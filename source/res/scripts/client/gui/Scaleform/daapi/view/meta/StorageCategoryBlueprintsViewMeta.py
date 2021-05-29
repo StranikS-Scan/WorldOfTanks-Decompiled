@@ -15,3 +15,6 @@ class StorageCategoryBlueprintsViewMeta(VehicleView):
 
     def as_updateNationalFragmentsS(self, fragments):
         return self.flashObject.as_updateNationalFragments(fragments) if self._isDAAPIInited() else None
+
+    def as_updateCanConvertS(self, value):
+        return self.flashObject.as_updateCanConvert(value) if self._isDAAPIInited() else None

@@ -24,6 +24,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.09	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	9.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -1104,8 +1110,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.08	</vehicleMovement>
-        <vehicleRotation>	0.08	</vehicleRotation>
+        <vehicleMovement>	0.09	</vehicleMovement>
+        <vehicleRotation>	0.09	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	180	</maxHealth>
@@ -1465,8 +1471,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.08	</vehicleMovement>
-        <vehicleRotation>	0.08	</vehicleRotation>
+        <vehicleMovement>	0.09	</vehicleMovement>
+        <vehicleRotation>	0.09	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -2064,7 +2070,7 @@
           <reloadTime>	8.23	</reloadTime>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.04	</turretRotation>
+            <turretRotation>	0.05	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

@@ -1,9 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/lobby_context.py
-
+import typing
+if typing.TYPE_CHECKING:
+    from Event import Event
 
 class ILobbyContext(object):
     onServerSettingsChanged = None
+
+    @property
+    def collectUiStats(self):
+        raise NotImplementedError
+
+    @property
+    def needLogUXEvents(self):
+        raise NotImplementedError
 
     def clear(self):
         raise NotImplementedError
@@ -45,14 +55,6 @@ class ILobbyContext(object):
         raise NotImplementedError
 
     def getGuiCtx(self):
-        raise NotImplementedError
-
-    @property
-    def collectUiStats(self):
-        raise NotImplementedError
-
-    @property
-    def needLogUXEvents(self):
         raise NotImplementedError
 
     def getServerSettings(self):

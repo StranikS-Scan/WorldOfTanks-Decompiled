@@ -4,6 +4,7 @@ from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework import ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.app_loader import settings as app_settings
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -11,7 +12,6 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
     from gui.Scaleform.daapi.view.lobby.hangar.VehicleParameters import VehiclePreviewParameters
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview_buying_panel import VehiclePreviewBuyingPanel
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.event_progression_buying_panels import VehiclePreviewEventProgressionVehicleBuyingPanel, VehiclePreviewEventProgressionStyleBuyingPanel
@@ -49,4 +49,5 @@ def getBusinessHandlers():
 class VehPreviewPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        super(VehPreviewPackageBusinessHandler, self).__init__((), app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+        listeners = ((VIEW_ALIAS.PACK_ITEM_POPOVER, self.loadViewByCtxEvent),)
+        super(VehPreviewPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

@@ -16,7 +16,8 @@ from gui.Scaleform.daapi.view.meta.VehicleMarkersManagerMeta import VehicleMarke
 from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.genConsts.ROOT_SWF_CONSTANTS import ROOT_SWF_CONSTANTS
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared import EVENT_BUS_SCOPE
+from gui.shared.events import MarkersManagerEvent
 from gui.shared.utils.plugins import PluginsCollection
 from helpers import dependency, isPlayerAvatar
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -144,6 +145,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
                 self.__addCanvas(sessionProvider, arenaVisitor)
                 self.__setMarkerDuration()
                 self.__createPlugins(arenaVisitor)
+                self.fireEvent(MarkersManagerEvent(MarkersManagerEvent.MARKERS_CREATED, self), EVENT_BUS_SCOPE.BATTLE)
             else:
                 _logger.error('Could not create component due to data missing')
             return
@@ -223,7 +225,6 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         self.__canvas.stickyMarkerRadiusScale = _STICKY_MARKER_RADIUS_SCALE
         self.__canvasProxy = weakref.ref(self.__canvas)
         self.component.addChild(self.__canvas, 'vehicleMarkersCanvas')
-        g_eventBus.handleEvent(events.MarkersManagerEvent(events.MarkersManagerEvent.MARKERS_CREATED, self), EVENT_BUS_SCOPE.BATTLE)
 
     def __removeCanvas(self):
         if self.__canvas is not None:

@@ -6,7 +6,7 @@ from gui.impl.pub import ViewImpl
 from frameworks.wulf import ViewSettings
 from gui.impl.gen.view_models.views.lobby.ranked.tooltips.roles_view_model import RolesViewModel
 from gui.impl.gen.view_models.views.lobby.ranked.tooltips.role_action_model import RoleActionModel
-from items.vehicles import getRolesActions, getRolesActionsGroups
+from items.vehicles import getActionsByRole, getRolesActionsGroups
 
 class RankedRolesTooltipView(ViewImpl):
 
@@ -20,15 +20,15 @@ class RankedRolesTooltipView(ViewImpl):
 
     def _onLoading(self, roleID, *args, **kwargs):
         super(RankedRolesTooltipView, self)._onLoading(*args, **kwargs)
-        rolesToActions = getRolesActions()
+        actions = getActionsByRole(roleID)
         roleLabel = ROLE_TYPE_TO_LABEL[roleID]
         rolesToActionsGroups = getRolesActionsGroups()
         actionsGroupLabel = ACTIONS_GROUP_TYPE_TO_LABEL[rolesToActionsGroups[roleID]]
         with self.getViewModel().transaction() as model:
-            model.setRoleName(R.strings.menu.roleExp.actionsGroup.dyn(actionsGroupLabel)())
-            model.setRoleImage(R.images.gui.maps.icons.roleExp.actionsTooltip.headerImage.dyn(roleLabel)())
+            model.setRoleType(actionsGroupLabel)
+            model.setRoleBgImage(R.images.gui.maps.icons.roleExp.actionsTooltip.headerImage.dyn(roleLabel)())
             roleActions = model.roleActions
-            for action in rolesToActions[roleID]:
+            for action in actions:
                 actionLabel = ACTION_TYPE_TO_LABEL[action]
                 roleAction = RoleActionModel()
                 roleAction.setImage(R.images.gui.maps.icons.roleExp.actions.c_128x128.dyn(actionLabel)())

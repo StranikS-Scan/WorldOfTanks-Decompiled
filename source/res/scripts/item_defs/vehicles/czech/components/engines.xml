@@ -23,6 +23,7 @@
     <Praga_AXK>	21	</Praga_AXK>
     <Skoda_16_AH_145_A>	22	</Skoda_16_AH_145_A>
     <Skoda_16_ADH_134>	24	</Skoda_16_ADH_134>
+    <CKD_AXK>	25	</CKD_AXK>
     <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
@@ -333,6 +334,23 @@
       <rpm_min>	333	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </Skoda_16_ADH_140>
+    <CKD_AXK>
+      <userString>	#czech_vehicles:CKD_AXK	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	84000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	1500	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
+    </CKD_AXK>
     <Skoda_16_AH_145>
       <userString>	#czech_vehicles:Skoda_16_AH_145	</userString>
       <tags>	diesel	</tags>

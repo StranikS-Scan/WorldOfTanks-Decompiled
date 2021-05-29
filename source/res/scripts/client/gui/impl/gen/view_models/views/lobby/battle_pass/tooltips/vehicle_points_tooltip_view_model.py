@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_mod
 class VehiclePointsTooltipViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(VehiclePointsTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -62,6 +62,12 @@ class VehiclePointsTooltipViewModel(ViewModel):
     def setIsElite(self, value):
         self._setBool(8, value)
 
+    def getBattleType(self):
+        return self._getString(9)
+
+    def setBattleType(self, value):
+        self._setString(9, value)
+
     def _initialize(self):
         super(VehiclePointsTooltipViewModel, self)._initialize()
         self._addViewModelProperty('rewardPoints', UserListModel())
@@ -73,3 +79,4 @@ class VehiclePointsTooltipViewModel(ViewModel):
         self._addNumberProperty('pointsReward', 0)
         self._addBoolProperty('isSpecialVehicle', False)
         self._addBoolProperty('isElite', False)
+        self._addStringProperty('battleType', '')

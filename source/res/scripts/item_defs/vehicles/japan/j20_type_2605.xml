@@ -26,6 +26,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.03	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	10.00	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -1946,7 +1952,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.9	</aimingTime>
-          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <shotDispersionRadius>	0.47	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/japan/J20_Type_2605/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/japan/J20_Type_2605/crash/lod0/Gun_02.model	</destroyed>

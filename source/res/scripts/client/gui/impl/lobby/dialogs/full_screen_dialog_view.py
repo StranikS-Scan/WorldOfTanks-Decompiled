@@ -5,6 +5,7 @@ import typing
 from abc import abstractproperty
 from PlayerEvents import g_playerEvents
 from async import AsyncScope, AsyncEvent, await, async, BrokenPromiseError, AsyncReturn
+from gui.impl.gen.view_models.common.format_resource_string_arg_model import FormatResourceStringArgModel
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import FullScreenDialogWindowModel
 from gui.impl.pub import ViewImpl
@@ -23,6 +24,7 @@ class DIALOG_TYPES(object):
     WARNING = 'warning'
     ERROR = 'error'
     SIMPLE = 'simple'
+    BLUEPRINTS_CONVERSION = 'blueprintsConversion'
 
 
 class FullScreenDialogView(ViewImpl):
@@ -106,6 +108,15 @@ class FullScreenDialogView(ViewImpl):
 
     def _onExitClicked(self):
         self._onCancel()
+
+    def _setTitleArgs(self, arrModel, frmtArgs):
+        for name, resource in frmtArgs:
+            frmtModel = FormatResourceStringArgModel()
+            frmtModel.setName(name)
+            frmtModel.setValue(resource)
+            arrModel.addViewModel(frmtModel)
+
+        arrModel.invalidate()
 
     def __setStats(self, model):
         model.setCredits(int(self._stats.money.getSignValue(Currency.CREDITS)))

@@ -15,9 +15,7 @@ class ConfirmEmailOverlayView(EmailOverlayView):
     __slots__ = ('_email',)
     _TITLE = R.strings.dialogs.accountCompletion.activate.title()
 
-    def __init__(self, email='', fadeAnimation=False):
-        settings = ViewSettings(R.views.lobby.account_completion.EmailActivateCurtainView())
-        settings.model = EmailActivateCurtainModel()
+    def __init__(self, settings, email='', fadeAnimation=False):
         super(ConfirmEmailOverlayView, self).__init__(settings, fadeAnimation)
         self._email = email
 
@@ -79,4 +77,6 @@ class ConfirmEmailOverlayView(EmailOverlayView):
 class ConfirmEmailOverlayWindow(LobbyWindow):
 
     def __init__(self, email='', fadeAnimation=False):
-        super(ConfirmEmailOverlayWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN, content=ConfirmEmailOverlayView(email, fadeAnimation), layer=WindowLayer.TOP_WINDOW)
+        settings = ViewSettings(R.views.lobby.account_completion.EmailActivateCurtainView())
+        settings.model = EmailActivateCurtainModel()
+        super(ConfirmEmailOverlayWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN, content=ConfirmEmailOverlayView(settings, email, fadeAnimation), layer=WindowLayer.TOP_WINDOW)

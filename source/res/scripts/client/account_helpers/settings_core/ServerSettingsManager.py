@@ -4,7 +4,7 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys
+from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys, SPGAim
 from adisp import process, async
 from constants import ROLES_COLLAPSE
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -17,6 +17,7 @@ GUI_START_BEHAVIOR = 'guiStartBehavior'
 class SETTINGS_SECTIONS(CONST_CONTAINER):
     GAME = 'GAME'
     GAME_EXTENDED = 'GAME_EXTENDED'
+    GAME_EXTENDED_2 = 'GAME_EXTENDED_2'
     GAMEPLAY = 'GAMEPLAY'
     GRAPHICS = 'GRAPHICS'
     SOUND = 'SOUND'
@@ -35,8 +36,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
     EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
     BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
-    WEEKENDBRAWL_CAROUSEL_FILTER_1 = 'WEEKENDBRAWL_CAROUSEL_FILTER_1'
-    WEEKENDBRAWL_CAROUSEL_FILTER_2 = 'WEEKENDBRAWL_CAROUSEL_FILTER_2'
+    MAPBOX_CAROUSEL_FILTER_1 = 'MAPBOX_CAROUSEL_FILTER_1'
+    MAPBOX_CAROUSEL_FILTER_2 = 'MAPBOX_CAROUSEL_FILTER_2'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -59,6 +60,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     DOG_TAGS = 'DOG_TAGS'
     UNIT_FILTER = 'UNIT_FILTER'
     BATTLE_HUD = 'BATTLE_HUD'
+    SPG_AIM = 'SPG_AIM'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -112,7 +114,8 @@ class ServerSettingsManager(object):
                               GAME.DATE_TIME_MESSAGE_INDEX: Offset(16, 983040),
                               GAME.MINIMAP_ALPHA: Offset(20, 267386880),
                               GAME.SHOW_VEH_MODELS_ON_MAP: Offset(29, 1610612736)}),
-     SETTINGS_SECTIONS.GAME_EXTENDED: Section(masks={GAME.CHAT_CONTACTS_LIST_ONLY: 1,
+     SETTINGS_SECTIONS.GAME_EXTENDED: Section(masks={GAME.PRE_COMMANDER_CAM: 0,
+                                       GAME.CHAT_CONTACTS_LIST_ONLY: 1,
                                        GAME.RECEIVE_INVITES_IN_BATTLE: 2,
                                        GAME.RECEIVE_CLAN_INVITES_NOTIFICATIONS: 3,
                                        GAME.MINIMAP_VIEW_RANGE: 6,
@@ -120,6 +123,7 @@ class ServerSettingsManager(object):
                                        GAME.MINIMAP_DRAW_RANGE: 8,
                                        GAME.INCREASED_ZOOM: 9,
                                        GAME.SNIPER_MODE_BY_SHIFT: 10,
+                                       GAME.COMMANDER_CAM: 11,
                                        GAME.CAROUSEL_TYPE: 12,
                                        GAME.DOUBLE_CAROUSEL_TYPE: 13,
                                        GAME.VEHICLE_CAROUSEL_STATS: 14,
@@ -135,6 +139,8 @@ class ServerSettingsManager(object):
                                        GAME.BATTLE_LOADING_RANKED_INFO: Offset(21, 6291456),
                                        GAME.HANGAR_CAM_PERIOD: Offset(18, 1835008),
                                        GAME.SNIPER_ZOOM: Offset(27, 402653184)}),
+     SETTINGS_SECTIONS.GAME_EXTENDED_2: Section(masks={GAME.SHOW_ARTY_HIT_ON_MAP: 0,
+                                         GAME.GAMEPLAY_ONLY_10_MODE: 1}, offsets={}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GAME.LENS_EFFECT: 1}, offsets={}),
      SETTINGS_SECTIONS.SOUND: Section(masks={}, offsets={SOUND.ALT_VOICES: Offset(0, 255)}),
@@ -154,6 +160,11 @@ class ServerSettingsManager(object):
                                'gunTagType': Offset(16, 16711680),
                                'reloaderTimer': Offset(24, 4278190080L)}),
      SETTINGS_SECTIONS.AIM_4: Section(masks={}, offsets={'zoomIndicator': Offset(0, 255)}),
+     SETTINGS_SECTIONS.SPG_AIM: Section(masks={SPGAim.SHOTS_RESULT_INDICATOR: 0,
+                                 SPGAim.SPG_SCALE_WIDGET: 1,
+                                 SPGAim.SPG_STRATEGIC_CAM_MODE: 2,
+                                 SPGAim.AUTO_CHANGE_AIM_MODE: 3,
+                                 SPGAim.SCROLL_SMOOTHING_ENABLED: 6}, offsets={SPGAim.AIM_ENTRANCE_MODE: Offset(4, 48)}),
      SETTINGS_SECTIONS.MARKERS: Section(masks={'markerBaseIcon': 0,
                                  'markerBaseLevel': 1,
                                  'markerBaseHpIndicator': 2,
@@ -240,17 +251,21 @@ class ServerSettingsManager(object):
                                                   'crystals': 8,
                                                   ROLES_COLLAPSE: 9,
                                                   'notDefined': 10,
-                                                  'tank1': 11,
-                                                  'tank2': 12,
-                                                  'firstLineSupport1': 13,
-                                                  'firstLineSupport2': 14,
-                                                  'firstLineSupport3': 15,
-                                                  'fireSupport1': 16,
-                                                  'sniper1': 17,
-                                                  'hashSupport1': 18,
-                                                  'scout1': 19,
-                                                  'scout2': 20,
-                                                  'SPG1': 21}, offsets={}),
+                                                  'role_HT_tank': 11,
+                                                  'role_HT_assault': 12,
+                                                  'role_HT_fireSupport': 13,
+                                                  'role_HT_universal': 14,
+                                                  'role_MT_universal': 15,
+                                                  'role_MT_fireSupport': 16,
+                                                  'role_MT_tank': 17,
+                                                  'role_MT_assassin': 18,
+                                                  'role_ATSPG_tank': 19,
+                                                  'role_ATSPG_universal': 20,
+                                                  'role_ATSPG_fireSupport': 21,
+                                                  'role_ATSPG_burstDamage': 22,
+                                                  'role_LT_tracked': 23,
+                                                  'role_LT_wheeled': 24,
+                                                  'role_SPG': 25}, offsets={}),
      SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                       'germany': 1,
                                                       'usa': 2,
@@ -287,41 +302,6 @@ class ServerSettingsManager(object):
                                                       'event': 7,
                                                       'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.BATTLEPASS_CAROUSEL_FILTER_1: Section(masks={'isCommonProgression': 0}, offsets={}),
-     SETTINGS_SECTIONS.WEEKENDBRAWL_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
-                                                        'germany': 1,
-                                                        'usa': 2,
-                                                        'china': 3,
-                                                        'france': 4,
-                                                        'uk': 5,
-                                                        'japan': 6,
-                                                        'czech': 7,
-                                                        'sweden': 8,
-                                                        'poland': 9,
-                                                        'italy': 10,
-                                                        'lightTank': 15,
-                                                        'mediumTank': 16,
-                                                        'heavyTank': 17,
-                                                        'SPG': 18,
-                                                        'AT-SPG': 19,
-                                                        'level_1': 20,
-                                                        'level_2': 21,
-                                                        'level_3': 22,
-                                                        'level_4': 23,
-                                                        'level_5': 24,
-                                                        'level_6': 25,
-                                                        'level_7': 26,
-                                                        'level_8': 27,
-                                                        'level_9': 28,
-                                                        'level_10': 29}, offsets={}),
-     SETTINGS_SECTIONS.WEEKENDBRAWL_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
-                                                        'elite': 1,
-                                                        'rented': 2,
-                                                        'igr': 3,
-                                                        'gameMode': 4,
-                                                        'favorite': 5,
-                                                        'bonus': 6,
-                                                        'event': 7,
-                                                        'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
@@ -382,7 +362,8 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.OPT_DEV_DRAG_AND_DROP_HINT: 2,
                                            OnceOnlyHints.DOGTAG_HANGAR_HINT: 3,
                                            OnceOnlyHints.DOGTAG_PROFILE_HINT: 4,
-                                           OnceOnlyHints.PLATOON_BTN_HINT: 5}, offsets={}),
+                                           OnceOnlyHints.PLATOON_BTN_HINT: 5,
+                                           OnceOnlyHints.MODE_SELECTOR_WIDGETS_BTN_HINT: 6}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -473,7 +454,8 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.BATTLE_HUD: Section(masks={SCORE_PANEL.SHOW_HP_VALUES: 0,
                                     SCORE_PANEL.SHOW_HP_DIFFERENCE: 1,
                                     SCORE_PANEL.ENABLE_TIER_GROUPING: 2,
-                                    SCORE_PANEL.SHOW_HP_BAR: 3}, offsets={}),
+                                    SCORE_PANEL.SHOW_HP_BAR: 3}, offsets={GAME.SHOW_VEHICLE_HP_IN_PLAYERS_PANEL: Offset(4, 48),
+                                    GAME.SHOW_VEHICLE_HP_IN_MINIMAP: Offset(6, 192)}),
      SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                   'germany': 1,
                                                   'usa': 2,
@@ -510,6 +492,41 @@ class ServerSettingsManager(object):
                                                   'event': 7,
                                                   'crystals': 8,
                                                   'battleRoyale': 9}, offsets={}),
+     SETTINGS_SECTIONS.MAPBOX_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
+                                                  'germany': 1,
+                                                  'usa': 2,
+                                                  'china': 3,
+                                                  'france': 4,
+                                                  'uk': 5,
+                                                  'japan': 6,
+                                                  'czech': 7,
+                                                  'sweden': 8,
+                                                  'poland': 9,
+                                                  'italy': 10,
+                                                  'lightTank': 15,
+                                                  'mediumTank': 16,
+                                                  'heavyTank': 17,
+                                                  'SPG': 18,
+                                                  'AT-SPG': 19,
+                                                  'level_1': 20,
+                                                  'level_2': 21,
+                                                  'level_3': 22,
+                                                  'level_4': 23,
+                                                  'level_5': 24,
+                                                  'level_6': 25,
+                                                  'level_7': 26,
+                                                  'level_8': 27,
+                                                  'level_9': 28,
+                                                  'level_10': 29}, offsets={}),
+     SETTINGS_SECTIONS.MAPBOX_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
+                                                  'elite': 1,
+                                                  'rented': 2,
+                                                  'igr': 3,
+                                                  'gameMode': 4,
+                                                  'favorite': 5,
+                                                  'bonus': 6,
+                                                  'event': 7,
+                                                  'crystals': 8}, offsets={}),
      SETTINGS_SECTIONS.UNIT_FILTER: Section(masks={}, offsets={GAME.UNIT_FILTER: Offset(0, 2047)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
@@ -818,6 +835,7 @@ class ServerSettingsManager(object):
         currentVersion = self.settingsCache.getVersion()
         data = {'gameData': {},
          'gameExtData': {},
+         'gameExtData2': {},
          'gameplayData': {},
          'controlsData': {},
          'aimData': {},
@@ -833,10 +851,12 @@ class ServerSettingsManager(object):
          'onceOnlyHints2': {},
          'uiStorage': {},
          'epicCarouselFilter2': {},
+         'rankedCarouselFilter2': {},
          'sessionStats': {},
          'battleComm': {},
          'dogTags': {},
          'battleHud': {},
+         'spgAim': {},
          GUI_START_BEHAVIOR: {},
          'battlePassStorage': {},
          'clear': {},
@@ -856,6 +876,10 @@ class ServerSettingsManager(object):
         clearGameExt = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED, 0)
         if gameExtData or clearGameExt:
             settings[SETTINGS_SECTIONS.GAME_EXTENDED] = self._buildSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, gameExtData) ^ clearGameExt
+        gameExtData = data.get('gameExtData2', {})
+        clearGameExt = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED_2, 0)
+        if gameExtData or clearGameExt:
+            settings[SETTINGS_SECTIONS.GAME_EXTENDED_2] = self._buildSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED_2, gameExtData) ^ clearGameExt
         gameplayData = data.get('gameplayData', {})
         clearGameplay = clear.get(SETTINGS_SECTIONS.GAMEPLAY, 0)
         if gameplayData or clearGameplay:
@@ -888,6 +912,10 @@ class ServerSettingsManager(object):
         clearEpicFilterCarousel = clear.get('epicCarouselFilter2', 0)
         if epicFilterCarousel or clearEpicFilterCarousel:
             settings[SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_2, epicFilterCarousel) ^ clearEpicFilterCarousel
+        rankedFilterCarousel = data.get('rankedCarouselFilter2', {})
+        clearRankedFilterCarousel = clear.get('rankedCarouselFilter2', 0)
+        if rankedFilterCarousel or clearRankedFilterCarousel:
+            settings[SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2, rankedFilterCarousel) ^ clearRankedFilterCarousel
         feedbackDamageIndicator = data.get('feedbackDamageIndicator', {})
         if feedbackDamageIndicator:
             settings[SETTINGS_SECTIONS.DAMAGE_INDICATOR] = self._buildSectionSettings(SETTINGS_SECTIONS.DAMAGE_INDICATOR, feedbackDamageIndicator)
@@ -933,6 +961,10 @@ class ServerSettingsManager(object):
         clearBPStorage = clear.get('battlePassStorage', 0)
         if BPStorage or clearBPStorage:
             settings[SETTINGS_SECTIONS.BATTLE_PASS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, BPStorage) ^ clearBPStorage
+        spgAimData = data.get('spgAim', {})
+        clearSpgAimData = clear.get(SETTINGS_SECTIONS.SPG_AIM, 0)
+        if spgAimData or clearSpgAimData:
+            settings[SETTINGS_SECTIONS.SPG_AIM] = self._buildSectionSettings(SETTINGS_SECTIONS.SPG_AIM, spgAimData) ^ clearSpgAimData
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version
@@ -951,9 +983,10 @@ class ServerSettingsManager(object):
 
 
 def _updateBattlePassVersion(data):
-    version = 4
+    version = 5
     if data[BattlePassStorageKeys.FLAGS_VERSION] < version:
         data[BattlePassStorageKeys.FLAGS_VERSION] = version
+        data[BattlePassStorageKeys.INTRO_SHOWN] = False
         data[BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
         data[BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = 0
         data[BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN] = False

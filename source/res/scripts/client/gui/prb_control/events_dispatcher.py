@@ -9,25 +9,25 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
+from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.locale.CHAT import CHAT
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.app_loader import sf_lobby
-from skeletons.gui.game_control import IPlatoonController
-from gui.prb_control.settings import FUNCTIONAL_FLAG
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent
-from helpers import dependency
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.prb_control.settings import FUNCTIONAL_FLAG
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent, ChannelCarouselEvent
+from helpers import dependency
 from messenger.ext import channel_num_gen
 from messenger.ext.channel_num_gen import SPECIAL_CLIENT_WINDOWS
 from messenger.m_constants import LAZY_CHANNEL
-from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.game_control import IPlatoonController
 TOOLTIP_PRB_DATA = namedtuple('TOOLTIP_PRB_DATA', ('tooltipId', 'label'))
 _CarouselItemCtx = namedtuple('_CarouselItemCtx', ['label',
  'canClose',
@@ -228,6 +228,17 @@ class EventDispatcher(object):
             return
         currCarouselItemCtx = _defCarouselItemCtx._replace(label=LAZY_CHANNEL.SPECIAL_BATTLES, order=channel_num_gen.getOrder4LazyChannel(LAZY_CHANNEL.SPECIAL_BATTLES), isNotified=False, criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.BATTLE_SESSION_LIST_WINDOW_PY}, openHandler=self.loadBattleSessionList)
         self.__fireEvent(ChannelManagementEvent(clientID, PreBattleChannelEvent.REQUEST_TO_ADD, currCarouselItemCtx._asdict()))
+
+    def restoreBattleSessionList(self):
+        viewContainer = self.app.containerManager
+        window = viewContainer.getView(WindowLayer.WINDOW, {POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.BATTLE_SESSION_LIST_WINDOW_PY})
+        if window is None:
+            clientID = channel_num_gen.getClientID4LazyChannel(LAZY_CHANNEL.SPECIAL_BATTLES)
+            if not clientID:
+                LOG_ERROR('Client ID not found', 'restoreBattleSessionList')
+                return
+            self.__fireEvent(events.ChannelManagementEvent(clientID, ChannelCarouselEvent.OPEN_BUTTON_CLICK, {'clientID': clientID}))
+        return
 
     def removeSpecBattleFromCarousel(self, prbType, closeWindow=True):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)

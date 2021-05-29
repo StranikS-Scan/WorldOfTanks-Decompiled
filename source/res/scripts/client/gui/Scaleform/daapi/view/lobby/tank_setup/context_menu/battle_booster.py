@@ -22,6 +22,9 @@ class BattleBoosterItemContextMenu(BaseItemContextMenu):
     def buyMore(self):
         shop.showBattleBoosterOverlay(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.BATTLE_BOOSTERS, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
 
+    def _isVisible(self, label):
+        return not self._itemsCache.items.getItemByCD(self._intCD).isHidden if label == CMLabel.BUY_MORE else super(BattleBoosterItemContextMenu, self)._isVisible(label)
+
 
 class BattleBoosterSlotContextMenu(BaseSlotContextMenu):
     __sqGen = SequenceIDGenerator()
@@ -38,6 +41,9 @@ class BattleBoosterSlotContextMenu(BaseSlotContextMenu):
     @option(__sqGen.next(), TankSetupCMLabel.TAKE_OFF)
     def takeOff(self):
         self._sendSlotAction(BaseSetupModel.REVERT_SLOT_ACTION)
+
+    def _isVisible(self, label):
+        return not self._itemsCache.items.getItemByCD(self._intCD).isHidden if label == CMLabel.BUY_MORE else super(BattleBoosterSlotContextMenu, self)._isVisible(label)
 
 
 class HangarBattleBoosterSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
@@ -58,7 +64,9 @@ class HangarBattleBoosterSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
         return
 
     def _isVisible(self, label):
-        return False if label == CMLabel.INFORMATION else super(HangarBattleBoosterSlotContextMenu, self)._isVisible(label)
+        if label == CMLabel.INFORMATION:
+            return False
+        return not self._itemsCache.items.getItemByCD(self._intCD).isHidden if label == CMLabel.BUY_MORE else super(HangarBattleBoosterSlotContextMenu, self)._isVisible(label)
 
     @async
     @process

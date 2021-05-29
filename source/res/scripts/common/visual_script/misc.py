@@ -16,6 +16,12 @@ class ASPECT(object):
     ALL = [CLIENT, SERVER]
 
 
+class EDITOR_TYPE(object):
+    NONE = 0
+    STR_KEY_SELECTOR = 1
+    ENUM_SELECTOR = 2
+
+
 def makePlanPath(planName):
     return 'vscript/plans/{}.xml'.format(planName)
 

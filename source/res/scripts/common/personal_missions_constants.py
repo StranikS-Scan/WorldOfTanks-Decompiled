@@ -42,7 +42,6 @@ class CONDITION_ICON:
     MAIN_REPEAT = 'main_repeat'
     IMPROVE = 'improve'
     RANK_UP = 'rank_up'
-    USED_EQUIPMENT = 'used_equipment'
 
 
 class PROGRESS_TEMPLATE:

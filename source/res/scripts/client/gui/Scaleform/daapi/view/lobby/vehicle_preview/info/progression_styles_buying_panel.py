@@ -9,7 +9,6 @@ from helpers import dependency
 from skeletons.gui.customization import ICustomizationService
 from gui.Scaleform.daapi.view.meta.VehiclePreviewProgressionStylesBuyingPanelMeta import VehiclePreviewProgressionStylesBuyingPanelMeta
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.buying_panel.progression_styles_buying_panel_model import ProgressionStylesBuyingPanelModel
-from gui.impl.lobby.tooltips.progression_styles_info_tooltip import ProgressionStylesInfoTooltip
 
 class VehiclePreviewProgressionStylesBuyingPanel(VehiclePreviewProgressionStylesBuyingPanelMeta):
 
@@ -50,9 +49,6 @@ class ProgressionStylesBuyingPanelView(ViewImpl):
     @property
     def viewModel(self):
         return super(ProgressionStylesBuyingPanelView, self).getViewModel()
-
-    def createToolTipContent(self, event, contentID):
-        return ProgressionStylesInfoTooltip()
 
     def setStyleLevel(self, styleLevel):
         self.__styleLevel = styleLevel

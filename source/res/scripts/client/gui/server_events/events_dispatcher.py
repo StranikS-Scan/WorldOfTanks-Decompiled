@@ -150,6 +150,10 @@ def showMissionsBattlePassCommonProgression(subTab=None):
     showMissions(tab=QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, subTab=subTab)
 
 
+def showMissionsMapboxProgression():
+    showMissions(tab=QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS)
+
+
 def showMissionDetails(missionID, groupID):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MISSION_DETAILS), ctx={'eventID': missionID,
      'groupID': groupID}), scope=EVENT_BUS_SCOPE.LOBBY)

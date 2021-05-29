@@ -12,6 +12,9 @@ from gui.shared.gui_items.dossier.achievements import mark_of_mastery
 from gui.shared.gui_items.dossier.factories import getAchievementFactory, _SequenceAchieveFactory
 from items import vehicles
 from soft_exception import SoftException
+from dossiers2.custom.account_layout import VEHICLE_STATS
+from helpers import dependency
+from skeletons.gui.game_control import IRankedBattlesController
 _logger = logging.getLogger(__name__)
 UNAVAILABLE_MARKS_OF_MASTERY = (-1, -1, -1, -1)
 _BATTLE_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.BATTLE]
@@ -1420,6 +1423,7 @@ class AccountDossierStats(_DossierStats):
          self.getRated7x7Stats(),
          self.getFalloutStats(),
          self.getRankedStats(),
+         self.getRanked10x10Stats(),
          self.getEpicRandomStats()))
 
     def getRandomStats(self):
@@ -1473,8 +1477,19 @@ class AccountDossierStats(_DossierStats):
     def getRankedStats(self):
         return TotalAccountRankedStatsBlock(self._getDossierItem())
 
-    def getSeasonRankedStats(self, seasonKey, seasonID):
+    def getRanked10x10Stats(self):
+        return TotalAccountRanked10x10StatsBlock(self._getDossierItem())
+
+    def getSeasonRanked15x15Stats(self, seasonKey, seasonID):
         return SeasonRankedStatsBlock(self._getDossierItem(), seasonKey, seasonID)
+
+    @dependency.replace_none_kwargs(rankedController=IRankedBattlesController)
+    def getSeasonRankedStats(self, seasonKey, seasonID, rankedController=None):
+        if rankedController.isRanked2020Season(seasonID):
+            stats = SeasonRankedStatsBlock(self._getDossierItem(), seasonKey, seasonID)
+        else:
+            stats = self.getRanked10x10Stats()
+        return stats
 
     def getEpicRandomStats(self):
         return AccountEpicRandomStatsBlock(self._getDossierItem())
@@ -1532,6 +1547,9 @@ class VehicleDossierStats(_DossierStats):
 
     def getRankedStats(self):
         return VehRankedStatsBlock(self._getDossierItem())
+
+    def getRanked10x10Stats(self):
+        return VehRanked10x10StatsBlock(self._getDossierItem())
 
     def getEpicRandomStats(self):
         return EpicRandomStatsBlock(self._getDossierItem())
@@ -1768,10 +1786,7 @@ class SeasonRankedStatsBlock(AccountRankedStatsBlock):
 class TotalAccountRankedStatsBlock(AccountRankedStatsBlock, _VehiclesStatsBlock):
 
     def __init__(self, dossier):
-        super(TotalAccountRankedStatsBlock, self).__init__(dossier, 'ranked', 'maxRanked')
-
-    def _getVehDossiersCut(self, dossier):
-        return dossier.getDossierDescr()['rankedCut']
+        super(TotalAccountRankedStatsBlock, self).__init__(dossier, self._getBlockName(), self._getMaxBlockName())
 
     def getStepsCount(self):
         return self._rankedSeasons.getSeasonsStepsCount()
@@ -1779,20 +1794,79 @@ class TotalAccountRankedStatsBlock(AccountRankedStatsBlock, _VehiclesStatsBlock)
     def hasAchievedRank(self):
         return self._rankedSeasons.hadAchievedRank()
 
+    def _getVehDossiersCut(self, dossier):
+        return dossier.getDossierDescr()['rankedCut']
+
+    def _getBlockName(self):
+        pass
+
+    def _getMaxBlockName(self):
+        pass
+
+
+class TotalAccountRanked10x10StatsBlock(TotalAccountRankedStatsBlock):
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def getStepsCount(self):
+        season = self.__rankedController.getCurrentSeason()
+        if season is None:
+            season = self.__rankedController.getPreviousSeason()
+        return self._rankedSeasons.getSeasonStepsCount(season.getSeasonID()) if season else 0
+
+    def getAchievedRank(self):
+        return self._rankedSeasons.getAchievedRank(self.__getSeasonID())
+
+    def _getVehDossiersCut(self, dossier):
+        return dossier.getDossierDescr()[VEHICLE_STATS.RANKED_CUT_10X10]
+
+    def _getBlockName(self):
+        pass
+
+    def _getMaxBlockName(self):
+        pass
+
+    def __getSeasonID(self):
+        season = self.__rankedController.getCurrentSeason()
+        if season:
+            seasonID = season.getSeasonID()
+        else:
+            passedSeasons = self.__rankedController.getSeasonPassed()
+            firstSeason = passedSeasons[0] if passedSeasons else None
+            seasonID = firstSeason[0] if firstSeason else None
+        return seasonID
+
 
 class VehRankedStatsBlock(RankedStatsBlock, _VehiclesStatsBlock):
 
     def __init__(self, dossier):
-        super(VehRankedStatsBlock, self).__init__(dossier, 'ranked', 'maxRanked')
+        super(VehRankedStatsBlock, self).__init__(dossier, self._getBlockName(), self._getMaxBlockName())
 
     def getTotalRanksCount(self):
         return self._rankedSeasons.getTotalRanksCount()
 
     def _getVehDossiersCut(self, dossier):
-        return dossier.getDossierDescr()['rankedCut']
+        return dossier.getDossierDescr()[VEHICLE_STATS.RANKED_CUT]
 
     def _packVehicle(self, battlesCount=0, wins=0, xp=0):
         return self.VehiclesDossiersCut(battlesCount, wins, xp)
 
     def _getSeasonsBlock(self, dossier):
         return _StoredVehRankedSeasonsStatsBlock(dossier)
+
+    def _getBlockName(self):
+        pass
+
+    def _getMaxBlockName(self):
+        pass
+
+
+class VehRanked10x10StatsBlock(VehRankedStatsBlock):
+
+    def _getVehDossiersCut(self, dossier):
+        return dossier.getRanked10x10Stats()
+
+    def _getBlockName(self):
+        pass
+
+    def _getMaxBlockName(self):
+        pass

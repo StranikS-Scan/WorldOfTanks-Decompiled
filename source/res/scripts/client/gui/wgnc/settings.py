@@ -27,6 +27,11 @@ class WGNC_DATA_PROXY_TYPE(object):
     BECOME_RECRUITER = 81
     SHOW_REFERRAL_WINDOW = 82
     UPDATE_CLAN_NOTIFICATION = 96
+    PAYMENT_METHOD_CHANGE_NOTIFICATION = 128
+    MAPBOX_SURVEY_AVAILABLE_NOTIFICATION = 144
+    MAPBOX_EVENT_STARTED_NOTIFICATION = 145
+    MAPBOX_EVENT_ENDED_NOTIFICATION = 146
+    MAPBOX_REWARD_RECEIVED_NOTIFICATION = 148
 
 
 WGNC_POP_UP_PRIORITIES = ('low', 'medium', 'high')
@@ -47,7 +52,8 @@ _WGNC_ICON_TO_LOCAL = {'information': WGNC_DEFAULT_ICON,
  'handsPlus': 'handsPlus',
  'box': 'referralCoin',
  'craftmachine_resource': 'craftmachineResource',
- 'ClanQuestNotification': 'clanQuestNotification'}
+ 'ClanQuestNotification': 'clanQuestNotification',
+ 'rankedYearLb': 'RankedYearLB'}
 
 def convertToLocalIcon(icon):
     result = WGNC_DEFAULT_ICON

@@ -13,11 +13,16 @@ from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.genConsts.AUTOLOADERBOOSTVIEWSOUNDS import AUTOLOADERBOOSTVIEWSOUNDS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+from gui.Scaleform.daapi.view.battle.shared.hint_panel.plugins import RoleHelpPlugin
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID
+from gui.shared.events import GameEvent
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.utils.plugins import PluginsCollection
 from skeletons.gui.battle_session import IBattleSessionProvider
 from helpers import dependency, i18n, isPlayerAvatar
+from helpers.CallbackDelayer import CallbackDelayer
 _logger = logging.getLogger(__name__)
+FADE_TIMEOUT = 7
 
 class AutoloaderBoostSoundEvents(object):
     __slots__ = ()
@@ -48,6 +53,8 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         self.__scale = 1.0
         self.__distance = 0
         self.__hasAmmo = True
+        self.__callbackDelayer = None
+        self.__isFaded = False
         return
 
     def getViewID(self):
@@ -163,11 +170,35 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         super(CrosshairPanelContainer, self)._populate()
         self.__plugins.init()
         self.startPlugins()
+        g_eventBus.addListener(GameEvent.ROLE_HINT_TOGGLE, self.__handleRoleHintToggled, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.__callbackDelayer = CallbackDelayer()
+        if RoleHelpPlugin.isAvailableToShow():
+            self.__toggleFade(True)
 
     def _dispose(self):
         self.stopPlugins()
         self.__plugins.fini()
+        if self.__callbackDelayer:
+            self.__callbackDelayer.destroy()
+        g_eventBus.removeListener(GameEvent.ROLE_HINT_TOGGLE, self.__handleRoleHintToggled, scope=EVENT_BUS_SCOPE.BATTLE)
         super(CrosshairPanelContainer, self)._dispose()
+
+    def __handleRoleHintToggled(self, event):
+        self.__toggleFade(event.ctx.get('isShown', False))
+
+    def __toggleFade(self, isFaded):
+        if self.__isFaded == isFaded:
+            return
+        self.__isFaded = isFaded
+        if self.__isFaded:
+            self.__callbackDelayer.delayCallback(FADE_TIMEOUT, self.__exceptionalFadeIn)
+        else:
+            self.__callbackDelayer.stopCallback(self.__exceptionalFadeIn)
+        self.as_isFadedS(self.__isFaded)
+
+    def __exceptionalFadeIn(self):
+        self.__toggleFade(False)
+        _logger.error('as_isFadedS must be called by GameEvent.ROLE_HINT_TOGGLE in __handleRoleHintToggled')
 
     def __configure(self):
         self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE

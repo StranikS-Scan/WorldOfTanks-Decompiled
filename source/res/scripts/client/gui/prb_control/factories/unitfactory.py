@@ -11,10 +11,10 @@ from gui.prb_control.entities.e_sport.unit.entity import ESportIntroEntity, ESpo
 from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEntity, PublicEntity
 from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEntryPoint, PublicEntryPoint
 from gui.prb_control.entities.event.squad.entity import EventBattleSquadEntity, EventBattleSquadEntryPoint
+from gui.prb_control.entities.mapbox.squad.entity import MapboxSquadEntryPoint, MapboxSquadEntity
 from gui.prb_control.entities.stronghold.unit.entity import StrongholdEntity, StrongholdEntryPoint, StrongholdBrowserEntryPoint, StrongholdBrowserEntity
 from gui.prb_control.entities.random.squad.entity import RandomSquadEntity, RandomSquadEntryPoint
 from gui.prb_control.entities.epic.squad.entity import EpicSquadEntity, EpicSquadEntryPoint
-from gui.prb_control.entities.weekend_brawl.squad.entity import WeekendBrawlSquadEntity, WeekendBrawlSquadEntryPoint
 from gui.prb_control.items import PlayerDecorator, FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
@@ -25,14 +25,14 @@ _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.SQUAD: RandomSquadEntryPoint
  PREBATTLE_ACTION_NAME.E_SPORT: ESportIntroEntry,
  PREBATTLE_ACTION_NAME.PUBLICS_LIST: PublicBrowserEntryPoint,
  PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST: StrongholdBrowserEntryPoint,
- PREBATTLE_ACTION_NAME.WEEKEND_BRAWL_SQUAD: WeekendBrawlSquadEntryPoint}
+ PREBATTLE_ACTION_NAME.MAPBOX_SQUAD: MapboxSquadEntryPoint}
 _SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntryPoint,
  PREBATTLE_TYPE.EVENT: EventBattleSquadEntryPoint,
  PREBATTLE_TYPE.EPIC: EpicSquadEntryPoint,
  PREBATTLE_TYPE.BATTLE_ROYALE: BattleRoyaleSquadEntryPoint,
  PREBATTLE_TYPE.UNIT: PublicEntryPoint,
  PREBATTLE_TYPE.STRONGHOLD: StrongholdEntryPoint,
- PREBATTLE_TYPE.WEEKEND_BRAWL: WeekendBrawlSquadEntryPoint}
+ PREBATTLE_TYPE.MAPBOX: MapboxSquadEntryPoint}
 _SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.E_SPORT_COMMON: ESportIntroEntity}
 _SUPPORTED_BROWSER_BY_TYPE = {PREBATTLE_TYPE.UNIT: PublicBrowserEntity,
  PREBATTLE_TYPE.STRONGHOLD: StrongholdBrowserEntity}
@@ -42,7 +42,7 @@ _SUPPORTED_UNIT_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntity,
  PREBATTLE_TYPE.BATTLE_ROYALE: BattleRoyaleSquadEntity,
  PREBATTLE_TYPE.UNIT: PublicEntity,
  PREBATTLE_TYPE.STRONGHOLD: StrongholdEntity,
- PREBATTLE_TYPE.WEEKEND_BRAWL: WeekendBrawlSquadEntity}
+ PREBATTLE_TYPE.MAPBOX: MapboxSquadEntity}
 
 class UnitFactory(ControlFactory):
 

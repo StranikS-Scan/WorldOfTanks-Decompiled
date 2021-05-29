@@ -42,6 +42,7 @@ _rankedSeason1BlockBuilder = StaticSizeBlockBuilder('rankedSeason1', RANKED_BLOC
 _rankedSeason2BlockBuilder = StaticSizeBlockBuilder('rankedSeason2', RANKED_BLOCK_LAYOUT, {}, [])
 _rankedSeason3BlockBuilder = StaticSizeBlockBuilder('rankedSeason3', RANKED_BLOCK_LAYOUT, {}, [])
 _rankedArchiveBlockBuilder = StaticSizeBlockBuilder('rankedArchive', RANKED_BLOCK_LAYOUT, {}, [])
+_ranked_10x10BlockBuilder = StaticSizeBlockBuilder('ranked_10x10', RANKED_BLOCK_LAYOUT, RANKED_STATS_DEPENDENCIES, [])
 _max15x15BlockBuilder = StaticSizeBlockBuilder('max15x15', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _max7x7BlockBuilder = StaticSizeBlockBuilder('max7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRated7x7BlockBuilder = StaticSizeBlockBuilder('maxRated7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
@@ -61,6 +62,7 @@ _maxRankedSeason1BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason1', MAX_A
 _maxRankedSeason2BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason2', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRankedSeason3BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason3', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRankedArchiveBlockBuilder = StaticSizeBlockBuilder('maxRankedArchive', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
+_maxRanked_10x10BlockBuilder = StaticSizeBlockBuilder('maxRanked_10x10', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 
 class VEHICLE_STATS:
     FRAGS = 'vehTypeFrags'
@@ -75,6 +77,7 @@ class VEHICLE_STATS:
     RANKED_CUT_SEASON_2 = 'rankedCutSeason2'
     RANKED_CUT_SEASON_3 = 'rankedCutSeason3'
     RANKED_CUT_ARCHIVE = 'rankedCutArchive'
+    RANKED_CUT_10X10 = 'rankedCut_10x10'
     RATED_7x7_CUT = 'rated7x7Cut'
     GLOBAL_MAP_COMMON_CUT = 'globalMapCommonCut'
     FALLOUT_CUT = 'falloutCut'
@@ -92,6 +95,7 @@ class VEHICLE_STATS:
      RANKED_CUT_SEASON_2,
      RANKED_CUT_SEASON_3,
      RANKED_CUT_ARCHIVE,
+     RANKED_CUT_10X10,
      RATED_7x7_CUT,
      GLOBAL_MAP_COMMON_CUT,
      FALLOUT_CUT,
@@ -113,6 +117,7 @@ _rankedCutSeason1BlockBuilder = DictBlockBuilder(VEHICLE_STATS.RANKED_CUT_SEASON
 _rankedCutSeason2BlockBuilder = DictBlockBuilder(VEHICLE_STATS.RANKED_CUT_SEASON_2, 'I', 'III', {})
 _rankedCutSeason3BlockBuilder = DictBlockBuilder(VEHICLE_STATS.RANKED_CUT_SEASON_3, 'I', 'III', {})
 _rankedCutArchiveBlockBuilder = DictBlockBuilder(VEHICLE_STATS.RANKED_CUT_ARCHIVE, 'I', 'III', {})
+_rankedCut10x10BlockBuilder = DictBlockBuilder(VEHICLE_STATS.RANKED_CUT_10X10, 'I', 'III', {})
 _a30x30CutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.A30x30_CUT, 'I', 'III', {})
 _markOfMasteryCut = DictBlockBuilder(VEHICLE_STATS.MARK_OF_MASTERY_CUT, 'I', 'B', {})
 _epicBattleCutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.EPIC_BATTLE_CUT, 'I', 'III', {})
@@ -616,7 +621,11 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'march21',
  'april21',
  'gagarin21',
- 'may21']
+ 'may21',
+ 'BattlePassCommonPr_5',
+ 'mapboxSeason1',
+ 'mapboxSeason2',
+ 'mapboxSeason3']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -762,7 +771,11 @@ _singleAchievementsPopUps = ['titleSniper',
  'march21',
  'april21',
  'gagarin21',
- 'may21']
+ 'may21',
+ 'BattlePassCommonPr_5',
+ 'mapboxSeason1',
+ 'mapboxSeason2',
+ 'mapboxSeason3']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
@@ -921,7 +934,10 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _maxRankedArchiveBlockBuilder,
  _rankedCutArchiveBlockBuilder,
  _epicBattleSeasonsBlockBuilder,
- _battleRoyaleSeasonsBlockBuilder)
+ _battleRoyaleSeasonsBlockBuilder,
+ _ranked_10x10BlockBuilder,
+ _maxRanked_10x10BlockBuilder,
+ _rankedCut10x10BlockBuilder)
 ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
 ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
 ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]

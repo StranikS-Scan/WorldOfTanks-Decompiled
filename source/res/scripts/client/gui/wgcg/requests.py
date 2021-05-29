@@ -15,6 +15,7 @@ from gui.wgcg.clan.handlers import ClanRequestHandlers
 from gui.wgcg.elen.handlers import ElenRequestHandlers
 from gui.wgcg.utils.handlers import UtilsRequestHandlers
 from gui.wgcg.hof.handlers import HofRequestHandlers
+from gui.wgcg.mapbox.handlers import MapboxRequestHandlers
 from gui.wgcg.promo_screens.handlers import PromoScreensRequestHandlers
 from gui.wgcg.rank.handlers import RankRequestHandlers
 from gui.wgcg.settings import WebRequestDataType
@@ -100,6 +101,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(PromoScreensRequestHandlers(requester).get())
         self.__handlers.update(UtilsRequestHandlers(requester).get())
         self.__handlers.update(CraftmachineRequestHandlers(requester).get())
+        self.__handlers.update(MapboxRequestHandlers(requester).get())
 
     def fini(self):
         super(WgcgRequestsController, self).fini()

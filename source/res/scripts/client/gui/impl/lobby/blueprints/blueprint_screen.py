@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/blueprints/blueprint_screen.py
+import BigWorld
+import nations
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import VEHICLES_WITH_BLUEPRINT_CONFIRM
+from account_helpers.AccountSettings import VEHICLES_WITH_BLUEPRINT_CONFIRM, STORAGE_BLUEPRINTS_CAROUSEL_FILTER
 from adisp import process
 from async import async, await
+from blueprints.BlueprintTypes import BlueprintTypes
 from frameworks.wulf import ViewSettings
 from frameworks.wulf.gui_constants import ViewFlags, ViewStatus
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -12,12 +15,14 @@ from gui.Scaleform.daapi.view.lobby.go_back_helper import getBackBtnLabel
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.impl.dialogs import dialogs
 from gui.impl.backport import createTooltipData, BackportTooltipWindow
+from gui.impl.dialogs import dialogs
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_model import BlueprintScreenModel
 from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_scheme_item_model import BlueprintScreenSchemeItemModel
 from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips import BlueprintScreenTooltips
+from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_value_price import BlueprintValuePrice
+from gui.impl.lobby.blueprints import getBlueprintTooltipData
 from gui.impl.lobby.blueprints.fragments_balance_content import FragmentsBalanceContent
 from gui.impl.pub import ViewImpl
 from gui.server_events.formatters import DISCOUNT_TYPE
@@ -26,14 +31,15 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.gui_items.items_actions.actions import UnlockItemActionWithResult
 from gui.shared.utils.functions import getVehTypeIconName
-from gui.shared.utils.requesters.blueprints_requester import SPECIAL_BLUEPRINT_LEVEL
+from gui.shared.utils.requesters.blueprints_requester import SPECIAL_BLUEPRINT_LEVEL, getNationalFragmentCD
 from helpers import dependency, int2roman
 from helpers.blueprint_generator import g_blueprintGenerator
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.shared import IItemsCache
-_DEFAULT_FRAGMENT_COUNT = 1
 
 class BlueprintScreen(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
+    __connectionMgr = dependency.descriptor(IConnectionManager)
     __slots__ = ('__vehicle', '__xpCost', '__fullXpCost', '__discount', '__convertedIndexes', '__exitEvent', '__accountSettings')
 
     def __init__(self, viewKey, viewModelClazz=BlueprintScreenModel, ctx=None):
@@ -58,7 +64,8 @@ class BlueprintScreen(ViewImpl):
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = event.getArgument('tooltipId')
-            tooltipData = self.__getTooltipData(tooltipId)
+            itemCD = event.getArgument('itemCD')
+            tooltipData = self.__getTooltipData(tooltipId, itemCD)
             if tooltipData is None:
                 return
             window = BackportTooltipWindow(tooltipData, self.getParentWindow())
@@ -70,6 +77,7 @@ class BlueprintScreen(ViewImpl):
 
     def _initialize(self):
         super(BlueprintScreen, self)._initialize()
+        BigWorld.worldDrawEnabled(False)
         self.__addListeners()
         vehicle = self.__vehicle
         bpRequester = self.__itemsCache.items.blueprints
@@ -103,8 +111,6 @@ class BlueprintScreen(ViewImpl):
             self.__updateLayout(model, layout)
             model.setShowUnavailableConfirm(not isAvailableForUnlock and not isSchemeFullCompleted and vehicle.intCD not in self.__accountSettings)
             conversionMaxCost = model.conversionMaxCost
-            conversionMaxCost.valueMain.setIcon(R.images.gui.maps.icons.blueprints.fragment.special.intelligence())
-            conversionMaxCost.valueAdditional.setIcon(R.images.gui.maps.icons.blueprints.fragment.special.dyn(self.__vehicle.nationName)())
             self.__updateConversionData(conversionMaxCost)
             model.setBackBtnLabel(getBackBtnLabel(self.__exitEvent, self.__exitEvent.name, vehicle.shortUserName))
             model.setCurrentStateView(BlueprintScreenModel.INIT)
@@ -115,9 +121,15 @@ class BlueprintScreen(ViewImpl):
             g_blueprintGenerator.cancel(vehicleCD=self.__vehicle.intCD)
         self.__removeListeners()
         AccountSettings.setSettings(VEHICLES_WITH_BLUEPRINT_CONFIRM, self.__accountSettings)
-        self.__exitEvent = None
         self.__convertedIndexes = None
         self.__accountSettings = None
+        if self.__connectionMgr.isConnected():
+            BigWorld.worldDrawEnabled(True)
+        if self.__exitEvent is not None:
+            storageFilter = AccountSettings.getSessionSettings(STORAGE_BLUEPRINTS_CAROUSEL_FILTER)
+            storageFilter['scroll_to'] = None
+            AccountSettings.setSessionSettings(STORAGE_BLUEPRINTS_CAROUSEL_FILTER, storageFilter)
+            self.__exitEvent = None
         super(BlueprintScreen, self)._finalize()
         return
 
@@ -145,21 +157,21 @@ class BlueprintScreen(ViewImpl):
 
     @async
     def __onGoToConversionScreen(self, args):
-        isResearch = yield await(dialogs.blueprintsConversion(parent=self, vehicleCD=self.__vehicle.intCD))
-        if isResearch and self.viewStatus == ViewStatus.LOADED:
+        isResearchClicked, (usedFragmentsData, fragmentCount) = yield await(dialogs.blueprintsConversion(parent=self.getParentWindow(), vehicleCD=self.__vehicle.intCD))
+        if isResearchClicked and self.viewStatus == ViewStatus.LOADED:
             layoutId = int(args['value'])
-            factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self.__vehicle.intCD, _DEFAULT_FRAGMENT_COUNT, layoutId)
+            factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self.__vehicle.intCD, fragmentCount, layoutId, usedNationalFragments=usedFragmentsData)
 
     @async
     def __onGoToAllConversion(self, _=None):
-        fragmentCount = self.viewModel.getMaxConvertibleFragmentCount()
-        isResearch = yield await(dialogs.blueprintsConversion(parent=self, vehicleCD=self.__vehicle.intCD, fragmentCount=fragmentCount))
-        if isResearch and self.viewStatus == ViewStatus.LOADED:
-            factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self.__vehicle.intCD, fragmentCount)
+        isResearchClicked, (usedFragmentsData, fragmentCount) = yield await(dialogs.blueprintsConversion(parent=self.getParentWindow(), vehicleCD=self.__vehicle.intCD, fragmentCount=self.viewModel.getMaxConvertibleFragmentCount()))
+        if isResearchClicked and self.viewStatus == ViewStatus.LOADED:
+            factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self.__vehicle.intCD, fragmentCount, usedNationalFragments=usedFragmentsData)
 
     def __onCloseAction(self):
         if self.__exitEvent is not None:
             g_eventBus.handleEvent(self.__exitEvent, scope=EVENT_BUS_SCOPE.LOBBY)
+            self.__exitEvent = None
         else:
             self.destroyWindow()
         return
@@ -233,14 +245,31 @@ class BlueprintScreen(ViewImpl):
 
     def __updateConversionData(self, model):
         bpRequester = self.__itemsCache.items.blueprints
-        intelligenceFragCount = bpRequester.getIntelligenceData()
-        nationFragCount = bpRequester.getNationalFragments(self.__vehicle.intCD)
+        intelligenceFragCount = bpRequester.getIntelligenceCount()
         nationFragCost, intelligenceFragCost = bpRequester.getRequiredIntelligenceAndNational(self.__vehicle.level)
         model.setHasAdditionalCost(nationFragCost != 0)
+        model.valueMain.setIcon(R.images.gui.maps.icons.blueprints.fragment.special.intelligence())
         model.valueMain.setValue(self.gui.systemLocale.getNumberFormat(intelligenceFragCost))
-        model.valueAdditional.setValue(self.gui.systemLocale.getNumberFormat(nationFragCost))
         model.valueMain.setNotEnough(intelligenceFragCount < intelligenceFragCost)
-        model.valueAdditional.setNotEnough(nationFragCount < nationFragCost)
+        model.valueMain.setItemCD(BlueprintTypes.INTELLIGENCE_DATA)
+        model.valueMain.setTooltipId(BlueprintScreenTooltips.TOOLTIP_BLUEPRINT)
+        additionalValues = model.additionalValues.getItems()
+        additionalValues.clear()
+        options = bpRequester.getNationalRequiredOptions(self.__vehicle.intCD, self.__vehicle.level)
+        allyBallance = bpRequester.getNationalAllianceFragments(self.__vehicle.intCD, self.__vehicle.level)
+        lastPriceIdx = len(options) - 1
+        for index, (nId, cost) in enumerate(options.iteritems()):
+            nationName = nations.MAP[nId]
+            price = BlueprintValuePrice()
+            price.setValue(self.gui.systemLocale.getNumberFormat(cost))
+            price.setIcon(R.images.gui.maps.icons.blueprints.fragment.special.dyn(nationName)())
+            price.setNotEnough(allyBallance[nId] < cost)
+            price.setHasDelimeter(index < lastPriceIdx)
+            price.setItemCD(getNationalFragmentCD(nId))
+            price.setTooltipId(BlueprintScreenTooltips.TOOLTIP_BLUEPRINT)
+            additionalValues.addViewModel(price)
+
+        additionalValues.invalidate()
 
     def __updateResearchPrice(self):
         if not self.__vehicle.isUnlocked:
@@ -274,8 +303,11 @@ class BlueprintScreen(ViewImpl):
         schemeItems.invalidate()
         model.setReceivedCount(receivedCount)
 
-    def __getTooltipData(self, ttId):
-        if ttId == BlueprintScreenTooltips.TOOLTIP_XP_DISCOUNT:
+    def __getTooltipData(self, ttId, itemCD):
+        blueprintTooltip = getBlueprintTooltipData(ttId, itemCD)
+        if blueprintTooltip is not None:
+            return blueprintTooltip
+        elif ttId == BlueprintScreenTooltips.TOOLTIP_XP_DISCOUNT:
             return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.PRICE_DISCOUNT, specialArgs=(self.__xpCost, self.__fullXpCost, DISCOUNT_TYPE.XP))
         elif ttId == BlueprintScreenTooltips.TOOLTIP_BLUEPRINT and self.__vehicle.level not in SPECIAL_BLUEPRINT_LEVEL:
             return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BLUEPRINT_INFO, specialArgs=(self.__vehicle.intCD, True))

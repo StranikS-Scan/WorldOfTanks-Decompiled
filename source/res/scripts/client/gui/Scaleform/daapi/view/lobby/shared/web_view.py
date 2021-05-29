@@ -1,15 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/web_view.py
 import logging
+import typing
 import BigWorld
 from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
 from gui.Scaleform.daapi.view.meta.BrowserScreenMeta import BrowserScreenMeta
-from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.shared import events, EVENT_BUS_SCOPE
-from skeletons.gui.game_control import IBrowserController
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
+from skeletons.gui.game_control import IBrowserController
+if typing.TYPE_CHECKING:
+    from gui.Scaleform.framework.managers import ContainerManager
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 BROWSER_LOAD_CALLBACK_DELAY = 0.01
@@ -132,7 +135,14 @@ class WebViewTransparent(WebView):
         self._browserParams = makeBrowserParams(bgAlpha=0.67)
         self._browserParams.update((ctx or {}).get('browserParams', {}))
         self.__blur = None
+        self.__hiddenLayers = (ctx or {}).get('hiddenLayers', ())
         return
+
+    def _populate(self):
+        super(WebViewTransparent, self)._populate()
+        if self.__hiddenLayers:
+            containerManager = self.app.containerManager
+            containerManager.hideContainers(self.__hiddenLayers, 0)
 
     def setParentWindow(self, window):
         super(WebViewTransparent, self).setParentWindow(window)
@@ -144,5 +154,8 @@ class WebViewTransparent(WebView):
     def _dispose(self):
         if self.__blur is not None:
             self.__blur.fini()
+        if self.__hiddenLayers:
+            containerManager = self.app.containerManager
+            containerManager.showContainers(self.__hiddenLayers, 0)
         super(WebViewTransparent, self)._dispose()
         return

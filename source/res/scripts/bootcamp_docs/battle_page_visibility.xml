@@ -3,29 +3,11 @@
     <id>	0	</id>
     <ribbons>	damage kill armor ram	</ribbons>
     <prebattle></prebattle>
-    <primary_hints></primary_hints>
-    <secondary_hints>
-      <hintNoMove></hintNoMove>
-      <hintNoMoveTurret></hintNoMoveTurret>
-      <hintWaitReload></hintWaitReload>
-      <hintAim></hintAim>
-      <hintExitGameArea></hintExitGameArea>
-      <hintMoveToMarker></hintMoveToMarker>
-    </secondary_hints>
   </lesson>
   <lesson>
     <id>	1	</id>
     <ribbons>	damage kill armor ram	</ribbons>
     <prebattle></prebattle>
-    <primary_hints></primary_hints>
-    <secondary_hints>
-      <hintNoMove></hintNoMove>
-      <hintNoMoveTurret></hintNoMoveTurret>
-      <hintWaitReload></hintWaitReload>
-      <hintAim></hintAim>
-      <hintExitGameArea></hintExitGameArea>
-      <hintMoveToMarker></hintMoveToMarker>
-    </secondary_hints>
   </lesson>
   <lesson>
     <id>	2	</id>
@@ -33,17 +15,6 @@
     <prebattle>
       <timeout>	5.0	</timeout>
     </prebattle>
-    <primary_hints></primary_hints>
-    <secondary_hints>
-      <hintNoMove></hintNoMove>
-      <hintNoMoveTurret></hintNoMoveTurret>
-      <hintWaitReload></hintWaitReload>
-      <hintAim></hintAim>
-      <hintExitGameArea></hintExitGameArea>
-      <hintMoveToMarker></hintMoveToMarker>
-      <hintShootWhileMoving></hintShootWhileMoving>
-      <hintSecondarySniper></hintSecondarySniper>
-    </secondary_hints>
   </lesson>
   <lesson>
     <id>	3	</id>
@@ -51,15 +22,6 @@
     <prebattle>
       <timeout>	5.0	</timeout>
     </prebattle>
-    <primary_hints></primary_hints>
-    <secondary_hints>
-      <hintShootWhileMoving></hintShootWhileMoving>
-      <hintWaitReload></hintWaitReload>
-      <hintAim></hintAim>
-      <hintExitGameArea></hintExitGameArea>
-      <hintSecondarySniper></hintSecondarySniper>
-      <hintUselessConsumable></hintUselessConsumable>
-    </secondary_hints>
   </lesson>
   <lesson>
     <id>	4	</id>
@@ -67,7 +29,6 @@
     <prebattle>
       <timeout>	5.0	</timeout>
     </prebattle>
-    <primary_hints></primary_hints>
   </lesson>
   <lesson>
     <id>	5	</id>
@@ -75,12 +36,10 @@
     <prebattle>
       <timeout>	5.0	</timeout>
     </prebattle>
-    <primary_hints></primary_hints>
   </lesson>
   <lesson>
     <id>	6	</id>
     <ribbons>	damage kill armor ram spotted capture crits	</ribbons>
     <prebattle></prebattle>
-    <primary_hints></primary_hints>
   </lesson>
 </battle_page_visibility.xml>

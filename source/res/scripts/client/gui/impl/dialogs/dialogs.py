@@ -58,10 +58,8 @@ def quitGame(parent=None, guiLoader=None):
 
 @async
 def blueprintsConversion(vehicleCD, fragmentCount=1, parent=None):
-    dialog = BlueprintsConversionView(vehicleCD, fragmentCount, parent.getParentWindow() if parent is not None else None)
-    result = yield await(showSimple(dialog, DialogButtons.RESEARCH))
-    raise AsyncReturn(result)
-    return
+    result = yield await(showSingleDialogWithResultData(layoutID=R.views.lobby.blueprints.Confirm(), wrappedViewClass=BlueprintsConversionView, parent=parent, vehicleCD=vehicleCD, fragmentsCount=fragmentCount))
+    raise AsyncReturn(result.result)
 
 
 @async

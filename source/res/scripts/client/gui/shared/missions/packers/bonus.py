@@ -129,11 +129,15 @@ class SimpleBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, label):
-        model = BonusModel()
+        model = cls._getBonusModel()
         cls._packCommon(bonus, model)
         model.setValue(str(bonus.getValue()))
         model.setLabel(label)
         return model
+
+    @classmethod
+    def _getBonusModel(cls):
+        return BonusModel()
 
 
 class TokenBonusUIPacker(BaseBonusUIPacker):
@@ -305,7 +309,7 @@ class BlueprintBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _pack(cls, bonus):
-        model = BlueprintBonusModel()
+        model = cls._getBonusModel()
         cls._packCommon(bonus, model)
         model.setValue(str(bonus.getCount()))
         model.setType(bonus.getBlueprintName())
@@ -315,6 +319,10 @@ class BlueprintBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _getToolTip(cls, bonus):
         return [TooltipData(tooltip=None, isSpecial=True, specialAlias=bonus.getBlueprintSpecialAlias(), specialArgs=[bonus.getBlueprintSpecialArgs()])]
+
+    @classmethod
+    def _getBonusModel(cls):
+        return BlueprintBonusModel()
 
 
 class CrewBookBonusUIPacker(BaseBonusUIPacker):

@@ -43,8 +43,9 @@ class BattlePassCriteriesGroup(BasicCriteriesGroup):
             self.__addGeneralBattlePassCriteria()
             self._criteria |= REQ_CRITERIA.CUSTOM(self.__isCommonProgression)
 
-    def __isCommonProgression(self, vehicle):
-        progress, cap = self.__battlePassController.getVehicleProgression(vehicle.intCD)
+    @classmethod
+    def __isCommonProgression(cls, vehicle):
+        progress, cap = cls.__battlePassController.getVehicleProgression(vehicle.intCD)
         return cap > 0 and progress < cap
 
     def __addGeneralBattlePassCriteria(self):

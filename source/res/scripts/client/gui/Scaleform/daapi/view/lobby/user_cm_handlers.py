@@ -6,6 +6,8 @@ from adisp import process
 from constants import DENUNCIATIONS_PER_DAY, ARENA_GUI_TYPE, IS_CHINA
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
@@ -30,7 +32,7 @@ from messenger.proto.entities import SharedUserEntity
 from messenger.proto.entities import ClanInfo as UserClanInfo
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
-from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IWeekendBrawlController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -56,12 +58,12 @@ class USER(object):
     CREATE_SQUAD = 'createSquad'
     CREATE_EVENT_SQUAD = 'createEventSquad'
     CREATE_BATTLE_ROYALE_SQUAD = 'createBattleRoyaleSquad'
-    CREATE_WEEKEND_BRAWL_SQUAD = 'createWeekendBrawlSquad'
     INVITE = 'invite'
     REQUEST_FRIENDSHIP = 'requestFriendship'
     VEHICLE_INFO = 'vehicleInfoEx'
     VEHICLE_PREVIEW = 'vehiclePreview'
     END_REFERRAL_COMPANY = 'endReferralCompany'
+    CREATE_MAPBOX_SQUAD = 'createMapboxSquad'
 
 
 _CM_ICONS = {USER.END_REFERRAL_COMPANY: 'endReferralCompany'}
@@ -72,7 +74,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     clanCtrl = dependency.descriptor(IWebController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     __battleRoyale = dependency.descriptor(IBattleRoyaleController)
-    __wBrawlCtrl = dependency.descriptor(IWeekendBrawlController)
+    __mapboxCtrl = dependency.descriptor(IMapboxController)
 
     def __init__(self, cmProxy, ctx=None):
         super(BaseUserCMHandler, self).__init__(cmProxy, ctx, handlers=self._getHandlers())
@@ -172,8 +174,8 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def createBattleRoyaleSquad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD, (self.databaseID,))
 
-    def createWeekendBrawlSquad(self):
-        self._doSelect(PREBATTLE_ACTION_NAME.WEEKEND_BRAWL_SQUAD, (self.databaseID,))
+    def createMapboxSquad(self):
+        self._doSelect(PREBATTLE_ACTION_NAME.MAPBOX_SQUAD, (self.databaseID,))
 
     def invite(self):
         user = self.usersStorage.getUser(self.databaseID)
@@ -195,11 +197,11 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
          USER.REMOVE_FROM_IGNORED: 'unsetIgnored',
          USER.COPY_TO_CLIPBOARD: 'copyToClipboard',
          USER.CREATE_SQUAD: 'createSquad',
-         USER.CREATE_WEEKEND_BRAWL_SQUAD: 'createWeekendBrawlSquad',
          USER.CREATE_EVENT_SQUAD: 'createEventSquad',
          USER.CREATE_BATTLE_ROYALE_SQUAD: 'createBattleRoyaleSquad',
          USER.INVITE: 'invite',
-         USER.REQUEST_FRIENDSHIP: 'requestFriendship'}
+         USER.REQUEST_FRIENDSHIP: 'requestFriendship',
+         USER.CREATE_MAPBOX_SQUAD: 'createMapboxSquad'}
         if not IS_CHINA:
             handlers.update({USER.SET_MUTED: 'setMuted',
              USER.UNSET_MUTED: 'unsetMuted'})
@@ -282,8 +284,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
                 primeTimeStatus, _, _ = self.__battleRoyale.getPrimeTimeStatus()
                 options.append(self._makeItem(USER.CREATE_BATTLE_ROYALE_SQUAD, MENU.contextmenu(USER.CREATE_BATTLE_ROYALE_SQUAD), optInitData={'enabled': canCreate and primeTimeStatus == PrimeTimeStatus.AVAILABLE,
                  'textColor': 13347959}))
-            if self.__wBrawlCtrl.isModeActive():
-                options.append(self._makeItem(USER.CREATE_WEEKEND_BRAWL_SQUAD, MENU.contextmenu(USER.CREATE_WEEKEND_BRAWL_SQUAD), optInitData={'enabled': canCreate,
+            if self.__mapboxCtrl.isEnabled():
+                isOptionEnabled = canCreate and self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
+                options.append(self._makeItem(USER.CREATE_MAPBOX_SQUAD, backport.text(R.strings.menu.contextMenu.createMapboxSquad()), optInitData={'enabled': isOptionEnabled,
                  'textColor': 13347959}))
         return options
 

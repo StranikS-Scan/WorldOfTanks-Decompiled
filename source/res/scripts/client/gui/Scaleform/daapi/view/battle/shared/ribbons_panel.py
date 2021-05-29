@@ -73,7 +73,7 @@ def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater):
     count = ribbon.getTargetsAmount()
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
     if count > 1:
-        updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=_formatCounter(count), bonusRibbonLabelID=bonusRibbonLabelID)
+        updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=_formatCounter(count), bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
     else:
         vIDs = ribbon.getVehIDs()
         if vIDs:
@@ -82,13 +82,13 @@ def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater):
             _logger.error('Enemy detection ribbon has no vehicle ID! %s', ribbon)
             vehicleName = ''
             vehicleClassTag = ''
-        updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, bonusRibbonLabelID=bonusRibbonLabelID)
+        updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
 
 
 def _enemiesStunRibbonFormatter(ribbon, arenaDP, updater):
     count = ribbon.getTargetsAmount()
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
-    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=_formatCounter(count), bonusRibbonLabelID=bonusRibbonLabelID)
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=_formatCounter(count), bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
 
 
 def _singleVehRibbonFormatter(ribbon, arenaDP, updater):
@@ -97,7 +97,7 @@ def _singleVehRibbonFormatter(ribbon, arenaDP, updater):
     else:
         vehicleName, vehicleClassTag = '', ribbon.getDamageSource()
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
-    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=backport.getIntegralFormat(ribbon.getExtraValue()), bonusRibbonLabelID=bonusRibbonLabelID)
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=backport.getIntegralFormat(ribbon.getExtraValue()), bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
 
 
 def _receivedRamRibbonFormatter(ribbon, arenaDP, updater):
@@ -106,7 +106,7 @@ def _receivedRamRibbonFormatter(ribbon, arenaDP, updater):
         vehicleName = ''
         vehicleClassTag = ''
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
-    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=backport.getIntegralFormat(ribbon.getExtraValue()), bonusRibbonLabelID=bonusRibbonLabelID)
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=backport.getIntegralFormat(ribbon.getExtraValue()), bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
 
 
 def _criticalHitRibbonFormatter(ribbon, arenaDP, updater):
@@ -129,7 +129,7 @@ def _killRibbonFormatter(ribbon, arenaDP, updater):
     value = ribbon.getExtraValue()
     leftFieldStr = backport.getIntegralFormat(value) if value else ''
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
-    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=leftFieldStr, bonusRibbonLabelID=bonusRibbonLabelID)
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=leftFieldStr, bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
 
 
 def _epicEventRibbonFormatter(ribbon, arenaDP, updater):
@@ -246,13 +246,13 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
             else:
                 soundNotifications.play(eventName)
 
-    def _addRibbon(self, ribbonID, ribbonType='', leftFieldStr='', vehName='', vehType='', rightFieldStr='', bonusRibbonLabelID=_BRL.NO_BONUS):
-        _logger.debug('RIBBON PANEL: as_addBattleEfficiencyEventS: ribbonID=%s, ribbonType="%s", ", leftFieldStr="%s, vehName="%s", vehType="%s", rightFieldStr="%s", ribbonBonusLabelID=%s.', ribbonID, ribbonType, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID)
-        self.as_addBattleEfficiencyEventS(ribbonType, ribbonID, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID)
+    def _addRibbon(self, ribbonID, ribbonType='', leftFieldStr='', vehName='', vehType='', rightFieldStr='', bonusRibbonLabelID=_BRL.NO_BONUS, role=''):
+        _logger.debug('RIBBON PANEL: as_addBattleEfficiencyEventS: ribbonID=%s, ribbonType="%s", ", leftFieldStr="%s, vehName="%s", vehType="%s", rightFieldStr="%s", bonusRibbonLabelID=%s, role=%s.', ribbonID, ribbonType, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID, role)
+        self.as_addBattleEfficiencyEventS(ribbonType, ribbonID, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID, role)
 
-    def _updateRibbon(self, ribbonID, ribbonType='', leftFieldStr='', vehName='', vehType='', rightFieldStr='', bonusRibbonLabelID=_BRL.NO_BONUS):
-        _logger.debug('RIBBON PANEL: as_updateBattleEfficiencyEventS: ribbonID=%s, ribbonType="%s", ", leftFieldStr="%s, vehName="%s", vehType="%s", rightFieldStr="%s", ribbonBonusLabelID=%s.', ribbonID, ribbonType, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID)
-        self.as_updateBattleEfficiencyEventS(ribbonType, ribbonID, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID)
+    def _updateRibbon(self, ribbonID, ribbonType='', leftFieldStr='', vehName='', vehType='', rightFieldStr='', bonusRibbonLabelID=_BRL.NO_BONUS, role=''):
+        _logger.debug('RIBBON PANEL: as_updateBattleEfficiencyEventS: ribbonID=%s, ribbonType="%s", ", leftFieldStr="%s, vehName="%s", vehType="%s", rightFieldStr="%s", bonusRibbonLabelID=%s, role=%s.', ribbonID, ribbonType, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID, role)
+        self.as_updateBattleEfficiencyEventS(ribbonType, ribbonID, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID, role)
 
     def __onRibbonAdded(self, ribbon):
         self.__invalidateRibbon(ribbon, self._addRibbon)

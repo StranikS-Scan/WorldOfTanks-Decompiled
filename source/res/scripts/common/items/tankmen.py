@@ -613,7 +613,7 @@ class TankmanDescr(object):
             raise
 
     def __paramsOnVehicle(self, vehicleType):
-        isPremium = any((tag in vehicleType.tags for tag in ('premium', 'premiumIGR', 'bob', 'weekend_brawl')))
+        isPremium = 'premium' in vehicleType.tags or 'premiumIGR' in vehicleType.tags
         isSameClass = len(VEHICLE_CLASS_TAGS & vehicleType.tags & self.__vehicleTags)
         return (isPremium, isSameClass)
 
@@ -771,6 +771,11 @@ def getTankmanGroup(tankmanDescr):
 def getCommanderSkinID(crewDescs, crewIDs, crewSkins):
     commanderDescr, commanderInvID = getCommanderInfo(crewDescs, crewIDs)
     return crewSkins.get(commanderInvID, crew_skins_constants.NO_CREW_SKIN_ID)
+
+
+def getTankmenWithTag(nationID, isPremium, tag):
+    nationGroups = getNationGroups(nationID, isPremium)
+    return set([ group.groupID for group in nationGroups.itervalues() if tag in group.tags ])
 
 
 def tankmenGroupHasRole(nationID, groupID, isPremium, role):

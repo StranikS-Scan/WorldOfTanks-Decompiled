@@ -5,8 +5,7 @@ __all__ = ('FEATURES', 'KEYS_MAPPING')
 class FEATURES:
     BOOTCAMP = 'bootcamp'
     IN_BATTLE_COMMUNICATION = 'ibc'
-    MODE_SELECTOR = 'mode_selector'
-    ALL = [BOOTCAMP, IN_BATTLE_COMMUNICATION, MODE_SELECTOR]
+    ALL = [BOOTCAMP, IN_BATTLE_COMMUNICATION]
 
 
 KEYS_MAPPING = {0: 'Left Mouse Button',

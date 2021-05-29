@@ -5,8 +5,6 @@ from constants import JOIN_FAILURE_NAMES, KICK_REASON_NAMES, PREBATTLE_TYPE, QUE
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.prb_control import prb_getters
 from gui.prb_control.settings import PREBATTLE_RESTRICTION, CTRL_ENTITY_TYPE
 from gui.prb_control.settings import UNIT_ERROR_NAMES, UNIT_BROWSER_ERROR_NAMES
@@ -54,14 +52,6 @@ def getVehicleEpicOnlyMessage():
     return i18n.makeString('#system_messages:prebattle/vehicleInvalid/epicOnly')
 
 
-def getVehicleBobOnlyMessage():
-    return backport.text(R.strings.system_messages.prebattle.vehicleInvalid.bobOnly())
-
-
-def getVehicleWeekendBrawlOnlyMessage():
-    return backport.text(R.strings.system_messages.prebattle.vehicleInvalid.weekendBrawlOnly())
-
-
 def getClassLimitMessage4Vehicle(teamLimits):
     classesList = [ i18n.makeString('#menu:classes/%s' % clazz) for clazz in teamLimits['classes'] ]
     return i18n.makeString('#system_messages:prebattle/vehicleInvalid/limits/classes') % ', '.join(classesList)
@@ -104,8 +94,6 @@ _INVALID_VEHICLE_STATE = {PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT: getVehicleN
  PREBATTLE_RESTRICTION.VEHICLE_NOT_READY: getVehicleNotReadyMessage,
  PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED: getVehicleNotSupportedMessage,
  PREBATTLE_RESTRICTION.VEHICLE_EPIC_ONLY: getVehicleEpicOnlyMessage,
- PREBATTLE_RESTRICTION.VEHICLE_BOB_ONLY: getVehicleBobOnlyMessage,
- PREBATTLE_RESTRICTION.VEHICLE_WEEKEND_BRAWL_ONLY: getVehicleWeekendBrawlOnlyMessage,
  PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED: getRotationVehicleIsLockedMessage}
 _INVALID_VEHICLE_IN_TEAM = {PREBATTLE_RESTRICTION.LIMIT_CLASSES: getClassLimitMessage4Vehicle,
  PREBATTLE_RESTRICTION.LIMIT_NATIONS: getNationLimitMessage4Vehicle,

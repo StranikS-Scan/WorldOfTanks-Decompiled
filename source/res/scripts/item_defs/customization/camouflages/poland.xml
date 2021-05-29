@@ -1521,4 +1521,45 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	poland:Pl21_CS_63	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	310	</id>
+      <texture>	vehicles/russian/Camouflage/Pl21_CS_63_3Dst_BV.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Pl21_CS_63_3Dst_BV/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Pl21_CS_63_3Dst_BV/label	</userString>
+      <maxNumber>	1	</maxNumber>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	66 60 60 255	</c0>
+          <c1>	147 121 97 255	</c1>
+          <c2>	88 89 75 255	</c2>
+          <c3>	127 113 95 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.453786	</HULL>
+        <TURRET>	0.453786	</TURRET>
+        <GUN>	0.453786	</GUN>
+      </rotation>
+      <tiling>
+        <poland:Pl03_PzV_Poland8>	1.3 1.7 1.75 2.53	</poland:Pl03_PzV_Poland8>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	3.07972 3.06803	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
 </poland.xml>

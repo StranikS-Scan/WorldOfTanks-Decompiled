@@ -65,8 +65,9 @@ class GunMarkersSetInfo(object):
 
 
 class CrosshairDataProxy(IBattleController):
-    __slots__ = ('__width', '__height', '__positionX', '__positionY', '__scale', '__viewID', '__eManager', '__isArenaStarted', '__strategicCameraID', 'onCrosshairViewChanged', 'onCrosshairOffsetChanged', 'onCrosshairSizeChanged', 'onCrosshairPositionChanged', 'onCrosshairScaleChanged', 'onCrosshairZoomFactorChanged', 'onGunMarkerStateChanged', 'onGunMarkersSetChanged', 'onStrategicCameraChanged', 'onChargeMarkerStateUpdated')
+    __slots__ = ('__width', '__height', '__positionX', '__positionY', '__scale', '__viewID', '__eManager', '__isArenaStarted', '__strategicCameraID', 'onCrosshairViewChanged', 'onCrosshairOffsetChanged', 'onCrosshairSizeChanged', 'onCrosshairPositionChanged', 'onCrosshairScaleChanged', 'onCrosshairZoomFactorChanged', 'onGunMarkerStateChanged', 'onGunMarkersSetChanged', 'onStrategicCameraChanged', 'onChargeMarkerStateUpdated', 'onSPGShotsIndicatorStateChanged')
     settingsCore = dependency.descriptor(ISettingsCore)
+    __spgShotsIndicatorState = aih_global_binding.bindRO(_BINDING_ID.SPG_SHOTS_INDICATOR_STATE)
     __ctrlMode = aih_global_binding.bindRO(_BINDING_ID.CTRL_MODE_NAME)
     __offset = aih_global_binding.bindRO(_BINDING_ID.AIM_OFFSET)
     __zoomFactor = aih_global_binding.bindRO(_BINDING_ID.ZOOM_FACTOR)
@@ -91,6 +92,7 @@ class CrosshairDataProxy(IBattleController):
         self.onChargeMarkerStateUpdated = Event.Event(self.__eManager)
         self.onGunMarkersSetChanged = Event.Event(self.__eManager)
         self.onStrategicCameraChanged = Event.Event(self.__eManager)
+        self.onSPGShotsIndicatorStateChanged = Event.Event(self.__eManager)
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.CROSSHAIR
@@ -104,6 +106,7 @@ class CrosshairDataProxy(IBattleController):
         aih_global_binding.subscribe(_BINDING_ID.CHARGE_MARKER_STATE, self.__onChargeMarkerStateUpdated)
         aih_global_binding.subscribe(_BINDING_ID.ZOOM_FACTOR, self.__onZoomFactorChanged)
         aih_global_binding.subscribe(_BINDING_ID.STRATEGIC_CAMERA, self.__onStrategicCameraChanged)
+        aih_global_binding.subscribe(_BINDING_ID.SPG_SHOTS_INDICATOR_STATE, self.__onSPGShotsIndicatorStateChanged)
         for bindingID in _GUN_MARKERS_SET_IDS:
             aih_global_binding.subscribe(bindingID, self.__onGunMarkersSetChanged)
 
@@ -115,6 +118,7 @@ class CrosshairDataProxy(IBattleController):
     def stopControl(self):
         self.__eManager.clear()
         self.settingsCore.interfaceScale.onScaleChanged -= self.__onScaleFactorChanged
+        aih_global_binding.unsubscribe(_BINDING_ID.SPG_SHOTS_INDICATOR_STATE, self.__onSPGShotsIndicatorStateChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.CTRL_MODE_NAME, self.__onAvatarControlModeChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.AIM_OFFSET, self.__onAimOffsetChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.CLIENT_GUN_MARKER_STATE, self.__onClientGunMarkerStateChanged)
@@ -169,6 +173,9 @@ class CrosshairDataProxy(IBattleController):
     def getGunMarkersSetInfo():
         return GunMarkersSetInfo()
 
+    def getSPGShotsIndicatorState(self):
+        return self.__spgShotsIndicatorState
+
     def __calculateSize(self, notify=True):
         width, height = GUI.screenResolution()[:2]
         if self.__width != width or self.__height != height:
@@ -222,6 +229,9 @@ class CrosshairDataProxy(IBattleController):
 
     def __onGunMarkersSetChanged(self, _):
         self.onGunMarkersSetChanged(self.getGunMarkersSetInfo())
+
+    def __onSPGShotsIndicatorStateChanged(self, value):
+        self.onSPGShotsIndicatorStateChanged(value)
 
     def __onStrategicCameraChanged(self, camera):
         if camera in _STRATEGIC_CAMERA_TO_ID:

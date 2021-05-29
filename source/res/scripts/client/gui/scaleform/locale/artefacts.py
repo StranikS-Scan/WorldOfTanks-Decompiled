@@ -133,6 +133,12 @@ class ARTEFACTS(object):
     DELUXAIMINGSTABILIZER_LONG_SPECIAL = '#artefacts:deluxAimingStabilizer/long_special'
     DELUXENHANCEDAIMDRIVES_NAME = '#artefacts:deluxEnhancedAimDrives/name'
     DELUXENHANCEDAIMDRIVES_LONG_SPECIAL = '#artefacts:deluxEnhancedAimDrives/long_special'
+    DELUXETURBOCHARGER_NAME = '#artefacts:deluxeTurbocharger/name'
+    DELUXETURBOCHARGER_LONG_SPECIAL = '#artefacts:deluxeTurbocharger/long_special'
+    DELUXEEXTRAHEALTHRESERVE_NAME = '#artefacts:deluxeExtraHealthReserve/name'
+    DELUXEEXTRAHEALTHRESERVE_LONG_SPECIAL = '#artefacts:deluxeExtraHealthReserve/long_special'
+    DELUXEEXTRAHEALTHRESERVE_EFFECT_CHASSISRESTORATION = '#artefacts:deluxeExtraHealthReserve/effect/chassisRestoration'
+    DELUXEEXTRAHEALTHRESERVE_ADDITIONAL_DESCR = '#artefacts:deluxeExtraHealthReserve/additional_descr'
     TROPHYBASICTANKRAMMER_NAME = '#artefacts:trophyBasicTankRammer/name'
     TROPHYBASICTANKRAMMER_SHORT_SPECIAL = '#artefacts:trophyBasicTankRammer/short_special'
     TROPHYBASICAIMDRIVES_NAME = '#artefacts:trophyBasicAimDrives/name'
@@ -156,6 +162,10 @@ class ARTEFACTS(object):
     TROPHYUPGRADEDIMPROVEDSIGHTS_NAME = '#artefacts:trophyUpgradedImprovedSights/name'
     TROPHYBASICIMPROVEDSIGHTS_SHORT_SPECIAL = '#artefacts:trophyBasicImprovedSights/short_special'
     TROPHYBASICIMPROVEDSIGHTS_LONG_SPECIAL = '#artefacts:trophyBasicImprovedSights/long_special'
+    TROPHYBASICADDITIONALINVISIBILITYDEVICE_NAME = '#artefacts:trophyBasicAdditionalInvisibilityDevice/name'
+    TROPHYBASICADDITIONALINVISIBILITYDEVICE_SHORT_SPECIAL = '#artefacts:trophyBasicAdditionalInvisibilityDevice/short_special'
+    TROPHYBASICADDITIONALINVISIBILITYDEVICE_LONG_SPECIAL = '#artefacts:trophyBasicAdditionalInvisibilityDevice/long_special'
+    TROPHYUPGRADEDADDITIONALINVISIBILITYDEVICE_NAME = '#artefacts:trophyUpgradedAdditionalInvisibilityDevice/name'
     EMPTY = '#artefacts:empty'
     HANDEXTINGUISHERS_NAME = '#artefacts:handExtinguishers/name'
     HANDEXTINGUISHERS_DESCR = '#artefacts:handExtinguishers/descr'
@@ -417,6 +427,24 @@ class ARTEFACTS(object):
     RECON_NAME = '#artefacts:recon/name'
     RECON_SHORTDESCR = '#artefacts:recon/shortDescr'
     RECON_LONGDESCR = '#artefacts:recon/longDescr'
+    TURBOCHARGERBATTLEBOOSTER_NAME = '#artefacts:turbochargerBattleBooster/name'
+    TURBOCHARGERBATTLEBOOSTER_DESCR = '#artefacts:turbochargerBattleBooster/descr'
+    TURBOCHARGERBATTLEBOOSTER_GAIN_SIMPLE = '#artefacts:turbochargerBattleBooster/gain/simple'
+    TURBOCHARGERBATTLEBOOSTER_GAIN_DELUXE = '#artefacts:turbochargerBattleBooster/gain/deluxe'
+    TURBOCHARGERBATTLEBOOSTER_SHORT_SPECIAL = '#artefacts:turbochargerBattleBooster/short_special'
+    TURBOCHARGERBATTLEBOOSTER_LONG_SPECIAL = '#artefacts:turbochargerBattleBooster/long_special'
+    IMPROVEDSIGHTSBATTLEBOOSTER_NAME = '#artefacts:improvedSightsBattleBooster/name'
+    IMPROVEDSIGHTSBATTLEBOOSTER_DESCR = '#artefacts:improvedSightsBattleBooster/descr'
+    IMPROVEDSIGHTSBATTLEBOOSTER_GAIN_SIMPLE = '#artefacts:improvedSightsBattleBooster/gain/simple'
+    IMPROVEDSIGHTSBATTLEBOOSTER_GAIN_DELUXE = '#artefacts:improvedSightsBattleBooster/gain/deluxe'
+    IMPROVEDSIGHTSBATTLEBOOSTER_SHORT_SPECIAL = '#artefacts:improvedSightsBattleBooster/short_special'
+    IMPROVEDSIGHTSBATTLEBOOSTER_LONG_SPECIAL = '#artefacts:improvedSightsBattleBooster/long_special'
+    ADDITINVISIBILITYDEVICEBATTLEBOOSTER_NAME = '#artefacts:additInvisibilityDeviceBattleBooster/name'
+    ADDITINVISIBILITYDEVICEBATTLEBOOSTER_DESCR = '#artefacts:additInvisibilityDeviceBattleBooster/descr'
+    ADDITINVISIBILITYDEVICEBATTLEBOOSTER_GAIN_SIMPLE = '#artefacts:additInvisibilityDeviceBattleBooster/gain/simple'
+    ADDITINVISIBILITYDEVICEBATTLEBOOSTER_GAIN_DELUXE = '#artefacts:additInvisibilityDeviceBattleBooster/gain/deluxe'
+    ADDITINVISIBILITYDEVICEBATTLEBOOSTER_SHORT_SPECIAL = '#artefacts:additInvisibilityDeviceBattleBooster/short_special'
+    ADDITINVISIBILITYDEVICEBATTLEBOOSTER_LONG_SPECIAL = '#artefacts:additInvisibilityDeviceBattleBooster/long_special'
     SMOKE_NAME = '#artefacts:smoke/name'
     SMOKE_SHORTDESCR = '#artefacts:smoke/shortDescr'
     SMOKE_LONGDESCR = '#artefacts:smoke/longDescr'
@@ -493,7 +521,13 @@ class ARTEFACTS(object):
      AIMINGSTABILIZERBATTLEBOOSTER_GAIN_SIMPLE,
      AIMINGSTABILIZERBATTLEBOOSTER_GAIN_DELUXE,
      ENHANCEDAIMDRIVESBATTLEBOOSTER_GAIN_SIMPLE,
-     ENHANCEDAIMDRIVESBATTLEBOOSTER_GAIN_DELUXE)
+     ENHANCEDAIMDRIVESBATTLEBOOSTER_GAIN_DELUXE,
+     TURBOCHARGERBATTLEBOOSTER_GAIN_SIMPLE,
+     TURBOCHARGERBATTLEBOOSTER_GAIN_DELUXE,
+     IMPROVEDSIGHTSBATTLEBOOSTER_GAIN_SIMPLE,
+     IMPROVEDSIGHTSBATTLEBOOSTER_GAIN_DELUXE,
+     ADDITINVISIBILITYDEVICEBATTLEBOOSTER_GAIN_SIMPLE,
+     ADDITINVISIBILITYDEVICEBATTLEBOOSTER_GAIN_DELUXE)
     ALL_ACTION_ENUM = (CAMOUFLAGEBATTLEBOOSTER_ACTION_PERK,
      CAMOUFLAGEBATTLEBOOSTER_ACTION_BOOST,
      SMOOTHTURRETBATTLEBOOSTER_ACTION_PERK,

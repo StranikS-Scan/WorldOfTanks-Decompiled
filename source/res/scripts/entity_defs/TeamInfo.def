@@ -1,10 +1,15 @@
 <TeamInfo.def>
   <AppealRadius>	3000	</AppealRadius>
+  <Volatile></Volatile>
   <Properties>
     <teamID>
       <Type>	INT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </teamID>
   </Properties>
+  <TempProperties></TempProperties>
+  <ClientMethods></ClientMethods>
+  <CellMethods></CellMethods>
+  <BaseMethods></BaseMethods>
   <shouldBackup>	false	</shouldBackup>
 </TeamInfo.def>

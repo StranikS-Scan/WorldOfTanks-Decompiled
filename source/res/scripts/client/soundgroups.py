@@ -27,6 +27,7 @@ DSP_SEEKSPEED = 200000
 SOUND_ENABLE_STATUS_DEFAULT = 0
 SOUND_ENABLE_STATUS_VALUES = range(3)
 MASTER_VOLUME_DEFAULT = 0.5
+CUSTOM_MP3_EVENTS = ('sixthSense', 'soundExploring')
 
 class CREW_GENDER_SWITCHES(object):
     GROUP = 'SWITCH_ext_vo_gender'
@@ -387,7 +388,7 @@ class SoundGroups(object):
         if self.__muffledByReplay is mute:
             return
         self.__muffledByReplay = mute
-        for categoryName in ('vehicles', 'effects', 'ambient', 'gui'):
+        for categoryName in ('vehicles', 'effects', 'ambient', 'gui', 'voice'):
             volume = 0.0 if mute else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
 
@@ -514,16 +515,12 @@ class SoundGroups(object):
             traceback.print_stack()
         return self.WWgetSound(event, event + ' : ' + str(node), node)
 
-    def playSound3D(self, node, event):
-        if DEBUG_TRACE_SOUND is True:
-            LOG_DEBUG('SOUND: playSound3D', event, node)
-        if DEBUG_TRACE_STACK is True:
-            import traceback
-            traceback.print_stack()
-        s = self.WWgetSound(event, event + ' : ' + str(node), node)
-        if s is not None:
-            s.play()
-        return
+    def prepareMP3(self, event):
+        if event in CUSTOM_MP3_EVENTS:
+            if not ResMgr.isFile('audioww/%s.mp3' % event):
+                LOG_ERROR('SOUND: mp3 file is not exist', 'audioww/%s.mp3' % event)
+            else:
+                WWISE.WW_prepareMP3('%s.mp3' % event)
 
     def getSound2D(self, event):
         if DEBUG_TRACE_SOUND is True:

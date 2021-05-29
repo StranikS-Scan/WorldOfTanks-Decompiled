@@ -86,6 +86,8 @@ class ProfileSection(ProfileSectionMeta):
             data = accountDossier.getFalloutStats()
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
             data = accountDossier.getRankedStats()
+        elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED_10X10:
+            data = accountDossier.getRanked10x10Stats()
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM:
             data = accountDossier.getEpicRandomStats()
         else:

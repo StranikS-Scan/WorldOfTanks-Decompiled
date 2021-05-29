@@ -12,10 +12,7 @@ def isOffspringCrew(tankmanDescr):
     return tankmen.hasTagInTankmenGroup(tankmanDescr.nationID, tankmanDescr.gid, tankmanDescr.isPremium, SPECIAL_CREW_TAG.OFFSPRING)
 
 
-def isMihoCrewCompleted(nationID, tankmenGroups):
-    for tGroup in tankmenGroups:
-        groupID, _, isPremium = tankmen.unpackCrewParams(tGroup)
-        if not tankmen.hasTagInTankmenGroup(nationID, groupID, isPremium, SPECIAL_CREW_TAG.MIHO):
-            return False
-
-    return True
+def isMihoCrewCompleted(nationID, isPremium, tankmenGroups):
+    mihoCrew = tankmen.getTankmenWithTag(nationID, isPremium, SPECIAL_CREW_TAG.MIHO)
+    actualCrew = [ tankmen.unpackCrewParams(tGroup)[0] for tGroup in tankmenGroups ]
+    return set(actualCrew) <= mihoCrew if len(actualCrew) <= len(mihoCrew) else mihoCrew < set(actualCrew)

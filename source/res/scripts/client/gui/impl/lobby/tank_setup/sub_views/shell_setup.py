@@ -1,20 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/sub_views/shell_setup.py
 from functools import partial
+from gui.shared import sound_helpers
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.lobby.tank_setup.configurations.shell import ShellTabsController, ShellDealPanel
 from gui.impl.lobby.tank_setup.sub_views.deal_base_setup import DealBaseSetupSubView
-from gui.impl.lobby.tank_setup.tank_setup_sounds import playShellUpdateSound
 from gui.shared.items_parameters import isAutoReloadGun
 from gui.shared.event_dispatcher import showModuleInfo
 
 class ShellSetupSubView(DealBaseSetupSubView):
     __slots__ = ()
 
-    def updateSlots(self, slotID, fullUpdate=True):
+    def updateSlots(self, slotID, fullUpdate=True, updateData=True):
         gun = self._interactor.getItem().descriptor.gun
         self._viewModel.setClipCount(1 if isAutoReloadGun(gun) else gun.clip[0])
-        super(ShellSetupSubView, self).updateSlots(slotID, fullUpdate)
+        super(ShellSetupSubView, self).updateSlots(slotID, fullUpdate, updateData)
 
     def _createTabsController(self):
         return ShellTabsController()
@@ -33,10 +33,10 @@ class ShellSetupSubView(DealBaseSetupSubView):
         super(ShellSetupSubView, self)._removeListeners()
         self._viewModel.onShellUpdate -= self.__onShellUpdate
 
-    def _updateSlots(self, fullUpdate=True):
+    def _updateSlots(self, fullUpdate=True, dataUpdate=True):
         self._viewModel.setMaxCount(self._interactor.getItem().ammoMaxSize)
         self._viewModel.setInstalledCount(sum((shell.count for shell in self._interactor.getCurrentLayout())))
-        super(ShellSetupSubView, self)._updateSlots(fullUpdate)
+        super(ShellSetupSubView, self)._updateSlots(fullUpdate, dataUpdate)
 
     def __onSwapSlots(self, actionType, args):
         leftID = int(args.get('leftID'))
@@ -54,5 +54,5 @@ class ShellSetupSubView(DealBaseSetupSubView):
         oldCount = self._interactor.getCurrentLayout()[self._interactor.getCurrentShellSlotID(intCD)].count
         totalCount = oldCount + (self._viewModel.getMaxCount() - self._viewModel.getInstalledCount())
         self._interactor.changeShell(intCD, newCount)
-        playShellUpdateSound(oldCount, newCount, totalCount)
+        sound_helpers.playSliderUpdateSound(oldCount, newCount, totalCount)
         self.update()

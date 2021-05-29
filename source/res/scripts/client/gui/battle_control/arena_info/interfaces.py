@@ -154,6 +154,9 @@ class IBattleFieldController(IArenaVehiclesController):
     def setVehicleHealth(self, vehicleID, newHealth):
         pass
 
+    def setVehicleData(self, data):
+        pass
+
     def setVehicleVisible(self, vehicleID, health):
         pass
 
@@ -306,58 +309,4 @@ class ISpawnController(object):
 class IVehicleCountController(IArenaVehiclesController, ViewComponentsController):
 
     def updateAttachedVehicle(self, vehicleID):
-        raise NotImplementedError
-
-
-class IPointsOfInterestController(IBattleController):
-
-    def addPointOfInterest(self, point):
-        raise NotImplementedError
-
-    def removePointOfInterest(self, pointID):
-        raise NotImplementedError
-
-    def addPlugin(self, plugin):
-        raise NotImplementedError
-
-    def removePlugin(self, plugin):
-        raise NotImplementedError
-
-    def getPointsOfInterest(self):
-        raise NotImplementedError
-
-    def getStartTime(self, pointID):
-        raise NotImplementedError
-
-    def getPointStatus(self, pointID):
-        raise NotImplementedError
-
-    def getCapturingPoints(self):
-        raise NotImplementedError
-
-    def invalidateCapturingState(self, poiID, invaders, state, startTime):
-        raise NotImplementedError
-
-    def invalidateCapturedState(self, poiID, vehicleID):
-        raise NotImplementedError
-
-    def invalidateInvaders(self, pointID, invaders):
-        raise NotImplementedError
-
-    def isInvader(self, pointID=None):
-        raise NotImplementedError
-
-    def isInPoint(self, poiID):
-        raise NotImplementedError
-
-    def isAbilityAvailable(self):
-        raise NotImplementedError
-
-    def selectAbility(self, abilityID):
-        raise NotImplementedError
-
-    def getResponseOnChoiceAbility(self, isSuccessfully):
-        raise NotImplementedError
-
-    def usedAbility(self, equipmentCD, vehicleID):
         raise NotImplementedError

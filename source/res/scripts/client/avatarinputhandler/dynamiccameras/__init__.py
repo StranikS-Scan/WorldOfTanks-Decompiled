@@ -6,7 +6,7 @@ import BigWorld
 import Math
 from Math import Vector3, Matrix
 import math_utils
-from AvatarInputHandler.cameras import readVec3, readFloat, ImpulseReason, ICamera
+from AvatarInputHandler.cameras import readVec3, ICamera, readFloat, ImpulseReason
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 
@@ -235,3 +235,46 @@ class CameraWithSettings(ICamera):
         self._userCfg.clear()
         self._cfg.clear()
         self._readConfigs(dataSection)
+
+
+class SPGScrollSmoother(object):
+    __slots__ = ('__smoothingTime', '__easing', '__isEnabled', '__targetValue', '__isStarted')
+
+    def __init__(self, smoothingTime):
+        self.__smoothingTime = smoothingTime
+        self.__easing = math_utils.Easing.exponentialEasing(0.0, 0.0, self.__smoothingTime)
+        self.__isEnabled = False
+        self.__targetValue = 0.0
+        self.__isStarted = False
+
+    def start(self, value):
+        self.__isStarted = True
+        self.__easing.reset(value, value, self.__smoothingTime)
+        self.__targetValue = value
+
+    def stop(self):
+        self.__isStarted = False
+        self.__easing.reset(self.__targetValue, self.__targetValue, self.__smoothingTime)
+
+    def setIsEnabled(self, isEnabled):
+        self.__isEnabled = isEnabled
+        if self.__isStarted:
+            self.__easing.reset(self.__targetValue, self.__targetValue, self.__smoothingTime)
+
+    def moveTo(self, value, limits):
+        value = math_utils.clamp(limits[0], limits[1], value)
+        if self.__isEnabled and self.__isStarted:
+            if not math_utils.almostZero(value - self.__targetValue):
+                self.__easing.reset(self.getCurrentValue(), value, self.__smoothingTime)
+                self.__targetValue = value
+        else:
+            self.__targetValue = value
+
+    def update(self, dt):
+        return self.__easing.update(dt) if self.__isEnabled and self.__isStarted else self.__targetValue
+
+    def setTime(self, smoothingTime):
+        self.__smoothingTime = smoothingTime
+
+    def getCurrentValue(self):
+        return self.__easing.value if self.__isEnabled and self.__isStarted else self.__targetValue

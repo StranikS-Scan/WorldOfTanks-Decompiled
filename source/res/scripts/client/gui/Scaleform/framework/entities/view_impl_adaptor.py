@@ -92,6 +92,7 @@ class ViewImplAdaptor(DisposableEntity, ViewInterface):
         settings = WindowSettings()
         settings.content = view
         settings.parent = parent
+        settings.layer = view.layer
         self.__key = ViewKey(view.layoutID, view.uniqueID)
         self.__window = Window(settings)
         self.__window.onStatusChanged += self.__onStatusChanged

@@ -3,7 +3,7 @@
 import logging
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET, NONE_SHELL_TYPE
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET
-from constants import ATTACK_REASON, ATTACK_REASONS, SHELL_TYPES_LIST
+from constants import ATTACK_REASON, ATTACK_REASONS, SHELL_TYPES_LIST, ROLE_TYPE, ROLE_TYPE_TO_LABEL
 _logger = logging.getLogger(__name__)
 
 def _unpackInteger(packedData):
@@ -270,22 +270,23 @@ class _FeedbackEvent(object):
         return self.__eventType
 
     @staticmethod
-    def fromDict(summaryData):
+    def fromDict(summaryData, additionalData=None):
         raise NotImplementedError
 
 
 class PlayerFeedbackEvent(_FeedbackEvent):
-    __slots__ = ('__battleEventType', '__targetID', '__count', '__extra', '__attackReasonID', '__isBurst')
+    __slots__ = ('__battleEventType', '__targetID', '__count', '__extra', '__attackReasonID', '__isBurst', '__role')
 
-    def __init__(self, feedbackEventType, eventType, targetID, extra, count):
+    def __init__(self, feedbackEventType, eventType, targetID, count, role, extra):
         super(PlayerFeedbackEvent, self).__init__(feedbackEventType)
         self.__battleEventType = eventType
         self.__targetID = targetID
         self.__count = count
+        self.__role = role
         self.__extra = extra
 
     @staticmethod
-    def fromDict(battleEventData):
+    def fromDict(battleEventData, additionalData=None):
         battleEventType = battleEventData['eventType']
         if battleEventType in _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT:
             feedbackEventType = _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT[battleEventType]
@@ -294,7 +295,10 @@ class PlayerFeedbackEvent(_FeedbackEvent):
                 extra = converter(battleEventData['details'])
             else:
                 extra = None
-            return PlayerFeedbackEvent(feedbackEventType, battleEventData['eventType'], battleEventData['targetID'], extra, battleEventData['count'])
+            role = ROLE_TYPE_TO_LABEL[ROLE_TYPE.NOT_DEFINED]
+            if additionalData is not None:
+                role = ROLE_TYPE_TO_LABEL[additionalData.get('role') or ROLE_TYPE.NOT_DEFINED]
+            return PlayerFeedbackEvent(feedbackEventType, battleEventData['eventType'], battleEventData['targetID'], battleEventData['count'], role, extra)
         else:
             return
 
@@ -310,6 +314,9 @@ class PlayerFeedbackEvent(_FeedbackEvent):
     def getCount(self):
         return self.__count
 
+    def getRole(self):
+        return self.__role
+
 
 class BattleSummaryFeedbackEvent(_FeedbackEvent):
     __slots__ = ('__damage', '__trackAssistDamage', '__radioAssistDamage', '__blockedDamage', '__stunAssist')
@@ -323,7 +330,7 @@ class BattleSummaryFeedbackEvent(_FeedbackEvent):
         self.__stunAssist = stunAssist
 
     @staticmethod
-    def fromDict(summaryData):
+    def fromDict(summaryData, additionalData=None):
         return BattleSummaryFeedbackEvent(damage=summaryData['damage'], trackAssist=summaryData['trackAssist'], radioAssist=summaryData['radioAssist'], tankings=summaryData['tankings'], stunAssist=summaryData['stunAssist'])
 
     def getTotalDamage(self):
@@ -348,7 +355,7 @@ class PostmortemSummaryEvent(_FeedbackEvent):
         self.__deathReasonID = lastDeathReasonID
 
     @staticmethod
-    def fromDict(summaryData):
+    def fromDict(summaryData, additionalData=None):
         return PostmortemSummaryEvent(lastKillerID=summaryData['lastKillerID'], lastDeathReasonID=summaryData['lastDeathReasonID'])
 
     def getKillerID(self):

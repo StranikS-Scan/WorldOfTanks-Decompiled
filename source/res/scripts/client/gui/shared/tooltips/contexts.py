@@ -729,17 +729,21 @@ class BlueprintContext(ToolTipContext):
             reqNational, reqIntel = self.__itemsCache.items.blueprints.getRequiredIntelligenceAndNational(vLevel)
             return (reqIntel, reqNational)
 
-    def getTypeAndNation(self, fragmentCD=None):
+    def getFragmentData(self, fragmentCD=None):
         if fragmentCD is None and self.__blueprintCD is None:
             return
         else:
             fragmentCD = self.__blueprintCD if fragmentCD is None else fragmentCD
             fragmentType = getFragmentType(fragmentCD)
-            nation = nations.NAMES[getFragmentNationID(fragmentCD)] if fragmentType == BlueprintTypes.NATIONAL else None
-            return (fragmentType, nation)
+            nation = None
+            alliance = None
+            if fragmentType in (BlueprintTypes.NATIONAL, BlueprintTypes.VEHICLE):
+                nation = nations.NAMES[getFragmentNationID(fragmentCD)]
+                alliance = nations.ALLIANCES_TAGS_ORDER[nations.NATION_TO_ALLIANCE_IDS_MAP[nations.INDICES[nation]]]
+            return (fragmentType, nation, alliance)
 
     def getUniversalCount(self, vehicleCD=None):
-        return self.__itemsCache.items.blueprints.getIntelligenceData() if vehicleCD is None else self.__itemsCache.items.blueprints.getNationalFragments(vehicleCD)
+        return self.__itemsCache.items.blueprints.getIntelligenceCount() if vehicleCD is None else self.__itemsCache.items.blueprints.getNationalFragments(vehicleCD)
 
     def getBlueprintLayout(self, vehicle=None):
         if vehicle is None and self.__blueprintCD is None:
@@ -748,6 +752,12 @@ class BlueprintContext(ToolTipContext):
             if vehicle is None:
                 vehicle = self.__itemsCache.items.getItemByCD(int(self.__blueprintCD))
             return self.__itemsCache.items.blueprints.getLayout(vehicle.intCD, vehicle.level)
+
+    def getAllianceNationFragmentsData(self, vehicle):
+        bpRequester = self.__itemsCache.items.blueprints
+        nationalRequiredOptions = bpRequester.getNationalRequiredOptions(vehicle.intCD, vehicle.level)
+        nationalAllianceFragments = bpRequester.getNationalAllianceFragments(vehicle.intCD, vehicle.level)
+        return (nationalRequiredOptions, nationalAllianceFragments)
 
 
 class VehicleAnnouncementContext(ToolTipContext):

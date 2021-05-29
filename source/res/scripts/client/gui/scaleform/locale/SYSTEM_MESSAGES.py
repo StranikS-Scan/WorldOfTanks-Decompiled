@@ -84,8 +84,6 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_readyVehicle'
     PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED = '#system_messages:prebattle/vehicleInvalid/vehicleNotSupported'
     PREBATTLE_VEHICLEINVALID_EPICONLY = '#system_messages:prebattle/vehicleInvalid/epicOnly'
-    PREBATTLE_VEHICLEINVALID_WEEKENDBRAWLONLY = '#system_messages:prebattle/vehicleInvalid/weekendBrawlOnly'
-    PREBATTLE_VEHICLEINVALID_BOBONLY = '#system_messages:prebattle/vehicleInvalid/bobOnly'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
     PREBATTLE_VEHICLEINVALID_FALLOUTONLY = '#system_messages:prebattle/vehicleInvalid/falloutOnly'
     PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS = '#system_messages:prebattle/vehicleInvalid/limits/nations'
@@ -1098,6 +1096,7 @@ class SYSTEM_MESSAGES(object):
     ROYALE_NOTIFICATION_PRIMETIME = '#system_messages:royale/notification/primeTime'
     ROYALE_NOTIFICATION_CONGRATULATIONS = '#system_messages:royale/notification/congratulations'
     ROYALE_NOTIFICATIONS_SINGLELEVEL_TEXT = '#system_messages:royale/notifications/singleLevel/text'
+    MAPBOX_NOTIFICATION_PRIMETIME = '#system_messages:mapbox/notification/primeTime'
     TOKENS_NOTIFICATION_MARK_ACQUIRED = '#system_messages:tokens/notification/mark_acquired'
     RANKED_NOTIFICATION_YEARLB_POSITIVE_TITLE = '#system_messages:ranked/notification/yearLB/positive/title'
     RANKED_NOTIFICATION_YEARLB_POSITIVE_BODY = '#system_messages:ranked/notification/yearLB/positive/body'
@@ -1187,6 +1186,16 @@ class SYSTEM_MESSAGES(object):
     UPGRADETROPHYDEVICE_SWITCH_OFF_BODY = '#system_messages:upgradeTrophyDevice/switch_off/body'
     BATTLEPASS_BADGEREMOVED_TEXT = '#system_messages:battlePass/badgeRemoved/text'
     BATTLEPASS_REWARDCHOICE_ERROR = '#system_messages:battlePass/rewardChoice/error'
+    BATTLEPASS_GAMEMODEENABLED_HEADER = '#system_messages:battlePass/gameModeEnabled/header'
+    BATTLEPASS_GAMEMODEENABLED_BODY_22 = '#system_messages:battlePass/gameModeEnabled/body/22'
+    BATTLEPASS_GAMEMODEENABLED_BODY_27 = '#system_messages:battlePass/gameModeEnabled/body/27'
+    BATTLEPASS_GAMEMODEENABLED_BODY_37 = '#system_messages:battlePass/gameModeEnabled/body/37'
+    BATTLEPASS_SEASONEND_TEXT = '#system_messages:battlePass/seasonEnd/text'
+    BATTLEPASS_SEASONEND_REWARDS_STYLE = '#system_messages:battlePass/seasonEnd/rewards/style'
+    BATTLEPASS_SEASONEND_REWARDS_CREWBOOK = '#system_messages:battlePass/seasonEnd/rewards/crewBook'
+    BATTLEPASS_SEASONEND_REWARDS_DEVICE = '#system_messages:battlePass/seasonEnd/rewards/device'
+    BATTLEPASS_SEASONEND_REWARDS_TROPHY = '#system_messages:battlePass/seasonEnd/rewards/trophy'
+    BATTLEPASS_SEASONEND_REWARDS_BLUEPRINTS = '#system_messages:battlePass/seasonEnd/rewards/blueprints'
     COLLECTORVEHICLE_SWITCH_OFF_TITLE = '#system_messages:collectorVehicle/switch_off/title'
     COLLECTORVEHICLE_SWITCH_OFF_BODY = '#system_messages:collectorVehicle/switch_off/body'
     COLLECTORVEHICLE_SWITCH_ON_TITLE = '#system_messages:collectorVehicle/switch_on/title'
@@ -1404,8 +1413,6 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE,
      PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED,
      PREBATTLE_VEHICLEINVALID_EPICONLY,
-     PREBATTLE_VEHICLEINVALID_WEEKENDBRAWLONLY,
-     PREBATTLE_VEHICLEINVALID_BOBONLY,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
      PREBATTLE_VEHICLEINVALID_FALLOUTONLY,
      PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS,
@@ -2418,6 +2425,7 @@ class SYSTEM_MESSAGES(object):
      ROYALE_NOTIFICATION_PRIMETIME,
      ROYALE_NOTIFICATION_CONGRATULATIONS,
      ROYALE_NOTIFICATIONS_SINGLELEVEL_TEXT,
+     MAPBOX_NOTIFICATION_PRIMETIME,
      TOKENS_NOTIFICATION_MARK_ACQUIRED,
      RANKED_NOTIFICATION_YEARLB_POSITIVE_TITLE,
      RANKED_NOTIFICATION_YEARLB_POSITIVE_BODY,
@@ -2507,6 +2515,16 @@ class SYSTEM_MESSAGES(object):
      UPGRADETROPHYDEVICE_SWITCH_OFF_BODY,
      BATTLEPASS_BADGEREMOVED_TEXT,
      BATTLEPASS_REWARDCHOICE_ERROR,
+     BATTLEPASS_GAMEMODEENABLED_HEADER,
+     BATTLEPASS_GAMEMODEENABLED_BODY_22,
+     BATTLEPASS_GAMEMODEENABLED_BODY_27,
+     BATTLEPASS_GAMEMODEENABLED_BODY_37,
+     BATTLEPASS_SEASONEND_TEXT,
+     BATTLEPASS_SEASONEND_REWARDS_STYLE,
+     BATTLEPASS_SEASONEND_REWARDS_CREWBOOK,
+     BATTLEPASS_SEASONEND_REWARDS_DEVICE,
+     BATTLEPASS_SEASONEND_REWARDS_TROPHY,
+     BATTLEPASS_SEASONEND_REWARDS_BLUEPRINTS,
      COLLECTORVEHICLE_SWITCH_OFF_TITLE,
      COLLECTORVEHICLE_SWITCH_OFF_BODY,
      COLLECTORVEHICLE_SWITCH_ON_TITLE,

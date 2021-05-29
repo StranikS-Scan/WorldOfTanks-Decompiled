@@ -113,11 +113,12 @@ class _VehiclesFilter(object):
 def _getCustomizationCriteria(invVehicles):
 
     def criteria(item):
-        if not item.isVehicleBound:
-            return all((not item.mayInstall(vehicle) for vehicle in invVehicles.getVehicles(item)))
-        inventoryVehicles = set((vehicle.intCD for vehicle in invVehicles.getVehicles(item)))
-        boundVehicles = item.getBoundVehicles()
-        return not boundVehicles.issubset(inventoryVehicles)
+        if item.isVehicleBound:
+            boundVehicles = item.getBoundVehicles()
+            if boundVehicles:
+                inventoryVehicles = set((vehicle.intCD for vehicle in invVehicles.getVehicles(item)))
+                return not boundVehicles.issubset(inventoryVehicles)
+        return all((not item.mayInstall(vehicle) for vehicle in invVehicles.getVehicles(item)))
 
     return criteria
 

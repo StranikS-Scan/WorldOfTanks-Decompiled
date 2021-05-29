@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/confirm_customization_item_dialog_meta.py
 import math
+import SoundGroups
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.view.dialogs import IDialogMeta
+from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
 from gui.Scaleform.framework import ScopeTemplates
 from gui.shared import events
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
@@ -14,6 +16,7 @@ from gui.shared.money import Currency, CurrencyCollection
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils.decorators import process
 from items.components.c11n_constants import MAX_ITEMS_FOR_BUY_OPERATION
+from skeletons.gui.game_control import ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
 from helpers import dependency
 
@@ -28,6 +31,7 @@ class ItemsCountStepSize(object):
 
 class ConfirmC11nBuyMeta(IDialogMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    __soundEventChecker = dependency.descriptor(ISoundEventChecker)
 
     def __init__(self, itemCD, title=DIALOGS.BUYCONFIRMATION_TITLE, submitBtn=DIALOGS.BUYCONFIRMATION_SUBMIT, cancelBtn=DIALOGS.BUYCONFIRMATION_CANCEL, vehicle=None):
         self.__item = self.itemsCache.items.getItemByCD(itemCD)
@@ -42,9 +46,15 @@ class ConfirmC11nBuyMeta(IDialogMeta):
 
     @process('buyItem')
     def submit(self, item, count, _, vehicle):
-        result = yield CustomizationsBuyer(g_currentVehicle.item, item, count).request()
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        try:
+            self.__soundEventChecker.lockPlayingSounds()
+            result = yield CustomizationsBuyer(g_currentVehicle.item, item, count).request()
+            if result.userMsg:
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            if result.success:
+                SoundGroups.g_instance.playSound2D(SOUNDS.PURCHASE)
+        finally:
+            self.__soundEventChecker.unlockPlayingSounds(restore=False)
 
     def getEventType(self):
         return events.ShowDialogEvent.SHOW_CONFIRM_C11N_BUY_DIALOG

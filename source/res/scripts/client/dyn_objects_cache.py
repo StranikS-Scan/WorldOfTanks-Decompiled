@@ -17,7 +17,6 @@ _AirDrop = namedtuple('_AirDrop', ('model', 'dropAnimation'))
 _LootEffect = namedtuple('_LootEffect', ('path_fwd', 'path'))
 _LootModel = namedtuple('_LootModel', ('name', 'border'))
 _Loot = namedtuple('_Loot', ('model', 'effect', 'pickupEffect'))
-_PointOfInterest = namedtuple('_PointOfInterest', ('modelName', 'color', 'overTerrainHeight'))
 _MinesEffects = namedtuple('_MinesEffects', ('plantEffect', 'idleEffect', 'destroyEffect'))
 _BerserkerEffects = namedtuple('_BerserkerEffects', ('turretEffect', 'hullEffect', 'transformPath'))
 MIN_OVER_TERRAIN_HEIGHT = 0
@@ -77,15 +76,6 @@ def _createTerrainCircleSettings(section):
             result[sectionKey] = _TerrainCircleSettings(subSection.readString('visual'), int(subSection.readString('color'), 0), subSection.readBool('enableAccurateCollision'), max(MIN_UPDATE_INTERVAL, subSection.readFloat('maxUpdateInterval')), max(MIN_OVER_TERRAIN_HEIGHT, subSection.readFloat('overTerrainHeight')), subSection.readFloat('cutOffYDistance', default=-1.0))
 
     return result
-
-
-def _createPointOfInterest(section, prerequisites):
-    modelName = section.readString('model')
-    color = int(section.readString('color'), 0)
-    overTerrainHeight = section.readFloat('overTerrainHeight')
-    _addPrecacheCandidate(prerequisites, modelName)
-    pointOfInterest = _PointOfInterest(modelName, color, overTerrainHeight)
-    return pointOfInterest
 
 
 def _parseEffectSubsection(dataSection, sectionKey):
@@ -182,20 +172,19 @@ class DynObjectsBase(object):
         pass
 
 
-class _CommonDynObjects(DynObjectsBase):
+class _CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
 
     def __init__(self):
-        super(_CommonDynObjects, self).__init__()
+        super(_CommonForBattleRoyaleAndEpicBattleDynObjects, self).__init__()
         self.__inspiringEffect = None
         self.__healPointEffect = None
-        self.__resourcesCache = None
         return
 
     def init(self, dataSection):
         if not self._initialized:
             self.__inspiringEffect = _createTerrainCircleSettings(dataSection['InspireAreaVisual'])
             self.__healPointEffect = _createTerrainCircleSettings(dataSection[self._healPointKey])
-            super(_CommonDynObjects, self).init(dataSection)
+            super(_CommonForBattleRoyaleAndEpicBattleDynObjects, self).init(dataSection)
 
     def getInspiringEffect(self):
         return self.__inspiringEffect
@@ -207,9 +196,6 @@ class _CommonDynObjects(DynObjectsBase):
     def _healPointKey(self):
         pass
 
-    def _onResourcesLoaded(self, resourceRefs):
-        self.__resourcesCache = resourceRefs
-
     def clear(self):
         pass
 
@@ -217,7 +203,7 @@ class _CommonDynObjects(DynObjectsBase):
         pass
 
 
-class _BattleRoyaleDynObjects(_CommonDynObjects):
+class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
 
     def __init__(self):
         super(_BattleRoyaleDynObjects, self).__init__()
@@ -232,6 +218,7 @@ class _BattleRoyaleDynObjects(_CommonDynObjects):
         self.__loots = {}
         self.__minesEffects = None
         self.__berserkerEffects = None
+        self.__resourcesCache = None
         return
 
     def init(self, dataSection):
@@ -248,7 +235,7 @@ class _BattleRoyaleDynObjects(_CommonDynObjects):
             self.__dropPlane = _createDropPlane(dataSection['dropPlane'], prerequisites)
             self.__airDrop = _createAirDrop(dataSection['airDrop'], prerequisites)
             self.__loots = _createLoots(dataSection, dataSection['lootTypes'], prerequisites)
-            BigWorld.loadResourceListBG(list(prerequisites), makeCallbackWeak(self._onResourcesLoaded))
+            BigWorld.loadResourceListBG(list(prerequisites), makeCallbackWeak(self.__onResourcesLoaded))
             super(_BattleRoyaleDynObjects, self).init(dataSection)
 
     def getVehicleUpgradeEffect(self):
@@ -300,38 +287,13 @@ class _BattleRoyaleDynObjects(_CommonDynObjects):
     def _healPointKey(self):
         pass
 
-
-class _WeekendBrawlDynObjects(_CommonDynObjects):
-
-    def __init__(self):
-        super(_WeekendBrawlDynObjects, self).__init__()
-        self.__pointsOfInterest = None
-        return
-
-    def init(self, dataSection):
-        prerequisites = set()
-        section = dataSection['pointOfInterest']
-        if section is not None:
-            self.__pointsOfInterest = _createPointOfInterest(section, prerequisites)
-            BigWorld.loadResourceListBG(list(prerequisites), makeCallbackWeak(self._onResourcesLoaded))
-        else:
-            _logger.error('Failed to read pointOfInterest config section')
-        super(_WeekendBrawlDynObjects, self).init(dataSection)
-        return
-
-    def destroy(self):
-        self.__pointsOfInterest = None
-        super(_WeekendBrawlDynObjects, self).destroy()
-        return
-
-    def getPointsOfInterest(self):
-        return self.__pointsOfInterest
+    def __onResourcesLoaded(self, resourceRefs):
+        self.__resourcesCache = resourceRefs
 
 
 _CONF_STORAGES = {ARENA_GUI_TYPE.BATTLE_ROYALE: _BattleRoyaleDynObjects,
- ARENA_GUI_TYPE.EPIC_BATTLE: _CommonDynObjects,
- ARENA_GUI_TYPE.EPIC_TRAINING: _CommonDynObjects,
- ARENA_GUI_TYPE.WEEKEND_BRAWL: _WeekendBrawlDynObjects}
+ ARENA_GUI_TYPE.EPIC_BATTLE: _CommonForBattleRoyaleAndEpicBattleDynObjects,
+ ARENA_GUI_TYPE.EPIC_TRAINING: _CommonForBattleRoyaleAndEpicBattleDynObjects}
 
 class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
 

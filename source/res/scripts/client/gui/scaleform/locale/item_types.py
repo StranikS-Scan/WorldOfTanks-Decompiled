@@ -76,6 +76,8 @@ class ITEM_TYPES(object):
     TANKMAN_SKILLS_COMMANDER_TUTOR_DESCR = '#item_types:tankman/skills/commander_tutor_descr'
     TANKMAN_SKILLS_COMMANDER_EXPERT = '#item_types:tankman/skills/commander_expert'
     TANKMAN_SKILLS_COMMANDER_EXPERT_DESCR = '#item_types:tankman/skills/commander_expert_descr'
+    TANKMAN_SKILLS_COMMANDER_ENEMYSHOTPREDICTOR = '#item_types:tankman/skills/commander_enemyShotPredictor'
+    TANKMAN_SKILLS_COMMANDER_ENEMYSHOTPREDICTOR_DESCR = '#item_types:tankman/skills/commander_enemyShotPredictor_descr'
     TANKMAN_SKILLS_COMMANDER_UNIVERSALIST = '#item_types:tankman/skills/commander_universalist'
     TANKMAN_SKILLS_COMMANDER_UNIVERSALIST_DESCR = '#item_types:tankman/skills/commander_universalist_descr'
     TANKMAN_SKILLS_COMMANDER_SIXTHSENSE = '#item_types:tankman/skills/commander_sixthSense'
@@ -186,6 +188,8 @@ class ITEM_TYPES(object):
      TANKMAN_SKILLS_COMMANDER_TUTOR_DESCR,
      TANKMAN_SKILLS_COMMANDER_EXPERT,
      TANKMAN_SKILLS_COMMANDER_EXPERT_DESCR,
+     TANKMAN_SKILLS_COMMANDER_ENEMYSHOTPREDICTOR,
+     TANKMAN_SKILLS_COMMANDER_ENEMYSHOTPREDICTOR_DESCR,
      TANKMAN_SKILLS_COMMANDER_UNIVERSALIST,
      TANKMAN_SKILLS_COMMANDER_UNIVERSALIST_DESCR,
      TANKMAN_SKILLS_COMMANDER_SIXTHSENSE,

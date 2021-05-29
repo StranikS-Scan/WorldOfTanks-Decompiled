@@ -15,7 +15,7 @@ class BattleResultViewModel(BrBaseViewModel):
         return self._getViewModel(2)
 
     @property
-    def leaderboardModel(self):
+    def leaderboardLobbyModel(self):
         return self._getViewModel(3)
 
     def getMapName(self):
@@ -27,5 +27,5 @@ class BattleResultViewModel(BrBaseViewModel):
     def _initialize(self):
         super(BattleResultViewModel, self)._initialize()
         self._addViewModelProperty('personalResults', BattleResultsTabModel())
-        self._addViewModelProperty('leaderboardModel', LeaderboardModel())
+        self._addViewModelProperty('leaderboardLobbyModel', LeaderboardModel())
         self._addStringProperty('mapName', '')

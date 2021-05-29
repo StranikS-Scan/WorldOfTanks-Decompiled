@@ -267,13 +267,10 @@ class BattleSessionProvider(IBattleSessionProvider):
             ctrl.switchToPostmortem(noRespawnPossible, respawnAvailable)
         return
 
-    def useLoaderIntuition(self):
-        ctrl = self.__sharedRepo.messages
-        if ctrl is not None:
-            ctrl.showVehicleMessage('LOADER_INTUITION_WAS_USED')
-        ctrl = self.__sharedRepo.ammo
-        if ctrl is not None:
-            ctrl.useLoaderIntuition()
+    def updateVehicleQuickShellChanger(self, isActive):
+        ammoCtrl = self.__sharedRepo.ammo
+        if ammoCtrl is not None:
+            ammoCtrl.updateVehicleQuickShellChanger(isActive)
         return
 
     def movingToRespawnBase(self):

@@ -77,8 +77,8 @@
       <fallout></fallout>
       <epic_battles></epic_battles>
       <bob></bob>
-      <weekend_brawl></weekend_brawl>
       <battle_royale></battle_royale>
+      <mapbox></mapbox>
       <rent_promotion></rent_promotion>
       <cannot_be_sold></cannot_be_sold>
       <unobservable></unobservable>
@@ -113,6 +113,21 @@
       <earn_crystals></earn_crystals>
       <lockOptionalDevices></lockOptionalDevices>
       <spawned></spawned>
+      <role_HT_tank></role_HT_tank>
+      <role_HT_assault></role_HT_assault>
+      <role_HT_universal></role_HT_universal>
+      <role_HT_fireSupport></role_HT_fireSupport>
+      <role_MT_tank></role_MT_tank>
+      <role_MT_universal></role_MT_universal>
+      <role_MT_fireSupport></role_MT_fireSupport>
+      <role_MT_assassin></role_MT_assassin>
+      <role_ATSPG_tank></role_ATSPG_tank>
+      <role_ATSPG_universal></role_ATSPG_universal>
+      <role_ATSPG_fireSupport></role_ATSPG_fireSupport>
+      <role_ATSPG_burstDamage></role_ATSPG_burstDamage>
+      <role_LT_tracked></role_LT_tracked>
+      <role_LT_wheeled></role_LT_wheeled>
+      <role_SPG></role_SPG>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -184,6 +199,8 @@
       <improvedSights></improvedSights>
       <improvedConfiguration></improvedConfiguration>
       <healthReserve></healthReserve>
+      <commandersView></commandersView>
+      <notBuyWhenAutoEquip></notBuyWhenAutoEquip>
     </tags>
   </optionalDevice>
   <shell>
@@ -221,7 +238,13 @@
       <premium_equipment></premium_equipment>
       <builtin></builtin>
       <trophyUpgraded></trophyUpgraded>
-      <weekend_brawl></weekend_brawl>
+      <turbocharger></turbocharger>
+      <healthReserve></healthReserve>
+      <rotationMechanism></rotationMechanism>
+      <improvedSights></improvedSights>
+      <additInvisibilityDevice></additInvisibilityDevice>
+      <commandersView></commandersView>
+      <notBuyWhenAutoEquip></notBuyWhenAutoEquip>
     </tags>
   </equipment>
   <customizationItem>

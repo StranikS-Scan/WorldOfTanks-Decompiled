@@ -211,9 +211,8 @@ class PreBattleConditions(ConditionsParser):
 
 class PostBattleConditions(ConditionsParser):
 
-    def __init__(self, section, preBattleCond, isCompleted):
+    def __init__(self, section, preBattleCond):
         self.__preBattleCond = weakref.proxy(preBattleCond)
-        self.__isCompleted = isCompleted
         super(PostBattleConditions, self).__init__(section, rootName='postBattle')
 
     def _handleCondition(self, name, data, uniqueName, group):
@@ -237,9 +236,7 @@ class PostBattleConditions(ConditionsParser):
             return conditions.CritsGroup(uniqueName, data)
         if name == 'unit':
             return conditions.UnitResults(uniqueName, data, self.__preBattleCond)
-        if name == 'multiStunEvent':
-            return conditions.MultiStunEvent(uniqueName, data)
-        return conditions.UsedEquipment(uniqueName, data, self.__isCompleted) if name == 'usedEquipment' else None
+        return conditions.MultiStunEvent(uniqueName, data) if name == 'multiStunEvent' else None
 
 
 class BonusConditions(ConditionsParser):

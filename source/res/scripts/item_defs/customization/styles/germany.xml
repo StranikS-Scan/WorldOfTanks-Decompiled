@@ -1420,4 +1420,44 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 2500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G154_Kpz_07_RH	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	261	</id>
+      <texture>	gui/maps/vehicles/styles/G154_Kpz_07_RH_3Dst_MM.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G154_Kpz_07_RH_3Dst_MM_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G154_Kpz_07_RH_3Dst_MM	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G154_Kpz_07_RH_3Dst_MM	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	309	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </germany.xml>

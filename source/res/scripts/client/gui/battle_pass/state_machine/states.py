@@ -277,9 +277,6 @@ class RewardAnyState(State):
                 machine.clearSelf()
                 machine.post(StateEvent())
                 return
-            if chapter and chosenStyleLevel is not None and self.__battlePass.isFinalLevel(data.get('newLevel', 0)) and chapter < len(self.__battlePass.getChapterConfig()):
-                machine.clearSelf()
-                machine.addStyleToChoose(chapter + 1)
             showBattlePassAwardsWindow(rewards, data)
             return
 

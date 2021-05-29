@@ -10,6 +10,7 @@ from gui import GUI_SETTINGS
 from gui.battle_pass.battle_pass_bonuses_helper import TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME
 from gui.battle_pass.sounds import AwardVideoSoundControl
 from gui.impl.gen import R
+from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.event_dispatcher import showOfferGiftsWindow, showBattlePassAwardsWindow, showBattlePassDailyQuestsIntroWindow
 from gui.shared.formatters import time_formatters
@@ -22,7 +23,6 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
-from tutorial.control.game_vars import getVehicleByIntCD
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import CustomizationsBonus, TmanTemplateTokensBonus
 _logger = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ def isBattlePassActiveSeason():
 
 
 def getPointsInfoStringID():
-    return R.strings.battle_pass_2020.points.top()
+    return R.strings.battle_pass.points.top()
 
 
 def getLevelProgression(level, points, levelsConfig):
@@ -71,7 +71,7 @@ def isBattlePassBought():
 
 
 def getFormattedTimeLeft(seconds):
-    return time_formatters.getTillTimeByResource(seconds, R.strings.battle_pass_2020.status.timeLeft, removeLeadingZeros=True)
+    return time_formatters.getTillTimeByResource(seconds, R.strings.battle_pass.status.timeLeft, removeLeadingZeros=True)
 
 
 def getSeasonHistory(seasonID):
@@ -106,9 +106,21 @@ def getSupportedArenaBonusTypeFor(queueType, isInUnit):
         arenaBonusType = ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD if isInUnit else ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO
     else:
         arenaBonusTypeByQueueType = {QUEUE_TYPE.RANDOMS: ARENA_BONUS_TYPE.REGULAR,
-         QUEUE_TYPE.RANKED: ARENA_BONUS_TYPE.RANKED}
+         QUEUE_TYPE.RANKED: ARENA_BONUS_TYPE.RANKED,
+         QUEUE_TYPE.MAPBOX: ARENA_BONUS_TYPE.MAPBOX}
         arenaBonusType = arenaBonusTypeByQueueType.get(queueType, ARENA_BONUS_TYPE.UNKNOWN)
     return arenaBonusType
+
+
+def getSupportedCurrentArenaBonusType(queueType=None):
+    dispatcher = g_prbLoader.getDispatcher()
+    isInUnit = False
+    if dispatcher:
+        state = dispatcher.getFunctionalState()
+        isInUnit = state.isInUnit(state.entityTypeID)
+        if queueType is None:
+            queueType = dispatcher.getEntity().getQueueType()
+    return getSupportedArenaBonusTypeFor(queueType, isInUnit)
 
 
 def setInBattleProgress(section, basePoints, sumPoints, hasBattlePass, setIfEmpty, arenaBonusType):
@@ -249,15 +261,6 @@ def getStyleForChapter(chapter, itemsCache=None):
 def getStyleInfoForChapter(chapter, itemsCache=None):
     chosenItems = itemsCache.items.battlePass.getChosenItems()
     return (None, None) if chosenItems is None or chapter not in chosenItems else chosenItems[chapter]
-
-
-def isVehicleInInventoryByStyle(style):
-    try:
-        intCD = first(style.descriptor.filter.include[0].vehicles)
-    except IndexError:
-        return False
-
-    return getVehicleByIntCD(intCD).isInInventory
 
 
 @replace_none_kwargs(itemsCache=IItemsCache)

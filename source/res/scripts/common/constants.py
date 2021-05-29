@@ -7,6 +7,7 @@ from math import cos, radians
 from time import time as timestamp
 from collections import namedtuple
 from itertools import izip
+from realm import CURRENT_REALM
 try:
     import BigWorld
 except ImportError:
@@ -22,7 +23,6 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'RU'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -98,7 +98,6 @@ IS_SHOW_SERVER_STATS = not IS_CHINA
 IS_CAT_LOADED = False
 IS_TUTORIAL_ENABLED = True
 LEAKS_DETECTOR_MAX_EXECUTION_TIME = 2.0
-UNKNOWN_TIME_ON_ARENA = -1
 IS_IGR_ENABLED = IS_KOREA or IS_CHINA
 SERVER_TICK_LENGTH = 0.1
 NULL_ENTITY_ID = 0
@@ -180,7 +179,7 @@ class ARENA_GUI_TYPE:
     EPIC_BATTLE = 21
     EPIC_TRAINING = 22
     BATTLE_ROYALE = 23
-    WEEKEND_BRAWL = 24
+    MAPBOX = 24
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
@@ -201,7 +200,7 @@ class ARENA_GUI_TYPE:
      EPIC_BATTLE,
      EPIC_TRAINING,
      BATTLE_ROYALE,
-     WEEKEND_BRAWL)
+     MAPBOX)
     RANDOM_RANGE = (RANDOM, EPIC_RANDOM)
     SANDBOX_RANGE = (SANDBOX, RATED_SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
@@ -228,7 +227,7 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.EPIC_BATTLE: 'epicbattle',
      ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle',
      ARENA_GUI_TYPE.BATTLE_ROYALE: 'battle_royale',
-     ARENA_GUI_TYPE.WEEKEND_BRAWL: 'weekendBrawl'}
+     ARENA_GUI_TYPE.MAPBOX: 'mapbox'}
 
 
 class ARENA_BONUS_TYPE:
@@ -264,6 +263,7 @@ class ARENA_BONUS_TYPE:
     BATTLE_ROYALE_TRN_SOLO = 34
     BATTLE_ROYALE_TRN_SQUAD = 35
     WEEKEND_BRAWL = 36
+    MAPBOX = 37
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
@@ -295,6 +295,7 @@ class ARENA_BONUS_TYPE:
      BOB,
      BATTLE_ROYALE_TRN_SOLO,
      BATTLE_ROYALE_TRN_SQUAD,
+     MAPBOX,
      WEEKEND_BRAWL)
     RANDOM_RANGE = (REGULAR, EPIC_RANDOM)
     SANDBOX_RANGE = (RATED_SANDBOX, SANDBOX)
@@ -463,7 +464,7 @@ class PREBATTLE_TYPE:
     EPIC_TRAINING = 16
     BATTLE_ROYALE = 17
     BATTLE_ROYALE_TOURNAMENT = 18
-    WEEKEND_BRAWL = 19
+    MAPBOX = 19
     RANGE = (SQUAD,
      TRAINING,
      COMPANY,
@@ -479,7 +480,7 @@ class PREBATTLE_TYPE:
      EPIC_TRAINING,
      BATTLE_ROYALE,
      BATTLE_ROYALE_TOURNAMENT,
-     WEEKEND_BRAWL)
+     MAPBOX)
     LEGACY_PREBATTLES = (TRAINING,
      TOURNAMENT,
      CLAN,
@@ -489,7 +490,7 @@ class PREBATTLE_TYPE:
      EVENT,
      EPIC,
      BATTLE_ROYALE,
-     WEEKEND_BRAWL)
+     MAPBOX)
     UNIT_MGR_PREBATTLES = (UNIT,
      SQUAD,
      CLAN,
@@ -500,7 +501,7 @@ class PREBATTLE_TYPE:
      EPIC,
      BATTLE_ROYALE,
      BATTLE_ROYALE_TOURNAMENT,
-     WEEKEND_BRAWL)
+     MAPBOX)
     CREATE_FROM_CLIENT = (UNIT,
      SQUAD,
      EPIC,
@@ -508,7 +509,7 @@ class PREBATTLE_TYPE:
      EVENT,
      BATTLE_ROYALE,
      BATTLE_ROYALE_TOURNAMENT,
-     WEEKEND_BRAWL)
+     MAPBOX)
     CREATE_FROM_WEB = (UNIT, SQUAD, STRONGHOLD)
     TRAININGS = (TRAINING, EPIC_TRAINING)
     EXTERNAL_PREBATTLES = (STRONGHOLD, TOURNAMENT)
@@ -518,12 +519,12 @@ class PREBATTLE_TYPE:
      BATTLE_ROYALE,
      EVENT,
      BATTLE_ROYALE_TOURNAMENT,
-     WEEKEND_BRAWL)
+     MAPBOX)
     CREATE_EX_FROM_WEB = (SQUAD, CLAN)
     JOIN_EX = (SQUAD,
      EPIC,
      EVENT,
-     WEEKEND_BRAWL)
+     MAPBOX)
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
     REMOVED = (COMPANY, CLUBS)
 
@@ -789,12 +790,13 @@ IS_LOOT_BOXES_ENABLED = 'isLootBoxesEnabled'
 SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
 MAGNETIC_AUTO_AIM_CONFIG = 'magnetic_auto_aim_config'
 BATTLE_NOTIFIER_CONFIG = 'battle_notifier_config'
-WEEKEND_BRAWL_CONFIG = 'weekend_brawl_config'
+BATTLE_ACHIEVEMENTS_CONFIG = 'battle_achievements_config'
 META_GAME_SETTINGS = 'meta_game_settings'
 
 class Configs(enum.Enum):
     BATTLE_ROYALE_CONFIG = 'battle_royale_config'
     EVENT_PROGRESSION_CONFIG = 'event_progression_config'
+    MAPBOX_CONFIG = 'mapbox_config'
 
 
 class RESTRICTION_TYPE:
@@ -884,7 +886,7 @@ class VEHICLE_TTC_ASPECTS:
 class VEHICLE_MISC_STATUS:
     OTHER_VEHICLE_DAMAGED_DEVICES_VISIBLE = 0
     IS_OBSERVED_BY_ENEMY = 1
-    LOADER_INTUITION_WAS_USED = 2
+    _NOT_USED = 2
     VEHICLE_IS_OVERTURNED = 3
     VEHICLE_DROWN_WARNING = 4
     IN_DEATH_ZONE = 5
@@ -1049,15 +1051,19 @@ class REPAIR_TYPE:
 
 
 class VEHICLE_HIT_EFFECT:
-    INTERMEDIATE_RICOCHET = 0
-    FINAL_RICOCHET = 1
-    ARMOR_NOT_PIERCED = 2
-    ARMOR_PIERCED_NO_DAMAGE = 3
+    ARMOR_PIERCED_NO_DAMAGE = 0
+    INTERMEDIATE_RICOCHET = 1
+    FINAL_RICOCHET = 2
+    ARMOR_NOT_PIERCED = 3
     ARMOR_PIERCED = 4
     CRITICAL_HIT = 5
     ARMOR_PIERCED_DEVICE_DAMAGED = 6
     MAX_CODE = ARMOR_PIERCED_DEVICE_DAMAGED
     RICOCHETS = (INTERMEDIATE_RICOCHET, FINAL_RICOCHET)
+    PIERCED_HITS = (ARMOR_PIERCED_NO_DAMAGE,
+     ARMOR_PIERCED,
+     CRITICAL_HIT,
+     ARMOR_PIERCED_DEVICE_DAMAGED)
 
 
 class VEHICLE_HIT_FLAGS:
@@ -1230,6 +1236,7 @@ class PROMO_CUTOUT:
 
 VEHICLE_CLASSES = ('lightTank', 'mediumTank', 'heavyTank', 'SPG', 'AT-SPG')
 VEHICLE_CLASS_INDICES = dict(((x[1], x[0]) for x in enumerate(VEHICLE_CLASSES)))
+VEHICLE_CLASSES_DETECTED_BY_ENEMY_SHOT_PREDICTOR = {'SPG'}
 MIN_VEHICLE_LEVEL = 1
 MAX_VEHICLE_LEVEL = 10
 VEHICLE_NO_INV_ID = -1
@@ -1260,7 +1267,7 @@ class QUEUE_TYPE:
     TOURNAMENT_UNITS = 20
     BATTLE_ROYALE = 21
     BATTLE_ROYALE_TOURNAMENT = 22
-    WEEKEND_BRAWL = 23
+    MAPBOX = 23
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -1281,7 +1288,7 @@ class QUEUE_TYPE:
      TOURNAMENT_UNITS,
      BATTLE_ROYALE,
      BATTLE_ROYALE_TOURNAMENT,
-     WEEKEND_BRAWL)
+     MAPBOX)
     REMOVED = (COMPANIES,)
 
 
@@ -1337,6 +1344,31 @@ class INVOICE_ASSET:
     BPCOIN = 9
 
 
+class INVOICE_LIMITS:
+    GOLD_MAX = 1000000
+    CRYSTAL_MAX = 1000000
+    CREDITS_MAX = 100000000
+    FORT_RESOURCE_MAX = 100000000
+    FREEXP_MAX = 100000000
+    EVENT_COIN_MAX = 1000000
+    BPCOIN_MAX = 1000000
+    SLOTS_MAX = 1000
+    BERTHS_MAX = 1000
+    TOKENS_MAX = 10000
+    GOODIES_MAX = 1000
+    PERMANENT_CUST_MAX = 100
+    NON_PERMANENT_CUST_MAX = 365
+    TMAN_FREEXP_MAX = 100000000
+    TMAN_SKILLS_MAX = 5
+    CREW_SKINS = 100
+    BLUEPRINTS_MAX = 100
+    PREMIUM_DAYS_MAX = 1830
+    BATTLE_PASS_POINTS = 100000
+    ENTITLEMENTS_MAX = 10000
+    RANKED_DAILY_BATTLES_MAX = 1000
+    RANKED_BONUS_BATTLES_MAX = 1000
+
+
 class RentType(object):
     NO_RENT = 0
     TIME_RENT = 1
@@ -1351,13 +1383,13 @@ class GameSeasonType(object):
     RANKED = 1
     EPIC = 2
     BATTLE_ROYALE = 3
-    WEEKEND_BRAWL = 4
+    MAPBOX = 4
 
 
 SEASON_TYPE_BY_NAME = {'ranked': GameSeasonType.RANKED,
  'epic': GameSeasonType.EPIC,
  'battle_royale': GameSeasonType.BATTLE_ROYALE,
- 'weekend_brawl': GameSeasonType.WEEKEND_BRAWL}
+ 'mapbox': GameSeasonType.MAPBOX}
 SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.iteritems()}
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
 USER_SEARCH_RESULTS_LIMIT = 50
@@ -1418,6 +1450,7 @@ class AUTO_MAINTENANCE_RESULT:
     NO_WALLET_SESSION = 4
     RENT_IS_OVER = 5
     RENT_IS_ALMOST_OVER = 6
+    BUY_NOT_AUTO_EQUIP = 7
 
 
 class REQUEST_COOLDOWN:
@@ -1447,6 +1480,7 @@ class REQUEST_COOLDOWN:
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
+    BPF_SEEN = 0.2
     FL_REWARD = 5.0
     NATION_CHANGE = 5.0
     MAKE_DENUNCIATION = 1.0
@@ -1456,6 +1490,7 @@ class REQUEST_COOLDOWN:
     CMD_BUY_VEHICLE = 5.0
     LOG_CLIENT_SESSION_STATS = 5.0
     LOG_CLIENT_SYSTEM = 5.0
+    LOG_MEM_CRIT_EVENTS = 5.0
     LOG_CLIENT_PB_20_UX_STATS = 5.0
     ANONYMIZER = 1.0
     UPDATE_IN_BATTLE_PLAYER_RELATIONS = 1.0
@@ -1474,6 +1509,7 @@ class REQUEST_COOLDOWN:
     CHANGE_EVENT_ENQUEUE_DATA = 1.0
     CMD_EQUIP_OPT_DEVS_SEQUENCE = 1.0
     BLUEPRINTS_CONVERT_SALE = 1.0
+    TANKMAN_RESPECIALIZE = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1671,6 +1707,7 @@ class USER_SERVER_SETTINGS:
     VERSION = 0
     HIDE_MARKS_ON_GUN = 500
     GAME_EXTENDED = 59
+    GAME_EXTENDED_2 = 102
     EULA_VERSION = 54
     ARCADE_AIM_1 = 43
     ARCADE_AIM_2 = 44
@@ -1680,6 +1717,7 @@ class USER_SERVER_SETTINGS:
     SNIPER_AIM_2 = 47
     SNIPER_AIM_3 = 48
     SNIPER_AIM_4 = 64
+    SPG_AIM = 65
     DOG_TAGS = 68
     BATTLE_COMM = 69
     BATTLE_HUD = 71
@@ -1691,7 +1729,9 @@ class USER_SERVER_SETTINGS:
      GAME_EXTENDED,
      LINKEDSET_QUESTS,
      SESSION_STATS,
-     DOG_TAGS)
+     DOG_TAGS,
+     GAME_EXTENDED_2,
+     BATTLE_HUD)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -1763,7 +1803,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  62: '[Free]',
  USER_SERVER_SETTINGS.ARCADE_AIM_4: 'Arcade aim setting',
  USER_SERVER_SETTINGS.SNIPER_AIM_4: 'Sniper aim setting',
- 65: '[Free]',
+ USER_SERVER_SETTINGS.SPG_AIM: 'SPG aim setting',
  66: '[Free]',
  67: '[Free]',
  USER_SERVER_SETTINGS.DOG_TAGS: 'Dog tags',
@@ -1788,16 +1828,15 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
- 92: 'Battle of Bloggers carousel filter',
- 93: 'Battle of Bloggers carousel filter',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
  98: 'Battle Pass Storage',
  99: 'Once only hints',
  100: 'Battle Royale carousel filter 1',
  101: 'Battle Royale carousel filter 2',
- 102: 'Weekend Brawl carousel filter',
- 103: 'Weekend Brawl carousel filter'}
+ USER_SERVER_SETTINGS.GAME_EXTENDED_2: 'Game extended section settings 2',
+ 103: 'Mapbox carousel filter 1',
+ 104: 'Mapbox carousel filter 2'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2000,12 +2039,12 @@ class INVITATION_TYPE:
     EPIC = PREBATTLE_TYPE.EPIC
     EVENT = PREBATTLE_TYPE.EVENT
     BATTLE_ROYALE = PREBATTLE_TYPE.BATTLE_ROYALE
-    WEEKEND_BRAWL = PREBATTLE_TYPE.WEEKEND_BRAWL
+    MAPBOX = PREBATTLE_TYPE.MAPBOX
     RANGE = (SQUAD,
      EVENT,
      EPIC,
      BATTLE_ROYALE,
-     WEEKEND_BRAWL)
+     MAPBOX)
 
 
 class REPAIR_FLAGS:
@@ -2155,6 +2194,11 @@ SHELL_TYPES_LIST = (SHELL_TYPES.HOLLOW_CHARGE,
 BATTLE_RESULT_WAITING_TIMEOUT = 0.1
 SHELL_TYPES_INDICES = dict(((value, index) for index, value in enumerate(SHELL_TYPES_LIST)))
 
+class SHELL_MECHANICS_TYPE:
+    LEGACY = 'LEGACY'
+    MODERN = 'MODERN'
+
+
 class HIT_INDIRECTION:
     DIRECT_HIT = 0
     HIT_BY_EXTERNAL_EXPLOSION = 1
@@ -2176,10 +2220,6 @@ def getArenaStartTime(arenaUniqueID):
 
 def getTimeOnArena(arenaUniqueID):
     return int(timestamp() - getArenaStartTime(arenaUniqueID))
-
-
-def getTimeOnArenaOf(arenaUniqueID, eventTime):
-    return UNKNOWN_TIME_ON_ARENA if eventTime == UNKNOWN_TIME_ON_ARENA else int(eventTime - getArenaStartTime(arenaUniqueID))
 
 
 class PIERCING_POWER(object):
@@ -2406,6 +2446,7 @@ class CLIENT_COMMAND_SOURCES:
 
 
 EMPTY_GEOMETRY_ID = 0
+ROLE_LEVELS = (10,)
 
 class ROLE_TYPE:
     NOT_DEFINED = 0
@@ -2423,23 +2464,38 @@ class ROLE_TYPE:
     SCOUT_TWO = 12
     SPG = 13
     HASH_SUPPORT_ONE = 14
+    HT_TANK = 15
+    HT_ASSAULT = 16
+    HT_UNIVERSAL = 17
+    HT_FIRESUPPORT = 18
+    MT_TANK = 19
+    MT_FIRESUPPORT = 20
+    MT_UNIVERSAL = 21
+    MT_ASSASIN = 22
+    ATSPG_TANK = 23
+    ATSPG_UNIVERSAL = 24
+    ATSPG_FIRESUPPORT = 25
+    ATSPG_BURSTDAMAGE = 26
+    LT_TRACKED = 27
+    LT_WHEELED = 28
 
 
 ROLE_LABEL_TO_TYPE = {'NotDefined': ROLE_TYPE.NOT_DEFINED,
- 'Tank1': ROLE_TYPE.TANK_ONE,
- 'Tank2': ROLE_TYPE.TANK_TWO,
- 'FirstLineSupport1': ROLE_TYPE.FIRST_LINE_SUPPORT_ONE,
- 'FirstLineSupport2': ROLE_TYPE.FIRST_LINE_SUPPORT_TWO,
- 'FirstLineSupport3': ROLE_TYPE.FIRST_LINE_SUPPORT_THREE,
- 'FirstLineSupport4': ROLE_TYPE.FIRST_LINE_SUPPORT_FOUR,
- 'FirstLineSupport5': ROLE_TYPE.FIRST_LINE_SUPPORT_FIVE,
- 'FireSupport1': ROLE_TYPE.FIRE_SUPPORT_ONE,
- 'FireSupport2': ROLE_TYPE.FIRE_SUPPORT_TWO,
- 'Sniper': ROLE_TYPE.SNIPER,
- 'Scout1': ROLE_TYPE.SCOUT_ONE,
- 'Scout2': ROLE_TYPE.SCOUT_TWO,
- 'SPG': ROLE_TYPE.SPG,
- 'HashSupport1': ROLE_TYPE.HASH_SUPPORT_ONE}
+ 'role_SPG': ROLE_TYPE.SPG,
+ 'role_HT_tank': ROLE_TYPE.HT_TANK,
+ 'role_HT_assault': ROLE_TYPE.HT_ASSAULT,
+ 'role_HT_universal': ROLE_TYPE.HT_UNIVERSAL,
+ 'role_HT_fireSupport': ROLE_TYPE.HT_FIRESUPPORT,
+ 'role_MT_tank': ROLE_TYPE.MT_TANK,
+ 'role_MT_universal': ROLE_TYPE.MT_UNIVERSAL,
+ 'role_MT_fireSupport': ROLE_TYPE.MT_FIRESUPPORT,
+ 'role_MT_assassin': ROLE_TYPE.MT_ASSASIN,
+ 'role_ATSPG_tank': ROLE_TYPE.ATSPG_TANK,
+ 'role_ATSPG_universal': ROLE_TYPE.ATSPG_UNIVERSAL,
+ 'role_ATSPG_fireSupport': ROLE_TYPE.ATSPG_FIRESUPPORT,
+ 'role_ATSPG_burstDamage': ROLE_TYPE.ATSPG_BURSTDAMAGE,
+ 'role_LT_tracked': ROLE_TYPE.LT_TRACKED,
+ 'role_LT_wheeled': ROLE_TYPE.LT_WHEELED}
 ROLE_TYPE_TO_LABEL = dict(((index, label) for label, index in ROLE_LABEL_TO_TYPE.items()))
 
 class ACTIONS_GROUP_TYPE:
@@ -2455,20 +2511,39 @@ class ACTIONS_GROUP_TYPE:
     SCOUT_TWO = 9
     SPG_ONE = 10
     HASH_SUPPORT_ONE = 11
+    HT_TANK = 12
+    HT_ASSAULT = 13
+    HT_UNIVERSAL = 14
+    HT_FIRESUPPORT = 15
+    MT_TANK = 16
+    MT_FIRESUPPORT = 17
+    MT_UNIVERSAL = 18
+    MT_ASSASIN = 19
+    ATSPG_TANK = 20
+    ATSPG_UNIVERSAL = 21
+    ATSPG_FIRESUPPORT = 22
+    ATSPG_BURSTDAMAGE = 23
+    LT_TRACKED = 24
+    LT_WHEELED = 25
+    SPG = 26
 
 
 ACTIONS_GROUP_LABEL_TO_TYPE = {'notDefined': ACTIONS_GROUP_TYPE.NOT_DEFINED,
- 'tank1': ACTIONS_GROUP_TYPE.TANK_ONE,
- 'tank2': ACTIONS_GROUP_TYPE.TANK_TWO,
- 'firstLineSupport1': ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_ONE,
- 'firstLineSupport2': ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_TWO,
- 'firstLineSupport3': ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_THREE,
- 'fireSupport1': ACTIONS_GROUP_TYPE.FIRE_SUPPORT_ONE,
- 'sniper1': ACTIONS_GROUP_TYPE.SNIPER_ONE,
- 'scout1': ACTIONS_GROUP_TYPE.SCOUT_ONE,
- 'scout2': ACTIONS_GROUP_TYPE.SCOUT_TWO,
- 'SPG1': ACTIONS_GROUP_TYPE.SPG_ONE,
- 'hashSupport1': ACTIONS_GROUP_TYPE.HASH_SUPPORT_ONE}
+ 'role_SPG': ACTIONS_GROUP_TYPE.SPG,
+ 'role_HT_tank': ACTIONS_GROUP_TYPE.HT_TANK,
+ 'role_HT_universal': ACTIONS_GROUP_TYPE.HT_UNIVERSAL,
+ 'role_HT_assault': ACTIONS_GROUP_TYPE.HT_ASSAULT,
+ 'role_HT_fireSupport': ACTIONS_GROUP_TYPE.HT_FIRESUPPORT,
+ 'role_MT_tank': ACTIONS_GROUP_TYPE.MT_TANK,
+ 'role_MT_universal': ACTIONS_GROUP_TYPE.MT_UNIVERSAL,
+ 'role_MT_fireSupport': ACTIONS_GROUP_TYPE.MT_FIRESUPPORT,
+ 'role_MT_assassin': ACTIONS_GROUP_TYPE.MT_ASSASIN,
+ 'role_ATSPG_fireSupport': ACTIONS_GROUP_TYPE.ATSPG_FIRESUPPORT,
+ 'role_ATSPG_burstDamage': ACTIONS_GROUP_TYPE.ATSPG_BURSTDAMAGE,
+ 'role_ATSPG_universal': ACTIONS_GROUP_TYPE.ATSPG_UNIVERSAL,
+ 'role_ATSPG_tank': ACTIONS_GROUP_TYPE.ATSPG_TANK,
+ 'role_LT_tracked': ACTIONS_GROUP_TYPE.LT_TRACKED,
+ 'role_LT_wheeled': ACTIONS_GROUP_TYPE.LT_WHEELED}
 ACTIONS_GROUP_TYPE_TO_LABEL = dict(((index, label) for label, index in ACTIONS_GROUP_LABEL_TO_TYPE.items()))
 
 class ACTION_TYPE:
@@ -2677,3 +2752,23 @@ class EPlatoonButtonState(enum.Enum):
     SEARCHING_STATE = 'SEARCHING'
     IN_PLATOON_STATE = 'IN_PLATOON'
     CREATE_STATE = 'CREATE'
+
+
+class DamageAbsorptionTypes(object):
+    FRAGMENTS = 0
+    BLAST = 1
+    SPALLS = 2
+
+
+DamageAbsorptionLabelToType = {'FRAGMENTS': DamageAbsorptionTypes.FRAGMENTS,
+ 'BLAST': DamageAbsorptionTypes.BLAST,
+ 'SPALLS': DamageAbsorptionTypes.SPALLS}
+DamageAbsorptionTypeToLabel = dict(((type, label) for label, type in DamageAbsorptionLabelToType.items()))
+
+class ReloadRestriction(object):
+    CYCLE_RELOAD = 1.0
+    OTHER_RELOAD = 2.5
+
+    @staticmethod
+    def getBy(vehTypeDescr):
+        return ReloadRestriction.OTHER_RELOAD if vehTypeDescr.gun.tags else ReloadRestriction.CYCLE_RELOAD

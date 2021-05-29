@@ -163,6 +163,9 @@ class DestructibleEntity(BigWorld.Entity):
     def getMatinfo(self, partIndex, matKind):
         return self.__properties.materials.get(matKind, None)
 
+    def isDestructibleComponent(self, componentID):
+        return self.__activeStateResource.isDestructibleComponent(componentID) if self.__activeStateResource is not None else False
+
     def __updateState(self, stateName):
         if self.__activeStateResource is not None:
             BigWorld.wgDelEdgeDetectEntity(self)
@@ -296,6 +299,10 @@ class DestructibleEntityState(ScriptGameObject):
 
     def collideAllWorld(self, startPoint, endPoint):
         return self.__collisionComponent.collideAllWorld(startPoint, endPoint) if self.__collisionComponent is not None else None
+
+    def isDestructibleComponent(self, componentID):
+        component = next((c for cIDx, c in enumerate(self.__stateProperties.components.itervalues()) if cIDx == componentID), None)
+        return component.destructible if component is not None else False
 
     def __playEffect(self, effectName, model):
         if self.__effectsPlayer is not None or None in (model, effectName):

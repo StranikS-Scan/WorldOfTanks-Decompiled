@@ -24,6 +24,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.03	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	5.0	</repairCost>
   <premiumVehicleXPFactor>	0.2	</premiumVehicleXPFactor>
@@ -2671,7 +2677,6 @@
   <radios>
     <R113M>	shared	</R113M>
   </radios>
-  <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
@@ -2698,6 +2703,13 @@
       </chassis>
     </detailed>
   </physics>
+  <clientAdjustmentFactors>
+    <guns>
+      <_122-mm_D-25T_with_wedges_shutter_B>
+        <delta>	1.23	</delta>
+      </_122-mm_D-25T_with_wedges_shutter_B>
+    </guns>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

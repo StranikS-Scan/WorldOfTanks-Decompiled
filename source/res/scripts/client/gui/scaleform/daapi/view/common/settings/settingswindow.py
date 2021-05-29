@@ -171,6 +171,7 @@ class SettingsWindow(SettingsWindowMeta):
         BigWorld.wg_setAdapterOrdinalNotifyCallback(None)
         self.stopVoicesPreview()
         self.stopAltBulbPreview()
+        self.stopArtyBulbPreview()
         self.anonymizerController.onStateChanged -= self.__refreshSettings
         self.settingsCore.onSettingsChanged -= self.__onColorSettingsChange
         super(SettingsWindow, self)._dispose()
@@ -284,12 +285,20 @@ class SettingsWindow(SettingsWindowMeta):
         setting = self.settingsCore.options.getSetting(settings_constants.SOUND.DETECTION_ALERT_SOUND)
         setting.playPreviewSound(sampleID)
 
+    def artyBulbPreview(self, sampleID):
+        setting = self.settingsCore.options.getSetting(settings_constants.SOUND.ARTY_SHOT_ALERT_SOUND)
+        setting.playPreviewSound(sampleID)
+
     def stopVoicesPreview(self):
         setting = self.settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
         setting.clearPreviewSound()
 
     def stopAltBulbPreview(self):
         setting = self.settingsCore.options.getSetting(settings_constants.SOUND.DETECTION_ALERT_SOUND)
+        setting.clearPreviewSound()
+
+    def stopArtyBulbPreview(self):
+        setting = self.settingsCore.options.getSetting(settings_constants.SOUND.ARTY_SHOT_ALERT_SOUND)
         setting.clearPreviewSound()
 
     def isSoundModeValid(self):

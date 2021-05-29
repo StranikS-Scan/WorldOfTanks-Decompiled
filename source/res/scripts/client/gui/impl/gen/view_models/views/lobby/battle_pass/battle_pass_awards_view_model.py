@@ -14,7 +14,7 @@ class BattlePassAwardsViewModel(CommonViewModel):
     SELECT_STYLE_REASON = 'selectStyleReason'
     DEFAULT_REASON = 'defaultReason'
 
-    def __init__(self, properties=15, commands=3):
+    def __init__(self, properties=16, commands=3):
         super(BattlePassAwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -73,11 +73,17 @@ class BattlePassAwardsViewModel(CommonViewModel):
     def setIsBaseLevelStyle(self, value):
         self._setBool(13, value)
 
+    def getSeasonStopped(self):
+        return self._getBool(14)
+
+    def setSeasonStopped(self, value):
+        self._setBool(14, value)
+
     def getWideRewardsIDs(self):
-        return self._getArray(14)
+        return self._getArray(15)
 
     def setWideRewardsIDs(self, value):
-        self._setArray(14, value)
+        self._setArray(15, value)
 
     def _initialize(self):
         super(BattlePassAwardsViewModel, self)._initialize()
@@ -91,6 +97,7 @@ class BattlePassAwardsViewModel(CommonViewModel):
         self._addBoolProperty('isNeedToShowOffer', False)
         self._addBoolProperty('isStyleChosen', False)
         self._addBoolProperty('isBaseLevelStyle', False)
+        self._addBoolProperty('seasonStopped', False)
         self._addArrayProperty('wideRewardsIDs', Array())
         self.onBuyClick = self._addCommand('onBuyClick')
         self.onStyleSelectClick = self._addCommand('onStyleSelectClick')

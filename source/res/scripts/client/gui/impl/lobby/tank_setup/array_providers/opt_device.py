@@ -146,10 +146,5 @@ class DeluxeOptDeviceProvider(BaseOptDeviceProvider):
 
     def _getItemCriteria(self):
         invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
-        trophySet = set()
-        for veh in invVehicles.itervalues():
-            for optDevice in veh.optDevices.installed.getItems():
-                if optDevice.isTrophy:
-                    trophySet.add(optDevice.intCD)
-
-        return REQ_CRITERIA.CUSTOM(lambda item: item.isTrophy and (item.isInInventory or item.intCD in trophySet)) ^ REQ_CRITERIA.OPTIONAL_DEVICE.DELUXE
+        installedSet = set((optDevice for veh in invVehicles.itervalues() for optDevice in veh.optDevices.installed.getIntCDs()))
+        return REQ_CRITERIA.CUSTOM(lambda item: item.isTrophy and (item.isInInventory or item.intCD in installedSet) or item.isDeluxe and (not item.isHidden or item.isInInventory or item.intCD in installedSet))

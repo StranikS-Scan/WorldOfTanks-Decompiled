@@ -943,4 +943,77 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F10_AMX_50B	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	263	</id>
+      <texture>	gui/maps/vehicles/styles/F10_AMX_50B_3Dst_BV.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/F10_AMX_50B_3Dst_BV_desc/long	</longDescriptionSpecial>
+      <modelsSet>	F10_AMX_50B_3Dst_BV	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/F10_AMX_50B_3Dst_BV	</userString>
+      <tags>	styleProgression progression_required	</tags>
+      <styleProgressions>
+        <stage>
+          <materials>	tank_turret_equipment	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_equipment_01 tank_equipment_01_skinned tank_gun_equipment_01_skinned tank_turret_equipment	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_equipment_01 tank_equipment_02 tank_equipment_01_skinned tank_equipment_02_skinned tank_gun_equipment_01_skinned tank_gun_equipment_02_skinned tank_turret_equipment	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_equipment_01 tank_equipment_02 tank_equipment_03 tank_equipment_01_skinned tank_equipment_02_skinned tank_equipment_03_skinned tank_gun_equipment_01_skinned tank_gun_equipment_02_skinned tank_turret_equipment	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <camouflages>
+                <item>
+                  <id>	316	</id>
+                  <appliedTo>	4368	</appliedTo>
+                  <patternSize>	1	</patternSize>
+                  <palette>	0	</palette>
+                </item>
+              </camouflages>
+              <sequences>
+                <item>
+                  <id>	23	</id>
+                  <slotId>	18000	</slotId>
+                </item>
+              </sequences>
+            </outfit>
+          </outfits>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </france.xml>

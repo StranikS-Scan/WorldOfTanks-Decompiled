@@ -130,7 +130,7 @@ class BattlePassController(IBattlePassController):
         return self.__getConfig().seasonFinish <= time_utils.getServerUTCTime()
 
     def isValidBattleType(self, prbEntity):
-        return prbEntity.getEntityType() == constants.ARENA_GUI_TYPE.RANDOM
+        return prbEntity.getQueueType() in (constants.QUEUE_TYPE.RANDOMS, constants.QUEUE_TYPE.MAPBOX)
 
     def isGameModeEnabled(self, arenaBonusType):
         return self.__getConfig().isGameModeEnabled(arenaBonusType)
@@ -267,9 +267,6 @@ class BattlePassController(IBattlePassController):
 
     def getState(self):
         return self.__itemsCache.items.battlePass.getState()
-
-    def getBoughtLevels(self):
-        return self.__itemsCache.items.battlePass.getBoughtLevels()
 
     def getPrevSeasonsStats(self):
         packedStats = self.__itemsCache.items.battlePass.getPackedStats()
@@ -511,7 +508,7 @@ class BattlePassController(IBattlePassController):
         return max(0, self.__getConfig().seasonStart - time_utils.getServerUTCTime())
 
     def __getTimeToNotifySeasonChange(self):
-        if not self.isDisabled():
+        if not self.isPaused():
             if not self.isSeasonStarted():
                 return self.__getTimeUntilStart()
             if not self.isSeasonFinished():

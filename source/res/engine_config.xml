@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -77,10 +77,32 @@
   </superShot>
   <accessMonitor>	false	</accessMonitor>
   <hasDevelopmentAssertions>	true	</hasDevelopmentAssertions>
-  <virtualMemoryLoadThreshold>	85.0	</virtualMemoryLoadThreshold>
-  <pageFileMemoryLoadThreshold>	99.0	</pageFileMemoryLoadThreshold>
-  <physicalMemoryLoadThreshold>	99.0	</physicalMemoryLoadThreshold>
-  <scaleformMemoryLoadThreshold>	90.0	</scaleformMemoryLoadThreshold>
+  <memoryCriticalThresholds>
+    <x86os86>
+      <virtualMemoryLoadThreshold>	85.0	</virtualMemoryLoadThreshold>
+      <virtualMemoryLoadLeftoverMb>	150.0	</virtualMemoryLoadLeftoverMb>
+      <pageFileMemoryLoadThreshold>	99.0	</pageFileMemoryLoadThreshold>
+      <pageFileMemoryLoadLeftoverMb>	200.0	</pageFileMemoryLoadLeftoverMb>
+      <physicalMemoryLoadThreshold>	99.0	</physicalMemoryLoadThreshold>
+      <physicalMemoryLoadLeftoverMb>	200.0	</physicalMemoryLoadLeftoverMb>
+    </x86os86>
+    <x86os64>
+      <virtualMemoryLoadThreshold>	87.0	</virtualMemoryLoadThreshold>
+      <virtualMemoryLoadLeftoverMb>	250.0	</virtualMemoryLoadLeftoverMb>
+      <pageFileMemoryLoadThreshold>	87.0	</pageFileMemoryLoadThreshold>
+      <pageFileMemoryLoadLeftoverMb>	250.0	</pageFileMemoryLoadLeftoverMb>
+      <physicalMemoryLoadThreshold>	87.0	</physicalMemoryLoadThreshold>
+      <physicalMemoryLoadLeftoverMb>	250.0	</physicalMemoryLoadLeftoverMb>
+    </x86os64>
+    <x64os64>
+      <virtualMemoryLoadThreshold>	94.0	</virtualMemoryLoadThreshold>
+      <virtualMemoryLoadLeftoverMb>	250.0	</virtualMemoryLoadLeftoverMb>
+      <pageFileMemoryLoadThreshold>	99.0	</pageFileMemoryLoadThreshold>
+      <pageFileMemoryLoadLeftoverMb>	250.0	</pageFileMemoryLoadLeftoverMb>
+      <physicalMemoryLoadThreshold>	99.0	</physicalMemoryLoadThreshold>
+      <physicalMemoryLoadLeftoverMb>	250.0	</physicalMemoryLoadLeftoverMb>
+    </x64os64>
+  </memoryCriticalThresholds>
   <scaleformGC>
     <suspend>	false	</suspend>
     <suspendDuringLoad>	true	</suspendDuringLoad>
@@ -153,7 +175,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
@@ -300,9 +322,6 @@
           <name>	wheel_vehicle_GUI.pck	</name>
         </bank>
         <bank>
-          <name>	weekend_brawl.pck	</name>
-        </bank>
-        <bank>
           <name>	plugin_media.bnk	</name>
         </bank>
         <bank>
@@ -347,9 +366,6 @@
           <name>	researches.bnk	</name>
         </bank>
         <bank>
-          <name>	weekend_brawl.bnk	</name>
-        </bank>
-        <bank>
           <name>	tasks.bnk	</name>
         </bank>
         <bank>
@@ -357,6 +373,12 @@
         </bank>
         <bank>
           <name>	dog_tags_hangar.bnk	</name>
+        </bank>
+        <bank>
+          <name>	mode_selector.bnk	</name>
+        </bank>
+        <bank>
+          <name>	map_box.bnk	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -622,8 +644,8 @@
       <source>	SCRIPT	</source>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	512	</maxSizeKB>
+      <trimToKB>	0	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>
@@ -631,8 +653,8 @@
     <file>	ui.log	  <enabled>	true	</enabled>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	512	</maxSizeKB>
+      <trimToKB>	0	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>
@@ -642,7 +664,7 @@
     <processExe>	cef_browser_process	</processExe>
     <cachePath>	profile/cef_cache	</cachePath>
     <resourcePath>	cef	</resourcePath>
-    <hardwareAcceleration>	false	</hardwareAcceleration>
+    <hardwareAcceleration>	true	</hardwareAcceleration>
     <logFile>	cef.log	</logFile>
     <logVerbosity>	disable	</logVerbosity>
     <enableFlash>	true	</enableFlash>

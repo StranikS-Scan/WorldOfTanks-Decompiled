@@ -5,6 +5,7 @@ from block import Block, Meta, InitParam, EDITOR_TYPE, buildStrKeysValue
 from slot_types import SLOT_TYPE, arrayOf
 from visual_script.misc import ASPECT
 from tunable_event_block import TunableEventBlock
+from type import VScriptType, VScriptEnum
 import weakref
 
 class Example(Meta):
@@ -165,3 +166,68 @@ class TestTunableEvent(TunableEventBlock, Example):
     @classmethod
     def blockAspects(cls):
         return [ASPECT.CLIENT]
+
+
+class TestType(VScriptType):
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    @classmethod
+    def vs_connectionColor(cls):
+        pass
+
+
+class TestEnum(VScriptEnum):
+    A = 0
+    B = 1
+    C = 2
+
+
+class MakeTestType(Block, Example):
+
+    def __init__(self, *args, **kwargs):
+        super(MakeTestType, self).__init__(*args, **kwargs)
+        self._name = self._makeDataInputSlot('name', SLOT_TYPE.STR)
+        self._age = self._makeDataInputSlot('age', SLOT_TYPE.INT)
+        self._out = self._makeDataOutputSlot('data', TestType.slotType(), self._exec)
+
+    def _exec(self):
+        self._out.setValue(TestType(self._name.getValue(), self._age.getValue()))
+
+
+class BreakTestType(Block, Example):
+
+    def __init__(self, *args, **kwargs):
+        super(BreakTestType, self).__init__(*args, **kwargs)
+        self._in = self._makeDataInputSlot('in', TestType.slotType())
+        self._name = self._makeDataOutputSlot('name', SLOT_TYPE.STR, self._execName)
+        self._age = self._makeDataOutputSlot('age', SLOT_TYPE.INT, self._execAge)
+
+    def _execName(self):
+        self._name.setValue(self._in.getValue().name)
+
+    def _execAge(self):
+        self._age.setValue(self._in.getValue().age)
+
+
+class MakeTestTypeArray(Block, Example):
+
+    def __init__(self, *args, **kwargs):
+        super(MakeTestTypeArray, self).__init__(*args, **kwargs)
+        self._out = self._makeDataOutputSlot('data', arrayOf(TestType.slotType()), None)
+        self._out.setValue([TestType('Bob', 1945), TestType('Marley', 1981)])
+        return
+
+
+class SelectTest(Block, Example):
+
+    def __init__(self, *args, **kwargs):
+        super(SelectTest, self).__init__(*args, **kwargs)
+        self._enum = self._makeDataInputSlot('enumValue', TestEnum.slotType())
+        self._res = self._makeDataOutputSlot('res', SLOT_TYPE.INT, self._exec)
+
+    def _exec(self):
+        v = self._enum.getValue()
+        self._res.setValue(v)

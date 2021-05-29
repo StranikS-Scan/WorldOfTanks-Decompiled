@@ -12,6 +12,7 @@ class HANGAR_HEADER_QUESTS(object):
     QUEST_TYPE_BATTLE_PASS = 'questBattlePass'
     QUEST_TYPE_SENIORITY = 'questSeniority'
     QUEST_TYPE_BATTLE_ROYALE = 'questBattleRoyale'
+    QUEST_TYPE_MAPBOX = 'mapboxProgression'
     QUEST_GROUP_COMMON = 'commonQuestsGroup'
     QUEST_GROUP_MARATHON = 'marathonQuestsGroup'
     QUEST_GROUP_PERSONAL = 'personalQuestsGroup'

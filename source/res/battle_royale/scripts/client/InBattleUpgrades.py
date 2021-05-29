@@ -6,11 +6,6 @@ from wotdecorators import noexcept
 
 class InBattleUpgrades(BigWorld.DynamicScriptComponent):
 
-    def __init__(self):
-        super(InBattleUpgrades, self).__init__()
-        if self.entity.guiSessionProvider.arenaVisitor.bonus.hasInBattleUpgrade():
-            self.entity.autoUpgradeOnChangeDescriptor = False
-
     def onEnterWorld(self, *args):
         pass
 
@@ -31,7 +26,7 @@ class InBattleUpgrades(BigWorld.DynamicScriptComponent):
         vehicleID = vehicle.id
         if vehicle.isPlayerVehicle:
             inputHandler = BigWorld.player().inputHandler
-            inputHandler.onControlModeChanged('arcade')
+            inputHandler.onControlModeChanged('arcade', initialVehicleMatrix=vehicle.matrix)
         progressionCtrl = vehicle.guiSessionProvider.dynamic.progression
         if progressionCtrl is not None:
             progressionCtrl.vehicleVisualChangingStarted(vehicleID)

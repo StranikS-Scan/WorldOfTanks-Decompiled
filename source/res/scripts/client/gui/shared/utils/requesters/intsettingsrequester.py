@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/IntSettingsRequester.py
 import logging
 from functools import wraps
+from account_helpers.AccountSettings import MAPBOX_CAROUSEL_FILTER_1, MAPBOX_CAROUSEL_FILTER_2
 import BigWorld
 import constants
 from adisp import async, process
@@ -73,8 +74,10 @@ class IntSettingsRequester(object):
      'ONCE_ONLY_HINTS_2': 99,
      'ROYALE_CAROUSEL_FILTER_1': 100,
      'ROYALE_CAROUSEL_FILTER_2': 101,
-     'WEEKENDBRAWL_CAROUSEL_FILTER_1': 102,
-     'WEEKENDBRAWL_CAROUSEL_FILTER_2': 103}
+     'GAME_EXTENDED_2': constants.USER_SERVER_SETTINGS.GAME_EXTENDED_2,
+     'SPG_AIM': constants.USER_SERVER_SETTINGS.SPG_AIM,
+     MAPBOX_CAROUSEL_FILTER_1: 103,
+     MAPBOX_CAROUSEL_FILTER_2: 104}
 
     def __init__(self):
         self.__isSynced = False

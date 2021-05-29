@@ -467,8 +467,9 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
 
     def __requestModelsRefresh(self):
         self._onRequestModelsRefresh()
+        self._isTurretDetached = self._vehicle.isTurretDetached
         modelsSetParams = self.modelsSetParams
-        assembler = model_assembler.prepareCompoundAssembler(self.typeDescriptor, modelsSetParams, self._vehicle.spaceID, self._vehicle.isTurretDetached)
+        assembler = model_assembler.prepareCompoundAssembler(self.typeDescriptor, modelsSetParams, self.spaceID, self.isTurretDetached)
         collisionAssembler = model_assembler.prepareCollisionAssembler(self.typeDescriptor, self.isTurretDetached, self.spaceID)
         BigWorld.loadResourceListBG((assembler, collisionAssembler), makeCallbackWeak(self.__onModelsRefresh, modelsSetParams.state), loadingPriority(self._vehicle.id))
 
@@ -500,7 +501,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.collisions = self.createComponent(BigWorld.CollisionComponent, resourceList['collisionAssembler'])
             model_assembler.setupCollisions(self.typeDescriptor, self.collisions)
             self.__linkCompound()
-            self._isTurretDetached = self._vehicle.isTurretDetached
             self.__prepareSystemsForDamagedVehicle(self._vehicle, self.isTurretDetached)
             self.__processPostmortemComponents()
             if isRightSideFlying:

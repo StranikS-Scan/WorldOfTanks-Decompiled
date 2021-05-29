@@ -72,6 +72,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.battlePassReachedCap.index(): _sc.BattlePassReachedCapFormatter(),
  _SM_TYPE.battlePassStyleChoiceAvailable.index(): _sc.BattlePassStyleChoiceAvailableFormatter(),
  _SM_TYPE.battlePassStyleChosen.index(): _sc.BattlePassStyleChosenFormatter(),
+ _SM_TYPE.battlePassSeasonEnd.index(): _sc.BattlePassSeasonEndFormatter(),
  _SM_TYPE.badges.index(): _sc.BadgesFormatter(),
  _SM_TYPE.collectibleVehiclesUnlocked.index(): _sc.CollectibleVehiclesUnlockedFormatter(),
  _SM_TYPE.customizationProgress.index(): _sc.CustomizationProgressFormatter(),
@@ -88,4 +89,8 @@ CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageForma
  SCH_CLIENT_MSG_TYPE.BATTLE_TUTORIAL_RESULTS_TYPE: _sc.BattleTutorialResultsFormatter(),
  SCH_CLIENT_MSG_TYPE.KOREA_PARENTAL_CONTROL_TYPE: _sc.KoreaParentalControlFormatter(),
  SCH_CLIENT_MSG_TYPE.TECH_TREE_ACTION_DISCOUNT: _sc.TechTreeActionDiscountFormatter(),
- SCH_CLIENT_MSG_TYPE.BLUEPRINTS_CONVERT_SALE: _sc.BlueprintsConvertSaleFormatter()}
+ SCH_CLIENT_MSG_TYPE.BLUEPRINTS_CONVERT_SALE: _sc.BlueprintsConvertSaleFormatter(),
+ SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD: _sc.MapboxRewardReceivedFormatter(),
+ SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_ENDED: _sc.MapboxEndedFormatter(),
+ SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_STARTED: _sc.MapboxStartedFormatter(),
+ SCH_CLIENT_MSG_TYPE.MAPBOX_SURVEY_AVAILABLE: _sc.MapboxSurveyAvailableFormatter()}

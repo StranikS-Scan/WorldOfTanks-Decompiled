@@ -24,6 +24,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.09	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	12.7	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -59,6 +65,13 @@
       <undamaged>	vehicles/poland/Pl21_CS_63/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/poland/Pl21_CS_63/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/poland/Pl21_CS_63/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Pl21_CS_63_3Dst_BV>
+          <undamaged>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Hull.model	</exploded>
+        </Pl21_CS_63_3Dst_BV>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -88,8 +101,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.29528 0.491236 2.2184	</rayStart>
-        <rayEnd>	-0.29528 0.30109 2.15639	</rayEnd>
+        <rayStart>	-0.512193 0.419436 2.43855	</rayStart>
+        <rayEnd>	-0.512193 0.229291 2.37654	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -1212,6 +1225,69 @@
         <anchorPosition>	0.000245512 0.388835 2.38526	</anchorPosition>
         <anchorDirection>	-0.000549726 0.948286 0.317418	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15085	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl21_CS_63_3Dst_BV	</compatibleModels>
+        <position>	-1.26122 1.10379 2.94207	</position>
+        <rotation>	0.705272 0.00173683 3.14158	</rotation>
+        <scale>	0.407816 0.191553 0.407821	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.09985	</clipAngle>
+        <anchorPosition>	-1.26115 0.185164 2.97881	</anchorPosition>
+        <anchorDirection>	0.0011401 0.761435 0.64824	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15086	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl21_CS_63_3Dst_BV	</compatibleModels>
+        <position>	1.26122 1.10376 2.94207	</position>
+        <rotation>	0.705272 0.00173683 3.14158	</rotation>
+        <scale>	0.407816 0.191553 0.407821	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.09985	</clipAngle>
+        <anchorPosition>	1.26129 0.185138 2.97881	</anchorPosition>
+        <anchorDirection>	0.00114011 0.761435 0.64824	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15087	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl21_CS_63_3Dst_BV	</compatibleModels>
+        <position>	-1.57375 0.850671 1.63833	</position>
+        <rotation>	1.64316 1.56562 -0.00857735	</rotation>
+        <scale>	0.441757 0.144362 0.441761	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.979198	</clipAngle>
+        <anchorPosition>	-1.66199 -0.104717 1.63863	</anchorPosition>
+        <anchorDirection>	-0.997377 0.0722979 0.00341424	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15088	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl21_CS_63_3Dst_BV	</compatibleModels>
+        <position>	1.57375 0.850639 1.63833	</position>
+        <rotation>	1.64314 -1.56556 -0.0085752	</rotation>
+        <scale>	0.441757 0.144362 0.441761	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.979198	</clipAngle>
+        <anchorPosition>	1.66198 -0.104751 1.63711	</anchorPosition>
+        <anchorDirection>	0.997289 0.0722779 -0.013798	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	sequence	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0.000000 0.000000 0.000000	</position>
+        <rotation>	0.000000 0.000000 0.000000	</rotation>
+        <attachNode>	V	</attachNode>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	2.64 2.64 0.000000 0.000000	</tiling>
@@ -1248,6 +1324,13 @@
         <undamaged>	vehicles/poland/Pl21_CS_63/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/poland/Pl21_CS_63/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/poland/Pl21_CS_63/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Pl21_CS_63_3Dst_BV>
+            <undamaged>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Chassis.model	</exploded>
+          </Pl21_CS_63_3Dst_BV>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -2038,6 +2121,13 @@
             <undamaged>	vehicles/poland/Pl21_CS_63/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/poland/Pl21_CS_63/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/poland/Pl21_CS_63/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Pl21_CS_63_3Dst_BV>
+                <undamaged>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Gun_01.model	</exploded>
+              </Pl21_CS_63_3Dst_BV>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/poland/Pl21_CS_63/collision/Gun_01.model	</collisionModelServer>
@@ -2119,6 +2209,13 @@
         <undamaged>	vehicles/poland/Pl21_CS_63/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/poland/Pl21_CS_63/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/poland/Pl21_CS_63/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Pl21_CS_63_3Dst_BV>
+            <undamaged>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Turret_01.model	</exploded>
+          </Pl21_CS_63_3Dst_BV>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/poland/Pl21_CS_63/collision/Turret_01.model	</collisionModelServer>
@@ -2662,6 +2759,48 @@
           <clipAngle>	0.780298	</clipAngle>
           <anchorPosition>	-1.2053 0.322106 0.00207883	</anchorPosition>
           <anchorDirection>	-0.998422 -0.0016749 0.05613	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35037	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Pl21_CS_63_3Dst_BV	</compatibleModels>
+          <position>	-0.617362 1.72204 1.43121	</position>
+          <rotation>	0.797081 -0.697153 -3.09224	</rotation>
+          <scale>	0.46765 0.322434 0.467652	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.19298	</clipAngle>
+          <anchorPosition>	-0.660817 0.284271 1.02971	</anchorPosition>
+          <anchorDirection>	-0.496523 0.697947 0.516077	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35038	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Pl21_CS_63_3Dst_BV	</compatibleModels>
+          <position>	0.000012 1.98449 1.45012	</position>
+          <rotation>	0.189107 -0.00176987 3.14158	</rotation>
+          <scale>	0.549509 0.177263 0.549512	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.621993	</clipAngle>
+          <anchorPosition>	0.000458056 0.589961 1.02305	</anchorPosition>
+          <anchorDirection>	-0.000320821 0.982172 0.187982	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35039	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Pl21_CS_63_3Dst_BV	</compatibleModels>
+          <position>	0.55072 1.72512 1.49117	</position>
+          <rotation>	0.787574 0.559807 3.03899	</rotation>
+          <scale>	0.363923 0.250916 0.363924	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.19298	</clipAngle>
+          <anchorPosition>	0.592001 0.2877 1.09204	</anchorPosition>
+          <anchorDirection>	0.461115 0.701856 0.542928	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>

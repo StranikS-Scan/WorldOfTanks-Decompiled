@@ -245,14 +245,14 @@ class DeclineSearchUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.DECLINE_SEARCH
 
 
-@ReprInjector.withParent(('selectVehInvID', 'selectVehInvID'), ('getGamePlayMask', 'gamePlayMask'), ('getDemoArenaTypeID', 'getDemoArenaTypeID'))
+@ReprInjector.withParent(('selectVehInvID', 'selectVehInvID'), ('getGamePlayMask', 'gamePlayMask'), ('getDemoArenaTypeID', 'getDemoArenaTypeID'), ('isOnly10ModeEnabled', 'isOnly10ModeEnabled'))
 class BattleQueueUnitCtx(AutoSearchUnitCtx):
-    __slots__ = ('selectVehInvID', '__isActionStartBattle', 'mapID')
+    __slots__ = ('selectVehInvID', '__isActionStartBattle', 'mmData')
 
     def __init__(self, waitingID='', action=1, vehTypes=None):
         super(BattleQueueUnitCtx, self).__init__(waitingID=waitingID, action=action, vehTypes=vehTypes)
         self.selectVehInvID = 0
-        self.mapID = 0
+        self.mmData = 0
 
     def getRequestType(self):
         return _REQUEST_TYPE.BATTLE_QUEUE
@@ -261,7 +261,10 @@ class BattleQueueUnitCtx(AutoSearchUnitCtx):
         return gameplay_ctx.getMask()
 
     def getDemoArenaTypeID(self):
-        return self.mapID
+        return self.mmData
+
+    def isOnly10ModeEnabled(self):
+        return gameplay_ctx.isOnly10ModeEnabled()
 
 
 class RosterSlotCtx(object):

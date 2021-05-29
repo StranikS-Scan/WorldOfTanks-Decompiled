@@ -10,6 +10,7 @@ class ArenaBonusType(IntEnum):
     REGULAR = 1
     RANKED = 22
     BATTLE_ROYALE_SOLO = 29
+    EPIC_BATTLE = 27
 
 
 class GameModeModel(ViewModel):

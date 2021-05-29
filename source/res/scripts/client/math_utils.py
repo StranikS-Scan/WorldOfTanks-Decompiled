@@ -330,12 +330,13 @@ class SMAFilter(FIRFilter):
 
 class LowPassFilter(object):
 
-    def __init__(self, alpha):
-        self.value = Vector3(0)
+    def __init__(self, alpha, defaultValue):
+        self.value = defaultValue
         self.alpha = alpha
+        self.__default = defaultValue
 
     def reset(self):
-        self.value = Vector3(0)
+        self.value = self.__default
 
     def add(self, value):
         self.value = value * self.alpha + (1 - self.alpha) * self.value

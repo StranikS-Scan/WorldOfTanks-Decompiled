@@ -57,7 +57,7 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
     TOURNAMENT = 8388608
     EPIC = 16777216
     BATTLE_ROYALE = 33554432
-    WEEKEND_BRAWL = 67108864
+    MAPBOX = 67108864
     DEFAULT = 134217728
     LEGACY_BITMASK = LEGACY_INTRO | LEGACY
     UNIT_BITMASK = UNIT_INTRO | UNIT_BROWSER | UNIT
@@ -145,6 +145,7 @@ class PREBATTLE_ACTION_NAME(object):
     SQUAD = 'squad'
     EVENT_SQUAD = 'eventSquad'
     BATTLE_ROYALE_SQUAD = 'battleRoyaleSquad'
+    MAPBOX_SQUAD = 'mapboxSquad'
     TOURNAMENT = 'tournament'
     CLAN = 'clan'
     E_SPORT = 'eSport'
@@ -162,9 +163,7 @@ class PREBATTLE_ACTION_NAME(object):
     BATTLE_ROYALE = 'battleRoyaleQueue'
     BATTLE_ROYALE_TOURNAMENT = 'battleRoyaleTournamentQueue'
     EVENT_BATTLE = 'eventBattle'
-    WEEKEND_BRAWL = 'weekendBrawl'
-    WEEKEND_BRAWL_SQUAD = 'weekendBrawlSquad'
-    WEEKEND_BRAWL_FORCED = 'weekendBrawlForced'
+    MAPBOX = 'mapbox'
 
 
 class PREBATTLE_INIT_STEP(object):
@@ -181,7 +180,7 @@ class SELECTOR_BATTLE_TYPES(object):
     EPIC = 'epic'
     EVENT_PROGRESSION = 'eventProgression'
     BATTLE_ROYALE = 'battleRoyale'
-    WEEKEND_BRAWL = 'weekendBrawl'
+    MAPBOX = 'mapbox'
 
 
 class REQUEST_TYPE(object):
@@ -257,8 +256,6 @@ class PREBATTLE_RESTRICTION(object):
     VEHICLE_IN_PREMIUM_IGR_ONLY = 'vehicle/inPremiumIgrOnly'
     VEHICLE_NOT_SUPPORTED = 'vehicle/not_supported'
     VEHICLE_EPIC_ONLY = 'vehicle/epic_only'
-    VEHICLE_BOB_ONLY = 'vehicle/bob_only'
-    VEHICLE_WEEKEND_BRAWL_ONLY = 'vehicle/weekendBrawlOnly'
     VEHICLE_ROTATION_GROUP_LOCKED = 'vehicle/rotationGroupLocked'
     UNSUITABLE_VEHICLE_FOR_BATTLE_ROYALE = 'vehicle/notForBattleRoyaleMode'
     VEHICLE_TOO_HEAVY = 'vehicle/tooHeavy'

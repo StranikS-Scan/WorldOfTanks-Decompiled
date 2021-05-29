@@ -527,8 +527,12 @@ class PersonalNumberComponent(SerializableComponent):
 class SequenceComponent(SerializableComponent):
     __metaclass__ = ReflectionMetaclass
     customType = _C11nSerializationTypes.SEQUENCE
+    if IS_EDITOR:
+        slotIdFieldType = intField()
+    else:
+        slotIdFieldType = xmlOnlyIntField(0)
     fields = OrderedDict((('id', intField()),
-     ('slotId', xmlOnlyIntField(0)),
+     ('slotId', slotIdFieldType),
      ('position', xmlOnlyFloatArrayField()),
      ('rotation', xmlOnlyFloatArrayField())))
     __slots__ = ('id', 'slotId', 'position', 'rotation')
@@ -544,8 +548,12 @@ class SequenceComponent(SerializableComponent):
 class AttachmentComponent(SerializableComponent):
     __metaclass__ = ReflectionMetaclass
     customType = _C11nSerializationTypes.ATTACHMENT
+    if IS_EDITOR:
+        slotIdFieldType = intField()
+    else:
+        slotIdFieldType = xmlOnlyIntField(0)
     fields = OrderedDict((('id', intField()),
-     ('slotId', xmlOnlyIntField(0)),
+     ('slotId', slotIdFieldType),
      ('position', xmlOnlyFloatArrayField()),
      ('rotation', xmlOnlyFloatArrayField())))
     __slots__ = ('id', 'slotId', 'position', 'rotation')

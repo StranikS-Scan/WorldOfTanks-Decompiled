@@ -11,6 +11,7 @@ class QUESTS(object):
     MISSIONS_TAB_CURRENTVEHICLE = '#quests:missions/tab/currentVehicle'
     MISSIONS_TAB_BATTLE_PASS = '#quests:missions/tab/battle_pass'
     MISSIONS_TAB_DAILY = '#quests:missions/tab/daily'
+    MISSIONS_TAB_MAPBOX = '#quests:missions/tab/mapbox'
     IGR_TOOLTIP_BATTLESLABEL = '#quests:igr/tooltip/battlesLabel'
     IGR_TOOLTIP_WINSLABEL = '#quests:igr/tooltip/winsLabel'
     POSTBATTLE_PROGRESSRESET = '#quests:postBattle/progressReset'
@@ -602,7 +603,6 @@ class QUESTS(object):
     DETAILS_CONDITIONS_INSTALLEDMODULE_TURRETS_NOT = '#quests:details/conditions/installedModule/turrets/not'
     DETAILS_CONDITIONS_INSTALLEDMODULE_RADIOS_NOT = '#quests:details/conditions/installedModule/radios/not'
     DETAILS_CONDITIONS_INSTALLEDMODULE_OPTIONALDEVICE_NOT = '#quests:details/conditions/installedModule/optionalDevice/not'
-    DETAILS_CONDITIONS_USEDEQUIPMENT = '#quests:details/conditions/usedEquipment'
     DETAILS_CONDITIONS_MULTISTUNEVENT = '#quests:details/conditions/multiStunEvent'
     DETAILS_CONDITIONS_MULTISTUNEVENT_NOT = '#quests:details/conditions/multiStunEvent/not'
     DETAILS_CONDITIONS_VEHICLESTUN = '#quests:details/conditions/vehicleStun'
@@ -944,7 +944,7 @@ class QUESTS(object):
     DETAILS_DOSSIER_22_BATTLESCOUNT = '#quests:details/dossier/22/battlesCount'
     DETAILS_DOSSIER_24_BATTLESCOUNT = '#quests:details/dossier/24/battlesCount'
     DETAILS_DOSSIER_27_BATTLESCOUNT = '#quests:details/dossier/27/battlesCount'
-    DETAILS_DOSSIER_36_BATTLESCOUNT = '#quests:details/dossier/36/battlesCount'
+    DETAILS_DOSSIER_37_BATTLESCOUNT = '#quests:details/dossier/37/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
     DETAILS_MODIFIERS_TITLE_AVAILABILITY = '#quests:details/modifiers/title/availability'
@@ -1042,6 +1042,8 @@ class QUESTS(object):
     MISSIONS_TAB_DAILY_BODY = '#quests:missions/tab/daily/body'
     MISSIONS_TAB_BATTLE_PASS_BODY = '#quests:missions/tab/battle_pass/body'
     MISSIONS_TAB_BATTLE_PASS_HEADER = '#quests:missions/tab/battle_pass/header'
+    MISSIONS_TAB_MAPBOX_BODY = '#quests:missions/tab/mapbox/body'
+    MISSIONS_TAB_MAPBOX_HEADER = '#quests:missions/tab/mapbox/header'
     MISSIONS_TAB_LABEL_CURRENTVEHICLE = '#quests:missions/tab/label/currentVehicle'
     MISSIONS_TAB_CURRENTVEHICLE_HEADER = '#quests:missions/tab/currentVehicle/header'
     MISSIONS_TAB_CURRENTVEHICLE_BODY = '#quests:missions/tab/currentVehicle/body'
@@ -2179,7 +2181,7 @@ class QUESTS(object):
      DETAILS_DOSSIER_22_BATTLESCOUNT,
      DETAILS_DOSSIER_24_BATTLESCOUNT,
      DETAILS_DOSSIER_27_BATTLESCOUNT,
-     DETAILS_DOSSIER_36_BATTLESCOUNT)
+     DETAILS_DOSSIER_37_BATTLESCOUNT)
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ENUM = (PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USSR,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_GERMANY,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USA,

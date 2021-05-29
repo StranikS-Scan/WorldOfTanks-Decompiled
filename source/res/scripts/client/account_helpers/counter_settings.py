@@ -7,7 +7,8 @@ from helpers import dependency
 from skeletons.gui.game_control import IAnonymizerController
 from skeletons.gui.lobby_context import ILobbyContext
 _NEW_SETTING_COUNTER_VISIBILITY_VALIDATORS = {settings_constants.GAME.ANONYMIZER: lambda : dependency.instance(IAnonymizerController).isEnabled,
- 'showQuestProgress': lambda : dependency.instance(ILobbyContext).getServerSettings().isPersonalMissionsEnabled()}
+ 'showQuestProgress': lambda : dependency.instance(ILobbyContext).getServerSettings().isPersonalMissionsEnabled(),
+ settings_constants.GAME.GAMEPLAY_ONLY_10_MODE: lambda : dependency.instance(ILobbyContext).getServerSettings().isOnly10ModeEnabled()}
 
 def isNewSettingCounterVisible(settingKey):
     return _NEW_SETTING_COUNTER_VISIBILITY_VALIDATORS.get(settingKey, lambda : True)()

@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/json/decoder.py
-# Compiled at: 2081-12-05 00:25:55
-"""Implementation of JSONDecoder
-"""
 import re
 import sys
 import struct
@@ -72,14 +69,6 @@ def _decode_uXXXX(s, pos):
 
 
 def py_scanstring(s, end, encoding=None, strict=True, _b=BACKSLASH, _m=STRINGCHUNK.match):
-    """Scan the string s for a JSON string. End is the index of the
-    character in s after the quote that started the JSON string.
-    Unescapes all valid JSON string escape sequences and raises ValueError
-    on attempt to decode an invalid string. If strict is False then literal
-    control characters are allowed in the string.
-    
-    Returns a tuple of the decoded string and the index of the character in s
-    after the end quote."""
     if encoding is None:
         encoding = DEFAULT_ENCODING
     chunks = []
@@ -252,78 +241,8 @@ def JSONArray(s_and_end, scan_once, _w=WHITESPACE.match, _ws=WHITESPACE_STR):
 
 
 class JSONDecoder(object):
-    """Simple JSON <http://json.org> decoder
-    
-    Performs the following translations in decoding by default:
-    
-    +---------------+-------------------+
-    | JSON          | Python            |
-    +===============+===================+
-    | object        | dict              |
-    +---------------+-------------------+
-    | array         | list              |
-    +---------------+-------------------+
-    | string        | unicode           |
-    +---------------+-------------------+
-    | number (int)  | int, long         |
-    +---------------+-------------------+
-    | number (real) | float             |
-    +---------------+-------------------+
-    | true          | True              |
-    +---------------+-------------------+
-    | false         | False             |
-    +---------------+-------------------+
-    | null          | None              |
-    +---------------+-------------------+
-    
-    It also understands ``NaN``, ``Infinity``, and ``-Infinity`` as
-    their corresponding ``float`` values, which is outside the JSON spec.
-    
-    """
 
     def __init__(self, encoding=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, strict=True, object_pairs_hook=None):
-        r"""``encoding`` determines the encoding used to interpret any ``str``
-        objects decoded by this instance (utf-8 by default).  It has no
-        effect when decoding ``unicode`` objects.
-        
-        Note that currently only encodings that are a superset of ASCII work,
-        strings of other encodings should be passed in as ``unicode``.
-        
-        ``object_hook``, if specified, will be called with the result
-        of every JSON object decoded and its return value will be used in
-        place of the given ``dict``.  This can be used to provide custom
-        deserializations (e.g. to support JSON-RPC class hinting).
-        
-        ``object_pairs_hook``, if specified will be called with the result of
-        every JSON object decoded with an ordered list of pairs.  The return
-        value of ``object_pairs_hook`` will be used instead of the ``dict``.
-        This feature can be used to implement custom decoders that rely on the
-        order that the key and value pairs are decoded (for example,
-        collections.OrderedDict will remember the order of insertion). If
-        ``object_hook`` is also defined, the ``object_pairs_hook`` takes
-        priority.
-        
-        ``parse_float``, if specified, will be called with the string
-        of every JSON float to be decoded. By default this is equivalent to
-        float(num_str). This can be used to use another datatype or parser
-        for JSON floats (e.g. decimal.Decimal).
-        
-        ``parse_int``, if specified, will be called with the string
-        of every JSON int to be decoded. By default this is equivalent to
-        int(num_str). This can be used to use another datatype or parser
-        for JSON integers (e.g. float).
-        
-        ``parse_constant``, if specified, will be called with one of the
-        following strings: -Infinity, Infinity, NaN.
-        This can be used to raise an exception if invalid JSON numbers
-        are encountered.
-        
-        If ``strict`` is false (true is the default), then control
-        characters will be allowed inside strings.  Control characters in
-        this context are those with character codes in the 0-31 range,
-        including ``'\t'`` (tab), ``'\n'``, ``'\r'`` and ``'\0'``.
-        
-        """
         self.encoding = encoding
         self.object_hook = object_hook
         self.object_pairs_hook = object_pairs_hook
@@ -337,10 +256,6 @@ class JSONDecoder(object):
         self.scan_once = scanner.make_scanner(self)
 
     def decode(self, s, _w=WHITESPACE.match):
-        """Return the Python representation of ``s`` (a ``str`` or ``unicode``
-        instance containing a JSON document)
-        
-        """
         obj, end = self.raw_decode(s, idx=_w(s, 0).end())
         end = _w(s, end).end()
         if end != len(s):
@@ -348,14 +263,6 @@ class JSONDecoder(object):
         return obj
 
     def raw_decode(self, s, idx=0):
-        """Decode a JSON document from ``s`` (a ``str`` or ``unicode``
-        beginning with a JSON document) and return a 2-tuple of the Python
-        representation and the index in ``s`` where the document ended.
-        
-        This can be used to decode a JSON document from a string that may
-        have extraneous data at the end.
-        
-        """
         try:
             obj, end = self.scan_once(s, idx)
         except StopIteration:

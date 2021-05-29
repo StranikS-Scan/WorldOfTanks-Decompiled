@@ -24,6 +24,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.07	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	6.0	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
@@ -1606,7 +1612,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_130mm_S-26A>	shared	  <maxAmmo>	25	</maxAmmo>
+        <_130mm_S-26A>	shared	  <maxAmmo>	35	</maxAmmo>
           <armor>
             <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1620,7 +1626,7 @@
             <minPitch>	0 -14.3 1 -14.3	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <turretYawLimits>	-2 10	</turretYawLimits>
+          <turretYawLimits>	-10 10	</turretYawLimits>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	10.3	</reloadTime>
@@ -1735,7 +1741,7 @@
     </Turret_1_R111_ISU130>
   </turrets0>
   <engines>
-    <V-2IS_R1>	shared	</V-2IS_R1>
+    <V-2IS_R1_SP>	shared	</V-2IS_R1_SP>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
@@ -1746,10 +1752,10 @@
   <physics>
     <detailed>
       <engines>
-        <V-2IS_R1>
-          <smplEnginePower>	549.7862	</smplEnginePower>
+        <V-2IS_R1_SP>
+          <smplEnginePower>	600	</smplEnginePower>
           <smplFwMaxSpeed>	38	</smplFwMaxSpeed>
-        </V-2IS_R1>
+        </V-2IS_R1_SP>
       </engines>
       <chassis>
         <Chassis_R111_ISU130>

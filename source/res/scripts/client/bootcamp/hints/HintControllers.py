@@ -12,6 +12,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from helpers import dependency
+from helpers.i18n import makeString
 from skeletons.gui.game_control import IBootcampController
 
 class PrimaryHintController(object):
@@ -135,7 +136,7 @@ class SecondaryHintController(object):
         super(SecondaryHintController, self).__init__()
         self.id = hintId
         self._typeId = typeId
-        self._message = message
+        self._message = makeString(message)
         self._onScreen = False
 
     def isShown(self):

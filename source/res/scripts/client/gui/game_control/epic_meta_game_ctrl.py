@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/epic_meta_game_ctrl.py
 import logging
 from itertools import chain
+import typing
 import BigWorld
 import WWISE
 import Event
@@ -32,6 +33,8 @@ from gui.Scaleform.daapi.view.lobby.epicBattle.epic_cycle_helpers import getCurr
 from player_ranks import getSettings as getRankSettings
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_results import IBattleResultsService
+if typing.TYPE_CHECKING:
+    from helpers.server_settings import EpicGameConfig
 _logger = logging.getLogger(__name__)
 _VALID_PREBATTLE_TYPES = [PREBATTLE_TYPE.EPIC, PREBATTLE_TYPE.EPIC_TRAINING]
 
@@ -115,8 +118,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def __init__(self):
         super(EpicBattleMetaGameController, self).__init__()
-        self._setSeasonSettingsProvider(self.getModeSettings)
-        self._setPrimeTimesIteratorGetter(self.getPrimeTimesIter)
         self.onUpdated = Event.Event()
         self.onPrimeTimeStatusUpdated = Event.Event()
         self.onEventEnded = Event.Event()
@@ -194,6 +195,9 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.__clear()
         self.__battleResultsService.onResultPosted -= self.__showBattleResults
 
+    def getModeSettings(self):
+        return self.__lobbyContext.getServerSettings().epicBattles
+
     def isEnabled(self):
         return self.getModeSettings().isEnabled
 
@@ -240,7 +244,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def getPlayerRanksInfo(self):
         if not self.__rankSettings:
-            famePtsByRank = self.__getSettings().metaLevel.get('famePtsByRank', {})
+            famePtsByRank = self.__getMetaSettings.metaLevel.get('famePtsByRank', {})
             rankSettings = getRankSettings()
             self.__rankSettings = {rankLvl:(extraFamePts, rankSettings.bonus.factor100ByRank[rankLvl]) for rankLvl, extraFamePts in famePtsByRank.iteritems()}
         return self.__rankSettings
@@ -325,9 +329,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return self.__itemsCache.items.epicMetaGame
 
     def getNumAbilitySlots(self, vehicleType):
-        config = self.__lobbyContext.getServerSettings().epicMetaGame
         vehClass = getVehicleClassFromVehicleType(vehicleType)
-        return config.defaultSlots.get(vehClass, 0)
+        return self.__getMetaSettings.defaultSlots.get(vehClass, 0)
 
     def __invalidateBattleAbilities(self, *_):
         if not self.__itemsCache.isSynced():
@@ -337,8 +340,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def __setData(self):
         self.__skillData = {}
-        skills = self.__getSettings().rewards.get('combatReserves', {})
-        maxSkillLvl = self.__getSettings().maxCombatReserveLevel
+        skills = self.__getMetaSettings.rewards.get('combatReserves', {})
+        maxSkillLvl = self.__getMetaSettings.maxCombatReserveLevel
         eqs = vehicles.g_cache.equipments()
         if skills != {}:
             for key, value in skills.iteritems():
@@ -354,7 +357,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
                         if found == lvlAmount:
                             break
 
-        metaLevel = self.__getSettings().metaLevel
+        metaLevel = self.__getMetaSettings.metaLevel
         self.__playerMaxLevel = metaLevel.get('maxLevel', 0)
         self.__playerMaxPrestigeLevel = metaLevel.get('maxPrestigeLevel', 0)
         self.__stageLimit = metaLevel.get('stageLimit', -1)
@@ -483,10 +486,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             _FrontLineSounds.onChange(isEpicSoundMode)
             self.__isEpicSoundMode = isEpicSoundMode
 
-    def getPrimeTimesIter(self, primeTimes):
-        for primeTime in primeTimes:
-            yield primeTime
-
     @async
     @process
     def __confirmFightButtonPressEnabled(self, callback):
@@ -504,14 +503,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             result = True
         callback(result)
 
-    @staticmethod
-    def __getSettings():
-        lobbyContext = dependency.instance(ILobbyContext)
-        generalSettings = lobbyContext.getServerSettings().epicMetaGame
-        return generalSettings
-
-    @staticmethod
-    def getModeSettings():
-        lobbyContext = dependency.instance(ILobbyContext)
-        generalSettings = lobbyContext.getServerSettings().epicBattles
-        return generalSettings
+    @property
+    def __getMetaSettings(self):
+        return self.__lobbyContext.getServerSettings().epicMetaGame

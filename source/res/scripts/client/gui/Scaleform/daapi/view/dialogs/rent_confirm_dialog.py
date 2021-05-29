@@ -40,8 +40,8 @@ class RentConfirmDialogMeta(I18nConfirmDialogMeta):
             _logger.debug('GameSeasonType %s with RentType %s is not supported', seasonType, rentType)
         stage = backport.text(R.strings.vehicle_preview.buyingPanel.offer.rent.name.dyn(key)(), value=indexes)
         event = backport.text(R.strings.arenas.type.epic.name.inQuotes())
+        period = backport.text(R.strings.dialogs.rentConfirmation.period(), stage=stage or 'Stage', event=event or 'Event')
         self._messageCtx = {'name': vehicle.shortUserName or 'Vehicle',
-         'stage': text_styles.stats(stage or 'Stage'),
-         'event': text_styles.stats(event or 'Event'),
+         'period': text_styles.stats(period),
          'price': formatPrice(price, reverse=True, useIcon=True)}
         return

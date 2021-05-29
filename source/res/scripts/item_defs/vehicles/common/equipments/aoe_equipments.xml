@@ -1,0 +1,177 @@
+<aoe_equipments.xml>
+  <arcade_artillery_aoe>
+    <id>	9101	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery 0 0	</icon>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	90	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <insetRadius>	5	</insetRadius>
+        <areaSwitch>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaSwitch>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	0	</delay>
+      <duration>	3.0	</duration>
+      <shotsNumber>	3	</shotsNumber>
+      <explodeDestructible>	false	</explodeDestructible>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <start>
+          <areaColor>	0x3FFFFF00	</areaColor>
+        </start>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+          <areaColor>	0x3FFFFF00	</areaColor>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	100	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </arcade_artillery_aoe>
+  <arcade_bomber_aoe>
+    <id>	9201	</id>
+    <userString>	#artefacts:bomber/name	</userString>
+    <description>	#artefacts:bomber/descr	</description>
+    <icon>	bomber 0 0	</icon>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackBomberEquipment	  <shortDescription>	#artefacts:bomber/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:bomber/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	90	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <insetRadius>	5	</insetRadius>
+        <areaSwitch>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaSwitch>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	5.38	</delay>
+      <duration>	1.0	</duration>
+      <areaLength>	80	</areaLength>
+      <areaWidth>	32	</areaWidth>
+      <shotsNumber>	40	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <attackerType>	BOMBER_EQ	</attackerType>
+      <lifetime>	16.48	</lifetime>
+      <shotEffect>	epicAirbombStrike	</shotEffect>
+      <effects>
+        <start>
+          <sequences>	particles/eff_sequence/aoe_airstrike_il2_01.seq	</sequences>
+        </start>
+        <action>
+          <areaColor>	0x3FFFFF00	</areaColor>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	75	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </arcade_bomber_aoe>
+  <artillery_deathzone_aoe>
+    <id>	9301	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery 0 0	</icon>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	90	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	4	</delay>
+      <duration>	3.0	</duration>
+      <shotsNumber>	4	</shotsNumber>
+      <explodeDestructible>	false	</explodeDestructible>
+      <areaRadius>	10	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	DEATH_ZONE	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <start>
+          <areaColor>	0x3FFF0000	</areaColor>
+        </start>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+          <areaColor>	0x3FFFFF00	</areaColor>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	100	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_deathzone_aoe>
+</aoe_equipments.xml>

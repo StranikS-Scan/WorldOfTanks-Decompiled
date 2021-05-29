@@ -671,15 +671,16 @@ class BuyBoosterAction(CachedItemAction):
 
 class ConvertBlueprintFragmentAction(IGUIItemAction):
 
-    def __init__(self, vehicleCD, fragmentCount=1, fragmentPosition=-1):
+    def __init__(self, vehicleCD, fragmentCount=1, fragmentPosition=-1, usedNationalFragments=None):
         super(ConvertBlueprintFragmentAction, self).__init__()
         self.__vehicleCD = vehicleCD
         self.__fragmentPosition = fragmentPosition
         self.__fragmentCount = fragmentCount
+        self.__usedNationalFragments = usedNationalFragments
 
     @decorators.process('blueprints/convertFragments')
     def doAction(self):
-        result = yield ConvertBlueprintFragmentProcessor(self.__vehicleCD, fragmentPosition=self.__fragmentPosition, count=self.__fragmentCount).request()
+        result = yield ConvertBlueprintFragmentProcessor(self.__vehicleCD, self.__fragmentCount, self.__fragmentPosition, self.__usedNationalFragments).request()
         if not result or not result.success:
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.BLUEPRINTS_CONVERSION_ERROR, type=result.sysMsgType)
 

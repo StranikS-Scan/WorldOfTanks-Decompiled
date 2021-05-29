@@ -27,3 +27,6 @@ class LobbyPageMeta(View):
 
     def as_hideWaitingS(self):
         return self.flashObject.as_hideWaiting() if self._isDAAPIInited() else None
+
+    def as_setSubContainerItemsVisibilityS(self, isVisible):
+        return self.flashObject.as_setSubContainerItemsVisibility(isVisible) if self._isDAAPIInited() else None

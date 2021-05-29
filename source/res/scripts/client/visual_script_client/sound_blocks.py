@@ -27,25 +27,68 @@ class SoundMeta(Meta):
         return [ASPECT.CLIENT]
 
 
-class Play2DSound(Block, SoundMeta):
+class PlaySound(Block, SoundMeta):
 
     def __init__(self, *args, **kwargs):
-        super(Play2DSound, self).__init__(*args, **kwargs)
+        super(PlaySound, self).__init__(*args, **kwargs)
         self._in = self._makeEventInputSlot('in', self._execute)
-        self._soundID = self._makeDataInputSlot('sound', SLOT_TYPE.STR)
+        self._sound = self._makeDataInputSlot('soundToPlay', SLOT_TYPE.SOUND)
         self._out = self._makeEventOutputSlot('out')
-
-    @classmethod
-    def blockName(cls):
-        pass
-
-    def captionText(self):
-        pass
+        self._onSoundStop = self._makeEventOutputSlot('onSoundStop')
 
     def _execute(self):
-        if not BattleReplay.g_replayCtrl.isTimeWarpInProgress:
-            SoundGroups.g_instance.playSound2D(self._soundID.getValue())
+        sound = self._sound.getValue()
+        if sound:
+            sound.setCallback(self.__onSoundEnd)
+            if not sound.play():
+                self._onSoundStop.call()
         self._out.call()
+
+    def __onSoundEnd(self, sound):
+        self._onSoundStop.call()
+
+
+class StopSound(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(StopSound, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._execute)
+        self._sound = self._makeDataInputSlot('sound', SLOT_TYPE.SOUND)
+        self._out = self._makeEventOutputSlot('out')
+
+    def _execute(self):
+        sound = self._sound.getValue()
+        if sound:
+            sound.stop()
+        self._out.call()
+
+
+class Create2DSound(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(Create2DSound, self).__init__(*args, **kwargs)
+        self._soundName = self._makeDataInputSlot('soundName', SLOT_TYPE.STR)
+        self._sound = self._makeDataOutputSlot('sound', SLOT_TYPE.SOUND, self._execute)
+
+    def _execute(self):
+        sound = SoundGroups.g_instance.getSound2D(self._soundName.getValue())
+        if sound:
+            self._sound.setValue(sound)
+
+
+class Create3DSound(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(Create3DSound, self).__init__(*args, **kwargs)
+        self._soundName = self._makeDataInputSlot('soundName', SLOT_TYPE.STR)
+        self._soundObjectName = self._makeDataInputSlot('soundObjectName', SLOT_TYPE.STR)
+        self._position = self._makeDataInputSlot('position', SLOT_TYPE.VECTOR3)
+        self._sound = self._makeDataOutputSlot('sound', SLOT_TYPE.SOUND, self._execute)
+
+    def _execute(self):
+        sound = SoundGroups.g_instance.WWgetSoundPos(self._soundName.getValue(), self._soundObjectName.getValue(), self._position.getValue())
+        if sound:
+            self._sound.setValue(sound)
 
 
 class SetMutedSounds(Block, SoundMeta):
@@ -53,7 +96,7 @@ class SetMutedSounds(Block, SoundMeta):
     def __init__(self, *args, **kwargs):
         super(SetMutedSounds, self).__init__(*args, **kwargs)
         self._in = self._makeEventInputSlot('in', self._execute)
-        self._soundIDs = self._makeDataInputSlot('sounds', arrayOf(SLOT_TYPE.STR))
+        self._soundNames = self._makeDataInputSlot('soundNames', arrayOf(SLOT_TYPE.STR))
         self._out = self._makeEventOutputSlot('out')
 
     def validate(self):
@@ -62,8 +105,8 @@ class SetMutedSounds(Block, SoundMeta):
     def _execute(self):
         avatar = BigWorld.player()
         if avatar:
-            if self._soundIDs.hasValue():
-                avatar.muteSounds(self._soundIDs.getValue())
+            if self._soundNames.hasValue():
+                avatar.muteSounds(self._soundNames.getValue())
             else:
                 avatar.muteSounds(())
 
@@ -126,3 +169,73 @@ class SetMusicSkipArenaChanges(Block, SoundMeta):
     def _execute(self):
         MusicControllerWWISE.g_musicController.skipArenaChanges = self._skip.getValue()
         self._out.call()
+
+
+class SetSoundRTPC(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(SetSoundRTPC, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._setValue)
+        self._out = self._makeEventOutputSlot('out')
+        self._soundIn = self._makeDataInputSlot('soundIn', SLOT_TYPE.SOUND)
+        self._soundOut = self._makeDataOutputSlot('soundOut', SLOT_TYPE.SOUND, None)
+        self._rtpcName = self._makeDataInputSlot('rtpcName', SLOT_TYPE.STR)
+        self._rtpcValue = self._makeDataInputSlot('rtpcValue', SLOT_TYPE.FLOAT)
+        return
+
+    def _setValue(self):
+        sound = self._soundIn.getValue()
+        if sound:
+            sound.setRTPC(self._rtpcName.getValue(), self._rtpcValue.getValue())
+        self._soundOut.setValue(sound)
+        self._out.call()
+
+
+class SetSoundSwitch(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(SetSoundSwitch, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._setValue)
+        self._out = self._makeEventOutputSlot('out')
+        self._soundIn = self._makeDataInputSlot('soundIn', SLOT_TYPE.SOUND)
+        self._soundOut = self._makeDataOutputSlot('soundOut', SLOT_TYPE.SOUND, None)
+        self._switchName = self._makeDataInputSlot('switchName', SLOT_TYPE.STR)
+        self._switchValue = self._makeDataInputSlot('switchValue', SLOT_TYPE.STR)
+        return
+
+    def _setValue(self):
+        sound = self._soundIn.getValue()
+        if sound:
+            sound.setSwitch(self._switchName.getValue(), self._switchValue.getValue())
+        self._soundOut.setValue(sound)
+        self._out.call()
+
+
+class GetSoundName(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetSoundName, self).__init__(*args, **kwargs)
+        self._sound = self._makeDataInputSlot('sound', SLOT_TYPE.SOUND)
+        self._name = self._makeDataOutputSlot('name', SLOT_TYPE.STR, self._execute)
+
+    def _execute(self):
+        sound = self._sound.getValue()
+        if sound:
+            self._name.setValue(sound.name)
+        else:
+            self._name.setValue('')
+
+
+class IsSoundPlaying(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(IsSoundPlaying, self).__init__(*args, **kwargs)
+        self._sound = self._makeDataInputSlot('sound', SLOT_TYPE.SOUND)
+        self._isPlaying = self._makeDataOutputSlot('isPlaying', SLOT_TYPE.BOOL, self._execute)
+
+    def _execute(self):
+        sound = self._sound.getValue()
+        if sound:
+            self._isPlaying.setValue(sound.isPlaying)
+        else:
+            self._isPlaying.setValue(False)

@@ -268,14 +268,16 @@ class StyledMode(CustomizationMode):
         callback(self)
         return
 
+    @async
     @wrappedProcess('sellItem')
-    def _sellItem(self, item, count):
+    def _sellItem(self, item, count, callback):
         if item.fullInventoryCount(g_currentVehicle.item.intCD) < count:
             emptyComponent = CustomizationOutfit()
             vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
             outfit = Outfit(component=emptyComponent, vehicleCD=vehicleCD)
             yield OutfitApplier(g_currentVehicle.item, ((outfit, SeasonType.ALL),)).request()
-        yield CustomizationsSeller(g_currentVehicle.item, item, count).request()
+        result = yield CustomizationsSeller(g_currentVehicle.item, item, count).request()
+        callback(result)
 
     def _getAppliedItems(self, isOriginal=True):
         appliedItems = set()

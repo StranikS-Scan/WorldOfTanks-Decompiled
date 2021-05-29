@@ -24,6 +24,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.09	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	13.000	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
@@ -52,6 +58,10 @@
       <armor_14>	12.7	</armor_14>
       <armor_15>	40.6	</armor_15>
       <armor_16>	76.2	</armor_16>
+      <armor_17>	177.8	</armor_17>
+      <armor_18>	155	</armor_18>
+      <armor_19>	125	</armor_19>
+      <armor_20>	93.2	</armor_20>
     </armor>
     <primaryArmor>	armor_1 armor_2 armor_4	</primaryArmor>
     <weight>	24593	</weight>
@@ -1569,11 +1579,11 @@
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	177.8	</armor_1>
-        <armor_2>	139.7	</armor_2>
+        <armor_1>	254	</armor_1>
+        <armor_2>	203	</armor_2>
         <armor_3>	76.2	</armor_3>
         <armor_4>	50.8	</armor_4>
-        <armor_5>	127	</armor_5>
+        <armor_5>	140	</armor_5>
         <armor_6>	114.3	</armor_6>
         <armor_7>	101.6	</armor_7>
         <armor_8>	88.9	</armor_8>
@@ -1609,11 +1619,11 @@
             <maxPitch>	0 9 0.353005 9 0.416667 5 0.450721 1 0.552374 1 0.583333 5 0.646995 9 1 9	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	230	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>

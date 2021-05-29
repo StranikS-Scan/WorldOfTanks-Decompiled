@@ -4055,13 +4055,13 @@
           <maxDistance>	720	</maxDistance>
           <piercingPower>	71 63	</piercingPower>
         </_25pdr_AP_Mk_1TA>
-        <_25pdr_AP_Mk_1T_SC>
+        <_25pdr_AP_Mk_1TA_SC>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	591	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	92 81	</piercingPower>
-        </_25pdr_AP_Mk_1T_SC>
+        </_25pdr_AP_Mk_1TA_SC>
         <_25pdr_HE_Mk_1DA>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	472	</speed>
@@ -4657,7 +4657,7 @@
       <impulse>	0.48	</impulse>
       <recoil>
         <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.08	</amplitude>
+        <amplitude>	0.6	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
       <effects>	shot_main_mb	</effects>
@@ -5349,21 +5349,29 @@
       </shotDispersionFactors>
       <shots>
         <_5.5inch_HE_Mk_4>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	440	</speed>
           <gravity>	146	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	35 35	</piercingPower>
-          <maxHeight>	409	</maxHeight>
+          <maxHeight>	415	</maxHeight>
         </_5.5inch_HE_Mk_4>
         <_5.5inch_HE_Mk_5>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	440	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	471	</speed>
           <gravity>	146	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	35 35	</piercingPower>
-          <maxHeight>	409	</maxHeight>
+          <piercingPower>	44 44	</piercingPower>
+          <maxHeight>	475	</maxHeight>
         </_5.5inch_HE_Mk_5>
+        <_5.5inch_AP_Mk_4>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	528	</speed>
+          <gravity>	146	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	212 187	</piercingPower>
+          <maxHeight>	597	</maxHeight>
+        </_5.5inch_AP_Mk_4>
       </shots>
     </_5.5inch_SPG_Gun>
     <_6inch_SPG_Gun>
@@ -5401,21 +5409,29 @@
       </shotDispersionFactors>
       <shots>
         <_6inch_HE>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	480	</speed>
           <gravity>	164	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	38 38	</piercingPower>
-          <maxHeight>	432	</maxHeight>
+          <maxHeight>	440	</maxHeight>
         </_6inch_HE>
         <_6inch_HE_Mk_6>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	480	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	514	</speed>
           <gravity>	164	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
-          <maxHeight>	432	</maxHeight>
+          <piercingPower>	48 48	</piercingPower>
+          <maxHeight>	503	</maxHeight>
         </_6inch_HE_Mk_6>
+        <_6inch_AP>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	576	</speed>
+          <gravity>	164	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	254 224	</piercingPower>
+          <maxHeight>	633	</maxHeight>
+        </_6inch_AP>
       </shots>
     </_6inch_SPG_Gun>
     <_7.2inch_SPG_Howitzer>
@@ -5453,21 +5469,29 @@
       </shotDispersionFactors>
       <shots>
         <_7.2inch_HE>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	440	</speed>
           <gravity>	143	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	46 46	</piercingPower>
-          <maxHeight>	417	</maxHeight>
+          <maxHeight>	424	</maxHeight>
         </_7.2inch_HE>
         <_7.2inch_HE_Mk_2>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	440	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	471	</speed>
           <gravity>	143	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	46 46	</piercingPower>
-          <maxHeight>	417	</maxHeight>
+          <piercingPower>	58 58	</piercingPower>
+          <maxHeight>	485	</maxHeight>
         </_7.2inch_HE_Mk_2>
+        <_7.2inch_AP>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	528	</speed>
+          <gravity>	143	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	306 269	</piercingPower>
+          <maxHeight>	610	</maxHeight>
+        </_7.2inch_AP>
       </shots>
     </_7.2inch_SPG_Howitzer>
     <_183mm_AT_Gun>
@@ -5622,21 +5646,29 @@
       </shotDispersionFactors>
       <shots>
         <_9.2inch_HE_Mk_18>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	360	</speed>
           <gravity>	129	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	59 59	</piercingPower>
-          <maxHeight>	315	</maxHeight>
+          <maxHeight>	314	</maxHeight>
         </_9.2inch_HE_Mk_18>
         <_9.2inch_HE_Mk_19>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	360	</speed>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	385	</speed>
           <gravity>	129	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	59 59	</piercingPower>
-          <maxHeight>	315	</maxHeight>
+          <piercingPower>	74 74	</piercingPower>
+          <maxHeight>	360	</maxHeight>
         </_9.2inch_HE_Mk_19>
+        <_9.2inch_AP_Mk_18>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	432	</speed>
+          <gravity>	129	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	370 326	</piercingPower>
+          <maxHeight>	453	</maxHeight>
+        </_9.2inch_AP_Mk_18>
       </shots>
     </_9.2inch_SPG_Howitzer>
     <_20pdr_Gun_Type_A_IGR>

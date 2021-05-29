@@ -76,6 +76,7 @@ class ArcadeAimingSystem(IAimingSystem):
         self._vehicleTypeDescriptor = None
         self.__cachedScanDirection = Vector3(0.0, 0.0, 0.0)
         self.__cachedScanStart = Vector3(0.0, 0.0, 0.0)
+        self.__cursorShouldCheckCollisions = True
         return
 
     def getPivotSettings(self):
@@ -84,6 +85,16 @@ class ArcadeAimingSystem(IAimingSystem):
     def setPivotSettings(self, heightAboveBase, focusRadius):
         self.__cursor.heightAboveBase = heightAboveBase
         self.__cursor.focusRadius = focusRadius
+
+    def setAnglesRange(self, anglesRange):
+        self.__anglesRange = anglesRange
+
+    def cursorShouldCheckCollisions(self, shouldCheckCollisions=True):
+        self.__cursorShouldCheckCollisions = shouldCheckCollisions
+
+    def setMinDistanceForShotPointCalc(self, minDist=None):
+        if self.__shotPointCalculator:
+            self.__shotPointCalculator.setMinDistance(minDist=minDist)
 
     def destroy(self):
         IAimingSystem.destroy(self)
@@ -138,7 +149,7 @@ class ArcadeAimingSystem(IAimingSystem):
         self.__updateInternal()
 
     def __updateInternal(self):
-        self.__cursor.update(True)
+        self.__cursor.update(self.__cursorShouldCheckCollisions)
         aimMatrix = self.__getLookToAimMatrix()
         aimMatrix.postMultiply(self.__cursor.matrix)
         self._matrix.set(aimMatrix)
@@ -283,6 +294,14 @@ class ShotPointCalculatorPlanar(object):
         self.__aimPlane = _AimPlane()
         self.__getTurretMat = functools.partial(AimingSystems.getTurretJointMat, self.__vehicleDesc, self.__vehicleMat)
         self.__cachedResult = ShotPointCalculatorPlanar.CachedResult()
+        self.__minDist = ShotPointCalculatorPlanar.MIN_DIST
+
+    def setMinDistance(self, minDist=None):
+        if minDist is None:
+            self.__minDist = ShotPointCalculatorPlanar.MIN_DIST
+        else:
+            self.__minDist = minDist
+        return
 
     def updateVehicleDescr(self, vehicleDesr):
         if vehicleDesr is not None:
@@ -302,7 +321,7 @@ class ShotPointCalculatorPlanar(object):
                 gunMat = AimingSystems.getGunJointMat(self.__vehicleDesc, self.__getTurretMat(turretYaw), gunPitch)
                 planePos = self.__aimPlane.intersectRay(gunMat.translation, gunMat.applyVector(Vector3(0, 0, 1)), False, False)
             else:
-                planePos = self.__aimPlane.intersectRay(scanStart, scanDir, False)
+                planePos = self.__aimPlane.intersectRay(scanStart, scanDir)
             if scanStart.distSqrTo(planePos) < scanStart.distSqrTo(scanPos):
                 return scanPos
             return planePos
@@ -339,7 +358,7 @@ class ShotPointCalculatorPlanar(object):
             if testResStatic.isTerrain():
                 shouldCheck = testResStatic.normal.dot(Math.Vector3(0.0, 1.0, 0.0)) <= math.cos(ShotPointCalculatorPlanar.TERRAIN_MIN_ANGLE)
             if shouldCheck:
-                isPointConvenient = closestDist >= ShotPointCalculatorPlanar.MIN_DIST
+                isPointConvenient = closestDist >= self.__minDist
         if closestPoint is None and testResDynamic is None:
             return (AimingSystems.shootInSkyPoint(start, direction), True)
         else:

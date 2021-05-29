@@ -14,20 +14,20 @@ class BattleBoosterSlotModel(BaseSlotModel):
     def setDescription(self, value):
         self._setString(13, value)
 
-    def getIsBuyMoreDisabled(self):
+    def getIsBuyMoreVisible(self):
         return self._getBool(14)
 
-    def setIsBuyMoreDisabled(self, value):
+    def setIsBuyMoreVisible(self, value):
         self._setBool(14, value)
 
-    def getIsCrewBooster(self):
+    def getIsBuyMoreDisabled(self):
         return self._getBool(15)
 
-    def setIsCrewBooster(self, value):
+    def setIsBuyMoreDisabled(self, value):
         self._setBool(15, value)
 
     def _initialize(self):
         super(BattleBoosterSlotModel, self)._initialize()
         self._addStringProperty('description', '')
+        self._addBoolProperty('isBuyMoreVisible', True)
         self._addBoolProperty('isBuyMoreDisabled', False)
-        self._addBoolProperty('isCrewBooster', False)

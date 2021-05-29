@@ -12,3 +12,6 @@ class ProfileStatisticsMeta(ProfileSection):
 
     def showPlayersStats(self):
         self._printOverrideError('showPlayersStats')
+
+    def as_updatePlayerStatsBtnS(self, isVisible):
+        return self.flashObject.as_updatePlayerStatsBtn(isVisible) if self._isDAAPIInited() else None

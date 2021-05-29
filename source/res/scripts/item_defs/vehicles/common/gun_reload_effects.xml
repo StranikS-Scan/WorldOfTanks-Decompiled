@@ -3,31 +3,55 @@
     <type>	SimpleReload	</type>
     <duration>	950.0	</duration>
     <sound>	gun_rld_12_25mm	</sound>
+    <intuition_overrides>
+      <duration>	1000.0	</duration>
+      <sound>	gun_rld_intuition_12_25mm	</sound>
+    </intuition_overrides>
   </reload12_25>
   <reload20_45>
     <type>	SimpleReload	</type>
     <duration>	660.0	</duration>
     <sound>	gun_rld_20_45mm	</sound>
+    <intuition_overrides>
+      <duration>	1000.0	</duration>
+      <sound>	gun_rld_intuition_20_45mm	</sound>
+    </intuition_overrides>
   </reload20_45>
   <reload50_75>
     <type>	SimpleReload	</type>
     <duration>	950.0	</duration>
     <sound>	gun_rld_50_75mm	</sound>
+    <intuition_overrides>
+      <duration>	1000.0	</duration>
+      <sound>	gun_rld_intuition_50_75mm	</sound>
+    </intuition_overrides>
   </reload50_75>
   <reload85_107>
     <type>	SimpleReload	</type>
     <duration>	1050.0	</duration>
     <sound>	gun_rld_85_107mm	</sound>
+    <intuition_overrides>
+      <duration>	1000.0	</duration>
+      <sound>	gun_rld_intuition_85_107mm	</sound>
+    </intuition_overrides>
   </reload85_107>
   <reload115_152>
     <type>	SimpleReload	</type>
     <duration>	2150.0	</duration>
     <sound>	gun_rld_115_152mm	</sound>
+    <intuition_overrides>
+      <duration>	1000.0	</duration>
+      <sound>	gun_rld_intuition_115_152mm	</sound>
+    </intuition_overrides>
   </reload115_152>
   <reload155_170>
     <type>	SimpleReload	</type>
     <duration>	2100.0	</duration>
     <sound>	gun_rld_155_170mm	</sound>
+    <intuition_overrides>
+      <duration>	1000.0	</duration>
+      <sound>	gun_rld_intuition_155_170mm	</sound>
+    </intuition_overrides>
   </reload155_170>
   <reload_automat_reloading_155_170>
     <type>	BarrelReload	</type>
@@ -44,6 +68,13 @@
     <lastShellAlert>	gun_rld_automat_reloading_short_lastshell	</lastShellAlert>
     <ammoLow>	gun_rld_automat_no_enough_shells	</ammoLow>
     <caliber>	SWITCH_ext_rld_automat_caliber_155_170mm	</caliber>
+    <intuition_overrides>
+      <duration>	2500.0	</duration>
+      <startLong>	gun_rld_intuition_automat_reloading_long_start	</startLong>
+      <loopShell>	gun_rld_intuition_automat_reloading_long_oneshell	</loopShell>
+      <loopShellLast>	gun_rld_intuition_automat_reloading_long_oneshell_last	</loopShellLast>
+      <loopShellLastDt>	0.5	</loopShellLastDt>
+    </intuition_overrides>
   </reload_automat_reloading_155_170>
   <reload_automat_reloading_115_152>
     <type>	BarrelReload	</type>
@@ -60,6 +91,13 @@
     <lastShellAlert>	gun_rld_automat_reloading_short_lastshell	</lastShellAlert>
     <ammoLow>	gun_rld_automat_no_enough_shells	</ammoLow>
     <caliber>	SWITCH_ext_rld_automat_caliber_115_152mm	</caliber>
+    <intuition_overrides>
+      <duration>	2500.0	</duration>
+      <startLong>	gun_rld_intuition_automat_reloading_long_start	</startLong>
+      <loopShell>	gun_rld_intuition_automat_reloading_long_oneshell	</loopShell>
+      <loopShellLast>	gun_rld_intuition_automat_reloading_long_oneshell_last	</loopShellLast>
+      <loopShellLastDt>	0.5	</loopShellLastDt>
+    </intuition_overrides>
   </reload_automat_reloading_115_152>
   <reload_automat_reloading_85_107>
     <type>	BarrelReload	</type>
@@ -76,6 +114,13 @@
     <lastShellAlert>	gun_rld_automat_reloading_short_lastshell	</lastShellAlert>
     <ammoLow>	gun_rld_automat_no_enough_shells	</ammoLow>
     <caliber>	SWITCH_ext_rld_automat_caliber_85_107mm	</caliber>
+    <intuition_overrides>
+      <duration>	2500.0	</duration>
+      <startLong>	gun_rld_intuition_automat_reloading_long_start	</startLong>
+      <loopShell>	gun_rld_intuition_automat_reloading_long_oneshell	</loopShell>
+      <loopShellLast>	gun_rld_intuition_automat_reloading_long_oneshell_last	</loopShellLast>
+      <loopShellLastDt>	0.5	</loopShellLastDt>
+    </intuition_overrides>
   </reload_automat_reloading_85_107>
   <reload_automat_reloading_50_75>
     <type>	BarrelReload	</type>
@@ -92,6 +137,13 @@
     <lastShellAlert>	gun_rld_automat_reloading_short_lastshell	</lastShellAlert>
     <ammoLow>	gun_rld_automat_no_enough_shells	</ammoLow>
     <caliber>	SWITCH_ext_rld_automat_caliber_50_75mm	</caliber>
+    <intuition_overrides>
+      <duration>	2500.0	</duration>
+      <startLong>	gun_rld_intuition_automat_reloading_long_start	</startLong>
+      <loopShell>	gun_rld_intuition_automat_reloading_long_oneshell	</loopShell>
+      <loopShellLast>	gun_rld_intuition_automat_reloading_long_oneshell_last	</loopShellLast>
+      <loopShellLastDt>	0.5	</loopShellLastDt>
+    </intuition_overrides>
   </reload_automat_reloading_50_75>
   <reload_automat_reloading_20_45>
     <type>	BarrelReload	</type>
@@ -108,6 +160,13 @@
     <lastShellAlert>	gun_rld_automat_reloading_short_lastshell	</lastShellAlert>
     <ammoLow>	gun_rld_automat_no_enough_shells	</ammoLow>
     <caliber>	SWITCH_ext_rld_automat_caliber_20_45mm	</caliber>
+    <intuition_overrides>
+      <duration>	2500.0	</duration>
+      <startLong>	gun_rld_intuition_automat_reloading_long_start	</startLong>
+      <loopShell>	gun_rld_intuition_automat_reloading_long_oneshell	</loopShell>
+      <loopShellLast>	gun_rld_intuition_automat_reloading_long_oneshell_last	</loopShellLast>
+      <loopShellLastDt>	0.5	</loopShellLastDt>
+    </intuition_overrides>
   </reload_automat_reloading_20_45>
   <reload_automat_reloading_12_25>
     <type>	BarrelReload	</type>
@@ -124,6 +183,12 @@
     <lastShellAlert>	gun_rld_automat_reloading_short_lastshell	</lastShellAlert>
     <ammoLow>	gun_rld_automat_no_enough_shells	</ammoLow>
     <caliber>	SWITCH_ext_rld_automat_caliber_12_25mm	</caliber>
+    <intuition_overrides>
+      <duration>	2500.0	</duration>
+      <startLong>	gun_rld_intuition_automat_reloading_long_start	</startLong>
+      <loopShell>	gun_rld_intuition_automat_reloading_long_oneshell	</loopShell>
+      <loopShellLast>	gun_rld_intuition_automat_reloading_long_oneshell_last	</loopShellLast>
+    </intuition_overrides>
   </reload_automat_reloading_12_25>
   <autoloader_reload85_107>
     <type>	AutoReload	</type>
@@ -139,6 +204,9 @@
     <shotFail>	gun_rld_autoloader_shot_fail	</shotFail>
     <almostCompleteDuration>	6000.0	</almostCompleteDuration>
     <caliber>	SWITCH_ext_rld_autoloader_caliber_85_107mm	</caliber>
+    <intuition_overrides>
+      <reloadStart>	gun_rld_intuition_autoloader_long_start	</reloadStart>
+    </intuition_overrides>
   </autoloader_reload85_107>
   <dualgun_reload85_107>
     <type>	DualGunReload	</type>

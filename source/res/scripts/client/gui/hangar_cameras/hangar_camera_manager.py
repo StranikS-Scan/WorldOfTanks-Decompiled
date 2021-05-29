@@ -230,6 +230,7 @@ class HangarCameraManager(object):
                 self.__cam.pivotPosition = pivotPos
             self.__cam.pivotMaxDist = dist
             if movementMode == IMMEDIATE_CAMERA_MOVEMENT_MODE:
+                self.__cam.pivotMinDist = 0.0
                 self.__cam.forceUpdate()
             return
 

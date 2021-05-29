@@ -10,7 +10,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_by_
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_model import RewardPointsModel
 from gui.impl.pub import ViewImpl
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
-from gui.battle_pass.battle_pass_helpers import isSeasonEndingSoon, getFormattedTimeLeft, getSupportedArenaBonusTypeFor
+from gui.battle_pass.battle_pass_helpers import isSeasonEndingSoon, getFormattedTimeLeft, getSupportedCurrentArenaBonusType
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.formatters.invites import getPreQueueName
 from helpers import dependency
@@ -21,13 +21,14 @@ class BattlePassInProgressTooltipView(ViewImpl):
     __battlePassController = dependency.descriptor(IBattlePassController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
-    __slots__ = ()
+    __slots__ = ('__battleType',)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, battleType=None, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView())
         settings.model = BattlePassInProgressTooltipViewModel()
         settings.args = args
         settings.kwargs = kwargs
+        self.__battleType = battleType
         super(BattlePassInProgressTooltipView, self).__init__(settings)
 
     @property
@@ -40,13 +41,16 @@ class BattlePassInProgressTooltipView(ViewImpl):
         if prbDispatcher is None:
             return
         else:
-            battleType = prbDispatcher.getEntity().getQueueType()
+            if self.__battleType is not None:
+                battleType = self.__battleType
+            else:
+                battleType = prbDispatcher.getEntity().getQueueType()
             with self.getViewModel().transaction() as model:
                 if self.__battleRoyaleController.isBattleRoyaleMode():
                     self.__updateBattleRoyalePoints(model)
                 else:
                     items = model.rewardPoints.getItems()
-                    arenaBonusType = self.__getCurrentSupportedGameMode(battleType)
+                    arenaBonusType = getSupportedCurrentArenaBonusType(battleType)
                     for points in self.__battlePassController.getPerBattlePoints(gameMode=arenaBonusType):
                         item = RewardPointsModel()
                         item.setTopCount(points.label)
@@ -72,14 +76,6 @@ class BattlePassInProgressTooltipView(ViewImpl):
                 self.__getAwards(model.rewardsCommon, curLevel, BattlePassConsts.REWARD_FREE)
                 self.__getAwards(model.rewardsElite, curLevel, BattlePassConsts.REWARD_PAID)
             return
-
-    def __getCurrentSupportedGameMode(self, queueType):
-        dispatcher = g_prbLoader.getDispatcher()
-        isInUnit = False
-        if dispatcher:
-            state = dispatcher.getFunctionalState()
-            isInUnit = state.isInUnit(state.entityTypeID)
-        return getSupportedArenaBonusTypeFor(queueType, isInUnit)
 
     def __getAwards(self, rewardsList, level, bonusType):
         bonuses = self.__battlePassController.getSingleAward(level + 1, bonusType)

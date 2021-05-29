@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/blueprints/blueprint_screen_model.py
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
-from gui.impl.gen.view_models.views.dialog_prices_content_model import DialogPricesContentModel
+from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_price_content_model import BlueprintPriceContentModel
 
 class BlueprintScreenModel(ViewModel):
     __slots__ = ('onGoToConversionScreen', 'onClose', 'onResearchVehicle', 'onGoToAllConversion', 'onSubmitUnavailableConfirm', 'onOpenVehicleViewBtnClicked')
@@ -162,7 +162,7 @@ class BlueprintScreenModel(ViewModel):
 
     def _initialize(self):
         super(BlueprintScreenModel, self)._initialize()
-        self._addViewModelProperty('conversionMaxCost', DialogPricesContentModel())
+        self._addViewModelProperty('conversionMaxCost', BlueprintPriceContentModel())
         self._addStringProperty('vehicleName', '')
         self._addStringProperty('vehicleType', '')
         self._addStringProperty('vehicleLevel', '')

@@ -22,27 +22,24 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.impl.lobby.buy_vehicle_view import BuyVehicleWindow
 from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.event_dispatcher import showShop
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, getRoleText
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
 from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IHeroTankController
-from skeletons.gui.game_control import IRestoreController
-from skeletons.gui.game_control import ITradeInController
-from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import IHeroTankController, IRestoreController, ITradeInController, IVehicleComparisonBasket, IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
@@ -109,6 +106,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     __heroTanksControl = dependency.descriptor(IHeroTankController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     hangarSpace = dependency.descriptor(IHangarSpace)
+    rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, ctx=None):
         self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
@@ -280,29 +278,27 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def _getData(self):
         vehicle = g_currentPreviewVehicle.item
-        if vehicle.isPremium:
-            vehicleTitle = '{} {},'.format(_ms(MENU.header_vehicletype_elite(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))))
-            vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNamePremium', {'name': vehicle.descriptor.type.shortUserString.upper()})
-        else:
-            vehicleTitle = '{} {},'.format(_ms(MENU.header_vehicletype(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))))
-            vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNameRegular', {'name': vehicle.descriptor.type.shortUserString.upper()})
-        if vehicle.isPremiumIGR:
-            vehicleTitle = makeHtmlString('html_templates:igr/premium-vehicle', 'name', {'vehicle': vehicleTitle})
+        vehicleLevel = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNameRegular', {'name': backport.text(R.strings.menu.header.level.num(vehicle.level)())})
+        vehicleNameStyle = 'vehicleNamePremium' if vehicle.isPremium else 'vehicleNameRegular'
+        vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', vehicleNameStyle, {'name': vehicle.descriptor.type.shortUserString})
         compareBtnEnabled, compareBtnTooltip = resolveStateTooltip(self.comparisonBasket, vehicle, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
+        isRanked = self.rankedController.isRankedPrbActive()
         result = {'closeBtnLabel': VEHICLE_PREVIEW.HEADER_CLOSEBTN_LABEL,
          'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
          'backBtnDescrLabel': self._getBackBtnLabel(),
          'showCloseBtn': _SHOW_CLOSE_BTN,
          'showBackButton': _SHOW_BACK_BTN,
-         'vehicleTitle': vehicleTitle,
-         'vehicleTypeIcon': getTypeSmallIconPath(vehicle.type, vehicle.isElite),
-         'nationFlagIcon': RES_ICONS.getFilterNation(vehicle.nationName),
          'vehicleName': vehicleName,
-         'nationName': MENU.nations(vehicle.nationName),
+         'vehicleLevel': vehicleLevel,
+         'vehicleType': vehicle.type,
+         'isVehicleElite': vehicle.isElite,
+         'nationFlagIcon': RES_ICONS.getNationFlag(vehicle.nationName),
          'compareBtnTooltip': compareBtnTooltip,
          'showCompareBtn': compareBtnEnabled,
          'listDesc': self.__getInfoPanelListDescription(vehicle),
-         'isMultinational': vehicle.hasNationGroup}
+         'isMultinational': vehicle.hasNationGroup,
+         'roleText': getRoleText(vehicle.role, vehicle.roleLabel) if isRanked else '',
+         'roleId': vehicle.role}
         return result
 
     def __onVehicleLoading(self, ctxEvent):

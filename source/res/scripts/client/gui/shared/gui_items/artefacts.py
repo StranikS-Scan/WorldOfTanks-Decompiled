@@ -547,11 +547,11 @@ class OptionalDevice(RemovableDevice):
         else:
             return ITEM_PRICE_EMPTY
 
-    def mayPurchaseUpgrage(self, proxy):
+    def mayPurchaseUpgrade(self, proxy):
         canBuy, _ = self._isEnoughMoney(self.getUpgradePrice(proxy).price, proxy.stats.money)
         return canBuy
 
-    def mayPurchaseUpgrageWithExchange(self, proxy):
+    def mayPurchaseUpgradeWithExchange(self, proxy):
         money = proxy.stats.money
         if not money.isSet(Currency.GOLD):
             return False

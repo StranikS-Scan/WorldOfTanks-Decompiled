@@ -111,11 +111,11 @@ class _BlurManager(object):
         if self._isBlurInCache(blur):
             isActiveBlur = blur is self._activeBlur()
             self._cache.remove(weakref.ref(blur))
-            if blur.enabled:
-                self._globalBlur.enable = False
-                if not self._hasEnabledLayerBlur():
-                    self._resetLayerBlur()
             if isActiveBlur:
+                if blur.enabled:
+                    self._globalBlur.enable = False
+                    if not self._hasEnabledLayerBlur():
+                        self._resetLayerBlur()
                 self._restoreLastAdded()
 
     def addRect(self, blur, blurRect, rectId):

@@ -50,6 +50,8 @@ class DualGunHelper(object):
                 __callReloadTimeWrapper(totalDebuffTime, cooldownTimes[activeGun].baseTime + debuff.baseTime)
             else:
                 avatar.updateVehicleGunReloadTime(vehicleID, -1, cooldownTimes[activeGun].baseTime / 10.0)
+        if ammoCtrl is not None:
+            ammoCtrl.setDualGunShellChangeTime(cooldownTimes[activeGun].baseTime / 10.0, cooldownTimes[secondGun].baseTime / 10.0, activeGun)
         return
 
     def reset(self):

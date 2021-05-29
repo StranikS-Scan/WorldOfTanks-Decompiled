@@ -16,9 +16,18 @@ class DefaultMapsController(IViewComponentsController):
         self._eManager = Event.EventManager()
         return
 
+    def getMinimapPositionById(self, cellId):
+        sessionProvider = dependency.instance(IBattleSessionProvider)
+        if self._miniMapUi is not None:
+            bottomLeft, upperRight = sessionProvider.arenaVisitor.type.getBoundingBox()
+            return minimap_utils.getPositionByCellIndex(cellId, bottomLeft, upperRight, self._miniMapUi.getMinimapDimensions())
+        else:
+            return
+
     def getMinimapCellIdByPosition(self, position):
         sessionProvider = dependency.instance(IBattleSessionProvider)
-        return minimap_utils.getCellIdFromPosition(position, sessionProvider.arenaVisitor.type.getBoundingBox(), self._miniMapUi.getMinimapDimensions()) if self._miniMapUi is not None else None
+        bb = sessionProvider.arenaVisitor.type.getBoundingBox()
+        return self._miniMapUi is not None and bb[0][0] <= position.x <= bb[1][0] and (minimap_utils.getCellIdFromPosition(position, bb, self._miniMapUi.getMinimapDimensions()) if bb[0][1] <= position.z <= bb[1][1] else None)
 
     def getMinimapCellNameById(self, cellId):
         return minimap_utils.getCellName(cellId, self._miniMapUi.getMinimapDimensions()) if self._miniMapUi is not None else ''

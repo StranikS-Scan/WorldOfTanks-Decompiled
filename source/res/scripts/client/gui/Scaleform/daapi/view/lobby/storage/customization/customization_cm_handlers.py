@@ -19,10 +19,6 @@ class CustomizationCMHandler(ContextMenu, EventSystemEntity):
     __itemsCache = dependency.descriptor(IItemsCache)
     __sqGen = SequenceIDGenerator()
 
-    @option(__sqGen.next(), CMLabel.INFORMATION)
-    def showInfo(self):
-        pass
-
     @option(__sqGen.next(), CMLabel.PREVIEW_CUSTOMIZATION)
     def preview(self):
         customizationPreview(itemCD=self._id, vehicleCD=self._vehicleCD)
@@ -46,8 +42,6 @@ class CustomizationCMHandler(ContextMenu, EventSystemEntity):
         item = self.__itemsCache.items.getItemByCD(self._id)
         if label == CMLabel.SELL:
             optionData.enabled = item is not None and isCustomizationAvailableForSell(item, self._vehicleCD)
-        elif label == CMLabel.INFORMATION:
-            optionData.enabled = False
         elif label == CMLabel.PREVIEW_CUSTOMIZATION:
             optionData.enabled = item is not None and item.itemTypeID == GUI_ITEM_TYPE.STYLE
         return optionData

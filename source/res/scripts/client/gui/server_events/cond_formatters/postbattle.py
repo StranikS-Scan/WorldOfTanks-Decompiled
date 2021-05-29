@@ -3,8 +3,6 @@
 from constants import ATTACK_REASON
 from debug_utils import LOG_WARNING, LOG_ERROR
 from dossiers2.custom.records import DB_ID_TO_RECORD
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -16,7 +14,6 @@ from gui.server_events.formatters import RELATIONS_SCHEME
 from gui.shared.gui_items.dossier import factories
 from helpers import i18n
 from personal_missions_constants import CONDITION_ICON
-_MAX_PROGRESS_BAR_VALUE = 1
 
 def _packAchieveElement(achieveRecordID):
     _, achieveName = DB_ID_TO_RECORD[achieveRecordID]
@@ -57,8 +54,7 @@ class MissionsPostBattleConditionsFormatter(MissionsBattleConditionsFormatter):
          'results': _BattleResultsFormatter(),
          'unitResults': _UnitResultsFormatter(),
          'crits': _CritsFormatter(),
-         'multiStunEvent': _MultiStunEventFormatter(),
-         'usedEquipment': _UsedEquipmentFormatter()})
+         'multiStunEvent': _MultiStunEventFormatter()})
 
 
 class _ClanKillsFormatter(SimpleMissionsFormatter):
@@ -319,30 +315,3 @@ class _CritsFormatter(ConditionFormatter):
                     result.extend(critFormatter.format(c, event))
 
         return result
-
-
-class _UsedEquipmentFormatter(SimpleMissionsFormatter):
-
-    def _format(self, condition, event):
-        result = []
-        if not event.isGuiDisabled():
-            result.append(self._packGui(condition))
-        return result
-
-    def _getDescription(self, condition):
-        item = condition.getEquipment()
-        itemName = item.descriptor.userString
-        label = backport.text(R.strings.quests.details.conditions.usedEquipment(), equipment=itemName)
-        return packDescriptionField(label)
-
-    def _packGui(self, condition):
-        isCompleted = condition.isCompleted()
-        return events_fmts.packMissionIconCondition(self._getTitle(isCompleted), MISSIONS_ALIASES.CUMULATIVE, self.getDescription(condition), self._getIconKey(condition), current=int(isCompleted), total=_MAX_PROGRESS_BAR_VALUE, sortKey=self._getSortKey(condition), progressID=condition.progressID)
-
-    @classmethod
-    def _getIconKey(cls, condition=None):
-        return CONDITION_ICON.USED_EQUIPMENT
-
-    @classmethod
-    def _getTitle(cls, current, total=_MAX_PROGRESS_BAR_VALUE):
-        return FormattableField(FORMATTER_IDS.CUMULATIVE, (int(current), int(total)))

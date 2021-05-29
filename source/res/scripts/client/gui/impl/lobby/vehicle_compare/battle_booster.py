@@ -3,6 +3,7 @@
 from gui.impl.lobby.tank_setup.array_providers.battle_booster import OptDeviceBattleBoosterProvider, CrewBattleBoosterProvider
 from gui.impl.lobby.tank_setup.configurations.battle_booster import BattleBoostersTabsController, BattleBoosterTabs
 from gui.impl.lobby.vehicle_compare.base_sub_view import CompareBaseSetupSubView
+from gui.shared.utils.requesters import REQ_CRITERIA
 
 class _CompareOptDeviceBattleBoosterProvider(OptDeviceBattleBoosterProvider):
 
@@ -11,6 +12,9 @@ class _CompareOptDeviceBattleBoosterProvider(OptDeviceBattleBoosterProvider):
 
     def _fillBuyStatus(self, *args, **kwargs):
         pass
+
+    def _getItemCriteria(self):
+        return REQ_CRITERIA.BATTLE_BOOSTER.OPTIONAL_DEVICE_EFFECT
 
 
 class _CompareCrewBattleBoosterProvider(CrewBattleBoosterProvider):

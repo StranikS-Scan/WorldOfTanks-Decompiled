@@ -8,8 +8,8 @@
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	65	</forward>
-    <backward>	22	</backward>
+    <forward>	68	</forward>
+    <backward>	24	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.249	</moving>
@@ -24,6 +24,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.09	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	5.7	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
@@ -1706,7 +1712,7 @@
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	390	</circularVisionRadius>
+      <circularVisionRadius>	410	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -2266,7 +2272,7 @@
       <engines>
         <Detroit_Diesel_8V71T>
           <smplEnginePower>	780	</smplEnginePower>
-          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	68	</smplFwMaxSpeed>
         </Detroit_Diesel_8V71T>
       </engines>
       <chassis>

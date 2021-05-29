@@ -335,6 +335,21 @@ class PromoScreensAccessor(BaseAccessor):
         return self._data_source.client_promo_log(callback, data)
 
 
+class MapboxAccessor(BaseAccessor):
+
+    def get_mapbox_progression(self, callback):
+        return self._data_source.get_mapbox_progression(callback)
+
+    def select_mapbox_crewbook(self, callback, itemID):
+        return self._data_source.select_mapbox_crewbook(callback, itemID)
+
+    def complete_survey(self, callback, mapName):
+        return self._data_source.complete_survey(callback, mapName)
+
+    def request_authorized_survey_url(self, callback, mapURL):
+        return self._data_source.request_authorized_survey_url(callback, mapURL)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -353,6 +368,7 @@ class Requester(object):
     promo_screens = RequestDescriptor(PromoScreensAccessor)
     freya = RequestDescriptor(FreyaAccessor)
     craftmachine = RequestDescriptor(CrafmachineAccessor)
+    mapbox = RequestDescriptor(MapboxAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

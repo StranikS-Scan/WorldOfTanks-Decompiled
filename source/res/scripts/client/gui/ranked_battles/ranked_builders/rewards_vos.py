@@ -76,9 +76,10 @@ def getRankRewardsVO(rank, bonuses, currentRankID):
 
 
 def getLeagueRewardVO(leagueID, styleID, styleBonus, isCurrent):
+    descr = backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues.awardDescr.dyn('league%s' % leagueID)())
     return {'leagueID': leagueID,
      'title': backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues.dyn('league%s' % leagueID)()),
-     'description': backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues.awardDescr()),
+     'description': descr,
      'styleID': styleID,
      'isSpecial': styleBonus.isSpecial,
      'specialAlias': styleBonus.specialAlias,

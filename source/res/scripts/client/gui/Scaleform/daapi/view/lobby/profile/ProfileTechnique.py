@@ -62,7 +62,10 @@ class ProfileTechnique(ProfileTechniqueMeta):
         super(ProfileTechnique, self)._dispose()
 
     def _getInitData(self, accountDossier=None, isFallout=False):
-        dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.EPIC_RANDOM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.RANKED)]
+        dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL),
+         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.EPIC_RANDOM),
+         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.RANKED),
+         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.RANKED_10X10)]
         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT)
         if accountDossier is not None and accountDossier.getHistoricalStats().getVehicles():
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL))
@@ -143,6 +146,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
          PROFILE_DROPDOWN_KEYS.HISTORICAL: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_HISTORICAL,
          PROFILE_DROPDOWN_KEYS.CLAN: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_GLOBALMAP,
          PROFILE_DROPDOWN_KEYS.RANKED: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_RANKED,
+         PROFILE_DROPDOWN_KEYS.RANKED_10X10: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_RANKED,
          PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTBATTLES,
          PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTSORTIES,
          PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_EPICRANDOM}
@@ -242,6 +246,9 @@ class ProfileTechnique(ProfileTechniqueMeta):
                 stats = vehDossier.getFalloutStats()
             elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
                 stats = vehDossier.getRankedStats()
+                achievementsList = self.__getAchievementsList(stats, vehDossier)
+            elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED_10X10:
+                stats = vehDossier.getRanked10x10Stats()
                 achievementsList = self.__getAchievementsList(stats, vehDossier)
             else:
                 raise SoftException('Profile Technique: Unknown battle type: ' + self._battlesType)

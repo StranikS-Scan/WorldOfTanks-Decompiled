@@ -63,13 +63,13 @@ class RandomSquadEntity(SquadEntity):
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, modeFlags=FUNCTIONAL_FLAG.RANDOM, prbType=PREBATTLE_TYPE.SQUAD):
+    def __init__(self):
         self._isBalancedSquad = False
         self._isUseSPGValidateRule = True
         self._maxSpgCount = False
-        self._mapID = 0
+        self._mmData = 0
         self.__watcher = None
-        super(RandomSquadEntity, self).__init__(modeFlags, prbType)
+        super(RandomSquadEntity, self).__init__(FUNCTIONAL_FLAG.RANDOM, PREBATTLE_TYPE.SQUAD)
         return
 
     def init(self, ctx=None):
@@ -82,7 +82,7 @@ class RandomSquadEntity(SquadEntity):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingChanged
         self.eventsCache.onSyncCompleted += self._onServerSettingChanged
         g_clientUpdateManager.addCallbacks({'inventory.1': self._onInventoryVehiclesUpdated})
-        self.__watcher = self._createVehiclesWatcher()
+        self.__watcher = RandomVehiclesWatcher()
         self.__watcher.start()
         return rv
 
@@ -114,13 +114,13 @@ class RandomSquadEntity(SquadEntity):
         return super(RandomSquadEntity, self).doSelectAction(action)
 
     def doAction(self, action=None):
-        self._mapID = 0 if action is None else action.mapID
+        self._mmData = 0 if action is None else action.mmData
         super(RandomSquadEntity, self).doAction(action)
         return
 
     def doBattleQueue(self, ctx, callback=None):
-        ctx.mapID = self._mapID
-        self._mapID = 0
+        ctx.mmData = self._mmData
+        self._mmData = 0
         super(RandomSquadEntity, self).doBattleQueue(ctx, callback)
 
     def isBalancedSquadEnabled(self):
@@ -167,9 +167,6 @@ class RandomSquadEntity(SquadEntity):
 
     def getMaxSPGCount(self):
         return self.lobbyContext.getServerSettings().getMaxSPGinSquads()
-
-    def _createVehiclesWatcher(self):
-        return RandomVehiclesWatcher()
 
     def _createRosterSettings(self):
         if self._isBalancedSquad:

@@ -100,7 +100,7 @@ def _readLoaderPedantSkill(xmlCtx, section, subsectionName):
 
 def _readLoaderIntuitionSkill(xmlCtx, section, subsectionName):
     skill, xmlCtx, section = _readSkillBasics(xmlCtx, section, subsectionName)
-    return skills_components.LoaderIntuitionSkill(skill, _xml.readFraction(xmlCtx, section, 'chance'))
+    return skills_components.LoaderIntuitionSkill(skill, _xml.readFraction(xmlCtx, section, 'quickShellChangerFactorPerPercent'))
 
 
 def _readLoaderDesperadoSkill(xmlCtx, section, subsectionName):
@@ -128,6 +128,11 @@ def _readRadiomanRetransmitterSkill(xmlCtx, section, subsectionName):
     return skills_components.RadiomanRetransmitterSkill(skill, _xml.readNonNegativeFloat(xmlCtx, section, 'distanceFactorPerLevel'))
 
 
+def _readCommanderEnemyShotPredictorSkill(xmlCtx, section, subsectionName):
+    skill, xmlCtx, section = _readSkillBasics(xmlCtx, section, subsectionName)
+    return skills_components.CommanderEnemyShotPredictor(skill, _xml.readNonNegativeFloat(xmlCtx, section, 'minExplosionRadius'), _xml.readNonNegativeFloat(xmlCtx, section, 'explosionMultiplier'), _xml.readNonNegativeFloat(xmlCtx, section, 'recalculatingHeight'), _xml.readNonNegativeFloat(xmlCtx, section, 'targetRadius'))
+
+
 _g_skillConfigReaders = {'repair': _readRole,
  'fireFighting': _readRole,
  'camouflage': _readRole,
@@ -136,6 +141,7 @@ _g_skillConfigReaders = {'repair': _readRole,
  'commander_universalist': _readCommanderUniversalistSkill,
  'commander_expert': _readCommanderSkillWithDelaySkill,
  'commander_sixthSense': _readCommanderSkillWithDelaySkill,
+ 'commander_enemyShotPredictor': _readCommanderEnemyShotPredictorSkill,
  'commander_eagleEye': _readCommanderEagleEye,
  'driver_tidyPerson': _readDriverTidyPersonSkill,
  'driver_smoothDriving': _readDriverSmoothDrivingSkill,

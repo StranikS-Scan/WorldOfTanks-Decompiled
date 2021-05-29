@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/listeners.py
+import logging
 import typing
 import collections
 import weakref
@@ -43,10 +44,10 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, LockButtonMessageDecorator, EmailConfirmationReminderMessageDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from shared_utils import first
-from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController
+from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
@@ -56,6 +57,7 @@ from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
 if typing.TYPE_CHECKING:
     from notification.NotificationsModel import NotificationsModel
+_logger = logging.getLogger(__name__)
 
 class _FeatureState(object):
     OFF = 0
@@ -63,6 +65,7 @@ class _FeatureState(object):
 
 
 _FUNCTION = 'function'
+SERVER_CMD_BP_GAMEMODE_ENABBLED = 'cmd_bp_gamemode_enabled'
 
 class _StateExtractor(object):
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -940,6 +943,7 @@ class BattlePassListener(_NotificationListener):
     __slots__ = ('__isStarted', '__isFinished', '__arenaBonusTypesEnabledState', '__arenaBonusTypesHandlers')
     __battlePassController = dependency.descriptor(IBattlePassController)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __notificationCtrl = dependency.descriptor(IEventsNotificationsController)
 
     def __init__(self):
         super(BattlePassListener, self).__init__()
@@ -956,15 +960,33 @@ class BattlePassListener(_NotificationListener):
          ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: self.__pushBattleRoyaleEnableChange}
         self.__battlePassController.onSeasonStateChange += self.__onSeasonStateChange
         self.__battlePassController.onBattlePassSettingsChange += self.__onBattlePassSettingsChange
+        self.__notificationCtrl.onEventNotificationsChanged += self.__onEventNotification
         self.__initArenaBonusTypeEnabledStates()
         return True
 
     def stop(self):
         self.__battlePassController.onSeasonStateChange -= self.__onSeasonStateChange
         self.__battlePassController.onBattlePassSettingsChange -= self.__onBattlePassSettingsChange
+        self.__notificationCtrl.onEventNotificationsChanged -= self.__onEventNotification
         self.__arenaBonusTypesHandlers = None
         super(BattlePassListener, self).stop()
         return
+
+    def __onEventNotification(self, added, removed=()):
+        if not self.__battlePassController.isActive():
+            return
+        for eventNotification in added:
+            msgType = eventNotification.eventType
+            if msgType != SERVER_CMD_BP_GAMEMODE_ENABBLED:
+                continue
+            arenaBonusType = eventNotification.data
+            header = backport.text(R.strings.system_messages.battlePass.gameModeEnabled.header(), seasonNum=self.__battlePassController.getSeasonNum())
+            textRes = R.strings.system_messages.battlePass.gameModeEnabled.body.num(arenaBonusType)
+            if not textRes.exists():
+                _logger.warning('There is no text for given arenaBonusType: %d', arenaBonusType)
+                return
+            text = backport.text(textRes())
+            SystemMessages.pushMessage(text=text, type=SystemMessages.SM_TYPE.BattlePassGameModeEnabled, messageData={'header': header})
 
     def __onBattlePassSettingsChange(self, newMode, oldMode):
         self.__checkAndNotify(oldMode, newMode)

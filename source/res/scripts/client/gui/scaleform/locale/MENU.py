@@ -692,7 +692,15 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_HISTORICALBATTLESLEAVE = '#menu:headerButtons/battle/types/historicalBattlesLeave'
     HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL = '#menu:headerButtons/battle/types/battleTutorial'
     HEADERBUTTONS_BATTLE_TYPES_FALLOUT = '#menu:headerButtons/battle/types/fallout'
-    HEADERBUTTONS_BATTLE_TYPES_WEEKENDBRAWL = '#menu:headerButtons/battle/types/weekendBrawl'
+    HEADERBUTTONS_BATTLE_TYPES_MAPBOXSQUAD = '#menu:headerButtons/battle/types/mapboxSquad'
+    HEADERBUTTONS_BATTLE_TYPES_MAPBOX = '#menu:headerButtons/battle/types/mapbox'
+    HEADERBUTTONS_BATTLE_TYPES_MAPBOX_EXTRA_FROZEN = '#menu:headerButtons/battle/types/mapbox/extra/frozen'
+    HEADERBUTTONS_BATTLE_TYPES_MAPBOX_EXTRA_FINISHED = '#menu:headerButtons/battle/types/mapbox/extra/finished'
+    HEADERBUTTONS_BATTLE_TYPES_MAPBOX_EXTRA_ENDSIN = '#menu:headerButtons/battle/types/mapbox/extra/endsIn'
+    HEADERBUTTONS_BATTLE_TYPES_MAPBOX_EXTRA_STARTSAT = '#menu:headerButtons/battle/types/mapbox/extra/startsAt'
+    HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_DAYS = '#menu:headerButtons/battle/types/mapbox/availability/days'
+    HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_HOURS = '#menu:headerButtons/battle/types/mapbox/availability/hours'
+    HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_LESSTHANHOUR = '#menu:headerButtons/battle/types/mapbox/availability/lessThanHour'
     HEADERBUTTONS_BATTLE_AVAILABLESINCE = '#menu:headerButtons/battle/availableSince'
     HEADERBUTTONS_BATTLE_AVAILABLESINCESOON = '#menu:headerButtons/battle/availableSinceSoon'
     HEADERBUTTONS_BATTLE_AVAILABLEUNTIL = '#menu:headerButtons/battle/availableUntil'
@@ -742,10 +750,6 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICLEVELREQUIRED_BODYEND = '#menu:headerButtons/fightBtn/tooltip/epicLevelRequired/bodyEnd'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEONLY_HEADER = '#menu:headerButtons/fightBtn/tooltip/epicBattleOnly/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/epicBattleOnly/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_WEEKENDBRAWLONLY_HEADER = '#menu:headerButtons/fightBtn/tooltip/weekendBrawlOnly/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_WEEKENDBRAWLONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/weekendBrawlOnly/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_BOBONLY_HEADER = '#menu:headerButtons/fightBtn/tooltip/bobOnly/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_BOBONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/bobOnly/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/header'
@@ -1526,7 +1530,7 @@ class MENU(object):
     CONTEXTMENU_CREATESQUAD = '#menu:contextMenu/createSquad'
     CONTEXTMENU_CREATEEVENTSQUAD = '#menu:contextMenu/createEventSquad'
     CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
-    CONTEXTMENU_CREATEWEEKENDBRAWLSQUAD = '#menu:contextMenu/createWeekendBrawlSquad'
+    CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
@@ -1618,7 +1622,14 @@ class MENU(object):
     CLASSES_ANYTYPE = '#menu:classes/anyType'
     OPPONENTS = '#menu:opponents'
     DEMONSTRATOR_WINDOW_TITLE = '#menu:demonstrator/window/title'
-    DEMONSTRATOR_WINDOW_INFO = '#menu:demonstrator/window/info'
+    DEMONSTRATOR_WINDOW_LVL = '#menu:demonstrator/window/lvl'
+    DEMONSTRATOR_WINDOW_SPAWNLABEL = '#menu:demonstrator/window/spawnLabel'
+    DEMONSTRATOR_WINDOW_ANY = '#menu:demonstrator/window/any'
+    DEMONSTRATOR_WINDOW_SPAWN_GREEN = '#menu:demonstrator/window/spawn/green'
+    DEMONSTRATOR_WINDOW_SPAWN_RED = '#menu:demonstrator/window/spawn/red'
+    DEMONSTRATOR_WINDOW_BUTTON = '#menu:demonstrator/window/button'
+    DEMONSTRATOR_MAPS_LABEL = '#menu:demonstrator/maps/label'
+    DEMONSTRATOR_MAP_DISABLED = '#menu:demonstrator/map/disabled'
     IGR_INFO = '#menu:igr/info'
     VEHICLEIGR_DAYS = '#menu:vehicleIgr/days'
     VEHICLEIGR_HOURS = '#menu:vehicleIgr/hours'
@@ -1644,7 +1655,7 @@ class MENU(object):
     BONUSTYPE_24 = '#menu:bonusType/24'
     BONUSTYPE_27 = '#menu:bonusType/27'
     BONUSTYPE_29 = '#menu:bonusType/29'
-    BONUSTYPE_36 = '#menu:bonusType/36'
+    BONUSTYPE_37 = '#menu:bonusType/37'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
@@ -1838,6 +1849,10 @@ class MENU(object):
     TIME_TIMEVALUESHORT_HOURS = '#menu:Time/timeValueShort/hours'
     TIME_TIMEVALUESHORT_MIN = '#menu:Time/timeValueShort/min'
     TIME_TIMEVALUESHORT_LESSMIN = '#menu:Time/timeValueShort/lessMin'
+    TIME_TIMEVALUESHORT_NOLEADINGZEROES_DAYS = '#menu:Time/timeValueShort/noLeadingZeroes/days'
+    TIME_TIMEVALUESHORT_NOLEADINGZEROES_HOURS = '#menu:Time/timeValueShort/noLeadingZeroes/hours'
+    TIME_TIMEVALUESHORT_NOLEADINGZEROES_MIN = '#menu:Time/timeValueShort/noLeadingZeroes/min'
+    TIME_TIMEVALUESHORT_NOLEADINGZEROES_LESSMIN = '#menu:Time/timeValueShort/noLeadingZeroes/lessMin'
     TIME_TIMEVALUEWITHSECS_DAYS = '#menu:Time/timeValueWithSecs/days'
     TIME_TIMEVALUEWITHSECS_HOURS = '#menu:Time/timeValueWithSecs/hours'
     TIME_TIMEVALUEWITHSECS_MIN = '#menu:Time/timeValueWithSecs/min'
@@ -1937,6 +1952,8 @@ class MENU(object):
     HANGAR_HEADER_MILLION = '#menu:hangar_header/million'
     HANGAR_HEADER_BATTLE_QUESTS_LABEL_ACTIVE = '#menu:hangar_header/battle_quests_label/active'
     HANGAR_HEADER_BATTLE_QUESTS_LABEL_INACTIVE = '#menu:hangar_header/battle_quests_label/inactive'
+    HANGAR_HEADER_MAPBOX_PROGRESSION_LABEL_ACTIVE = '#menu:hangar_header/mapbox_progression_label/active'
+    HANGAR_HEADER_MAPBOX_PROGRESSION_LABEL_INACTIVE = '#menu:hangar_header/mapbox_progression_label/inactive'
     HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ACTIVE = '#menu:hangar_header/personal_quests_label/active'
     HANGAR_HEADER_PERSONAL_QUESTS_LABEL_EMPTY = '#menu:hangar_header/personal_quests_label/empty'
     HANGAR_HEADER_PERSONAL_QUESTS_LABEL_INACTIVE = '#menu:hangar_header/personal_quests_label/inactive'
@@ -2084,19 +2101,52 @@ class MENU(object):
     CRYSTALS_INFO_TAB_EARN_EVENTS_TITLE = '#menu:crystals/info/tab/earn/events/title'
     CRYSTALS_INFO_TAB_EARN_EVENTS_DESCRIPTION = '#menu:crystals/info/tab/earn/events/description'
     CRYSTALS_INFO_TAB_EARN_EVENTS_DESCRIPTIONCONTENT = '#menu:crystals/info/tab/earn/events/descriptionContent'
-    ROLEEXP_ACTIONSGROUP_NOTDEFINED = '#menu:roleExp/actionsGroup/notDefined'
-    ROLEEXP_ACTIONSGROUP_TANK1 = '#menu:roleExp/actionsGroup/tank1'
-    ROLEEXP_ACTIONSGROUP_TANK2 = '#menu:roleExp/actionsGroup/tank2'
-    ROLEEXP_ACTIONSGROUP_FIRSTLINESUPPORT1 = '#menu:roleExp/actionsGroup/firstLineSupport1'
-    ROLEEXP_ACTIONSGROUP_FIRSTLINESUPPORT2 = '#menu:roleExp/actionsGroup/firstLineSupport2'
-    ROLEEXP_ACTIONSGROUP_FIRSTLINESUPPORT3 = '#menu:roleExp/actionsGroup/firstLineSupport3'
-    ROLEEXP_ACTIONSGROUP_FIRESUPPORT1 = '#menu:roleExp/actionsGroup/fireSupport1'
-    ROLEEXP_ACTIONSGROUP_SNIPER1 = '#menu:roleExp/actionsGroup/sniper1'
-    ROLEEXP_ACTIONSGROUP_SCOUT1 = '#menu:roleExp/actionsGroup/scout1'
-    ROLEEXP_ACTIONSGROUP_SCOUT2 = '#menu:roleExp/actionsGroup/scout2'
-    ROLEEXP_ACTIONSGROUP_SPG1 = '#menu:roleExp/actionsGroup/SPG1'
-    ROLEEXP_ACTIONSGROUP_HASHSUPPORT1 = '#menu:roleExp/actionsGroup/hashSupport1'
-    ROLEEXP_CURRENTVEHICLESTATUS = '#menu:roleExp/currentVehicleStatus'
+    ROLEEXP_ROLENAME_ROLE_HT_TANK = '#menu:roleExp/roleName/role_HT_tank'
+    ROLEEXP_ROLEGROUPNAME_ROLE_HT_TANK = '#menu:roleExp/roleGroupName/role_HT_tank'
+    ROLEEXP_ROLENAME_ROLE_HT_ASSAULT = '#menu:roleExp/roleName/role_HT_assault'
+    ROLEEXP_ROLEGROUPNAME_ROLE_HT_ASSAULT = '#menu:roleExp/roleGroupName/role_HT_assault'
+    ROLEEXP_ROLENAME_ROLE_HT_UNIVERSAL = '#menu:roleExp/roleName/role_HT_universal'
+    ROLEEXP_ROLEGROUPNAME_ROLE_HT_UNIVERSAL = '#menu:roleExp/roleGroupName/role_HT_universal'
+    ROLEEXP_ROLENAME_ROLE_HT_FIRESUPPORT = '#menu:roleExp/roleName/role_HT_fireSupport'
+    ROLEEXP_ROLEGROUPNAME_ROLE_HT_FIRESUPPORT = '#menu:roleExp/roleGroupName/role_HT_fireSupport'
+    ROLEEXP_ROLENAME_ROLE_MT_TANK = '#menu:roleExp/roleName/role_MT_tank'
+    ROLEEXP_ROLEGROUPNAME_ROLE_MT_TANK = '#menu:roleExp/roleGroupName/role_MT_tank'
+    ROLEEXP_ROLENAME_ROLE_MT_UNIVERSAL = '#menu:roleExp/roleName/role_MT_universal'
+    ROLEEXP_ROLEGROUPNAME_ROLE_MT_UNIVERSAL = '#menu:roleExp/roleGroupName/role_MT_universal'
+    ROLEEXP_ROLENAME_ROLE_MT_FIRESUPPORT = '#menu:roleExp/roleName/role_MT_fireSupport'
+    ROLEEXP_ROLEGROUPNAME_ROLE_MT_FIRESUPPORT = '#menu:roleExp/roleGroupName/role_MT_fireSupport'
+    ROLEEXP_ROLENAME_ROLE_MT_ASSASSIN = '#menu:roleExp/roleName/role_MT_assassin'
+    ROLEEXP_ROLEGROUPNAME_ROLE_MT_ASSASSIN = '#menu:roleExp/roleGroupName/role_MT_assassin'
+    ROLEEXP_ROLENAME_ROLE_ATSPG_TANK = '#menu:roleExp/roleName/role_ATSPG_tank'
+    ROLEEXP_ROLEGROUPNAME_ROLE_ATSPG_TANK = '#menu:roleExp/roleGroupName/role_ATSPG_tank'
+    ROLEEXP_ROLENAME_ROLE_ATSPG_UNIVERSAL = '#menu:roleExp/roleName/role_ATSPG_universal'
+    ROLEEXP_ROLEGROUPNAME_ROLE_ATSPG_UNIVERSAL = '#menu:roleExp/roleGroupName/role_ATSPG_universal'
+    ROLEEXP_ROLENAME_ROLE_ATSPG_FIRESUPPORT = '#menu:roleExp/roleName/role_ATSPG_fireSupport'
+    ROLEEXP_ROLEGROUPNAME_ROLE_ATSPG_FIRESUPPORT = '#menu:roleExp/roleGroupName/role_ATSPG_fireSupport'
+    ROLEEXP_ROLENAME_ROLE_ATSPG_BURSTDAMAGE = '#menu:roleExp/roleName/role_ATSPG_burstDamage'
+    ROLEEXP_ROLEGROUPNAME_ROLE_ATSPG_BURSTDAMAGE = '#menu:roleExp/roleGroupName/role_ATSPG_burstDamage'
+    ROLEEXP_ROLENAME_ROLE_LT_TRACKED = '#menu:roleExp/roleName/role_LT_tracked'
+    ROLEEXP_ROLEGROUPNAME_ROLE_LT_TRACKED = '#menu:roleExp/roleGroupName/role_LT_tracked'
+    ROLEEXP_ROLENAME_ROLE_LT_WHEELED = '#menu:roleExp/roleName/role_LT_wheeled'
+    ROLEEXP_ROLEGROUPNAME_ROLE_LT_WHEELED = '#menu:roleExp/roleGroupName/role_LT_wheeled'
+    ROLEEXP_ROLENAME_ROLE_SPG = '#menu:roleExp/roleName/role_SPG'
+    ROLEEXP_ROLEGROUPNAME_ROLE_SPG = '#menu:roleExp/roleGroupName/role_SPG'
+    ROLEEXP_ROLEDESCR_ROLE_HT_TANK = '#menu:roleExp/roleDescr/role_HT_tank'
+    ROLEEXP_ROLEDESCR_ROLE_HT_ASSAULT = '#menu:roleExp/roleDescr/role_HT_assault'
+    ROLEEXP_ROLEDESCR_ROLE_HT_UNIVERSAL = '#menu:roleExp/roleDescr/role_HT_universal'
+    ROLEEXP_ROLEDESCR_ROLE_HT_FIRESUPPORT = '#menu:roleExp/roleDescr/role_HT_fireSupport'
+    ROLEEXP_ROLEDESCR_ROLE_MT_TANK = '#menu:roleExp/roleDescr/role_MT_tank'
+    ROLEEXP_ROLEDESCR_ROLE_MT_UNIVERSAL = '#menu:roleExp/roleDescr/role_MT_universal'
+    ROLEEXP_ROLEDESCR_ROLE_MT_FIRESUPPORT = '#menu:roleExp/roleDescr/role_MT_fireSupport'
+    ROLEEXP_ROLEDESCR_ROLE_MT_ASSASSIN = '#menu:roleExp/roleDescr/role_MT_assassin'
+    ROLEEXP_ROLEDESCR_ROLE_ATSPG_TANK = '#menu:roleExp/roleDescr/role_ATSPG_tank'
+    ROLEEXP_ROLEDESCR_ROLE_ATSPG_UNIVERSAL = '#menu:roleExp/roleDescr/role_ATSPG_universal'
+    ROLEEXP_ROLEDESCR_ROLE_ATSPG_FIRESUPPORT = '#menu:roleExp/roleDescr/role_ATSPG_fireSupport'
+    ROLEEXP_ROLEDESCR_ROLE_ATSPG_BURSTDAMAGE = '#menu:roleExp/roleDescr/role_ATSPG_burstDamage'
+    ROLEEXP_ROLEDESCR_ROLE_LT_TRACKED = '#menu:roleExp/roleDescr/role_LT_tracked'
+    ROLEEXP_ROLEDESCR_ROLE_LT_WHEELED = '#menu:roleExp/roleDescr/role_LT_wheeled'
+    ROLEEXP_ROLEDESCR_ROLE_SPG = '#menu:roleExp/roleDescr/role_SPG'
+    ROLEEXP_ROLELABEL = '#menu:roleExp/roleLabel'
     ROLEEXP_ACTION_BLOCKANDTAKEDAMAGE = '#menu:roleExp/action/blockAndTakeDamage'
     ROLEEXP_ACTION_DONEARDAMAGE = '#menu:roleExp/action/doNearDamage'
     ROLEEXP_ACTION_DOOWNDAMAGE = '#menu:roleExp/action/doOwnDamage'
@@ -2185,7 +2235,7 @@ class MENU(object):
      CONTEXTMENU_CREATESQUAD,
      CONTEXTMENU_CREATEEVENTSQUAD,
      CONTEXTMENU_CREATEBATTLEROYALESQUAD,
-     CONTEXTMENU_CREATEWEEKENDBRAWLSQUAD,
+     CONTEXTMENU_CREATEMAPBOXSQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,
@@ -2447,6 +2497,7 @@ class MENU(object):
      HANGAR_HEADER_PERSONAL_QUESTS_LABEL_EMPTY,
      HANGAR_HEADER_PERSONAL_QUESTS_LABEL_INACTIVE,
      HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ALL_DONE)
+    HANGAR_HEADER_MAPBOX_PROGRESSION_LABEL_ENUM = (HANGAR_HEADER_MAPBOX_PROGRESSION_LABEL_ACTIVE, HANGAR_HEADER_MAPBOX_PROGRESSION_LABEL_INACTIVE)
     TANK_PARAMS_ENUM = (TANK_PARAMS_MAXHEALTH,
      TANK_PARAMS_VEHICLEWEIGHT,
      TANK_PARAMS_ENGINEPOWER,
@@ -2907,6 +2958,15 @@ class MENU(object):
     def hangarHeaderPersonalMissionsLabel(cls, key0):
         outcome = '#menu:hangar_header/personal_quests_label/{}'.format(key0)
         if outcome not in cls.HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def hangarHeaderMapboxProgressionLabel(cls, key0):
+        outcome = '#menu:hangar_header/mapbox_progression_label/{}'.format(key0)
+        if outcome not in cls.HANGAR_HEADER_MAPBOX_PROGRESSION_LABEL_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

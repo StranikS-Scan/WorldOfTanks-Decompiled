@@ -247,7 +247,8 @@ class C11nHangarCameraManager(TimeDeltaMeter):
                 self.__hangarCameraManager.updateDynamicFov(dist=dist, rampTime=transitionDuration)
             return
 
-    def __getDistConstraints(self, position, commonConstraints=None, startingPoint=None):
+    @staticmethod
+    def __getDistConstraints(position, commonConstraints=None, startingPoint=None):
         if commonConstraints is None or startingPoint is None:
             from gui.ClientHangarSpace import customizationHangarCFG
             cfg = customizationHangarCFG()
@@ -275,7 +276,7 @@ class C11nHangarCameraManager(TimeDeltaMeter):
                 self.__prevPitch = -currentMatrix.pitch
             return
 
-    def __projectionChangeHandler(self, *args, **kwargs):
+    def __projectionChangeHandler(self, *_, **__):
         BigWorld.callback(0.0, self.__onProjectionChanged)
 
     def __onProjectionChanged(self):

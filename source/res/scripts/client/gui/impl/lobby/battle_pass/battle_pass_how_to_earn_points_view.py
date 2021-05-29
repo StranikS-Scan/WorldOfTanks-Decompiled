@@ -18,7 +18,8 @@ from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
-_rBattlePass = R.strings.battle_pass_2020
+SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.RANKED, ARENA_BONUS_TYPE.EPIC_BATTLE]
+_rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
 class BattlePassHowToEarnPointsView(ViewImpl):
@@ -48,9 +49,11 @@ class BattlePassHowToEarnPointsView(ViewImpl):
     def __createGeneralModel(self):
         with self.viewModel.transaction() as tx:
             tx.gameModes.clearItems()
-            tx.gameModes.addViewModel(self.__createGameModel(ARENA_BONUS_TYPE.REGULAR))
-            tx.gameModes.addViewModel(self.__createGameModel(ARENA_BONUS_TYPE.RANKED))
-            tx.gameModes.addViewModel(self.__createBattleRoyalGameModel())
+            for supportedArenaType in SUPPORTED_ARENA_BONUS_TYPES:
+                if supportedArenaType == ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO:
+                    tx.gameModes.addViewModel(self.__createBattleRoyalGameModel())
+                tx.gameModes.addViewModel(self.__createGameModel(supportedArenaType))
+
             tx.setSyncInitiator((tx.getSyncInitiator() + 1) % 1000)
 
     def __createGameModel(self, gameType):
@@ -151,14 +154,19 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         if gameType == ARENA_BONUS_TYPE.REGULAR:
             self.__createRandomCardsModel(gameType, viewModel)
         elif gameType == ARENA_BONUS_TYPE.RANKED:
-            self.__createRankedCardsModel(viewModel)
+            self.__createRankedCardsModel(viewModel, ARENA_BONUS_TYPE.RANKED)
+        elif gameType == ARENA_BONUS_TYPE.EPIC_BATTLE:
+            self.__createEpicBattleCardsModel(viewModel)
 
-    def __createRankedCardsModel(self, viewModel):
-        self.__createSpecialVehCard(viewModel)
+    def __createRankedCardsModel(self, viewModel, gameType):
+        self.__createSpecialVehCard(viewModel, gameType)
         self.__createLimitCard(viewModel)
 
+    def __createEpicBattleCardsModel(self, viewModel):
+        self.__createEpicBattlePointsCard(viewModel)
+
     def __createRandomCardsModel(self, gameType, viewModel):
-        self.__createSpecialVehCard(viewModel)
+        self.__createSpecialVehCard(viewModel, ARENA_BONUS_TYPE.REGULAR)
         self.__createLimitCard(viewModel)
         self.__createDailyCard(gameType, viewModel)
 
@@ -176,18 +184,24 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         viewModel.cards.addViewModel(gameModeCard)
 
     @staticmethod
+    def __createEpicBattlePointsCard(viewModel):
+        gameModeCard = GameModeCardModel()
+        gameModeCard.setCardType(PointsCardType.EPIC_BATTLE_POINTS)
+        viewModel.cards.addViewModel(gameModeCard)
+
+    @staticmethod
     def __createBattleRoyalCardsModel(viewModel):
         gameModeCard = GameModeCardModel()
         gameModeCard.setCardType(PointsCardType.BATTLE)
         viewModel.cards.addViewModel(gameModeCard)
 
-    def __createSpecialVehCard(self, viewModel):
+    def __createSpecialVehCard(self, viewModel, gameType=ARENA_BONUS_TYPE.REGULAR):
         gameModeCard = GameModeCardModel()
         gameModeCard.setCardType(PointsCardType.TECH)
         specialTanksIntCDs = self.__battlePassController.getSpecialVehicles()
         for specialTanksIntCD in specialTanksIntCDs:
             vehicle = self.__itemsCache.items.getItemByCD(specialTanksIntCD)
-            pointsDiff = self.__battlePassController.getPointsDiffForVehicle(specialTanksIntCD)
+            pointsDiff = self.__battlePassController.getPointsDiffForVehicle(specialTanksIntCD, gameMode=gameType)
             if vehicle is None or pointsDiff.textID == 0:
                 _logger.warning('No vehicle or points data found for CD: %s', str(specialTanksIntCD))
                 continue

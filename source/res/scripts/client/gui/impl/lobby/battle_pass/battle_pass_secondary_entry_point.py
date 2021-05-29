@@ -6,7 +6,7 @@ from gui.impl import backport
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.BATTLE_PASS_2020 import BATTLE_PASS_2020
+from gui.Scaleform.locale.BATTLE_PASS import BATTLE_PASS
 from gui.impl.lobby.battle_pass.battle_pass_entry_point_view import BaseBattlePassEntryPointView
 _TOOLTIPS = {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): TOOLTIPS_CONSTANTS.BATTLE_PASS_NOT_STARTED,
  R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): TOOLTIPS_CONSTANTS.BATTLE_PASS_COMPLETED,
@@ -61,6 +61,9 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
                 self.as_setCountS(self._getNotChosenRewardCountWith3d())
             return
 
+    def _getCurrentArenaBonusType(self):
+        return self.__arenaBonusType
+
     def __getIcon(self):
         hangarEntryPoints = R.images.gui.maps.icons.library.hangarEntryPoints
         if self._isBought() or self._isCompleted():
@@ -82,14 +85,14 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
             tooltip = _TOOLTIPS.get(self._getTooltip(), '')
             tooltipType = TOOLTIPS_CONSTANTS.WULF
         elif not self.__battlePassController.isEnabled():
-            tooltip = BATTLE_PASS_2020.TOOLTIPS_ENTRYPOINT_DISABLED
+            tooltip = BATTLE_PASS.TOOLTIPS_ENTRYPOINT_DISABLED
             tooltipType = TOOLTIPS_CONSTANTS.COMPLEX
         else:
-            tooltip = backport.text(R.strings.battle_pass_2020.tooltips.secondaryEntryPoint.disabled.num(currentArenaBonusType)())
+            tooltip = backport.text(R.strings.battle_pass.tooltips.secondaryEntryPoint.disabled.num(currentArenaBonusType)())
             if tooltip:
                 tooltipType = TOOLTIPS_CONSTANTS.SIMPLE
             else:
-                tooltip = BATTLE_PASS_2020.TOOLTIPS_ENTRYPOINT_DISABLED
+                tooltip = BATTLE_PASS.TOOLTIPS_ENTRYPOINT_DISABLED
                 tooltipType = TOOLTIPS_CONSTANTS.COMPLEX
         data['tooltip'] = str(tooltip)
         data['tooltipType'] = tooltipType

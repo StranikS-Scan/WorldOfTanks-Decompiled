@@ -24,10 +24,6 @@ class ViewFlags(CONST_CONTAINER):
     @classmethod
     def getViewType(cls, flags):
         flags = flags & ViewFlags.VIEW_TYPE_MASK
-        if flags == ViewFlags.VIEW:
-            return WindowLayer.UNDEFINED
-        if flags == ViewFlags.WINDOW_DECORATOR:
-            return WindowLayer.UNDEFINED
         if flags == ViewFlags.COMPONENT:
             return WindowLayer.UNDEFINED
         if flags == ViewFlags.OLD_STYLE_VIEW:

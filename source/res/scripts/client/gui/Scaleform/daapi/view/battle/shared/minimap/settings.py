@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/minimap/settings.py
-from account_helpers.settings_core.options import MinimapVehModelsSetting
+from enum import Enum
+from account_helpers.settings_core.options import MinimapVehModelsSetting, MinimapHPSettings
 from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from shared_utils import BitmaskHelper
 MINIMAP_COMPONENT_PATH = '_level0.root.{}.main.minimap.entriesContainer'.format(LAYER_NAMES.VIEWS)
@@ -47,6 +48,7 @@ class ENTRY_SYMBOL_NAME(object):
     MARK_OBJECTIVE_REPLY_ATK = 'PositionAttackReplyEntry'
     MARK_POSITION = 'PositionFlashEntry'
     ARTY_MARKER = 'ArtyMarkerMinimapEntry'
+    ARTY_HIT_DOT_MARKER = 'ArtyHitDotMarkerUI'
     LOCATION_MARKER = 'MarkGoingToPositionEntryUI'
     ATTENTION_MARKER = 'MarkAttentionEntryUI'
     EPIC_SECTOR_ENEMY_BASE = 'SectorBaseEnemyEntry'
@@ -65,7 +67,6 @@ class ENTRY_SYMBOL_NAME(object):
     EPIC_DEPLOY_HQ_ENEMY = 'HeadquarterEntryDeploymentEnemy'
     RADAR_ANIM = 'RadarUI'
     DISCOVERED_ITEM_MARKER = 'net.wg.gui.battle.views.minimap.components.entries.battleRoyale.DiscoveredItemMarker'
-    INTEREST_POINT = 'InterestPointEntry'
 
 
 class TRANSFORM_FLAG(object):
@@ -113,6 +114,11 @@ EQ_MARKER_TO_SYMBOL = {'artillery': ENTRY_SYMBOL_NAME.ARTILLERY_ENTRY,
  'recon': ENTRY_SYMBOL_NAME.RECON_ENTRY,
  'smoke': ENTRY_SYMBOL_NAME.SMOKE_ENTRY}
 
+class SettingsTypes(Enum):
+    MinimapVehicles = 0
+    MinimapHitPoint = 1
+
+
 class ADDITIONAL_FEATURES(BitmaskHelper):
     OFF = 0
     BY_REQUEST = 1
@@ -128,11 +134,15 @@ class ADDITIONAL_FEATURES(BitmaskHelper):
         return cls.BY_REQUEST & mask > 0
 
 
-def convertSettingToFeatures(value, previous):
-    options = MinimapVehModelsSetting.OPTIONS
-    indexes = MinimapVehModelsSetting.VEHICLE_MODELS_TYPES
+def convertSettingToFeatures(value, previous, settingsType):
+    if settingsType == SettingsTypes.MinimapVehicles:
+        options = MinimapVehModelsSetting.OPTIONS
+        indices = MinimapVehModelsSetting.VEHICLE_MODELS_TYPES
+        selected = indices[value]
+    else:
+        options = MinimapHPSettings.Options
+        selected = MinimapHPSettings.Options(value)
     result = ADDITIONAL_FEATURES.OFF
-    selected = indexes[value]
     if selected == options.ALT:
         result = ADDITIONAL_FEATURES.BY_REQUEST
     elif selected == options.ALWAYS:

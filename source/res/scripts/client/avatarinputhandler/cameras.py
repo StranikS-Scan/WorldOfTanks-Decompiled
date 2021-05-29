@@ -103,6 +103,15 @@ def readBool(dataSec, name, defaultVal):
     return defaultVal if dataSec is None else dataSec.readBool(name, defaultVal)
 
 
+def readInt(dataSec, name, minVal, maxVal, defaultVal):
+    if dataSec is None:
+        return defaultVal
+    else:
+        value = dataSec.readInt(name, defaultVal)
+        value = math_utils.clamp(minVal, maxVal, value)
+        return value
+
+
 def readFloat(dataSec, name, minVal, maxVal, defaultVal):
     if dataSec is None:
         return defaultVal
@@ -132,6 +141,10 @@ def readVec3(dataSec, name, minVal, maxVal, defaultVal):
             value[i] = math_utils.clamp(minVal[i], maxVal[i], value[i])
 
         return value
+
+
+def readString(dataSec, name, defaultVal):
+    return defaultVal if dataSec is None else dataSec.readString(name, defaultVal)
 
 
 def getScreenAspectRatio():

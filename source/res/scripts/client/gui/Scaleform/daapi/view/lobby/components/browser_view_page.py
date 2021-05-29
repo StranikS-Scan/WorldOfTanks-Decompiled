@@ -16,6 +16,7 @@ class BrowserPageComponent(BrowserViewStackExPaddingMeta):
 
     def __init__(self):
         super(BrowserPageComponent, self).__init__()
+        self._wasError = False
         self.__browserId = None
         self.__url = None
         self.__size = None
@@ -30,6 +31,7 @@ class BrowserPageComponent(BrowserViewStackExPaddingMeta):
         return
 
     def invalidateUrl(self):
+        self._wasError = False
         self.__url = self._getUrl()
         if self.__url is not None:
             browser = self.browserCtrl.getBrowser(self.__browserId)
@@ -40,6 +42,7 @@ class BrowserPageComponent(BrowserViewStackExPaddingMeta):
         return
 
     def refreshUrl(self):
+        self._wasError = False
         browser = self.browserCtrl.getBrowser(self.__browserId)
         if browser is not None:
             browser.refresh()
@@ -55,7 +58,16 @@ class BrowserPageComponent(BrowserViewStackExPaddingMeta):
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(BrowserPageComponent, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VIEW_ALIAS.BROWSER:
+            viewPy.onError += self._onError
             viewPy.init(self.__browserId, self._getWebHandlers())
+
+    def _onUnregisterFlashComponent(self, viewPy, alias):
+        if alias == VIEW_ALIAS.BROWSER:
+            viewPy.onError -= self._onError
+        super(BrowserPageComponent, self)._onUnregisterFlashComponent(viewPy, alias)
+
+    def _onError(self):
+        self._wasError = True
 
     @classmethod
     def _isRightClickAllowed(cls):

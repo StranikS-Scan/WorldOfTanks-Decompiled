@@ -33,11 +33,11 @@
     <Interface>	AvatarCreator	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_11210>
+    <requiredVersion_11300>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.12.1_3	</Default>
-    </requiredVersion_11210>
+      <Default>	ct_1.13.0	</Default>
+    </requiredVersion_11300>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -393,6 +393,10 @@
       <Exposed></Exposed>
       <Arg>	CLIENT_SESSION_STATS	</Arg>
     </logClientSessionStats>
+    <logMemoryCriticalEvent>
+      <Exposed></Exposed>
+      <Arg>	MEM_CRIT_EVENT	</Arg>
+    </logMemoryCriticalEvent>
     <logClientPB20UXStats>
       <Exposed></Exposed>
       <Arg>	CLIENT_PB_20_UX_STATS	</Arg>

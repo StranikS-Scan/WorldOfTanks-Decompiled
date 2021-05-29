@@ -65,6 +65,9 @@ YEAR_POINTS_TOKEN = 'rb2020'
 YEAR_STRIPE_SERVER_TOKEN = 'ranked_2020_final_top'
 YEAR_STRIPE_CLIENT_TOKEN = 'ranked_final_ready'
 ENTITLEMENT_EVENT_TOKEN = 'ranked_entitlement_event'
+LOBBY_SUB_LANDING_PARAM = '?is_landing='
+SEASON_RATING_PARAM = '?spaID={}'
+SEASON_IDS_RB_2020 = (202007, 202010, 202103)
 
 class RankedTokenQuestPostfix(CONST_CONTAINER):
     COMMON = 'common'
@@ -99,11 +102,6 @@ class SeasonGapStates(CONST_CONTAINER):
     NOT_IN_SEASON = 13
     BANNED_NOT_IN_SEASON = 14
     ROLLED_NOT_IN_SEASON = 15
-
-
-class LandingUrlParams(CONST_CONTAINER):
-    LOBBY_SUB = '/?is_landing='
-    SHOW_MY_POSITION = '&from_award_view='
 
 
 @unique

@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_page import IResetablePage
 from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
 from gui.ranked_battles.constants import SeasonResultTokenPatterns
-from gui.ranked_battles.ranked_helpers import getRankedBattlesRatingUrl, getRankedBattlesInfoPageUrl, getRankedBattlesSeasonGapUrl, getRankedBattlesYearRatingUrl, getRankedBattlesShopUrl
+from gui.ranked_battles.ranked_helpers import getRankedBattlesSeasonRatingUrl, getRankedBattlesInfoPageUrl, getRankedBattlesSeasonGapUrl, getRankedBattlesYearRatingUrl, getRankedBattlesShopUrl
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_MAIN_PAGE_SOUND_SPACE, RANKED_OVERLAY_SOUND_SPACE, Sounds, AmbientType
 from skeletons.gui.game_control import IRankedBattlesController
 from web.web_client_api.ranked_battles import createRankedBattlesWebHandlers
@@ -27,7 +27,7 @@ class RankedBrowserPage(BrowserPageComponent, IResetablePage):
             if ctx is not None and (ctx.get('webParams', '') or ctx.get('clientParams', {})):
                 self.__ctx = ctx
                 self.invalidateUrl()
-            elif self._isForcedRefresh():
+            elif self._isForcedRefresh() or self._wasError:
                 self.refreshUrl()
         return
 
@@ -100,7 +100,7 @@ class RankedShopPage(RankedBrowserPage):
 class RankedRatingPage(RankedBrowserPage):
 
     def _getBaseUrl(self, **kwargs):
-        return getRankedBattlesRatingUrl(**kwargs)
+        return getRankedBattlesSeasonRatingUrl(**kwargs)
 
     @classmethod
     def _isRightClickAllowed(cls):

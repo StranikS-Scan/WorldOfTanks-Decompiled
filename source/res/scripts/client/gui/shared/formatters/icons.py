@@ -5,7 +5,8 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.money import Currency
 from gui.shared.utils.functions import getAbsoluteUrl
-__all__ = ('noSeason', 'swords', 'alert', 'arrow', 'xp', 'notAvailable', 'notAvailableRed', 'checkmark', 'info', 'premiumIgrBig', 'premiumIgrSmall', 'freeXP', 'nut', 'clock', 'makeImageTag', 'roleActionsGroup') + Currency.ALL
+from gui.Scaleform.genConsts.COMPONENTS import COMPONENTS
+__all__ = ('noSeason', 'swords', 'alert', 'arrow', 'xp', 'notAvailable', 'notAvailableRed', 'checkmark', 'info', 'premiumIgrBig', 'premiumIgrSmall', 'freeXP', 'nut', 'clock', 'makeImageTag', 'getRoleIcon') + Currency.ALL
 _IMG_TAG_TPL = "<img src='{0}' width='{1}' height='{2}' vspace='{3}' hspace='{4}'/>"
 
 def _getIcon(icon, width=None, height=None, vspace=None, hspace=None):
@@ -193,9 +194,11 @@ def makeImageTag(source, width=16, height=16, vSpace=-4, hSpace=0):
     return _IMG_TAG_TPL.format(getAbsoluteUrl(source), width, height, vSpace, hSpace)
 
 
-def roleActionsGroup(actionsGroup, vSpace=-5):
-    source = backport.image(R.images.gui.maps.icons.roleExp.actionGroups.c_20x20.dyn(actionsGroup)())
-    return makeImageTag(source, width=20, height=20, vSpace=vSpace)
+def getRoleIcon(role, vSpace=-6):
+    if role == 'role_' + COMPONENTS.SPG:
+        return ''
+    source = backport.image(R.images.gui.maps.icons.roleExp.actionGroups.c_24x24.dyn(role)())
+    return makeImageTag(source, width=24, height=24, vSpace=vSpace)
 
 
 def lightning(vSpace=-4):

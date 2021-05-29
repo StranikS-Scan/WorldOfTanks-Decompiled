@@ -346,13 +346,15 @@ class CustomMode(CustomizationMode):
             self._events.onItemsBought(originalOutfits, purchaseItems, results)
         callback(self)
 
+    @async
     @wrappedProcess('sellItem')
-    def _sellItem(self, item, count):
+    def _sellItem(self, item, count, callback):
         if item.fullInventoryCount(g_currentVehicle.item.intCD) < count:
             for season, outfit in getOutfitWithoutItems(self.getOutfitsInfo(), item.intCD, count):
                 yield OutfitApplier(g_currentVehicle.item, ((outfit, season),)).request()
 
-        yield CustomizationsSeller(g_currentVehicle.item, item, count).request()
+        result = yield CustomizationsSeller(g_currentVehicle.item, item, count).request()
+        callback(result)
 
     def _isOutfitsEmpty(self):
         for season in SeasonType.COMMON_SEASONS:

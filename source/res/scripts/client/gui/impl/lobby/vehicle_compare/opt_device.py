@@ -35,12 +35,12 @@ class _CompareOptDeviceTabsController(OptDeviceTabsController):
 
 class CompareOptDeviceSetupSubView(CompareBaseSetupSubView):
 
-    def updateSlots(self, slotID, fullUpdate=True):
+    def updateSlots(self, slotID, fullUpdate=True, updateData=True):
         self._filter.resetFilters(self._viewModel.filter)
         item = self._interactor.getCurrentLayout()[slotID]
         if item is not None:
             self._setTab(getOptDeviceTabByItem(item))
-        super(CompareOptDeviceSetupSubView, self).updateSlots(slotID, fullUpdate)
+        super(CompareOptDeviceSetupSubView, self).updateSlots(slotID, fullUpdate, updateData)
         return
 
     def _createTabsController(self):

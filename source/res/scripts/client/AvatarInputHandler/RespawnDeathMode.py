@@ -7,7 +7,7 @@ import SoundGroups
 import BattleReplay
 from AvatarInputHandler import aih_global_binding
 from DynamicCameras.ArcadeCamera import ArcadeCamera
-from control_modes import IControlMode, _ARCADE_CAM_PIVOT_POS
+from control_modes import IControlMode
 from math_utils import clamp
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -27,7 +27,7 @@ class RespawnDeathMode(IControlMode):
         return
 
     def create(self):
-        self.__cam.create(_ARCADE_CAM_PIVOT_POS, None, True)
+        self.__cam.create(None, True)
         return
 
     def destroy(self):

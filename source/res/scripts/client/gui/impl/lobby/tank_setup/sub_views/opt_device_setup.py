@@ -8,7 +8,7 @@ from gui.impl.lobby.tank_setup.sub_views.base_equipment_setup import BaseEquipme
 
 class OptDeviceSetupSubView(BaseEquipmentSetupSubView):
 
-    def updateSlots(self, slotID, fullUpdate=True):
+    def updateSlots(self, slotID, fullUpdate=True, updateData=True):
         if fullUpdate:
             self._filter.resetFilters(self._viewModel.filter)
         item = self._interactor.getCurrentLayout()[slotID]
@@ -17,7 +17,7 @@ class OptDeviceSetupSubView(BaseEquipmentSetupSubView):
             if self._currentTabName != tabName:
                 self._setTab(tabName)
                 fullUpdate = True
-        super(OptDeviceSetupSubView, self).updateSlots(slotID, fullUpdate)
+        super(OptDeviceSetupSubView, self).updateSlots(slotID, fullUpdate, updateData)
         return
 
     def revertItem(self, slotID):

@@ -91,6 +91,7 @@ _ENTITY_TO_ANOTHER_PREFIX = {(_C_TYPE.PREQUEUE, _Q_TYPE.RANDOMS): ('', 'goToAnot
  (_C_TYPE.UNIT, _P_TYPE.UNIT): ('goToIntro', 'goToAnother'),
  (_C_TYPE.UNIT, _P_TYPE.SQUAD): ('goToSquad', 'goToAnother'),
  (_C_TYPE.UNIT, _P_TYPE.EVENT): ('goToSquad', 'goToAnother'),
+ (_C_TYPE.UNIT, _P_TYPE.MAPBOX): ('goToSquad', 'goToAnother'),
  (_C_TYPE.PREQUEUE, _Q_TYPE.EPIC): ('', 'goToAnother')}
 _DEFAULT_CONFIRM = 'leave'
 

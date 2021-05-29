@@ -324,13 +324,15 @@ class EditableStyleMode(CustomMode):
                 outfit = self.__style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
             yield (season, outfit)
 
+    @async
     @wrapperdProcess('sellItem')
-    def _sellItem(self, item, count):
+    def _sellItem(self, item, count, callback):
         if item.fullInventoryCount(g_currentVehicle.item.intCD) < count:
             for season, outfit in self._iterOutfitsWithoutItem(item, count):
                 yield OutfitApplier(g_currentVehicle.item, ((outfit, season),)).request()
 
-        yield CustomizationsSeller(g_currentVehicle.item, item, count).request()
+        result = yield CustomizationsSeller(g_currentVehicle.item, item, count).request()
+        callback(result)
 
     def _selectSlot(self, slotId):
         slotId = correctSlot(slotId)

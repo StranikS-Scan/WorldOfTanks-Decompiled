@@ -507,4 +507,134 @@
       </oneOf>
     </kpi>
   </lastEffortBattleBooster>
+  <turbochargerBattleBooster>
+    <id>	202	</id>
+    <userString>	#artefacts:turbochargerBattleBooster/name	</userString>
+    <description>	#artefacts:turbochargerBattleBooster/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:turbochargerBattleBooster/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:turbochargerBattleBooster/long_special	</longDescriptionSpecial>
+    <icon>	turbocharger 0 0	</icon>
+    <price>	12	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale equipmentBattleBooster turbocharger notBuyWhenAutoEquip	</tags>
+    <notInShop>	true	</notInShop>
+    <vehicleFilter>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	FactorBattleBooster	  <level>
+        <deviceFilter>
+          <tags>
+            <required>	turbocharger	</required>
+            <incompatible>	deluxe trophyUpgraded	</incompatible>
+          </tags>
+        </deviceFilter>
+        <attribute>	engine/power	</attribute>
+        <factor>	1.037	</factor>
+      </level>
+      <level>
+        <deviceFilter>
+          <tags>
+            <required>	turbocharger deluxe	</required>
+          </tags>
+        </deviceFilter>
+        <attribute>	engine/power	</attribute>
+        <factor>	1.036	</factor>
+      </level>
+      <level>
+        <deviceFilter>
+          <tags>
+            <required>	turbocharger trophyUpgraded	</required>
+          </tags>
+        </deviceFilter>
+        <attribute>	engine/power	</attribute>
+        <factor>	1.036	</factor>
+      </level>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.04	</value>
+      </mul>
+    </kpi>
+  </turbochargerBattleBooster>
+  <improvedSightsBattleBooster>
+    <id>	203	</id>
+    <userString>	#artefacts:improvedSightsBattleBooster/name	</userString>
+    <description>	#artefacts:improvedSightsBattleBooster/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:improvedSightsBattleBooster/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:improvedSightsBattleBooster/long_special	</longDescriptionSpecial>
+    <icon>	improvedSights 0 0	</icon>
+    <price>	10	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale equipmentBattleBooster improvedSights notBuyWhenAutoEquip	</tags>
+    <notInShop>	true	</notInShop>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	FactorBattleBooster	  <level>
+        <deviceFilter>
+          <tags>
+            <required>	improvedSights	</required>
+            <incompatible>	deluxe trophyUpgraded	</incompatible>
+          </tags>
+        </deviceFilter>
+        <attribute>	multShotDispersionFactor	</attribute>
+        <factor>	0.979	</factor>
+      </level>
+      <level>
+        <deviceFilter>
+          <tags>
+            <required>	improvedSights trophyUpgraded	</required>
+          </tags>
+        </deviceFilter>
+        <attribute>	multShotDispersionFactor	</attribute>
+        <factor>	0.978	</factor>
+      </level>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	0.98	</value>
+      </mul>
+    </kpi>
+  </improvedSightsBattleBooster>
+  <additInvisibilityDeviceBattleBooster>
+    <id>	204	</id>
+    <userString>	#artefacts:additInvisibilityDeviceBattleBooster/name	</userString>
+    <description>	#artefacts:additInvisibilityDeviceBattleBooster/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:additInvisibilityDeviceBattleBooster/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:additInvisibilityDeviceBattleBooster/long_special	</longDescriptionSpecial>
+    <icon>	additionalInvisibilityDevice 0 0	</icon>
+    <price>	10	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale equipmentBattleBooster additInvisibilityDevice notBuyWhenAutoEquip	</tags>
+    <notInShop>	true	</notInShop>
+    <script>	InvisibilityBattleBooster	  <level>
+        <deviceFilter>
+          <tags>
+            <required>	additInvisibilityDevice	</required>
+          </tags>
+        </deviceFilter>
+        <attribute>	invisibility	</attribute>
+        <factors>	0.02 1.0	</factors>
+      </level>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleCamouflage	</name>
+        <value>	1.0	</value>
+      </mul>
+    </kpi>
+  </additInvisibilityDeviceBattleBooster>
 </battle_boosters.xml>

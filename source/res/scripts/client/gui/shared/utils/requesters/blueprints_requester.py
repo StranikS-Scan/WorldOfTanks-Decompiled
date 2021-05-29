@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/blueprints_requester.py
 import logging
-from collections import namedtuple, defaultdict
+from collections import namedtuple, defaultdict, OrderedDict
+from copy import copy
 import BigWorld
+import nations
 from adisp import async
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentLayouts import Layout
@@ -65,7 +67,7 @@ def getUniqueBlueprints(blueprints, isFullNationCD=False):
 
 
 def _isUnsuitableForBlueprints(vehicle):
-    return vehicle.isPremium or vehicle.isSecret or vehicle.isEvent or vehicle.isOnlyForEpicBattles or vehicle.isCollectible or vehicle.isOnlyForBob or vehicle.isOnlyForWeekendBrawlBattles
+    return vehicle.isPremium or vehicle.isSecret or vehicle.isEvent or vehicle.isOnlyForEpicBattles or vehicle.isCollectible
 
 
 class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
@@ -85,7 +87,7 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
 
     def getBlueprintCount(self, vehicleCD, vLevel):
         _logger.debug('Extract blueprint count for the vehicle=%s, level=%s ', vehicleCD, vLevel)
-        totalCount = self.__lobbyContext.getServerSettings().blueprintsConfig.getFragmentCount(vLevel)
+        totalCount = self._bpfConfig.getFragmentCount(vLevel)
         if vehicleCD in self.__itemsCache.items.stats.unlocks:
             return (totalCount, totalCount)
         filledCount = self.__vehicleFragments[vehicleCD].filledCount if vehicleCD in self.__vehicleFragments else 0
@@ -93,7 +95,7 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
 
     def getBlueprintData(self, vehicleCD, vLevel):
         _logger.debug('Extract blueprint data for the vehicle=%s, level=%s ', vehicleCD, vLevel)
-        if not self.__lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable():
+        if not self._bpfConfig.isBlueprintsAvailable():
             return None
         else:
             vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
@@ -112,12 +114,12 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
         filledCount, totalCount = self.getBlueprintCount(vehicleCD, vLevel)
         if filledCount == totalCount and filledCount != 0:
             return 100
-        discount = self.__lobbyContext.getServerSettings().blueprintsConfig.getFragmentDiscount(vLevel)
+        discount = self._bpfConfig.getFragmentDiscount(vLevel)
         return int(round(discount * filledCount * 100))
 
     def getRequiredCountAndDiscount(self, vehicleCD, vLevel):
         filledCount, totalCount = self.getBlueprintCount(vehicleCD, vLevel)
-        requiredDiscount = self.__lobbyContext.getServerSettings().blueprintsConfig.getFragmentDiscount(vLevel)
+        requiredDiscount = self._bpfConfig.getFragmentDiscount(vLevel)
         if self.isLastFragment(totalCount, filledCount):
             requiredDiscount = 1 - filledCount * requiredDiscount
         return (totalCount, int(round(requiredDiscount * 100)))
@@ -142,11 +144,20 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
         nationID = getFragmentNationID(fragmentCD)
         return sum(self.__nationalFragments[nationID].values()) if nationID in self.__nationalFragments else 0
 
-    def getIntelligenceData(self):
+    def getNationalAllianceFragments(self, fragmentCD, vehicleLevel):
+        allianceNationIds = sorted(self.__getAllyConversionCoefs(fragmentCD, vehicleLevel).keys())
+        return OrderedDict(((nId, 0) for nId in allianceNationIds)) if not self.__nationalFragments else OrderedDict(((nId, sum(self.__nationalFragments[nId].values()) if nId in self.__nationalFragments else 0) for nId in allianceNationIds))
+
+    def getNationalRequiredOptions(self, vehicleCD, vehicleLevel):
+        national, _ = self.getRequiredIntelligenceAndNational(vehicleLevel)
+        allyCoefs = self.__getAllyConversionCoefs(vehicleCD, vehicleLevel)
+        return OrderedDict(((nId, round(national * allyCoef)) for nId, allyCoef in sorted(allyCoefs.iteritems())))
+
+    def getIntelligenceCount(self):
         return 0 if not self.__intelligence else sum(self.__intelligence.values())
 
-    def getRequiredIntelligenceAndNational(self, vLevel):
-        return self.__lobbyContext.getServerSettings().blueprintsConfig.getRequiredFragmentsForConversion(vLevel)
+    def getRequiredIntelligenceAndNational(self, vehicleLevel):
+        return self._bpfConfig.getRequiredFragmentsForConversion(vehicleLevel)
 
     def hasUniversalFragments(self):
         return bool(self.__intelligence or self.__nationalFragments)
@@ -154,26 +165,28 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
     def isLastFragment(self, totalCount, filledCount):
         return totalCount - filledCount == 1
 
-    def canConvertToVehicleFragment(self, vehicleCD, vLevel):
-        bpfConfig = self.__lobbyContext.getServerSettings().blueprintsConfig
-        national, intelligence = bpfConfig.getRequiredFragmentsForConversion(vLevel)
+    def canConvertToVehicleFragment(self, vehicleCD, vehicleLevel):
+        national, intelligence = self.getRequiredIntelligenceAndNational(vehicleLevel)
         if not national and not intelligence:
             return False
-        existingNational = self.getNationalFragments(vehicleCD)
-        existingIntelligence = self.getIntelligenceData()
-        return existingNational >= national and existingIntelligence >= intelligence
+        existingIntelligence = self.getIntelligenceCount()
+        if existingIntelligence < intelligence:
+            return False
+        existingAllianceFragments = self.getNationalAllianceFragments(vehicleCD, vehicleLevel)
+        allyConversionCoefs = self.__getAllyConversionCoefs(vehicleCD, vehicleLevel)
+        return any((existingAllianceFragments[nId] >= round(allyConversionCoefs[nId] * national) for nId in existingAllianceFragments.iterkeys()))
 
     def getConvertibleFragmentCount(self, vehicleCD, vehicleLevel):
-        bpfConfig = self.__lobbyContext.getServerSettings().blueprintsConfig
-        national, intelligence = bpfConfig.getRequiredFragmentsForConversion(vehicleLevel)
+        national, intelligence = self._bpfConfig.getRequiredFragmentsForConversion(vehicleLevel)
         if not national and not intelligence:
             return 0
-        existingNational = self.getNationalFragments(vehicleCD)
-        existingIntelligence = self.getIntelligenceData()
+        existingIntelligence = self.getIntelligenceCount()
+        existingAlliance = self.getNationalAllianceFragments(vehicleCD, vehicleLevel)
         filledCount, totalCount = self.getBlueprintCount(vehicleCD, vehicleLevel)
         need = totalCount - filledCount
-        availableNational = existingNational / national
-        availableIntelligence = existingIntelligence / intelligence
+        availableIntelligence = int(existingIntelligence / intelligence) if intelligence else 0
+        allyConversionCoefs = self.__getAllyConversionCoefs(vehicleCD, vehicleLevel)
+        availableNational = sum((int(existingAlliance[nId] / round(national * allyConversionCoefs[nId])) for nId in existingAlliance.iterkeys()))
         return min((need, availableNational, availableIntelligence))
 
     def getLayout(self, vehicleCD, vLevel):
@@ -191,7 +204,7 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
             return (rows, columns, layout)
 
     def isBlueprintsAvailable(self):
-        return self.__lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable()
+        return self._bpfConfig.isBlueprintsAvailable()
 
     def hasBlueprintsOrFragments(self):
         return bool(self.__vehicleFragments) or self.hasUniversalFragments()
@@ -199,6 +212,10 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
     @async
     def _requestCache(self, callback):
         BigWorld.player().blueprints.getCache(lambda resID, value: self._response(resID, value, callback))
+
+    @property
+    def _bpfConfig(self):
+        return self.__lobbyContext.getServerSettings().blueprintsConfig
 
     def _preprocessValidData(self, data):
         _logger.debug('Preprocess blueprint cache')
@@ -212,6 +229,12 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
                 self.__nationalFragments = blueprintsDecodeData[1]
                 self.__intelligence = blueprintsDecodeData[2]
             return data
+
+    def __getAllyConversionCoefs(self, vehicleCD, vehicleLevel):
+        nationId = getFragmentNationID(vehicleCD)
+        coefs = copy(self._bpfConfig.getAllianceConversionCoeffs(vehicleLevel).get(nations.NATION_TO_ALLIANCE_IDS_MAP[nationId], {}))
+        coefs[nationId] = 1
+        return coefs
 
     def __createLayoutData(self, vehicleCD, vLevel, hasBlueprints):
         allLayout = Layout.LAYOUTS

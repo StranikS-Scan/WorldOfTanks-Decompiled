@@ -24,6 +24,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.07	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	6.0	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
@@ -68,6 +74,13 @@
       <undamaged>	vehicles/british/GB109_GSOR_1008/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB109_GSOR_1008/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB109_GSOR_1008/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB109_GSOR_1008_3Dst>
+          <undamaged>	vehicles/british/GB109_GSOR_1008/_skins/GB109_GSOR_1008_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB109_GSOR_1008/_skins/GB109_GSOR_1008_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB109_GSOR_1008/_skins/GB109_GSOR_1008_3Dst/crash/lod0/Hull.model	</exploded>
+        </GB109_GSOR_1008_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -97,9 +110,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.437714 0.484957 2.41392	</rayStart>
-        <rayEnd>	0.417594 0.254098 2.35152	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayStart>	-0.623712 0.556533 2.11206	</rayStart>
+        <rayEnd>	-0.553512 0.33272 2.06133	</rayEnd>
+        <rayUp>	0.140152 0.0415246 -0.989259	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -1382,6 +1395,62 @@
         <anchorPosition>	1.70606 0.360826 0.575825	</anchorPosition>
         <anchorDirection>	0.789114 0.614244 0.00174424	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15092	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB109_GSOR_1008_3Dst	</compatibleModels>
+        <position>	-0.00258574 1.65336 1.95625	</position>
+        <rotation>	0.364803 0.0128174 3.13637	</rotation>
+        <scale>	0.667081 0.390964 0.667081	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-0.00283862 0.580995 1.94704	</anchorPosition>
+        <anchorDirection>	0.00979488 0.934181 0.356664	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15093	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB109_GSOR_1008_3Dst	</compatibleModels>
+        <position>	-1.69525 1.082 2.48015	</position>
+        <rotation>	1.56058 1.63951 0.0597343	</rotation>
+        <scale>	0.544818 0.160935 0.544819	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.581967	</clipAngle>
+        <anchorPosition>	-1.72814 0.0334203 2.48045	</anchorPosition>
+        <anchorDirection>	-0.999908 -0.0101947 0.0089674	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15094	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB109_GSOR_1008_3Dst	</compatibleModels>
+        <position>	1.69527 1.08197 2.48015	</position>
+        <rotation>	1.56057 -1.63935 -0.0596379	</rotation>
+        <scale>	0.544818 0.160935 0.544819	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.581967	</clipAngle>
+        <anchorPosition>	1.72816 0.0333852 2.48045	</anchorPosition>
+        <anchorDirection>	0.999908 -0.0102107 0.0089121	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15095	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB109_GSOR_1008_3Dst	</compatibleModels>
+        <position>	1.3405 1.21692 2.96615	</position>
+        <rotation>	0.594418 0.011384 3.13571	</rotation>
+        <scale>	0.441889 0.130531 0.441891	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	1.34068 0.180665 2.97425	</anchorPosition>
+        <anchorDirection>	0.0122573 0.82846 0.559914	</anchorDirection>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	111.885 112.152	</density>
@@ -1418,6 +1487,13 @@
         <undamaged>	vehicles/british/GB109_GSOR_1008/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB109_GSOR_1008/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB109_GSOR_1008/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB109_GSOR_1008_3Dst>
+            <undamaged>	vehicles/british/GB109_GSOR_1008/_skins/GB109_GSOR_1008_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB109_GSOR_1008/_skins/GB109_GSOR_1008_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB109_GSOR_1008/_skins/GB109_GSOR_1008_3Dst/crash/lod0/Chassis.model	</exploded>
+          </GB109_GSOR_1008_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -2116,6 +2192,13 @@
             <undamaged>	vehicles/british/GB109_GSOR_1008/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB109_GSOR_1008/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB109_GSOR_1008/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB109_GSOR_1008_3Dst>
+                <undamaged>	vehicles/british/GB109_GSOR_1008/_skins/GB109_GSOR_1008_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB109_GSOR_1008/_skins/GB109_GSOR_1008_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB109_GSOR_1008/_skins/GB109_GSOR_1008_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </GB109_GSOR_1008_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB109_GSOR_1008/collision/Gun_01.model	</collisionModelServer>
@@ -2544,6 +2627,41 @@
               <anchorDirection>	0.000312993 0.993202 0.116399	</anchorDirection>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45028	</slotId>
+              <rayStart>	0.000000 0.17425 2.48589	</rayStart>
+              <rayEnd>	-0.0154816 0.217113 2.48589	</rayEnd>
+              <rayUp>	0.121 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.46	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	GB109_GSOR_1008_3Dst	</compatibleModels>
+              <position>	-0.72796 2.0796 0.682003	</position>
+              <rotation>	0.85661 0.00906377 3.13407	</rotation>
+              <scale>	0.37492 0.165033 0.374921	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.775098	</clipAngle>
+              <anchorPosition>	-0.727845 0.232689 0.307696	</anchorPosition>
+              <anchorDirection>	0.0143709 0.654984 0.755506	</anchorDirection>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45029	</slotId>
+              <tags>	formfactor_square	</tags>
+              <position>	0.000019 2.34036 0.476112	</position>
+              <rotation>	0.0088396 0.014224 3.13563	</rotation>
+              <scale>	0.527265 0.123608 0.527267	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.775098	</clipAngle>
+              <anchorPosition>	-0.000393572 0.526747 0.0493948	</anchorPosition>
+              <anchorDirection>	0.00608332 0.999943 0.00875369	</anchorDirection>
+              <compatibleModels>	GB109_GSOR_1008_3Dst	</compatibleModels>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	0.000000 0.17425 2.48589	</rayStart>
@@ -2566,6 +2684,13 @@
         <undamaged>	vehicles/british/GB109_GSOR_1008/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB109_GSOR_1008/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB109_GSOR_1008/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB109_GSOR_1008_3Dst>
+            <undamaged>	vehicles/british/GB109_GSOR_1008/_skins/GB109_GSOR_1008_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB109_GSOR_1008/_skins/GB109_GSOR_1008_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB109_GSOR_1008/_skins/GB109_GSOR_1008_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </GB109_GSOR_1008_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB109_GSOR_1008/collision/Turret_01.model	</collisionModelServer>

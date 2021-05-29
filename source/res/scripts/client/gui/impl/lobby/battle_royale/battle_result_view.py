@@ -140,7 +140,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
         with self.viewModel.transaction() as model:
             self.__setPlayerVehicleStatus(model.playerVehicleStatus)
             self.__setPersonalResult(model.personalResults)
-            self.__setLeaderboard(model.leaderboardModel)
+            self.__setLeaderboard(model.leaderboardLobbyModel)
 
     def __onBattlePassClick(self):
         events_dispatcher.showMissionsBattlePassCommonProgression()

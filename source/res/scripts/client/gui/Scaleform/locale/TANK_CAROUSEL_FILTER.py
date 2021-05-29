@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/TANK_CAROUSEL_FILTER.py
-
+from debug_utils import LOG_WARNING
 
 class TANK_CAROUSEL_FILTER(object):
     TOOLTIP_PARAMS = '#tank_carousel_filter:tooltip/params'
@@ -13,7 +13,10 @@ class TANK_CAROUSEL_FILTER(object):
     POPOVER_LABEL_SPECIALS = '#tank_carousel_filter:popover/label/specials'
     POPOVER_LABEL_HIDDEN = '#tank_carousel_filter:popover/label/hidden'
     POPOVER_LABEL_PROGRESSIONS = '#tank_carousel_filter:popover/label/progressions'
-    POPOVER_LABEL_ROLES = '#tank_carousel_filter:popover/label/roles'
+    POPOVER_LABEL_ROLES_LIGHTTANK = '#tank_carousel_filter:popover/label/roles/lightTank'
+    POPOVER_LABEL_ROLES_MEDIUMTANK = '#tank_carousel_filter:popover/label/roles/mediumTank'
+    POPOVER_LABEL_ROLES_HEAVYTANK = '#tank_carousel_filter:popover/label/roles/heavyTank'
+    POPOVER_LABEL_ROLES_AT_SPG = '#tank_carousel_filter:popover/label/roles/AT-SPG'
     POPOVER_LABEL_SEARCHNAMEVEHICLE = '#tank_carousel_filter:popover/label/searchNameVehicle'
     POPOVER_CHECKBOX_PREMIUM = '#tank_carousel_filter:popover/checkbox/premium'
     POPOVER_CHECKBOX_ELITE = '#tank_carousel_filter:popover/checkbox/elite'
@@ -29,6 +32,7 @@ class TANK_CAROUSEL_FILTER(object):
     TOOLTIP_PARAMS_BODY = '#tank_carousel_filter:tooltip/params/body'
     TOOLTIP_NATIONS_BODY = '#tank_carousel_filter:tooltip/nations/body'
     TOOLTIP_VEHICLETYPES_BODY = '#tank_carousel_filter:tooltip/vehicleTypes/body'
+    TOOLTIP_ROLE_BODY = '#tank_carousel_filter:tooltip/role/body'
     TOOLTIP_PREMIUM_HEADER = '#tank_carousel_filter:tooltip/premium/header'
     TOOLTIP_PREMIUM_BODY = '#tank_carousel_filter:tooltip/premium/body'
     TOOLTIP_CRYSTALS_HEADER = '#tank_carousel_filter:tooltip/crystals/header'
@@ -70,3 +74,16 @@ class TANK_CAROUSEL_FILTER(object):
     INFOTIP_RENT = '#tank_carousel_filter:infotip/rent'
     INFOTIP_EVENT = '#tank_carousel_filter:infotip/event'
     INFOTIP_COUNTER = '#tank_carousel_filter:infotip/counter'
+    POPOVER_LABEL_ROLES_ENUM = (POPOVER_LABEL_ROLES_LIGHTTANK,
+     POPOVER_LABEL_ROLES_MEDIUMTANK,
+     POPOVER_LABEL_ROLES_HEAVYTANK,
+     POPOVER_LABEL_ROLES_AT_SPG)
+
+    @classmethod
+    def getRolesLabel(cls, vehType):
+        outcome = '#tank_carousel_filter:popover/label/roles/{}'.format(vehType)
+        if outcome not in cls.POPOVER_LABEL_ROLES_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

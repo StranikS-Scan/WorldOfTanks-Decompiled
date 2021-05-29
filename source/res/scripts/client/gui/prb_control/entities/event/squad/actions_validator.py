@@ -17,7 +17,7 @@ class _EventBattleVehiclesValidator(SquadVehiclesValidator):
         return super(_EventBattleVehiclesValidator, self)._validate()
 
     def _isValidMode(self, vehicle):
-        return vehicle.isEvent and not vehicle.isOnlyForEpicBattles and not vehicle.isOnlyForBob and not vehicle.isOnlyForWeekendBrawlBattles
+        return vehicle.isEvent and not vehicle.isOnlyForEpicBattles
 
 
 class EventSquadSlotsValidator(CommanderValidator):

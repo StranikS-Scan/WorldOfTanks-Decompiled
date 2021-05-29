@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/blueprints/__init__.py
 import typing
+import nations
 from constants import IS_CLIENT
 from debug_utils import LOG_CURRENT_EXCEPTION
 from soft_exception import SoftException
@@ -55,15 +56,27 @@ def _readBlueprints(reader, subsectionName):
             progress = lsection.readFloat('progress', 0)
             requires = tuple((int(i) for i in lsection.readString('requires').split())) or (0, 0)
             decays = tuple((float(i) for i in lsection.readString('decays').split())) or (0, 0)
+            allyConversionCoef = _readConversionCoefs(lsection, 'allyConversionCoefs')
             levels[int(lvl)] = (parts,
              progress,
              requires,
-             decays)
+             decays,
+             allyConversionCoef)
 
         return {'isEnabled': isEnabled,
          'useBlueprintsForUnlock': useBlueprintsForUnlock,
          'allowBlueprintsConversion': allowBlueprintsConversion,
          'levels': levels}
+
+
+def _readConversionCoefs(section, subsectionName):
+    result = {}
+    for allianceName, groupSection in section[subsectionName].items():
+        result[nations.ALLIANCE_IDS[allianceName]] = group = dict()
+        for nationName, _ in groupSection.items():
+            group[nations.INDICES[nationName]] = groupSection.readFloat(nationName, 1)
+
+    return result
 
 
 @singleton
@@ -107,6 +120,10 @@ def init(gameParams=None, nofail=True):
 
 def getAllResearchedVehicles(defaultUnlocks=frozenset()):
     return getHelperCache()['vehiclesInTrees'] - defaultUnlocks
+
+
+def getUnlockedVehicles(defaultUnlocks=frozenset()):
+    return getHelperCache()['vehiclesInTrees'] & defaultUnlocks
 
 
 def isNationResearched(nationID, defaultUnlocks=frozenset(), unlocks=frozenset()):

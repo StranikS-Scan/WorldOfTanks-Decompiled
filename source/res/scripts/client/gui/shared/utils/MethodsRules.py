@@ -9,21 +9,6 @@ _logger = logging.getLogger(__name__)
 class MethodsRules(object):
     __slots__ = ('__listenersToSkip', '__notificationToDelay', '__delayersProcessed')
 
-    class skipable(object):
-
-        def __init__(self, func):
-            self.__listerner = func
-
-        def __call__(self, *args, **kwargs):
-            instance = args[0]
-            if instance.skip(self.__listerner):
-                _logger.debug('Notification skipped: %r, %r', instance, self.__listerner)
-                return
-            self.__listerner(*args, **kwargs)
-
-        def __get__(self, obj, objtype=None):
-            return MethodType(self, obj, objtype)
-
     class delayable(object):
 
         def __init__(self, delayerName=None):

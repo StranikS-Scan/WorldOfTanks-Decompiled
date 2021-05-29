@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/battle_royale/pre_queue/entity.py
 import logging
 import BigWorld
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
 from gui.prb_control import prb_getters
@@ -10,6 +10,7 @@ from helpers import dependency
 from gui.ranked_battles.constants import PrimeTimeStatus
 from skeletons.gui.game_control import IBattleRoyaleController
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
+from gui.prb_control.entities.battle_royale import isNeedToLoadHangar
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQueueEntryPoint
 from gui.prb_control.entities.battle_royale.pre_queue.actions_validator import BattleRoyaleActionsValidator
 from gui.prb_control.entities.battle_royale.pre_queue.vehicles_watcher import BattleRoyaleVehiclesWatcher
@@ -83,10 +84,8 @@ class BattleRoyaleEntity(PreQueueEntity):
             self.__watcher.stop()
             self.__watcher = None
         self.storage.suspend()
-        if g_currentPreviewVehicle.isPresent():
-            reqFlags = FUNCTIONAL_FLAG.LOAD_PAGE | FUNCTIONAL_FLAG.SWITCH | FUNCTIONAL_FLAG.TRAINING
-            if ctx and not ctx.hasFlags(reqFlags):
-                g_eventDispatcher.loadHangar()
+        if isNeedToLoadHangar(ctx):
+            g_eventDispatcher.loadHangar()
         return super(BattleRoyaleEntity, self).fini(ctx, woEvents)
 
     def resetPlayerState(self):

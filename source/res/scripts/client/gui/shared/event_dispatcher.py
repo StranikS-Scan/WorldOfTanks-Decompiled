@@ -31,7 +31,7 @@ from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.genConsts.WEEKENDBRAWL_ALIASES import WEEKENDBRAWL_ALIASES
+from gui.Scaleform.genConsts.MAPBOX_ALIASES import MAPBOX_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.game_control.links import URLMacros
 from gui.impl import backport
@@ -77,6 +77,8 @@ from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from gui.Scaleform.framework.managers import ContainerManager
 _logger = logging.getLogger(__name__)
 
 class SettingsTabIndex(object):
@@ -119,10 +121,6 @@ def showRankedPrimeTimeWindow():
 
 def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
-
-
-def showWeekendBrawlPrimeTimeWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(WEEKENDBRAWL_ALIASES.WEEKEND_BRAWL_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesWelcomeBackWindow():
@@ -749,7 +747,7 @@ def showTankPremiumAboutPage():
 
 
 @adisp.process
-def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False, browserParams=None):
+def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False, browserParams=None, hiddenLayers=None):
     if url:
         if browserParams is None:
             browserParams = {}
@@ -759,7 +757,8 @@ def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=N
          'callbackOnLoad': callbackOnLoad,
          'webHandlers': webHandlers,
          'forcedSkipEscape': forcedSkipEscape,
-         'browserParams': browserParams}), EVENT_BUS_SCOPE.LOBBY)
+         'browserParams': browserParams,
+         'hiddenLayers': hiddenLayers or ()}), EVENT_BUS_SCOPE.LOBBY)
     return
 
 
@@ -1257,6 +1256,29 @@ def getParentWindow():
     return first(windows)
 
 
+def showMapboxPrimeTimeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(MAPBOX_ALIASES.MAPBOX_PRIME_TIME), ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showMapboxIntro(closeCallback=None):
+    from gui.impl.lobby.mapbox.map_box_intro import MapBoxIntroWindow
+    if not MapBoxIntroWindow.getInstances():
+        window = MapBoxIntroWindow(closeCallback)
+        window.load()
+
+
+def showMapboxAward(numBattles, rewards):
+    from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
+    if not MapBoxAwardsViewWindow.getInstances():
+        MapBoxAwardsViewWindow(numBattles, rewards).load()
+
+
+def showMapboxRewardChoice(selectableCrewbook):
+    from gui.impl.lobby.mapbox.mapbox_reward_choice_view import MapboxRewardChoiceWindow
+    if not MapboxRewardChoiceWindow.getInstances():
+        MapboxRewardChoiceWindow(selectableCrewbook).load()
+
+
 @waitShowOverlay
 def showAddEmailOverlay(initialEmail='', fadeAnimation=False):
     if isViewLoaded(R.views.lobby.account_completion.EmailConfirmationCurtainView()):
@@ -1273,3 +1295,11 @@ def showConfirmEmailOverlay(email='', fadeAnimation=False):
     from gui.impl.lobby.account_completion.confirm_email_overlay_view import ConfirmEmailOverlayWindow
     wnd = ConfirmEmailOverlayWindow(email, fadeAnimation)
     wnd.load()
+
+
+def showModeSelectorWindow(isEventEnabled, provider=None):
+    from gui.impl.lobby.mode_selector.mode_selector_view import ModeSelectorView
+    appLoader = dependency.instance(IAppLoader)
+    app = appLoader.getApp()
+    containerManager = app.containerManager
+    containerManager.load(GuiImplViewLoadParams(ModeSelectorView.layoutID, ModeSelectorView, ScopeTemplates.DEFAULT_SCOPE), isEventEnabled=isEventEnabled, provider=provider)

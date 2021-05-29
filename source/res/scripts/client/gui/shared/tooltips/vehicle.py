@@ -37,7 +37,7 @@ from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEEL
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import ITradeInController, IBootcampController
+from skeletons.gui.game_control import ITradeInController, IBootcampController, IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from items import perks
@@ -570,7 +570,7 @@ class VehicleStatusTooltipData(BlocksTooltipData):
 
     def __init__(self, context):
         super(VehicleStatusTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
-        self._setWidth(_TOOLTIP_MIN_WIDTH)
+        self._setWidth(346)
 
     def _packBlocks(self, *args, **kwargs):
         vehicle = self.context.buildItem(*args, **kwargs)
@@ -597,6 +597,7 @@ class VehicleTooltipBlockConstructor(object):
 
 
 class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
+    rankedController = dependency.descriptor(IRankedBattlesController)
 
     def construct(self):
         block = []
@@ -612,6 +613,9 @@ class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
         levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(self.vehicle.level)), text_styles.standard(_ms(TOOLTIPS.VEHICLE_LEVEL)))
         icon = getTypeBigIconPath(self.vehicle.type, self.vehicle.isElite)
         headerBlocks.append(formatters.packImageTextBlockData(title=nameStr, desc=text_styles.concatStylesToMultiLine(levelStr + ' ' + typeStr, ''), img=icon, imgPadding=formatters.packPadding(left=10, top=-15), txtGap=-9, txtOffset=99, padding=formatters.packPadding(top=15, bottom=-15 if self.vehicle.isFavorite else -21)))
+        if self.rankedController.isRankedPrbActive():
+            role = self.vehicle.roleLabel
+            headerBlocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.menu.roleExp.roleLabel()) + ' ' + backport.text(R.strings.menu.roleExp.roleName.dyn(role)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(role)()))), padding=formatters.packPadding(top=-9, left=99, bottom=9)))
         block.append(formatters.packBuildUpBlockData(headerBlocks, stretchBg=False, linkage=bgLinkage, padding=formatters.packPadding(left=-self.leftPadding)))
         return block
 
@@ -772,11 +776,8 @@ class FrontlineRentBlockConstructor(VehicleTooltipBlockConstructor):
             else:
                 rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
                 rentInfo = self.vehicle.rentInfo
-            if self.vehicle.isOnlyForEpicBattles or self.vehicle.isOnlyForWeekendBrawlBattles:
-                nameId = backport.text(R.strings.tooltips.vehicle.deal.epic.main())
-                if self.vehicle.isOnlyForWeekendBrawlBattles:
-                    nameId = backport.text(R.strings.tooltips.vehicle.deal.weekendBrawl.main())
-                block.append(formatters.packTextParameterBlockData(name=text_styles.main(nameId), value='', valueWidth=self._valueWidth, padding=paddings))
+            if self.vehicle.isOnlyForEpicBattles:
+                block.append(formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DEAL_EPIC_MAIN), value='', valueWidth=self._valueWidth, padding=paddings))
                 if rentInfo.getActiveSeasonRent() is not None:
                     rentFormatter = RentLeftFormatter(rentInfo)
                     rentLeftInfo = rentFormatter.getRentLeftStr(rentLeftKey)

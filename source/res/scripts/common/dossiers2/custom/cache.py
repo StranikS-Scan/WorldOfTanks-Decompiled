@@ -24,12 +24,13 @@ def buildCache():
         nationList = vehicles.g_list.getList(nationIdx)
         vehiclesInNationTree = set()
         for vehDescr in nationList.itervalues():
-            vehTags = vehDescr.tags
-            if any((tag in vehTags for tag in ('bob', 'battle_royale', 'weekend_brawl'))):
+            if 'bob' in vehDescr.tags:
+                continue
+            elif 'battle_royale' in vehDescr.tags:
                 continue
             vehiclesByLevel.setdefault(vehDescr.level, set()).add(vehDescr.compactDescr)
             for tag in ('beast', 'sinai', 'patton'):
-                if tag in vehTags:
+                if tag in vehDescr.tags:
                     vehiclesByTag[tag].add(vehDescr.compactDescr)
 
             if CollectorVehicleConsts.COLLECTOR_VEHICLES_TAG in vehDescr.tags:

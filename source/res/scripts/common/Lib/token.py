@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/token.py
-# Compiled at: 2082-05-01 05:52:11
-"""Token constants (from "token.h")."""
 ENDMARKER = 0
 NAME = 1
 NUMBER = 2

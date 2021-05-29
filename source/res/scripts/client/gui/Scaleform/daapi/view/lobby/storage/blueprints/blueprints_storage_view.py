@@ -20,10 +20,19 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui import GUI_NATIONS
 from WeakMethod import WeakMethodProxy
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 
 class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCarouselEnvironment):
+    __lobbyCtx = dependency.descriptor(ILobbyContext)
+
+    def __init__(self):
+        super(StorageCategoryBlueprintsView, self).__init__()
+        self.__needToResetScrollTo = True
 
     def navigateToBlueprintScreen(self, itemId):
+        self.filter.update({'scroll_to': itemId})
+        self.__needToResetScrollTo = False
         shared_events.showBlueprintView(itemId, blueprintExitEvent())
 
     def selectConvertible(self, value):
@@ -40,12 +49,16 @@ class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCa
         self.__currentFilteredVehicles = self._dataProvider.getCurrentVehiclesCount()
         self.__isFilterCounterShown = False
         self.__updateUniversalFragments()
-        self.updateSearchInput()
+        self.updateSearchInput(self.filter.get('searchNameVehicle'))
         self.__updateVehicles()
+        self.__restoreCarouselState()
+        self.updateCounter()
 
     def _dispose(self):
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         g_clientUpdateManager.removeObjectCallbacks(self)
+        if self.__needToResetScrollTo:
+            self.filter.update({'can_convert': False})
         super(StorageCategoryBlueprintsView, self)._dispose()
         super(StorageCategoryBlueprintsView, self).clear()
 
@@ -99,7 +112,7 @@ class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCa
         self.as_updateNationalFragmentsS(result)
 
     def __updateIntelligence(self):
-        self.as_updateIntelligenceDataS(self.__makeFragmentVO(self._itemsCache.items.blueprints.getIntelligenceData(), 'intelligence', BlueprintTypes.INTELLIGENCE_DATA))
+        self.as_updateIntelligenceDataS(self.__makeFragmentVO(self._itemsCache.items.blueprints.getIntelligenceCount(), 'intelligence', BlueprintTypes.INTELLIGENCE_DATA))
 
     def __updateFilterWarning(self):
         hasNoVehicles = self._dataProvider.getTotalVehiclesCount() == 0
@@ -108,4 +121,13 @@ class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCa
         if hasNoFilterResults and not hasNoVehicles:
             filterWarningVO = self._makeFilterWarningVO(STORAGE.FILTER_WARNINGMESSAGE, STORAGE.FILTER_NORESULTSBTN_LABEL, TOOLTIPS.STORAGE_FILTER_NORESULTSBTN)
         self.as_showFilterWarningS(filterWarningVO)
+        return
+
+    def __restoreCarouselState(self):
+        self.as_updateCanConvertS(self.filter.get('can_convert'))
+        self.updateSearchInput(self.filter.get('searchNameVehicle'))
+        self.applyFilter()
+        scrollTo = self.filter.get('scroll_to')
+        if scrollTo is not None:
+            self.as_scrollToItemS(scrollTo)
         return

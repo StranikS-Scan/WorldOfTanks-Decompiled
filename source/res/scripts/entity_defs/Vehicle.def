@@ -258,6 +258,11 @@
       <Flags>	ALL_CLIENTS	</Flags>
       <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </isMyVehicle>
+    <quickShellChangerFactor>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </quickShellChangerFactor>
   </Properties>
   <TempProperties>
     <events></events>
@@ -299,6 +304,7 @@
       </Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	BOOL	</Arg>
     </showDamageFromShot>
     <showDamageFromExplosion>
       <Arg>	OBJECT_ID	</Arg>

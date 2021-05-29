@@ -87,7 +87,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     def __onVehicleLoading(self, ctxEvent):
         isVehicleLoadingStarted = ctxEvent.ctx['started']
         if isVehicleLoadingStarted:
-            _logger.warning('Too early VEHICLE_LOADING handler call.')
+            _logger.debug('Too early VEHICLE_LOADING handler call.')
             return
         elif ctxEvent.ctx['intCD'] != self.__vehicleCD:
             _logger.warning('VEHICLE_LOADING handler: incompatible "intCD" parameter.')

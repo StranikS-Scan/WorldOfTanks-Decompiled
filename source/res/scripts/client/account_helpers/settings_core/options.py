@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/options.py
+from enum import Enum
 from typing import TYPE_CHECKING
 import base64
 import cPickle
@@ -44,7 +45,7 @@ from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, L
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
 from messenger import g_settings as messenger_settings
 from account_helpers.AccountSettings import AccountSettings, SPEAKERS_DEVICE
-from account_helpers.settings_core.settings_constants import SOUND
+from account_helpers.settings_core.settings_constants import SOUND, SPGAimEntranceModeOptions
 from messenger.storage import storage_getter
 from shared_utils import CONST_CONTAINER, forEach
 from gui import GUI_SETTINGS
@@ -81,6 +82,8 @@ def highestPriorityMethod(methods):
         return APPLY_METHOD.DELAYED
     return APPLY_METHOD.NEXT_BATTLE if APPLY_METHOD.NEXT_BATTLE in methods else APPLY_METHOD.NORMAL
 
+
+SettingsExtraData = namedtuple('SettingsExtraData', 'current options extraData')
 
 class ISetting(object):
 
@@ -778,6 +781,17 @@ class GameplaySetting(StorageAccountSetting):
         return super(GameplaySetting, self)._get()
 
 
+class RandomOnly10ModeSetting(StorageAccountSetting):
+    _RandomOnly10ModeSettingStruct = namedtuple('_RandomOnly10ModeSettingStruct', 'current options extraData')
+    lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def pack(self):
+        return self._RandomOnly10ModeSettingStruct(self._get(), self._getOptions(), self.getExtraData())._asdict()
+
+    def getExtraData(self):
+        return {'enabled': self.lobbyContext.getServerSettings().isOnly10ModeEnabled()}
+
+
 class TripleBufferedSetting(SettingAbstract):
 
     def _get(self):
@@ -1343,30 +1357,15 @@ class AimSetting(StorageAccountSetting):
     def pack(self):
         result = self._get()
         for vname, (name, optsLen) in self.VIRTUAL_OPTIONS.iteritems():
-            types = [ {'loc': makeString('#settings:aim/%s/type%d' % (name, i)),
-             'label': '#settings:aim/%s/type%d' % (name, i),
-             'index': i} for i in xrange(int(optsLen)) ]
-            types = sorted(types, key=itemgetter('loc'))
-            for item in types:
-                item.pop('loc', None)
+            if vname in result:
+                types = [ {'loc': makeString('#settings:aim/%s/type%d' % (name, i)),
+                 'label': '#settings:aim/%s/type%d' % (name, i),
+                 'index': i} for i in xrange(int(optsLen)) ]
+                types = sorted(types, key=itemgetter('loc'))
+                for item in types:
+                    item.pop('loc', None)
 
-            result[vname] = self.PackStruct(result[vname], types)._asdict()
-
-        return result
-
-    def toAccountSettings(self):
-        result = {}
-        value = self._get()
-        for option in self.OPTIONS.ALL():
-            if option not in self.VIRTUAL_OPTIONS:
-                alpha = value[option]
-                optType = 0
-                for k, v in self.VIRTUAL_OPTIONS.items():
-                    if v[0] == option:
-                        optType = value[k]
-
-                result[option] = {'alpha': alpha,
-                 'type': optType}
+                result[vname] = self.PackStruct(result[vname], types)._asdict()
 
         return result
 
@@ -1380,6 +1379,71 @@ class AimSetting(StorageAccountSetting):
                         result[k] = value['type']
 
         return result
+
+
+class SPGAimSetting(StorageDumpSetting):
+
+    def getExtraData(self):
+        labelR = R.strings.settings.aim.spg.dyn(self.settingName)
+        tooltipR = labelR.dyn('tooltip') if labelR else None
+        data = {'checkBoxLabel': backport.text(labelR()) if labelR else ''}
+        if tooltipR:
+            data['tooltip'] = makeTooltip(backport.text(tooltipR.header()), backport.text(tooltipR.body()))
+        return data
+
+    def pack(self):
+        return {'current': self._get(),
+         'options': self._getOptions(),
+         'extraData': self.getExtraData()}
+
+    def getDefaultValue(self):
+        return AccountSettings.getSettingsDefault('spgAim').get(self.settingName, None)
+
+
+class SPGStrategicCamMode(StorageDumpSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        BASE = 'base'
+        ALT = 'alt'
+
+    ARTY_CAM_OPTIONS = [OPTIONS.BASE, OPTIONS.ALT]
+
+    def getDefaultValue(self):
+        return self.ARTY_CAM_OPTIONS.index(self.OPTIONS.BASE)
+
+    def getExtraData(self):
+        tooltipR = R.strings.settings.aim.spg.spgStrategicCamMode.tooltip
+        data = {'label': backport.text(R.strings.settings.aim.spg.spgStrategicCamMode())}
+        if tooltipR:
+            data['tooltip'] = makeTooltip(backport.text(tooltipR.header()), backport.text(tooltipR.body()))
+        return data
+
+    def pack(self):
+        return {'current': self._get(),
+         'options': self._getOptions(),
+         'extraData': self.getExtraData()}
+
+    def _getOptions(self):
+        settingsKey = '#settings:aim/spg/{}/{}'
+        return [ settingsKey.format(self.settingName, mType) for mType in self.ARTY_CAM_OPTIONS ]
+
+
+class SPGAimEntranceMode(StorageDumpSetting):
+
+    def getDefaultValue(self):
+        return AccountSettings.getSettingsDefault('spgAim').get(self.settingName, SPGAimEntranceModeOptions.SETTINGS_OPTIONS.index(SPGAimEntranceModeOptions.LAST))
+
+    def getExtraData(self):
+        return {'label': backport.text(R.strings.settings.aim.spg.aimEntranceMode())}
+
+    def pack(self):
+        return {'current': self._get(),
+         'options': self._getOptions(),
+         'extraData': self.getExtraData()}
+
+    def _getOptions(self):
+        settingsKey = '#settings:aim/spg/{}/{}'
+        return [ settingsKey.format(self.settingName, mType) for mType in SPGAimEntranceModeOptions.SETTINGS_OPTIONS ]
 
 
 class MinimapSetting(StorageDumpSetting):
@@ -1403,6 +1467,33 @@ class MinimapVehModelsSetting(StorageDumpSetting):
 
     def getDefaultValue(self):
         return self.VEHICLE_MODELS_TYPES.index(self.OPTIONS.ALWAYS)
+
+
+class MinimapArtyHitSetting(StorageDumpSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        HIDE = 'hide'
+        DOT = 'dot'
+
+    ARTY_HIT_OPTIONS = [OPTIONS.HIDE, OPTIONS.DOT]
+
+    def getDefaultValue(self):
+        return self.ARTY_HIT_OPTIONS.index(self.OPTIONS.DOT)
+
+
+class MinimapHPSettings(StorageDumpSetting):
+
+    class Options(Enum):
+        NEVER = 0
+        ALT = 1
+        ALWAYS = 2
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ settingsKey % (self.settingName, mType.lower()) for mType in self.Options.__members__.keys() ]
+
+    def getDefaultValue(self):
+        return self.Options.ALT.value
 
 
 class CarouselTypeSetting(StorageDumpSetting):
@@ -2066,13 +2157,12 @@ class NightModeSetting(AccountSetting):
         super(NightModeSetting, self)._set(isEnabled)
 
 
-class DetectionAlertSound(AccountSetting):
-    _DetectionAlertPackStruct = namedtuple('_DetectionAlertPackStruct', 'current options extraData')
-    _WWISE_EVENTS = ('lightbulb', 'lightbulb_02', 'sixthSense')
-    _CUSTOM_EVENT_FILE = 'audioww/sixthSense.mp3'
+class PreviewSoundSetting(AccountSetting):
+    _USER_SOUND = 'userSound'
+    _WWISE_EVENTS = (_USER_SOUND,)
 
-    def __init__(self):
-        super(DetectionAlertSound, self).__init__(SOUND.DETECTION_ALERT_SOUND)
+    def __init__(self, key):
+        super(PreviewSoundSetting, self).__init__(key)
         self.__previewSound = None
         return
 
@@ -2083,15 +2173,15 @@ class DetectionAlertSound(AccountSetting):
             if self._WWISE_EVENTS.index(playingEvent) != eventIdx:
                 self.clearPreviewSound()
                 self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
-                self.__previewSound.play()
+                self.__playSound()
             else:
-                if playingEvent != 'sixthSense':
+                if playingEvent != self._USER_SOUND:
                     self.clearPreviewSound()
                     self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
-                self.__previewSound.play()
+                self.__playSound()
         else:
             self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
-            self.__previewSound.play()
+            self.__playSound()
         return
 
     def clearPreviewSound(self):
@@ -2104,14 +2194,14 @@ class DetectionAlertSound(AccountSetting):
         return self._WWISE_EVENTS[self._get()]
 
     def pack(self):
-        return self._DetectionAlertPackStruct(self._get(), self._getOptions(), self._getExtraData())._asdict()
+        return SettingsExtraData(self._get(), self._getOptions(), self._getExtraData())._asdict()
 
     def _getOptions(self):
         options = []
         for sample in self._WWISE_EVENTS:
-            option = {'label': '#settings:sound/{}/{}'.format(SOUND.DETECTION_ALERT_SOUND, sample)}
-            if sample == 'sixthSense':
-                option.update(tooltip='#settings:sounds/sixthSense')
+            option = {'label': '#settings:sound/{}/{}'.format(self.key, sample)}
+            if sample == self._USER_SOUND:
+                option.update(tooltip='#settings:sounds/%s' % self._USER_SOUND)
             options.append(option)
 
         return options
@@ -2119,8 +2209,8 @@ class DetectionAlertSound(AccountSetting):
     def _getExtraData(self):
         extraData = []
         for sample in self._WWISE_EVENTS:
-            if sample == 'sixthSense':
-                canPreview = bool(ResMgr.isFile(self._CUSTOM_EVENT_FILE))
+            if sample == self._USER_SOUND:
+                canPreview = bool(ResMgr.isFile('audioww/%s.mp3' % self._USER_SOUND))
             else:
                 canPreview = True
             extraData.append(canPreview)
@@ -2128,10 +2218,25 @@ class DetectionAlertSound(AccountSetting):
         return extraData
 
     def _get(self):
-        return self._WWISE_EVENTS.index(super(DetectionAlertSound, self)._get())
+        return self._WWISE_EVENTS.index(super(PreviewSoundSetting, self)._get())
 
     def _save(self, eventIdx):
-        super(DetectionAlertSound, self)._save(self._WWISE_EVENTS[eventIdx])
+        super(PreviewSoundSetting, self)._save(self._WWISE_EVENTS[eventIdx])
+
+    def __playSound(self):
+        if self.__previewSound.name in SoundGroups.CUSTOM_MP3_EVENTS:
+            SoundGroups.g_instance.prepareMP3(self.__previewSound.name)
+        self.__previewSound.play()
+
+
+class DetectionAlertSound(PreviewSoundSetting):
+    _USER_SOUND = 'sixthSense'
+    _WWISE_EVENTS = ('lightbulb', 'lightbulb_02', _USER_SOUND)
+
+
+class ArtyShotAlertSound(PreviewSoundSetting):
+    _USER_SOUND = 'soundExploring'
+    _WWISE_EVENTS = ('artillery_lightbulb', _USER_SOUND)
 
 
 class AltVoicesSetting(StorageDumpSetting):
@@ -2367,6 +2472,21 @@ class HullLockSetting(StorageAccountSetting):
         return True
 
 
+class VehicleHPInPlayersPanelSetting(StorageAccountSetting):
+
+    class Options(Enum):
+        NEVER = 0
+        ALT = 1
+        ALWAYS = 2
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ settingsKey % (self.settingName, mType.lower()) for mType in self.Options.__members__.keys() ]
+
+    def getDefaultValue(self):
+        return self.Options.ALT.value
+
+
 class HangarCamPeriodSetting(StorageAccountSetting):
 
     class OPTIONS(CONST_CONTAINER):
@@ -2518,20 +2638,22 @@ class DogtagsSetting(StorageDumpSetting):
 
 
 class ShowDamageIconSetting(StorageAccountSetting):
-    ShowDamageIconPackStruct = namedtuple('ShowDamageIconPackStruct', 'current options extraData')
 
     def getExtraData(self):
-        lineBreak = '<br/>'
         templateName = 'html_templates:lobby/tooltips/settings_show_damage_icon'
-        showDamageIconTooltipContent = makeHtmlString(templateName, 'ricochet') + lineBreak
-        showDamageIconTooltipContent += makeHtmlString(templateName, 'trackDamage') + lineBreak
-        showDamageIconTooltipContent += makeHtmlString(templateName, 'criticalDamage') + lineBreak
-        showDamageIconTooltipContent += makeHtmlString(templateName, 'blocked')
-        return {'checkBoxLabel': i18n.makeString(SETTINGS.GAME_SHOWDAMAGEICON),
-         'tooltip': makeTooltip(i18n.makeString(TOOLTIPS.SHOWDAMAGEICON_HEADER), showDamageIconTooltipContent)}
+        showDamageIconTooltipContent = (makeHtmlString(templateName, 'ricochet'),
+         makeHtmlString(templateName, 'trackDamage'),
+         makeHtmlString(templateName, 'criticalDamage'),
+         makeHtmlString(templateName, 'blocked'),
+         makeHtmlString(templateName, 'spacedArmorBlocked'),
+         makeHtmlString(templateName, 'trackBlocked'),
+         makeHtmlString(templateName, 'wheelBlocked'),
+         makeHtmlString(templateName, 'missArmor'))
+        return {'checkBoxLabel': backport.text(R.strings.settings.game.showDamageIcon()),
+         'tooltip': makeTooltip(backport.text(R.strings.tooltips.showDamageIcon.header()), '<br/>'.join(showDamageIconTooltipContent))}
 
     def pack(self):
-        res = self.ShowDamageIconPackStruct(self._get(), self._getOptions(), self.getExtraData())._asdict()
+        res = SettingsExtraData(self._get(), self._getOptions(), self.getExtraData())._asdict()
         return res
 
     def getDefaultValue(self):
@@ -2552,7 +2674,6 @@ class MouseAffectedSetting(RegularSetting):
 
 
 class IncreasedZoomSetting(StorageAccountSetting, MouseAffectedSetting):
-    IncreasedZoomPackStruct = namedtuple('IncreasedZoomPackStruct', 'current options extraData')
 
     def getExtraData(self):
         zooms = self._mouseSettings[0].getCamera().getConfigValue('zooms')[-2:]
@@ -2562,7 +2683,7 @@ class IncreasedZoomSetting(StorageAccountSetting, MouseAffectedSetting):
          'tooltip': makeTooltip(TOOLTIPS.INCREASEDZOOM_HEADER, i18n.makeString(TOOLTIPS.INCREASEDZOOM_BODY, zooms=zoomStr))}
 
     def pack(self):
-        return self.IncreasedZoomPackStruct(self._get(), self._getOptions(), self.getExtraData())._asdict()
+        return SettingsExtraData(self._get(), self._getOptions(), self.getExtraData())._asdict()
 
     def setSystemValue(self, value):
         if BattleReplay.isPlaying():

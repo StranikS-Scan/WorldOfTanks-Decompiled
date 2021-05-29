@@ -25,6 +25,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.03	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	5.0	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
@@ -1926,8 +1932,8 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
-          <rayStart>	-1.43386 0.430019 0.299774	</rayStart>
-          <rayEnd>	-1.28421 0.299355 0.276659	</rayEnd>
+          <rayStart>	-1.37214 0.423544 0.282362	</rayStart>
+          <rayEnd>	-1.28969 0.346629 0.269662	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.25	</size>
           <hideIfDamaged>	false	</hideIfDamaged>

@@ -21,7 +21,8 @@ class BattlePassRewardOptionType(Enum):
     BLUEPRINT = 'blueprint'
     CREW_BROCHURE = 'brochure'
     CREW_GUIDE = 'guide'
-    NEW_DEVICE = 'newDevice'
+    NEW_DEVICE_MI = 'newDeviceMI'
+    NEW_DEVICE_FV = 'newDeviceFV'
     TROPHY_DEVICE = 'trophyDevice'
 
 
@@ -31,7 +32,8 @@ def _getPacker():
     return {BattlePassRewardOptionType.BLUEPRINT: NationalBlueprintRewardOptionPacker(),
      BattlePassRewardOptionType.CREW_BROCHURE: crewBookRewardOptionPacker,
      BattlePassRewardOptionType.CREW_GUIDE: crewBookRewardOptionPacker,
-     BattlePassRewardOptionType.NEW_DEVICE: deviceRewardOptionPacker,
+     BattlePassRewardOptionType.NEW_DEVICE_MI: deviceRewardOptionPacker,
+     BattlePassRewardOptionType.NEW_DEVICE_FV: deviceRewardOptionPacker,
      BattlePassRewardOptionType.TROPHY_DEVICE: deviceRewardOptionPacker}
 
 
@@ -110,7 +112,7 @@ class CrewBookRewardOptionPacker(RewardOptionPacker):
         model.setIconName(item.getBonusIconName())
         model.setCount(bonus.getGiftCount())
         model.setExpBonusValue(item.getXP())
-        model.setDescription(backport.text(R.strings.battle_pass_2020.rewardChoice.crewBook.rewardDescription(), nation=backport.text(R.strings.nations.dyn(item.getNation()).genetiveCase())))
+        model.setDescription(backport.text(R.strings.battle_pass.rewardChoice.crewBook.rewardDescription(), nation=backport.text(R.strings.nations.dyn(item.getNation()).genetiveCase())))
         return model
 
     @classmethod

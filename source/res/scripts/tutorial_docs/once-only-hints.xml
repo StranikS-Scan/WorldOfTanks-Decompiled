@@ -234,14 +234,31 @@
         </condition-and>
       </condition>
       <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
     <hint>	BlueprintScreenConvertFragmentHint	  <item-id>	BlueprintScreenConvertFragment	</item-id>
       <text>	_(#tutorial:blueprints/blueprintScreen/fragmentItem)	</text>
       <arrow>
-        <direction>	R	</direction>
+        <direction>	L	</direction>
         <loop>	True	</loop>
       </arrow>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	False	</ignore-outside-click>
+      <equal-actions>	True	</equal-actions>
+    </hint>
+    <hint>	BlueprintScreenConvertFormulaHint	  <item-id>	BlueprintScreenConvertFormula	</item-id>
+      <text>	_(#tutorial:blueprints/blueprintScreen/convertFormula)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <condition>
+        <condition-hint-showed>
+          <hint-id>	BlueprintScreenConvertFragmentHint	</hint-id>
+          <value>	True	</value>
+        </condition-hint-showed>
+      </condition>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	False	</ignore-outside-click>
       <equal-actions>	True	</equal-actions>
@@ -530,6 +547,16 @@
       <text>	_(#tank_setup:hints/dragAndDrop/section)	</text>
       <arrow>
         <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	ModeSelectorWidgetsBtnHint	  <item-id>	ModeSelectorWidgetsBtn	</item-id>
+      <text>	_(#mode_selector:hint/showProgression)	</text>
+      <arrow>
+        <direction>	R	</direction>
         <loop>	True	</loop>
       </arrow>
       <update-runtime>	True	</update-runtime>

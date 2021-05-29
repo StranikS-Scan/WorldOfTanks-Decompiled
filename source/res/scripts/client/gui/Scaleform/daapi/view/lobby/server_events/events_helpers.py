@@ -370,8 +370,8 @@ def getChainVehTypeAndLevelRestrictions(operation, chainID):
 _questBranchToTabMap = {PM_BRANCH.REGULAR: QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM}
 
 def getBattlePassQuestInfo(progress):
-    postBattleR = R.strings.battle_pass_2020.reward.postBattle
-    chapterName = backport.text(R.strings.battle_pass_2020.chapter.name.num(progress.chapter)())
+    postBattleR = R.strings.battle_pass.reward.postBattle
+    chapterName = backport.text(R.strings.battle_pass.chapter.name.num(progress.chapter)())
     questName = backport.text(postBattleR.title(), level=progress.level, chapter=chapterName)
     progressDesc = backport.text(postBattleR.progress())
     progressDiffTooltip = backport.text(postBattleR.progress.tooltip(), points=progress.pointsBattleDiff)
@@ -406,6 +406,6 @@ def getBattlePassQuestInfo(progress):
      'questType': EVENT_TYPE.BATTLE_QUEST,
      'progressList': progressList,
      'questState': {'statusState': 'done' if progress.isDone else 'inProgress'},
-     'linkBtnTooltip': '' if progress.isEnabled else backport.text(R.strings.battle_pass_2020.progression.error()),
+     'linkBtnTooltip': '' if progress.isEnabled else backport.text(R.strings.battle_pass.progression.error()),
      'linkBtnEnabled': progress.isEnabled}
     return info

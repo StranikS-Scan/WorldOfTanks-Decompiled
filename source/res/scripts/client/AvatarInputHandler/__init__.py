@@ -34,13 +34,11 @@ from AvatarInputHandler.commands.radar_control import RadarControl
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpdateControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpgradePanelControl
-from AvatarInputHandler.commands.ability_panel_control import AbilityPanelControl, ChoiceAbilityControl
 from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
 from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker, TurboshaftModeSoundNotifications
 from Event import Event
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import ARENA_PERIOD, AIMING_MODE
-from control_modes import _ARCADE_CAM_PIVOT_POS
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import g_guiResetters, GUI_CTRL_MODE_FLAG, GUI_SETTINGS
 from gui.app_loader import settings
@@ -67,6 +65,7 @@ _GUN_MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
 _BINDING_ID = aih_global_binding.BINDING_ID
 _CTRL_MODES = aih_constants.CTRL_MODES
 _CTRLS_FIRST = _CTRL_MODE.DEFAULT
+_CONTROL_MODE_SWITCH_COOLDOWN = 1.0
 _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.STRATEGIC: (control_modes.StrategicControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.ARTY: (control_modes.ArtyControlMode, 'artyMode', _ARTY_CTRL_TYPE),
@@ -230,6 +229,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__detachedCommands = []
         self.__remoteCameraSender = None
         self.__isGUIVisible = False
+        self.__lastSwitchTime = 0
         return
 
     def __constructComponents(self):
@@ -274,10 +274,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.__commands.append(VehicleUpdateControl())
                 self.__commands.append(VehicleUpgradePanelControl())
                 self.__detachedCommands.append(VehicleUpgradePanelControl())
-            if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.WEEKEND_BRAWL):
-                self.__commands.append(AbilityPanelControl())
-                self.__commands.append(ChoiceAbilityControl())
-                self.__detachedCommands.append(ChoiceAbilityControl())
             return
 
     def prerequisites(self):
@@ -532,13 +528,14 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.__waitObserverCallback = None
             if not isObserverMode and self.__isDualGun:
                 gui_event_dispatcher.controlModeChange(eMode)
-            if isObserverMode and eMode == _CTRL_MODE.POSTMORTEM:
-                if self.__observerVehicle is not None and not self.__observerIsSwitching:
-                    self.__waitObserverCallback = partial(self.onControlModeChanged, eMode, **args)
-                    self.__observerIsSwitching = True
-                    player.positionControl.followCamera(False)
-                    player.positionControl.bindToVehicle(True, self.__observerVehicle)
-                    return
+            if not player.observerSeesAll():
+                if isObserverMode and eMode == _CTRL_MODE.POSTMORTEM:
+                    if self.__observerVehicle is not None and not self.__observerIsSwitching:
+                        self.__waitObserverCallback = partial(self.onControlModeChanged, eMode, **args)
+                        self.__observerIsSwitching = True
+                        player.positionControl.followCamera(False)
+                        player.positionControl.bindToVehicle(True, self.__observerVehicle)
+                        return
             if isObserverMode and self.__ctrlModeName == _CTRL_MODE.POSTMORTEM:
                 self.__observerVehicle = None
                 if player.vehicle and player.vehicle.id != player.playerVehicleID:
@@ -552,7 +549,14 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             self.__curCtrl = self.__ctrls[eMode]
             self.__ctrlModeName = eMode
             if player is not None:
-                if not prevCtrl.isManualBind() and self.__curCtrl.isManualBind():
+                if player.observerSeesAll():
+                    if prevCtrlModeName == _CTRL_MODE.VIDEO:
+                        player.positionControl.followCamera(False)
+                        player.positionControl.bindToVehicle(True, self.__observerVehicle)
+                    if eMode == _CTRL_MODE.VIDEO:
+                        self.__observerVehicle = player.observedVehicleID
+                        player.positionControl.bindToVehicle(True)
+                elif not prevCtrl.isManualBind() and self.__curCtrl.isManualBind():
                     if isObserverMode:
                         player.positionControl.bindToVehicle(False, -1)
                     else:
@@ -851,6 +855,15 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         if player is not None:
             player.showVehicleError('cantSwitchEngineDestroyed')
         return
+
+    def isControlModeChangeAllowed(self):
+        if not BigWorld.player().observerSeesAll():
+            return True
+        if BigWorld.time() - self.__lastSwitchTime < _CONTROL_MODE_SWITCH_COOLDOWN:
+            LOG_WARNING('Control mode switch is on cooldown')
+            return False
+        self.__lastSwitchTime = BigWorld.time()
+        return True
 
 
 class _Targeting(object):

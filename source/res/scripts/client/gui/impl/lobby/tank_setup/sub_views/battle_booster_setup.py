@@ -7,11 +7,14 @@ from gui.impl.lobby.tank_setup.sub_views.base_equipment_setup import BaseEquipme
 class BattleBoosterSetupSubView(BaseEquipmentSetupSubView):
     __slots__ = ()
 
-    def updateSlots(self, slotID, fullUpdate=True):
+    def updateSlots(self, slotID, fullUpdate=True, updateData=True):
         item = self._interactor.getCurrentLayout()[slotID]
         if item is not None:
             self._setTab(BattleBoosterTabs.CREW if item.isCrewBooster() else BattleBoosterTabs.OPT_DEVICE)
-        super(BattleBoosterSetupSubView, self).updateSlots(slotID, fullUpdate)
+        if item is not None and item not in self._interactor.getInstalledLayout() and (item.isHidden or not item.isInInventory):
+            self._interactor.changeSlotItem(slotID, None)
+            self._interactor.getAutoRenewal().setLocalValue(False)
+        super(BattleBoosterSetupSubView, self).updateSlots(slotID, fullUpdate, updateData)
         return
 
     def revertItem(self, slotID):

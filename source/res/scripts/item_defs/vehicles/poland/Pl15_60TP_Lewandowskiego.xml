@@ -24,6 +24,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.03	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	11.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -1942,8 +1948,8 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <rayStart>	-0.860476 0.427228 1.45877	</rayStart>
-          <rayEnd>	-0.767445 0.358569 1.42039	</rayEnd>
+          <rayStart>	-0.817393 0.42318 1.44065	</rayStart>
+          <rayEnd>	-0.786568 0.394501 1.42787	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.296	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -1953,8 +1959,8 @@
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
           <isMirrored>	true	</isMirrored>
-          <rayStart>	0.823274 0.399772 1.44342	</rayStart>
-          <rayEnd>	0.804648 0.386025 1.43574	</rayEnd>
+          <rayStart>	0.81844 0.421513 1.43497	</rayStart>
+          <rayEnd>	0.790419 0.395443 1.42336	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.296	</size>
           <hideIfDamaged>	false	</hideIfDamaged>

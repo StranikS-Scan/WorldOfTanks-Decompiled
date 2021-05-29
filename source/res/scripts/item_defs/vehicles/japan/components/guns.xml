@@ -2181,7 +2181,7 @@
       <maxRegenHealth>	115	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.40	</shotDispersionRadius>
+      <shotDispersionRadius>	0.38	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
         <afterShot>	4.0	</afterShot>
@@ -2316,6 +2316,13 @@
           <maxDistance>	720	</maxDistance>
           <piercingPower>	192 192	</piercingPower>
         </_150mm_Common_Type_0_HE_Kai>
+        <_150mm_Common_Type_91_AP>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	252 227	</piercingPower>
+        </_150mm_Common_Type_91_AP>
       </shots>
     </_150mm_45_41st_Year_Type>
     <_90mm_Gun_Type61_IGR>

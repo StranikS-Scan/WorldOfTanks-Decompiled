@@ -6,7 +6,10 @@ from constants import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES
 from items import vehicles
 from soft_exception import SoftException
 from debug_utils import LOG_WARNING, LOG_DEBUG_DEV
-CHECK_POINTS_LIMIT = True
+CHECK_POINTS_LIMIT = False
+TEAM_SIZE_REGULAR = 15
+TEAM_SIZE_RANKED = 10
+TEAM_SIZE_EPIC_BATTLE = 30
 
 def _makePointsPerLevel(progression):
     result = copy(progression)
@@ -16,8 +19,7 @@ def _makePointsPerLevel(progression):
     return result
 
 
-def validatePoints(season, bonusTypeName='regular'):
-    TEAM_SIZE_REGULAR = 15
+def validatePoints(season, bonusTypeName='regular', teamSize=TEAM_SIZE_REGULAR):
     capBonuses = season['capBonuses']
     bonusType = ARENA_BONUS_TYPE_NAMES.get(bonusTypeName.upper())
     points = season['points'][bonusType]
@@ -27,8 +29,8 @@ def validatePoints(season, bonusTypeName='regular'):
     losePoints = points['lose']
 
     def checkPointsList(pointsList, pointsLimit, capBonusPoints, path):
-        if len(pointsList) != TEAM_SIZE_REGULAR:
-            raise SoftException('BattlePass len(season/points/{}) {} != {}'.format(path, len(pointsList), TEAM_SIZE_REGULAR))
+        if len(pointsList) != teamSize:
+            raise SoftException('BattlePass len(season/points/{}) {} != {}'.format(path, len(pointsList), teamSize))
         if max(pointsList) + capBonusPoints > pointsLimit:
             msg = 'BattlePass season/points/{} max valid points + capBonus={} is {}'.format(path, maxCapBonus, pointsLimit)
             if CHECK_POINTS_LIMIT:
@@ -51,11 +53,16 @@ def validatePoints(season, bonusTypeName='regular'):
             checkPointsList(losePoints, pointsLimit, capBonusAtLevel, '{}/{}/lose'.format(bonusTypeName, str(vehCD)))
 
 
-def calculatePointsSettingsRegular(storage):
+def calculatePointsSettings(storage):
     vehTypeCompDescr, results = storage['tempResults'].items()[0]
     rank = storage['avatarResults'].get('fareTeamXPPosition', 0)
     isWinner = 'winnerTeam' in results and 'team' in results and results['team'] == results['winnerTeam']
     return (vehTypeCompDescr, isWinner, rank)
+
+
+def calculatePointsSettingsEpicBattle(storage):
+    vehTypeCompDescr, isWinner, rank = calculatePointsSettings(storage)
+    return (0, isWinner, rank)
 
 
 def calculatePointsSettingsBattleRoyale(storage):
@@ -102,11 +109,19 @@ def validatePointsBattleRoyale(bonusType, placesCount, season):
 
 
 def validatePointsRanked(season):
-    validatePoints(season, bonusTypeName='ranked')
+    validatePoints(season, bonusTypeName='ranked', teamSize=TEAM_SIZE_RANKED)
+
+
+def validatePointsEpicBattle(season):
+    validatePoints(season, bonusTypeName='EPIC_BATTLE', teamSize=TEAM_SIZE_EPIC_BATTLE)
+
+
+def validatePointsMapBox(season):
+    validatePoints(season, bonusTypeName='mapbox')
 
 
 BattlePassByGameMode = {ARENA_BONUS_TYPE.REGULAR: {'validatePoints': validatePoints,
-                            'calculatePointsSettings': calculatePointsSettingsRegular,
+                            'calculatePointsSettings': calculatePointsSettings,
                             'maxRanks': 15},
  ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: {'validatePoints': partial(validatePointsBattleRoyale, ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, 20),
                                        'calculatePointsSettings': calculatePointsSettingsBattleRoyale,
@@ -115,5 +130,11 @@ BattlePassByGameMode = {ARENA_BONUS_TYPE.REGULAR: {'validatePoints': validatePoi
                                         'calculatePointsSettings': calculatePointsSettingsBattleRoyale,
                                         'maxRanks': 10},
  ARENA_BONUS_TYPE.RANKED: {'validatePoints': validatePointsRanked,
-                           'calculatePointsSettings': calculatePointsSettingsRegular,
+                           'calculatePointsSettings': calculatePointsSettings,
+                           'maxRanks': 15},
+ ARENA_BONUS_TYPE.EPIC_BATTLE: {'validatePoints': validatePointsEpicBattle,
+                                'calculatePointsSettings': calculatePointsSettingsEpicBattle,
+                                'maxRanks': 15},
+ ARENA_BONUS_TYPE.MAPBOX: {'validatePoints': validatePointsMapBox,
+                           'calculatePointsSettings': calculatePointsSettings,
                            'maxRanks': 15}}

@@ -6,7 +6,7 @@ from account_helpers.settings_core.settings_constants import BattlePassStorageKe
 from battle_pass_common import BattlePassState
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.BattlePassEntryPointMeta import BattlePassEntryPointMeta
-from gui.battle_pass.battle_pass_helpers import getSeasonHistory, getLevelFromStats, getNotChosen3DStylesCount
+from gui.battle_pass.battle_pass_helpers import getSeasonHistory, getLevelFromStats, getNotChosen3DStylesCount, getSupportedCurrentArenaBonusType
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_entry_point_view_model import BattlePassEntryPointViewModel, AnimationState, BPState
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_3d_style_not_chosen_tooltip import BattlePass3dStyleNotChosenTooltip
@@ -14,6 +14,9 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view impo
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
 from gui.impl.pub import ViewImpl
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.formatters.invites import getPreQueueName
 from gui.server_events.events_dispatcher import showMissionsBattlePassCommonProgression, showBattlePass3dStyleChoiceWindow
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
@@ -73,7 +76,7 @@ class BattlePassEntryPointComponent(BattlePassEntryPointMeta):
         return self.__view
 
 
-class BaseBattlePassEntryPointView(object):
+class BaseBattlePassEntryPointView(IGlobalListener):
     _battlePassController = dependency.descriptor(IBattlePassController)
     __settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -82,6 +85,9 @@ class BaseBattlePassEntryPointView(object):
         self._widgetState = BPState.DISABLED
         self._widgetChapter = -1
         self._widgetLevel = -1
+
+    def onPrbEntitySwitched(self):
+        self._updateData()
 
     def _start(self):
         self._updateWidgetValues()
@@ -112,6 +118,7 @@ class BaseBattlePassEntryPointView(object):
         self._battlePassController.onSeasonStateChange += self._updateData
         self._battlePassController.onBattlePassSettingsChange += self._updateData
         g_eventBus.addListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
+        self.startGlobalListening()
 
     def _removeListeners(self):
         self._battlePassController.onPointsUpdated -= self._updateData
@@ -119,6 +126,7 @@ class BaseBattlePassEntryPointView(object):
         self._battlePassController.onSeasonStateChange -= self._updateData
         self._battlePassController.onBattlePassSettingsChange -= self._updateData
         g_eventBus.removeListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
+        self.stopGlobalListening()
 
     def _isBought(self):
         if self._battlePassController.isOffSeasonEnable():
@@ -128,14 +136,14 @@ class BaseBattlePassEntryPointView(object):
         return self._battlePassController.isBought(chapter=self._widgetChapter)
 
     def _getTooltip(self):
-        if self._battlePassController.isPaused():
+        if self._isBattlePassPaused():
             tooltip = 0
         elif self._battlePassController.isOffSeasonEnable():
             tooltip = R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView()
-        elif not self._is3DStyleChosen():
-            tooltip = R.views.lobby.battle_pass.tooltips.BattlePass3dStyleNotChosenTooltip()
         elif self._isCompleted():
             tooltip = R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView()
+        elif not self._is3DStyleChosen():
+            tooltip = R.views.lobby.battle_pass.tooltips.BattlePass3dStyleNotChosenTooltip()
         else:
             tooltip = R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView()
         return tooltip
@@ -168,6 +176,16 @@ class BaseBattlePassEntryPointView(object):
         self._widgetLevel = currentLevel
         self._widgetChapter = currentChapter
         return
+
+    def _getCurrentArenaBonusType(self):
+        return getSupportedCurrentArenaBonusType(self._getQueueType())
+
+    def _isBattlePassPaused(self):
+        return self._battlePassController.isPaused() or not self._battlePassController.isGameModeEnabled(self._getCurrentArenaBonusType())
+
+    def _getQueueType(self):
+        dispatcher = g_prbLoader.getDispatcher()
+        return dispatcher.getEntity().getQueueType() if dispatcher else None
 
     def __onAwardViewClose(self, _):
         currentState = self._battlePassController.getState()
@@ -253,7 +271,7 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
         currentLevel = min(self._widgetLevel + 1, self._battlePassController.getMaxLevel())
         notChosenRewardCount = 0
         is3DStyleChosen = False
-        if self._battlePassController.isPaused():
+        if self._isBattlePassPaused():
             state = BPState.DISABLED
         elif self._battlePassController.isOffSeasonEnable():
             state = BPState.SEASON_WAITING
@@ -281,6 +299,8 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
             model.setBattlePassState(state)
             model.setNotChosenRewardCount(notChosenRewardCount)
             model.setIs3DStyleChosen(is3DStyleChosen)
+            if not self._battlePassController.isGameModeEnabled(self._getCurrentArenaBonusType()):
+                model.setBattleType(getPreQueueName(self._getQueueType(), True))
             model.setIsProgressionCompleted(self._isCompleted())
             model.setHasBattlePass(hasBattlePass)
             animState = AnimationState.NORMAL

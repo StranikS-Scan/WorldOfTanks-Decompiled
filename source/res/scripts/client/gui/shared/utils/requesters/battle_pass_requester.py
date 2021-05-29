@@ -18,9 +18,6 @@ class BattlePassRequester(AbstractSyncDataRequester):
     def getState(self):
         return self.getCacheValue('state', 0)
 
-    def getBoughtLevels(self):
-        return self.getCacheValue('boughtLevels', 0)
-
     def getPointsForVehicle(self, vehicleID, default=0):
         return self.getCacheValue('vehiclePoints', {}).get(vehicleID, default)
 

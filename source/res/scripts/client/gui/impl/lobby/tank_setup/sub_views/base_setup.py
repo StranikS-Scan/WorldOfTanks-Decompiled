@@ -36,7 +36,7 @@ class BaseSetupSubView(BaseSubModelView):
             self._setTab(self._tabsController.getDefaultTab())
         if self._filter is not None:
             self._filter.initFilters(self._viewModel.filter)
-        self.updateSlots(currentSlotID)
+        self.updateSlots(currentSlotID, updateData=False)
         return
 
     def initialize(self, *args, **kwargs):
@@ -56,9 +56,9 @@ class BaseSetupSubView(BaseSubModelView):
                 self._updateSlots(fullUpdate)
             return
 
-    def updateSlots(self, slotID, fullUpdate=True):
+    def updateSlots(self, slotID, fullUpdate=True, updateData=True):
         self._curSlotID = slotID
-        self._updateSlots(fullUpdate)
+        self._updateSlots(fullUpdate, updateData)
 
     @async
     def canQuit(self):
@@ -96,7 +96,7 @@ class BaseSetupSubView(BaseSubModelView):
         tabName = args.get('name')
         if tabName and tabName != self._viewModel.tabs.getSelectedTabName():
             self._setTab(tabName)
-            self._updateSlots(fullUpdate=True)
+            self._updateSlots(updateData=False)
             playSectionSelectSound()
 
     def _setTab(self, tabName):
@@ -107,12 +107,13 @@ class BaseSetupSubView(BaseSubModelView):
             self._currentTabName = tabName
         return
 
-    def _updateSlots(self, fullUpdate=True):
+    def _updateSlots(self, fullUpdate=True, updateData=True):
         if self._provider is None:
             return
         else:
-            if fullUpdate:
+            if updateData:
                 self._provider.updateItems()
+            if fullUpdate:
                 self._provider.fillArray(self._viewModel.getSlots(), self._getSectionContext())
                 self._updateItemByFilter()
             else:

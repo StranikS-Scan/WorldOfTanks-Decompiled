@@ -149,6 +149,5 @@ def sniperCameraTransition(transitionTime, currentGunIndex):
      'currentGunIndex': currentGunIndex}), scope=_SCOPE)
 
 
-def toggleWeekendBrawlAbilityOverlay():
-    if isVehicleAlive():
-        g_eventBus.handleEvent(GameEvent(GameEvent.ABILITY_CHOICE_OVERLAY), scope=_SCOPE)
+def showCommanderCamHint(show):
+    g_eventBus.handleEvent(GameEvent(GameEvent.COMMANDER_HINT, {'show': show}), scope=_SCOPE)

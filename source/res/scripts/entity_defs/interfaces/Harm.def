@@ -18,6 +18,7 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	TUPLE	  <of>	FLOAT32	</of>
       </Arg>
+      <Arg>	FLOAT32	</Arg>
     </harm_receiveShot>
     <harm_receiveExplosion>
       <Arg>	ATTACKER_INFO	</Arg>
@@ -29,6 +30,7 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	FLOAT32	</Arg>
     </harm_receiveExplosion>
     <harm_receivePressure>
       <Arg>	BOOL	</Arg>
@@ -58,7 +60,7 @@
       <Arg>	ATTACK_RESULTS	</Arg>
     </harm_receiveAttackResults>
     <harm_onCombatEquipmentShootingStarted>
-      <Arg>	UINT8	</Arg>
+      <Arg>	UINT16	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	ARRAY	  <of>	SHOT_ID	</of>

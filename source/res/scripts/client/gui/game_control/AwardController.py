@@ -5,9 +5,10 @@ import types
 import weakref
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
-from itertools import ifilter
+from itertools import ifilter, chain
 import ArenaType
 import BigWorld
+import async
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
 from PlayerEvents import g_playerEvents
@@ -43,11 +44,13 @@ from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
 from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardWindow
+from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_dispatcher as quests_events, recruit_helper, awards
+from gui.server_events.bonuses import getServiceBonuses
 from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBankRewardWindow, showMissionsBattlePassCommonProgression
 from gui.server_events.events_helpers import isDailyQuest, isACEmailConfirmationQuest
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
@@ -65,11 +68,12 @@ from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
 from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
+from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.events import g_messengerEvents
 from nations import NAMES
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController, IBattlePassController
+from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController, IBattlePassController, IMapboxController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.server_events import IEventsCache
@@ -176,7 +180,8 @@ class AwardController(IAwardController, IGlobalListener):
          DynamicBonusHandler(self),
          ProgressiveItemsRewardHandler(self),
          DedicationReward(self),
-         BadgesInvoiceHandler(self)]
+         BadgesInvoiceHandler(self),
+         MapboxProgressionRewardHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -1578,3 +1583,28 @@ class BadgesInvoiceHandler(ServiceChannelHandler):
     @staticmethod
     def _showWindow(badge):
         showBadgeInvoiceAwardWindow(badge)
+
+
+class MapboxProgressionRewardHandler(AwardHandler):
+    __notificationMgr = dependency.descriptor(INotificationWindowController)
+    __eventsCache = dependency.descriptor(IEventsCache)
+    __mapboxCtrl = dependency.descriptor(IMapboxController)
+
+    def init(self):
+        g_messengerEvents.serviceChannel.onClientMessageReceived += self.handle
+
+    def fini(self):
+        g_messengerEvents.serviceChannel.onClientMessageReceived -= self.handle
+
+    def _needToShowAward(self, args):
+        _, __, settings = args
+        return settings.messageType == SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD
+
+    @async.async
+    def _showAward(self, ctx):
+        _, message, __ = ctx
+        bonuses = chain.from_iterable([ getServiceBonuses(name, value) for name, value in message['savedData'].get('rewards', {}).iteritems() ])
+        window = MapBoxAwardsViewWindow(message['savedData']['battles'], bonuses)
+        self.__notificationMgr.append(WindowNotificationCommand(window))
+        self.__eventsCache.onEventsVisited()
+        yield async.await(self.__mapboxCtrl.forceUpdateProgressData())

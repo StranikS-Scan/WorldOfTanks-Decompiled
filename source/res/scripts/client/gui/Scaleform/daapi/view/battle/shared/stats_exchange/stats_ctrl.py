@@ -295,7 +295,13 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             qProgressCtrl.onHeaderProgressesUpdate += self.__onHeaderProgressesUpdate
             if qProgressCtrl.isInited():
                 self.__onFullConditionsUpdate()
-        self.__addDynamicCtrlListeners()
+        self.__isDogTagInBattleEnabled = self.lobbyContext.getServerSettings().isDogTagInBattleEnabled()
+        dogTagsCtrl = self.sessionProvider.dynamic.dogTags
+        if dogTagsCtrl is not None and self.__isDogTagInBattleEnabled:
+            dogTagsCtrl.onArenaVehicleVictimDogTagUpdated += self.invalidateVehicleStatus
+        battleFieldCtrl = self.sessionProvider.dynamic.battleField
+        if battleFieldCtrl is not None:
+            battleFieldCtrl.onSpottedStatusChanged += self.updateVehiclesStats
         if self._battleCtx is not None:
             self.__setPersonalStatus()
         return
@@ -312,7 +318,12 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             qProgressCtrl.onFullConditionsUpdate -= self.__onFullConditionsUpdate
             qProgressCtrl.onQuestProgressInited -= self.__onFullConditionsUpdate
             qProgressCtrl.onHeaderProgressesUpdate -= self.__onHeaderProgressesUpdate
-        self.__removeDynamicCtrlListeners()
+        dogTagsCtrl = self.sessionProvider.dynamic.dogTags
+        if dogTagsCtrl is not None and self.__isDogTagInBattleEnabled:
+            dogTagsCtrl.onArenaVehicleVictimDogTagUpdated -= self.invalidateVehicleStatus
+        battleFieldCtrl = self.sessionProvider.dynamic.battleField
+        if battleFieldCtrl is not None:
+            battleFieldCtrl.onSpottedStatusChanged -= self.updateVehiclesStats
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.sessionProvider.removeArenaCtrl(self)
         self.__clearTeamOverrides()
@@ -324,25 +335,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
 
     def _createExchangeCollector(self):
         raise NotImplementedError
-
-    def __addDynamicCtrlListeners(self):
-        self.__isDogTagInBattleEnabled = self.lobbyContext.getServerSettings().isDogTagInBattleEnabled()
-        dogTagsCtrl = self.sessionProvider.dynamic.dogTags
-        if dogTagsCtrl is not None and self.__isDogTagInBattleEnabled:
-            dogTagsCtrl.onArenaVehicleVictimDogTagUpdated += self.invalidateVehicleStatus
-        battleFieldCtrl = self.sessionProvider.dynamic.battleField
-        if battleFieldCtrl is not None:
-            battleFieldCtrl.onSpottedStatusChanged += self.updateVehiclesStats
-        return
-
-    def __removeDynamicCtrlListeners(self):
-        dogTagsCtrl = self.sessionProvider.dynamic.dogTags
-        if dogTagsCtrl is not None and self.__isDogTagInBattleEnabled:
-            dogTagsCtrl.onArenaVehicleVictimDogTagUpdated -= self.invalidateVehicleStatus
-        battleFieldCtrl = self.sessionProvider.dynamic.battleField
-        if battleFieldCtrl is not None:
-            battleFieldCtrl.onSpottedStatusChanged -= self.updateVehiclesStats
-        return
 
     def __setPersonalStatus(self):
         self.__personalStatus = _makePersonalStatusFromSettingsStorage(self.settingsCore)

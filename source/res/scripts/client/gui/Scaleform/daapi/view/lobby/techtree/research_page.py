@@ -24,7 +24,7 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events
 from gui.shared.events import LoadViewEvent
-from gui.shared.formatters import text_styles, icons
+from gui.shared.formatters import text_styles, icons, getRoleText
 from gui.shared.formatters.time_formatters import getDueDateOrTimeStr, RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeBigIconPath
@@ -37,8 +37,7 @@ from helpers.blueprint_generator import g_blueprintGenerator
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
-from skeletons.gui.game_control import IBootcampController
-from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.game_control import IBootcampController, ITradeInController, IRankedBattlesController
 from skeletons.gui.shared import IItemsCache
 _logger = getLogger(__name__)
 _BENEFIT_ITEMS_LIMIT = 3
@@ -125,6 +124,7 @@ _BANNER_GETTERS = {States.RESTORE: _getRestoreBannerStr,
 class Research(ResearchMeta):
     __tradeIn = dependency.descriptor(ITradeInController)
     __bootcamp = dependency.descriptor(IBootcampController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, ctx=None, skipConfirm=False):
         super(Research, self).__init__(ResearchItemsData(dumpers.ResearchItemsObjDumper()))
@@ -328,6 +328,7 @@ class Research(ResearchMeta):
         tankHasNationGroup = (root.isInInventory or root.isRented) and root.hasNationGroup
         isNationChangeAvailable = root.isNationChangeAvailable
         isShownNationChangeTooltip = tankHasNationGroup and not isNationChangeAvailable
+        isRanked = self.__rankedController.isRankedPrbActive()
         result = {'tankTierStr': text_styles.grandTitle(tankTier),
          'tankNameStr': text_styles.grandTitle(root.userName),
          'tankTierStrSmall': text_styles.promoTitle(tankTier),
@@ -354,7 +355,8 @@ class Research(ResearchMeta):
          'changeNationBtnVisibility': tankHasNationGroup,
          'isTankNationChangeAvailable': isNationChangeAvailable,
          'nationChangeIsNew': not AccountSettings.getSettings(NATION_CHANGE_VIEWED),
-         'nationChangeTooltip': self.__getNationChangeTooltip(root) if isShownNationChangeTooltip else ''}
+         'nationChangeTooltip': self.__getNationChangeTooltip(root) if isShownNationChangeTooltip else '',
+         'roleText': getRoleText(root.role, root.roleLabel) if isRanked else ''}
         return result
 
     def __getIsInteractive(self, root, rootNode):

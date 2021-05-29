@@ -12,9 +12,9 @@ class FrontlineSetupSubView(BaseEquipmentSetupSubView):
     __progressionController = dependency.descriptor(IEventProgressionController)
     __slots__ = ()
 
-    def updateSlots(self, slotID, fullUpdate=True):
+    def updateSlots(self, slotID, fullUpdate=True, updateData=True):
         self._viewModel.setIsLocked(self.__hasBattleAbilities())
-        super(FrontlineSetupSubView, self).updateSlots(slotID, fullUpdate)
+        super(FrontlineSetupSubView, self).updateSlots(slotID, fullUpdate, updateData)
 
     def revertItem(self, slotID):
         self._interactor.revertSlot(slotID)

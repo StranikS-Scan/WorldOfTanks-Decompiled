@@ -7,6 +7,7 @@ from itertools import chain
 from constants import QUEUE_TYPE
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSenorityEntryPointIsActive
 from gui.Scaleform.daapi.view.meta.EventEntryPointsContainerMeta import EventEntryPointsContainerMeta
+from gui.impl.lobby.mapbox.mapbox_entry_point_view import isMapboxEntryPointAvailable
 from gui.impl.lobby.ranked.ranked_entry_point import isRankedEntryPointAvailable
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
@@ -16,7 +17,7 @@ from gui.game_control.craftmachine_controller import getCraftMachineEntryPointIs
 from helpers import dependency
 from helpers.time_utils import getServerUTCTime, ONE_DAY
 from helpers.time_utils import getTimestampByStrDate
-from skeletons.gui.game_control import IEventsNotificationsController, IBootcampController
+from skeletons.gui.game_control import IEventsNotificationsController, IBootcampController, IMapboxController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _HANGAR_ENTRY_POINTS = 'hangarEntryPoints'
@@ -25,7 +26,8 @@ _COUNT_VISIBLE_ENTRY_POINTS = 2
 _ADDITIONAL_SWFS_MAP = {HANGAR_ALIASES.SENIORITY_AWARDS_ENTRY_POINT_2020: 'seniorityAwardsComponents.swf'}
 _ENTRY_POINT_ENABLED_VALIDATOR = {HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT: getCraftMachineEntryPointIsActive,
  HANGAR_ALIASES.SENIORITY_AWARDS_ENTRY_POINT_2020: getSenorityEntryPointIsActive,
- RANKEDBATTLES_ALIASES.ENTRY_POINT: isRankedEntryPointAvailable}
+ RANKEDBATTLES_ALIASES.ENTRY_POINT: isRankedEntryPointAvailable,
+ HANGAR_ALIASES.MAPBOX_ENTRY_POINT: isMapboxEntryPointAvailable}
 _logger = logging.getLogger(__name__)
 
 class _EntryPointData(object):
@@ -95,6 +97,7 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __bootcamp = dependency.descriptor(IBootcampController)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __mapboxCtrl = dependency.descriptor(IMapboxController)
     __slots__ = ['__entries', '__serverSettings']
 
     def __init__(self):
@@ -109,6 +112,7 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
     def _dispose(self):
         self.as_updateEntriesS([])
         self.stopGlobalListening()
+        self.__mapboxCtrl.onPrimeTimeStatusUpdated -= self.__onPrimeTimeStatusUpdated
         self.__notificationsCtrl.onEventNotificationsChanged -= self.__onEventNotification
         self.clearNotification()
         self.__lobbyContext.onServerSettingsChanged -= self.__onServerSettingsChanged
@@ -124,10 +128,14 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
         self.__onServerSettingsChanged(self.__lobbyContext.getServerSettings())
         self.__lobbyContext.onServerSettingsChanged += self.__onServerSettingsChanged
         self.__itemsCache.onSyncCompleted += self.__onCacheResync
+        self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.__onPrimeTimeStatusUpdated
         self.startGlobalListening()
 
     def _isRandomBattleSelected(self):
         return self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.RANDOMS) if self.prbDispatcher is not None else False
+
+    def __onPrimeTimeStatusUpdated(self, *_):
+        self.__updateEntries()
 
     def __onServerSettingsChanged(self, serverSettings):
         if self.__serverSettings is not None:

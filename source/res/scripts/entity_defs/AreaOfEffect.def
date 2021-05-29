@@ -1,0 +1,33 @@
+<AreaOfEffect.def>
+  <Properties>
+    <arenaID>
+      <Type>	INT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </arenaID>
+    <avatarID>
+      <Type>	INT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </avatarID>
+    <equipmentID>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentID>
+    <launchTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </launchTime>
+    <strikeTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </strikeTime>
+  </Properties>
+  <ClientMethods>
+    <playEffect>
+      <Arg>	STRING	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </playEffect>
+  </ClientMethods>
+</AreaOfEffect.def>

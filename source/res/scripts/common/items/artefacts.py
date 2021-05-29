@@ -36,6 +36,9 @@ else:
             raise SoftException('Unexpected call "i18n.makeString"')
 
 
+if IS_CELLAPP:
+    from actions import vehicle as vehicleActions
+
 class CommonXmlSectionReader(object):
 
     def __init__(self, xmlTagKeyMap, dictInstance):
@@ -1215,6 +1218,21 @@ class AdditiveBattleBooster(DynamicEquipment):
         factors[attribute] += value
 
 
+class InvisibilityBattleBooster(DynamicEquipment):
+    __slots__ = ()
+
+    def _readLevelConfig(self, xmlCtx, section):
+        filter = _OptionalDeviceFilter(xmlCtx, section['deviceFilter'])
+        attribute = _xml.readNonEmptyString(xmlCtx, section, 'attribute')
+        factors = _xml.readTupleOfPositiveFloats(xmlCtx, section, 'factors', count=2)
+        return (filter, (attribute, factors))
+
+    def _updateVehicleAttrFactorsImpl(self, factors, levelParams):
+        attribute, factor = levelParams
+        factors[attribute][0] += factor[0]
+        factors[attribute][1] *= factor[1]
+
+
 class FactorSkillBattleBooster(Equipment):
     __slots__ = ('skillName', 'efficiencyFactor')
 
@@ -1547,6 +1565,63 @@ class EpicEngineering(PassiveEngineering):
     pass
 
 
+class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsumableConfigReader, ArcadeEquipmentConfigReader):
+    __slots__ = ('delay', 'duration', 'lifetime', 'shotsNumber', 'areaRadius', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'areaShow', 'noOwner', 'attackerType', 'shotSoundPreDelay', 'wwsoundShot', 'wwsoundEquipmentUsed', 'shotEffect', 'effects', 'actionsConfig', 'explodeDestructible') + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + SharedCooldownConsumableConfigReader._SHARED_COOLDOWN_CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS
+
+    def _readConfig(self, xmlCtx, section):
+        super(AreaOfEffectEquipment, self)._readConfig(xmlCtx, section)
+        self.readTooltipInformation(xmlCtx, section)
+        self.readSharedCooldownConsumableConfig(xmlCtx, section)
+        self.readArcadeInformation(xmlCtx, section)
+        self.delay = section.readFloat('delay')
+        self.duration = section.readFloat('duration')
+        self.lifetime = section.readFloat('lifetime')
+        self.shotsNumber = section.readInt('shotsNumber')
+        self.areaRadius = section.readFloat('areaRadius')
+        self.areaLength = section.readFloat('areaLength', self.areaRadius * 2)
+        self.areaWidth = section.readFloat('areaWidth', self.areaRadius * 2)
+        self.areaVisual = section.readString('areaVisual') or None
+        self.areaColor = section.readInt('areaColor') or None
+        self.areaShow = section.readString('areaShow').lower() or None
+        self.noOwner = section.readBool('noOwner')
+        self.attackerType = section.readString('attackerType').upper()
+        self.shotSoundPreDelay = section.readInt('shotSoundPreDelay')
+        self.wwsoundShot = section.readString('wwsoundShot')
+        self.wwsoundEquipmentUsed = section.readString('wwsoundEquipmentUsed')
+        self.shotEffect = section.readString('shotEffect')
+        self.effects = {name:self._readEffectConfig(effect) for name, effect in section['effects'].items()}
+        if IS_CELLAPP:
+            self.actionsConfig = [ self._readActionConfig(conf) for conf in section['actions'].values() ]
+            self.explodeDestructible = section.readBool('explodeDestructible')
+        else:
+            self.actionsConfig = None
+            self.explodeDestructible = None
+        return
+
+    def _readEffectConfig(self, section):
+        return None if not section else {'shotEffects': section.readString('shotEffects').split(),
+         'sequences': section.readString('sequences').split(),
+         'groundRaycast': section.readBool('groundRaycast'),
+         'offsetDeviation': section.readFloat('offsetDeviation'),
+         'repeatCount': section.readInt('repeatCount', 1),
+         'repeatDelay': section.readFloat('repeatDelay'),
+         'areaColor': _xml.readIntOrNone(None, section, 'areaColor')}
+
+    def _readActionConfig(self, section):
+        if not section:
+            return None
+        else:
+            actionType = section.readString('type')
+            actionClass = getattr(vehicleActions, actionType)
+            return {'type': actionType,
+             'applyTo': section.readString('applyTo'),
+             'args': actionClass.parseXML(section['args'])}
+
+
+class AttackBomberEquipment(AreaOfEffectEquipment):
+    pass
+
+
 UpgradeInfo = NamedTuple('UpgradeInfo', [('upgradedCompDescr', int)])
 
 class UpgradableItem(Artefact):
@@ -1600,6 +1675,14 @@ class UpgradableRotationMechanisms(RotationMechanisms, UpgradableItem):
 
 
 class UpgradedRotationMechanisms(RotationMechanisms, UpgradedItem):
+    pass
+
+
+class UpgradableLowNoiseTracks(LowNoiseTracks, UpgradableItem):
+    pass
+
+
+class UpgradedLowNoiseTracks(LowNoiseTracks, UpgradedItem):
     pass
 
 
@@ -1910,71 +1993,6 @@ class SpawnKamikaze(ConsumableSpawnKamikaze):
     pass
 
 
-class WeekendBrawlInspire(Equipment, TooltipConfigReader, InspireConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader):
-    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + InspireConfigReader._INSPIRE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + CooldownConsumableConfigReader._CONSUMABLE_SLOTS
-
-    def __init__(self):
-        super(WeekendBrawlInspire, self).__init__()
-        self.initTooltipInformation()
-        self.initCountableConsumableSlots()
-        self.initConsumableWithDeployTimeSlots()
-        self.initInspireSlots()
-
-    def _readConfig(self, xmlCtx, scriptSection):
-        self.readTooltipInformation(xmlCtx, scriptSection)
-        self.readCountableConsumableConfig(xmlCtx, scriptSection)
-        self.readInspireConfig(xmlCtx, scriptSection)
-
-
-class WeekendBrawlSmoke(Equipment, TooltipConfigReader, SmokeConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader):
-    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + SmokeConfigReader._SMOKE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + CooldownConsumableConfigReader._CONSUMABLE_SLOTS
-
-    def __init__(self):
-        super(WeekendBrawlSmoke, self).__init__()
-        self.initTooltipInformation()
-        self.initCountableConsumableSlots()
-        self.initConsumableWithDeployTimeSlots()
-        self.initSmokeSlots()
-
-    def _readConfig(self, xmlCtx, scriptSection):
-        self.readTooltipInformation(xmlCtx, scriptSection)
-        self.readCountableConsumableConfig(xmlCtx, scriptSection)
-        self.readSmokeConfig(xmlCtx, scriptSection)
-        self.readConsumableWithDeployTimeConfig(xmlCtx, scriptSection)
-
-
-class WeekendBrawlRecon(Equipment, TooltipConfigReader, ReconConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader):
-
-    def __init__(self):
-        super(WeekendBrawlRecon, self).__init__()
-        self.initTooltipInformation()
-        self.initCountableConsumableSlots()
-        self.initConsumableWithDeployTimeSlots()
-        self.initReconSlots()
-
-    def _readConfig(self, xmlCtx, scriptSection):
-        self.readTooltipInformation(xmlCtx, scriptSection)
-        self.readCountableConsumableConfig(xmlCtx, scriptSection)
-        self.readConsumableWithDeployTimeConfig(xmlCtx, scriptSection)
-        self.readReconConfig(xmlCtx, scriptSection)
-
-
-class WeekendBrawlBomber(Equipment, TooltipConfigReader, BomberConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader):
-
-    def __init__(self):
-        super(WeekendBrawlBomber, self).__init__()
-        self.initTooltipInformation()
-        self.initCountableConsumableSlots()
-        self.initConsumableWithDeployTimeSlots()
-        self.initBomberSlots()
-
-    def _readConfig(self, xmlCtx, scriptSection):
-        self.readTooltipInformation(xmlCtx, scriptSection)
-        self.readCountableConsumableConfig(xmlCtx, scriptSection)
-        self.readConsumableWithDeployTimeConfig(xmlCtx, scriptSection)
-        self.readBomberConfig(xmlCtx, scriptSection)
-
-
 def _readKpi(xmlCtx, section):
     from gui.shared.gui_items import KPI
     kpi = []
@@ -2046,3 +2064,13 @@ class OPT_DEV_TYPE_TAG(object):
     def checkTags(tags):
         intersectionTags = tags & OPT_DEV_TYPE_TAG.ALL
         return len(intersectionTags) < 2
+
+
+class AoeEffects(object):
+    START = 'start'
+    ACTION = 'action'
+
+
+class AreaShow(object):
+    BEFORE = 'before'
+    ALWAYS = 'always'

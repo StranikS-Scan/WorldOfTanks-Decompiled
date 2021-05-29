@@ -22,18 +22,26 @@ def getRewardsForQuests(message, questIDs):
     resultRewards = {}
     for questID, rewards in detailRewards.items():
         if questID in questIDs:
-            _mergeRewards(resultRewards, rewards)
+            mergeRewards(resultRewards, rewards)
 
     return resultRewards
 
 
-def _mergeRewards(resultRewards, rewards):
+def mergeRewards(resultRewards, rewards):
     for bonusName, bonusValue in rewards.items():
         if bonusName in BONUS_MERGERS:
             BONUS_MERGERS[bonusName](resultRewards, bonusName, bonusValue, False, 1, None)
+        if bonusName == 'selectableCrewbook':
+            _mergeSelectableCrewbook(resultRewards, bonusName, bonusValue)
         _logger.warning('BONUS_MERGERS has not bonus %s', bonusName)
 
     return
+
+
+def _mergeSelectableCrewbook(resultRewards, bonusName, bonusValue):
+    selectablesTotal = resultRewards.setdefault(bonusName, {})
+    for item in bonusValue:
+        selectablesTotal[item['itemName']] = item['count']
 
 
 def getCustomizationItemData(itemId, customizationName):

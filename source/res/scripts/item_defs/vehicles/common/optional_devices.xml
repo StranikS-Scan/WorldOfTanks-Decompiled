@@ -236,6 +236,130 @@
       </mul>
     </kpi>
   </deluxEnhancedAimDrives>
+  <deluxeTurbocharger>
+    <id>	111	</id>
+    <userString>	#artefacts:deluxeTurbocharger/name	</userString>
+    <longDescriptionSpecial>	#artefacts:deluxeTurbocharger/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/turbocharger.png 0 0	</icon>
+    <price>	5000	  <crystal></crystal>
+    </price>
+    <tags>	turbocharger deluxe	</tags>
+    <notInShop>	true	</notInShop>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	2	</minLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <incompatibleTags>
+      <installed>	turbocharger	</installed>
+    </incompatibleTags>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/enginePowerFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.125 1.125	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	6 6	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	4 4	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.125	</value>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	6	</value>
+      </add>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	4	</value>
+      </add>
+    </kpi>
+  </deluxeTurbocharger>
+  <deluxeExtraHealthReserve>
+    <id>	112	</id>
+    <userString>	#artefacts:deluxeExtraHealthReserve/name	</userString>
+    <longDescriptionSpecial>	#artefacts:deluxeExtraHealthReserve/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/extraHealthReserve.png 0 0	</icon>
+    <price>	5000	  <crystal></crystal>
+    </price>
+    <tags>	healthReserve deluxe	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	healthReserve	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	extraHealthReserve_class1_user extraHealthReserve_class2_user extraHealthReserve_class3_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	ExtraHealthReserve	  <chassisMaxLoadFactor>	1.1 1.1	</chassisMaxLoadFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/healthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.125 1.125	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.75 1.75	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/vehicleByChassisDamageFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.25 0.25	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.3 1.3	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	1.125	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.75	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.3	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisLoad	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisFallDamage	</name>
+        <value>	0.25	</value>
+      </mul>
+    </kpi>
+  </deluxeExtraHealthReserve>
   <trophyBasicAimDrives>
     <id>	50	</id>
     <userString>	#artefacts:trophyBasicAimDrives/name	</userString>
@@ -940,6 +1064,90 @@
       </mul>
     </kpi>
   </trophyUpgradedImprovedSights>
+  <trophyBasicAdditionalInvisibilityDevice>
+    <id>	113	</id>
+    <userString>	#artefacts:trophyBasicAdditionalInvisibilityDevice/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicAdditionalInvisibilityDevice/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:trophyBasicAdditionalInvisibilityDevice/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/additionalInvisibilityDevice.png 0 0	</icon>
+    <groupName>	additInvisibilityDevice	</groupName>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	additInvisibilityDevice trophyBasic	</tags>
+    <incompatibleTags>
+      <installed>	additInvisibilityDevice	</installed>
+    </incompatibleTags>
+    <script>	UpgradableLowNoiseTracks	  <weight>	100	</weight>
+      <overridableFactors>
+        <invisibilityBonus>	0.06	</invisibilityBonus>
+      </overridableFactors>
+      <upgradeInfo>
+        <upgradedCompDescr>	29433	</upgradedCompDescr>
+        <price>	3000000	</price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <aggregateMul>
+        <name>	vehicleCamouflageGroup	</name>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.06	</value>
+          <vehicleTypes>	lightTank mediumTank	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.05	</value>
+          <vehicleTypes>	AT-SPG	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.03	</value>
+          <vehicleTypes>	heavyTank SPG	</vehicleTypes>
+        </mul>
+      </aggregateMul>
+    </kpi>
+  </trophyBasicAdditionalInvisibilityDevice>
+  <trophyUpgradedAdditionalInvisibilityDevice>
+    <id>	114	</id>
+    <userString>	#artefacts:trophyUpgradedAdditionalInvisibilityDevice/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicAdditionalInvisibilityDevice/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:trophyBasicAdditionalInvisibilityDevice/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/additionalInvisibilityDevice.png 0 0	</icon>
+    <groupName>	additInvisibilityDevice	</groupName>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	additInvisibilityDevice trophyUpgraded	</tags>
+    <incompatibleTags>
+      <installed>	additInvisibilityDevice	</installed>
+    </incompatibleTags>
+    <script>	UpgradedLowNoiseTracks	  <weight>	100	</weight>
+      <overridableFactors>
+        <invisibilityBonus>	0.09	</invisibilityBonus>
+      </overridableFactors>
+    </script>
+    <kpi>
+      <aggregateMul>
+        <name>	vehicleCamouflageGroup	</name>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.09	</value>
+          <vehicleTypes>	lightTank mediumTank	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.07	</value>
+          <vehicleTypes>	AT-SPG	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.05	</value>
+          <vehicleTypes>	heavyTank SPG	</vehicleTypes>
+        </mul>
+      </aggregateMul>
+    </kpi>
+  </trophyUpgradedAdditionalInvisibilityDevice>
   <improvedConfiguration_tier2>
     <id>	61	</id>
     <userString>	#artefacts:improvedConfiguration_tier2/name	</userString>

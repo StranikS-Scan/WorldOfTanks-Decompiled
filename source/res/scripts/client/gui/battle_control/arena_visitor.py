@@ -308,8 +308,8 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isBattleRoyale(self):
         return self._guiType == _GUI_TYPE.BATTLE_ROYALE
 
-    def isWeekendBrawlBattle(self):
-        return self._guiType == _GUI_TYPE.WEEKEND_BRAWL
+    def isMapbox(self):
+        return self._guiType == _GUI_TYPE.MAPBOX
 
     def hasLabel(self):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS

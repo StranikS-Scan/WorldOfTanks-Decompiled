@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_rewards_view.py
-import constants
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_STYLED_VEHICLES_POOL
@@ -11,8 +10,6 @@ from gui.Scaleform.daapi.view.meta.RankedBattlesRewardsRanksMeta import RankedBa
 from gui.Scaleform.daapi.view.meta.RankedBattlesRewardsYearMeta import RankedBattlesRewardsYearMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS as _RBC
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.ranked_battles.constants import YEAR_AWARDS_ORDER, STANDARD_POINTS_COUNT, FINAL_QUEST_PATTERN
 from gui.ranked_battles.ranked_builders import rewards_vos
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
@@ -21,7 +18,6 @@ from gui.ranked_battles.ranked_helpers.sound_manager import AmbientType
 from gui.shared.event_dispatcher import showStylePreview
 from gui.shared.utils.scheduled_notifications import AcyclicNotifier
 from helpers import dependency, time_utils
-from items import parseIntCompactDescr
 from items.vehicles import VehicleDescriptor, getVehicleType
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
@@ -217,11 +213,13 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
     def _populate(self):
         super(RankedBattlesRewardsLeaguesView, self)._populate()
         data = self.__getLeaguesData()
+        descr = None
         self.as_setRewardsS({'leagues': data,
-         'description': backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues.description())})
+         'description': descr})
+        return
 
     def __getLeaguesData(self):
-        leaguesRewardsData = self.__rankedController.getLeagueRewards('customizations')
+        leaguesRewardsData = self.__rankedController.getLeagueRewards()
         result = []
         formatter = getRankedAwardsFormatter()
         for data in leaguesRewardsData:
@@ -229,9 +227,7 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
             styleBonus = first(formatter.getPreformattedBonuses(data['awards']))
             if leagueID and styleBonus:
                 isCurrent = self.__rankedController.getWebSeasonProvider().seasonInfo.league == leagueID
-                styleCD = styleBonus.specialArgs[0]
-                _, _, styleID = parseIntCompactDescr(styleCD)
-                self.__styleDescriptions[styleCD] = backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues.description.dyn('league%s' % leagueID)())
+                styleID = leagueID
                 result.append(rewards_vos.getLeagueRewardVO(leagueID, styleID, styleBonus, isCurrent))
 
         return result
@@ -264,8 +260,6 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
                 AccountSettings.setSettings(RANKED_STYLED_VEHICLES_POOL, vehiclesPool)
         styleDescr = self.__styleDescriptions.get(styleCD, '')
         style = self.__itemsCache.items.getItemByCD(styleCD)
-        if constants.IS_CHINA:
-            styleDescr = style.shortDescription if style else ''
         showStylePreview(styledVehicleCD, style, styleDescr, self._backToLeaguesCallback)
         return
 

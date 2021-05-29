@@ -13,14 +13,20 @@ HitEffectMapping = namedtuple('HitEffectMapping', ('componentName', 'hitTester')
 
 class DamageFromShotDecoder(object):
     ShotPoint = namedtuple('ShotPoint', ('componentName', 'matrix', 'hitEffectCode', 'hitEffectGroup'))
-    __hitEffectCodeToEffectGroup = ('armorBasicRicochet', 'armorRicochet', 'armorResisted', 'armorResisted', 'armorHit', 'armorCriticalHit', 'armorCriticalHit')
+    _HIT_EFFECT_CODE_TO_EFFECT_GROUP = {VEHICLE_HIT_EFFECT.INTERMEDIATE_RICOCHET: 'armorBasicRicochet',
+     VEHICLE_HIT_EFFECT.FINAL_RICOCHET: 'armorRicochet',
+     VEHICLE_HIT_EFFECT.ARMOR_NOT_PIERCED: 'armorResisted',
+     VEHICLE_HIT_EFFECT.ARMOR_PIERCED_NO_DAMAGE: 'armorResisted',
+     VEHICLE_HIT_EFFECT.ARMOR_PIERCED: 'armorHit',
+     VEHICLE_HIT_EFFECT.CRITICAL_HIT: 'armorCriticalHit',
+     VEHICLE_HIT_EFFECT.ARMOR_PIERCED_DEVICE_DAMAGED: 'armorCriticalHit'}
 
     @staticmethod
     def hasDamaged(vehicleHitEffectCode):
         return vehicleHitEffectCode >= VEHICLE_HIT_EFFECT.ARMOR_PIERCED
 
-    @staticmethod
-    def decodeHitPoints(encodedPoints, collisionComponent, maxComponentIdx=TankPartIndexes.ALL[-1]):
+    @classmethod
+    def decodeHitPoints(cls, encodedPoints, collisionComponent, maxComponentIdx=TankPartIndexes.ALL[-1]):
         resultPoints = []
         for encodedPoint in encodedPoints:
             compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(encodedPoint, collisionComponent, maxComponentIdx)
@@ -59,7 +65,7 @@ class DamageFromShotDecoder(object):
             matrix = Matrix()
             matrix.setTranslate(startPoint + hitDir * minDist)
             matrix.preMultiply(rot)
-            effectGroup = DamageFromShotDecoder.__hitEffectCodeToEffectGroup[hitEffectCode]
+            effectGroup = cls._HIT_EFFECT_CODE_TO_EFFECT_GROUP[hitEffectCode]
             componentName = TankPartIndexes.getName(compIdx)
             if not componentName:
                 componentName = collisionComponent.getPartName(convertedCompIdx)

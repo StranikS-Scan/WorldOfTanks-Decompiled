@@ -3,7 +3,6 @@
 from collections import defaultdict
 import logging
 import BigWorld
-import Vehicle
 import Math
 from constants import VEHICLE_SETTING
 from aih_constants import CTRL_MODE_NAME, CTRL_MODES
@@ -158,8 +157,8 @@ class AvatarObserver(CallbackDelayer):
                     if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
                         self.vehicle.filter.enableStabilisedMatrix(True)
                     BigWorld.target.exclude = self.vehicle
-                    for v in BigWorld.entities.values():
-                        if isinstance(v, Vehicle.Vehicle) and v.appearance is not None:
+                    for v in BigWorld.player().vehicles:
+                        if v.appearance is not None:
                             v.appearance.highlighter.setVehicleOwnership()
                             self.guiSessionProvider.stopVehicleVisual(v.id, False)
                             self.guiSessionProvider.startVehicleVisual(v, True)
@@ -169,14 +168,17 @@ class AvatarObserver(CallbackDelayer):
     def updateObservedVehicleData(self):
         vehicle = self.getVehicleAttached()
         if vehicle is not None:
+            self.stopCallback(self.updateObservedVehicleData)
             extraData = self.observedVehicleData[self.__observedVehicleID]
             if self.gunRotator is not None:
                 turretYaw, gunPitch = vehicle.getAimParams()
                 self.gunRotator.forceGunParams(turretYaw, gunPitch, extraData.dispAngle)
             self.guiSessionProvider.updateObservedVehicleData(self.__observedVehicleID, extraData)
+        elif self.vehicle:
+            return self.delayCallback(0.0, self.updateObservedVehicleData)
         return
 
-    def vehicle_onEnterWorld(self, vehicle):
+    def vehicle_onAppearanceReady(self, vehicle):
         if vehicle.id != self.playerVehicleID:
             if self.isObserver() and vehicle.id == self.__observedVehicleID:
                 extraData = self.observedVehicleData[self.__observedVehicleID]
@@ -186,7 +188,7 @@ class AvatarObserver(CallbackDelayer):
         if self.isObserver():
             self.observedVehicleData[vehicleID].setReload(timeLeft, baseTime)
 
-    def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, stunned, isBoostApplicable):
+    def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, firstClipBaseTime, stunned, isBoostApplicable):
         pass
 
     def updateDualGunState(self, vehicleID, activeGun, gunStates, cooldownTimes):
@@ -277,14 +279,19 @@ class AvatarObserver(CallbackDelayer):
                     self.guiSessionProvider.stopVehicleVisual(vehicle.id, False)
                 else:
                     self.guiSessionProvider.startVehicleVisual(vehicle, True)
-            self.updateObservedVehicleData()
+            if self.observerSeesAll():
+                self.guiSessionProvider.shared.equipments.updateMapCase()
+            else:
+                self.updateObservedVehicleData()
             return
 
     def set_observerFPVControlMode(self, prev):
         if self.isObserver() is not None:
             eMode = CTRL_MODES[self.observerFPVControlMode]
             if self.isObserverFPV:
-                if eMode not in _OBSERVABLE_VIEWS and eMode != CTRL_MODE_NAME.MAP_CASE_ARCADE:
+                if eMode == CTRL_MODE_NAME.MAP_CASE_ARCADE:
+                    return
+                if eMode not in _OBSERVABLE_VIEWS:
                     _logger.debug("AvatarObserver.set_observerFPVControlMode() requested control mode '%r' is not supported, switching out of FPV", eMode)
                     self.cell.switchObserverFPV(False)
                 else:
@@ -294,15 +301,17 @@ class AvatarObserver(CallbackDelayer):
     def __switchToObservedControlMode(self):
         eMode = CTRL_MODES[self.observerFPVControlMode]
         _logger.debug('AvatarObserver.__switchToObservedControlMode(): %r, %r', self.observerFPVControlMode, eMode)
-        filteredValue = None
-        time = BigWorld.serverTime()
-        if eMode in _OBSERVABLE_VIEWS:
-            filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT, time)
-        if filteredValue is None or filteredValue == Math.Vector3(0, 0, 0):
-            _logger.debug('AvatarObserver.__switchToObservedControlMode(): no filtered value yet.Rescheduling switch... %r', filteredValue)
-            self.delayCallback(0.0, self.__switchToObservedControlMode)
+        if self.observerSeesAll() and self.inputHandler.ctrlModeName == eMode:
             return
         else:
+            filteredValue = None
+            time = BigWorld.serverTime()
+            if eMode in _OBSERVABLE_VIEWS:
+                filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT, time)
+            if filteredValue is None or filteredValue == Math.Vector3(0, 0, 0):
+                _logger.debug('AvatarObserver.__switchToObservedControlMode(): no filtered value yet.Rescheduling switch... %r', filteredValue)
+                self.delayCallback(0.0, self.__switchToObservedControlMode)
+                return
             self.inputHandler.onVehicleControlModeChanged(eMode)
             return
 

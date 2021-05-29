@@ -10,6 +10,7 @@ from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.app_loader import settings as app_settings
 from gui.impl.lobby.battle_pass.battle_pass_progressions_view import BattlePassProgressionsComponent
+from gui.impl.lobby.mapbox.mapbox_progression_view import MapboxProgressionsComponent
 from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -44,6 +45,7 @@ def getViewSettings():
      ComponentSettings(QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, DailyQuestsInjectorView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, MissionsMarathonView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, BattlePassProgressionsComponent, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS, MapboxProgressionsComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, MissionsEventBoardsView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, MissionsCategoriesView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, CurrentVehicleMissionsView, ScopeTemplates.VIEW_SCOPE),

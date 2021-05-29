@@ -12,12 +12,16 @@ import math_utils
 from AvatarInputHandler import cameras, aih_global_binding
 from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
 from AvatarInputHandler.AimingSystems.StrategicAimingSystemRemote import StrategicAimingSystemRemote
-from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings
+from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings, SPGScrollSmoother
+from AvatarInputHandler.DynamicCameras.camera_switcher import CameraSwitcher, SwitchTypes, CameraSwitcherCollection, SwitchToPlaces, TRANSITION_DIST_HYSTERESIS
 from AvatarInputHandler.cameras import getWorldRayAndPoint, readFloat, readVec2, ImpulseReason, FovExtended
 from ClientArena import Plane
+from account_helpers.settings_core import settings_constants
+from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_WARNING
 from helpers.CallbackDelayer import CallbackDelayer
 _DistRangeSetting = namedtuple('_DistRangeSetting', ['minArenaSize', 'distRange', 'acceleration'])
+_CAM_YAW_ROUND = 4
 
 def getCameraAsSettingsHolder(settingsDataSec):
     return StrategicCamera(settingsDataSec)
@@ -48,6 +52,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__activeDistRangeSettings = None
         self.__dynamicCfg = CameraDynamicConfig()
         self.__cameraYaw = 0.0
+        self.__switchers = CameraSwitcherCollection(cameraSwitchers=[CameraSwitcher(switchType=SwitchTypes.FROM_TRANSITION_DIST_AS_MIN, switchToName=CTRL_MODE_NAME.ARTY, switchToPos=1.0)], isEnabled=True)
         self._readConfigs(dataSec)
         self.__cam = BigWorld.CursorCamera()
         self.__cam.isHangar = False
@@ -59,6 +64,10 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__dxdydz = Vector3(0, 0, 0)
         self.__needReset = 0
         self.__smoothingPivotDelta = 0
+        self.__transitionEnabled = True
+        self.__camDist = 0.0
+        self.__scrollSmoother = SPGScrollSmoother(0.3)
+        self.__saveDist = False
         return
 
     @staticmethod
@@ -66,6 +75,8 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         return StrategicCamera.__name__
 
     def create(self, onChangeControlMode=None):
+        aimingSystemClass = StrategicAimingSystemRemote if BigWorld.player().isObserver() else StrategicAimingSystem
+        self.__aimingSystem = aimingSystemClass(self._cfg['distRange'][0], self.__cameraYaw)
         super(StrategicCamera, self).create()
         self.__onChangeControlMode = onChangeControlMode
         self.__camDist = self._cfg['camDist']
@@ -74,10 +85,11 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__cam.movementHalfLife = 0.0
         self.__cam.turningHalfLife = -1
         self.__cam.pivotPosition = Math.Vector3(0.0, self.__camDist, 0.0)
-        aimingSystemClass = StrategicAimingSystemRemote if BigWorld.player().isObserver() else StrategicAimingSystem
-        self.__aimingSystem = aimingSystemClass(self._cfg['distRange'][0], self.__cameraYaw)
+        self.__scrollSmoother.setTime(self._cfg['scrollSmoothingTime'])
+        self.__enableSwitchers()
 
     def destroy(self):
+        self.__saveDist = False
         self.disable()
         self.__onChangeControlMode = None
         self.__cam = None
@@ -88,18 +100,29 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         CameraWithSettings.destroy(self)
         return
 
-    def enable(self, targetPos, saveDist):
+    def enable(self, targetPos, saveDist, switchToPos=None, switchToPlace=None):
         self.__prevTime = BigWorld.time()
         self.__aimingSystem.enable(targetPos)
         self.__activeDistRangeSettings = self.__getActiveDistRangeForArena()
         if self.__activeDistRangeSettings is not None:
             self.__aimingSystem.height = self.__getDistRange()[0]
-        srcMat = math_utils.createRotationMatrix((self.__cameraYaw, -math.pi * 0.499, 0.0))
-        self.__cam.source = srcMat
-        if not saveDist:
-            self.__updateCamDistCfg()
-            self.__camDist = self._cfg['camDist']
+        minDist, maxDist = self.__getDistRange()
+        maxPivotHeight = maxDist - minDist
+        self.__updateCameraYaw()
+        if switchToPlace == SwitchToPlaces.TO_TRANSITION_DIST:
+            self.__camDist = self.__getTransitionCamDist()
+        elif switchToPlace == SwitchToPlaces.TO_RELATIVE_POS and switchToPos is not None:
+            self.__camDist = maxPivotHeight * switchToPos
+        elif switchToPlace == SwitchToPlaces.TO_NEAR_POS and switchToPos is not None:
+            switchToPos = math_utils.clamp(minDist, maxDist, switchToPos)
+            self.__camDist = switchToPos - minDist
+        elif self.settingsCore.getSetting(settings_constants.SPGAim.AUTO_CHANGE_AIM_MODE):
+            self.__camDist = math_utils.clamp(self.__getTransitionCamDist(), maxPivotHeight, self.__camDist)
+        self.__saveDist = saveDist
+        self.__camDist = math_utils.clamp(0, maxPivotHeight, self.__camDist)
         self.__cam.pivotPosition = Math.Vector3(0.0, self.__camDist, 0.0)
+        self.__scrollSmoother.start(self.__camDist)
+        self.__enableSwitchers()
         camTarget = Math.MatrixProduct()
         camTarget.b = self.__aimingSystem.matrix
         self.__cam.target = camTarget
@@ -115,8 +138,10 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         return
 
     def disable(self):
+        self.__scrollSmoother.stop()
         if self.__aimingSystem is not None:
             self.__aimingSystem.disable()
+        self.__switchers.clear()
         self.stopCallback(self.__cameraUpdate)
         positionControl = BigWorld.player().positionControl
         if positionControl is not None:
@@ -133,6 +158,20 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         distRange = self.__getDistRange()
         if len(distRange) > 1:
             self.__camDist = distRange[1]
+
+    def getDistRatio(self):
+        distRange = self.__getDistRange()
+        maxPivotHeight = distRange[1] - distRange[0]
+        return self.__camDist / maxPivotHeight
+
+    def getCurrentCamDist(self):
+        return self.__camDist + self.__getDistRange()[0]
+
+    def getCamDistRange(self):
+        return self.__getDistRange()
+
+    def getCamTransitionDist(self):
+        return self._cfg['transitionDist']
 
     def update(self, dx, dy, dz, updatedByKeyboard=False):
         self.__curSense = self._cfg['keySensitivity'] if updatedByKeyboard else self._cfg['sensitivity']
@@ -223,6 +262,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
             if replayCtrl.isRecording:
                 replayCtrl.setAimClipPosition(aimOffset)
         self.__aimOffset = aimOffset
+        self.__updateCameraYaw()
         shotDescr = BigWorld.player().getVehicleDescriptor().shot
         BigWorld.wg_trajectory_drawer().setParams(shotDescr.maxDistance, Math.Vector3(0, -shotDescr.gravity, 0), aimOffset)
         curTime = BigWorld.time()
@@ -248,22 +288,49 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
                     self.__needReset = 2
         else:
             self.__aimingSystem.handleMovement(self.__dxdydz.x * self.__curSense, -self.__dxdydz.y * self.__curSense)
-        distRange = self.__getDistRange()
         self.__calcSmoothingPivotDelta(deltaTime)
         self.__camDist -= self.__dxdydz.z * float(self.__curSense)
         self.__camDist = self.__aimingSystem.overrideCamDist(self.__camDist)
         distRange = self.__getDistRange()
         maxPivotHeight = distRange[1] - distRange[0]
-        self.__camDist = math_utils.clamp(0, maxPivotHeight, self.__camDist)
-        self._cfg['camDist'] = self.__camDist
-        camDistWithSmoothing = self.__camDist + self.__smoothingPivotDelta - self.__aimingSystem.heightFromPlane
+        transitionDist = self._cfg['transitionDist'] - distRange[0]
+        if self.__switchers.isEnabled():
+            self.__camDist = math_utils.clamp(transitionDist, maxPivotHeight, self.__camDist)
+            scrollLimits = (transitionDist, maxPivotHeight)
+        else:
+            self.__camDist = math_utils.clamp(0, maxPivotHeight, self.__camDist)
+            scrollLimits = (0, maxPivotHeight)
+        if self.__saveDist:
+            self._cfg['camDist'] = self.__camDist
+        self.__scrollSmoother.moveTo(self.__camDist, scrollLimits)
+        currentCamDist = self.__scrollSmoother.update(deltaTime)
+        camDistWithSmoothing = currentCamDist + self.__smoothingPivotDelta - self.__aimingSystem.heightFromPlane
         self.__cam.pivotPosition = Math.Vector3(0.0, camDistWithSmoothing, 0.0)
-        if self.__dxdydz.z != 0 and self.__onChangeControlMode is not None and math_utils.almostZero(self.__camDist - maxPivotHeight):
-            self.__onChangeControlMode()
+        if self.__onChangeControlMode is not None and self.__switchers.needToSwitch(self.__dxdydz.z, self.__camDist, 0, maxPivotHeight, transitionDist):
+            self.__onChangeControlMode(*self.__switchers.getSwitchParams())
+        if not self.__transitionEnabled and self.__camDist + TRANSITION_DIST_HYSTERESIS >= transitionDist:
+            self.__transitionEnabled = True
+            self.__enableSwitchers(False)
         self.__updateOscillator(deltaTime)
         if not self.__autoUpdatePosition:
             self.__dxdydz = Vector3(0, 0, 0)
         return 0.0
+
+    def _handleSettingsChange(self, diff):
+        if settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE in diff:
+            self.__aimingSystem.setParallaxModeEnabled(diff[settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE] == 1)
+        if settings_constants.SPGAim.AUTO_CHANGE_AIM_MODE in diff:
+            self.__enableSwitchers()
+        if settings_constants.SPGAim.SCROLL_SMOOTHING_ENABLED in diff:
+            self.__scrollSmoother.setIsEnabled(self.settingsCore.getSetting(settings_constants.SPGAim.SCROLL_SMOOTHING_ENABLED))
+
+    def _updateSettingsFromServer(self):
+        if self.settingsCore.isReady:
+            if self.__aimingSystem is not None:
+                self.__aimingSystem.setParallaxModeEnabled(self.settingsCore.getSetting(settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE) == 1)
+            self.__enableSwitchers()
+            self.__scrollSmoother.setIsEnabled(self.settingsCore.getSetting(settings_constants.SPGAim.SCROLL_SMOOTHING_ENABLED))
+        return
 
     def __calcSmoothingPivotDelta(self, deltaTime):
         heightsDy = self.__aimingSystem.heightFromPlane - self.__smoothingPivotDelta
@@ -284,6 +351,19 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
             self.__positionOscillator.reset()
             self.__positionNoiseOscillator.reset()
         self.__cam.target.a = math_utils.createTranslationMatrix(self.__positionOscillator.deviation + self.__positionNoiseOscillator.deviation)
+
+    def __updateCameraYaw(self):
+        altModeEnabled = self.settingsCore.getSetting(settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE) == 1
+        pitch = -math.pi * 0.499 if not altModeEnabled else math.radians(-88.0)
+        self.__cameraYaw = round(self.aimingSystem.getCamYaw(), _CAM_YAW_ROUND)
+        srcMat = math_utils.createRotationMatrix((self.__cameraYaw, pitch, 0.0))
+        self.__cam.source = srcMat
+
+    def __getTransitionCamDist(self):
+        minDist, maxDist = self.__getDistRange()
+        maxPivotHeight = maxDist - minDist
+        transitionDist = self._cfg['transitionDist'] - minDist
+        return math_utils.clamp(0, maxPivotHeight, transitionDist)
 
     def reload(self):
         if not constants.IS_DEVELOPMENT:
@@ -308,7 +388,9 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         bcfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.005, 10, 0.025)
         bcfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.005, 10, 0.025)
         bcfg['distRange'] = readVec2(dataSec, 'distRange', (1, 1), (10000, 10000), (2, 30))
+        bcfg['transitionDist'] = readFloat(dataSec, 'transitionDist', 1.0, 10000.0, 60.0)
         bcfg['distRangeForArenaSize'] = self.__readDynamicDistRangeData(dataSec)
+        bcfg['scrollSmoothingTime'] = readFloat(dataSec, 'scrollSmoothingTime', 0.0, 1.0, 0.3)
 
     def _readUserCfg(self):
         ucfg = self._userCfg
@@ -331,7 +413,9 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         cfg['sensitivity'] = bcfg['sensitivity']
         cfg['scrollSensitivity'] = bcfg['scrollSensitivity']
         cfg['distRange'] = bcfg['distRange']
+        cfg['transitionDist'] = bcfg['transitionDist']
         cfg['distRangeForArenaSize'] = bcfg['distRangeForArenaSize']
+        cfg['scrollSmoothingTime'] = bcfg['scrollSmoothingTime']
         cfg['camDist'] = ucfg['camDist']
         cfg['keySensitivity'] *= ucfg['keySensitivity']
         cfg['sensitivity'] *= ucfg['sensitivity']
@@ -375,10 +459,9 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
     def __getCameraAcceleration(self):
         return 0 if not self.__activeDistRangeSettings else self.__activeDistRangeSettings.acceleration
 
-    def __updateCamDistCfg(self):
-        ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
-        if ds is not None:
-            ds = ds['strategicMode/camera']
-        distRange = self.__getDistRange()
-        self._cfg['camDist'] = self._userCfg['camDist'] = readFloat(ds, 'camDist', 0, distRange[1] - distRange[0], 0)
-        return
+    def __enableSwitchers(self, updateTransitionEnabled=True):
+        minDist, _ = self.__getDistRange()
+        if updateTransitionEnabled and self.__camDist + minDist + TRANSITION_DIST_HYSTERESIS <= self._cfg['transitionDist']:
+            self.__transitionEnabled = False
+        if self.settingsCore.isReady:
+            self.__switchers.setIsEnabled(self.settingsCore.getSetting(settings_constants.SPGAim.AUTO_CHANGE_AIM_MODE) and self.__transitionEnabled)

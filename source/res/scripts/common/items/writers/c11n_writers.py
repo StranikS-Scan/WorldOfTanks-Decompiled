@@ -50,6 +50,8 @@ def saveCustomizationItems(cache, folder):
     writeItemType(StyleXmlWriter(), cache, folder, 'style')
     writeItemType(PersonalNumberXmlWriter(), cache, folder, 'personal_number')
     writeItemType(InsigniaXmlWriter(), cache, folder, 'insignia')
+    writeItemType(SequenceXmlWriter(), cache, folder, 'sequence')
+    writeItemType(AttachmentXmlWriter(), cache, folder, 'attachment')
     writeFontType(FontXmlWriter(), cache, folder, 'font')
 
 
@@ -301,7 +303,9 @@ CUSTOMIZATION_ITEMS_TYPE_TO_NAME = {CustomizationType.DECAL: 'decal',
  CustomizationType.PERSONAL_NUMBER: 'personal_number',
  CustomizationType.STYLE: 'style',
  CustomizationType.INSIGNIA: 'insignia',
- CustomizationType.FONT: 'font'}
+ CustomizationType.FONT: 'font',
+ CustomizationType.ATTACHMENT: 'attachment',
+ CustomizationType.SEQUENCE: 'sequence'}
 CUSTOMIZATION_ITEMS_NAME_TO_TYPE = {v:k for k, v in CUSTOMIZATION_ITEMS_TYPE_TO_NAME.items()}
 
 def saveItemFilter(filter, section, filterName, valueDescription):
@@ -770,6 +774,27 @@ class InsigniaXmlWriter(BaseCustomizationItemXmlWriter):
         return changed
 
 
+class AttachmentXmlWriter(BaseCustomizationItemXmlWriter):
+
+    def write(self, item, section):
+        changed = super(AttachmentXmlWriter, self).write(item, section)
+        changed |= rewriteString(section, 'name', item, 'name', '')
+        changed |= rewriteInt(section, 'sequenceId', item, 'sequenceId', -1)
+        changed |= rewriteString(section, 'modelName', item, 'modelName', '')
+        changed |= rewriteString(section, 'attachmentLogic', item, 'attachmentLogic', '')
+        changed |= rewriteBool(section, 'initialVisibility', item, 'initialVisibility', False)
+        return changed
+
+
+class SequenceXmlWriter(BaseCustomizationItemXmlWriter):
+
+    def write(self, item, section):
+        changed = super(SequenceXmlWriter, self).write(item, section)
+        changed |= rewriteString(section, 'name', item, 'name', '')
+        changed |= rewriteString(section, 'sequenceName', item, 'sequenceName', '')
+        return changed
+
+
 def writeFontAlphabet(item):
     xmlPath = item.editorData.alphabet
     if xmlPath is None or len(xmlPath) == 0:
@@ -822,16 +847,19 @@ def _rewriteFn(tp):
     def rewrite(section, subsectionName, item, propertyPath, defaultValue=None):
         if not _needWrite(item, propertyPath):
             return section.deleteSection(subsectionName)
-        path = propertyPath.split('.')
-        value = item
-        for propertyName in path:
-            value = getattr(value, propertyName)
+        else:
+            path = propertyPath.split('.')
+            value = item
+            for propertyName in path:
+                value = getattr(value, propertyName)
 
-        if eq(read(section, subsectionName, defaultValue), value):
-            return False
-        w = getattr(section, writeTp)
-        w(subsectionName, value)
-        return True
+            if value is None:
+                return False
+            if eq(read(section, subsectionName, defaultValue), value):
+                return False
+            w = getattr(section, writeTp)
+            w(subsectionName, value)
+            return True
 
     return rewrite
 

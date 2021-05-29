@@ -178,7 +178,7 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
     def __setSpecialVoiceByTankmen(self, nationID, groupID, isPremium, crewGroups):
         for tag, params in self.__voiceoverByTankman.iteritems():
             if tankmen.hasTagInTankmenGroup(nationID, groupID, isPremium, tag):
-                crewParams = self.__getSpecialModeForCrew(tag, nationID, crewGroups)
+                crewParams = self.__getSpecialModeForCrew(tag, nationID, isPremium, crewGroups)
                 resParams = crewParams if crewParams is not None else params
                 self.__setSpecialVoice(resParams)
                 return True
@@ -205,9 +205,9 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
         self.__currentMode = params
         SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, params.genderSwitch)
 
-    def __getSpecialModeForCrew(self, tag, nationID, crewGroups):
+    def __getSpecialModeForCrew(self, tag, nationID, isPremium, crewGroups):
         if tag not in self.__voiceoverAdditionalModes:
             return None
         else:
             crewChecker = _isFullCrewCheckers.get(tag)
-            return self.__voiceoverAdditionalModes[tag].get(_FULL_CREW_CONDITION) if crewChecker is not None and crewChecker(nationID, crewGroups) else None
+            return self.__voiceoverAdditionalModes[tag].get(_FULL_CREW_CONDITION) if crewChecker is not None and crewChecker(nationID, isPremium, crewGroups) else None

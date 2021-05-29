@@ -24,7 +24,6 @@ _DEFAULT_PLAYER_GROUP = 1
 _DEFAULT_PLAYER_RANK = 0
 _DEFAULT_PHYSICAL_SECTOR = 1
 _DEFAULT_HAS_RESPAWNS = True
-_DEFAULT_INTEREST_POINT_STATE = 0
 
 class EPIC_RANDOM_KEYS(object):
     PLAYER_GROUP = 'playerGroup'
@@ -50,18 +49,6 @@ class BattleRoyaleKeys(Enum):
         return [BattleRoyaleKeys.RANK.value] if not static else []
 
 
-class WeekendBrawlKeys(Enum):
-    POINT_OF_INTEREST = 'interestPointState'
-
-    @staticmethod
-    def getKeys(static=True):
-        return [] if static else [(WeekendBrawlKeys.POINT_OF_INTEREST.value, _DEFAULT_INTEREST_POINT_STATE)]
-
-    @staticmethod
-    def getSortingKeys(_=True):
-        return []
-
-
 class EPIC_BATTLE_KEYS(object):
     RANK = 'playerRank'
     PLAYER_GROUP = 'playerGroup'
@@ -84,8 +71,7 @@ GAMEMODE_SPECIFIC_KEYS = {ARENA_GUI_TYPE.EPIC_RANDOM: EPIC_RANDOM_KEYS,
  ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: EPIC_RANDOM_KEYS,
  ARENA_GUI_TYPE.EPIC_BATTLE: EPIC_BATTLE_KEYS,
  ARENA_GUI_TYPE.EPIC_TRAINING: EPIC_BATTLE_KEYS,
- ARENA_GUI_TYPE.BATTLE_ROYALE: BattleRoyaleKeys,
- ARENA_GUI_TYPE.WEEKEND_BRAWL: WeekendBrawlKeys}
+ ARENA_GUI_TYPE.BATTLE_ROYALE: BattleRoyaleKeys}
 
 class GameModeDataVO(object):
     __slots__ = ('__internalData', '__sortingKeys')

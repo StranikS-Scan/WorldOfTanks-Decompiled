@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/ranked_builders/main_page_vos.py
 from constants import CURRENT_REALM
+from ranked_common import SwitchState
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -70,12 +71,14 @@ def _getRatingPage():
      'tooltip': makeTooltip(header=backport.text(R.strings.tooltips.rankedBattlesView.rating.header()), body=backport.text(R.strings.tooltips.rankedBattlesView.rating.body()))}
 
 
-def _getYearRatingPage(isYearLBEnabled, yearLBSize):
+def _getYearRatingPage(isYearLBVisible, yearLBSize, disabled):
+    body = R.strings.tooltips.rankedBattlesView.yearRating.body
     return ({'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID,
       'viewId': RANKEDBATTLES_ALIASES.RANKED_BATTLES_YEAR_RAITING_ALIAS,
       'linkage': 'BrowserViewStackExPaddingUI',
       'background': _getYearLeaderboardBG(),
-      'tooltip': makeTooltip(header=backport.text(R.strings.tooltips.rankedBattlesView.yearRating.header(), amount=yearLBSize), body=backport.text(R.strings.tooltips.rankedBattlesView.yearRating.body()))},) if isYearLBEnabled else ()
+      'tooltip': makeTooltip(header=backport.text(R.strings.tooltips.rankedBattlesView.yearRating.header(), amount=yearLBSize), body=backport.text(body.disabled()) if disabled else backport.text(body())),
+      'enabled': not disabled},) if isYearLBVisible else ()
 
 
 def _getInfoPage():
@@ -105,24 +108,27 @@ def getCountersData(rankedController, awardsCounter, infoCounter, yearRatingCoun
     return result
 
 
-def getRankedMainSeasonOnItems(isRankedShop, isYearLBEnabled, isYearRewardEnabled, yearLBSize, isMastered):
+def getRankedMainSeasonOnItems(isRankedShop, yearLBState, isYearRewardEnabled, yearLBSize, isMastered):
     result = list()
     result.append(_getSeasonOnMain(isMastered))
     result.append(_getRewardsPage(isYearRewardEnabled=isYearRewardEnabled))
-    result.extend(_getShopPage(isRankedShop))
-    result.append(_getRatingPage())
-    result.extend(_getYearRatingPage(isYearLBEnabled, yearLBSize))
-    result.append(_getInfoPage())
+    result.extend(getRankedMainSeasonAllItems(isRankedShop, yearLBState, yearLBSize))
     return result
 
 
-def getRankedMainSeasonOffItems(isRankedShop, isYearLBEnabled, isYearRewardEnabled, yearLBSize):
+def getRankedMainSeasonOffItems(isRankedShop, yearLBState, isYearRewardEnabled, yearLBSize):
     result = list()
-    result.append(_getSeasonOffMain(isYearLBEnabled))
+    result.append(_getSeasonOffMain(False))
     result.append(_getRewardsPage(True, isYearRewardEnabled))
+    result.extend(getRankedMainSeasonAllItems(isRankedShop, yearLBState, yearLBSize))
+    return result
+
+
+def getRankedMainSeasonAllItems(isRankedShop, yearLBState, yearLBSize):
+    result = list()
     result.extend(_getShopPage(isRankedShop))
     result.append(_getRatingPage())
-    result.extend(_getYearRatingPage(isYearLBEnabled, yearLBSize))
+    result.extend(_getYearRatingPage(yearLBState != SwitchState.HIDDEN, yearLBSize, disabled=yearLBState == SwitchState.DISABLED))
     result.append(_getInfoPage())
     return result
 

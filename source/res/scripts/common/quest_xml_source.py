@@ -447,9 +447,7 @@ class Source(object):
              'crit': self.__readBattleResultsConditionList,
              'critName': self.__readCritName,
              'unregularAmmo': self.__readCondition_true,
-             'isNotLeaver': self.__readCondition_true,
-             'compDescr': self.__readCondition_int,
-             'usedEquipment': self.__readBattleResultsConditionList})
+             'isNotLeaver': self.__readCondition_true})
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
             condition_readers.update({'red': self.__readListOfInts,
              'silver': self.__readListOfInts,

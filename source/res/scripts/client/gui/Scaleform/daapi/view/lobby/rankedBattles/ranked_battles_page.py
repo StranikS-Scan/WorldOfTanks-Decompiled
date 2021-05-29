@@ -117,12 +117,12 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
     def _update(self):
         self._checkOverlayDestroy()
         self._updateHeader()
-        self._updateMenuItems(self.__rankedController.isRankedShopEnabled(), self.__rankedController.isYearLBEnabled(), self.__rankedController.isYearRewardEnabled(), self.__rankedController.getYearLBSize())
+        self._updateMenuItems(self.__rankedController.isRankedShopEnabled(), self.__rankedController.getYearLBState(), self.__rankedController.isYearRewardEnabled(), self.__rankedController.getYearLBSize())
 
     def _updateHeader(self):
         raise NotImplementedError
 
-    def _updateMenuItems(self, isRankedShopEnabled, isYearLBEnabled, isYearRewardEnabled, yearLBSize):
+    def _updateMenuItems(self, isRankedShopEnabled, yearLBState, isYearRewardEnabled, yearLBSize):
         raise NotImplementedError
 
     def _updateSounds(self, onClose=False):
@@ -213,8 +213,8 @@ class RankedMainSeasonOffPage(RankedMainPage):
     def _updateHeader(self):
         self.as_setHeaderDataS(main_page_vos.getRankedMainSeasonOffHeader(self.__prevSeason, self.__nextSeason, self.__isYearGap(), self._selectedItemID))
 
-    def _updateMenuItems(self, isRankedShopEnabled, isYearLBEnabled, isYearRewardEnabled, yearLBSize):
-        menuItems = main_page_vos.getRankedMainSeasonOffItems(isRankedShopEnabled, isYearLBEnabled, isYearRewardEnabled, yearLBSize)
+    def _updateMenuItems(self, isRankedShopEnabled, yearLBState, isYearRewardEnabled, yearLBSize):
+        menuItems = main_page_vos.getRankedMainSeasonOffItems(isRankedShopEnabled, yearLBState, isYearRewardEnabled, yearLBSize)
         self.as_setDataS({'menuItems': menuItems,
          'selectedIndex': self._getSelectedIdx(menuItems)})
 
@@ -272,9 +272,9 @@ class RankedMainSeasonOnPage(RankedMainPage):
     def _updateHeader(self):
         self.as_setHeaderDataS(main_page_vos.getRankedMainSeasonOnHeader(self.__currentSeason, self._selectedItemID))
 
-    def _updateMenuItems(self, isRankedShopEnabled, isYearLBEnabled, isYearRewardEnabled, yearLBSize):
+    def _updateMenuItems(self, isRankedShopEnabled, yearLBState, isYearRewardEnabled, yearLBSize):
         isMastered = self.__rankedController.isAccountMastered()
-        menuItems = main_page_vos.getRankedMainSeasonOnItems(isRankedShopEnabled, isYearLBEnabled, isYearRewardEnabled, yearLBSize, isMastered)
+        menuItems = main_page_vos.getRankedMainSeasonOnItems(isRankedShopEnabled, yearLBState, isYearRewardEnabled, yearLBSize, isMastered)
         self.as_setDataS({'menuItems': menuItems,
          'selectedIndex': self._getSelectedIdx(menuItems)})
 

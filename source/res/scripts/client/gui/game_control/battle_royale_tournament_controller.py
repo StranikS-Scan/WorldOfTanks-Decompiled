@@ -136,7 +136,7 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
     def __clear(self):
         g_playerEvents.onClientUpdated -= self.__onClientUpdated
         g_playerEvents.onCollectPrebattleInvites -= self.__onCollectPrebattleInvites
-        g_playerEvents.onPrebattleAutoInvitesChanged += self.__onPrebattleAutoInvitesChanged
+        g_playerEvents.onPrebattleAutoInvitesChanged -= self.__onPrebattleAutoInvitesChanged
 
     def __clearInternalData(self):
         self.__previousInviteIDs = set()

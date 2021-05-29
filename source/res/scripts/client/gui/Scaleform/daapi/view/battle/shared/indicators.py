@@ -17,8 +17,9 @@ from gui.Scaleform.genConsts.SIEGE_MODE_CONSTS import SIEGE_MODE_CONSTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import DEVICE_STATES_RANGE, DEVICE_STATE_NORMAL, DEVICE_STATE_CRITICAL, VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN
+from gui.battle_control.battle_constants import PREDICTION_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
-from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator
+from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator, HitType
 from gui.shared.crits_mask_parser import critsParserGenerator
 from helpers import dependency
 from helpers import i18n
@@ -30,6 +31,11 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
+_PREDICTION_INDICATOR_SWF = 'battlePredictionIndicatorApp.swf'
+_PREDICTION_INDICATOR_COMPONENT = 'WGPredictionIndicatorFlash'
+_PREDICTION_INDICATOR_MC_NAME = '_root.predictionIndicator.hit_{0}'
+_PREDICTION_INDICATOR_SWF_SIZE = (680, 680)
+_PREDICTION_INDICATOR_MAX_DUR = 20
 _DAMAGE_INDICATOR_SWF = 'battleDamageIndicatorApp.swf'
 _DAMAGE_INDICATOR_COMPONENT = 'WGHitIndicatorFlash'
 _DAMAGE_INDICATOR_MC_NAME = '_root.dmgIndicator.hit_{0}'
@@ -46,6 +52,7 @@ _DIRECT_ARTY_INDICATOR_MC_NAME = '_root.artyDirectionalIndicatorMc'
 _DIRECT_INDICATOR_SWF_SIZE = (680, 680)
 _MARKER_SMALL_SIZE_THRESHOLD = 0.1
 _MARKER_LARGE_SIZE_THRESHOLD = 0.3
+_VIEWS_WITH_INV_CAMERA_ORIENTATION = (CROSSHAIR_VIEW_ID.STRATEGIC,)
 
 class _MARKER_TYPE(CONST_CONTAINER):
     HP_DAMAGE = 0
@@ -341,13 +348,16 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         self.component.heightMode = 'PIXEL'
         self.component.widthMode = 'PIXEL'
         self.movie.scaleMode = 'NoScale'
+        self.component.useInvertCameraView = False
         self.__isBlind = bool(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND))
         self.__setUpVOBuilderFactoryAndUpdateMethod(_DEFAULT_DAMAGE_INDICATOR_TYPE)
         self.settingsCore.interfaceScale.onScaleChanged += self.__setMarkersScale
         ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
             ctrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
+            ctrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
             self.__onCrosshairPositionChanged(*ctrl.getPosition())
+            self.__onCrosshairViewChanged(ctrl.getViewID())
         self.__setMarkersScale()
         self.active(True)
         self.component.offsetRotationElementsInDegree(10.0, 10.0)
@@ -356,12 +366,16 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     def __del__(self):
         LOG_DEBUG('DamageIndicator is deleted')
 
+    def getHitType(self):
+        return HitType.HIT_DAMAGE
+
     def destroy(self):
         super(_DamageIndicator, self).destroy()
         self.settingsCore.interfaceScale.onScaleChanged -= self.__setMarkersScale
         ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
             ctrl.onCrosshairOffsetChanged -= self.__onCrosshairPositionChanged
+            ctrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
         self.__updateMethod = None
         self.close()
         return
@@ -372,7 +386,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     def getBeginAnimationDuration(self):
         return _BEGIN_ANIMATION_DURATION
 
-    def invalidateSettings(self):
+    def invalidateSettings(self, diff=None):
         getter = self.settingsCore.getSetting
         self.__isBlind = bool(getter(GRAPHICS.COLOR_BLIND))
         indicatorType = getter(DAMAGE_INDICATOR.TYPE)
@@ -407,6 +421,9 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         width, height = GUI.screenResolution()
         self.as_setScreenSettingsS(scale, width, height)
         return
+
+    def __onCrosshairViewChanged(self, viewID):
+        self.component.useInvertCameraView = viewID in _VIEWS_WITH_INV_CAMERA_ORIENTATION
 
 
 class SixthSenseIndicator(SixthSenseMeta):
@@ -462,6 +479,8 @@ class SixthSenseIndicator(SixthSenseMeta):
                 if self.__detectionSoundEvent.isPlaying:
                     self.__detectionSoundEvent.restart()
                 else:
+                    if self.__detectionSoundEvent.name in SoundGroups.CUSTOM_MP3_EVENTS:
+                        SoundGroups.g_instance.prepareMP3(self.__detectionSoundEvent.name)
                     self.__detectionSoundEvent.play()
                 self.sessionProvider.shared.optionalDevices.soundManager.playLightbulbEffect()
             self.as_showS()
@@ -779,6 +798,10 @@ def createDamageIndicator():
     return _DamageIndicator(HIT_INDICATOR_MAX_ON_SCREEN)
 
 
+def createPredictionIndicator():
+    return _PredictionIndicator(PREDICTION_INDICATOR_MAX_ON_SCREEN)
+
+
 class _ArtyDirectionIndicator(Flash, IDirectionIndicator):
 
     def __init__(self, swf):
@@ -821,3 +844,109 @@ class _ArtyDirectionIndicator(Flash, IDirectionIndicator):
         if not self.__isVisible == isVisible:
             self.__isVisible = isVisible
             self.component.visible = isVisible
+
+
+class PredictionIndicatorMeta(Flash):
+
+    def __init__(self, swf, className, args):
+        super(PredictionIndicatorMeta, self).__init__(swf, className, args)
+        root = self.movie.root.predictionIndicator
+        self._as_show = root.as_show
+        self._as_setYaw = root.as_setYaw
+        self._as_hide = root.as_hide
+        self._as_setPosition = root.as_setPosition
+        self._as_setScreenSettings = root.as_setScreenSettings
+
+    def destroy(self):
+        self._as_show = None
+        self._as_setYaw = None
+        self._as_hide = None
+        self._as_setPosition = None
+        self._as_setScreenSettings = None
+        self.movie.root.predictionIndicator.dispose()
+        return
+
+    def as_showS(self, itemIdx):
+        return self._as_show(itemIdx)
+
+    def as_hideS(self, itemIdx):
+        return self._as_hide(itemIdx)
+
+    def as_setYawS(self, itemIdx, yaw):
+        return self._as_setYaw(itemIdx, yaw)
+
+    def as_setPosition(self, posX, posY):
+        self._as_setPosition(posX, posY)
+
+    def as_setScreenSettingsS(self, scale, screenWidth, screenHeight):
+        return self._as_setScreenSettings(scale, screenWidth, screenHeight)
+
+
+class _PredictionIndicator(PredictionIndicatorMeta, IHitIndicator):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
+
+    def __init__(self, hitsCount):
+        names = tuple((_PREDICTION_INDICATOR_MC_NAME.format(x) for x in xrange(hitsCount)))
+        super(_PredictionIndicator, self).__init__(_PREDICTION_INDICATOR_SWF, _PREDICTION_INDICATOR_COMPONENT, (names,))
+        self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
+        self.component.position.z = DEPTH_OF_Aim
+        self.movie.backgroundAlpha = 0.0
+        self.component.focus = False
+        self.component.moveFocus = False
+        self.component.heightMode = 'PIXEL'
+        self.component.widthMode = 'PIXEL'
+        self.movie.scaleMode = 'NoScale'
+        self.component.useInvertCameraView = False
+        self.settingsCore.interfaceScale.onScaleChanged += self.__setMarkersScale
+        ctrl = self.sessionProvider.shared.crosshair
+        if ctrl is not None:
+            ctrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
+            ctrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+            self.__onCrosshairPositionChanged(*ctrl.getPosition())
+            self.__onCrosshairViewChanged(ctrl.getViewID())
+        self.__setMarkersScale()
+        self.active(True)
+        return
+
+    def __del__(self):
+        LOG_DEBUG('PredictionIndicator is deleted')
+
+    def getHitType(self):
+        return HitType.ARTY_HIT_PREDICTION
+
+    def destroy(self):
+        super(_PredictionIndicator, self).destroy()
+        self.settingsCore.interfaceScale.onScaleChanged -= self.__setMarkersScale
+        ctrl = self.sessionProvider.shared.crosshair
+        if ctrl is not None:
+            ctrl.onCrosshairOffsetChanged -= self.__onCrosshairPositionChanged
+            ctrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
+        self.close()
+        return
+
+    def getDuration(self):
+        return _PREDICTION_INDICATOR_MAX_DUR
+
+    def getBeginAnimationDuration(self):
+        pass
+
+    def showHitDirection(self, idx, hitData, timeLeft):
+        self.as_setYawS(idx, hitData.getYaw())
+        self.as_showS(itemIdx=idx)
+
+    def hideHitDirection(self, idx):
+        self.as_hideS(idx)
+
+    def __onCrosshairPositionChanged(self, posX, posY):
+        self.as_setPosition(posX, posY)
+
+    def __onCrosshairViewChanged(self, viewID):
+        self.component.useInvertCameraView = viewID in _VIEWS_WITH_INV_CAMERA_ORIENTATION
+
+    def __setMarkersScale(self, scale=None):
+        if scale is None:
+            scale = self.settingsCore.interfaceScale.get()
+        width, height = GUI.screenResolution()
+        self.as_setScreenSettingsS(scale, width, height)
+        return

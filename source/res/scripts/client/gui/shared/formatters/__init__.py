@@ -11,6 +11,7 @@ from gui.impl.gen import R
 from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.shared.formatters import time_formatters
+from gui.shared.formatters.icons import getRoleIcon
 from gui.shared.formatters.currency import getBWFormatter, getStyle
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE
 from gui.shared.money import Money, Currency
@@ -232,3 +233,7 @@ def formatPurchaseItems(purchaseItems):
         formattedItems.append(formattedItem)
 
     return ', \n'.join(formattedItems) + '.'
+
+
+def getRoleText(role, roleLabel):
+    return text_styles.concatStylesToSingleLine(getRoleIcon(roleLabel), makeHtmlString('html_templates:vehicleRoles', 'roleMain', {'message': backport.text(R.strings.menu.roleExp.roleName.dyn(roleLabel)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleLabel)()))})) if role else ''

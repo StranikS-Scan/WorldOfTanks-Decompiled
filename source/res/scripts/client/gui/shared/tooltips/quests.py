@@ -181,7 +181,7 @@ class ScheduleQuestTooltipData(BlocksTooltipData):
         if weekDays:
             days = [ _ms(MENU.datetime_weekdays_full(idx)) for idx in event.getWeekDays() ]
             items.append(self._getSubBlock(TOOLTIPS.QUESTS_SCHEDULE_WEEKDAYS, days))
-        intervals = event.getCollapsedActiveTimeIntervals()
+        intervals = event.getActiveTimeIntervals()
         if intervals:
             times = []
             for low, high in intervals:

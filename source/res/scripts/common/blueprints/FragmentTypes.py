@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/blueprints/FragmentTypes.py
 import nations
 import typing
+from backports.functools_lru_cache import lru_cache
 from items import vehicles, ITEM_TYPES
 from random_utils import wchoices
 from debug_utils import LOG_DEBUG_DEV
@@ -29,6 +30,9 @@ class BlueprintFragment(object):
     def getRequiredFragmentCounts(self, count=1):
         return {}
 
+    def getRequiredIntelligenceDataCounts(self, count=1):
+        return {}
+
     def decayExtraFragments(self, count=1):
         return {}
 
@@ -47,6 +51,7 @@ class NationalBlueprintFragment(BlueprintFragment):
     FTYPE = BlueprintTypes.NATIONAL
 
     @staticmethod
+    @lru_cache(maxsize=len(nations.NAMES) * 2)
     def fromNation(nationNameOrId):
         nationID = nations.INDICES.get(nationNameOrId, -1) if type(nationNameOrId) is str else nationNameOrId
         return NationalBlueprintFragment(65280 + (nationID << 4) + ITEM_TYPES.vehicle)
@@ -62,7 +67,7 @@ class NationalBlueprintFragment(BlueprintFragment):
 
 
 class VehicleBlueprintFragment(BlueprintFragment):
-    __slots__ = ('progressPerFragment', 'require', 'decays')
+    __slots__ = ('progressPerFragment', 'require', 'decays', 'nationalRequiredOptions')
     FTYPE = BlueprintTypes.VEHICLE
 
     @staticmethod
@@ -78,10 +83,12 @@ class VehicleBlueprintFragment(BlueprintFragment):
         availableLevels = g_cache.levels
         if enableException and vehicleLevel not in availableLevels:
             raise BlueprintsException('Invalid vehicle level for having blueprints')
-        self.total, self.progressPerFragment, self.require, self.decays = availableLevels.get(vehicleLevel, (0,
+        self.total, self.progressPerFragment, self.require, self.decays, _ = availableLevels.get(vehicleLevel, (0,
          0,
          (0, 0),
-         (0, 0)))
+         (0, 0),
+         {}))
+        self.nationalRequiredOptions = self.__getNationalRequiredOptions(self.nationID, vehicleLevel)
         LOG_DEBUG_DEV('[BPF] VehicleFragment: total={}, progress={}, require={}'.format(self.total, self.progressPerFragment, self.require))
 
     def __repr__(self):
@@ -104,10 +111,28 @@ class VehicleBlueprintFragment(BlueprintFragment):
     def getRequiredFragmentCounts(self, count=1):
         return dict(((t, count * r) for t, r in zip((self.asNationalCD, self.asIntelligenceDataCD), self.require)))
 
+    def getRequiredIntelligenceDataCounts(self, count=1):
+        return {self.asIntelligenceDataCD: count * self.require[1]}
+
     def decayExtraFragments(self, count=1):
         evts = (self.asNationalCD, self.asIntelligenceDataCD)
         wghts = self.decays
         return wchoices(evts, wghts).ncounts(count) if any(wghts) else {}
+
+    @staticmethod
+    @lru_cache(maxsize=256)
+    def __getNationalRequiredOptions(nationID, vehicleLevel):
+        availableLevels = g_cache.levels
+        if vehicleLevel not in availableLevels:
+            return {}
+        _, _, require, _, allyConversionCoefs = availableLevels.get(vehicleLevel, (0,
+         0,
+         (0, 0),
+         (0, 0),
+         {}))
+        allyConversionCoefs = allyConversionCoefs.get(nations.NATION_TO_ALLIANCE_IDS_MAP[nationID], {})
+        nationalRequire = require[0]
+        return {NationalBlueprintFragment.fromNation(nId).makeIntCompDescr():(round(allyConversionCoefs[nId] * nationalRequire) if nId != nationID else nationalRequire) for nId in allyConversionCoefs.iterkeys()}
 
 
 class IntelligenceDataFragment(BlueprintFragment):
@@ -136,7 +161,7 @@ def fromIntFragmentCD(ifragmentCD, enableException=True):
 
 
 def toIntFragmentCD(fragment):
-    return fragment.makeIntCompDescr()
+    return fragment.makeIntCompDescr(normalized=False)
 
 
 def isValidFragment(maybeFragment, defaultUnlocks=()):
@@ -162,3 +187,8 @@ def isSimilar(fragmentTypeCD1, fragmentTypeCD2, strict=True):
     if 15 & fragmentTypeCD1 == BlueprintTypes.NATIONAL:
         return isSimilar(fragmentTypeCD1 & 255, fragmentTypeCD2 & 255, True)
     return isSimilar(fragmentTypeCD1 & 15, fragmentTypeCD2 & 15, True) if 15 & fragmentTypeCD1 == BlueprintTypes.INTELLIGENCE_DATA else False
+
+
+@lru_cache(maxsize=256)
+def normalizeFragment(ifragmentCD):
+    return fromIntFragmentCD(ifragmentCD).makeIntCompDescr(normalized=True)

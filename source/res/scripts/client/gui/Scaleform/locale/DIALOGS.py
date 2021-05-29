@@ -126,6 +126,7 @@ class DIALOGS(object):
     RENTCONFIRMATION_MESSAGE = '#dialogs:rentConfirmation/message'
     RENTCONFIRMATION_SUBMIT = '#dialogs:rentConfirmation/submit'
     RENTCONFIRMATION_CANCEL = '#dialogs:rentConfirmation/cancel'
+    RENTCONFIRMATION_PERIOD = '#dialogs:rentConfirmation/period'
     RENTCONFIRMATIONRENEW_TITLE = '#dialogs:rentConfirmationRenew/title'
     RENTCONFIRMATIONRENEW_MESSAGE = '#dialogs:rentConfirmationRenew/message'
     RENTCONFIRMATIONRENEW_SUBMIT = '#dialogs:rentConfirmationRenew/submit'
@@ -1181,6 +1182,7 @@ class DIALOGS(object):
      RENTCONFIRMATION_MESSAGE,
      RENTCONFIRMATION_SUBMIT,
      RENTCONFIRMATION_CANCEL,
+     RENTCONFIRMATION_PERIOD,
      RENTCONFIRMATIONRENEW_TITLE,
      RENTCONFIRMATIONRENEW_MESSAGE,
      RENTCONFIRMATIONRENEW_SUBMIT,

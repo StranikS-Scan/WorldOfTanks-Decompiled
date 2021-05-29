@@ -154,6 +154,9 @@ class BattleBoostersCMHandler(ContextMenu):
             optionData.textColor = CM_BUY_COLOR
         return optionData
 
+    def _isVisible(self, label):
+        return not self._itemsCache.items.getItemByCD(self._id).isHidden if label == CMLabel.BUY_MORE else super(BattleBoostersCMHandler, self)._isVisible(label)
+
 
 class DemountKitsCMHandler(ContextMenu):
     __sqGen = SequenceIDGenerator()

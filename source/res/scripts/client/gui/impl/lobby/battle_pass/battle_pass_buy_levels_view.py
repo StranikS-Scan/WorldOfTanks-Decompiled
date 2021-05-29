@@ -21,7 +21,7 @@ from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IWalletController, IBattlePassController
 from skeletons.gui.shared import IItemsCache
-_rBattlePass = R.strings.battle_pass_2020
+_rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
 class BattlePassBuyLevelView(ViewImpl):

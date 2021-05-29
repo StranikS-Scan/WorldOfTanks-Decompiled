@@ -158,10 +158,6 @@ def goldTextNormalCard(text):
     return _formatText('goldTextNormalCard', text)
 
 
-def goldTextTitle(text):
-    return _formatText('goldTextTitle', text)
-
-
 def creditsTextNormalCard(text):
     return _formatText('creditsTextNormalCard', text)
 

@@ -203,9 +203,9 @@ class VehicleGunRotator(object):
         else:
             return
 
-    def getShotParams(self, targetPoint, ignoreYawLimits=False):
+    def getShotParams(self, targetPoint, ignoreYawLimits=False, overrideShotIdx=None):
         descr = self._avatar.getVehicleAttached().typeDescriptor
-        shotTurretYaw, shotGunPitch = getShotAngles(descr, self._avatar.getOwnVehicleStabilisedMatrix(), (self.__turretYaw, self.__gunPitch), targetPoint, overrideGunPosition=self.__gunPosition)
+        shotTurretYaw, shotGunPitch = getShotAngles(descr, self._avatar.getOwnVehicleStabilisedMatrix(), (self.__turretYaw, self.__gunPitch), targetPoint, overrideGunPosition=self.__gunPosition, overrideShotIdx=overrideShotIdx)
         gunPitchLimits = calcPitchLimitsFromDesc(shotTurretYaw, self.__getGunPitchLimits(), descr.hull.turretPitches[0], descr.turret.gunJointPitch)
         closestLimit = self.__isOutOfLimits(shotGunPitch, gunPitchLimits)
         if closestLimit is not None:
@@ -215,12 +215,15 @@ class VehicleGunRotator(object):
             closestLimit = self.__isOutOfLimits(shotTurretYaw, turretYawLimits)
             if closestLimit is not None:
                 shotTurretYaw = closestLimit
-        pos, vel = self.__getShotPosition(shotTurretYaw, shotGunPitch)
-        grav = Math.Vector3(0.0, -descr.shot.gravity, 0.0)
+        pos, vel = self.__getShotPosition(shotTurretYaw, shotGunPitch, shotIdx=overrideShotIdx)
+        grav = Math.Vector3(0.0, -descr.getShot(shotIdx=overrideShotIdx).gravity, 0.0)
         return (pos, vel, grav)
 
     def getCurShotPosition(self):
         return self.__getShotPosition(self.__turretYaw, self.__gunPitch)
+
+    def getCurShotDispersionAngles(self):
+        return self.__dispersionAngles
 
     def __set_clientMode(self, value):
         if self.__clientMode == value:
@@ -544,12 +547,12 @@ class VehicleGunRotator(object):
             speedLimit = min(speedLimit, idealYawSpeed * timeDiff)
         return curAngle + min(shotDiff, speedLimit) if shotDiff > 0.0 else curAngle + max(shotDiff, -speedLimit)
 
-    def __getShotPosition(self, turretYaw, gunPitch, gunOffset=None):
+    def __getShotPosition(self, turretYaw, gunPitch, gunOffset=None, shotIdx=None):
         descr = self._avatar.getVehicleDescriptor()
         turretOffs = descr.hull.turretPositions[0] + descr.chassis.hullPosition
         if gunOffset is None:
             gunOffset = descr.activeGunShotPosition if self.__gunPosition is None else self.__gunPosition
-        shotSpeed = descr.shot.speed
+        shotSpeed = descr.getShot(shotIdx).speed
         turretWorldMatrix = Math.Matrix()
         turretWorldMatrix.setRotateY(turretYaw)
         turretWorldMatrix.translation = turretOffs

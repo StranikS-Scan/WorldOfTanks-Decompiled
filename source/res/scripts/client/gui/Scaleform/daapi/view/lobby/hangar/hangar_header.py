@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_header.py
+import logging
 import BigWorld
 import constants
 import nations
@@ -24,7 +25,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import finders
 from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID
-from gui.server_events.events_dispatcher import showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap, showMissionsCategories, showMissionsBattlePassCommonProgression
+from gui.server_events.events_dispatcher import showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap, showMissionsCategories, showMissionsBattlePassCommonProgression, showMissionsMapboxProgression
 from gui.server_events.events_helpers import isRankedDaily
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -37,7 +38,7 @@ from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IBattlePassController, IBootcampController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IMarathonEventsController, IFestivityController, IEventProgressionController, IRankedBattlesController, IQuestsController, IBattleRoyaleController
+from skeletons.gui.game_control import IMarathonEventsController, IFestivityController, IEventProgressionController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -45,6 +46,7 @@ from helpers import time_utils
 from helpers.time_utils import ONE_DAY
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
 from skeletons.tutorial import ITutorialLoader
+_logger = logging.getLogger(__name__)
 
 class WIDGET_PM_STATE(object):
     DISABLED = 0
@@ -212,6 +214,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
+    __mapboxCtrl = dependency.descriptor(IMapboxController)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
@@ -228,6 +231,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             showMissionsCategories(groupID=RANKED_DAILY_GROUP_ID)
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_BATTLE_PASS:
             showMissionsBattlePassCommonProgression()
+        elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_MAPBOX:
+            showMissionsMapboxProgression()
         elif questType in QUEST_TYPE_BY_PM_BRANCH.itervalues():
             if questID:
                 showPersonalMission(missionID=int(questID))
@@ -269,6 +274,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._festivityController.onStateChanged += self.update
         self.__battlePassController.onSeasonStateChange += self.update
         self.__rankedController.onGameModeStatusUpdated += self.update
+        self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.update
+        self.__mapboxCtrl.addProgressionListener(self.update)
         g_clientUpdateManager.addCallbacks({'inventory.1': self.update,
          'stats.tutorialsCompleted': self.update})
         if self._eventsController:
@@ -281,6 +288,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self._marathonsCtrl.onFlagUpdateNotify -= self.update
+        self.__mapboxCtrl.removeProgressionListener(self.update)
+        self.__mapboxCtrl.onPrimeTimeStatusUpdated -= self.update
         self._eventsCache.onSyncCompleted -= self.update
         self._eventsCache.onProgressUpdated -= self.update
         self._festivityController.onStateChanged -= self.update
@@ -297,16 +306,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return
 
     def _makeHeaderVO(self):
-        if self.prbDispatcher:
-            state = self.prbDispatcher.getFunctionalState()
-            isWeekendBrawl = state.isInPreQueue(constants.QUEUE_TYPE.WEEKEND_BRAWL) or state.isInUnit(constants.PREBATTLE_TYPE.WEEKEND_BRAWL)
-        else:
-            isWeekendBrawl = False
         emptyHeaderVO = {'isVisible': False,
          'quests': []}
         if not self.__tutorialLoader.gui.hangarHeaderEnabled:
-            return emptyHeaderVO
-        if isWeekendBrawl:
             return emptyHeaderVO
         if self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,
@@ -319,13 +321,17 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if self.__battleRoyaleController.isBattleRoyaleMode():
             if not (self.__battleRoyaleController.isInPrimeTime() and self.__isShowPersonalMission):
                 return []
-        if self._lobbyContext.getServerSettings().isPersonalMissionsEnabled():
+        if self._lobbyContext.getServerSettings().isPersonalMissionsEnabled() and not self.__mapboxCtrl.isMapboxMode():
             personalMissions = self.__getPersonalMissionsVO(vehicle)
             if personalMissions:
                 quests.append(personalMissions)
         battleQuests = self.__getBattleQuestsVO(vehicle)
         if battleQuests:
             quests.append(battleQuests)
+        if self.__mapboxCtrl.isMapboxMode():
+            mapboxProgression = self.__getMapboxProgressionVO()
+            if mapboxProgression:
+                quests.append(mapboxProgression)
         isMarathonQuestsGroupped = self.__screenWidth <= _SCREEN_WIDTH_FOR_MARATHON_GROUP
         marathonQuests = self.__getMarathonQuestsVO(vehicle, isMarathonQuestsGroupped)
         if marathonQuests:
@@ -468,6 +474,27 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def __onServerSettingChanged(self, diff):
         if 'elenSettings' in diff or constants.PremiumConfigs.PREM_QUESTS in diff:
             self.update()
+
+    def __getMapboxProgressionVO(self):
+        data = self.__mapboxCtrl.getProgressionData()
+        if data is not None and self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime():
+            completed = data.totalBattles
+            if completed is None:
+                _logger.error('battles played is None')
+                return
+            total = max(data.rewards)
+            if completed < total:
+                label = _ms(MENU.hangarHeaderMapboxProgressionLabel(LABEL_STATE.ACTIVE), total=completed)
+            else:
+                label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_MISSIONS_ICONS_CHECK_GREEN_XS)
+            progressionIcon = backport.image(R.images.gui.maps.icons.quests.headerFlagIcons.mapbox())
+            flag = backport.image(R.images.gui.maps.icons.library.hangarFlag.flag_green())
+        else:
+            flag = backport.image(R.images.gui.maps.icons.library.hangarFlag.flag_gray())
+            progressionIcon = backport.image(R.images.gui.maps.icons.quests.headerFlagIcons.mapbox_disabled())
+            label = ''
+        quests = [self._headerQuestFormaterVo(data is not None, progressionIcon, label, HANGAR_HEADER_QUESTS.QUEST_TYPE_MAPBOX, flag=flag, tooltip=TOOLTIPS_CONSTANTS.MAPBOX_PROGRESSION_PREVIEW, isTooltipSpecial=True)]
+        return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_PERSONAL, '', quests)
 
     def __getBattleQuestsVO(self, vehicle):
         quests = self._questController.getCurrentModeQuestsForVehicle(vehicle)
@@ -661,7 +688,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __updateBattlePassSecondaryEntryPoint(self):
         currentArenaBonusType = self.__getCurentArenaBonusType()
-        secondaryPointCanBeAvailable = currentArenaBonusType != constants.ARENA_BONUS_TYPE.REGULAR and currentArenaBonusType != constants.ARENA_BONUS_TYPE.UNKNOWN
+        secondaryPointCanBeAvailable = currentArenaBonusType not in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.UNKNOWN, constants.ARENA_BONUS_TYPE.MAPBOX)
         secondaryEntryPointAvailable = secondaryPointCanBeAvailable and not self.__battlePassController.isDisabled()
         self.as_setSecondaryEntryPointVisibleS(secondaryEntryPointAvailable)
         if secondaryEntryPointAvailable:

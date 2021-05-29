@@ -190,7 +190,7 @@ class TankmanRecruitAndEquip(Processor):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
         prefix = self.__getSysMsgPrefix()
         sysMsgType = _getSysMsgType(tmanCost)
-        return makeI18nSuccess(sysMsgKey='{}/financial_success'.format(prefix), auxData=ctx, price=formatPrice(tmanCost), type=sysMsgType) if tmanCost else makeI18nSuccess(sysMsgKey='{}/success'.format(prefix), auxData=ctx, type=sysMsgType)
+        return makeI18nSuccess(sysMsgKey='{}/financial_success'.format(prefix), auxData=ctx, price=formatPrice(tmanCost, useStyle=True), type=sysMsgType) if tmanCost else makeI18nSuccess(sysMsgKey='{}/success'.format(prefix), auxData=ctx, type=sysMsgType)
 
     def __getRecruitPrice(self, tmanCostTypeIdx):
         upgradeCost = self.itemsCache.items.shop.tankmanCost[tmanCostTypeIdx]

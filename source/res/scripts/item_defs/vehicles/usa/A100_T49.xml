@@ -24,6 +24,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.09	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	10.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -3668,7 +3674,7 @@
             </armor_4>
             <gun>	60	</gun>
           </armor>
-          <shotDispersionRadius>	0.6	</shotDispersionRadius>
+          <shotDispersionRadius>	0.57	</shotDispersionRadius>
           <reloadTime>	23	</reloadTime>
           <aimingTime>	3.6	</aimingTime>
           <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
@@ -3678,7 +3684,7 @@
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.38	</turretRotation>
+            <turretRotation>	0.35	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

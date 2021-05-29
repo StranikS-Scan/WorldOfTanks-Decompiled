@@ -10,6 +10,7 @@ from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.battle_results.components import style
+from gui.impl.gen import R
 from gui.impl import backport
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from helpers import dependency
@@ -306,7 +307,7 @@ class ProfileFalloutStatisticsVO(ProfileDictStatisticsVO):
 class ProfileRankedStatisticsVO(ProfileDictStatisticsVO):
 
     def _getHeaderText(self, data):
-        return i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_RANKED)
+        return i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_RANKED_15X15)
 
     def _getHeaderData(self, data):
         targetData = data[0]
@@ -324,6 +325,12 @@ class ProfileRankedStatisticsVO(ProfileDictStatisticsVO):
         targetData = data[0]
         stats = targetData.getBattlesStats()
         return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _formatChartsData((_getVehStatsByTypes(stats), _getVehStatsByNation(stats), tuple())))
+
+
+class ProfileRanked10x10StatisticsVO(ProfileRankedStatisticsVO):
+
+    def _getHeaderText(self, data):
+        return backport.text(R.strings.profile.section.statistics.headerText.ranked_10x10())
 
 
 class ProfileEpicRandomStatisticsVO(ProfileAllStatisticsVO):
@@ -351,6 +358,7 @@ _VO_MAPPING = {PROFILE_DROPDOWN_KEYS.ALL: ProfileAllStatisticsVO,
  PROFILE_DROPDOWN_KEYS.CLAN: ProfileGlobalMapStatisticsVO,
  PROFILE_DROPDOWN_KEYS.FORTIFICATIONS: ProfileFortStatisticsVO,
  PROFILE_DROPDOWN_KEYS.RANKED: ProfileRankedStatisticsVO,
+ PROFILE_DROPDOWN_KEYS.RANKED_10X10: ProfileRanked10x10StatisticsVO,
  PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: ProfileEpicRandomStatisticsVO}
 
 def getStatisticsVO(battlesType, targetData, accountDossier, isCurrentUser):

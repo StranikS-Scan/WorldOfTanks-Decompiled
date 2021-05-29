@@ -23,9 +23,7 @@ class AddEmailOverlayView(EmailOverlayView):
     _SUBTITLE = R.strings.dialogs.accountCompletion.email.subTitle()
     _eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, initialEmail='', fadeAnimation=False):
-        settings = ViewSettings(R.views.lobby.account_completion.EmailConfirmationCurtainView())
-        settings.model = EmailConfirmationCurtainModel()
+    def __init__(self, settings, initialEmail='', fadeAnimation=False):
         super(AddEmailOverlayView, self).__init__(settings, fadeAnimation)
         self._initialEmail = initialEmail
         self._tooltipItems = {}
@@ -125,4 +123,6 @@ class AddEmailOverlayView(EmailOverlayView):
 class AddEmailOverlayWindow(LobbyWindow):
 
     def __init__(self, initialEmail='', fadeAnimation=False):
-        super(AddEmailOverlayWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN, content=AddEmailOverlayView(initialEmail, fadeAnimation), layer=WindowLayer.TOP_WINDOW)
+        settings = ViewSettings(R.views.lobby.account_completion.EmailConfirmationCurtainView())
+        settings.model = EmailConfirmationCurtainModel()
+        super(AddEmailOverlayWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN, content=AddEmailOverlayView(settings, initialEmail, fadeAnimation), layer=WindowLayer.TOP_WINDOW)

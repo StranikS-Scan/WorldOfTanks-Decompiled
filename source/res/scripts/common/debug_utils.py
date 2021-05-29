@@ -52,7 +52,7 @@ class _LogWrapper(object):
         if self.__lvl >= _logLevel:
             return func
         else:
-            return lambda *args: None
+            return lambda *args, **kwargs: None
 
 
 class CriticalError(BaseException):

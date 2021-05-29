@@ -16,6 +16,13 @@ def createTooltipData(tooltip=None, isSpecial=False, specialAlias=None, specialA
     return TooltipData(tooltip, isSpecial, specialAlias, specialArgs)
 
 
+def createAndLoadBackportTooltipWindow(parentWindow, tooltip=None, isSpecial=False, tooltipId=None, specialArgs=None):
+    tooltipData = createTooltipData(tooltip=tooltip, isSpecial=isSpecial, specialAlias=tooltipId, specialArgs=specialArgs)
+    window = BackportTooltipWindow(tooltipData, parentWindow)
+    window.load()
+    return window
+
+
 class _BackportTooltipContent(ViewImpl):
     appLoader = dependency.descriptor(IAppLoader)
     __slots__ = ()

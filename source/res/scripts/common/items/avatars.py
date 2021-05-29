@@ -25,7 +25,7 @@ class Cache(object):
             if configXml is None:
                 _xml.raiseWrongXml(None, configXmlPath, 'can not open or read')
             if IS_CLIENT or IS_CELLAPP:
-                extras, extrasDict = common_extras.readExtras((None, configXmlPath), configXml, 'extras', 'avatar_extras_common')
+                extras, extrasDict = common_extras.readExtras((None, configXmlPath), configXml, 'extras', 'avatar_extras')
                 config = self.__commonConfig = {'extras': extras,
                  'extrasDict': extrasDict}
             configXml = None

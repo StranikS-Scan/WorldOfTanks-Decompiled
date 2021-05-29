@@ -167,7 +167,7 @@ class ArenaWithBasesDescription(DefaultArenaGuiDescription):
     def isInvitationEnabled(self):
         guiVisitor = self._visitor.gui
         replayCtrl = BattleReplay.g_replayCtrl
-        return (not replayCtrl.isPlaying or replayCtrl.isBattleSimulation) and (guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle() and IS_DEVELOPMENT)
+        return (not replayCtrl.isPlaying or replayCtrl.isBattleSimulation) and (guiVisitor.isRandomBattle() or guiVisitor.isMapbox() or guiVisitor.isTrainingBattle() and IS_DEVELOPMENT)
 
     def isQuestEnabled(self):
         guiVisitor = self._visitor.gui
@@ -288,7 +288,7 @@ class EpicBattlesDescription(ArenaWithLabelDescription):
         return EPIC_BATTLE.TEAM1NAME if team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER else EPIC_BATTLE.TEAM2NAME
 
 
-class WeekendBrawlDescription(ArenaWithLabelDescription):
+class MapboxArenaDescription(ArenaWithLabelDescription):
 
     def isInvitationEnabled(self):
         replayCtrl = BattleReplay.g_replayCtrl
@@ -307,8 +307,8 @@ def createDescription(arenaVisitor):
         description = EpicBattlesDescription(arenaVisitor)
     elif guiVisitor.isBattleRoyale():
         description = BattleRoyaleDescription(arenaVisitor)
-    elif guiVisitor.isWeekendBrawlBattle():
-        description = WeekendBrawlDescription(arenaVisitor)
+    elif guiVisitor.isMapbox():
+        description = MapboxArenaDescription(arenaVisitor)
     elif guiVisitor.hasLabel():
         description = ArenaWithLabelDescription(arenaVisitor)
     else:

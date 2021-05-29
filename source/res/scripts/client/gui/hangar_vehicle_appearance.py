@@ -357,7 +357,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         modelCA.name = 'ModelCollisions'
         resources.append(modelCA)
         if crashedBspModels:
-            crashedModelCA = BigWorld.CollisionAssembler(crashedBspModels, self.worldID)
+            crashedModelCA = BigWorld.CollisionAssembler(crashedBspModels, self.__spaceId)
             crashedModelCA.name = 'CrashedModelCollisions'
             resources.append(crashedModelCA)
         physicalTracksBuilders = vDesc.chassis.physicalTracks
@@ -372,33 +372,37 @@ class HangarVehicleAppearance(ScriptGameObject):
         if not self.__vDesc:
             self.__fireResourcesLoadedEvent()
             return
-        if buildInd != self.__curBuildInd:
+        elif buildInd != self.__curBuildInd:
             return
-        failedIDs = resourceRefs.failedIDs
-        resources = self.__resources
-        succesLoaded = True
-        for resID, resource in resourceRefs.items():
-            if resID not in failedIDs:
-                resources[resID] = resource
-            _logger.error('Could not load %s', resID)
-            succesLoaded = False
-
-        if self.collisions:
-            BigWorld.removeCameraCollider(self.collisions.getColliderID())
-        self._modelCollisions = resourceRefs['ModelCollisions']
-        hasCrashedCollisions = resourceRefs.has_key('CrashedModelCollisions')
-        if hasCrashedCollisions:
-            self._crashedModelCollisions = resourceRefs['CrashedModelCollisions']
-        if self.__isVehicleDestroyed and hasCrashedCollisions:
-            self.collisions = self.createComponent(BigWorld.CollisionComponent, self._crashedModelCollisions)
         else:
-            self.collisions = self.createComponent(BigWorld.CollisionComponent, self._modelCollisions)
-        if succesLoaded:
-            self.__setupModel(buildInd)
-        self.turretRotator = SimpleTurretRotator(self.compoundModel, self.__staticTurretYaw, self.__vDesc.hull.turretPositions[0], self.__vDesc.hull.turretPitches[0], easingCls=math_utils.Easing.squareEasing)
-        self.__applyAttachmentsVisibility()
-        self.__fireResourcesLoadedEvent()
-        super(HangarVehicleAppearance, self).activate()
+            failedIDs = resourceRefs.failedIDs
+            resources = self.__resources
+            succesLoaded = True
+            for resID, resource in resourceRefs.items():
+                if resID not in failedIDs:
+                    resources[resID] = resource
+                _logger.error('Could not load %s', resID)
+                succesLoaded = False
+
+            if self.collisions:
+                BigWorld.removeCameraCollider(self.collisions.getColliderID())
+            self._modelCollisions = resourceRefs['ModelCollisions']
+            hasCrashedCollisions = resourceRefs.has_key('CrashedModelCollisions')
+            if hasCrashedCollisions:
+                self._crashedModelCollisions = resourceRefs['CrashedModelCollisions']
+            if self.__isVehicleDestroyed and hasCrashedCollisions:
+                self.collisions = self.createComponent(BigWorld.CollisionComponent, self._crashedModelCollisions)
+            else:
+                self.collisions = self.createComponent(BigWorld.CollisionComponent, self._modelCollisions)
+            if succesLoaded:
+                self.__setupModel(buildInd)
+            if self.turretRotator is not None:
+                self.turretRotator.destroy()
+            self.turretRotator = SimpleTurretRotator(self.compoundModel, self.__staticTurretYaw, self.__vDesc.hull.turretPositions[0], self.__vDesc.hull.turretPitches[0], easingCls=math_utils.Easing.squareEasing)
+            self.__applyAttachmentsVisibility()
+            self.__fireResourcesLoadedEvent()
+            super(HangarVehicleAppearance, self).activate()
+            return
 
     def __fireResourcesLoadedEvent(self):
         compDescr = self.__vDesc.type.compactDescr if self.__vDesc is not None else None

@@ -113,7 +113,7 @@ class EventInfoModel(object):
                 i18nKey = '#quests:details/header/tillDate'
                 args = {'finishTime': self._getDateTimeString(self.event.getFinishTime())}
             weekDays = self.event.getWeekDays()
-            intervals = self.event.getCollapsedActiveTimeIntervals()
+            intervals = self.event.getActiveTimeIntervals()
             if weekDays or intervals:
                 if i18nKey is None:
                     i18nKey = '#quests:details/header/schedule'

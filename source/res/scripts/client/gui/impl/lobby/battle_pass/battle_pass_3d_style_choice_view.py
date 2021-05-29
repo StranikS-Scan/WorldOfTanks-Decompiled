@@ -8,9 +8,10 @@ from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
-from gui.battle_pass.battle_pass_helpers import isVehicleInInventoryByStyle, getCurrentStyleLevel, getStyleInfo
+from gui.battle_pass.battle_pass_helpers import getCurrentStyleLevel, getStyleInfo
 from gui.battle_pass.state_machine.state_machine_helpers import getStylesToChooseUntilChapter
 from gui.impl import backport
+from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass3d_style_choice_view_model import BattlePass3DStyleChoiceViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tank_style_model import TankStyleModel
@@ -25,6 +26,7 @@ from shared_utils import first
 from skeletons.gui.game_control import IBattlePassController
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_style_info_tooltip_view import BattlePassStyleInfoTooltipView
 from skeletons.gui.shared import IItemsCache
+from tutorial.control.game_vars import getVehicleByIntCD
 
 class _BattlePassViewStates(object):
 
@@ -55,7 +57,7 @@ class _BattlePassViewStates(object):
 
 
 _BPViewStates = _BattlePassViewStates()
-_rBattlePass = R.strings.battle_pass_2020
+_rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
 class BattlePass3dStyleChoiceView(ViewImpl):
@@ -89,7 +91,10 @@ class BattlePass3dStyleChoiceView(ViewImpl):
                 styleInfo = getStyleInfo(styleBonus)
                 tankStyleModel.setStyleId(styleInfo.id)
                 tankStyleModel.setStyleName(styleInfo.userName)
-                tankStyleModel.setIsInHangar(isVehicleInInventoryByStyle(styleInfo))
+                vehicleCD = getVehicleCDForStyle(styleInfo)
+                vehicle = getVehicleByIntCD(vehicleCD)
+                fillVehicleInfo(tankStyleModel.vehicleInfo, vehicle)
+                tankStyleModel.setIsInHangar(vehicle.isInInventory)
                 tankStyleModel.setIsObtained(bool(styleInfo.fullCount()))
                 tx.tankStylesList.addViewModel(tankStyleModel)
 

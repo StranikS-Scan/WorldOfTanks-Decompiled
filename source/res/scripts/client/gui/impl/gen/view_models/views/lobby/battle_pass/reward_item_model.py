@@ -8,7 +8,7 @@ class RewardItemModel(BonusModel):
     SIZE_SMALL = 1
     SIZE_BIG = 2
 
-    def __init__(self, properties=20, commands=0):
+    def __init__(self, properties=13, commands=0):
         super(RewardItemModel, self).__init__(properties=properties, commands=commands)
 
     def getItem(self):
@@ -17,28 +17,28 @@ class RewardItemModel(BonusModel):
     def setItem(self, value):
         self._setString(7, value)
 
-    def getIcon(self):
+    def getUserName(self):
         return self._getString(8)
 
-    def setIcon(self, value):
+    def setUserName(self, value):
         self._setString(8, value)
 
-    def getBigIcon(self):
+    def getIcon(self):
         return self._getString(9)
 
-    def setBigIcon(self, value):
+    def setIcon(self, value):
         self._setString(9, value)
 
-    def getHighlightType(self):
+    def getType(self):
         return self._getString(10)
 
-    def setHighlightType(self, value):
+    def setType(self, value):
         self._setString(10, value)
 
-    def getBigHighlightType(self):
+    def getBigIcon(self):
         return self._getString(11)
 
-    def setBigHighlightType(self, value):
+    def setBigIcon(self, value):
         self._setString(11, value)
 
     def getOverlayType(self):
@@ -47,60 +47,11 @@ class RewardItemModel(BonusModel):
     def setOverlayType(self, value):
         self._setString(12, value)
 
-    def getBigOverlayType(self):
-        return self._getString(13)
-
-    def setBigOverlayType(self, value):
-        self._setString(13, value)
-
-    def getHighlightIcon(self):
-        return self._getString(14)
-
-    def setHighlightIcon(self, value):
-        self._setString(14, value)
-
-    def getBigHighlightIcon(self):
-        return self._getString(15)
-
-    def setBigHighlightIcon(self, value):
-        self._setString(15, value)
-
-    def getOverlayIcon(self):
-        return self._getString(16)
-
-    def setOverlayIcon(self, value):
-        self._setString(16, value)
-
-    def getBigOverlayIcon(self):
-        return self._getString(17)
-
-    def setBigOverlayIcon(self, value):
-        self._setString(17, value)
-
-    def getAlign(self):
-        return self._getString(18)
-
-    def setAlign(self, value):
-        self._setString(18, value)
-
-    def getSize(self):
-        return self._getNumber(19)
-
-    def setSize(self, value):
-        self._setNumber(19, value)
-
     def _initialize(self):
         super(RewardItemModel, self)._initialize()
         self._addStringProperty('item', '')
+        self._addStringProperty('userName', '')
         self._addStringProperty('icon', '')
+        self._addStringProperty('type', '')
         self._addStringProperty('bigIcon', '')
-        self._addStringProperty('highlightType', '')
-        self._addStringProperty('bigHighlightType', '')
         self._addStringProperty('overlayType', '')
-        self._addStringProperty('bigOverlayType', '')
-        self._addStringProperty('highlightIcon', '')
-        self._addStringProperty('bigHighlightIcon', '')
-        self._addStringProperty('overlayIcon', '')
-        self._addStringProperty('bigOverlayIcon', '')
-        self._addStringProperty('align', '')
-        self._addNumberProperty('size', 0)

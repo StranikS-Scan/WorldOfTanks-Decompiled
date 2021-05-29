@@ -13,13 +13,13 @@ from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMet
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import event_dispatcher as shared_events
-from gui.shared.formatters.icons import roleActionsGroup
+from gui.shared.formatters.icons import getRoleIcon
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.items_actions.actions import VehicleRepairAction
-from helpers import i18n, dependency, int2roman
+from helpers import dependency, int2roman
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBootcampController, IUISpamController
@@ -94,13 +94,12 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
                 rentAvailable = vehicle.isRentable and canBuyOrRent
             if msgLvl == Vehicle.VEHICLE_STATE_LEVEL.RENTABLE:
                 msgLvl = Vehicle.VEHICLE_STATE_LEVEL.INFO
-            msg, msgLvl = self.__applyGamemodeOverrides(statusId, i18n.makeString(msg), msgLvl)
+            statusOverrideRes = R.strings.ranked_battles.currentVehicleStatus.dyn(statusId)
+            if statusOverrideRes:
+                msg = backport.text(statusOverrideRes())
             msgString = ''
-            if statusId != Vehicle.VEHICLE_STATE.UNDAMAGED or msgLvl == Vehicle.VEHICLE_STATE_LEVEL.ACTIONS_GROUP:
+            if statusId != Vehicle.VEHICLE_STATE.UNDAMAGED:
                 msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': msg})
-            roleID = ROLE_TYPE.NOT_DEFINED
-            if msgLvl == Vehicle.VEHICLE_STATE_LEVEL.ACTIONS_GROUP:
-                roleID = vehicle.role
             self.__applyCustomizationNewCounter(vehicle)
             self.__updateDevices(vehicle)
             self.as_updateVehicleStatusS({'message': msgString,
@@ -109,7 +108,8 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
              'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
              'vehicleLevel': '{}'.format(int2roman(vehicle.level)),
              'vehicleName': '{}'.format(vehicle.shortUserName),
-             'actionGroupId': roleID})
+             'roleId': vehicle.role if self.__isRankedPrbActive() else ROLE_TYPE.NOT_DEFINED,
+             'roleMessage': self.__getRoleMessage() if self.__isRankedPrbActive() else ''})
 
     def __inventoryUpdateCallBack(self, *args):
         self.update()
@@ -144,16 +144,11 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     def __isRankedPrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.RANKED)
 
-    def __applyGamemodeOverrides(self, statusId, msg, msgLvl):
-        return self.__applyRankedOverrides(statusId, msg, msgLvl) if self.__isRankedPrbActive() else (msg, msgLvl)
-
-    def __applyRankedOverrides(self, statusId, msg, msgLvl):
-        statusOverrideRes = R.strings.ranked_battles.currentVehicleStatus.dyn(statusId)
-        if statusOverrideRes:
-            msg = backport.text(statusOverrideRes())
-        isRole = statusId in (Vehicle.VEHICLE_STATE.UNDAMAGED, Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED)
-        if isRole and g_currentVehicle.item.actionsGroup:
+    @staticmethod
+    def __getRoleMessage():
+        msg = ''
+        hasRole = g_currentVehicle.item.role != ROLE_TYPE.NOT_DEFINED
+        if hasRole:
             actionsGroupLabel = g_currentVehicle.item.actionsGroupLabel
-            msg = text_styles.concatStylesToSingleLine(backport.text(R.strings.menu.roleExp.currentVehicleStatus()), ' ', roleActionsGroup(actionsGroupLabel), backport.text(R.strings.menu.roleExp.actionsGroup.dyn(actionsGroupLabel)()))
-            msgLvl = Vehicle.VEHICLE_STATE_LEVEL.ACTIONS_GROUP
-        return (msg, msgLvl)
+            msg = text_styles.concatStylesToSingleLine(getRoleIcon(actionsGroupLabel), ' ', backport.text(R.strings.menu.roleExp.roleName.dyn(actionsGroupLabel)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(actionsGroupLabel)())))
+        return makeHtmlString('html_templates:vehicleStatus', Vehicle.VEHICLE_STATE_LEVEL.ROLE, {'message': msg}) if hasRole else ''

@@ -30,9 +30,9 @@ class BattlePassGiftTokenTooltipData(BlocksTooltipData):
 
     @staticmethod
     def __packImageBlock(shortName):
-        image = R.images.gui.maps.icons.battlePass2020.tooltips.dyn(shortName)
+        image = R.images.gui.maps.icons.battlePass.tooltips.dyn(shortName)
         if not image.exists():
-            image = R.images.gui.maps.icons.battlePass2020.tooltips.new_device_gift
+            image = R.images.gui.maps.icons.battlePass.tooltips.new_device_fv_gift
         return formatters.packImageBlockData(img=backport.image(image()), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-1))
 
     @classmethod
@@ -73,10 +73,10 @@ class BattlePassPointsTooltipData(BlocksTooltipData):
 
     def _packBlocks(self, *args, **kwargs):
         self._items = super(BattlePassPointsTooltipData, self)._packBlocks(*args, **kwargs)
-        titleBlock = formatters.packTitleDescBlock(title=text_styles.highTitle(backport.text(R.strings.battle_pass_2020.tooltips.battlePassPoints.title())))
-        imageBlock = formatters.packImageBlockData(img=backport.image(R.images.gui.maps.icons.battlePass2020.tooltips.battlePassPoints()), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
+        titleBlock = formatters.packTitleDescBlock(title=text_styles.highTitle(backport.text(R.strings.battle_pass.tooltips.battlePassPoints.title())))
+        imageBlock = formatters.packImageBlockData(img=backport.image(R.images.gui.maps.icons.battlePass.tooltips.battlePassPoints()), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
         titleImageBlock = formatters.packBuildUpBlockData([titleBlock, imageBlock])
         self._items.append(titleImageBlock)
-        descriptionBlock = text_styles.main(backport.text(R.strings.battle_pass_2020.tooltips.battlePassPoints.description()))
+        descriptionBlock = text_styles.main(backport.text(R.strings.battle_pass.tooltips.battlePassPoints.description()))
         self._items.append(formatters.packTextBlockData(descriptionBlock))
         return self._items

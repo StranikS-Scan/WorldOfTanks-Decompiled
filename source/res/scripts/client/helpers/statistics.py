@@ -241,7 +241,6 @@ class StatisticsCollector(IStatisticsCollector):
          'cpuFreq': statisticsDict['cpuFreq'],
          'gpuVendor': statisticsDict['gpuVendor'],
          'gpuMemory': statisticsDict['gpuMemory'],
-         'mainMemory': statisticsDict['mainMemory'],
          'os': statisticsDict['os'],
          'graphicsEngine': self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE),
          'cpuScore': BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE),
@@ -258,7 +257,12 @@ class StatisticsCollector(IStatisticsCollector):
          'multiGPU': statisticsDict['multiGPU'],
          'cpuName': statisticsDict['cpuName'],
          'hangarFirstLoadingTime': self.__hangarLoadingTime,
-         'clientBit': statisticsDict['clientBit']}
+         'clientBit': statisticsDict['clientBit'],
+         'ramTotal': statisticsDict['ramTotal'],
+         'virtTotal': statisticsDict['virtTotal'],
+         'pageFileTotal': statisticsDict['pageFileTotal'],
+         'systemHddName': statisticsDict['systemHddName'],
+         'gameHddName': statisticsDict['gameHddName']}
 
     def __onSettingsChanged(self, diff):
         keys = set(diff.keys())

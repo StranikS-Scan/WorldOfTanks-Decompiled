@@ -15,20 +15,20 @@ class RolesViewModel(ViewModel):
     def roleActions(self):
         return self._getViewModel(0)
 
-    def getRoleName(self):
-        return self._getResource(1)
+    def getRoleType(self):
+        return self._getString(1)
 
-    def setRoleName(self, value):
-        self._setResource(1, value)
+    def setRoleType(self, value):
+        self._setString(1, value)
 
-    def getRoleImage(self):
+    def getRoleBgImage(self):
         return self._getResource(2)
 
-    def setRoleImage(self, value):
+    def setRoleBgImage(self, value):
         self._setResource(2, value)
 
     def _initialize(self):
         super(RolesViewModel, self)._initialize()
         self._addViewModelProperty('roleActions', UserListModel())
-        self._addResourceProperty('roleName', R.invalid())
-        self._addResourceProperty('roleImage', R.invalid())
+        self._addStringProperty('roleType', '')
+        self._addResourceProperty('roleBgImage', R.invalid())

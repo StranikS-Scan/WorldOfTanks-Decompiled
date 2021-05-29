@@ -8,8 +8,8 @@
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	50	</forward>
-    <backward>	20	</backward>
+    <forward>	55	</forward>
+    <backward>	25	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.197	</moving>
@@ -24,6 +24,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.09	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	13.0	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
@@ -36,7 +42,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	130	</armor_1>
+      <armor_1>	135	</armor_1>
       <armor_2>	80	</armor_2>
       <armor_3>	80	</armor_3>
       <armor_4>	60	</armor_4>
@@ -1401,16 +1407,16 @@
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	220	</armor_1>
-        <armor_2>	160	</armor_2>
-        <armor_3>	190	</armor_3>
+        <armor_1>	250	</armor_1>
+        <armor_2>	200	</armor_2>
+        <armor_3>	210	</armor_3>
         <armor_4>	50	</armor_4>
         <armor_5>	48	</armor_5>
         <armor_6>	107	</armor_6>
         <armor_7>	121	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	60	</armor_9>
-        <armor_10>	240	</armor_10>
+        <armor_10>	275	</armor_10>
         <armor_11>	48	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_11>
         <armor_12>	30	</armor_12>
@@ -1453,7 +1459,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	8.7	</reloadTime>
+          <reloadTime>	8.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2150,7 +2156,7 @@
       <engines>
         <_12150L7B>
           <smplEnginePower>	700	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </_12150L7B>
       </engines>
       <chassis>

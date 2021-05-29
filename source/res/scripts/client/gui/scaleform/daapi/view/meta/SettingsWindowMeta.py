@@ -25,6 +25,9 @@ class SettingsWindowMeta(AbstractWindowView):
     def altBulbPreview(self, sampleID):
         self._printOverrideError('altBulbPreview')
 
+    def artyBulbPreview(self, sampleID):
+        self._printOverrideError('artyBulbPreview')
+
     def isSoundModeValid(self):
         self._printOverrideError('isSoundModeValid')
 

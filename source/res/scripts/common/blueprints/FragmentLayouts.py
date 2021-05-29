@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/blueprints/FragmentLayouts.py
 from bitstring import BitArray
+from bit_coder import BitCoder
 
 class Layout(object):
     __slots__ = ('rows', 'columns', 'stamps', '__iadd__', '__isub__', '__len__', 'asInt', 'fromInt', 'layoutData')
@@ -18,8 +19,20 @@ class Layout(object):
 
     @classmethod
     def fromInt(cls, packedLayout=None, length=None):
-        length = length or 0
+        length = cls.__checkParams(packedLayout, length)
         return cls(0 if packedLayout is None else int(packedLayout), length)
+
+    @classmethod
+    def calcFilledfromInt(cls, packedLayout, length):
+        cls.__checkParams(packedLayout, length)
+        return cls.__numberOfSetBits(packedLayout & BitCoder.mask(length))
+
+    @classmethod
+    def calcEmptyfromInt(cls, packedLayout, length):
+        return length - cls.calcFilledfromInt(packedLayout, length)
+
+    def asInt(self):
+        return (len(self) << 28) + (self.columns << 24) + (self.stamps.uint << 16) + self.layoutData.uint
 
     def __init__(self, intLayout, length):
         layoutDataLength = int(intLayout >> 28 or length)
@@ -60,5 +73,13 @@ class Layout(object):
     def __repr__(self):
         return bin(self.layoutData[-len(self)::].uint)
 
-    def asInt(self):
-        return (len(self) << 28) + (self.columns << 24) + (self.stamps.uint << 16) + self.layoutData.uint
+    @staticmethod
+    def __checkParams(packedLayout, length):
+        length = length or 0
+        return length
+
+    @staticmethod
+    def __numberOfSetBits(i):
+        i = i - (i >> 1 & 1431655765)
+        i = (i & 858993459) + (i >> 2 & 858993459)
+        return ((i + (i >> 4) & 252645135) * 16843009 & 4294967295L) >> 24

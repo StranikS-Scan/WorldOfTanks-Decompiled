@@ -92,36 +92,39 @@ VEHICLE_BATTLE_TYPES_ORDER = (VEHICLE_CLASS_NAME.HEAVY_TANK,
  VEHICLE_CLASS_NAME.LIGHT_TANK,
  VEHICLE_CLASS_NAME.SPG)
 VEHICLE_BATTLE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(VEHICLE_BATTLE_TYPES_ORDER)))
-_ALL_ACTION_GROUPS_ORDER = [constants.ACTIONS_GROUP_TYPE.NOT_DEFINED,
- constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_ONE,
- constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_THREE,
- constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_TWO,
- constants.ACTIONS_GROUP_TYPE.TANK_ONE,
- constants.ACTIONS_GROUP_TYPE.TANK_TWO,
- constants.ACTIONS_GROUP_TYPE.FIRE_SUPPORT_ONE,
- constants.ACTIONS_GROUP_TYPE.HASH_SUPPORT_ONE,
- constants.ACTIONS_GROUP_TYPE.SNIPER_ONE,
- constants.ACTIONS_GROUP_TYPE.SCOUT_ONE,
- constants.ACTIONS_GROUP_TYPE.SCOUT_TWO,
- constants.ACTIONS_GROUP_TYPE.SPG_ONE]
-_LIGHT_GROUPS = {constants.ACTIONS_GROUP_TYPE.NOT_DEFINED, constants.ACTIONS_GROUP_TYPE.SCOUT_ONE, constants.ACTIONS_GROUP_TYPE.SCOUT_TWO}
-_MEDIUM_GROUPS = {constants.ACTIONS_GROUP_TYPE.NOT_DEFINED,
- constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_THREE,
- constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_TWO,
- constants.ACTIONS_GROUP_TYPE.FIRE_SUPPORT_ONE}
-_HEAVY_GROUPS = {constants.ACTIONS_GROUP_TYPE.NOT_DEFINED,
- constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_ONE,
- constants.ACTIONS_GROUP_TYPE.TANK_ONE,
- constants.ACTIONS_GROUP_TYPE.TANK_TWO}
-_AT_SPG_GROUPS = {constants.ACTIONS_GROUP_TYPE.NOT_DEFINED,
- constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_ONE,
- constants.ACTIONS_GROUP_TYPE.HASH_SUPPORT_ONE,
- constants.ACTIONS_GROUP_TYPE.SNIPER_ONE}
-_SPG_GROUPS = {constants.ACTIONS_GROUP_TYPE.SPG_ONE}
+_ALL_ACTION_GROUPS_ORDER = [constants.ACTIONS_GROUP_TYPE.LT_TRACKED,
+ constants.ACTIONS_GROUP_TYPE.LT_WHEELED,
+ constants.ACTIONS_GROUP_TYPE.HT_UNIVERSAL,
+ constants.ACTIONS_GROUP_TYPE.MT_UNIVERSAL,
+ constants.ACTIONS_GROUP_TYPE.ATSPG_UNIVERSAL,
+ constants.ACTIONS_GROUP_TYPE.HT_TANK,
+ constants.ACTIONS_GROUP_TYPE.MT_TANK,
+ constants.ACTIONS_GROUP_TYPE.ATSPG_TANK,
+ constants.ACTIONS_GROUP_TYPE.MT_FIRESUPPORT,
+ constants.ACTIONS_GROUP_TYPE.ATSPG_FIRESUPPORT,
+ constants.ACTIONS_GROUP_TYPE.MT_ASSASIN,
+ constants.ACTIONS_GROUP_TYPE.HT_ASSAULT,
+ constants.ACTIONS_GROUP_TYPE.HT_FIRESUPPORT,
+ constants.ACTIONS_GROUP_TYPE.ATSPG_BURSTDAMAGE,
+ constants.ACTIONS_GROUP_TYPE.SPG]
+_LIGHT_GROUPS = [constants.ACTIONS_GROUP_TYPE.LT_TRACKED, constants.ACTIONS_GROUP_TYPE.LT_WHEELED]
+_MEDIUM_GROUPS = [constants.ACTIONS_GROUP_TYPE.MT_TANK,
+ constants.ACTIONS_GROUP_TYPE.MT_UNIVERSAL,
+ constants.ACTIONS_GROUP_TYPE.MT_FIRESUPPORT,
+ constants.ACTIONS_GROUP_TYPE.MT_ASSASIN]
+_HEAVY_GROUPS = [constants.ACTIONS_GROUP_TYPE.HT_TANK,
+ constants.ACTIONS_GROUP_TYPE.HT_UNIVERSAL,
+ constants.ACTIONS_GROUP_TYPE.HT_ASSAULT,
+ constants.ACTIONS_GROUP_TYPE.HT_FIRESUPPORT]
+_AT_SPG_GROUPS = [constants.ACTIONS_GROUP_TYPE.ATSPG_TANK,
+ constants.ACTIONS_GROUP_TYPE.ATSPG_UNIVERSAL,
+ constants.ACTIONS_GROUP_TYPE.ATSPG_FIRESUPPORT,
+ constants.ACTIONS_GROUP_TYPE.ATSPG_BURSTDAMAGE]
+_SPG_GROUPS = {constants.ACTIONS_GROUP_TYPE.SPG}
 VEHICLE_ACTION_GROUPS_LABELS = [ constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _ALL_ACTION_GROUPS_ORDER ]
 VEHICLE_ACTION_GROUPS_LABELS_BY_CLASS = {VEHICLE_CLASS_NAME.LIGHT_TANK: [ constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _LIGHT_GROUPS ],
  VEHICLE_CLASS_NAME.MEDIUM_TANK: [ constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _MEDIUM_GROUPS ],
- VEHICLE_CLASS_NAME.HEAVY_TANK: {constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _HEAVY_GROUPS},
+ VEHICLE_CLASS_NAME.HEAVY_TANK: [ constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _HEAVY_GROUPS ],
  VEHICLE_CLASS_NAME.AT_SPG: [ constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _AT_SPG_GROUPS ],
  VEHICLE_CLASS_NAME.SPG: [ constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _SPG_GROUPS ]}
 
@@ -146,9 +149,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     BATTLE_ROYALE = 'battle_royale'
     RENT_PROMOTION = 'rent_promotion'
     EARN_CRYSTALS = 'earn_crystals'
-    LOW_TIER_EVENT = 'lowTierEvent'
-    BOB = 'bob'
-    WEEKEND_BRAWL = 'weekend_brawl'
 
 
 EPIC_ACTION_VEHICLE_CDS = (44033, 63265)
@@ -212,7 +212,7 @@ class Vehicle(FittingItem):
         WARNING = 'warning'
         RENTED = 'rented'
         RENTABLE = 'rentableBlub'
-        ACTIONS_GROUP = 'actionsGroup'
+        ROLE = 'role'
 
     rentalsController = dependency.descriptor(IRentalsController)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -734,6 +734,10 @@ class Vehicle(FittingItem):
     @property
     def repairCost(self):
         return self._repairCost
+
+    @repairCost.setter
+    def repairCost(self, value):
+        self._repairCost = value
 
     @property
     def health(self):
@@ -1268,10 +1272,6 @@ class Vehicle(FittingItem):
         return checkForTags(self.tags, VEHICLE_TAGS.EVENT)
 
     @property
-    def isLowTierEvent(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.LOW_TIER_EVENT)
-
-    @property
     def isOnlyForEpicBattles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.EPIC_BATTLES)
 
@@ -1282,14 +1282,6 @@ class Vehicle(FittingItem):
     @property
     def isOnlyForBattleRoyaleBattles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.BATTLE_ROYALE)
-
-    @property
-    def isOnlyForBob(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.BOB)
-
-    @property
-    def isOnlyForWeekendBrawlBattles(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.WEEKEND_BRAWL)
 
     @property
     def isTelecom(self):

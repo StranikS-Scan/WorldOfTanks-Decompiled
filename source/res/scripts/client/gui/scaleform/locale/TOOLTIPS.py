@@ -388,6 +388,8 @@ class TOOLTIPS(object):
     SHOWVECTORONMAP_BODY = '#tooltips:showVectorOnMap/body'
     SHOWSECTORONMAP_HEADER = '#tooltips:showSectorOnMap/header'
     SHOWSECTORONMAP_BODY = '#tooltips:showSectorOnMap/body'
+    SHOWARTYHITONMAP_HEADER = '#tooltips:showArtyHitOnMap/header'
+    SHOWARTYHITONMAP_BODY = '#tooltips:showArtyHitOnMap/body'
     INCREASEDZOOM_HEADER = '#tooltips:increasedZoom/header'
     INCREASEDZOOM_BODY = '#tooltips:increasedZoom/body'
     HULLLOCKENABLED_HEADER = '#tooltips:hullLockEnabled/header'
@@ -401,6 +403,9 @@ class TOOLTIPS(object):
     EPICRANDOMSTANDARDNOTIFICATION_HEADER = '#tooltips:epicRandomStandardNotification/header'
     EPICRANDOMSTANDARDNOTIFICATION_BODY = '#tooltips:epicRandomStandardNotification/body'
     EPICRANDOMSTANDARDNOTIFICATION_ATTENTION = '#tooltips:epicRandomStandardNotification/attention'
+    ONLY10MODE_HEADER = '#tooltips:only10Mode/header'
+    ONLY10MODE_BODY = '#tooltips:only10Mode/body'
+    ONLY10MODE_ATTENTION = '#tooltips:only10Mode/attention'
     EPICBATTLEWIDGET_HEADER = '#tooltips:epicBattleWidget/header'
     EPICBATTLEWIDGET_DESC_NOPRESTIGE = '#tooltips:epicBattleWidget/desc/noPrestige'
     EPICBATTLEWIDGET_DESC_NORMAL = '#tooltips:epicBattleWidget/desc/normal'
@@ -548,6 +553,13 @@ class TOOLTIPS(object):
     BATTLETYPES_BATTLEROYALE_TILLEND = '#tooltips:battleTypes/battleRoyale/tillEnd'
     BATTLETYPES_BATTLEROYALE_TILLSTARTCYCLE = '#tooltips:battleTypes/battleRoyale/tillStartCycle'
     BATTLETYPES_BATTLEROYALE_TILLENDCYCLE = '#tooltips:battleTypes/battleRoyale/tillEndCycle'
+    BATTLETYPES_MAPBOX_HEADER = '#tooltips:battleTypes/mapbox/header'
+    BATTLETYPES_MAPBOX_BODY = '#tooltips:battleTypes/mapbox/body'
+    BATTLETYPES_MAPBOX_FROZEN_BODY = '#tooltips:battleTypes/mapbox/frozen/body'
+    BATTLETYPES_MAPBOX_TILLSTART = '#tooltips:battleTypes/mapbox/tillStart'
+    BATTLETYPES_MAPBOX_TILLEND = '#tooltips:battleTypes/mapbox/tillEnd'
+    BATTLETYPES_MAPBOX_TILLSTARTCYCLE = '#tooltips:battleTypes/mapbox/tillStartCycle'
+    BATTLETYPES_MAPBOX_TILLENDCYCLE = '#tooltips:battleTypes/mapbox/tillEndCycle'
     RANKED_SERVERNAME = '#tooltips:ranked/serverName'
     FALLOUTBATTLESELECTORWINDOW_INFO_HEADER = '#tooltips:falloutBattleSelectorWindow/info/header'
     FALLOUTBATTLESELECTORWINDOW_INFO_BODY = '#tooltips:falloutBattleSelectorWindow/info/body'
@@ -836,6 +848,10 @@ class TOOLTIPS(object):
     MODULEFITS_TROPHYEQUIPMENT_UPGRADED_DESCRIPTION = '#tooltips:moduleFits/trophyEquipment/upgraded/description'
     MODULEFITS_TROPHYEQUIPMENT_CANNOTBUY_HEADER = '#tooltips:moduleFits/trophyEquipment/cannotBuy/header'
     MODULEFITS_TROPHYEQUIPMENT_CANNOTBUY_DESCRIPTION = '#tooltips:moduleFits/trophyEquipment/cannotBuy/description'
+    MODULEFITS_DELUXEEQUIPMENT_CANNOTBUY_HEADER = '#tooltips:moduleFits/deluxeEquipment/cannotBuy/header'
+    MODULEFITS_DELUXEEQUIPMENT_CANNOTBUY_DESCRIPTION = '#tooltips:moduleFits/deluxeEquipment/cannotBuy/description'
+    MODULEFITS_BATTLEBOOSTER_CANNOTBUY_HEADER = '#tooltips:moduleFits/battleBooster/cannotBuy/header'
+    MODULEFITS_BATTLEBOOSTER_CANNOTBUY_DESCRIPTION = '#tooltips:moduleFits/battleBooster/cannotBuy/description'
     DEVICEFITS_CREDITS_ERROR_HEADER = '#tooltips:deviceFits/credits_error/header'
     DEVICEFITS_CREDITS_ERROR_TEXT = '#tooltips:deviceFits/credits_error/text'
     DEVICEFITS_NEED_TURRET_HEADER = '#tooltips:deviceFits/need_turret/header'
@@ -1129,7 +1145,6 @@ class TOOLTIPS(object):
     VEHICLE_DEAL_TELECOM_MAIN_TWITCHPRIME = '#tooltips:vehicle/deal/telecom/main/Twitchprime'
     VEHICLE_TRADE = '#tooltips:vehicle/trade'
     VEHICLE_DEAL_EPIC_MAIN = '#tooltips:vehicle/deal/epic/main'
-    VEHICLE_DEAL_WEEKENDBRAWL_MAIN = '#tooltips:vehicle/deal/weekendBrawl/main'
     ANONYMIZER_TEAMSTATS_HEADER = '#tooltips:anonymizer/teamStats/header'
     ANONYMIZER_TEAMSTATS_BODY = '#tooltips:anonymizer/teamStats/body'
     BUYSKILL_FULLY = '#tooltips:buySkill/fully'
@@ -1332,14 +1347,12 @@ class TOOLTIPS(object):
     BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_FREEUNLOCK = '#tooltips:blueprint/VehicleBlueprintTooltip/freeUnlock'
     BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_GATHERHEADER = '#tooltips:blueprint/VehicleBlueprintTooltip/gatherHeader'
     BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_GATHERDESCRIPTION1 = '#tooltips:blueprint/VehicleBlueprintTooltip/gatherDescription1'
-    BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_GATHERDESCRIPTION2 = '#tooltips:blueprint/VehicleBlueprintTooltip/gatherDescription2'
-    BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_OR = '#tooltips:blueprint/VehicleBlueprintTooltip/or'
-    BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_INTERNATIONALS = '#tooltips:blueprint/VehicleBlueprintTooltip/internationals'
-    BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_NATIONALS = '#tooltips:blueprint/VehicleBlueprintTooltip/nationals'
+    BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_CHOSE = '#tooltips:blueprint/VehicleBlueprintTooltip/chose'
     BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_EMPTYSTATUS = '#tooltips:blueprint/VehicleBlueprintTooltip/emptyStatus'
     BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_INCOMPLETESTATUS = '#tooltips:blueprint/VehicleBlueprintTooltip/incompleteStatus'
     BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_COMPLETESTATUS = '#tooltips:blueprint/VehicleBlueprintTooltip/completeStatus'
-    BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_UNLOCKEDSTATUS = '#tooltips:blueprint/VehicleBlueprintTooltip/unlockedStatus'
+    BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_VEHICLEUNLOCKED_HEADER = '#tooltips:blueprint/VehicleBlueprintTooltip/vehicleUnlocked/header'
+    BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_VEHICLEUNLOCKED_BODY = '#tooltips:blueprint/VehicleBlueprintTooltip/vehicleUnlocked/body'
     BLUEPRINT_BLUEPRINTEMPTYSLOT_TITLE = '#tooltips:blueprint/BlueprintEmptySlot/title'
     BLUEPRINT_BLUEPRINTEMPTYSLOT_GATHERHEADER = '#tooltips:blueprint/BlueprintEmptySlot/gatherHeader'
     BLUEPRINT_BLUEPRINTEMPTYSLOT_STATUSNOTENOUGH = '#tooltips:blueprint/BlueprintEmptySlot/statusNotEnough'
@@ -1352,16 +1365,21 @@ class TOOLTIPS(object):
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INTELFRAGMENT = '#tooltips:blueprint/BlueprintFragmentTooltip/intelFragment'
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOMNATIONAL_HEADER = '#tooltips:blueprint/BlueprintFragmentTooltip/randomNational/header'
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOMNATIONAL_DESCRIPTION = '#tooltips:blueprint/BlueprintFragmentTooltip/randomNational/description'
+    BLUEPRINT_RANDOMNATIONAL_HEADER = '#tooltips:blueprint/randomNational/header'
+    BLUEPRINT_RANDOMNATIONAL_DESCRIPTION = '#tooltips:blueprint/randomNational/description'
+    BLUEPRINT_RANDOMNATIONAL_ADDITIONALINFO = '#tooltips:blueprint/randomNational/additionalInfo'
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOM_DISCOUNT = '#tooltips:blueprint/BlueprintFragmentTooltip/random/discount'
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOM_HEADER = '#tooltips:blueprint/BlueprintFragmentTooltip/random/header'
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOM_DESCRIPTION = '#tooltips:blueprint/BlueprintFragmentTooltip/random/description'
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INTELDESCRIPTION = '#tooltips:blueprint/BlueprintFragmentTooltip/intelDescription'
-    BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_COMPENSATION = '#tooltips:blueprint/BlueprintFragmentTooltip/compensation'
+    BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_ADDITIONALINFO = '#tooltips:blueprint/BlueprintFragmentTooltip/additionalInfo'
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INSTORAGE = '#tooltips:blueprint/BlueprintFragmentTooltip/inStorage'
     BLUEPRINT_BLUEPRINTSCREEN_RESEARCHIMPOSSIBLE_HEADER = '#tooltips:blueprint/BlueprintScreen/researchImpossible/header'
     BLUEPRINT_BLUEPRINTSCREEN_RESEARCHIMPOSSIBLE_BODY = '#tooltips:blueprint/BlueprintScreen/researchImpossible/body'
     BLUEPRINT_BLUEPRINTSCREEN_CREATEMAXFRAGMENTS_HEADER = '#tooltips:blueprint/BlueprintScreen/createMaxFragments/header'
     BLUEPRINT_BLUEPRINTSCREEN_CREATEMAXFRAGMENTS_BODY = '#tooltips:blueprint/BlueprintScreen/createMaxFragments/body'
+    BLUEPRINT_BLUEPRINTSCREEN_CREATEMAXFRAGMENTSDISABLED_HEADER = '#tooltips:blueprint/BlueprintScreen/createMaxFragmentsDisabled/header'
+    BLUEPRINT_BLUEPRINTSCREEN_CREATEMAXFRAGMENTSDISABLED_BODY = '#tooltips:blueprint/BlueprintScreen/createMaxFragmentsDisabled/body'
     VEHICLESELLDIALOG_RENDERER_ALERTICONGOLD_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIconGold/header'
     VEHICLESELLDIALOG_RENDERER_ALERTICONGOLD_BODY = '#tooltips:vehicleSellDialog/renderer/alertIconGold/body'
     VEHICLESELLDIALOG_RENDERER_ALERTICONCRYSTAL_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIconCrystal/header'
@@ -1918,6 +1936,7 @@ class TOOLTIPS(object):
     RANKEDBATTLESVIEW_INFO_BODY = '#tooltips:rankedBattlesView/info/body'
     RANKEDBATTLESVIEW_YEARRATING_HEADER = '#tooltips:rankedBattlesView/yearRating/header'
     RANKEDBATTLESVIEW_YEARRATING_BODY = '#tooltips:rankedBattlesView/yearRating/body'
+    RANKEDBATTLESVIEW_YEARRATING_BODY_DISABLED = '#tooltips:rankedBattlesView/yearRating/body/disabled'
     RANKEDBATTLESVIEW_SPRINTER_HEADER = '#tooltips:rankedBattlesView/sprinter/header'
     RANKEDBATTLESVIEW_SPRINTER_BODY = '#tooltips:rankedBattlesView/sprinter/body'
     RANKED_WIDGET_EFFICIENCY_TITLE = '#tooltips:ranked/widget/efficiency/title'
@@ -2294,6 +2313,7 @@ class TOOLTIPS(object):
     ADVANCED_SERVICE = '#tooltips:advanced/service'
     ADVANCED_HOLLOW_CHARGE = '#tooltips:advanced/HOLLOW_CHARGE'
     ADVANCED_HIGH_EXPLOSIVE = '#tooltips:advanced/HIGH_EXPLOSIVE'
+    ADVANCED_HIGH_EXPLOSIVE_MODERN = '#tooltips:advanced/HIGH_EXPLOSIVE_MODERN'
     ADVANCED_ARMOR_PIERCING = '#tooltips:advanced/ARMOR_PIERCING'
     ADVANCED_ARMOR_PIERCING_CR = '#tooltips:advanced/ARMOR_PIERCING_CR'
     ADVANCED_LARGEREPAIRKIT = '#tooltips:advanced/largeRepairkit'
@@ -2338,6 +2358,7 @@ class TOOLTIPS(object):
     ADVANCED_COMMANDER_UNIVERSALIST = '#tooltips:advanced/commander_universalist'
     ADVANCED_COMMANDER_EXPERT = '#tooltips:advanced/commander_expert'
     ADVANCED_COMMANDER_SIXTHSENSE = '#tooltips:advanced/commander_sixthSense'
+    ADVANCED_COMMANDER_ENEMYSHOTPREDICTOR = '#tooltips:advanced/commander_enemyShotPredictor'
     ADVANCED_GUNNER_RANCOROUS = '#tooltips:advanced/gunner_rancorous'
     ADVANCED_GUNNER_GUNSMITH = '#tooltips:advanced/gunner_gunsmith'
     ADVANCED_GUNNER_SNIPER = '#tooltips:advanced/gunner_sniper'
@@ -2746,6 +2767,10 @@ class TOOLTIPS(object):
     SHOWDAMAGEICON_CRITICALDAMAGE = '#tooltips:showDamageIcon/criticalDamage'
     SHOWDAMAGEICON_TRACKDAMAGE = '#tooltips:showDamageIcon/trackDamage'
     SHOWDAMAGEICON_BLOCKED = '#tooltips:showDamageIcon/blocked'
+    SHOWDAMAGEICON_SPACEDARMORBLOCKED = '#tooltips:showDamageIcon/spacedArmorBlocked'
+    SHOWDAMAGEICON_TRACKBLOCKED = '#tooltips:showDamageIcon/trackBlocked'
+    SHOWDAMAGEICON_WHEELBLOCKED = '#tooltips:showDamageIcon/wheelBlocked'
+    SHOWDAMAGEICON_MISSARMOR = '#tooltips:showDamageIcon/missArmor'
     MARATHON_SUBTITLE = '#tooltips:marathon/subtitle'
     MARATHON_DATE = '#tooltips:marathon/date'
     KURSK_HEADER = '#tooltips:kursk/header'
@@ -3025,8 +3050,8 @@ class TOOLTIPS(object):
     VEHICLECRYSTAL_LIMITSTATUS_LIMITREACHED_TITLE = '#tooltips:vehicleCrystal/limitStatus/limitReached/title'
     VEHICLECRYSTAL_LIMITSTATUS_LIMITREACHED_DESCRIPTION = '#tooltips:vehicleCrystal/limitStatus/limitReached/description'
     ROLEEXP_STATUS_ROLEACTIONS_TITLE = '#tooltips:roleExp/status/roleActions/title'
+    ROLEEXP_STATUS_ROLE_DESCR = '#tooltips:roleExp/status/role/descr'
     ROLEEXP_STATUS_FOOTER = '#tooltips:roleExp/status/footer'
-    ROLEEXP_STATUS_FOOTEREXP = '#tooltips:roleExp/status/footerExp'
     BATTLEPASSOFFER_ERROR = '#tooltips:battlePassOffer/error'
     BATTLEPASSOFFER_ALLNATIONS = '#tooltips:battlePassOffer/allNations'
     BATTLEPASSOFFER_BLUEPRINTINFO = '#tooltips:battlePassOffer/blueprintInfo'
@@ -3035,8 +3060,10 @@ class TOOLTIPS(object):
     BATTLEPASSOFFER_ETC = '#tooltips:battlePassOffer/etc'
     BATTLEPASSOFFER_TITLE_TROPHY_GIFT = '#tooltips:battlePassOffer/title/trophy_gift'
     BATTLEPASSOFFER_FOOTER_TROPHY_GIFT = '#tooltips:battlePassOffer/footer/trophy_gift'
-    BATTLEPASSOFFER_TITLE_NEW_DEVICE_GIFT = '#tooltips:battlePassOffer/title/new_device_gift'
-    BATTLEPASSOFFER_FOOTER_NEW_DEVICE_GIFT = '#tooltips:battlePassOffer/footer/new_device_gift'
+    BATTLEPASSOFFER_TITLE_NEW_DEVICE_FV_GIFT = '#tooltips:battlePassOffer/title/new_device_fv_gift'
+    BATTLEPASSOFFER_FOOTER_NEW_DEVICE_FV_GIFT = '#tooltips:battlePassOffer/footer/new_device_fv_gift'
+    BATTLEPASSOFFER_TITLE_NEW_DEVICE_MI_GIFT = '#tooltips:battlePassOffer/title/new_device_mi_gift'
+    BATTLEPASSOFFER_FOOTER_NEW_DEVICE_MI_GIFT = '#tooltips:battlePassOffer/footer/new_device_mi_gift'
     BATTLEPASSOFFER_TITLE_BLUEPRINT_GIFT = '#tooltips:battlePassOffer/title/blueprint_gift'
     BATTLEPASSOFFER_FOOTER_BLUEPRINT_GIFT = '#tooltips:battlePassOffer/footer/blueprint_gift'
     BATTLEPASSOFFER_TITLE_BROCHURE_GIFT = '#tooltips:battlePassOffer/title/brochure_gift'
@@ -3128,8 +3155,28 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TANKMEN_BP3_3_LABEL = '#tooltips:notrecruitedtankman/tankmen_bp3_3/label'
     NOTRECRUITEDTANKMAN_TANKMEN_BP3_3_DESC = '#tooltips:notrecruitedtankman/tankmen_bp3_3/desc'
     NOTRECRUITEDTANKMAN_TANKMEN_BP3_3_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen_bp3_3/howToGetInfo'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP5_1_LABEL = '#tooltips:notrecruitedtankman/tankmen_bp5_1/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP5_1_DESC = '#tooltips:notrecruitedtankman/tankmen_bp5_1/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP5_1_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen_bp5_1/howToGetInfo'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP5_2_LABEL = '#tooltips:notrecruitedtankman/tankmen_bp5_2/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP5_2_DESC = '#tooltips:notrecruitedtankman/tankmen_bp5_2/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP5_2_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen_bp5_2/howToGetInfo'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP5_3_LABEL = '#tooltips:notrecruitedtankman/tankmen_bp5_3/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP5_3_DESC = '#tooltips:notrecruitedtankman/tankmen_bp5_3/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP5_3_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen_bp5_3/howToGetInfo'
     NOTRECRUITEDTANKMAN_COMMANDER_GAGARIN21_LABEL = '#tooltips:notrecruitedtankman/commander_gagarin21/label'
     NOTRECRUITEDTANKMAN_COMMANDER_GAGARIN21_DESC = '#tooltips:notrecruitedtankman/commander_gagarin21/desc'
+    DEMONSTRATOR_PLATOONWARNING_HEADER = '#tooltips:demonstrator/platoonWarning/header'
+    DEMONSTRATOR_PLATOONWARNING_BODY = '#tooltips:demonstrator/platoonWarning/body'
+    SELECTABLECREWBOOK_GUIDE_FOOTER = '#tooltips:selectableCrewbook/guide/footer'
+    SELECTABLECREWBOOK_BROCHURE_FOOTER = '#tooltips:selectableCrewbook/brochure/footer'
+    SELECTABLECREWBOOK_GUIDE_TITLE = '#tooltips:selectableCrewbook/guide/title'
+    SELECTABLECREWBOOK_BROCHURE_TITLE = '#tooltips:selectableCrewbook/brochure/title'
+    SELECTABLECREWBOOK_ALLNATIONS = '#tooltips:selectableCrewbook/allNations'
+    SELECTABLECREWBOOK_INFO = '#tooltips:selectableCrewbook/info'
+    RANDOMCREWBOOK_GUIDE_HEADER = '#tooltips:randomCrewbook/guide/header'
+    RANDOMCREWBOOK_BROCHURE_HEADER = '#tooltips:randomCrewbook/brochure/header'
+    RANDOMCREWBOOK_BODY = '#tooltips:randomCrewbook/body'
     ACCOUNTCOMPLETIONHANGAR_TITLE = '#tooltips:accountCompletionHangar/title'
     ACCOUNTCOMPLETIONHANGAR_TEXT = '#tooltips:accountCompletionHangar/text'
     ACCOUNTCOMPLETIONHANGAR_HOLDER = '#tooltips:accountCompletionHangar/holder'
@@ -3139,6 +3186,52 @@ class TOOLTIPS(object):
     ACCOUNTCOMPLETIONHANGAR_SIMPLE_TITLE = '#tooltips:accountCompletionHangar/simple/title'
     ACCOUNTCOMPLETIONHANGAR_SIMPLE_TEXT = '#tooltips:accountCompletionHangar/simple/text'
     ACCOUNTCOMPLETION_EMAIL_TITLETOOLTIP = '#tooltips:accountCompletion/email/titleTooltip'
+    MODE_SELECTOR_UNAVAILABLE_TECHPROBLEMS = '#tooltips:mode_selector/unavailable/techProblems'
+    MODE_SELECTOR_UNAVAILABLE_BOOTCAMP = '#tooltips:mode_selector/unavailable/bootcamp'
+    MODE_SELECTOR_POPOVER_BODY = '#tooltips:mode_selector/popover/body'
+    MODE_SELECTOR_POPOVER_DEFAULT_HEADER = '#tooltips:mode_selector/popover/default/header'
+    MODE_SELECTOR_POPOVER_DEFAULT_BODY = '#tooltips:mode_selector/popover/default/body'
+    MODE_SELECTOR_POPOVER_DOMINATION_HEADER = '#tooltips:mode_selector/popover/domination/header'
+    MODE_SELECTOR_POPOVER_DOMINATION_BODY = '#tooltips:mode_selector/popover/domination/body'
+    MODE_SELECTOR_POPOVER_ASSAULT_HEADER = '#tooltips:mode_selector/popover/assault/header'
+    MODE_SELECTOR_POPOVER_ASSAULT_BODY = '#tooltips:mode_selector/popover/assault/body'
+    MODE_SELECTOR_POPOVER_EPICSTANDARD_HEADER = '#tooltips:mode_selector/popover/epicStandard/header'
+    MODE_SELECTOR_POPOVER_EPICSTANDARD_BODY = '#tooltips:mode_selector/popover/epicStandard/body'
+    MODE_SELECTOR_POPOVER_EPICSTANDARD_ATTENTION = '#tooltips:mode_selector/popover/epicStandard/attention'
+    MODE_SELECTOR_INFO_BODY = '#tooltips:mode_selector/info/body'
+    MODE_SELECTOR_PROGRESSIONBTN_BODY = '#tooltips:mode_selector/progressionBtn/body'
+    MODE_SELECTOR_RANKED_BONUS_HEADER = '#tooltips:mode_selector/ranked/bonus/header'
+    MODE_SELECTOR_RANKED_BONUS_AVAILABLE = '#tooltips:mode_selector/ranked/bonus/available'
+    MODE_SELECTOR_RANKED_BONUS_DESCRIPTION = '#tooltips:mode_selector/ranked/bonus/description'
+    MODE_SELECTOR_RANKED_QUALIFICATION_HEADER = '#tooltips:mode_selector/ranked/qualification/header'
+    MODE_SELECTOR_RANKED_QUALIFICATION_DESCRIPTION = '#tooltips:mode_selector/ranked/qualification/description'
+    BLUEPRINTS_CONVERSIONVIEW_ICON_NOTENOUGHFRAGMENTS = '#tooltips:blueprints/conversionView/icon/notEnoughFragments'
+    BLUEPRINTS_CONVERSIONVIEW_CONFIRM_NOTENOUGHFRAGMENTS = '#tooltips:blueprints/conversionView/confirm/notEnoughFragments'
+    BLUEPRINTS_CONVERSIONVIEW_TITLE = '#tooltips:blueprints/conversionView/title'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_TITLE_NAME_ALLIANCE_USSR = '#tooltips:blueprints/conversionView/alliance/title/name/Alliance-USSR'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_TITLE_NAME_ALLIANCE_GERMANY = '#tooltips:blueprints/conversionView/alliance/title/name/Alliance-Germany'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_TITLE_NAME_ALLIANCE_USA = '#tooltips:blueprints/conversionView/alliance/title/name/Alliance-USA'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_TITLE_NAME_ALLIANCE_FRANCE = '#tooltips:blueprints/conversionView/alliance/title/name/Alliance-France'
+    BLUEPRINTS_CONVERSIONVIEW_SUBTITLE = '#tooltips:blueprints/conversionView/subTitle'
+    BLUEPRINTS_CONVERSIONVIEW_DESC = '#tooltips:blueprints/conversionView/desc'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_DESC_NAME_ALLIANCE_USSR = '#tooltips:blueprints/conversionView/alliance/desc/name/Alliance-USSR'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_DESC_NAME_ALLIANCE_GERMANY = '#tooltips:blueprints/conversionView/alliance/desc/name/Alliance-Germany'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_DESC_NAME_ALLIANCE_USA = '#tooltips:blueprints/conversionView/alliance/desc/name/Alliance-USA'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_DESC_NAME_ALLIANCE_FRANCE = '#tooltips:blueprints/conversionView/alliance/desc/name/Alliance-France'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_NATIONS_ALLIANCE_USSR = '#tooltips:blueprints/conversionView/alliance/nations/Alliance-USSR'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_NATIONS_ALLIANCE_GERMANY = '#tooltips:blueprints/conversionView/alliance/nations/Alliance-Germany'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_NATIONS_ALLIANCE_USA = '#tooltips:blueprints/conversionView/alliance/nations/Alliance-USA'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_NATIONS_ALLIANCE_FRANCE = '#tooltips:blueprints/conversionView/alliance/nations/Alliance-France'
+    BLUEPRINTS_CONVERSIONVIEW_CONTENT_TITLE = '#tooltips:blueprints/conversionView/content/title'
+    BLUEPRINTS_CONVERSIONVIEW_CONTENT_FIRST_TITLE = '#tooltips:blueprints/conversionView/content/first/title'
+    BLUEPRINTS_CONVERSIONVIEW_CONTENT_FIRST_BODY = '#tooltips:blueprints/conversionView/content/first/body'
+    BLUEPRINTS_CONVERSIONVIEW_CONTENT_SECOND = '#tooltips:blueprints/conversionView/content/second'
+    BLUEPRINTS_CONVERSIONVIEW_CONTENT_FRAGMENTAMOUNT = '#tooltips:blueprints/conversionView/content/fragmentAmount'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_CONTENT_NAME_ALLIANCE_USSR = '#tooltips:blueprints/conversionView/alliance/content/name/Alliance-USSR'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_CONTENT_NAME_ALLIANCE_GERMANY = '#tooltips:blueprints/conversionView/alliance/content/name/Alliance-Germany'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_CONTENT_NAME_ALLIANCE_USA = '#tooltips:blueprints/conversionView/alliance/content/name/Alliance-USA'
+    BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_CONTENT_NAME_ALLIANCE_FRANCE = '#tooltips:blueprints/conversionView/alliance/content/name/Alliance-France'
+    BLUEPRINTS_CONVERSIONVIEW_INFO = '#tooltips:blueprints/conversionView/info'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -3558,6 +3651,7 @@ class TOOLTIPS(object):
      ADVANCED_SERVICE,
      ADVANCED_HOLLOW_CHARGE,
      ADVANCED_HIGH_EXPLOSIVE,
+     ADVANCED_HIGH_EXPLOSIVE_MODERN,
      ADVANCED_ARMOR_PIERCING,
      ADVANCED_ARMOR_PIERCING_CR,
      ADVANCED_LARGEREPAIRKIT,
@@ -3602,6 +3696,7 @@ class TOOLTIPS(object):
      ADVANCED_COMMANDER_UNIVERSALIST,
      ADVANCED_COMMANDER_EXPERT,
      ADVANCED_COMMANDER_SIXTHSENSE,
+     ADVANCED_COMMANDER_ENEMYSHOTPREDICTOR,
      ADVANCED_GUNNER_RANCOROUS,
      ADVANCED_GUNNER_GUNSMITH,
      ADVANCED_GUNNER_SNIPER,
@@ -3749,6 +3844,9 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP3_1_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP3_2_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP3_3_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP5_1_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP5_2_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP5_3_LABEL,
      NOTRECRUITEDTANKMAN_COMMANDER_GAGARIN21_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
@@ -3826,6 +3924,9 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP3_1_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP3_2_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP3_3_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP5_1_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP5_2_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP5_3_DESC,
      NOTRECRUITEDTANKMAN_COMMANDER_GAGARIN21_DESC)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,
@@ -3842,7 +3943,10 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP3_1_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP3_2_HOWTOGETINFO,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP3_3_HOWTOGETINFO)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP3_3_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP5_1_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP5_2_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP5_3_HOWTOGETINFO)
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_ENUM = (QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,
@@ -3859,7 +3963,10 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP3_1_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP3_2_HOWTOGETINFO,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP3_3_HOWTOGETINFO)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP3_3_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP5_1_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP5_2_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP5_3_HOWTOGETINFO)
 
     @classmethod
     def elen_summary_rank(cls, key0):

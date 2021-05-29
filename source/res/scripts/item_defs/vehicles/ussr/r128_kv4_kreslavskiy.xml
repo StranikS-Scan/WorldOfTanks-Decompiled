@@ -10,7 +10,7 @@
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	30	</forward>
+    <forward>	40	</forward>
     <backward>	16	</backward>
   </speedLimits>
   <invisibility>
@@ -26,6 +26,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.03	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	6.0	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
@@ -52,7 +58,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	58135	</weight>
-    <maxHealth>	1200	</maxHealth>
+    <maxHealth>	1360	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -853,8 +859,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.21	</vehicleMovement>
-        <vehicleRotation>	0.21	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -1704,8 +1710,8 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	180	</armor_1>
-        <armor_2>	160	</armor_2>
+        <armor_1>	200	</armor_1>
+        <armor_2>	180	</armor_2>
         <armor_3>	160	</armor_3>
         <armor_4>	100	</armor_4>
         <armor_5>	50	</armor_5>
@@ -1715,7 +1721,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12000	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	340	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2274,7 +2280,7 @@
     </Turret_1_R128_KV4_Kreslavskiy>
   </turrets0>
   <engines>
-    <M_40_1200>	shared	</M_40_1200>
+    <M_40_1200_A>	shared	</M_40_1200_A>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
@@ -2285,10 +2291,10 @@
   <physics>
     <detailed>
       <engines>
-        <M_40_1200>
-          <smplEnginePower>	1268.737	</smplEnginePower>
-          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </M_40_1200>
+        <M_40_1200_A>
+          <smplEnginePower>	1350	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+        </M_40_1200_A>
       </engines>
       <chassis>
         <Chassis_R128_KV4_Kreslavskiy>

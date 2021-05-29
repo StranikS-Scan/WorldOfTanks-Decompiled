@@ -10,7 +10,8 @@ HintData = namedtuple('HintData', ['key',
  'messageRight',
  'offsetX',
  'offsetY',
- 'priority'])
+ 'priority',
+ 'reducedPanning'])
 _HINT_DISPLAY_COUNT_AFTER_RESET = 1
 
 class HintPriority(object):
@@ -24,6 +25,7 @@ class HintPriority(object):
 
 
 class HintPanelPlugin(IPlugin):
+    __slots__ = ()
 
     @classmethod
     def isSuitable(cls):

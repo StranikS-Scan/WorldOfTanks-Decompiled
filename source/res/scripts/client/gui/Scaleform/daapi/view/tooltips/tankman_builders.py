@@ -10,6 +10,15 @@ from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 __all__ = ('getTooltipBuilders',)
 
+def _advancedBlockCondition(context):
+
+    def advancedTooltipExist(*args):
+        item = context.buildItem(*args)
+        return item.name in advanced.SKILL_MOVIES
+
+    return advancedTooltipExist
+
+
 class TankmanTooltipBuilder(AdvancedDataBuilder):
     __slots__ = ()
 
@@ -58,7 +67,7 @@ def getTooltipBuilders():
     return (TankmanTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      NotRecruitedTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      BattleRoyaleTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_TANKMAN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
-     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.TANKMAN_SKILL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, skill.SkillTooltipDataBlock(contexts.PersonalCaseContext(fieldsToExclude=('count',))), advanced.SkillTooltipAdvanced(contexts.PersonalCaseContext(fieldsToExclude=('count',)))),
+     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.TANKMAN_SKILL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, skill.SkillTooltipDataBlock(contexts.PersonalCaseContext(fieldsToExclude=('count',))), advanced.SkillTooltipAdvanced(contexts.PersonalCaseContext(fieldsToExclude=('count',))), condition=_advancedBlockCondition(contexts.PersonalCaseContext(fieldsToExclude=('count',)))),
      TankmanNewSkillTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN_NEW_SKILL, TOOLTIPS_CONSTANTS.TANKMEN_BUY_SKILL_UI),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.PREVIEW_CREW_SKILL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, skill.SkillTooltipDataBlock(contexts.PreviewCaseContext()), advanced.SkillTooltipAdvanced(contexts.PreviewCaseContext())),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.TANKMAN_SKILL_EXTENDED, TOOLTIPS_CONSTANTS.TANKMAN_SKILL_EXTENDED_UI, skill.TankmanSkillTooltipData(contexts.HangarParamContext()), advanced.SkillExtendedTooltipAdvanced(contexts.HangarParamContext())))

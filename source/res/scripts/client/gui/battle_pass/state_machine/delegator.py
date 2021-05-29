@@ -45,6 +45,7 @@ class BattlePassRewardLogic(object):
         else:
             stylesToChoose = []
         rewardsToChoose, defaultRewards, chosenStyle = separateRewards(rewards, battlePass=self.__battlePassController)
+        rewardsToChoose = self.__validateRewardsToChoose(rewardsToChoose)
         self.__machine.saveRewards(rewardsToChoose, stylesToChoose, defaultRewards, chosenStyle, data)
         if not self.__machine.isRunning():
             self.__startAfterTurningOnMachine = True
@@ -66,6 +67,9 @@ class BattlePassRewardLogic(object):
 
     def hasRewardToChoose(self):
         return self.__machine.hasRewardToChoose()
+
+    def getLeftRewardsCount(self):
+        return self.__machine.getLeftRewardsCount()
 
     def getNextRewardToChoose(self):
         return self.__machine.getNextRewardToChoose()
@@ -98,3 +102,7 @@ class BattlePassRewardLogic(object):
     def postStateEvent(self, **kwargs):
         if self.__machine.isRunning():
             self.__machine.post(StateEvent(**kwargs))
+
+    def __validateRewardsToChoose(self, rewardsToChoose):
+        result = [ token for token in rewardsToChoose if bool(self.__itemsCache.items.tokens.getToken(token)) ]
+        return result

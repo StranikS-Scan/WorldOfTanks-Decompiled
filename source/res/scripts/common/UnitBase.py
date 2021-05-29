@@ -17,7 +17,7 @@ from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClass
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
-from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster, WeekendBrawlRoster
+from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster, MapBoxRoster
 if TYPE_CHECKING:
     from typing import List as TList, Tuple as TTuple, Dict as TDict, Optional as TOptional
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
@@ -227,6 +227,7 @@ class UNIT_OP:
     SET_PLAYER_PROFILE = 24
     DEL_PLAYER_PROFILE = 25
     ESTIMATED_TIME_IN_QUEUE = 26
+    ONLY_10_MODE = 27
 
 
 class UNIT_ROLE:
@@ -329,6 +330,7 @@ class CLIENT_UNIT_CMD:
     CHANGE_FALLOUT_TYPE = 24
     SET_UNIT_VEHICLE_TYPE = 25
     SET_ARENA_TYPE = 26
+    SET_ONLY_10_MODE = 27
 
 
 CMD_NAMES = dict([ (v, k) for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__') ])
@@ -349,7 +351,7 @@ class UNIT_MGR_FLAGS:
     EPIC = 4096
     TOURNAMENT = 8192
     BATTLE_ROYALE = 16384
-    WEEKEND_BRAWL = 32768
+    MAPBOX = 32768
 
 
 class UnitAssemblerSearchFlags(object):
@@ -431,8 +433,8 @@ def _prebattleTypeFromFlags(flags):
         return PREBATTLE_TYPE.EPIC
     elif flags & UNIT_MGR_FLAGS.BATTLE_ROYALE:
         return PREBATTLE_TYPE.BATTLE_ROYALE
-    elif flags & UNIT_MGR_FLAGS.WEEKEND_BRAWL:
-        return PREBATTLE_TYPE.WEEKEND_BRAWL
+    elif flags & UNIT_MGR_FLAGS.MAPBOX:
+        return PREBATTLE_TYPE.MAPBOX
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return PREBATTLE_TYPE.SQUAD
     elif flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
@@ -452,12 +454,12 @@ def _entityNameFromFlags(flags):
         return 'FalloutUnitMgr'
     elif flags & UNIT_MGR_FLAGS.EVENT:
         return 'EventUnitMgr'
-    elif flags & UNIT_MGR_FLAGS.WEEKEND_BRAWL:
-        return 'WeekendBrawlUnitMgr'
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return 'SquadUnitMgr'
     elif flags & UNIT_MGR_FLAGS.STRONGHOLD:
         return 'StrongholdUnitMgr'
+    elif flags & UNIT_MGR_FLAGS.MAPBOX:
+        return 'MapBoxUnitMgr'
     else:
         return 'UnitMgr'
 
@@ -469,8 +471,8 @@ def _invitationTypeFromFlags(flags):
         return INVITATION_TYPE.EVENT
     elif flags & UNIT_MGR_FLAGS.BATTLE_ROYALE:
         return INVITATION_TYPE.BATTLE_ROYALE
-    elif flags & UNIT_MGR_FLAGS.WEEKEND_BRAWL:
-        return INVITATION_TYPE.WEEKEND_BRAWL
+    elif flags & UNIT_MGR_FLAGS.MAPBOX:
+        return INVITATION_TYPE.MAPBOX
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return INVITATION_TYPE.SQUAD
     else:
@@ -488,8 +490,8 @@ class ROSTER_TYPE:
     TOURNAMENT_ROSTER = UNIT_MGR_FLAGS.TOURNAMENT
     EPIC_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EPIC
     BATTLE_ROYALE_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.BATTLE_ROYALE
-    WEEKEND_BRAWL_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.WEEKEND_BRAWL
-    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE | UNIT_MGR_FLAGS.WEEKEND_BRAWL
+    MAPBOX_ROSTER = UNIT_MGR_FLAGS.MAPBOX | UNIT_MGR_FLAGS.SQUAD
+    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE | UNIT_MGR_FLAGS.MAPBOX
 
 
 class EXTRAS_HANDLER_TYPE:
@@ -537,7 +539,7 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.TOURNAMENT_ROSTER: SpecRoster,
  ROSTER_TYPE.EPIC_ROSTER: EpicRoster,
  ROSTER_TYPE.BATTLE_ROYALE_ROSTER: BattleRoyaleRoster,
- ROSTER_TYPE.WEEKEND_BRAWL_ROSTER: WeekendBrawlRoster}
+ ROSTER_TYPE.MAPBOX_ROSTER: MapBoxRoster}
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler,
  EXTRAS_HANDLER_TYPE.SPEC_BATTLE: ClanBattleExtrasHandler,
@@ -577,7 +579,8 @@ class UnitBase(OpsUnpacker):
      UNIT_OP.ARENA_TYPE: ('i', '_setArenaType'),
      UNIT_OP.SET_PLAYER_PROFILE: ('', '_setProfileVehicleByData'),
      UNIT_OP.DEL_PLAYER_PROFILE: ('q', '_delProfileVehicle'),
-     UNIT_OP.ESTIMATED_TIME_IN_QUEUE: ('i', '_setEstimatedTimeInQueue')})
+     UNIT_OP.ESTIMATED_TIME_IN_QUEUE: ('i', '_setEstimatedTimeInQueue'),
+     UNIT_OP.ONLY_10_MODE: ('?', '_setOnly10Mode')})
     MAX_PLAYERS = 250
 
     def __init__(self, limitsDefs={}, slotDefs={}, slotCount=0, packedRoster='', extrasInit=None, packedUnit='', rosterTypeID=ROSTER_TYPE.UNIT_ROSTER, extrasHandlerID=EXTRAS_HANDLER_TYPE.EMPTY, prebattleTypeID=PREBATTLE_TYPE.UNIT):
@@ -616,6 +619,7 @@ class UnitBase(OpsUnpacker):
         self._reservedSlots = set()
         self._modalTimestamp = 0
         self._estimatedTimeInQueue = 0
+        self._isOnly10ModeEnabled = False
 
     def _initExtrasHandler(self):
         weakSelf = weakref.proxy(self)
@@ -768,7 +772,7 @@ class UnitBase(OpsUnpacker):
 
         return True
 
-    _HEADER = '<HHHHHHHBiiii'
+    _HEADER = '<HHHHHHHBiiii?'
     _PLAYER_DATA = '<qiIHBHHHq?'
     _PLAYER_VEHICLES_LIST = '<qH'
     _PLAYER_VEHICLE_TUPLE = '<iH'
@@ -807,7 +811,8 @@ class UnitBase(OpsUnpacker):
          self._modalTimestamp,
          self._estimatedTimeInQueue,
          self._gameplaysMask,
-         self._arenaType)
+         self._arenaType,
+         self._isOnly10ModeEnabled)
         packed += struct.pack(self._HEADER, *args)
         for accountDBID, vehList in vehs.iteritems():
             packed += struct.pack(self._PLAYER_VEHICLES_LIST, accountDBID, len(vehList))
@@ -839,7 +844,7 @@ class UnitBase(OpsUnpacker):
         unpacking = self._roster.unpack(unpacking)
         slotCount = self.getMaxSlotCount()
         self._freeSlots = set(xrange(0, slotCount))
-        memberCount, vehCount, playerCount, profilesCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._estimatedTimeInQueue, self._gameplaysMask, self._arenaType = struct.unpack_from(self._HEADER, unpacking)
+        memberCount, vehCount, playerCount, profilesCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._estimatedTimeInQueue, self._gameplaysMask, self._arenaType, self._isOnly10ModeEnabled = struct.unpack_from(self._HEADER, unpacking)
         unpacking = unpacking[self._HEADER_SIZE:]
         for i in xrange(0, vehCount):
             accountDBID, vehListCount = struct.unpack_from(self._PLAYER_VEHICLES_LIST, unpacking)
@@ -1060,6 +1065,13 @@ class UnitBase(OpsUnpacker):
         if prevGameplaysMask != newGameplaysMask:
             self._gameplaysMask = newGameplaysMask
             self.storeOp(UNIT_OP.GAMEPLAYS_MASK, newGameplaysMask)
+        return OK
+
+    def _setOnly10Mode(self, newIsOnly10Mode):
+        isOnly10ModeEnabled = self._isOnly10ModeEnabled
+        if isOnly10ModeEnabled != newIsOnly10Mode:
+            self._isOnly10ModeEnabled = newIsOnly10Mode
+            self.storeOp(UNIT_OP.ONLY_10_MODE, newIsOnly10Mode)
         return OK
 
     def _setArenaType(self, newArenaType):

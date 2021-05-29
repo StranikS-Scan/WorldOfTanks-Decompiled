@@ -102,6 +102,6 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
 
     def _makeVehicleVOAction(self, vehicle):
         vehicleVO = makeVehicleVO(vehicle, self._levelsRange, self.__vehicleTypes)
-        if vehicle.isOnlyForEpicBattles or vehicle.isOnlyForWeekendBrawlBattles or vehicle.isOnlyForBob:
+        if vehicle.isOnlyForEpicBattles:
             vehicleVO['enabled'], vehicleVO['tooltip'] = False, TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE
         return vehicleVO

@@ -113,8 +113,14 @@ class ModuleBlockTooltipData(BlocksTooltipData):
 
             if compatibleBlocks:
                 items.append(formatters.packBuildUpBlockData(compatibleBlocks, padding=formatters.packPadding(left=leftPadding)))
-        if itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and module.isTrophy:
-            items.append(formatters.packBuildUpBlockData(self.__trophyDeviceBlocks(module, statusConfig), padding=formatters.packPadding(top=-4, bottom=-5, left=_DEFAULT_PADDING, right=_DEFAULT_PADDING), gap=4))
+        if itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+            canNotBuyBlock = None
+            if module.isTrophy:
+                canNotBuyBlock = self.__trophyDeviceBlocks(module, statusConfig)
+            elif module.isDeluxe and module.isHidden:
+                canNotBuyBlock = self.__hiddenDeluxeDeviceBlock(module, statusConfig)
+            if canNotBuyBlock is not None:
+                items.append(formatters.packBuildUpBlockData(canNotBuyBlock, padding=formatters.packPadding(top=-4, bottom=-5, left=_DEFAULT_PADDING, right=_DEFAULT_PADDING), gap=4))
         statusBlock = StatusBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
         if statusBlock:
             statusTopPadding = -30 if showModuleCompatibles else blockTopPadding
@@ -142,13 +148,21 @@ class ModuleBlockTooltipData(BlocksTooltipData):
             headerStyle = text_styles.statInfo
             state = 'upgraded'
         trophyBlocks.append(formatters.packItemTitleDescBlockData(title=headerStyle(backport.text(R.strings.tooltips.moduleFits.trophyEquipment.dyn(state).header())), desc=text_styles.main(backport.text(R.strings.tooltips.moduleFits.trophyEquipment.dyn(state).description()))))
+        trophyBlocks.append(self.__getCannotBuyBlock(module, statusConfig))
+        return trophyBlocks
+
+    def __hiddenDeluxeDeviceBlock(self, module, statusConfig):
+        return [self.__getCannotBuyBlock(module, statusConfig)]
+
+    @staticmethod
+    def __getCannotBuyBlock(module, statusConfig):
+        deviceType = 'trophyEquipment' if module.isTrophy else 'deluxeEquipment'
         statsVehicle = statusConfig.vehicle
         if statsVehicle is None or module in statsVehicle.optDevices.installed or module.isInInventory:
             cannotBuyHeaderStyle = text_styles.warning
         else:
             cannotBuyHeaderStyle = text_styles.critical
-        trophyBlocks.append(formatters.packItemTitleDescBlockData(title=cannotBuyHeaderStyle(backport.text(R.strings.tooltips.moduleFits.trophyEquipment.cannotBuy.header())), desc=text_styles.main(backport.text(R.strings.tooltips.moduleFits.trophyEquipment.cannotBuy.description()))))
-        return trophyBlocks
+        return formatters.packItemTitleDescBlockData(title=cannotBuyHeaderStyle(backport.text(R.strings.tooltips.moduleFits.dyn(deviceType).cannotBuy.header())), desc=text_styles.main(backport.text(R.strings.tooltips.moduleFits.dyn(deviceType).cannotBuy.description())))
 
 
 class ModuleTooltipBlockConstructor(object):

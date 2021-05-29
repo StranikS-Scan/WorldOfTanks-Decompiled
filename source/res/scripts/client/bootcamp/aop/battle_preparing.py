@@ -10,6 +10,6 @@ def weave(weaver, stateBattlePreparing):
 class _PointcutDelayStartFirstBattle(aop.Pointcut):
 
     def __init__(self, stateBattlePreparing):
-        super(_PointcutDelayStartFirstBattle, self).__init__('Avatar', 'PlayerAvatar', '^(vehicle_onEnterWorld|onEnterWorld|onSpaceLoaded)$', aspects=(common.AspectRedirectMethod({'vehicle_onEnterWorld': stateBattlePreparing.onVehicleOnEnterWorld,
+        super(_PointcutDelayStartFirstBattle, self).__init__('Avatar', 'PlayerAvatar', '^(vehicle_onAppearanceReady|onEnterWorld|onSpaceLoaded)$', aspects=(common.AspectRedirectMethod({'vehicle_onAppearanceReady': stateBattlePreparing.onVehicleOnAppearanceReady,
           'onEnterWorld': stateBattlePreparing.onAvatarOnEnterWorld,
           'onSpaceLoaded': stateBattlePreparing.onSpaceLoaded}),))

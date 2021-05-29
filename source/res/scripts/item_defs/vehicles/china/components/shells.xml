@@ -6,8 +6,12 @@
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
+    <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
+    <he_modern_premium>	HIGH_EXPLOSIVE_MODERN_PREMIUM.png 0 0	</he_modern_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
+    <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
+    <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
   </icons>
   <_37mm_AP_M74>
     <id>	43	</id>
@@ -41,9 +45,10 @@
   <_37mm_HE_M63>
     <id>	45	</id>
     <userString>	#china_vehicles:_37mm_HE_M63	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	10	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	37	</caliber>
     <explosionRadius>	0.31	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -52,6 +57,28 @@
       <armor>	50	</armor>
       <devices>	50	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.31	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	25	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
   </_37mm_HE_M63>
   <_37mm_Pzgr36>
     <id>	15	</id>
@@ -85,9 +112,10 @@
   <_37mm_Sprg.18>
     <id>	17	</id>
     <userString>	#china_vehicles:_37mm_Sprg.18	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	6	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	37	</caliber>
     <explosionRadius>	0.31	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -96,13 +124,36 @@
       <armor>	42	</armor>
       <devices>	50	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.31	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	20	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
   </_37mm_Sprg.18>
   <_37mm_OE_mle._1916>
     <id>	12	</id>
     <userString>	#china_vehicles:_37mm_OE_mle._1916	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	6	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	37	</caliber>
     <explosionRadius>	0.31	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -111,6 +162,28 @@
       <armor>	36	</armor>
       <devices>	50	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.31	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	20	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
   </_37mm_OE_mle._1916>
   <_37mm_Odr_mle._1935>
     <id>	10	</id>
@@ -188,9 +261,10 @@
   <_40mm_HE>
     <id>	39	</id>
     <userString>	#china_vehicles:_40mm_HE	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	15	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	40	</caliber>
     <explosionRadius>	0.35	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -199,6 +273,28 @@
       <armor>	60	</armor>
       <devices>	54	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.35	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	30	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
   </_40mm_HE>
   <_45mm_UBR-240A>
     <id>	40	</id>
@@ -232,9 +328,10 @@
   <_45mm_UOF-240A>
     <id>	42	</id>
     <userString>	#china_vehicles:_45mm_UOF-240A	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	14	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	45	</caliber>
     <explosionRadius>	0.43	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -243,6 +340,28 @@
       <armor>	62	</armor>
       <devices>	61	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.43	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	30	</armor>
+        <devices>	30	</devices>
+      </damage>
+    </armorSpalls>
   </_45mm_UOF-240A>
   <_47mm_AP>
     <id>	34	</id>
@@ -276,9 +395,10 @@
   <_47mm_HE>
     <id>	36	</id>
     <userString>	#china_vehicles:_47mm_HE	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	13	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	47	</caliber>
     <explosionRadius>	0.47	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -287,6 +407,28 @@
       <armor>	65	</armor>
       <devices>	64	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.47	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	35	</armor>
+        <devices>	30	</devices>
+      </damage>
+    </armorSpalls>
   </_47mm_HE>
   <_47mm_APHE_Type1>
     <id>	52	</id>
@@ -320,9 +462,10 @@
   <_47mm_HE_Type1>
     <id>	54	</id>
     <userString>	#china_vehicles:_47mm_HE_Type1	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	19	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	47	</caliber>
     <explosionRadius>	0.47	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -331,6 +474,28 @@
       <armor>	90	</armor>
       <devices>	64	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.47	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	45	</armor>
+        <devices>	30	</devices>
+      </damage>
+    </armorSpalls>
   </_47mm_HE_Type1>
   <_57mm_AP_Type_97>
     <id>	49	</id>
@@ -365,9 +530,10 @@
   <_57mm_HE_Type_97>
     <id>	51	</id>
     <userString>	#china_vehicles:_57mm_HE_Type_97	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	20	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	57	</caliber>
     <explosionRadius>	0.66	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -376,6 +542,28 @@
       <armor>	95	</armor>
       <devices>	76	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	50	</armor>
+        <devices>	40	</devices>
+      </damage>
+    </armorSpalls>
   </_57mm_HE_Type_97>
   <_57mm_AP_Type_97_bootcamp>
     <id>	88	</id>
@@ -412,10 +600,11 @@
   <_57mm_HE_Type_97_bootcamp>
     <id>	90	</id>
     <userString>	#china_vehicles:_57mm_HE_Type_97	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	20	</price>
     <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	57	</caliber>
     <explosionRadius>	0.66	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -424,6 +613,28 @@
       <armor>	95	</armor>
       <devices>	76	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	50	</armor>
+        <devices>	40	</devices>
+      </damage>
+    </armorSpalls>
   </_57mm_HE_Type_97_bootcamp>
   <_57mm_AP_Type_55_57>
     <id>	58	</id>
@@ -457,9 +668,10 @@
   <_57mm_HE_Type_55_57>
     <id>	60	</id>
     <userString>	#china_vehicles:_57mm_HE_Type_55_57	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	28	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	57	</caliber>
     <explosionRadius>	0.66	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -468,6 +680,28 @@
       <armor>	95	</armor>
       <devices>	76	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	0.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	50	</armor>
+        <devices>	40	</devices>
+      </damage>
+    </armorSpalls>
   </_57mm_HE_Type_55_57>
   <_76mm_AP_type1>
     <id>	46	</id>
@@ -501,9 +735,10 @@
   <_76mm_HE_type1>
     <id>	48	</id>
     <userString>	#china_vehicles:_76mm_HE_type1	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	48	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	76	</caliber>
     <explosionRadius>	1.09	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -512,6 +747,28 @@
       <armor>	165	</armor>
       <devices>	105	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.09	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	85	</armor>
+        <devices>	55	</devices>
+      </damage>
+    </armorSpalls>
   </_76mm_HE_type1>
   <_76mm_UBR-354A>
     <id>	55	</id>
@@ -545,9 +802,10 @@
   <_76mm_UOF-354>
     <id>	57	</id>
     <userString>	#china_vehicles:_76mm_UOF-354	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	56	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	76	</caliber>
     <explosionRadius>	1.09	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -556,6 +814,28 @@
       <armor>	156	</armor>
       <devices>	105	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.09	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	80	</armor>
+        <devices>	55	</devices>
+      </damage>
+    </armorSpalls>
   </_76mm_UOF-354>
   <_76mm_AP_M79>
     <id>	72	</id>
@@ -589,9 +869,10 @@
   <_76mm_HE_M42A1>
     <id>	74	</id>
     <userString>	#usa_vehicles:_75mm_M48	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	68	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	76	</caliber>
     <explosionRadius>	1.09	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -600,6 +881,28 @@
       <armor>	185	</armor>
       <devices>	105	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.09	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	95	</armor>
+        <devices>	55	</devices>
+      </damage>
+    </armorSpalls>
   </_76mm_HE_M42A1>
   <_76mm_APDS_T_M331>
     <id>	94	</id>
@@ -633,9 +936,10 @@
   <_76mm_HE_M352>
     <id>	96	</id>
     <userString>	#china_vehicles:_76mm_HE_M352	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	145	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	76	</caliber>
     <explosionRadius>	1.09	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -644,6 +948,28 @@
       <armor>	260	</armor>
       <devices>	105	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.09	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	130	</armor>
+        <devices>	55	</devices>
+      </damage>
+    </armorSpalls>
   </_76mm_HE_M352>
   <_85mm_CB_367G>
     <id>	66	</id>
@@ -678,9 +1004,10 @@
   <_85mm_SB_367G>
     <id>	68	</id>
     <userString>	#china_vehicles:_85mm_SB_367G	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	170	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	85	</caliber>
     <explosionRadius>	1.32	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -689,6 +1016,28 @@
       <armor>	320	</armor>
       <devices>	115	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.32	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
   </_85mm_SB_367G>
   <_85mm_CJ_365>
     <id>	64	</id>
@@ -707,9 +1056,10 @@
   <_85mm_SB_365>
     <id>	65	</id>
     <userString>	#china_vehicles:_85mm_SB_365	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	98	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	85	</caliber>
     <explosionRadius>	1.32	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -718,6 +1068,28 @@
       <armor>	280	</armor>
       <devices>	115	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.32	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	140	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
   </_85mm_SB_365>
   <_85mm_UBR>
     <id>	3	</id>
@@ -767,9 +1139,10 @@
   <_85mm_UOF>
     <id>	5	</id>
     <userString>	#china_vehicles:_85mm_UOF	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	130	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	85	</caliber>
     <explosionRadius>	1.32	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -778,6 +1151,28 @@
       <armor>	300	</armor>
       <devices>	115	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.32	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	150	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
   </_85mm_UOF>
   <_90mm_AP_M318>
     <id>	75	</id>
@@ -812,9 +1207,10 @@
   <_90mm_HE_T91E3>
     <id>	77	</id>
     <userString>	#china_vehicles:_90mm_HE_T91E3	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	230	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	90	</caliber>
     <explosionRadius>	1.46	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -823,6 +1219,28 @@
       <armor>	320	</armor>
       <devices>	122	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
   </_90mm_HE_T91E3>
   <_100mm_UBR-412>
     <id>	0	</id>
@@ -856,9 +1274,10 @@
   <_100mm_UOF-412>
     <id>	2	</id>
     <userString>	#china_vehicles:_100mm_UOF-412	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	252	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	100	</caliber>
     <explosionRadius>	1.76	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -867,6 +1286,28 @@
       <armor>	330	</armor>
       <devices>	135	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.76	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	165	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
   </_100mm_UOF-412>
   <_100mm_CJ-412G>
     <id>	18	</id>
@@ -900,9 +1341,10 @@
   <_100mm_SB-412G>
     <id>	20	</id>
     <userString>	#china_vehicles:_100mm_SB-412G	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	750	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	100	</caliber>
     <explosionRadius>	1.76	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -911,6 +1353,28 @@
       <armor>	420	</armor>
       <devices>	135	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.76	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
   </_100mm_SB-412G>
   <_100mm_UBR-412training>
     <id>	71	</id>
@@ -960,9 +1424,10 @@
   <_105mm_HEP_M393A1>
     <id>	79	</id>
     <userString>	#china_vehicles:_105mm_HEP_M393A1	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	910	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -971,6 +1436,28 @@
       <armor>	480	</armor>
       <devices>	150	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
   </_105mm_HEP_M393A1>
   <_120mm_CB-472LY>
     <id>	97	</id>
@@ -1005,9 +1492,10 @@
   <_120mm_SB-472LY>
     <id>	99	</id>
     <userString>	#china_vehicles:_120mm_SB-472LY	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	630	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	120	</caliber>
     <explosionRadius>	2.49	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1016,6 +1504,28 @@
       <armor>	515	</armor>
       <devices>	165	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	2.49	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
   </_120mm_SB-472LY>
   <_122mm_Type_57>
     <id>	6	</id>
@@ -1050,9 +1560,10 @@
   <_122mm_Type_68>
     <id>	8	</id>
     <userString>	#china_vehicles:_122mm_Type_68	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	608	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	122	</caliber>
     <explosionRadius>	2.49	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1061,6 +1572,28 @@
       <armor>	530	</armor>
       <devices>	165	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	2.49	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
   </_122mm_Type_68>
   <_122mm_Type_57_CJ>
     <id>	100	</id>
@@ -1125,9 +1658,10 @@
   <_122mm_SB-472>
     <id>	63	</id>
     <userString>	#china_vehicles:_122mm_SB-472	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	630	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	122	</caliber>
     <explosionRadius>	2.49	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1136,6 +1670,28 @@
       <armor>	530	</armor>
       <devices>	165	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	2.49	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
   </_122mm_SB-472>
   <_130mm_AP>
     <id>	31	</id>
@@ -1170,9 +1726,10 @@
   <_130mm_HE>
     <id>	33	</id>
     <userString>	#china_vehicles:_130mm_HE	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	978	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	130	</caliber>
     <explosionRadius>	2.78	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1181,6 +1738,28 @@
       <armor>	640	</armor>
       <devices>	180	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	2.78	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	320	</armor>
+        <devices>	90	</devices>
+      </damage>
+    </armorSpalls>
   </_130mm_HE>
   <_130mm_AP_QL>
     <id>	91	</id>
@@ -1217,10 +1796,11 @@
   <_130mm_HE_QL>
     <id>	93	</id>
     <userString>	#china_vehicles:_130mm_HE_QL	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	1020	</price>
     <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	130	</caliber>
     <explosionRadius>	2.78	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1229,6 +1809,28 @@
       <armor>	660	</armor>
       <devices>	180	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	2.78	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	330	</armor>
+        <devices>	90	</devices>
+      </damage>
+    </armorSpalls>
   </_130mm_HE_QL>
   <_130mm_Chuan_bei_482G>
     <id>	85	</id>
@@ -1263,9 +1865,10 @@
   <_130mm_Sha_bao_482G>
     <id>	87	</id>
     <userString>	#china_vehicles:_130mm_Sha_bao_482G	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	1020	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	130	</caliber>
     <explosionRadius>	2.78	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1274,6 +1877,28 @@
       <armor>	660	</armor>
       <devices>	180	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	2.78	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	330	</armor>
+        <devices>	90	</devices>
+      </damage>
+    </armorSpalls>
   </_130mm_Sha_bao_482G>
   <_152mm_Chuan_bei_547>
     <id>	82	</id>
@@ -1308,9 +1933,10 @@
   <_152mm_Sha_bao_547>
     <id>	84	</id>
     <userString>	#china_vehicles:_152mm_Sha_bao_547	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	1190	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	152	</caliber>
     <explosionRadius>	3.66	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1319,6 +1945,28 @@
       <armor>	1100	</armor>
       <devices>	203	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	3.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	550	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
   </_152mm_Sha_bao_547>
   <_152mm_GM_45AP>
     <id>	102	</id>
@@ -1352,9 +2000,10 @@
   <_152mm_GM_45HE>
     <id>	104	</id>
     <userString>	#china_vehicles:_152mm_GM_45HE	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	1170	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	152	</caliber>
     <explosionRadius>	3.66	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1363,6 +2012,28 @@
       <armor>	840	</armor>
       <devices>	203	</devices>
     </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	3.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	420	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
   </_152mm_GM_45HE>
   <Development_Shell>
     <id>	65000	</id>
@@ -1413,9 +2084,10 @@
   <_85mm_SB_365_bootcamp>
     <id>	21	</id>
     <userString>	#china_vehicles:_85mm_SB_365	</userString>
-    <icon>	he	</icon>
+    <icon>	he_modern	</icon>
     <price>	98	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	85	</caliber>
     <explosionRadius>	1.32	</explosionRadius>
     <isTracer>	true	</isTracer>
@@ -1425,5 +2097,27 @@
       <devices>	115	</devices>
     </damage>
     <notInShop>	True	</notInShop>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.32	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	110	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
   </_85mm_SB_365_bootcamp>
 </shells.xml>

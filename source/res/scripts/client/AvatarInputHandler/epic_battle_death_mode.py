@@ -140,11 +140,12 @@ class DeathFreeCamMode(VideoCameraControlMode):
     def handleKeyEvent(self, isDown, key, mods, event=None):
         VideoCameraControlMode.handleKeyEvent(self, isDown, key, mods, event)
         cmdMap = CommandMapping.g_instance
-        if not self.__forcedGuiControlEnabled and cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown and BigWorld.player().target is not None:
-            self.__switchToVehicle(BigWorld.player().target.id)
-            return True
-        else:
-            return False
+        if not self.__forcedGuiControlEnabled and cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown and BigWorld.player().target is not None and BigWorld.player().target.__class__.__name__ == 'Vehicle':
+            vehicleDesc = BigWorld.player().arena.vehicles.get(BigWorld.player().target.id)
+            if vehicleDesc['isAlive'] and vehicleDesc['team'] == BigWorld.player().team:
+                self.__switchToVehicle(BigWorld.player().target.id)
+                return True
+        return False
 
     def selectPlayer(self, vehID):
         self.__switchToVehicle(vehID)
@@ -192,31 +193,33 @@ class DeathTankFollowMode(PostMortemControlMode):
             self.selectPlayer(None)
             self._switchToCtrlMode(CTRL_MODE_NAME.DEATH_FREE_CAM)
             return True
-        elif cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown and self.curPostmortemDelay is None and BigWorld.player().target is not None:
-            self.selectPlayer(BigWorld.player().target.id)
-            return True
-        elif cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
-         CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
-         CommandMapping.CMD_CM_CAMERA_ROTATE_UP,
-         CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN,
-         CommandMapping.CMD_CM_INCREASE_ZOOM,
-         CommandMapping.CMD_CM_DECREASE_ZOOM), key):
-            dx = dy = dz = 0.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT):
-                dx = -1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT):
-                dx = 1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_UP):
-                dy = -1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN):
-                dy = 1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_INCREASE_ZOOM):
-                dz = 1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
-                dz = -1.0
-            self.camera.update(dx, dy, dz, True, True, False if dx == dy == dz == 0.0 else True)
-            return True
         else:
+            if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown and self.curPostmortemDelay is None and BigWorld.player().target is not None and BigWorld.player().target.__class__.__name__ == 'Vehicle':
+                vehicleDesc = BigWorld.player().arena.vehicles.get(BigWorld.player().target.id)
+                if vehicleDesc['isAlive'] and vehicleDesc['team'] == BigWorld.player().team:
+                    self.selectPlayer(BigWorld.player().target.id)
+                    return True
+            if cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
+             CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
+             CommandMapping.CMD_CM_CAMERA_ROTATE_UP,
+             CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN,
+             CommandMapping.CMD_CM_INCREASE_ZOOM,
+             CommandMapping.CMD_CM_DECREASE_ZOOM), key):
+                dx = dy = dz = 0.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT):
+                    dx = -1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT):
+                    dx = 1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_UP):
+                    dy = -1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN):
+                    dy = 1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_INCREASE_ZOOM):
+                    dz = 1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
+                    dz = -1.0
+                self.camera.update(dx, dy, dz, True, True, False if dx == dy == dz == 0.0 else True)
+                return True
             return False
 
     def _onMatrixBound(self, isStatic):

@@ -209,8 +209,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInEpicQueue = False
         self.isInBattleRoyaleQueue = False
         self.isInBattleRoyaleTournamentQueue = False
+        self.isInMapboxQueue = False
         self.platformBlueprintsConvertSaleLimits = g_accountRepository.platformBlueprintsConvertSaleLimits
-        self.isInWeekendBrawlQueue = False
         self.__onCmdResponse = {}
         self.__onStreamComplete = {}
         self.__objectsSelectionEnabled = True
@@ -428,9 +428,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
             self.isInBattleRoyaleTournamentQueue = True
             events.onEnqueuedBattleRoyaleTournament()
-        elif queueType == QUEUE_TYPE.WEEKEND_BRAWL:
-            self.isInWeekendBrawlQueue = True
-            events.onEnqueuedWeekendBrawl()
+        elif queueType == QUEUE_TYPE.MAPBOX:
+            self.isInMapboxQueue = True
+            events.onEnqueuedMapbox()
         events.onEnqueued(queueType)
 
     def onEnqueueFailure(self, queueType, errorCode, errorStr):
@@ -453,8 +453,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             events.onEnqueuedBattleRoyaleFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
             events.onEnqueuedBattleRoyaleTournamentFailure(errorCode, errorStr)
-        elif queueType == QUEUE_TYPE.WEEKEND_BRAWL:
-            events.onEnqueuedWeekendBrawlFailure(errorCode, errorStr)
+        elif queueType == QUEUE_TYPE.MAPBOX:
+            events.onEnqueuedMapboxFailure(errorCode, errorStr)
         events.onEnqueueFailure(queueType, errorCode, errorStr)
 
     def onDequeued(self, queueType):
@@ -486,9 +486,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
             self.isInBattleRoyaleTournamentQueue = False
             events.onDequeuedBattleRoyaleTournament()
-        elif queueType == QUEUE_TYPE.WEEKEND_BRAWL:
-            self.isInWeekendBrawlQueue = False
-            events.onDequeuedWeekendBrawl()
+        elif queueType == QUEUE_TYPE.MAPBOX:
+            self.isInMapboxQueue = False
+            events.onDequeuedMapbox()
         events.onDequeued(queueType)
 
     def onTutorialEnqueued(self, number, queueLen, avgWaitingTime):
@@ -548,9 +548,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
             self.isInBattleRoyaleTournamentQueue = False
             events.onKickedFromBattleRoyaleTournamentQueue()
-        elif queueType == QUEUE_TYPE.WEEKEND_BRAWL:
-            self.isInWeekendBrawlQueue = False
-            events.onKickedFromWeekendBrawlQueue()
+        elif queueType == QUEUE_TYPE.MAPBOX:
+            self.isInMapboxQueue = False
+            events.onKickedFromMapboxQueue()
         events.onKickedFromQueue(queueType)
 
     def onArenaCreated(self):
@@ -572,7 +572,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInEpicQueue = False
         self.isInBattleRoyaleQueue = False
         self.isInBattleRoyaleTournamentQueue = False
-        self.isInWeekendBrawlQueue = False
+        self.isInMapboxQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onArenaJoinFailure(errorCode, errorStr)
@@ -792,10 +792,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdIntArrStrArr(AccountCommands.CMD_REQ_PLAYERS_GLOBAL_RATING, accountIDs, [], proxy)
         return
 
-    def enqueueRandom(self, vehInvID, gameplaysMask=65535, arenaTypeID=0):
+    def enqueueRandom(self, vehInvID, gameplaysMask=65535, arenaTypeID=0, isOnly10ModeEnabled=False):
         if events.isPlayerEntityChanging:
             return
-        self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_RANDOM, vehInvID, gameplaysMask, arenaTypeID)
+        self.base.doCmdInt4(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_RANDOM, vehInvID, gameplaysMask, arenaTypeID, isOnly10ModeEnabled)
 
     def dequeueRandom(self):
         if not events.isPlayerEntityChanging:
@@ -888,13 +888,13 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BATTLE_ROYALE, 0, 0, 0)
 
-    def enqueueWeekendBrawl(self, vehInvID):
+    def enqueueMapbox(self, vehInvID):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_WEEKEND_BRAWL, vehInvID, 0, 0)
+            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_MAPBOX, vehInvID, 0, 0)
 
-    def dequeueWeekendBrawl(self):
+    def dequeueMapbox(self):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_WEEKEND_BRAWL, 0, 0, 0)
+            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_MAPBOX, 0, 0, 0)
 
     def forceEpicDevStart(self):
         if not events.isPlayerEntityChanging:
@@ -1120,6 +1120,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def logClientSessionStats(self, stats):
         self.base.logClientSessionStats(stats)
 
+    def logMemoryCriticalEvent(self, memCritEvent):
+        self.base.logMemoryCriticalEvent(memCritEvent)
+
     def logClientPB20UXStats(self, stats):
         self.base.logClientPB20UXStats(stats)
 
@@ -1170,6 +1173,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def addBlueprintFragment(self, fragmentTypeCD, requestedCount, other=-1):
         LOG_DEBUG('Account.addBlueprintFragment: fragmentTypeCD={}, count={}'.format(fragmentTypeCD, requestedCount))
         self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_BPF_ADD_FRAGMENTS_DEV, requestedCount, fragmentTypeCD, other)
+
+    def getWishlist(self):
+        self._doCmdIntArr(AccountCommands.CMD_WISHLIST_GET_DEV, [], lambda *args: LOG_DEBUG_DEV(args[3]))
 
     def processInvitations(self, invitations):
         self.prebattleInvitations.processInvitations(invitations, ClientInvitations.InvitationScope.ACCOUNT)

@@ -71,7 +71,7 @@ class HintManager(object):
     def getHints(self):
         return self._hints
 
-    def addHint(self, hintParams):
+    def addHint(self, hintParams, secondary=False):
         hint = HintCustom(*hintParams)
         self._hintSystem.addHint(hint)
         self._hints[hint.id] = hint

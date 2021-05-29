@@ -585,5 +585,20 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/client_promo_log/'
         return self._request_data(callback, url, data, method='GET')
 
+    def get_mapbox_progression(self, callback):
+        url = '/mapbox/progress'
+        return self._request_data(callback, url, method='GET')
+
+    def select_mapbox_crewbook(self, callback, itemID):
+        url = '/mapbox'
+        return self._request_data(callback, url, method='POST', post_data={'itemID': itemID})
+
+    def complete_survey(self, callback, mapName):
+        url = '/mapbox/surveys/complete'
+        return self._request_data(callback, url, method='POST', post_data={'name': mapName})
+
+    def request_authorized_survey_url(self, callback, mapURL):
+        return self._request_data(callback, mapURL, method='GET')
+
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

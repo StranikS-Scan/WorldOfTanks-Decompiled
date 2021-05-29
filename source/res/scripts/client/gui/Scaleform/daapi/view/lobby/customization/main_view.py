@@ -591,7 +591,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def __getPurchaseMessage(self, cart, purchaseItems):
         msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization
-        money = formatPrice(cart.totalPrice.price)
+        money = formatPrice(cart.totalPrice.price, useStyle=True)
         if cart.boughtCount == 1:
             pItem = findFirst(lambda i: not i.isFromInventory, purchaseItems)
             if pItem is None:
@@ -640,6 +640,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             msgText = None
         return msgText
 
+    def __onItemSold(self, *_, **__):
+        self.soundManager.playInstantSound(SOUNDS.SELL)
+
     def onAnchorsShown(self, anchors):
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.isVehicleLoaded:
@@ -670,6 +673,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.events.onItemLimitReached += self.__onItemLimitReached
         self.__ctx.events.onItemsRemoved += self.__onItemsRemoved
         self.__ctx.events.onItemsBought += self.__onItemsBought
+        self.__ctx.events.onItemSold += self.__onItemSold
         self.__ctx.events.onCacheResync += self.__onCacheResync
         self.__ctx.events.onChangesCanceled += self.__onChangesCanceled
         self.__ctx.events.onItemSelected += self.__onItemSelected
@@ -771,6 +775,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.events.onChangesCanceled -= self.__onChangesCanceled
         self.__ctx.events.onCacheResync -= self.__onCacheResync
         self.__ctx.events.onItemsBought -= self.__onItemsBought
+        self.__ctx.events.onItemSold -= self.__onItemSold
         self.__ctx.events.onItemsRemoved -= self.__onItemsRemoved
         self.__ctx.events.onItemInstalled -= self.__onItemsInstalled
         self.__ctx.events.onItemLimitReached -= self.__onItemLimitReached

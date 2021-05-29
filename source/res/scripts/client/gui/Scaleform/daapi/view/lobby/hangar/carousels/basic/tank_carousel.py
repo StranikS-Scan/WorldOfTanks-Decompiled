@@ -117,15 +117,13 @@ class TankCarousel(TankCarouselMeta):
         return True
 
     def _getInitialFilterVO(self, contexts):
-        if self.filter is None:
-            return {}
-        else:
+        filtersVO = {'mainBtn': {'value': getButtonsAssetPath('params'),
+                     'tooltip': TANK_CAROUSEL_FILTER.TOOLTIP_PARAMS},
+         'hotFilters': [],
+         'isVisible': self._getFiltersVisible(),
+         'isFrontline': False}
+        if self.filter is not None:
             filters = self.filter.getFilters(self._usedFilters)
-            filtersVO = {'mainBtn': {'value': getButtonsAssetPath('params'),
-                         'tooltip': TANK_CAROUSEL_FILTER.TOOLTIP_PARAMS},
-             'hotFilters': [],
-             'isVisible': self._getFiltersVisible(),
-             'isFrontline': False}
             for entry in self._usedFilters:
                 filterCtx = contexts.get(entry, FilterSetupContext())
                 filtersVO['hotFilters'].append({'id': entry,
@@ -134,7 +132,7 @@ class TankCarousel(TankCarouselMeta):
                  'enabled': True,
                  'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), _ms('#tank_carousel_filter:tooltip/{}/body'.format(entry), **filterCtx.ctx))})
 
-            return filtersVO
+        return filtersVO
 
     def __buySlot(self):
         price = self.itemsCache.items.shop.getVehicleSlotsPrice(self.itemsCache.items.stats.vehicleSlots)

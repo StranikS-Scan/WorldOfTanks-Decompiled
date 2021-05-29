@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.device_reward_option_model
 class BattlePassRewardChoiceViewModel(ViewModel):
     __slots__ = ('onTakeClick', 'onCloseClick', 'onAnimationFinished')
 
-    def __init__(self, properties=7, commands=3):
+    def __init__(self, properties=8, commands=3):
         super(BattlePassRewardChoiceViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -50,6 +50,12 @@ class BattlePassRewardChoiceViewModel(ViewModel):
     def setSelectedGiftId(self, value):
         self._setNumber(6, value)
 
+    def getNotChooseRewardsCount(self):
+        return self._getNumber(7)
+
+    def setNotChooseRewardsCount(self, value):
+        self._setNumber(7, value)
+
     def _initialize(self):
         super(BattlePassRewardChoiceViewModel, self)._initialize()
         self._addViewModelProperty('rewards', UserListModel())
@@ -59,6 +65,7 @@ class BattlePassRewardChoiceViewModel(ViewModel):
         self._addStringProperty('rewardType', '')
         self._addBoolProperty('isOptionsSequence', False)
         self._addNumberProperty('selectedGiftId', -1)
+        self._addNumberProperty('notChooseRewardsCount', 0)
         self.onTakeClick = self._addCommand('onTakeClick')
         self.onCloseClick = self._addCommand('onCloseClick')
         self.onAnimationFinished = self._addCommand('onAnimationFinished')

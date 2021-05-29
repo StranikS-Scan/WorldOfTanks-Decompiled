@@ -21,3 +21,9 @@ class BattlePageMeta(View):
 
     def as_toggleCtrlPressFlagS(self, isCtrlPressed):
         return self.flashObject.as_toggleCtrlPressFlag(isCtrlPressed) if self._isDAAPIInited() else None
+
+    def as_createRoleDescriptionS(self):
+        return self.flashObject.as_createRoleDescription() if self._isDAAPIInited() else None
+
+    def as_setArtyShotIndicatorFlagS(self, isVisible):
+        return self.flashObject.as_setArtyShotIndicatorFlag(isVisible) if self._isDAAPIInited() else None

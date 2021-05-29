@@ -1,23 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/aliases.py
-# Compiled at: 2081-09-26 12:48:47
-""" Encoding Aliases Support
-
-    This module is used by the encodings package search function to
-    map encodings names to module names.
-
-    Note that the search function normalizes the encoding names before
-    doing the lookup, so the mapping will have to map normalized
-    encoding names to module names.
-
-    Contents:
-
-        The following aliases dictionary contains mappings of all IANA
-        character set names for which the Python core library provides
-        codecs. In addition to these, a few Python specific codec
-        aliases have also been added.
-
-"""
 aliases = {'646': 'ascii',
  'ansi_x3.4_1968': 'ascii',
  'ansi_x3_4_1968': 'ascii',

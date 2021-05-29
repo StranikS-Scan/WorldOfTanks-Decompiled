@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/shared/utils/requesters.py
-from gui.shared.money import Money
+import typing
+if typing.TYPE_CHECKING:
+    from collections import OrderedDict
+    from gui.shared.money import Money
 
 class IRequester(object):
 
@@ -834,7 +837,13 @@ class IBlueprintsRequester(IRequester):
     def getNationalFragments(self, fragmentCD):
         raise NotImplementedError
 
-    def getIntelligenceData(self):
+    def getNationalAllianceFragments(self, fragmentCD, vehicleLevel):
+        raise NotImplementedError
+
+    def getNationalRequiredOptions(self, fragmentCD, vehicleLevel):
+        raise NotImplementedError
+
+    def getIntelligenceCount(self):
         raise NotImplementedError
 
     def getRequiredIntelligenceAndNational(self, vLevel):

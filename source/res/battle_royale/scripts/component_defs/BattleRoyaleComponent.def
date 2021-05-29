@@ -4,6 +4,9 @@
       <Arg>	PYTHON	</Arg>
     </setupArena>
     <finalizeWinner></finalizeWinner>
+    <destroyLeaver>
+      <Arg>	OBJECT_ID	</Arg>
+    </destroyLeaver>
   </CellMethods>
   <BaseMethods>
     <destroyLeavers></destroyLeavers>

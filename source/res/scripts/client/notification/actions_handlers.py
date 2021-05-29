@@ -24,7 +24,7 @@ from gui.impl.gen import R
 from gui.platform.wgnp.controller import isEmailConfirmationNeeded, getEmail
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression, showBattlePass3dStyleChoiceWindow
+from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression, showBattlePass3dStyleChoiceWindow, showMissionsMapboxProgression
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
 from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showBlueprintsSalePage, showConfirmEmailOverlay
 from gui.shared.notifications import NotificationPriorityLevel
@@ -43,7 +43,7 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController
+from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IMapboxController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
@@ -891,7 +891,7 @@ class _OpenSelectDevicesHandler(_NavigationDisabledActionHandler):
 
     @classmethod
     def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
+        return NOTIFICATION_TYPE.CHOOSING_DEVICES
 
     @classmethod
     def getActions(cls):
@@ -937,6 +937,36 @@ class _OpenBattlePassStyleChoiceView(_NavigationDisabledActionHandler):
             showMissionsBattlePassCommonProgression()
 
 
+class _OpenMapboxProgression(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showMissionsMapboxProgression()
+
+
+class _OpenMapboxSurvey(_NavigationDisabledActionHandler):
+    __mapboxCtrl = dependency.descriptor(IMapboxController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        self.__mapboxCtrl.showSurvey(notification.getSavedData())
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -977,7 +1007,9 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenMissingEventsHandler,
  _OpenNotrecruitedSysMessageHandler,
  _OpentBlueprintsConvertSale,
- _OpenConfirmEmailHandler)
+ _OpenConfirmEmailHandler,
+ _OpenMapboxProgression,
+ _OpenMapboxSurvey)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

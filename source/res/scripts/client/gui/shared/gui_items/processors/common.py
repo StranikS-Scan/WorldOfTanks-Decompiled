@@ -335,14 +335,15 @@ class EpicRewardsClaimer(Processor):
 
 class ConvertBlueprintFragmentProcessor(Processor):
 
-    def __init__(self, vehicleCD, count, fragmentPosition):
+    def __init__(self, vehicleCD, count, fragmentPosition, usedNationalFragments):
         super(ConvertBlueprintFragmentProcessor, self).__init__()
         self.__vehicleCD = vehicleCD
         self.__position = fragmentPosition
         self.__count = count
+        self.__usedNationalFragments = usedNationalFragments
 
     def _request(self, callback):
-        BigWorld.player().blueprints.convertBlueprintFragment(self.__vehicleCD, self.__position, self.__count, lambda code: self._response(code, callback))
+        BigWorld.player().blueprints.convertBlueprintFragment(self.__vehicleCD, self.__position, self.__count, self.__usedNationalFragments, lambda code: self._response(code, callback))
 
 
 class _MapsBlackListSelector(Processor):
@@ -473,8 +474,8 @@ class BuyBattlePass(Processor):
 
     def _successHandler(self, code, ctx=None):
         itemsCache = dependency.instance(IItemsCache)
-        return makeSuccess(msgType=SM_TYPE.BattlePassReward, userMsg='', auxData={'header': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP()),
-         'description': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithoutRewards.text(), chapter=backport.text(R.strings.battle_pass_2020.chapter.name.num(self.__chapter)())),
+        return makeSuccess(msgType=SM_TYPE.BattlePassBuy, userMsg='', auxData={'header': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP()),
+         'description': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithoutRewards.text(), chapter=backport.text(R.strings.battle_pass.chapter.name.num(self.__chapter)())),
          'additionalText': self.__makeGoldString(itemsCache.items.shop.getBattlePassCost().get(Currency.GOLD, 0))})
 
     @staticmethod

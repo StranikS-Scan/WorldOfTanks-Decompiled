@@ -134,6 +134,27 @@
       </effects-group>
       <effects-group>
         <condition>
+          <inactive>	WatchingBattleModeGameface	</inactive>
+          <inactive>	RandomBattleSelected	</inactive>
+          <component-on-scene>	RandomBattleModeGameface	</component-on-scene>
+        </condition>
+        <effects>
+          <set-action>	RandomBattleClickGameface	</set-action>
+          <activate>	WatchingBattleModeGameface	</activate>
+        </effects>
+      </effects-group>
+      <effects-group>
+        <condition>
+          <active>	WatchingBattleModeGameface	</active>
+          <component-not-on-scene>	RandomBattleModeGameface	</component-not-on-scene>
+        </condition>
+        <effects>
+          <remove-action>	RandomBattleClickGameface	</remove-action>
+          <inactivate>	WatchingBattleModeGameface	</inactivate>
+        </effects>
+      </effects-group>
+      <effects-group>
+        <condition>
           <effect-not-triggered>	OnFightButtonEnable	</effect-not-triggered>
         </condition>
         <effects>
@@ -203,6 +224,7 @@
             </condition>
           </request-exclusive-hint>
           <request-exclusive-hint>	RandomBattleMode	</request-exclusive-hint>
+          <request-exclusive-hint>	RandomBattleModeGameface	</request-exclusive-hint>
         </effects>
       </effects-group>
       <update-exclusive-hints>
@@ -217,6 +239,11 @@
   </global-runtime-effects>
   <has-id>
     <click-action>	RandomBattleClick	  <item-id>	RandomBattleMode	</item-id>
+      <effects>
+        <activate>	RandomBattleSelected	</activate>
+      </effects>
+    </click-action>
+    <click-action>	RandomBattleClickGameface	  <item-id>	RandomBattleModeGameface	</item-id>
       <effects>
         <activate>	RandomBattleSelected	</activate>
       </effects>

@@ -1,0 +1,14 @@
+<VehicleAchievementsComponent.def>
+  <Properties>
+    <achievements>
+      <Type>	ARRAY	  <of>	UINT16	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </achievements>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	achievementsComponent	</DefaultKeyName>
+</VehicleAchievementsComponent.def>

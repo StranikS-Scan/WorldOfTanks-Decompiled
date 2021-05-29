@@ -1,17 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/battle_selector_items.py
 import logging
-from uilogging.deprecated.decorators import loggerTarget, loggerEntry
-from uilogging.deprecated.mode_selector.constants import MS_LOG_KEYS
-from uilogging.deprecated.mode_selector.decorators import logChangeMode
-from uilogging.deprecated.mode_selector.loggers import ModeSelectorUILogger
-from adisp import process
-from gui.prb_control.entities.base.ctx import PrbAction
+import typing
 from account_helpers import isDemonstrator
+from CurrentVehicle import g_currentVehicle
+from adisp import process
+from battle_selector_event_progression_item import EventProgressionItem
+from battle_selector_event_progression_providers import EventProgressionDataProvider
+from battle_selector_item import SelectorItem
+from account_helpers import isDemonstratorExpert
 from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR
 from gui import GUI_SETTINGS
-from gui.prb_control.dispatcher import g_prbLoader
+from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.battle_royale.constants import BattleRoyalePerfProblems
+from gui.clans.clan_helpers import isStrongholdsEnabled
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.entities.base.ctx import PrbAction
+from gui.Scaleform.daapi.view.lobby.mapbox import mapbox_helpers
 from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.prb_getters import areSpecBattlesHidden
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -19,19 +26,15 @@ from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
-from helpers import time_utils, dependency, int2roman
 from gui.shared.utils.functions import makeTooltip
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IWeekendBrawlController
+from helpers import time_utils, dependency, int2roman
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.clans.clan_helpers import isStrongholdsEnabled
-from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
-from gui.impl import backport
-from gui.impl.gen import R
 from skeletons.gui.server_events import IEventsCache
-from battle_selector_item import SelectorItem
-from battle_selector_event_progression_providers import EventProgressionDataProvider
-from battle_selector_event_progression_item import EventProgressionItem
 from gui.prb_control import prbEntityProperty
+if typing.TYPE_CHECKING:
+    from skeletons.gui.game_control import ISeasonProvider
+    cycleStrGetter = typing.Callable[[ISeasonProvider, str, typing.Optional[typing.Callable[[int], str]]], str]
 _logger = logging.getLogger(__name__)
 _R_HEADER_BUTTONS = R.strings.menu.headerButtons
 _R_BATTLE_TYPES = R.strings.menu.headerButtons.battle.types
@@ -105,7 +108,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.WEEKEND_BRAWL)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -322,29 +325,10 @@ class _SandboxItem(_SelectorItem):
         self._isVisible = self.lobbyContext.getServerSettings().isSandboxEnabled()
 
 
-class _WeekendBrawlItem(_SelectorItem):
-    wBrawlController = dependency.descriptor(IWeekendBrawlController)
-
-    def isRandomBattle(self):
-        return True
-
-    def getSpecialBGIcon(self):
-        return backport.image(_R_ICONS.buttons.selectorRendererBGEvent()) if self.wBrawlController.isModeActive() else ''
-
-    def select(self):
-        super(_WeekendBrawlItem, self).select()
-        selectorUtils.setBattleTypeAsKnown(self._selectorType)
-
-    def _update(self, state):
-        self._isSelected = state.isQueueSelected(QUEUE_TYPE.WEEKEND_BRAWL)
-        self._isDisabled = state.hasLockedState
-        self._isVisible = self.wBrawlController.isModeActive()
-
-
-class _BaseSelectorItems(object):
+class _BattleSelectorItems(object):
 
     def __init__(self, items, extraItems=None):
-        super(_BaseSelectorItems, self).__init__()
+        super(_BattleSelectorItems, self).__init__()
         self.__items = {item.getData():item for item in items}
         self.__extraItems = {item.getData():item for item in extraItems} if extraItems else dict()
         self.__isDemonstrator = False
@@ -376,11 +360,14 @@ class _BaseSelectorItems(object):
                 selected = item
 
         if self.__isDemonstrator:
-            self.__isDemoButtonEnabled = not selected.isDemoButtonDisabled()
+            if not g_currentVehicle.item:
+                self.__isDemoButtonEnabled = False
+            else:
+                self.__isDemoButtonEnabled = not selected.isDemoButtonDisabled()
         return selected
 
     def validateAccountAttrs(self, attrs):
-        self.__isDemonstrator = isDemonstrator(attrs)
+        self.__isDemonstrator = isDemonstrator(attrs) or isDemonstratorExpert(attrs)
         locked = not attrs & ACCOUNT_ATTR.RANDOM_BATTLES
         for item in self.__items.itervalues():
             if item.isRandomBattle():
@@ -427,20 +414,19 @@ class _BaseSelectorItems(object):
         _logger.error('Action not found: %s', action)
         return False
 
+    def hasNewVisible(self):
+        return any((item.isShowNewIndicator() and item.isVisible() for item in self.allItems))
 
-@loggerTarget(logKey=MS_LOG_KEYS.BATTLE_TYPES, loggerCls=ModeSelectorUILogger)
-class _BattleSelectorItems(_BaseSelectorItems):
+    @property
+    def isDemoButtonEnabled(self):
+        return self.__isDemoButtonEnabled
 
-    @loggerEntry
-    def init(self):
-        return super(_BattleSelectorItems, self).init()
-
-    @logChangeMode
-    def update(self, state):
-        return super(_BattleSelectorItems, self).update(state)
+    @property
+    def isDemonstrator(self):
+        return self.__isDemonstrator
 
 
-class _SquadSelectorItems(_BaseSelectorItems):
+class _SquadSelectorItems(_BattleSelectorItems):
 
     def _getDefaultPAN(self):
         return _DEFAULT_SQUAD_PAN
@@ -546,6 +532,28 @@ class _BattleRoyaleSquadItem(_SpecialSquadItem):
     @property
     def squadIcon(self):
         return backport.image(_R_ICONS.battleTypes.c_40x40.royaleSquad())
+
+
+class _MapboxSquadItem(_SpecialSquadItem):
+    __mapboxCtrl = dependency.descriptor(IMapboxController)
+
+    def __init__(self, label, data, order, selectorType=None, isVisible=True):
+        super(_MapboxSquadItem, self).__init__(label, data, order, selectorType, isVisible)
+        primeTimeStatus, _, _ = self.__mapboxCtrl.getPrimeTimeStatus()
+        self._prebattleType = PREBATTLE_TYPE.MAPBOX
+        self._isVisible = self.__mapboxCtrl.isEnabled() and self.__mapboxCtrl.isInPrimeTime()
+        self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
+
+    def _update(self, state):
+        super(_MapboxSquadItem, self)._update(state)
+        self._isSelected = self.__mapboxCtrl.isMapboxMode()
+        primeTimeStatus, _, _ = self.__mapboxCtrl.getPrimeTimeStatus()
+        self._isVisible = self.__mapboxCtrl.isEnabled() and self.__mapboxCtrl.isInPrimeTime() and state.isInPreQueue(queueType=QUEUE_TYPE.MAPBOX)
+        self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
+
+    @property
+    def squadIcon(self):
+        return backport.image(_R_ICONS.battleTypes.c_40x40.mapboxSquad())
 
 
 class _RankedItem(_SelectorItem):
@@ -696,6 +704,55 @@ class _BattleRoyaleItem(SelectorItem):
             return season is not None
 
 
+class _MapboxItem(SelectorItem):
+    __mapboxCtrl = dependency.descriptor(IMapboxController)
+
+    def __init__(self, label, data, order, selectorType=None, isVisible=True):
+        super(_MapboxItem, self).__init__(label, data, order, selectorType, isVisible)
+        self._isVisible = self.__getIsVisible()
+        self.__isFrozen = False
+
+    def isRandomBattle(self):
+        return True
+
+    def getVO(self):
+        vo = super(_MapboxItem, self).getVO()
+        if self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime():
+            vo['specialBgIcon'] = backport.image(R.images.gui.maps.icons.buttons.selectorRendererBGEvent())
+        return vo
+
+    def getFormattedLabel(self):
+        battleTypeName = super(_MapboxItem, self).getFormattedLabel()
+        availabilityStr = self.__getScheduleStr()
+        return battleTypeName if availabilityStr is None else '%s\n%s' % (battleTypeName, availabilityStr)
+
+    @process
+    def _doSelect(self, dispatcher):
+        currentSeason = self.__mapboxCtrl.getCurrentSeason()
+        if currentSeason is not None:
+            if self.__mapboxCtrl.getCurrentOrNextActiveCycleNumber(currentSeason):
+                yield dispatcher.doSelectAction(PrbAction(self._data))
+        return
+
+    def _update(self, state):
+        isNow = self.__mapboxCtrl.isInPrimeTime()
+        isEnabled = self.__mapboxCtrl.isEnabled()
+        self.__isFrozen = self.__mapboxCtrl.isFrozen() or not isEnabled
+        self._isVisible = self.__getIsVisible()
+        if not isEnabled or not isNow:
+            self._isLocked = True
+        self._isDisabled = state.hasLockedState or not isEnabled or self.__mapboxCtrl.getCurrentCycleID() is None
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.MAPBOX)
+        return
+
+    def __getScheduleStr(self):
+        return text_styles.main(backport.text(R.strings.menu.headerButtons.battle.types.mapbox.extra.frozen())) if self.__isFrozen else _getSeasonInfoStr(self.__mapboxCtrl, SELECTOR_BATTLE_TYPES.MAPBOX, _getCycleEndsInStr, _getCycleStartsAtStr, mapbox_helpers.getTillTimeString)
+
+    def __getIsVisible(self):
+        hasActualSeason = (self.__mapboxCtrl.getCurrentSeason() or self.__mapboxCtrl.getNextSeason()) is not None
+        return self.__mapboxCtrl.isEnabled() and hasActualSeason
+
+
 _g_items = None
 _g_squadItems = None
 _DEFAULT_PAN = PREBATTLE_ACTION_NAME.RANDOM
@@ -707,13 +764,13 @@ def _createItems(lobbyContext=None):
     isInRoaming = settings.roaming.isInRoaming()
     items = []
     _addRandomBattleType(items)
-    _addWeekendBrawlBattleType(items)
     _addRankedBattleType(items, settings)
     _addCommandBattleType(items, settings)
     _addStrongholdsBattleType(items, isInRoaming)
     _addTrainingBattleType(items)
     _addEpicTrainingBattleType(items, settings)
     _addRoyaleBattleType(items)
+    _addMapboxBattleType(items)
     if GUI_SETTINGS.specPrebatlesVisible:
         _addSpecialBattleType(items)
     if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
@@ -732,6 +789,7 @@ def _createSquadSelectorItems():
     _addSimpleSquadType(items)
     _addBattleRoyaleSquadType(items)
     _addEventSquadType(items)
+    _addMapboxSquadType(items)
     return _SquadSelectorItems(items)
 
 
@@ -747,6 +805,10 @@ def _addRankedBattleType(items, settings):
 
 def _addRoyaleBattleType(items):
     items.append(_BattleRoyaleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE, PREBATTLE_ACTION_NAME.BATTLE_ROYALE, 2, SELECTOR_BATTLE_TYPES.BATTLE_ROYALE))
+
+
+def _addMapboxBattleType(items):
+    items.append(_MapboxItem(backport.text(_R_BATTLE_TYPES.mapbox()), PREBATTLE_ACTION_NAME.MAPBOX, 2, SELECTOR_BATTLE_TYPES.MAPBOX))
 
 
 def _addCommandBattleType(items, settings):
@@ -782,10 +844,6 @@ def _addSandboxType(items):
     items.append(_SandboxItem(backport.text(_R_BATTLE_TYPES.battleTeaching()), PREBATTLE_ACTION_NAME.SANDBOX, 9))
 
 
-def _addWeekendBrawlBattleType(items):
-    items.append(_WeekendBrawlItem(backport.text(_R_BATTLE_TYPES.weekendBrawl()), PREBATTLE_ACTION_NAME.WEEKEND_BRAWL, 2, SELECTOR_BATTLE_TYPES.WEEKEND_BRAWL))
-
-
 def _addSimpleSquadType(items):
     items.append(_SimpleSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.simpleSquad())), PREBATTLE_ACTION_NAME.SQUAD, 0))
 
@@ -797,6 +855,37 @@ def _addBattleRoyaleSquadType(items):
 
 def _addEventSquadType(items):
     items.append(_EventSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.eventSquad())), PREBATTLE_ACTION_NAME.EVENT_SQUAD, 2))
+
+
+def _addMapboxSquadType(items):
+    items.append(_MapboxSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.mapboxSquad())), PREBATTLE_ACTION_NAME.MAPBOX_SQUAD, 2))
+
+
+def _getCycleEndsInStr(modeCtrl, modeName, timeLeftStrGetter=time_utils.getTillTimeString):
+    modeStrBase = R.strings.menu.headerButtons.battle.types.dyn(modeName)
+    scheduleStr = backport.text(modeStrBase.extra.endsIn(), timeLeft=timeLeftStrGetter(modeCtrl.getEventEndTimestamp()))
+    return text_styles.main(scheduleStr)
+
+
+def _getCycleStartsAtStr(modeCtrl, modeName, timeStrGetter=backport.getDateTimeFormat):
+    currentOrNextSeason = modeCtrl.getCurrentSeason() or modeCtrl.getNextSeason()
+    nextCycle = currentOrNextSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
+    scheduleStr = backport.text(R.strings.menu.headerButtons.battle.types.dyn(modeName).extra.startsAt(), time=timeStrGetter(time_utils.makeLocalServerTime(nextCycle.startDate)))
+    return text_styles.main(scheduleStr)
+
+
+def _getSeasonInfoStr(modeCtrl, modeName, activeCycleStrGetter, nextCycleStrGetter, timeLeftStrGetter):
+    currentSeason = modeCtrl.getCurrentSeason()
+    if currentSeason is not None and currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
+        return activeCycleStrGetter(modeCtrl, modeName, timeLeftStrGetter)
+    else:
+        currentOrNextSeason = currentSeason or modeCtrl.getNextSeason()
+        if currentOrNextSeason is not None:
+            nextCycle = currentOrNextSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
+            if nextCycle is not None:
+                return nextCycleStrGetter(modeCtrl, modeName, backport.getDateTimeFormat)
+        scheduleStr = backport.text(R.strings.menu.headerButtons.battle.types.dyn(modeName).extra.finished())
+        return text_styles.main(scheduleStr)
 
 
 def create():

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ReloadEffect.py
 import logging
+from copy import copy
 from math import fabs
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers import gEffectsDisabled, dependency
@@ -25,42 +26,60 @@ def _createReloadEffectDesc(eType, dataSection):
     if not dataSection.values():
         return None
     elif eType == ReloadEffectsType.SIMPLE_RELOAD:
-        return _SimpleReloadDesc(dataSection)
+        return _SimpleReloadDesc(dataSection, eType)
     elif eType == ReloadEffectsType.BARREL_RELOAD:
-        return _BarrelReloadDesc(dataSection)
+        return _BarrelReloadDesc(dataSection, eType)
     elif eType == ReloadEffectsType.AUTO_RELOAD:
-        return _AutoReloadDesc(dataSection)
+        return _AutoReloadDesc(dataSection, eType)
     else:
-        return _DualGunReloadDesc(dataSection) if eType == ReloadEffectsType.DUALGUN_RELOAD else None
+        return _DualGunReloadDesc(dataSection, eType) if eType == ReloadEffectsType.DUALGUN_RELOAD else None
 
 
 class _ReloadDesc(object):
-    __slots__ = ()
+    __slots__ = ('_intuitionOverrides',)
 
     def __init__(self):
-        pass
+        self._intuitionOverrides = {}
 
     def create(self):
         return None
 
+    def createIntuitionReload(self):
+        return None
+
+    def hasUniqueIntuitionReload(self):
+        return bool(self._intuitionOverrides)
+
 
 class _SimpleReloadDesc(_ReloadDesc):
-    __slots__ = ('duration', 'soundEvent')
+    __slots__ = ('duration', 'soundEvent', 'effectType')
 
-    def __init__(self, dataSection):
+    def __init__(self, dataSection, eType):
         super(_SimpleReloadDesc, self).__init__()
         self.duration = dataSection.readFloat('duration', 0.0) / 1000.0
         self.soundEvent = dataSection.readString('sound', '')
+        self.effectType = eType
+        intuitionOverrides = dataSection['intuition_overrides']
+        if intuitionOverrides is not None:
+            self._intuitionOverrides['duration'] = intuitionOverrides.readFloat('duration', self.duration * 1000.0) / 1000.0
+            self._intuitionOverrides['sound'] = intuitionOverrides.readString('sound', self.soundEvent)
+        return
 
     def create(self):
         return SimpleReload(self)
+
+    def createIntuitionReload(self):
+        decr = copy(self)
+        decr.duration = self._intuitionOverrides.get('duration', self.duration)
+        decr.soundEvent = self._intuitionOverrides.get('sound', self.soundEvent)
+        return decr.create()
 
 
 class _DualGunReloadDesc(_SimpleReloadDesc):
     __slots__ = ('ammoLowSound', 'soundEvent', 'runTimeDelta', 'runTimeDeltaAmmoLow', 'caliber')
 
-    def __init__(self, dataSection):
-        super(_DualGunReloadDesc, self).__init__(dataSection)
+    def __init__(self, dataSection, eType):
+        super(_DualGunReloadDesc, self).__init__(dataSection, eType)
         self.ammoLowSound = dataSection.readString('ammoLowSound', '')
         self.runTimeDelta = dataSection.readFloat('runTimeDelta', 0.0)
         self.runTimeDeltaAmmoLow = dataSection.readFloat('runTimeDeltaAmmoLow', 0.0)
@@ -69,12 +88,15 @@ class _DualGunReloadDesc(_SimpleReloadDesc):
     def create(self):
         return DualGunReload(self)
 
+    def createIntuitionReload(self):
+        return DualGunReload(self)
+
 
 class _BarrelReloadDesc(_SimpleReloadDesc):
     __slots__ = ('lastShellAlert', 'shellDuration', 'startLong', 'startLoop', 'stopLoop', 'loopShell', 'loopShellLast', 'ammoLow', 'caliber', 'shellDt', 'shellDtLast')
 
-    def __init__(self, dataSection):
-        super(_BarrelReloadDesc, self).__init__(dataSection)
+    def __init__(self, dataSection, eType):
+        super(_BarrelReloadDesc, self).__init__(dataSection, eType)
         self.lastShellAlert = dataSection.readString('lastShellAlert', '')
         self.shellDuration = dataSection.readFloat('shellDuration', 0.0) / 1000.0
         self.startLong = dataSection.readString('startLong', '')
@@ -86,15 +108,31 @@ class _BarrelReloadDesc(_SimpleReloadDesc):
         self.caliber = dataSection.readString('caliber', '')
         self.shellDt = dataSection.readFloat('loopShellDt', 0.5)
         self.shellDtLast = dataSection.readFloat('loopShellLastDt', 0.5)
+        intuitionOverrides = dataSection['intuition_overrides']
+        if intuitionOverrides is not None:
+            self._intuitionOverrides['loopShell'] = intuitionOverrides.readString('loopShell', self.loopShell)
+            self._intuitionOverrides['loopShellLast'] = intuitionOverrides.readString('loopShellLast', self.loopShellLast)
+            self._intuitionOverrides['loopShellLastDt'] = intuitionOverrides.readFloat('loopShellLastDt', self.shellDtLast)
+            self._intuitionOverrides['startLong'] = intuitionOverrides.readString('startLong', self.startLong)
+        return
 
     def create(self):
         return BarrelReload(self)
 
+    def createIntuitionReload(self):
+        descr = copy(self)
+        descr.duration = self._intuitionOverrides['duration']
+        descr.loopShell = self._intuitionOverrides['loopShell']
+        descr.loopShellLast = self._intuitionOverrides['loopShellLast']
+        descr.shellDtLast = self._intuitionOverrides['loopShellLastDt']
+        descr.startLong = self._intuitionOverrides['startLong']
+        return descr.create()
+
 
 class _AutoReloadDesc(_ReloadDesc):
-    __slots__ = ('duration', 'soundEvent', 'reloadStart', 'autoLoaderFull', 'lastShellAlert', 'shotFail', 'clipShellLoad', 'clipShellLoadT', 'ammoLow', 'caliber', 'almostComplete', 'almostCompleteT')
+    __slots__ = ('duration', 'soundEvent', 'reloadStart', 'autoLoaderFull', 'lastShellAlert', 'shotFail', 'clipShellLoad', 'clipShellLoadT', 'ammoLow', 'caliber', 'almostComplete', 'almostCompleteT', 'effectType')
 
-    def __init__(self, dataSection):
+    def __init__(self, dataSection, eType):
         super(_AutoReloadDesc, self).__init__()
         self.duration = dataSection.readFloat('duration', 0.5) / 1000.0
         if self.duration < 0.5:
@@ -114,9 +152,19 @@ class _AutoReloadDesc(_ReloadDesc):
         if self.almostCompleteT < 0.5:
             self.almostCompleteT = 0.5
         self.shotFail = dataSection.readString('shotFail', '')
+        self.effectType = eType
+        intuitionOverrides = dataSection['intuition_overrides']
+        if intuitionOverrides is not None:
+            self._intuitionOverrides['reloadStart'] = intuitionOverrides.readString('reloadStart', self.reloadStart)
+        return
 
     def create(self):
         return AutoReload(self)
+
+    def createIntuitionReload(self):
+        descr = copy(self)
+        descr.reloadStart = self._intuitionOverrides['reloadStart']
+        return AutoReload(descr)
 
 
 def effectFromSection(section):
@@ -133,6 +181,14 @@ def playByName(soundName):
 
 
 class _GunReload(CallbackDelayer):
+    __slots__ = ('_desc',)
+
+    def __init__(self, effectDesc):
+        super(_GunReload, self).__init__()
+        self._desc = effectDesc
+
+    def getEffectType(self):
+        return self._desc.effectType
 
     def _checkAndPlayGunRammerEffect(self, reloadTime):
         if _needGunRammerEffect():
@@ -146,8 +202,7 @@ class _GunReload(CallbackDelayer):
 class SimpleReload(_GunReload):
 
     def __init__(self, effectDesc):
-        _GunReload.__init__(self)
-        self._desc = effectDesc
+        _GunReload.__init__(self, effectDesc)
         self._sound = None
         self._startLoopT = 0.0
         return
@@ -180,6 +235,9 @@ class SimpleReload(_GunReload):
             self._sound = None
         self.stopCallback(self.__playSound)
         return
+
+    def reloadEnd(self):
+        self.stopCallback(self.__playSound)
 
     def onClipLoad(self, timeLeft, shellsInClip, lastShell, canBeFull):
         pass
@@ -223,7 +281,7 @@ class BarrelReload(SimpleReload):
                 self.stopCallback(self._startOneShoot)
                 self.__reloadSequence.schedule(shellReloadTime, reloadShellCount)
                 self._checkAndPlayGunRammerEffect(shellReloadTime)
-                if reloadStart:
+                if reloadStart and shellReloadTime > self._desc.duration:
                     if self._startLongSound is not None:
                         self._startLongSound.stop()
                     self._startLongSound = SoundGroups.g_instance.getSound2D(self._desc.startLong)
@@ -248,6 +306,9 @@ class BarrelReload(SimpleReload):
             LOG_DEBUG('!!! Stop Loop = {0}'.format(self._desc.stopLoop))
         self.stopCallback(self._startOneShoot)
         self.__reloadSequence.stop()
+
+    def reloadEnd(self):
+        self.stop()
 
     def onClipLoad(self, timeLeft, shellsInClip, lastShell, canBeFull):
         pass
@@ -317,6 +378,7 @@ class LoopSequence(CallbackDelayer):
         self.stopCallback(self.__startCallback)
         if self.__inProgress:
             playByName(self.__stopLoop)
+        self.__inProgress = False
         self.__sequence = []
 
     def __start(self):
@@ -343,6 +405,7 @@ class LoopSequence(CallbackDelayer):
                 if dt < 0.0:
                     dt = 0.0
                 return dt
+            self.__inProgress = False
             return None
             return None
 
@@ -374,8 +437,7 @@ class LoopSequence(CallbackDelayer):
 class AutoReload(_GunReload):
 
     def __init__(self, effectDesc):
-        _GunReload.__init__(self)
-        self._desc = effectDesc
+        _GunReload.__init__(self, effectDesc)
         self._sound = None
         self._almostCompleteSnd = None
         self._startLoopT = 0.0
@@ -422,6 +484,9 @@ class AutoReload(_GunReload):
         self.stopCallback(self.__onAlmostComplete)
         self._almostCompleteSnd = None
         return
+
+    def reloadEnd(self):
+        self.stopCallback(self.__onShellInTheBarrel)
 
     def onClipLoad(self, timeLeft, shellCount, lastShell, canBeFull):
         if BARREL_DEBUG_ENABLED:
@@ -481,8 +546,7 @@ class AutoReload(_GunReload):
 class DualGunReload(_GunReload):
 
     def __init__(self, effectDesc):
-        _GunReload.__init__(self)
-        self.__desc = effectDesc
+        _GunReload.__init__(self, effectDesc)
         self.__sound = None
         self.__ammoLowSound = None
         return
@@ -495,16 +559,16 @@ class DualGunReload(_GunReload):
         if gEffectsDisabled() or not directTrigger:
             return
         else:
-            SoundGroups.g_instance.setSwitch(_CALIBER_RELOAD_SOUND_SWITCH, self.__desc.caliber)
+            SoundGroups.g_instance.setSwitch(_CALIBER_RELOAD_SOUND_SWITCH, self._desc.caliber)
             self.stopCallback(self.__onReloadStart)
-            timeToStart = shellReloadTime - self.__desc.runTimeDelta
+            timeToStart = shellReloadTime - self._desc.runTimeDelta
             if self.__sound is None:
-                self.__sound = SoundGroups.g_instance.getSound2D(self.__desc.soundEvent)
+                self.__sound = SoundGroups.g_instance.getSound2D(self._desc.soundEvent)
             if timeToStart > 0:
                 self.delayCallback(timeToStart, self.__onReloadStart, BigWorld.time() + timeToStart)
             if ammoLow:
-                timeToStart = shellReloadTime - self.__desc.runTimeDeltaAmmoLow
-                self.__ammoLowSound = SoundGroups.g_instance.getSound2D(self.__desc.ammoLowSound)
+                timeToStart = shellReloadTime - self._desc.runTimeDeltaAmmoLow
+                self.__ammoLowSound = SoundGroups.g_instance.getSound2D(self._desc.ammoLowSound)
                 self.delayCallback(timeToStart, self.__onAmmoLow, BigWorld.time() + timeToStart)
             self._checkAndPlayGunRammerEffect(shellReloadTime)
             return
@@ -517,7 +581,12 @@ class DualGunReload(_GunReload):
         self.__sound = None
         self.__ammoLowSound = None
         self.stopCallback(self.__onReloadStart)
+        self.stopCallback(self.__onAmmoLow)
         return
+
+    def reloadEnd(self):
+        self.stopCallback(self.__onReloadStart)
+        self.stopCallback(self.__onAmmoLow)
 
     def __onReloadStart(self, time):
         if fabs(time - BigWorld.time()) > 0.1:
@@ -542,6 +611,83 @@ class DualGunReload(_GunReload):
                     return
                 self.__ammoLowSound.play()
             return
+
+
+class ReloadEffectStrategy(object):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __slots__ = ('__gunReloadEffect', '__intuitionReloadEffect', '__currentReloadEffect', '__reloadInProgress')
+
+    def __init__(self, gunReloadEffectDesc):
+        self.__gunReloadEffect = gunReloadEffectDesc.create()
+        if gunReloadEffectDesc.hasUniqueIntuitionReload():
+            self.__intuitionReloadEffect = gunReloadEffectDesc.createIntuitionReload()
+        else:
+            self.__intuitionReloadEffect = None
+        self.__currentReloadEffect = self.__gunReloadEffect
+        self.__reloadInProgress = False
+        return
+
+    def start(self, timeLeft, baseTime, clipCapacity, directTrigger=False):
+        reloadFromStart = fabs(timeLeft - baseTime) < 0.001 if not self.__reloadInProgress else False
+        self.__reloadInProgress = True
+        self.__reloadStartEffect(timeLeft, clipCapacity, reloadFromStart, directTrigger)
+
+    def stop(self):
+        self.__reloadInProgress = False
+        if self.__intuitionReloadEffect is not None:
+            self.__intuitionReloadEffect.stop()
+        self.__gunReloadEffect.stop()
+        return
+
+    def onClipLoad(self, timeLeft, shellsInClip, lastShell, canBeFull):
+        if self.__currentReloadEffect is not None:
+            self.__currentReloadEffect.onClipLoad(timeLeft, shellsInClip, lastShell, canBeFull)
+        return
+
+    def onFull(self):
+        if self.__currentReloadEffect is not None:
+            self.__currentReloadEffect.onFull()
+        return
+
+    def shotFail(self):
+        if self.__currentReloadEffect is not None:
+            self.__currentReloadEffect.shotFail()
+        return
+
+    def reloadEnd(self):
+        self.__reloadInProgress = False
+        if self.__currentReloadEffect is not None:
+            self.__currentReloadEffect.reloadEnd()
+        return
+
+    def getGunReloadType(self):
+        return self.__gunReloadEffect.getEffectType()
+
+    def __reloadStartEffect(self, timeLeft, clipCapacity, reloadFromStart, directTrigger=False):
+        ammoCtrl = self.__sessionProvider.shared.ammo
+        currentShellCD = ammoCtrl.getCurrentShellCD()
+        shellCounts = ammoCtrl.getShells(currentShellCD)
+        shellsQuantityLeft = ammoCtrl.getShellsQuantityLeft()
+        isIntuition = ammoCtrl.getIntuitionReloadInProcess()
+        if isIntuition and self.__intuitionReloadEffect is not None:
+            relloadEffect = self.__intuitionReloadEffect
+        else:
+            relloadEffect = self.__gunReloadEffect
+        if self.__currentReloadEffect != relloadEffect:
+            self.__currentReloadEffect.stop()
+        self.__currentReloadEffect = relloadEffect
+        if relloadEffect is not None:
+            ammoLow = False
+            if clipCapacity > shellCounts[0]:
+                ammoLow = True
+                clipCapacity = shellCounts[0]
+            if self.getGunReloadType() == ReloadEffectsType.DUALGUN_RELOAD:
+                if shellsQuantityLeft == 1:
+                    ammoLow = True
+                relloadEffect.start(timeLeft, ammoLow, directTrigger)
+            else:
+                relloadEffect.start(timeLeft, ammoLow, shellCounts[1], clipCapacity, currentShellCD, reloadFromStart)
+        return
 
 
 @dependency.replace_none_kwargs(sessionProvider=IBattleSessionProvider)

@@ -5,11 +5,9 @@ from typing import TYPE_CHECKING
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
-from gui.impl.gen.view_models.common.format_resource_string_arg_model import FormatResourceStringArgModel as FrmtModel
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogView
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 if TYPE_CHECKING:
-    from frameworks.wulf import Array
     from gui.impl.gen.view_models.views.lobby.common.buy_sell_items_dialog_model import BuySellItemsDialogModel
 
 class DialogBuySellItemBaseView(FullScreenDialogView):
@@ -53,15 +51,6 @@ class DialogBuySellItemBaseView(FullScreenDialogView):
         else:
             price = self._item.getSellPrice(preferred=False)
         return price
-
-    def _setTitleArgs(self, arrModel, frmtArgs):
-        for name, resource in frmtArgs:
-            frmtModel = FrmtModel()
-            frmtModel.setName(name)
-            frmtModel.setValue(resource)
-            arrModel.addViewModel(frmtModel)
-
-        arrModel.invalidate()
 
     def _setItemPrices(self, model):
         itemPrice = self._getItemPrice()

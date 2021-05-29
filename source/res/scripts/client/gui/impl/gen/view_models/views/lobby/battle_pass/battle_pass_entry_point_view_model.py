@@ -23,7 +23,7 @@ class BPState(Enum):
 class BattlePassEntryPointViewModel(ViewModel):
     __slots__ = ('onClick',)
 
-    def __init__(self, properties=15, commands=1):
+    def __init__(self, properties=16, commands=1):
         super(BattlePassEntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
     def getPrevLevel(self):
@@ -116,6 +116,12 @@ class BattlePassEntryPointViewModel(ViewModel):
     def setChapterNumber(self, value):
         self._setNumber(14, value)
 
+    def getBattleType(self):
+        return self._getString(15)
+
+    def setBattleType(self, value):
+        self._setString(15, value)
+
     def _initialize(self):
         super(BattlePassEntryPointViewModel, self)._initialize()
         self._addNumberProperty('prevLevel', 0)
@@ -133,4 +139,5 @@ class BattlePassEntryPointViewModel(ViewModel):
         self._addBoolProperty('is3DStyleChosen', False)
         self._addNumberProperty('notChosenRewardCount', 0)
         self._addNumberProperty('chapterNumber', 0)
+        self._addStringProperty('battleType', '')
         self.onClick = self._addCommand('onClick')

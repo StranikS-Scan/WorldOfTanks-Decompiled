@@ -155,7 +155,6 @@ class SessionCarouselFilter(_CarouselFilter):
 
     def load(self):
         defaultFilters = dict()
-        savedFilters = dict()
         for section in self._clientSections:
             defaultFilters.update(AccountSettings.getSessionSettingsDefault(section))
 

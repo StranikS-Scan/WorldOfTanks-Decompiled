@@ -225,10 +225,10 @@ def getStyleProgressionOutfit(outfit, toLevel=0, season=None):
                 tmpOutfit = Outfit(strCompactDescr=tmpOutfitCompDescr, vehicleCD=outfit.vehicleCD)
                 resOutfit = resOutfit.discard(tmpOutfit)
 
-    levelAdditionalOutfit = styleProgression.get(toLevel, {}).get('additionalOutfit', {})
+    levelAdditionalOutfit = styleProgression.get(toLevel, {}).get('additionalOutfit', {}).get(season)
     compDescr = None
-    if levelAdditionalOutfit and levelAdditionalOutfit.get(season):
-        compDescr = levelAdditionalOutfit.get(season).makeCompDescr()
+    if levelAdditionalOutfit:
+        compDescr = levelAdditionalOutfit.makeCompDescr()
     tmpOutfit = Outfit(strCompactDescr=compDescr, vehicleCD=outfit.vehicleCD)
     tmpDiff = resOutfit.diff(tmpOutfit).copy()
     resOutfit = resOutfit.adjust(tmpDiff)
@@ -237,6 +237,19 @@ def getStyleProgressionOutfit(outfit, toLevel=0, season=None):
         baseOutfit = Outfit(strCompactDescr=baseOutfit.makeCompDescr(), vehicleCD=outfit.vehicleCD)
         resOutfit = baseOutfit.adjust(resOutfit)
     resOutfit.setProgressionLevel(toLevel)
+    if levelAdditionalOutfit:
+        if levelAdditionalOutfit.attachments:
+            attachmentSlot = resOutfit.misc.slotFor(GUI_ITEM_TYPE.ATTACHMENT)
+            for attachment in levelAdditionalOutfit.attachments:
+                intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.ATTACHMENT, attachment.id)
+                attachmentSlot.append(intCD, attachment)
+
+        if levelAdditionalOutfit.sequences:
+            sequenceSlot = resOutfit.misc.slotFor(GUI_ITEM_TYPE.SEQUENCE)
+            for seq in levelAdditionalOutfit.sequences:
+                intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.SEQUENCE, seq.id)
+                sequenceSlot.append(intCD, seq)
+
     return resOutfit
 
 

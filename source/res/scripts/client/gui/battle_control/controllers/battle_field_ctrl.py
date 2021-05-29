@@ -168,6 +168,7 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
                 self.__alliesHealth += maxHealth
                 self.__totalAlliesHealth += maxHealth
             tList[vInfoVO.vehicleID] = [maxHealth, maxHealth]
+            self.__updateVehicleHealth(vehicleID=vInfoVO.vehicleID)
             return
 
     def __updateVehiclesHealth(self):

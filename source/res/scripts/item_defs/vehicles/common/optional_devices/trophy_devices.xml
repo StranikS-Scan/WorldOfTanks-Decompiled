@@ -703,4 +703,88 @@
       </mul>
     </kpi>
   </trophyUpgradedImprovedSights>
+  <trophyBasicAdditionalInvisibilityDevice>
+    <id>	113	</id>
+    <userString>	#artefacts:trophyBasicAdditionalInvisibilityDevice/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicAdditionalInvisibilityDevice/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:trophyBasicAdditionalInvisibilityDevice/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/additionalInvisibilityDevice.png 0 0	</icon>
+    <groupName>	additInvisibilityDevice	</groupName>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	additInvisibilityDevice trophyBasic	</tags>
+    <incompatibleTags>
+      <installed>	additInvisibilityDevice	</installed>
+    </incompatibleTags>
+    <script>	UpgradableLowNoiseTracks	  <weight>	100	</weight>
+      <overridableFactors>
+        <invisibilityBonus>	0.06	</invisibilityBonus>
+      </overridableFactors>
+      <upgradeInfo>
+        <upgradedCompDescr>	29433	</upgradedCompDescr>
+        <price>	3000000	</price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <aggregateMul>
+        <name>	vehicleCamouflageGroup	</name>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.06	</value>
+          <vehicleTypes>	lightTank mediumTank	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.05	</value>
+          <vehicleTypes>	AT-SPG	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.03	</value>
+          <vehicleTypes>	heavyTank SPG	</vehicleTypes>
+        </mul>
+      </aggregateMul>
+    </kpi>
+  </trophyBasicAdditionalInvisibilityDevice>
+  <trophyUpgradedAdditionalInvisibilityDevice>
+    <id>	114	</id>
+    <userString>	#artefacts:trophyUpgradedAdditionalInvisibilityDevice/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicAdditionalInvisibilityDevice/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:trophyBasicAdditionalInvisibilityDevice/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/additionalInvisibilityDevice.png 0 0	</icon>
+    <groupName>	additInvisibilityDevice	</groupName>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	additInvisibilityDevice trophyUpgraded	</tags>
+    <incompatibleTags>
+      <installed>	additInvisibilityDevice	</installed>
+    </incompatibleTags>
+    <script>	UpgradedLowNoiseTracks	  <weight>	100	</weight>
+      <overridableFactors>
+        <invisibilityBonus>	0.09	</invisibilityBonus>
+      </overridableFactors>
+    </script>
+    <kpi>
+      <aggregateMul>
+        <name>	vehicleCamouflageGroup	</name>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.09	</value>
+          <vehicleTypes>	lightTank mediumTank	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.07	</value>
+          <vehicleTypes>	AT-SPG	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.05	</value>
+          <vehicleTypes>	heavyTank SPG	</vehicleTypes>
+        </mul>
+      </aggregateMul>
+    </kpi>
+  </trophyUpgradedAdditionalInvisibilityDevice>
 </trophy_devices.xml>

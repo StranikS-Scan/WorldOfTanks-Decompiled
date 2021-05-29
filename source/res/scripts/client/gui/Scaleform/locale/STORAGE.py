@@ -81,6 +81,8 @@ class STORAGE(object):
     BLUEPRINTS_CARD_CONVERTAVAILABLE = '#storage:blueprints/card/convertAvailable'
     BLUEPRINTS_CARD_CONVERTREQUIRED = '#storage:blueprints/card/convertRequired'
     BLUEPRINTS_CHECKBOX_LABEL = '#storage:blueprints/checkbox/label'
+    BLUEPRINTS_CARD_ADDITIONAL = '#storage:blueprints/card/additional'
+    BLUEPRINTS_CARD_PLUS = '#storage:blueprints/card/plus'
     VEHICLESELECTPOPOVER_TOOLTIPS_NATION_HEADER = '#storage:vehicleSelectPopover/tooltips/nation/header'
     VEHICLESELECTPOPOVER_TOOLTIPS_NATION_BODY = '#storage:vehicleSelectPopover/tooltips/nation/body'
     VEHICLESELECTPOPOVER_TOOLTIPS_TYPE_HEADER = '#storage:vehicleSelectPopover/tooltips/type/header'

@@ -61,7 +61,7 @@ class ProjectileMover(object):
                 self.salvo.addProjectile(artID, gravity, refStartPoint, refVelocity)
                 return
             isOwnShoot = attackerID == BigWorld.player().playerVehicleID
-            projectileMotor = self.__ballistics.addProjectile(shotID, gravity, refStartPoint, refVelocity, startPoint, maxDistance, isOwnShoot, attackerID, ownVehicleGunShotPositionGetter(), tracerCameraPos)
+            projectileMotor, collisionTime, _ = self.__ballistics.addProjectile(shotID, gravity, refStartPoint, refVelocity, startPoint, maxDistance, isOwnShoot, attackerID, ownVehicleGunShotPositionGetter(), tracerCameraPos)
             if self.__debugDrawer is not None:
                 self.__debugDrawer.addProjectile(shotID, attackerID, refStartPoint, refVelocity, Math.Vector3(0.0, -gravity, 0.0), maxDistance, isOwnShoot)
             if projectileMotor is None:
@@ -81,7 +81,7 @@ class ProjectileMover(object):
                 model.addMotor(projectileMotor)
                 model.visible = False
                 model.visibleAttachments = True
-                projEffects.attachTo(proj['model'], proj['effectsData'], 'flying', isPlayerVehicle=isOwnShoot, isArtillery=False, attackerID=attackerID)
+                projEffects.attachTo(proj['model'], proj['effectsData'], 'flying', isPlayerVehicle=isOwnShoot, isArtillery=False, attackerID=attackerID, collisionTime=collisionTime)
             self.__projectiles[shotID] = proj
             FlockManager.getManager().onProjectile(startPoint)
             return
@@ -214,7 +214,7 @@ class EntityCollisionData(object):
         if isVehicle:
             self.entity = BigWorld.entity(entityID)
             matInfo = self.entity.getMatinfo(partIndex, matKind)
-            self.armor = matInfo.armor if matInfo is not None else 0.0
+            self.armor = matInfo.armor if matInfo is not None and matInfo.armor is not None else 0.0
         else:
             self.entity = None
         return

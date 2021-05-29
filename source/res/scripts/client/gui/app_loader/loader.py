@@ -77,6 +77,7 @@ class AppLoader(IAppLoader):
         self.onGUISpaceLeft = Event.Event()
         self.onGUISpaceBeforeEnter = Event.Event()
         self.onGUISpaceEntered = Event.Event()
+        self.onGUIInitialized = Event.Event()
 
     def init(self, appFactory):
         self.__appFactory = appFactory
@@ -207,6 +208,7 @@ class AppLoader(IAppLoader):
             _logger.info('App is initialized: %s', appNS)
             self.__appsStates[appNS] = ApplicationStateID.INITIALIZED
             self.__space.showGUI(self.__appFactory, appNS, ApplicationStateID.INITIALIZED)
+            self.onGUIInitialized()
 
     def __onAppDestroyed(self, event):
         appNS = event.ns

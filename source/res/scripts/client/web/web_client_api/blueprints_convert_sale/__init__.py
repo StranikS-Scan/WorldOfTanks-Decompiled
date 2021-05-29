@@ -106,7 +106,7 @@ class BlueprintsConvertSaleWebApi(object):
     @w2c(W2CSchema, 'get_blueprint_balance')
     def getBlueprintBalance(self, _):
         balance = [{'currency': 'intelligence',
-          'balance': self._itemsCache.items.blueprints.getIntelligenceData()}]
+          'balance': self._itemsCache.items.blueprints.getIntelligenceCount()}]
         fragments = self._itemsCache.items.blueprints.getAllNationalFragmentsData()
         for nameID, value in fragments.iteritems():
             balance.append({'currency': NATION_NAMES[nameID],

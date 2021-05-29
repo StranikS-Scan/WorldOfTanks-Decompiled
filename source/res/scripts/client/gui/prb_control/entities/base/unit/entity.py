@@ -1008,7 +1008,7 @@ class UnitEntity(_UnitEntity):
                 if callback:
                     callback(False)
                 return
-            self._requestsProcessor.doRequest(ctx, 'startBattle', vehInvID=ctx.selectVehInvID, gameplaysMask=ctx.getGamePlayMask(), arenaTypeID=ctx.getDemoArenaTypeID(), callback=callback, stopAutoSearch=flags.isInSearch())
+            self._requestsProcessor.doRequest(ctx, 'startBattle', vehInvID=ctx.selectVehInvID, gameplaysMask=ctx.getGamePlayMask(), arenaTypeID=ctx.getDemoArenaTypeID(), callback=callback, stopAutoSearch=flags.isInSearch(), isOnly10ModeEnabled=ctx.isOnly10ModeEnabled())
         else:
             if not pPermissions.canStopBattleQueue():
                 LOG_ERROR('Player can not stop battle queue', pPermissions)

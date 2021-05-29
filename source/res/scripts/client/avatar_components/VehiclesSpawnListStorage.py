@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/avatar_components/VehiclesSpawnListStorage.py
 import logging
 import cPickle
-from VehiclesSpawnListStorageCommon import convertTuplesToVehicleSpawnData
 from Event import Event
+from VehiclesSpawnListStorageCommon import convertTuplesToVehicleSpawnData
 _logger = logging.getLogger(__name__)
 
 class VehiclesSpawnListStorage(object):

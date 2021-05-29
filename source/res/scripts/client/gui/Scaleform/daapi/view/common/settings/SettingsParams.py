@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/SettingsParams.py
+from itertools import chain
 import BigWorld
 from account_helpers.settings_core import settings_constants, options
 from gui.shared.utils import graphics
@@ -14,7 +15,7 @@ class SettingsParams(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __settingsDiffPreprocessing(self, diff):
-        for option in settings_constants.FEEDBACK.ALL():
+        for option in chain(settings_constants.FEEDBACK.ALL(), (settings_constants.AIM.SPG,)):
             feedbackTab = diff.pop(option, None)
             if feedbackTab is not None:
                 diff.update(feedbackTab)
@@ -58,7 +59,9 @@ class SettingsParams(object):
         return settings
 
     def getAimSettings(self):
-        return self.settingsCore.packSettings(settings_constants.AIM.ALL())
+        settings = {settings_constants.AIM.SPG: self.settingsCore.packSettings(settings_constants.SPGAim.ALL())}
+        settings.update(self.settingsCore.packSettings(settings_constants.AIM.ALL()))
+        return settings
 
     def getControlsSettings(self):
         return self.settingsCore.packSettings(settings_constants.CONTROLS.ALL())
@@ -67,7 +70,7 @@ class SettingsParams(object):
         return self.settingsCore.packSettings(settings_constants.GRAPHICS.getScreenConstants())
 
     def preview(self, settingName, value):
-        if settingName in settings_constants.FEEDBACK.ALL():
+        if settingName in chain(settings_constants.FEEDBACK.ALL(), (settings_constants.AIM.SPG,)):
             settingName, value = value.popitem()
         self.settingsCore.previewSetting(settingName, value)
 

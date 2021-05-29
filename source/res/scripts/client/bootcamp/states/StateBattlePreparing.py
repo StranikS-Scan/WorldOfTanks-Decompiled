@@ -143,8 +143,8 @@ class StateBattlePreparing(AbstractState):
         g_bootcampEvents.onBootcampSpaceLoaded()
         return True
 
-    def onVehicleOnEnterWorld(self, vehicle):
-        LOG_DEBUG_DEV_BOOTCAMP('onVehicleOnEnterWorld called')
+    def onVehicleOnAppearanceReady(self, vehicle):
+        LOG_DEBUG_DEV_BOOTCAMP('onVehicleOnAppearanceReady called')
         if not self.isVideoPlayingLesson or self.__isIntroVideoFinished:
             return False
         self.__onEnterWorldVehicles.append(vehicle)
@@ -183,7 +183,7 @@ class StateBattlePreparing(AbstractState):
         self.__isIntroVideoFinished = True
         g_bootcamp.setIntroVideoPlayed()
         for vehicle in self.__onEnterWorldVehicles:
-            BigWorld.player().vehicle_onEnterWorld(vehicle)
+            BigWorld.player().vehicle_onAppearanceReady(vehicle)
 
         del self.__onEnterWorldVehicles[:]
         if self.__prereqs is not None:

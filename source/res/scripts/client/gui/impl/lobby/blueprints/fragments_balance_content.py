@@ -7,9 +7,10 @@ from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.common_balance_content_model import CommonBalanceContentModel
+from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_balance_content_model import BlueprintBalanceContentModel
 from gui.impl.gen.view_models.views.lobby.blueprints.fragment_item_model import FragmentItemModel
 from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips import BlueprintScreenTooltips
+from gui.impl.lobby.blueprints.blueprints_alliance_tooltip_view import BlueprintsAllianceTooltipView
 from gui.impl.pub import ViewImpl
 from gui.impl.backport import createTooltipData, BackportTooltipWindow
 from gui.shared.utils.requesters.blueprints_requester import getNationalFragmentCD
@@ -23,7 +24,7 @@ class FragmentsBalanceContent(ViewImpl):
 
     def __init__(self, vehicleCD):
         settings = ViewSettings(R.views.lobby.blueprints.fragments_balance_content.FragmentsBalanceContent())
-        settings.model = CommonBalanceContentModel()
+        settings.model = BlueprintBalanceContentModel()
         super(FragmentsBalanceContent, self).__init__(settings)
         self.__vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
 
@@ -45,6 +46,9 @@ class FragmentsBalanceContent(ViewImpl):
         else:
             return super(FragmentsBalanceContent, self).createToolTip(event)
 
+    def createToolTipContent(self, event, contentID):
+        return BlueprintsAllianceTooltipView(self.__vehicle.nationName, self.__vehicle.intCD, self.__vehicle.level) if contentID == R.views.lobby.blueprints.tooltips.BlueprintsAlliancesTooltipView() else super(FragmentsBalanceContent, self).createToolTipContent(event, contentID)
+
     def _initialize(self, *args, **kwargs):
         super(FragmentsBalanceContent, self)._initialize(*args, **kwargs)
         intelligenceFragments, nationalFragments = self.__getFragmentCount()
@@ -53,18 +57,23 @@ class FragmentsBalanceContent(ViewImpl):
             logger.warning('Can not get a vehicle object and nation name')
         g_clientUpdateManager.addCallbacks({'blueprints': self.__onUpdateBlueprints})
         with self.viewModel.transaction() as model:
-            item = FragmentItemModel()
+            nationId = nations.INDICES[nationName]
+            allianceId = nations.NATION_TO_ALLIANCE_IDS_MAP[nationId]
+            model.setAllianceName(nations.ALLIANCES_TAGS_ORDER[allianceId].replace('-', '_'))
+            item = model.intelligenceBalance
             item.setValue(self.gui.systemLocale.getNumberFormat(intelligenceFragments))
             item.setIcon(R.images.gui.maps.icons.blueprints.fragment.special.intelligence())
             item.setFragmentCD(BlueprintTypes.INTELLIGENCE_DATA)
-            model.currency.addViewModel(item)
-            item = FragmentItemModel()
-            item.setValue(self.gui.systemLocale.getNumberFormat(nationalFragments))
-            item.setIcon(R.images.gui.maps.icons.blueprints.fragment.special.dyn(nationName)())
-            nationId = nations.INDICES.get(nationName, nations.NONE_INDEX)
-            nationTooltipData = getNationalFragmentCD(nationId)
-            item.setFragmentCD(nationTooltipData)
-            model.currency.addViewModel(item)
+            for nationID, fragmentsCoout in nationalFragments.iteritems():
+                nationName = nations.MAP[nationID]
+                item = FragmentItemModel()
+                item.setValue(self.gui.systemLocale.getNumberFormat(fragmentsCoout))
+                item.setIcon(R.images.gui.maps.icons.blueprints.fragment.special.dyn(nationName)())
+                nationId = nations.INDICES.get(nationName, nations.NONE_INDEX)
+                nationTooltipData = getNationalFragmentCD(nationId)
+                item.setFragmentCD(nationTooltipData)
+                model.currency.addViewModel(item)
+
             model.currency.invalidate()
         return
 
@@ -80,20 +89,23 @@ class FragmentsBalanceContent(ViewImpl):
     def __updateModel(self):
         intelligenceFragments, nationalFragments = self.__getFragmentCount()
         with self.viewModel.transaction() as model:
-            intelItem = model.currency.getItem(0)
+            intelItem = model.intelligenceBalance
             intelItem.setValue(self.gui.systemLocale.getNumberFormat(intelligenceFragments))
-            nationalItem = model.currency.getItem(1)
-            nationalItem.setValue(self.gui.systemLocale.getNumberFormat(nationalFragments))
+            for index, fragmentsCoout in enumerate(nationalFragments.itervalues()):
+                nationalItem = model.currency.getItem(index)
+                nationalItem.setValue(self.gui.systemLocale.getNumberFormat(fragmentsCoout))
+
             model.currency.invalidate()
 
     def __getFragmentCount(self):
-        nationFragmentCount = 0
+        bpRequester = self.__itemsCache.items.blueprints
+        existingAllianceFragments = None
         if self.__vehicle is None:
             logger.warning('Can not get a vehicle compact descriptor')
         else:
-            nationFragmentCount = self.__itemsCache.items.blueprints.getNationalFragments(self.__vehicle.intCD)
-        intelligenceFragmentCount = self.__itemsCache.items.blueprints.getIntelligenceData()
-        return (intelligenceFragmentCount, nationFragmentCount)
+            existingAllianceFragments = bpRequester.getNationalAllianceFragments(self.__vehicle.intCD, self.__vehicle.level)
+        intelligenceFragmentCount = bpRequester.getIntelligenceCount()
+        return (intelligenceFragmentCount, existingAllianceFragments)
 
     def __getTooltipData(self, ttId, fragmentCD):
         return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO, specialArgs=[fragmentCD]) if ttId == BlueprintScreenTooltips.TOOLTIP_BLUEPRINT else None

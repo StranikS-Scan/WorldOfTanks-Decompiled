@@ -22,7 +22,7 @@ class EventProgressionItem(SelectorExtraItem):
         return self.__dataProvider.getData()
 
     def getOrder(self):
-        return self.__dataProvider.getData()
+        return self.__dataProvider.getOrder()
 
     def getSelectorType(self):
         return self.__dataProvider.getSelectorType()

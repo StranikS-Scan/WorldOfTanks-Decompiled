@@ -228,7 +228,6 @@
     <arenaCell></arenaCell>
     <_components></_components>
     <_TimerManager__unpersistedTimers></_TimerManager__unpersistedTimers>
-    <events></events>
   </TempProperties>
   <ClientMethods>
     <update>
@@ -265,6 +264,7 @@
     </updateVehicleGunReloadTime>
     <updateVehicleClipReloadTime>
       <Arg>	OBJECT_ID	</Arg>
+      <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	BOOL	</Arg>
@@ -353,7 +353,7 @@
       <Arg>	UINT8	</Arg>
       <Arg>	EXTRA_ID	</Arg>
       <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
+      <Arg>	UINT16	</Arg>
     </showVehicleDamageInfo>
     <showOtherVehicleDamagedDevices>
       <Arg>	OBJECT_ID	</Arg>
@@ -501,6 +501,17 @@
       <Arg>	PYTHON	</Arg>
       <AllowUnsafeData>	true	</AllowUnsafeData>
     </updateQuestProgress>
+    <updateVehicleQuickShellChanger>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+    </updateVehicleQuickShellChanger>
+    <enemySPGHit>
+      <Arg>	VECTOR3	</Arg>
+    </enemySPGHit>
+    <enemySPGShotSound>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+    </enemySPGShotSound>
   </ClientMethods>
   <CellMethods>
     <autoAim>
@@ -700,7 +711,7 @@
       <Arg>	UINT8	</Arg>
       <Arg>	EXTRA_ID	</Arg>
       <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
+      <Arg>	UINT16	</Arg>
     </showVehicleDamageInfo>
     <vehicle_moveWith>
       <Exposed></Exposed>
@@ -779,6 +790,10 @@
       <Arg>	INT32	</Arg>
       <Exposed></Exposed>
     </logStreamCorruption>
+    <logMemoryCriticalEvent>
+      <Exposed></Exposed>
+      <Arg>	MEM_CRIT_EVENT	</Arg>
+    </logMemoryCriticalEvent>
     <releaseClientForLogin>
       <Arg>	BOOL	</Arg>
     </releaseClientForLogin>

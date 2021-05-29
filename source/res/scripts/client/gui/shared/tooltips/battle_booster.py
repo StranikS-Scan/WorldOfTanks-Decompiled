@@ -16,6 +16,7 @@ from skeletons.gui.shared import IItemsCache
 _TOOLTIP_WIDTH = 468
 _AUTOCANNON_SHOT_DISTANCE = 400
 _MAX_INSTALLED_LIST_LEN = 10
+_DEFAULT_PADDING = 20
 _logger = logging.getLogger(__name__)
 
 class BattleBoosterTooltipBlockConstructor(object):
@@ -160,18 +161,33 @@ class StatusBlockConstructor(BattleBoosterTooltipBlockConstructor):
         block = list()
         if self.configuration.isAwardWindow:
             return block
-        module = self.module
-        inventoryVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
-        totalInstalledVehicles = [ x.shortUserName for x in module.getInstalledVehicles(inventoryVehicles) ]
-        installedVehicles = totalInstalledVehicles[:_MAX_INSTALLED_LIST_LEN]
-        if installedVehicles:
-            tooltipText = ', '.join(installedVehicles)
-            if len(totalInstalledVehicles) > _MAX_INSTALLED_LIST_LEN:
-                hiddenVehicleCount = len(totalInstalledVehicles) - _MAX_INSTALLED_LIST_LEN
-                hiddenTxt = '%s %s' % (backport.text(R.strings.tooltips.suitableVehicle.hiddenVehicleCount()), text_styles.stats(hiddenVehicleCount))
-                tooltipText = '%s %s' % (tooltipText, hiddenTxt)
-            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.deviceFits.already_installed.header())), desc=text_styles.standard(tooltipText)))
-        return block
+        else:
+            module = self.module
+            inventoryVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
+            totalInstalledVehicles = [ x.shortUserName for x in module.getInstalledVehicles(inventoryVehicles) ]
+            installedVehicles = totalInstalledVehicles[:_MAX_INSTALLED_LIST_LEN]
+            canNotBuyBlock = None
+            if module.isHidden:
+                canNotBuyBlock = [self.__getCannotBuyBlock(module, self.configuration)]
+            if canNotBuyBlock is not None:
+                block.append(formatters.packBuildUpBlockData(canNotBuyBlock, padding=formatters.packPadding(top=-4, bottom=-5, right=_DEFAULT_PADDING), gap=4))
+            if installedVehicles:
+                tooltipText = ', '.join(installedVehicles)
+                if len(totalInstalledVehicles) > _MAX_INSTALLED_LIST_LEN:
+                    hiddenVehicleCount = len(totalInstalledVehicles) - _MAX_INSTALLED_LIST_LEN
+                    hiddenTxt = '%s %s' % (backport.text(R.strings.tooltips.suitableVehicle.hiddenVehicleCount()), text_styles.stats(hiddenVehicleCount))
+                    tooltipText = '%s %s' % (tooltipText, hiddenTxt)
+                block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.deviceFits.already_installed.header())), desc=text_styles.standard(tooltipText)))
+            return block
+
+    @staticmethod
+    def __getCannotBuyBlock(module, statusConfig):
+        statsVehicle = statusConfig.vehicle
+        if statsVehicle is None or module in statsVehicle.battleBoosters.installed or module.isInInventory:
+            cannotBuyHeaderStyle = text_styles.warning
+        else:
+            cannotBuyHeaderStyle = text_styles.critical
+        return formatters.packItemTitleDescBlockData(title=cannotBuyHeaderStyle(backport.text(R.strings.tooltips.moduleFits.battleBooster.cannotBuy.header())), desc=text_styles.main(backport.text(R.strings.tooltips.moduleFits.battleBooster.cannotBuy.description())))
 
 
 class BoosterHasNoEffectBlockConstructor(BattleBoosterTooltipBlockConstructor):

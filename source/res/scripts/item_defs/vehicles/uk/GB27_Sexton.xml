@@ -26,6 +26,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.03	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	3.92	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -85,6 +91,9 @@
     <turretPositions>
       <turret>	-0.125975 0.613358 1.20022	</turret>
     </turretPositions>
+    <turretHardPoints>
+      <hardPoint>	HP_turretJoint	</hardPoint>
+    </turretHardPoints>
     <hitTester>
       <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Hull.model	</collisionModelClient>
@@ -3375,14 +3384,15 @@
           <aimingTime>	5.5	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <turretYawLimits>	-25 15	</turretYawLimits>
+          <effects>	shot_main	</effects>
           <models>
-            <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/british/GB27_Sexton/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/british/GB27_Sexton/crash/lod0/Gun_02.model	</exploded>
+            <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB27_Sexton/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB27_Sexton/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Gun_02.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <customization>
             <customizableVehicleAreas>
@@ -3421,17 +3431,17 @@
         </_18_pdr_SPG_Gun>
       </guns>
       <models>
-        <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Turret_02.model	</undamaged>
-        <destroyed>	vehicles/british/GB27_Sexton/crash/lod0/Turret_02.model	</destroyed>
-        <exploded>	vehicles/british/GB27_Sexton/crash/lod0/Turret_02.model	</exploded>
+        <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB27_Sexton/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB27_Sexton/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Turret_02.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Turret_02.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.016515 0.43822 -0.624731	</gunPosition>
+      <gunPosition>	0.016515 0.43822 -0.624727	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.208 0.745 0.667 0.558 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.137 -0.044 0.745 0.667 0.558 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_07	</wwturretRotatorSoundManual>
       <customization>
         <customizableVehicleAreas>
@@ -3514,13 +3524,13 @@
           <turretYawLimits>	-25 15	</turretYawLimits>
           <effects>	shot_main_mb	</effects>
           <models>
-            <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/british/GB27_Sexton/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/british/GB27_Sexton/crash/lod0/Gun_01.model	</exploded>
+            <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB27_Sexton/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB27_Sexton/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Gun_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <customization>
             <customizableVehicleAreas>
@@ -3559,17 +3569,17 @@
         </OQF_25pdr_Gun_Mk_II>
       </guns>
       <models>
-        <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Turret_01.model	</undamaged>
-        <destroyed>	vehicles/british/GB27_Sexton/crash/lod0/Turret_01.model	</destroyed>
-        <exploded>	vehicles/british/GB27_Sexton/crash/lod0/Turret_01.model	</exploded>
+        <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/british/GB27_Sexton/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/british/GB27_Sexton/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Turret_01.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Turret_01.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.014534 0.567338 -0.059905	</gunPosition>
+      <gunPosition>	0.014535 0.558595 -0.013326	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.208 0.388 0.100 0.500 0.500 0.000 0.500 0.355 0.986 0.000	</physicsShape>
+      <physicsShape>	1.156 -0.054 1.000 0.000 1.087 -0.034 0.388 0.100 0.500 0.500 0.000 0.500 0.355 0.986 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
       <customization>
         <customizableVehicleAreas>

@@ -2,19 +2,34 @@
 # Embedded file name: scripts/common/bonus_readers.py
 import time
 from typing import Union, TYPE_CHECKING
+import blueprints
+import dossiers2
 import items
 import calendar
 from account_shared import validateCustomizationItem
 from battle_pass_common import NON_VEH_CD
+from blueprints.BlueprintTypes import BlueprintTypes
+from blueprints.FragmentTypes import isUniversalFragment
+from dossiers2.custom.cache import getCache
 from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen, utils
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE
+from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS
 from soft_exception import SoftException
 if TYPE_CHECKING:
     from ResMgr import DataSection
 __all__ = ['readBonusSection', 'readUTC', 'SUPPORTED_BONUSES']
+
+def bonusReaderLimitDecorator(invoiceLimit, readFunction):
+
+    def wrapper(bonus, name, section, eventType, checkLimit):
+        readFunction(bonus, name, section, eventType, checkLimit)
+        if checkLimit and bonus[name] > invoiceLimit:
+            raise SoftException('Invalid count of %s with amount %d when limit is %d. ' % (name, bonus[name], invoiceLimit))
+
+    return wrapper
+
 
 def getBonusReaders(bonusTypes):
     return dict(((k, __BONUS_READERS[k]) for k in bonusTypes))
@@ -42,11 +57,11 @@ def readUTC(section, field, default=None):
         raise SoftException('Invalid field %s: %s' % (field, e))
 
 
-def __readBonus_bool(bonus, name, section, eventType):
+def __readBonus_bool(bonus, name, section, eventType, checkLimit):
     bonus[name] = section.asBool
 
 
-def __readBonus_string_set(bonus, name, section, eventType):
+def __readBonus_string_set(bonus, name, section, eventType, checkLimit):
     data = section.asString
     bonus[name] = data.strip().split()
 
@@ -177,22 +192,22 @@ class IntHolder(int):
         return int(self).__invert__()
 
     def __eq__(self, x):
-        return int(self).__eq__(x)
+        return int(self) == x
 
     def __ne__(self, x):
-        return int(self).__ne__(x)
+        return int(self) != x
 
     def __lt__(self, x):
-        return int(self).__lt__(x)
+        return int(self) < x
 
     def __le__(self, x):
-        return int(self).__le__(x)
+        return int(self) <= x
 
     def __gt__(self, x):
-        return int(self).__gt__(x)
+        return int(self) > x
 
     def __ge__(self, x):
-        return int(self).__ge__(x)
+        return int(self) >= x
 
     def __str__(self):
         return '{}: [val = {}, ukey = {}, rate = {}, isMaterialized = {}]'.format(self.__class__.__name__, int(self), self.ukey, self.rate, self.isMaterialized())
@@ -355,11 +370,11 @@ def __readIntWithTokenExpansion(section):
     return IntHolder(value, ukey=bindingToken, rate=rate) if bindingToken else value
 
 
-def __readBonus_int(bonus, name, section, eventType):
+def __readBonus_int(bonus, name, section, eventType, checkLimit):
     bonus[name] = __readIntWithTokenExpansion(section)
 
 
-def __readBonus_factor(bonus, name, section, eventType):
+def __readBonus_factor(bonus, name, section, eventType, checkLimit):
     bindingToken = section.readString('token2float', '')
     rate = section.readFloat('rate', 1.0)
     value = section.asFloat
@@ -368,7 +383,7 @@ def __readBonus_factor(bonus, name, section, eventType):
     bonus[name] = FloatHolder(value, ukey=bindingToken, rate=rate) if bindingToken else value
 
 
-def __readBonus_equipment(bonus, _name, section, eventType):
+def __readBonus_equipment(bonus, _name, section, eventType, checkLimit):
     eqName = section.asString
     cache = vehicles.g_cache
     eqID = cache.equipmentIDs().get(eqName)
@@ -382,7 +397,7 @@ def __readBonus_equipment(bonus, _name, section, eventType):
     return
 
 
-def __readBonus_optionalDevice(bonus, _name, section, eventType):
+def __readBonus_optionalDevice(bonus, _name, section, eventType, checkLimit):
     name = section.asString
     cache = vehicles.g_cache
     odID = cache.optionalDeviceIDs().get(name)
@@ -396,7 +411,7 @@ def __readBonus_optionalDevice(bonus, _name, section, eventType):
     return
 
 
-def __readBonus_item(bonus, _name, section, eventType):
+def __readBonus_item(bonus, _name, section, eventType, checkLimit):
     compDescr = section.asInt
     try:
         descr = utils.getItemDescrByCompactDescr(compDescr)
@@ -411,7 +426,7 @@ def __readBonus_item(bonus, _name, section, eventType):
     bonus.setdefault('items', {})[compDescr] = count
 
 
-def __readBonus_vehicle(bonus, _name, section, eventType):
+def __readBonus_vehicle(bonus, _name, section, eventType, checkLimit):
     vehCompDescr = None
     if section.has_key('vehCompDescr'):
         vehCompDescr = section['vehCompDescr'].asString.decode('base64')
@@ -423,7 +438,7 @@ def __readBonus_vehicle(bonus, _name, section, eventType):
         vehTypeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationID, innationID)
     extra = {}
     if section.has_key('tankmen'):
-        __readBonus_tankmen(extra, vehTypeCompDescr, section['tankmen'], eventType)
+        __readBonus_tankmen(extra, vehTypeCompDescr, section['tankmen'], eventType, checkLimit)
     else:
         if section.has_key('noCrew'):
             extra['noCrew'] = True
@@ -470,7 +485,7 @@ def __readBonus_vehicleCustomizations(bonus, _name, section):
     return
 
 
-def __readBonus_tankmen(bonus, vehTypeCompDescr, section, eventType):
+def __readBonus_tankmen(bonus, vehTypeCompDescr, section, eventType, checkLimit):
     lst = []
     for subsection in section.values():
         tmanDescr = subsection.asString
@@ -501,6 +516,10 @@ def __readBonus_tankmen(bonus, vehTypeCompDescr, section, eventType):
          'vehicleTypeID': subsection.readInt('vehicleTypeID', -1),
          'skills': subsection.readString('skills', '').split(),
          'freeSkills': subsection.readString('freeSkills', '').split()}
+        if checkLimit and tmanData['freeXP'] > INVOICE_LIMITS.TMAN_FREEXP_MAX:
+            raise SoftException('Invalid count of tankman free xp with amount %d when limit is %d.' % (tmanData['freeXP'], INVOICE_LIMITS.TMAN_FREEXP_MAX))
+        if checkLimit and len(tmanData['skills']) > INVOICE_LIMITS.TMAN_SKILLS_MAX:
+            raise SoftException('Invalid count of tankman skills with amount %d when limit is %d.' % (len(tmanData['skills']), INVOICE_LIMITS.TMAN_SKILLS_MAX))
         for record in ('firstNameID', 'lastNameID', 'iconID'):
             if tmanData[record] == -1:
                 tmanData[record] = None
@@ -566,7 +585,7 @@ def __readBonus_outfits(bonus, _name, section):
     bonus['outfits'] = outfits
 
 
-def __readBonus_customizations(bonus, _name, section, eventType):
+def __readBonus_customizations(bonus, _name, section, eventType, checkLimit):
     lst = []
     for subsection in section.values():
         custData = {'value': subsection.readInt('value', 0),
@@ -589,7 +608,7 @@ def __readBonus_customizations(bonus, _name, section, eventType):
     return
 
 
-def __readBonus_crewSkin(bonus, _name, section, eventType):
+def __readBonus_crewSkin(bonus, _name, section, eventType, checkLimit):
     crewSkinID = section.readInt('id', NO_CREW_SKIN_ID)
     skinData = {'id': crewSkinID,
      'count': section.readInt('count', 0)}
@@ -597,10 +616,12 @@ def __readBonus_crewSkin(bonus, _name, section, eventType):
         raise SoftException("Unknown crew skin id '%s'" % crewSkinID)
     if skinData['count'] == 0:
         raise SoftException("Invalid count for crew skin id '%s'" % crewSkinID)
+    if checkLimit and skinData['count'] > INVOICE_LIMITS.CREW_SKINS:
+        raise SoftException('Invalid count of crew skin id %s with amount %d when limit is %d.' % (crewSkinID, skinData['count'], INVOICE_LIMITS.CREW_SKINS))
     bonus.setdefault('crewSkins', []).append(skinData)
 
 
-def __readBonus_tokens(bonus, _name, section, eventType):
+def __readBonus_tokens(bonus, _name, section, eventType, checkLimit):
     id = section['id'].asString
     if id.startswith(tankmen.RECRUIT_TMAN_TOKEN_PREFIX) and tankmen.getRecruitInfoFromToken(id) is None:
         raise SoftException('Invalid tankman token format: {}'.format(id))
@@ -612,10 +633,12 @@ def __readBonus_tokens(bonus, _name, section, eventType):
     token['count'] = 1
     if section.has_key('count'):
         token['count'] = section['count'].asInt
+    if checkLimit and token['count'] > INVOICE_LIMITS.TOKENS_MAX:
+        raise SoftException('Invalid count of tankman token with id %s with amount %d when limit is %d.' % (id, token['count'], INVOICE_LIMITS.TOKENS_MAX))
     return
 
 
-def __readBonus_goodies(bonus, _name, section, eventType):
+def __readBonus_goodies(bonus, _name, section, eventType, checkLimit):
     goodieID = section['id'].asInt
     goodies = bonus.setdefault('goodies', {})
     if goodieID in goodies:
@@ -627,9 +650,11 @@ def __readBonus_goodies(bonus, _name, section, eventType):
         goodie['count'] = __readIntWithTokenExpansion(section['count'])
     else:
         goodie['count'] = 1
+    if checkLimit and goodie['count'] > INVOICE_LIMITS.GOODIES_MAX:
+        raise SoftException('Invalid count for goodie with id %d with amount %d when limit is %d.' % (goodieID, goodie['count'], INVOICE_LIMITS.GOODIES_MAX))
 
 
-def __readBonus_enhancement(bonus, _name, section, eventType):
+def __readBonus_enhancement(bonus, _name, section, eventType, checkLimit):
     enhancementID = section.asInt
     count = 1
     wipe = False
@@ -641,13 +666,15 @@ def __readBonus_enhancement(bonus, _name, section, eventType):
      'wipe': wipe}
 
 
-def __readBonus_entitlement(bonus, _name, section, eventType):
+def __readBonus_entitlement(bonus, _name, section, eventType, checkLimit):
     id = section['id'].asString
     entitlement = bonus.setdefault('entitlements', {})[id] = {}
     if section.has_key('count'):
         entitlement['count'] = section['count'].asInt
     else:
         entitlement['count'] = 1
+    if checkLimit and entitlement['count'] > INVOICE_LIMITS.ENTITLEMENTS_MAX:
+        raise SoftException('Invalid count of entitlement id %s with amount %d when limit is %d.' % (id, entitlement['count'], INVOICE_LIMITS.ENTITLEMENTS_MAX))
     if section.has_key('expires'):
         entitlement['expires'] = readUTC(section, 'expires')
 
@@ -666,7 +693,7 @@ def __readBonus_expires(id, expires, section):
         return
 
 
-def __readBonus_dossier(bonus, _name, section, eventType):
+def __readBonus_dossier(bonus, _name, section, eventType, checkLimit):
     blockName, record = section['name'].asString.split(':')
     operation = 'add'
     if section.has_key('type'):
@@ -692,32 +719,39 @@ def __readBonus_dossier(bonus, _name, section, eventType):
      'type': operation}
 
 
-def __readBonus_blueprint(bonus, _name, section, eventType):
+def __readBonus_blueprint(bonus, _name, section, eventType, checkLimit):
     bonus.setdefault('blueprints', {})
     compDescr = section.readInt('compDescr', 0) or vehicles.makeVehicleTypeCompDescrByName(section.readString('vehType'))
+    if not dossiers2.custom.cache.getCache():
+        dossiers2.custom.cache.buildCache()
+    cache = dossiers2.custom.cache.getCache()
     if compDescr == 0:
         raise SoftException('Invalid vehicle type name or description %s' % section)
+    if not isUniversalFragment(compDescr):
+        vehicle = vehicles.getVehicleType(compDescr)
+        if compDescr not in cache['vehiclesInTrees']:
+            raise SoftException('Invalid vehicle type %s. Vehicle is not in research tree.' % section)
     count = section.readInt('count', 0)
+    if checkLimit and count > INVOICE_LIMITS.BLUEPRINTS_MAX:
+        raise SoftException('Invalid count of blueprint id %s with amount %d when limit is %d.' % (compDescr, count, INVOICE_LIMITS.BLUEPRINTS_MAX))
     if count != 0:
         bonus['blueprints'].update({compDescr: count})
 
 
-def __readBonus_blueprintAny(bonus, _name, section, eventType):
+def __readBonus_blueprintAny(bonus, _name, section, eventType, checkLimit):
     bonus.setdefault('blueprintsAny', {})
-    nationID = section.readInt('nationID', -1)
-    level = section.readInt('level', -1)
-    if not (level == -1 or 1 < level < 11):
-        raise SoftException('Invalid vehicle level %s, must be [2..10] or missing' % level)
-    vehClass = section.readString('vehClass', 'any')
-    if not (vehClass == 'any' or vehClass in vehicles.VEHICLE_CLASS_TAGS):
-        raise SoftException('Invalid vehicle class %s' % vehClass)
     count = section.readInt('count', 1)
     if count < 1:
         raise SoftException('Any blueprint count must be positive, got %s' % count)
-    bonus['blueprintsAny'].update({(nationID, vehClass, level): count})
+    if checkLimit and count > INVOICE_LIMITS.BLUEPRINTS_MAX:
+        raise SoftException('Invalid count of any blueprint with amount %d when limit is %d.' % (count, INVOICE_LIMITS.BLUEPRINTS_MAX))
+    fragmentType = section.readInt('fragmentType', 1)
+    if fragmentType not in [BlueprintTypes.VEHICLE, BlueprintTypes.NATIONAL]:
+        raise SoftException('Fragment type should be in range [1, 2], where 1 is Vehicle and 2 is National fragment. Given value is %s' % fragmentType)
+    bonus['blueprintsAny'].update({fragmentType: count})
 
 
-def __readBonus_vehicleChoice(bonus, _name, section, eventType):
+def __readBonus_vehicleChoice(bonus, _name, section, eventType, checkLimit):
     extra = {}
     if section.has_key('levels'):
         for level in section['levels'].asString.split():
@@ -727,7 +761,7 @@ def __readBonus_vehicleChoice(bonus, _name, section, eventType):
     bonus['demandedVehicles'] = extra
 
 
-def __readMetaSection(bonus, _name, section, eventType):
+def __readMetaSection(bonus, _name, section, eventType, checkLimit):
     if section is None:
         return
     else:
@@ -883,7 +917,7 @@ def __readBonus_oneof(config, bonusReaders, bonus, section, eventType):
     return resultLimitIDs
 
 
-def __readBonus_dogTag(bonus, _name, section, eventType):
+def __readBonus_dogTag(bonus, _name, section, eventType, checkLimit):
     componentId = section['id'].asInt
     data = {'id': componentId}
     value = section.readFloat('value', None)
@@ -902,8 +936,11 @@ def __readBonus_dogTag(bonus, _name, section, eventType):
     return
 
 
-def __readBonus_battlePassPoints(bonus, _name, section, eventType):
-    bonus['battlePassPoints'] = {'vehicles': {NON_VEH_CD: __readIntWithTokenExpansion(section)}}
+def __readBonus_battlePassPoints(bonus, _name, section, eventType, checkLimit):
+    count = __readIntWithTokenExpansion(section)
+    if checkLimit and count > INVOICE_LIMITS.BATTLE_PASS_POINTS:
+        raise SoftException('Invalid count of battlePassPoints with amount %d when limit is %d.' % (count, INVOICE_LIMITS.BATTLE_PASS_POINTS))
+    bonus['battlePassPoints'] = {'vehicles': {NON_VEH_CD: count}}
 
 
 def __readBonus_group(config, bonusReaders, bonus, section, eventType):
@@ -914,19 +951,20 @@ def __readBonus_group(config, bonusReaders, bonus, section, eventType):
 
 __BONUS_READERS = {'meta': __readMetaSection,
  'buyAllVehicles': __readBonus_bool,
+ 'researchAllVehicles': __readBonus_bool,
  'equipGold': __readBonus_bool,
  'ultimateLoginPriority': __readBonus_bool,
  'addTankmanSkills': __readBonus_bool,
  'buySpecial': __readBonus_string_set,
  'premiumAmmo': __readBonus_int,
- 'gold': __readBonus_int,
- 'credits': __readBonus_int,
- 'crystal': __readBonus_int,
- 'eventCoin': __readBonus_int,
- 'bpcoin': __readBonus_int,
- 'freeXP': __readBonus_int,
- 'slots': __readBonus_int,
- 'berths': __readBonus_int,
+ 'gold': bonusReaderLimitDecorator(INVOICE_LIMITS.GOLD_MAX, __readBonus_int),
+ 'credits': bonusReaderLimitDecorator(INVOICE_LIMITS.CREDITS_MAX, __readBonus_int),
+ 'crystal': bonusReaderLimitDecorator(INVOICE_LIMITS.CRYSTAL_MAX, __readBonus_int),
+ 'eventCoin': bonusReaderLimitDecorator(INVOICE_LIMITS.EVENT_COIN_MAX, __readBonus_int),
+ 'bpcoin': bonusReaderLimitDecorator(INVOICE_LIMITS.BPCOIN_MAX, __readBonus_int),
+ 'freeXP': bonusReaderLimitDecorator(INVOICE_LIMITS.FREEXP_MAX, __readBonus_int),
+ 'slots': bonusReaderLimitDecorator(INVOICE_LIMITS.SLOTS_MAX, __readBonus_int),
+ 'berths': bonusReaderLimitDecorator(INVOICE_LIMITS.BERTHS_MAX, __readBonus_int),
  'premium': __readBonus_int,
  'premium_plus': __readBonus_int,
  'premium_vip': __readBonus_int,
@@ -952,8 +990,8 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'customizations': __readBonus_customizations,
  'crewSkin': __readBonus_crewSkin,
  'entitlement': __readBonus_entitlement,
- 'rankedDailyBattles': __readBonus_int,
- 'rankedBonusBattles': __readBonus_int,
+ 'rankedDailyBattles': bonusReaderLimitDecorator(INVOICE_LIMITS.RANKED_DAILY_BATTLES_MAX, __readBonus_int),
+ 'rankedBonusBattles': bonusReaderLimitDecorator(INVOICE_LIMITS.RANKED_BONUS_BATTLES_MAX, __readBonus_int),
  'dogTagComponent': __readBonus_dogTag,
  'battlePassPoints': __readBonus_battlePassPoints,
  'vehicleChoice': __readBonus_vehicleChoice,
@@ -1024,19 +1062,19 @@ def __readBonusConfig(section):
     return config
 
 
-def readBonusSection(bonusRange, section, eventType=None):
+def readBonusSection(bonusRange, section, eventType=None, checkLimit=True):
     if section is None:
         return {}
     else:
         bonusReaders = getBonusReaders(bonusRange)
         config = __readBonusConfig(section['config']) if section.has_key('config') else {}
-        limitIDs, bonus = __readBonusSubSection(config, bonusReaders, section, eventType)
+        limitIDs, bonus = __readBonusSubSection(config, bonusReaders, section, eventType, checkLimit)
         if config:
             bonus['config'] = config
         return bonus
 
 
-def __readBonusSubSection(config, bonusReaders, section, eventType=None):
+def __readBonusSubSection(config, bonusReaders, section, eventType=None, checkLimit=True):
     bonus = {}
     resultLimitIDs = set()
     for name, subSection in section.items():
@@ -1045,7 +1083,7 @@ def __readBonusSubSection(config, bonusReaders, section, eventType=None):
             if limitIDs:
                 resultLimitIDs.update(limitIDs)
         if name in bonusReaders:
-            bonusReaders[name](bonus, name, subSection, eventType)
+            bonusReaders[name](bonus, name, subSection, eventType, checkLimit)
         if name in _RESERVED_NAMES:
             pass
         raise SoftException('Bonus {} not in bonus readers: {}'.format(name, bonusReaders.keys()))

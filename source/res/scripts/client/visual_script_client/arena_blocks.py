@@ -6,8 +6,8 @@ import BigWorld
 from constants import IS_EDITOR, ARENA_PERIOD, ARENA_PERIOD_NAMES
 from visual_script.block import Block, InitParam
 from visual_script.dependency import dependencyImporter
-from visual_script.misc import ASPECT
-from visual_script.slot_types import SLOT_TYPE
+from visual_script.misc import ASPECT, errorVScript
+from visual_script.slot_types import SLOT_TYPE, arrayOf
 from visual_script.arena_blocks import ArenaMeta, GetUDOByNameBase
 from visual_script.tunable_event_block import TunableEventBlock
 from PlayerEvents import g_playerEvents
@@ -301,3 +301,57 @@ class GetUDOByName(GetUDOByNameBase):
     def _getUDOsOfType(self, typeName):
         allUDOs = BigWorld.userDataObjects.values()
         return [ udo for udo in allUDOs if udo.__class__.__name__ == typeName ]
+
+
+class GetArenaBorders(Block, ArenaMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetArenaBorders, self).__init__(*args, **kwargs)
+        self._min = self._makeDataOutputSlot('min', SLOT_TYPE.VECTOR2, None)
+        self._max = self._makeDataOutputSlot('max', SLOT_TYPE.VECTOR2, None)
+        if not IS_EDITOR:
+            bbox = self._arena.arenaType.boundingBox
+            self._min.setValue((bbox[0][0], bbox[0][1]))
+            self._max.setValue((bbox[1][0], bbox[1][1]))
+        return
+
+    @property
+    def _arena(self):
+        return getattr(BigWorld.player(), 'arena')
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class GetVehicles(Block, ArenaMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetVehicles, self).__init__(*args, **kwargs)
+        self._team = self._makeDataInputSlot('team', SLOT_TYPE.INT)
+        self._excludePlayer = self._makeDataInputSlot('excludePlayer', SLOT_TYPE.BOOL)
+        self._excludeDestroyed = self._makeDataInputSlot('excludeDestroyed', SLOT_TYPE.BOOL)
+        self._vehicles = self._makeDataOutputSlot('vehicles', arrayOf(SLOT_TYPE.VEHICLE), self._execute)
+
+    def _execute(self):
+        if helpers.isPlayerAvatar():
+            avatar = BigWorld.player()
+            vehicles = avatar.vehicles
+            team = self._team.getValue() if self._team.hasValue() else None
+            if team is not None:
+                vehicles = (v for v in vehicles if v.publicInfo.team == team)
+            if self._excludePlayer.hasValue() and self._excludePlayer.getValue():
+                vehicles = (v for v in vehicles if v.id != avatar.vehicle.id)
+            if self._excludeDestroyed.hasValue() and self._excludeDestroyed.getValue():
+                vehicles = (v for v in vehicles if v.isAlive())
+            self._vehicles.setValue(map(weakref.proxy, vehicles))
+        else:
+            errorVScript(self, 'BigWorld.player is not player avatar.')
+        return
+
+    def validate(self):
+        return super(GetVehicles, self).validate()
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]

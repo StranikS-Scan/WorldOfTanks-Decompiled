@@ -12,18 +12,18 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_WEB_INFO, RANKED_WEB_INFO_UPDATE
 from adisp import process
 from constants import ARENA_BONUS_TYPE, EVENT_TYPE
+from ranked_common import SwitchState
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
-from gui.periodic_battles.models import PrimeTime
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_RESTRICTION
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.ranked_battles import ranked_helpers
-from gui.ranked_battles.constants import PrimeTimeStatus, ZERO_RANK_ID, YEAR_POINTS_TOKEN, YEAR_AWARDS_ORDER, FINAL_QUEST_PATTERN, STANDARD_POINTS_COUNT, YEAR_STRIPE_SERVER_TOKEN, YEAR_STRIPE_CLIENT_TOKEN, MAX_GROUPS_IN_DIVISION, ENTITLEMENT_EVENT_TOKEN, FINAL_LEADER_QUEST, NOT_IN_LEAGUES_QUEST
+from gui.ranked_battles.constants import PrimeTimeStatus, ZERO_RANK_ID, YEAR_POINTS_TOKEN, YEAR_AWARDS_ORDER, FINAL_QUEST_PATTERN, STANDARD_POINTS_COUNT, YEAR_STRIPE_SERVER_TOKEN, YEAR_STRIPE_CLIENT_TOKEN, MAX_GROUPS_IN_DIVISION, ENTITLEMENT_EVENT_TOKEN, FINAL_LEADER_QUEST, NOT_IN_LEAGUES_QUEST, SEASON_IDS_RB_2020
 from gui.ranked_battles.ranked_builders.postbattle_awards_vos import AwardBlock
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.ranked_battles.ranked_helpers.web_season_provider import RankedWebSeasonProvider, UNDEFINED_WEB_INFO, UNDEFINED_LEAGUE_ID
@@ -40,9 +40,9 @@ from gui.shared.money import Currency
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier
 from helpers import dependency, time_utils
-from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY
+from predefined_hosts import g_preDefinedHosts
 from season_provider import SeasonProvider
-from shared_utils import first, findFirst, collapseIntervals
+from shared_utils import first, findFirst
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IRankedBattlesController
@@ -56,6 +56,7 @@ if typing.TYPE_CHECKING:
     from gui.ranked_battles.ranked_helpers.web_season_provider import WebSeasonInfo
     from gui.ranked_battles.ranked_models import PostBattleRankInfo
     from season_common import GameSeason
+    from helpers.server_settings import RankedBattlesConfig
 _logger = logging.getLogger(__name__)
 ZERO_RANK_COUNT = 1
 DEFAULT_RANK = RankData(0, 0)
@@ -97,7 +98,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         self.onYearPointsChanges = Event.Event()
         self.onEntitlementEvent = Event.Event()
         self.onKillWebOverlays = Event.Event()
-        self._setSeasonSettingsProvider(self.__getCachedSettings)
         self.__serverSettings = None
         self.__rankedSettings = None
         self.__battlesGroups = None
@@ -201,8 +201,14 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         if self.isRankedPrbActive():
             self.updateClientValues()
 
+    def getModeSettings(self):
+        return self.__rankedSettings
+
     def isAvailable(self):
         return self.isEnabled() and not self.isFrozen() and self.getCurrentSeason() is not None
+
+    def isRanked2020Season(self, seasonID):
+        return seasonID in SEASON_IDS_RB_2020
 
     def isAccountMastered(self):
         currentRank, _ = self.__itemsCache.items.ranked.accRank
@@ -219,7 +225,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.RANKED)
 
     def isRankedShopEnabled(self):
-        return self.__rankedSettings.isShopEnabled
+        return self.__rankedSettings.shopState == SwitchState.ENABLED
 
     def isSeasonRewarding(self):
         prevSeason = self.getPreviousSeason()
@@ -254,13 +260,13 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         return isPrevFinal and finalLeaderQuest is not None and finalLeaderQuest.getStartTimeLeft() == 0
 
     def isYearLBEnabled(self):
-        return self.__rankedSettings.isYearLBEnabled
+        return self.__rankedSettings.yearLBState == SwitchState.ENABLED
+
+    def getYearLBState(self):
+        return self.__rankedSettings.yearLBState
 
     def isYearRewardEnabled(self):
-        return self.__rankedSettings.isYearRewardEnabled
-
-    def hasAnySeason(self):
-        return bool(self.__rankedSettings.seasons)
+        return self.__rankedSettings.yearRewardState == SwitchState.ENABLED
 
     def hasAvailablePrimeTimeServers(self):
         return self.__hasPrimeStatusServer((PrimeTimeStatus.AVAILABLE,))
@@ -399,7 +405,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         if isCurrent:
             _, _, seasonID, _ = seasonInfo
             seasonQuests = self.__eventsCache.getHiddenQuests(lambda q: q.getType() == EVENT_TYPE.TOKEN_QUEST and ranked_helpers.isRankedQuestID(q.getID()) and ranked_helpers.isSeasonTokenQuest(q.getID()))
-            for qID in sorted(seasonQuests):
+            for qID in sorted(seasonQuests, reverse=True):
                 season, leagueID, isSprinter = ranked_helpers.getDataFromSeasonTokenQuestID(qID)
                 if season == seasonID and not isSprinter:
                     quest = seasonQuests[qID]
@@ -413,68 +419,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def getMaxRank(self):
         return RankData(*self.__itemsCache.items.ranked.maxRank)
-
-    def getPrimeTimes(self):
-        primeTimes = self.__rankedSettings.primeTimes
-        peripheryIDs = self.__rankedSettings.peripheryIDs
-        primeTimesPeriods = defaultdict(lambda : defaultdict(list))
-        for primeTime in primeTimes.itervalues():
-            period = (primeTime['start'], primeTime['end'])
-            weekdays = primeTime['weekdays']
-            for pID in primeTime['peripheryIDs']:
-                if pID not in peripheryIDs:
-                    continue
-                periphery = primeTimesPeriods[pID]
-                for wDay in weekdays:
-                    periphery[wDay].append(period)
-
-        return {pID:PrimeTime(pID, {wDay:collapseIntervals(periods) for wDay, periods in pPeriods.iteritems()}) for pID, pPeriods in primeTimesPeriods.iteritems()}
-
-    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
-        primeTimes = self.getPrimeTimes()
-        dayStart, dayEnd = time_utils.getDayTimeBoundsForLocal(selectedTime)
-        dayEnd += 1
-        serversPeriodsMapping = {}
-        hostsList = self.__getHostList()
-        for _, _, serverShortName, _, peripheryID in hostsList:
-            if peripheryID not in primeTimes:
-                continue
-            dayPeriods = primeTimes[peripheryID].getPeriodsBetween(dayStart, dayEnd)
-            if groupIdentical and dayPeriods in serversPeriodsMapping.values():
-                for name, period in serversPeriodsMapping.iteritems():
-                    serverInMapping = name if period == dayPeriods else None
-                    if serverInMapping:
-                        newName = '{0}, {1}'.format(serverInMapping, serverShortName)
-                        serversPeriodsMapping[newName] = serversPeriodsMapping.pop(serverInMapping)
-                        break
-
-            serversPeriodsMapping[serverShortName] = dayPeriods
-
-        return serversPeriodsMapping
-
-    def getPrimeTimeStatus(self, peripheryID=None):
-        if peripheryID is None:
-            peripheryID = self.__connectionMgr.peripheryID
-        primeTime = self.getPrimeTimes().get(peripheryID)
-        if primeTime is None:
-            return (PrimeTimeStatus.NOT_SET, 0, False)
-        elif not primeTime.hasAnyPeriods():
-            return (PrimeTimeStatus.FROZEN, 0, False)
-        else:
-            season = self.getCurrentSeason()
-            currTime = time_utils.getCurrentLocalServerTimestamp()
-            if season and season.hasActiveCycle(currTime):
-                isNow, timeTillUpdate = primeTime.getAvailability(currTime, season.getCycleEndDate())
-            else:
-                timeTillUpdate = 0
-                if season:
-                    nextCycle = season.getNextByTimeCycle(currTime)
-                    if nextCycle:
-                        primeTimeStart = primeTime.getNextPeriodStart(nextCycle.startDate, season.getEndDate(), includeBeginning=True)
-                        if primeTimeStart:
-                            timeTillUpdate = max(primeTimeStart, nextCycle.startDate) - currTime
-                isNow = False
-            return (PrimeTimeStatus.AVAILABLE, timeTillUpdate, isNow) if isNow else (PrimeTimeStatus.NOT_AVAILABLE, timeTillUpdate, False)
 
     def getRank(self, rankID):
         return self.getRanksChain(rankID, rankID)[rankID]
@@ -603,21 +547,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def getSuitableVehicleLevels(self):
         return (self.__rankedSettings.minLevel, self.__rankedSettings.maxLevel)
-
-    def getTimer(self):
-        primeTimeStatus, timeLeft, _ = self.getPrimeTimeStatus()
-        if primeTimeStatus != PrimeTimeStatus.AVAILABLE and not self.__connectionMgr.isStandalone():
-            allPeripheryIDs = set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
-            for peripheryID in allPeripheryIDs:
-                peripheryStatus, peripheryTime, _ = self.getPrimeTimeStatus(peripheryID)
-                if peripheryStatus == PrimeTimeStatus.NOT_AVAILABLE and peripheryTime < timeLeft:
-                    timeLeft = peripheryTime
-
-        seasonsChangeTime = self.getClosestStateChangeTime()
-        currTime = time_utils.getCurrentLocalServerTimestamp()
-        if seasonsChangeTime and (currTime + timeLeft > seasonsChangeTime or timeLeft == 0):
-            timeLeft = seasonsChangeTime - currTime
-        return timeLeft + 1 if timeLeft > 0 else 0
 
     def getTotalQualificationBattles(self):
         return self.__rankedSettings.qualificationBattles
@@ -906,9 +835,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
         return result
 
-    def __getCachedSettings(self):
-        return self.__rankedSettings
-
     def __getCurrentOrPreviousSeason(self):
         return self.getCurrentSeason() or self.getPreviousSeason()
 
@@ -958,16 +884,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         if self.__battlesGroups is None:
             self.__battlesGroups = self.__buildGroupsForBattle()
         return self.__battlesGroups
-
-    def __getHostList(self):
-        hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)
-        if self.__connectionMgr.isStandalone():
-            hostsList.insert(0, (self.__connectionMgr.url,
-             self.__connectionMgr.serverUserName,
-             self.__connectionMgr.serverUserNameShort,
-             HOST_AVAILABILITY.IGNORED,
-             0))
-        return hostsList
 
     def __getQuestForRank(self, rankId):
         season = self.getCurrentSeason()

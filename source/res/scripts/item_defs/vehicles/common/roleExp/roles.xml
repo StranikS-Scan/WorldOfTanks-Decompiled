@@ -1,63 +1,62 @@
 <roles.xml>
-  <Tank1>
-    <actionsGroup>	tank1	</actionsGroup>
-    <includeTags>	heavyTank	</includeTags>
-    <excludeTags>	heavyTank1 heavyTank2	</excludeTags>
-  </Tank1>
-  <Tank2>
-    <actionsGroup>	tank2	</actionsGroup>
-    <includeTags>	heavyTank1	</includeTags>
-  </Tank2>
-  <FirstLineSupport1>
-    <actionsGroup>	firstLineSupport1	</actionsGroup>
-    <includeTags>	heavyTank2	</includeTags>
-  </FirstLineSupport1>
-  <FirstLineSupport2>
-    <actionsGroup>	firstLineSupport2	</actionsGroup>
-    <includeTags>	mediumTank	</includeTags>
-    <excludeTags>	mediumTank1 mediumTank2 mediumTank3	</excludeTags>
-  </FirstLineSupport2>
-  <FirstLineSupport3>
-    <actionsGroup>	firstLineSupport3	</actionsGroup>
-    <includeTags>	mediumTank3	</includeTags>
-  </FirstLineSupport3>
-  <FirstLineSupport4>
-    <actionsGroup>	firstLineSupport1	</actionsGroup>
-    <includeTags>	AT-SPG2	</includeTags>
-    <excludeTags>	RE_ATSPG_3	</excludeTags>
-  </FirstLineSupport4>
-  <FireSupport1>
-    <actionsGroup>	fireSupport1	</actionsGroup>
-    <includeTags>	mediumTank1	</includeTags>
-  </FireSupport1>
-  <FireSupport2>
-    <actionsGroup>	fireSupport1	</actionsGroup>
-    <includeTags>	mediumTank2	</includeTags>
-  </FireSupport2>
-  <FirstLineSupport5>
-    <actionsGroup>	firstLineSupport1	</actionsGroup>
-    <includeTags>	AT-SPG	</includeTags>
-    <excludeTags>	AT-SPG1 AT-SPG2	</excludeTags>
-  </FirstLineSupport5>
-  <Sniper>
-    <actionsGroup>	sniper1	</actionsGroup>
-    <includeTags>	AT-SPG1	</includeTags>
-  </Sniper>
-  <Scout1>
-    <actionsGroup>	scout1	</actionsGroup>
-    <includeTags>	scout	</includeTags>
-    <excludeTags>	wheeledVehicle	</excludeTags>
-  </Scout1>
-  <Scout2>
-    <actionsGroup>	scout2	</actionsGroup>
-    <includeTags>	wheeledVehicle	</includeTags>
-  </Scout2>
-  <SPG>
-    <actionsGroup>	SPG1	</actionsGroup>
-    <includeTags>	SPG	</includeTags>
-  </SPG>
-  <HashSupport1>
-    <actionsGroup>	hashSupport1	</actionsGroup>
-    <includeTags>	RE_ATSPG_3	</includeTags>
-  </HashSupport1>
+  <role_HT_tank>
+    <actionsGroup>	role_HT_tank	</actionsGroup>
+    <includeTags>	role_HT_tank	</includeTags>
+  </role_HT_tank>
+  <role_HT_assault>
+    <actionsGroup>	role_HT_assault	</actionsGroup>
+    <includeTags>	role_HT_assault	</includeTags>
+  </role_HT_assault>
+  <role_HT_universal>
+    <actionsGroup>	role_HT_universal	</actionsGroup>
+    <includeTags>	role_HT_universal	</includeTags>
+  </role_HT_universal>
+  <role_HT_fireSupport>
+    <actionsGroup>	role_HT_fireSupport	</actionsGroup>
+    <includeTags>	role_HT_fireSupport	</includeTags>
+  </role_HT_fireSupport>
+  <role_MT_tank>
+    <actionsGroup>	role_MT_tank	</actionsGroup>
+    <includeTags>	role_MT_tank	</includeTags>
+  </role_MT_tank>
+  <role_MT_universal>
+    <actionsGroup>	role_MT_universal	</actionsGroup>
+    <includeTags>	role_MT_universal	</includeTags>
+  </role_MT_universal>
+  <role_MT_fireSupport>
+    <actionsGroup>	role_MT_fireSupport	</actionsGroup>
+    <includeTags>	role_MT_fireSupport	</includeTags>
+  </role_MT_fireSupport>
+  <role_MT_assassin>
+    <actionsGroup>	role_MT_assassin	</actionsGroup>
+    <includeTags>	role_MT_assassin	</includeTags>
+  </role_MT_assassin>
+  <role_ATSPG_tank>
+    <actionsGroup>	role_ATSPG_tank	</actionsGroup>
+    <includeTags>	role_ATSPG_tank	</includeTags>
+  </role_ATSPG_tank>
+  <role_ATSPG_universal>
+    <actionsGroup>	role_ATSPG_universal	</actionsGroup>
+    <includeTags>	role_ATSPG_universal	</includeTags>
+  </role_ATSPG_universal>
+  <role_ATSPG_fireSupport>
+    <actionsGroup>	role_ATSPG_fireSupport	</actionsGroup>
+    <includeTags>	role_ATSPG_fireSupport	</includeTags>
+  </role_ATSPG_fireSupport>
+  <role_ATSPG_burstDamage>
+    <actionsGroup>	role_ATSPG_burstDamage	</actionsGroup>
+    <includeTags>	role_ATSPG_burstDamage	</includeTags>
+  </role_ATSPG_burstDamage>
+  <role_LT_tracked>
+    <actionsGroup>	role_LT_tracked	</actionsGroup>
+    <includeTags>	role_LT_tracked	</includeTags>
+  </role_LT_tracked>
+  <role_LT_wheeled>
+    <actionsGroup>	role_LT_wheeled	</actionsGroup>
+    <includeTags>	role_LT_wheeled	</includeTags>
+  </role_LT_wheeled>
+  <role_SPG>
+    <actionsGroup>	role_SPG	</actionsGroup>
+    <includeTags>	role_SPG	</includeTags>
+  </role_SPG>
 </roles.xml>

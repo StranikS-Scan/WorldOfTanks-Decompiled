@@ -5,6 +5,7 @@ import typing
 import BattleReplay
 import aih_constants
 from AvatarInputHandler import aih_global_binding
+from account_helpers.settings_core.settings_constants import SPGAim
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle.shared import crosshair
@@ -15,9 +16,10 @@ from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES as _ALIASES
 from gui.app_loader import settings as app_settings
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE, BATTLE_CTRL_ID
+from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE, BATTLE_CTRL_ID, CROSSHAIR_VIEW_ID
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency, uniprof
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
@@ -59,7 +61,7 @@ class ComponentsConfig(IComponentsConfig):
 class _SharedComponentsConfig(ComponentsConfig):
 
     def __init__(self):
-        super(_SharedComponentsConfig, self).__init__(((BATTLE_CTRL_ID.HIT_DIRECTION, (_ALIASES.HIT_DIRECTION,)), (BATTLE_CTRL_ID.BATTLE_NOTIFIER, (_ALIASES.BATTLE_NOTIFIER,)), (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (_ALIASES.BATTLE_NOTIFIER,))), ((_ALIASES.HIT_DIRECTION, indicators.createDamageIndicator),))
+        super(_SharedComponentsConfig, self).__init__(((BATTLE_CTRL_ID.HIT_DIRECTION, (_ALIASES.PREDICTION_INDICATOR, _ALIASES.HIT_DIRECTION)), (BATTLE_CTRL_ID.BATTLE_NOTIFIER, (_ALIASES.BATTLE_NOTIFIER,)), (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (_ALIASES.BATTLE_NOTIFIER,))), ((_ALIASES.PREDICTION_INDICATOR, indicators.createPredictionIndicator), (_ALIASES.HIT_DIRECTION, indicators.createDamageIndicator)))
 
 
 _SHARED_COMPONENTS_CONFIG = _SharedComponentsConfig()
@@ -67,6 +69,7 @@ _SHARED_COMPONENTS_CONFIG = _SharedComponentsConfig()
 class SharedPage(BattlePageMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     gameplay = dependency.descriptor(IGameplayLogic)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, components=None, external=None):
         super(SharedPage, self).__init__()
@@ -189,10 +192,22 @@ class SharedPage(BattlePageMeta):
             self._isInPostmortem = ctrl.isInPostmortem
             ctrl.onPostMortemSwitched += self._onPostMortemSwitched
             ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+            self.__onCrosshairViewChanged(crosshairCtrl.getViewID())
+        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
+        if not self.__settingsCore.isReady:
+            self.__settingsCore.onSettingsReady += self.__onSettingsReady
         aih_global_binding.subscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self._onAvatarCtrlModeChanged)
         return
 
     def _stopBattleSession(self):
+        self.__settingsCore.onSettingsReady -= self.__onSettingsReady
+        self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onPostMortemSwitched -= self._onPostMortemSwitched
@@ -367,6 +382,30 @@ class SharedPage(BattlePageMeta):
 
     def __handleCalloutDisplayEvent(self, event):
         self._processCallout(needShow=event.ctx['isDown'])
+
+    def __onCrosshairViewChanged(self, viewID):
+        artyShotIndicatorVisible = self.__settingsCore.isReady and viewID in (CROSSHAIR_VIEW_ID.STRATEGIC,) and self.__settingsCore.getSetting(SPGAim.SHOTS_RESULT_INDICATOR)
+        self.__setArtyShotIndicatorFlag(artyShotIndicatorVisible)
+
+    def __onSettingsChanged(self, diff):
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if SPGAim.SHOTS_RESULT_INDICATOR in diff and crosshairCtrl is not None:
+            viewID = crosshairCtrl.getViewID()
+            artyShotIndicatorVisible = viewID in (CROSSHAIR_VIEW_ID.STRATEGIC,) and self.__settingsCore.getSetting(SPGAim.SHOTS_RESULT_INDICATOR)
+            self.__setArtyShotIndicatorFlag(artyShotIndicatorVisible)
+        return
+
+    def __onSettingsReady(self):
+        self.__settingsCore.onSettingsReady -= self.__onSettingsReady
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            viewID = crosshairCtrl.getViewID()
+            artyShotIndicatorVisible = viewID in (CROSSHAIR_VIEW_ID.STRATEGIC,) and self.__settingsCore.getSetting(SPGAim.SHOTS_RESULT_INDICATOR)
+            self.__setArtyShotIndicatorFlag(artyShotIndicatorVisible)
+        return
+
+    def __setArtyShotIndicatorFlag(self, isVisible):
+        self.as_setArtyShotIndicatorFlagS(isVisible)
 
 
 class BattlePageBusinessHandler(PackageBusinessHandler):

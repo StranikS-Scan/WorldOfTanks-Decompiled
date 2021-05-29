@@ -47,20 +47,18 @@ class AccountValidator(object):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
     def validate(self):
-        handlers = (partial(self.__validateInvItem, GUI_ITEM_TYPE.CHASSIS, ValidationCodes.CHASSIS_MISMATCH),
-         partial(self.__validateInvItem, GUI_ITEM_TYPE.TURRET, ValidationCodes.TURRET_MISMATCH),
-         partial(self.__validateInvItem, GUI_ITEM_TYPE.GUN, ValidationCodes.GUN_MISMATCH),
-         partial(self.__validateInvItem, GUI_ITEM_TYPE.ENGINE, ValidationCodes.ENGINE_MISMATCH),
-         partial(self.__validateInvItem, GUI_ITEM_TYPE.FUEL_TANK, ValidationCodes.FUEL_TANK_MISMATCH),
-         partial(self.__validateInvItem, GUI_ITEM_TYPE.RADIO, ValidationCodes.RADIO_MISMATCH),
-         partial(self.__validateInvItem, GUI_ITEM_TYPE.OPTIONALDEVICE, ValidationCodes.OPT_DEV_MISMATCH),
-         partial(self.__validateInvItem, GUI_ITEM_TYPE.SHELL, ValidationCodes.SHELL_MISMATCH),
-         partial(self.__validateInvItem, GUI_ITEM_TYPE.EQUIPMENT, ValidationCodes.EQ_MISMATCH),
-         self.__validateUnlocks,
-         self.__validateInventoryVehicles,
-         self.__validateInventoryOutfit,
-         self.__validateInventoryTankmen,
-         self.__validateEliteVehicleCDs)
+        handlers = (self.__validateInventoryVehicles, self.__validateInventoryOutfit, self.__validateInventoryTankmen)
+        if constants.IS_DEVELOPMENT:
+            handlers += (partial(self.__validateInvItem, GUI_ITEM_TYPE.CHASSIS, ValidationCodes.CHASSIS_MISMATCH),
+             partial(self.__validateInvItem, GUI_ITEM_TYPE.TURRET, ValidationCodes.TURRET_MISMATCH),
+             partial(self.__validateInvItem, GUI_ITEM_TYPE.GUN, ValidationCodes.GUN_MISMATCH),
+             partial(self.__validateInvItem, GUI_ITEM_TYPE.ENGINE, ValidationCodes.ENGINE_MISMATCH),
+             partial(self.__validateInvItem, GUI_ITEM_TYPE.FUEL_TANK, ValidationCodes.FUEL_TANK_MISMATCH),
+             partial(self.__validateInvItem, GUI_ITEM_TYPE.RADIO, ValidationCodes.RADIO_MISMATCH),
+             partial(self.__validateInvItem, GUI_ITEM_TYPE.OPTIONALDEVICE, ValidationCodes.OPT_DEV_MISMATCH),
+             partial(self.__validateInvItem, GUI_ITEM_TYPE.SHELL, ValidationCodes.SHELL_MISMATCH),
+             partial(self.__validateInvItem, GUI_ITEM_TYPE.EQUIPMENT, ValidationCodes.EQ_MISMATCH),
+             self.__validateUnlocks)
         for handler in handlers:
             try:
                 handler()
@@ -69,13 +67,6 @@ class AccountValidator(object):
                 return e.code
 
         return ValidationCodes.OK
-
-    def __validateEliteVehicleCDs(self):
-        for vehicleCD in self.itemsCache.items.stats.eliteVehicles:
-            try:
-                self.itemsCache.items.getItemByCD(vehicleCD)
-            except KeyError:
-                _logger.error('No vehicle corresponding to compact descriptor: %s. Account data is inconsistent.', vehicleCD)
 
     def __validateInventoryVehicles(self):
         inventory = self.itemsCache.items.inventory

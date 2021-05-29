@@ -55,7 +55,7 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from nations import NAMES
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from optional_bonuses import BONUS_MERGERS
-from shared_utils import makeTupleByDict, CONST_CONTAINER
+from shared_utils import makeTupleByDict, CONST_CONTAINER, first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IEventProgressionController
 from skeletons.gui.goodies import IGoodiesCache
@@ -1566,6 +1566,17 @@ class BoxBonus(SimpleBonus):
         return _getItemTooltip(name)
 
 
+class UniversalCrewbook(SimpleBonus):
+    __ITEM = namedtuple('__ITEM', ('name', 'count', 'options'))
+
+    def getItems(self):
+        return [ self.__ITEM(item['itemName'], item['count'], self.__getOptionsBonus(item['options'])) for item in self._value ]
+
+    def __getOptionsBonus(self, options):
+        bonusCls = _BONUSES.get(options.get('name'))
+        return first(bonusCls(options.get('name'), options.get('value')))
+
+
 def randomBlueprintBonusFactory(name, value, isCompensation=False, ctx=None):
     blueprintBonuses = []
     for params, fragmentCount in value.iteritems():
@@ -1596,20 +1607,22 @@ class BlueprintsBonusSubtypes(CONST_CONTAINER):
     NATION_FRAGMENT = 'BlueprintNationFragmentCongrats'
     VEHICLE_FRAGMENT = 'BlueprintVehicleFragmentCongrats'
     RANDOM_FRAGMENT = 'BlueprintRandomFragmentCongrats'
+    RANDOM_NATIONAL_FRAGMENT = 'BlueprintRandomNationalFragmentCongrats'
     USE_CONGRATS = (FINAL_FRAGMENT, VEHICLE_FRAGMENT)
 
 
 class RandomBlueprintBonus(SimpleBonus):
     _HTML_TEMPLATE = 'anyBlueprints'
+    _HTML_TEMPLATE_NATIONAL = 'anyNationalBlueprints'
 
     def getBlueprintName(self):
-        return BlueprintsBonusSubtypes.RANDOM_FRAGMENT
+        return BlueprintsBonusSubtypes.RANDOM_NATIONAL_FRAGMENT if self._getBlueprintType() == BlueprintTypes.NATIONAL else BlueprintsBonusSubtypes.RANDOM_FRAGMENT
 
     def getBlueprintTooltipName(self):
-        return backport.text(R.strings.tooltips.blueprint.BlueprintFragmentTooltip.random.header())
+        return backport.text(R.strings.tooltips.blueprint.BlueprintFragmentTooltip.randomNational.header()) if self._getBlueprintType() == BlueprintTypes.NATIONAL else backport.text(R.strings.tooltips.blueprint.BlueprintFragmentTooltip.random.header())
 
     def getBlueprintSpecialAlias(self):
-        return TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO
+        return TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_NATIONAL_INFO if self._getBlueprintType() == BlueprintTypes.NATIONAL else TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO
 
     def getBlueprintSpecialArgs(self):
         return None
@@ -1618,7 +1631,7 @@ class RandomBlueprintBonus(SimpleBonus):
         pass
 
     def getImageCategory(self):
-        pass
+        return 'randomNational' if self._getBlueprintType() == BlueprintTypes.NATIONAL else 'random'
 
     def getImage(self, size='big'):
         return RES_ICONS.getBlueprintFragment(size, self.getImageCategory())
@@ -1633,7 +1646,7 @@ class RandomBlueprintBonus(SimpleBonus):
         return False
 
     def _getFormattedMessage(self, styleSubset, formattedValue):
-        return makeHtmlString('html_templates:lobby/quests/{}'.format(styleSubset), self._HTML_TEMPLATE, {'value': formattedValue})
+        return makeHtmlString('html_templates:lobby/quests/{}'.format(styleSubset), self._getHtmlTemplate(), {'value': formattedValue})
 
     def _format(self, styleSubset):
         formattedValue = str(self.getValue()[1])
@@ -1641,6 +1654,12 @@ class RandomBlueprintBonus(SimpleBonus):
         if formattedValue is not None:
             text = self._getFormattedMessage(styleSubset, formattedValue)
         return text
+
+    def _getBlueprintType(self):
+        return self._value[0]
+
+    def _getHtmlTemplate(self):
+        return self._HTML_TEMPLATE_NATIONAL if self._getBlueprintType() == BlueprintTypes.NATIONAL else self._HTML_TEMPLATE
 
 
 class VehicleBlueprintBonus(SimpleBonus):
@@ -2073,7 +2092,9 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'rankedDailyBattles': CountableIntegralBonus,
  'rankedBonusBattles': CountableIntegralBonus,
  'battlePassPoints': BattlePassPointsBonus,
- 'dogTagComponents': DogTagComponentBonus}
+ 'dogTagComponents': DogTagComponentBonus,
+ 'selectableCrewbook': UniversalCrewbook,
+ 'randomCrewbook': UniversalCrewbook}
 HIDDEN_BONUSES = (MetaBonus,)
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
@@ -2128,6 +2149,10 @@ def getBonuses(quest, name, value, isCompensation=False, ctx=None):
          'campaignID': quest.getCampaignID(),
          'areTokensPawned': False})
     return _initFromTree(key, name, value, isCompensation, ctx=ctx)
+
+
+def getServiceBonuses(name, value, isCompensation=False):
+    return _initFromTree((name, 'default'), name, value, isCompensation)
 
 
 def getTutorialBonuses(name, value):

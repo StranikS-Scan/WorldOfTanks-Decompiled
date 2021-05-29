@@ -6,6 +6,7 @@ from collections import defaultdict
 import logging
 import BigWorld
 import BattleReplay
+import SoundGroups
 from AvatarInputHandler import AvatarInputHandler
 from ReplayEvents import g_replayEvents
 from gui.Scaleform.daapi.view.battle.shared import destroy_times_mapping as _mapping
@@ -53,11 +54,7 @@ _TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.HEALING, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.HEALING_CD, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.REPAIRING, _TIMER_STATES.WARNING_VIEW): 3,
- (_TIMER_STATES.REPAIRING_CD, _TIMER_STATES.WARNING_VIEW): 3,
- (_TIMER_STATES.INTEREST_POINT_CAPTURING, _TIMER_STATES.WARNING_VIEW): 1,
- (_TIMER_STATES.INTEREST_POINT_CAPTURED, _TIMER_STATES.WARNING_VIEW): 1,
- (_TIMER_STATES.INTEREST_POINT_BLOCKED, _TIMER_STATES.WARNING_VIEW): 1,
- (_TIMER_STATES.INTEREST_POINT_COOLDOWN, _TIMER_STATES.WARNING_VIEW): 1}
+ (_TIMER_STATES.REPAIRING_CD, _TIMER_STATES.WARNING_VIEW): 3}
 _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
  _TIMER_STATES.CAPTURE_BLOCK,
  _TIMER_STATES.SMOKE,
@@ -68,9 +65,7 @@ _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
  _TIMER_STATES.ORANGE_ZONE,
  _TIMER_STATES.BERSERKER,
  _TIMER_STATES.REPAIRING,
- _TIMER_STATES.REPAIRING_CD,
- _TIMER_STATES.INTEREST_POINT_CAPTURED,
- _TIMER_STATES.INTEREST_POINT_BLOCKED)
+ _TIMER_STATES.REPAIRING_CD)
 _MAX_DISPLAYED_SECONDARY_STATUS_TIMERS = 2
 _VERTICAL_SHIFT_WITH_AUTOLOADER_IN_SNIPER_MODE = 42
 
@@ -299,9 +294,6 @@ class _StackTimersCollection(_BaseTimersCollection):
                 currTimer.hide()
             currTimer.show(bubble)
 
-    def setMaxDisplaySecondaryTimers(self, newAmount):
-        self._maxDisplayedSecondaryTimers = newAmount
-
     def __getActiveSecondaryTimers(self):
         if not self._timers:
             return
@@ -400,6 +392,7 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self._mapping = _mapping.FrontendMapping()
         self._timers = _createTimersCollection(self)
         self.__sound = None
+        self.__stunSoundPlaying = None
         self.__vehicleID = None
         self.__viewID = CROSSHAIR_VIEW_ID.UNDEFINED
         self.__equipmentCtrl = None
@@ -480,6 +473,9 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
 
     def __hideAll(self):
         self._timers.removeTimers()
+        if self.__stunSoundPlaying:
+            SoundGroups.g_instance.playSound2D('artillery_stun_effect_end')
+            self.__stunSoundPlaying = False
 
     def __setFireInVehicle(self, isInFire):
         if isInFire:
@@ -564,8 +560,24 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self.__sound.play()
         return
 
+    def __playStunSoundIfNeed(self, isVisible):
+        vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+        if vehicle is None or not vehicle.isPlayerVehicle:
+            return
+        else:
+            hasActiveSecondaryTimer = self._timers.hasActiveSecondaryTimer(_TIMER_STATES.STUN)
+            if isVisible:
+                SoundGroups.g_instance.playSound2D('artillery_stun_effect_start')
+                self.__stunSoundPlaying = True
+            elif not isVisible and hasActiveSecondaryTimer and self.__stunSoundPlaying:
+                SoundGroups.g_instance.playSound2D('artillery_stun_effect_end')
+                self.__stunSoundPlaying = False
+            return
+
     def __showStunTimer(self, value):
-        if value.duration > 0.0:
+        isVisible = value.duration > 0.0
+        self.__playStunSoundIfNeed(isVisible=isVisible)
+        if isVisible:
             self._showTimer(_TIMER_STATES.STUN, value.totalTime, _TIMER_STATES.WARNING_VIEW, value.endTime, value.startTime)
         else:
             self._hideTimer(_TIMER_STATES.STUN)
@@ -619,6 +631,13 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self._showTimer(_TIMER_STATES.DEATH_ZONE, waveDuration, 'critical', strikeTime)
         else:
             self._hideTimer(_TIMER_STATES.DEATH_ZONE)
+
+    def __updatePersonalDeathZoneWarningNotification(self, visible, time):
+        if visible:
+            self._showTimer(_TIMER_STATES.DEATH_ZONE, max(time - BigWorld.serverTime(), 0), 'warning', None)
+        else:
+            self._hideTimer(_TIMER_STATES.DEATH_ZONE)
+        return
 
     @MethodsRules.delayable()
     def __onVehicleControlling(self, vehicle):
@@ -682,6 +701,8 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self.__updateRepairingTimer(**value)
         elif state == VEHICLE_VIEW_STATE.DEATHZONE:
             self.__updateDeathZoneWarningNotification(*value)
+        elif state == VEHICLE_VIEW_STATE.PERSONAL_DEATHZONE:
+            self.__updatePersonalDeathZoneWarningNotification(*value)
         elif state in (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
             self.__hideAll()
 

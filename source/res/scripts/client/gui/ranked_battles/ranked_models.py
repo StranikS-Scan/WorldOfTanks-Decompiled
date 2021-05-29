@@ -56,6 +56,9 @@ class RankedSeason(GameSeason):
     def _buildCycle(self, idx, status, start, end, number, announceOnly):
         return RankedCycle(idx, status, start, end, number, announceOnly)
 
+    def getUserName(self):
+        return backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonName())
+
 
 class RankStep(object):
 

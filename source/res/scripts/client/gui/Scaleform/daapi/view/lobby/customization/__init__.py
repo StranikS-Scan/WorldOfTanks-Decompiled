@@ -2,8 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/__init__.py
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.customization.customization_cm_handlers import CustomizationItemCMHandler
-from gui.Scaleform.daapi.view.lobby.customization.customization_inscription_controller import CustomizationInscriptionController
 from gui.Scaleform.framework import GroupedViewSettings, ScopeTemplates, ViewSettings, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
@@ -14,12 +12,14 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import ShowDialogEvent
 
 def getContextMenuHandlers():
+    from gui.Scaleform.daapi.view.lobby.customization.customization_cm_handlers import CustomizationItemCMHandler
     return ((CONTEXT_MENU_HANDLER_TYPE.CUSTOMIZATION_ITEM, CustomizationItemCMHandler),)
 
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.customization.customization_properties_sheet import CustomizationPropertiesSheet
     from gui.Scaleform.daapi.view.lobby.customization.customization_bottom_panel import CustomizationBottomPanel
+    from gui.Scaleform.daapi.view.lobby.customization.customization_inscription_controller import CustomizationInscriptionController
     from gui.Scaleform.daapi.view.lobby.customization.filter_popover import FilterPopover
     from gui.Scaleform.daapi.view.lobby.customization.popovers.custom_popover import CustomPopover
     from gui.Scaleform.daapi.view.lobby.customization.popovers.style_popover import StylePopover

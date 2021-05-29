@@ -66,6 +66,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         return
 
     def removeVehicle(self):
+        self.setHighlight(False)
         self._isVehicleLoaded = False
         if self.__vAppearance:
             self.__vAppearance.remove()

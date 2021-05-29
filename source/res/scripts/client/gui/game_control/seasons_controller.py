@@ -3,21 +3,21 @@
 from constants import GameSeasonType
 from soft_exception import SoftException
 from helpers import dependency
-from skeletons.gui.game_control import ISeasonsController, IRankedBattlesController, IEpicBattleMetaGameController, IWeekendBrawlController, IBattleRoyaleController
+from skeletons.gui.game_control import ISeasonsController, IRankedBattlesController, IEpicBattleMetaGameController, IBattleRoyaleController, IMapboxController
 from skeletons.gui.game_control import ISeasonProvider
 
 class SeasonsController(ISeasonsController):
-    rankedController = dependency.descriptor(IRankedBattlesController)
-    epicMetaController = dependency.descriptor(IEpicBattleMetaGameController)
-    battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-    wBrawlController = dependency.descriptor(IWeekendBrawlController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+    __epicMetaController = dependency.descriptor(IEpicBattleMetaGameController)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __mapboxController = dependency.descriptor(IMapboxController)
 
     def __init__(self):
         super(SeasonsController, self).__init__()
-        self._seasonProvidersByType = {GameSeasonType.RANKED: self.rankedController,
-         GameSeasonType.EPIC: self.epicMetaController,
-         GameSeasonType.BATTLE_ROYALE: self.battleRoyaleController,
-         GameSeasonType.WEEKEND_BRAWL: self.wBrawlController}
+        self._seasonProvidersByType = {GameSeasonType.RANKED: self.__rankedController,
+         GameSeasonType.EPIC: self.__epicMetaController,
+         GameSeasonType.BATTLE_ROYALE: self.__battleRoyaleController,
+         GameSeasonType.MAPBOX: self.__mapboxController}
 
     def hasAnySeason(self, seasonType):
         return self.__getSeasonProviderChecked(seasonType).hasAnySeason()

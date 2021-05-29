@@ -21,3 +21,6 @@ class BaseStorageCategoryViewMeta(BaseDAAPIComponent):
 
     def as_getCardsDPS(self):
         return self.flashObject.as_getCardsDP() if self._isDAAPIInited() else None
+
+    def as_scrollToItemS(self, itemIntCD):
+        return self.flashObject.as_scrollToItem(itemIntCD) if self._isDAAPIInited() else None

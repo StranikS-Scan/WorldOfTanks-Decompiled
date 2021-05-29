@@ -15,3 +15,12 @@ class PlayersPanelMeta(StatsBase):
 
     def as_setChatCommandsVisibilityS(self, value):
         return self.flashObject.as_setChatCommandsVisibility(value) if self._isDAAPIInited() else None
+
+    def as_setPlayerHPS(self, isAlly, index, percent):
+        return self.flashObject.as_setPlayerHP(isAlly, index, percent) if self._isDAAPIInited() else None
+
+    def as_setOverrideExInfoS(self, exOverrideInfo):
+        return self.flashObject.as_setOverrideExInfo(exOverrideInfo) if self._isDAAPIInited() else None
+
+    def as_setPanelHPBarVisibilityStateS(self, value):
+        return self.flashObject.as_setPanelHPBarVisibilityState(value) if self._isDAAPIInited() else None

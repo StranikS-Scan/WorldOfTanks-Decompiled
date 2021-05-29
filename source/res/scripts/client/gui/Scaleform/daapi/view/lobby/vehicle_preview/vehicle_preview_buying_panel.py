@@ -152,10 +152,10 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             self.__purchasePackage()
         elif self.__offers is not None:
             self.__purchaseOffer()
-        elif canBuyGoldForVehicleThroughWeb(vehicle):
-            self.__purchaseSingleVehicle(vehicle)
         elif self.__isHeroTank:
             self.__purchaseHeroTank()
+        elif canBuyGoldForVehicleThroughWeb(vehicle):
+            self.__purchaseSingleVehicle(vehicle)
         else:
             self.__research()
         return

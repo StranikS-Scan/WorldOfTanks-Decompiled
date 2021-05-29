@@ -165,10 +165,6 @@ class IDynamicControllersLocator(object):
     def battleNotifier(self):
         raise NotImplementedError
 
-    @property
-    def pointsOfInterest(self):
-        raise NotImplementedError
-
 
 class ISquadInvitationsHandler(object):
     __slots__ = ()
@@ -573,9 +569,6 @@ class IBattleContext(object):
     def extractLastArenaWinStatus(self):
         raise NotImplementedError
 
-    def areQuestsEnabledForArena(self):
-        raise NotImplementedError
-
 
 class IBattleSessionProvider(object):
     __slots__ = ('onBattleSessionStart', 'onBattleSessionStop')
@@ -653,7 +646,7 @@ class IBattleSessionProvider(object):
     def switchToPostmortem(self, noRespawnPossible=True, respawnAvailable=False):
         raise NotImplementedError
 
-    def useLoaderIntuition(self):
+    def updateVehicleQuickShellChanger(self, isActive):
         raise NotImplementedError
 
     def movingToRespawnBase(self):

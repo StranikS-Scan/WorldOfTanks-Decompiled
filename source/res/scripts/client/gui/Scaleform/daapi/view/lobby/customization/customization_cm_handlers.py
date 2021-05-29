@@ -5,6 +5,7 @@ from adisp import process as adisp_process
 from Event import Event
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta import ConfirmC11nBuyMeta, ConfirmC11nSellMeta
+from gui.Scaleform.daapi.view.lobby.customization.shared import isItemUsedUp
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
@@ -122,7 +123,8 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
 
     def __getEditStyleBtn(self, item):
         editingReason = item.canBeEditedForVehicle(g_currentVehicle.item.intCD)
-        btn = self._makeItem(optId=CustomizationOptions.EDIT_STYLE, optLabel=MENU.cst_item_ctx_menu(CustomizationOptions.EDIT_STYLE), optInitData={'enabled': bool(editingReason)})
+        isUsedUp = isItemUsedUp(item)
+        btn = self._makeItem(optId=CustomizationOptions.EDIT_STYLE, optLabel=MENU.cst_item_ctx_menu(CustomizationOptions.EDIT_STYLE), optInitData={'enabled': bool(editingReason) and not isUsedUp})
         return btn
 
     def __getClearStyleBtn(self, item):

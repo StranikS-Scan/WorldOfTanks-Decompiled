@@ -50,6 +50,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     RANKED_STEP = 'rankedStep'
     RANKED_RANK = 'rankedRank'
     RANKED_CALENDAR_DAY = 'rankedCalendarDayInfo'
+    RANKED_CALENDAR_DAY_EXTENDED = 'rankedCalendarDayInfoExtended'
     RANKED_SELECTOR_INFO = 'rankedSelectorInfo'
     RANKED_DIVISION_INFO = 'rankedDivisionInfo'
     RANKED_YEAR_REWARD = 'rankedYearReward'
@@ -77,8 +78,9 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE_COLLECTOR = 'vehicleCollector'
     BATTLE_PASS_GIFT_TOKEN = 'battlePassGiftToken'
     BATTLE_PASS_POINTS = 'battlePassPoints'
-    WEEKEND_BRAWL_SELECTOR_INFO = 'weekendBrawlSelectorInfo'
-    WEEKEND_BRAWL_CALENDAR_DAY = 'weekendBrawlCalendarDay'
+    MAPBOX_SELECTOR_INFO = 'mapboxSelectorInfo'
+    SELECTABLE_CREWBOOK = 'selectableCrewbook'
+    RANDOM_CREWBOOK = 'randomCrewbook'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

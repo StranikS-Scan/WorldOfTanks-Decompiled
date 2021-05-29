@@ -142,7 +142,7 @@ class CyberSportIntroView(CyberSportIntroMeta):
             elif vehicle.type not in _ACCEPTED_VEH_TYPES:
                 isReadyVehicle = False
                 warnTooltip = TOOLTIPS.CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE
-            elif vehicle.isOnlyForEpicBattles or vehicle.isOnlyForWeekendBrawlBattles or vehicle.isOnlyForBob:
+            elif vehicle.isOnlyForEpicBattles:
                 isReadyVehicle = False
                 warnTooltip = TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE
             else:

@@ -26,6 +26,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.03	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	8.90	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -2996,7 +3002,7 @@
             <maxPitch>	0 6.5 0.138889 6.5 0.166667 10 0.333333 10 0.444444 1 0.555556 1 0.666667 10 0.833333 10 0.861111 6.5 1 6.5	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.52	</shotDispersionRadius>
+          <shotDispersionRadius>	0.49	</shotDispersionRadius>
           <reloadTime>	22	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.24	</turretRotation>
@@ -3089,7 +3095,7 @@
             <maxPitch>	0 10 0.377778 10 0.383333 9.5 0.386111 9.1 0.388889 8.8 0.391667 8.4 0.394444 8.1 0.397222 7.8 0.4 7.5 0.402778 7.2 0.405556 6.9 0.408333 6.5 0.411111 6.3 0.413889 6 0.416667 5.7 0.419444 5.5 0.422222 5.2 0.425 5 0.427778 4.8 0.430556 4.5 0.433333 4.1 0.436111 3.8 0.438889 3.6 0.444444 3.2 0.447222 3 0.475 2.3 0.477778 2 0.497222 2 0.502778 2 0.522222 2 0.525 2.3 0.552778 3 0.555556 3.2 0.561111 3.6 0.563889 3.8 0.566667 4.1 0.569444 4.5 0.572222 4.8 0.575 5 0.577778 5.2 0.580556 5.5 0.583333 5.7 0.586111 6 0.588889 6.3 0.591667 6.5 0.594444 6.9 0.597222 7.2 0.6 7.5 0.602778 7.8 0.605556 8.1 0.608333 8.4 0.611111 8.8 0.613889 9.1 0.616667 9.5 0.622222 10 0.925 10 0.927778 9.8 0.930556 9.7 0.933333 9.9 0.936111 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.152	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	19.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>

@@ -106,7 +106,7 @@ class VehicleBuyer(VehicleReceiveProcessor):
         return makeI18nError(sysMsgKey=msg, defaultSysMsgKey='vehicle_buy/server_error', auxData={'errStr': errStr}, vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
+        return makeI18nSuccess(sysMsgKey='vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price, useStyle=True), type=self._getSysMsgType())
 
     def _getSysMsgType(self):
         return CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.getCurrency(byWeight=False), SM_TYPE.Information)

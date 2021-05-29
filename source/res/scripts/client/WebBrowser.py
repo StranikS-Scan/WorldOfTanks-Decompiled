@@ -43,6 +43,10 @@ def destroyExternalCache():
     return
 
 
+def getWebCache():
+    return _g_webCache
+
+
 class LogSeverity(Enum):
     disable = 0
     verbose = 1

@@ -50,6 +50,8 @@ from gui.shared.utils.functions import getUniqueViewName
 from gui.ranked_battles.constants import PrimeTimeStatus
 from predefined_hosts import g_preDefinedHosts
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
+if typing.TYPE_CHECKING:
+    from helpers.server_settings import BattleRoyaleConfig
 _logger = logging.getLogger(__name__)
 
 class BATTLE_ROYALE_GAME_LIMIT_TYPE(object):
@@ -83,8 +85,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.onUpdated = Event.Event()
         self.onPrimeTimeStatusUpdated = Event.Event()
         self.onSpaceUpdated = Event.Event()
-        self._setSeasonSettingsProvider(self.getModeSettings)
-        self._setPrimeTimesIteratorGetter(self.getPrimeTimesIter)
         self.__clientValuesInited = False
         self.__clientShields = {}
         self.__performanceGroup = None
@@ -179,6 +179,9 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             self.__voControl.deactivate()
         self.__voControl.onAvatarBecomePlayer()
         super(BattleRoyaleController, self).onAvatarBecomePlayer()
+
+    def getModeSettings(self):
+        return self.__lobbyContext.getServerSettings().battleRoyale
 
     def isEnabled(self):
         return self.getModeSettings().isEnabled
@@ -414,7 +417,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def __eventAvailabilityUpdate(self, *_):
         battleRoyaleEnabled = self.isEnabled() and self.getCurrentSeason() is not None
         isSelectRandom = not battleRoyaleEnabled and self.isBattleRoyaleMode()
-        isSelectRandom = isSelectRandom and not self.__battleRoyaleTournamentController.isAvailable()
         if isSelectRandom:
             self.selectRandomBattle()
         return
@@ -627,13 +629,3 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def __tokenIsValid(self, quest):
         tokens = quest.accountReqs.getTokens()
         return False if tokens and not tokens[0].isAvailable() else True
-
-    def getPrimeTimesIter(self, primeTimes):
-        for primeTime in primeTimes.itervalues():
-            yield primeTime
-
-    @staticmethod
-    def getModeSettings():
-        lobbyContext = dependency.instance(ILobbyContext)
-        generalSettings = lobbyContext.getServerSettings().battleRoyale
-        return generalSettings

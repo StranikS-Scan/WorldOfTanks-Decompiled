@@ -276,7 +276,7 @@ class _SelectTokenTextGetter(_BaseTextGetter):
 
     @classmethod
     def getText(cls, item):
-        nameRes = R.strings.battle_pass_2020.chosenBonuses.bonus.dyn(item.getType())
+        nameRes = R.strings.battle_pass.chosenBonuses.bonus.dyn(item.getType())
         return backport.text(nameRes()) if nameRes.exists() else ''
 
 
@@ -289,9 +289,9 @@ class _StyleProgressTokenTextGetter(_BaseTextGetter):
         level = item.getLevel()
         style = getStyleForChapter(chapter)
         if style is not None:
-            text = backport.text(R.strings.battle_pass_2020.styleProgressBonus(), styleName=style.userName, level=level)
+            text = backport.text(R.strings.battle_pass.styleProgressBonus(), styleName=style.userName, level=level)
         else:
-            text = backport.text(R.strings.battle_pass_2020.styleProgressBonus.notChosen(), level=level)
+            text = backport.text(R.strings.battle_pass.styleProgressBonus.notChosen(), level=level)
         return text
 
 
@@ -303,7 +303,7 @@ class _TankmanTokenTextGetter(_BaseTextGetter):
             if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
                 recruitInfo = getRecruitInfo(tokenID)
                 if recruitInfo is not None:
-                    return backport.text(R.strings.battle_pass_2020.universalTankmanBonus(), name=recruitInfo.getFullUserName())
+                    return backport.text(R.strings.battle_pass.universalTankmanBonus(), name=recruitInfo.getFullUserName())
 
         return ''
 

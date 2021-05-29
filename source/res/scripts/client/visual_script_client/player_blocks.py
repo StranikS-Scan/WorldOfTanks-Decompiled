@@ -29,6 +29,12 @@ class PlayerMeta(Meta):
     def blockAspects(cls):
         return [ASPECT.CLIENT]
 
+    @property
+    def _avatar(self):
+        if helpers.isPlayerAvatar():
+            return BigWorld.player()
+        errorVScript(self, 'BigWorld.player is not player avatar.')
+
 
 class PlayerEventMeta(PlayerMeta):
 
@@ -45,15 +51,46 @@ class GetPlayerVehicleGun(Block, PlayerMeta):
         self._gunDirection = self._makeDataOutputSlot('gunDirection', SLOT_TYPE.VECTOR3, self._getGunDirection)
 
     def _getGunPosition(self):
-        avatar = BigWorld.player()
-        position, _ = avatar.gunRotator.getCurShotPosition()
-        self._gunPosition.setValue(position)
+        avatar = self._avatar
+        if avatar:
+            position, _ = avatar.gunRotator.getCurShotPosition()
+            self._gunPosition.setValue(position)
 
     def _getGunDirection(self):
-        avatar = BigWorld.player()
-        _, direction = avatar.gunRotator.getCurShotPosition()
-        direction.normalise()
-        self._gunDirection.setValue(direction)
+        avatar = self._avatar
+        if avatar:
+            _, direction = avatar.gunRotator.getCurShotPosition()
+            direction.normalise()
+            self._gunDirection.setValue(direction)
+
+
+class GetPlayerGunMarkerInfo(Block, PlayerMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetPlayerGunMarkerInfo, self).__init__(*args, **kwargs)
+        self._pos = self._makeDataOutputSlot('position', SLOT_TYPE.VECTOR3, self._getPosition)
+        self._dir = self._makeDataOutputSlot('direction', SLOT_TYPE.VECTOR3, self._getDirection)
+        self._size = self._makeDataOutputSlot('size', SLOT_TYPE.FLOAT, self._getSize)
+
+    @property
+    def _markerInfo(self):
+        avatar = self._avatar
+        return avatar.gunRotator.markerInfo if avatar else None
+
+    def _getPosition(self):
+        markerInfo = self._markerInfo
+        if markerInfo:
+            self._pos.setValue(markerInfo[0])
+
+    def _getDirection(self):
+        markerInfo = self._markerInfo
+        if markerInfo:
+            self._dir.setValue(markerInfo[1])
+
+    def _getSize(self):
+        markerInfo = self._markerInfo
+        if markerInfo:
+            self._size.setValue(markerInfo[2])
 
 
 class OnPlayerSnipeMode(TunableEventBlock, PlayerEventMeta, TriggerListener):
@@ -104,22 +141,25 @@ class OnGunMarkerPenetrationStateChanged(TunableEventBlock, PlayerEventMeta):
         return
 
     def onStartScript(self):
-        avatar = BigWorld.player()
-        avatar.guiSessionProvider.shared.crosshair.onGunMarkerStateChanged += self._onGunMarkerStateChanged
+        avatar = self._avatar
+        if avatar:
+            avatar.guiSessionProvider.shared.crosshair.onGunMarkerStateChanged += self._onGunMarkerStateChanged
 
     def onFinishScript(self):
-        avatar = BigWorld.player()
-        crosshair = avatar.guiSessionProvider.shared.crosshair
-        if crosshair:
-            crosshair.onGunMarkerStateChanged -= self._onGunMarkerStateChanged
+        avatar = self._avatar
+        if avatar:
+            crosshair = avatar.guiSessionProvider.shared.crosshair
+            if crosshair:
+                crosshair.onGunMarkerStateChanged -= self._onGunMarkerStateChanged
 
     def _onGunMarkerStateChanged(self, _, position, direction, collision):
-        avatar = BigWorld.player()
-        shotResultResolver = gun_marker_ctrl.createShotResultResolver()
-        result = shotResultResolver.getShotResult(position, collision, direction, excludeTeam=avatar.team)
-        if result != self._oldResult:
-            self._oldResult = result
-            self._callOutput(result)
+        avatar = self._avatar
+        if avatar:
+            shotResultResolver = gun_marker_ctrl.createShotResultResolver()
+            result = shotResultResolver.getShotResult(position, collision, direction, excludeTeam=avatar.team)
+            if result != self._oldResult:
+                self._oldResult = result
+                self._callOutput(result)
 
     @TunableEventBlock.eventProcessor
     def _callOutput(self, result):
@@ -203,6 +243,52 @@ class OnPlayerVehicleShoot(TunablePlayerVehicleEventBlock, PlayerEventMeta):
 
     @TunableEventBlock.eventProcessor
     def onPlayerShoot(self, aimInfo):
+        pass
+
+
+class OnPlayerShotMissed(TunablePlayerVehicleEventBlock, PlayerEventMeta):
+    _EVENT_SLOT_NAMES = ['onMissed']
+
+    @TunableEventBlock.eventProcessor
+    def onPlayerShotMissed(self):
+        pass
+
+
+class OnPlayerAutoAim(TunablePlayerVehicleEventBlock, PlayerEventMeta, TriggerListener):
+    _EVENT_SLOT_NAMES = ['onEnabled', 'onDisabled']
+
+    def onStartScript(self):
+        manager = TriggersManager.g_manager
+        if manager:
+            manager.addListener(self)
+        else:
+            errorVScript(self, 'TriggersManager.g_manager is None')
+
+    def onFinishScript(self):
+        manager = TriggersManager.g_manager
+        if manager:
+            manager.delListener(self)
+        else:
+            errorVScript(self, 'TriggersManager.g_manager is None')
+
+    def onTriggerActivated(self, params):
+        triggerType = params.get('type')
+        if triggerType == TriggersManager.TRIGGER_TYPE.AUTO_AIM_AT_VEHICLE:
+            self._index = 0
+            self._callOnEnter()
+
+    def onTriggerDeactivated(self, params):
+        triggerType = params.get('type')
+        if triggerType == TriggersManager.TRIGGER_TYPE.AUTO_AIM_AT_VEHICLE:
+            self._index = 1
+            self._callOnExit()
+
+    @TunableEventBlock.eventProcessor
+    def _callOnEnter(self):
+        pass
+
+    @TunableEventBlock.eventProcessor
+    def _callOnExit(self):
         pass
 
 
@@ -366,3 +452,25 @@ class OnPlayerVehicleAreaTrigger(TunablePlayerVehicleEventBlock, PlayerEventMeta
 
     def validate(self):
         return 'Trigger value is required' if not self._trigger.hasValue() else super(OnPlayerVehicleAreaTrigger, self).validate()
+
+
+class GetPlayerGunDispersionAngles(Block, PlayerMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetPlayerGunDispersionAngles, self).__init__(*args, **kwargs)
+        self._current = self._makeDataOutputSlot('current', SLOT_TYPE.ANGLE, self._getCurrentDispersions)
+        self._target = self._makeDataOutputSlot('target', SLOT_TYPE.ANGLE, self._getCurrentDispersions)
+        self._ideal = self._makeDataOutputSlot('ideal', SLOT_TYPE.ANGLE, self._getIdealDispersion)
+
+    def _getCurrentDispersions(self):
+        avatar = self._avatar
+        if avatar:
+            angles = avatar.gunRotator.getCurShotDispersionAngles()
+            self._current.setValue(angles[0])
+            self._target.setValue(angles[1])
+
+    def _getIdealDispersion(self):
+        avatar = self._avatar
+        if avatar:
+            td = avatar.getVehicleDescriptor()
+            self._ideal.setValue(td.gun.shotDispersionAngle)

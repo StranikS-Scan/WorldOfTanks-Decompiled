@@ -274,14 +274,11 @@ class CombatEquipmentManager(object):
         size = Vector2(equipment.areaWidth, equipment.areaLength)
         visual = equipment.areaVisual
         color = equipment.areaColor
-        marker = equipment.areaMarker
         if visual is None:
             visual = CombatSelectedArea.DEFAULT_RADIUS_MODEL
         if color is None:
             pass
-        if marker is None:
-            pass
-        area.setup(pos, direction, size, visual, color, marker)
+        area.setup(pos, direction, size, visual, color, None)
         return area
 
     def onSmoke(self, smokeInfos):

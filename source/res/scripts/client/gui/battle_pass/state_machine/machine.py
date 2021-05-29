@@ -110,13 +110,11 @@ class BattlePassStateMachine(StateMachine):
         else:
             if self.__rewards is None:
                 self.__rewards = []
-            prefix = tokenID.rsplit(':', 2)[0]
-            tokensToRemove = [ value for value in self.__rewardsToChoose if value.startswith(prefix) ]
-            for token in tokensToRemove:
-                self.__rewardsToChoose.remove(token)
-                if not self.__manualFlow:
+            if not self.__manualFlow:
+                for token in self.__rewardsToChoose:
                     self.__rewards.append(packToken(token))
 
+            self.__rewardsToChoose = []
         return
 
     def getChosenStyleChapter(self):
@@ -132,6 +130,9 @@ class BattlePassStateMachine(StateMachine):
 
     def hasStyleToChoose(self):
         return bool(self.__stylesToChoose)
+
+    def getLeftRewardsCount(self):
+        return len(self.__rewardsToChoose)
 
     def clearStylesToChoose(self):
         self.__stylesToChoose = []

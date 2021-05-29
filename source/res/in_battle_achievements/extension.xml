@@ -1,0 +1,14 @@
+<extension.xml>
+  <FeatureName>	InBattleAchievements	</FeatureName>
+  <Components>
+    <StaticComponents>
+      <InBattleAchievementsComponent></InBattleAchievementsComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <ArenaAchievementsComponent></ArenaAchievementsComponent>
+      <VehicleAchievementsComponent></VehicleAchievementsComponent>
+    </DynamicComponents>
+  </Components>
+  <IsEnabled>	True	</IsEnabled>
+  <ExternalComponents></ExternalComponents>
+</extension.xml>

@@ -107,13 +107,11 @@ class IngameDetailsHelpWindow(IngameDetailsHelpWindowMeta, BattleGUIKeyHandler):
              'status': '',
              'selected': index == 0,
              'tooltip': {}} for index in range(len(self.__datailedList)) ]
-            self.as_setInitDataS({'pages': pages,
-             'title': detailed_help_pages.buildTitle(self.__ctx)})
+            self.as_setPaginatorDataS(pages)
             return
 
-    def requestHelpData(self, index):
-        data = self.__datailedList[index]
-        self.as_setHelpDataS(data)
+    def requestPageData(self, index):
+        self.as_setPageDataS(self.__datailedList[index])
 
     def _dispose(self):
         if self.app is not None:

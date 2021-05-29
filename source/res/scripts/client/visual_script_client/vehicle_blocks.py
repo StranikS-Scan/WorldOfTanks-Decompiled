@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/vehicle_blocks.py
 import weakref
+import random
 import BigWorld
-from visual_script.block import Block
+from visual_script.block import Block, EDITOR_TYPE, InitParam, buildStrKeysValue
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT, errorVScript
 from visual_script.tunable_event_block import TunableEventBlock
@@ -132,6 +133,82 @@ class IsVehicleBurning(Block, VehicleMeta):
         extra = v.typeDescriptor.extrasDict['fire']
         res = extra is not None and extra.isRunningFor(v)
         self._res.setValue(res)
+        return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class GetNearestAliveVehicle(Block, VehicleMeta):
+    _settingTypes = ['Ally', 'Enemy', 'Any']
+
+    @classmethod
+    def initParams(cls):
+        return [InitParam('Vehicle Team', SLOT_TYPE.STR, buildStrKeysValue(*cls._settingTypes), EDITOR_TYPE.STR_KEY_SELECTOR)]
+
+    def __init__(self, *args, **kwargs):
+        super(GetNearestAliveVehicle, self).__init__(*args, **kwargs)
+        self._settingType = self._getInitParams()
+        self._position = self._makeDataInputSlot('position', SLOT_TYPE.VECTOR3)
+        self._vehicle = self._makeDataOutputSlot('vehicle', SLOT_TYPE.VEHICLE, self._execute)
+
+    def __checkVehicle(self, vehicle):
+        player = BigWorld.player()
+        if not hasattr(vehicle, 'isStarted') or not vehicle.isStarted or not vehicle.isAlive():
+            return False
+        if player.vehicle and vehicle.id == player.vehicle.id:
+            return False
+        if self._settingType == 'Ally':
+            return vehicle.publicInfo.team == player.team
+        return vehicle.publicInfo.team != player.team if self._settingType == 'Enemy' else True
+
+    def _execute(self):
+        player = BigWorld.player()
+        vehicles = (v for v in player.vehicles if self.__checkVehicle(v))
+        vehicle = None
+        minDist = 99999
+        for v in vehicles:
+            dist = player.vehicle.position.distTo(v.position)
+            if dist < minDist:
+                vehicle = v
+                minDist = dist
+
+        self._vehicle.setValue(weakref.proxy(vehicle) if vehicle else None)
+        return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class GetAnyVehicle(Block, VehicleMeta):
+    _settingTypes = ['Ally', 'Enemy', 'Any']
+
+    @classmethod
+    def initParams(cls):
+        return [InitParam('Vehicle Team', SLOT_TYPE.STR, buildStrKeysValue(*cls._settingTypes), EDITOR_TYPE.STR_KEY_SELECTOR)]
+
+    def __init__(self, *args, **kwargs):
+        super(GetAnyVehicle, self).__init__(*args, **kwargs)
+        self._settingType = self._getInitParams()
+        self._vehicle = self._makeDataOutputSlot('vehicle', SLOT_TYPE.VEHICLE, self._execute)
+
+    def __checkVehicle(self, vehicle):
+        player = BigWorld.player()
+        if not hasattr(vehicle, 'isStarted') or not vehicle.isStarted or not vehicle.isAlive():
+            return False
+        if player.vehicle and vehicle.id == player.vehicle.id:
+            return False
+        if self._settingType == 'Ally':
+            return vehicle.publicInfo.team == player.team
+        return vehicle.publicInfo.team != player.team if self._settingType == 'Enemy' else True
+
+    def _execute(self):
+        player = BigWorld.player()
+        vehicles = [ v for v in player.vehicles if self.__checkVehicle(v) ]
+        vehicle = random.choice(vehicles) if vehicles else None
+        self._vehicle.setValue(weakref.proxy(vehicle) if vehicle else None)
         return
 
     @classmethod

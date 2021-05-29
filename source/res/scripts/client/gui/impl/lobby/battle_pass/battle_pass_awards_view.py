@@ -85,7 +85,8 @@ class BattlePassAwardsView(ViewImpl):
         self.viewModel.setCurrentLevel(newLevel)
         self.viewModel.setIsBaseLevelStyle(True if level == 1 else False)
         self.viewModel.setChapterNumber(prevChapter)
-        chapterTextKey = R.strings.battle_pass_2020.chapter.name.num(prevChapter)
+        self.viewModel.setSeasonStopped(self.__battlePassController.isPaused())
+        chapterTextKey = R.strings.battle_pass.chapter.name.num(prevChapter)
         if chapterTextKey.exists():
             self.viewModel.setChapter(backport.text(chapterTextKey()))
         self.viewModel.setIsStyleChosen(styleCD is not None)

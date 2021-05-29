@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/vehicles.py
 import typing
-from backports.functools_lru_cache import lru_cache
-from typing import List, Optional, TYPE_CHECKING, Dict, Union, Tuple, Generator, Set, FrozenSet
+from typing import List, Optional, TYPE_CHECKING, Dict, Union, Tuple, Generator
 from items import ItemsPrices
 from items.components.supply_slot_categories import LevelsFactor
 from math_common import ceilTo
@@ -14,6 +13,7 @@ import struct
 import itertools
 import copy
 import os
+from typing import List, Optional, Tuple, Dict, Any, TYPE_CHECKING
 import BigWorld
 from Math import Vector2, Vector3
 import nation_change
@@ -37,14 +37,16 @@ from items import vehicle_items
 from items._xml import cachedFloat
 from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
 from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_EDITOR
-from constants import ACTION_LABEL_TO_TYPE, ACTIONS_GROUP_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ACTIONS_GROUP_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL, ROLE_TYPE, ACTIONS_GROUP_TYPE
+from constants import ACTION_LABEL_TO_TYPE, ACTIONS_GROUP_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ACTIONS_GROUP_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL, ROLE_TYPE, ACTIONS_GROUP_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from items.stun import g_cfg as stunConfig
 from items import common_extras, decodeEnum
 from string import upper
 from constants import IS_EDITOR
+from constants import SHELL_MECHANICS_TYPE
 from wrapped_reflection_framework import ReflectionMetaclass
 from collector_vehicle import CollectorVehicleConsts
+from material_kinds import IDS_BY_NAMES
 if IS_EDITOR:
     import meta_objects.items.vehicles_meta as meta
     from meta_objects.items.vehicle_items_meta.utils import getEffectNameByEffect
@@ -83,11 +85,10 @@ VEHICLE_CLASS_TAGS = frozenset(('lightTank',
  'SPG',
  'AT-SPG'))
 VEHICLE_LEVEL_EARN_CRYSTAL = 10
-MODES_WITHOUT_CRYSTAL_EARNINGS = {'bob',
+MODES_WITHOUT_CRYSTAL_EARNINGS = set(('bob',
  'fallout',
  'event_battles',
- 'battle_royale',
- 'weekend_brawl'}
+ 'battle_royale'))
 
 class VEHICLE_PHYSICS_TYPE():
     TANK = 0
@@ -251,7 +252,9 @@ def vehicleAttributeFactors():
      'healthFactor': 1.0,
      'damageFactor': 1.0,
      'enginePowerFactor': 1.0,
-     'deathZones/sensitivityFactor': 1.0}
+     'deathZones/sensitivityFactor': 1.0,
+     'multShotDispersionFactor': 1.0,
+     'gun/changeShell/reloadFactor': 1.0}
 
 
 WHEEL_SIZE_COEF = 2.2
@@ -342,6 +345,9 @@ class VehicleDescriptor(object):
             self.__updateAttributes(onAnyApp=True)
         return self._maxHealth
 
+    def getShot(self, shotIdx=None):
+        return self.shot if shotIdx is None else self.gun.shots[shotIdx]
+
     def __set_activeTurretPos(self, turretPosition):
         self.turret, self.gun = self.turrets[turretPosition]
         self.__activeTurretPos = turretPosition
@@ -368,6 +374,7 @@ class VehicleDescriptor(object):
     hasHydraulicChassis = property(lambda self: self.type.hasHydraulicChassis)
     hasBurnout = property(lambda self: self.type.hasBurnout)
     hasCharge = property(lambda self: self.type.hasCharge)
+    role = property(lambda self: self.type.role)
     isPitchHullAimingAvailable = property(lambda self: self.type.hullAimingParams['pitch']['isAvailable'])
     isYawHullAimingAvailable = property(lambda self: self.type.hullAimingParams['yaw']['isAvailable'])
 
@@ -1553,7 +1560,7 @@ class VehicleType(object):
         self.builtins = {t.split('_user')[0] for t in self.tags if t.startswith('builtin')}
         self.hasBurnout = 'burnout' in self.tags
         self.isCollectorVehicle = CollectorVehicleConsts.COLLECTOR_VEHICLES_TAG in self.tags
-        self.role = self.__getRoleFromTags() if self.level == 10 else ROLE_TYPE.NOT_DEFINED
+        self.role = self.__getRoleFromTags() if self.level in ROLE_LEVELS else ROLE_TYPE.NOT_DEFINED
         self.actionsGroup = self.__getActionsGroupFromRole(self.role)
         self.actions = self.__getActionsFromActionsGroup(self.actionsGroup)
         VehicleType.currentReadingVeh = self
@@ -1799,6 +1806,9 @@ class VehicleType(object):
 
         return res
 
+    def getVehicleClass(self):
+        return getVehicleClassFromVehicleType(self)
+
     def __getRoleFromTags(self):
         rolesTags = g_cache.rolesTags()
         suitableRoles = []
@@ -1994,7 +2004,7 @@ class SupplySlotsStorage(object):
 
 
 class Cache(object):
-    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20', '__rolesTags', '__actionsByGroups', '__rolesActionGroups', '__actionsByRoles', '__supplySlots', '__supplySlotsStorages')
+    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20', '__rolesTags', '__actionsByGroups', '__rolesActionGroups', '__actionsByRoles', '__supplySlots', '__supplySlotsStorages', '__moduleKind')
     NATION_COMPONENTS_SECTION = '/components/'
     NATION_ITEM_SOURCE = {ITEM_TYPES.vehicleChassis: 'chassis.xml',
      ITEM_TYPES.vehicleEngine: 'engines.xml',
@@ -2036,6 +2046,7 @@ class Cache(object):
         self.__actionsByRoles = None
         self.__supplySlots = None
         self.__supplySlotsStorages = None
+        self.__moduleKind = {}
         if IS_CLIENT or IS_EDITOR:
             self.__vehicleEffects = None
             self.__gunEffects = None
@@ -2184,16 +2195,6 @@ class Cache(object):
             descr = self.__equipmentIDs
         return descr
 
-    @lru_cache(maxsize=10)
-    def equipmentCDsByTags(self, requiredTags=frozenset(), forbiddenTags=frozenset()):
-        equipmentCDs = set()
-        for eqID, equipment in g_cache.equipments().iteritems():
-            eqTags = equipment.tags
-            if requiredTags.issubset(eqTags) and not eqTags & forbiddenTags:
-                equipmentCDs.add(equipment.compactDescr)
-
-        return frozenset(equipmentCDs)
-
     def rolesTags(self):
         rolesTags = self.__rolesTags
         if rolesTags is None:
@@ -2310,6 +2311,30 @@ class Cache(object):
         if nations[nationID] is None:
             self.__readNation(nationID)
         return nations[nationID]
+
+    def _readModulesLists(self, xmlPath):
+        section = ResMgr.openSection(xmlPath)
+        if section is None:
+            _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
+        for key in ('tankmen', 'internal', 'external'):
+            self.__moduleKind[key] = _xml.readString(xmlPath, section, 'moduleKind/' + key).split()
+            moduleName = self.__moduleKind[key]
+            modules = set()
+            for module in moduleName:
+                moduleID = IDS_BY_NAMES.get(module)
+                if not moduleID:
+                    _xml.raiseWrongXml((_VEHICLE_TYPE_XML_PATH + 'common', 'vehicle_common.xml'), 'moduleKind/' + key, 'module is not existing in system/data/vehicle_common.xml')
+                modules.add(moduleID)
+
+            self.__moduleKind[key] = modules
+
+        return
+
+    @property
+    def _moduleKind(self):
+        if not self.__moduleKind:
+            self._readModulesLists(_VEHICLE_TYPE_XML_PATH + 'common/vehicle_common.xml')
+        return self.__moduleKind
 
     def __readNation(self, nationID):
         nationName = nations.NAMES[nationID]
@@ -2696,6 +2721,13 @@ def getActionsGroups():
 
 def getRolesActions():
     return g_cache.actionsByRoles()
+
+
+def getActionsByRole(role):
+    actionsByRoles = getRolesActions()
+    if role in actionsByRoles:
+        return actionsByRoles[role]
+    LOG_ERROR("actionsByRoles doesn't contain role={}".format(role))
 
 
 def isRestorable(vehTypeCD, gameParams):
@@ -4406,9 +4438,13 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if shellType is None:
         _xml.raiseWrongXml(xmlCtx, 'kind', "unknown shell kind '%s'" % kind)
     shell.type = shellType
-    mechanics = intern(_xml.readStringOrEmpty(xmlCtx, section, 'mechanics'))
-    isModernHighExplosive = mechanics == 'MODERN'
+    mechanics = intern(_xml.readStringWithDefaultValue(xmlCtx, section, 'mechanics', SHELL_MECHANICS_TYPE.LEGACY))
+    isModernHighExplosive = mechanics == SHELL_MECHANICS_TYPE.MODERN
     shell.damage = (_readDamageValue(xmlCtx, section, 'armor', isModernHighExplosive), _readDamageValue(xmlCtx, section, 'devices', isModernHighExplosive))
+    if section.has_key('deviceDamagePossibility/protectFromDirectHits'):
+        shellType.protectFromDirectHits = readProtectedModules(xmlCtx, section, 'deviceDamagePossibility/protectFromDirectHits')
+    if kind == 'HIGH_EXPLOSIVE' and section.has_key('deviceDamagePossibility/protectFromIndirectHits'):
+        shellType.protectFromIndirectHits = readProtectedModules(xmlCtx, section, 'deviceDamagePossibility/protectFromIndirectHits')
     if not IS_CLIENT and not IS_BOT:
         if kind.startswith('ARMOR_PIERCING'):
             shellType.normalizationAngle = radians(_xml.readNonNegativeFloat(xmlCtx, section, 'normalizationAngle'))
@@ -4417,11 +4453,14 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
             shellType.piercingPowerLossFactorByDistance = 10.0 * _xml.readNonNegativeFloat(xmlCtx, section, 'piercingPowerLossFactorByDistance')
             shellType.ricochetAngleCos = cos(radians(_xml.readNonNegativeFloat(xmlCtx, section, 'ricochetAngle')))
     if kind == 'HIGH_EXPLOSIVE':
+        shellType.mechanics = mechanics
         if isModernHighExplosive:
-            shellType.isModernMechanics = True
+            shellType.obstaclePenetration = _xml.readBool(xmlCtx, section, 'obstaclePenetration', component_constants.DEFAULT_MODERN_HE_OBSTACLE_PENETRATION)
+            shellType.shieldPenetration = _xml.readBool(xmlCtx, section, 'shieldPenetration', component_constants.DEFAULT_MODERN_HE_SHIELD_PENETRATION)
             shellType.blastWave = _readImpactParams(xmlCtx, section, 'blastWave')
             shellType.shellFragments = _readImpactParams(xmlCtx, section, 'shellFragments')
             shellType.armorSpalls = _readImpactParams(xmlCtx, section, 'armorSpalls')
+            shellType.maxDamage = max(shellType.shellFragments.damages[0], shellType.shellFragments.damages[1], shellType.armorSpalls.damages[0], shellType.armorSpalls.damages[1], shellType.blastWave.damages[0], shellType.blastWave.damages[1])
         shellType.explosionRadius = cachedFloat(section.readFloat('explosionRadius'))
         if shellType.explosionRadius <= 0.0:
             shellType.explosionRadius = cachedFloat(shell.caliber * shell.caliber / 5555.0)
@@ -4434,6 +4473,8 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
 
         if shellType.explosionEdgeDamageFactor > 1.0:
             _xml.raiseWrongXml(xmlCtx, 'explosionEdgeDamageFactor', 'explosionEdgeDamageFactor must be < 1')
+    shell.damageRandomization = _xml.readNonNegativeFloat(xmlCtx, section, 'damageRandomization', component_constants.DEFAULT_DAMAGE_RANDOMIZATION)
+    shell.piercingPowerRandomization = _xml.readNonNegativeFloat(xmlCtx, section, 'piercingPowerRandomization', component_constants.DEFAULT_PIERCING_POWER_RANDOMIZATION)
     hasStun = section.readBool('hasStun', False)
     if hasStun:
         stun = shell_components.Stun()
@@ -4469,6 +4510,22 @@ _shellKinds = (SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.ARMOR_PIERCING_HE,
  SHELL_TYPES.ARMOR_PIERCING_CR,
  SHELL_TYPES.SMOKE)
+
+def readProtectedModules(xmlCtx, section, subsection):
+    moduleKind = g_cache._moduleKind
+    protectModules = set()
+    allValidModules = moduleKind.get('external', set()).union(moduleKind.get('internal', set()), moduleKind.get('tankmen', set()))
+    protectFromHits = _xml.readString(xmlCtx, section, subsection).split()
+    for module in protectFromHits:
+        moduleID = IDS_BY_NAMES.get(module)
+        if module in moduleKind:
+            protectModules = protectModules.union(moduleKind[module])
+        if moduleID not in allValidModules:
+            _xml.raiseWrongXml(xmlCtx, section, 'wrong material type')
+        protectModules.add(moduleID)
+
+    return protectModules
+
 
 def _defaultLocalReader(xmlCtx, section, sharedItem, unlocksDescrs, parentItem=None):
     if not section.has_key('unlocks'):
@@ -4885,36 +4942,38 @@ def _writeDrivenJoints(items, section, subsectionName):
         return subsection
 
     def createSingleSection(section, subsection):
-        if len(section) == 0:
-            for child in subsection.values():
-                subsection.deleteSection(child)
+        for i in xrange(len(section)):
+            record = section[i]
+            recordSection = createOrTake(subsection, i, 'master')
+            slavesSection = None
+            for j in xrange(len(record)):
+                table = record[j]
+                if j == 0:
+                    tableSection = recordSection
+                else:
+                    slavesSection = createOrTake(recordSection, 0, 'slaves')
+                    tableSection = createOrTake(slavesSection, j - 1, 'slave')
+                _xml.rewriteString(tableSection, 'node', table[0])
+                rowsSection = createOrTake(tableSection, 0, 'table')
+                for k in xrange(1, len(table)):
+                    row = degrees(table[k])
+                    rowSection = createOrTake(rowsSection, k - 1, 'row')
+                    rowSection.asFloat = row
 
-            return
-        else:
-            for i in xrange(len(section)):
-                record = section[i]
-                recordSection = createOrTake(subsection, i, 'master')
-                slavesSection = None
-                for j in xrange(len(record)):
-                    table = record[j]
-                    if j == 0:
-                        tableSection = recordSection
-                    else:
-                        slavesSection = createOrTake(recordSection, 0, 'slaves')
-                        tableSection = createOrTake(slavesSection, j - 1, 'slave')
-                    _xml.rewriteString(tableSection, 'node', table[0])
-                    rowsSection = createOrTake(tableSection, 0, 'table')
-                    for k in xrange(1, len(table)):
-                        row = degrees(table[k])
-                        rowSection = createOrTake(rowsSection, k - 1, 'row')
-                        rowSection.asFloat = row
+                rows = rowsSection.values()
+                for k in xrange(len(table) - 1, len(rows)):
+                    rowsSection.deleteSection(rows[k])
 
-                if slavesSection:
-                    children = slavesSection.values()
-                    for j in xrange(len(record) - 1, len(children)):
-                        slavesSection.deleteSection(children[j])
+            if slavesSection:
+                children = slavesSection.values()
+                for j in xrange(len(record) - 1, len(children)):
+                    slavesSection.deleteSection(children[j])
 
-            return
+        masters = subsection.values()
+        for i in xrange(len(section), len(masters)):
+            subsection.deleteSection(masters[i])
+
+        return
 
     def createOrTake(section, id, subsectionName):
         if not section.has_key(subsectionName):
@@ -4943,10 +5002,7 @@ def _writeDrivenJoints(items, section, subsectionName):
         else:
             return left == right
 
-    if items is None or len(items) == 0:
-        if section.has_key(subsectionName):
-            section.deleteSection(subsectionName)
-    elif len(items) > 0:
+    if items is not None and len(items) > 0:
         subsection = getSubsection(section, subsectionName)
         default = []
         for key, value in items.items():
@@ -4964,6 +5020,10 @@ def _writeDrivenJoints(items, section, subsectionName):
             skinSubsection = getSubsection(setSubsection, key)
             createSingleSection(value, skinSubsection)
 
+    if section.has_key(subsectionName):
+        subsection = getSubsection(section, subsectionName)
+        if len(subsection.values()) == 0:
+            section.deleteSection(subsectionName)
     return
 
 
@@ -6020,9 +6080,14 @@ def _readImpactParams(xmlCtx, section, paramName):
     subXmlCtx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, paramName)
     params = HighExplosiveImpactParams()
     params.radius = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'impactRadius', 0.0)
-    if paramName == 'armorSpalls':
-        params.angleCos = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'coneAngleCos')
     params.damages = (_xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/armor', 0.0), _xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/devices', 0.0))
+    if paramName == 'armorSpalls':
+        params.coneAngleCos = cos(radians(_xml.readNonNegativeFloat(subXmlCtx, subsection, 'coneAngle')))
+        params.piercingSpalls = _xml.readBool(subXmlCtx, subsection, 'piercingSpalls', component_constants.DEFAULT_PIERCING_SPALLS)
+    if subsection.has_key('damageAbsorption'):
+        label = _xml.readNonEmptyString(subXmlCtx, subsection, 'damageAbsorption')
+        params.damageAbsorptionType = DamageAbsorptionLabelToType.get(label)
+    params.isActive = params.radius and (params.damages[0] or params.damages[1])
     return params
 
 

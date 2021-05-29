@@ -91,6 +91,7 @@ class CYBERSPORT(object):
     WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_ROTATIONGROUPLOCKED = '#cyberSport:window/unit/message/vehicleInNotReady/rotationGroupLocked'
     WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_ISINBATTLE = '#cyberSport:window/unit/message/vehicleInNotReady/isInBattle'
     WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_WRONGMODE = '#cyberSport:window/unit/message/vehicleInNotReady/wrongMode'
+    WINDOW_UNIT_MESSAGE_VEHICLENOTVALIDFOREVENT = '#cyberSport:window/unit/message/vehicleNotValidForEvent'
     WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_WRONGUNITDATA = '#cyberSport:window/unit/message/vehicleInNotReady/wrongUnitData'
     WINDOW_UNIT_MESSAGE_GETREADY = '#cyberSport:window/unit/message/getReady'
     WINDOW_UNIT_MESSAGE_GETNOTREADY = '#cyberSport:window/unit/message/getNotReady'

@@ -648,11 +648,12 @@ class _ShotSoundEffectDesc(_BaseSoundEvent):
 class _NodeSoundEffectDesc(_BaseSoundEvent):
     TYPE = '_NodeSoundEffectDesc'
     effectUniqId = 0
-    __slots__ = ('_soundName', 'effectUniqId')
+    __slots__ = ('_soundName', 'effectUniqId', '_dopplerEffect')
 
     def __init__(self, dataSection):
         super(_NodeSoundEffectDesc, self).__init__(dataSection)
-        self._soundName = ((dataSection.readString('wwsoundPC', ''),), (dataSection.readString('wwsoundNPC', ''),))
+        self._soundName = (dataSection.readStrings('wwsoundPC'), dataSection.readStrings('wwsoundNPC'))
+        self._dopplerEffect = dataSection.readString('doppler', '')
 
     @classmethod
     def nextUniqueID(cls):
@@ -681,6 +682,8 @@ class _NodeSoundEffectDesc(_BaseSoundEvent):
                         for soundStartParam in self._parameters:
                             soundObject.setRTPC(soundStartParam.name, soundStartParam.value)
 
+                    if self._dopplerEffect:
+                        soundObject.setDopplerEffect(self._dopplerEffect)
                     for sndName in soundName:
                         if sndName:
                             soundObject.play(sndName)
@@ -693,7 +696,7 @@ class _NodeSoundEffectDesc(_BaseSoundEvent):
 
 
 class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
-    __slots__ = ('_parameters', '__stopSoundEventName')
+    __slots__ = ('_parameters', '__stopSoundEventName', '__tracerDelaySound')
     TYPE = '_TracerSoundEffectDesc'
     shellTypesMap = {'AP': 0,
      'HE': 1,
@@ -706,6 +709,12 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
         shellType = _TracerSoundEffectDesc.shellTypesMap.get(shellType, 0)
         self._parameters = [SoundStartParam('psb_shell_type', shellType)]
         self.__stopSoundEventName = ''
+        delaySoundSection = dataSection['tracerDelaySound']
+        if delaySoundSection is not None:
+            self.__tracerDelaySound = _TracerDelaySound(delaySoundSection)
+        else:
+            self.__tracerDelaySound = None
+        return
 
     def _getName(self, args):
         isPlayer, id = self._isPlayer(args)
@@ -714,12 +723,19 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
     def create(self, model, effects, args):
         isPlayer, _ = self._isPlayer(args)
         self.__stopSoundEventName = 'psb_pc_stop' if isPlayer else 'psb_npc_stop'
-        return super(_TracerSoundEffectDesc, self).create(model, effects, args)
+        soundObject = super(_TracerSoundEffectDesc, self).create(model, effects, args)
+        if soundObject is not None and self.__tracerDelaySound is not None:
+            self.__tracerDelaySound.create(soundObject, args)
+        return soundObject
 
     def delete(self, elem, reason):
+        if self.__tracerDelaySound is not None:
+            self.__tracerDelaySound.delete()
         if reason != 0:
             soundObject = elem.get('sound', None)
             if soundObject is not None:
+                if self._dopplerEffect is not None:
+                    soundObject.stopDopplerEffect()
                 soundObject.play(self.__stopSoundEventName)
         super(_TracerSoundEffectDesc, self).delete(elem, 0)
         return
@@ -864,7 +880,7 @@ class _SoundEffectDesc(_EffectDesc):
             self._soundNames = (intern(dataSection.readString('wwsoundPC')), intern(dataSection.readString('wwsoundNPC')))
         else:
             self._soundName = intern(dataSection.readString('wwsound'))
-        self._impactNames = ImpactNames(intern(dataSection.readString('impactNPC_PC', '')), intern(dataSection.readString('impactPC_NPC', '')), intern(dataSection.readString('impactNPC_NPC', '')), intern(dataSection.readString('impactFNPC_PC', '')))
+        self._impactNames = ImpactNames(tuple((intern(soundName) for soundName in dataSection.readStrings('impactNPC_PC'))), tuple((intern(soundName) for soundName in dataSection.readStrings('impactPC_NPC'))), tuple((intern(soundName) for soundName in dataSection.readStrings('impactNPC_NPC'))), tuple((intern(soundName) for soundName in dataSection.readStrings('impactFNPC_PC'))))
         if dataSection.has_key('SWITCH_ext_impact_surface'):
             self._switch_impact_surface = intern(dataSection.readString('SWITCH_ext_impact_surface'))
         if dataSection.has_key('SWITCH_ext_shell_type'):
@@ -938,29 +954,29 @@ class _SoundEffectDesc(_EffectDesc):
                 if hitdir is not None:
                     m.translation -= hitdir
                 if fromPC:
-                    soundName = self._impactNames.impactPC_NPC
+                    soundNames = self._impactNames.impactPC_NPC
                 elif isPlayerVehicle:
                     isAlly = self.__sessionProvider.getArenaDP().isAlly(attackerID)
-                    soundName = self._impactNames.impactNPC_PC
+                    soundNames = self._impactNames.impactNPC_PC
                     if isAlly:
                         isFriendlyFireMode = self.__sessionProvider.arenaVisitor.bonus.isFriendlyFireMode()
                         isCustomAllyDamageEffect = self.__sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
                         if isFriendlyFireMode and isCustomAllyDamageEffect:
-                            soundName = self._impactNames.impactFNPC_PC or self._impactNames.impactNPC_PC
+                            soundNames = self._impactNames.impactFNPC_PC or self._impactNames.impactNPC_PC
                     if not BigWorld.entity(playerID).isAlive():
                         if self.__sessionProvider is not None:
                             spectator = self.__sessionProvider.dynamic.spectator
                             if spectator is not None and spectator.spectatorViewMode in (EPIC_CONSTS.SPECTATOR_MODE_FREECAM, EPIC_CONSTS.SPECTATOR_MODE_FOLLOW):
-                                soundName = self._impactNames.impactNPC_NPC
+                                soundNames = self._impactNames.impactNPC_NPC
                 else:
-                    soundName = self._impactNames.impactNPC_NPC
+                    soundNames = self._impactNames.impactNPC_NPC
                 if hitdir is not None:
                     t = m.applyToOrigin()
                     m.setRotateY(hitdir.yaw)
                     m.translation = t
-                sound = SoundGroups.g_instance.WWgetSoundObject(soundName + '_MODEL_' + str(id(model)), None, m.translation)
+                sound = SoundGroups.g_instance.WWgetSoundObject(soundNames[0] if soundNames else '_MODEL_' + str(id(model)), None, m.translation)
                 if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                    _logger.debug('SOUND: EffectList impacts, %s, %s, %s, %s', soundName, args, str(id(model)), sound)
+                    _logger.debug('SOUND: EffectList impacts, %s, %s, %s, %s', soundNames, args, str(id(model)), sound)
                 if SoundGroups.DEBUG_TRACE_STACK is True:
                     import traceback
                     traceback.print_stack()
@@ -971,8 +987,10 @@ class _SoundEffectDesc(_EffectDesc):
                     damage_size = _getDamageSize(args)
                     if damage_size is not None:
                         sound.setSwitch('SWITCH_ext_damage_size', damage_size)
-                    self.__setFriendlyFireRTPC(attackerID, sound, soundName)
-                    sound.play(soundName)
+                    self.__setFriendlyFireRTPC(attackerID, sound, soundNames)
+                    for soundName in soundNames:
+                        sound.play(soundName)
+
                     for soundStartParam in startParams:
                         sound.setRTPC(soundStartParam.name, soundStartParam.value)
 
@@ -1011,8 +1029,8 @@ class _SoundEffectDesc(_EffectDesc):
     def prerequisites(self):
         return []
 
-    def __setFriendlyFireRTPC(self, attackerID, sound, soundName):
-        if soundName == self._impactNames.impactFNPC_PC and attackerID is not None:
+    def __setFriendlyFireRTPC(self, attackerID, sound, soundNames):
+        if soundNames == self._impactNames.impactFNPC_PC and attackerID is not None:
             playerVehiclePosition = BigWorld.player().getOwnVehiclePosition()
             attackerVehicle = BigWorld.entity(attackerID)
             if attackerVehicle is not None:
@@ -1251,6 +1269,52 @@ class _LightEffectDesc(_EffectDesc):
                 elem['light'].destroyLight()
                 elem['light'] = None
             return True
+
+
+class _TracerDelaySound(object):
+    __slots__ = ('_soundName', '__soundDelayBeforeEnd', '__soundCallback', '__data')
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self, dataSection):
+        self._soundName = (dataSection.readString('wwsoundEnemy', ''), dataSection.readString('wwsoundAlly', ''))
+        self.__soundDelayBeforeEnd = dataSection.readFloat('delayBeforeEnd', 0.0)
+        self.__soundCallback = None
+        self.__data = {}
+        return
+
+    def create(self, soundObject, args):
+        collisionTime = args.get('collisionTime', None)
+        entityID = args.get('attackerID', -1)
+        if entityID > 0 and self.__needPlay(collisionTime, entityID):
+            self.__data.clear()
+            self.__data['soundObject'] = soundObject
+            self.__data['soundCallback'] = BigWorld.callback(collisionTime - self.__soundDelayBeforeEnd, lambda : self.__playSound(self.__getSoundName(entityID)))
+            return True
+        else:
+            return False
+
+    def delete(self):
+        soundCallback = self.__data.get('soundCallback', None)
+        if soundCallback is not None:
+            BigWorld.cancelCallback(soundCallback)
+            self.__data['soundCallback'] = None
+        self.__data.clear()
+        return
+
+    def __needPlay(self, collisionTime, entityID):
+        return collisionTime is not None and collisionTime > self.__soundDelayBeforeEnd and self.__getSoundName(entityID)
+
+    def __playSound(self, soundName):
+        if SoundGroups.DEBUG_TRACE_EFFECTLIST:
+            _logger.debug('SOUND: EffectList _TracerDelaySoundEffectDesc, name=%s', soundName)
+        soundObject = self.__data.get('soundObject', None)
+        if soundObject is not None:
+            soundObject.play(soundName)
+        self.__data['soundCallback'] = None
+        return
+
+    def __getSoundName(self, entityID):
+        return self._soundName[1] if self.__sessionProvider.getArenaDP().isAlly(entityID) else self._soundName[0]
 
 
 _effectDescFactory = {'pixie': _PixieEffectDesc,

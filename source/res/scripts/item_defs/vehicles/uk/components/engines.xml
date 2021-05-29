@@ -78,6 +78,7 @@
     <Rolls_Royce_Meteorite_202>	99	</Rolls_Royce_Meteorite_202>
     <Rolls_Royce_Meteor_MkIV_B12>	100	</Rolls_Royce_Meteor_MkIV_B12>
     <Meteorite_M120>	101	</Meteorite_M120>
+    <Leyland_L60_No_4_A>	103	</Leyland_L60_No_4_A>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
     <Rolls_Royse_Meteor_MkIV_IGR>	60003	</Rolls_Royse_Meteor_MkIV_IGR>
@@ -1220,6 +1221,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </Leyland_L60_No_4>
+    <Leyland_L60_No_4_A>
+      <userString>	#gb_vehicles:Leyland_L60_No_4	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2320	</rpm_max>
+    </Leyland_L60_No_4_A>
     <Continental_AOI-1195-5>
       <userString>	#gb_vehicles:Continental_AOI-1195-5	</userString>
       <shortUserString>	#gb_vehicles:Continental_AOI-1195-5_short	</shortUserString>

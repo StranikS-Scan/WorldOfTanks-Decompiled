@@ -62,14 +62,6 @@ def playSectionSelectSound():
     playSound(TankSetupSoundEvents.SELECT_VIEW)
 
 
-def playShellUpdateSound(oldCount, newCount, totalCount):
-    WWISE.WW_setRTPCBus(TankSetupSoundEvents.RTPC_SHELLS_PROGRESS_BAR, newCount * 100.0 / totalCount)
-    if newCount > oldCount:
-        playSound(TankSetupSoundEvents.AMMO_SINGLE_PLUS)
-    elif newCount < oldCount:
-        playSound(TankSetupSoundEvents.AMMO_SINGLE_MINUS)
-
-
 def playSlotActionSound(setupName, *args, **kwargs):
     if setupName == TankSetupConstants.CONSUMABLES or setupName == TankSetupConstants.BATTLE_ABILITIES:
         ConsumableActionSoundHelper.playActionSound(*args, **kwargs)

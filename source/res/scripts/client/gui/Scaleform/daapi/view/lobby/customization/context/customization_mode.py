@@ -12,7 +12,7 @@ from gui.customization.constants import CustomizationModes, CustomizationModeSou
 from gui.customization.shared import SeasonType, C11nId
 from gui.shared.utils.decorators import process as wrappedProcess
 from helpers import dependency
-from shared_utils import first, nextTick
+from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
@@ -20,6 +20,7 @@ if typing.TYPE_CHECKING:
     from gui.hangar_vehicle_appearance import AnchorParams
     from gui.customization.shared import PurchaseItem
     from gui.shared.gui_items.customization.c11n_items import Customization
+    from gui.shared.gui_items.Vehicle import Vehicle
     from items.customizations import SerializableComponent
     from gui.Scaleform.daapi.view.lobby.customization.context.context import CustomizationContext
     from vehicle_outfit.containers import SlotData
@@ -197,13 +198,16 @@ class CustomizationMode(object):
         callback(None)
         return
 
+    @process
     def sellItem(self, intCD, count, _):
         if not count:
             return
         item = self._service.getItemByCD(intCD)
-        self._sellItem(item, count)
-        nextTick(self._ctx.refreshOutfit)()
-        nextTick(partial(self._events.onItemSold, item=item, count=count))()
+        self._soundEventChecker.lockPlayingSounds()
+        result = yield self._sellItem(item, count)
+        self._soundEventChecker.unlockPlayingSounds(restore=False)
+        if self.isInited and result.success:
+            self._events.onItemSold(item=item, count=count)
 
     def cancelChanges(self):
         self._cancelChanges()
@@ -298,8 +302,9 @@ class CustomizationMode(object):
     def _applyItems(self, modifiedOutfits, isModeChanged, callback):
         raise NotImplementedError
 
+    @async
     @wrappedProcess('sellItem')
-    def _sellItem(self, item, count):
+    def _sellItem(self, item, count, callback):
         raise NotImplementedError
 
     def _preserveState(self):

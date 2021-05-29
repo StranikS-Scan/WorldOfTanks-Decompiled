@@ -41,7 +41,8 @@ class StorageView(LobbySubView, StorageViewMeta):
         self.__isItemsForSellEmpty = self.__getItemsForSellEmpty()
         self.__activeSectionIdx = 0
         self.__activeTab = None
-        self.__switchSection(sectionName=(ctx or {}).get('defaultSection', STORAGE_CONSTANTS.FOR_SELL), sectionTab=(ctx or {}).get('defaultTab'), skipRefresh=True)
+        context = ctx or {}
+        self.__switchSection(sectionName=context.get('defaultSection', STORAGE_CONSTANTS.FOR_SELL), sectionTab=context.get('defaultTab'), skipRefresh=True)
         return
 
     def onClose(self):

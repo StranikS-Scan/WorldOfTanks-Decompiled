@@ -134,7 +134,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'easterEgg': EasterEggProps(True, []),
  'premiumInfo': {},
  'checkPromoFrequencyInBattles': 5,
- 'vivoxLicense': ''}
+ 'vivoxLicense': '',
+ 'spgHitDirectionDelta': 10.0}
 
 class GuiSettings(object):
 

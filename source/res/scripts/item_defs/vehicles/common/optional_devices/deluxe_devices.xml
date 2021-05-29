@@ -235,4 +235,128 @@
       </mul>
     </kpi>
   </deluxEnhancedAimDrives>
+  <deluxeTurbocharger>
+    <id>	111	</id>
+    <userString>	#artefacts:deluxeTurbocharger/name	</userString>
+    <longDescriptionSpecial>	#artefacts:deluxeTurbocharger/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/turbocharger.png 0 0	</icon>
+    <price>	5000	  <crystal></crystal>
+    </price>
+    <tags>	turbocharger deluxe	</tags>
+    <notInShop>	true	</notInShop>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	2	</minLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <incompatibleTags>
+      <installed>	turbocharger	</installed>
+    </incompatibleTags>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/enginePowerFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.125 1.125	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	6 6	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	4 4	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.125	</value>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	6	</value>
+      </add>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	4	</value>
+      </add>
+    </kpi>
+  </deluxeTurbocharger>
+  <deluxeExtraHealthReserve>
+    <id>	112	</id>
+    <userString>	#artefacts:deluxeExtraHealthReserve/name	</userString>
+    <longDescriptionSpecial>	#artefacts:deluxeExtraHealthReserve/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/extraHealthReserve.png 0 0	</icon>
+    <price>	5000	  <crystal></crystal>
+    </price>
+    <tags>	healthReserve deluxe	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	healthReserve	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	extraHealthReserve_class1_user extraHealthReserve_class2_user extraHealthReserve_class3_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	ExtraHealthReserve	  <chassisMaxLoadFactor>	1.1 1.1	</chassisMaxLoadFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/healthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.125 1.125	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.75 1.75	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/vehicleByChassisDamageFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.25 0.25	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.3 1.3	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	1.125	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.75	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.3	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisLoad	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisFallDamage	</name>
+        <value>	0.25	</value>
+      </mul>
+    </kpi>
+  </deluxeExtraHealthReserve>
 </deluxe_devices.xml>

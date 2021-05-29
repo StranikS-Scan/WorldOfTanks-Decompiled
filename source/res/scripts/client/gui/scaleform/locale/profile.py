@@ -147,7 +147,8 @@ class PROFILE(object):
     SECTION_STATISTICS_HEADERTEXT_HISTORICAL = '#profile:section/statistics/headerText/historical'
     SECTION_STATISTICS_HEADERTEXT_FORTIFICATIONS = '#profile:section/statistics/headerText/fortifications'
     SECTION_STATISTICS_HEADERTEXT_CLAN = '#profile:section/statistics/headerText/clan'
-    SECTION_STATISTICS_HEADERTEXT_RANKED = '#profile:section/statistics/headerText/ranked'
+    SECTION_STATISTICS_HEADERTEXT_RANKED_15X15 = '#profile:section/statistics/headerText/ranked_15x15'
+    SECTION_STATISTICS_HEADERTEXT_RANKED_10X10 = '#profile:section/statistics/headerText/ranked_10x10'
     SECTION_STATISTICS_CHARTS_BYTYPELABEL = '#profile:section/statistics/charts/byTypeLabel'
     SECTION_STATISTICS_CHARTS_BYNATIONLABEL = '#profile:section/statistics/charts/byNationLabel'
     SECTION_STATISTICS_CHARTS_BYLEVELLABEL = '#profile:section/statistics/charts/byLevelLabel'
@@ -376,6 +377,7 @@ class PROFILE(object):
     PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES = '#profile:profile/dropdown/labels/fortifications/battles'
     PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES = '#profile:profile/dropdown/labels/fortifications/sorties'
     PROFILE_DROPDOWN_LABELS_RANKED = '#profile:profile/dropdown/labels/ranked'
+    PROFILE_DROPDOWN_LABELS_RANKED_10X10 = '#profile:profile/dropdown/labels/ranked_10x10'
     PROFILE_SEASONSDROPDOWN_ALL = '#profile:profile/seasonsdropdown/all'
     PROFILE_SEASONSDROPDOWN_CURRENT = '#profile:profile/seasonsdropdown/current'
     PROFILE_SEASONSDROPDOWN_SPECIFIC = '#profile:profile/seasonsdropdown/specific'
@@ -552,7 +554,8 @@ class PROFILE(object):
      PROFILE_DROPDOWN_LABELS_FORTIFICATIONS,
      PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES,
      PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES,
-     PROFILE_DROPDOWN_LABELS_RANKED)
+     PROFILE_DROPDOWN_LABELS_RANKED,
+     PROFILE_DROPDOWN_LABELS_RANKED_10X10)
     PROFILE_RANKED_SEASONSDROPDOWN_ENUM = (PROFILE_RANKED_SEASONSDROPDOWN_ARCHIVE,
      PROFILE_RANKED_SEASONSDROPDOWN_1,
      PROFILE_RANKED_SEASONSDROPDOWN_CN_1,

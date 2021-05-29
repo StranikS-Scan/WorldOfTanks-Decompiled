@@ -60,3 +60,9 @@ def _setMask(gameplayMask):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     settingsCore = dependency.instance(ISettingsCore)
     settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, {'gameplayMask': gameplayMask})
+
+
+def isOnly10ModeEnabled():
+    from account_helpers.settings_core.settings_constants import GAME
+    settingsCore = dependency.instance(ISettingsCore)
+    return settingsCore.getSetting(GAME.GAMEPLAY_ONLY_10_MODE)

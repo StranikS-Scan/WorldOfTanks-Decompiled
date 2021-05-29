@@ -295,7 +295,7 @@ class TechTree(TechTreeMeta):
 
     def __formatBlueprintBalance(self):
         bpRequester = self._itemsCache.items.blueprints
-        self.__intelligenceAmount = bpRequester.getIntelligenceData()
+        self.__intelligenceAmount = bpRequester.getIntelligenceCount()
         self.__nationalFragmentsData = bpRequester.getAllNationalFragmentsData()
         selectedNation = SelectedNation.getIndex()
         nationalAmount = self.__nationalFragmentsData.get(selectedNation, 0)

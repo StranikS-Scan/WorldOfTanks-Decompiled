@@ -20,6 +20,10 @@ def isDemonstrator(attrs):
     return __checkAccountAttr(attrs, ACCOUNT_ATTR.ARENA_CHANGE)
 
 
+def isDemonstratorExpert(attrs):
+    return __checkAccountAttr(attrs, ACCOUNT_ATTR.BATTLE_TYPE_CHANGE)
+
+
 def isRoamingEnabled(attrs):
     return __checkAccountAttr(attrs, ACCOUNT_ATTR.ROAMING)
 

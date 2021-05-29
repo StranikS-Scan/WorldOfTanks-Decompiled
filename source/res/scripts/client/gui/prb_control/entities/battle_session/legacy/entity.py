@@ -36,7 +36,7 @@ class BattleSessionListEntryPoint(LegacyEntryPoint):
         raise SoftException('BattleSession can be created through the web only')
 
     def join(self, ctx, callback=None):
-        g_eventDispatcher.loadBattleSessionList()
+        g_eventDispatcher.restoreBattleSessionList()
         if callback:
             callback(True)
 

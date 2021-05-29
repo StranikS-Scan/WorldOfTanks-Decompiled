@@ -14,6 +14,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.09	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <speedLimits>
     <forward>	55	</forward>
@@ -65,6 +71,13 @@
       <undamaged>	vehicles/italy/It20_Carro_Combattimento_45t/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/italy/It20_Carro_Combattimento_45t/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/italy/It20_Carro_Combattimento_45t/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <It20_Carro_Combattimento_45t_3Dst_MG>
+          <undamaged>	vehicles/italy/It20_Carro_Combattimento_45t/_skins/It20_Carro_Combattimento_45t_3Dst_MG/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/italy/It20_Carro_Combattimento_45t/_skins/It20_Carro_Combattimento_45t_3Dst_MG/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/italy/It20_Carro_Combattimento_45t/_skins/It20_Carro_Combattimento_45t_3Dst_MG/crash/lod0/Hull.model	</exploded>
+        </It20_Carro_Combattimento_45t_3Dst_MG>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -88,8 +101,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.984278 0.526206 2.14762	</rayStart>
-        <rayEnd>	0.984278 0.333027 2.09586	</rayEnd>
+        <rayStart>	-1.14564 0.561995 2.01406	</rayStart>
+        <rayEnd>	-1.14564 0.368817 1.9623	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.35	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -867,6 +880,76 @@
         <anchorPosition>	1.77023 0.285098 0.370273	</anchorPosition>
         <anchorDirection>	0.913132 0.407663 0.000592768	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15055	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It20_Carro_Combattimento_45t_3Dst_MG	</compatibleModels>
+        <position>	-1.31586 1.13088 3.04948	</position>
+        <rotation>	0.496043 0.00103496 3.14128	</rotation>
+        <scale>	0.574695 0.346212 0.574692	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.34893	</clipAngle>
+        <anchorPosition>	-1.31578 0.23001 3.09707	</anchorPosition>
+        <anchorDirection>	0.000808881 0.879473 0.475948	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15056	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It20_Carro_Combattimento_45t_3Dst_MG	</compatibleModels>
+        <position>	1.31588 1.12833 3.05413	</position>
+        <rotation>	0.496043 0.00103496 3.14128	</rotation>
+        <scale>	0.574696 0.346213 0.574692	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.34893	</clipAngle>
+        <anchorPosition>	1.31596 0.227462 3.10173	</anchorPosition>
+        <anchorDirection>	0.000808857 0.879473 0.475949	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15057	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It20_Carro_Combattimento_45t_3Dst_MG	</compatibleModels>
+        <position>	-1.81339 0.905774 2.04187	</position>
+        <rotation>	1.53702 -1.52005 -3.1102	</rotation>
+        <scale>	0.527542 0.317806 0.527539	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.34893	</clipAngle>
+        <anchorPosition>	-1.73689 -0.0856255 2.04039	</anchorPosition>
+        <anchorDirection>	-0.999243 0.0337531 0.0193303	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15058	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It20_Carro_Combattimento_45t_3Dst_MG	</compatibleModels>
+        <position>	1.8138 0.945597 1.95168	</position>
+        <rotation>	1.53704 1.52 3.11016	</rotation>
+        <scale>	0.447003 0.269287 0.447	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.34893	</clipAngle>
+        <anchorPosition>	1.7373 -0.0458008 1.9502	</anchorPosition>
+        <anchorDirection>	0.999244 0.0337353 0.0193316	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15059	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It20_Carro_Combattimento_45t_3Dst_MG	</compatibleModels>
+        <position>	0.980942 1.47225 2.09484	</position>
+        <rotation>	0.319737 0.00104367 3.14125	</rotation>
+        <scale>	0.693787 0.417958 0.693784	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	0.980941 0.4832 2.09476	</anchorPosition>
+        <anchorDirection>	0.000670802 0.949318 0.314316	</anchorDirection>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -874,6 +957,9 @@
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
+    <turretPitches>
+      <turret>	0.000000	</turret>
+    </turretPitches>
     <camouflage>
       <density>	99.6323 100.878	</density>
       <aoTextureSize>	1024 1024	</aoTextureSize>
@@ -909,6 +995,13 @@
         <undamaged>	vehicles/italy/It20_Carro_Combattimento_45t/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/italy/It20_Carro_Combattimento_45t/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/italy/It20_Carro_Combattimento_45t/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <It20_Carro_Combattimento_45t_3Dst_MG>
+            <undamaged>	vehicles/italy/It20_Carro_Combattimento_45t/_skins/It20_Carro_Combattimento_45t_3Dst_MG/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/italy/It20_Carro_Combattimento_45t/_skins/It20_Carro_Combattimento_45t_3Dst_MG/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/italy/It20_Carro_Combattimento_45t/_skins/It20_Carro_Combattimento_45t_3Dst_MG/crash/lod0/Chassis.model	</exploded>
+          </It20_Carro_Combattimento_45t_3Dst_MG>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1787,6 +1880,13 @@
             <undamaged>	vehicles/italy/It20_Carro_Combattimento_45t/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/italy/It20_Carro_Combattimento_45t/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/italy/It20_Carro_Combattimento_45t/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <It20_Carro_Combattimento_45t_3Dst_MG>
+                <undamaged>	vehicles/italy/It20_Carro_Combattimento_45t/_skins/It20_Carro_Combattimento_45t_3Dst_MG/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/italy/It20_Carro_Combattimento_45t/_skins/It20_Carro_Combattimento_45t_3Dst_MG/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/italy/It20_Carro_Combattimento_45t/_skins/It20_Carro_Combattimento_45t_3Dst_MG/crash/lod0/Gun_01.model	</exploded>
+              </It20_Carro_Combattimento_45t_3Dst_MG>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/italy/It20_Carro_Combattimento_45t/collision/Gun_01.model	</collisionModelServer>
@@ -1864,6 +1964,13 @@
         <undamaged>	vehicles/italy/It20_Carro_Combattimento_45t/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/italy/It20_Carro_Combattimento_45t/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/italy/It20_Carro_Combattimento_45t/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <It20_Carro_Combattimento_45t_3Dst_MG>
+            <undamaged>	vehicles/italy/It20_Carro_Combattimento_45t/_skins/It20_Carro_Combattimento_45t_3Dst_MG/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It20_Carro_Combattimento_45t/_skins/It20_Carro_Combattimento_45t_3Dst_MG/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/italy/It20_Carro_Combattimento_45t/_skins/It20_Carro_Combattimento_45t_3Dst_MG/crash/lod0/Turret_01.model	</exploded>
+          </It20_Carro_Combattimento_45t_3Dst_MG>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/italy/It20_Carro_Combattimento_45t/collision/Turret_01.model	</collisionModelServer>
@@ -2488,6 +2595,48 @@
           <clipAngle>	0.000000	</clipAngle>
           <anchorPosition>	-1.15321 0.654148 -0.453195	</anchorPosition>
           <anchorDirection>	-0.551308 0.834142 0.0163469	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35044	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	It20_Carro_Combattimento_45t_3Dst_MG	</compatibleModels>
+          <position>	-0.94044 1.82806 0.678658	</position>
+          <rotation>	0.786679 -0.846475 -3.10693	</rotation>
+          <scale>	0.453185 0.104779 0.453184	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.25131	</clipAngle>
+          <anchorPosition>	-0.985515 0.396691 0.532453	</anchorPosition>
+          <anchorDirection>	-0.552911 0.705776 0.44291	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35045	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	It20_Carro_Combattimento_45t_3Dst_MG	</compatibleModels>
+          <position>	0.884228 1.85581 0.704619	</position>
+          <rotation>	0.786695 0.846478 3.10685	</rotation>
+          <scale>	0.518859 0.119963 0.518858	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.25131	</clipAngle>
+          <anchorPosition>	0.93316 0.431499 0.562838	</anchorPosition>
+          <anchorDirection>	0.552971 0.705763 0.442856	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35046	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	It20_Carro_Combattimento_45t_3Dst_MG	</compatibleModels>
+          <position>	-0.36458 2.13925 -2.50761	</position>
+          <rotation>	1.80598 -0.0145102 -0.0126431	</rotation>
+          <scale>	0.647206 0.2177 0.647209	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.809803	</clipAngle>
+          <anchorPosition>	-0.36544 0.648112 -2.67544	</anchorPosition>
+          <anchorDirection>	0.00146764 0.233007 -0.972474	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>

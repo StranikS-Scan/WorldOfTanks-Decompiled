@@ -238,7 +238,7 @@ class VehicleStateController(IBattleController):
         self.notifyStateChanged(VEHICLE_VIEW_STATE.PLAYER_INFO, vehicleID)
         self.__vehicleID = vehicleID
         self.__updater = _VehicleUpdater(self, self.__vehicleID)
-        self.__waitingTI.start()
+        self.__waitingTI.restart()
 
     def getControllingVehicle(self):
         vehicle = None

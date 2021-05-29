@@ -182,6 +182,7 @@ def start():
                 ServiceLocator.gameplay.start()
         else:
             ServiceLocator.gameplay.start()
+        BigWorld.loginEntered()
         if not g_replayCtrl.isPlaying:
             WebBrowser.initExternalCache()
         return
@@ -293,9 +294,12 @@ def onGeometryMapped(spaceID, path):
     arenaName = path.split('/')[-1]
     BigWorld.notifySpaceChange(path)
     SoundGroups.g_instance.preloadSoundGroups(arenaName)
+    from ArenaType import g_geometryNamesToIDs
+    return None if arenaName not in g_geometryNamesToIDs else g_geometryNamesToIDs[arenaName]
 
 
 def onDisconnected():
+    BigWorld.loginEntered()
     gui_personality.onDisconnected()
     VOIP.getVOIPManager().logout()
     VOIP.getVOIPManager().onDisconnected()

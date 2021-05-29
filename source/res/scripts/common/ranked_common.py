@@ -13,3 +13,10 @@ def getShieldsConfig(rankedConfig, now):
         cycle = season['cycles'].get(cycleID, {})
         result.update(cycle.get('shields', rankedConfig['shields']))
     return result
+
+
+class SwitchState(object):
+    ENABLED = 'enabled'
+    DISABLED = 'disabled'
+    HIDDEN = 'hidden'
+    ALL = ('enabled', 'disabled', 'hidden')

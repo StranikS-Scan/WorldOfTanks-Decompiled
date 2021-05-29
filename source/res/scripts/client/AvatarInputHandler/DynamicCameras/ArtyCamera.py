@@ -9,11 +9,16 @@ import math_utils
 from AvatarInputHandler import aih_global_binding, cameras
 from AvatarInputHandler.AimingSystems.ArtyAimingSystem import ArtyAimingSystem
 from AvatarInputHandler.AimingSystems.ArtyAimingSystemRemote import ArtyAimingSystemRemote
-from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings
+from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings, SPGScrollSmoother
+from AvatarInputHandler.DynamicCameras.camera_switcher import CameraSwitcher, SwitchTypes, CameraSwitcherCollection, SwitchToPlaces, TRANSITION_DIST_HYSTERESIS
 from AvatarInputHandler.cameras import readFloat, readVec2, ImpulseReason
 from ProjectileMover import collideDynamicAndStatic
+from account_helpers.settings_core.settings_constants import SPGAim
+from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_WARNING
 from helpers.CallbackDelayer import CallbackDelayer
+_SEARCH_COLLISION_DEPTH = 1
+_OFFSET_FROM_NEAR_PLANE = 0.01
 
 class Hysteresis(object):
     threshold = property(lambda self: self.__threshold)
@@ -74,6 +79,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         CallbackDelayer.__init__(self)
         self.__positionOscillator = None
         self.__positionNoiseOscillator = None
+        self.__switchers = CameraSwitcherCollection(cameraSwitchers=[CameraSwitcher(switchType=SwitchTypes.FROM_TRANSITION_DIST_AS_MAX, switchToName=CTRL_MODE_NAME.STRATEGIC, switchToPos=0.0)], isEnabled=True)
         self.__dynamicCfg = CameraDynamicConfig()
         self._readConfigs(dataSec)
         self.__cam = BigWorld.CursorCamera()
@@ -92,6 +98,10 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.__rotation = 0.0
         self.__positionHysteresis = None
         self.__timeHysteresis = None
+        self.__transitionEnabled = True
+        self.__scrollSmoother = SPGScrollSmoother(0.3)
+        self.__collisionDist = 0.0
+        self.__camViewPoint = Vector3()
         return
 
     @staticmethod
@@ -115,6 +125,8 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.__sourceMatrix = Matrix()
         self.__targetMatrix = Matrix()
         self.__rotation = 0.0
+        self.__enableSwitchers()
+        self.__scrollSmoother.setTime(self._cfg['scrollSmoothingTime'])
 
     def destroy(self):
         self.disable()
@@ -127,33 +139,66 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         CameraWithSettings.destroy(self)
         return
 
-    def enable(self, targetPos, saveDist):
+    def enable(self, targetPos, saveDist, switchToPos=None, switchToPlace=None):
         self.__prevTime = 0.0
+        if switchToPlace == SwitchToPlaces.TO_TRANSITION_DIST:
+            self.__camDist = math_utils.clamp(self._cfg['distRange'][0], self._cfg['distRange'][1], self._cfg['transitionDist'])
+        elif switchToPlace == SwitchToPlaces.TO_RELATIVE_POS and switchToPos is not None:
+            minDist, maxDist = self._cfg['distRange']
+            self.__camDist = (maxDist - minDist) * switchToPos + minDist
+        elif switchToPlace == SwitchToPlaces.TO_NEAR_POS and switchToPos is not None:
+            minDist, maxDist = self._cfg['distRange']
+            self.__camDist = math_utils.clamp(minDist, maxDist, switchToPos)
+        elif self.settingsCore.getSetting(SPGAim.AUTO_CHANGE_AIM_MODE):
+            self.__camDist = math_utils.clamp(self._cfg['distRange'][0], self._cfg['transitionDist'], self.__camDist)
+        self.__desiredCamDist = self.__camDist
+        self.__scrollSmoother.start(self.__desiredCamDist)
+        self.__enableSwitchers()
         self.__aimingSystem.enable(targetPos)
         self.__positionHysteresis.update(Vector3(0.0, 0.0, 0.0))
         self.__timeHysteresis.update(BigWorld.timeExact())
         camTarget = MatrixProduct()
+        self.__rotation = max(self.__aimingSystem.direction.pitch, self._cfg['minimalPitch'])
+        cameraDirection = self.__getCameraDirection()
+        self.__targetMatrix.translation = self.aimingSystem.aimPoint - cameraDirection.scale(self.__camDist)
         self.__cam.target = camTarget
+        self.__cam.target.b = self.__targetMatrix
+        self.__sourceMatrix = math_utils.createRotationMatrix((cameraDirection.yaw, -cameraDirection.pitch, 0.0))
         self.__cam.source = self.__sourceMatrix
         self.__cam.forceUpdate()
         BigWorld.camera(self.__cam)
         BigWorld.player().positionControl.moveTo(self.__aimingSystem.hitPoint)
         BigWorld.player().positionControl.followCamera(False)
-        self.__rotation = 0.0
         self.__cameraUpdate()
         self.delayCallback(0.01, self.__cameraUpdate)
         self.__needReset = 1
+        return
 
     def disable(self):
+        self.__scrollSmoother.stop()
         if self.__aimingSystem is not None:
             self.__aimingSystem.disable()
         self.stopCallback(self.__cameraUpdate)
+        self.__switchers.clear()
         self.__positionOscillator.reset()
         return
 
     def teleport(self, pos):
         self.__aimingSystem.updateTargetPos(pos)
         self.update(0.0, 0.0, 0.0)
+
+    def getDistRatio(self):
+        minDist, maxDist = self._cfg['distRange']
+        return (self.__desiredCamDist - minDist) / (maxDist - minDist)
+
+    def getCurrentCamDist(self):
+        return self.__desiredCamDist
+
+    def getCamDistRange(self):
+        return self._cfg['distRange']
+
+    def getCamTransitionDist(self):
+        return self._cfg['transitionDist']
 
     def update(self, dx, dy, dz, updateByKeyboard=False):
         self.__curSense = self._cfg['keySensitivity'] if updateByKeyboard else self._cfg['sensitivity']
@@ -205,6 +250,11 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
             aimOffset = replayCtrl.getAimClipPosition()
         else:
+            proj = BigWorld.projection()
+            aimLocalPos = Matrix(self.__cam.matrix).applyPoint(aimWorldPos)
+            if aimLocalPos.z < 0:
+                aimLocalPos.z = max(0.0, proj.nearPlane - _OFFSET_FROM_NEAR_PLANE)
+                aimWorldPos = Matrix(self.__cam.invViewMatrix).applyPoint(aimLocalPos)
             aimOffset = cameras.projectPoint(aimWorldPos)
             aimOffset = Vector2(math_utils.clamp(-0.95, 0.95, aimOffset.x), math_utils.clamp(-0.95, 0.95, aimOffset.y))
             if replayCtrl.isRecording:
@@ -241,11 +291,12 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         return direction
 
     def __getDesiredCameraDistance(self):
-        distRange = self._cfg['distRange']
+        distRange = self.__switchersDistRange()
         self.__desiredCamDist -= self.__dxdydz.z * self.__curSense
         self.__desiredCamDist = math_utils.clamp(distRange[0], distRange[1], self.__desiredCamDist)
         self.__desiredCamDist = self.__aimingSystem.overrideCamDist(self.__desiredCamDist)
         self._cfg['camDist'] = self.__camDist
+        self.__scrollSmoother.moveTo(self.__desiredCamDist, distRange)
         return self.__desiredCamDist
 
     def __updateTrajectoryDrawer(self):
@@ -268,7 +319,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         return useHighPitch
 
     def __getCollisionTestOrigin(self, aimPoint, direction):
-        distRange = self._cfg['distRange']
+        distRange = self.__switchersDistRange()
         vehiclePosition = BigWorld.player().getVehicleAttached().position
         collisionTestOrigin = Vector3(vehiclePosition)
         if direction.x * direction.x > direction.z * direction.z and not math_utils.almostZero(direction.x):
@@ -281,16 +332,18 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         return collisionTestOrigin
 
     def __resolveCollisions(self, aimPoint, distance, direction):
-        distRange = self._cfg['distRange']
+        distRange = self.__switchersDistRange()
+        collisionDist = 0.0
         collisionTestOrigin = self.__getCollisionTestOrigin(aimPoint, direction)
         sign = copysign(1.0, distance * distance - (aimPoint - collisionTestOrigin).lengthSquared)
         srcPoint = collisionTestOrigin
-        endPoint = aimPoint - direction.scale(distance + sign * distRange[0])
+        endPoint = aimPoint - direction.scale(distance + sign * (distRange[0] + _SEARCH_COLLISION_DEPTH))
         collision = collideDynamicAndStatic(srcPoint, endPoint, (BigWorld.player().playerVehicleID,))
         if collision:
             collisionDistance = (aimPoint - collision[0]).length
+            collisionDist = collisionDistance - sign * distRange[0]
             if sign * (collisionDistance - distance) < distRange[0]:
-                distance = collisionDistance - sign * distRange[0]
+                distance = collisionDist
         if math_utils.almostZero(self.__rotation):
             srcPoint = aimPoint - direction.scale(distance)
             endPoint = aimPoint
@@ -300,14 +353,14 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
                 if collision[1]:
                     self.__positionHysteresis.update(aimPoint)
                     self.__timeHysteresis.update(self.__prevTime)
-        return distance
+        return collisionDist
 
     def __calculateIdealState(self, deltaTime):
         aimPoint = self.__aimingSystem.aimPoint
         direction = self.__aimingSystem.direction
         impactPitch = max(direction.pitch, self._cfg['minimalPitch'])
         self.__rotation = max(self.__rotation, impactPitch)
-        distRange = self._cfg['distRange']
+        distRange = self.__switchersDistRange()
         distanceCurSq = (aimPoint - BigWorld.player().getVehicleAttached().position).lengthSquared
         distanceMinSq = distRange[0] ** 2.0
         forcedPitch = impactPitch
@@ -320,26 +373,32 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.__rotation = math_utils.clamp(minPitch, maxPitch, self.__rotation + angularShift)
         desiredDistance = self.__getDesiredCameraDistance()
         cameraDirection = self.__getCameraDirection()
-        desiredDistance = self.__resolveCollisions(aimPoint, desiredDistance, cameraDirection)
-        desiredDistance = math_utils.clamp(distRange[0], distRange[1], desiredDistance)
-        translation = aimPoint - cameraDirection.scale(desiredDistance)
+        collisionDist = self.__resolveCollisions(aimPoint, desiredDistance, cameraDirection)
+        collisionDist = max(distRange[0], collisionDist)
+        desiredDistance = self.__scrollSmoother.update(deltaTime)
         rotation = Vector3(cameraDirection.yaw, -cameraDirection.pitch, 0.0)
-        return (translation, rotation)
+        return (rotation, desiredDistance, collisionDist)
 
-    def __interpolateStates(self, deltaTime, translation, rotation):
+    def __interpolateStates(self, deltaTime, rotation, desiredDistance, collisionDist):
         lerpParam = math_utils.clamp(0.0, 1.0, deltaTime * self._cfg['interpolationSpeed'])
         self.__sourceMatrix = slerp(self.__sourceMatrix, rotation, lerpParam)
-        self.__targetMatrix.translation = math_utils.lerp(self.__targetMatrix.translation, translation, lerpParam)
+        camDirection = Vector3()
+        camDirection.setPitchYaw(-self.__sourceMatrix.pitch, self.__sourceMatrix.yaw)
+        camDirection.normalise()
+        self.__camViewPoint = math_utils.lerp(self.__camViewPoint, self.__aimingSystem.aimPoint, lerpParam)
+        self.__collisionDist = math_utils.lerp(self.__collisionDist, collisionDist, lerpParam)
+        desiredDistance = max(desiredDistance, self.__collisionDist)
+        self.__targetMatrix.translation = self.__camViewPoint - camDirection.scale(desiredDistance)
         return (self.__sourceMatrix, self.__targetMatrix)
 
     def __cameraUpdate(self):
         deltaTime = self.__updateTime()
+        self.__aimOffset = self.__calculateAimOffset(self.__aimingSystem.aimPoint)
         self.__handleMovement()
         aimPoint = Vector3(self.__aimingSystem.aimPoint)
-        self.__aimOffset = self.__calculateAimOffset(aimPoint)
         self.__updateTrajectoryDrawer()
-        translation, rotation = self.__calculateIdealState(deltaTime)
-        self.__interpolateStates(deltaTime, translation, math_utils.createRotationMatrix(rotation))
+        rotation, desiredDistance, collisionDist = self.__calculateIdealState(deltaTime)
+        self.__interpolateStates(deltaTime, math_utils.createRotationMatrix(rotation), desiredDistance, collisionDist)
         self.__camDist = aimPoint - self.__targetMatrix.translation
         self.__camDist = self.__camDist.length
         self.__cam.source = self.__sourceMatrix
@@ -350,8 +409,14 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
             self.__prevAimPoint = aimPoint
         self.__updateOscillator(deltaTime)
         self.__aimingSystem.update(deltaTime)
+        if self.__onChangeControlMode is not None and self.__switchers.needToSwitch(self.__dxdydz.z, self.__desiredCamDist, self._cfg['distRange'][0], self._cfg['distRange'][1], self._cfg['transitionDist']):
+            self.__onChangeControlMode(*self.__switchers.getSwitchParams())
+        if not self.__transitionEnabled and self.__desiredCamDist - TRANSITION_DIST_HYSTERESIS <= self._cfg['transitionDist']:
+            self.__transitionEnabled = True
+            self.__enableSwitchers(False)
         if not self.__autoUpdatePosition:
             self.__dxdydz = Vector3(0, 0, 0)
+        return 0.01
 
     def __updateOscillator(self, deltaTime):
         if ArtyCamera.isCameraDynamic():
@@ -361,6 +426,12 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
             self.__positionOscillator.reset()
             self.__positionNoiseOscillator.reset()
         self.__cam.target.a = math_utils.createTranslationMatrix(self.__positionOscillator.deviation + self.__positionNoiseOscillator.deviation)
+
+    def __switchersDistRange(self):
+        distRange = self._cfg['distRange']
+        if self.__switchers.isEnabled():
+            distRange = self.__switchers.getDistLimitationForSwitch(distRange[0], distRange[1], self._cfg['transitionDist'])
+        return distRange
 
     def _readConfigs(self, dataSec):
         if not dataSec:
@@ -378,12 +449,14 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         bcfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.005, 10.0, 0.025)
         bcfg['angularSpeed'] = readFloat(dataSec, 'angularSpeed', pi / 720.0, pi / 0.5, pi / 360.0)
         bcfg['distRange'] = readVec2(dataSec, 'distRange', (1.0, 1.0), (10000.0, 10000.0), (2.0, 30.0))
+        bcfg['transitionDist'] = readFloat(dataSec, 'transitionDist', 1.0, 10000.0, 60.0)
         bcfg['minimalPitch'] = readFloat(dataSec, 'minimalPitch', pi / 36.0, pi / 3.0, pi / 18.0)
         bcfg['maximalPitch'] = readFloat(dataSec, 'maximalPitch', pi / 6.0, pi / 3.0, pi / 3.5)
         bcfg['interpolationSpeed'] = readFloat(dataSec, 'interpolationSpeed', 0.0, 10.0, 5.0)
         bcfg['highPitchThreshold'] = readFloat(dataSec, 'highPitchThreshold', 0.1, 10.0, 3.0)
         bcfg['hTimeThreshold'] = readFloat(dataSec, 'hysteresis/timeThreshold', 0.0, 10.0, 0.5)
         bcfg['hPositionThreshold'] = readFloat(dataSec, 'hysteresis/positionThreshold', 0.0, 100.0, 7.0)
+        bcfg['scrollSmoothingTime'] = readFloat(dataSec, 'scrollSmoothingTime', 0.0, 1.0, 0.3)
 
     def _readUserCfg(self):
         ucfg = self._userCfg
@@ -406,6 +479,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         cfg['sensitivity'] = bcfg['sensitivity']
         cfg['scrollSensitivity'] = bcfg['scrollSensitivity']
         cfg['distRange'] = bcfg['distRange']
+        cfg['transitionDist'] = bcfg['transitionDist']
         cfg['angularSpeed'] = bcfg['angularSpeed']
         cfg['minimalPitch'] = bcfg['minimalPitch']
         cfg['maximalPitch'] = bcfg['maximalPitch']
@@ -413,9 +487,29 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         cfg['highPitchThresholdSq'] = bcfg['highPitchThreshold'] * bcfg['highPitchThreshold']
         cfg['hTimeThreshold'] = bcfg['hTimeThreshold']
         cfg['hPositionThresholdSq'] = bcfg['hPositionThreshold'] * bcfg['hPositionThreshold']
+        cfg['scrollSmoothingTime'] = bcfg['scrollSmoothingTime']
         cfg['keySensitivity'] *= ucfg['keySensitivity']
         cfg['sensitivity'] *= ucfg['sensitivity']
         cfg['scrollSensitivity'] *= ucfg['scrollSensitivity']
         cfg['camDist'] = ucfg['camDist']
         cfg['horzInvert'] = ucfg['horzInvert']
         cfg['vertInvert'] = ucfg['vertInvert']
+
+    def _handleSettingsChange(self, diff):
+        super(ArtyCamera, self)._handleSettingsChange(diff)
+        if SPGAim.AUTO_CHANGE_AIM_MODE in diff:
+            self.__enableSwitchers()
+        if SPGAim.SCROLL_SMOOTHING_ENABLED in diff:
+            self.__scrollSmoother.setIsEnabled(self.settingsCore.getSetting(SPGAim.SCROLL_SMOOTHING_ENABLED))
+
+    def _updateSettingsFromServer(self):
+        super(ArtyCamera, self)._updateSettingsFromServer()
+        if self.settingsCore.isReady:
+            self.__enableSwitchers()
+            self.__scrollSmoother.setIsEnabled(self.settingsCore.getSetting(SPGAim.SCROLL_SMOOTHING_ENABLED))
+
+    def __enableSwitchers(self, updateTransitionEnabled=True):
+        if updateTransitionEnabled and self.__desiredCamDist - TRANSITION_DIST_HYSTERESIS >= self._cfg['transitionDist']:
+            self.__transitionEnabled = False
+        if self.settingsCore.isReady:
+            self.__switchers.setIsEnabled(self.settingsCore.getSetting(SPGAim.AUTO_CHANGE_AIM_MODE) and self.__transitionEnabled)

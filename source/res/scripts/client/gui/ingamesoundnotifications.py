@@ -1,71 +1,86 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/IngameSoundNotifications.py
-from collections import namedtuple
+from random import randrange
 from functools import partial
+from collections import namedtuple
+from debug_utils import LOG_WARNING
+import Math
 import BigWorld
 import ResMgr
 import BattleReplay
+import Event
 import SoundGroups
-import WWISE
-from debug_utils import LOG_WARNING
-from Math import Matrix
+import VSE
+from visual_script_client.contexts.sound_notifications_context import SoundNotificationsContext
+from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 
-class IngameSoundNotifications(object):
-    __CFG_SECTION_PATH = 'gui/sound_notifications.xml'
-    QueueItem = namedtuple('QueueItem', ('soundPath', 'time', 'minTimeBetweenEvents', 'idToBind', 'checkFn', 'soundPos', 'soundObjectName', 'matrixProvider'))
+class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
+    __EVENTS_PATH = 'gui/sound_notifications.xml'
+    __CIRCUMSTANCES_PATH = 'gui/sound_circumstances.xml'
+    __DEFAULT_LIFETIME = 3.0
+    QueueItem = namedtuple('QueueItem', ('eventName', 'priority', 'time', 'vehicleID', 'checkFn', 'position', 'boundVehicleID'))
+    PlayingEvent = namedtuple('PlayingEvent', ('eventName', 'vehicle', 'position', 'boundVehicle', 'is2D'))
 
     def __init__(self):
-        self.__activeEvents = None
-        self.__soundQueues = None
+        CallbackDelayer.__init__(self)
+        TimeDeltaMeter.__init__(self)
         self.__isEnabled = False
         self.__enabledSoundCategories = set()
-        self.__lastEnqueuedTime = {}
         self.__remappedNotifications = {}
-        self.__readConfig()
+        self.__events = {}
+        self.__eventsPriorities = {}
+        self.__eventsCooldowns = {}
+        self.__fxCooldowns = {}
+        self.__circumstances = {}
+        self.__circumstancesWeights = {}
+        self.__circumstancesGroupsWeights = {}
+        self.__playingEvents = {}
+        self.__queues = {}
+        self.onPlayEvent = Event.Event()
+        self.onAddEvent = Event.Event()
+        self.__readConfigs()
+        self._vsePlan = VSE.Plan()
+        self._vsePlan.load('soundNotifications', 'CLIENT')
+        self.__soundNotificationsContext = None
         return
 
     def start(self):
-        self.__soundQueues = {'fx': [],
-         'voice': []}
         self.__enabledSoundCategories = set(('fx', 'voice'))
         self.__isEnabled = True
-        self.__activeEvents = {'fx': None,
-         'voice': None}
-        self.__lastEnqueuedTime = {}
-        return
+        self.__soundNotificationsContext = SoundNotificationsContext()
+        self._vsePlan.setContext(self.__soundNotificationsContext)
+        self._vsePlan.start()
+        self.measureDeltaTime()
+        self.delayCallback(0.0, self.__tick)
 
     def destroy(self):
-        if self.__activeEvents:
-            for event in self.__activeEvents.itervalues():
-                if event is not None:
-                    event['sound'].stop()
-
-        self.__activeEvents = None
-        self.__soundQueues = None
+        CallbackDelayer.destroy(self)
         self.__isEnabled = False
+        self._vsePlan.stop()
+        self._vsePlan = None
+        if self.__soundNotificationsContext is not None:
+            self.__soundNotificationsContext.destroy()
+            self.__soundNotificationsContext = None
+        self.clear()
+        self.__eventsPriorities = {}
+        self.__eventsCooldowns = {}
+        self.__fxCooldowns = {}
+        self.__circumstancesWeights = {}
+        self.__circumstancesGroupsWeights = {}
         return
 
-    def cancel(self, eventName, continuePlaying=True):
-        for category in ('fx', 'voice'):
-            eventDesc = self.__events[eventName].get(category, None)
-            if eventDesc is not None:
-                activeEvent = self.__activeEvents[category]
-                soundPath = eventDesc['sound']
-                if activeEvent is not None and activeEvent['soundPath'] == soundPath:
-                    activeEvent['sound'].stop()
-                    self.__activeEvents[category] = None
-                    if continuePlaying:
-                        self.__playFirstFromQueue(category)
-                if soundPath in self.__soundQueues[category]:
-                    self.__soundQueues[category].remove(soundPath)
+    def isPlaying(self, eventName):
+        for event in self.__playingEvents.values():
+            if event and event.eventName == eventName:
+                return True
 
-        return
+        return False
 
-    def play(self, eventName, vehicleIdToBind=None, checkFn=None, eventPos=None, soundObjectName=None, matrixProvider=None):
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
-            return
-        elif not self.__isEnabled or BigWorld.isWindowVisible() is False:
+    def setRemapping(self, remap):
+        self.__remappedNotifications = remap
+
+    def play(self, eventName, vehicleID=None, checkFn=None, position=None, boundVehicleID=None):
+        if self.__checkPause():
             return
         else:
             eventName = self.__remappedNotifications.get(eventName, eventName)
@@ -75,189 +90,244 @@ class IngameSoundNotifications(object):
             if event is None:
                 LOG_WARNING("Couldn't find %s event" % eventName)
                 return
-            queues = self.__soundQueues
-            enabledCategories = self.__enabledSoundCategories
-            time = BigWorld.time()
-            for category, soundDesc in event.iteritems():
-                if category in enabledCategories and soundDesc['sound'] != '':
-                    rules = soundDesc['playRules']
-                    idToBind = vehicleIdToBind
-                    if idToBind is None and soundDesc['shouldBindToPlayer']:
-                        if BigWorld.player().vehicle is not None:
-                            idToBind = BigWorld.player().vehicle.id
-                    soundPath = soundDesc['sound']
-                    minTimeBetweenEvents = soundDesc['minTimeBetweenEvents']
-                    queueItem = IngameSoundNotifications.QueueItem(soundPath, time + soundDesc['timeout'], minTimeBetweenEvents, idToBind, checkFn, eventPos, soundObjectName, matrixProvider)
-                    if rules == 0:
-                        try:
-                            if matrixProvider is not None:
-                                mProv = Matrix(matrixProvider)
-                                mProvPos = mProv.translation
-                                SoundGroups.g_instance.playSoundPos(soundDesc['sound'], mProvPos)
-                            elif eventPos is not None:
-                                SoundGroups.g_instance.playCameraOriented(soundDesc['sound'], eventPos)
-                            else:
-                                SoundGroups.g_instance.playSound2D(soundDesc['sound'])
-                        except Exception:
-                            pass
-
-                        continue
-                    else:
-                        lastEnqueuedTime = self.__lastEnqueuedTime.get(soundPath)
-                        if lastEnqueuedTime is not None and time - lastEnqueuedTime < minTimeBetweenEvents:
-                            continue
-                        self.__lastEnqueuedTime[soundPath] = time
-                        if rules == 1:
-                            clearActiveEvents = True
-                            if self.__activeEvents[category] is not None:
-                                clearActiveEvents = False
-                            self.__clearQueue(category, clearActiveEvents)
-                            queues[category].append(queueItem)
-                        elif rules == 2:
-                            queues[category].insert(0, queueItem)
-                        elif rules == 3:
-                            queues[category].append(queueItem)
-                    if self.__activeEvents[category] is None:
-                        self.__playFirstFromQueue(category)
-
+            if 'chance' in event and randrange(1, 100) > int(event['chance']):
+                return
+            self.__playFX(eventName, vehicleID, position)
+            if 'queue' not in event or not self.isCategoryEnabled('voice'):
+                return
+            predelay = float(event['predelay']) if 'predelay' in event else 0
+            BigWorld.callback(predelay, partial(self.__playDelayed, eventName, vehicleID, checkFn, position, boundVehicleID))
             return
 
-    def enable(self, isEnabled):
-        self.__isEnabled = isEnabled
-        if not isEnabled:
-            for category in ('fx', 'voice'):
-                self.__clearQueue(category)
+    def __playDelayed(self, eventName, vehicleID=None, checkFn=None, position=None, boundVehicleID=None):
+        event = self.__events.get(eventName, None)
+        queueNum = int(event['queue'])
+        priority = int(self.getEventInfo(eventName, 'priority'))
+        queueItem = self.QueueItem(eventName, priority, BigWorld.time(), vehicleID, checkFn, position, boundVehicleID)
+        index = 0
+        for item in self.__queues[queueNum]:
+            if item.priority < queueItem.priority:
+                break
+            index += 1
+
+        self.__queues[queueNum].insert(index, queueItem)
+        if not self.__playingEvents[queueNum]:
+            self.__playFirstFromQueue(queueNum)
+        else:
+            self.onAddEvent(eventName)
+        return
+
+    def __playFX(self, eventName, vehicleID, position):
+        if eventName in self.__fxCooldowns and self.__fxCooldowns[eventName]:
+            return
+        else:
+            event = self.__events.get(eventName, None)
+            if 'fxEvent' not in event or not self.isCategoryEnabled('fx'):
+                return
+            if 'cooldownFx' in event and float(event['cooldownFx']) > 0:
+                self.__fxCooldowns[eventName] = {'time': float(event['cooldownFx'])}
+            if vehicleID is not None:
+                vehicle = BigWorld.entity(vehicleID)
+                if vehicle:
+                    SoundGroups.g_instance.playSoundPos(event['fxEvent'], vehicle.position)
+            elif position is not None:
+                SoundGroups.g_instance.playSoundPos(event['fxEvent'], position)
+            else:
+                SoundGroups.g_instance.playSound2D(event['fxEvent'])
+            return
+
+    def playNextQueueEvent(self, queueNum):
+        if self.__checkPause():
+            return
+        else:
+            self.__playingEvents[queueNum] = None
+            self.__playFirstFromQueue(queueNum)
+            return
+
+    def replayLastQueueEvent(self, queueNum):
+        if self.__checkPause():
+            return
+        if self.__playingEvents[queueNum]:
+            self.onPlayEvent(self.__playingEvents[queueNum].eventName)
+
+    def getFirstQueueEvent(self, queueNum):
+        return self.__queues[queueNum][0].eventName if self.__queues[queueNum] else ''
 
     def clear(self):
-        if self.__isEnabled:
-            self.enable(False)
-            self.enable(True)
+        for queueNum in self.__queues:
+            self.__queues[queueNum] = []
+
+        for queueNum in self.__playingEvents:
+            self.__playingEvents[queueNum] = None
+
+        return
+
+    def clearQueue(self, queueNum):
+        self.__queues[queueNum] = []
 
     def enableFX(self, isEnabled):
-        self.enableCategory('fx', isEnabled)
-
-    def enableVoices(self, isEnabled, clearQueue=True):
-        self.enableCategory('voice', isEnabled, clearQueue)
-
-    def enableCategory(self, category, isEnabled, clearQueue=True):
         if isEnabled:
-            self.__enabledSoundCategories.add(category)
+            self.__enabledSoundCategories.add('fx')
         else:
-            self.__enabledSoundCategories.remove(category)
-            if clearQueue:
-                self.__clearQueue(category)
+            self.__enabledSoundCategories.remove('fx')
 
-    def setRemapping(self, remap):
-        self.__remappedNotifications = remap
+    def enableVoices(self, isEnabled, clearQueues=True):
+        if isEnabled:
+            self.__enabledSoundCategories.add('voice')
+        else:
+            self.__enabledSoundCategories.remove('voice')
+            if clearQueues:
+                self.clear()
 
     def isCategoryEnabled(self, category):
         return True if category in self.__enabledSoundCategories else False
 
-    def isPlaying(self, eventName):
-        for category in ('fx', 'voice'):
-            eventDesc = self.__events[eventName].get(category, None)
-            if eventDesc is not None:
-                activeEvent = self.__activeEvents[category]
-                soundPath = eventDesc['sound']
-                if activeEvent is not None and activeEvent['soundPath'] == soundPath:
-                    return activeEvent['sound'].isPlaying
+    def getEventInfo(self, eventName, parameter):
+        if parameter == 'priority' and eventName in self.__eventsPriorities and self.__eventsPriorities[eventName]:
+            return self.__eventsPriorities[eventName]['priority']
+        return self.__events[eventName][parameter] if eventName in self.__events and parameter in self.__events[eventName] else ''
 
-        return False
+    def getPlayingEventData(self, queueNum, parameter):
+        playingEvent = self.__playingEvents[queueNum]
+        return getattr(playingEvent, parameter) if playingEvent and hasattr(playingEvent, parameter) else None
 
-    def __clearQueue(self, category, clearActiveEvents=True):
-        if self.__activeEvents[category] is not None:
-            if clearActiveEvents is True:
-                self.__activeEvents[category] = None
-        self.__soundQueues[category] = []
+    def getCircumstanceInfo(self, circIndex, parameter):
+        if parameter == 'weight':
+            if circIndex in self.__circumstancesWeights and self.__circumstancesWeights[circIndex]:
+                return self.__circumstancesWeights[circIndex]['weight']
+            if circIndex in self.__circumstances and 'group' in self.__circumstances[circIndex]:
+                groupName = self.__circumstances[circIndex]['group']
+                if groupName in self.__circumstancesGroupsWeights and self.__circumstancesGroupsWeights[groupName]:
+                    return self.__circumstancesGroupsWeights[groupName]['weight']
+        return self.__circumstances[circIndex][parameter] if circIndex in self.__circumstances and parameter in self.__circumstances[circIndex] else ''
+
+    def getCircumstanceIndex(self, circGroup, circName):
+        for circ in self.__circumstances.values():
+            if 'group' and 'name' and 'index' in circ and circ['group'] == circGroup and circ['name'] == circName:
+                return circ['index']
+
+    def setEventCooldown(self, eventName, cooldown):
+        if eventName in self.__events:
+            self.__eventsCooldowns[eventName] = {'time': cooldown}
+
+    def setEventPriority(self, eventName, priority, hold):
+        if eventName in self.__events:
+            self.__eventsPriorities[eventName] = {'priority': priority,
+             'time': hold}
+
+    def setCircumstanceWeight(self, circIndex, weight, hold):
+        if circIndex in self.__circumstances:
+            self.__circumstancesWeights[circIndex] = {'weight': weight,
+             'time': hold}
+
+    def setCircumstanceGroupWeight(self, groupName, weight, hold):
+        self.__circumstancesGroupsWeights[groupName] = {'weight': weight,
+         'time': hold}
+
+    def __checkPause(self):
+        shouldPause = False
+        if not self.__isEnabled or BigWorld.isWindowVisible() is False:
+            shouldPause = True
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying:
+            if replayCtrl.isTimeWarpInProgress or replayCtrl.isPaused:
+                shouldPause = True
+        if shouldPause:
+            self.clear()
+        return shouldPause
+
+    def __playFirstFromQueue(self, queueNum):
+        if not self.__queues[queueNum]:
+            self.__playingEvents[queueNum] = None
+            return
+        else:
+            queueItem = self.__queues[queueNum][0]
+            del self.__queues[queueNum][0]
+            checkCooldown = queueItem.eventName not in self.__eventsCooldowns or not self.__eventsCooldowns[queueItem.eventName]
+            checkVehicle = queueItem.vehicleID is None or BigWorld.entity(queueItem.vehicleID) is not None
+            checkFunction = queueItem.checkFn() if queueItem.checkFn else True
+            if checkFunction and checkVehicle and checkCooldown:
+                vehicle = BigWorld.entity(queueItem.vehicleID) if queueItem.vehicleID is not None else None
+                boundVehicle = BigWorld.entity(queueItem.boundVehicleID) if queueItem.boundVehicleID is not None else None
+                position = vehicle.position if vehicle else queueItem.position
+                self.__playingEvents[queueNum] = self.PlayingEvent(queueItem.eventName, vehicle, position, boundVehicle, position is None)
+                self.onPlayEvent(queueItem.eventName)
+            else:
+                self.__playFirstFromQueue(queueNum)
+            return
+
+    def __readConfigs(self):
+        eventsSec = ResMgr.openSection(self.__EVENTS_PATH)
+        self.__events = {}
+        for eventSec in eventsSec.values():
+            eventName = eventSec.readString('name')
+            self.__events[eventName] = {}
+            for infoSec in eventSec.values():
+                self.__events[eventName][infoSec.name] = infoSec.asString
+                if infoSec.name == 'queue' and infoSec.asInt not in self.__queues:
+                    self.__queues[infoSec.asInt] = []
+                    self.__playingEvents[infoSec.asInt] = None
+
+        circsSec = ResMgr.openSection(self.__CIRCUMSTANCES_PATH)
+        self.__circumstances = {}
+        for circSec in circsSec.values():
+            index = circSec.readString('index')
+            self.__circumstances[index] = {}
+            for infoSec in circSec.values():
+                self.__circumstances[index][infoSec.name] = infoSec.asString
+
         return
 
-    def __onSoundEnd(self, category, sound):
-        if self.__activeEvents is None:
-            return
-        else:
-            if WWISE.enabled:
-                if sound.isPlaying:
-                    BigWorld.callback(0.01, lambda : self.__onSoundEnd(category, sound))
-                else:
-                    self.__activeEvents[category] = None
-                    queue = self.__soundQueues[category]
-                    if queue:
-                        BigWorld.callback(0.01, partial(self.__playFirstFromQueue, category))
-            elif sound.state.find('playing') != -1:
-                BigWorld.callback(0.01, lambda : self.__onSoundEnd(category, sound))
-            else:
-                self.__activeEvents[category] = None
-                BigWorld.callback(0.01, partial(self.__playFirstFromQueue, category))
-            return
+    def __tick(self):
+        self.__tickGroup(self.__eventsCooldowns)
+        self.__tickGroup(self.__fxCooldowns)
+        self.__tickGroup(self.__eventsPriorities)
+        self.__tickGroup(self.__circumstancesWeights)
+        self.__tickGroup(self.__circumstancesGroupsWeights)
+        for queueNum in self.__queues:
+            self.__queues[queueNum] = [ item for item in self.__queues[queueNum] if self.__checkLifetime(item) ]
 
-    def __playFirstFromQueue(self, category):
-        if not self.__isEnabled:
-            return
-        else:
-            queue = self.__soundQueues[category]
-            time = BigWorld.time()
-            while queue:
-                soundPath, timeout, _, vehicleIdToBind, checkFn, sndPos, soundObjectName, matrixProvider = queue[0]
-                del queue[0]
-                if vehicleIdToBind is not None:
-                    vehicles = BigWorld.player().arena.vehicles
-                    vehicleInfo = vehicles.get(vehicleIdToBind)
-                    if vehicleInfo is None or not vehicleInfo['isAlive']:
-                        continue
-                if checkFn is not None and not checkFn():
-                    continue
-                if time > timeout:
-                    continue
-                if matrixProvider is not None:
-                    sound = SoundGroups.g_instance.WWgetSound(soundPath, soundObjectName, matrixProvider)
-                elif sndPos is not None:
-                    sound = SoundGroups.g_instance.getCameraOriented(soundPath, sndPos)
-                else:
-                    sound = SoundGroups.g_instance.getSound2D(soundPath)
-                if sound is not None:
-                    sound.setCallback(partial(self.__onSoundEnd, category))
-                    sound.play()
-                    self.__activeEvents[category] = {'sound': sound,
-                     'soundPath': soundPath}
-                return
+    def __checkLifetime(self, queueItem):
+        event = self.__events[queueItem.eventName]
+        lifetime = float(event['lifetime']) if 'lifetime' in event else self.__DEFAULT_LIFETIME
+        return queueItem.time + lifetime > BigWorld.time()
 
-            return
+    def __tickGroup(self, group):
+        delta = self.measureDeltaTime()
+        for name, info in group.items():
+            if not info:
+                continue
+            info['time'] = info['time'] - delta
+            if info['time'] < 0:
+                group[name] = None
 
-    def __readConfig(self):
-        sec = ResMgr.openSection(self.__CFG_SECTION_PATH)
-        events = {}
-        for eventSec in sec.values():
-            event = events[eventSec.name] = {}
-            for category in ('fx', 'voice'):
-                soundSec = eventSec[category]
-                if soundSec is not None:
-                    event[category] = {'sound': soundSec.readString('wwsound'),
-                     'playRules': soundSec.readInt('playRules'),
-                     'timeout': soundSec.readFloat('timeout', 3.0),
-                     'minTimeBetweenEvents': soundSec.readFloat('minTimeBetweenEvents', 0),
-                     'shouldBindToPlayer': soundSec.readBool('shouldBindToPlayer', False)}
-
-        self.__events = events
         return
 
 
 class ComplexSoundNotifications(object):
+    SPG_DISTANT_THREAT_SOUND = 'wpn_artillery_distant_threat'
+    RTPC_EXT_SPG_SIGHT = 'RTPC_ext_artillery_sight'
 
-    def __init__(self, ingameSoundNotifications):
-        self.__isAimingEnded = False
-        self.__ingameSoundNotifications = ingameSoundNotifications
+    def __init__(self):
+        self.__activeSounds = {}
 
     def destroy(self):
-        pass
+        for sound in self.__activeSounds.values():
+            sound.stop()
 
-    def setAimingEnded(self, isEnded, isReloading):
-        if not self.__isAimingEnded and isEnded and not isReloading:
-            self.__ingameSoundNotifications.play('sight_convergence')
-        self.__isAimingEnded = isEnded
+        self.__activeSounds.clear()
 
-    def notifyEnemySpotted(self, isPlural):
-        self.__ingameSoundNotifications.cancel('`p`p', True)
-        if isPlural:
-            self.__ingameSoundNotifications.play('enemies_sighted')
-        else:
-            self.__ingameSoundNotifications.play('enemy_sighted')
+    def notifyEnemySPGShotSound(self, distToTarget, shooterPosition):
+        soundMatrix = Math.Matrix()
+        soundMatrix.translation = shooterPosition
+        sound = SoundGroups.g_instance.getSound3D(soundMatrix, ComplexSoundNotifications.SPG_DISTANT_THREAT_SOUND)
+        if sound is not None:
+            soundId = id(sound)
+            self.__activeSounds[soundId] = sound
+            sound.setRTPC(ComplexSoundNotifications.RTPC_EXT_SPG_SIGHT, distToTarget)
+            sound.setCallback(lambda s: self.__endSoundCallback(soundId))
+            sound.play()
+        return
+
+    def __endSoundCallback(self, soundID):
+        del self.__activeSounds[soundID]

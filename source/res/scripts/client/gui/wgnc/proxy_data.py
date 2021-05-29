@@ -11,8 +11,11 @@ from gui.wgnc.common import WebHandlersContainer
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import dependency
+from gui.wgnc.image_notification_helper import showPaymentMethodLinkNotification, showPaymentMethodUnlinkNotification
+from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from skeletons.gui.game_control import IBrowserController, IPromoController, IReferralProgramController, IClanNotificationController
 from skeletons.gui.shared.promo import IPromoLogger
+from skeletons.gui.system_messages import ISystemMessages
 
 class _ProxyDataItem(object):
 
@@ -286,6 +289,71 @@ class ShowReferralWindowItem(_ProxyDataItem):
     def show(self, _):
         url = getReferralProgramURL() + self.__relativeUrl
         showReferralProgramWindow(url)
+
+
+class PaymentMethodChangeItem(_ProxyDataItem):
+
+    def __init__(self, operation, method, cdnUrl):
+        self.__operation = operation
+        self.__method = method
+        self.__cdnUrl = cdnUrl
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.PAYMENT_METHOD_CHANGE_NOTIFICATION
+
+    def show(self, _):
+        if self.__operation == 'link':
+            showPaymentMethodLinkNotification(self.__method, self.__cdnUrl)
+        elif self.__operation == 'unlink':
+            showPaymentMethodUnlinkNotification(self.__method, self.__cdnUrl)
+
+
+class ShowMapboxSurveyAvailableMessage(_ProxyDataItem):
+    __systemMessages = dependency.descriptor(ISystemMessages)
+
+    def __init__(self, mapName):
+        self.__mapName = mapName
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.MAPBOX_SURVEY_AVAILABLE_NOTIFICATION
+
+    def show(self, _):
+        self.__systemMessages.proto.serviceChannel.pushClientMessage({'map': self.__mapName}, SCH_CLIENT_MSG_TYPE.MAPBOX_SURVEY_AVAILABLE)
+
+
+class ShowMapboxEventStartedMessage(_ProxyDataItem):
+    __systemMessages = dependency.descriptor(ISystemMessages)
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.MAPBOX_EVENT_STARTED_NOTIFICATION
+
+    def show(self, _):
+        self.__systemMessages.proto.serviceChannel.pushClientMessage({}, SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_STARTED)
+
+
+class ShowMapboxEventEndedMessage(_ProxyDataItem):
+    __systemMessages = dependency.descriptor(ISystemMessages)
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.MAPBOX_EVENT_ENDED_NOTIFICATION
+
+    def show(self, _):
+        self.__systemMessages.proto.serviceChannel.pushClientMessage({}, SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_ENDED)
+
+
+class ShowMapboxRewardReceivedMessage(_ProxyDataItem):
+    __systemMessages = dependency.descriptor(ISystemMessages)
+
+    def __init__(self, rewardData):
+        self.__rewardData = rewardData
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.MAPBOX_REWARD_RECEIVED_NOTIFICATION
+
+    def show(self, _):
+        self.__systemMessages.proto.serviceChannel.pushClientMessage({'rewards': self.__rewardData['rewards'],
+         'battles': self.__rewardData['battles'],
+         'msgType': SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD}, SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD)
 
 
 class ProxyDataHolder(object):

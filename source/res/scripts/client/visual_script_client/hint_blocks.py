@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/visual_script_client/hint_blocks.py
 import BigWorld
 import aih_constants
-from bootcamp.BootcampConstants import HINT_NAMES
+from bootcamp.BootcampConstants import HINT_NAMES, HINT_TYPE
 from visual_script.block import Block, Meta, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT, errorVScript
@@ -38,9 +38,9 @@ class InitHint(Block, HintMeta):
     def __init__(self, *args, **kwargs):
         super(InitHint, self).__init__(*args, **kwargs)
         self._in = self._makeEventInputSlot('in', self._onInit)
-        self._typeId = self._makeDataInputSlot('typeId', SLOT_TYPE.STR, EDITOR_TYPE.ENUM_SELECTOR)
-        self._typeId.setEditorData([ name for name in HINT_NAMES ])
         self._typeValues = {name:value for value, name in enumerate(HINT_NAMES)}
+        self._typeId = self._makeDataInputSlot('typeId', SLOT_TYPE.STR, EDITOR_TYPE.ENUM_SELECTOR)
+        self._typeId.setEditorData([ name for name in HINT_NAMES if self._typeValues[name] not in HINT_TYPE.SECONDARY_HINTS ])
         self._text = self._makeDataInputSlot('text', SLOT_TYPE.STR)
         self._text.setDefaultValue('')
         self._voiceover = self._makeDataInputSlot('voiceover', SLOT_TYPE.STR)
@@ -51,22 +51,21 @@ class InitHint(Block, HintMeta):
         return
 
     def _onInit(self):
-        if not IS_EDITOR:
-            avatar = BigWorld.player()
-            hintTypeId = self.__getHintTypeId()
-            timeCompleted = self._timeCompleteDuration.getValue() if self._timeCompleteDuration.hasValue() else 1.0
-            cooldownAfter = self._timeCooldownAfter.getValue() if self._timeCooldownAfter.hasValue() else 0.0
-            message = self._text.getValue()
-            voiceover = self._voiceover.getValue() if self._voiceover.hasValue() else None
-            hintParam = (avatar,
-             hintTypeId,
-             timeCompleted,
-             cooldownAfter,
-             message,
-             voiceover)
-            hint = HintManager.hintManager().addHint(hintParam)
-            hint.start()
-            self._id.setValue(hint.id)
+        avatar = BigWorld.player()
+        hintTypeId = self.__getHintTypeId()
+        timeCompleted = self._timeCompleteDuration.getValue() if self._timeCompleteDuration.hasValue() else 1.0
+        cooldownAfter = self._timeCooldownAfter.getValue() if self._timeCooldownAfter.hasValue() else 0.0
+        message = self._text.getValue()
+        voiceover = self._voiceover.getValue() if self._voiceover.hasValue() else None
+        hintParam = (avatar,
+         hintTypeId,
+         timeCompleted,
+         cooldownAfter,
+         message,
+         voiceover)
+        hint = HintManager.hintManager().addHint(hintParam)
+        hint.start()
+        self._id.setValue(hint.id)
         self._out.call()
         return
 
@@ -75,6 +74,36 @@ class InitHint(Block, HintMeta):
 
     def validate(self):
         return 'TypeId is required' if not self._typeId.hasValue() else super(InitHint, self).validate()
+
+
+class InitSecondaryHint(Block, HintMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(InitSecondaryHint, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._onInit)
+        self._text = self._makeDataInputSlot('text', SLOT_TYPE.STR)
+        self._text.setDefaultValue('')
+        self._out = self._makeEventOutputSlot('out')
+        self._id = self._makeDataOutputSlot('id', SLOT_TYPE.INT, None)
+        return
+
+    def _onInit(self):
+        avatar = BigWorld.player()
+        message = self._text.getValue()
+        hintParam = (avatar,
+         HINT_TYPE.HINT_WAIT_RELOAD,
+         0.0,
+         0.0,
+         message,
+         None)
+        hint = HintManager.hintManager().addHint(hintParam, secondary=True)
+        hint.start()
+        self._id.setValue(hint.id)
+        self._out.call()
+        return
+
+    def validate(self):
+        return super(InitSecondaryHint, self).validate()
 
 
 class ShowHint(ProcessHint, HintMeta):
@@ -106,14 +135,13 @@ class IsHintVisible(Block, HintMeta):
         self._visible = self._makeDataOutputSlot('visible', SLOT_TYPE.BOOL, self._isVisible)
 
     def _isVisible(self):
-        if not IS_EDITOR:
-            hintId = self._id.getValue()
-            hint = HintManager.hintManager().getHint(hintId)
-            if hint is not None:
-                visible = hint.isActive()
-                self._visible.setValue(visible)
-            else:
-                errorVScript(self, 'Unknown hint id')
+        hintId = self._id.getValue()
+        hint = HintManager.hintManager().getHint(hintId)
+        if hint is not None:
+            visible = hint.isActive()
+            self._visible.setValue(visible)
+        else:
+            errorVScript(self, 'Unknown hint id')
         return
 
     @classmethod
@@ -129,10 +157,9 @@ class HideAllHints(Block, HintMeta):
         self._out = self._makeEventOutputSlot('out')
 
     def __onHide(self):
-        if not IS_EDITOR:
-            for hint in HintManager.hintManager().getHints().itervalues():
-                if hint.isActive():
-                    hint.hide()
+        for hint in HintManager.hintManager().getHints().itervalues():
+            if hint.isActive():
+                hint.hide()
 
         self._out.call()
 

@@ -466,9 +466,8 @@ _STRIKE_SELECTORS = {artefacts.RageArtillery: _ArtilleryStrikeSelector,
  artefacts.BRSmokeArcade: _ArcadeBomberStrikeSelector,
  artefacts.SpawnKamikaze: _ArcadeBomberStrikeSelector,
  artefacts.BattleRoyaleMinefield: _ArcadeBomberStrikeSelector,
- artefacts.WeekendBrawlSmoke: _SmokeStrikeSelector,
- artefacts.WeekendBrawlRecon: _ReconStrikeSelector,
- artefacts.WeekendBrawlBomber: _BomberStrikeSelector}
+ artefacts.AreaOfEffectEquipment: _ArcadeBomberStrikeSelector,
+ artefacts.AttackBomberEquipment: _ArcadeBomberStrikeSelector}
 
 class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -553,6 +552,8 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
         cmdMap = CommandMapping.g_instance
+        if cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key):
+            self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
         if key == Keys.KEY_LEFTMOUSE and isDown:
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isPlaying:
@@ -683,6 +684,9 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
             self.__class__.deactivateCallback()
             self.__class__.deactivateCallback = None
         prevMode = self.__class__.prevCtlMode
+        if BigWorld.player().observerSeesAll() and (not prevMode[self._MODE_NAME] or prevMode[self._MODE_NAME] == self.__aih.ctrlModeName):
+            LOG_WARNING('Skip switching to previouse mode', prevMode[self._MODE_NAME])
+            return
         if not self.__aimingModeUserDisabled:
             self.__aimingMode &= -1 - AIMING_MODE.USER_DISABLED
         pos = self._getPreferedPositionOnQuit()

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 import BigWorld
 import constants
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -29,7 +29,9 @@ def _initializeDefaultSettings(core, data, initialized):
      GAME.PLAYERS_PANELS_SHOW_LEVELS: core.getSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS)}
     data['gameExtData'] = {GAME.CHAT_CONTACTS_LIST_ONLY: options.getSetting(GAME.CHAT_CONTACTS_LIST_ONLY).getDefaultValue(),
      GAME.SNIPER_ZOOM: core.getSetting(GAME.SNIPER_ZOOM),
-     GAME.HULLLOCK_ENABLED: core.getSetting(GAME.HULLLOCK_ENABLED)}
+     GAME.HULLLOCK_ENABLED: core.getSetting(GAME.HULLLOCK_ENABLED),
+     GAME.PRE_COMMANDER_CAM: core.getSetting(GAME.PRE_COMMANDER_CAM),
+     GAME.COMMANDER_CAM: core.getSetting(GAME.COMMANDER_CAM)}
     gameplayData = data['gameplayData'] = {GAME.GAMEPLAY_MASK: AccountSettings.getSettingsDefault('gameplayMask')}
     aimData = data['aimData'] = {'arcade': core.getSetting('arcade'),
      'sniper': core.getSetting('sniper')}
@@ -574,6 +576,49 @@ def _migrateTo69(core, data, initialized):
     data['gameExtData'][GAME.HULLLOCK_ENABLED] = True
 
 
+def _migrateTo70(core, data, initialized):
+    gameData = data['gameExtData2']
+    gameData[GAME.SHOW_ARTY_HIT_ON_MAP] = True
+    spgAim = data['spgAim']
+    spgAim[SPGAim.SHOTS_RESULT_INDICATOR] = True
+    spgAim[SPGAim.SPG_SCALE_WIDGET] = True
+    spgAim[SPGAim.SPG_STRATEGIC_CAM_MODE] = 0
+    spgAim[SPGAim.AUTO_CHANGE_AIM_MODE] = True
+    spgAim[SPGAim.AIM_ENTRANCE_MODE] = 0
+    spgAim[SPGAim.SCROLL_SMOOTHING_ENABLED] = True
+
+
+def _migrateTo71(core, data, initialized):
+    data['rankedCarouselFilter2'] = {'role_HT_tank': False,
+     'role_HT_assault': False,
+     'role_HT_universal': False,
+     'role_HT_fireSupport': False,
+     'role_MT_tank': False,
+     'role_MT_universal': False,
+     'role_MT_fireSupport': False,
+     'role_MT_assassin': False,
+     'role_ATSPG_tank': False,
+     'role_ATSPG_universal': False,
+     'role_ATSPG_fireSupport': False,
+     'role_ATSPG_burstDamage': False,
+     'role_LT_tracked': False,
+     'role_LT_wheeled': False,
+     'role_SPG': False,
+     constants.ROLES_COLLAPSE: False,
+     'notDefined': False}
+
+
+def _migrateTo72(core, data, initialized):
+    data['gameExtData'][GAME.PRE_COMMANDER_CAM] = True
+    data['gameExtData'][GAME.COMMANDER_CAM] = True
+    data['battleHud'][GAME.SHOW_VEHICLE_HP_IN_PLAYERS_PANEL] = core.options.getSetting(GAME.SHOW_VEHICLE_HP_IN_PLAYERS_PANEL).getDefaultValue()
+    data['battleHud'][GAME.SHOW_VEHICLE_HP_IN_MINIMAP] = core.options.getSetting(GAME.SHOW_VEHICLE_HP_IN_MINIMAP).getDefaultValue()
+
+
+def _migrateTo73(core, data, initialized):
+    data['gameExtData2'][GAME.GAMEPLAY_ONLY_10_MODE] = False
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -844,6 +889,22 @@ _versions = ((1,
   False),
  (69,
   _migrateTo69,
+  False,
+  False),
+ (70,
+  _migrateTo70,
+  False,
+  False),
+ (71,
+  _migrateTo71,
+  False,
+  False),
+ (72,
+  _migrateTo72,
+  False,
+  False),
+ (73,
+  _migrateTo73,
   False,
   False))
 

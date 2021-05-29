@@ -211,6 +211,8 @@ class SequenceXmlReader(BaseCustomizationItemXmlReader):
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(SequenceXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         target.sequenceName = ix.readStringOrNone(xmlCtx, section, 'sequenceName')
+        if IS_EDITOR:
+            target.name = ix.readStringOrNone(xmlCtx, section, 'name')
 
 
 class AttachmentXmlReader(BaseCustomizationItemXmlReader):
@@ -226,6 +228,8 @@ class AttachmentXmlReader(BaseCustomizationItemXmlReader):
         target.sequenceId = ix.readIntOrNone(xmlCtx, section, 'sequenceId')
         target.attachmentLogic = ix.readStringOrNone(xmlCtx, section, 'attachmentLogic')
         target.initialVisibility = ix.readBool(xmlCtx, section, 'initialVisibility', True)
+        if IS_EDITOR:
+            target.name = ix.readStringOrNone(xmlCtx, section, 'name')
 
 
 class ModificationXmlReader(BaseCustomizationItemXmlReader):

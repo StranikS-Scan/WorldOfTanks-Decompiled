@@ -23,6 +23,8 @@ class SOUNDS(CONST_CONTAINER):
     NEW_PROGRESSIVE_DECAL = 'cust_progress_reward'
     PROGRESSIVE_DECAL_COULD_BE_INSTALLED = 'cust_progress_reward_edit'
     PROGRESSIVE_DECAL_UPGRADE = 'cust_progress_upgrade'
+    SELL = 'cust_sell'
+    PURCHASE = 'cust_purchase'
     SELECT = 'cust_select'
     REMOVE = 'cust_select_remove'
     CHOOSE = 'cust_tankmodule_choose'

@@ -30,6 +30,7 @@ class BATTLE_TYPES(object):
     SANDBOX = 'sandbox'
     RATED_SANDBOX = 'ratedsandbox'
     RANKED = 'ranked'
+    RANKED_10X10 = 'ranked_10x10'
     EPIC_RANDOM = 'epicRandom'
     CTF_30X30 = 'ctf30x30'
     DOMINATION_30X30 = 'domination30x30'

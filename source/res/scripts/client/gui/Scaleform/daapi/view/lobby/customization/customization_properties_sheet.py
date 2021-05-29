@@ -896,7 +896,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     def __onItemsBought(self, *_, **__):
         self.__update()
 
-    def __onItemSold(self, item, count):
+    def __onItemSold(self, *_, **__):
         self.__update()
 
     def __onTabChanged(self, tabIndex, itemCD=None):

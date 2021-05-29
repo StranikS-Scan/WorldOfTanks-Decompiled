@@ -23,6 +23,7 @@
     <_100mm_AK1>	20	</_100mm_AK1>
     <_88mm_vz_41N_A>	21	</_88mm_vz_41N_A>
     <_88mm_Skoda_vz_36_N>	23	</_88mm_Skoda_vz_36_N>
+    <_130mm_Skoda_R_14>	24	</_130mm_Skoda_R_14>
   </ids>
   <shared>
     <_37mm_Pechotni_delo_Skoda_L_27>
@@ -1340,5 +1341,62 @@
         </_105mm_Narazovy>
       </shots>
     </_105mm_vz_39N>
+    <_130mm_Skoda_R_14>
+      <userString>	#czech_vehicles:_130mm_Skoda_R_14	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	297000	</price>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	15.4285714285714	</reloadTime>
+      <maxAmmo>	28	</maxAmmo>
+      <aimingTime>	3.42857142857143	</aimingTime>
+      <weight>	2900	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_130mm_Prurazny_vz_51>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1020	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	208 188	</piercingPower>
+        </_130mm_Prurazny_vz_51>
+        <_130mm_Prurazny_vz_56>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1020	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	248 218	</piercingPower>
+        </_130mm_Prurazny_vz_56>
+        <_130mm_Narazovy_vz_51>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	863	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	68 68	</piercingPower>
+        </_130mm_Narazovy_vz_51>
+      </shots>
+    </_130mm_Skoda_R_14>
   </shared>
 </guns.xml>

@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/blueprints/blueprints_cm_handlers.py
 from async import await, async
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.impl.dialogs import dialogs
-from gui.Scaleform.daapi.view.lobby.storage.blueprints import blueprintExitEvent
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import ContextMenu, option, CMLabel
-from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
@@ -17,22 +18,24 @@ class BlueprintsCMHandler(ContextMenu):
     @option(__sqGen.next(), CMLabel.CONVERT_BLUEPRINT)
     @async
     def convertBlueprintFragment(self):
-        isResearch = yield await(dialogs.blueprintsConversion(self._id))
-        if isResearch:
-            factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self._id)
+        isResearchClicked, (usedFragmentsData, _) = yield await(dialogs.blueprintsConversion(self._id))
+        if isResearchClicked:
+            factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self._id, usedNationalFragments=usedFragmentsData)
 
     @option(__sqGen.next(), CMLabel.CONVERT_BLUEPRINT_MAX)
     @async
     def convertMaxBlueprintFragments(self):
-        availableCount = self.__getMaxFragmentCount()
-        isResearch = yield await(dialogs.blueprintsConversion(self._id, fragmentCount=availableCount))
-        if isResearch:
-            factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self._id, availableCount)
+        isResearchClicked, (usedFragmentsData, fragmentCount) = yield await(dialogs.blueprintsConversion(self._id, fragmentCount=self.__getMaxFragmentCount()))
+        if isResearchClicked:
+            factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self._id, fragmentCount, usedNationalFragments=usedFragmentsData)
 
     @option(__sqGen.next(), CMLabel.SHOW_BLUEPRINT)
     def showBlueprintView(self):
-        exitEvent = blueprintExitEvent()
-        shared_events.showBlueprintView(self._id, exitEvent)
+        storageView = self.app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_STORAGE))
+        if storageView is not None:
+            bpStorageView = storageView.getComponent(STORAGE_CONSTANTS.BLUEPRINTS_VIEW)
+            bpStorageView.navigateToBlueprintScreen(self._id)
+        return
 
     def _getOptionCustomData(self, label):
         optionData = super(BlueprintsCMHandler, self)._getOptionCustomData(label)

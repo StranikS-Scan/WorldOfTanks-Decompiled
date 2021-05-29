@@ -143,6 +143,9 @@ class ARENAS(object):
     C_60_ASIA_MIAO_NAME = '#arenas:60_asia_miao/name'
     C_60_ASIA_MIAO_DESCRIPTION = '#arenas:60_asia_miao/description'
     C_251_BR_BATTLE_CITY3_NAME = '#arenas:251_br_battle_city3/name'
+    C_117_CANYON_ISH_NAME = '#arenas:117_canyon_ish/name'
+    C_119_TURNING_POINT_IF_NAME = '#arenas:119_turning_point_if/name'
+    C_128_LAST_FRONTIER_V_NAME = '#arenas:128_last_frontier_v/name'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -282,7 +285,10 @@ class ARENAS(object):
      C_105_GERMANY_DESCRIPTION,
      C_60_ASIA_MIAO_NAME,
      C_60_ASIA_MIAO_DESCRIPTION,
-     C_251_BR_BATTLE_CITY3_NAME)
+     C_251_BR_BATTLE_CITY3_NAME,
+     C_117_CANYON_ISH_NAME,
+     C_119_TURNING_POINT_IF_NAME,
+     C_128_LAST_FRONTIER_V_NAME)
 
     @classmethod
     def all(cls, key0):

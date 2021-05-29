@@ -32,10 +32,11 @@ from gui.impl.lobby.platoon.view.subview.platoon_tiers_limit_subview import Tier
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.impl.pub import ViewImpl
 from gui.prb_control import prb_getters
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE, SELECTOR_BATTLE_TYPES
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelCarouselEvent
 from gui.shared.gui_items.badge import Badge
+from gui.shared.utils.functions import replaceHyphenToUnderscore
 from helpers import i18n, dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from messenger.m_constants import PROTO_TYPE
@@ -294,7 +295,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
                         vehicleItem = self.__itemsCache.items.getItemByCD(vehicle.get('intCD', 0))
                         slot.player.vehicle.setIsPremium(vehicleItem.isPremium or vehicleItem.isElite)
                         slot.player.vehicle.setName(vehicleItem.shortUserName)
-                        slot.player.vehicle.setTechName(removeNationFromTechName(vehicleItem.name))
+                        slot.player.vehicle.setTechName(replaceHyphenToUnderscore(removeNationFromTechName(vehicleItem.name)))
                         slot.player.vehicle.setTier(vehicleItem.level)
                         slot.player.vehicle.setType(vehicleItem.type)
                         slot.player.vehicle.setNation(vehicleItem.nationName)
@@ -680,8 +681,8 @@ class BattleRoyalMembersView(SquadMembersView):
         return None
 
 
-class WeekendBrawlMembersView(SquadMembersView):
-    _battleType = 'weekend_brawl'
+class MapboxMembersView(SquadMembersView):
+    _battleType = SELECTOR_BATTLE_TYPES.MAPBOX
 
     def _addSubviews(self):
         self._addSubviewToLayout(ChatSubview())
@@ -690,7 +691,7 @@ class WeekendBrawlMembersView(SquadMembersView):
         pass
 
     def _getTitle(self):
-        title = ''.join((i18n.makeString(backport.text(R.strings.platoon.squad())), i18n.makeString(backport.text(R.strings.platoon.members.header.weekendBrawl()))))
+        title = ''.join((i18n.makeString(backport.text(R.strings.platoon.squad())), i18n.makeString(backport.text(R.strings.platoon.members.header.mapbox()))))
         return title
 
     def _updateFindPlayersButton(self, *args):
@@ -712,8 +713,8 @@ class MembersWindow(PreloadableWindow):
             content = EpicMembersView()
         elif prbType == PREBATTLE_TYPE.BATTLE_ROYALE:
             content = BattleRoyalMembersView()
-        elif prbType == PREBATTLE_TYPE.WEEKEND_BRAWL:
-            content = WeekendBrawlMembersView()
+        elif prbType == PREBATTLE_TYPE.MAPBOX:
+            content = MapboxMembersView()
         if content is None:
             _logger.debug('PrbType is unknown %d', prbType)
         super(MembersWindow, self).__init__(wndFlags=WindowFlags.WINDOW, content=content)

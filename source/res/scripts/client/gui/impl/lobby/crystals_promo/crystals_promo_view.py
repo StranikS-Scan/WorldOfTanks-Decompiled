@@ -62,11 +62,11 @@ class CrystalsPromoView(ViewImpl):
         model.battleTypes.clearItems()
         battleTypes = model.battleTypes.getItems()
         rewards = self.__getRewards(allRewards, ARENA_BONUS_TYPE.REGULAR, 10)
-        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.random(), R.images.gui.maps.icons.crystalsInfo.get.c_1_BLOCK(), [self.__getCondition(3, rewards.winTop3, rewards.loseTop3), self.__getCondition(10, rewards.winTop10, rewards.loseTop10)]))
+        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.random(), R.images.gui.maps.icons.crystalsInfo.get.c_1_BLOCK(), [self.__getCondition(3, rewards.winTop3, rewards.loseTop3), self.__getCondition(rewards.topLength, rewards.winTop10, rewards.loseTop10)]))
         rewards = self.__getRewards(allRewards, ARENA_BONUS_TYPE.EPIC_RANDOM, 10)
-        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.general(), R.images.gui.maps.icons.crystalsInfo.get.c_2_BLOCK(), [self.__getCondition(6, rewards.winTop3, rewards.loseTop3), self.__getCondition(20, rewards.winTop10, rewards.loseTop10)]))
+        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.general(), R.images.gui.maps.icons.crystalsInfo.get.c_2_BLOCK(), [self.__getCondition(6, rewards.winTop3, rewards.loseTop3), self.__getCondition(rewards.topLength, rewards.winTop10, rewards.loseTop10)]))
         rewards = self.__getRewards(allRewards, ARENA_BONUS_TYPE.RANKED, 10)
-        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.ranked(), R.images.gui.maps.icons.crystalsInfo.get.c_3_BLOCK(), [self.__getCondition(3, rewards.winTop3, rewards.loseTop3), self.__getCondition(10, rewards.winTop10, rewards.loseTop10)]))
+        battleTypes.addViewModel(self.__getBattleType(R.strings.menu.crystals.info.tab.get.ranked(), R.images.gui.maps.icons.crystalsInfo.get.c_3_BLOCK(), [self.__getCondition(3, rewards.winTop3, rewards.loseTop3), self.__getCondition(rewards.topLength, rewards.winTop10, rewards.loseTop10)]))
         battleTypes.invalidate()
 
     def __goToShopHandler(self, args=None):
@@ -101,10 +101,6 @@ class CrystalsPromoView(ViewImpl):
     def _onLoaded(self, *args, **kwargs):
         g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityMenu, scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def __onToggleVisibilityMenu(self, event):
-        self.__visibility = event.ctx['state']
 
     def __onServerSettingsChanged(self, *_):
         with self.getViewModel().transaction() as model:
@@ -114,7 +110,6 @@ class CrystalsPromoView(ViewImpl):
     def _finalize(self):
         self.viewModel.goToShop -= self.__goToShopHandler
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
-        g_eventBus.removeListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityMenu, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': self.__isMarkerDisabled}), EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': self.__visibility}), EVENT_BUS_SCOPE.LOBBY)
 

@@ -18,8 +18,8 @@ class BaseBattleBoosterProvider(VehicleBaseArrayProvider):
         model = super(BaseBattleBoosterProvider, self).createSlot(item, ctx)
         model.setImageName(item.descriptor.iconName)
         isEnough = item.mayPurchaseWithExchange(self._itemsCache.items.stats.money, self._itemsCache.items.shop.exchangeRate)
+        model.setIsBuyMoreVisible(not item.isHidden)
         model.setIsBuyMoreDisabled(not isEnough)
-        model.setIsCrewBooster(item.isCrewBooster())
         self._fillHighlights(model, item)
         self._fillBuyPrice(model, item)
         return model
@@ -58,7 +58,9 @@ class OptDeviceBattleBoosterProvider(BaseBattleBoosterProvider):
     __slots__ = ()
 
     def _getItemCriteria(self):
-        return REQ_CRITERIA.BATTLE_BOOSTER.OPTIONAL_DEVICE_EFFECT
+        invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
+        installedSet = set((booster for veh in invVehicles.itervalues() for booster in veh.battleBoosters.installed.getIntCDs()))
+        return REQ_CRITERIA.CUSTOM(lambda item: not item.isCrewBooster() and (not item.isHidden or item.isInInventory or item.intCD in installedSet))
 
     def _fillDescription(self, model, item):
         model.setDescription(item.getOptDeviceBoosterDescription(self._getVehicle(), formatValueToColorTag))

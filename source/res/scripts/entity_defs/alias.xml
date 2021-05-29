@@ -32,9 +32,6 @@
       <gpuMemory>
         <Type>	INT16	</Type>
       </gpuMemory>
-      <mainMemory>
-        <Type>	INT32	</Type>
-      </mainMemory>
       <os>
         <Type>	INT32	</Type>
       </os>
@@ -86,6 +83,21 @@
       <clientBit>
         <Type>	UINT8	</Type>
       </clientBit>
+      <ramTotal>
+        <Type>	UINT32	</Type>
+      </ramTotal>
+      <virtTotal>
+        <Type>	UINT32	</Type>
+      </virtTotal>
+      <pageFileTotal>
+        <Type>	UINT32	</Type>
+      </pageFileTotal>
+      <systemHddName>
+        <Type>	STRING	</Type>
+      </systemHddName>
+      <gameHddName>
+        <Type>	STRING	</Type>
+      </gameHddName>
     </Properties>
   </CLIENT_SYSTEM>
   <CLIENT_SESSION_STATS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -189,9 +201,6 @@
       <drrScale>
         <Type>	UINT8	</Type>
       </drrScale>
-      <memoryCritical>
-        <Type>	UINT8	</Type>
-      </memoryCritical>
       <gameSessionDuration>
         <Type>	INT16	</Type>
       </gameSessionDuration>
@@ -201,9 +210,6 @@
       <cameraDir>
         <Type>	VECTOR3	</Type>
       </cameraDir>
-      <availVMem>
-        <Type>	INT32	</Type>
-      </availVMem>
       <invalidStats>
         <Type>	UINT32	</Type>
       </invalidStats>
@@ -234,8 +240,60 @@
       <lastArenaTeam>
         <Type>	UINT16	</Type>
       </lastArenaTeam>
+      <memoryCritical>
+        <Type>	UINT32	</Type>
+      </memoryCritical>
+      <ramAvailable>
+        <Type>	UINT32	</Type>
+      </ramAvailable>
+      <ramPeak>
+        <Type>	UINT32	</Type>
+      </ramPeak>
+      <virtAvailable>
+        <Type>	UINT32	</Type>
+      </virtAvailable>
+      <virtPeak>
+        <Type>	UINT32	</Type>
+      </virtPeak>
+      <pageFileAvailable>
+        <Type>	UINT32	</Type>
+      </pageFileAvailable>
+      <pageFilePeak>
+        <Type>	UINT32	</Type>
+      </pageFilePeak>
     </Properties>
   </CLIENT_SESSION_STATS>
+  <MEM_CRIT_EVENT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <spaceName>
+        <Type>	STRING	</Type>
+      </spaceName>
+      <virtAvailable>
+        <Type>	UINT32	</Type>
+      </virtAvailable>
+      <processUptime>
+        <Type>	UINT32	</Type>
+      </processUptime>
+      <ramAvailable>
+        <Type>	UINT16	</Type>
+      </ramAvailable>
+      <pageFileAvailable>
+        <Type>	UINT16	</Type>
+      </pageFileAvailable>
+      <battlesCount>
+        <Type>	UINT16	</Type>
+      </battlesCount>
+      <arenaGeometryID>
+        <Type>	UINT16	</Type>
+      </arenaGeometryID>
+      <spaceType>
+        <Type>	UINT8	</Type>
+      </spaceType>
+      <reasons>
+        <Type>	UINT8	</Type>
+      </reasons>
+    </Properties>
+  </MEM_CRIT_EVENT>
   <CLIENT_PB_20_UX_STATS>	FIXED_DICT	  <Properties>
       <linkedsetQuestsCompleted>
         <Type>	UINT8	</Type>
@@ -346,6 +404,20 @@
       </players>
     </Properties>
   </RANKED_BATTLES_QUEUE_INFO>
+  <MAPBOX_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <classes>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </classes>
+      <players>
+        <Type>	UINT32	</Type>
+      </players>
+      <avgWaitTime>
+        <Type>	FLOAT32	</Type>
+      </avgWaitTime>
+    </Properties>
+  </MAPBOX_QUEUE_INFO>
   <PUBLIC_ARENA_INFO>	FIXED_DICT	  <Properties>
       <id>
         <Type>	OBJECT_ID	</Type>
@@ -770,6 +842,18 @@
       <battleNotifier>
         <Type>	BOOL	</Type>
       </battleNotifier>
+      <additionalzoom>
+        <Type>	BOOL	</Type>
+      </additionalzoom>
+      <hpinminimap>
+        <Type>	UINT8	</Type>
+      </hpinminimap>
+      <hpinplayerspanels>
+        <Type>	UINT8	</Type>
+      </hpinplayerspanels>
+      <commandercam>
+        <Type>	BOOL	</Type>
+      </commandercam>
     </Properties>
   </USER_EXTRA_SETTINGS>
   <ARENA_ADDPLAYER_INFO>	FIXED_DICT	  <Properties>
@@ -1538,40 +1622,4 @@
   </TOURNAMEMT_PARTICIPANT>
   <LIST_OF_TOURNAMEMT_PARTICIPANTS>	ARRAY	  <of>	TOURNAMEMT_PARTICIPANT	</of>
   </LIST_OF_TOURNAMEMT_PARTICIPANTS>
-  <STATUS_WITH_END_TIME>	FIXED_DICT	  <Properties>
-      <statusID>
-        <Type>	UINT8	</Type>
-      </statusID>
-      <endTime>
-        <Type>	FLOAT32	</Type>
-      </endTime>
-    </Properties>
-  </STATUS_WITH_END_TIME>
-  <STATUS_WITH_TIMES>	FIXED_DICT	  <Properties>
-      <statusID>
-        <Type>	UINT8	</Type>
-      </statusID>
-      <startTime>
-        <Type>	FLOAT32	</Type>
-      </startTime>
-      <endTime>
-        <Type>	FLOAT32	</Type>
-      </endTime>
-    </Properties>
-  </STATUS_WITH_TIMES>
-  <POI_CAPTURING_INFO>	FIXED_DICT	  <Properties>
-      <vehicleID>
-        <Type>	OBJECT_ID	</Type>
-      </vehicleID>
-      <startTime>
-        <Type>	FLOAT32	</Type>
-      </startTime>
-      <endTime>
-        <Type>	FLOAT32	</Type>
-      </endTime>
-      <status>
-        <Type>	UINT8	</Type>
-      </status>
-    </Properties>
-  </POI_CAPTURING_INFO>
 </alias.xml>

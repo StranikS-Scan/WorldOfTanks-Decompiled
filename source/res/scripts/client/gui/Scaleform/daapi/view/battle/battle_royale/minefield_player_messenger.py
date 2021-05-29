@@ -28,9 +28,11 @@ class MinefieldPlayerMessenger(IProgressionListener, IViewComponentsCtrlListener
     def detachedFromCtrl(self, ctrlID):
         super(MinefieldPlayerMessenger, self).detachedFromCtrl(ctrlID)
         arena = avatar_getter.getArena()
-        arena.onCombatEquipmentUsed -= self.__onCombatEquipmentUsed
+        if arena:
+            arena.onCombatEquipmentUsed -= self.__onCombatEquipmentUsed
         ctrl = self.__sessionProvider.shared.feedback
-        ctrl.onPlayerFeedbackReceived -= self._onPlayerFeedbackReceived
+        if ctrl:
+            ctrl.onPlayerFeedbackReceived -= self._onPlayerFeedbackReceived
         self.__equipmentCtrl = None
         return
 

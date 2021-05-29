@@ -4,6 +4,7 @@ import math
 import string
 import BigWorld
 import Math
+import math_utils
 from constants import AOI
 AOI_TO_FAR_TIME = 5.0
 MINIMAP_SIZE = (210.0, 210.0)
@@ -77,9 +78,19 @@ def getCellIdFromPosition(desiredShotPoint, boundingBox, dimensions):
     mapYLength = boundingBox[1][1] - boundingBox[0][1]
     xOffset = -boundingBox[0][0]
     yOffset = -boundingBox[0][1]
-    mapGridX = math.floor((xOffset + desiredShotPoint.x) / mapXLength * dimensions)
-    mapGridY = dimensions - (math.floor((yOffset + desiredShotPoint.z) / mapYLength * dimensions) + 1)
+    x = math_utils.clamp(boundingBox[0][0] + 0.1, boundingBox[1][0] - 0.1, desiredShotPoint.x)
+    y = math_utils.clamp(boundingBox[0][1] + 0.1, boundingBox[1][1] - 0.1, desiredShotPoint.z)
+    mapGridX = math.floor((xOffset + x) / mapXLength * dimensions)
+    mapGridY = dimensions - (math.floor((yOffset + y) / mapYLength * dimensions) + 1)
     return mapGridX * dimensions + mapGridY
+
+
+def getPositionByCellIndex(cellIndex, bottomLeft, upperRight, dimensions):
+    column, row = divmod(cellIndex, dimensions)
+    spaceSize = upperRight - bottomLeft
+    xOffset = -bottomLeft[0]
+    yOffset = -bottomLeft[1]
+    return (column * spaceSize[0] / dimensions - xOffset, 0, -row * spaceSize[1] / dimensions + spaceSize[1] - yOffset)
 
 
 def getCellName(cellId, dimensions):

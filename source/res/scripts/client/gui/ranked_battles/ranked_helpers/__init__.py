@@ -6,7 +6,7 @@ from collections import namedtuple
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.periodic_battles.models import CalendarStatusVO
-from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, PrimeTimeStatus, RankedTokenQuestPostfix, LandingUrlParams, AlertTypes
+from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, PrimeTimeStatus, RankedTokenQuestPostfix, LOBBY_SUB_LANDING_PARAM, SEASON_RATING_PARAM, AlertTypes
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.utils.functions import makeTooltip
@@ -104,36 +104,38 @@ def _getAlertMessage():
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def getRankedBattlesRatingUrl(lobbyContext=None):
-    return lobbyContext.getServerSettings().bwRankedBattles.rblbHostUrl
+def getRankedBattlesSeasonRatingUrl(lobbyContext=None, spaID=None):
+    url = lobbyContext.getServerSettings().rankedBattles.seasonRatingPageUrl
+    params = SEASON_RATING_PARAM.format(spaID)
+    return url + params if spaID is not None else url
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getRankedBattlesInfoPageUrl(lobbyContext=None):
-    return lobbyContext.getServerSettings().bwRankedBattles.infoPageUrl
+    return lobbyContext.getServerSettings().rankedBattles.infoPageUrl
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getRankedBattlesIntroPageUrl(lobbyContext=None):
-    return lobbyContext.getServerSettings().bwRankedBattles.introPageUrl
+    return lobbyContext.getServerSettings().rankedBattles.introPageUrl
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getRankedBattlesSeasonGapUrl(lobbyContext=None):
-    return lobbyContext.getServerSettings().bwRankedBattles.seasonGapPageUrl
+    return lobbyContext.getServerSettings().rankedBattles.seasonGapPageUrl
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def getRankedBattlesYearRatingUrl(lobbyContext=None, isLobbySub=False, showPosition=False):
-    url = lobbyContext.getServerSettings().bwRankedBattles.yearRatingPageUrl
-    params = LandingUrlParams.LOBBY_SUB + str(isLobbySub).lower() + LandingUrlParams.SHOW_MY_POSITION + str(showPosition).lower()
+def getRankedBattlesYearRatingUrl(lobbyContext=None, isLobbySub=False):
+    url = lobbyContext.getServerSettings().rankedBattles.yearRatingPageUrl
+    params = LOBBY_SUB_LANDING_PARAM + str(isLobbySub).lower()
     return url + params if url is not None else None
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getRankedBattlesShopUrl(lobbyContext=None, isLobbySub=False):
-    url = lobbyContext.getServerSettings().bwRankedBattles.shopPageUrl
-    params = LandingUrlParams.LOBBY_SUB + str(isLobbySub).lower()
+    url = lobbyContext.getServerSettings().rankedBattles.shopPageUrl
+    params = LOBBY_SUB_LANDING_PARAM + str(isLobbySub).lower()
     return url + params if url is not None else None
 
 

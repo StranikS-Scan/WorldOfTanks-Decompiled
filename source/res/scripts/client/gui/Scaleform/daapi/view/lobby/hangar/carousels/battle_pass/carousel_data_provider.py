@@ -14,7 +14,7 @@ class BattlePassCarouselDataProvider(HangarCarouselDataProvider):
             return text_styles.makeHtmlString('html_templates:lobby/tank_carousel', 'specialVehPoints', ctx={'value': value})
 
         result = super(BattlePassCarouselDataProvider, self)._buildVehicle(vehicle)
-        if not self._isSuitableForQueue(vehicle):
+        if not self._isSuitableForQueue(vehicle) or not self.battlePassController.isVisible():
             return result
         currentPoints, limitPoints = self.battlePassController.getVehicleProgression(vehicle.intCD)
         isSpecialVehicle = self.battlePassController.isSpecialVehicle(vehicle.intCD)

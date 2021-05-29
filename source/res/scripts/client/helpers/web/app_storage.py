@@ -77,6 +77,9 @@ class AsynchFileStorage(IStorage):
             files = [ f for f in os.listdir(self.__name) if os.path.isfile(os.path.join(self.__name, f)) ]
         return files
 
+    def setWorker(self, worker):
+        self.__worker = worker
+
     def __write(self, filename, data, callback):
         self.__worker.putJob(_WriteFileJob(filename, data, callback))
 
@@ -104,6 +107,15 @@ class ApplicationStorage(object):
         if self.__worker:
             self.__worker.stop()
             self.__worker = None
+        return
+
+    def restartWorker(self, workersLimit, queueLimit=threads.INFINITE_QUEUE_SIZE):
+        if self.__worker is None:
+            self.__worker = threads.ThreadPool(workersLimit, queueLimit)
+            self.__worker.start()
+            for storage in self.__db.itervalues():
+                storage.setWorker(self.__worker)
+
         return
 
     @property

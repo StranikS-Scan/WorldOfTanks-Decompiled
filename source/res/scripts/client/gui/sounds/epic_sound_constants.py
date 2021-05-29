@@ -42,8 +42,7 @@ class EPIC_SOUND(object):
      'ARTILLERY': BF_EB_ABILITY_DEPLOYING,
      'SMOKE': BF_EB_ABILITY_DEPLOYING,
      'INSPIRE': BF_EB_ABILITY_INSPIRE_DEPLOYED}
-    EB_READY_FOR_DEPLOYMENT_ID = {True: 'eb_ready_for_deployment',
-     False: 'eb_stop_ready_for_deployment'}
+    EB_READY_FOR_DEPLOYMENT = 'eb_ready_for_deployment'
     BF_EB_START_BATTLE = {EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER: 'vo_eb_start_ATK',
      EPIC_BATTLE_TEAM_ID.TEAM_DEFENDER: 'vo_eb_start_DEF'}
     BF_EB_GLOBAL_MESSAGE = 'eb_general_message'

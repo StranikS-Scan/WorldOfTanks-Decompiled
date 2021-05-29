@@ -29,7 +29,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         return
 
     def onPrbEntitySwitched(self):
-        if not self._isRandomBattleSelected():
+        if not (self._isRandomBattleSelected() or self._isMapboxSelected()):
             self.__animateHide()
         else:
             self.__showOrHide()
@@ -52,7 +52,13 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         return DailyQuestsWidgetView()
 
     def _isRandomBattleSelected(self):
-        return self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.RANDOMS) if self.prbDispatcher is not None else False
+        return self.__isQueueSelected(QUEUE_TYPE.RANDOMS)
+
+    def _isMapboxSelected(self):
+        return self.__isQueueSelected(QUEUE_TYPE.MAPBOX)
+
+    def __isQueueSelected(self, queueType):
+        return self.prbDispatcher.getFunctionalState().isQueueSelected(queueType) if self.prbDispatcher is not None else False
 
     def __show(self):
         if self._injectView is None:
@@ -83,7 +89,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
             self.__show()
 
     def __shouldHide(self):
-        return not isDailyQuestsEnable() or self.promoController.isTeaserOpen() or not self._isRandomBattleSelected()
+        return not isDailyQuestsEnable() or self.promoController.isTeaserOpen() or not (self._isRandomBattleSelected() or self._isMapboxSelected())
 
     def __hasIncompleteQuests(self):
         for quest in self.eventsCache.getDailyQuests().values():

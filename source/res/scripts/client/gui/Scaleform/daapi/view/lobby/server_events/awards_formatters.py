@@ -145,6 +145,8 @@ class BlueprintsFormatter(OldStyleBonusFormatter):
             blueprintString = backport.text(R.strings.quests.bonusName.blueprints.vehicle.any())
         elif blueprintType == BlueprintsBonusSubtypes.RANDOM_FRAGMENT:
             blueprintString = backport.text(R.strings.quests.bonusName.blueprints.any())
+        elif blueprintType == BlueprintsBonusSubtypes.RANDOM_NATIONAL_FRAGMENT:
+            blueprintString = backport.text(R.strings.quests.bonusName.blueprints.nation.any())
         return ' '.join([blueprintString, str(count)])
 
 
@@ -198,7 +200,7 @@ class BattlePassStyleProgressFormatter(OldStyleBonusFormatter):
         style = getStyleForChapter(chapter)
         tooltip = ''
         if style is None:
-            body = backport.text(R.strings.battle_pass_2020.styleProgressBonus.notChosen.tooltip())
+            body = backport.text(R.strings.battle_pass.styleProgressBonus.notChosen.tooltip())
             tooltip = makeTooltip(body=body)
         return tooltip
 

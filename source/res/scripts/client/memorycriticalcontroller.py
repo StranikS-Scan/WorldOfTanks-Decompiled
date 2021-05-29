@@ -4,7 +4,7 @@ from functools import partial
 import BigWorld
 import Event
 import WWISE
-from debug_utils import LOG_NOTE, LOG_CURRENT_EXCEPTION, LOG_ERROR
+from debug_utils import LOG_NOTE, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 
 class MemoryCriticalController(object):
     ORIGIN_DEFAULT = -1
@@ -18,15 +18,54 @@ class MemoryCriticalController(object):
         self.__loweredSettings = []
         self.onMemCrit = Event.Event()
         self.__selfCheckInProgress = False
+        self.__pendingEvent = None
+        return
 
     def destroy(self):
         if self.onMemCrit is not None:
             self.onMemCrit.clear()
             self.onMemCrit = None
+        if self.__pendingEvent is not None:
+            LOG_WARNING('There is MemoryCriticalEvent but it was not logged')
+            self.__pendingEvent = None
+        from PlayerEvents import g_playerEvents
+        g_playerEvents.onAccountShowGUI -= self.__logPendingMemCritEvent
+        g_playerEvents.onAvatarBecomePlayer -= self.__logPendingMemCritEvent
         del self.__loweredSettings[:]
         return
 
+    def __logMemCritEvent(self, memCriticalEvent):
+        player = BigWorld.player()
+        if player is not None and player.isPlayer:
+            from PlayerEvents import g_playerEvents
+            if not g_playerEvents.isPlayerEntityChanging:
+                player.logMemoryCriticalEvent(memCriticalEvent)
+                return True
+        return False
+
+    def __logPendingMemCritEvent(self, *args, **kwargs):
+        if self.__pendingEvent is not None:
+            if not self.__logMemCritEvent(self.__pendingEvent):
+                LOG_WARNING('MemoryCriticalEvent was waiting to be logged but endpoint (Account or Avatar) is missing')
+                return
+            self.__pendingEvent = None
+        else:
+            LOG_ERROR('Pending MemoryCriticalEvent is missing')
+        from PlayerEvents import g_playerEvents
+        g_playerEvents.onAccountShowGUI -= self.__logPendingMemCritEvent
+        g_playerEvents.onAvatarBecomePlayer -= self.__logPendingMemCritEvent
+        return
+
+    def __postponeLogMemCritEvent(self, memCriticalEvent):
+        self.__pendingEvent = memCriticalEvent
+        from PlayerEvents import g_playerEvents
+        g_playerEvents.onAccountShowGUI += self.__logPendingMemCritEvent
+        g_playerEvents.onAvatarBecomePlayer += self.__logPendingMemCritEvent
+
     def __call__(self):
+        memCriticalEvent = BigWorld.collectLastMemoryCriticalEvent()
+        if not self.__logMemCritEvent(memCriticalEvent):
+            self.__postponeLogMemCritEvent(memCriticalEvent)
         if self.__needReboot:
             return
         WWISE.WW_onMemoryCritical()

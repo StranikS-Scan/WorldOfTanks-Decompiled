@@ -26,6 +26,7 @@ from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.utils import decorators
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import int2roman, dependency
+from items.components.c11n_constants import ItemTags
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.goodies import IGoodiesCache
@@ -290,7 +291,9 @@ class VehicleSellDialog(VehicleSellDialogMeta):
     def __prepareVehicleCustomizations(self, vehicle):
         installedCustomizations = self.__itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.STYLE, criteria=REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle)).values()
         if not installedCustomizations:
-            installedCustomizations = self.__itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria=REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle)).itervalues()
+            criteria = REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle)
+            criteria |= ~REQ_CRITERIA.CUSTOMIZATION.HAS_TAGS([ItemTags.NATIONAL_EMBLEM])
+            installedCustomizations = self.__itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria=criteria).itervalues()
             installedCustomizations = sorted(installedCustomizations, key=lambda item: TYPES_ORDER.index(item.itemTypeID))
         customizationOnVehicle = []
         for customization in installedCustomizations:

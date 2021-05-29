@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/lobby_context.py
-from Event import Event, EventManager
+from helpers.server_settings import ServerSettings
 import BigWorld
+from Event import Event, EventManager
+from account_helpers import isRoamingEnabled
 from adisp import async, process
 from constants import CURRENT_REALM
+from debug_utils import LOG_ERROR, LOG_NOTE
 from gui.lobby_ctx_listener import LobbyContextChangeListener
 from helpers import dependency
-from helpers.server_settings import ServerSettings
-from account_helpers import isRoamingEnabled
-from debug_utils import LOG_ERROR, LOG_NOTE
 from ids_generators import Int32IDGenerator
 from predefined_hosts import g_preDefinedHosts
 from skeletons.connection_mgr import IConnectionManager
@@ -34,6 +34,14 @@ class LobbyContext(ILobbyContext):
         self.__em = EventManager()
         self.onServerSettingsChanged = Event(self.__em)
         return
+
+    @property
+    def collectUiStats(self):
+        return self.__guiCtx.get('collectUiStats', True)
+
+    @property
+    def needLogUXEvents(self):
+        return self.__guiCtx.get('logUXEvents', False)
 
     def clear(self):
         self.__headerNavigationConfirmators.clear()
@@ -103,14 +111,6 @@ class LobbyContext(ILobbyContext):
 
     def getGuiCtx(self):
         return self.__guiCtx
-
-    @property
-    def collectUiStats(self):
-        return self.__guiCtx.get('collectUiStats', True)
-
-    @property
-    def needLogUXEvents(self):
-        return self.__guiCtx.get('logUXEvents', False)
 
     def getServerSettings(self):
         return self.__serverSettings
@@ -190,7 +190,7 @@ class LobbyContext(ILobbyContext):
     @async
     @process
     def isHeaderNavigationPossible(self, callback=None):
-        for confirmator in self.__headerNavigationConfirmators:
+        for confirmator in set(self.__headerNavigationConfirmators):
             confirmed = yield confirmator()
             if not confirmed:
                 callback(False)

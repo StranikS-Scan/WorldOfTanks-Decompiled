@@ -14,8 +14,7 @@ class VehicleDescrCrew(object):
         self._crewCompactDescrs = crewCompactDescrs
         self._activityFlags = activityFlags
         self._isFire = isFire
-        skills = self._validateAndComputeCrew()
-        self._skills = skills
+        self._skills = skills = self._validateAndComputeCrew()
         if _DO_DEBUG_LOG:
             items = skills.iteritems()
             for skillName, skillData in sorted(items, cmp=lambda x, y: cmp(x[0], y[0])):
@@ -425,6 +424,7 @@ class VehicleDescrCrew(object):
      'commander_expert': None,
      'commander_sixthSense': None,
      'commander_eagleEye': _process_commander_eagleEye,
+     'commander_enemyShotPredictor': None,
      'driver_tidyPerson': None,
      'driver_smoothDriving': None,
      'driver_virtuoso': _process_driver_virtuoso,

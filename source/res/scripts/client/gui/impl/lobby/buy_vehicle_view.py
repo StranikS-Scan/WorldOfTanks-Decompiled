@@ -3,6 +3,7 @@
 import logging
 from collections import namedtuple
 from functools import partial
+import adisp
 import nations
 import constants
 from CurrentVehicle import g_currentPreviewVehicle
@@ -50,7 +51,7 @@ from gui.shared.events import VehicleBuyEvent
 from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleTradeInProcessor, VehicleRestoreProcessor, VehiclePersonalTradeInProcessor
 from helpers import i18n, dependency, int2roman, func_utils
 from shared_utils import CONST_CONTAINER
-from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, IEventProgressionController, IPersonalTradeInController
+from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, IEventProgressionController, IPersonalTradeInController, ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
 from frameworks.wulf import WindowFlags, ViewStatus, ViewSettings
 _logger = logging.getLogger(__name__)
@@ -80,6 +81,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
     __restore = dependency.descriptor(IRestoreController)
     __bootcamp = dependency.descriptor(IBootcampController)
     __eventProgression = dependency.descriptor(IEventProgressionController)
+    __soundEventChecker = dependency.descriptor(ISoundEventChecker)
     __RENT_NOT_SELECTED_IDX = -2
     __RENT_UNLIM_IDX = -1
     __CREW_NOT_SELECTED_IDX = -1
@@ -452,6 +454,15 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
 
     @decorators.process('buyItem')
     def __requestForMoneyObtain(self):
+        try:
+            self.__soundEventChecker.lockPlayingSounds()
+            yield self.__requestForMoneyObtainImpl()
+        finally:
+            self.__soundEventChecker.unlockPlayingSounds()
+
+    @adisp.async
+    @adisp.process
+    def __requestForMoneyObtainImpl(self, callback):
         equipmentBlock = self.viewModel.equipmentBlock
         isTradeIn = self.__isTradeIn() and self.__tradeOffVehicle is not None and not self.__isRentVisible
         isPersonalTradeIn = self.__isPersonalTradeIn() and self.__personalTradeInSaleVehicle is not None and not self.__isRentVisible
@@ -478,15 +489,18 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             result = yield showI18nConfirmDialog(confirmationType, meta=I18nConfirmDialogMeta(confirmationType, ctx, ctx), focusedID=DIALOG_BUTTON_ID.SUBMIT)
             if not result or self.isDisposed():
                 self.__tradeInInProgress = False
+                callback(result)
                 return
             result = yield processor.request()
             if result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             if self.isDisposed():
+                callback(result)
                 return
             self.__tradeInInProgress = False
             if not result.success:
                 self.__onWindowClose()
+                callback(result)
                 return
         if isWithSlot:
             result = yield VehicleSlotBuyer(showConfirm=False, showWarning=False).request()
@@ -494,6 +508,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             if not result.success or self.isDisposed():
                 self.__purchaseInProgress = False
+                callback(result)
                 return
         if not (isTradeIn or isPersonalTradeIn):
             emptySlotAvailable = self.__itemsCache.items.inventory.getFreeSlots(self.__stats.vehicleSlots) > 0
@@ -511,6 +526,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             self.__purchaseInProgress = False
         if result and result.success and not self.isDisposed():
             self.showCongratulations()
+        callback(result)
         return
 
     def __getTradeInCTX(self, vehicle):

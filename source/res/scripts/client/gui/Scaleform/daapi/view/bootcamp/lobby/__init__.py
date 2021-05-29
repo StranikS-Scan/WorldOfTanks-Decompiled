@@ -4,7 +4,7 @@ from bootcamp.Bootcamp import g_bootcamp
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.app_loader import settings as app_settings
-from gui.shared import EVENT_BUS_SCOPE, g_eventBus
+from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ScopeTemplates, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
@@ -40,23 +40,11 @@ def getBusinessHandlers():
 class BootcampPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = ((VIEW_ALIAS.BOOTCAMP_LOBBY_OVERLAY_WINDOW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.BOOTCAMP_INTRO_VIDEO, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.BATTLE_RESULTS, self.loadViewByCtxEvent),
+        listeners = ((VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.LOBBY, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOTCAMP_LOBBY_HIGHLIGHTS, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.LOBBY_RESEARCH, self.__loadResearch),
-         (VIEW_ALIAS.EXIT_FROM_RESEARCH, self.__exitFromResearch),
-         (VIEW_ALIAS.LOBBY_TECHTREE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOTCAMP_MESSAGE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOTCAMP_INTERLUDE_VIDEO, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.PERSONAL_CASE, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.VEHICLE_PREVIEW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.IMAGE_VIEW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.VEHICLE_BUY_WINDOW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.PACK_ITEM_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOTCAMP_QUESTS_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.SUBTITLES_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOTCAMP_ADD_HIGHLIGHT, self.__onShowHint),
@@ -67,8 +55,6 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_SHOW, self.__queueDialogShow),
          (VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_CLOSE, self.__queueDialogClose))
         super(BootcampPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
-        self.__exitEvent = None
-        return
 
     def __onHideHint(self, event):
         hintWindow = self.findViewByAlias(WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.BOOTCAMP_LOBBY_HIGHLIGHTS)
@@ -114,13 +100,3 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
         queueDialog = self.findViewByAlias(WindowLayer.TOP_WINDOW, VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG)
         if queueDialog:
             queueDialog.destroy()
-
-    def __loadResearch(self, event):
-        ctx = event.ctx
-        self.__exitEvent = ctx.get('exit')
-        self.loadViewWithDefName(VIEW_ALIAS.LOBBY_RESEARCH, ctx=ctx)
-
-    def __exitFromResearch(self, _):
-        if self.__exitEvent is not None:
-            g_eventBus.handleEvent(self.__exitEvent, scope=EVENT_BUS_SCOPE.LOBBY)
-        return

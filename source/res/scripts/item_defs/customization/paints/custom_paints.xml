@@ -1120,6 +1120,14 @@
       <metallic>	0.2	</metallic>
       <userString>	#vehicle_customization:repaint/traditional_beauty_kimono	</userString>
     </paint>
+    <paint>
+      <id>	124	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_31.png	</texture>
+      <color>	50 42 45 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/samurai_spirits	</userString>
+    </paint>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
@@ -1948,6 +1956,30 @@
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/cis_tournament_3	</userString>
     </paint>
+    <paint>
+      <id>	120	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_27.png	</texture>
+      <color>	39 45 45 255	</color>
+      <gloss>	0.64	</gloss>
+      <metallic>	0.5	</metallic>
+      <userString>	#vehicle_customization:repaint/cis_event_tournament_1	</userString>
+    </paint>
+    <paint>
+      <id>	121	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_27.png	</texture>
+      <color>	39 45 45 255	</color>
+      <gloss>	0.64	</gloss>
+      <metallic>	0.5	</metallic>
+      <userString>	#vehicle_customization:repaint/cis_event_tournament_2	</userString>
+    </paint>
+    <paint>
+      <id>	122	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_27.png	</texture>
+      <color>	39 45 45 255	</color>
+      <gloss>	0.64	</gloss>
+      <metallic>	0.5	</metallic>
+      <userString>	#vehicle_customization:repaint/cis_event_tournament_3	</userString>
+    </paint>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
@@ -2038,7 +2070,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	Dragon1	</name>
+    <name>	Clan Customization 2021	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -2055,6 +2087,14 @@
       <gloss>	0.5	</gloss>
       <metallic>	0.3	</metallic>
       <userString>	#vehicle_customization:repaint/dragon	</userString>
+    </paint>
+    <paint>
+      <id>	117	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_11.png	</texture>
+      <color>	169 201 211 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/griffin	</userString>
     </paint>
     <usages>
       <item>
@@ -2097,6 +2137,30 @@
       <gloss>	0.65	</gloss>
       <metallic>	0.5	</metallic>
       <userString>	#vehicle_customization:repaint/bp2021_3	</userString>
+    </paint>
+    <paint>
+      <id>	115	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_01.png	</texture>
+      <color>	160 119 96 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/bp2021_5_3	</userString>
+    </paint>
+    <paint>
+      <id>	116	</id>
+      <texture>	gui/maps/vehicles/repaints/ussr_color_03.png	</texture>
+      <color>	108 114 57 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/bp2021_5_2	</userString>
+    </paint>
+    <paint>
+      <id>	123	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	17 17 20 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <userString>	#vehicle_customization:repaint/bp2021s2_style1	</userString>
     </paint>
     <usages>
       <item>
@@ -2252,6 +2316,84 @@
       <gloss>	0.01	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/gagarin	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	May Marathon 2021	</name>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	114	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	16 16 33 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/may_marathon_2021	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Canada Day 2021	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	125	</id>
+      <texture>	gui/maps/vehicles/repaints/primer_marmot_01.png	</texture>
+      <color>	84 6 10 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/canada_day_2021	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	CN 360 Anniversary	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	127	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_17.png	</texture>
+      <color>	178 178 178 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/360_anniversary	</userString>
     </paint>
     <usages>
       <item>

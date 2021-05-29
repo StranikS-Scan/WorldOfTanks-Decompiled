@@ -22,12 +22,6 @@ from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
 _DELAY_FOR_OPENING_RADIAL_MENU = 0.2
-_PLAY_PING_SOUNDS_FOR_PLAYER_USING_DIRECTION_ONLY = True
-_SOUND_OBJECT_NAMES_BY_MARKER_TYPE = {MarkerType.VEHICLE_MARKER_TYPE: 'VehicleMarkerSoundObject_',
- MarkerType.BASE_MARKER_TYPE: 'BaseMakerSoundObject_',
- MarkerType.LOCATION_MARKER_TYPE: 'LocationMakerSoundObject_',
- MarkerType.HEADQUARTER_MARKER_TYPE: 'HeadquarterMarkerSoundObject_'}
-_DEFAULT_SOUND_OBJECT_NAME = 'DefaultSoundObject_'
 _TARGET_ID_IS_ENEMY_VEHICLE = {BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY, BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY}
 _CHAT_COMMAND_DEFINING_SOS_REPLY = {BATTLE_CHAT_COMMAND_NAMES.HELPME}
 _IS_NON_PLAYER_NOTIFICATION = '_npc'
@@ -35,7 +29,7 @@ _SKIP_ON_COMMAND_RECEIVED = {BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
  BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION,
  BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA,
  BATTLE_CHAT_COMMAND_NAMES.CLEAR_CHAT_COMMANDS}
-CommandNotificationData = namedtuple('CommandNotificationData', 'matrixProvider, soundObjectName, targetID')
+CommandNotificationData = namedtuple('CommandNotificationData', 'matrixProvider, targetID')
 _logger = logging.getLogger(__name__)
 
 class AvatarChatKeyHandling(object):
@@ -141,7 +135,7 @@ class AvatarChatKeyHandling(object):
             advChatCmdData = advChatCmp.getCommandDataForTargetIDAndMarkerType(targetID, markerType)
             return advChatCmdData
 
-    def __getMatrixProvider(self, position):
+    def __createMatrix(self, position):
         matrixProvider = Matrix()
         matrixProvider.translation = position
         return matrixProvider
@@ -173,7 +167,7 @@ class AvatarChatKeyHandling(object):
                 return createTranslationMatrix(position)
             return
         else:
-            return vehicle.matrix
+            return Matrix(vehicle.matrix)
 
     def __getObjectivePosition(self, objectID):
         teamId, baseId = getBaseTeamAndIDFromUniqueID(objectID)
@@ -213,7 +207,7 @@ class AvatarChatKeyHandling(object):
         if position is None:
             return
         else:
-            matrixProvider = self.__getMatrixProvider(position)
+            matrixProvider = self.__createMatrix(position)
             return matrixProvider
 
     def __getHQMatrixProvider(self, cmd, destructibleEntityID=None):
@@ -226,18 +220,18 @@ class AvatarChatKeyHandling(object):
             destructibleObj = destructibleEntityComp.getDestructibleEntity(destructibleEntityID)
             if destructibleObj is None:
                 return
-            matrixProvider = self.__getMatrixProvider(destructibleObj.position)
+            matrixProvider = self.__createMatrix(destructibleObj.position)
             return matrixProvider
 
     def __getLocationMarkerMatrixProvider(self, cmd, targetID=None):
         if cmd is not None:
-            matrixProvider = self.__getMatrixProvider(cmd.getMarkedPosition())
+            matrixProvider = self.__createMatrix(cmd.getMarkedPosition())
             return matrixProvider
         if targetID is None and cmd is not None:
             targetID = cmd.getFirstTargetID()
         locationPointData = g_locationPointManager.getLocationPointData(targetID)
         if locationPointData is not None:
-            matrixProvider = self.__getMatrixProvider(locationPointData.position)
+            matrixProvider = self.__createMatrix(locationPointData.position)
             return matrixProvider
         else:
             return
@@ -250,7 +244,7 @@ class AvatarChatKeyHandling(object):
             if cmdSenderVehicleID != self.playerVehicleID:
                 return
             notification = cmd.getSoundEventName(True)
-            self.__playSoundNotification(notification, None, None, None, True, True)
+            self.__playSoundNotification(notification, None, True, True)
             return
 
     def __onCommandReceivedReply(self, commandName, cmd):
@@ -301,9 +295,9 @@ class AvatarChatKeyHandling(object):
             notification = command.soundNotification
             if notification is None:
                 return
-            matrixProvider = self.__getMatrixProvider(position)
+            matrixProvider = self.__createMatrix(position)
             sentByPlayer = True if creatorID == self.playerVehicleID else False
-            self.__playSoundNotification(notification, None, None, matrixProvider, True, sentByPlayer)
+            self.__playSoundNotification(notification, matrixProvider.translation, True, sentByPlayer)
             return
 
     def __getOriginalCommandID(self, targetID, markerType):
@@ -325,8 +319,6 @@ class AvatarChatKeyHandling(object):
             soundNotificationReply = _ACTIONS.battleChatCommandFromActionID(commandID).soundNotificationReply
             if soundNotificationReply is None or markerType not in self.__customMatrixProviderGetter:
                 return
-            soundObjectName = _SOUND_OBJECT_NAMES_BY_MARKER_TYPE.get(markerType, _DEFAULT_SOUND_OBJECT_NAME)
-            soundObjectName += str(targetID)
             if targetID == self.playerVehicleID:
                 matrixProvider = self.__customMatrixProviderGetter[markerType](None, replierID)
             else:
@@ -335,7 +327,7 @@ class AvatarChatKeyHandling(object):
             if replierID != self.playerVehicleID and targetID != self.playerVehicleID:
                 enableVoice = False
             sentByPlayer = True if replierID == self.playerVehicleID else False
-            self.__playSoundNotification(soundNotificationReply, None, soundObjectName, matrixProvider, enableVoice, sentByPlayer)
+            self.__playSoundNotification(soundNotificationReply, matrixProvider.translation, enableVoice, sentByPlayer)
             return
 
     def __onCommandReceived(self, cmd):
@@ -376,22 +368,20 @@ class AvatarChatKeyHandling(object):
                 vehicleID = self.__getVehicleIDForCmdSender(cmd)
             return vehicleID
 
-    def __getSoundObjectNameAndMatrixProvider(self, cmd, markerType):
+    def __getMatrixProvider(self, cmd, markerType):
         if markerType not in self.__customMatrixProviderGetter:
-            return CommandNotificationData(matrixProvider=None, soundObjectName=None, targetID=None)
+            return CommandNotificationData(matrixProvider=None, targetID=None)
         else:
             matrixProvider = self.__customMatrixProviderGetter[markerType](cmd)
             vehicleID = self.__getVehicleIDByCmd(cmd)
-            soundObjectName = _SOUND_OBJECT_NAMES_BY_MARKER_TYPE.get(MarkerType.VEHICLE_MARKER_TYPE, _DEFAULT_SOUND_OBJECT_NAME)
-            soundObjectName += str(vehicleID)
-            return CommandNotificationData(matrixProvider=matrixProvider, soundObjectName=soundObjectName, targetID=vehicleID)
+            return CommandNotificationData(matrixProvider=matrixProvider, targetID=vehicleID)
 
     def __playSoundNotificationOnCommandReceived(self, cmd, markerType, useSoundNotification=False, notificationName=None, enableVoice=True):
         if cmd.isEpicGlobalMessage():
             if self.soundNotifications:
                 self.soundNotifications.play(EPIC_SOUND.BF_EB_GLOBAL_MESSAGE)
         else:
-            commandNotificationData = self.__getSoundObjectNameAndMatrixProvider(cmd, markerType)
+            commandNotificationData = self.__getMatrixProvider(cmd, markerType)
             if notificationName is None:
                 notificationName = cmd.getSoundEventName(useSoundNotification)
             if enableVoice is True:
@@ -404,7 +394,7 @@ class AvatarChatKeyHandling(object):
                         _logger.info('Voice was blocked for the receiver of a private message due to flood prevention system!')
             cmdSenderVehicleID = self.__getVehicleIDForCmdSender(cmd)
             sentByPlayer = True if cmdSenderVehicleID == self.playerVehicleID else False
-            self.__playSoundNotification(notificationName, None, commandNotificationData.soundObjectName, commandNotificationData.matrixProvider, enableVoice, sentByPlayer)
+            self.__playSoundNotification(notificationName, commandNotificationData.matrixProvider.translation, enableVoice, sentByPlayer)
         return
 
     def __resetDebugOutput(self):
@@ -431,20 +421,18 @@ class AvatarChatKeyHandling(object):
             self.__callbackDelayer.delayCallback(4.0, self.__resetDebugOutput)
             return
 
-    def __playSoundNotification(self, notification, sndPos=None, soundObjectName=None, matrixProvider=None, enableVoice=True, isSentByPlayer=True):
+    def __playSoundNotification(self, notification, sndPos=None, enableVoice=True, isSentByPlayer=True):
         if not self.soundNotifications or notification is None:
             return
         else:
             categoryVoiceIsEnabled = self.soundNotifications.isCategoryEnabled('voice')
             if categoryVoiceIsEnabled and enableVoice is False:
                 self.__enableVoices(enableVoice)
-            playEffect = sndPos is not None or matrixProvider is not None or isSentByPlayer
+            playEffect = sndPos is not None or isSentByPlayer
             prevFxState = self.__switchSoundFXTo(playEffect)
             if not isSentByPlayer:
                 notification += _IS_NON_PLAYER_NOTIFICATION
-            elif _PLAY_PING_SOUNDS_FOR_PLAYER_USING_DIRECTION_ONLY:
-                matrixProvider = None
-            self.soundNotifications.play(notification, None, None, sndPos, soundObjectName, matrixProvider)
+            self.soundNotifications.play(notification, position=sndPos)
             if categoryVoiceIsEnabled and enableVoice is False:
                 self.__enableVoices(True)
             if prevFxState != playEffect:

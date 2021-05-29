@@ -81,7 +81,11 @@ class GAME(CONST_CONTAINER):
     ENABLE_POSTMORTEM_DELAY = 'enablePostMortemDelay'
     REPLAY_ENABLED = 'replayEnabled'
     SNIPER_ZOOM = 'sniperZoom'
+    PRE_COMMANDER_CAM = 'preCommanderCam'
+    COMMANDER_CAM = 'commanderCam'
     HULLLOCK_ENABLED = 'hullLockEnabled'
+    SHOW_VEHICLE_HP_IN_PLAYERS_PANEL = 'showVehicleHPinPlayersPanel'
+    SHOW_VEHICLE_HP_IN_MINIMAP = 'showVehicleHPinMinimap'
     ENABLE_SERVER_AIM = 'useServerAim'
     SHOW_DAMAGE_ICON = 'showDamageIcon'
     SHOW_VEHICLES_COUNTER = 'showVehiclesCounter'
@@ -108,10 +112,12 @@ class GAME(CONST_CONTAINER):
     GAMEPLAY_ASSAULT = 'gameplay_assault'
     GAMEPLAY_NATIONS = 'gameplay_nations'
     GAMEPLAY_EPIC_STANDARD = 'gameplay_epicStandard'
+    GAMEPLAY_ONLY_10_MODE = 'gameplay_only10Mode'
     GAMEPLAY_EPIC_DOMINATION = 'gameplay_epicDomination'
     SHOW_VECTOR_ON_MAP = 'showVectorOnMap'
     SHOW_SECTOR_ON_MAP = 'showSectorOnMap'
     SHOW_VEH_MODELS_ON_MAP = 'showVehModelsOnMap'
+    SHOW_ARTY_HIT_ON_MAP = 'showArtyHitOnMap'
     MINIMAP_VIEW_RANGE = 'minimapViewRange'
     MINIMAP_MAX_VIEW_RANGE = 'minimapMaxViewRange'
     MINIMAP_DRAW_RANGE = 'minimapDrawRange'
@@ -166,6 +172,7 @@ class SOUND(CONST_CONTAINER):
     SOUND_SPEAKERS = 'soundSpeakers'
     VOICE_NOTIFICATION = 'voiceNotificationVolume'
     DETECTION_ALERT_SOUND = 'bulbVoices'
+    ARTY_SHOT_ALERT_SOUND = 'artyBulbVoices'
     CAPTURE_DEVICES = 'captureDevice'
     VOIP_ENABLE = 'enableVoIP'
     VOIP_ENABLE_CHANNEL = 'enableVoIPChannel'
@@ -193,6 +200,23 @@ class CONTROLS(CONST_CONTAINER):
 class AIM(CONST_CONTAINER):
     ARCADE = 'arcade'
     SNIPER = 'sniper'
+    SPG = 'spg'
+
+
+class SPGAim(CONST_CONTAINER):
+    SHOTS_RESULT_INDICATOR = 'shotsResultIndicator'
+    SPG_SCALE_WIDGET = 'spgScaleWidget'
+    SPG_STRATEGIC_CAM_MODE = 'spgStrategicCamMode'
+    AUTO_CHANGE_AIM_MODE = 'autoChangeAimMode'
+    AIM_ENTRANCE_MODE = 'aimEntranceMode'
+    SCROLL_SMOOTHING_ENABLED = 'scrollSmoothingEnabled'
+
+
+class SPGAimEntranceModeOptions(CONST_CONTAINER):
+    LAST = 'last'
+    STRATEGIC = 'strategic'
+    TRAJECTORY = 'trajectory'
+    SETTINGS_OPTIONS = [LAST, STRATEGIC, TRAJECTORY]
 
 
 class MARKERS(CONST_CONTAINER):
@@ -327,6 +351,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     OPT_DEV_DRAG_AND_DROP_HINT = 'OptDevDragAndDropHint'
     DOGTAG_HANGAR_HINT = 'DogTagHangarHint'
     DOGTAG_PROFILE_HINT = 'DogTagProfileHint'
+    MODE_SELECTOR_WIDGETS_BTN_HINT = 'ModeSelectorWidgetsBtnHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

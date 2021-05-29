@@ -47,9 +47,13 @@ class SoundEventChecker(ISoundEventChecker):
     def lockPlayingSounds(self):
         self.__isLocked = True
 
-    def unlockPlayingSounds(self):
+    def unlockPlayingSounds(self, restore=True):
         self.__isLocked = False
-        self.__playAllSounds()
+        if restore:
+            self.__playAllSounds()
+        else:
+            self.__spendCurrencies = []
+            self.__earnCurrencies = []
 
     def __stop(self):
         self.__isLocked = False

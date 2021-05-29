@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/season_provider.py
 from collections import defaultdict
 from operator import itemgetter
+import typing
 import season_common
 from shared_utils import first
 from skeletons.gui.game_control import ISeasonProvider
@@ -15,11 +16,6 @@ from skeletons.connection_mgr import IConnectionManager
 
 class SeasonProvider(ISeasonProvider):
     __connectionMgr = dependency.descriptor(IConnectionManager)
-
-    def __init__(self):
-        self.__settingsProvider = None
-        self.__getPrimeTimesIter = None
-        return
 
     def hasAnySeason(self):
         return bool(self.__getSeasonSettings().seasons)
@@ -127,6 +123,16 @@ class SeasonProvider(ISeasonProvider):
                 cycle = season.getLastCycleInfo()
             return cycle.ordinalNumber if cycle else 0
 
+    def getEventEndTimestamp(self):
+        if self.hasPrimeTimesLeft():
+            currServerTime = time_utils.getCurrentLocalServerTimestamp()
+            actualSeason = self.getCurrentSeason() or self.getNextSeason()
+            actualCycle = actualSeason.getCycleInfo() or actualSeason.getNextCycleInfo(currServerTime)
+            lastPrimeTimeEnd = max([ period[1] for primeTime in self.getPrimeTimes().values() for period in primeTime.getPeriodsBetween(int(currServerTime), actualCycle.endDate) ])
+            return lastPrimeTimeEnd
+        else:
+            return None
+
     def getCurrentCycleInfo(self):
         season = self.getCurrentSeason()
         if season is not None:
@@ -161,11 +167,11 @@ class SeasonProvider(ISeasonProvider):
             return (PrimeTimeStatus.AVAILABLE, timeTillUpdate, isNow) if isNow else (PrimeTimeStatus.NOT_AVAILABLE, timeTillUpdate, False)
 
     def getPrimeTimes(self):
-        gameModeSettings = self.__settingsProvider()
+        gameModeSettings = self.__getSeasonSettings()
         primeTimes = gameModeSettings.primeTimes
         peripheryIDs = gameModeSettings.peripheryIDs
         primeTimesPeriods = defaultdict(lambda : defaultdict(list))
-        for primeTime in self.__getPrimeTimesIter(primeTimes):
+        for primeTime in primeTimes.itervalues():
             period = (primeTime['start'], primeTime['end'])
             weekdays = primeTime['weekdays']
             for pID in primeTime['peripheryIDs']:
@@ -212,7 +218,35 @@ class SeasonProvider(ISeasonProvider):
         currTime = time_utils.getCurrentLocalServerTimestamp()
         if seasonsChangeTime and (currTime + timeLeft > seasonsChangeTime or timeLeft == 0):
             timeLeft = seasonsChangeTime - currTime
-        return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
+        return timeLeft + 1 if timeLeft > 0 else 0
+
+    def hasPrimeTimesLeft(self):
+        season = self.getCurrentSeason()
+        if season is not None and season.hasActiveCycle(int(self.__getNow())):
+            seasonEnd = season.getEndDate()
+            peripheryIDs = self.__getAllPeripheryIDs()
+            for peripheryID, primeTime in self.getPrimeTimes().iteritems():
+                if peripheryID in peripheryIDs and primeTime.getPeriodsBetween(int(self.__getNow()), seasonEnd):
+                    return True
+
+        return False
+
+    def hasAvailablePrimeTimeServers(self):
+        allPeripheryIDs = self.__getAllPeripheryIDs()
+        for peripheryID in allPeripheryIDs:
+            primeTimeStatus, _, _ = self.getPrimeTimeStatus(peripheryID)
+            if primeTimeStatus == PrimeTimeStatus.AVAILABLE:
+                return True
+
+        return False
+
+    def isInPrimeTime(self):
+        _, _, isNow = self.getPrimeTimeStatus()
+        return isNow
+
+    def isFrozen(self):
+        status, _, _ = self.getPrimeTimeStatus()
+        return status == PrimeTimeStatus.FROZEN
 
     def _getHostList(self):
         hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)
@@ -224,17 +258,18 @@ class SeasonProvider(ISeasonProvider):
              0))
         return hostsList
 
-    def _setSeasonSettingsProvider(self, settingsProvider):
-        self.__settingsProvider = settingsProvider
-
-    def _setPrimeTimesIteratorGetter(self, primeTimesIterator):
-        self.__getPrimeTimesIter = primeTimesIterator
-
     def _createSeason(self, cycleInfo, seasonData):
         return GameSeason(cycleInfo, seasonData)
 
     def __getSeasonSettings(self):
-        return self.__settingsProvider()
+        return self.getModeSettings()
+
+    def __getAllPeripheryIDs(self):
+        if self.__connectionMgr.isStandalone():
+            allPeripheryIDs = {self.__connectionMgr.peripheryID}
+        else:
+            allPeripheryIDs = {host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming()}
+        return allPeripheryIDs
 
     @staticmethod
     def __getNow():

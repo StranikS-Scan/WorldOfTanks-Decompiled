@@ -85,7 +85,7 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
             self.setSelectedPoint(pointId)
 
     def onDeploymentReady(self):
-        self.__playSound(EPIC_SOUND.EB_READY_FOR_DEPLOYMENT_ID[True])
+        self.__playSound(EPIC_SOUND.EB_READY_FOR_DEPLOYMENT)
 
     def onRespawnInfoUpdated(self, respawnInfo):
         vehicle = self.__carousel.getSelectedVehicle()

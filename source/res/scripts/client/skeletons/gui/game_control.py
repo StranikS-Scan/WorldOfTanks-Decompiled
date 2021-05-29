@@ -5,6 +5,7 @@ from constants import ARENA_BONUS_TYPE
 if typing.TYPE_CHECKING:
     from Event import Event
     from gui.game_control.event_progression_controller import PlayerLevelInfo
+    from gui.game_control.mapbox_controller import ProgressionData
     from gui.shared.gui_items import Vehicle, Tankman
     from gui.periodic_battles.models import PrimeTime
     from gui.prb_control.items import ValidationResult
@@ -15,12 +16,13 @@ if typing.TYPE_CHECKING:
     from gui.ranked_battles.constants import YearAwardsNames
     from gui.shared.gui_items.fitting_item import RentalInfoProvider
     from gui.server_events.event_items import RankedQuest
+    from helpers.server_settings import _MapboxConfig
     from season_common import GameSeason
     from skeletons.account_helpers.settings_core import ISettingsCache
     from gui.ranked_battles.ranked_models import BattleRankInfo
     from gui.server_events.bonuses import SimpleBonus
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
-    from gui.shared.gui_items import ItemsCollection
+    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, RankedBattlesConfig
 
 class IGameController(object):
 
@@ -69,6 +71,9 @@ class IGameWindowController(IGameController):
 
 class ISeasonProvider(object):
 
+    def getModeSettings(self):
+        raise NotImplementedError
+
     def hasAnySeason(self):
         raise NotImplementedError
 
@@ -93,7 +98,13 @@ class ISeasonProvider(object):
     def getTimer(self):
         raise NotImplementedError
 
+    def hasPrimeTimesLeft(self):
+        raise NotImplementedError
+
     def getCurrentOrNextActiveCycleNumber(self, season):
+        raise NotImplementedError
+
+    def getEventEndTimestamp(self):
         raise NotImplementedError
 
     def getCurrentCycleInfo(self):
@@ -112,6 +123,15 @@ class ISeasonProvider(object):
         raise NotImplementedError
 
     def isWithinSeasonTime(self, seasonID):
+        raise NotImplementedError
+
+    def hasAvailablePrimeTimeServers(self):
+        raise NotImplementedError
+
+    def isInPrimeTime(self):
+        raise NotImplementedError
+
+    def isFrozen(self):
         raise NotImplementedError
 
 
@@ -316,7 +336,7 @@ class ISoundEventChecker(IGameController):
     def lockPlayingSounds(self):
         raise NotImplementedError
 
-    def unlockPlayingSounds(self):
+    def unlockPlayingSounds(self, restore=True):
         raise NotImplementedError
 
 
@@ -764,22 +784,7 @@ class IQuestsController(IGameController):
         raise NotImplementedError
 
 
-class ISpecialModeController(IGameController):
-
-    def getPrimeTimes(self):
-        raise NotImplementedError
-
-    def isAvailable(self):
-        raise NotImplementedError
-
-    def hasAvailablePrimeTimeServers(self):
-        raise NotImplementedError
-
-    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
-        raise NotImplementedError
-
-
-class IRankedBattlesController(ISpecialModeController, ISeasonProvider):
+class IRankedBattlesController(IGameController, ISeasonProvider):
     onEntitlementEvent = None
     onGameModeStatusTick = None
     onGameModeStatusUpdated = None
@@ -916,15 +921,6 @@ class IRankedBattlesController(ISpecialModeController, ISeasonProvider):
     def getMaxRank(self):
         raise NotImplementedError
 
-    def getPrimeTimeStatus(self, peripheryID=None):
-        raise NotImplementedError
-
-    def getPrimeTimes(self):
-        raise NotImplementedError
-
-    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
-        pass
-
     def getRank(self, rankID):
         raise NotImplementedError
 
@@ -958,9 +954,6 @@ class IRankedBattlesController(ISpecialModeController, ISeasonProvider):
     def getSuitableVehicleLevels(self):
         raise NotImplementedError
 
-    def getTimer(self):
-        raise NotImplementedError
-
     def getTotalQualificationBattles(self):
         raise NotImplementedError
 
@@ -968,6 +961,9 @@ class IRankedBattlesController(ISpecialModeController, ISeasonProvider):
         raise NotImplementedError
 
     def getYearLBSize(self):
+        raise NotImplementedError
+
+    def getYearLBState(self):
         raise NotImplementedError
 
     def getYearRewards(self, points):
@@ -1828,7 +1824,7 @@ class IBattlePassController(IGameController):
     def getSpecialVehicles(self):
         raise NotImplementedError
 
-    def getPointsDiffForVehicle(self, intCD):
+    def getPointsDiffForVehicle(self, intCD, gameMode=ARENA_BONUS_TYPE.REGULAR):
         raise NotImplementedError
 
     def getVehicleProgression(self, intCD):
@@ -1865,9 +1861,6 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def getFinalOfferTime(self):
-        raise NotImplementedError
-
-    def getBoughtLevels(self):
         raise NotImplementedError
 
     def getPrevSeasonsStats(self):
@@ -1946,6 +1939,68 @@ class IBlueprintsConvertSaleController(IGameController):
     pass
 
 
+class IMapboxController(IGameController, ISeasonProvider):
+    onPrimeTimeStatusUpdated = None
+    onMapboxSurveyShown = None
+
+    def addProgressionListener(self, listener):
+        raise NotImplementedError
+
+    def removeProgressionListener(self, listener):
+        raise NotImplementedError
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isActive(self):
+        raise NotImplementedError
+
+    def isMapboxMode(self):
+        raise NotImplementedError
+
+    def selectMapboxBattle(self):
+        raise NotImplementedError
+
+    def getProgressionData(self):
+        raise NotImplementedError
+
+    def selectCrewbookNation(self, itemID):
+        raise NotImplementedError
+
+    def handleSurveyCompleted(self, mapName):
+        raise NotImplementedError
+
+    def getUnseenItemsCount(self):
+        raise NotImplementedError
+
+    def showSurvey(self, mapName):
+        raise NotImplementedError
+
+    def addVisitedMap(self, mapName):
+        raise NotImplementedError
+
+    def storeReward(self, numBattles, rewardIdx, rewardIconName):
+        raise NotImplementedError
+
+    def getStoredReward(self, numBattles, rewardIdx):
+        raise NotImplementedError
+
+    def setPrevBattlesPlayed(self, numBattles):
+        raise NotImplementedError
+
+    def getPrevBattlesPlayed(self):
+        raise NotImplementedError
+
+    def isMapVisited(self, mapName):
+        raise NotImplementedError
+
+    def forceUpdateProgressData(self):
+        raise NotImplementedError
+
+    def getModeSettings(self):
+        raise NotImplementedError
+
+
 class IOverlayController(IGameController):
 
     def switchOverlay(self):
@@ -1968,54 +2023,3 @@ class ISteamRegistrationOverlay(IOverlayController):
 
     def waitShow(self):
         raise NotImplementedError
-
-
-class IWeekendBrawlController(IGameController, ISeasonProvider):
-    onPrimeTimeStatusUpdated = None
-    onUpdated = None
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isModeActive(self):
-        raise NotImplementedError
-
-    def isAvailable(self):
-        raise NotImplementedError
-
-    def getConfig(self):
-        raise NotImplementedError
-
-    def getPrimeTimes(self):
-        raise NotImplementedError
-
-    def hasAvailablePrimeTimeServers(self):
-        raise NotImplementedError
-
-    def hasAnyPeripheryWithPrimeTime(self):
-        raise NotImplementedError
-
-    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
-        raise NotImplementedError
-
-    def getPrimeTimeStatus(self, peripheryID=None):
-        raise NotImplementedError
-
-    def getSuitableVehicles(self):
-        raise NotImplementedError
-
-    def hasSuitableVehicles(self):
-        raise NotImplementedError
-
-    def isSuitableVehicle(self):
-        raise NotImplementedError
-
-    def isFrozen(self):
-        raise NotImplementedError
-
-    def getCurrentRealm(self):
-        raise NotImplementedError
-
-
-class IWeekendBrawlSoundController(IGameController):
-    pass

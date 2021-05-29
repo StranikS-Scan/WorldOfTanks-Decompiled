@@ -5,7 +5,8 @@ from visual_script.registrar import VSBlockRegistrar
 import example
 import general
 import vehicle_blocks
+import qa_blocks
 g_blockRegistrar = VSBlockRegistrar(ASPECT.CLIENT, ASPECT.SERVER)
-g_blockRegistrar.regBlocksFromModule(example)
 g_blockRegistrar.regBlocksFromModule(general)
 g_blockRegistrar.regBlocksFromModule(vehicle_blocks)
+g_blockRegistrar.regBlocksFromModule(qa_blocks)

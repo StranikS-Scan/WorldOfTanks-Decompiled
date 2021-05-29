@@ -61,6 +61,8 @@ class RandomEntity(PreQueueEntity):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
+        if not woEvents:
+            g_eventDispatcher.loadHangar()
         return super(RandomEntity, self).fini(ctx, woEvents)
 
     @vehicleAmmoCheck
@@ -72,10 +74,16 @@ class RandomEntity(PreQueueEntity):
         return SelectResult(True) if name == PREBATTLE_ACTION_NAME.RANDOM else super(RandomEntity, self).doSelectAction(action)
 
     def _doQueue(self, ctx):
-        mapID = ctx.getDemoArenaTypeID()
-        if mapID:
-            LOG_DEBUG('Demonstrator mapID:', ArenaType.g_cache[mapID].geometryName)
-        BigWorld.player().enqueueRandom(ctx.getVehicleInventoryID(), gameplaysMask=ctx.getGamePlayMask(), arenaTypeID=mapID)
+        mmData = ctx.getDemoArenaTypeID()
+        if mmData:
+            team = mmData >> 28 & 15
+            levelType = mmData >> 24 & 15
+            arenaTypeID = mmData & 16777215
+            LOG_DEBUG('Demonstrator gameplay selected: ', ArenaType.g_cache[arenaTypeID].gameplayName)
+            LOG_DEBUG('Demonstrator map selected: ', ArenaType.g_cache[arenaTypeID].geometryName)
+            LOG_DEBUG('Demonstrator level selected: ', levelType)
+            LOG_DEBUG('Demonstrator spawn selected: ', team)
+        BigWorld.player().enqueueRandom(ctx.getVehicleInventoryID(), gameplaysMask=ctx.getGamePlayMask(), isOnly10ModeEnabled=ctx.isOnly10ModeEnabled(), arenaTypeID=mmData)
         LOG_DEBUG('Sends request on queuing to the random battle', ctx)
 
     def _doDequeue(self, ctx):
@@ -87,10 +95,10 @@ class RandomEntity(PreQueueEntity):
         if not invID:
             raise SoftException('Inventory ID of vehicle can not be zero')
         if action is not None:
-            arenaTypeID = action.mapID
+            arenaTypeID = action.mmData
         else:
             arenaTypeID = 0
-        return RandomQueueCtx(invID, arenaTypeID=arenaTypeID, gamePlayMask=gameplay_ctx.getMask(), waitingID='prebattle/join')
+        return RandomQueueCtx(invID, arenaTypeID=arenaTypeID, gamePlayMask=gameplay_ctx.getMask(), isOnly10ModeEnabled=gameplay_ctx.isOnly10ModeEnabled(), waitingID='prebattle/join')
 
     def _goToQueueUI(self):
         g_eventDispatcher.loadBattleQueue()

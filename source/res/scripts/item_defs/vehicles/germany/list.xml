@@ -249,7 +249,7 @@
     <shortUserString>	#germany_vehicles:Maus_short	</shortUserString>
     <description>	#germany_vehicles:Maus_descr	</description>
     <price>	6100000	</price>
-    <tags>	heavyTank HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <tags>	heavyTank HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals role_HT_tank	</tags>
     <level>	10	</level>
   </G42_Maus>
   <G27_VK3001P>
@@ -328,7 +328,7 @@
     <shortUserString>	#germany_vehicles:G_E_short	</shortUserString>
     <description>	#germany_vehicles:G_E_descr	</description>
     <price>	6100000	</price>
-    <tags>	SPG HD heavySPG tankRammer_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <tags>	SPG HD heavySPG tankRammer_class1_user antifragmentationLining_superheavy_user earn_crystals role_SPG	</tags>
     <level>	10	</level>
   </G61_G_E>
   <G56_E-100>
@@ -337,7 +337,7 @@
     <shortUserString>	#germany_vehicles:E-100_short	</shortUserString>
     <description>	#germany_vehicles:E-100_descr	</description>
     <price>	6100000	</price>
-    <tags>	heavyTank HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <tags>	heavyTank HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals role_HT_tank	</tags>
     <level>	10	</level>
   </G56_E-100>
   <G55_E-75>
@@ -427,7 +427,7 @@
     <description>	#germany_vehicles:JagdPz_E100_descr	</description>
     <shortUserString>	#germany_vehicles:JagdPz_E100_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	AT-SPG HD heavyAT-SPG AT-SPG2 improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <tags>	AT-SPG HD heavyAT-SPG AT-SPG2 improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals role_ATSPG_tank	</tags>
     <level>	10	</level>
   </G72_JagdPz_E100>
   <G73_E50_Ausf_M>
@@ -436,7 +436,7 @@
     <shortUserString>	#germany_vehicles:E50_Ausf_M_short	</shortUserString>
     <description>	#germany_vehicles:E50_Ausf_M_descr	</description>
     <price>	6100000	</price>
-    <tags>	mediumTank HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <tags>	mediumTank HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals role_MT_tank	</tags>
     <level>	10	</level>
   </G73_E50_Ausf_M>
   <G63_PzI_ausf_C>
@@ -521,7 +521,7 @@
     <shortUserString>	#germany_vehicles:Leopard1_short	</shortUserString>
     <description>	#germany_vehicles:Leopard1_descr	</description>
     <price>	6100000	</price>
-    <tags>	mediumTank HD beast mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <tags>	mediumTank HD beast mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals role_MT_fireSupport	</tags>
     <level>	10	</level>
   </G89_Leopard1>
   <G91_Pro_Ag_A>
@@ -603,7 +603,7 @@
     <shortUserString>	#germany_vehicles:Waffentrager_E100_short	</shortUserString>
     <price>	6100000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG HD secret unrecoverable heavyAT-SPG AT-SPG2 extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <tags>	AT-SPG HD secret unrecoverable heavyAT-SPG AT-SPG2 extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals role_ATSPG_burstDamage	</tags>
     <level>	10	</level>
   </G98_Waffentrager_E100>
   <G83_Pz_IV_AusfA>
@@ -675,7 +675,7 @@
     <description>	#germany_vehicles:G121_Grille_15_L63_descr	</description>
     <shortUserString>	#germany_vehicles:G121_Grille_15_L63_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	AT-SPG HD mediumAT-SPG AT-SPG1 tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <tags>	AT-SPG HD mediumAT-SPG AT-SPG1 tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals role_ATSPG_fireSupport	</tags>
     <level>	10	</level>
   </G121_Grille_15_L63>
   <G134_PzKpfw_VII>
@@ -684,7 +684,7 @@
     <shortUserString>	#germany_vehicles:G134_PzKpfw_VII_short	</shortUserString>
     <description>	#germany_vehicles:G134_PzKpfw_VII_descr	</description>
     <price>	6100000	</price>
-    <tags>	heavyTank HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <tags>	heavyTank HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals role_HT_tank	</tags>
     <level>	10	</level>
   </G134_PzKpfw_VII>
   <G115_Typ_205B>
@@ -702,7 +702,7 @@
     <shortUserString>	#germany_vehicles:G125_Spz_57_Rh_short	</shortUserString>
     <description>	#germany_vehicles:G125_Spz_57_Rh_descr	</description>
     <price>	6100000	</price>
-    <tags>	lightTank HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user earn_crystals	</tags>
+    <tags>	lightTank HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user earn_crystals role_LT_tracked	</tags>
     <level>	10	</level>
   </G125_Spz_57_Rh>
   <G126_HWK_12>
@@ -775,7 +775,6 @@
     <longDescriptionSpecial>	#germany_vehicles:G142_M48RPz_long_special	</longDescriptionSpecial>
     <price>	6700	  <gold></gold>
     </price>
-    <notInShop>	true	</notInShop>
     <tags>	mediumTank HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </G142_M48RPz>
@@ -875,7 +874,7 @@
     <price>	30000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG HD secret disabledInRoaming heavyAT-SPG AT-SPG2 extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <tags>	AT-SPG HD secret disabledInRoaming heavyAT-SPG AT-SPG2 extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals role_ATSPG_burstDamage	</tags>
     <level>	10	</level>
   </G98_Waffentrager_E100_P>
   <G138_VK168_02>
@@ -887,6 +886,7 @@
     <longDescriptionSpecial>	#germany_vehicles:G138_VK168_02_long_special	</longDescriptionSpecial>
     <price>	10300	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <tags>	heavyTank HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user	</tags>
     <level>	8	</level>
   </G138_VK168_02>
@@ -1227,7 +1227,7 @@
     <price>	22500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank HD special heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <tags>	heavyTank HD special heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals role_HT_tank	</tags>
     <level>	10	</level>
   </G92_VK7201>
   <G122_VK6501H>
@@ -1495,7 +1495,7 @@
     <price>	6100000	</price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank HD secret bob cannot_be_sold beast mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank HD secret bob cannot_be_sold beast mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user role_MT_fireSupport	</tags>
     <level>	10	</level>
   </G89_Leopard1_bob>
   <G65_JagdTiger_SdKfz_185_IGR>
@@ -1576,7 +1576,7 @@
     <shortUserString>	#igr_vehicles:Maus_IGR_short	</shortUserString>
     <description>	#igr_vehicles:Maus_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	heavyTank HD secret premiumIGR improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <tags>	heavyTank HD secret premiumIGR improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals role_HT_tank	</tags>
     <level>	10	</level>
   </G42_Maus_IGR>
   <G12_Ltraktor_bot>

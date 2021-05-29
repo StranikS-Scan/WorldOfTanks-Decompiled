@@ -2,17 +2,19 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/plugins.py
 import logging
 import math
-from collections import defaultdict
+from collections import defaultdict, namedtuple
+from enum import IntEnum
 import BattleReplay
 import BigWorld
 from AvatarInputHandler import gun_marker_ctrl, aih_global_binding
+from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import SPGShotResultEnum
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME
-from aih_constants import CHARGE_MARKER_STATE
+from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME, SPGAim
+from aih_constants import CHARGE_MARKER_STATE, CTRL_MODE_NAME
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH
 from debug_utils import LOG_WARNING
-from gui import makeHtmlString
+from gui import makeHtmlString, GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_ALT_COLOR
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_DEFAULT_COLOR
 from gui.Scaleform.daapi.view.battle.shared.formatters import getHealthPercent
@@ -27,23 +29,27 @@ from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, CROSSHAIR_VIE
 from gui.battle_control.battle_constants import SHELL_SET_RESULT, VEHICLE_VIEW_STATE, NET_TYPE_OVERRIDE
 from gui.battle_control.controllers import crosshair_proxy
 from gui.battle_control.controllers.consumables.ammo_ctrl import AutoReloadingBoostStates
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.TimeInterval import TimeInterval
 from gui.shared.utils.plugins import IPlugin
 from helpers import dependency
-from helpers.time_utils import MS_IN_SECOND
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
 from soft_exception import SoftException
+from helpers.time_utils import MS_IN_SECOND
 _logger = logging.getLogger(__name__)
 _SETTINGS_KEY_TO_VIEW_ID = {AIM.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  AIM.SNIPER: CROSSHAIR_VIEW_ID.SNIPER}
+_VIEW_ID_TO_SETTINGS_KEY = {v:k for k, v in _SETTINGS_KEY_TO_VIEW_ID.iteritems()}
 _SETTINGS_KEYS = set(_SETTINGS_KEY_TO_VIEW_ID.keys())
 _SETTINGS_VIEWS = set(_SETTINGS_KEY_TO_VIEW_ID.values())
 _DEVICE_ENGINE_NAME = 'engine'
 _DEVICE_REPAIRED = 'repaired'
+_LISTENING_SETTINGS = {SPGAim.SPG_SCALE_WIDGET, GRAPHICS.COLOR_BLIND}
 _TARGET_UPDATE_INTERVAL = 0.2
 _DUAL_GUN_MARKER_STATES_MAP = {CHARGE_MARKER_STATE.VISIBLE: DUAL_GUN_MARKER_STATE.VISIBLE,
  CHARGE_MARKER_STATE.LEFT_ACTIVE: DUAL_GUN_MARKER_STATE.LEFT_PART_ACTIVE,
@@ -63,7 +69,9 @@ def createPlugins():
      'shotDone': ShotDonePlugin,
      'speedometerWheeledTech': SpeedometerWheeledTech,
      'siegeMode': SiegeModePlugin,
-     'dualgun': DualGunPlugin}
+     'dualgun': DualGunPlugin,
+     'artyCamDist': ArtyCameraDistancePlugin,
+     'spgShotResultIndicator': SPGShotResultIndicatorPlugin}
     return resultPlugins
 
 
@@ -71,10 +79,10 @@ def chooseSetting(viewID):
     return viewID if viewID in _SETTINGS_VIEWS else _SETTINGS_KEY_TO_VIEW_ID[AIM.ARCADE]
 
 
-def _makeSettingsVO(settingsCore, *keys):
+def _makeSettingsVO(settingsCore):
     getter = settingsCore.getSetting
     data = {}
-    for mode in keys:
+    for mode in _SETTINGS_KEYS:
         settings = getter(mode)
         if settings is not None:
             data[_SETTINGS_KEY_TO_VIEW_ID[mode]] = {'centerAlphaValue': settings['centralTag'] / 100.0,
@@ -90,6 +98,14 @@ def _makeSettingsVO(settingsCore, *keys):
              'gunTagType': settings['gunTagType'],
              'mixingAlpha': settings['mixing'] / 100.0,
              'mixingType': settings['mixingType']}
+
+    for view in _SETTINGS_VIEWS:
+        commonSettings = data.get(view, None)
+        if commonSettings is None:
+            commonSettings = {}
+            data[view] = commonSettings
+        commonSettings.update({'spgScaleWidgetEnabled': getter(SPGAim.SPG_SCALE_WIDGET),
+         'isColorBlind': settingsCore.getSetting(GRAPHICS.COLOR_BLIND)})
 
     return data
 
@@ -205,16 +221,16 @@ class SettingsPlugin(CrosshairPlugin):
     __slots__ = ()
 
     def start(self):
-        self._parentObj.setSettings(_makeSettingsVO(self.settingsCore, *_SETTINGS_KEYS))
+        self._parentObj.setSettings(_makeSettingsVO(self.settingsCore))
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     def stop(self):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
 
     def __onSettingsChanged(self, diff):
-        changed = set(diff.keys()) & _SETTINGS_KEYS
+        changed = set(diff.keys()) & _SETTINGS_KEYS.union(_LISTENING_SETTINGS)
         if changed:
-            self._parentObj.setSettings(_makeSettingsVO(self.settingsCore, *changed))
+            self._parentObj.setSettings(_makeSettingsVO(self.settingsCore))
 
 
 class EventBusPlugin(CrosshairPlugin):
@@ -432,6 +448,7 @@ class AmmoPlugin(CrosshairPlugin):
         ctrl.onGunAutoReloadBoostUpdated += self.__onGunAutoReloadBoostUpd
         ctrl.onShellsUpdated += self.__onShellsUpdated
         ctrl.onCurrentShellChanged += self.__onCurrentShellChanged
+        ctrl.onQuickShellChangerUpdated += self.__onQuickShellChangerUpdated
         vehStateCtrl.onVehicleControlling += self.__onVehicleControlling
         g_replayEvents.onPause += self.__onReplayPaused
         return
@@ -444,6 +461,7 @@ class AmmoPlugin(CrosshairPlugin):
         ctrl = self.sessionProvider.shared.ammo
         vehStateCtrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
+            ctrl.onQuickShellChangerUpdated -= self.__onQuickShellChangerUpdated
             ctrl.onGunSettingsSet -= self.__onGunSettingsSet
             ctrl.onGunAutoReloadTimeSet -= self.__onGunAutoReloadTimeSet
             ctrl.onGunAutoReloadBoostUpdated -= self.__onGunAutoReloadBoostUpd
@@ -478,6 +496,7 @@ class AmmoPlugin(CrosshairPlugin):
             self.__reloadAnimator.setClipAutoLoading(reloadingState.getActualValue(), reloadingState.getBaseValue(), isStun=False)
         if self.bootcampController.isInBootcamp():
             self._parentObj.as_setNetVisibleS(CROSSHAIR_CONSTANTS.VISIBLE_NET)
+        self._parentObj.as_setShellChangeTimeS(ctrl.canQuickShellChange(), ctrl.getQuickShellChangeTime())
 
     def __setReloadingState(self, state):
         self.__reloadAnimator.setReloading(state)
@@ -579,6 +598,9 @@ class AmmoPlugin(CrosshairPlugin):
             isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
             self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
         return
+
+    def __onQuickShellChangerUpdated(self, isActive, time):
+        self._parentObj.as_setShellChangeTimeS(isActive, time)
 
 
 class VehicleStatePlugin(CrosshairPlugin):
@@ -1308,3 +1330,207 @@ class DualGunPlugin(CrosshairPlugin):
         transitionTimeInSeconds = event.ctx.get('transitionTime')
         gunIndex = event.ctx.get('currentGunIndex')
         self.parentObj.as_runCameraTransitionFxS(gunIndex, transitionTimeInSeconds * MS_IN_SECOND)
+
+
+class ArtyCameraDistancePlugin(_DistancePlugin):
+    __slots__ = ()
+    _MIN_VALUE = 0.0
+    _MID_VALUE = 0.5
+    _MAX_VALUE = 1.0
+
+    def _update(self):
+        self.__updateCameraDistance()
+
+    def _onCrosshairViewChanged(self, viewID):
+        self._interval.stop()
+        if viewID == CROSSHAIR_VIEW_ID.STRATEGIC:
+            self.__updateCameraDistance()
+            self._interval.start()
+
+    def __updateCameraDistance(self):
+        inputHandler = avatar_getter.getInputHandler()
+        if inputHandler is None or inputHandler.ctrlModeName not in (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY) or not inputHandler.ctrl.isEnabled:
+            return
+        else:
+            if GUI_SETTINGS.spgAlternativeAimingCameraEnabled and self.settingsCore.getSetting(SPGAim.AUTO_CHANGE_AIM_MODE):
+                self.__updateWithAutoChangeMode(inputHandler.ctrl)
+            else:
+                self.__simpleUpdate(inputHandler.ctrl)
+            return
+
+    def __simpleUpdate(self, ctrl):
+        value = (1.0 - ctrl.getCamDistRatio()) * (self._MAX_VALUE - self._MIN_VALUE)
+        self._parentObj.as_updateScaleWidgetS(value)
+
+    def __updateWithAutoChangeMode(self, curCtrl):
+        minV, transition, maxV = curCtrl.getScaleParams()
+        camDist = curCtrl.getCamDist()
+        if camDist <= transition:
+            ratioDist = (camDist - minV) / (transition - minV)
+            value = (1.0 - ratioDist) * (self._MID_VALUE - self._MIN_VALUE) + self._MID_VALUE
+        else:
+            ratioDist = (camDist - transition) / (maxV - transition)
+            value = (1.0 - ratioDist) * (self._MAX_VALUE - self._MID_VALUE)
+        self._parentObj.as_updateScaleWidgetS(value)
+
+
+class SPGShotIndicatorState(IntEnum):
+    NOT_ACTIVE = 0
+    ACTIVE = 1
+    EMPTY_SHELL = 2
+    ACTIVE_EMPTY_SHELL = 3
+
+
+SPGShotResultData = namedtuple('ArtyShotResultVO', ['shotIdx',
+ 'shellTypeName',
+ 'shotResult',
+ 'state'])
+
+class SPGShotResultIndicatorPlugin(CrosshairPlugin):
+    __slots__ = ('__isEnabled', '__cache', '__currentFlyTimes')
+
+    def __init__(self, parentObj):
+        super(SPGShotResultIndicatorPlugin, self).__init__(parentObj)
+        self.__isEnabled = False
+        self.__cache = {}
+        self.__currentFlyTimes = {}
+
+    def start(self):
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+            crosshairCtrl.onSPGShotsIndicatorStateChanged += self.__onSPGShotsIndicatorStateChanged
+        ammoCtrl = self.sessionProvider.shared.ammo
+        if ammoCtrl is not None:
+            ammoCtrl.onCurrentShellChanged += self.__onCurrentShellChanged
+            ammoCtrl.onShellsUpdated += self.__onShellsUpdated
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.__setEnabled(self._parentObj.getViewID())
+        return
+
+    def stop(self):
+        self.__clear()
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        ammoCtrl = self.sessionProvider.shared.ammo
+        if ammoCtrl is not None:
+            ammoCtrl.onShellsUpdated -= self.__onShellsUpdated
+            ammoCtrl.onCurrentShellChanged -= self.__onCurrentShellChanged
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
+            crosshairCtrl.onSPGShotsIndicatorStateChanged -= self.__onSPGShotsIndicatorStateChanged
+        return
+
+    def __setEnabled(self, viewID):
+        self.__isEnabled = viewID in (CROSSHAIR_VIEW_ID.STRATEGIC,) and self.settingsCore.getSetting(SPGAim.SHOTS_RESULT_INDICATOR)
+        currentState = self.sessionProvider.shared.crosshair.getSPGShotsIndicatorState()
+        if not self.__isEnabled:
+            self.__clear()
+        elif currentState:
+            self.__onSPGShotsIndicatorStateChanged(currentState)
+
+    def __clear(self):
+        self.__cache.clear()
+        self.__currentFlyTimes.clear()
+        self._parentObj.as_setGunMarkersIndicatorsS([])
+
+    def __onCrosshairViewChanged(self, viewID):
+        self.__setEnabled(viewID)
+
+    def __getState(self, vehicleDescriptor, shotIdx, shotIntCD, currentShell=None):
+        ammoCtrl = self.sessionProvider.shared.ammo
+        isEmpty = False
+        if ammoCtrl is not None and ammoCtrl.shellInAmmo(shotIntCD):
+            quantity, _ = ammoCtrl.getShells(shotIntCD)
+            if quantity <= 0:
+                isEmpty = True
+        else:
+            isEmpty = True
+        if currentShell is None:
+            if shotIdx == vehicleDescriptor.activeGunShotIndex:
+                if not isEmpty:
+                    return SPGShotIndicatorState.ACTIVE
+                return SPGShotIndicatorState.ACTIVE_EMPTY_SHELL
+        elif shotIntCD == currentShell:
+            if not isEmpty:
+                return SPGShotIndicatorState.ACTIVE
+            return SPGShotIndicatorState.ACTIVE_EMPTY_SHELL
+        return SPGShotIndicatorState.NOT_ACTIVE if not isEmpty else SPGShotIndicatorState.EMPTY_SHELL
+
+    def __onCurrentShellChanged(self, currentIntCD):
+        vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+        if self.__isEnabled and vehicle is not None:
+            vehicleDescriptor = vehicle.typeDescriptor
+            for intCD in self.__cache:
+                data = self.__cache[intCD]
+                state = self.__getState(vehicleDescriptor, data.shotIdx, intCD, currentShell=currentIntCD)
+                self.__cache[intCD] = SPGShotResultData(data.shotIdx, data.shellTypeName, data.shotResult, int(state))
+
+            self.__updateUIIndicators()
+        return
+
+    def __onShellsUpdated(self, *args, **_):
+        intCD = args[0]
+        quantity = args[1]
+        flyTimeIsActive = None
+        if self.__isEnabled and quantity == 0 and intCD in self.__cache:
+            if self.__cache[intCD].state == SPGShotIndicatorState.ACTIVE:
+                newState = SPGShotIndicatorState.ACTIVE_EMPTY_SHELL
+            else:
+                newState = SPGShotIndicatorState.EMPTY_SHELL
+            flyTimeIsActive = self.__flyTimeIsActive(self.__cache[intCD].shotResult, newState)
+            self.__cache[intCD] = SPGShotResultData(self.__cache[intCD].shotIdx, self.__cache[intCD].shellTypeName, self.__cache[intCD].shotResult, int(newState))
+            self.__updateUIIndicators()
+        if flyTimeIsActive is not None and intCD in self.__currentFlyTimes and self.__currentFlyTimes[intCD][1] != flyTimeIsActive:
+            flyTime = self.__currentFlyTimes[intCD][0]
+            self.__currentFlyTimes[intCD] = (flyTime, flyTimeIsActive)
+            self._parentObj.as_setShotFlyTimesS([{'shellIntCD': intCD,
+              'flyTime': flyTime if flyTimeIsActive else -1.0}])
+        return
+
+    def __onSPGShotsIndicatorStateChanged(self, shotStates):
+        vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+        if self.__isEnabled and vehicle is not None:
+            vehicleDescriptor = vehicle.typeDescriptor
+            needIndicatorsUpdate = False
+            for i, shotDescr in enumerate(vehicleDescriptor.gun.shots):
+                intCD = shotDescr.shell.compactDescr
+                state = self.__getState(vehicleDescriptor, i, intCD)
+                shotState = shotStates.get(i, None)
+                shotResult = SPGShotResultEnum.NOT_HIT
+                if shotState is not None:
+                    shotResult = shotState[0]
+                    self.__currentFlyTimes[intCD] = (self.__roundTime(shotState[1]), self.__flyTimeIsActive(shotResult, state))
+                currentResult = self.__cache.get(intCD, None)
+                shellTypeNameR = R.strings.item_types.shell.kindsAbbreviation.dyn(shotDescr.shell.kind)
+                if currentResult is None or self.__cache[intCD].shotResult != shotResult or self.__cache[intCD].state != state:
+                    self.__cache[intCD] = SPGShotResultData(i, backport.text(shellTypeNameR()) if shellTypeNameR else '', int(shotResult), int(state))
+                    needIndicatorsUpdate = True
+
+            if needIndicatorsUpdate:
+                self.__updateUIIndicators()
+            self._parentObj.as_setShotFlyTimesS([ {'shellIntCD': k,
+             'flyTime': v[0] if v[1] else -1.0} for k, v in self.__currentFlyTimes.iteritems() ])
+        return
+
+    def __updateUIIndicators(self):
+        ammoCtrl = self.sessionProvider.shared.ammo
+        if ammoCtrl is not None:
+            indicators = [ {'shellIntCD': intCD,
+             'shellTypeName': self.__cache[intCD].shellTypeName,
+             'shotResult': self.__cache[intCD].shotResult,
+             'state': self.__cache[intCD].state} for intCD in ammoCtrl.getShellsOrderIter() if intCD in self.__cache ]
+            self._parentObj.as_setGunMarkersIndicatorsS(indicators)
+        return
+
+    def __roundTime(self, flyTime):
+        flyTime *= 10
+        flyTime = int(flyTime + (0.5 if flyTime > 0 else -0.5))
+        return float(flyTime) / 10
+
+    def __onSettingsChanged(self, diff):
+        if SPGAim.SHOTS_RESULT_INDICATOR in diff:
+            self.__setEnabled(self.parentObj.getViewID())
+
+    def __flyTimeIsActive(self, shotResult, shellState):
+        return shotResult == SPGShotResultEnum.HIT and shellState not in (SPGShotIndicatorState.ACTIVE_EMPTY_SHELL, SPGShotIndicatorState.EMPTY_SHELL)

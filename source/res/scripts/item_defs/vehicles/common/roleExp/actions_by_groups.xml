@@ -1,35 +1,47 @@
 <actions_by_groups.xml>
-  <tank1>
+  <role_HT_tank>
     <actions>	blockAndTakeDamage doNearDamage	</actions>
-  </tank1>
-  <tank2>
+  </role_HT_tank>
+  <role_HT_assault>
     <actions>	blockAndTakeDamage doNearDamage	</actions>
-  </tank2>
-  <firstLineSupport1>
-    <actions>	doOwnDamage blockAndTakeDamage	</actions>
-  </firstLineSupport1>
-  <firstLineSupport2>
-    <actions>	doOwnDamage blockAndTakeDamage	</actions>
-  </firstLineSupport2>
-  <firstLineSupport3>
-    <actions>	doOwnDamage blockDamage	</actions>
-  </firstLineSupport3>
-  <fireSupport1>
-    <actions>	doOwnDamage searchEnemy	</actions>
-  </fireSupport1>
-  <sniper1>
+  </role_HT_assault>
+  <role_HT_universal>
+    <actions>	blockAndTakeDamage doOwnDamage	</actions>
+  </role_HT_universal>
+  <role_HT_fireSupport>
+    <actions>	blockAndTakeDamage doNearDamage	</actions>
+  </role_HT_fireSupport>
+  <role_MT_universal>
+    <actions>	blockAndTakeDamage doOwnDamage	</actions>
+  </role_MT_universal>
+  <role_MT_tank>
+    <actions>	blockAndTakeDamage doNearDamage	</actions>
+  </role_MT_tank>
+  <role_MT_fireSupport>
+    <actions>	searchEnemy doFarDamage	</actions>
+  </role_MT_fireSupport>
+  <role_MT_assassin>
+    <actions>	searchEnemy doNearDamage	</actions>
+  </role_MT_assassin>
+  <role_ATSPG_tank>
+    <actions>	blockAndTakeDamage doNearDamage	</actions>
+  </role_ATSPG_tank>
+  <role_ATSPG_universal>
+    <actions>	blockAndTakeDamage doOwnDamage	</actions>
+  </role_ATSPG_universal>
+  <role_ATSPG_fireSupport>
     <actions>	doFarDamage	</actions>
-  </sniper1>
-  <hashSupport1>
+  </role_ATSPG_fireSupport>
+  <role_ATSPG_burstDamage>
     <actions>	doNearDamageSq	</actions>
-  </hashSupport1>
-  <scout1>
-    <actions>	searchEnemy doInvisAssist doOwnDamage	</actions>
-  </scout1>
-  <scout2>
+  </role_ATSPG_burstDamage>
+  <role_LT_tracked>
+    <actions>	searchEnemy doOwnDamage doInvisAssist	</actions>
+  </role_LT_tracked>
+  <role_LT_wheeled>
     <actions>	searchEnemy fragAssist doOwnDamage	</actions>
-  </scout2>
-  <SPG1>
+  </role_LT_wheeled>
+  <role_SPG>
     <actions>	doStun doGroupStun doSpgDamage	</actions>
-  </SPG1>
+  </role_SPG>
 </actions_by_groups.xml>

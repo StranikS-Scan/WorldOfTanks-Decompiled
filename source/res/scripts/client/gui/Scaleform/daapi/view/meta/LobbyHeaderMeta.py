@@ -37,6 +37,12 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def showSquad(self, popoverCenterX):
         self._printOverrideError('showSquad')
 
+    def openFullscreenBattleSelector(self):
+        self._printOverrideError('openFullscreenBattleSelector')
+
+    def closeFullscreenBattleSelector(self):
+        self._printOverrideError('closeFullscreenBattleSelector')
+
     def fightClick(self, mapID, actionName):
         self._printOverrideError('fightClick')
 
@@ -76,8 +82,8 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_setPremShopDataS(self, iconSrc, premShopText, tooltip, tooltipType):
         return self.flashObject.as_setPremShopData(iconSrc, premShopText, tooltip, tooltipType) if self._isDAAPIInited() else None
 
-    def as_updateBattleTypeS(self, battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID, eventBgEnabled, eventAnimEnabled):
-        return self.flashObject.as_updateBattleType(battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID, eventBgEnabled, eventAnimEnabled) if self._isDAAPIInited() else None
+    def as_updateBattleTypeS(self, battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID, eventBgEnabled, eventAnimEnabled, showLegacySelector, hasNew):
+        return self.flashObject.as_updateBattleType(battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID, eventBgEnabled, eventAnimEnabled, showLegacySelector, hasNew) if self._isDAAPIInited() else None
 
     def as_setServerS(self, name, tooltip, tooltipType):
         return self.flashObject.as_setServer(name, tooltip, tooltipType) if self._isDAAPIInited() else None
@@ -135,3 +141,6 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_setIsPlatoonDropdownShowingS(self, visible):
         return self.flashObject.as_setIsPlatoonDropdownShowing(visible) if self._isDAAPIInited() else None
+
+    def as_setIsFullscreenBattleSelectorShowingS(self, visible):
+        return self.flashObject.as_setIsFullscreenBattleSelectorShowing(visible) if self._isDAAPIInited() else None

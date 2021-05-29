@@ -48,8 +48,8 @@ class TrophyDeviceUpgradeConfirmView(DialogWindow):
         self._setPreset(DialogPresets.TROPHY_DEVICE_UPGRADE)
         self.__setUpgradeCost()
         canUpgrade = self.__canPurchaseUpgrade()
-        self._addButton(DialogButtons.SUBMIT, R.strings.battle_pass_2020.trophyDeviceUpgradeConfim.submit(), isFocused=True, isEnabled=canUpgrade, tooltipBody=self.__getSubmitBtnTooltip(canUpgrade))
-        self._addButton(DialogButtons.CANCEL, R.strings.battle_pass_2020.trophyDeviceUpgradeConfim.cancel(), invalidateAll=True)
+        self._addButton(DialogButtons.SUBMIT, R.strings.battle_pass.trophyDeviceUpgradeConfim.submit(), isFocused=True, isEnabled=canUpgrade, tooltipBody=self.__getSubmitBtnTooltip(canUpgrade))
+        self._addButton(DialogButtons.CANCEL, R.strings.battle_pass.trophyDeviceUpgradeConfim.cancel(), invalidateAll=True)
 
     def _finalize(self):
         self.__wallet.onWalletStatusChanged -= self.__onWalletStatusChanged
@@ -57,17 +57,17 @@ class TrophyDeviceUpgradeConfirmView(DialogWindow):
         super(TrophyDeviceUpgradeConfirmView, self)._finalize()
 
     def _getResultData(self):
-        return {'needCreditsExchange': not self.__trophyBasicModule.mayPurchaseUpgrage(self.__itemsCache.items) and self.__trophyBasicModule.mayPurchaseUpgrageWithExchange(self.__itemsCache.items)}
+        return {'needCreditsExchange': not self.__trophyBasicModule.mayPurchaseUpgrade(self.__itemsCache.items) and self.__trophyBasicModule.mayPurchaseUpgradeWithExchange(self.__itemsCache.items)}
 
     def __setUpgradeCost(self):
         upgradeCost = self.gui.systemLocale.getNumberFormat(self.__upgradePrice.credits)
         with self.bottomContentViewModel.transaction() as model:
             model.valueMain.setType(Currency.CREDITS)
             model.valueMain.setValue(upgradeCost)
-            model.valueMain.setNotEnough(not self.__trophyBasicModule.mayPurchaseUpgrage(self.__itemsCache.items))
+            model.valueMain.setNotEnough(not self.__trophyBasicModule.mayPurchaseUpgrade(self.__itemsCache.items))
 
     def __canPurchaseUpgrade(self):
-        return (self.__trophyBasicModule.mayPurchaseUpgrage(self.__itemsCache.items) or self.__trophyBasicModule.mayPurchaseUpgrageWithExchange(self.__itemsCache.items)) and self.__goldOperationsEnabled
+        return (self.__trophyBasicModule.mayPurchaseUpgrade(self.__itemsCache.items) or self.__trophyBasicModule.mayPurchaseUpgradeWithExchange(self.__itemsCache.items)) and self.__goldOperationsEnabled
 
     def __onMoneyUpdated(self, _):
         self.__setUpgradeCost()
@@ -83,7 +83,7 @@ class TrophyDeviceUpgradeConfirmView(DialogWindow):
         self.__setUpgradeCost()
 
     def __getSubmitBtnTooltip(self, canUpgrade):
-        return R.invalid() if canUpgrade else R.strings.battle_pass_2020.trophyDeviceUpgradeConfim.submitTooltip()
+        return R.invalid() if canUpgrade else R.strings.battle_pass.trophyDeviceUpgradeConfim.submitTooltip()
 
 
 class TrophyDeviceUpgradeConfirmDialogContent(DialogContent):

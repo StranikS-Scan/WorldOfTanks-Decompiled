@@ -188,12 +188,12 @@ class BattlePassBuyView(ViewImpl):
             return
 
     def __updateDetailRewards(self):
-        fromLevel = self.__selectedPackage.getStartLevelInChapter()
-        toLevel = self.__battlePassController.getCurrentLevel()
+        fromLevel, maxLevelInChapter = self.__battlePassController.getChapterLevelInterval(self.__selectedPackage.getChapter())
+        toLevel = min(maxLevelInChapter, self.__battlePassController.getCurrentLevel())
         with self.viewModel.rewards.transaction() as tx:
             tx.nowRewards.clearItems()
             tx.futureRewards.clearItems()
-            tx.setFromLevel(fromLevel + 1)
+            tx.setFromLevel(fromLevel)
             tx.setToLevel(toLevel)
             tx.setChapter(self.__selectedPackage.getChapter())
             tx.setStatePackage(PackageItem.BATTLE_PASS_TYPE)

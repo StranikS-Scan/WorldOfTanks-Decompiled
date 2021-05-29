@@ -8,7 +8,7 @@ from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
     from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent')
+__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent')
 _logger = logging.getLogger(__name__)
 
 class HasCtxEvent(SharedEvent):
@@ -59,6 +59,8 @@ class GameEvent(HasCtxEvent):
     HIDE_EXTERNAL_COMPONENTS = 'game/hideExternalComponents'
     ON_BACKGROUND_ALPHA_CHANGE = 'game/onBackgroundAlphaChange'
     HIDE_AUTO_AIM_MARKER = 'game/hideAutoIamMarker'
+    HIDE_LOBBY_SUB_CONTAINER_ITEMS = 'game/hideLobbySubContainerItems'
+    REVEAL_LOBBY_SUB_CONTAINER_ITEMS = 'game/revealLobbySubContainerItems'
     BATTLE_LOADING = 'game/battleLoading'
     ADD_AUTO_AIM_MARKER = 'game/addAutoIamMarker'
     SHOW_BTN_HINT = 'game/showBtnHint'
@@ -76,7 +78,8 @@ class GameEvent(HasCtxEvent):
     RESPOND_TO_CALLOUT = 'game/respondToCallout'
     ARENA_BORDER_TYPE_CHANGED = 'game/arenaBorderTypeChanged'
     TOGGLE_VOIP_CHANNEL_ENABLED = 'game/voip/toggleEnabled'
-    ABILITY_CHOICE_OVERLAY = 'game/weekend_brawl/AbilityChoicePanel'
+    ROLE_HINT_TOGGLE = 'roleHintToggle'
+    COMMANDER_HINT = 'game/commanderHint'
 
 
 class GUICommonEvent(SharedEvent):
@@ -677,13 +680,6 @@ class ChoosingDevicesEvent(HasCtxEvent):
     DEVICE_REMOVED = 'deviceRemoved'
 
 
-class PointOfInterestEvent(HasCtxEvent):
-    ENTER_INTO_POINT = 'onEnterIntoPoint'
-    LEAVE_POINT = 'onLeavePoint'
-    START_COOLDOWN = 'onStartCooldown'
-    END_COOLDOWN = 'onEndCooldown'
-
-
 class ItemRemovalByDemountKitEvent(HasCtxEvent):
     DECLARED = 'item_removal_by_dk_declared'
     CANCELED = 'item_removal_by_dk_canceled'
@@ -748,3 +744,11 @@ class DogTagsEvent(SharedEvent):
 
 class PlatoonDropdownEvent(HasCtxEvent):
     NAME = 'DropdownEvent'
+
+
+class FullscreenModeSelectorEvent(HasCtxEvent):
+    NAME = 'FullscreenModeSelectorEvent'
+
+
+class ModeSelectorPopoverEvent(HasCtxEvent):
+    NAME = 'ModeSelectorPopoverEvent'

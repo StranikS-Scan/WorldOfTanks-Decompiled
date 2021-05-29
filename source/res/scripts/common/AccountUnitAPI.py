@@ -89,8 +89,8 @@ class UnitClientAPI(object):
     def createEventSquad(self):
         return self._doCreate(PREBATTLE_TYPE.EVENT)
 
-    def createWeekendBrawlSquad(self):
-        return self._doCreate(PREBATTLE_TYPE.WEEKEND_BRAWL)
+    def createMapboxSquad(self):
+        return self._doCreate(PREBATTLE_TYPE.MAPBOX)
 
     def join(self, unitMgrID, slotIdx=UNIT_SLOT.ANY):
         self._callAPI('join', unitMgrID, slotIdx)
@@ -155,11 +155,12 @@ class UnitClientAPI(object):
     def setDevMode(self, isDevMode=True):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_DEV_MODE, int(isDevMode)) if constants.IS_DEVELOPMENT else None
 
-    def startBattle(self, vehInvID=0, gameplaysMask=None, arenaTypeID=0, stopAutoSearch=False):
+    def startBattle(self, vehInvID=0, gameplaysMask=None, arenaTypeID=0, isOnly10ModeEnabled=False, stopAutoSearch=False):
         if gameplaysMask is not None:
             self.setGameplaysMask(gameplaysMask)
         if arenaTypeID != 0:
             self.setArenaType(arenaTypeID)
+        self.setOnly10Mode(isOnly10ModeEnabled)
         return self._doUnitCmd(CLIENT_UNIT_CMD.START_UNIT_BATTLE, vehInvID, int(stopAutoSearch))
 
     def stopBattle(self):
@@ -179,6 +180,9 @@ class UnitClientAPI(object):
 
     def setGameplaysMask(self, gameplaysMask):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_GAMEPLAYS_MASK, gameplaysMask)
+
+    def setOnly10Mode(self, isOnly10ModeEnabled):
+        return self._doUnitCmd(CLIENT_UNIT_CMD.SET_ONLY_10_MODE, isOnly10ModeEnabled)
 
     def setArenaType(self, arenaTypeID):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_ARENA_TYPE, arenaTypeID)

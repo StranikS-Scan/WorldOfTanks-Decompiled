@@ -617,6 +617,8 @@ class CommonTankAppearance(ScriptGameObject):
         else:
             self._updateCurrTerrainMatKinds()
             self.__updateEffectsLOD()
+            if self.siegeEffects:
+                self.siegeEffects.tick()
             if self.customEffectManager:
                 self.customEffectManager.update()
             return

@@ -13,8 +13,8 @@ class DealBaseSetupSubView(BaseSetupSubView):
         super(DealBaseSetupSubView, self).update(fullUpdate)
         self._updateDealPanel()
 
-    def updateSlots(self, slotID, fullUpdate=True):
-        super(DealBaseSetupSubView, self).updateSlots(slotID, fullUpdate)
+    def updateSlots(self, slotID, fullUpdate=True, updateData=True):
+        super(DealBaseSetupSubView, self).updateSlots(slotID, fullUpdate, updateData)
         self._updateDealPanel()
 
     @async

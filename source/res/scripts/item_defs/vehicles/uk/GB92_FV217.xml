@@ -26,6 +26,12 @@
     <additionalInvisibilityDevice>
       <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
     </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.07	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	11	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -78,6 +84,11 @@
           <destroyed>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst/crash/lod0/Hull.model	</exploded>
         </GB92_FV217_3Dst>
+        <GB92_FV217_3Dst_BV>
+          <undamaged>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst_BV/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst_BV/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst_BV/crash/lod0/Hull.model	</exploded>
+        </GB92_FV217_3Dst_BV>
       </sets>
     </models>
     <swinging>
@@ -1229,7 +1240,7 @@
         <slotType>	projectionDecal	</slotType>
         <slotId>	15079	</slotId>
         <tags>	formfactor_square	</tags>
-        <compatibleModels>	GB92_FV217_3Dst	</compatibleModels>
+        <compatibleModels>	GB92_FV217_3Dst GB92_FV217_3Dst_BV	</compatibleModels>
         <position>	1.98284 1.19931 3.22695	</position>
         <rotation>	1.57827 -0.480462 1.09164	</rotation>
         <scale>	0.384544 0.202045 0.384548	</scale>
@@ -1257,7 +1268,7 @@
         <slotType>	projectionDecal	</slotType>
         <slotId>	15081	</slotId>
         <tags>	formfactor_square	</tags>
-        <compatibleModels>	GB92_FV217_3Dst	</compatibleModels>
+        <compatibleModels>	GB92_FV217_3Dst GB92_FV217_3Dst_BV	</compatibleModels>
         <position>	-1.98299 1.19934 3.22685	</position>
         <rotation>	1.57826 0.482003 -1.09016	</rotation>
         <scale>	0.384544 0.202045 0.384548	</scale>
@@ -1280,6 +1291,69 @@
         <clipAngle>	0.000000	</clipAngle>
         <anchorPosition>	0.626529 1.34486 -0.451438	</anchorPosition>
         <anchorDirection>	-0.000101087 1 -0.000043	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15083	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB92_FV217_3Dst_BV	</compatibleModels>
+        <position>	-0.000061 2.44198 1.92396	</position>
+        <rotation>	0.619917 -0.000054 3.14151	</rotation>
+        <scale>	0.700636 0.482965 0.637393	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-0.000070 1.10859 1.83194	</anchorPosition>
+        <anchorDirection>	0.000056 0.813927 0.580968	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15084	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB92_FV217_3Dst_BV	</compatibleModels>
+        <position>	-1.52883 1.69759 1.47432	</position>
+        <rotation>	2.14645 1.56203 -0.0121276	</rotation>
+        <scale>	0.707702 0.371837 0.707709	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.309	</clipAngle>
+        <anchorPosition>	-1.69879 0.60341 1.47529	</anchorPosition>
+        <anchorDirection>	-0.838848 0.544344 0.00477701	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15085	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB92_FV217_3Dst_BV	</compatibleModels>
+        <position>	-0.000040 2.72861 0.500955	</position>
+        <rotation>	0.00459666 -0.000003 3.14135	</rotation>
+        <scale>	0.588674 0.405788 0.588674	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.935387	</clipAngle>
+        <anchorPosition>	-0.000081 1.35574 0.500181	</anchorPosition>
+        <anchorDirection>	0.000245708 0.999989 0.00459664	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15086	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB92_FV217_3Dst_BV	</compatibleModels>
+        <position>	1.31346 2.18086 0.249482	</position>
+        <rotation>	2.08075 -1.56369 -0.0134304	</rotation>
+        <scale>	0.52517 0.275933 0.525176	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.309	</clipAngle>
+        <anchorPosition>	1.44661 1.05088 0.246486	</anchorPosition>
+        <anchorDirection>	0.872571 0.488092 -0.0196305	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	sequence	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0.000000 0.000000 0.000000	</position>
+        <rotation>	0.000000 0.000000 0.000000	</rotation>
+        <attachNode>	V	</attachNode>
       </slot>
     </customizationSlots>
     <customization>
@@ -1329,6 +1403,11 @@
             <destroyed>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst/crash/lod0/Chassis.model	</exploded>
           </GB92_FV217_3Dst>
+          <GB92_FV217_3Dst_BV>
+            <undamaged>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst_BV/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst_BV/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst_BV/crash/lod0/Chassis.model	</exploded>
+          </GB92_FV217_3Dst_BV>
         </sets>
       </models>
       <traces>
@@ -2268,6 +2347,11 @@
                 <destroyed>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst/crash/lod0/Gun_01.model	</exploded>
               </GB92_FV217_3Dst>
+              <GB92_FV217_3Dst_BV>
+                <undamaged>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst_BV/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst_BV/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst_BV/crash/lod0/Gun_01.model	</exploded>
+              </GB92_FV217_3Dst_BV>
             </sets>
           </models>
           <hitTester>
@@ -2384,6 +2468,11 @@
             <destroyed>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst/crash/lod0/Turret_01.model	</exploded>
           </GB92_FV217_3Dst>
+          <GB92_FV217_3Dst_BV>
+            <undamaged>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst_BV/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst_BV/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB92_FV217/_skins/GB92_FV217_3Dst_BV/crash/lod0/Turret_01.model	</exploded>
+          </GB92_FV217_3Dst_BV>
         </sets>
       </models>
       <hitTester>

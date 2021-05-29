@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.12.1.1</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.12.1.1</Path>
+    <Path cacheSubdirs="true">./res_mods/1.13.0.0 Common Test</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.13.0.0 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
@@ -40,8 +40,13 @@
       <Package type="hd">./res/packages/114_czech_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/115_sweden.pkg</Package>
       <Package type="hd">./res/packages/115_sweden_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/117_canyon_ish.pkg</Package>
+      <Package type="hd">./res/packages/117_canyon_ish_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/119_turning_point_if.pkg</Package>
       <Package type="sd,hd">./res/packages/11_murovanka.pkg</Package>
       <Package type="hd">./res/packages/11_murovanka_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/128_last_frontier_v.pkg</Package>
+      <Package type="hd">./res/packages/128_last_frontier_v_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/13_erlenberg.pkg</Package>
       <Package type="hd">./res/packages/13_erlenberg_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line.pkg</Package>
@@ -115,6 +120,7 @@
       <Package type="sandbox,sd,hd">./res/packages/battle_royale.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui-part1.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/in_battle_achievements.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/misc.pkg</Package>
       <Package type="hd">./res/packages/misc_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/particles.pkg</Package>
@@ -152,7 +158,6 @@
       <Package type="sd,hd">./res/packages/vehicles_level_10-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_10_hd-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_10_hd-part2.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/weekend_brawl.pkg</Package>
     </Packages>
     <Path>./res</Path>
   </Paths>

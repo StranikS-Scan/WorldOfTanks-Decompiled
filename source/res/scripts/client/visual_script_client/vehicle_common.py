@@ -53,6 +53,8 @@ class TriggerListener(TriggersManager.ITriggerListener):
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_SHOOT:
             aimingInfo = params['aimingInfo']
             self.onPlayerShoot(aimingInfo)
+        elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_MISSED:
+            self.onPlayerShotMissed()
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE:
             self.onPlayerVehicleFireEvent(True)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_TANKMAN_SHOOTED:
@@ -91,6 +93,9 @@ class TriggerListener(TriggersManager.ITriggerListener):
     def onPlayerShoot(self, aimInfo):
         pass
 
+    def onPlayerShotMissed(self):
+        pass
+
     def onPlayerDetectEnemy(self, new, lost):
         pass
 
@@ -110,6 +115,9 @@ class TriggerListener(TriggersManager.ITriggerListener):
         pass
 
     def onPlayerMove(self, modeCommands):
+        pass
+
+    def onAutoAim(self, isOn):
         pass
 
 

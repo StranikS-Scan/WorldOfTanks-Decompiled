@@ -102,6 +102,9 @@
     <coatedOpticsBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</coatedOpticsBattleBooster>
     <aimingStabilizerBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</aimingStabilizerBattleBooster>
     <enhancedAimDrivesBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</enhancedAimDrivesBattleBooster>
+    <turbochargerBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</turbochargerBattleBooster>
+    <improvedSightsBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</improvedSightsBattleBooster>
+    <additInvisibilityDeviceBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</additInvisibilityDeviceBattleBooster>
     <camouflageBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</camouflageBattleBooster>
     <smoothTurretBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</smoothTurretBattleBooster>
     <virtuosoBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</virtuosoBattleBooster>
@@ -111,6 +114,7 @@
     <rancorousBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</rancorousBattleBooster>
     <pedantBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</pedantBattleBooster>
     <lastEffortBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</lastEffortBattleBooster>
+    <quickShellChanger>	NoneExtra : QuickShellChanger	</quickShellChanger>
     <shoot>	ShowShooting : Shoot	</shoot>
     <noAmmo>	NoneExtra : NoAmmo	</noAmmo>
     <gunReload>	NoneExtra : GunReload	</gunReload>
@@ -226,7 +230,7 @@
       </sounds>
       <deviceUserString>	#ingame_gui:devices/surveing_device	</deviceUserString>
     </surveyingDeviceHealth>
-    <commanderHealth>	DamageMarker : TankmanHealth	  <tankmanRole>	commander	</tankmanRole>
+    <commanderHealth>	TankmanHealth : TankmanHealth	  <tankmanRole>	commander	</tankmanRole>
       <indexInRole>	1	</indexInRole>
       <sounds>
         <critical>	commander_killed	</critical>
@@ -234,7 +238,7 @@
       </sounds>
       <deviceUserString>	#ingame_gui:tankmen/commander	</deviceUserString>
     </commanderHealth>
-    <driverHealth>	DamageMarker : TankmanHealth	  <tankmanRole>	driver	</tankmanRole>
+    <driverHealth>	TankmanHealth : TankmanHealth	  <tankmanRole>	driver	</tankmanRole>
       <indexInRole>	1	</indexInRole>
       <sounds>
         <critical>	driver_killed	</critical>
@@ -242,7 +246,7 @@
       </sounds>
       <deviceUserString>	#ingame_gui:tankmen/driver	</deviceUserString>
     </driverHealth>
-    <radioman1Health>	DamageMarker : TankmanHealth	  <tankmanRole>	radioman	</tankmanRole>
+    <radioman1Health>	TankmanHealth : TankmanHealth	  <tankmanRole>	radioman	</tankmanRole>
       <indexInRole>	1	</indexInRole>
       <sounds>
         <critical>	radioman_killed	</critical>
@@ -250,7 +254,7 @@
       </sounds>
       <deviceUserString>	#ingame_gui:tankmen/radioman	</deviceUserString>
     </radioman1Health>
-    <radioman2Health>	DamageMarker : TankmanHealth	  <tankmanRole>	radioman	</tankmanRole>
+    <radioman2Health>	TankmanHealth : TankmanHealth	  <tankmanRole>	radioman	</tankmanRole>
       <indexInRole>	2	</indexInRole>
       <sounds>
         <critical>	radioman_killed	</critical>
@@ -258,7 +262,7 @@
       </sounds>
       <deviceUserString>	#ingame_gui:tankmen/radioman	</deviceUserString>
     </radioman2Health>
-    <gunner1Health>	DamageMarker : TankmanHealth	  <tankmanRole>	gunner	</tankmanRole>
+    <gunner1Health>	TankmanHealth : TankmanHealth	  <tankmanRole>	gunner	</tankmanRole>
       <indexInRole>	1	</indexInRole>
       <sounds>
         <critical>	gunner_killed	</critical>
@@ -266,7 +270,7 @@
       </sounds>
       <deviceUserString>	#ingame_gui:tankmen/gunner	</deviceUserString>
     </gunner1Health>
-    <gunner2Health>	DamageMarker : TankmanHealth	  <tankmanRole>	gunner	</tankmanRole>
+    <gunner2Health>	TankmanHealth : TankmanHealth	  <tankmanRole>	gunner	</tankmanRole>
       <indexInRole>	2	</indexInRole>
       <sounds>
         <critical>	gunner_killed	</critical>
@@ -274,7 +278,7 @@
       </sounds>
       <deviceUserString>	#ingame_gui:tankmen/gunner	</deviceUserString>
     </gunner2Health>
-    <loader1Health>	DamageMarker : TankmanHealth	  <tankmanRole>	loader	</tankmanRole>
+    <loader1Health>	TankmanHealth : TankmanHealth	  <tankmanRole>	loader	</tankmanRole>
       <indexInRole>	1	</indexInRole>
       <sounds>
         <critical>	loader_killed	</critical>
@@ -282,7 +286,7 @@
       </sounds>
       <deviceUserString>	#ingame_gui:tankmen/loader	</deviceUserString>
     </loader1Health>
-    <loader2Health>	DamageMarker : TankmanHealth	  <tankmanRole>	loader	</tankmanRole>
+    <loader2Health>	TankmanHealth : TankmanHealth	  <tankmanRole>	loader	</tankmanRole>
       <indexInRole>	2	</indexInRole>
       <sounds>
         <critical>	loader_killed	</critical>
@@ -946,4 +950,9 @@
     <module>	0.5	</module>
     <tankman>	0.5	</tankman>
   </damageByStaticsChances>
+  <moduleKind>
+    <internal>	engine transmission ammoBay fuelTank radio turretRotator gunBreech	</internal>
+    <external>	wheel rightTrack leftTrack gun surveyingDevice	</external>
+    <tankmen>	commander driver radioman_1 radioman_2 gunner_1 gunner_2 loader_1 loader_2	</tankmen>
+  </moduleKind>
 </vehicle_common.xml>

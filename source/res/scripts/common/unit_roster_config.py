@@ -34,6 +34,10 @@ class EpicSlot(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (8, 8)
 
 
+class MapboxSlot(BaseUnitRosterSlot):
+    DEFAULT_LEVELS = (8, 10)
+
+
 class SquadRoster(BaseUnitRoster):
     MAX_SLOTS = 3
     MAX_EMPTY_SLOTS = 2
@@ -97,9 +101,9 @@ class BattleRoyaleRoster(BaseUnitRoster):
     LIMITS_TYPE = BaseUnitRosterLimits
 
 
-class WeekendBrawlRoster(BaseUnitRoster):
+class MapBoxRoster(BaseUnitRoster):
     MAX_SLOTS = 3
     MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    SLOT_TYPE = MapboxSlot
+    DEFAULT_SLOT_PACK = MapboxSlot().pack()
     LIMITS_TYPE = BaseUnitRosterLimits

@@ -2,31 +2,16 @@
 # Embedded file name: scripts/client/bootcamp/hints/HintsSystem.py
 import time
 from collections import deque, namedtuple
-import BattleReplay
 import SoundGroups
 from bootcamp.BootcampConstants import HINT_TYPE, HINT_NAMES
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP
 from HintControllers import createPrimaryHintController, createSecondaryHintController, createReplayPlayHintSystem
 from soft_exception import SoftException
 from HintsBase import HINT_COMMAND
-from HintsMove import HintNoMove, HintNoMoveTurret, HintMoveToMarker
-from HintsScenario import HintUselessConsumable, HintExitGameArea, HintLowHP
 from HintsLobby import HintLobbyRotate
-from HintsShoot import HintAim, HintWaitReload, HintShootWhileMoving, HintSecondarySniper, HintTargetUnLock
 _Voiceover = namedtuple('_Voiceover', ('name', 'sound'))
 
 class HintSystem(object):
-    hintsBattleClasses = {HINT_TYPE.HINT_NO_MOVE: HintNoMove,
-     HINT_TYPE.HINT_NO_MOVE_TURRET: HintNoMoveTurret,
-     HINT_TYPE.HINT_SHOT_WHILE_MOVING: HintShootWhileMoving,
-     HINT_TYPE.HINT_EXIT_GAME_AREA: HintExitGameArea,
-     HINT_TYPE.HINT_AIM: HintAim,
-     HINT_TYPE.HINT_WAIT_RELOAD: HintWaitReload,
-     HINT_TYPE.HINT_USELESS_CONSUMABLE: HintUselessConsumable,
-     HINT_TYPE.HINT_MOVE_TO_MARKER: HintMoveToMarker,
-     HINT_TYPE.HINT_SECONDARY_SNIPER: HintSecondarySniper,
-     HINT_TYPE.HINT_LOW_HP: HintLowHP,
-     HINT_TYPE.HINT_UNLOCK_TARGET: HintTargetUnLock}
     hintsLobbyClasses = {HINT_TYPE.HINT_ROTATE_LOBBY: HintLobbyRotate}
     highPriorityVoiceovers = ('vo_bc_weakness_in_armor',)
 
@@ -43,34 +28,25 @@ class HintSystem(object):
         self._hints = []
         self.__currentVoiceover = None
         self.__voiceoverSchedule = []
-        replayPlaying = BattleReplay.g_replayCtrl.isPlaying
-        replaySafeHints = (HINT_TYPE.HINT_MESSAGE_AVOID,)
         self.__replayPlayer = createReplayPlayHintSystem(self)
         for hintName, hintParams in hintsInfo.iteritems():
             try:
                 hintTypeId = HINT_NAMES.index(hintName)
-                if hintTypeId in HINT_TYPE.BATTLE_HINTS:
-                    if replayPlaying and hintTypeId not in replaySafeHints:
-                        continue
-                    cls = HintSystem.hintsBattleClasses.get(hintTypeId, None)
-                    if cls is None:
-                        raise SoftException('Hint not implemented (%s)' % HINT_NAMES[hintTypeId])
-                    hint = cls(avatar, hintParams)
-                else:
+                if hintTypeId not in HINT_TYPE.BATTLE_HINTS:
                     cls = HintSystem.hintsLobbyClasses.get(hintTypeId, None)
                     if cls is None:
                         raise SoftException('Hint not implemented (%s)' % HINT_NAMES[hintTypeId])
                     hint = cls(hintParams)
-                timeCompleted = hintParams.get('time_completed', 2.0)
-                cooldownAfter = hintParams.get('cooldown_after', 2.0)
-                voiceover = hintParams.get('voiceover', None)
-                message = hintParams.get('message', 'Default Message')
-                hint.timeCompleted = timeCompleted
-                hint.cooldownAfter = cooldownAfter
-                hint.message = message
-                if voiceover is not None:
-                    hint.voiceover = voiceover
-                self.addHint(hint)
+                    timeCompleted = hintParams.get('time_completed', 2.0)
+                    cooldownAfter = hintParams.get('cooldown_after', 2.0)
+                    voiceover = hintParams.get('voiceover', None)
+                    message = hintParams.get('message', 'Default Message')
+                    hint.timeCompleted = timeCompleted
+                    hint.cooldownAfter = cooldownAfter
+                    hint.message = message
+                    if voiceover is not None:
+                        hint.voiceover = voiceover
+                    self.addHint(hint)
             except Exception:
                 LOG_CURRENT_EXCEPTION_BOOTCAMP()
 

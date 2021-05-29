@@ -22,6 +22,7 @@ from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltip
 from gui.battle_pass.battle_pass_decorators import createTooltipContentDecorator, createBackportTooltipDecorator
 from gui.battle_pass.battle_pass_helpers import getFormattedTimeLeft, isSeasonEndingSoon, getInfoPageURL, getIntroVideoURL, BattlePassProgressionSubTabs, getSeasonHistory, getLevelFromStats, getDataByTankman, getStyleForChapter, getTankmanInfo, getNotChosen3DStylesCount
 from gui.impl import backport
+from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_progressions_view_model import BattlePassProgressionsViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import RewardLevelModel
@@ -43,10 +44,11 @@ from skeletons.gui.game_control import IBattlePassController, IWalletController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from tutorial.control.game_vars import getVehicleByIntCD
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 _logger = logging.getLogger(__name__)
-_rBattlePass = R.strings.battle_pass_2020
+_rBattlePass = R.strings.battle_pass
 
 class BattlePassProgressionsComponent(InjectComponentAdaptor, MissionsBattlePassViewMeta, LobbySubView):
     __slots__ = ()
@@ -73,7 +75,7 @@ class BattlePassProgressionsComponent(InjectComponentAdaptor, MissionsBattlePass
 
     def __showDummy(self, show):
         if show:
-            self.as_setBackgroundS(backport.image(R.images.gui.maps.icons.battlePass2020.progression.bg()))
+            self.as_setBackgroundS(backport.image(R.images.gui.maps.icons.battlePass.progression.bg()))
             self.as_showDummyS({'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_32X32,
              'htmlText': text_styles.main(backport.text(_rBattlePass.progression.error())),
              'alignCenter': True,
@@ -212,8 +214,17 @@ class BattlePassProgressionsView(ViewImpl):
         with self.viewModel.transaction() as tx:
             videoIsOpening = self.__showIntroVideo(onStart=True)
             tx.setShowIntro(self.__isFirstShowView())
+            vehIntCDs = self.__battlePassController.getSpecialVehicles()
+            capacity = self.__battlePassController.getVehicleProgression(vehIntCDs[0])[1]
+            tx.intro.setPoints(capacity)
+            for vehIntCD in vehIntCDs:
+                if getVehicleByIntCD(vehIntCD) is not None:
+                    tx.intro.getTankNames().addString(getVehicleByIntCD(vehIntCD).userName)
+                tx.intro.getTankNames().addString('')
+
             if not videoIsOpening:
                 self.__setShowBuyAnimations(model=tx)
+        return
 
     def __isFirstShowView(self):
         return not self.__settingsCore.serverSettings.getBPStorage().get(BattlePassStorageKeys.INTRO_SHOWN)
@@ -257,6 +268,10 @@ class BattlePassProgressionsView(ViewImpl):
         model.widget3dStyle.setStyleId(style.id if style else 0)
         model.widget3dStyle.setLevel(level)
         model.widget3dStyle.setIsUnselectedPrevStyle(isUnselectedPrevStyle)
+        if style is not None:
+            vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
+            vehicle = getVehicleByIntCD(vehicleCD)
+            fillVehicleInfo(model.widget3dStyle.vehicleInfo, vehicle)
         return
 
     def __setChapterCharacter(self, model):
@@ -580,7 +595,7 @@ class BattlePassProgressionsView(ViewImpl):
 
     @staticmethod
     def __getDayMonth(timeStamp):
-        timeStruct = time_utils.getTimeStructInUTC(timeStamp)
+        timeStruct = time_utils.getTimeStructInLocal(timeStamp)
         return (timeStruct.tm_mday, timeStruct.tm_mon)
 
     def __onMissionsTabChanged(self, event):

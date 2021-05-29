@@ -63,9 +63,8 @@ def getGameControllersConfig(manager):
     from gui.game_control.reactive_comm import ReactiveCommunicationService
     from gui.ui_spam.ui_spam_controller import UISpamController
     from gui.game_control.blueprints_convert_sale_controller import BlueprintsConvertSaleController
+    from gui.game_control.mapbox_controller import MapboxController
     from gui.game_control.overlay import SteamRegistrationOverlay as _SteamRegistrationOverlay
-    from gui.game_control.weekend_brawl_controller import WeekendBrawlController as _BrawlCtrl
-    from gui.game_control.weekend_brawl_sound_controller import WeekendBrawlSoundController as _BrawlSoundCtrl
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -118,8 +117,7 @@ def getGameControllersConfig(manager):
         _config(_interface.IChinaController, _China())
     else:
         _config(_interface.IChinaController, _NoChina())
-    _config(_interface.IWeekendBrawlController, _BrawlCtrl())
-    _config(_interface.IWeekendBrawlSoundController, _BrawlSoundCtrl())
+    _config(_interface.IMapboxController, MapboxController())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())

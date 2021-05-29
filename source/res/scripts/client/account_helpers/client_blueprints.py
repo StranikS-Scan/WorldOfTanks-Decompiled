@@ -1,13 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/client_blueprints.py
 import logging
+import typing
 from functools import partial
 import AccountCommands
+from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
+from helpers import dependency
+from items import vehicles
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
+from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 _BLUEPRINT_KEY = 'blueprints'
 
 class ClientBlueprints(object):
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, syncData=None):
         self.__account = None
@@ -59,13 +65,22 @@ class ClientBlueprints(object):
             self.__syncData.waitForSync(partial(self.__onGetResponse, callback))
             return
 
-    def convertBlueprintFragment(self, fragmentTypeCD, position, requestedCount, callback):
+    def convertBlueprintFragment(self, fragmentTypeCD, position, requestedCount, usedNationalFragments, callback):
         _logger.debug('Account.convertBlueprintFragment: fragmentTypeCD=%s', fragmentTypeCD)
         if callback is not None:
             proxy = lambda requestID, resultID, errorStr: callback(resultID)
         else:
             proxy = None
-        self.__account._doCmdInt3(AccountCommands.CMD_BPF_CONVERT_FRAGMENTS, requestedCount, fragmentTypeCD, position, proxy)
+        arr = [fragmentTypeCD, position, requestedCount]
+        if usedNationalFragments is not None:
+            for k, v in usedNationalFragments.iteritems():
+                arr.append(k)
+                arr.append(v)
+
+        else:
+            arr.append(getFragmentNationID(fragmentTypeCD))
+            arr.append(self.__itemsCache.items.blueprints.getRequiredIntelligenceAndNational(vehicles.getVehicleType(fragmentTypeCD).level)[0])
+        self.__account._doCmdIntArr(AccountCommands.CMD_BPF_CONVERT_FRAGMENTS, arr, proxy)
         return
 
     def markFragmentsAsSeen(self, fragmentCDs, callback):

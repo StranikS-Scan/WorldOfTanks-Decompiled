@@ -6,7 +6,6 @@ from Event import Event, EventManager
 from gui.Scaleform.framework.managers.TutorialManager import ScaleformTutorialManager
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
-from soft_exception import SoftException
 from tutorial.gui import GuiType, IGuiImpl
 if typing.TYPE_CHECKING:
     from skeletons.tutorial import ComponentID
@@ -30,6 +29,7 @@ class ScaleformGuiImpl(IGuiImpl):
 
     def fini(self):
         self.__appLoader.onGUISpaceBeforeEnter -= self.__onBeforeEnterSpace
+        self.__appLoader.onGUIInitialized -= self.__setProxy
         self.clear()
         self.__eventMgr.clear()
 
@@ -79,19 +79,22 @@ class ScaleformGuiImpl(IGuiImpl):
 
     def __onBeforeEnterSpace(self, spaceID):
         if spaceID in (GuiGlobalSpaceID.LOBBY, GuiGlobalSpaceID.BATTLE):
-            self.__setProxy(self.__appLoader.getApp().tutorialManager)
+            self.__setProxy()
 
-    def __setProxy(self, proxy):
+    def __setProxy(self):
         self.clear()
-        self.__proxy = proxy
-        if proxy is None:
-            raise SoftException('TutorialManagerMeta proxy can not be None')
-        self.__proxy.onCreated += self.__onProxyCreated
-        self.__proxy.onComponentFoundEvent += self.__onComponentFound
-        self.__proxy.onComponentDisposedEvent += self.__onComponentDisposed
-        self.__proxy.onEffectCompletedEvent += self.__onEffectCompleted
-        self.__proxy.onTriggerActivatedEvent += self.__onTriggerActivated
-        return
+        self.__proxy = self.__appLoader.getApp().tutorialManager
+        if self.__proxy is None:
+            self.__appLoader.onGUIInitialized += self.__setProxy
+            return
+        else:
+            self.__proxy.onCreated += self.__onProxyCreated
+            self.__proxy.onComponentFoundEvent += self.__onComponentFound
+            self.__proxy.onComponentDisposedEvent += self.__onComponentDisposed
+            self.__proxy.onEffectCompletedEvent += self.__onEffectCompleted
+            self.__proxy.onTriggerActivatedEvent += self.__onTriggerActivated
+            self.__appLoader.onGUIInitialized -= self.__setProxy
+            return
 
     def __onComponentFound(self, componentId, viewTutorialId):
         self.onComponentFound(componentId, viewTutorialId)

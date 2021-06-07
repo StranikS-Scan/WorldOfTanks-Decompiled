@@ -347,13 +347,13 @@ class LootPickUpSN(TimerSN):
         if self.__vehicle != vehicle:
             self.__vehicle = vehicle
             self.__loots.clear()
-        super(LootPickUpSN, self)._onVehicleControlling(vehicle)
+            super(LootPickUpSN, self)._onVehicleControlling(vehicle)
 
     def __showLootTimer(self, lootID, lootTypeID, pickupTime):
         time = BigWorld.serverTime()
         if not self.__loots:
             self._isVisible = True
-        self.__loots.setdefault(lootID, (lootTypeID, time + pickupTime))
+        self.__loots[lootID] = (lootTypeID, time + pickupTime)
         timeLeft = max((loot_time for _, loot_time in self.__loots.values()))
         timeLeft -= time
         self.__updateText()

@@ -309,6 +309,20 @@
     <name>	Collapsible style animals	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/animals	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <decal>
+      <id>	783	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/animals/sticker_48.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group1/animal_48	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <name>	ASIA Red Desert	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
@@ -10854,6 +10868,27 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	CN 360 Anniversary	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <tags>	hiddenInUI styleOnly	</tags>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	781	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_532.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_532	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	782	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_533.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_533	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	ASIA Red Desert styleOnly hiddenInUI	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>

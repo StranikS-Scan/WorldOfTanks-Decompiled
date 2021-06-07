@@ -2097,6 +2097,14 @@
       <metallic>	0.3	</metallic>
       <userString>	#vehicle_customization:repaint/griffin	</userString>
     </paint>
+    <paint>
+      <id>	126	</id>
+      <texture>	gui/maps/vehicles/repaints/france_base_color.png	</texture>
+      <color>	13 37 45 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.5	</metallic>
+      <userString>	#vehicle_customization:repaint/goldmine	</userString>
+    </paint>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
@@ -2395,6 +2403,33 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/360_anniversary	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	ASIA Red Desert	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	177	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_01.png	</texture>
+      <color>	76 35 26 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/red_desert	</userString>
+      <tags>	hiddenInUI	</tags>
     </paint>
     <usages>
       <item>

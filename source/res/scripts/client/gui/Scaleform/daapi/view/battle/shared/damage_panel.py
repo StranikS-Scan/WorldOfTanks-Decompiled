@@ -40,7 +40,8 @@ _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
  VEHICLE_VIEW_STATE.STUN: '_updateStun',
  VEHICLE_VIEW_STATE.DEBUFF: '_updateDebuff',
  VEHICLE_VIEW_STATE.INSPIRE: '_updateInspire',
- VEHICLE_VIEW_STATE.SIEGE_MODE: '_changeSpeedoType'}
+ VEHICLE_VIEW_STATE.SIEGE_MODE: '_changeSpeedoType',
+ VEHICLE_VIEW_STATE.REPAIR_POINT: '_updateRepairPoint'}
 
 class STATUS_ID(CONST_CONTAINER):
     STUN = 0
@@ -173,6 +174,7 @@ class DamagePanel(DamagePanelMeta):
         self.__isWheeledTech = False
         self.__stunDuration = 0
         self.__debuffDuration = 0
+        self.__isRepairPointActive = False
         return
 
     def __del__(self):
@@ -297,6 +299,9 @@ class DamagePanel(DamagePanelMeta):
             healthProgress = normalizeHealthPercent(health, self.__maxHealth)
             self.as_updateHealthS(healthStr, healthProgress)
 
+    def _updateRepairPoint(self, value):
+        self.__isRepairPointActive = bool(value.get('isInactivation', False))
+
     def _setAutoRotation(self, isOn):
         isAutoRotationOff = self.__isAutoRotationShown and not bool(isOn)
         if isAutoRotationOff != self.__isAutoRotationOff:
@@ -312,7 +317,7 @@ class DamagePanel(DamagePanelMeta):
     def _updateStun(self, stunInfo):
         if STATUS_ID.STUN in self.__statusAnimPlayers:
             self.__stunDuration = stunInfo.duration
-            if self.__stunDuration > 0:
+            if self.__stunDuration > 0 and not self.__isRepairPointActive:
                 self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(self.__stunDuration, True)
             elif self.__debuffDuration > 0:
                 self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(self.__debuffDuration, False)

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: in_battle_achievements/scripts/common/in_battle_achievements.py
 from dossiers2.custom.records import RECORD_DB_IDS
+DISABLE_ACHIEVEMENTS_VEHICLE_TAG = 'disableIBA'
+EXCLUDED_VEHICLE_TAGS = ('observer', DISABLE_ACHIEVEMENTS_VEHICLE_TAG)
 ENABLED_ACHIEVEMENTS = {('achievements', 'kamikaze'): True,
  ('achievements', 'huntsman'): True,
  ('achievements', 'medalPascucci'): True,

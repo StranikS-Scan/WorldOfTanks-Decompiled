@@ -1534,19 +1534,6 @@ class QUESTS(object):
     PERSONALMISSION_BOTTOMSTATUS_ALLAWARDSRECEIVED = '#quests:personalMission/bottomStatus/allAwardsReceived'
     QUEST_CONDITION_DOT = '#quests:quest/condition/dot'
     QUEST_CONDITION_OR = '#quests:quest/condition/or'
-    ACTIONCARD_TITLE_SET_MARATHONANNOUNCE = '#quests:actionCard/title/set_MarathonAnnounce'
-    ACTION_AUTO_SET_MARATHONANNOUNCE = '#quests:action/auto/set_MarathonAnnounce'
-    ACTION_FULL_SET_MARATHONANNOUNCE = '#quests:action/full/set_MarathonAnnounce'
-    ACTION_BUTTON_SET_MARATHONANNOUNCE = '#quests:action/button/set_MarathonAnnounce'
-    ACTIONCARD_TITLE_SET_MARATHONINPROGRESS = '#quests:actionCard/title/set_MarathonInProgress'
-    ACTION_AUTO_SET_MARATHONINPROGRESS = '#quests:action/auto/set_MarathonInProgress'
-    ACTION_FULL_SET_MARATHONINPROGRESS = '#quests:action/full/set_MarathonInProgress'
-    ACTION_BUTTON_SET_MARATHONINPROGRESS = '#quests:action/button/set_MarathonInProgress'
-    ACTIONCARD_TITLE_SET_MARATHONFINISHED = '#quests:actionCard/title/set_MarathonFinished'
-    ACTION_AUTO_SET_MARATHONFINISHED = '#quests:action/auto/set_MarathonFinished'
-    ACTION_HERO_FULL_SET_MARATHONFINISHED = '#quests:action/hero/full/set_MarathonFinished'
-    ACTION_BUTTON_SET_MARATHONFINISHED = '#quests:action/button/set_MarathonFinished'
-    ACTION_MARATHON_ANNOUNCETIME = '#quests:action/marathon/announceTime'
     METRICS_STATE_DONE = '#quests:metrics/state/done'
     METRICS_STATE_INPROGRESS = '#quests:metrics/state/inProgress'
     METRICS_STATE_FAILED = '#quests:metrics/state/failed'
@@ -2039,17 +2026,7 @@ class QUESTS(object):
      ACTION_BOOSTER_BOOSTER_CREW_XP,
      ACTION_BOOSTER_BOOSTER_CREDITS,
      ACTION_BOOSTER_BOOSTER_REPAIR,
-     ACTION_EXCHANGERATE_GOLD2CREDIT,
-     ACTION_AUTO_SET_MARATHONANNOUNCE,
-     ACTION_FULL_SET_MARATHONANNOUNCE,
-     ACTION_BUTTON_SET_MARATHONANNOUNCE,
-     ACTION_AUTO_SET_MARATHONINPROGRESS,
-     ACTION_FULL_SET_MARATHONINPROGRESS,
-     ACTION_BUTTON_SET_MARATHONINPROGRESS,
-     ACTION_AUTO_SET_MARATHONFINISHED,
-     ACTION_HERO_FULL_SET_MARATHONFINISHED,
-     ACTION_BUTTON_SET_MARATHONFINISHED,
-     ACTION_MARATHON_ANNOUNCETIME)
+     ACTION_EXCHANGERATE_GOLD2CREDIT)
     DETAILS_DOSSIER_ALL_ENUM = (DETAILS_DOSSIER_RANDOM_XP,
      DETAILS_DOSSIER_RANDOM_MAXXP,
      DETAILS_DOSSIER_RANDOM_WINS,

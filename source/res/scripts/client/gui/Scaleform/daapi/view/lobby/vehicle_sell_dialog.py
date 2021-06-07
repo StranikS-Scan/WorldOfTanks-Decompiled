@@ -384,6 +384,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
                 if item.guiItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isRemovableForMoney:
                     currency = item.removeCurrency
                     optionalDevices -= item.itemRemovalPrice.extract(currency)
+            if item.guiItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+                optionalDevices += item.itemSellPrice
             common += item.itemSellPrice
 
         self.__income = _VSDMoney()

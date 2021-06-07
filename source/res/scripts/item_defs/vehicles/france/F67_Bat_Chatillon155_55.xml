@@ -3854,6 +3854,43 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-45.0	</row>
+                <row>	-39.3	</row>
+                <row>	-31.672	</row>
+                <row>	-22.803	</row>
+                <row>	-9.543	</row>
+                <row>	0.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	joint_lower	</node>
+                  <table>
+                    <row>	-0.895	</row>
+                    <row>	-0.03	</row>
+                    <row>	0.741	</row>
+                    <row>	1.078	</row>
+                    <row>	0.631	</row>
+                    <row>	0.0	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	joint_upper	</node>
+                  <table>
+                    <row>	-45.431	</row>
+                    <row>	-39.132	</row>
+                    <row>	-31.068	</row>
+                    <row>	-21.859	</row>
+                    <row>	-8.827	</row>
+                    <row>	0.0	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <camouflage>
             <tiling>	1.9 1.5 0.000000 0.3	</tiling>
             <density>	75.9317 82.0437	</density>
@@ -3870,7 +3907,7 @@
         <collisionModelServer>	vehicles/french/F67_Bat_Chatillon155_55/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F67_Bat_Chatillon155_55/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.01371 0.69683 0.49997	</gunPosition>
+      <gunPosition>	-0.013710 0.775777 0.258294	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.026 0.032 1.026 0.000 0.778 -0.185 0.138 0.000 0.500 0.500 0.239 0.500 0.101 0.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>

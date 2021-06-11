@@ -14,7 +14,7 @@ from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighligh
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import CustomizationTooltipContext
-from gui.shared.missions.packers.bonus import BonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker, CrewBookBonusUIPacker, SimpleBonusUIPacker, BlueprintBonusUIPacker
+from gui.shared.missions.packers.bonus import BonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker, CrewBookBonusUIPacker, SimpleBonusUIPacker, BlueprintBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.money import Currency
 from helpers import dependency
@@ -133,6 +133,15 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
 
         return tooltipData
 
+    @classmethod
+    def _getContentId(cls, bonus):
+        result = []
+        for tokenID in bonus.getTokens().iterkeys():
+            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                result.append(BACKPORT_TOOLTIP_CONTENT_ID)
+
+        return result
+
 
 class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
 
@@ -175,6 +184,15 @@ class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=itemCustomization.intCD)))
 
         return tooltipData
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        result = []
+        for item, _ in zip(bonus.getCustomizations(), bonus.getList()):
+            if item is not None:
+                result.append(BACKPORT_TOOLTIP_CONTENT_ID)
+
+        return result
 
 
 class BattlePassPremiumDaysPacker(BaseBonusUIPacker):
@@ -266,6 +284,14 @@ class SelectBonusPacker(BaseBonusUIPacker):
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_GIFT_TOKEN, specialArgs=[tokenID]))
 
         return tooltipData
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        result = []
+        for _ in bonus.getTokens().iterkeys():
+            result.append(BACKPORT_TOOLTIP_CONTENT_ID)
+
+        return result
 
 
 class BattlePassStyleProgressTokenBonusPacker(_BattlePassFinalBonusPacker):

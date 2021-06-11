@@ -3276,6 +3276,12 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
                 _xml.raiseWrongXml(xmlCtx, 'drivingWheels', 'unknown wheel name(s)')
 
             item.wheels = chassis_components.WheelsConfig(wheelGroups, wheels)
+        if IS_CLIENT:
+            _, wheels = chassis_readers.readWheelsAndGroups(xmlCtx, section)
+            for wheel in wheels:
+                if wheel.materials:
+                    item.wheelsArmor[wheel.nodeName] = wheel.materials.values()[0]
+
         item.drivingWheelsSizes = (frontWheelSize, rearWheelSize)
     _readPriceForItem(xmlCtx, section, item.compactDescr)
     if IS_CLIENT or IS_WEB:

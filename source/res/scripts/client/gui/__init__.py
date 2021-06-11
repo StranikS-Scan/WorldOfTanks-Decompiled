@@ -133,6 +133,7 @@ def getGuiServicesConfig(manager):
     from gui import impl
     from gui import offers
     from gui.platform import wgnp
+    from gui import cdn
     from skeletons.gui.lobby_context import ILobbyContext
     manager.addConfig(app_loader.getAppLoaderConfig)
     manager.addConfig(shared.getSharedServices)
@@ -155,6 +156,7 @@ def getGuiServicesConfig(manager):
     manager.addConfig(offers.getOffersConfig)
     manager.addConfig(server_events.getLinkedSetController)
     manager.addConfig(wgnp.getWGNPRequestController)
+    manager.addConfig(cdn.getPurchaseCache)
     if HAS_DEV_RESOURCES:
         try:
             from gui.development import getDevelopmentServicesConfig

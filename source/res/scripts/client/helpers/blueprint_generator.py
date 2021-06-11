@@ -40,14 +40,15 @@ class BlueprintGenerator(object):
         return
 
     def generate(self, vehicleCD=None, vehicleName=None, clear=False):
-        if clear:
-            BigWorld.clearBlueprint()
         vehicleDescriptor = self.__getVehicleDescr(vehicleCD, vehicleName)
         if vehicleDescriptor is None:
             return
         else:
-            self.__inProgress = vehicleDescriptor.name
-            self.__loadVehicleCompound(vehicleDescriptor)
+            if self.__inProgress != vehicleDescriptor.name:
+                if clear:
+                    BigWorld.clearBlueprint()
+                self.__inProgress = vehicleDescriptor.name
+                self.__loadVehicleCompound(vehicleDescriptor)
             return self.__getTexturePath()
 
     def cancel(self, vehicleCD=None, vehicleName=None):

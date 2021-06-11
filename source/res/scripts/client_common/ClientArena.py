@@ -151,7 +151,7 @@ class ClientArena(object):
         return None if self.__arenaBBCollider is None and not self.__setupBBColliders() else self.__arenaBBCollider.getClosestPointOnBB(point)
 
     def collideWithSpaceBB(self, start, end):
-        return None if self.__spaceBBCollider is None and not self.__setupBBColliders() else self.__spaceBBCollider.collide(start, end)
+        return (None, None) if self.__spaceBBCollider is None and not self.__setupBBColliders() else self.__spaceBBCollider.collide(start, end)
 
     def getSpaceBB(self):
         return (None, None) if self.__spaceBBCollider is None and not self.__setupBBColliders() else (self.__spaceBBCollider.getMinBounds(), self.__spaceBBCollider.getMaxBounds())

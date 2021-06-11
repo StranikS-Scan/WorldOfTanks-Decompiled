@@ -7,7 +7,6 @@ from constants import QUEUE_TYPE
 from frameworks.wulf import ViewSettings, ViewFlags, WindowStatus
 from frameworks.wulf.gui_constants import ViewStatus, WindowLayer
 from gui import GUI_SETTINGS
-from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mapbox.mapbox_progression_model import MapboxProgressionModel
 from gui.impl.gen.view_models.views.lobby.mapbox.progression_reward_model import ProgressionRewardModel
@@ -77,14 +76,12 @@ class MapboxProgressionView(ViewImpl):
             with self.viewModel.transaction() as model:
                 model.setIsDataSynced(True)
                 model.setIsError(True)
-        self.soundManager.playSound(backport.sound(R.sounds.ev_mapbox_enter()))
         self.__addListeners()
 
     def _finalize(self):
-        super(MapboxProgressionView, self)._finalize()
-        self.soundManager.playSound(backport.sound(R.sounds.ev_mapbox_exit()))
         self.__removeListeners()
         self.__showViewCallback = None
+        super(MapboxProgressionView, self)._finalize()
         return
 
     def __addListeners(self):
@@ -94,6 +91,7 @@ class MapboxProgressionView(ViewImpl):
         self.viewModel.onRemoveBubble += self.__onRemoveBubble
         self.viewModel.onShowSurvey += self.__onShowSurvey
         self.viewModel.onTakeReward += self.__onTakeReward
+        self.viewModel.onAnimationEnded += self.__onAnimationEnded
         self.__mapboxController.addProgressionListener(self.__onProgressionDataUpdated)
         self.__mapboxController.onMapboxSurveyShown += self.__doRemoveBubble
         g_prbCtrlEvents.onPreQueueJoined += self.__onPreQueueJoined
@@ -104,12 +102,18 @@ class MapboxProgressionView(ViewImpl):
         g_prbCtrlEvents.onPreQueueJoined -= self.__onPreQueueJoined
         self.__mapboxController.onMapboxSurveyShown -= self.__doRemoveBubble
         self.__mapboxController.removeProgressionListener(self.__onProgressionDataUpdated)
+        self.viewModel.onAnimationEnded -= self.__onAnimationEnded
         self.viewModel.onTakeReward -= self.__onTakeReward
         self.viewModel.onShowSurvey -= self.__onShowSurvey
         self.viewModel.onShowInfo -= self.__onShowInfo
         self.viewModel.onRemoveBubble -= self.__onRemoveBubble
         self.viewModel.onSelectMapboxBattle -= self.__onSelectMapboxBattle
         self.__gui.windowsManager.onWindowStatusChanged -= self.__onWindowStatusChanged
+
+    def __onAnimationEnded(self, *args):
+        progressionData = self.__mapboxController.getProgressionData()
+        self.viewModel.setPrevTotalBattlesPlayed(progressionData.totalBattles)
+        self.__mapboxController.setPrevBattlesPlayed(progressionData.totalBattles)
 
     def __onWindowStatusChanged(self, _, newState):
 

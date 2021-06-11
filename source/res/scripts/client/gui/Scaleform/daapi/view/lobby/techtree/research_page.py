@@ -131,6 +131,7 @@ class Research(ResearchMeta):
         self._resolveLoadCtx(ctx=ctx)
         self._exitEvent = ctx.get(BackButtonContextKeys.EXIT, None)
         self._skipConfirm = skipConfirm
+        self.__preloadingBP = None
         return
 
     def __del__(self):
@@ -290,11 +291,16 @@ class Research(ResearchMeta):
         self.as_setWalletStatusS(self._wallet.componentsStatuses)
         self.as_setFreeXPS(self._itemsCache.items.stats.actualFreeXP)
         self.addListener(events.VehicleBuyEvent.VEHICLE_SELECTED, self.__onTradeOffSelectedChanged)
-        g_blueprintGenerator.generate(self._data.getRootCD())
+        self.__preloadingBP = self._data.getRootCD()
+        g_blueprintGenerator.generate(self.__preloadingBP)
 
     def _dispose(self):
+        if self.__preloadingBP is not None:
+            g_blueprintGenerator.cancel(self.__preloadingBP)
+            self.__preloadingBP = None
         self.removeListener(events.VehicleBuyEvent.VEHICLE_SELECTED, self.__onTradeOffSelectedChanged)
         super(Research, self)._dispose()
+        return
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == VEHPREVIEW_CONSTANTS.TRADE_OFF_WIDGET_ALIAS:

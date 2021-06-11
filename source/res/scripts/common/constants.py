@@ -1342,6 +1342,7 @@ class INVOICE_ASSET:
     CRYSTAL = 7
     EVENT_COIN = 8
     BPCOIN = 9
+    PURCHASE = 10
 
 
 class INVOICE_LIMITS:

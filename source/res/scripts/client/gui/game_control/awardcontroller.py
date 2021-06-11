@@ -55,7 +55,7 @@ from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBan
 from gui.server_events.events_helpers import isDailyQuest, isACEmailConfirmationQuest
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
-from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showBadgeInvoiceAwardWindow
+from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showBadgeInvoiceAwardWindow, showMultiAwardWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -80,6 +80,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
+from skeletons.gui.cdn import IPurchaseCache
 _logger = logging.getLogger(__name__)
 
 class QUEST_AWARD_POSTFIX(object):
@@ -181,7 +182,8 @@ class AwardController(IAwardController, IGlobalListener):
          ProgressiveItemsRewardHandler(self),
          DedicationReward(self),
          BadgesInvoiceHandler(self),
-         MapboxProgressionRewardHandler(self)]
+         MapboxProgressionRewardHandler(self),
+         PurchaseHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -1608,3 +1610,21 @@ class MapboxProgressionRewardHandler(AwardHandler):
         self.__notificationMgr.append(WindowNotificationCommand(window))
         self.__eventsCache.onEventsVisited()
         yield async.await(self.__mapboxCtrl.forceUpdateProgressData())
+
+
+class PurchaseHandler(ServiceChannelHandler):
+    __purchaseCache = dependency.descriptor(IPurchaseCache)
+
+    def __init__(self, awardCtrl):
+        super(PurchaseHandler, self).__init__(SYS_MESSAGE_TYPE.invoiceReceived.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        invoiceData = message.data
+        if invoiceData.get('assetType', 0) == INVOICE_ASSET.PURCHASE:
+            if self.__purchaseCache.canBeRequestedFromProduct(invoiceData):
+                if 'data' not in invoiceData:
+                    _logger.error('Invalid purchase invoice data!')
+                showMultiAwardWindow(invoiceData)
+            else:
+                _logger.debug('Data can not be requested from the product! Award window will not be shown!')

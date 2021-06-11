@@ -418,7 +418,7 @@ class _CurrentVehicle(_CachedVehicle):
         if vehicle is None:
             return
         else:
-            if not self.battleRoyaleController.isEnabled() and vehicle.isOnlyForBattleRoyaleBattles and not self.battleRoyaleTounamentController.isSelected():
+            if not self.battleRoyaleController.isEnabled() and vehicle.isOnlyForBattleRoyaleBattles and not self.battleRoyaleTounamentController.isActive():
                 self.selectVehicle()
             return
 

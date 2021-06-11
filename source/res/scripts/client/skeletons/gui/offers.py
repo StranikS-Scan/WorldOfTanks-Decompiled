@@ -74,3 +74,6 @@ class IOffersDataProvider(object):
 
     def getAvailableOffersByToken(self, token):
         raise NotImplementedError
+
+    def isOfferAvailable(self, tokenID):
+        raise NotImplementedError

@@ -1157,6 +1157,13 @@ def showBadgeInvoiceAwardWindow(badge, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showMultiAwardWindow(invoiceData, notificationMgr=None):
+    from gui.impl.lobby.awards.multiple_awards_view import MultipleAwardsViewWindow
+    window = MultipleAwardsViewWindow(invoiceData)
+    notificationMgr.append(WindowNotificationCommand(window))
+
+
 def showProgressiveItemsView(itemIntCD=None):
     from gui.impl.lobby.customization.progressive_items_view.progressive_items_view import ProgressiveItemsView
     appLoader = dependency.instance(IAppLoader)

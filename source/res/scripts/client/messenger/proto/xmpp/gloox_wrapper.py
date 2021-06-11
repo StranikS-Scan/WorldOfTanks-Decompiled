@@ -196,6 +196,10 @@ class ClientDecorator(object):
         self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_SET, ContactBareJID(jid), name, groups, (to, from_), makeClanInfo(*clanInfo))
 
     def onRosterItemRemoved(self, jid):
+        remainingInboundSubs = [ sub for sub in self.__inboundSubs if sub[0] != jid ]
+        if len(remainingInboundSubs) != len(self.__inboundSubs):
+            self.__inboundSubs = remainingInboundSubs
+            self.__cancelInboundSubsCallback()
         self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_REMOVED, ContactBareJID(jid))
 
     def onHandlePresence(self, jid, priority, status, presence, wgexts, mucInfo):

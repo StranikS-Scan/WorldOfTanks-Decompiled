@@ -352,7 +352,8 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
                 self.playEffect(currentState.effect)
             if vehicle.health <= 0:
                 BigWorld.player().inputHandler.onVehicleDeath(vehicle, currentState.state == 'ammoBayExplosion')
-                self.__requestModelsRefresh()
+                if currentState.state != 'ammoBayExplosion':
+                    self.__requestModelsRefresh()
             elif not vehicle.isCrewActive:
                 self.__onCrewKilled()
         return

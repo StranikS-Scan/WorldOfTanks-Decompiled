@@ -266,6 +266,15 @@ class _BwShop(namedtuple('_BwShop', ('hostUrl', 'backendHostUrl', 'isStorageEnab
 
 _BwShop.__new__.__defaults__ = ('', '', False)
 
+class _BwProductCatalog(namedtuple('_BwProductCatalog', ('url',))):
+
+    @classmethod
+    def defaults(cls):
+        return cls('')
+
+
+_BwProductCatalog.__new__.__defaults__ = ('',)
+
 class RankedBattlesConfig(namedtuple('RankedBattlesConfig', ('isEnabled',
  'peripheryIDs',
  'winnerRankChanges',
@@ -769,6 +778,7 @@ class ServerSettings(object):
         self.__crystalRewardsConfig = _crystalRewardsConfig()
         self.__reactiveCommunicationConfig = _ReactiveCommunicationConfig()
         self.__blueprintsConvertSaleConfig = _BlueprintsConvertSaleConfig()
+        self.__bwProductCatalog = _BwProductCatalog()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -859,6 +869,8 @@ class ServerSettings(object):
             self.__mapboxSettings = makeTupleByDict(_MapboxConfig, self.__serverSettings[Configs.MAPBOX_CONFIG.value])
         else:
             self.__mapboxSettings = _MapboxConfig.defaults()
+        if 'productsCatalog' in self.__serverSettings:
+            self.__bwProductCatalog = makeTupleByDict(_BwProductCatalog, self.__serverSettings['productsCatalog'])
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1091,6 +1103,10 @@ class ServerSettings(object):
     @property
     def shop(self):
         return self.__bwShop
+
+    @property
+    def productCatalog(self):
+        return self.__bwProductCatalog
 
     def isShopDataChangedInDiff(self, diff, fieldName=None):
         if 'shop' in diff:

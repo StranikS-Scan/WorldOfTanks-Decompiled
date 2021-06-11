@@ -145,6 +145,7 @@ class BATTLE_PASS(object):
     TOOLTIPS_VEHICLEPOINTS_TITLE = '#battle_pass:tooltips/vehiclePoints/title'
     TOOLTIPS_VEHICLEPOINTS_DESCR = '#battle_pass:tooltips/vehiclePoints/descr'
     TOOLTIPS_VEHICLEPOINTS_MAPBOX = '#battle_pass:tooltips/vehiclePoints/mapbox'
+    TOOLTIPS_VEHICLEPOINTS_RANKED = '#battle_pass:tooltips/vehiclePoints/ranked'
     TOOLTIPS_VEHICLEPOINTS_SPECIAL_DESCR = '#battle_pass:tooltips/vehiclePoints/special/descr'
     TOOLTIPS_VEHICLEPOINTS_AWARD = '#battle_pass:tooltips/vehiclePoints/award'
     TOOLTIPS_VEHICLEPOINTS_POINTSOBTAINED = '#battle_pass:tooltips/vehiclePoints/pointsObtained'

@@ -168,7 +168,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.__activeGunIndex = None
         self.refreshNationalVoice()
         self.__prevHealth = None
-        self.isCrewActive = True
         self.__quickShellChangerIsActive = False
         return
 
@@ -708,6 +707,10 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             matInfo = self.typeDescriptor.turret.materials.get(matKind)
         elif parIndex == TankPartIndexes.GUN:
             matInfo = self.typeDescriptor.gun.materials.get(matKind)
+        elif self.isWheeledTech and self.appearance.collisions is not None:
+            wheelName = self.appearance.collisions.getPartName(parIndex)
+            if wheelName is not None:
+                matInfo = self.typeDescriptor.chassis.wheelsArmor.get(wheelName, None)
         if matInfo is None:
             commonMaterialsInfo = vehicles.g_cache.commonConfig['materials']
             matInfo = commonMaterialsInfo.get(matKind)

@@ -415,11 +415,15 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             self.selectRandomBattle()
 
     def __eventAvailabilityUpdate(self, *_):
-        battleRoyaleEnabled = self.isEnabled() and self.getCurrentSeason() is not None
-        isSelectRandom = not battleRoyaleEnabled and self.isBattleRoyaleMode()
-        if isSelectRandom:
-            self.selectRandomBattle()
-        return
+        if self.__battleRoyaleTournamentController.isSelected():
+            return
+        else:
+            battleRoyaleEnabled = self.isEnabled() and self.getCurrentSeason() is not None
+            isSelectRandom = not battleRoyaleEnabled and self.isBattleRoyaleMode()
+            isSelectRandom = isSelectRandom and not self.__battleRoyaleTournamentController.isAvailable()
+            if isSelectRandom:
+                self.selectRandomBattle()
+            return
 
     def __onSpaceCreate(self):
         nextTick(self.__updateSpace)()

@@ -318,8 +318,7 @@ class CommonTankAppearance(ScriptGameObject):
             self._chassisDecal.attach()
         self._createAndAttachStickers()
         if not self.isObserver:
-            if not self.damageState.isCurrentModelDamaged and not self.__systemStarted:
-                self._startSystems()
+            self._startSystems()
             self.filter.enableLagDetection(not self.damageState.isCurrentModelDamaged)
             if self.__periodicTimerID is not None:
                 BigWorld.cancelCallback(self.__periodicTimerID)
@@ -346,8 +345,7 @@ class CommonTankAppearance(ScriptGameObject):
 
         super(CommonTankAppearance, self).deactivate()
         self.shadowManager.unregisterCompoundModel(self.compoundModel)
-        if self.__systemStarted:
-            self._stopSystems()
+        self._stopSystems()
         self.wheelsGameObject.deactivate()
         for go in self.filterRetrieverGameObjects:
             go.deactivate()
@@ -460,25 +458,29 @@ class CommonTankAppearance(ScriptGameObject):
         return (chassisColisionMatrix, gunNodeName)
 
     def _startSystems(self):
-        self.__systemStarted = True
         if self.flyingInfoProvider is not None:
             self.flyingInfoProvider.setData(self.filter, self.suspension)
-        if self.trackScrollController is not None:
-            self.trackScrollController.activate()
-            self.trackScrollController.setData(self.filter)
-        if self.engineAudition is not None:
-            self.engineAudition.setWeaponEnergy(self._weaponEnergy)
-            self.engineAudition.attachToModel(self.compoundModel)
-        if self.hullAimingController is not None:
-            self.hullAimingController.setData(self.filter, self.typeDescriptor)
-        if self.detailedEngineState is not None:
-            self.detailedEngineState.onGearUpCbk = self.__onEngineStateGearUp
-        return
+        if self.damageState.isCurrentModelDamaged or self.__systemStarted:
+            return
+        else:
+            self.__systemStarted = True
+            if self.trackScrollController is not None:
+                self.trackScrollController.activate()
+                self.trackScrollController.setData(self.filter)
+            if self.engineAudition is not None:
+                self.engineAudition.setWeaponEnergy(self._weaponEnergy)
+                self.engineAudition.attachToModel(self.compoundModel)
+            if self.hullAimingController is not None:
+                self.hullAimingController.setData(self.filter, self.typeDescriptor)
+            if self.detailedEngineState is not None:
+                self.detailedEngineState.onGearUpCbk = self.__onEngineStateGearUp
+            return
 
     def _stopSystems(self):
-        self.__systemStarted = False
         if self.flyingInfoProvider is not None:
             self.flyingInfoProvider.setData(None, None)
+        if self.__systemStarted:
+            self.__systemStarted = False
         if self.trackScrollController is not None:
             self.trackScrollController.deactivate()
             self.trackScrollController.setData(None)

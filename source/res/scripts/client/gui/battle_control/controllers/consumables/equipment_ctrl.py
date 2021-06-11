@@ -1266,6 +1266,8 @@ def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, totalT
         return _ReplayReconItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('smoke'):
         return _ReplaySmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('arcade_smoke'):
+        return _ReplaySmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.endswith('afterburning'):
         return _ReplayAfterburningItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('large_repairkit_battle_royale'):

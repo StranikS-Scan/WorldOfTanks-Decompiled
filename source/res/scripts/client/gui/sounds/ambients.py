@@ -350,7 +350,25 @@ class BattleResultsEnv(SoundEnv):
 class BattlePassSoundEnv(SoundEnv):
 
     def __init__(self, soundsCtrl):
-        super(BattlePassSoundEnv, self).__init__(soundsCtrl, 'battlePass', filters=(SoundFilters.BATTLE_PASS_FILTER,))
+        super(BattlePassSoundEnv, self).__init__(soundsCtrl, 'battlePass', filters=(SoundFilters.BATTLE_PASS_FILTER, SoundFilters.HANGAR_PLACE_TASKS_BATTLE_PASS))
+
+
+class MarathonPageSoundEnv(SoundEnv):
+
+    def __init__(self, soundsCtrl):
+        super(MarathonPageSoundEnv, self).__init__(soundsCtrl, 'marathon', filters=(SoundFilters.MARATHON_FILTER,))
+
+
+class MissionsCategoriesSoundEnv(SoundEnv):
+
+    def __init__(self, soundsCtrl):
+        super(MissionsCategoriesSoundEnv, self).__init__(soundsCtrl, 'missionCategories', filters=(SoundFilters.HANGAR_PLACE_TASKS_MISSIONS,))
+
+
+class MissionsPremiumSoundEnv(SoundEnv):
+
+    def __init__(self, soundsCtrl):
+        super(MissionsPremiumSoundEnv, self).__init__(soundsCtrl, 'dailyMissions', filters=(SoundFilters.HANGAR_PLACE_TASKS_DAILY,))
 
 
 class GuiAmbientsCtrl(object):

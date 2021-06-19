@@ -10778,6 +10778,177 @@
     <historical>	false	</historical>
     <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	503	</id>
+      <texture>	gui/maps/vehicles/styles/may_marathon_2021.png	</texture>
+      <description>	#vehicle_customization:special_style/may_marathon_2021_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/may_marathon_2021_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/may_marathon_2021	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	311	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	114	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	519	</id>
+      <texture>	gui/maps/vehicles/styles/football_4sale2.png	</texture>
+      <description>	#vehicle_customization:special_style/football_event_2021_1_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/football_event_2021_1_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/football_event_2021_1	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	328	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	520	</id>
+      <texture>	gui/maps/vehicles/styles/football_4sale1.png	</texture>
+      <description>	#vehicle_customization:special_style/football_event_2021_2_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/football_event_2021_2_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/football_event_2021_2	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	329	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	521	</id>
+      <texture>	gui/maps/vehicles/styles/football_meta.png	</texture>
+      <description>	#vehicle_customization:special_style/football_event_2021_3_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/football_event_2021_3_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/football_event_2021_3	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	330	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	522	</id>
+      <texture>	gui/maps/vehicles/styles/football_gift.png	</texture>
+      <description>	#vehicle_customization:special_style/football_event_2021_4_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/football_event_2021_4_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/football_event_2021_4	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	331	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
       <include>
         <levels>	10	</levels>
       </include>
@@ -16957,6 +17128,46 @@
           <camouflages>
             <item>
               <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 2500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G154_Kpz_07_RH	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	261	</id>
+      <texture>	gui/maps/vehicles/styles/G154_Kpz_07_RH_3Dst_MM.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G154_Kpz_07_RH_3Dst_MM_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G154_Kpz_07_RH_3Dst_MM	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G154_Kpz_07_RH_3Dst_MM	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	309	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>

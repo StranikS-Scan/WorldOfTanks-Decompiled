@@ -2532,6 +2532,7 @@ class MarathonConfig(object):
     EMPTY_PATH = ''
     URL = 'marathonUrl'
     REWARD_VEHICLE_URL = 'rewardVehicleUrl'
+    REWARD_VEHICLE_URL_IGB = 'rewardVehicleUrlIgb'
     FINISH_SALE_TIME = 'finishSaleTime'
 
 

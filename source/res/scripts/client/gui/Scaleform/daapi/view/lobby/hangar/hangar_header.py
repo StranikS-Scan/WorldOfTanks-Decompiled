@@ -10,7 +10,6 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.event_boards.listener import IEventBoardsListener
 from gui.impl.gen import R
 from gui.impl import backport
-from gui.marathon.marathon_event_controller import DEFAULT_MARATHON_PREFIX
 from gui.prb_control import prb_getters
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
@@ -238,7 +237,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_EVENT:
             showMissionsElen(questID)
         elif HANGAR_HEADER_QUESTS.QUEST_TYPE_MARATHON in questType:
-            marathonPrefix = questID or DEFAULT_MARATHON_PREFIX
+            marathonPrefix = questID or self._marathonsCtrl.getPrimaryMarathon()
             showMissionsMarathon(marathonPrefix)
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_SENIORITY:
             showSeniorityInfoWindow()

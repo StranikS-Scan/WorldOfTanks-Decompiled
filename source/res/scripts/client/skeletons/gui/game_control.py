@@ -1084,6 +1084,7 @@ class IBootcampController(IGameController):
 
 class IMarathonEventsController(IGameController):
     onFlagUpdateNotify = None
+    onMarathonDataChanged = None
     onVehicleReceived = None
 
     def addMarathon(self, data):

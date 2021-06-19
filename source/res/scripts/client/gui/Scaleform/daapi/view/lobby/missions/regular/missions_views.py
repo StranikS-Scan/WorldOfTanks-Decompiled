@@ -7,6 +7,7 @@ from async import async, await
 from constants import PremiumConfigs
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface
+from gui.marathon.web_handlers import createDefaultMarathonWebHandlers
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -23,6 +24,7 @@ from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.event_boards.settings import expandGroup, isGroupMinimized
 from gui.server_events import settings, caches
@@ -144,7 +146,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
                 url = yield self._marathonEvent.getUrl()
                 browserID = yield self._browserCtrl.load(url=url, useBrowserWindow=False, browserID=self.__browserID, browserSize=(self._width, self._height))
                 self.__browserID = browserID
-                viewPy.init(browserID, self._marathonEvent.createMarathonWebHandlers(), alias=alias)
+                viewPy.init(browserID, createDefaultMarathonWebHandlers(), alias=alias)
                 self.__browserView = viewPy
                 self.__browserView.showContentUnderLoading = False
             else:
@@ -162,8 +164,10 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         self._marathonEvent.showRewardVideo()
         Waiting.hide('loadPage')
         self.__loadBrowserCallbackID = BigWorld.callback(0.01, self.__loadBrowser)
+        g_eventBus.addListener(events.MissionsEvent.ON_TAB_CHANGED, self.__onMissionsTabChanged, EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
+        g_eventBus.removeListener(events.MissionsEvent.ON_TAB_CHANGED, self.__onMissionsTabChanged, EVENT_BUS_SCOPE.LOBBY)
         self.__cancelLoadBrowserCallback()
         self.__browserView = None
         super(MissionsMarathonView, self)._dispose()
@@ -182,6 +186,18 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
 
     def __updateEvents(self):
         self._builder.invalidateBlocks()
+
+    def __onMissionsTabChanged(self, event):
+        self.__viewActive = event.ctx == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS
+        if self._marathonEvent.isNeedHandlingEscape and self.__viewActive:
+            self.__setSkipEscapeInBrowser(False)
+        else:
+            self.__setSkipEscapeInBrowser(True)
+
+    def __setSkipEscapeInBrowser(self, value):
+        browser = self._browserCtrl.getBrowser(self.__browserID)
+        if browser:
+            browser.skipEscape = value
 
 
 class MissionsEventBoardsView(MissionsEventBoardsViewMeta):

@@ -773,6 +773,11 @@ def getCommanderSkinID(crewDescs, crewIDs, crewSkins):
     return crewSkins.get(commanderInvID, crew_skins_constants.NO_CREW_SKIN_ID)
 
 
+def getTankmenWithTag(nationID, isPremium, tag):
+    nationGroups = getNationGroups(nationID, isPremium)
+    return set([ group.groupID for group in nationGroups.itervalues() if tag in group.tags ])
+
+
 def tankmenGroupHasRole(nationID, groupID, isPremium, role):
     nationGroups = getNationGroups(nationID, isPremium)
     if groupID in nationGroups:

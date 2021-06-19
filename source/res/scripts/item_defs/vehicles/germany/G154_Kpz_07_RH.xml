@@ -59,6 +59,13 @@
       <undamaged>	vehicles/german/G154_Kpz_07_RH/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G154_Kpz_07_RH/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G154_Kpz_07_RH/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G154_Kpz_07_RH_3Dst_MM>
+          <undamaged>	vehicles/german/G154_Kpz_07_RH/_skins/G154_Kpz_07_RH_3Dst_MM/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G154_Kpz_07_RH/_skins/G154_Kpz_07_RH_3Dst_MM/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G154_Kpz_07_RH/_skins/G154_Kpz_07_RH_3Dst_MM/crash/lod0/Hull.model	</exploded>
+        </G154_Kpz_07_RH_3Dst_MM>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -88,8 +95,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.646558 0.617064 2.62687	</rayStart>
-        <rayEnd>	0.646558 0.270036 2.42796	</rayEnd>
+        <rayStart>	1.1897 0.615355 2.62986	</rayStart>
+        <rayEnd>	1.1897 0.268326 2.43095	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -1180,7 +1187,7 @@
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
         <anchorPosition>	-1.51755 0.439443 1.22735	</anchorPosition>
-        <anchorDirection>	-0.859723 0.51076 -0.00024502	</anchorDirection>
+        <anchorDirection>	-0.859719 0.510757 0.00324416	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -1193,7 +1200,91 @@
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
         <anchorPosition>	-1.51735 0.440107 1.97694	</anchorPosition>
-        <anchorDirection>	-0.859723 0.51076 -0.00024502	</anchorDirection>
+        <anchorDirection>	-0.859719 0.510757 0.00324416	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15083	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G154_Kpz_07_RH_3Dst_MM	</compatibleModels>
+        <position>	-0.866184 1.30896 2.55612	</position>
+        <rotation>	0.55846 -0.00175242 3.14158	</rotation>
+        <scale>	0.402857 0.101985 0.402855	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.698707	</clipAngle>
+        <anchorPosition>	-0.866278 0.465555 2.61053	</anchorPosition>
+        <anchorDirection>	-0.000916024 0.848072 0.52988	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15084	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G154_Kpz_07_RH_3Dst_MM	</compatibleModels>
+        <position>	-1.69265 0.874539 2.02514	</position>
+        <rotation>	1.61966 1.48954 -0.109751	</rotation>
+        <scale>	0.449501 0.113794 0.449498	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-1.71938 -0.0546388 2.02591	</anchorPosition>
+        <anchorDirection>	-0.998411 0.0485526 0.0285913	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15085	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G154_Kpz_07_RH_3Dst_MM	</compatibleModels>
+        <position>	1.69229 0.874498 2.02543	</position>
+        <rotation>	1.61963 -1.48968 0.109825	</rotation>
+        <scale>	0.449501 0.113794 0.449498	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	1.71902 -0.0546812 2.0262	</anchorPosition>
+        <anchorDirection>	0.998407 0.0485246 0.0287997	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15086	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G154_Kpz_07_RH_3Dst_MM	</compatibleModels>
+        <position>	-0.950107 1.51674 -1.58308	</position>
+        <rotation>	3.03653 -0.000003 -0.000011	</rotation>
+        <scale>	0.541426 0.137065 0.541426	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.48281	</clipAngle>
+        <anchorPosition>	-0.950108 0.658535 -1.5907	</anchorPosition>
+        <anchorDirection>	-0.000011 0.994486 -0.104866	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15087	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G154_Kpz_07_RH_3Dst_MM	</compatibleModels>
+        <position>	1.39066 0.945171 3.1405	</position>
+        <rotation>	0.826064 0.0017336 3.14158	</rotation>
+        <scale>	0.471992 0.119487 0.471989	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	1.39075 0.0639503 3.19394	</anchorPosition>
+        <anchorDirection>	0.00129031 0.677775 0.735268	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15088	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G154_Kpz_07_RH_3Dst_MM	</compatibleModels>
+        <position>	-1.39122 0.945205 3.14025	</position>
+        <rotation>	0.826064 0.0017336 3.14157	</rotation>
+        <scale>	0.471993 0.119487 0.471989	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-1.39113 0.0639897 3.19369	</anchorPosition>
+        <anchorDirection>	0.00129534 0.677775 0.735268	</anchorDirection>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -1230,6 +1321,13 @@
         <undamaged>	vehicles/german/G154_Kpz_07_RH/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G154_Kpz_07_RH/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G154_Kpz_07_RH/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G154_Kpz_07_RH_3Dst_MM>
+            <undamaged>	vehicles/german/G154_Kpz_07_RH/_skins/G154_Kpz_07_RH_3Dst_MM/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G154_Kpz_07_RH/_skins/G154_Kpz_07_RH_3Dst_MM/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G154_Kpz_07_RH/_skins/G154_Kpz_07_RH_3Dst_MM/crash/lod0/Chassis.model	</exploded>
+          </G154_Kpz_07_RH_3Dst_MM>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -2180,6 +2278,13 @@
             <undamaged>	vehicles/german/G154_Kpz_07_RH/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G154_Kpz_07_RH/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G154_Kpz_07_RH/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G154_Kpz_07_RH_3Dst_MM>
+                <undamaged>	vehicles/german/G154_Kpz_07_RH/_skins/G154_Kpz_07_RH_3Dst_MM/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G154_Kpz_07_RH/_skins/G154_Kpz_07_RH_3Dst_MM/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G154_Kpz_07_RH/_skins/G154_Kpz_07_RH_3Dst_MM/crash/lod0/Gun_01.model	</exploded>
+              </G154_Kpz_07_RH_3Dst_MM>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G154_Kpz_07_RH/collision/Gun_01.model	</collisionModelServer>
@@ -2390,6 +2495,20 @@
               <verticalMirror>	true	</verticalMirror>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45013	</slotId>
+              <tags>	formfactor_square	</tags>
+              <position>	-0.246417 2.2356 1.22347	</position>
+              <rotation>	0.00299882 0.000021 3.14158	</rotation>
+              <scale>	0.639709 0.0877337 0.639708	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.51377	</clipAngle>
+              <anchorPosition>	-0.246312 0.260245 0.743676	</anchorPosition>
+              <anchorDirection>	0.000013 0.999996 0.00299882	</anchorDirection>
+              <compatibleModels>	G154_Kpz_07_RH_3Dst_MM	</compatibleModels>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <position>	0.437078 2.43178 -0.28136	</position>
@@ -2419,6 +2538,13 @@
         <undamaged>	vehicles/german/G154_Kpz_07_RH/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G154_Kpz_07_RH/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G154_Kpz_07_RH/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G154_Kpz_07_RH_3Dst_MM>
+            <undamaged>	vehicles/german/G154_Kpz_07_RH/_skins/G154_Kpz_07_RH_3Dst_MM/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G154_Kpz_07_RH/_skins/G154_Kpz_07_RH_3Dst_MM/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G154_Kpz_07_RH/_skins/G154_Kpz_07_RH_3Dst_MM/crash/lod0/Turret_01.model	</exploded>
+          </G154_Kpz_07_RH_3Dst_MM>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G154_Kpz_07_RH/collision/Turret_01.model	</collisionModelServer>
@@ -2838,6 +2964,34 @@
           <clipAngle>	0.650402	</clipAngle>
           <anchorPosition>	1.42411 0.0785279 0.00280928	</anchorPosition>
           <anchorDirection>	0.946403 0.322976 -0.0028466	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35027	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G154_Kpz_07_RH_3Dst_MM	</compatibleModels>
+          <position>	-1.34825 1.84861 0.335904	</position>
+          <rotation>	1.56861 -0.00566454 -1.39515	</rotation>
+          <scale>	0.50005 0.1 0.50005	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.07394	</clipAngle>
+          <anchorPosition>	-1.39023 0.292083 -0.151802	</anchorPosition>
+          <anchorDirection>	-0.983594 -0.000381559 -0.180394	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35028	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G154_Kpz_07_RH_3Dst_MM	</compatibleModels>
+          <position>	1.34552 1.84855 0.320825	</position>
+          <rotation>	1.56861 -0.00469557 1.38547	</rotation>
+          <scale>	0.50005 0.1 0.500051	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.07394	</clipAngle>
+          <anchorPosition>	1.38751 0.292019 -0.166854	</anchorPosition>
+          <anchorDirection>	0.983711 -0.000402361 -0.179757	</anchorDirection>
         </slot>
       </customizationSlots>
       <camouflage>

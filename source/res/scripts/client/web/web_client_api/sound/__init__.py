@@ -5,6 +5,7 @@ import WWISE
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from web.web_client_api import w2c, w2capi, W2CSchema, Field
+from gui.shared import g_eventBus, events
 
 class _SoundSchema(W2CSchema):
     sound_id = Field(required=True, type=basestring)
@@ -62,13 +63,26 @@ class SoundStateWebApi(object):
      'STATE_clans_craft': 'STATE_clans_craft_progress_off',
      'STATE_gamemode_progress_page': 'STATE_gamemode_progress_page_off'}
 
+    def __init__(self):
+        super(SoundStateWebApi, self).__init__()
+        self.__exitStates = set()
+        g_eventBus.addListener(events.LobbySimpleEvent.CHANGE_SOUND_ENVIRONMENT, self.__setExitStates)
+
     @w2c(_SoundStateSchema, 'sound_state', finiHandlerName='_soundStateFini')
     def setSoundState(self, cmd):
         WWISE.WW_setState(str(cmd.state_name), str(cmd.state_value))
+        if cmd.state_name in self._ON_EXIT_STATES:
+            self.__exitStates.add(str(cmd.state_name))
 
     def _soundStateFini(self):
-        for stateName, stateValue in self._ON_EXIT_STATES.iteritems():
-            WWISE.WW_setState(stateName, stateValue)
+        self.__setExitStates()
+        g_eventBus.removeListener(events.LobbySimpleEvent.CHANGE_SOUND_ENVIRONMENT, self.__setExitStates)
+
+    def __setExitStates(self, _=None):
+        for stateName in self.__exitStates:
+            WWISE.WW_setState(stateName, self._ON_EXIT_STATES[stateName])
+
+        self.__exitStates.clear()
 
 
 @w2capi()

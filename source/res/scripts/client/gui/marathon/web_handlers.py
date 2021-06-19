@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/marathon/web_handlers.py
+from functools import partial
 from gui.server_events.events_dispatcher import showMissionsMarathon
+from gui.shared.event_dispatcher import showStorage
 from web.web_client_api import webApiCollection, w2capi
 from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.request.access_token import AccessTokenWebApiMixin
@@ -17,6 +19,8 @@ from web.web_client_api.ui.hangar import HangarTabWebApiMixin
 from web.web_client_api.ui.missions import MissionsWebApiMixin
 from web.web_client_api.ui.profile import ProfileTabWebApiMixin
 from web.web_client_api.vehicles import VehiclesWebApi
+from web.web_client_api.ui.shop import ShopWebApiMixin
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 _DEFAULT_MARATHON_WEB_API_COLLECTION = (SoundWebApi,
  SoundStateWebApi,
  HangarSoundWebApi,
@@ -37,10 +41,10 @@ class _RequestWebApi(AccessTokenWebApiMixin, WgniTokenWebApiMixin, SpaIdWebApiMi
 
 
 @w2capi(name='open_tab', key='tab_id')
-class _OpenTabWebApi(HangarTabWebApiMixin, ProfileTabWebApiMixin, VehiclePreviewWebApiMixin, MissionsWebApiMixin):
+class _OpenTabWebApi(HangarTabWebApiMixin, ProfileTabWebApiMixin, ShopWebApiMixin, VehiclePreviewWebApiMixin, MissionsWebApiMixin):
 
     def _getVehicleStylePreviewCallback(self, cmd):
-        return showMissionsMarathon
+        return partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION) if cmd.back_btn_descr == 'storage' else showMissionsMarathon
 
 
 def createDefaultMarathonWebHandlers():

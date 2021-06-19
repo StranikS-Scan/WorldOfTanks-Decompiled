@@ -40,3 +40,4 @@ class HANGAR_ALIASES(object):
     AMMUNITION_PANEL_INJECT = 'ammunitionPanelInject'
     AMMUNITION_SETUP_VIEW_INJECT = 'ammunitionSetupViewInject'
     CRAFT_MACHINE_ENTRY_POINT = 'CraftMachineEntryPoint'
+    MARATHON_ENTRY_POINT = 'MarathonEntryPoint'

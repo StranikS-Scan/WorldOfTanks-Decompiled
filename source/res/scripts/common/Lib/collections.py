@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/collections.py
-# Compiled at: 2047-01-12 15:46:31
+# Compiled at: 1985-04-30 13:40:55
 __all__ = ['Counter',
  'deque',
  'defaultdict',

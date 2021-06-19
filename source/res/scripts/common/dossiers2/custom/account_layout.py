@@ -616,7 +616,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'march21',
  'april21',
  'gagarin21',
- 'may21']
+ 'may21',
+ 'june21']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -762,7 +763,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'march21',
  'april21',
  'gagarin21',
- 'may21']
+ 'may21',
+ 'june21']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

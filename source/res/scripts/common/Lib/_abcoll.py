@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/_abcoll.py
-# Compiled at: 2046-12-19 07:23:19
+# Compiled at: 1985-03-05 00:24:17
 """Abstract Base Classes (ABCs) for collections, according to PEP 3119.
 
 DON'T USE THIS MODULE DIRECTLY!  The classes here should be imported

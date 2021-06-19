@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/types.py
-# Compiled at: 2047-11-01 11:57:44
+# Compiled at: 1987-01-26 05:08:59
 """Define names for all type symbols known in the standard interpreter.
 
 Types that are part of optional modules (e.g. array) are not listed.

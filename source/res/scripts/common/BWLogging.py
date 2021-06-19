@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/BWLogging.py
-# Compiled at: 2046-11-12 10:58:26
+# Compiled at: 1985-01-13 15:41:35
 import encodings
 import json
 import logging

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sre_compile.py
-# Compiled at: 2047-10-29 13:00:53
+# Compiled at: 1987-01-21 17:35:52
 """Internal support module for sre"""
 import _sre, sys
 import sre_parse

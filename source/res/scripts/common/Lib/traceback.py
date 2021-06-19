@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/traceback.py
-# Compiled at: 2047-10-31 10:26:25
+# Compiled at: 1987-01-23 13:00:13
 """Extract, format and print information about Python stack traces."""
 import linecache
 import sys

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/genericpath.py
-# Compiled at: 2047-05-02 08:30:28
+# Compiled at: 1985-11-06 19:14:22
 """
 Path operations common to more than one OS
 Do not use directly.  The OS specific modules import the appropriate

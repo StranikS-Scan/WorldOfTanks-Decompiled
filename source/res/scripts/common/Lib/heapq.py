@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/heapq.py
-# Compiled at: 2047-05-07 07:41:49
+# Compiled at: 1985-11-20 08:53:04
 """Heap queue algorithm (a.k.a. priority queue).
 
 Heaps are arrays for which a[k] <= a[2*k+1] and a[k] <= a[2*k+2] for

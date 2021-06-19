@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/inspect.py
-# Compiled at: 2047-06-20 00:19:04
+# Compiled at: 1986-01-19 13:32:58
 """Get useful information from live Python objects.
 
 This module encapsulates the interface provided by the internal special

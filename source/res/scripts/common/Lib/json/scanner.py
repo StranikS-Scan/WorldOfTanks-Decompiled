@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/json/scanner.py
-# Compiled at: 2047-06-18 23:24:48
+# Compiled at: 1985-12-30 07:35:11
 """JSON token scanner
 """
 import re

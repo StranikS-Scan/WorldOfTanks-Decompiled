@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/string.py
-# Compiled at: 2047-10-18 22:08:08
+# Compiled at: 1987-01-22 19:38:24
 """A collection of string operations (most are no longer used).
 
 Warning: most of the code you see here isn't normally used nowadays.

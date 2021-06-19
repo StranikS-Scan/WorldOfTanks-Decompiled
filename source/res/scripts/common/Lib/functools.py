@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/functools.py
-# Compiled at: 2047-05-01 10:59:02
+# Compiled at: 1985-11-06 04:05:05
 """functools.py - Tools for working with functions and callable objects
 """
 from _functools import partial, reduce

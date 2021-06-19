@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/linecache.py
-# Compiled at: 2047-07-17 05:43:30
+# Compiled at: 1986-02-25 23:51:45
 """Cache lines from files.
 
 This is intended to read lines from modules imported -- hence if a filename

@@ -8,6 +8,7 @@ from gui.battle_control.controllers.appearance_cache_ctrls.battle_royale_appeara
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.event_appearance_cache_ctrl import EventAppearanceCacheController
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
+from gui.battle_control.controllers import vehicle_post_progression_ctrl as vpp_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 from gui.battle_control.controllers import battle_hints_ctrl
 from gui.battle_control.controllers import radar_ctrl
@@ -91,6 +92,10 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
     @property
     def optionalDevices(self):
         return self._repository.getController(BATTLE_CTRL_ID.OPTIONAL_DEVICES)
+
+    @property
+    def vehiclePostProgression(self):
+        return self._repository.getController(BATTLE_CTRL_ID.VEHICLE_POST_PROGRESSION_CTRL)
 
     @property
     def vehicleState(self):
@@ -328,6 +333,7 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addController(ammo)
         repository.addController(consumables.createEquipmentCtrl(setup))
         repository.addController(consumables.createOptDevicesCtrl(setup))
+        repository.addController(vpp_ctrl.VehiclePostProgressionBattleController(setup))
         state = vehicle_state_ctrl.createCtrl(setup)
         repository.addController(state)
         repository.addController(avatar_stats_ctrl.AvatarStatsController())

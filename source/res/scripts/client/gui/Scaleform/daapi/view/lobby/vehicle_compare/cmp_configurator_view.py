@@ -508,6 +508,12 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
         battleBooster = basketVehicle.getBattleBooster()
         if battleBooster is not None:
             vehicle_adjusters.installBattleBoosterOnVehicle(vehicle, battleBooster.intCD)
+        dynSlotTypes = basketVehicle.getDynSlotTypes()
+        if dynSlotTypes:
+            vehicle.optDevices.dynSlotTypes = dynSlotTypes
+        postProgressionState = basketVehicle.getPostProgressionState()
+        if not postProgressionState.isEmpty():
+            vehicle.installPostProgression(postProgressionState)
         return (vehicle, _CrewSkillsManager(vehicle, crewLvl, crewSkills))
 
     def getCurrentCrewSkills(self):
@@ -685,6 +691,8 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
             vehicle_adjusters.installEquipment(vehicle, equipmentIntCD, i)
 
         vehicle.descriptor.activeGunShotIndex = self.__vehicle.descriptor.activeGunShotIndex
+        vehicle.optDevices.dynSlotTypes = self.__vehicle.optDevices.dynSlotTypes
+        vehicle.installPostProgression(self.__vehicle.postProgression.getState())
         cmp_helpers.applyCamouflage(vehicle, cmp_helpers.isCamouflageSet(self.__vehicle))
         for battleBooster in self.__vehicle.battleBoosters.installed.getItems():
             vehicle_adjusters.installBattleBoosterOnVehicle(vehicle, battleBooster.intCD)
@@ -694,20 +702,26 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
     def _populate(self):
         super(VehicleCompareConfiguratorMain, self)._populate()
         self.comparisonBasket.onSwitchChange += self.__onBasketStateChanged
-        basketVehcileData = self.getBasketVehCmpData()
-        basketVehCrewLvl, basketVehCrewSkills = basketVehcileData.getCrewData()
-        self.__vehicle = Vehicle(basketVehcileData.getVehicleStrCD())
+        basketVehicleData = self.getBasketVehCmpData()
+        basketVehCrewLvl, basketVehCrewSkills = basketVehicleData.getCrewData()
+        self.__vehicle = Vehicle(basketVehicleData.getVehicleStrCD())
         self.__vehItem = CompareInteractingItem(self.__vehicle)
         self.__crewSkillsManager = _CrewSkillsManager(self.__vehicle, basketVehCrewLvl, basketVehCrewSkills)
-        equipment = basketVehcileData.getEquipment()
+        equipment = basketVehicleData.getEquipment()
         for slotIndex, equipmentSlot in enumerate(equipment):
             self.__installEquipment(equipmentSlot, slotIndex)
 
-        cmp_helpers.applyCamouflage(self.__vehicle, basketVehcileData.hasCamouflage())
-        battleBooster = basketVehcileData.getBattleBooster()
+        cmp_helpers.applyCamouflage(self.__vehicle, basketVehicleData.hasCamouflage())
+        battleBooster = basketVehicleData.getBattleBooster()
         if battleBooster is not None:
             vehicle_adjusters.installBattleBoosterOnVehicle(self.__vehicle, battleBooster.intCD)
-        self.__updateSelectedShell(basketVehcileData.getSelectedShellIndex())
+        dynSlotTypes = basketVehicleData.getDynSlotTypes()
+        if dynSlotTypes:
+            self.__vehicle.optDevices.dynSlotTypes = dynSlotTypes
+        postProgressionState = basketVehicleData.getPostProgressionState()
+        if not postProgressionState.isEmpty():
+            self.__vehicle.installPostProgression(postProgressionState)
+        self.__updateSelectedShell(basketVehicleData.getSelectedShellIndex())
         self.as_showViewS(VEHICLE_COMPARE_CONSTANTS.VEHICLE_CONFIGURATOR_VIEW)
         self.comparisonBasket.isLocked = True
         return

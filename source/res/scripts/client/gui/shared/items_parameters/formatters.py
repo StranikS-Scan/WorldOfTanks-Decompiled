@@ -93,7 +93,15 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  TURBOSHAFT_SPEED_MODE_SPEED: MENU.TANK_PARAMS_MPH,
  DUAL_GUN_CHARGE_TIME: MENU.TANK_PARAMS_S,
  DUAL_GUN_RATE_TIME: MENU.TANK_PARAMS_S,
- 'shotSpeed': MENU.TANK_PARAMS_MPS}
+ 'shotSpeed': MENU.TANK_PARAMS_MPS,
+ 'vehicleGunShotDispersionAfterShot': MENU.TANK_PARAMS_PERCENT,
+ 'vehicleGunShotDispersionChassisMovement': MENU.TANK_PARAMS_PERCENT,
+ 'vehicleGunShotDispersionChassisRotation': MENU.TANK_PARAMS_PERCENT,
+ 'vehicleGunShotDispersionTurretRotation': MENU.TANK_PARAMS_PERCENT,
+ 'vehicleGunShotDispersionWhileGunDamaged': MENU.TANK_PARAMS_PERCENT,
+ 'vehicleRamDamageResistance': MENU.TANK_PARAMS_PERCENT,
+ 'damageEnemiesByRamming': MENU.TANK_PARAMS_PERCENT,
+ 'vehicleInvisibilityAfterShot': MENU.TANK_PARAMS_PERCENT}
 MEASURE_UNITS_NO_BRACKETS = {'weight': MENU.TANK_PARAMS_NO_BRACKETS_KG,
  'cooldownSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,
  'caliber': MENU.TANK_PARAMS_NO_BRACKETS_MM}
@@ -334,7 +342,15 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  DUAL_GUN_RATE_TIME: _niceListFormat,
  'shotSpeed': _integralFormat,
  'extraRepairSpeed': _percentFormat,
- TURBOSHAFT_SPEED_MODE_SPEED: _niceListFormat}
+ TURBOSHAFT_SPEED_MODE_SPEED: _niceListFormat,
+ 'vehicleGunShotDispersionAfterShot': _integralFormat,
+ 'vehicleGunShotDispersionChassisMovement': _integralFormat,
+ 'vehicleGunShotDispersionChassisRotation': _integralFormat,
+ 'vehicleGunShotDispersionTurretRotation': _integralFormat,
+ 'vehicleGunShotDispersionWhileGunDamaged': _integralFormat,
+ 'vehicleRamDamageResistance': _integralFormat,
+ 'damageEnemiesByRamming': _integralFormat,
+ 'vehicleInvisibilityAfterShot': _integralFormat}
 
 def _deltaWrapper(fn):
 
@@ -375,7 +391,7 @@ _STATES_INDEX_IN_COLOR_MAP = {PARAM_STATE.WORSE: 0,
  PARAM_STATE.NORMAL: 1,
  PARAM_STATE.BETTER: 2}
 
-def _colorize(paramStr, state, colorScheme):
+def colorize(paramStr, state, colorScheme):
     if isinstance(state, (tuple, list)):
         stateType, _ = state
     else:
@@ -391,14 +407,15 @@ def colorizedFullFormatParameter(parameter, colorScheme):
     return formatParameter(parameter.name, parameter.value, parameter.state, colorScheme, allowSmartRound=False)
 
 
-def simplifiedDeltaParameter(parameter, isSituational=False):
+def simplifiedDeltaParameter(parameter, isSituational=False, isApproximately=False):
     mainFormatter = SIMPLIFIED_SCHEME[1]
     delta = int(parameter.state[1])
     paramStr = formatParameter(parameter.name, parameter.value)
     if delta:
         sign = '-' if delta < 0 else '+'
+        approximatelySymbol = '*' if isApproximately else ''
         scheme = SITUATIONAL_SCHEME if isSituational else SIMPLIFIED_SCHEME
-        deltaStr = _colorize('%s%s' % (sign, abs(delta)), parameter.state, scheme)
+        deltaStr = colorize('%s%s%s' % (sign, abs(delta), approximatelySymbol), parameter.state, scheme)
         return '(%s) %s' % (deltaStr, mainFormatter(paramStr))
     return mainFormatter(paramStr)
 
@@ -413,7 +430,7 @@ def _applyFormat(value, state, settings, doSmartRound, colorScheme):
     else:
         paramStr = settings['rounder'](value)
     if state is not None and colorScheme is not None:
-        paramStr = _colorize(paramStr, state, colorScheme)
+        paramStr = colorize(paramStr, state, colorScheme)
     return paramStr
 
 
@@ -505,7 +522,7 @@ def getAllParametersTitles():
         data['tooltip'] = TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
         result.append(data)
         for paramName in PARAMS_GROUPS[groupName]:
-            data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, paramName)
+            data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, paramName, groupName)
             data['iconSource'] = getParameterSmallIconPath(paramName)
             data['titleText'] = formatVehicleParamName(paramName)
             data['isEnabled'] = False

@@ -112,6 +112,7 @@ class TOOLTIPS(object):
     RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED = '#tooltips:researchPage/vehicle/button/compare/disabled'
     RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked'
     RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP = '#tooltips:researchPage/module/status/notEnoughXP'
+    VEHPOSTPROGRESSIONVIEW_BUTTON_COMPARE_DISABLED = '#tooltips:vehPostProgressionView/button/compare/disabled'
     MODULEFITS_OPERATION_ERROR = '#tooltips:moduleFits/operation_error'
     VEHICLEPREVIEW_CREW = '#tooltips:vehiclePreview/crew'
     VEHICLEPREVIEW_VEHICLEPANEL_INFO = '#tooltips:vehiclePreview/vehiclePanel/info'
@@ -978,6 +979,8 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_INVENTORY_BODY = '#tooltips:header/buttons/inventory/body'
     HEADER_BUTTONS_SHOP_HEADER = '#tooltips:header/buttons/shop/header'
     HEADER_BUTTONS_SHOP_BODY = '#tooltips:header/buttons/shop/body'
+    HEADER_BUTTONS_SHOP_OFFLINEPAGE_HEADER = '#tooltips:header/buttons/shop/offlinePage/header'
+    HEADER_BUTTONS_SHOP_OFFLINEPAGE_BODY = '#tooltips:header/buttons/shop/offlinePage/body'
     HEADER_BUTTONS_STORAGE_HEADER = '#tooltips:header/buttons/storage/header'
     HEADER_BUTTONS_STORAGE_BODY = '#tooltips:header/buttons/storage/body'
     HEADER_BUTTONS_PROFILE_HEADER = '#tooltips:header/buttons/profile/header'
@@ -2954,8 +2957,6 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen_bp2_2/howToGetInfo'
     NOTRECRUITEDTANKMAN_CH_COMPENSATION_LABEL = '#tooltips:notrecruitedtankman/ch_compensation/label'
     NOTRECRUITEDTANKMAN_CH_COMPENSATION_DESC = '#tooltips:notrecruitedtankman/ch_compensation/desc'
-    NOTRECRUITEDTANKMAN_COMMANDER_TWITCH_MOCHIZUKI_LABEL = '#tooltips:notrecruitedtankman/commander_twitch_mochizuki/label'
-    NOTRECRUITEDTANKMAN_COMMANDER_TWITCH_MOCHIZUKI_DESC = '#tooltips:notrecruitedtankman/commander_twitch_mochizuki/desc'
     QUESTS_AWARDS_VEHICLERENT_HEADER = '#tooltips:quests/awards/vehicleRent/header'
     QUESTS_AWARDS_VEHICLERENT_EXPIRE = '#tooltips:quests/awards/vehicleRent/expire'
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS = '#tooltips:quests/awards/vehicleRent/rentLeft/rentDays'
@@ -3234,6 +3235,10 @@ class TOOLTIPS(object):
     BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_CONTENT_NAME_ALLIANCE_USA = '#tooltips:blueprints/conversionView/alliance/content/name/Alliance-USA'
     BLUEPRINTS_CONVERSIONVIEW_ALLIANCE_CONTENT_NAME_ALLIANCE_FRANCE = '#tooltips:blueprints/conversionView/alliance/content/name/Alliance-France'
     BLUEPRINTS_CONVERSIONVIEW_INFO = '#tooltips:blueprints/conversionView/info'
+    VEHPOSTPROGRESSIONVIEW_BUTTON_COMPARE_DISABLED_HEADER = '#tooltips:vehPostProgressionView/button/compare/disabled/header'
+    VEHPOSTPROGRESSIONVIEW_BUTTON_COMPARE_DISABLED_BODY = '#tooltips:vehPostProgressionView/button/compare/disabled/body'
+    VEHPOSTPROGRESSIONVIEW_UNLOCKLEVEL_HEADER = '#tooltips:vehPostProgressionView/unlockLevel/header'
+    VEHPOSTPROGRESSIONVIEW_UNLOCKLEVEL_BODY = '#tooltips:vehPostProgressionView/unlockLevel/body'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -3825,7 +3830,6 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP2_1_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_LABEL,
      NOTRECRUITEDTANKMAN_CH_COMPENSATION_LABEL,
-     NOTRECRUITEDTANKMAN_COMMANDER_TWITCH_MOCHIZUKI_LABEL,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU1_YUSHA_LABEL,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU1_VSPISHKA_LABEL,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU2_AMWAY921_LABEL,
@@ -3906,7 +3910,6 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP2_1_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_DESC,
      NOTRECRUITEDTANKMAN_CH_COMPENSATION_DESC,
-     NOTRECRUITEDTANKMAN_COMMANDER_TWITCH_MOCHIZUKI_DESC,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU1_YUSHA_DESC,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU1_VSPISHKA_DESC,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU2_AMWAY921_DESC,

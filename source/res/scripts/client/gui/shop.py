@@ -6,7 +6,7 @@ import uuid
 from collections import namedtuple
 import BigWorld
 from adisp import async, process
-from constants import RentType, GameSeasonType
+from constants import RentType, GameSeasonType, SANDBOX_CONSTANTS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
 from gui.Scaleform.daapi.view.lobby.store.browser import shop_helpers as helpers
@@ -221,7 +221,7 @@ def showBuyItemWebView(url, itemId, source=None, origin=None, alias=VIEW_ALIAS.O
         params['source'] = source
     if origin:
         params['origin'] = origin
-    url = yield URLMacros().parse(url=_makeBuyItemUrl(url, itemId), params=params)
+    url = yield URLMacros().parse(url=_makeBuyItemUrl(url, itemId) if not SANDBOX_CONSTANTS.IS_SHOP_OFFLINE_PAGE_ENABLED else url, params=params)
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
 
 

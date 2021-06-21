@@ -193,7 +193,7 @@ class VehicleTypeInfoVO(object):
                 invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.SORTING)
             else:
                 newStrCD = vehicleType.makeCompactDescr()
-                if self.strCompactDescr != newStrCD:
+                if self.strCompactDescr != newStrCD or self.maxHealth != maxHealth:
                     self.__setVehicleData(vehicleType, maxHealth)
                     invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.SORTING)
         return invalidate

@@ -770,7 +770,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         return
 
     def _onVehicleHealthChanged(self, vehicleID, currH, maxH):
-        if vehicleID not in self._entries:
+        if vehicleID not in self._entries or not self.__canShowVehicleHp:
             return
         self._invoke(self._entries[vehicleID].getID(), 'setVehicleHealth', normalizeHealthPercent(currH, maxH))
 
@@ -888,6 +888,10 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
 
     def __showVehicleHp(self, vehicleId, entryId):
         self._invoke(entryId, 'showVehicleHp', self.__canShowVehicleHp)
+        vehicle = BigWorld.entity(vehicleId)
+        if vehicle is not None and self.__canShowVehicleHp:
+            self._onVehicleHealthChanged(vehicleId, vehicle.health, vehicle.maxHealth)
+        return
 
     def __showFeatures(self, flag):
         self._parentObj.as_showVehiclesNameS(flag)
@@ -962,13 +966,9 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                     self._setVehicleInfo(vehicleID, model, vInfo, guiProps, isSpotted=True)
                     self._setInAoI(model, True)
                     self._notifyVehicleAdded(vehicleID)
-                    vehicle = BigWorld.entity(vehicleID)
-                    self._onVehicleHealthChanged(vehicleID, vehicle.health, vehicle.maxHealth)
             else:
                 self._showVehicle(vehicleID, VEHICLE_LOCATION.AOI)
                 self._notifyVehicleAdded(vehicleID)
-                vehicle = BigWorld.entity(vehicleID)
-                self._onVehicleHealthChanged(vehicleID, vehicle.health, vehicle.maxHealth)
             return
 
     def __onMinimapVehicleRemoved(self, vehicleID):

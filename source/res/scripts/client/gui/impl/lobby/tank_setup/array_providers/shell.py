@@ -6,6 +6,7 @@ from gui.impl.lobby.tank_setup.array_providers.base import VehicleBaseArrayProvi
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import MEASURE_UNITS, formatParameter
+from post_progression_common import TankSetupGroupsId
 from helpers import dependency, i18n
 from skeletons.gui.shared import IItemsCache
 _SHELLS_INFO_PARAMS = ('avgDamage', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'stunDurationList')
@@ -48,15 +49,22 @@ class ShellProvider(VehicleBaseArrayProvider):
             BuyPriceModelBuilder.clearPriceModel(model.price)
             BuyPriceModelBuilder.fillPriceModelByItemPrice(model.price, buyPrice)
             self._fillSpecification(model, item)
+        vehicle = self._getVehicle()
         inTankCount = 0
-        for shell in self._getVehicle().shells.installed:
+        for shell in vehicle.shells.setupLayouts:
             if shell == item:
-                inTankCount = shell.count
+                inTankCount = max(inTankCount, shell.count)
 
         boughtCount = item.inventoryCount + inTankCount
         buyCount = max(item.count - boughtCount, 0)
         model.setCount(item.count)
-        model.setItemsInStorage(max(boughtCount - item.count, 0))
+        shellsSetupLayouts = vehicle.shells.setupLayouts
+        inTankCount = max(item.count, shellsSetupLayouts.ammoLoadedInOtherSetups(item.intCD))
+        model.setItemsInStorage(max(boughtCount - inTankCount, 0))
+        if vehicle.isSetupSwitchAvailable(TankSetupGroupsId.EQUIPMENT_AND_SHELLS):
+            model.setItemsInVehicle(inTankCount)
+        else:
+            model.setItemsInVehicle(-1)
         model.setBuyCount(buyCount)
         BuyPriceModelBuilder.clearPriceModel(model.totalPrice)
         if buyCount:

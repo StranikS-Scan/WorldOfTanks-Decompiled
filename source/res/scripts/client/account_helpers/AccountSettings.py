@@ -12,7 +12,7 @@ import WWISE
 import constants
 import nations
 from account_helpers import gameplay_ctx
-from account_helpers.settings_core.settings_constants import GAME, BattleCommStorageKeys, ScorePanelStorageKeys, SPGAim, SOUND, AIM
+from account_helpers.settings_core.settings_constants import GAME, BattleCommStorageKeys, ScorePanelStorageKeys, SPGAim, SOUND, AIM, GuiSettingsBehavior
 from aih_constants import CTRL_MODE_NAME
 from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -174,6 +174,7 @@ TOP_OF_TREE_CONFIG = 'topOfTree'
 DOG_TAGS = 'dogTags'
 LAST_ARTY_CTRL_MODE = 'lastArtyCtrlMode'
 MAPBOX_PROGRESSION = 'mapbox_progression'
+BECOME_ELITE_VEHICLES_WATCHED = 'becomeEliteWatched'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -442,7 +443,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'lastShownEpicWelcomeScreen': 0,
                                     'techTreeIntroBlueprintsReceived': False,
                                     'techTreeIntroShowed': False,
-                                    'isDisplayPlatoonMembersClicked': False},
+                                    'isDisplayPlatoonMembersClicked': False,
+                                    GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: True},
                EULA_VERSION: {'version': 0},
                LINKEDSET_QUESTS: {'shown': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
@@ -789,7 +791,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SUBTITLES: True,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
-                NATION_CHANGE_VIEWED: False,
+                BECOME_ELITE_VEHICLES_WATCHED: set(),
                 GAME.GAMEPLAY_ONLY_10_MODE: False,
                 MAPBOX_PROGRESSION: {'previous_battles_played': 0,
                                      'visited_maps': [],

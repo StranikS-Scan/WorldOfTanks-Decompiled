@@ -337,6 +337,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         showShop(getBuyPremiumUrl())
 
     def onPremShopClick(self):
+        if not constants.SANDBOX_CONSTANTS.IS_PREMIUM_SHOP_ENABLED:
+            return
         self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.PREM_SHOP))
 
     @process
@@ -411,11 +413,15 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         super(LobbyHeader, self)._populate()
         if self.__tutorialLoader.gui.lastHeaderMenuButtonsOverride is not None:
             self.__onOverrideHeaderMenuButtons()
-        elif self.__loginManager.isWgcSteam:
-            steamButtons = tuple((v for v in self.BUTTONS.ALL() if v != self.BUTTONS.PREMSHOP))
-            self.as_setHeaderButtonsS(steamButtons)
+        elif self.__loginManager.isWgcSteam or not constants.SANDBOX_CONSTANTS.IS_PREMIUM_SHOP_ENABLED:
+            headerButtons = tuple((v for v in self.BUTTONS.ALL() if v != self.BUTTONS.PREMSHOP))
+            self.as_setHeaderButtonsS(headerButtons)
         else:
             self.as_setHeaderButtonsS(self.BUTTONS.ALL())
+        if not constants.SANDBOX_CONSTANTS.IS_PERSONAL_MISSIONS_ENABLED:
+            tabs = self.__tutorialLoader.gui.lastHangarMenuButtonsOverride or list(self.TABS.ALL())
+            tabs = [ tab for tab in tabs if tab != self.TABS.PERSONAL_MISSIONS ]
+            self.__tutorialLoader.gui.overrideHangarMenuButtons(tabs)
         self._addListeners()
         Waiting.hide('enter')
         self._isLobbyHeaderControlsDisabled = False
@@ -1090,7 +1096,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
         if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.BATTLE_SELECTOR):
             eventEnabled = self.isEventEnabled
-            self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), selected.isSelectorBtnEnabled(), self.__SELECTOR_TOOLTIP_TYPE, TOOLTIP_TYPES.COMPLEX, selected.getData(), eventEnabled, eventEnabled and not WWISE.WG_isMSR(), self.lobbyContext.getServerSettings().isLegacyModeSelectorEnabled(), hasNew)
+            self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), selected.isSelectorBtnEnabled() and constants.SANDBOX_CONSTANTS.IS_BATTLE_SELECTOR_ENABLED, self.__SELECTOR_TOOLTIP_TYPE, TOOLTIP_TYPES.COMPLEX, selected.getData(), eventEnabled, eventEnabled and not WWISE.WG_isMSR(), self.lobbyContext.getServerSettings().isLegacyModeSelectorEnabled(), hasNew)
         else:
             self.as_updateBattleTypeS('', '', False, '', TOOLTIP_TYPES.NONE, '', False, False, False, False)
         if selected.isDisabled():
@@ -1295,6 +1301,13 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
          {'label': MENU.HEADERBUTTONS_PROFILE,
           'value': self.TABS.PROFILE,
           'tooltip': TOOLTIPS.HEADER_BUTTONS_PROFILE}]
+        if constants.SANDBOX_CONSTANTS.IS_SHOP_OFFLINE_PAGE_ENABLED:
+            for tabData in tabDataProvider:
+                if tabData['value'] == self.TABS.STORE:
+                    tabData['enabled'] = False
+                    tabData['tooltip'] = '#tooltips:header/buttons/shop/offlinePage'
+                    break
+
         techTreeData = {'label': MENU.HEADERBUTTONS_TECHTREE,
          'value': self.TABS.TECHTREE,
          'tooltip': TOOLTIPS.HEADER_BUTTONS_TECHTREE,
@@ -1409,7 +1422,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.__hideCounter(alias)
 
     def __updateShopTabCounter(self):
-        self.__updateTabCounter(self.TABS.STORE)
+        if not constants.SANDBOX_CONSTANTS.IS_SHOP_OFFLINE_PAGE_ENABLED:
+            self.__updateTabCounter(self.TABS.STORE)
 
     def __updateStorageTabCounter(self):
         self.__updateTabCounter(self.TABS.STORAGE, self.demountKitNovelty.noveltyCount + self.offersNovelty.noveltyCount)
@@ -1542,7 +1556,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__menuVisibilityHelper = None
         return
 
-    def __onShowTooltip(self, tooltip, _):
+    def __onShowTooltip(self, tooltip, *_):
         if tooltip == self.__SELECTOR_TOOLTIP_TYPE:
             self.uiModeSelectorButtonLogger.tooltipOpened(SELECTOR_BUTTON_TOOLTIP_LOG_ID)
 

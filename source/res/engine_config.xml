@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences_ct.xml	</preferences>
+  <preferences>	preferences_sb.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -333,6 +333,9 @@
         <bank>
           <name>	ev_battle_royale_2019_music.pck	</name>
         </bank>
+        <bank>
+          <name>	tanks_post_progression.bnk	</name>
+        </bank>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
         <bank>
@@ -644,8 +647,8 @@
       <source>	SCRIPT	</source>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	512	</maxSizeKB>
-      <trimToKB>	0	</trimToKB>
+      <maxSizeKB>	2048	</maxSizeKB>
+      <trimToKB>	512	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>
@@ -653,8 +656,8 @@
     <file>	ui.log	  <enabled>	true	</enabled>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	512	</maxSizeKB>
-      <trimToKB>	0	</trimToKB>
+      <maxSizeKB>	2048	</maxSizeKB>
+      <trimToKB>	512	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>

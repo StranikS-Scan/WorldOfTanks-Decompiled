@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/offers/cache.py
+import os
 import logging
 import itertools
 import urlparse
@@ -71,6 +72,14 @@ class ExternalCache(WebExternalCache):
         if self._notDownloadedCnt or self._notStoredCnt:
             result = CachePrefetchResult.FAIL
         self._prefetchEnd(result)
+
+    def getRelativePath(self, url):
+        absolute = self.get(url)
+        if absolute:
+            try:
+                return os.path.relpath(absolute, start=self.rootDirPath)
+            except ValueError:
+                _logger.error('Error while getting relative path from: %s, root: %s', absolute, self.rootDirPath)
 
     def close(self, reason=CachePrefetchResult.CLOSED):
         super(ExternalCache, self).close()

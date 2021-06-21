@@ -138,6 +138,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BATTLE_ABILITY_SELECT_POPOVER = 'battleAbilitySelectPopover'
     PACK_ITEM_POPOVER = 'packItemPopover'
     UI_LOGGER_TEST_DIALOG = 'uiLoggerDialog'
+    VEH_POST_PROGRESSION = 'vehPostProgression'
     MINIMAP_LOBBY = 'minimapLobby'
     MINIMAP_GRID = 'minimapGridLobby'
     MINIMAP_ON_BATTLE_LOADING = 'minimapOnBattleLoading'

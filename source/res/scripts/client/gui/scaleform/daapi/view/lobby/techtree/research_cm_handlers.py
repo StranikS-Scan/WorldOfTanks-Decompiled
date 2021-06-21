@@ -129,7 +129,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         ItemsActionsFactory.doAction(ItemsActionsFactory.CHANGE_NATION, self._nodeCD)
 
     def _initFlashValues(self, ctx):
-        self._nodeCD = int(ctx.nodeCD)
+        self._nodeCD = int(ctx.vehCD)
         self._nodeState = int(ctx.nodeState)
         vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
         self._previewAlias = getattr(ctx, 'previewAlias', VIEW_ALIAS.LOBBY_TECHTREE)
@@ -206,7 +206,7 @@ class BlueprintVehicleContextMenuHandler(SimpleVehicleCMHandler):
         shared_events.showBlueprintView(self._nodeCD)
 
     def _initFlashValues(self, ctx):
-        self._nodeCD = int(ctx.nodeCD)
+        self._nodeCD = int(ctx.vehCD)
         self._nodeState = int(ctx.nodeState)
         self._previewAlias = getattr(ctx, 'previewAlias', VIEW_ALIAS.LOBBY_TECHTREE)
 

@@ -4,6 +4,8 @@ import typing
 if typing.TYPE_CHECKING:
     from collections import OrderedDict
     from gui.shared.money import Money
+    from gui.veh_post_porgression.models.ext_money import ExtendedMoney
+    from post_progression_common import VehicleState
 
 class IRequester(object):
 
@@ -100,6 +102,15 @@ class IInventoryRequester(IRequester):
         raise NotImplementedError
 
     def getInstalledEnhancements(self):
+        raise NotImplementedError
+
+    def getVehPostProgression(self, vehIntCD):
+        raise NotImplementedError
+
+    def getVehExtData(self, vehIntCD):
+        raise NotImplementedError
+
+    def getDynSlotTypeID(self, vehIntCD):
         raise NotImplementedError
 
 
@@ -340,6 +351,9 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     def getMaxResearchedLevel(self, nationID):
+        raise NotImplementedError
+
+    def getMoneyExt(self, vehCD):
         raise NotImplementedError
 
     def getWeeklyVehicleCrystals(self, vehCD):
@@ -648,6 +662,9 @@ class IShopRequester(IShopCommonStats, IRequester):
         raise NotImplementedError
 
     def bestGoody(self, goodies):
+        raise NotImplementedError
+
+    def customRoleSlotChangeCost(self, vehLevel, isRaw=False):
         raise NotImplementedError
 
     def getVehicleSlotsItemPrice(self, currentSlotsCount):

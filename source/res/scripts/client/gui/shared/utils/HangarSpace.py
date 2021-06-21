@@ -303,6 +303,10 @@ class HangarSpace(IHangarSpace):
         Waiting.show('loadHangarSpaceVehicle', isSingle=True)
         self.updateVehicle(vehicle, outfit)
 
+    def updateVehicleDescriptor(self, descr):
+        if self.__inited:
+            self.__space.updateVehicleDescriptor(descr)
+
     def __handleKeyEvent(self, event):
         if event.key == Keys.KEY_LEFTMOUSE:
             if event.isKeyDown():

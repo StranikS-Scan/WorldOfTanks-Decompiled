@@ -4,10 +4,10 @@ import cPickle
 import logging
 import math
 from collections import namedtuple, defaultdict
+from helpers.i18n import makeString
 import ArenaType
-import constants
-from soft_exception import SoftException
 import ResMgr
+import constants
 import nations
 from gui import g_htmlTemplates, makeHtmlString, GUI_NATIONS
 from gui.Scaleform import getNationsFilterAssetPath
@@ -30,12 +30,13 @@ from gui.clans.items import formatField
 from gui.impl import backport
 from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.impl.gen import R
+from gui.impl.lobby.battle_pass.tooltips.battle_pass_3d_style_not_chosen_tooltip import BattlePass3dStyleNotChosenTooltip
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_3d_style_not_chosen_tooltip import BattlePass3dStyleNotChosenTooltip
 from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
+from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.server_events.events_helpers import missionsSortFunc
@@ -53,7 +54,6 @@ from gui.shared.tooltips import formatters
 from gui.shared.view_helpers import UsersInfoHelper
 from helpers import dependency
 from helpers import i18n, time_utils, html, int2roman
-from helpers.i18n import makeString
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeContactStatusDescription
 from messenger.m_constants import USER_TAG
 from messenger.storage import storage_getter
@@ -64,9 +64,10 @@ from skeletons.gui.game_control import IIGRController, IServerStatsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.techtree_events import ITechTreeEventsListener
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.techtree_events import ITechTreeEventsListener
 from skeletons.gui.web import IWebController
+from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
 _PARENTHESES_OPEN = '('
@@ -1524,3 +1525,12 @@ class TechTreeNationDiscountTooltip(TechTreeEventTooltipBase):
         blocks.append(self._actionExpireBlock(closestAction))
         items.append(formatters.packBuildUpBlockData(blocks))
         return items
+
+
+class VehPostProgressionEntryPointTooltipContentWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(VehPostProgressionEntryPointTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.VEH_POST_PROGRESSION_ENTRY_POINT)
+
+    def getDisplayableData(self, intCD, parentScreen, *args, **kwargs):
+        return DecoratedTooltipWindow(VehPostProgressionEntryPointTooltip(intCD, parentScreen), useDecorator=False)

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
+import typing
+import logging
 from collections import namedtuple
 import async as future_async
 from account_helpers import AccountSettings
@@ -34,6 +36,7 @@ from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.common import UseCrewBookProcessor
 from gui.shared.gui_items.processors.goodies import BoosterBuyer
 from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor, BCBuyAndInstallItemProcessor, OptDeviceInstaller
+from gui.shared.gui_items.processors.veh_post_progression import ChangeVehicleSetupEquipments, DiscardPairsProcessor, PurchasePairProcessor, PurchaseStepsProcessor, SetEquipmentSlotTypeProcessor
 from gui.shared.gui_items.processors.module import ModuleSeller
 from gui.shared.gui_items.processors.module import ModuleUpgradeProcessor
 from gui.shared.gui_items.processors.module import MultipleModulesSeller
@@ -50,6 +53,10 @@ from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
+    from gui.SystemMessages import ResultMsg
+_logger = logging.getLogger(__name__)
 ItemSellSpec = namedtuple('ItemSellSpec', ('typeIdx', 'intCD', 'count'))
 
 def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
@@ -95,10 +102,10 @@ def getGunCD(item, vehicle, itemsCache=None):
 
 def processMsg(result):
     if result and result.userMsg:
-        SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority, messageData=result.msgData)
     if result and hasattr(result, 'auxData') and not isinstance(result.auxData, dict) and result.auxData:
         for m in result.auxData:
-            SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
+            SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType, priority=m.msgPriority, messageData=m.msgData)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -539,7 +546,7 @@ class BuyAndInstallOptDevices(AmmunitionBuyAndInstall):
 
     def __init__(self, vehicle, confirmOnlyExchange=False):
         optDevices = vehicle.optDevices
-        changeItems = [ item for item in optDevices.layout.getItems() if item not in optDevices.installed ]
+        changeItems = [ item for item in optDevices.layout.getItems() if not vehicle.optDevices.setupLayouts.isInSetup(item) ]
         super(BuyAndInstallOptDevices, self).__init__(vehicle, changeItems, confirmOnlyExchange)
 
     @async
@@ -553,7 +560,7 @@ class BuyAndInstallConsumables(AmmunitionBuyAndInstall):
     __slots__ = ()
 
     def __init__(self, vehicle, confirmOnlyExchange=False):
-        changeItems = [ item for item in vehicle.consumables.layout.getItems() if item not in vehicle.consumables.installed ]
+        changeItems = [ item for item in vehicle.consumables.layout.getItems() if not vehicle.consumables.setupLayouts.isInSetup(item) ]
         super(BuyAndInstallConsumables, self).__init__(vehicle, changeItems, confirmOnlyExchange)
 
     @async
@@ -567,7 +574,7 @@ class BuyAndInstallBattleBoosters(AmmunitionBuyAndInstall):
     __slots__ = ()
 
     def __init__(self, vehicle, confirmOnlyExchange=False):
-        changeItems = [ item for item in vehicle.battleBoosters.layout.getItems() if item not in vehicle.battleBoosters.installed ]
+        changeItems = [ item for item in vehicle.battleBoosters.layout.getItems() if not vehicle.battleBoosters.setupLayouts.isInSetup(item) ]
         super(BuyAndInstallBattleBoosters, self).__init__(vehicle, changeItems, confirmOnlyExchange)
 
     @async
@@ -781,3 +788,115 @@ class RemoveOptionalDevice(AsyncGUIItemAction):
     def _action(self, callback):
         result = yield self.__removeProcessor.request()
         callback(result)
+
+
+class ChangeSetupEquipmentsIndex(AsyncGUIItemAction):
+    __slots__ = ('__vehicle', '__groupID', '__layoutIdx')
+
+    def __init__(self, vehicle, groupID, layoutIdx):
+        super(ChangeSetupEquipmentsIndex, self).__init__()
+        self.__vehicle = vehicle
+        self.__groupID = groupID
+        self.__layoutIdx = layoutIdx
+
+    @async
+    @process
+    def _action(self, callback):
+        result = yield ChangeVehicleSetupEquipments(self.__vehicle, self.__groupID, self.__layoutIdx).request()
+        callback(result)
+
+
+class DiscardPostProgressionPairs(AsyncGUIItemAction):
+    __slots__ = ('__vehicle', '__stepIDs', '__modIDs')
+
+    def __init__(self, vehicle, stepIDs, modIDs):
+        super(DiscardPostProgressionPairs, self).__init__()
+        self.__vehicle = vehicle
+        self.__stepIDs = stepIDs
+        self.__modIDs = modIDs
+
+    @async
+    @decorators.process('loadPage')
+    def _action(self, callback):
+        result = yield DiscardPairsProcessor(self.__vehicle, self.__stepIDs, self.__modIDs).request()
+        callback(result)
+
+    @async
+    @future_async.async
+    def _confirm(self, callback):
+        result = yield future_async.await(shared_events.showDestroyPairModificationsDialog)(self.__vehicle, self.__stepIDs)
+        callback(result.result[0] if not result.busy else False)
+
+
+class PurchasePostProgressionPair(AsyncGUIItemAction):
+    __slots__ = ('__vehicle', '__stepID', '__modificationID')
+
+    def __init__(self, vehicle, stepID, modificationID):
+        super(PurchasePostProgressionPair, self).__init__()
+        self.__vehicle = vehicle
+        self.__stepID = stepID
+        self.__modificationID = modificationID
+
+    @async
+    @decorators.process('loadPage')
+    def _action(self, callback):
+        result = yield PurchasePairProcessor(self.__vehicle, self.__stepID, self.__modificationID).request()
+        callback(result)
+
+    @async
+    @future_async.async
+    def _confirm(self, callback):
+        result = yield future_async.await(shared_events.showPostProgressionPairModDialog)(self.__vehicle, self.__stepID, self.__modificationID)
+        callback(result.result[0] if not result.busy else False)
+
+
+class PurchasePostProgressionSteps(AsyncGUIItemAction):
+    __slots__ = ('__vehicle', '__stepIDs')
+
+    def __init__(self, vehicle, stepIDs):
+        super(PurchasePostProgressionSteps, self).__init__()
+        self.__vehicle = vehicle
+        self.__stepIDs = stepIDs
+
+    @async
+    @decorators.process('loadPage')
+    def _action(self, callback):
+        result = yield PurchaseStepsProcessor(self.__vehicle, self.__stepIDs).request()
+        callback(result)
+
+    @async
+    @future_async.async
+    def _confirm(self, callback):
+        result = yield future_async.await(shared_events.showPostProgressionResearchDialog)(self.__vehicle, self.__stepIDs)
+        callback(result.result[0] if not result.busy else False)
+
+
+class SetEquipmentSlotType(AsyncGUIItemAction):
+    __slots__ = ('__vehicle', '__slotID')
+
+    def __init__(self, vehicle):
+        super(SetEquipmentSlotType, self).__init__()
+        self.__vehicle = vehicle
+        self.__slotID = 0
+
+    @async
+    @decorators.process('loadContent')
+    def _action(self, callback):
+        result = yield SetEquipmentSlotTypeProcessor(self.__vehicle, self.__slotID).request()
+        callback(result)
+
+    @async
+    @future_async.async
+    def _confirm(self, callback):
+        from gui.impl.lobby.common.select_slot_spec_dialog import showDialog
+        result = yield future_async.await(showDialog(self.__vehicle))
+        if result.busy:
+            callback(False)
+        else:
+            isOk, idx = result.result
+            _logger.debug('Select slot specialization dialog result: isOk: %r, idx: %r', isOk, idx)
+            if isOk and idx > 0:
+                self.__slotID = idx
+                callback(True)
+            else:
+                callback(False)

@@ -38,19 +38,22 @@ from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY
 from gui.shared.utils import makeSearchableString
 from helpers import i18n, time_utils, dependency, func_utils
-from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr
-from items.vehicles import getItemByCompactDescr
+from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr, filterIntCDsByItemType
+from items.vehicles import getItemByCompactDescr, getVehicleType
 from items.components.c11n_constants import SeasonType, CustomizationType, HIDDEN_CAMOUFLAGE_ID, ApplyArea, CUSTOM_STYLE_POOL_ID, ItemTags
 from shared_utils import findFirst, CONST_CONTAINER
-from skeletons.gui.game_control import IIGRController, IRentalsController
+from skeletons.gui.game_control import IIGRController, IRentalsController, IVehiclePostProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
+from post_progression_common import TankSetupGroupsId
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
     from items.components.c11n_components import StyleItem
+    from gui.veh_post_porgression.models.progression import PostProgressionItem, AvailabilityCheckResult
+    from post_progression_common import VehicleState
 _logger = logging.getLogger(__name__)
 
 class VEHICLE_CLASS_NAME(CONST_CONTAINER):
@@ -152,13 +155,14 @@ class VEHICLE_TAGS(CONST_CONTAINER):
 
 
 EPIC_ACTION_VEHICLE_CDS = (44033, 63265)
-_NOT_FULL_AMMO_MULTIPLIER = 0.2
+NOT_FULL_AMMO_MULTIPLIER = 0.2
 _MAX_RENT_MULTIPLIER = 2
 RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', 'mainRentType', 'seasonType'))
 CrystalsEarnedInfo = namedtuple('CrystalsEarnedInfo', ('current', 'max'))
+EliteStatusProgress = typing.NamedTuple('EliteStatusProgress', (('unlocked', typing.Set[int]), ('toUnlock', typing.Set[int]), ('total', typing.Set[int])))
 
 class Vehicle(FittingItem):
-    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfits', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_perksController', '_personalTradeInAvailableSale', '_personalTradeInAvailableBuy', '_groupIDs')
+    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfits', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_perksController', '_personalTradeInAvailableSale', '_personalTradeInAvailableBuy', '_groupIDs', '_postProgression')
 
     class VEHICLE_STATE(object):
         DAMAGED = 'damaged'
@@ -220,13 +224,15 @@ class Vehicle(FittingItem):
     igrCtrl = dependency.descriptor(IIGRController)
     itemsCache = dependency.descriptor(IItemsCache)
     __customizationService = dependency.descriptor(ICustomizationService)
+    __postProgressionCtrl = dependency.descriptor(IVehiclePostProgressionController)
 
-    def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
+    def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None):
+        self.__postProgressionCtrl.processVehExtData(getVehicleType(typeCompDescr or strCompactDescr), extData)
         if strCompactDescr is not None:
-            vehDescr = vehicles.VehicleDescr(compactDescr=strCompactDescr)
+            vehDescr = vehicles.VehicleDescr(compactDescr=strCompactDescr, extData=extData)
         else:
             _, nID, innID = vehicles.parseIntCompactDescr(typeCompDescr)
-            vehDescr = vehicles.VehicleDescr(typeID=(nID, innID))
+            vehDescr = vehicles.VehicleDescr(typeID=(nID, innID), extData=extData)
         super(Vehicle, self).__init__(vehDescr.type.compactDescr, proxy, strCD=HasStrCD(strCompactDescr))
         self._descriptor = vehDescr
         self._inventoryID = inventoryID
@@ -254,6 +260,7 @@ class Vehicle(FittingItem):
         self._isInfiniteRotationGroup = False
         self._unlockedBy = []
         self._perksController = None
+        self._postProgression = None
         self._hasNationGroup = hasNationGroup(vehDescr.type.compactDescr)
         self._outfits = {}
         self._isStyleInstalled = False
@@ -351,6 +358,9 @@ class Vehicle(FittingItem):
         self._hasModulesToSelect = self.__hasModulesToSelect()
         self.__customState = ''
         self._slotsAnchorsById, self._slotsAnchors = self.__initAnchors()
+        if self.__postProgressionCtrl.isDisabledFor(self):
+            self._descriptor.installModifications([], rebuildAttrs=False)
+            self._equipment.optDevices.dynSlotTypes = []
         return
 
     def __initAnchors(self):
@@ -505,9 +515,6 @@ class Vehicle(FittingItem):
         for eq in self.consumables.installed.getItems():
             bonuses['equipment'] += eq.crewLevelIncrease
 
-        for battleBooster in self.battleBoosters.installed.getItems():
-            bonuses['equipment'] += battleBooster.getCrewBonus(self)
-
         bonuses['optDevices'] = self.descriptor.miscAttrs['crewLevelIncrease']
         bonuses['commander'] = 0
         commanderEffRoleLevel = 0
@@ -626,6 +633,19 @@ class Vehicle(FittingItem):
     @property
     def isFullyElite(self):
         return self._isFullyElite
+
+    def getEliteStatusProgress(self):
+        vehType = self.descriptor.type
+        installable = {intCD for intCD in vehType.installableComponents if getTypeOfCompactDescr(intCD) in GUI_ITEM_TYPE.VEHICLE_MODULES}
+        unlocksDescrs = {data[1] for data in vehType.unlocksDescrs}
+        total = unlocksDescrs | installable
+        if not self.hasTurrets:
+            for turretCD in filterIntCDsByItemType(total, GUI_ITEM_TYPE.TURRET):
+                total.remove(turretCD)
+
+        unlocked = total & self.itemsCache.items.stats.unlocks
+        toUnlock = total - unlocked
+        return EliteStatusProgress(unlocked, toUnlock, total)
 
     @property
     def clanLock(self):
@@ -792,6 +812,10 @@ class Vehicle(FittingItem):
         self._fuelTank = value
 
     @property
+    def setupLayouts(self):
+        return self._equipment.setupLayouts
+
+    @property
     def optDevices(self):
         return self._equipment.optDevices
 
@@ -942,8 +966,24 @@ class Vehicle(FittingItem):
         return self.descriptor.gun.maxAmmo
 
     @property
+    def ammoMinSize(self):
+        return self.descriptor.gun.maxAmmo * NOT_FULL_AMMO_MULTIPLIER
+
+    @property
     def isAmmoFull(self):
-        return sum((s.count for s in self.shells.installed.getItems())) >= self.ammoMaxSize * _NOT_FULL_AMMO_MULTIPLIER
+        return sum((s.count for s in self.shells.installed.getItems())) >= self.ammoMinSize
+
+    @property
+    def isAmmoFullInSetups(self, setupIdx=None):
+        return self.shells.setupLayouts.isAmmoFull(setupIdx, self.ammoMinSize)
+
+    @property
+    def isAmmoNotFullInSetups(self):
+        return self.shells.setupLayouts.isAmmoNotFull(self.ammoMinSize)
+
+    @property
+    def isAmmoCanSwitch(self):
+        return self.isSetupSwitchAvailable(TankSetupGroupsId.EQUIPMENT_AND_SHELLS)
 
     @property
     def isTooHeavy(self):
@@ -1409,9 +1449,40 @@ class Vehicle(FittingItem):
     def compactDescr(self):
         return self._descriptor.type.compactDescr
 
-    @prbDispatcherProperty
-    def __prbDispatcher(self):
-        return None
+    @property
+    def typeDescr(self):
+        return self._descriptor.type
+
+    @property
+    def isPostProgressionExists(self):
+        return self.postProgression.isExists()
+
+    @property
+    def isRoleSlotAvailable(self):
+        return self.postProgression.isRoleSlotAvailable(self)
+
+    @property
+    def postProgression(self):
+        if self._postProgression is None:
+            self._postProgression = self.itemsCache.items.getVehPostProgression(self.intCD, self._descriptor.type)
+        return self._postProgression
+
+    @property
+    def postProgressionAvailability(self):
+        return self.postProgression.isAvailable(self)
+
+    def clearPostProgression(self):
+        self._postProgression = None
+        self._descriptor.installModifications(self.postProgression.getActiveModifications(self))
+        return
+
+    def installPostProgression(self, customState, ignoreDisabled=False):
+        self._postProgression = self.postProgression.clone()
+        self._postProgression.setState(customState)
+        self._descriptor.installModifications(self.postProgression.getActiveModifications(self, ignoreDisabled))
+
+    def isSetupSwitchAvailable(self, groupID):
+        return self.postProgression.isSetupSwitchAvailable(self, groupID)
 
     def isCustomizationEnabled(self):
         locked = False
@@ -1635,6 +1706,10 @@ class Vehicle(FittingItem):
 
     def _sortByType(self, other):
         return compareByVehTypeName(self.type, other.type)
+
+    @prbDispatcherProperty
+    def __prbDispatcher(self):
+        return None
 
     def __hasModulesToSelect(self):
         components = []

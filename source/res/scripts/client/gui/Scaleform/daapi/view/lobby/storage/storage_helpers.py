@@ -387,4 +387,4 @@ def getItemExtraParams(item):
 
 
 def getCategoriesIcons(device):
-    return [ backport.image(R.images.gui.maps.icons.tanksetup.specialization.dyn('medium_{}_off'.format(category))()) for category in SlotCategories.ORDER if category in device.descriptor.categories ]
+    return [ backport.image(R.images.gui.maps.icons.specialization.dyn('medium_{}_off'.format(category))()) for category in SlotCategories.ORDER if category in device.descriptor.categories ]

@@ -219,7 +219,7 @@ class RecruitWindow(RecruitWindowMeta):
     @process
     def __buyTankman(self, nationID, vehTypeID, role, studyType, callback):
         recruiter = TankmanRecruit(int(nationID), int(vehTypeID), role, int(studyType))
-        success, msg, msgType, tmanInvID = yield recruiter.request()
+        success, msg, msgType, _, _, tmanInvID = yield recruiter.request()
         tankman = None
         if msg:
             SystemMessages.pushI18nMessage(msg, type=msgType)

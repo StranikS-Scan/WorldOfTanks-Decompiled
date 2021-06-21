@@ -27,6 +27,11 @@ BUY_AND_INSTALL_SHELLS = 'buyAndInstallShells'
 BUY_AND_INSTALL_BATTLE_BOOSTERS = 'buyAndInstallBattleBoosters'
 UPGRADE_OPT_DEVICE = 'upgradeOptDevice'
 REMOVE_OPT_DEVICE = 'removeOptDevice'
+CHANGE_SETUP_EQUIPMENTS_INDEX = 'changeSetupEquipmentsIndex'
+SET_EQUIPMENT_SLOT_TYPE = 'setEquipmentSlotType'
+DISCARD_POST_PROGRESSION_PAIRS = 'discardPostProgressionPairs'
+PURCHASE_POST_PROGRESSION_PAIR = 'purchasePostProgressionPair'
+PURCHASE_POST_PROGRESSION_STEPS = 'purchasePostProgressionSteps'
 _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  SELL_MULTIPLE: actions.SellMultipleItems,
  UNLOCK_ITEM: actions.UnlockItemAction,
@@ -49,7 +54,12 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  BUY_AND_INSTALL_SHELLS: actions.BuyAndInstallShells,
  BUY_AND_INSTALL_BATTLE_BOOSTERS: actions.BuyAndInstallBattleBoosters,
  UPGRADE_OPT_DEVICE: actions.UpgradeOptDeviceAction,
- REMOVE_OPT_DEVICE: actions.RemoveOptionalDevice}
+ REMOVE_OPT_DEVICE: actions.RemoveOptionalDevice,
+ CHANGE_SETUP_EQUIPMENTS_INDEX: actions.ChangeSetupEquipmentsIndex,
+ DISCARD_POST_PROGRESSION_PAIRS: actions.DiscardPostProgressionPairs,
+ PURCHASE_POST_PROGRESSION_PAIR: actions.PurchasePostProgressionPair,
+ PURCHASE_POST_PROGRESSION_STEPS: actions.PurchasePostProgressionSteps,
+ SET_EQUIPMENT_SLOT_TYPE: actions.SetEquipmentSlotType}
 
 @process
 def doAction(actionType, *args, **kwargs):

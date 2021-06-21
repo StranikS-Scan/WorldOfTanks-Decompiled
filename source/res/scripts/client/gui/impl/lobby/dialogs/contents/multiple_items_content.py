@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/dialogs/contents/multiple_items_content.py
 import typing
 from gui.impl.gen.view_models.constants.fitting_types import FittingTypes
-from gui.impl.lobby.tank_setup.base_sub_model_view import BaseSubModelView
+from gui.impl.common.base_sub_model_view import BaseSubModelView
 from gui.impl.lobby.dialogs.auxiliary.confirmed_items_packer import ConfirmedItemsPacker
 from gui.shared.gui_items import GUI_ITEM_TYPE
 if typing.TYPE_CHECKING:

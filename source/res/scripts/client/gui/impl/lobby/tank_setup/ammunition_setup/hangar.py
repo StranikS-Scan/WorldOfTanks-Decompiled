@@ -12,7 +12,8 @@ class HangarAmmunitionSetupView(BaseHangarAmmunitionSetupView):
         return HangarMainTankSetupView(self.viewModel.tankSetup, self.__getTankSetupBuilder()(self._vehItem))
 
     def _createAmmunitionPanel(self):
-        return HangarAmmunitionPanel(self.viewModel.ammunitionPanel, self._vehItem.getItem())
+        ctx = {'specializationClickable': True}
+        return HangarAmmunitionPanel(self.viewModel.ammunitionPanel, self._vehItem.getItem(), ctx=ctx)
 
     def __getTankSetupBuilder(self):
         return FrontlineTankSetupBuilder if self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC) else HangarTankSetupBuilder

@@ -80,6 +80,7 @@ class GameEvent(HasCtxEvent):
     TOGGLE_VOIP_CHANNEL_ENABLED = 'game/voip/toggleEnabled'
     ROLE_HINT_TOGGLE = 'roleHintToggle'
     COMMANDER_HINT = 'game/commanderHint'
+    CHANGE_AMMUNITION_SETUP = 'game/changeAmmunitionSetup'
 
 
 class GUICommonEvent(SharedEvent):
@@ -355,6 +356,8 @@ class SkillDropEvent(SharedEvent):
 class CloseWindowEvent(SharedEvent):
     EULA_CLOSED = 'EULAClosed'
     GOLD_FISH_CLOSED = 'GoldFishClosed'
+    ELITE_WINDOW_CLOSED = 'EliteWindowClosed'
+    BUY_VEHICLE_VIEW_CLOSED = 'BuyVehicleViewClosed'
 
     def __init__(self, eventType=None, isAgree=False):
         super(CloseWindowEvent, self).__init__(eventType)

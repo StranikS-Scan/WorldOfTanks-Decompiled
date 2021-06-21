@@ -224,6 +224,9 @@ class DamagePanel(DamagePanelMeta):
             if vehicle is not None:
                 self._updatePlayerInfo(vehicle.id)
                 self.__onVehicleControlling(vehicle)
+        ctrl = self.sessionProvider.shared.vehiclePostProgression
+        if ctrl is not None:
+            ctrl.onSetupUpdated += self.__onSetupUpdated
         feedbackCtrl = self.sessionProvider.shared.feedback
         if feedbackCtrl is not None:
             feedbackCtrl.onMinimapVehicleRemoved += self.__onVehicleRemoved
@@ -238,6 +241,9 @@ class DamagePanel(DamagePanelMeta):
     def _dispose(self):
         self.as_resetS()
         self.hideStatusImmediate()
+        ctrl = self.sessionProvider.shared.vehiclePostProgression
+        if ctrl is not None:
+            ctrl.onSetupUpdated -= self.__onSetupUpdated
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleControlling -= self.__onVehicleControlling
@@ -430,3 +436,16 @@ class DamagePanel(DamagePanelMeta):
 
     def __onReplayPaused(self, _):
         self.as_setPlaybackSpeedS(BattleReplay.g_replayCtrl.playbackSpeed)
+
+    def __onSetupUpdated(self):
+        ctrl = self.sessionProvider.shared.vehicleState
+        vehicle = ctrl.getControllingVehicle() if ctrl is not None else None
+        if vehicle is not None:
+            typeDescr = vehicle.getDescr(vehicle.respawnCompactDescr)
+            ctrl = self.sessionProvider.shared.vehiclePostProgression
+            if ctrl is not None:
+                devices = ctrl.setupEquipments.optDevices.installed.getIntCDs()
+                typeDescr.installOptDevsSequence(devices)
+                self.__maxHealth = typeDescr.maxHealth
+                self._updateHealth(self.__maxHealth)
+        return

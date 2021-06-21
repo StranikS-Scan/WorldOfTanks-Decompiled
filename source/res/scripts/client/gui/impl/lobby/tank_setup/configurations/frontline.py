@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/configurations/frontline.py
-from gui.impl.lobby.tabs_controller import tabUpdateFunc
+from gui.impl.common.tabs_controller import tabUpdateFunc
 from gui.impl.lobby.tank_setup.array_providers.frontline import BattleAbilityProvider
 from gui.impl.lobby.tank_setup.configurations.base import BaseTankSetupTabsController, BaseDealPanel
 
@@ -29,5 +29,5 @@ class FrontlineTabsController(BaseTankSetupTabsController):
 class FrontlineDealPanel(BaseDealPanel):
 
     @classmethod
-    def updateDealPanelPrice(cls, items, dealPanelModel):
+    def updateDealPanelPrice(cls, vehicle, items, dealPanelModel):
         pass

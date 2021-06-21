@@ -22,7 +22,8 @@ if typing.TYPE_CHECKING:
     from gui.ranked_battles.ranked_models import BattleRankInfo
     from gui.server_events.bonuses import SimpleBonus
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
-    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, RankedBattlesConfig
+    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, RankedBattlesConfig, VehiclePostProgressionConfig
+    from items.vehicles import VehicleType
 
 class IGameController(object):
 
@@ -2022,4 +2023,25 @@ class ISteamRegistrationOverlay(IOverlayController):
         raise NotImplementedError
 
     def waitShow(self):
+        raise NotImplementedError
+
+
+class IVehiclePostProgressionController(IGameController):
+
+    def isDisabledFor(self, vehicle, settings=None):
+        raise NotImplementedError
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isExistsFor(self, vehType, settings=None):
+        raise NotImplementedError
+
+    def getSettings(self):
+        raise NotImplementedError
+
+    def getInvalidProgressions(self, diff, existingIDs):
+        raise NotImplementedError
+
+    def processVehExtData(self, vehCD, extData):
         raise NotImplementedError

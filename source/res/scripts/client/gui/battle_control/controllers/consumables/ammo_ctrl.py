@@ -632,8 +632,11 @@ class AmmoController(MethodsRules, IBattleController):
             code = self.getNextSettingCode(intCD)
             if code is None:
                 return False
-            avatar_getter.updateVehicleSetting(code, intCD, avatar)
-            if avatar_getter.isPlayerOnArena(avatar):
+            isPlayerOnArena = avatar_getter.isPlayerOnArena(avatar)
+            vppCtrl = self.__guiSessionProvider.shared.vehiclePostProgression
+            if isPlayerOnArena or vppCtrl is not None and not vppCtrl.postProgression.isPostProgressionEnabled:
+                avatar_getter.updateVehicleSetting(code, intCD, avatar)
+            if isPlayerOnArena:
                 avatar_getter.changeVehicleSetting(code, intCD, avatar)
             return True
 

@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.compare_toggle_ammunition_slot import CompareToggleAmmunitionSlot
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
-from gui.impl.lobby.tank_setup.ammunition_panel_blocks import OptDeviceBlock, BaseBlock, ConsumablesBlock, BattleBoostersBlock
+from gui.impl.common.ammunition_panel.ammunition_panel_blocks import OptDeviceBlock, BaseBlock, ConsumablesBlock, BattleBoostersBlock
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
@@ -41,6 +41,9 @@ class CompareShellsBlock(BaseBlock):
     def _getInstalled(self):
         getter = self._itemsCache.items.getItemByCD
         return [ getter(shot.shell.compactDescr) for shot in self._vehicle.descriptor.gun.shots ]
+
+    def _getSetupLayout(self):
+        return None
 
     def _getLayout(self):
         return self._getInstalled()
@@ -91,6 +94,9 @@ class CompareCamouflageBlock(BaseBlock):
         return None
 
     def _getInstalled(self):
+        return None
+
+    def _getSetupLayout(self):
         return None
 
     def _createSlots(self):

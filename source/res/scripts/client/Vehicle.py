@@ -30,6 +30,7 @@ from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
 from items import vehicles
+from items.components.post_progression_components import getActiveModifications
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -168,6 +169,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.__activeGunIndex = None
         self.refreshNationalVoice()
         self.__prevHealth = None
+        self.isCrewActive = True
         self.__quickShellChangerIsActive = False
         return
 
@@ -213,7 +215,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
 
     def getDescr(self, respawnCompactDescr):
         if respawnCompactDescr is not None:
-            descr = vehicles.VehicleDescr(respawnCompactDescr)
+            descr = vehicles.VehicleDescr(respawnCompactDescr, extData=self)
             if 'battle_royale' in descr.type.tags:
                 pass
             else:
@@ -221,7 +223,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 self.__prevHealth = self.publicInfo.maxHealth
             return descr
         else:
-            return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr))
+            return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr), extData=self)
 
     @staticmethod
     def respawnVehicle(vID, compactDescr=None, outfitCompactDescr=None):
@@ -540,6 +542,28 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DOT_EFFECT, self.dotEffect)
             return
 
+    def set_setups(self, _=None):
+        avatar = BigWorld.player()
+        if self.isMyVehicle and avatar is not None and not avatar.isObserver():
+            ctrl = self.guiSessionProvider.shared.vehiclePostProgression
+            ctrl.setSetups(self.setups.copy())
+        return
+
+    def set_setupsIndexes(self, _=None):
+        avatar = BigWorld.player()
+        if self.isMyVehicle and avatar is not None and not avatar.isObserver():
+            ctrl = self.guiSessionProvider.shared.vehiclePostProgression
+            ctrl.setIndexes(self.setupsIndexes.copy())
+        return
+
+    def set_vehPostProgression(self, _=None):
+        if self.isMyVehicle:
+            modificationIDs = getActiveModifications(self.vehPostProgression, vehicles.g_cache.postProgression())
+            self.typeDescriptor.installModifications(modificationIDs)
+            if self.vehPostProgression:
+                ctrl = self.guiSessionProvider.shared.vehiclePostProgression
+                ctrl.setPostProgressionStatus(self.vehPostProgression)
+
     def onHealthChanged(self, newHealth, oldHealth, attackerID, attackReasonID):
         if newHealth > 0 and self.health <= 0:
             self.health = newHealth
@@ -707,10 +731,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             matInfo = self.typeDescriptor.turret.materials.get(matKind)
         elif parIndex == TankPartIndexes.GUN:
             matInfo = self.typeDescriptor.gun.materials.get(matKind)
-        elif self.isWheeledTech and self.appearance.collisions is not None:
-            wheelName = self.appearance.collisions.getPartName(parIndex)
-            if wheelName is not None:
-                matInfo = self.typeDescriptor.chassis.wheelsArmor.get(wheelName, None)
         if matInfo is None:
             commonMaterialsInfo = vehicles.g_cache.commonConfig['materials']
             matInfo = commonMaterialsInfo.get(matKind)

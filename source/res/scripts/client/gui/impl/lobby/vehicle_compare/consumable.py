@@ -7,8 +7,8 @@ from gui.impl.lobby.vehicle_compare.base_sub_view import CompareBaseSetupSubView
 
 class CompareConsumableDeviceProvider(ConsumableDeviceProvider):
 
-    def _fillStatus(self, model, item, slotID, isInstalledOrMounted):
-        super(CompareConsumableDeviceProvider, self)._fillStatus(model, item, slotID, isInstalledOrMounted)
+    def _fillStatus(self, model, item, slotID):
+        super(CompareConsumableDeviceProvider, self)._fillStatus(model, item, slotID)
         if item.name in cmp_helpers.NOT_AFFECTED_EQUIPMENTS:
             model.setIsLocked(True)
 

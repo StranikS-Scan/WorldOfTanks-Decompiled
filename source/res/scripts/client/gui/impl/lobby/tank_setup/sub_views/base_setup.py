@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/sub_views/base_setup.py
 import logging
+import typing
 from BWUtil import AsyncReturn
 from async import async, await_callback
 from gui.impl.lobby.tank_setup.array_providers.base import BaseVehSectionContext
-from gui.impl.lobby.tank_setup.base_sub_model_view import BaseSubModelView
+from gui.impl.common.base_sub_model_view import BaseSubModelView
 from gui.impl.lobby.tank_setup.tank_setup_helper import TankSetupAsyncCommandLock
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playSectionSelectSound
 from helpers import dependency
@@ -39,14 +40,6 @@ class BaseSetupSubView(BaseSubModelView):
         self.updateSlots(currentSlotID, updateData=False)
         return
 
-    def initialize(self, *args, **kwargs):
-        super(BaseSetupSubView, self).initialize()
-        self._addListeners()
-
-    def finalize(self):
-        self._removeListeners()
-        super(BaseSetupSubView, self).finalize()
-
     def update(self, fullUpdate=False):
         if self._viewModel is None:
             return
@@ -61,7 +54,7 @@ class BaseSetupSubView(BaseSubModelView):
         self._updateSlots(fullUpdate, updateData)
 
     @async
-    def canQuit(self):
+    def canQuit(self, skipApplyAutoRenewal=None):
         yield await_callback(lambda callback: callback())()
         raise AsyncReturn(True)
 

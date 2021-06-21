@@ -6,9 +6,8 @@ import BigWorld
 import CommandMapping
 from helpers import dependency
 from items import vehicles
-from helpers.i18n import makeString
-from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
 from skeletons.gui.game_control import IBattleRoyaleController
+from gui.Scaleform.daapi.view.common.keybord_helpers import getHotKeyList
 from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
 _logger = logging.getLogger(__name__)
 
@@ -54,7 +53,7 @@ def getCircularVisionAngle(vehicle=None):
 
 
 def getHotKeyString(command):
-    return ' +'.join(_getHotKeyList(command))
+    return ' +'.join(getHotKeyList(command))
 
 
 def getHotKeyListByIndex(index):
@@ -62,17 +61,7 @@ def getHotKeyListByIndex(index):
         command = CommandMapping.CMD_CM_VEHICLE_UPGRADE_PANEL_LEFT
     else:
         command = CommandMapping.CMD_CM_VEHICLE_UPGRADE_PANEL_RIGHT
-    return _getHotKeyList(command)
-
-
-def _getHotKeyList(command):
-    keys = []
-    key, satelliteKeys = CommandMapping.g_instance.getCommandKeys(command)
-    for satelliteKey in satelliteKeys:
-        keys.append(makeString(READABLE_KEY_NAMES.key(BigWorld.keyToString(satelliteKey))))
-
-    keys.append(makeString(READABLE_KEY_NAMES.key(BigWorld.keyToString(key))))
-    return keys
+    return getHotKeyList(command)
 
 
 def isIncorrectVehicle(vehicle):

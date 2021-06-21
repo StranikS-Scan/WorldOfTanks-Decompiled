@@ -153,6 +153,8 @@ class DIALOGS(object):
     LOWAMMO_CANCEL = '#dialogs:lowAmmo/cancel'
     LOWAMMOAUTOLOAD_TITLE = '#dialogs:lowAmmoAutoLoad/title'
     LOWAMMOAUTOLOAD_MESSAGE = '#dialogs:lowAmmoAutoLoad/message'
+    LOWALTERNATIVEAMMOAUTOLOAD_TITLE = '#dialogs:lowAlternativeAmmoAutoLoad/title'
+    LOWALTERNATIVEAMMOAUTOLOAD_MESSAGE = '#dialogs:lowAlternativeAmmoAutoLoad/message'
     LOWAMMOAUTOLOAD_SUBMIT = '#dialogs:lowAmmoAutoLoad/submit'
     LOWAMMOAUTOLOAD_CANCEL = '#dialogs:lowAmmoAutoLoad/cancel'
     SANDBOX_TITLE = '#dialogs:sandBox/title'
@@ -1209,6 +1211,8 @@ class DIALOGS(object):
      LOWAMMO_CANCEL,
      LOWAMMOAUTOLOAD_TITLE,
      LOWAMMOAUTOLOAD_MESSAGE,
+     LOWALTERNATIVEAMMOAUTOLOAD_TITLE,
+     LOWALTERNATIVEAMMOAUTOLOAD_MESSAGE,
      LOWAMMOAUTOLOAD_SUBMIT,
      LOWAMMOAUTOLOAD_CANCEL,
      SANDBOX_TITLE,

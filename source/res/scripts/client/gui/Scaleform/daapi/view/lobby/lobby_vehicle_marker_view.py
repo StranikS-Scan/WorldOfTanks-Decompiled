@@ -3,7 +3,6 @@
 from collections import defaultdict
 import GUI
 import Math
-from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.daapi.view.meta.LobbyVehicleMarkerViewMeta import LobbyVehicleMarkerViewMeta
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
@@ -44,7 +43,6 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.addListener(events.ViewEventType.LOAD_GUI_IMPL_VIEW, self.__handleGuiImplViewLoad, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self.__onPlatoonTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self.__onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibility, EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
         super(LobbyVehicleMarkerView, self)._dispose()
@@ -58,7 +56,6 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.removeListener(events.ViewEventType.LOAD_GUI_IMPL_VIEW, self.__handleGuiImplViewLoad, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self.__onPlatoonTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self.__onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibility, EVENT_BUS_SCOPE.LOBBY)
         return
 
     def getIsMarkerDisabled(self):
@@ -169,10 +166,3 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
     def __handleGuiImplViewLoad(self, _):
         self.__isMarkerDisabled = True
         self.__updateAllMarkersVisibility()
-
-    def __onToggleVisibility(self, event):
-        state = event.ctx.get('state')
-        if state is not None and state == HeaderMenuVisibilityState.ALL:
-            self.__isMarkerDisabled = False
-            self.__updateAllMarkersVisibility()
-        return

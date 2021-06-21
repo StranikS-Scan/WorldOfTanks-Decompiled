@@ -348,6 +348,10 @@ class Tankman(GUIItem):
         return self.roleLevel == tankmen.MAX_SKILL_LEVEL
 
     @property
+    def isMaxRoleEfficiency(self):
+        return self.efficiencyRoleLevel == tankmen.MAX_SKILL_LEVEL
+
+    @property
     def vehicleNativeType(self):
         for tag in vehicles.VEHICLE_CLASS_TAGS.intersection(self.vehicleNativeDescr.type.tags):
             return tag
@@ -751,12 +755,15 @@ def __isCommonSkillLearnt(skillName, vehicle):
 
 
 def __isPersonalSkillLearnt(skillName, vehicle):
-    for _, tankman in vehicle.crew:
-        if tankman is not None:
-            if skillName in tankman.skillsMap and tankman.skillsMap[skillName].level == tankmen.MAX_SKILL_LEVEL:
-                return True
+    if not vehicle.crew:
+        return True
+    else:
+        for _, tankman in vehicle.crew:
+            if tankman is not None:
+                if skillName in tankman.skillsMap and tankman.skillsMap[skillName].level == tankmen.MAX_SKILL_LEVEL:
+                    return True
 
-    return False
+        return False
 
 
 def __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID, skills=(), freeSkills=(), lastSkillLevel=tankmen.MAX_SKILL_LEVEL):

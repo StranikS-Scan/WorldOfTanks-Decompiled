@@ -7,7 +7,7 @@ from BWUtil import AsyncReturn
 import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
 from async import async, await
-from constants import RentType, GameSeasonType
+from constants import RentType, GameSeasonType, SANDBOX_CONSTANTS
 from debug_utils import LOG_WARNING
 from frameworks.wulf import ViewFlags, WindowLayer
 from frameworks.wulf import Window
@@ -47,6 +47,9 @@ from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDia
 from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import RefillShells, ExitFromShellsConfirm
 from gui.impl.lobby.techtree.techtree_intro_view import TechTreeIntroWindow
+from gui.impl.lobby.veh_post_progression.dialogs.buy_pair_modification import BuyPairModificationDialog
+from gui.impl.lobby.veh_post_progression.dialogs.destroy_pair_modification import DestroyPairModificationsDialog
+from gui.impl.lobby.veh_post_progression.dialogs.research_confirm import PostProgressionResearchConfirm
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
@@ -77,6 +80,7 @@ from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from uilogging.veh_post_progression.loggers import VehPostProgressionEntryPointLogger
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers import ContainerManager
 _logger = logging.getLogger(__name__)
@@ -413,6 +417,8 @@ def showShop(url='', path='', params=None, isClientCloseControl=False):
         else:
             url = getShopURL()
     url = '/'.join((node.strip('/') for node in (url, path) if node))
+    if SANDBOX_CONSTANTS.IS_SHOP_OFFLINE_PAGE_ENABLED:
+        url = getShopURL()
     appLoader = dependency.instance(IAppLoader)
     app = appLoader.getApp()
     if app is not None and app.containerManager is not None:
@@ -1157,13 +1163,6 @@ def showBadgeInvoiceAwardWindow(badge, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showMultiAwardWindow(invoiceData, notificationMgr=None):
-    from gui.impl.lobby.awards.multiple_awards_view import MultipleAwardsViewWindow
-    window = MultipleAwardsViewWindow(invoiceData)
-    notificationMgr.append(WindowNotificationCommand(window))
-
-
 def showProgressiveItemsView(itemIntCD=None):
     from gui.impl.lobby.customization.progressive_items_view.progressive_items_view import ProgressiveItemsView
     appLoader = dependency.instance(IAppLoader)
@@ -1257,6 +1256,17 @@ def showBattlePassRewardChoiceWindow():
     window.load()
 
 
+@async
+def showVehPostProgressionView(vehTypeCompDescr, exitEvent=None, isUnlocked=None, caller=None):
+    from gui.impl.lobby.veh_post_progression.post_progression_intro import getPostProgressionIntroWindowProc
+    intoProc = getPostProgressionIntroWindowProc()
+    yield intoProc.show()
+    loadEvent = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.VEH_POST_PROGRESSION), ctx={'intCD': vehTypeCompDescr,
+     'exit': exitEvent})
+    g_eventBus.handleEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
+    VehPostProgressionEntryPointLogger().logEnter(caller, isUnlocked)
+
+
 def getParentWindow():
     guiLoader = dependency.instance(IGuiLoader)
     windows = guiLoader.windowsManager.findWindows(lambda w: w.layer == WindowLayer.SUB_VIEW)
@@ -1310,3 +1320,24 @@ def showModeSelectorWindow(isEventEnabled, provider=None):
     app = appLoader.getApp()
     containerManager = app.containerManager
     containerManager.load(GuiImplViewLoadParams(ModeSelectorView.layoutID, ModeSelectorView, ScopeTemplates.DEFAULT_SCOPE), isEventEnabled=isEventEnabled, provider=provider)
+
+
+@async
+def showPostProgressionPairModDialog(vehicle, stepID, modID, parent=None):
+    from gui.impl.dialogs import dialogs
+    result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=BuyPairModificationDialog, vehicle=vehicle, stepID=stepID, modID=modID, parent=parent))
+    raise AsyncReturn(result)
+
+
+@async
+def showDestroyPairModificationsDialog(vehicle, stepIDs, parent=None):
+    from gui.impl.dialogs import dialogs
+    result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.demountkit.CommonWindow(), wrappedViewClass=DestroyPairModificationsDialog, vehicle=vehicle, stepIDs=stepIDs, parent=parent))
+    raise AsyncReturn(result)
+
+
+@async
+def showPostProgressionResearchDialog(vehicle, stepIDs, parent=None):
+    from gui.impl.dialogs import dialogs
+    result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.veh_post_progression.PostProgressionResearchSteps(), parent=parent, wrappedViewClass=PostProgressionResearchConfirm, vehicle=vehicle, stepIDs=stepIDs))
+    raise AsyncReturn(result)

@@ -10,7 +10,7 @@ import BigWorld
 from adisp import process
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
-from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, CURRENCY_TOKEN_PREFIX, RESOURCE_TOKEN_PREFIX, RentType
+from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, CURRENCY_TOKEN_PREFIX, RESOURCE_TOKEN_PREFIX
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
@@ -1147,16 +1147,6 @@ class VehiclesBonus(SimpleBonus):
     @staticmethod
     def getRentSeason(vehInfo):
         return vehInfo.get('rent', {}).get('season')
-
-    def getRentInfo(self):
-        _, vehInfo = self.getVehicles()[0]
-        if self.isRentVehicle(vehInfo):
-            for rentType, getter in ((RentType.TIME_RENT, self.getRentDays), (RentType.BATTLES_RENT, self.getRentBattles), (RentType.WINS_RENT, self.getRentWins)):
-                rentValue = getter(vehInfo)
-                if rentValue:
-                    return (rentType, rentValue)
-
-        return (RentType.NO_RENT, 0)
 
     def __getVehicleVO(self, vehicle, vehicleInfo, iconGetter):
         tmanRoleLevel = self.getTmanRoleLevel(vehicleInfo)

@@ -11,7 +11,7 @@ from frameworks.wulf import ViewSettings
 from frameworks.wulf.gui_constants import ViewFlags, ViewStatus
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.go_back_helper import getBackBtnLabel
+from gui.Scaleform.daapi.view.lobby.go_back_helper import getBackBtnDescription
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -112,7 +112,7 @@ class BlueprintScreen(ViewImpl):
             model.setShowUnavailableConfirm(not isAvailableForUnlock and not isSchemeFullCompleted and vehicle.intCD not in self.__accountSettings)
             conversionMaxCost = model.conversionMaxCost
             self.__updateConversionData(conversionMaxCost)
-            model.setBackBtnLabel(getBackBtnLabel(self.__exitEvent, self.__exitEvent.name, vehicle.shortUserName))
+            model.setBackBtnLabel(getBackBtnDescription(self.__exitEvent, self.__exitEvent.name, vehicle.shortUserName))
             model.setCurrentStateView(BlueprintScreenModel.INIT)
         self.setChildView(R.dynamic_ids.blueprint_screen.balance_content(), FragmentsBalanceContent(vehicle.intCD))
 

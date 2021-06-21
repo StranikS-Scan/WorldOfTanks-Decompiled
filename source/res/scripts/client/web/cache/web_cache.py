@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/cache/web_cache.py
-import os
 import hashlib
 import json
 import logging
@@ -73,18 +72,6 @@ class WebExternalCache(IWebExternalCache):
                 return res
             self.__cache.pop(key)
         _logger.debug('Resource %s not found in cache and will be loaded from Web.', url)
-        return None
-
-    def getRelativePath(self, url):
-        return self.getRelativeFromAbsolute(self.get(url))
-
-    def getRelativeFromAbsolute(self, absolute):
-        if absolute:
-            try:
-                return os.path.relpath(absolute, start=self.rootDirPath)
-            except ValueError:
-                _logger.error('Error while getting relative path from: %s, root: %s', absolute, self.rootDirPath)
-
         return None
 
     def loadCustomUrls(self, urls, appName):

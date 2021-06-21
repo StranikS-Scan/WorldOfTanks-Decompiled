@@ -3,7 +3,6 @@
 import logging
 import typing
 import constants
-from adisp import async, process
 from gui.dog_tag_composer import dogTagComposer
 from gui.impl import backport
 from gui.impl.backport import TooltipData, createTooltipData
@@ -102,15 +101,6 @@ class BaseBonusUIPacker(object):
     def getContentId(cls, bonus):
         return cls._getContentId(bonus)
 
-    def isAsync(self):
-        return False
-
-    def asyncPack(self, bonus, callback=None):
-        pass
-
-    def asyncGetToolTip(self, bonus, callback=None):
-        pass
-
     @classmethod
     def _pack(cls, bonus):
         return []
@@ -180,19 +170,10 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
             tokenType = cls.__getTokenBonusType(tokenID, complexToken)
             tooltipPacker = tooltipPackers.get(tokenType)
             if tooltipPacker is None:
-                _logger.warning('There is not a tooltip creator for a token bonus %s', tokenType)
-                continue
+                _logger.warning('There is not a tooltip creator for a token bonus')
+                return result
             tooltip = tooltipPacker(complexToken)
             result.append(createTooltipData(tooltip))
-
-        return result
-
-    @classmethod
-    def _getContentId(cls, bonus):
-        result = []
-        bonusTokens = bonus.getTokens()
-        for _ in bonusTokens:
-            result.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return result
 
@@ -277,14 +258,6 @@ class ItemBonusUIPacker(BaseBonusUIPacker):
 
         return tooltipData
 
-    @classmethod
-    def _getContentId(cls, bonus):
-        result = []
-        for _, _ in sorted(bonus.getItems().iteritems(), key=lambda i: i[0]):
-            result.append(BACKPORT_TOOLTIP_CONTENT_ID)
-
-        return result
-
 
 class GoodiesBonusUIPacker(BaseBonusUIPacker):
 
@@ -328,17 +301,6 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
 
         for demountkit in sorted(bonus.getDemountKits().iterkeys()):
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT, specialArgs=[demountkit.intCD]))
-
-        return tooltipData
-
-    @classmethod
-    def _getContentId(cls, bonus):
-        tooltipData = []
-        for _ in sorted(bonus.getBoosters().iterkeys(), key=lambda b: b.boosterID):
-            tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
-
-        for _ in sorted(bonus.getDemountKits().iterkeys()):
-            tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return tooltipData
 
@@ -396,14 +358,6 @@ class CrewBookBonusUIPacker(BaseBonusUIPacker):
 
         return tooltipData
 
-    @classmethod
-    def _getContentId(cls, bonus):
-        tooltipData = []
-        for _, _ in sorted(bonus.getItems()):
-            tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
-
-        return tooltipData
-
 
 class CrewSkinBonusUIPacker(BaseBonusUIPacker):
 
@@ -432,14 +386,6 @@ class CrewSkinBonusUIPacker(BaseBonusUIPacker):
         tooltipData = []
         for item, _, _, _ in sorted(bonus.getItems()):
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.CREW_SKIN, specialArgs=[item.getID()]))
-
-        return tooltipData
-
-    @classmethod
-    def _getContentId(cls, bonus):
-        tooltipData = []
-        for _ in sorted(bonus.getItems()):
-            tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return tooltipData
 
@@ -476,15 +422,6 @@ class CustomizationBonusUIPacker(BaseBonusUIPacker):
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=itemCustomization.intCD)))
 
         return tooltipData
-
-    @classmethod
-    def _getContentId(cls, bonus):
-        result = []
-        for b in bonus.getCustomizations():
-            if b is not None:
-                result.extend(super(CustomizationBonusUIPacker, cls)._getContentId(b))
-
-        return result
 
 
 class DossierBonusUIPacker(BaseBonusUIPacker):
@@ -527,17 +464,6 @@ class DossierBonusUIPacker(BaseBonusUIPacker):
 
         return tooltipData
 
-    @classmethod
-    def _getContentId(cls, bonus):
-        tooltipData = []
-        for _ in bonus.getAchievements():
-            tooltipData.extend(super(DossierBonusUIPacker, cls)._getContentId(bonus))
-
-        for _ in bonus.getBadges():
-            tooltipData.extend(super(DossierBonusUIPacker, cls)._getContentId(bonus))
-
-        return tooltipData
-
 
 class TankmenBonusUIPacker(BaseBonusUIPacker):
 
@@ -573,10 +499,6 @@ class TankmenBonusUIPacker(BaseBonusUIPacker):
 
         return tooltipData
 
-    @classmethod
-    def _getContentId(cls, bonus):
-        return [ BACKPORT_TOOLTIP_CONTENT_ID for _ in bonus.getTankmenGroups().itervalues() ]
-
 
 class VehiclesBonusUIPacker(BaseBonusUIPacker):
 
@@ -608,16 +530,13 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
         for vehicle, vehInfo in vehicles:
             compensation = bonus.compensation(vehicle, bonus)
             if compensation:
+                packer = SimpleBonusUIPacker()
                 for bonusComp in compensation:
-                    packedTooltips.extend(cls._packCompensationTooltip(bonusComp, vehicle))
+                    packedTooltips.extend(packer.getToolTip(bonusComp))
 
             packedTooltips.append(cls._packTooltip(bonus, vehicle, vehInfo))
 
         return packedTooltips
-
-    @classmethod
-    def _packCompensationTooltip(cls, bonusComp, vehicle):
-        return SimpleBonusUIPacker().getToolTip(bonusComp)
 
     @classmethod
     def _packVehicle(cls, bonus, vehInfo, label):
@@ -652,17 +571,13 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
             rentExpiryTime = 0.0
         return rentExpiryTime
 
-    @classmethod
-    def _packVehicleBonusModel(cls, bonus, isRent, label):
+    @staticmethod
+    def _packVehicleBonusModel(bonus, isRent, label):
         model = BonusModel()
         model.setName(bonus.getName() + VEHICLE_RENT_ICON_POSTFIX if isRent else bonus.getName())
         model.setIsCompensation(bonus.isCompensation())
         model.setLabel(label)
         return model
-
-    @classmethod
-    def _getContentId(cls, bonus):
-        return [ BACKPORT_TOOLTIP_CONTENT_ID for _ in bonus.getVehicles() ]
 
 
 class DogTagComponentsUIPacker(BaseBonusUIPacker):
@@ -686,10 +601,6 @@ class DogTagComponentsUIPacker(BaseBonusUIPacker):
     @classmethod
     def _getToolTip(cls, bonus):
         return [ cls._getDogTagTooltip(dogTagRecord) for dogTagRecord in bonus.getUnlockedComponents() ]
-
-    @classmethod
-    def _getContentId(cls, bonus):
-        return [ BACKPORT_TOOLTIP_CONTENT_ID for _ in bonus.getUnlockedComponents() ]
 
     @classmethod
     def _getDogTagTooltip(cls, dogTagRecord):
@@ -748,32 +659,6 @@ class BonusUIPacker(object):
             return packer.getContentId(bonus)
         _logger.error('Bonus packer for bonus type %s was not implemented yet.', bonus.getName())
         return []
-
-
-class AsyncBonusUIPacker(BonusUIPacker):
-
-    @async
-    @process
-    def requestData(self, bonus, callback=None):
-        packer = self._getBonusPacker(bonus.getName())
-        if packer:
-            if packer.isAsync():
-                resultList = yield packer.asyncPack(bonus)
-                callback(resultList)
-            else:
-                callback(self.pack(bonus))
-        else:
-            callback([])
-
-    @async
-    @process
-    def requestToolTip(self, bonus, callback=None):
-        packer = self._getBonusPacker(bonus.getName())
-        if packer.isAsync():
-            resultList = yield packer.asyncGetToolTip(bonus)
-            callback(resultList)
-        else:
-            callback(self.getToolTip(bonus))
 
 
 def getDefaultBonusPacker():

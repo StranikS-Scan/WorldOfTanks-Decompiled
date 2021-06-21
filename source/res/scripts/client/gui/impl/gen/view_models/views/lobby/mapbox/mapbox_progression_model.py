@@ -4,9 +4,9 @@ from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 
 class MapboxProgressionModel(ViewModel):
-    __slots__ = ('onShowInfo', 'onSelectMapboxBattle', 'onShowSurvey', 'onTakeReward', 'onRemoveBubble', 'onClose', 'onAnimationEnded')
+    __slots__ = ('onShowInfo', 'onSelectMapboxBattle', 'onShowSurvey', 'onTakeReward', 'onRemoveBubble', 'onClose')
 
-    def __init__(self, properties=12, commands=7):
+    def __init__(self, properties=12, commands=6):
         super(MapboxProgressionModel, self).__init__(properties=properties, commands=commands)
 
     def getIsOverlapped(self):
@@ -101,4 +101,3 @@ class MapboxProgressionModel(ViewModel):
         self.onTakeReward = self._addCommand('onTakeReward')
         self.onRemoveBubble = self._addCommand('onRemoveBubble')
         self.onClose = self._addCommand('onClose')
-        self.onAnimationEnded = self._addCommand('onAnimationEnded')

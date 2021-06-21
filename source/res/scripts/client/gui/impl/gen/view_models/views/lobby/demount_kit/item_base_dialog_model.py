@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import Ful
 class ItemBaseDialogModel(FullScreenDialogWindowModel):
     __slots__ = ()
 
-    def __init__(self, properties=12, commands=3):
+    def __init__(self, properties=13, commands=3):
         super(ItemBaseDialogModel, self).__init__(properties=properties, commands=commands)
 
     def getImage(self):
@@ -21,7 +21,14 @@ class ItemBaseDialogModel(FullScreenDialogWindowModel):
     def setDescription(self, value):
         self._setResource(11, value)
 
+    def getSpecialType(self):
+        return self._getString(12)
+
+    def setSpecialType(self, value):
+        self._setString(12, value)
+
     def _initialize(self):
         super(ItemBaseDialogModel, self)._initialize()
         self._addResourceProperty('image', R.invalid())
         self._addResourceProperty('description', R.invalid())
+        self._addStringProperty('specialType', '')

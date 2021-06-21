@@ -75,7 +75,7 @@ class ToolTip(ToolTipMgrMeta):
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return
             self.__cacheTooltipData(False, tooltipType, args, stateType)
-            self.onShow(tooltipType, self.__isAdvancedKeyPressed)
+            self.onShow(tooltipType, args, self.__isAdvancedKeyPressed)
             if data is not None and data.isDynamic():
                 data.changeVisibility(True)
                 if tooltipType not in self._dynamic:
@@ -96,15 +96,17 @@ class ToolTip(ToolTipMgrMeta):
             window.load()
             window.move(x, y)
             self.__tooltipWindowId = window.uniqueID
-            self.onShow(tooltipType, self.__isAdvancedKeyPressed)
+            self.onShow(tooltipType, args, self.__isAdvancedKeyPressed)
             return
 
     def onCreateComplexTooltip(self, tooltipID, stateType):
         if self._areTooltipsDisabled:
             return
-        self._complex.build(self, stateType, self.__isAdvancedKeyPressed, tooltipID)
-        self.__cacheTooltipData(True, tooltipID, tuple(), stateType)
-        self.onShow(tooltipID, self.__isAdvancedKeyPressed)
+        else:
+            self._complex.build(self, stateType, self.__isAdvancedKeyPressed, tooltipID)
+            self.__cacheTooltipData(True, tooltipID, tuple(), stateType)
+            self.onShow(tooltipID, None, self.__isAdvancedKeyPressed)
+            return
 
     def onHideTooltip(self, tooltipId):
         if not self._areTooltipsDisabled and tooltipId in self._dynamic:

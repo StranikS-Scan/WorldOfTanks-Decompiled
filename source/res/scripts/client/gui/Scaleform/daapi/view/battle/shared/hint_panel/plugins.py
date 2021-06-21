@@ -427,7 +427,6 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         self._isInProgressCircle = False
         self._isUnderFire = False
         self.__cbOnRadarCooldown = None
-        self.__radarInProgress = False
         return
 
     def start(self):
@@ -478,11 +477,7 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
 
     def radarActivated(self, _):
         _logger.debug('Radar activated')
-        self.__radarInProgress = True
         self.__hideHint()
-
-    def timeOutDone(self):
-        self.__radarInProgress = False
 
     def radarActivationFailed(self, code):
         _logger.debug('Radar activation failed')
@@ -505,8 +500,6 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
 
     def __showHint(self):
         _logger.debug('Showing radar hint')
-        if self.__radarInProgress:
-            return
         self._parentObj.setBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR, self._getHint())
         self.__isHintShown = True
         self.__isInDisplayPeriod = False

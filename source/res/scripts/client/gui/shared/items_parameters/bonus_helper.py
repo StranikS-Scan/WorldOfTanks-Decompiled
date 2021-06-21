@@ -141,6 +141,12 @@ class TankSetupBonusExtractor(BonusExtractor):
         return self.itemsCache.items.getLayoutsVehicleCopy(vehicle)
 
 
+class PostProgressionBonusExtractor(BonusExtractor):
+
+    def _getCopyVehicle(self, vehicle):
+        return self.itemsCache.items.getLayoutsVehicleCopy(vehicle, ignoreDisabledProgression=True)
+
+
 class _CustomizedVehicleParams(VehicleParams):
 
     def __init__(self, vehicle, removeCamouflage):

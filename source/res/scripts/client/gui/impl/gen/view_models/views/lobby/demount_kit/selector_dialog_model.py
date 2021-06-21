@@ -6,22 +6,22 @@ from gui.impl.gen.view_models.views.lobby.demount_kit.selector_dialog_item_model
 class SelectorDialogModel(ItemBaseDialogModel):
     __slots__ = ('onSelectItem',)
 
-    def __init__(self, properties=15, commands=4):
+    def __init__(self, properties=16, commands=4):
         super(SelectorDialogModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def firstItem(self):
-        return self._getViewModel(12)
+        return self._getViewModel(13)
 
     @property
     def secondItem(self):
-        return self._getViewModel(13)
+        return self._getViewModel(14)
 
     def getSelectedItem(self):
-        return self._getString(14)
+        return self._getString(15)
 
     def setSelectedItem(self, value):
-        self._setString(14, value)
+        self._setString(15, value)
 
     def _initialize(self):
         super(SelectorDialogModel, self)._initialize()

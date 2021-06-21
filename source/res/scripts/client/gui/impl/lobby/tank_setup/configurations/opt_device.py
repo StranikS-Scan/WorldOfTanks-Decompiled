@@ -3,7 +3,7 @@
 import operator
 from account_helpers.AccountSettings import AccountSettings, SHOW_OPT_DEVICE_HINT_TROPHY, SHOW_OPT_DEVICE_HINT
 from gui.impl.auxiliary.selected_filters import BaseSelectedFilters
-from gui.impl.lobby.tabs_controller import tabUpdateFunc
+from gui.impl.common.tabs_controller import tabUpdateFunc
 from gui.impl.lobby.tank_setup.configurations.base import BaseTankSetupTabsController
 from gui.impl.lobby.tank_setup.array_providers.opt_device import SimpleOptDeviceProvider, DeluxeOptDeviceProvider
 from gui.shared.gui_items import GUI_ITEM_TYPE

@@ -4,7 +4,7 @@ from operator import itemgetter
 import typing
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
-from constants import PREMIUM_ENTITLEMENTS
+from constants import PREMIUM_ENTITLEMENTS, RentType
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
@@ -55,6 +55,9 @@ class OfferBonusMixin(object):
         else:
             inventoryCount = 0
         return inventoryCount
+
+    def getRentInfo(self):
+        return (RentType.NO_RENT, 0)
 
     def isMaxCountExceeded(self):
         return False
@@ -132,6 +135,16 @@ class VehiclesOfferBonus(OfferBonusMixin, VehiclesBonus):
 
     def getOfferNationalFlag(self):
         return RES_SHOP.getNationFlagIcon(self.displayedItem.nationName)
+
+    def getRentInfo(self):
+        _, vehInfo = self.getVehicles()[0]
+        if self.isRentVehicle(vehInfo):
+            for rentType, getter in ((RentType.TIME_RENT, self.getRentDays), (RentType.BATTLES_RENT, self.getRentBattles), (RentType.WINS_RENT, self.getRentWins)):
+                rentValue = getter(vehInfo)
+                if rentValue:
+                    return (rentType, rentValue)
+
+        return (RentType.NO_RENT, 0)
 
     def getInventoryCount(self):
         return int(self.displayedItem.isInInventory)

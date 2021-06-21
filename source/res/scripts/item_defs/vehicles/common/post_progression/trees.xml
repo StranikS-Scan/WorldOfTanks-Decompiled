@@ -1,0 +1,2687 @@
+<trees.xml>
+  <role_HT_tank>
+    <id>	11	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_heavyTank_base_1	</value>
+        </action>
+        <unlocks>	3 101	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	101	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_heavyTank_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_heavyTank_base_2	</value>
+        </action>
+        <unlocks>	5 102	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	102	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_heavyTank_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_heavyTank_base_3	</value>
+        </action>
+        <unlocks>	6 103	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	103	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_heavyTank_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_HT_tank_base_4	</value>
+        </action>
+        <unlocks>	8 114	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	114	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_HT_tank_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_HT_tank_base_5	</value>
+        </action>
+        <unlocks>	115	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	115	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_HT_tank_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_HT_tank>
+  <role_HT_assault>
+    <id>	12	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_heavyTank_base_1	</value>
+        </action>
+        <unlocks>	3 101	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	101	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_heavyTank_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_heavyTank_base_2	</value>
+        </action>
+        <unlocks>	5 102	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	102	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_heavyTank_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_heavyTank_base_3	</value>
+        </action>
+        <unlocks>	6 103	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	103	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_heavyTank_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_HT_assault_base_4	</value>
+        </action>
+        <unlocks>	8 124	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	124	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_HT_assault_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_HT_assault_base_5	</value>
+        </action>
+        <unlocks>	125	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	125	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_HT_assault_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_HT_assault>
+  <role_HT_universal>
+    <id>	13	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_heavyTank_base_1	</value>
+        </action>
+        <unlocks>	3 101	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	101	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_heavyTank_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_heavyTank_base_2	</value>
+        </action>
+        <unlocks>	5 102	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	102	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_heavyTank_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_heavyTank_base_3	</value>
+        </action>
+        <unlocks>	6 103	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	103	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_heavyTank_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_HT_universal_base_4	</value>
+        </action>
+        <unlocks>	8 134	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	134	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_HT_universal_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_HT_universal_base_5	</value>
+        </action>
+        <unlocks>	135	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	135	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_HT_universal_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_HT_universal>
+  <role_HT_fireSupport>
+    <id>	14	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_heavyTank_base_1	</value>
+        </action>
+        <unlocks>	3 101	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	101	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_heavyTank_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_heavyTank_base_2	</value>
+        </action>
+        <unlocks>	5 102	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	102	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_heavyTank_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_heavyTank_base_3	</value>
+        </action>
+        <unlocks>	6 103	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	103	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_heavyTank_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_HT_fireSupport_base_4	</value>
+        </action>
+        <unlocks>	8 144	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	144	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_HT_fireSupport_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_HT_fireSupport_base_5	</value>
+        </action>
+        <unlocks>	145	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	145	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_HT_fireSupport_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_HT_fireSupport>
+  <role_MT_tank>
+    <id>	21	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_1	</value>
+        </action>
+        <unlocks>	3 201	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	201	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_2	</value>
+        </action>
+        <unlocks>	5 202	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	202	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_3	</value>
+        </action>
+        <unlocks>	6 203	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	203	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_MT_tank_base_4	</value>
+        </action>
+        <unlocks>	8 214	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	214	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_MT_tank_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_MT_tank_base_5	</value>
+        </action>
+        <unlocks>	215	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	215	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_MT_tank_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_MT_tank>
+  <role_MT_universal>
+    <id>	22	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_1	</value>
+        </action>
+        <unlocks>	3 201	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	201	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_2	</value>
+        </action>
+        <unlocks>	5 202	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	202	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_3	</value>
+        </action>
+        <unlocks>	6 203	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	203	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_MT_universal_base_4	</value>
+        </action>
+        <unlocks>	8 224	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	224	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_MT_universal_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_MT_universal_base_5	</value>
+        </action>
+        <unlocks>	225	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	225	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_MT_universal_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_MT_universal>
+  <role_MT_fireSupport>
+    <id>	23	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_1	</value>
+        </action>
+        <unlocks>	3 201	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	201	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_2	</value>
+        </action>
+        <unlocks>	5 202	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	202	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_3	</value>
+        </action>
+        <unlocks>	6 203	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	203	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_MT_fireSupport_base_4	</value>
+        </action>
+        <unlocks>	8 234	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	234	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_MT_fireSupport_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_MT_fireSupport_base_5	</value>
+        </action>
+        <unlocks>	235	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	235	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_MT_fireSupport_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_MT_fireSupport>
+  <role_MT_assassin>
+    <id>	24	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_1	</value>
+        </action>
+        <unlocks>	3 201	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	201	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_2	</value>
+        </action>
+        <unlocks>	5 202	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	202	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_mediumTank_base_3	</value>
+        </action>
+        <unlocks>	6 203	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	203	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_mediumTank_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_MT_assassin_base_4	</value>
+        </action>
+        <unlocks>	8 244	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	244	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_MT_assassin_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_MT_assassin_base_5	</value>
+        </action>
+        <unlocks>	245	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	245	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_MT_assassin_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_MT_assassin>
+  <role_ATSPG_tank>
+    <id>	31	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_base_1	</value>
+        </action>
+        <unlocks>	3 301	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	301	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_base_2	</value>
+        </action>
+        <unlocks>	5 302	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	302	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_base_3	</value>
+        </action>
+        <unlocks>	6 303	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	303	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_tank_base_4	</value>
+        </action>
+        <unlocks>	8 314	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	314	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_tank_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_tank_base_5	</value>
+        </action>
+        <unlocks>	315	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	315	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_tank_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_ATSPG_tank>
+  <role_ATSPG_universal>
+    <id>	32	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_base_1	</value>
+        </action>
+        <unlocks>	3 301	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	301	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_base_2	</value>
+        </action>
+        <unlocks>	5 302	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	302	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_base_3	</value>
+        </action>
+        <unlocks>	6 303	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	303	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_universal_base_4	</value>
+        </action>
+        <unlocks>	8 324	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	324	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_universal_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_universal_base_5	</value>
+        </action>
+        <unlocks>	325	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	325	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_universal_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_ATSPG_universal>
+  <role_ATSPG_burstDamage>
+    <id>	33	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_base_1	</value>
+        </action>
+        <unlocks>	3 301	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	301	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_base_2	</value>
+        </action>
+        <unlocks>	5 302	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	302	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_base_3	</value>
+        </action>
+        <unlocks>	6 303	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	303	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_burstDamage_base_4	</value>
+        </action>
+        <unlocks>	8 334	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	334	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_burstDamage_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_burstDamage_base_5	</value>
+        </action>
+        <unlocks>	335	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	335	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_burstDamage_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_ATSPG_burstDamage>
+  <role_ATSPG_fireSupport>
+    <id>	34	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_base_1	</value>
+        </action>
+        <unlocks>	3 301	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	301	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_base_2	</value>
+        </action>
+        <unlocks>	5 302	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	302	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_base_3	</value>
+        </action>
+        <unlocks>	6 303	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	303	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_fireSupport_base_4	</value>
+        </action>
+        <unlocks>	8 344	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	344	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_fireSupport_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_ATSPG_fireSupport_base_5	</value>
+        </action>
+        <unlocks>	345	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	345	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_ATSPG_fireSupport_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_ATSPG_fireSupport>
+  <role_LT_tracked>
+    <id>	41	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_lightTank_base_1	</value>
+        </action>
+        <unlocks>	3 401	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	401	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_lightTank_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_lightTank_base_2	</value>
+        </action>
+        <unlocks>	5 402	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	402	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_lightTank_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_lightTank_base_3	</value>
+        </action>
+        <unlocks>	6 403	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	403	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_lightTank_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_LT_tracked_base_4	</value>
+        </action>
+        <unlocks>	8 414	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	414	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_LT_tracked_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_LT_tracked_base_5	</value>
+        </action>
+        <unlocks>	415	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	415	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_LT_tracked_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_LT_tracked>
+  <role_LT_wheeled>
+    <id>	42	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_lightTank_base_1	</value>
+        </action>
+        <unlocks>	3 401	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	401	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_lightTank_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_lightTank_base_2	</value>
+        </action>
+        <unlocks>	5 402	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	402	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_lightTank_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_lightTank_base_3	</value>
+        </action>
+        <unlocks>	6 403	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	403	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_lightTank_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_LT_wheeled_base_4	</value>
+        </action>
+        <unlocks>	8 424	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	424	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_LT_wheeled_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_LT_wheeled_base_5	</value>
+        </action>
+        <unlocks>	425	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	425	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_LT_wheeled_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_LT_wheeled>
+  <role_SPG>
+    <id>	51	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_SPG_base_1	</value>
+        </action>
+        <unlocks>	3 501	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	501	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_SPG_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_SPG_base_2	</value>
+        </action>
+        <unlocks>	5 502	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	502	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_SPG_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_SPG_base_3	</value>
+        </action>
+        <unlocks>	6 503	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	503	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_SPG_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_SPG_base_4	</value>
+        </action>
+        <unlocks>	8 514	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	514	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_SPG_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	28000	  <xp></xp>
+        </price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_SPG_base_5	</value>
+        </action>
+        <unlocks>	515	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	515	</id>
+        <price>	0	  <xp></xp>
+        </price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_SPG_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_SPG>
+</trees.xml>

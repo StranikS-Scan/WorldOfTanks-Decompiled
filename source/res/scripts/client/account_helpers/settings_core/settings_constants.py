@@ -311,6 +311,7 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     TECHTREE_INTRO_BLUEPRINTS_RECEIVED = 'techTreeIntroBlueprintsReceived'
     TECHTREE_INTRO_SHOWED = 'techTreeIntroShowed'
     DISPLAY_PLATOON_MEMBER_CLICKED = 'isDisplayPlatoonMembersClicked'
+    VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW = 'vehPostProgressionUnlockMsgNeedShow'
 
 
 class OnceOnlyHints(CONST_CONTAINER):

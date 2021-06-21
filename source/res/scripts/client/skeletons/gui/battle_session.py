@@ -18,6 +18,10 @@ class ISharedControllersLocator(object):
         raise NotImplementedError
 
     @property
+    def vehiclePostProgression(self):
+        raise NotImplementedError
+
+    @property
     def vehicleState(self):
         raise NotImplementedError
 

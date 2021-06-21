@@ -72,7 +72,6 @@ from messenger.formatters import TimeFormatter, NCContextItemFormatter
 from messenger.formatters.service_channel_helpers import EOL, getCustomizationItemData, MessageData, getRewardsForQuests, mergeRewards
 from nations import NAMES
 from shared_utils import BoundMethodWeakref, first
-from skeletons.gui.cdn import IPurchaseCache
 from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IBattlePassController, IBattleRoyaleController, IMapboxController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -862,7 +861,6 @@ class GiftReceivedFormatter(ServiceChannelFormatter):
 
 
 class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
-    __purchaseCache = dependency.descriptor(IPurchaseCache)
     __assetHandlers = {INVOICE_ASSET.GOLD: '_formatAmount',
      INVOICE_ASSET.CREDITS: '_formatAmount',
      INVOICE_ASSET.CRYSTAL: '_formatAmount',
@@ -870,8 +868,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
      INVOICE_ASSET.BPCOIN: '_formatAmount',
      INVOICE_ASSET.PREMIUM: '_formatAmount',
      INVOICE_ASSET.FREE_XP: '_formatAmount',
-     INVOICE_ASSET.DATA: '_formatData',
-     INVOICE_ASSET.PURCHASE: '_formatPurchase'}
+     INVOICE_ASSET.DATA: '_formatData'}
     __currencyToInvoiceAsset = {Currency.GOLD: INVOICE_ASSET.GOLD,
      Currency.CREDITS: INVOICE_ASSET.CREDITS,
      Currency.CRYSTAL: INVOICE_ASSET.CRYSTAL,
@@ -901,9 +898,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
      INVOICE_ASSET.BPCOIN: 'bpcoinInvoiceReceived',
      INVOICE_ASSET.PREMIUM: 'premiumInvoiceReceived',
      INVOICE_ASSET.FREE_XP: 'freeXpInvoiceReceived',
-     INVOICE_ASSET.DATA: 'dataInvoiceReceived',
-     INVOICE_ASSET.PURCHASE: 'purchaseInvoiceReceived'}
-    __INVALID_TYPE_ASSET = -1
+     INVOICE_ASSET.DATA: 'dataInvoiceReceived'}
     __goodiesCache = dependency.descriptor(IGoodiesCache)
     __eventsCache = dependency.descriptor(IEventsCache)
 
@@ -914,17 +909,13 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         formatted, settings = (None, None)
         if isSynced:
             data = message.data
-            isDataSynced = yield self.__waitForSyncData(data)
-            if isDataSynced:
-                self.__prerocessRareAchievements(data)
-                assetType = data.get('assetType', self.__INVALID_TYPE_ASSET)
-                handler = self.__assetHandlers.get(assetType)
-                if handler is not None:
-                    formatted = getattr(self, handler)(assetType, data)
-                if formatted is not None:
-                    settings = self._getGuiSettings(message, self._getMessageTemplateKey(assetType))
-            else:
-                _logger.error('Message data has not been synchronized properly!')
+            self.__prerocessRareAchievements(data)
+            assetType = data.get('assetType', -1)
+            handler = self.__assetHandlers.get(assetType)
+            if handler is not None:
+                formatted = getattr(self, handler)(assetType, data)
+            if formatted is not None:
+                settings = self._getGuiSettings(message, self._getMessageTemplateKey(assetType))
         callback([MessageData(formatted, settings)])
         return
 
@@ -1240,39 +1231,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         return None if amount is None else g_settings.msgTemplates.format(self._getMessageTemplateKey(assetType), ctx={'at': self._getOperationTimeString(data),
          'desc': self.__getL10nDescription(data),
          'op': self.__getFinOperationString(assetType, amount)})
-
-    def _formatPurchase(self, assetType, data):
-        operations = self._composeOperations(data)
-        if not operations:
-            return None
-        else:
-            ctx = {'at': self._getOperationTimeString(data),
-             'desc': self.__getL10nDescription(data),
-             'op': '<br/>'.join(operations)}
-            templateData = {}
-            metadata = data.get('meta')
-            title = backport.text(R.strings.messenger.serviceChannelMessages.invoiceReceived.invoice())
-            subtitle = ''
-            if metadata:
-                purchase = self.__purchaseCache.getCachedPurchase(self.__purchaseCache.getProductCode(metadata))
-                titleID = purchase.getTitleID()
-                if titleID:
-                    title = backport.text(R.strings.messenger.serviceChannelMessages.invoiceReceived.purchase.title.dyn(titleID)())
-                else:
-                    _logger.info('Could not find title in the purchase descriptor!')
-                purchaseName = purchase.getProductName()
-                if purchaseName:
-                    subtitle = g_settings.htmlTemplates.format('purchaseSubtitle', {'text': purchaseName})
-                else:
-                    _logger.info('Could not find name in the purchase descriptor!')
-                iconID = purchase.getIconID()
-                if iconID:
-                    templateData['icon'] = iconID
-                else:
-                    _logger.info('Could not find icon in the purchase descriptor!')
-            ctx['title'] = title
-            ctx['subtitle'] = subtitle
-            return g_settings.msgTemplates.format(self._getMessageTemplateKey(assetType), ctx=ctx, data=templateData)
 
     def _getMessageTemplateKey(self, assetType):
         return self.__messageTemplateKeys[assetType]
@@ -1633,32 +1591,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             debitedFormatted = g_settings.htmlTemplates.format(templateId, ctx={'bonusBattles': debitedStr})
             result = text_styles.concatStylesToMultiLine(result, debitedFormatted) if result else debitedFormatted
         return result
-
-    @async
-    @process
-    def __waitForSyncData(self, data, callback):
-        yield lambda callback: callback(True)
-        assetType = data.get('assetType', self.__INVALID_TYPE_ASSET)
-        if assetType == INVOICE_ASSET.PURCHASE:
-            if self.__purchaseCache.canBeRequestedFromProduct(data):
-                purchaseDescrUrl = self.__purchaseCache.getProductCode(data.get('meta'))
-                yield self.__purchaseCache.requestPurchaseByID(purchaseDescrUrl)
-            else:
-                _logger.debug('Data can not be requested from the product! System message will be shown without product data!')
-            callback(True)
-        else:
-            callback(True)
-
-    def __getMetaUrlData(self, data):
-        meta = data.get('meta')
-        if meta:
-            productUrl = meta.get('product_id')
-            if productUrl:
-                return productUrl
-            _logger.error('Could not find product_code in meta section of invoice!')
-        else:
-            _logger.error('Could not find meta section in purchase invoice!')
-        return None
 
 
 class AdminMessageFormatter(ServiceChannelFormatter):

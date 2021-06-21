@@ -11,15 +11,14 @@ from WebBrowser import getWebCache
 _logger = logging.getLogger(__name__)
 
 class WebImageHelper(object):
-    __slots__ = ('__callbackMethod', '__imageUrl', '__callbackDelayer', '__webCache', '__defLocalDirPath')
+    __slots__ = ('__callbackMethod', '__imageUrl', '__callbackDelayer', '__webCache')
     __DEFAULT_TIMEOUT = 5.0
 
-    def __init__(self, defLocalDirPath='notifications'):
+    def __init__(self):
         self.__callbackMethod = None
         self.__imageUrl = ''
         self.__callbackDelayer = CallbackDelayer()
         self.__webCache = None
-        self.__defLocalDirPath = defLocalDirPath
         return
 
     @async
@@ -41,7 +40,7 @@ class WebImageHelper(object):
                 self.__callMethod(str(localPath))
                 return
             _logger.debug('Failed to get image from web cache by url %s. Downloading initialized.', self.__imageUrl)
-            self.__webCache.loadCustomUrls([self.__imageUrl], self.__defLocalDirPath)
+            self.__webCache.loadCustomUrls([self.__imageUrl], 'notifications')
             self.__webCache.onDownloadFinished += self.__stop
             self.__callbackDelayer.delayCallback(self.__DEFAULT_TIMEOUT, self.__stop)
             return

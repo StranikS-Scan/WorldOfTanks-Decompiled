@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/impl/lobby/dialogs/full_screen_dialog_view.py
 import logging
 import typing
-from abc import abstractproperty
 from PlayerEvents import g_playerEvents
 from async import AsyncScope, AsyncEvent, await, async, BrokenPromiseError, AsyncReturn
 from gui.impl.gen.view_models.common.format_resource_string_arg_model import FormatResourceStringArgModel
@@ -17,6 +16,7 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from frameworks import wulf
+TViewModel = typing.TypeVar('TViewModel', bound=FullScreenDialogWindowModel)
 _logger = logging.getLogger(__name__)
 
 class DIALOG_TYPES(object):
@@ -27,7 +27,7 @@ class DIALOG_TYPES(object):
     BLUEPRINTS_CONVERSION = 'blueprintsConversion'
 
 
-class FullScreenDialogView(ViewImpl):
+class FullScreenDialogView(ViewImpl, typing.Generic[TViewModel]):
     __slots__ = ('__scope', '__event', '__result', '_stats')
     _itemsCache = dependency.descriptor(IItemsCache)
 
@@ -38,9 +38,9 @@ class FullScreenDialogView(ViewImpl):
         self.__result = DialogButtons.CANCEL
         self._stats = self._itemsCache.items.stats
 
-    @abstractproperty
+    @property
     def viewModel(self):
-        pass
+        return self.getViewModel()
 
     def _getAdditionalData(self):
         return None
@@ -54,7 +54,7 @@ class FullScreenDialogView(ViewImpl):
 
         raise AsyncReturn(DialogResult(self.__result, self._getAdditionalData()))
 
-    def _initialize(self):
+    def _initialize(self, *args, **kwargs):
         super(FullScreenDialogView, self)._initialize()
         self._addListeners()
 

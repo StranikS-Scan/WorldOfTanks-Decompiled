@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/plugins.py
-from functools import partial
 import logging
+import typing
+from functools import partial
 from collections import namedtuple
 import async as future_async
 from adisp import process, async
@@ -24,6 +25,8 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.money import Currency
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta
+from gui.veh_post_porgression.models.ext_money import EXT_MONEY_UNDEFINED, ExtendedGuiItemEconomyCode
+from gui.veh_post_porgression.models.purchase import PurchaseProvider
 from helpers import dependency
 from items.components import skills_constants
 from items.components.c11n_constants import SeasonType
@@ -36,6 +39,9 @@ from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
+    from post_progression_common import ACTION_TYPES
 _logger = logging.getLogger(__name__)
 PluginResult = namedtuple('PluginResult', 'success errorMsg ctx')
 
@@ -1108,3 +1114,123 @@ class CustomizationPurchaseValidator(SyncValidator):
                     return makeError('outfits_must_have_same_style')
 
             return makeSuccess()
+
+
+class PostProgressionStateValidator(SyncValidator):
+    __slots__ = ('__vehicle',)
+
+    def __init__(self, vehicle, isEnabled=True):
+        super(PostProgressionStateValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+
+    def _validate(self):
+        progressionAvailability = self.__vehicle.postProgressionAvailability
+        return makeError(progressionAvailability.reason.value) if not progressionAvailability else makeSuccess()
+
+
+class PostProgressionStepsValidator(SyncValidator):
+    __slots__ = ('__vehicle', '__stepIDs', '__actionTypes')
+
+    def __init__(self, vehicle, stepIDs, actionTypes, isEnabled=True):
+        super(PostProgressionStepsValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+        self.__stepIDs = stepIDs
+        self.__actionTypes = actionTypes
+
+    def _validate(self):
+        progression = self.__vehicle.postProgression
+        for stepID in self.__stepIDs:
+            if stepID not in progression.getRawTree().steps:
+                return makeError('step_tree_mismatch')
+            if progression.getStep(stepID).action.actionType not in self.__actionTypes:
+                return makeError('step_action_type_mismatch')
+
+        return makeSuccess()
+
+
+class PostProgressionChangeSetupValidator(SyncValidator):
+    __slots__ = ('__vehicle', '__groupID')
+
+    def __init__(self, vehicle, groupID, isEnabled=True):
+        super(PostProgressionChangeSetupValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+        self.__groupID = groupID
+
+    def _validate(self):
+        return makeError('setup_switch_unavailable') if not self.__vehicle.isSetupSwitchAvailable(self.__groupID) else makeSuccess()
+
+
+class PostProgressionDiscardPairsValidator(SyncValidator):
+    __slots__ = ('__vehicle', '__stepIDs')
+
+    def __init__(self, vehicle, stepIDs, isEnabled=True):
+        super(PostProgressionDiscardPairsValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+        self.__stepIDs = stepIDs
+
+    def _validate(self):
+        progression = self.__vehicle.postProgression
+        for stepID in self.__stepIDs:
+            checkResult = progression.getStep(stepID).action.mayDiscardInner()
+            if not checkResult:
+                return makeError(checkResult.reason)
+
+        return makeSuccess()
+
+
+class PostProgressionPurchasePairValidator(SyncValidator):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __slots__ = ('__vehicle', '__stepID', '__modificationID')
+
+    def __init__(self, vehicle, stepID, modificationID, isEnabled=True):
+        super(PostProgressionPurchasePairValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+        self.__stepID = stepID
+        self.__modificationID = modificationID
+
+    def _validate(self):
+        multiStep = self.__vehicle.postProgression.getStep(self.__stepID)
+        balance = self.__itemsCache.items.stats.getMoneyExt(self.__vehicle.intCD)
+        checkResult = multiStep.action.mayPurchaseInner(balance, self.__modificationID)
+        return makeError(checkResult.reason) if not checkResult else makeSuccess()
+
+
+class PostProgressionPurchaseStepsValidator(SyncValidator):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __slots__ = ('__vehicle', '__stepIDs')
+
+    def __init__(self, vehicle, stepIDs, isEnabled=True):
+        super(PostProgressionPurchaseStepsValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+        self.__stepIDs = stepIDs
+
+    def _validate(self):
+        totalPrice = EXT_MONEY_UNDEFINED
+        progression = self.__vehicle.postProgression
+        stepIDs = self.__stepIDs
+        for stepID in stepIDs:
+            step = progression.getStep(stepID)
+            if step.isRestricted():
+                return makeError(ExtendedGuiItemEconomyCode.STEP_RESTRICTED)
+            parentStep = progression.getStep(step.getParentStepID() or stepID)
+            if parentStep.isLocked() and parentStep.stepID not in stepIDs:
+                return makeError(ExtendedGuiItemEconomyCode.STEP_LOCKED)
+            totalPrice += step.getPrice()
+
+        balance = self.__itemsCache.items.stats.getMoneyExt(self.__vehicle.intCD)
+        checkResult = PurchaseProvider.mayConsume(balance, totalPrice)
+        return makeError(checkResult.reason) if not checkResult else makeSuccess()
+
+
+class PostProgressionSetSlotTypeValidator(SyncValidator):
+    __slots__ = ('__vehicle', '__slotID')
+
+    def __init__(self, vehicle, slotID, isEnabled=True):
+        super(PostProgressionSetSlotTypeValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+        self.__slotID = slotID
+
+    def _validate(self):
+        if not self.__vehicle.isRoleSlotAvailable:
+            return makeError('role_slot_switch_unavailable')
+        return makeError('role_slot_invalid_option') if self.__slotID not in [ slot.slotID for slot in self.__vehicle.optDevices.dynSlotTypeOptions ] else makeSuccess()

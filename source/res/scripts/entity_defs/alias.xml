@@ -795,6 +795,12 @@
         <Type>	ARRAY	  <of>	INT32	</of>
         </Type>
       </vehAmmo>
+      <vehSetups>
+        <Type>	PYTHON	</Type>
+      </vehSetups>
+      <vehSetupsIndexes>
+        <Type>	PYTHON	</Type>
+      </vehSetupsIndexes>
       <vehCrew>
         <Type>	TUPLE	  <of>	STRING	</of>
         </Type>
@@ -824,6 +830,13 @@
       <vehPerks>
         <Type>	PYTHON	</Type>
       </vehPerks>
+      <customRoleSlotTypeId>
+        <Type>	UINT8	</Type>
+      </customRoleSlotTypeId>
+      <vehPostProgression>
+        <Type>	ARRAY	  <of>	INT32	</of>
+        </Type>
+      </vehPostProgression>
     </Properties>
   </ARENA_VEH_INFO>
   <USER_EXTRA_SETTINGS>	FIXED_DICT	  <Properties>
@@ -1530,6 +1543,13 @@
       <maxHealth>
         <Type>	UINT16	</Type>
       </maxHealth>
+      <vehPostProgression>
+        <Type>	ARRAY	  <of>	INT32	</of>
+        </Type>
+      </vehPostProgression>
+      <customRoleSlotTypeId>
+        <Type>	UINT8	</Type>
+      </customRoleSlotTypeId>
     </Properties>
   </CLIENT_VEHICLE_PUBLIC_INFO>
   <PLAY_LIMITS>	FIXED_DICT	  <Properties>

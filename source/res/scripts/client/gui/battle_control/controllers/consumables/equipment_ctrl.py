@@ -875,7 +875,7 @@ class EquipmentsController(MethodsRules, IBattleController):
         return item
 
     def getOrderedEquipmentsLayout(self):
-        return map(lambda intCD: (intCD, self._equipments[intCD]), self._order)
+        return [ (intCD, self._equipments[intCD]) for intCD in self._order if intCD ]
 
     @MethodsRules.delayable()
     def notifyPlayerVehicleSet(self, vID):
@@ -888,29 +888,26 @@ class EquipmentsController(MethodsRules, IBattleController):
 
     @MethodsRules.delayable('notifyPlayerVehicleSet')
     def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime):
-        if timeRemaining == -1 and totalTime == -1:
-            return
+        _logger.debug('Equipment added: intCD=%d, quantity=%d, stage=%s, timeRemaining=%d, totalTime=%d', intCD, quantity, stage, timeRemaining, totalTime)
+        item = None
+        if not intCD:
+            if len(self._order) < self.__equipmentCount:
+                self._order.append(0)
+                self.onEquipmentAdded(0, None)
+        elif intCD in self._equipments:
+            item = self._equipments[intCD]
+            item.update(quantity, stage, timeRemaining, totalTime)
+            self.onEquipmentUpdated(intCD, item)
         else:
-            _logger.debug('Equipment added: intCD=%d, quantity=%d, stage=%s, timeRemaining=%d, totalTime=%d', intCD, quantity, stage, timeRemaining, totalTime)
-            item = None
-            if not intCD:
-                if len(self._order) < self.__equipmentCount:
-                    self._order.append(0)
-                    self.onEquipmentAdded(0, None)
-            elif intCD in self._equipments:
-                item = self._equipments[intCD]
-                item.update(quantity, stage, timeRemaining, totalTime)
-                self.onEquipmentUpdated(intCD, item)
-            else:
-                descriptor = vehicles.getItemByCompactDescr(intCD)
-                if descriptor.equipmentType in (EQUIPMENT_TYPES.regular, EQUIPMENT_TYPES.battleAbilities):
-                    item = self.createItem(descriptor, quantity, stage, timeRemaining, totalTime)
-                    self._equipments[intCD] = item
-                    self._order.append(intCD)
-                    self.onEquipmentAdded(intCD, item)
-            if item:
-                item.setServerPrevStage(None)
-            return
+            descriptor = vehicles.getItemByCompactDescr(intCD)
+            if descriptor.equipmentType in (EQUIPMENT_TYPES.regular, EQUIPMENT_TYPES.battleAbilities):
+                item = self.createItem(descriptor, quantity, stage, timeRemaining, totalTime)
+                self._equipments[intCD] = item
+                self._order.append(intCD)
+                self.onEquipmentAdded(intCD, item)
+        if item:
+            item.setServerPrevStage(None)
+        return
 
     def updateMapCase(self):
         for item in self._equipments.itervalues():
@@ -1265,8 +1262,6 @@ def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, totalT
     if descriptor.name.startswith('recon'):
         return _ReplayReconItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('smoke'):
-        return _ReplaySmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
-    if descriptor.name.startswith('arcade_smoke'):
         return _ReplaySmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.endswith('afterburning'):
         return _ReplayAfterburningItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)

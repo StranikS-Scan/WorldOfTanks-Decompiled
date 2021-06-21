@@ -9,6 +9,7 @@ from constants import RentType, SEASON_NAME_BY_TYPE, CLIENT_COMMAND_SOURCES
 from AccountCommands import VEHICLE_SETTINGS_FLAG
 from gui.shared.gui_items.processors.messages.items_processor_messages import ItemBuyProcessorMessage, BattleAbilitiesApplyProcessorMessage, LayoutApplyProcessorMessage, BattleBoostersApplyProcessorMessage, OptDevicesApplyProcessorMessage, ConsumablesApplyProcessorMessage, ShellsApplyProcessorMessage
 from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
+from gui.veh_post_porgression.messages import makeVehiclePostProgressionUnlockMsg
 from items import EQUIPMENT_TYPES
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.components.c11n_constants import SeasonType
@@ -59,7 +60,19 @@ def getCustomizationItemSellCountForVehicle(item, vehicleIntCD):
     return min(installedCount, availableForSell)
 
 
+def showVehicleReceivedResultMessages(result):
+    if result and result.userMsg:
+        SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority, messageData=result.msgData)
+    if result is not None and result.auxData is not None:
+        for m in result.auxData.get('additionalMessages', ()):
+            if m.userMsg:
+                SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType, priority=m.msgPriority, messageData=m.msgData)
+
+    return
+
+
 class VehicleReceiveProcessor(ItemProcessor):
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehicle, buyShell=False, crewType=-1):
         self.item = vehicle
@@ -77,6 +90,9 @@ class VehicleReceiveProcessor(ItemProcessor):
 
     def _getSysMsgType(self):
         raise NotImplementedError
+
+    def _getActualVehicle(self):
+        return self.__itemsCache.items.getItemByCD(self.item.intCD)
 
 
 class VehicleBuyer(VehicleReceiveProcessor):
@@ -106,7 +122,7 @@ class VehicleBuyer(VehicleReceiveProcessor):
         return makeI18nError(sysMsgKey=msg, defaultSysMsgKey='vehicle_buy/server_error', auxData={'errStr': errStr}, vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price, useStyle=True), type=self._getSysMsgType())
+        return makeI18nSuccess(sysMsgKey='vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price, useStyle=True), type=self._getSysMsgType(), auxData={'additionalMessages': [makeVehiclePostProgressionUnlockMsg(self._getActualVehicle())]})
 
     def _getSysMsgType(self):
         return CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.getCurrency(byWeight=False), SM_TYPE.Information)
@@ -682,7 +698,7 @@ class OptDevicesInstaller(Processor):
 
     def __init__(self, vehicle):
         super(OptDevicesInstaller, self).__init__()
-        self.__buyItems = [ item for item in vehicle.optDevices.layout.getItems() if not item.isInInventory and item not in vehicle.optDevices.installed ]
+        self.__buyItems = [ item for item in vehicle.optDevices.layout.getItems() if not item.isInInventory and not vehicle.optDevices.setupLayouts.isInSetup(item) ]
         self.__price = getVehicleOptionalDevicesLayoutPrice(vehicle).price
         self._vehicle = vehicle
         self.__devices = vehicle.optDevices.layout.getIntCDs()
@@ -783,7 +799,7 @@ class BuyAndInstallBattleBoostersProcessor(Processor):
         return
 
     def _successHandler(self, code, ctx=None):
-        return makeSuccess(auxData=[ ItemBuyProcessorMessage(i, 1).makeSuccessMsg() for i in self.__boosters if not i.isInInventory ])
+        return makeSuccess(auxData=[ ItemBuyProcessorMessage(i, 1).makeSuccessMsg() for i in self.__boosters if not i.isInInventory and not self.__vehicle.battleBoosters.setupLayouts.isInOtherLayout(i) ])
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return BattleBoostersApplyProcessorMessage().makeErrorMsg(errStr)

@@ -522,7 +522,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def invisibilityFactorAtShot(self):
-        return self._itemDescr.gun.invisibilityFactorAtShot
+        return self._itemDescr.miscAttrs['invisibilityFactorAtShot']
 
     @property
     def clipFireRate(self):

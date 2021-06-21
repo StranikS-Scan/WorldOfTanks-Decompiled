@@ -4,8 +4,8 @@ from itertools import izip
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
-from gui.impl.gen.view_models.views.lobby.tank_setup.common.bonus_model import BonusModel
-from gui.impl.gen.view_models.views.lobby.tank_setup.common.bonus_value_model import BonusValueModel
+from gui.impl.gen.view_models.common.bonus_model import BonusModel
+from gui.impl.gen.view_models.common.bonus_value_model import BonusValueModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.opt_device_slot_model import OptDeviceSlotModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.specialization_model import SpecializationModel
 from gui.impl.lobby.tank_setup.array_providers.base import VehicleBaseArrayProvider
@@ -36,8 +36,9 @@ class BaseOptDeviceProvider(VehicleBaseArrayProvider):
     def updateSlot(self, model, item, ctx):
         super(BaseOptDeviceProvider, self).updateSlot(model, item, ctx)
         isInstalledOrMounted = item in self._getCurrentLayout() or item in self._getInstalledLayout()
-        self._fillStatus(model, item, ctx.slotID, isInstalledOrMounted)
-        self._fillBuyStatus(model, item, isInstalledOrMounted)
+        self._fillStatus(model, item, ctx.slotID)
+        if not model.getIsDisabled():
+            self._fillBuyStatus(model, item, isInstalledOrMounted)
         appropriateCategories = self.__getAppropriateCategories(item, ctx.slotID)
         activeCategories = appropriateCategories & item.descriptor.categories
         for bonusModel, kpi in izip(model.bonuses.getItems(), item.getKpi(self._getVehicle())):
@@ -105,7 +106,7 @@ class BaseOptDeviceProvider(VehicleBaseArrayProvider):
     def __getAppropriateCategories(self, item, slotID):
         installedSlotID = self._getEquipment().layout.index(item)
         appropriateSlotID = installedSlotID if installedSlotID is not None else slotID
-        return self._getEquipment().slots[appropriateSlotID].categories
+        return self._getEquipment().getSlot(appropriateSlotID).item.categories
 
 
 class SimpleOptDeviceProvider(BaseOptDeviceProvider):
@@ -144,7 +145,10 @@ class DeluxeOptDeviceProvider(BaseOptDeviceProvider):
             model.setOverlayType(ItemHighlightTypes.EQUIPMENT_PLUS)
             model.setHighlightType(ItemHighlightTypes.EQUIPMENT_PLUS)
 
+    def _isInstallAllowed(self, item):
+        return self._lobbyCtx.getServerSettings().isTrophyDevicesEnabled() and item.isTrophy and self._getSetupLayout().isInSetup(item)
+
     def _getItemCriteria(self):
         invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
-        installedSet = set((optDevice for veh in invVehicles.itervalues() for optDevice in veh.optDevices.installed.getIntCDs()))
+        installedSet = set((optDevice for veh in invVehicles.itervalues() for optDevice in veh.optDevices.setupLayouts.getIntCDs()))
         return REQ_CRITERIA.CUSTOM(lambda item: item.isTrophy and (item.isInInventory or item.intCD in installedSet) or item.isDeluxe and (not item.isHidden or item.isInInventory or item.intCD in installedSet))

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/__init__.py
+import typing
 import nations
 from items import _xml
 from constants import IS_CLIENT, ITEM_DEFS_PATH
@@ -205,6 +206,10 @@ def parseIntCompactDescr(compactDescr):
     if itemTypeID == 0:
         itemTypeID = compactDescr >> 24 & 255
     return (itemTypeID, compactDescr >> 4 & 15, compactDescr >> 8 & 65535)
+
+
+def filterIntCDsByItemType(intCDs, itemTypeID):
+    return [ cd for cd in intCDs if parseIntCompactDescr(cd)[0] == itemTypeID ]
 
 
 def allianceFromVehicleCD(compactDescr):

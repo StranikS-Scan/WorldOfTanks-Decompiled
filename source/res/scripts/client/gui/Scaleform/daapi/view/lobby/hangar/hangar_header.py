@@ -404,6 +404,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def __getPersonalMissionsVO(self, vehicle):
         result = []
         states = []
+        if not constants.SANDBOX_CONSTANTS.IS_PERSONAL_MISSIONS_ENABLED:
+            return []
         if vehicle.isOnlyForBattleRoyaleBattles:
             return []
         for branch in reversed(PM_BRANCH.ACTIVE_BRANCHES):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/module.py
+import typing
 import logging
 import AccountCommands
 import BigWorld
@@ -22,6 +23,8 @@ from items import vehicles
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+if typing.TYPE_CHECKING:
+    pass
 MULTIPLE_SELLING_TEMPLATE = 'multipleSelling/{}'
 _logger = logging.getLogger(__name__)
 

@@ -37,7 +37,7 @@ from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEEL
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import ITradeInController, IBootcampController, IRankedBattlesController
+from skeletons.gui.game_control import ITradeInController, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from items import perks
@@ -275,6 +275,7 @@ class BaseVehicleAdvancedParametersTooltipData(BaseVehicleParametersTooltipData)
 
     def _packBlocks(self, paramName):
         blocks = super(BaseVehicleAdvancedParametersTooltipData, self)._packBlocks(paramName)
+        self._packData(paramName)
         isExtraParam = KPI.Name.hasValue(paramName)
         if isExtraParam:
             title = text_styles.highTitle(backport.text(R.strings.menu.extraParams.header(), paramName=backport.text(R.strings.tank_setup.kpi.bonus.dyn(paramName)())))
@@ -289,6 +290,7 @@ class BaseVehicleAdvancedParametersTooltipData(BaseVehicleParametersTooltipData)
                 descText = backport.text(R.strings.tooltips.tank_params.desc.dyn(paramName)())
             desc = text_styles.main(descText)
         if isRelativeParameter(paramName):
+            desc = self._getApproximatelyDescription(desc) if self.context.isApproximately else desc
             blocks.append(formatters.packTitleDescBlock(title, desc))
         else:
             blocks.append(formatters.packImageTextBlockData(title, desc, img=param_formatter.getParameterBigIconPath(paramName), imgPadding=formatters.packPadding(top=10, left=1), txtPadding=formatters.packPadding(left=10)))
@@ -300,6 +302,13 @@ class BaseVehicleAdvancedParametersTooltipData(BaseVehicleParametersTooltipData)
 
     def _hasExtendedInfo(self):
         return True
+
+    def _getApproximatelyDescription(self, desc):
+        approxImgRes = R.images.gui.maps.icons.vehPostProgression.tooltips.dyn(self._extendedData.state[0])
+        if approxImgRes.exists():
+            approxDesc = text_styles.concatStylesWithSpace(icons.makeImageTag(source=backport.image(approxImgRes()), vSpace=-1), text_styles.main(backport.text(R.strings.veh_post_progression.tooltips.ttc.approximately())))
+            return text_styles.concatStylesToMultiLine(desc, '', approxDesc)
+        return desc
 
     def _getAutoReloadTimeDescription(self):
         return backport.text(R.strings.tooltips.tank_params.desc.autoReloadTime())
@@ -314,7 +323,6 @@ class VehicleAvgParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):
 
     def _packBlocks(self, paramName):
         blocks = super(VehicleAvgParameterTooltipData, self)._packBlocks(paramName)
-        self._packData(paramName)
         rangeParamName = self._AVG_TO_RANGE_PARAMETER_NAME[paramName]
         value = self.context.getComparator().getExtendedData(rangeParamName).value
         fmtValue = param_formatter.formatParameter(rangeParamName, value)
@@ -365,7 +373,6 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
 
     def _packBlocks(self, paramName):
         blocks = super(VehicleAdvancedParametersTooltipData, self)._packBlocks(paramName)
-        self._packData(paramName)
         bonuses, hasSituational = self._getBonuses()
         self._packListBlock(blocks, bonuses, text_styles.warning(_ms(TOOLTIPS.VEHICLEPARAMS_BONUSES_TITLE)))
         notFullCrew, penalties = self._getPenalties()
@@ -454,14 +461,6 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
         else:
             item = g_currentVehicle.item if g_currentVehicle else None
         return item and item.descriptor.gun.autoreloadHasBoost or not item
-
-
-class VehicleListDescParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):
-
-    def _packBlocks(self, paramName):
-        blocks = super(VehicleListDescParameterTooltipData, self)._packBlocks(paramName)
-        blocks.append(formatters.packTextBlockData(text_styles.main(TOOLTIPS.TANK_PARAMS_DESC_EFFECTIVEARMORDESC)))
-        return blocks
 
 
 class DefaultCrewMemberTooltipData(BlocksTooltipData):
@@ -597,7 +596,6 @@ class VehicleTooltipBlockConstructor(object):
 
 
 class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
-    rankedController = dependency.descriptor(IRankedBattlesController)
 
     def construct(self):
         block = []
@@ -613,9 +611,9 @@ class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
         levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(self.vehicle.level)), text_styles.standard(_ms(TOOLTIPS.VEHICLE_LEVEL)))
         icon = getTypeBigIconPath(self.vehicle.type, self.vehicle.isElite)
         headerBlocks.append(formatters.packImageTextBlockData(title=nameStr, desc=text_styles.concatStylesToMultiLine(levelStr + ' ' + typeStr, ''), img=icon, imgPadding=formatters.packPadding(left=10, top=-15), txtGap=-9, txtOffset=99, padding=formatters.packPadding(top=15, bottom=-15 if self.vehicle.isFavorite else -21)))
-        if self.rankedController.isRankedPrbActive():
-            role = self.vehicle.roleLabel
-            headerBlocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.menu.roleExp.roleLabel()) + ' ' + backport.text(R.strings.menu.roleExp.roleName.dyn(role)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(role)()))), padding=formatters.packPadding(top=-9, left=99, bottom=9)))
+        if self.vehicle.role != constants.ROLE_TYPE.NOT_DEFINED:
+            roleLabel = self.vehicle.roleLabel
+            headerBlocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.menu.roleExp.roleLabel()) + ' ' + backport.text(R.strings.menu.roleExp.roleName.dyn(roleLabel)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleLabel)()))), padding=formatters.packPadding(top=-9, left=99, bottom=9)))
         block.append(formatters.packBuildUpBlockData(headerBlocks, stretchBg=False, linkage=bgLinkage, padding=formatters.packPadding(left=-self.leftPadding)))
         return block
 

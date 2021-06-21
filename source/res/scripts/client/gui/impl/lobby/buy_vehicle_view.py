@@ -48,7 +48,7 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.utils import decorators
 from gui.shared.utils.vehicle_collector_helper import getCollectibleVehiclesInInventory
 from gui.shared.events import VehicleBuyEvent
-from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleTradeInProcessor, VehicleRestoreProcessor, VehiclePersonalTradeInProcessor
+from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleTradeInProcessor, VehicleRestoreProcessor, VehiclePersonalTradeInProcessor, showVehicleReceivedResultMessages
 from helpers import i18n, dependency, int2roman, func_utils
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, IEventProgressionController, IPersonalTradeInController, ISoundEventChecker
@@ -275,6 +275,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
         self.__startTutorial()
         self.__destroyWindow()
+        self.fireEvent(events.CloseWindowEvent(events.CloseWindowEvent.BUY_VEHICLE_VIEW_CLOSED, isAgree=True))
 
     def __onCheckboxWithoutCrewChanged(self, args):
         self.__isWithoutCommander = args['selected']
@@ -395,6 +396,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.__destroyWindow()
         if self.__usePreviousAlias and self.__returnCallback:
             self.__returnCallback()
+        self.fireEvent(events.CloseWindowEvent(events.CloseWindowEvent.BUY_VEHICLE_VIEW_CLOSED, isAgree=False))
 
     def __destroyWindow(self):
         self.viewModel.congratulationAnim.setResetAnimTrigger(True)
@@ -492,8 +494,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 callback(result)
                 return
             result = yield processor.request()
-            if result.userMsg:
-                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            showVehicleReceivedResultMessages(result)
             if self.isDisposed():
                 callback(result)
                 return
@@ -521,8 +522,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                     self.__playSlotAnimation()
             else:
                 result = yield VehicleRenter(self.__vehicle, self.__selectedRentID, isWithAmmo, crewType).request()
-            if result.userMsg:
-                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            showVehicleReceivedResultMessages(result)
             self.__purchaseInProgress = False
         if result and result.success and not self.isDisposed():
             self.showCongratulations()

@@ -88,7 +88,7 @@ class TokenRecruitWindow(QuestRecruitWindowMeta):
     @process
     def __recruitTankman(self, nationID, vehTypeID, role, tokenName, tokenData, callback):
         recruiter = TankmanTokenRecruit(nationID=int(nationID), vehTypeID=int(vehTypeID), role=role, tokenName=tokenName, tokenData=tokenData)
-        _, msg, msgType, _ = yield recruiter.request()
+        _, msg, msgType, _, _, _ = yield recruiter.request()
         if msg:
             SystemMessages.pushMessage(msg, type=msgType)
         callback(None)

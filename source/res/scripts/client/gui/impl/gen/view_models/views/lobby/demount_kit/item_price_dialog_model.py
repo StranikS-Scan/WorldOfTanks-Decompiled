@@ -6,32 +6,38 @@ from gui.impl.gen.view_models.views.lobby.demount_kit.item_base_dialog_model imp
 class ItemPriceDialogModel(ItemBaseDialogModel):
     __slots__ = ()
 
-    def __init__(self, properties=16, commands=3):
+    def __init__(self, properties=18, commands=3):
         super(ItemPriceDialogModel, self).__init__(properties=properties, commands=commands)
 
     def getPriceDescription(self):
-        return self._getResource(12)
+        return self._getResource(13)
 
     def setPriceDescription(self, value):
-        self._setResource(12, value)
+        self._setResource(13, value)
 
     def getItemPrice(self):
-        return self._getNumber(13)
+        return self._getNumber(14)
 
     def setItemPrice(self, value):
-        self._setNumber(13, value)
+        self._setNumber(14, value)
 
     def getCurrencyType(self):
-        return self._getString(14)
+        return self._getString(15)
 
     def setCurrencyType(self, value):
-        self._setString(14, value)
+        self._setString(15, value)
 
     def getDiscount(self):
-        return self._getNumber(15)
+        return self._getNumber(16)
 
     def setDiscount(self, value):
-        self._setNumber(15, value)
+        self._setNumber(16, value)
+
+    def getShowPriceWarning(self):
+        return self._getBool(17)
+
+    def setShowPriceWarning(self, value):
+        self._setBool(17, value)
 
     def _initialize(self):
         super(ItemPriceDialogModel, self)._initialize()
@@ -39,3 +45,4 @@ class ItemPriceDialogModel(ItemBaseDialogModel):
         self._addNumberProperty('itemPrice', 0)
         self._addStringProperty('currencyType', '')
         self._addNumberProperty('discount', 0)
+        self._addBoolProperty('showPriceWarning', False)

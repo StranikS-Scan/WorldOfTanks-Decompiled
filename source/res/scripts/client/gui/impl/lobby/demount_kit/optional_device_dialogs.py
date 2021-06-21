@@ -4,7 +4,7 @@ from frameworks.wulf import ViewSettings
 from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.goodies.goodie_items import DemountKit
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
-from gui.impl.gen.view_models.views.lobby.demount_kit.optional_device_dialog_model import OptionalDeviceDialogModel
+from gui.impl.gen.view_models.views.lobby.demount_kit.item_price_dialog_model import ItemPriceDialogModel
 from gui.impl.gen import R
 from gui.impl.lobby.demount_kit.item_price_dialog import ItemPriceDialog
 from gui.impl.lobby.dialogs.full_screen_dialog_view import DIALOG_TYPES
@@ -19,7 +19,7 @@ class OpDevBaseDialog(ItemPriceDialog):
     __slots__ = ()
 
     def __init__(self, compDescr):
-        settings = ViewSettings(layoutID=R.views.lobby.demountkit.CommonWindow(), model=OptionalDeviceDialogModel())
+        settings = ViewSettings(layoutID=R.views.lobby.demountkit.CommonWindow(), model=ItemPriceDialogModel())
         super(OpDevBaseDialog, self).__init__(settings, compDescr)
 
     @property

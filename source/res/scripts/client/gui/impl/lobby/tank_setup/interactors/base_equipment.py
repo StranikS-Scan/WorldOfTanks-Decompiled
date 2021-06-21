@@ -60,7 +60,7 @@ class BaseEquipmentInteractor(BaseInteractor):
         return
 
     def _resetInstalledIndices(self):
-        self._installedIndices = [ i for i in xrange(len(self.getInstalledLayout())) ]
+        self._installedIndices = [ i for i in range(len(self.getInstalledLayout())) ]
 
     def _resetPlayerLayout(self):
         self._playerLayout = self.getCurrentLayout().copy()

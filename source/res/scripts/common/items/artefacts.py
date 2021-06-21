@@ -12,7 +12,7 @@ from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK
 from debug_utils import LOG_DEBUG_DEV
 from items import ITEM_OPERATION, PREDEFINED_HEAL_GROUPS
 from items import _xml, vehicles
-from items.artefacts_helpers import VehicleFilter, _ArtefactFilter
+from items.artefacts_helpers import VehicleFilter, _ArtefactFilter, readKpi
 from items.basic_item import BasicItem
 from items.components import shared_components, component_constants
 from items.components.supply_slot_categories import SupplySlotFilter, LevelsFactor, AttrsOperation, SlotCategories
@@ -188,7 +188,7 @@ class Artefact(BasicItem):
             self.icon = _xml.readIcon(xmlCtx, section, 'icon')
             self.iconName = os.path.splitext(os.path.basename(self.icon[0]))[0]
         if IS_CLIENT and section.has_key('kpi'):
-            self.kpi = _readKpi(xmlCtx, section['kpi'])
+            self.kpi = readKpi(xmlCtx, section['kpi'])
         else:
             self.kpi = []
         if section.has_key('vehicleFilter'):
@@ -1991,54 +1991,6 @@ class ConsumableSpawnKamikaze(Equipment, TooltipConfigReader, CountableConsumabl
 
 class SpawnKamikaze(ConsumableSpawnKamikaze):
     pass
-
-
-def _readKpi(xmlCtx, section):
-    from gui.shared.gui_items import KPI
-    kpi = []
-    for kpiType, subsec in section.items():
-        if kpiType not in KPI.Type.ALL():
-            _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported KPI type')
-            return
-        if kpiType == KPI.Type.ONE_OF:
-            kpi.append(KPI(KPI.Name.COMPOUND_KPI, _readKpi(xmlCtx, subsec), KPI.Type.ONE_OF))
-        if kpiType == KPI.Type.AGGREGATE_MUL:
-            kpi.append(_readAggregateKPI(xmlCtx, subsec, kpiType))
-        kpi.append(_readKpiValue(xmlCtx, subsec, kpiType))
-
-    return kpi
-
-
-def _readKpiValue(xmlCtx, section, kpiType):
-    from gui.shared.gui_items import KPI
-    name = section.readString('name')
-    value = section.readFloat('value')
-    specValue = section.readString('specValue')
-    vehicleTypes = section.readString('vehicleTypes').split()
-    if not name:
-        _xml.raiseWrongXml(xmlCtx, kpiType, 'empty <name> tag not allowed')
-    elif name not in KPI.Name.ALL():
-        _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported value in <name> tag')
-    return KPI(name, value, kpiType, float(specValue) if specValue else None, vehicleTypes)
-
-
-def _readAggregateKPI(xmlCtx, section, kpiType):
-    from gui.shared.gui_items import KPI, AGGREGATE_TO_SINGLE_TYPE_KPI_MAP
-    subKpies = []
-    for key, subsec in section.items():
-        if key in KPI.Type.ALL():
-            if key != AGGREGATE_TO_SINGLE_TYPE_KPI_MAP.get(kpiType, None):
-                _xml.raiseWrongXml(xmlCtx, key, 'unsupported KPI type for aggregating')
-            subKpies.append(_readKpiValue(xmlCtx, subsec, key))
-
-    if not subKpies:
-        _xml.raiseWrongXml(xmlCtx, kpiType, 'has not KPI for aggregating')
-    name = section.readString('name')
-    if not name:
-        _xml.raiseWrongXml(xmlCtx, kpiType, 'empty <name> tag not allowed')
-    elif name not in KPI.Name.ALL():
-        _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported value in <name> tag')
-    return KPI(name, subKpies, kpiType)
 
 
 _readTags = vehicles._readTags

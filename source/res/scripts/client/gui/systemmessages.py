@@ -5,13 +5,14 @@ from enumerations import Enumeration
 from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.system_messages import ISystemMessages
-ResultMsg = namedtuple('ResultMsg', 'success userMsg sysMsgType auxData')
+ResultMsg = namedtuple('ResultMsg', 'success userMsg sysMsgType msgPriority msgData auxData')
 SM_TYPE = Enumeration('System message type', ['Error',
  'ErrorHeader',
  'ErrorSimple',
  'Warning',
  'WarningHeader',
  'Information',
+ 'InformationHeader',
  'GameGreeting',
  'PowerLevel',
  'FinancialTransactionWithGold',
@@ -60,7 +61,10 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'PurchaseForMoney',
  'PaymentMethodLinkWgnc',
  'PaymentMethodUnlinkWgnc',
- 'BattlePassGameModeEnabled'])
+ 'BattlePassGameModeEnabled',
+ 'ResearchVehiclePostProgressionSteps',
+ 'BuyPostProgressionModForCredits',
+ 'ChangeSlotCategory'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold,
  Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal,

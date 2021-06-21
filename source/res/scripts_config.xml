@@ -1,24 +1,24 @@
 <scripts_config.xml>
   <login>
     <host>
-      <name>	WOT CT1	</name>
-      <short_name>	CT1	</short_name>
-      <url>	login-ct-p1.worldoftanks.net:20015	</url>
-      <url_token>	login2-ct-p1.worldoftanks.net:20015	</url_token>
+      <name>	WOT SB1	</name>
+      <short_name>	SB1	</short_name>
+      <url>	wotr4sandbox1.login.wargaming.net:20014	</url>
+      <url_token>	wotr4sandbox1-2.login.wargaming.net:20014	</url_token>
       <public_key_path>	loginapp_wot.pubkey	</public_key_path>
       <periphery_id>	11	</periphery_id>
     </host>
     <host>
-      <name>	WOT CT2	</name>
-      <short_name>	CT2	</short_name>
-      <url>	login-ct-p2.worldoftanks.net:20015	</url>
-      <url_token>	login2-ct-p2.worldoftanks.net:20015	</url_token>
+      <name>	WOT SB2	</name>
+      <short_name>	SB2	</short_name>
+      <url>	wotr4sandbox2.login.wargaming.net:20014	</url>
+      <url_token>	wotr4sandbox2-2.login.wargaming.net:20014	</url_token>
       <public_key_path>	loginapp_wot.pubkey	</public_key_path>
       <periphery_id>	12	</periphery_id>
     </host>
   </login>
+  <csisUrl></csisUrl>
   <updateUrl>	http://worldoftanks.ru/update	</updateUrl>
-  <csisUrl>	http://csis-ct.worldoftanks.net/csis/wotct/	</csisUrl>
   <silhouetteColors>
     <common>
       <self>	0.5 0.5 0.5 1	</self>

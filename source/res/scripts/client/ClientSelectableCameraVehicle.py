@@ -5,6 +5,7 @@ import Math
 import BigWorld
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from gui.hangar_vehicle_appearance import HangarVehicleAppearance
+from items.vehicles import stripOptionalDeviceFromVehicleCompactDescr
 from vehicle_systems.tankStructure import ModelStates
 from vehicle_systems.tankStructure import TankPartIndexes
 from gui.ClientHangarSpace import hangarCFG
@@ -79,6 +80,20 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
             self.appearance.recreate(self.typeDescriptor, callback=self._onVehicleLoaded, outfit=outfit)
         else:
             self.appearance.updateCustomization(outfit, self._onVehicleRefreshed)
+
+    def updateVehicleDescriptor(self, descr):
+        if descr is None:
+            return
+        else:
+            if self.__descriptorRequiresRecreate(descr):
+                self._isVehicleLoaded = False
+                self.typeDescriptor = descr
+                if self.__vAppearance is None:
+                    self.__vAppearance = self._createAppearance()
+                self.__vAppearance.recreate(self.typeDescriptor, callback=self._onVehicleLoaded)
+            else:
+                self.typeDescriptor = descr
+            return
 
     def _createAppearance(self):
         return HangarVehicleAppearance(self.spaceID, self)
@@ -179,3 +194,11 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         else:
             self._setVehicleModelTransform(self.__vehicleTransform.targetPos, self.__vehicleTransform.rotateYPR, self.__vehicleTransform.shadowModelYOffset)
             return
+
+    def __descriptorRequiresRecreate(self, desc):
+        if self.typeDescriptor is None:
+            return True
+        else:
+            oldDescriptor = stripOptionalDeviceFromVehicleCompactDescr(self.typeDescriptor.makeCompactDescr())
+            newDescriptor = stripOptionalDeviceFromVehicleCompactDescr(desc.makeCompactDescr())
+            return True if oldDescriptor != newDescriptor else False

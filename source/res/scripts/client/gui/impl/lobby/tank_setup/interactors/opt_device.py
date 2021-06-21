@@ -26,6 +26,9 @@ class BaseOptDeviceInteractor(BaseInteractor):
     def getCurrentLayout(self):
         return self.getItem().optDevices.layout
 
+    def getSetupLayout(self):
+        return self.getItem().optDevices.setupLayouts
+
     def getCurrentCategories(self, slotID):
         return self.getItem().optDevices.slots[slotID].categories
 
@@ -36,6 +39,7 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
     def getVehicleAfterInstall(self):
         vehicle = super(OptDeviceInteractor, self).getVehicleAfterInstall()
         vehicle.optDevices.setInstalled(*self.getItem().optDevices.layout)
+        vehicle.optDevices.dynSlotTypes = self.getItem().optDevices.dynSlotTypes
         return vehicle
 
     def setItemInCurrentLayout(self, slotID, item):
@@ -103,7 +107,7 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
         return
 
     def revert(self):
-        for slotID in xrange(self.getInstalledLayout().getCapacity()):
+        for slotID in range(self.getInstalledLayout().getCapacity()):
             self.setItemInCurrentLayout(slotID, None)
 
         for slotID, optDevice in enumerate(self.getInstalledLayout()):
@@ -140,9 +144,12 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
         return
 
     def updateFrom(self, vehicle, onlyInstalled=True):
-        self.getItem().optDevices.setInstalled(*vehicle.optDevices.installed)
+        super(OptDeviceInteractor, self).updateFrom(vehicle, onlyInstalled)
+        items = self.getItem().optDevices
+        items.setInstalled(*vehicle.optDevices.installed)
+        items.setupLayouts.setSetups(vehicle.optDevices.setupLayouts.setups)
         if not onlyInstalled:
-            for slotID in xrange(vehicle.optDevices.layout.getCapacity()):
+            for slotID in range(vehicle.optDevices.layout.getCapacity()):
                 self.setItemInCurrentLayout(slotID, None)
 
             for slotID, optDevice in enumerate(vehicle.optDevices.layout):
@@ -152,6 +159,7 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
 
     @async
     def showExitConfirmDialog(self):
-        result = yield await(showTankSetupExitConfirmDialog(items=self.getChangedList(), vehInvID=self.getItem().invID, fromSection=self.getName(), startState=BuyAndExchangeStateEnum.BUY_NOT_REQUIRED if not self.getChangedList() else None))
+        changedList = self.getChangedList()
+        result = yield await(showTankSetupExitConfirmDialog(items=changedList, vehInvID=self.getItem().invID, fromSection=self.getName(), startState=BuyAndExchangeStateEnum.BUY_NOT_REQUIRED if not changedList else None))
         raise AsyncReturn(result)
         return

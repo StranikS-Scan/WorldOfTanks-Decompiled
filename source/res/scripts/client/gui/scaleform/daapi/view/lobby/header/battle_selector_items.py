@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/battle_selector_items.py
 import logging
 import typing
+import constants
 from account_helpers import isDemonstrator
 from CurrentVehicle import g_currentVehicle
 from adisp import process
@@ -760,23 +761,24 @@ _DEFAULT_SQUAD_PAN = PREBATTLE_ACTION_NAME.SQUAD
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _createItems(lobbyContext=None):
-    settings = lobbyContext.getServerSettings()
-    isInRoaming = settings.roaming.isInRoaming()
     items = []
-    _addRandomBattleType(items)
-    _addRankedBattleType(items, settings)
-    _addCommandBattleType(items, settings)
-    _addStrongholdsBattleType(items, isInRoaming)
-    _addTrainingBattleType(items)
-    _addEpicTrainingBattleType(items, settings)
-    _addRoyaleBattleType(items)
-    _addMapboxBattleType(items)
-    if GUI_SETTINGS.specPrebatlesVisible:
-        _addSpecialBattleType(items)
-    if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
-        _addSandboxType(items)
     extraItems = []
-    _addEventProgressionItems(extraItems)
+    _addRandomBattleType(items)
+    if constants.SANDBOX_CONSTANTS.IS_BATTLE_SELECTOR_ENABLED:
+        settings = lobbyContext.getServerSettings()
+        isInRoaming = settings.roaming.isInRoaming()
+        _addRankedBattleType(items, settings)
+        _addCommandBattleType(items, settings)
+        _addStrongholdsBattleType(items, isInRoaming)
+        _addTrainingBattleType(items)
+        _addEpicTrainingBattleType(items, settings)
+        _addRoyaleBattleType(items)
+        _addMapboxBattleType(items)
+        if GUI_SETTINGS.specPrebatlesVisible:
+            _addSpecialBattleType(items)
+        if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
+            _addSandboxType(items)
+        _addEventProgressionItems(extraItems)
     return _BattleSelectorItems(items, extraItems)
 
 

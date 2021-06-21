@@ -1,17 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/browser/shop_helpers.py
 import typing
+import constants
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
-from helpers import dependency
+from helpers import dependency, getLanguageCode
 from helpers.http.url_formatters import addParamsToUrlQuery
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _getUrl(urlName=None, lobbyContext=None):
-    hostUrl = lobbyContext.getServerSettings().shop.hostUrl
-    return hostUrl + ('' if urlName is None else GUI_SETTINGS.shop.get(urlName))
+    if constants.SANDBOX_CONSTANTS.IS_SHOP_OFFLINE_PAGE_ENABLED:
+        if getLanguageCode() == 'ru':
+            return 'wotdata://gui/html/shop_dummy/offlinePage.html'
+        return 'wotdata://gui/html/shop_dummy/offlinePage.en.html'
+    else:
+        hostUrl = lobbyContext.getServerSettings().shop.hostUrl
+        return hostUrl + ('' if urlName is None else GUI_SETTINGS.shop.get(urlName))
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

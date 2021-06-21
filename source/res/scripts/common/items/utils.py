@@ -218,13 +218,13 @@ if IS_CLIENT:
     def updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors, perksController=None):
         extras = {}
         extraAspects = {VEHICLE_TTC_ASPECTS.WHEN_STILL: ('invisibility',)}
+        updateVehicleAttrFactors(vehicleDescr, perksController, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT)
         for aspect in extraAspects.iterkeys():
             currFactors = copy.deepcopy(factors)
             updateVehicleAttrFactors(vehicleDescr, perksController, crewCompactDescrs, eqs, currFactors, aspect)
             for coefficient in extraAspects[aspect]:
                 extras.setdefault(coefficient, {})[aspect] = currFactors[coefficient]
 
-        updateVehicleAttrFactors(vehicleDescr, perksController, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT)
         for coefficientName, coefficientValue in extras.iteritems():
             coefficientValue[VEHICLE_TTC_ASPECTS.DEFAULT] = factors[coefficientName]
             factors[coefficientName] = coefficientValue

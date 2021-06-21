@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/browser/shop_view.py
 import logging
+from functools import partial
+import constants
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -12,6 +14,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from sound_constants import SHOP_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
+from web.web_client_api import webApiCollection, w2c, W2CSchema, w2capi
+from web.web_client_api.sound import SoundWebApi
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
@@ -70,6 +74,30 @@ class ShopOverlay(_ShopOverlayBase):
     def onEscapePress(self):
         if not self._browserParams.get('isHidden'):
             self.destroy()
+
+    def onCloseBtnClick(self):
+        if constants.SANDBOX_CONSTANTS.IS_SHOP_OFFLINE_PAGE_ENABLED:
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+            return
+        super(ShopOverlay, self).onCloseBtnClick()
+
+    def webHandlers(self):
+        if constants.SANDBOX_CONSTANTS.IS_SHOP_OFFLINE_PAGE_ENABLED:
+
+            @w2capi(name='open_tab', key='tab_id')
+            class OpenTabWebApiOverride(object):
+
+                def __init__(self, overlay):
+                    super(OpenTabWebApiOverride, self).__init__()
+                    self.__overlay = overlay
+
+                @w2c(W2CSchema)
+                def hangar(self, cmd):
+                    self.__overlay.onEscapePress()
+
+            _OpenTabWebApi = partial(OpenTabWebApiOverride, self)
+            return webApiCollection(_OpenTabWebApi, SoundWebApi)
+        return super(ShopOverlay, self).webHandlers()
 
 
 class PremContentPageOverlay(WebView):

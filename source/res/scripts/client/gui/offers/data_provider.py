@@ -165,13 +165,6 @@ class OffersDataProvider(IOffersDataProvider):
     def getAvailableOffersByToken(self, token):
         return list(self.__iAvailableOffersByToken(token))
 
-    def isOfferAvailable(self, tokenID):
-        for offer in self.iAvailableOffers():
-            if offer.token == tokenID:
-                return True
-
-        return False
-
     def _onDisconnected(self):
         self.stop()
         self._pendingNotify = False

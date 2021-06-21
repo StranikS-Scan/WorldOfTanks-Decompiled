@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.common.price_model import PriceModel
 class BaseSlotModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=13, commands=0):
+    def __init__(self, properties=15, commands=0):
         super(BaseSlotModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -37,53 +37,65 @@ class BaseSlotModel(ViewModel):
     def setItemsInStorage(self, value):
         self._setNumber(4, value)
 
-    def getItemTypeID(self):
+    def getItemsInVehicle(self):
         return self._getNumber(5)
 
-    def setItemTypeID(self, value):
+    def setItemsInVehicle(self, value):
         self._setNumber(5, value)
 
+    def getItemTypeID(self):
+        return self._getNumber(6)
+
+    def setItemTypeID(self, value):
+        self._setNumber(6, value)
+
     def getIsMounted(self):
-        return self._getBool(6)
-
-    def setIsMounted(self, value):
-        self._setBool(6, value)
-
-    def getIsDisabled(self):
         return self._getBool(7)
 
-    def setIsDisabled(self, value):
+    def setIsMounted(self, value):
         self._setBool(7, value)
 
-    def getIsVisible(self):
+    def getIsMountedInOtherSetup(self):
         return self._getBool(8)
 
-    def setIsVisible(self, value):
+    def setIsMountedInOtherSetup(self, value):
         self._setBool(8, value)
 
-    def getInstalledSlotId(self):
-        return self._getNumber(9)
+    def getIsDisabled(self):
+        return self._getBool(9)
 
-    def setInstalledSlotId(self, value):
-        self._setNumber(9, value)
+    def setIsDisabled(self, value):
+        self._setBool(9, value)
 
-    def getIsLocked(self):
+    def getIsVisible(self):
         return self._getBool(10)
 
-    def setIsLocked(self, value):
+    def setIsVisible(self, value):
         self._setBool(10, value)
 
+    def getInstalledSlotId(self):
+        return self._getNumber(11)
+
+    def setInstalledSlotId(self, value):
+        self._setNumber(11, value)
+
+    def getIsLocked(self):
+        return self._getBool(12)
+
+    def setIsLocked(self, value):
+        self._setBool(12, value)
+
     def getOverlayType(self):
-        return self._getString(11)
+        return self._getString(13)
 
     def setOverlayType(self, value):
-        self._setString(11, value)
+        self._setString(13, value)
 
     def getHighlightType(self):
-        return self._getString(12)
+        return self._getString(14)
 
     def setHighlightType(self, value):
-        self._setString(12, value)
+        self._setString(14, value)
 
     def _initialize(self):
         super(BaseSlotModel, self)._initialize()
@@ -92,8 +104,10 @@ class BaseSlotModel(ViewModel):
         self._addNumberProperty('intCD', 0)
         self._addStringProperty('imageName', '')
         self._addNumberProperty('itemsInStorage', 0)
+        self._addNumberProperty('itemsInVehicle', 0)
         self._addNumberProperty('itemTypeID', 0)
         self._addBoolProperty('isMounted', False)
+        self._addBoolProperty('isMountedInOtherSetup', False)
         self._addBoolProperty('isDisabled', False)
         self._addBoolProperty('isVisible', True)
         self._addNumberProperty('installedSlotId', -1)

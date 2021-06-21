@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/eliteWindow/EliteWindow.py
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.EliteWindowMeta import EliteWindowMeta
+from gui.shared import events
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
@@ -17,4 +18,5 @@ class EliteWindow(EliteWindowMeta):
         self.as_setVehicleS(makeVehicleVO(self.itemsCache.items.getItemByCD(self.vehInvID)))
 
     def onWindowClose(self):
+        self.fireEvent(events.CloseWindowEvent(events.CloseWindowEvent.ELITE_WINDOW_CLOSED))
         self.destroy()

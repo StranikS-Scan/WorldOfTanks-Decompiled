@@ -94,14 +94,20 @@ def makeTooltip(header=None, body=None, note=None, attention=None):
 def checkAmmoLevel(vehicles, callback):
     showAmmoWarning = False
     ammoWarningMessage = 'lowAmmoAutoLoad'
+    alternativeAmmoWarningMessage = 'lowAlternativeAmmoAutoLoad'
     for vehicle in vehicles:
         if vehicle.isReadyToFight:
-            showAmmoWarning = showAmmoWarning or not vehicle.isAmmoFull
+            if vehicle.isAmmoCanSwitch:
+                isNotFull, _ = vehicle.isAmmoNotFullInSetups
+            else:
+                isNotFull = not vehicle.isAmmoFull
+            showAmmoWarning = showAmmoWarning or isNotFull
         if showAmmoWarning:
             from gui.impl.dialogs import dialogs
             from gui.impl.dialogs.builders import ResSimpleDialogBuilder
             builder = ResSimpleDialogBuilder()
-            builder.setMessagesAndButtons(R.strings.dialogs.dyn(ammoWarningMessage))
+            msg = alternativeAmmoWarningMessage if vehicle.isAmmoFull else ammoWarningMessage
+            builder.setMessagesAndButtons(R.strings.dialogs.dyn(msg))
             builder.setIcon(R.images.gui.maps.icons.tanksetup.warning.ammunition())
             builder.setPreset(DialogPresets.TROPHY_DEVICE_UPGRADE)
             success = yield future_async.await(dialogs.showSimple(builder.buildInLobby()))

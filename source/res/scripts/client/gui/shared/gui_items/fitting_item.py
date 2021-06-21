@@ -424,6 +424,9 @@ class FittingItem(GUIItem):
     def isInstalled(self, vehicle, slotIdx=None):
         return False
 
+    def isInSetup(self, vehicle, setupIndex=None, slotIdx=None):
+        return False
+
     def mayInstall(self, vehicle, slotIdx=None):
         return vehicle.descriptor.mayInstallComponent(self.intCD)
 

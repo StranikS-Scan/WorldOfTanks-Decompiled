@@ -207,5 +207,12 @@ def getSlotTooltipData(event, vehicle, currentSlotID, currentSection=None, toolt
         return tooltipBuilder.getPanelSlotTooltip(copyVehicle, int(slotID))
 
 
+def getSlotSpecTooltipData(event, tooltipId):
+    isClickable = event.getArgument('isClickable')
+    isDyn = event.getArgument('isDyn')
+    spec = event.getArgument('spec')
+    return createTooltipData(isSpecial=True, specialAlias=tooltipId, specialArgs=[spec, isDyn, isClickable])
+
+
 def getShellsPriceDiscountTooltipData(event, tooltipId):
     return createTooltipData(isSpecial=True, specialAlias=tooltipId, specialArgs=(event.getArgument('price'), event.getArgument('defPrice'), event.getArgument('currencyType')))

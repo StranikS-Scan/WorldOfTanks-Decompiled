@@ -44,7 +44,8 @@ class TankSetupConfirmDialog(BuyAndExchange):
 
     def _onLoading(self, *args, **kwargs):
         super(TankSetupConfirmDialog, self)._onLoading(*args, **kwargs)
-        self._buyContent = AmmunitionBuyBottomContent(viewModel=self.viewModel.dealPanel, items=self.__items)
+        vehicle = self._itemsCache.items.getVehicle(self.__vehicleInvID)
+        self._buyContent = AmmunitionBuyBottomContent(viewModel=self.viewModel.dealPanel, vehicle=vehicle, items=self.__items)
         self._buyContent.onLoading()
         if self.__startState == BuyAndExchangeStateEnum.EXCHANGE_CONTENT:
             filterItems = REQ_CRITERIA.INVENTORY

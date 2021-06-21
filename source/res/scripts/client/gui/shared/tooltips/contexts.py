@@ -14,6 +14,7 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
+from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
 from gui.server_events import recruit_helper
@@ -438,6 +439,7 @@ class BaseHangarParamContext(ToolTipContext):
 
     def __init__(self, showTitleValue=False):
         super(BaseHangarParamContext, self).__init__(TOOLTIP_COMPONENT.HANGAR)
+        self.isApproximately = False
         self.showTitleValue = showTitleValue
 
     def getComparator(self):
@@ -494,6 +496,22 @@ class TankSetupParamContext(HangarParamContext):
 
     def getBonusExtractor(self, vehicle, bonuses, paramName):
         return bonus_helper.TankSetupBonusExtractor(vehicle, bonuses, paramName)
+
+
+class PostProgressionParamContext(TankSetupParamContext):
+
+    def __init__(self):
+        super(PostProgressionParamContext, self).__init__()
+        self.isApproximately = True
+
+    def getComparator(self):
+        return params_helper.tankSetupVehiclesComparator(g_postProgressionVehicle.item, g_postProgressionVehicle.defaultItem, withBonuses=g_postProgressionVehicle.item.isInInventory)
+
+    def buildItem(self, *args, **kwargs):
+        return g_postProgressionVehicle.item
+
+    def getBonusExtractor(self, vehicle, bonuses, paramName):
+        return bonus_helper.PostProgressionBonusExtractor(vehicle, bonuses, paramName)
 
 
 class HangarContext(ToolTipContext):

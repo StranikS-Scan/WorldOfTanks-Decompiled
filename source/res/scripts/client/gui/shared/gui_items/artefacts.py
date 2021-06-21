@@ -8,7 +8,7 @@ from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
-from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE, checkForTags, getKpiFormatDescription, KPI, mergeAggregateKpi
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE, checkForTags, getKpiFormatDescription, KPI, collectKpi
 from gui.shared.gui_items.Tankman import isSkillLearnt
 from gui.shared.gui_items.fitting_item import FittingItem
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
@@ -20,17 +20,17 @@ from items.tankmen import PERKS
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
-_TAG_NOT_FOR_SALE = 'notForSale'
-_TAG_TRIGGER = 'trigger'
-_TAG_CREW_BATTLE_BOOSTER = 'crewSkillBattleBooster'
-_TAG_EQUEPMENT_BUILTIN = 'builtin'
-_TAG_OPT_DEVICE_DELUXE = 'deluxe'
-_TAG_OPT_DEVICE_TROPHY_BASIC = 'trophyBasic'
-_TAG_OPT_DEVICE_TROPHY_UPGRADED = 'trophyUpgraded'
-_TOKEN_OPT_DEVICE_SIMPLE = 'simple'
-_TOKEN_OPT_DEVICE_DELUXE = 'deluxe'
-_TOKEN_CREW_PERK_REPLACE = 'perk'
-_TOKEN_CREW_PERK_BOOST = 'boost'
+TAG_NOT_FOR_SALE = 'notForSale'
+TAG_TRIGGER = 'trigger'
+TAG_CREW_BATTLE_BOOSTER = 'crewSkillBattleBooster'
+TAG_EQUEPMENT_BUILTIN = 'builtin'
+TAG_OPT_DEVICE_DELUXE = 'deluxe'
+TAG_OPT_DEVICE_TROPHY_BASIC = 'trophyBasic'
+TAG_OPT_DEVICE_TROPHY_UPGRADED = 'trophyUpgraded'
+TOKEN_OPT_DEVICE_SIMPLE = 'simple'
+TOKEN_OPT_DEVICE_DELUXE = 'deluxe'
+TOKEN_CREW_PERK_REPLACE = 'perk'
+TOKEN_CREW_PERK_BOOST = 'boost'
 
 class VehicleArtefact(FittingItem):
     __slots__ = ()
@@ -52,27 +52,14 @@ class VehicleArtefact(FittingItem):
 
     @property
     def isForSale(self):
-        return _TAG_NOT_FOR_SALE not in self.tags
+        return TAG_NOT_FOR_SALE not in self.tags
 
     @property
     def tags(self):
         return self.descriptor.tags
 
     def getKpi(self, vehicle=None):
-        if vehicle is None:
-            return [ (mergeAggregateKpi(kpi) if kpi.type == KPI.Type.AGGREGATE_MUL else kpi) for kpi in self.descriptor.kpi ]
-        else:
-            result = []
-            for kpi in self.descriptor.kpi:
-                if kpi.type == KPI.Type.AGGREGATE_MUL:
-                    for subKpi in kpi.value:
-                        if not subKpi.vehicleTypes or vehicle.type in subKpi.vehicleTypes:
-                            result.append(subKpi)
-
-                if not kpi.vehicleTypes or vehicle.type in kpi.vehicleTypes:
-                    result.append(kpi)
-
-            return result
+        return collectKpi(self.descriptor, vehicle)
 
     @property
     def isStimulator(self):
@@ -125,14 +112,17 @@ class Equipment(VehicleArtefact):
 
     @property
     def isBuiltIn(self):
-        return _TAG_EQUEPMENT_BUILTIN in self.tags
+        return TAG_EQUEPMENT_BUILTIN in self.tags
 
     def isInstalled(self, vehicle, slotIdx=None):
         return vehicle.consumables.installed.containsIntCD(self.intCD, slotIdx)
 
+    def isInSetup(self, vehicle, setupIndex=None, slotIdx=None):
+        return vehicle.consumables.setupLayouts.containsIntCD(self.intCD, slotIdx)
+
     @property
     def isTrigger(self):
-        return _TAG_TRIGGER in self.tags
+        return TAG_TRIGGER in self.tags
 
     def mayInstall(self, vehicle, slotIdx=None):
         for idx, eq in enumerate(vehicle.consumables.installed):
@@ -150,7 +140,7 @@ class Equipment(VehicleArtefact):
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
-            if vehicle.consumables.installed.containsIntCD(self.intCD):
+            if vehicle.consumables.setupLayouts.containsIntCD(self.intCD):
                 result.add(vehicle)
 
         return result
@@ -223,7 +213,7 @@ class BattleBooster(Equipment):
         return self.__lobbyContext.getServerSettings().isBattleBoostersEnabled() and super(BattleBooster, self).isForSale
 
     def isCrewBooster(self):
-        return _TAG_CREW_BATTLE_BOOSTER in self.tags
+        return TAG_CREW_BATTLE_BOOSTER in self.tags
 
     def isAffectsOnVehicle(self, vehicle):
         if self.isCrewBooster():
@@ -237,10 +227,13 @@ class BattleBooster(Equipment):
     def isInstalled(self, vehicle, slotIdx=None):
         return False if vehicle is None else vehicle.battleBoosters.installed.containsIntCD(self.intCD, slotIdx)
 
+    def isInSetup(self, vehicle, setupIndex=None, slotIdx=None):
+        return False if vehicle is None else vehicle.battleBoosters.setupLayouts.containsIntCD(self.intCD, slotIdx)
+
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
-            if vehicle.battleBoosters.installed.containsIntCD(self.intCD):
+            if vehicle.battleBoosters.setupLayouts.containsIntCD(self.intCD):
                 result.add(vehicle)
 
         return result
@@ -293,7 +286,7 @@ class BattleBooster(Equipment):
     def getCrewBoosterAction(self, isPerkReplace):
         if not self.isCrewBooster():
             raise SoftException('This action description is only for Crew Booster!')
-        token = _TOKEN_CREW_PERK_REPLACE if isPerkReplace else _TOKEN_CREW_PERK_BOOST
+        token = TOKEN_CREW_PERK_REPLACE if isPerkReplace else TOKEN_CREW_PERK_BOOST
         return i18n.makeString(ARTEFACTS.getCrewActionForBattleBooster(self.name, token))
 
     def getOptDeviceBoosterDescription(self, vehicle, valueFormatter=None):
@@ -306,11 +299,11 @@ class BattleBooster(Equipment):
     def getOptDeviceBoosterGainValue(self, vehicle):
         if self.isCrewBooster():
             raise SoftException('This description is only for Opt. Dev. Booster!')
-        deviceType = _TOKEN_OPT_DEVICE_SIMPLE
+        deviceType = TOKEN_OPT_DEVICE_SIMPLE
         if vehicle is not None:
             for device in vehicle.optDevices.installed:
                 if self.isOptionalDeviceCompatible(device) and device.isDeluxe:
-                    deviceType = _TOKEN_OPT_DEVICE_DELUXE
+                    deviceType = TOKEN_OPT_DEVICE_DELUXE
                     break
 
         gain = i18n.makeString(ARTEFACTS.getDeviceGainForBattleBooster(self.name, deviceType))
@@ -373,10 +366,13 @@ class BattleAbility(Equipment):
     def isInstalled(self, vehicle, slotIdx=None):
         return vehicle.battleAbilities.installed.containsIntCD(self.intCD, slotIdx)
 
+    def isInSetup(self, vehicle, setupIndex=None, slotIdx=None):
+        return vehicle.battleAbilities.setupLayouts.containsIntCD(self.intCD, slotIdx)
+
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
-            if self.isInstalled(vehicle):
+            if vehicle.battleAbilities.setupLayouts.containsIntCD(self.intCD):
                 result.add(vehicle)
 
         return result
@@ -441,23 +437,23 @@ class OptionalDevice(RemovableDevice):
 
     @property
     def isUpgradable(self):
-        return checkForTags(self.tags, _TAG_OPT_DEVICE_TROPHY_BASIC)
+        return checkForTags(self.tags, TAG_OPT_DEVICE_TROPHY_BASIC)
 
     @property
     def isUpgraded(self):
-        return checkForTags(self.tags, _TAG_OPT_DEVICE_TROPHY_UPGRADED)
+        return checkForTags(self.tags, TAG_OPT_DEVICE_TROPHY_UPGRADED)
 
     @property
     def isDeluxe(self):
-        return checkForTags(self.tags, _TAG_OPT_DEVICE_DELUXE)
+        return checkForTags(self.tags, TAG_OPT_DEVICE_DELUXE)
 
     @property
     def isTrophy(self):
-        return checkForTags(self.tags, (_TAG_OPT_DEVICE_TROPHY_BASIC, _TAG_OPT_DEVICE_TROPHY_UPGRADED))
+        return checkForTags(self.tags, (TAG_OPT_DEVICE_TROPHY_BASIC, TAG_OPT_DEVICE_TROPHY_UPGRADED))
 
     @property
     def isRegular(self):
-        return not checkForTags(self.tags, (_TAG_OPT_DEVICE_TROPHY_BASIC, _TAG_OPT_DEVICE_TROPHY_UPGRADED, _TAG_OPT_DEVICE_DELUXE))
+        return not checkForTags(self.tags, (TAG_OPT_DEVICE_TROPHY_BASIC, TAG_OPT_DEVICE_TROPHY_UPGRADED, TAG_OPT_DEVICE_DELUXE))
 
     def getRemovalPrice(self, proxy=None):
         if not self.isRemovable and proxy is not None:
@@ -494,6 +490,9 @@ class OptionalDevice(RemovableDevice):
 
         return super(OptionalDevice, self).isInstalled(vehicle, slotIdx)
 
+    def isInSetup(self, vehicle, setupIndex=None, slotIdx=None):
+        return vehicle.optDevices.setupLayouts.containsIntCD(self.intCD, slotIdx)
+
     def hasSimilarDevicesInstalled(self, vehicle):
         for device in vehicle.optDevices.installed.getItems():
             if not self.descriptor.checkCompatibilityWithOther(device.descriptor):
@@ -518,8 +517,7 @@ class OptionalDevice(RemovableDevice):
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
-            installed = [ x.intCD for x in vehicle.optDevices.installed.getItems() ]
-            if self.intCD in installed:
+            if vehicle.optDevices.setupLayouts.containsIntCD(self.intCD):
                 result.add(vehicle)
 
         return result

@@ -316,7 +316,6 @@ class CommonTankAppearance(ScriptGameObject):
 
         if not self.isObserver:
             self._chassisDecal.attach()
-        self._createAndAttachStickers()
         if not self.isObserver:
             self._startSystems()
             self.filter.enableLagDetection(not self.damageState.isCurrentModelDamaged)
@@ -353,6 +352,9 @@ class CommonTankAppearance(ScriptGameObject):
         self._chassisDecal.detach()
         if self.vehicleStickers:
             self.vehicleStickers.detach()
+
+    def setVehicleInfo(self, vehInfo):
+        self._createAndAttachStickers(vehInfo)
 
     def setupGunMatrixTargets(self, target):
         self.turretMatrix = target.turretMatrix
@@ -445,7 +447,7 @@ class CommonTankAppearance(ScriptGameObject):
                 node = self.compoundModel.node(TankPartNames.HULL)
                 node.attach(splodge)
 
-    def _createStickers(self):
+    def _createStickers(self, vehInfo):
         return VehicleStickers(self.typeDescriptor, 0, self.outfit)
 
     @property
@@ -592,14 +594,14 @@ class CommonTankAppearance(ScriptGameObject):
         self.filter.placingOnGround = placingOnGround
         return
 
-    def _createAndAttachStickers(self):
+    def _createAndAttachStickers(self, vehInfo):
         isCurrentModelDamaged = self.damageState.isCurrentModelDamaged
         stickersAlpha = DEFAULT_STICKERS_ALPHA
         if isCurrentModelDamaged:
             return
         else:
             if self.vehicleStickers is None:
-                self._vehicleStickers = self._createStickers()
+                self._vehicleStickers = self._createStickers(vehInfo)
             self.vehicleStickers.alpha = stickersAlpha
             self.vehicleStickers.attach(compoundModel=self.compoundModel, isDamaged=self.damageState.isCurrentModelDamaged, showDamageStickers=not isCurrentModelDamaged)
             return

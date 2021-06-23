@@ -196,6 +196,7 @@ class ClientArena(object):
 
     def __onVehicleAddedUpdate(self, argStr):
         infoAsTuple = cPickle.loads(zlib.decompress(argStr))
+        LOG_DEBUG_DEV('__onVehicleAddedUpdate', infoAsTuple)
         vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
         self.__vehicles[vehID] = self.__preprocessVehicleInfo(info)
         self.__rebuildIndexToId()

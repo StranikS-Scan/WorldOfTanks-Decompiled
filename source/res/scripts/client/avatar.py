@@ -1211,11 +1211,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             floatArg = floatArgs[0]
             typeDescr = self.vehicleTypeDescriptor
             if self.isObserver() or observedVehID == vehicleID:
-                observedVehicle = BigWorld.entity(observedVehID)
-                if observedVehicle:
-                    typeDescr = observedVehicle.typeDescriptor
+                observedVehicleData = self.arena.vehicles.get(observedVehID)
+                if observedVehicleData:
+                    typeDescr = observedVehicleData['vehicleType']
                 else:
-                    LOG_DEBUG_DEV('[updateVehicleMiscStatus] Vehicle #{} was not loaded'.format(observedVehID))
+                    LOG_DEBUG_DEV('[updateVehicleMiscStatus] Vehicle #{} is not in arena vehicles'.format(observedVehID))
                     return
             if code == STATUS.DESTROYED_DEVICE_IS_REPAIRING:
                 extraIndex = intArg & 255
@@ -1377,11 +1377,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         typeDescr = self.vehicleTypeDescriptor
         observedVehID = self.guiSessionProvider.shared.vehicleState.getControllingVehicleID()
         if self.isObserver() or observedVehID == vehicleID:
-            observedVehicle = BigWorld.entity(observedVehID)
-            if observedVehicle:
-                typeDescr = observedVehicle.typeDescriptor
+            observedVehicleData = self.arena.vehicles.get(observedVehID)
+            if observedVehicleData:
+                typeDescr = observedVehicleData['vehicleType']
             else:
-                LOG_DEBUG_DEV('[showVehicleDamageInfo] Vehicle #{} was not loaded'.format(observedVehID))
+                LOG_DEBUG_DEV('[showVehicleDamageInfo] Vehicle #{} is not in arena vehicles'.format(observedVehID))
                 return
         extra = typeDescr.extras[extraIndex] if extraIndex != 0 else None
         if vehicleID == self.playerVehicleID or vehicleID == observedVehID or not self.__isVehicleAlive and vehicleID == self.inputHandler.ctrl.curVehicleID:

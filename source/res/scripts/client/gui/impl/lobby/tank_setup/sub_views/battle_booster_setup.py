@@ -11,7 +11,7 @@ class BattleBoosterSetupSubView(BaseEquipmentSetupSubView):
         item = self._interactor.getCurrentLayout()[slotID]
         if item is not None:
             self._setTab(BattleBoosterTabs.CREW if item.isCrewBooster() else BattleBoosterTabs.OPT_DEVICE)
-        if item is not None and item not in self._interactor.getInstalledLayout() and (item.isHidden or not item.isInInventory):
+        if item is not None and item.isHidden and not item.isInInventory:
             self._interactor.changeSlotItem(slotID, None)
             self._interactor.getAutoRenewal().setLocalValue(False)
         super(BattleBoosterSetupSubView, self).updateSlots(slotID, fullUpdate, updateData)

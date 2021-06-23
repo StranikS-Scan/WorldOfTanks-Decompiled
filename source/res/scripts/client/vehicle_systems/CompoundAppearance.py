@@ -612,11 +612,10 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.filter.vehicleCollisionCallback = player.handleVehicleCollidedVehicle
         return
 
-    def _createStickers(self):
+    def _createStickers(self, vehInfo):
         insigniaRank = self._vehicle.publicInfo['marksOnGun']
         vehicleStickers = VehicleStickers(self.typeDescriptor, insigniaRank, self.outfit)
-        clanID = BigWorld.player().arena.vehicles[self._vehicle.id]['clanDBID']
-        vehicleStickers.setClanID(clanID)
+        vehicleStickers.setClanID(vehInfo['clanDBID'])
         return vehicleStickers
 
     def __createTerrainCircle(self):

@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.13.0.0 Common Test</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.13.0.0 Common Test</Path>
+    <Path cacheSubdirs="true">./res_mods/1.13.0.0</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.13.0.0</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
@@ -45,8 +45,18 @@
       <Package type="sd,hd">./res/packages/119_turning_point_if.pkg</Package>
       <Package type="sd,hd">./res/packages/11_murovanka.pkg</Package>
       <Package type="hd">./res/packages/11_murovanka_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/120_graf_zeppelin_ish.pkg</Package>
+      <Package type="hd">./res/packages/120_graf_zeppelin_ish_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/121_lost_paradise_v.pkg</Package>
+      <Package type="hd">./res/packages/121_lost_paradise_v_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/122_frozen_land.pkg</Package>
+      <Package type="hd">./res/packages/122_frozen_land_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/123_dalny_gg.pkg</Package>
+      <Package type="hd">./res/packages/123_dalny_gg_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/125_highground_v.pkg</Package>
+      <Package type="sd,hd">./res/packages/126_asia_ravine_ish.pkg</Package>
+      <Package type="hd">./res/packages/126_asia_ravine_ish_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/128_last_frontier_v.pkg</Package>
-      <Package type="hd">./res/packages/128_last_frontier_v_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/13_erlenberg.pkg</Package>
       <Package type="hd">./res/packages/13_erlenberg_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line.pkg</Package>

@@ -1,0 +1,54 @@
+<122_frozen_land.xml>
+  <name>	#arenas:122_frozen_land/name	</name>
+  <description>	#arenas:122_frozen_land/description	</description>
+  <geometry>	spaces/122_frozen_land	</geometry>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <boundingBox>
+    <bottomLeft>	-400.000000 -500.000000	</bottomLeft>
+    <upperRight>	600.000000 500.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/122_frozen_land/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_klondike_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_klondike_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_klondike_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_klondike_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_klondike_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_klondike_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamSpawnPoints>
+        <team1>
+          <position>	215.00 -456.14	</position>
+        </team1>
+        <team2>
+          <position>	215.00 449.27	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	52.730289 -433.539185	</position1>
+        </team1>
+        <team2>
+          <position1>	42.398514 434.307281	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</122_frozen_land.xml>

@@ -263,6 +263,15 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.isForceReloading = False
         self.__prevHealth = self.maxHealth
 
+    def __onVehicleInfoAdded(self, vehID):
+        if self.id != vehID:
+            _logger.error('__onVehicleInfoAdded(): Received unexpected vehicle id %d. Waiting for %d', vehID, self.id)
+            return
+        _logger.debug('__onVehicleInfoAdded(%d)', self.id)
+        player = BigWorld.player()
+        player.arena.onVehicleAdded -= self.__onVehicleInfoAdded
+        self.appearance.setVehicleInfo(player.arena.vehicles[vehID])
+
     def onLeaveWorld(self):
         _logger.debug('onLeaveWorld %d', self.id)
         self.__appearanceCache.stopLoading(self.id)
@@ -734,6 +743,11 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.appearance.removeComponentByType(GenericComponents.HierarchyComponent)
         self.appearance.createComponent(GenericComponents.HierarchyComponent, self.entityGameObject)
         self.appearance.activate()
+        vehInfo = avatar.arena.vehicles.get(self.id, None)
+        if vehInfo is not None:
+            self.appearance.setVehicleInfo(vehInfo)
+        else:
+            avatar.arena.onVehicleAdded += self.__onVehicleInfoAdded
         self.appearance.changeEngineMode(self.engineMode)
         if self.isPlayerVehicle or self.typeDescriptor is None or not self.typeDescriptor.hasSiegeMode:
             self.appearance.changeSiegeState(self.siegeState)

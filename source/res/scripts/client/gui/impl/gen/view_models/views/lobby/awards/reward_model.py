@@ -13,7 +13,7 @@ class RentTypeEnum(IntEnum):
 class RewardModel(BonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=18, commands=0):
+    def __init__(self, properties=19, commands=0):
         super(RewardModel, self).__init__(properties=properties, commands=commands)
 
     def getItem(self):
@@ -82,6 +82,12 @@ class RewardModel(BonusModel):
     def setIsVehicleOnChoice(self, value):
         self._setBool(17, value)
 
+    def getItemID(self):
+        return self._getNumber(18)
+
+    def setItemID(self, value):
+        self._setNumber(18, value)
+
     def _initialize(self):
         super(RewardModel, self)._initialize()
         self._addStringProperty('item', '')
@@ -95,3 +101,4 @@ class RewardModel(BonusModel):
         self._addNumberProperty('vehicleRentValue', 0)
         self._addBoolProperty('isFromStorage', False)
         self._addBoolProperty('isVehicleOnChoice', False)
+        self._addNumberProperty('itemID', 0)

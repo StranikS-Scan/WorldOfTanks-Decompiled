@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/AwardController.py
 import logging
+import typing
 import types
 import weakref
 from abc import ABCMeta, abstractmethod
@@ -11,6 +12,7 @@ import BigWorld
 import async
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
+from adisp import process
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, AWARDS, SPEAKERS_DEVICE, GUI_START_BEHAVIOR, TECHTREE_INTRO_BLUEPRINTS, RANKED_YEAR_POSITION
 from account_helpers.settings_core.settings_constants import SOUND, GuiSettingsBehavior
@@ -43,6 +45,7 @@ from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
+from gui.impl.lobby.awards.items_collection_provider import MultipleAwardRewardsMainPacker
 from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardWindow
 from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
@@ -80,7 +83,9 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
-from skeletons.gui.cdn import IPurchaseCache
+from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
+if typing.TYPE_CHECKING:
+    from gui.platform.catalog_service.controller import _PurchaseDescriptor
 _logger = logging.getLogger(__name__)
 
 class QUEST_AWARD_POSTFIX(object):
@@ -1625,6 +1630,24 @@ class PurchaseHandler(ServiceChannelHandler):
             if self.__purchaseCache.canBeRequestedFromProduct(invoiceData):
                 if 'data' not in invoiceData:
                     _logger.error('Invalid purchase invoice data!')
-                showMultiAwardWindow(invoiceData)
+                    return
+                self.__tryToShowAwards(invoiceData)
             else:
                 _logger.debug('Data can not be requested from the product! Award window will not be shown!')
+
+    @process
+    def __tryToShowAwards(self, invoiceData):
+        yield lambda callback: callback(True)
+        metaData = invoiceData.get('meta', {})
+        if metaData.get('type') == 'normal':
+            productCode = self.__purchaseCache.getProductCode(metaData)
+            if productCode:
+                pD = yield self.__purchaseCache.requestPurchaseByID(productCode)
+                if pD.getDisplayWays().showAwardScreen:
+                    rewards, tTips = yield MultipleAwardRewardsMainPacker().getWholeBonusesData(invoiceData, productCode)
+                    if rewards:
+                        showMultiAwardWindow(rewards, tTips, productCode)
+                    else:
+                        _logger.info('Reward list is empty, multiple awards window will not be shown for purchase %s', productCode)
+            else:
+                _logger.debug('Product code is empty! Awards Window will not be shown!')

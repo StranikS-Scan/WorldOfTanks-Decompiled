@@ -229,16 +229,14 @@ class AwardContext(DefaultContext):
         self._rentBattlesLeft = None
         self._rentWinsLeft = None
         self._rentSeason = None
-        self._isSeniority = False
         return
 
-    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, isSeniority=False):
+    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None):
         self._tmanRoleLevel = tmanCrewLevel
         self._rentExpiryTime = rentExpiryTime
         self._rentBattlesLeft = rentBattles
         self._rentWinsLeft = rentWins
         self._rentSeason = rentSeason
-        self._isSeniority = isSeniority
         return self.itemsCache.items.getItemByCD(int(intCD))
 
     def getStatsConfiguration(self, item):
@@ -268,8 +266,34 @@ class AwardContext(DefaultContext):
          'rentExpiryTime': self._rentExpiryTime,
          'rentBattlesLeft': self._rentBattlesLeft,
          'rentWinsLeft': self._rentWinsLeft,
-         'rentSeason': self._rentSeason,
-         'isSeniority': self._isSeniority}
+         'rentSeason': self._rentSeason}
+
+
+class ExtendedAwardContext(AwardContext):
+
+    def __init__(self, fieldsToExclude=None):
+        super(ExtendedAwardContext, self).__init__(fieldsToExclude)
+        self._showCrew = False
+        self._showVehicleSlot = False
+
+    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, showCrew=False, _showVehicleSlot=False):
+        self._showCrew = showCrew
+        self._showVehicleSlot = _showVehicleSlot
+        return super(ExtendedAwardContext, self).buildItem(intCD, tmanCrewLevel, rentExpiryTime, rentBattles, rentWins, rentSeason)
+
+    def getParams(self):
+        params = super(ExtendedAwardContext, self).getParams()
+        params['showCrew'] = self._showCrew
+        params['showVehicleSlot'] = self._showVehicleSlot
+        return params
+
+
+class SeniorityAwardContext(ExtendedAwardContext):
+
+    def __init__(self, fieldsToExclude=None):
+        super(SeniorityAwardContext, self).__init__(fieldsToExclude)
+        self._showCrew = True
+        self._showVehicleSlot = True
 
 
 class ShopContext(AwardContext):

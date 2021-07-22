@@ -1394,6 +1394,73 @@
       </damage>
     </armorSpalls>
   </_76mm_UOF-354K>
+  <_76mm_BR_350A_1>
+    <id>	289	</id>
+    <userString>	#ussr_vehicles:_76mm_BR_350A_1	</userString>
+    <icon>	ap	</icon>
+    <price>	44	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_76mm_BR_350A_1>
+  <_76mm_BR_350B>
+    <id>	290	</id>
+    <userString>	#ussr_vehicles:_76mm_BR_350B	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	2000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_76mm_BR_350B>
+  <_76mm_F_354>
+    <id>	291	</id>
+    <userString>	#ussr_vehicles:_76mm_F_354	</userString>
+    <icon>	he_modern	</icon>
+    <price>	56	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	76	</caliber>
+    <explosionRadius>	1.09	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	164	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.09	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	80	</armor>
+        <devices>	55	</devices>
+      </damage>
+    </armorSpalls>
+  </_76mm_F_354>
   <_76mm_UBR-354KA_bootcamp>
     <id>	186	</id>
     <userString>	#ussr_vehicles:_76mm_UBR-354KA	</userString>

@@ -1158,9 +1158,9 @@ def showBadgeInvoiceAwardWindow(badge, notificationMgr=None):
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showMultiAwardWindow(invoiceData, notificationMgr=None):
+def showMultiAwardWindow(rewards, tTips, productCode, notificationMgr=None):
     from gui.impl.lobby.awards.multiple_awards_view import MultipleAwardsViewWindow
-    window = MultipleAwardsViewWindow(invoiceData)
+    window = MultipleAwardsViewWindow(rewards, tTips, productCode)
     notificationMgr.append(WindowNotificationCommand(window))
 
 

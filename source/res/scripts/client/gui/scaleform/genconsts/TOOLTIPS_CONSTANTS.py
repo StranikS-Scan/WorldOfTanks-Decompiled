@@ -55,6 +55,8 @@ class TOOLTIPS_CONSTANTS(object):
     BATTLE_BOOSTER_COMPARE = 'battleBoosterCompare'
     SHOP_VEHICLE = 'shopVehicle'
     AWARD_VEHICLE = 'awardVehicle'
+    EXTENDED_AWARD_VEHICLE = 'extendedAwardVehicle'
+    SENIORITY_AWARD_VEHICLE = 'seniorityAwardVehicle'
     DEFAULT_SHELL = 'defaultShell'
     HANGAR_SHELL = 'hangarShell'
     NATION_CHANGE_HANGAR_SHELL = 'nationChangeHangarShell'
@@ -498,6 +500,8 @@ class TOOLTIPS_CONSTANTS(object):
      TECHTREE_VEHICLE,
      SHOP_VEHICLE,
      AWARD_VEHICLE,
+     EXTENDED_AWARD_VEHICLE,
+     SENIORITY_AWARD_VEHICLE,
      TRADE_IN,
      TRADE_IN_PRICE,
      HISTORICAL_VEHICLE,

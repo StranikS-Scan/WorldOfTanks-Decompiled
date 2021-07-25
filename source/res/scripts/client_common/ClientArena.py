@@ -151,7 +151,7 @@ class ClientArena(object):
         return None if self.__arenaBBCollider is None and not self.__setupBBColliders() else self.__arenaBBCollider.getClosestPointOnBB(point)
 
     def collideWithSpaceBB(self, start, end):
-        return None if self.__spaceBBCollider is None and not self.__setupBBColliders() else self.__spaceBBCollider.collide(start, end)
+        return (None, None) if self.__spaceBBCollider is None and not self.__setupBBColliders() else self.__spaceBBCollider.collide(start, end)
 
     def getSpaceBB(self):
         return (None, None) if self.__spaceBBCollider is None and not self.__setupBBColliders() else (self.__spaceBBCollider.getMinBounds(), self.__spaceBBCollider.getMaxBounds())
@@ -196,6 +196,7 @@ class ClientArena(object):
 
     def __onVehicleAddedUpdate(self, argStr):
         infoAsTuple = cPickle.loads(zlib.decompress(argStr))
+        LOG_DEBUG_DEV('__onVehicleAddedUpdate', infoAsTuple)
         vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
         self.__vehicles[vehID] = self.__preprocessVehicleInfo(info)
         self.__rebuildIndexToId()
@@ -318,9 +319,7 @@ class ClientArena(object):
         self.__vehicleIndexToId = dict(zip(range(len(vehs)), sorted(vehs.keys())))
 
     def __vehicleInfoAsDict(self, info):
-        extVehicleTypeData = {'vehPostProgression': info[25],
-         'customRoleSlotTypeId': info[26]}
-        infoAsDict = {'vehicleType': self.__getVehicleType(info[1], extVehicleTypeData),
+        infoAsDict = {'vehicleType': self.__getVehicleType(info[1]),
          'name': info[2],
          'team': info[3],
          'isAlive': info[4],
@@ -346,8 +345,8 @@ class ClientArena(object):
          'maxHealth': info[24]}
         return (info[0], infoAsDict)
 
-    def __getVehicleType(self, intCD, extData):
-        return None if intCD is None else vehicles.VehicleDescr(compactDescr=intCD, extData=extData)
+    def __getVehicleType(self, intCD):
+        return None if intCD is None else vehicles.VehicleDescr(compactDescr=intCD)
 
     def __vehicleStatisticsAsDict(self, stats):
         return (stats[0], {'frags': stats[1]})

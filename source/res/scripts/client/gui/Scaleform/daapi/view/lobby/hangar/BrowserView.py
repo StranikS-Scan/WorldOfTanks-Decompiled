@@ -110,6 +110,9 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
             if self.__browser:
                 callbackArgs['url'] = self.__browser.url
             returnCallback(**callbackArgs)
+        onDisposeCallback = self.__getFromCtx('onDisposeCallback')
+        if onDisposeCallback is not None:
+            onDisposeCallback()
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         super(BrowserView, self)._dispose()
         return

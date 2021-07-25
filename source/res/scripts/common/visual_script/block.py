@@ -70,7 +70,7 @@ class Meta(object):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.SERVER, ASPECT.CLIENT]
+        return [ASPECT.CLIENT, ASPECT.SERVER]
 
     @classmethod
     def blockIcon(cls):

@@ -28,6 +28,10 @@ class HangarCameraIdleController(HangarCameraSettingsListener):
         super(HangarCameraIdleController, self).destroy()
         return
 
+    @property
+    def isForcedDisable(self):
+        return self.__isForcedDisabled
+
     def _onSpaceCreated(self):
         super(HangarCameraIdleController, self)._onSpaceCreated()
         g_eventBus.addListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onCameraForceDisable, EVENT_BUS_SCOPE.LOBBY)

@@ -5,15 +5,13 @@ from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys, getBackBtnDescription
+from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys, getBackBtnLabel
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
 from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation, NODE_STATE
-from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_entry_point import VehPostProgressionEntryPoint
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.daapi.view.meta.ResearchMeta import ResearchMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
@@ -25,12 +23,11 @@ from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events
-from gui.shared.event_dispatcher import showVehPostProgressionView
 from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles, icons, getRoleText
 from gui.shared.formatters.time_formatters import getDueDateOrTimeStr, RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import getTypeBigIconPath, Vehicle
+from gui.shared.gui_items.Vehicle import getTypeBigIconPath
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
@@ -40,9 +37,8 @@ from helpers.blueprint_generator import g_blueprintGenerator
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
-from skeletons.gui.game_control import IBootcampController, ITradeInController
+from skeletons.gui.game_control import IBootcampController, ITradeInController, IRankedBattlesController
 from skeletons.gui.shared import IItemsCache
-from uilogging.veh_post_progression.constants import EntryPointCallers
 _logger = getLogger(__name__)
 _BENEFIT_ITEMS_LIMIT = 3
 
@@ -128,21 +124,15 @@ _BANNER_GETTERS = {States.RESTORE: _getRestoreBannerStr,
 class Research(ResearchMeta):
     __tradeIn = dependency.descriptor(ITradeInController)
     __bootcamp = dependency.descriptor(IBootcampController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, ctx=None, skipConfirm=False):
         super(Research, self).__init__(ResearchItemsData(dumpers.ResearchItemsObjDumper()))
         self._resolveLoadCtx(ctx=ctx)
         self._exitEvent = ctx.get(BackButtonContextKeys.EXIT, None)
         self._skipConfirm = skipConfirm
+        self.__preloadingBP = None
         return
-
-    @property
-    def vehicle(self):
-        return self._data.getRootItem()
-
-    def goToPostProgression(self, itemCD):
-        vehicle = self._itemsCache.items.getItemByCD(int(itemCD))
-        showVehPostProgressionView(vehicle.intCD, self._createExitEvent(), vehicle.postProgression.isUnlocked(vehicle).result, EntryPointCallers.RESEARCH_PAGE)
 
     def __del__(self):
         _logger.debug('ResearchPage deleted')
@@ -159,18 +149,15 @@ class Research(ResearchMeta):
 
     def requestResearchData(self):
         self.redraw()
-        self._vehPostProgressionEntryPoint.tryUnlock()
 
     def goToNextVehicle(self, vehCD):
         self._data.setRootCD(vehCD)
         self.redraw()
-        self._vehPostProgressionEntryPoint.tryUnlock()
 
     def redraw(self):
         self._data.load()
         self.as_setRootDataS(self._getRootData())
         self.as_setResearchItemsS(SelectedNation.getName(), self._data.dump())
-        self._vehPostProgressionEntryPoint.redraw(self.vehicle)
 
     def request4Unlock(self, itemCD, topLevel):
         itemCD = int(itemCD)
@@ -231,7 +218,7 @@ class Research(ResearchMeta):
             super(Research, self).invalidateUnlocks(unlocks)
 
     def invalidateInventory(self, data):
-        if not self.vehicle.activeInNationGroup:
+        if not self._data.getRootItem().activeInNationGroup:
             self.__redrawPageAfterNationWasChanged()
             return
         if self._data.isRedrawNodes(data):
@@ -294,9 +281,6 @@ class Research(ResearchMeta):
             return
         super(Research, self).invalidateVehicleCollectorState()
 
-    def invalidateVehPostProgression(self):
-        self._vehPostProgressionEntryPoint.redraw(self.vehicle)
-
     def compareVehicle(self, itemCD):
         self._cmpBasket.addVehicle(int(itemCD))
 
@@ -307,75 +291,56 @@ class Research(ResearchMeta):
         self.as_setWalletStatusS(self._wallet.componentsStatuses)
         self.as_setFreeXPS(self._itemsCache.items.stats.actualFreeXP)
         self.addListener(events.VehicleBuyEvent.VEHICLE_SELECTED, self.__onTradeOffSelectedChanged)
-        g_blueprintGenerator.generate(self._data.getRootCD())
-        self._vehPostProgressionEntryPoint = VehPostProgressionEntryPoint(self)
+        self.__preloadingBP = self._data.getRootCD()
+        g_blueprintGenerator.generate(self.__preloadingBP)
 
     def _dispose(self):
+        if self.__preloadingBP is not None:
+            g_blueprintGenerator.cancel(self.__preloadingBP)
+            self.__preloadingBP = None
         self.removeListener(events.VehicleBuyEvent.VEHICLE_SELECTED, self.__onTradeOffSelectedChanged)
-        self._vehPostProgressionEntryPoint.dispose()
         super(Research, self)._dispose()
+        return
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == VEHPREVIEW_CONSTANTS.TRADE_OFF_WIDGET_ALIAS:
-            viewPy.setTradeInVehicle(self.vehicle)
+            viewPy.setTradeInVehicle(self._data.getRootItem())
 
-    def _createExitEvent(self):
-        return events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_RESEARCH), ctx={BackButtonContextKeys.ROOT_CD: self._data.getRootCD(),
+    def _blueprintExitEvent(self, vehicleCD):
+        return events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_RESEARCH), ctx={BackButtonContextKeys.ROOT_CD: vehicleCD,
          BackButtonContextKeys.EXIT: self._exitEvent or events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR))})
 
     def _resolveLoadCtx(self, ctx=None):
-        exitEvent = None
-        rootCD = None
-        if ctx:
-            exitEvent = ctx.get(BackButtonContextKeys.EXIT)
-            rootCD = ctx.get(BackButtonContextKeys.ROOT_CD)
-        self._previewAlias = exitEvent.name if exitEvent else VIEW_ALIAS.LOBBY_HANGAR
-        if rootCD or g_currentVehicle.isPresent():
-            self._data.setRootCD(rootCD or g_currentVehicle.item.intCD)
+        exitEvent = ctx[BackButtonContextKeys.EXIT] if ctx is not None and BackButtonContextKeys.EXIT in ctx else None
+        self._previewAlias = exitEvent.name if exitEvent is not None else VIEW_ALIAS.LOBBY_HANGAR
+        rootCD = ctx[BackButtonContextKeys.ROOT_CD] if ctx is not None and BackButtonContextKeys.ROOT_CD in ctx else None
+        if rootCD is None and g_currentVehicle.isPresent():
+            self._data.setRootCD(g_currentVehicle.item.intCD)
+        else:
+            self._data.setRootCD(rootCD)
         SelectedNation.select(self._data.getNationID())
         return
-
-    def _updateUnlockedItems(self, unlocked):
-        super(Research, self)._updateUnlockedItems(unlocked)
-        self._vehPostProgressionEntryPoint.invalidateUnlocks(unlocked)
 
     def _getExperienceInfoLinkage(self):
         return RESEARCH_ALIASES.EXPERIENCE_INFO
 
     def _getRootData(self):
-        root = self.vehicle
+        root = self._data.getRootItem()
         rootNode = self._data.getRootNode()
-        nodeState = rootNode.getState()
         bpfProps = rootNode.getBpfProps()
-        isNext2Unlock = NODE_STATE.isNext2Unlock(nodeState)
-        isPremium = NODE_STATE.isCollectibleActionVehicle(nodeState) or NODE_STATE.isPremium(nodeState)
+        isNext2Unlock = NODE_STATE.isNext2Unlock(rootNode.getState())
         comparisonState, comparisonTooltip = resolveStateTooltip(self._cmpBasket, root, enabledTooltip='', fullTooltip=TOOLTIPS.RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED)
         tankTier = int2roman(root.level)
         tankHasNationGroup = (root.isInInventory or root.isRented) and root.hasNationGroup
         isNationChangeAvailable = root.isNationChangeAvailable
         isShownNationChangeTooltip = tankHasNationGroup and not isNationChangeAvailable
-        result = {'vehicleTitle': {'intCD': self._data.getRootCD(),
-                          'tankTierStr': text_styles.grandTitle(tankTier),
-                          'tankNameStr': text_styles.grandTitle(root.userName),
-                          'tankTierStrSmall': text_styles.promoTitle(tankTier),
-                          'tankNameStrSmall': text_styles.promoTitle(root.userName),
-                          'typeIconPath': getTypeBigIconPath(root.type, root.isElite),
-                          'isElite': root.isElite,
-                          'statusStr': self.__getRootStatusStr(root),
-                          'roleText': getRoleText(root.role, root.roleLabel)},
-         'vehicleButton': {'shopIconPath': RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_MEDIUM, root.name.split(':')[1]),
-                           'compareBtnVisible': not self.__bootcamp.isInBootcamp(),
-                           'compareBtnEnabled': comparisonState,
-                           'compareBtnLabel': backport.text(R.strings.menu.research.labels.button.addToCompare()),
-                           'compareBtnTooltip': comparisonTooltip,
-                           'previewBtnEnabled': root.isPreviewAllowed(),
-                           'previewBtnLabel': backport.text(R.strings.menu.research.labels.button.vehiclePreview()),
-                           'isPremium': isPremium,
-                           'vehicleId': self._data.getRootCD(),
-                           'vehicleState': nodeState,
-                           'isInInventory': NODE_STATE.inInventory(nodeState),
-                           'previewAlias': VIEW_ALIAS.LOBBY_RESEARCH,
-                           'cmHandlerType': CONTEXT_MENU_HANDLER_TYPE.RESEARCH_VEHICLE},
+        isRanked = self.__rankedController.isRankedPrbActive()
+        result = {'tankTierStr': text_styles.grandTitle(tankTier),
+         'tankNameStr': text_styles.grandTitle(root.userName),
+         'tankTierStrSmall': text_styles.promoTitle(tankTier),
+         'tankNameStrSmall': text_styles.promoTitle(root.userName),
+         'typeIconPath': getTypeBigIconPath(root.type, root.isElite),
+         'shopIconPath': RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_MEDIUM, root.name.split(':')[1]),
          'isInteractive': self.__getIsInteractive(root, rootNode),
          'buttonLabel': self.__getMainButtonLabel(root, rootNode),
          'blueprintLabel': self.__getResearchPageBlueprintLabel(rootNode),
@@ -383,12 +348,21 @@ class Research(ResearchMeta):
          'blueprintCanConvert': bpfProps.canConvert if bpfProps is not None else False,
          'bpbGlowEnabled': isNext2Unlock,
          'itemPrices': rootNode.getItemPrices(),
+         'compareBtnVisible': not self.__bootcamp.isInBootcamp(),
+         'compareBtnEnabled': comparisonState,
+         'compareBtnLabel': backport.text(R.strings.menu.research.labels.button.addToCompare()),
+         'compareBtnTooltip': comparisonTooltip,
+         'previewBtnEnabled': root.isPreviewAllowed(),
+         'previewBtnLabel': backport.text(R.strings.menu.research.labels.button.vehiclePreview()),
+         'isElite': root.isElite,
+         'statusStr': self.__getRootStatusStr(root),
          'discountStr': self.__getDiscountBannerStr(root, rootNode),
          'rentBtnLabel': self.__getRentButtonLabel(rootNode),
          'changeNationBtnVisibility': tankHasNationGroup,
          'isTankNationChangeAvailable': isNationChangeAvailable,
          'nationChangeIsNew': not AccountSettings.getSettings(NATION_CHANGE_VIEWED),
-         'nationChangeTooltip': self.__getNationChangeTooltip(root) if isShownNationChangeTooltip else ''}
+         'nationChangeTooltip': self.__getNationChangeTooltip(root) if isShownNationChangeTooltip else '',
+         'roleText': getRoleText(root.role, root.roleLabel) if isRanked else ''}
         return result
 
     def __getIsInteractive(self, root, rootNode):
@@ -418,7 +392,7 @@ class Research(ResearchMeta):
         return htmlStr
 
     def __getViewLayoutData(self):
-        root = self.vehicle
+        root = self._data.getRootItem()
         result = self.__getBackBtnData()
         result['isPremiumLayout'] = root.isPremium
         if root.isPremium:
@@ -431,7 +405,7 @@ class Research(ResearchMeta):
 
     def __getBackBtnData(self):
         result = {'backBtnLabel': backport.text(R.strings.menu.viewHeader.backBtn.label()),
-         'backBtnDescrLabel': getBackBtnDescription(self._exitEvent, self._previewAlias)}
+         'backBtnDescrLabel': getBackBtnLabel(self._exitEvent, self._previewAlias)}
         return result
 
     def __redrawPageAfterNationWasChanged(self):

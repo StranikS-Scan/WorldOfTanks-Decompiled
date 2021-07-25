@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/params.py
 import collections
-import copy
 import inspect
 import math
 import operator
@@ -9,15 +8,12 @@ import typing
 from collections import namedtuple, defaultdict
 from math import ceil
 from itertools import izip_longest
-import BigWorld
-from constants import SHELL_TYPES, PIERCING_POWER
+from constants import SHELL_TYPES, PIERCING_POWER, BonusTypes, TANK_CONTROL_LEVEL
 from gui import GUI_SETTINGS
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import KPI
-from gui.shared.gui_items.Tankman import isSkillLearnt
 from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors, isAutoReloadGun, isDualGun
 from gui.shared.items_parameters import functions, getShellDescriptors, getOptionalDeviceWeight, NO_DATA
-from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_SWITCH_ON_TIME, TURBOSHAFT_SWITCH_OFF_TIME
@@ -25,13 +21,17 @@ from gui.shared.utils import DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, GUN_
 from gui.shared.utils import GUN_CAN_BE_CLIP, RELOAD_TIME_PROP_NAME
 from gui.shared.utils import RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, GUN_CLIP
 from helpers import time_utils, dependency
-from items import getTypeOfCompactDescr, getTypeInfoByIndex, ITEM_TYPES, vehicles, tankmen
-from items import utils as items_utils
+from items import getTypeOfCompactDescr, getTypeInfoByIndex, ITEM_TYPES, vehicles
+from items.components.detachment_constants import NO_DETACHMENT_ID
+from items.components.detachment_components import PerkBonusApplier
+from items.utils import common as items_utils
 from items.components import component_constants
-from shared_utils import findFirst, first
+from shared_utils import first
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.detachment import IDetachmentCache
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
     from items.vehicles import VehicleDescriptor, CompositeVehicleDescriptor
 MAX_VISION_RADIUS = 500
 MIN_VISION_RADIUS = 150
@@ -39,6 +39,7 @@ PIERCING_DISTANCES = (50, 500)
 ONE_HUNDRED_PERCENTS = 100
 MIN_RELATIVE_VALUE = 1
 EXTRAS_CAMOUFLAGE = 'camouflageExtras'
+ALWAYS_ACTIVE_SITUATIONAL_BONUSES = ('commander_sixthSense', 'commander_enemyShotPredictor')
 _Weight = namedtuple('_Weight', 'current, max')
 _Invisibility = namedtuple('_Invisibility', 'current, atShot')
 _PenaltyInfo = namedtuple('_PenaltyInfo', 'roleName, value, vehicleIsNotNative')
@@ -111,7 +112,7 @@ def _processExtraBonuses(vehicle):
     withRareCamouflage = vehicle.intCD in g_paramsCache.getVehiclesWithoutCamouflage()
     hasCamo = bool(vehicle.getBonusCamo())
     if withRareCamouflage or hasCamo:
-        result.append((EXTRAS_CAMOUFLAGE, 'extra'))
+        result.append((EXTRAS_CAMOUFLAGE, BonusTypes.EXTRA))
     return result
 
 
@@ -285,18 +286,21 @@ class TurretParams(WeightedParam):
 
 
 class VehicleParams(_ParameterBase):
+    detachmentCache = dependency.descriptor(IDetachmentCache)
 
     def __init__(self, vehicle):
         super(VehicleParams, self).__init__(self._getVehicleDescriptor(vehicle))
-        self.__factors = functions.getVehicleFactors(vehicle)
-        self.__kpi = functions.getKpiFactors(vehicle)
+        self.__factors = functions.getVehicleFactors(vehicle, self.getIgnoreSituational())
+        self._kpi = functions.getKpiFactors(vehicle)
         self.__coefficients = g_paramsCache.getSimplifiedCoefficients()
         self.__vehicle = vehicle
 
     def __getattr__(self, item):
-        if KPI.Name.hasValue(item):
-            return self.__kpi.getFactor(item)
-        raise AttributeError
+        return self.getKpiFactor(item)
+
+    @staticmethod
+    def getIgnoreSituational():
+        return True
 
     @property
     def maxHealth(self):
@@ -476,6 +480,26 @@ class VehicleParams(_ParameterBase):
         return max(value, MIN_RELATIVE_VALUE)
 
     @property
+    def relativeTankControlLevel(self):
+        vehicleTankControlLevel = self.__vehicle.descriptor.miscAttrs['crewMasteryFactor']
+        return (1 + self.__factors['crewMasteryFactor'] + vehicleTankControlLevel) * 100
+
+    @property
+    def relativeSituationalBonuses(self):
+        bonuses = self.getBonuses()
+        result = set()
+        for bonusID, bonusType in bonuses:
+            if functions.isSituationalBonus(bonusID, bonusType):
+                if bonusType == BonusTypes.DETACHMENT:
+                    result.add(int(bonusID.split('_')[0]))
+                else:
+                    result.add(bonusID)
+
+        _, crewBoosters, _ = self.getExtraBonuses(self.__vehicle)
+        result.update([ int(bonusID) for bonusID in crewBoosters if functions.isSituationalBonus(bonusID, BonusTypes.DETACHMENT) ])
+        return len(result) + len(ALWAYS_ACTIVE_SITUATIONAL_BONUSES)
+
+    @property
     def turretYawLimits(self):
         return None if not self.__hasTurret() else self.__getGunYawLimits()
 
@@ -522,7 +546,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def invisibilityFactorAtShot(self):
-        return self._itemDescr.miscAttrs['invisibilityFactorAtShot']
+        return self._itemDescr.gun.invisibilityFactorAtShot * self.__factors.get('invisibilityFactorAtShot', 1)
 
     @property
     def clipFireRate(self):
@@ -587,22 +611,10 @@ class VehicleParams(_ParameterBase):
         item = self._itemDescr.shot.shell
         return item.stun.guaranteedStunDuration * item.stun.stunDuration if item.hasStun else None
 
-    @property
-    def vehicleEnemySpottingTime(self):
-        kpiFactor = self.__kpi.getFactor('vehicleEnemySpottingTime')
-        skillName = 'gunner_rancorous'
-        skillDuration = 0.0
-        skillBattleBoosters = None
-        for battleBoosters in self.__vehicle.battleBoosters.installed:
-            if battleBoosters is not None and battleBoosters.getAffectedSkillName() == skillName:
-                skillBattleBoosters = battleBoosters
-
-        skillLearnt = isSkillLearnt(skillName, self.__vehicle)
-        if skillLearnt and skillBattleBoosters is not None:
-            skillDuration = skillBattleBoosters.descriptor.duration
-        elif skillLearnt or skillBattleBoosters is not None:
-            skillDuration = tankmen.getSkillsConfig().getSkill(skillName).duration
-        return kpiFactor + skillDuration
+    def getKpiFactor(self, item, toCompare=False, onlyPassive=False):
+        if KPI.Name.hasValue(item):
+            return self._kpi.getFactor(item, toCompare=toCompare, onlyPassive=onlyPassive)
+        raise AttributeError
 
     def getParamsDict(self, preload=False):
         conditionalParams = ('aimingTime',
@@ -650,65 +662,60 @@ class VehicleParams(_ParameterBase):
         result['base'] = base
         return result
 
-    @staticmethod
-    def getBonuses(vehicle):
-        installedItems = [ item for item in vehicle.consumables.installed.getItems() ]
-        result = [ (eq.name, eq.itemTypeName) for eq in installedItems ]
+    def getBonuses(self, comparableInstructor=False):
+        vehicle = self.__vehicle
+        result = [ (eq.name, eq.itemTypeName) for eq in vehicle.consumables.installed.getItems() ]
         optDevs = vehicle.optDevices.installed.getItems()
         optDevs = [ (device.name, device.itemTypeName) for device in optDevs ]
         result.extend(optDevs)
         for battleBooster in vehicle.battleBoosters.installed.getItems():
-            result.append((battleBooster.name, 'battleBooster'))
+            result.append((battleBooster.name, BonusTypes.BATTLE_BOOSTER))
 
-        for _, tankman in vehicle.crew:
-            if tankman is None:
-                continue
-            for skill in tankman.skills:
-                if skill.isEnable and skill.isActive:
-                    result.append((skill.name, 'skill'))
+        perksController = vehicle.getPerksController()
+        detachmentInvID = perksController.detInvID if perksController else vehicle.getLinkedDetachmentID()
+        if detachmentInvID != NO_DETACHMENT_ID:
+            from gui.Scaleform.daapi.view.lobby.detachment.detachment_setup_vehicle import g_detachmentTankSetupVehicle
+            bonusPerks = g_detachmentTankSetupVehicle.getBackupedBonusPerks()
+            comparableInstructorsIDs = g_detachmentTankSetupVehicle.comparableInstructors
+            if not perksController:
+                vehicle.initPerksController(detachmentInvID, bonusPerks=bonusPerks, comparableInstructors=comparableInstructorsIDs if comparableInstructor else [])
+                perksController = vehicle.getPerksController()
+            detachment = VehicleParams.detachmentCache.getDetachment(detachmentInvID)
+            perksDict = perksController.mergedPerks
+            boosterBonuses = defaultdict(int)
+            for _, perkID, bonus, _ in detachment.getPerksBoosterInfluence(vehicle=vehicle, bonusPerks=bonusPerks, comparableInstructors=comparableInstructorsIDs if comparableInstructor else []):
+                boosterBonuses[perkID] += bonus
 
-        perksSet = set()
-        for perksScope in BigWorld.player().inventory.abilities.abilitiesManager.getPerksByVehicle(vehicle.invID):
-            for perkID, _ in perksScope:
-                perksSet.add((str(perkID), 'perk'))
-
-        result.extend(list(perksSet))
+        else:
+            perksDict = {}
+            boosterBonuses = {}
+        result.extend((('{}_{}'.format(perkID, perkLevel - boosterBonuses.get(perkID, 0)), BonusTypes.DETACHMENT) for perkID, perkLevel in perksDict.iteritems() if perkLevel > boosterBonuses.get(perkID, 0)))
         result.extend(_processExtraBonuses(vehicle))
+        if self.relativeTankControlLevel > ONE_HUNDRED_PERCENTS:
+            result.append((TANK_CONTROL_LEVEL, BonusTypes.SKILL))
         return set(result)
 
-    def getPenalties(self, vehicle):
-        crew, emptySlots, otherVehicleSlots = functions.extractCrewDescrs(vehicle, replaceNone=False)
-        crewFactors = items_utils.getCrewAffectedFactors(vehicle.descriptor, crew)
-        result = {}
-        currParams = self.getParamsDict(True)
-        for slotId, factors in crewFactors.iteritems():
-            for factor, factorValue in factors.iteritems():
-                if factor in _FACTOR_TO_SKILL_PENALTY_MAP:
-                    oldFactor = copy.copy(self.__factors[factor])
-                    self.__factors[factor] = _universalSum(oldFactor, factorValue)
-                    params = _FACTOR_TO_SKILL_PENALTY_MAP[factor]
-                    for paramName in params:
-                        paramPenalties = result.setdefault(paramName, {})
-                        if slotId not in emptySlots:
-                            newValue = getattr(self, paramName)
-                            if newValue is None:
-                                continue
-                            state = rateParameterState(paramName, currParams[paramName], newValue)
-                            if isinstance(currParams[paramName], collections.Iterable):
-                                states, deltas = zip(*state)
-                                if findFirst(lambda v: v == PARAM_STATE.WORSE, states):
-                                    paramPenalties[slotId] = deltas
-                            elif state[0] == PARAM_STATE.WORSE:
-                                paramPenalties[slotId] = state[1]
-                        paramPenalties[slotId] = 0
+    @staticmethod
+    def getExtraBonuses(vehicle, comparableInstructor=False):
+        perksController = vehicle.getPerksController()
+        detachmentInvID = perksController.detInvID if perksController else vehicle.getLinkedDetachmentID()
+        extraBonuses = {}
+        crewBoosterBonuses = {}
+        overcapBonuses = {}
+        detachment = VehicleParams.detachmentCache.getDetachment(detachmentInvID)
+        if detachment:
+            from gui.Scaleform.daapi.view.lobby.detachment.detachment_setup_vehicle import g_detachmentTankSetupVehicle
+            comparableInstructorsIDs = g_detachmentTankSetupVehicle.comparableInstructors
+            bonusPerks = g_detachmentTankSetupVehicle.getBackupedBonusPerks()
+            history = []
+            detachment.getPerks(vehicle=vehicle, bonusPerks=bonusPerks, comparableInstructors=comparableInstructorsIDs if comparableInstructor else [], history=history)
+            for item in history:
+                extraBonuses[item.perkID] = extraBonuses.get(item.perkID, 0) + item.bonus
+                overcapBonuses[item.perkID] = overcapBonuses.get(item.perkID, 0) + item.overcap
+                if item.type == PerkBonusApplier.BOOSTER:
+                    crewBoosterBonuses[item.perkID] = crewBoosterBonuses.get(item.perkID, 0) + item.bonus
 
-                    self.__factors[factor] = oldFactor
-
-        roles = vehicle.descriptor.type.crewRoles
-        for paramName, penalties in result.items():
-            result[paramName] = [ _PenaltyInfo(roles[slotId][0], value, slotId in otherVehicleSlots) for slotId, value in penalties.iteritems() ]
-
-        return {k:v for k, v in result.iteritems() if v}
+        return (extraBonuses, crewBoosterBonuses, overcapBonuses)
 
     def _getVehicleDescriptor(self, vehicle):
         return vehicle.descriptor
@@ -749,7 +756,7 @@ class VehicleParams(_ParameterBase):
         return enginePower / self.vehicleWeight.current * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR * self.__factors['engine/power'] / 12.25 / rollingFriction
 
     def __getInvisibilityValues(self, itemDescription):
-        camouflageFactor = self.__factors.get('camouflage', 1)
+        camouflageFactor = self.__factors.get('camouflageFactor', 1)
         moving, still = items_utils.getClientInvisibility(itemDescription, self.__vehicle, camouflageFactor, self.__factors)
         moving *= ONE_HUNDRED_PERCENTS
         still *= ONE_HUNDRED_PERCENTS
@@ -1151,6 +1158,9 @@ class _ParamsDictProxy(object):
     def iteritems(self):
         self.__loadAllValues()
         return self.__cachedParams.iteritems()
+
+    def getKpiPassiveParam(self, paramName):
+        return self.__paramsCalculator.getKpiFactor(paramName, onlyPassive=True)
 
     def __getitem__(self, item):
         if item not in self.__cachedParams:

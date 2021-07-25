@@ -37,7 +37,6 @@ _MULTIPLIER = 'Multiplier'
 _ALL = 'All'
 _PREMIUM_PACKET = 'premiumPacket'
 _gold_bonus_list = ('slotsPrices',
- 'berthsPrices',
  'premiumPacket1Cost',
  'premiumPacket3Cost',
  'premiumPacket7Cost',
@@ -926,7 +925,6 @@ def getEconomicalStatsDict():
     shop = itemsCache.items.shop
     return {'exchangeRate': shop.exchangeRate,
      'slotsPrices': shop.slotsPrices[1][0],
-     'berthsPrices': shop.berthsPrices[2][0],
      'premiumPacket1Cost': shop.getPremiumPacketCost(1),
      'premiumPacket3Cost': shop.getPremiumPacketCost(3),
      'premiumPacket7Cost': shop.getPremiumPacketCost(7),
@@ -937,6 +935,7 @@ def getEconomicalStatsDict():
      'premiumPacket360Cost': shop.getPremiumPacketCost(360),
      'winXPFactorMode': shop.winXPFactorMode,
      'freeXPToTManXPRate': shop.freeXPToTManXPRate,
+     'freeXPToDetXPRate': shop.freeXPToDetXPRate,
      'dailyXPFactor': shop.dailyXPFactor,
      'freeXPConversionDiscrecity': shop.freeXPConversion[0],
      'isPremium': itemsCache.items.stats.isPremium}
@@ -953,7 +952,6 @@ _PARAM_TO_IMG_DICT = {'exchangeRate': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CONVE
  'changeRoleCost': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CREW_CHANGE_MAIN_SKILL,
  'freeXPConversionDiscrecity': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CONVERT_EXP,
  'slotsPrices': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_SLOT,
- 'berthsPrices': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_PLACE_IN_BARRACKS,
  'goldTankmanCost': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CREW_EDUCATION,
  'creditsTankmanCost': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CREW_EDUCATION,
  'creditsDropSkillsCost': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CREW_SKILL_RESET,

@@ -13,6 +13,7 @@ from gui.shared.event_dispatcher import showTankSetupExitConfirmDialog
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.artefacts import OptionalDevice
+    from gui.shared.gui_items.Vehicle import Vehicle
 
 class BaseOptDeviceInteractor(BaseInteractor):
     __slots__ = ()
@@ -26,28 +27,44 @@ class BaseOptDeviceInteractor(BaseInteractor):
     def getCurrentLayout(self):
         return self.getItem().optDevices.layout
 
-    def getSetupLayout(self):
-        return self.getItem().optDevices.setupLayouts
-
     def getCurrentCategories(self, slotID):
         return self.getItem().optDevices.slots[slotID].categories
 
 
 class OptDeviceInteractor(BaseOptDeviceInteractor):
-    __slots__ = ()
+    __slots__ = ('__previewDevice',)
+
+    def __init__(self, item):
+        super(OptDeviceInteractor, self).__init__(item)
+        self.__previewDevice = None
+        return
 
     def getVehicleAfterInstall(self):
         vehicle = super(OptDeviceInteractor, self).getVehicleAfterInstall()
         vehicle.optDevices.setInstalled(*self.getItem().optDevices.layout)
-        vehicle.optDevices.dynSlotTypes = self.getItem().optDevices.dynSlotTypes
         return vehicle
 
-    def setItemInCurrentLayout(self, slotID, item):
-        self.getCurrentLayout()[slotID] = item
+    def getVehiclePreview(self):
+        vehicle = super(OptDeviceInteractor, self).getVehicleAfterInstall()
+        if self.__previewDevice:
+            slotID, item = self.__previewDevice
+            layout = vehicle.optDevices.layout
+            if item in layout:
+                installedSlotID = list(layout).index(item)
+                if installedSlotID != slotID:
+                    otherItem = layout[slotID]
+                    self.setItemInCurrentLayout(installedSlotID, otherItem, vehicle)
+            self.setItemInCurrentLayout(slotID, item, vehicle)
+        vehicle.optDevices.setInstalled(*vehicle.optDevices.layout)
+        return vehicle
+
+    def setItemInCurrentLayout(self, slotID, item, vehicle=None):
+        vehicle = vehicle or self.getItem()
+        vehicle.optDevices.layout[slotID] = item
         if item is not None:
-            self.getItem().descriptor.installOptionalDevice(item.intCD, slotID)
-        elif self.getItem().descriptor.optionalDevices[slotID] is not None:
-            self.getItem().descriptor.removeOptionalDevice(slotID)
+            vehicle.descriptor.installOptionalDevice(item.intCD, slotID)
+        elif vehicle.descriptor.optionalDevices[slotID] is not None:
+            vehicle.descriptor.removeOptionalDevice(slotID)
         return
 
     @adisp.process
@@ -58,6 +75,12 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
             callback(result)
         else:
             callback(None)
+        return
+
+    def setPreviewSlotItem(self, slotID, itemIntCD):
+        item = self._itemsCache.items.getItemByCD(int(itemIntCD)) if itemIntCD is not None else None
+        self.__previewDevice = (slotID, item) if item else None
+        self.itemPreviewUpdated()
         return
 
     @async
@@ -107,7 +130,7 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
         return
 
     def revert(self):
-        for slotID in range(self.getInstalledLayout().getCapacity()):
+        for slotID in xrange(self.getInstalledLayout().getCapacity()):
             self.setItemInCurrentLayout(slotID, None)
 
         for slotID, optDevice in enumerate(self.getInstalledLayout()):
@@ -144,12 +167,9 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
         return
 
     def updateFrom(self, vehicle, onlyInstalled=True):
-        super(OptDeviceInteractor, self).updateFrom(vehicle, onlyInstalled)
-        items = self.getItem().optDevices
-        items.setInstalled(*vehicle.optDevices.installed)
-        items.setupLayouts.setSetups(vehicle.optDevices.setupLayouts.setups)
+        self.getItem().optDevices.setInstalled(*vehicle.optDevices.installed)
         if not onlyInstalled:
-            for slotID in range(vehicle.optDevices.layout.getCapacity()):
+            for slotID in xrange(vehicle.optDevices.layout.getCapacity()):
                 self.setItemInCurrentLayout(slotID, None)
 
             for slotID, optDevice in enumerate(vehicle.optDevices.layout):
@@ -159,7 +179,6 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
 
     @async
     def showExitConfirmDialog(self):
-        changedList = self.getChangedList()
-        result = yield await(showTankSetupExitConfirmDialog(items=changedList, vehInvID=self.getItem().invID, fromSection=self.getName(), startState=BuyAndExchangeStateEnum.BUY_NOT_REQUIRED if not changedList else None))
+        result = yield await(showTankSetupExitConfirmDialog(items=self.getChangedList(), vehInvID=self.getItem().invID, fromSection=self.getName(), startState=BuyAndExchangeStateEnum.BUY_NOT_REQUIRED if not self.getChangedList() else None))
         raise AsyncReturn(result)
         return

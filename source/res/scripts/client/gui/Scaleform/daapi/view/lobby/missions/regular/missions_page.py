@@ -44,6 +44,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.game_control import IMarathonEventsController, IGameSessionController, IBattleRoyaleController, IRankedBattlesController, IBattlePassController, IUISpamController, IMapboxController
+from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -168,6 +169,9 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.addListener(MissionsEvent.ON_FILTER_CLOSED, self.__onFilterClosed, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(MissionsEvent.PAGE_INVALIDATE, self.__pageInvalidate, EVENT_BUS_SCOPE.LOBBY)
         self.eventsCache.onEventsVisited += self.__onEventsVisited
+        enterEvent, _ = self.__VOICED_TABS.get(self.__currentTabAlias, (None, None))
+        if enterEvent is not None:
+            self.soundManager.playSound(enterEvent)
         g_currentVehicle.onChanged += self.__updateHeader
         self.battlePassCtrl.onSeasonStateChange += self.__updateHeader
         self.marathonsCtrl.onVehicleReceived += self.__onMarathonVehicleReceived
@@ -192,6 +196,11 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         for builder in self.__builders.itervalues():
             builder.clear()
 
+        _, exitEvent = self.__VOICED_TABS.get(self.__currentTabAlias, (None, None))
+        if exitEvent is not None:
+            appLoader = dependency.instance(IAppLoader)
+            if appLoader.getSpaceID() != GuiGlobalSpaceID.LOGIN:
+                self.soundManager.playSound(exitEvent)
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
         self.marathonsCtrl.onVehicleReceived -= self.__onMarathonVehicleReceived
         g_currentVehicle.onChanged -= self.__updateHeader
@@ -205,6 +214,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         caches.getNavInfo().setMissionsTab(self.__currentTabAlias)
         caches.getNavInfo().setMarathonPrefix(self.__marathonPrefix)
         self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_DEACTIVATE), EVENT_BUS_SCOPE.LOBBY)
+        return
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias in QUESTS_ALIASES.MISSIONS_VIEW_PY_ALIASES:

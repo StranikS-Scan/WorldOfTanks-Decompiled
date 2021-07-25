@@ -45,6 +45,16 @@
           <valueByLevel>	2.0 2.5	</valueByLevel>
         </factor>
         <factor>
+          <attribute>	miscAttrs/turretRotatorHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/radioHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.5	</valueByLevel>
+        </factor>
+        <factor>
           <attribute>	miscAttrs/fireStartingChanceFactor	</attribute>
           <type>	mul	</type>
           <valueByLevel>	0.5 0.35	</valueByLevel>
@@ -116,6 +126,16 @@
         </factor>
         <factor>
           <attribute>	miscAttrs/engineHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/turretRotatorHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/radioHealthFactor	</attribute>
           <type>	mul	</type>
           <valueByLevel>	2.0 2.5	</valueByLevel>
         </factor>
@@ -195,7 +215,12 @@
     </script>
     <kpi>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleExplosionDamageResistance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.4	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	0.5	</value>
         <specValue>	0.4	</specValue>
       </mul>
@@ -262,7 +287,12 @@
     </script>
     <kpi>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleExplosionDamageResistance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.4	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	0.5	</value>
         <specValue>	0.4	</specValue>
       </mul>
@@ -329,7 +359,12 @@
     </script>
     <kpi>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleExplosionDamageResistance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.4	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	0.5	</value>
         <specValue>	0.4	</specValue>
       </mul>
@@ -396,7 +431,12 @@
     </script>
     <kpi>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleExplosionDamageResistance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.4	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	0.5	</value>
         <specValue>	0.4	</specValue>
       </mul>
@@ -763,17 +803,17 @@
     <script>	StaticOptionalDevice	  <weight>	100	</weight>
       <factors>
         <factor>
-          <attribute>	miscAttrs/crewLevelIncrease	</attribute>
+          <attribute>	miscAttrs/crewMasteryFactor	</attribute>
           <type>	add	</type>
-          <valueByLevel>	5.0 6.0	</valueByLevel>
+          <valueByLevel>	0.05 0.06	</valueByLevel>
         </factor>
       </factors>
     </script>
     <kpi>
       <mul>
-        <name>	crewLevel	</name>
+        <name>	crewMastery	</name>
         <value>	1.05	</value>
-        <specValue>	1.060	</specValue>
+        <specValue>	1.06	</specValue>
       </mul>
     </kpi>
   </improvedVentilation_tier3>
@@ -799,15 +839,15 @@
     <script>	StaticOptionalDevice	  <weight>	150	</weight>
       <factors>
         <factor>
-          <attribute>	miscAttrs/crewLevelIncrease	</attribute>
+          <attribute>	miscAttrs/crewMasteryFactor	</attribute>
           <type>	add	</type>
-          <valueByLevel>	5.0 6.0	</valueByLevel>
+          <valueByLevel>	0.05 0.06	</valueByLevel>
         </factor>
       </factors>
     </script>
     <kpi>
       <mul>
-        <name>	crewLevel	</name>
+        <name>	crewMastery	</name>
         <value>	1.05	</value>
         <specValue>	1.06	</specValue>
       </mul>
@@ -835,15 +875,15 @@
     <script>	StaticOptionalDevice	  <weight>	200	</weight>
       <factors>
         <factor>
-          <attribute>	miscAttrs/crewLevelIncrease	</attribute>
+          <attribute>	miscAttrs/crewMasteryFactor	</attribute>
           <type>	add	</type>
-          <valueByLevel>	5.0 6.0	</valueByLevel>
+          <valueByLevel>	0.05 0.06	</valueByLevel>
         </factor>
       </factors>
     </script>
     <kpi>
       <mul>
-        <name>	crewLevel	</name>
+        <name>	crewMastery	</name>
         <value>	1.05	</value>
         <specValue>	1.06	</specValue>
       </mul>
@@ -1194,7 +1234,12 @@
     </script>
     <kpi>
       <mul>
-        <name>	vehicleGunShotDispersion	</name>
+        <name>	turretAimingDispersion	</name>
+        <value>	0.8	</value>
+        <specValue>	0.77	</specValue>
+      </mul>
+      <mul>
+        <name>	movingAimingDispersion	</name>
         <value>	0.8	</value>
         <specValue>	0.77	</specValue>
       </mul>
@@ -1230,7 +1275,12 @@
     </script>
     <kpi>
       <mul>
-        <name>	vehicleGunShotDispersion	</name>
+        <name>	turretAimingDispersion	</name>
+        <value>	0.8	</value>
+        <specValue>	0.77	</specValue>
+      </mul>
+      <mul>
+        <name>	movingAimingDispersion	</name>
         <value>	0.8	</value>
         <specValue>	0.77	</specValue>
       </mul>
@@ -1692,7 +1742,12 @@
         <specValue>	1.125	</specValue>
       </mul>
       <mul>
-        <name>	vehicleGunShotDispersion	</name>
+        <name>	turretAimingDispersion	</name>
+        <value>	0.9	</value>
+        <specValue>	0.875	</specValue>
+      </mul>
+      <mul>
+        <name>	movingAimingDispersion	</name>
         <value>	0.9	</value>
         <specValue>	0.875	</specValue>
       </mul>
@@ -1749,7 +1804,12 @@
         <specValue>	1.125	</specValue>
       </mul>
       <mul>
-        <name>	vehicleGunShotDispersion	</name>
+        <name>	turretAimingDispersion	</name>
+        <value>	0.9	</value>
+        <specValue>	0.875	</specValue>
+      </mul>
+      <mul>
+        <name>	movingAimingDispersion	</name>
         <value>	0.9	</value>
         <specValue>	0.875	</specValue>
       </mul>

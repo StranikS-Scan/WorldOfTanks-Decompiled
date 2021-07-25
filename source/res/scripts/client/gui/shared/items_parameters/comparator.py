@@ -2,8 +2,11 @@
 # Embedded file name: scripts/client/gui/shared/items_parameters/comparator.py
 import collections
 import sys
+import typing
 from constants import BonusTypes
+from items.vehicles import getBonusID
 from gui.shared.items_parameters import params_cache
+from gui.shared.gui_items import KPI
 from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR
 BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  'shotDispersionAngle',
@@ -22,24 +25,30 @@ BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  WHEELED_SWITCH_OFF_TIME,
  DUAL_GUN_CHARGE_TIME,
  'vehicleOwnSpottingTime',
- 'vehicleGunShotDispersion',
  'crewStunDuration',
- 'vehicleReloadTimeAfterShellChange',
  'crewRepeatedStunDuration',
  'vehicleChassisFallDamage',
  'vehPenaltyForDamageEngineAndCombat',
  'demaskFoliageFactor',
  'demaskMovingFactor',
- 'vehicleRamOrExplosionDamageResistance',
+ 'vehicleRamDamageResistance',
+ 'vehicleExplosionDamageResistance',
  'vehicleFireChance',
- 'vehicleGunReloadTime',
- 'vehicleGunShotFullDispersion',
- 'vehicleGunShotDispersionAfterShot',
- 'vehicleGunShotDispersionChassisMovement',
- 'vehicleGunShotDispersionChassisRotation',
- 'vehicleGunShotDispersionTurretRotation',
- 'vehicleGunShotDispersionWhileGunDamaged',
- 'vehicleRamDamageResistance'])
+ 'equipmentPreparationTime',
+ 'upDamageDispersion',
+ 'upPenetrationDispersion',
+ 'turretAimingDispersion',
+ 'movingAimingDispersion',
+ 'deathPenaltyFactor',
+ 'moduleCritMod',
+ 'firstAidKitPreparationTime',
+ 'repairKitPreparationTime',
+ 'trackRamDamageResist',
+ 'aimingDispersionWhileGunDamaged',
+ 'stunResistanceEffect',
+ 'firstAidKitPreparationTime',
+ 'repairKitPreparationTime',
+ 'damageMonitoringDelay'])
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
 _CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
  'clipFireRate': (True, True, False),
@@ -81,8 +90,8 @@ class ItemsComparator(object):
 
         return result
 
-    def getExtendedData(self, paramName):
-        return getParamExtendedData(paramName, self._currentParams.get(paramName), self._otherParams.get(paramName), self._getPenaltiesAndBonuses(paramName))
+    def getExtendedData(self, paramName, compareWithEmpty=False):
+        return getParamExtendedData(paramName, self._currentParams.get(paramName), self._otherParams.get(paramName) if not compareWithEmpty else 0, self._getPenaltiesAndBonuses(paramName))
 
     def _getPenaltiesAndBonuses(self, _):
         return ([],
@@ -93,14 +102,42 @@ class ItemsComparator(object):
 
 class VehiclesComparator(ItemsComparator):
 
-    def __init__(self, currentVehicleParams, otherVehicleParams, suitableArtefacts=None, bonuses=None, penalties=None):
+    def __init__(self, currentVehicleParams, otherVehicleParams, suitableArtefacts=None, bonuses=None, penalties=None, extraBonuses=None, otherBonuses=None, otherExtraBonuses=None):
         super(VehiclesComparator, self).__init__(currentVehicleParams, otherVehicleParams)
         self.__suitableArtefacts = suitableArtefacts or set()
         self.__bonuses = bonuses or set()
+        self.__extraBonuses = extraBonuses or ({}, {}, {})
+        self.__otherBonuses = otherBonuses or set()
+        self.__otherExtraBonuses = otherExtraBonuses or ({}, {}, {})
         self.__penalties = penalties or dict()
+        self.__normalizedBonuses = {(bonusID if bonusType != BonusTypes.DETACHMENT else getBonusID(bonusType, bonusID), bonusType) for bonusID, bonusType in self.__bonuses}
+
+    def getExtendedData(self, paramName, compareWithEmpty=False):
+        return getParamExtendedData(paramName, self._currentParams.get(paramName), self._otherParams.get(paramName) if not compareWithEmpty else 0, self._getPenaltiesAndBonuses(paramName))
+
+    def getBonuses(self):
+        return self.__bonuses
+
+    def getExtraBonuses(self):
+        return self.__extraBonuses
+
+    def getOtherBonuses(self):
+        return self.__otherBonuses
+
+    def getOtherExtraBonuses(self):
+        return self.__otherExtraBonuses
+
+    def getBonusesWithBoosters(self):
+        return self.__mergeBonuses(self.__bonuses, self.__extraBonuses)
+
+    def getOtherBonusesWithBoosters(self):
+        return self.__mergeBonuses(self.__otherBonuses, self.__otherExtraBonuses)
 
     def hasBonusOfType(self, bnsType):
         return any((i == bnsType for _, i in self.__bonuses))
+
+    def getKpiPassiveParam(self, paramName):
+        return self._currentParams.getKpiPassiveParam(paramName)
 
     def _getPenaltiesAndBonuses(self, paramName):
         penalties = self.__penalties.get(paramName, [])
@@ -122,20 +159,44 @@ class VehiclesComparator(ItemsComparator):
         return allPossibleParamBonuses
 
     def __getCurrentParamBonuses(self, paramName, possibleBonuses):
-        return self.__getConditionalBonuses(paramName, possibleBonuses) if paramName in CONDITIONAL_BONUSES else (possibleBonuses.intersection(self.__bonuses), {})
+        bonuses = possibleBonuses.intersection(self.__normalizedBonuses)
+        inactive = {}
+        if paramName in CONDITIONAL_BONUSES:
+            bonuses, inactive = self.__getConditionalBonuses(paramName, bonuses)
+        for possibleBonus in possibleBonuses:
+            if possibleBonus in PROGRESSION_CONDITIONAL_BONUSES and possibleBonus not in bonuses:
+                inactive[possibleBonus] = [possibleBonus]
 
-    def __getConditionalBonuses(self, paramName, possibleBonuses):
+        return (bonuses, inactive)
+
+    @staticmethod
+    def __getConditionalBonuses(paramName, bonuses):
         currentBonuses, affectedBonuses = set(), {}
-        condition, affected = CONDITIONAL_BONUSES[paramName]
-        bonuses = possibleBonuses.intersection(self.__bonuses)
+        conditions, affected = CONDITIONAL_BONUSES[paramName]
         for bonus in bonuses:
             isAffected = bonus in affected
-            if not isAffected or isAffected and condition in bonuses:
+            if not isAffected or isAffected and any((condition in bonuses for condition in conditions)):
                 currentBonuses.add(bonus)
             if isAffected:
-                affectedBonuses[bonus] = condition
+                affectedBonuses[bonus] = conditions
 
         return (currentBonuses, affectedBonuses)
+
+    def __mergeBonuses(self, bonuses, extraBonuses):
+        result = set()
+        mergedBonuses = {}
+        for bonus, bonusType in bonuses:
+            if bonusType == BonusTypes.DETACHMENT:
+                perkID, perkLevel = bonus.split('_')
+                mergedBonuses[int(perkID)] = int(perkLevel)
+            result.add((bonus, bonusType))
+
+        crewBoosterBonuses = extraBonuses[1]
+        for perkID, perkLevel in crewBoosterBonuses.iteritems():
+            mergedBonuses[perkID] = mergedBonuses.get(perkID, 0) + perkLevel
+
+        result.update(set((('{}_{}'.format(perkID, perkLevel), BonusTypes.DETACHMENT) for perkID, perkLevel in mergedBonuses.iteritems())))
+        return result
 
 
 class _ParameterInfo(collections.namedtuple('_ParameterInfo', ('name', 'value', 'state', 'possibleBonuses', 'inactiveBonuses', 'bonuses', 'penalties'))):
@@ -152,25 +213,14 @@ class _ParameterInfo(collections.namedtuple('_ParameterInfo', ('name', 'value', 
         return
 
 
-CONDITIONAL_BONUSES = {('invisibilityMovingFactor',
+_CONDITIONAL_BONUSES = {('invisibilityMovingFactor',
  'invisibilityStillFactor',
  TURBOSHAFT_INVISIBILITY_MOVING_FACTOR,
- TURBOSHAFT_INVISIBILITY_STILL_FACTOR): (('camouflage', BonusTypes.SKILL), [('brotherhood', BonusTypes.SKILL),
-                                                                                                                                            ('chocolate', BonusTypes.EQUIPMENT),
-                                                                                                                                            ('cocacola', BonusTypes.EQUIPMENT),
-                                                                                                                                            ('ration', BonusTypes.EQUIPMENT),
-                                                                                                                                            ('hotCoffee', BonusTypes.EQUIPMENT),
-                                                                                                                                            ('ration_china', BonusTypes.EQUIPMENT),
-                                                                                                                                            ('ration_uk', BonusTypes.EQUIPMENT),
-                                                                                                                                            ('ration_japan', BonusTypes.EQUIPMENT),
-                                                                                                                                            ('ration_czech', BonusTypes.EQUIPMENT),
-                                                                                                                                            ('ration_poland', BonusTypes.EQUIPMENT),
-                                                                                                                                            ('ration_italy', BonusTypes.EQUIPMENT),
-                                                                                                                                            ('improvedVentilation_tier1', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                                            ('improvedVentilation_tier2', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                                            ('improvedVentilation_tier3', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                                            ('deluxImprovedVentilation', BonusTypes.OPTIONAL_DEVICE)])}
-CONDITIONAL_BONUSES = {k:v for keys, v in CONDITIONAL_BONUSES.items() for k in keys}
+ TURBOSHAFT_INVISIBILITY_STILL_FACTOR): ([('302', BonusTypes.DETACHMENT), ('camouflagePerkBattleBooster', BonusTypes.BATTLE_BOOSTER)], [('tankControlLevel', BonusTypes.SKILL)]),
+ (KPI.Name.VEHICLE_REPAIR_SPEED,): ([('301', BonusTypes.DETACHMENT)], [('tankControlLevel', BonusTypes.SKILL)]),
+ (KPI.Name.DETACHMENT_PERK_FIRE_EXTINGUISHING_RATE,): ([('305', BonusTypes.DETACHMENT)], [('tankControlLevel', BonusTypes.SKILL)])}
+CONDITIONAL_BONUSES = {k:v for keys, v in _CONDITIONAL_BONUSES.items() for k in keys}
+PROGRESSION_CONDITIONAL_BONUSES = [('1', BonusTypes.DETACHMENT)]
 
 def _getComparableValue(currentValue, comparableList, idx):
     return comparableList[idx] if len(comparableList) > idx else currentValue
@@ -192,8 +242,6 @@ def _getParamStateInfo(paramName, val1, val2, customReverted=False):
                 val2 = round(val2, 2)
             diff = val1 - val2
     if paramName in NEGATIVE_PARAMS and hasNoParam:
-        if val1 is None and val2 is None:
-            return (PARAM_STATE.NORMAL, diff)
         if val1 is None:
             return (PARAM_STATE.BETTER, diff)
         return (PARAM_STATE.WORSE, diff)

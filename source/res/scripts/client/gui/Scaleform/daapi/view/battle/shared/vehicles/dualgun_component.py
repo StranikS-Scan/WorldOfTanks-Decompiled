@@ -131,6 +131,8 @@ class DualGunComponent(DualGunPanelMeta):
         self.__reloadEventReceived = False
         self.__isObserver = False
         self.__currentTotalTimeTimer = 0
+        self.__displayedCooldownTimes = {}
+        self.__prevGunStates = {}
         self.__soundManager = DualGunSounds()
         return
 
@@ -275,10 +277,20 @@ class DualGunComponent(DualGunPanelMeta):
         else:
             return GunStatesUI.READY if state == DUAL_GUN.GUN_STATE.READY else None
 
-    def __updateGunState(self, gunID, state, serverCooldownData):
-        leftTime = int(serverCooldownData[gunID][DualGunConstants.LEFT_TIME] * DualGunConstants.TIME_MULTIPLIER)
-        baseTime = int(serverCooldownData[gunID][DualGunConstants.BASE_TIME] * DualGunConstants.TIME_MULTIPLIER)
-        self.as_setGunStateS(gunID, state, leftTime, baseTime)
+    def __updateGunState(self, states, serverCooldownData, chargeReady):
+        if chargeReady:
+            self.__prevGunStates.clear()
+            self.__displayedCooldownTimes.clear()
+        for gunID in (DUAL_GUN.ACTIVE_GUN.LEFT, DUAL_GUN.ACTIVE_GUN.RIGHT):
+            state = self._convertServerStateToUI(states[gunID])
+            leftTime = int(serverCooldownData[gunID][DualGunConstants.LEFT_TIME] * DualGunConstants.TIME_MULTIPLIER)
+            baseTime = int(serverCooldownData[gunID][DualGunConstants.BASE_TIME] * DualGunConstants.TIME_MULTIPLIER)
+            self.__displayedCooldownTimes.setdefault(gunID, baseTime)
+            self.__prevGunStates.setdefault(gunID, state)
+            if state <= self.__prevGunStates[gunID]:
+                self.__displayedCooldownTimes[gunID] = baseTime
+            self.__prevGunStates[gunID] = state
+            self.as_setGunStateS(gunID, state, leftTime, self.__displayedCooldownTimes[gunID])
 
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
         if eventID == FEEDBACK_EVENT_ID.VEHICLE_ACTIVE_GUN_CHANGED:
@@ -294,13 +306,11 @@ class DualGunComponent(DualGunPanelMeta):
             return
         activeGun, cooldownTimes, states = value
         self.__debuffBaseTime = cooldownTimes[DUAL_GUN.COOLDOWNS.DEBUFF].baseTime
+        chargeReady = all((state == DUAL_GUN.GUN_STATE.READY for state in states))
         if len(states) < 2:
             LOG_WARNING('Got incorrect dualgun states length, aborting')
             return
-        leftGunState = self._convertServerStateToUI(states[DUAL_GUN.ACTIVE_GUN.LEFT])
-        rightGunState = self._convertServerStateToUI(states[DUAL_GUN.ACTIVE_GUN.RIGHT])
-        self.__updateGunState(DUAL_GUN.COOLDOWNS.LEFT, leftGunState, cooldownTimes)
-        self.__updateGunState(DUAL_GUN.COOLDOWNS.RIGHT, rightGunState, cooldownTimes)
+        self.__updateGunState(states, cooldownTimes, chargeReady)
         leftTime = cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH][DualGunConstants.LEFT_TIME]
         baseTime = cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH][DualGunConstants.BASE_TIME]
         activeGunReloadingTimeLeft = max(leftTime, cooldownTimes[activeGun].leftTime)
@@ -311,22 +321,13 @@ class DualGunComponent(DualGunPanelMeta):
                 self.__soundManager.onWeaponChanged(switchLeftTime / MS_IN_SECOND)
             self.__reloadEventReceived = False
         self.as_updateActiveGunS(activeGun, switchLeftTime, switchBaseTime)
-        self.__updateDualGunState(states, cooldownTimes)
+        self.__updateDualGunState(cooldownTimes, chargeReady)
         self.__updateChargeTimerState()
         if not self.__debuffInProgress:
-            timeUntilDoubleShot = self.__getTimeUntilNextDoubleShot(cooldownTimes)
-            self.__currentTotalTimeTimer = timeUntilDoubleShot * DualGunConstants.TIME_MULTIPLIER
+            self.__currentTotalTimeTimer = sum(self.__displayedCooldownTimes.itervalues())
             self.__updateTimeUntilNextDoubleShot(increaseByDebuff=False)
 
-    @staticmethod
-    def __getTimeUntilNextDoubleShot(cooldownTimes):
-        totalTime = 0
-        for gunID in (DUAL_GUN.ACTIVE_GUN.LEFT, DUAL_GUN.ACTIVE_GUN.RIGHT):
-            totalTime += cooldownTimes[gunID].baseTime
-
-        return totalTime
-
-    def __updateDualGunState(self, states, cooldownTimes):
+    def __updateDualGunState(self, cooldownTimes, chargeReady):
         debuff = cooldownTimes[DUAL_GUN.COOLDOWNS.DEBUFF]
         if debuff.leftTime > 0:
             self.__debuffInProgress = True
@@ -337,7 +338,7 @@ class DualGunComponent(DualGunPanelMeta):
             self.__updateTimeUntilNextDoubleShot(increaseByDebuff=True)
             return
         self.__debuffInProgress = False
-        if states[DUAL_GUN.ACTIVE_GUN.LEFT] == DUAL_GUN.GUN_STATE.READY and states[DUAL_GUN.ACTIVE_GUN.RIGHT] == DUAL_GUN.GUN_STATE.READY:
+        if chargeReady:
             self.as_readyForChargeS()
         elif BigWorld.player().isObserver() and self.__inBattle and self.__chargeState == DUALGUN_CHARGER_STATUS.APPLIED:
             if self.__prevChargeState == DUALGUN_CHARGER_STATUS.PREPARING:
@@ -398,10 +399,8 @@ class DualGunComponent(DualGunPanelMeta):
 
     def __updateChargeTimerState(self, *args):
         shellsQuantity = self.__sessionProvider.shared.ammo.getShellsQuantityLeft()
-        if shellsQuantity > 1 or shellsQuantity < 0 or not self.__isPlayerVehicle():
-            self.as_setTimerVisibleS(True)
-        else:
-            self.as_setTimerVisibleS(False)
+        visibility = shellsQuantity > 1 or shellsQuantity < 0 or not self.__isPlayerVehicle()
+        self.as_setTimerVisibleS(visibility)
 
     def __onReplayTimeWarpStart(self):
         self.as_resetS()

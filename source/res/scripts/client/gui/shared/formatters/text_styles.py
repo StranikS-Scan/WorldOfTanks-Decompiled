@@ -6,6 +6,7 @@ from gui.shared.money import Currency
 from helpers import i18n
 from soft_exception import SoftException
 __all__ = ('standard',
+ 'standardSmall',
  'main',
  'mainBig',
  'neutral',
@@ -13,6 +14,7 @@ __all__ = ('standard',
  'statInfo',
  'statusAttention',
  'statusAlert',
+ 'statusAlertSmall',
  'statusAttention',
  'middleTitle',
  'highTitle',
@@ -31,6 +33,7 @@ __all__ = ('standard',
  'expText',
  'statsDecrease',
  'expTextBig',
+ 'whiteTextBig',
  Currency.GOLD,
  Currency.CREDITS,
  Currency.CRYSTAL,
@@ -56,7 +59,18 @@ __all__ = ('standard',
  'grandTitle',
  'grandTitleYellow',
  'grandTitleTK',
- 'textEpic')
+ 'textEpic',
+ 'yellowTitle',
+ 'brownSmall',
+ 'whiteOrange',
+ 'whiteOrangeTitle',
+ 'whiteOrangeTitleBig',
+ 'blueBooster',
+ 'blueBoosterTitle',
+ 'blueBoosterTitleBig',
+ 'grayTitle',
+ 'mainTitle',
+ 'mainFieldSmall')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -74,6 +88,10 @@ def standard(text):
     return _formatText('standardText', text)
 
 
+def standardSmall(text):
+    return _formatText('standardTextSmall', text)
+
+
 def locked(text):
     return _formatText('lockedText', text)
 
@@ -82,8 +100,16 @@ def main(text):
     return _formatText('mainText', text)
 
 
+def mainGreen(text):
+    return _formatText('mainGreenText', text)
+
+
 def mainSmall(text):
     return _formatText('mainTextSmall', text)
+
+
+def mainFieldSmall(text):
+    return _formatText('mainFieldSmall', text)
 
 
 def mainBig(text):
@@ -116,6 +142,10 @@ def statInfo(text):
 
 def statusAlert(text):
     return _formatText('statusAlert', text)
+
+
+def statusAlertSmall(text):
+    return _formatText('statusAlertText', text)
 
 
 def statusAttention(text):
@@ -164,6 +194,10 @@ def creditsTextNormalCard(text):
 
 def expTextBig(text):
     return _formatText('expTextBig', text)
+
+
+def whiteTextBig(text):
+    return _formatText('whiteTextBig', text)
 
 
 def errCurrencyTextBig(text):
@@ -220,6 +254,22 @@ def statsIncrease(text):
 
 def error(text):
     return _formatText('errorText', text)
+
+
+def errorBold(text):
+    return _formatText('errorTextBold', text)
+
+
+def errorBig(text):
+    return _formatText('errorTextBig', text)
+
+
+def errorMedium(text):
+    return _formatText('errorTextMedium', text)
+
+
+def isLeader(text):
+    return _formatText('isLeader', text)
 
 
 def statsDecrease(text):
@@ -336,6 +386,14 @@ def vehicleStatusCriticalTextSmall(text):
     return _formatText('vehicleStatusCriticalTextSmall', text)
 
 
+def vehicleStatusCritical(text):
+    return _formatText('vehicleStatusCritical', text)
+
+
+def vehicleStatusWarning(text):
+    return _formatText('vehicleStatusWarning', text)
+
+
 def vehicleName(text):
     return _formatText('vehicleName', text)
 
@@ -404,6 +462,10 @@ def grandTitleTK(text):
     return _formatText('grandTitleTK', text)
 
 
+def perkYellow(text):
+    return _formatText('perkYellowText', text)
+
+
 def failedStatusText(text):
     return _formatText('failedStatusText', text)
 
@@ -414,6 +476,46 @@ def getRawStyles(names):
 
 def getStyles(names):
     return dict(((name, _formatText(name)) for name in names))
+
+
+def yellowTitle(text):
+    return _formatText('yellowTitle', text)
+
+
+def brownSmall(text):
+    return _formatText('brownSmall', text)
+
+
+def whiteOrange(text):
+    return _formatText('whiteOrange', text)
+
+
+def whiteOrangeTitle(text):
+    return _formatText('whiteOrangeTitle', text)
+
+
+def whiteOrangeTitleBig(text):
+    return _formatText('whiteOrangeTitleBig', text)
+
+
+def blueBooster(text):
+    return _formatText('blueBooster', text)
+
+
+def blueBoosterTitle(text):
+    return _formatText('blueBoosterTitle', text)
+
+
+def blueBoosterTitleBig(text):
+    return _formatText('blueBoosterTitleBig', text)
+
+
+def grayTitle(text):
+    return _formatText('grayTitle', text)
+
+
+def mainTitle(text):
+    return _formatText('mainTitle', text)
 
 
 def _processStyle(style):

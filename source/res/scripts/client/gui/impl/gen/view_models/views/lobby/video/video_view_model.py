@@ -21,10 +21,10 @@ class VideoViewModel(ViewModel):
     def setSubtitleTrack(self, value):
         self._setNumber(1, value)
 
-    def getIsWindowAccessible(self):
+    def getIsPaused(self):
         return self._getBool(2)
 
-    def setIsWindowAccessible(self, value):
+    def setIsPaused(self, value):
         self._setBool(2, value)
 
     def getIsUIVisible(self):
@@ -43,7 +43,7 @@ class VideoViewModel(ViewModel):
         super(VideoViewModel, self)._initialize()
         self._addResourceProperty('videoSource', R.invalid())
         self._addNumberProperty('subtitleTrack', 0)
-        self._addBoolProperty('isWindowAccessible', True)
+        self._addBoolProperty('isPaused', False)
         self._addBoolProperty('isUIVisible', False)
         self._addBoolProperty('isVignetteVisible', True)
         self.onCloseBtnClick = self._addCommand('onCloseBtnClick')

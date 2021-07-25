@@ -3,7 +3,7 @@
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.tooltips import advanced
 from gui.shared.tooltips import contexts
-from gui.shared.tooltips.builders import DataBuilder, AdvancedDataBuilder, DefaultFormatBuilder
+from gui.shared.tooltips.builders import DataBuilder, AdvancedDataBuilder, DefaultFormatBuilder, TooltipWindowBuilder
 from gui.shared.tooltips.ranked.ranked_prime_time import RankedServerPrimeTime
 from gui.shared.tooltips.ranked.rank_tooltip import RankedTooltipData
 from gui.shared.tooltips.ranked.ranked_calendar_day_tooltip import RankedCalendarDayTooltip
@@ -17,6 +17,7 @@ from gui.shared.tooltips.ranked.league_tooltip import LeagueTooltipData
 from gui.shared.tooltips.ranked.league_tooltip import EfficiencyTooltipData
 from gui.shared.tooltips.ranked.league_tooltip import PositionTooltipData
 from gui.shared.tooltips.ranked.ranked_year_reward_tooltip import RankedYearReward
+from gui.shared.tooltips.ranked.ranked_roles_tooltip import RankedRolesTooltipContentWindowData
 from gui.shared.tooltips.ranked.ranked_quests_preview_tooltip import RankedQuestsPreviewTooltip
 __all__ = ('getTooltipBuilders',)
 
@@ -35,4 +36,5 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.RANKED_DIVISION_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedDivisionTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.RANKED_BATTLES_YEAR_REWARD, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedYearReward(contexts.ToolTipContext(None))),
      DefaultFormatBuilder(TOOLTIPS_CONSTANTS.RANKED_SERVER_PRIMETIME, TOOLTIPS_CONSTANTS.COMPLEX_UI, RankedServerPrimeTime(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.RANKED_BATTLES_ROLES, None, RankedRolesTooltipContentWindowData(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.RANKED_QUESTS_PREVIEW, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedQuestsPreviewTooltip(contexts.QuestsBoosterContext())))

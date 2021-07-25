@@ -36,9 +36,9 @@ def getContextMenuHandlers():
 def getViewSettings():
     from gui.Scaleform.framework import ScopeTemplates
     from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_view import AmmunitionSetupView
-    from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_view_veh_params import AmmunitionSetupViewVehicleParams
+    from gui.Scaleform.daapi.view.lobby.detachment.detachment_view_veh_params import DetachmentViewVehicleParams
     from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_view_adaptor import AmmunitionSetupViewAdaptor
-    return (ViewSettings(VIEW_ALIAS.AMMUNITION_SETUP_VIEW, AmmunitionSetupView, 'ammunitionSetupView.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.AMMUNITION_SETUP_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True, isModal=True), ComponentSettings(HANGAR_ALIASES.AMMUNITION_SETUP_VIEW_INJECT, AmmunitionSetupViewAdaptor, ScopeTemplates.DEFAULT_SCOPE), ComponentSettings(HANGAR_ALIASES.AMMUNITION_SETUP_VIEW_VEHICLE_PARAMS, AmmunitionSetupViewVehicleParams, ScopeTemplates.DEFAULT_SCOPE))
+    return (ViewSettings(VIEW_ALIAS.AMMUNITION_SETUP_VIEW, AmmunitionSetupView, 'ammunitionSetupView.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.AMMUNITION_SETUP_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True, isModal=True), ComponentSettings(HANGAR_ALIASES.AMMUNITION_SETUP_VIEW_INJECT, AmmunitionSetupViewAdaptor, ScopeTemplates.DEFAULT_SCOPE), ComponentSettings(HANGAR_ALIASES.AMMUNITION_SETUP_VIEW_VEHICLE_PARAMS, DetachmentViewVehicleParams, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

@@ -1,27 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/InventoryRequester.py
-import typing
 from itertools import imap
 from collections import namedtuple, defaultdict
 from copy import deepcopy
 import BigWorld
+from nation_change.nation_change_helpers import activeInNationGroup
 from adisp import async
 from constants import CustomizationInvData, SkinInvData, VEHICLE_NO_INV_ID
-from debug_utils import LOG_DEBUG
 from items import vehicles, tankmen, getTypeOfCompactDescr, parseIntCompactDescr, makeIntCompactDescrByID
 from items.components.c11n_constants import UNBOUND_VEH_KEY
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
-from nation_change.nation_change_helpers import activeInNationGroup
-from post_progression_common import VehiclesPostProgression, VehicleState, EXT_DATA_SLOT_KEY, EXT_DATA_PROGRESSION_KEY
 from skeletons.gui.shared.utils.requesters import IInventoryRequester
-_DUMMY_VEH_POST_PROGRESSION = VehiclesPostProgression({VehiclesPostProgression.ROOT_KEY: {}})
 
 class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
-    VEH_DATA = namedtuple('VEH_DATA', ('compDescr', 'descriptor', 'invID', 'crew'))
+    VEH_DATA = namedtuple('VEH_DATA', ('compDescr', 'descriptor', 'invID', 'repair', 'crew', 'lock', 'settings', 'extraSettings', 'shells', 'shellsLayout', 'eqs', 'eqsLayout'))
     ITEM_DATA = namedtuple('ITEM_DATA', ('compDescr', 'descriptor', 'count'))
     TMAN_DATA = namedtuple('TMAN_DATA', ('compDescr', 'descriptor', 'vehicle', 'invID'))
     OUTFIT_DATA = namedtuple('OUTFIT_DATA', ('compDescr', 'flags'))
+    DESCR_DATA = namedtuple('DESCR_DATA', ('compDescr', 'invID', 'linkedInvID'))
     CUSTOMIZATION_PROGRESS_DATA = namedtuple('CUSTOMIZATION_PROGRESS_DATA', ('currentLevel', 'currentProgressOnLevel', 'maxProgressOnLevel'))
 
     def __init__(self):
@@ -34,7 +33,6 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         self.__newC11nItemsByVehicleCache = {}
         self.__c11nProgressionData = {}
         self.__c11nProgressionForVehicle = {}
-        self.__vehPostProgression = _DUMMY_VEH_POST_PROGRESSION
 
     def clear(self):
         self.__itemsCache.clear()
@@ -43,7 +41,6 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         self.__vehsIDsByCD.clear()
         self.__c11nProgressionData.clear()
         self.__c11nProgressionForVehicle.clear()
-        self.__vehPostProgression = _DUMMY_VEH_POST_PROGRESSION
         super(InventoryRequester, self).clear()
 
     def invalidateItem(self, itemTypeID, invIdx):
@@ -228,15 +225,9 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
     def getInstalledEnhancements(self):
         return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('enhancements', {})
 
-    def getVehPostProgression(self, vehIntCD):
-        return self.__vehPostProgression.getVehicleState(vehIntCD)
-
-    def getVehExtData(self, vehIntCD):
-        return {EXT_DATA_SLOT_KEY: self.getDynSlotTypeID(vehIntCD),
-         EXT_DATA_PROGRESSION_KEY: self.getVehPostProgression(vehIntCD)}
-
-    def getDynSlotTypeID(self, vehIntCD):
-        return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('customRoleSlots', {}).get(vehIntCD, 0)
+    def getEquippedCrewSkinID(self, detInvID):
+        allOutfits = self.getCacheValue(GUI_ITEM_TYPE.CREW_SKINS, {}).get(SkinInvData.OUTFITS)
+        return allOutfits.get(detInvID, NO_CREW_SKIN_ID)
 
     @async
     def _requestCache(self, callback=None):
@@ -249,7 +240,6 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
                 self.__vehsCDsByID[invID] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.parseVehicleCompactDescr(vCompDescr))
 
         self.__vehsIDsByCD = dict(((v, k) for k, v in self.__vehsCDsByID.iteritems()))
-        self.__vehPostProgression = VehiclesPostProgression(invData[GUI_ITEM_TYPE.VEHICLE])
         super(InventoryRequester, self)._response(resID, invData, callback)
         return
 
@@ -258,14 +248,16 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         return result.get(compactDescr) if result is not None and compactDescr is not None else result
 
     def __makeItem(self, itemTypeID, invDataIdx):
-        return self.__getMaker(itemTypeID)(invDataIdx)
+        return self.__getMaker(itemTypeID)(invDataIdx, itemTypeID)
 
     def __getMaker(self, itemTypeID):
         if itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             return self.__makeVehicle
-        return self.__makeTankman if itemTypeID == GUI_ITEM_TYPE.TANKMAN else self.__makeSimpleItem
+        if itemTypeID == GUI_ITEM_TYPE.TANKMAN:
+            return self.__makeTankman
+        return self.__makeDescrData if itemTypeID in (GUI_ITEM_TYPE.DETACHMENT, GUI_ITEM_TYPE.INSTRUCTOR) else self.__makeSimpleItem
 
-    def __makeVehicle(self, vehInvID):
+    def __makeVehicle(self, vehInvID, *args, **kwargs):
         if vehInvID not in self.__vehsCDsByID:
             return
         else:
@@ -282,14 +274,14 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             if compactDescr is None:
                 return
             try:
-                item = cache[typeCompDescr] = self.VEH_DATA(value('compDescr'), vehicles.VehicleDescr(compactDescr=compactDescr), vehInvID, value('crew', []))
+                item = cache[typeCompDescr] = self.VEH_DATA(value('compDescr'), vehicles.VehicleDescr(compactDescr=compactDescr), vehInvID, value('repair', 0), value('crew', []), value('lock', 0), value('settings', 0), value('extraSettings', 0), value('shells', []), value('shellsLayout', []), value('eqs', []), value('eqsLayout', []))
             except Exception:
                 LOG_DEBUG('Error while building vehicle from inventory', vehInvID, typeCompDescr)
                 return
 
             return item
 
-    def __makeTankman(self, tmanInvID):
+    def __makeTankman(self, tmanInvID, *args, **kwargs):
         cache = self.__itemsCache[GUI_ITEM_TYPE.TANKMAN]
         if tmanInvID in cache:
             return cache[tmanInvID]
@@ -305,7 +297,30 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             item = cache[tmanInvID] = self.TMAN_DATA(compactDescr, tankmen.TankmanDescr(compactDescr), value('vehicle', VEHICLE_NO_INV_ID), tmanInvID)
             return item
 
-    def __makeSimpleItem(self, typeCompDescr):
+    def __makeDescrData(self, invID, itemTypeID):
+        cache = self.__itemsCache[itemTypeID]
+        if invID in cache:
+            return cache[invID]
+        else:
+            itemsInvData = self.getCacheValue(itemTypeID, {})
+
+            def value(key, default=None):
+                return itemsInvData.get(key, {}).get(invID, default)
+
+            compactDescr = value('compDescr')
+            if compactDescr is None:
+                return
+            linkedInvID = 0
+            if itemTypeID == GUI_ITEM_TYPE.DETACHMENT:
+                vehData = itemsInvData['vehicle']
+                linkedInvID = next(iter((vehInvID for vehInvID, detInvID in vehData.iteritems() if detInvID == invID)), 0)
+            elif itemTypeID == GUI_ITEM_TYPE.INSTRUCTOR:
+                detData = itemsInvData['detachment']
+                linkedInvID = next(iter((detInvID for instInvID, detInvID in detData.iteritems() if instInvID == invID)), 0)
+            item = cache[invID] = self.DESCR_DATA(compactDescr, invID, linkedInvID)
+            return item
+
+    def __makeSimpleItem(self, typeCompDescr, *args, **kwargs):
         itemTypeID = getTypeOfCompactDescr(typeCompDescr)
         cache = self.__itemsCache[itemTypeID]
         if typeCompDescr in cache:

@@ -155,12 +155,13 @@ class UnitClientAPI(object):
     def setDevMode(self, isDevMode=True):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_DEV_MODE, int(isDevMode)) if constants.IS_DEVELOPMENT else None
 
-    def startBattle(self, vehInvID=0, gameplaysMask=None, arenaTypeID=0, isOnly10ModeEnabled=False, stopAutoSearch=False):
+    def startBattle(self, vehInvID=0, gameplaysMask=None, arenaTypeID=0, isOnly10ModeEnabled=None, stopAutoSearch=False):
         if gameplaysMask is not None:
             self.setGameplaysMask(gameplaysMask)
         if arenaTypeID != 0:
             self.setArenaType(arenaTypeID)
-        self.setOnly10Mode(isOnly10ModeEnabled)
+        if isOnly10ModeEnabled is not None:
+            self.setOnly10Mode(isOnly10ModeEnabled)
         return self._doUnitCmd(CLIENT_UNIT_CMD.START_UNIT_BATTLE, vehInvID, int(stopAutoSearch))
 
     def stopBattle(self):

@@ -168,19 +168,12 @@ class BattleResultsService(IBattleResultsService):
         return 0 if arenaInfo is None else arenaInfo.extraXP
 
     def isCrewSameForArena(self, arenaUniqueID):
-        arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
-        vehicle = self.getVehicleForArena(arenaUniqueID)
-        if arenaInfo is not None and vehicle is not None:
-            currentCrew = set((tankman.invID for _, tankman in vehicle.crew if tankman is not None))
-            lastCrew = set((tankmanID for tankmanID, _ in arenaInfo.extraTmenXP))
-            return currentCrew == lastCrew
-        else:
-            return False
+        return True
 
-    def isXPToTManSameForArena(self, arenaUniqueID):
+    def isXPToDetSameForArena(self, arenaUniqueID):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
         vehicle = self.getVehicleForArena(arenaUniqueID)
-        return vehicle.isXPToTman == arenaInfo.isXPToTMan if arenaInfo is not None and vehicle is not None else False
+        return vehicle.isXPToDet == arenaInfo.isXPToDet if arenaInfo is not None and vehicle is not None else False
 
     def getVehicleForArena(self, arenaUniqueID):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)

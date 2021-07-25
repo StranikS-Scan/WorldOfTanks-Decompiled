@@ -6,8 +6,8 @@ from gui.impl.lobby.tank_setup.sub_views.consumable_setup import ConsumableSetup
 
 class BootcampConsumableDeviceProvider(ConsumableDeviceProvider):
 
-    def _fillStatus(self, model, item, slotID):
-        super(BootcampConsumableDeviceProvider, self)._fillStatus(model, item, slotID)
+    def _fillStatus(self, model, item, slotID, isInstalledOrMounted):
+        super(BootcampConsumableDeviceProvider, self)._fillStatus(model, item, slotID, isInstalledOrMounted)
         if not item.isInInventory:
             model.setIsDisabled(True)
 

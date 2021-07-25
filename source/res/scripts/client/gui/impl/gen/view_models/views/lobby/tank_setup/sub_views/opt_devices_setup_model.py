@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.opt_device_slot_m
 class OptDevicesSetupModel(BaseSetupModel):
     __slots__ = ('onIntroPassed',)
 
-    def __init__(self, properties=9, commands=8):
+    def __init__(self, properties=9, commands=10):
         super(OptDevicesSetupModel, self).__init__(properties=properties, commands=commands)
 
     @property

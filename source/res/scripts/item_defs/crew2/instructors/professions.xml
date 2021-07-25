@@ -1,0 +1,36 @@
+<professions.xml>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:noNamespaceSchemaLocation>	../../../development/xml_schema/crew2/instructor/professions.xsd	</xsi:noNamespaceSchemaLocation>
+  <professions>
+    <profession>
+      <id>	1	</id>
+      <uiName>	#TakticheskayaPodgotovka	</uiName>
+      <uiDescription>	#TakticheskayaPodgotovka	</uiDescription>
+      <perksIDs>	101 102 103 104 105	</perksIDs>
+    </profession>
+    <profession>
+      <id>	2	</id>
+      <uiName>	#OgnevayaPodgotovka	</uiName>
+      <uiDescription>	#OgnevayaPodgotovka	</uiDescription>
+      <perksIDs>	201 202 203 204 205	</perksIDs>
+    </profession>
+    <profession>
+      <id>	3	</id>
+      <uiName>	#TechnicheskayaPodgotovka	</uiName>
+      <uiDescription>	#TechnicheskayaPodgotovka	</uiDescription>
+      <perksIDs>	301 302 303 304 305	</perksIDs>
+    </profession>
+    <profession>
+      <id>	4	</id>
+      <uiName>	#VoditelskayaPodgotovka	</uiName>
+      <uiDescription>	#VoditelskayaPodgotovka	</uiDescription>
+      <perksIDs>	401 402 403 404 405	</perksIDs>
+    </profession>
+    <profession>
+      <id>	5	</id>
+      <uiName>	#OperativnayaPodgotovka	</uiName>
+      <uiDescription>	#OperativnayaPodgotovka	</uiDescription>
+      <perksIDs>	501 502 503 504 505	</perksIDs>
+    </profession>
+  </professions>
+</professions.xml>

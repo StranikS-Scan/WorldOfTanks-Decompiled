@@ -22,8 +22,7 @@ if typing.TYPE_CHECKING:
     from gui.ranked_battles.ranked_models import BattleRankInfo
     from gui.server_events.bonuses import SimpleBonus
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
-    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, RankedBattlesConfig, VehiclePostProgressionConfig
-    from items.vehicles import VehicleType
+    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, RankedBattlesConfig
 
 class IGameController(object):
 
@@ -621,7 +620,7 @@ class IVehicleComparisonBasket(IGameController):
     onSwitchChange = None
     onNationChange = None
 
-    def applyNewParameters(self, index, vehicle, crewLvl, crewSkills, selectedShellIndex=0):
+    def applyNewParameters(self, index, vehicle, perks, selectedShellIndex=0):
         raise NotImplementedError
 
     def addVehicle(self, vehicleCompactDesr, initParameters=None):
@@ -648,6 +647,10 @@ class IVehicleComparisonBasket(IGameController):
 
     @property
     def isLocked(self):
+        raise NotImplementedError
+
+    @isLocked.setter
+    def isLocked(self, value):
         raise NotImplementedError
 
     def isAvailable(self):
@@ -1678,6 +1681,9 @@ class ISpecialSoundCtrl(IGameController):
     def setPlayerVehicle(self, vehiclePublicInfo, isPlayerVehicle):
         raise NotImplementedError
 
+    def getSoundModeBySpecialVoice(self, specialVoice):
+        raise NotImplementedError
+
 
 class IBattlePassController(IGameController):
     onPointsUpdated = None
@@ -1940,6 +1946,46 @@ class IBlueprintsConvertSaleController(IGameController):
     pass
 
 
+class IDetachmentController(IGameController):
+    onShowIntroVideoSwitched = None
+    onSlotsAnimationRenew = None
+
+    @property
+    def isIntroVideoOn(self):
+        raise NotImplementedError
+
+    @property
+    def isConnected(self):
+        raise NotImplementedError
+
+    def tryLockPopups(self):
+        raise NotImplementedError
+
+    def isDetachmentIntroCompleted(self):
+        raise NotImplementedError
+
+    def showIntroVideo(self):
+        raise NotImplementedError
+
+    def processIntro(self, showSandboxIntro, showIntro, showPresentation):
+        raise NotImplementedError
+
+    def getShownProgress(self, detInvID):
+        raise NotImplementedError
+
+    def isSlotAnimationActive(self, detInvID, slotType, slotIndex, checkSlotEmpty=True):
+        raise NotImplementedError
+
+    def saveAnimationAsShown(self, detInvID, slotType, slotIndex):
+        raise NotImplementedError
+
+    def renewSlotsAnimation(self, detInvID, slotType, slots):
+        raise NotImplementedError
+
+    def setPromoScreenIsShown(self):
+        raise NotImplementedError
+
+
 class IMapboxController(IGameController, ISeasonProvider):
     onPrimeTimeStatusUpdated = None
     onMapboxSurveyShown = None
@@ -2023,25 +2069,4 @@ class ISteamRegistrationOverlay(IOverlayController):
         raise NotImplementedError
 
     def waitShow(self):
-        raise NotImplementedError
-
-
-class IVehiclePostProgressionController(IGameController):
-
-    def isDisabledFor(self, vehicle, settings=None):
-        raise NotImplementedError
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isExistsFor(self, vehType, settings=None):
-        raise NotImplementedError
-
-    def getSettings(self):
-        raise NotImplementedError
-
-    def getInvalidProgressions(self, diff, existingIDs):
-        raise NotImplementedError
-
-    def processVehExtData(self, vehCD, extData):
         raise NotImplementedError

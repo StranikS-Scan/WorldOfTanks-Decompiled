@@ -63,9 +63,9 @@ def getGameControllersConfig(manager):
     from gui.game_control.reactive_comm import ReactiveCommunicationService
     from gui.ui_spam.ui_spam_controller import UISpamController
     from gui.game_control.blueprints_convert_sale_controller import BlueprintsConvertSaleController
+    from gui.game_control.detachment_controller import DetachmentController as _DetachmentController
     from gui.game_control.mapbox_controller import MapboxController
     from gui.game_control.overlay import SteamRegistrationOverlay as _SteamRegistrationOverlay
-    from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -128,5 +128,5 @@ def getGameControllersConfig(manager):
     _config(_interface.IEventProgressionController, _EventProgression())
     _config(_interface.IUISpamController, UISpamController())
     _config(_interface.IBlueprintsConvertSaleController, BlueprintsConvertSaleController())
-    _config(_interface.IVehiclePostProgressionController, VehiclePostProgressionController())
+    _config(_interface.IDetachmentController, _DetachmentController())
     _config(_interface.ISteamRegistrationOverlay, _SteamRegistrationOverlay())

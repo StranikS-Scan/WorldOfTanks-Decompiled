@@ -14,7 +14,6 @@ INSTALL_ITEM = 'installItemAction'
 BUY_AND_INSTALL_ITEM = 'buyAndInstallItemAction'
 BC_BUY_AND_INSTALL_ITEM = 'bcBuyAndInstallItemAction'
 VEHICLE_AUTO_FILL_LAYOUT = 'vehicleAutoFillLayoutAction'
-BUY_BERTHS = 'buyBerths'
 BUY_VEHICLE_SLOT = 'buyVehClot'
 BUY_BOOSTER = 'buyBooster'
 CONVERT_BLUEPRINT_FRAGMENT = 'convertFragment'
@@ -25,13 +24,17 @@ BUY_AND_INSTALL_OPT_DEVICES = 'buyAndInstallOptDevices'
 BUY_AND_INSTALL_CONSUMABLES = 'buyAndInstallConsumables'
 BUY_AND_INSTALL_SHELLS = 'buyAndInstallShells'
 BUY_AND_INSTALL_BATTLE_BOOSTERS = 'buyAndInstallBattleBoosters'
+BUY_DORMITORY = 'buyDormitory'
 UPGRADE_OPT_DEVICE = 'upgradeOptDevice'
 REMOVE_OPT_DEVICE = 'removeOptDevice'
-CHANGE_SETUP_EQUIPMENTS_INDEX = 'changeSetupEquipmentsIndex'
-SET_EQUIPMENT_SLOT_TYPE = 'setEquipmentSlotType'
-DISCARD_POST_PROGRESSION_PAIRS = 'discardPostProgressionPairs'
-PURCHASE_POST_PROGRESSION_PAIR = 'purchasePostProgressionPair'
-PURCHASE_POST_PROGRESSION_STEPS = 'purchasePostProgressionSteps'
+LEARN_PERKS = 'learnPerks'
+REMOVE_INSTRUCTOR = 'removeInstructor'
+RECOVER_INSTRUCTOR = 'recoverInstructor'
+ADD_INSTRUCTOR = 'addInstructorToSlot'
+DEMOBILIZED_DETACHMENT = 'demobilizeDetachment'
+RESTORE_DETACHMENT = 'restoreDetachment'
+RESET_DETACHMENT_VEHICLE_LINK = 'ResetDetachmentVehicleLink'
+ASSIGN_DETACHMENT = 'assignDetachment'
 _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  SELL_MULTIPLE: actions.SellMultipleItems,
  UNLOCK_ITEM: actions.UnlockItemAction,
@@ -42,7 +45,6 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  BUY_AND_INSTALL_ITEM: actions.BuyAndInstallItemAction,
  BC_BUY_AND_INSTALL_ITEM: actions.BCBuyAndInstallItemAction,
  VEHICLE_AUTO_FILL_LAYOUT: actions.VehicleAutoFillLayoutAction,
- BUY_BERTHS: actions.BuyBerthsAction,
  BUY_VEHICLE_SLOT: actions.BuyVehicleSlotAction,
  BUY_BOOSTER: actions.BuyBoosterAction,
  CONVERT_BLUEPRINT_FRAGMENT: actions.ConvertBlueprintFragmentAction,
@@ -53,13 +55,17 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  BUY_AND_INSTALL_CONSUMABLES: actions.BuyAndInstallConsumables,
  BUY_AND_INSTALL_SHELLS: actions.BuyAndInstallShells,
  BUY_AND_INSTALL_BATTLE_BOOSTERS: actions.BuyAndInstallBattleBoosters,
+ BUY_DORMITORY: actions.BuyDormitoryAction,
  UPGRADE_OPT_DEVICE: actions.UpgradeOptDeviceAction,
  REMOVE_OPT_DEVICE: actions.RemoveOptionalDevice,
- CHANGE_SETUP_EQUIPMENTS_INDEX: actions.ChangeSetupEquipmentsIndex,
- DISCARD_POST_PROGRESSION_PAIRS: actions.DiscardPostProgressionPairs,
- PURCHASE_POST_PROGRESSION_PAIR: actions.PurchasePostProgressionPair,
- PURCHASE_POST_PROGRESSION_STEPS: actions.PurchasePostProgressionSteps,
- SET_EQUIPMENT_SLOT_TYPE: actions.SetEquipmentSlotType}
+ LEARN_PERKS: actions.LearnPerksAction,
+ REMOVE_INSTRUCTOR: actions.RemoveInstructorFromDetachmentAction,
+ RECOVER_INSTRUCTOR: actions.RecoverInstructorAction,
+ ADD_INSTRUCTOR: actions.AddInstructorToSlotAction,
+ DEMOBILIZED_DETACHMENT: actions.DemobilizeDetachment,
+ RESTORE_DETACHMENT: actions.RestoreDetachment,
+ RESET_DETACHMENT_VEHICLE_LINK: actions.ResetDetachmentVehicleLink,
+ ASSIGN_DETACHMENT: actions.AssignDetachment}
 
 @process
 def doAction(actionType, *args, **kwargs):

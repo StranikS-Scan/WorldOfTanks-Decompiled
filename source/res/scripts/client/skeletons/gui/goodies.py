@@ -38,6 +38,9 @@ class IGoodiesCache(object):
     def getDemountKit(self, demountKitID=None, currency=None):
         raise NotImplementedError
 
+    def getGoodie(self, goodieID):
+        raise NotImplementedError
+
     def getGoodieByID(self, goodieID):
         raise NotImplementedError
 
@@ -48,6 +51,12 @@ class IGoodiesCache(object):
         raise NotImplementedError
 
     def getDemountKits(self, criteria=None):
+        raise NotImplementedError
+
+    def getRecertificationForm(self, recertificationFormID=None):
+        raise NotImplementedError
+
+    def getRecertificationForms(self, criteria=None):
         raise NotImplementedError
 
     def getClanReserves(self):

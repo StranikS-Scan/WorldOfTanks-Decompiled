@@ -18,6 +18,12 @@ class VehicleSelectorBase(object):
     def getFilters(self):
         return self.__filters
 
+    def _getBaseCriteria(self):
+        criteria = REQ_CRITERIA.EMPTY | REQ_CRITERIA.VEHICLE.ACTIVE_OR_MAIN_IN_NATION_GROUP
+        criteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_IGR_RENT
+        criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
+        return criteria
+
     def _updateFilter(self, nation=-1, vehicleType='none', isMain=False, level=-1, compatibleOnly=False):
         self.__filters = {'nation': nation,
          'vehicleType': vehicleType,
@@ -25,10 +31,28 @@ class VehicleSelectorBase(object):
          'level': level,
          'compatibleOnly': compatibleOnly}
 
+    def _updateFilterWithDict(self, filterDict):
+        if not self.__filters:
+            self.__filters = filterDict.copy()
+        else:
+            self.__filters.update(filterDict)
+
     def _updateData(self, allVehicles, compatiblePredicate=lambda vo: vo.get('enabled')):
-        criteria = REQ_CRITERIA.EMPTY | REQ_CRITERIA.VEHICLE.ACTIVE_OR_MAIN_IN_NATION_GROUP
-        criteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_IGR_RENT
-        criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
+        filteredVehicles = allVehicles.filter(self._collectCriteria())
+        if self.__filters.get('compatibleOnly', True):
+            predicate = compatiblePredicate
+        else:
+            predicate = lambda vo: True
+        result = []
+        for v in filteredVehicles.itervalues():
+            vo = self._makeVehicleVOAction(v)
+            if predicate(vo):
+                result.append(vo)
+
+        return result
+
+    def _collectCriteria(self):
+        criteria = self._getBaseCriteria()
         if not self.showNotReadyVehicles:
             criteria |= REQ_CRITERIA.VEHICLE.READY
         if self.__filters:
@@ -41,18 +65,7 @@ class VehicleSelectorBase(object):
                 criteria |= REQ_CRITERIA.VEHICLE.FAVORITE
             if levels:
                 criteria |= REQ_CRITERIA.VEHICLE.LEVELS(levels)
-        filteredVehicles = allVehicles.filter(criteria)
-        if self.__filters.get('compatibleOnly', True):
-            predicate = compatiblePredicate
-        else:
-            predicate = lambda vo: True
-        result = []
-        for v in filteredVehicles.itervalues():
-            vo = self._makeVehicleVOAction(v)
-            if predicate(vo):
-                result.append(vo)
-
-        return result
+        return criteria
 
     def _parseFilters(self):
         nations, levels, classes = (None, None, None)

@@ -76,10 +76,14 @@ class WebView(BrowserScreenMeta):
         self.as_setBrowserParamsS(self._browserParams)
 
     def _dispose(self):
+        onDisposeCallback = self.__getFromCtx('onDisposeCallback')
+        if onDisposeCallback is not None:
+            onDisposeCallback()
         super(WebView, self)._dispose()
         self.removeListener(events.HideWindowEvent.HIDE_OVERLAY_BROWSER_VIEW, self.__handleBrowserClose, scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__browserId:
             self.browserCtrl.delBrowser(self.__browserId)
+        return
 
     def _refresh(self):
         self.__browser.refresh()

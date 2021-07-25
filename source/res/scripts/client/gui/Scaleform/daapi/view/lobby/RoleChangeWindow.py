@@ -1,196 +1,238 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/RoleChangeWindow.py
-import constants
-from gui.impl import backport
-from gui.shop import showBuyGoldForCrew
-from gui.shared.gui_items.Tankman import getCrewSkinIconBig
-from gui.shared.money import Money
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
-from gui.shared.tooltips.formatters import packActionTooltipData
-from gui.shared.utils.functions import makeTooltip
-from helpers import dependency
-from helpers.i18n import makeString as _ms
+from typing import Optional
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.RoleChangeMeta import RoleChangeMeta
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.gui_items import Tankman
-from gui.shared.gui_items.crew_skin import localizedFullName
-from gui.shared.gui_items.serializers import packTankman
-from gui.shared.gui_items.processors.tankman import TankmanChangeRole
-from gui.shared.money import Currency
-from gui.shared.utils import decorators, isVehicleObserver
-from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.impl import backport
+from gui.impl.auxiliary.detachment_helper import removeUnsuitableRecruits
+from gui.impl.gen import R
 from gui.shared.formatters import icons, text_styles
-from items import tankmen
+from gui.shared.gui_items import Tankman
+from gui.shared.gui_items.crew_skin import getCrewSkinIconBig
+from gui.shared.gui_items.crew_skin import localizedFullName
+from gui.shared.gui_items.processors.tankman import TankmanChangeRole, TankmanRetraining
+from gui.shared.gui_items.serializers import packTankman, packTraining
+from gui.shared.money import Currency
+from gui.shared.money import Money
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
+from gui.shared.tooltips.formatters import packActionTooltipData
+from gui.shared.utils import decorators
+from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from gui.shop import showBuyGoldForCrew
+from helpers import dependency
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from nations import NAMES
-from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 def _getTankmanVO(tankman):
     packedTankman = packTankman(tankman, isCountPermanentSkills=False)
     fullName = '%s %s' % (packedTankman['firstUserName'], packedTankman['lastUserName'])
-    return {'name': fullName,
+    return {'tankmanID': tankman.invID,
+     'name': fullName,
      'nation': NAMES[tankman.nationID],
      'rank': packedTankman['rankUserName'],
      'vehicle': packedTankman['nativeVehicle']['userName'],
+     'vehicleIcon': packedTankman['nativeVehicle']['typeIconFlat'],
      'faceIcon': packedTankman['icon']['big'],
      'rankIcon': packedTankman['iconRank']['big'],
-     'roleIcon': packedTankman['iconRole']['medium']}
+     'roleIcon': packedTankman['iconRole']['medium'],
+     'role': packedTankman['roleUserName']}
 
 
-def _isSameRole(tankman, role):
-    td = tankman.descriptor
-    return True if td.role == role else False
-
-
-def _isRoleAvailableToChange(tankman, role):
-    td = tankman.descriptor
-    return False if not tankmen.tankmenGroupHasRole(td.nationID, td.gid, td.isPremium, role) else True
-
-
-def _getTooltip(tankman, role):
-    td = tankman.descriptor
-    if not tankmen.tankmenGroupHasRole(td.nationID, td.gid, td.isPremium, role):
-        return makeTooltip(TOOLTIPS.ROLECHANGE_ROLECHANGEFORBIDDEN_HEADER, _ms(TOOLTIPS.ROLECHANGE_ROLECHANGEFORBIDDEN_BODY, role=_ms(TOOLTIPS.roleForSkill(role))))
-    return makeTooltip(TOOLTIPS.ROLECHANGE_CURRENTROLEWARNING_HEADER, TOOLTIPS.ROLECHANGE_CURRENTROLEWARNING_BODY) if td.role == role else ''
-
-
-def _isRoleSlotTaken(tmen, vehicle, role):
-    roledTankmenInVehicle = []
-    rolesCount = 0
-    for idx, tankman in vehicle.crew:
-        if vehicle.descriptor.type.crewRoles[idx][0] == role:
-            rolesCount += 1
-            if tankman:
-                roledTankmenInVehicle.append(tankman)
-
-    hasFreeSlot = len(roledTankmenInVehicle) < rolesCount
-    for roleTankman in tmen:
-        if roleTankman.vehicleDescr and roleTankman.vehicleDescr.type.compactDescr == vehicle.intCD:
-            return not hasFreeSlot
-
-    return False
-
-
-def _getTooltipHeader(tankmenCountWithSameRole, isAvailable):
-    return _ms(TOOLTIPS.ROLECHANGE_ROLEANDVEHICLETAKEN_HEADER) if tankmenCountWithSameRole > 0 and isAvailable else ''
-
-
-def _getTooltipBody(sameTankmen, isAvailable, roleSlotIsTaken, role, selectedVehicle):
-    bodyStr = ''
-    if sameTankmen > 0 and isAvailable:
-        if roleSlotIsTaken:
-            bodyStr = _ms(TOOLTIPS.ROLECHANGE_ROLEANDVEHICLETAKEN_BODY, count=sameTankmen, role=role, vehicleName=selectedVehicle.shortUserName)
-        else:
-            bodyStr = _ms(TOOLTIPS.ROLECHANGE_ROLETAKEN_BODY, count=sameTankmen)
-    return bodyStr
-
-
-class RoleChangeWindow(RoleChangeMeta):
+class RetrainRoleChangeWindow(RoleChangeMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.instance(ILobbyContext)
+    _GOLD_OPERATION = 2
 
     def __init__(self, ctx=None):
-        super(RoleChangeWindow, self).__init__()
-        self.__tankman = self.itemsCache.items.getTankman(ctx.get('tankmanID', None))
+        super(RetrainRoleChangeWindow, self).__init__()
+        self.__tankman = self.itemsCache.items.getTankman(ctx.get('tankmanID'))
         self.__nativeVehicleCD = self.__tankman.vehicleNativeDescr.type.compactDescr
-        self.__selectedVehicleCD = self.__nativeVehicleCD
-        self.__currentVehicleCD = None
-        if self.__tankman.vehicleDescr is not None:
+        self.__requiredRole = ctx.get('requiredRole', self.__tankman.role)
+        self.__operationID = 0
+        self.__fromMobilizationWindow = ctx.get('mobilization', False)
+        self.__callback = ctx.get('callback', None)
+        self.__currentVehicleCD = ctx.get('currentVehicleCD', None)
+        if self.__currentVehicleCD is None and self.__tankman.vehicleDescr is not None:
             self.__currentVehicleCD = self.__tankman.vehicleDescr.type.compactDescr
-        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self._onMoneyUpdate)
-        g_clientUpdateManager.addCallbacks({'stats.unlock': self._onStatsUpdate,
-         'stats.inventory': self._onStatsUpdate})
-        self.__checkMoney()
+        self.__vehicle = self.itemsCache.items.getItemByCD(self.__currentVehicleCD)
         return
 
-    def onVehicleSelected(self, vehTypeCompDescr):
-        self.__selectedVehicleCD = int(vehTypeCompDescr)
-        selectedVehicle = self.itemsCache.items.getItemByCD(self.__selectedVehicleCD)
-        data = []
-        mainRoles = []
-        for slotIdx, _ in selectedVehicle.crew:
-            mainRole = selectedVehicle.descriptor.type.crewRoles[slotIdx][0]
-            if mainRole not in mainRoles:
-                mainRoles.append(mainRole)
-                criteria = REQ_CRITERIA.TANKMAN.NATIVE_TANKS([self.__selectedVehicleCD]) | REQ_CRITERIA.TANKMAN.ROLES([mainRole]) | REQ_CRITERIA.TANKMAN.ACTIVE
-                roleTankmen = self.itemsCache.items.getTankmen(criteria).values()
-                sameTankmen = len(roleTankmen)
-                roleSlotIsTaken = _isRoleSlotTaken(roleTankmen, selectedVehicle, mainRole)
-                roleStr = Tankman.getRoleUserName(mainRole)
-                isCurrent = _isSameRole(self.__tankman, mainRole)
-                if isCurrent:
-                    isAvailable = False
-                else:
-                    isAvailable = _isRoleAvailableToChange(self.__tankman, mainRole)
-                data.append({'id': mainRole,
-                 'name': roleStr,
-                 'icon': Tankman.getRoleMediumIconPath(mainRole),
-                 'available': isAvailable,
-                 'tooltip': _getTooltip(self.__tankman, mainRole),
-                 'warningHeader': _getTooltipHeader(sameTankmen, isAvailable),
-                 'warningBody': _getTooltipBody(sameTankmen, isAvailable, roleSlotIsTaken, roleStr, selectedVehicle),
-                 'current': isCurrent})
+    def changeRetrainType(self, operationID):
+        self.__operationID = int(operationID)
+        self.__checkMoney()
 
-        self.as_setRolesS(data)
+    def submit(self):
+        if self._isRoleChangeState():
+            self.changeRole()
+        else:
+            self.retrainingTankman()
+
+    @decorators.process('retraining')
+    def retrainingTankman(self):
+        tankmanCostTypeIdx = self.__operationID
+        operationCost = self.itemsCache.items.shop.tankmanCost[tankmanCostTypeIdx].get('gold', 0)
+        currentGold = self.itemsCache.items.stats.gold
+        if currentGold < operationCost:
+            showBuyGoldForCrew(operationCost)
+            return
+        result = yield TankmanRetraining(self.__tankman, self.__vehicle, tankmanCostTypeIdx).request()
+        SystemMessages.pushMessages(result)
+        if self.__callback:
+            self.__callback(result)
+        if result.success:
+            self.destroy()
 
     @decorators.process('changingRole')
-    def changeRole(self, role, vehicleId):
+    def changeRole(self, *args):
         changeRoleCost = self.itemsCache.items.shop.changeRoleCost
         actualGold = self.itemsCache.items.stats.gold
         if changeRoleCost > actualGold:
             showBuyGoldForCrew(changeRoleCost)
             return
-        result = yield TankmanChangeRole(self.__tankman, role, int(vehicleId)).request()
+        result = yield TankmanChangeRole(self.__tankman, self.__requiredRole, self.__currentVehicleCD).request()
         SystemMessages.pushMessages(result)
+        if self.__callback:
+            self.__callback(result)
         if result.success:
-            self.onWindowClose()
+            self.destroy()
 
     def onWindowClose(self):
         self.destroy()
 
     def _populate(self):
-        super(RoleChangeWindow, self)._populate()
-        self.__setCommonData()
-        self.onVehicleSelected(self.__nativeVehicleCD)
-        self.__checkMoney()
+        super(RetrainRoleChangeWindow, self)._populate()
+        g_clientUpdateManager.addMoneyCallback(self._onMoneyUpdate)
+        g_clientUpdateManager.addCallbacks({'shop': self._onStatsUpdate})
+        self._onStatsUpdate()
 
     def _dispose(self):
         self.__tankman = None
-        self.__selectedVehicleCD = None
         self.__currentVehicleCD = None
         g_clientUpdateManager.removeObjectCallbacks(self)
-        super(RoleChangeWindow, self)._dispose()
+        super(RetrainRoleChangeWindow, self)._dispose()
         return
 
     def _onMoneyUpdate(self, *args):
         self.__checkMoney()
+        if self._isRoleChangeState():
+            self.__setRoleData()
+        else:
+            self.__setCrewOperationData()
+
+    def _isRoleChangeState(self):
+        return self.__tankman.role != self.__requiredRole
 
     def _onStatsUpdate(self, *args):
         self.__setCommonData()
+        self.__setVehicleData()
+        if self._isRoleChangeState():
+            self.__setRoleData()
+        else:
+            self.__setCrewOperationData()
 
     def __checkMoney(self):
-        changeRoleCost = self.itemsCache.items.shop.changeRoleCost
-        defaultChangeRoleCost = self.itemsCache.items.shop.defaults.changeRoleCost
-        if changeRoleCost != defaultChangeRoleCost:
-            discount = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'changeRoleCost', True, Money(gold=changeRoleCost), Money(gold=defaultChangeRoleCost))
+        items = self.itemsCache.items
+        discount = None
+        notEnoughMoneyTooltip = None
+        if self._isRoleChangeState():
+            changeRoleCost = items.shop.changeRoleCost
+            actualCurrency = Currency.GOLD
+            defaultChangeRoleCost = items.shop.defaults.changeRoleCost
+            if changeRoleCost != defaultChangeRoleCost:
+                discount = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'changeRoleCost', True, Money(gold=changeRoleCost), Money(gold=defaultChangeRoleCost))
+            formattedPrice = backport.getIntegralFormat(changeRoleCost)
+            shortage = changeRoleCost - items.stats.gold
+            style = text_styles.gold if shortage <= 0 else text_styles.error
+            icon = icons.gold()
+            enableSubmitButton = True
         else:
-            discount = None
-        formattedPrice = backport.getIntegralFormat(changeRoleCost)
-        actualGold = self.itemsCache.items.stats.gold
-        enoughGold = actualGold - changeRoleCost >= 0
-        style = text_styles.gold if enoughGold else text_styles.error
-        self.as_setPriceS(priceString='{}{}'.format(style(formattedPrice), icons.gold()), actionChangeRole=discount)
+            tankmanCost = items.shop.tankmanCost[self.__operationID]
+            isGoldOperation = self.__operationID == self._GOLD_OPERATION
+            if isGoldOperation:
+                retrainCost = tankmanCost[Currency.GOLD]
+                actualCurrency = Currency.GOLD
+                actualMoney = items.stats.gold
+                style = text_styles.gold
+                icon = icons.gold()
+            else:
+                retrainCost = tankmanCost[Currency.CREDITS]
+                actualCurrency = Currency.CREDITS
+                actualMoney = items.stats.credits
+                style = text_styles.credits
+                icon = icons.credits()
+            shortage = retrainCost - actualMoney
+            if shortage > 0:
+                style = text_styles.error
+            formattedPrice = backport.getIntegralFormat(retrainCost)
+            enableSubmitButton = shortage <= 0 or isGoldOperation
+        if shortage > 0:
+            notEnoughMoneyTooltip = {'isSpecial': True,
+             'specialAlias': TOOLTIPS_CONSTANTS.NOT_ENOUGH_MONEY,
+             'specialArgs': (shortage, actualCurrency)}
+        self.as_setPriceS(priceString='{}{}'.format(style(formattedPrice), icon), actionChangeRole=discount, enableSubmitButton=enableSubmitButton, tooltip=notEnoughMoneyTooltip)
         return
 
     def __setCommonData(self):
-        commonData = {'tankmanModel': _getTankmanVO(self.__tankman),
-         'role': self.__tankman.descriptor.role,
-         'vehicles': self.__getVehiclesData(self.__tankman.nationID, self.__nativeVehicleCD)}
+        commonData = {'tankmanModel': _getTankmanVO(self.__tankman)}
         self.__updateIconForCrewSkin(commonData)
         self.as_setCommonDataS(commonData)
+
+    def __setRoleData(self):
+        if self.__fromMobilizationWindow:
+            if self.__tankman.isInTank:
+                place = R.strings.detachment.crew.recruit.changeRole.mob_description.in_tank()
+                vehicle = self.itemsCache.items.getItemByCD(self.__tankman.vehicleDescr.type.compactDescr)
+            else:
+                place = R.strings.detachment.crew.recruit.changeRole.mob_description.in_barrack()
+                vehicle = self.itemsCache.items.getItemByCD(self.__nativeVehicleCD)
+            infoText = backport.text(place, vehicleName=vehicle.shortUserName, role=Tankman.getRoleUserName(self.__tankman.role))
+        else:
+            infoText = backport.text(R.strings.detachment.crew.recruit.changeRole.description(), vehicleName=self.__vehicle.shortUserName)
+        tankmenCriteria = REQ_CRITERIA.TANKMAN.ACTIVE | REQ_CRITERIA.CUSTOM(lambda t: t.vehicleNativeDescr.type.compactDescr == self.__currentVehicleCD and t.role == self.__requiredRole)
+        allTankmen = self.itemsCache.items.getTankmen(tankmenCriteria)
+        suitableTmenCnt = len(removeUnsuitableRecruits(allTankmen, self.__vehicle))
+        isWarningActive = suitableTmenCnt > 0
+        roleData = {'name': Tankman.getRoleUserName(self.__requiredRole),
+         'icon': Tankman.getRole42x42IconPath(self.__requiredRole),
+         'isWarningActive': isWarningActive}
+        if isWarningActive:
+            roleData['warningHeader'] = backport.text(R.strings.tooltips.RoleChange.roleTaken.header())
+            roleData['warningBody'] = backport.text(R.strings.tooltips.RoleChange.roleTaken.body(), number=suitableTmenCnt, vehicleName=self.__vehicle.shortUserName)
+        self.as_setRoleS(roleData, infoText)
+
+    def __setVehicleData(self):
+        vehicle = self.__vehicle
+        isPremium = vehicle.isPremium or vehicle.isPremiumIGR
+        warningText = backport.text(R.strings.detachment.crew.recruit.toPremiumVehicle.description()) if isPremium else ''
+        tooltip = {'tooltip': makeTooltip(backport.text(R.strings.detachment.crew.recruit.toPremiumVehicle.tooltip.header()), backport.text(R.strings.detachment.crew.recruit.toPremiumVehicle.tooltip.body())) if isPremium else ''}
+        self.as_setVehicleDataS({'nationID': vehicle.nationID,
+         'vType': vehicle.type,
+         'vIntCD': vehicle.intCD,
+         'vLevel': vehicle.level,
+         'vName': vehicle.shortUserName,
+         'vIconSmall': vehicle.iconSmall,
+         'warningText': warningText,
+         'warningTooltip': tooltip})
+
+    def __setCrewOperationData(self):
+        items = self.itemsCache.items
+        shopPrices, _ = self.itemsCache.items.shop.getTankmanCostWithDefaults()
+        tooltip = makeTooltip(backport.text(R.strings.detachment.crew.recruit.retrain.warning.tooltip.header()), backport.text(R.strings.detachment.crew.recruit.retrain.warning.tooltip.body()))
+        retrainButtons = packTraining(self.__vehicle, [self.__tankman])
+        for button in retrainButtons:
+            button['tooltip'] = {'tooltip': tooltip}
+
+        data = {'credits': items.stats.credits,
+         'gold': items.stats.gold,
+         'tankmanCost': shopPrices,
+         'retrainButtons': retrainButtons,
+         'infoTooltip': {'tooltip': tooltip}}
+        self.as_setCrewOperationDataS(data)
 
     def __updateIconForCrewSkin(self, commonData):
         skinID = self.__tankman.skinID
@@ -198,27 +240,3 @@ class RoleChangeWindow(RoleChangeMeta):
             skinItem = self.itemsCache.items.getCrewSkin(skinID)
             commonData['tankmanModel']['faceIcon'] = getCrewSkinIconBig(skinItem.getIconID())
             commonData['tankmanModel']['name'] = localizedFullName(skinItem)
-
-    def __getVehiclesData(self, nationID, nativeVehicleCD):
-        items = []
-        criteria = REQ_CRITERIA.NATIONS([nationID]) | REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
-        criteria |= ~(REQ_CRITERIA.SECRET | ~REQ_CRITERIA.INVENTORY_OR_UNLOCKED)
-        if not constants.IS_IGR_ENABLED:
-            criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
-        if constants.IS_DEVELOPMENT:
-            criteria |= ~REQ_CRITERIA.VEHICLE.IS_BOT
-        vehicles = self.itemsCache.items.getVehicles(criteria)
-        vehiclesData = vehicles.values()
-        if nativeVehicleCD not in vehicles:
-            vehiclesData.append(self.itemsCache.items.getItemByCD(nativeVehicleCD))
-        for vehicle in sorted(vehiclesData):
-            vDescr = vehicle.descriptor
-            if isVehicleObserver(vDescr.type.compactDescr):
-                continue
-            items.append({'id': vehicle.intCD,
-             'type': vehicle.type,
-             'name': vehicle.shortUserName})
-
-        return {'items': items,
-         'nativeVehicleId': nativeVehicleCD,
-         'currentVehicleId': self.__currentVehicleCD or -1}

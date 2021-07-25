@@ -190,45 +190,31 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
             for viewCmp in self._viewComponents:
                 viewCmp.updateVehicleHealth(vehicleID, currH, maxH)
 
-    def __changeVehicleHealth(self, vehicleID, newHealth, needUpdate=True):
-        setter = None
-        currentHealth = 0
+    def __changeVehicleHealth(self, vehicleID, newHealth):
         if vehicleID in self._aliveEnemies:
-            currentHealth, _ = self._aliveEnemies[vehicleID]
-            setter = self.__setEnemyHealth
+            currH, _ = self._aliveEnemies[vehicleID]
+            self.__enemiesHealth -= currH
+            self.__enemiesHealth += newHealth
+            self._aliveEnemies[vehicleID][0] = newHealth
+            self.__updateVehiclesHealth()
         elif vehicleID in self._aliveAllies:
-            currentHealth, _ = self._aliveAllies[vehicleID]
-            setter = self.__setAllyHealth
-        if setter is not None and currentHealth != newHealth:
-            setter(vehicleID, currentHealth, newHealth)
-            if needUpdate:
-                self.__updateVehiclesHealth()
-        return
-
-    def __setEnemyHealth(self, vehicleID, currentHealth, newHealth):
-        self.__enemiesHealth -= currentHealth
-        self.__enemiesHealth += newHealth
-        self._aliveEnemies[vehicleID][0] = newHealth
-
-    def __setAllyHealth(self, vehicleID, currentHealth, newHealth):
-        self.__alliesHealth -= currentHealth
-        self.__alliesHealth += newHealth
-        self._aliveAllies[vehicleID][0] = newHealth
+            currH, _ = self._aliveAllies[vehicleID]
+            self.__alliesHealth -= currH
+            self.__alliesHealth += newHealth
+            self._aliveAllies[vehicleID][0] = newHealth
+            self.__updateVehiclesHealth()
 
     def __changeMaxVehicleHealth(self, vehicleID, newMaxHealth):
         setter = None
         currentMaxHealth = 0
-        currentHealth = 0
         if vehicleID in self._aliveEnemies:
             setter = self.__setEnemyMaxHealth
-            currentHealth, currentMaxHealth = self._aliveEnemies[vehicleID]
+            currentMaxHealth = self._aliveEnemies[vehicleID][1]
         elif vehicleID in self._aliveAllies:
             setter = self.__setAllyMaxHealth
-            currentHealth, currentMaxHealth = self._aliveAllies[vehicleID]
+            currentMaxHealth = self._aliveAllies[vehicleID][1]
         if setter is not None and currentMaxHealth != newMaxHealth:
             setter(vehicleID, currentMaxHealth, newMaxHealth)
-            if currentHealth == currentMaxHealth:
-                self.__changeVehicleHealth(vehicleID, newMaxHealth, False)
             self.__updateVehiclesHealth()
         return
 

@@ -1,21 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_helpers.py
-import operator
+import typing
 from frameworks.wulf import WindowLayer
-from helpers import dependency
-from items import tankmen
-from shared_utils import first
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_top_modules import TopModulesChecker
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.game_control.veh_comparison_basket import PARAMS_AFFECTED_TANKMEN_SKILLS
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import Tankman
+from helpers import dependency
+from items import tankmen
 from items.components.c11n_components import SeasonType
+from items.components.detachment_constants import NO_DETACHMENT_ID
+from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
+    from gui.shared.gui_items.customization.c11n_items import Camouflage
+    from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_view import VehicleCompareConfiguratorMain
+    from gui.game_control.veh_comparison_basket import PerksData
 MODULES_INSTALLING_ORDER = (GUI_ITEM_TYPE.CHASSIS,
  GUI_ITEM_TYPE.TURRET,
  GUI_ITEM_TYPE.GUN,
@@ -30,54 +34,6 @@ BATTLE_BOOSTER_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER]
 def createTankman(nationID, vehicleTypeID, role, roleLevel, skills):
     descr = tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, roleLevel, skills)
     return Tankman(descr)
-
-
-def sortSkills(skillsSet):
-    return sorted(skillsSet, key=PARAMS_AFFECTED_TANKMEN_SKILLS.index)
-
-
-def _getAvailableSkillsByRoles(availableSkills):
-    outcome = {}
-    for role, skills in tankmen.SKILLS_BY_ROLES.iteritems():
-        intersection = skills.intersection(set(availableSkills))
-        if intersection:
-            outcome[role] = intersection
-
-    return outcome
-
-
-_PARAMS_AFFECTED_SKILLS_BY_ROLES = _getAvailableSkillsByRoles(PARAMS_AFFECTED_TANKMEN_SKILLS)
-
-def getVehicleCrewSkills(vehicle):
-    descCrewRoles = vehicle.descriptor.type.crewRoles
-    mainRoles = map(operator.itemgetter(0), descCrewRoles)
-    outcome = [ [role, _PARAMS_AFFECTED_SKILLS_BY_ROLES[role]] for role in mainRoles ]
-    leftRoles = set(tankmen.ROLES.difference(set(mainRoles)))
-    if leftRoles:
-        for idx, rolesRange in reversed(list(enumerate(descCrewRoles))):
-            for role in rolesRange:
-                if role in leftRoles:
-                    leftRoles.remove(role)
-                    outcome[idx][1] |= _PARAMS_AFFECTED_SKILLS_BY_ROLES[role]
-                    if not leftRoles:
-                        return outcome
-
-    else:
-        return outcome
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def getVehCrewInfo(vehIntCD, itemsCache=None):
-    levelsByIndexes = {}
-    nativeVehiclesByIndexes = {}
-    if itemsCache is not None:
-        hangarVehicle = itemsCache.items.getItemByCD(vehIntCD)
-        for roleIdx, tman in hangarVehicle.crew:
-            if tman:
-                levelsByIndexes[roleIdx] = int(tman.roleLevel)
-                nativeVehiclesByIndexes[roleIdx] = itemsCache.items.getItemByCD(tman.vehicleNativeDescr.type.compactDescr)
-
-    return (levelsByIndexes, nativeVehiclesByIndexes)
 
 
 def isEquipmentSame(equipment1, equipment2):
@@ -142,3 +98,8 @@ def getVehicleTopModules(vehicle):
     topModules = checker.process()
     checker.clear()
     return sorted(topModules, key=lambda module: MODULES_INSTALLING_ORDER.index(module.itemTypeID))
+
+
+def setPerksController(vehicle, perks):
+    vehicle.stopPerksController()
+    vehicle.initPerksController(NO_DETACHMENT_ID, perks.perks)

@@ -32,6 +32,12 @@ class TooltipBuilder(object):
     def build(self, manager, stateType, advanced_, *args, **kwargs):
         raise NotImplementedError
 
+    def prepare(self, callback, *args, **kwargs):
+        return True
+
+    def stopPreparation(self):
+        pass
+
     def supportAdvanced(self, tooltipType, *args):
         return False
 
@@ -67,6 +73,12 @@ class DataBuilder(SimpleBuilder):
         data = self._buildData(advanced_, *args, **kwargs)
         manager.show(data, self._linkage)
         return self._provider
+
+    def prepare(self, callback, *args, **kwargs):
+        return self._provider.context.prepare(callback, *args, **kwargs)
+
+    def stopPreparation(self):
+        self._provider.context.finalize()
 
     def _buildData(self, advanced_, *args, **kwargs):
         return self._provider.buildToolTip(*args, **kwargs)

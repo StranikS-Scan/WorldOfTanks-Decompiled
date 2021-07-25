@@ -11,6 +11,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters.icons import getRoleIcon
 from gui.shared.formatters import text_styles
@@ -27,11 +28,11 @@ from gui.customization.shared import isVehicleCanBeCustomized
 
 class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __slots__ = ('__hangarMessage',)
-    __bootcampCtrl = dependency.descriptor(IBootcampController)
-    __itemsCache = dependency.descriptor(IItemsCache)
-    __service = dependency.descriptor(ICustomizationService)
-    __settingsCore = dependency.descriptor(ISettingsCore)
-    __uiSpamController = dependency.descriptor(IUISpamController)
+    bootcampCtrl = dependency.descriptor(IBootcampController)
+    itemsCache = dependency.descriptor(IItemsCache)
+    service = dependency.descriptor(ICustomizationService)
+    settingsCore = dependency.descriptor(ISettingsCore)
+    uiSpamController = dependency.descriptor(IUISpamController)
 
     def __init__(self):
         super(AmmunitionPanel, self).__init__()
@@ -48,12 +49,12 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             yield VehicleRepairAction(vehicle).doAction()
 
     def showCustomization(self):
-        self.__service.showCustomization()
+        self.service.showCustomization()
 
     def toRentContinue(self):
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            canBuyOrRent, _ = vehicle.mayObtainForMoney(self.__itemsCache.items.stats.money)
+            canBuyOrRent, _ = vehicle.mayObtainForMoney(self.itemsCache.items.stats.money)
             if vehicle.isRentable and vehicle.rentalIsOver and canBuyOrRent:
                 shared_events.showVehicleBuyDialog(vehicle)
 
@@ -89,7 +90,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             statusId, msg, msgLvl = hangarMessage
             rentAvailable = False
             if statusId in (Vehicle.VEHICLE_STATE.RENTAL_IS_OVER, Vehicle.VEHICLE_STATE.RENTABLE_AGAIN):
-                canBuyOrRent, _ = vehicle.mayObtainForMoney(self.__itemsCache.items.stats.money)
+                canBuyOrRent, _ = vehicle.mayObtainForMoney(self.itemsCache.items.stats.money)
                 rentAvailable = vehicle.isRentable and canBuyOrRent
             if msgLvl == Vehicle.VEHICLE_STATE_LEVEL.RENTABLE:
                 msgLvl = Vehicle.VEHICLE_STATE_LEVEL.INFO
@@ -107,19 +108,19 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
              'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
              'vehicleLevel': '{}'.format(int2roman(vehicle.level)),
              'vehicleName': '{}'.format(vehicle.shortUserName),
-             'roleId': vehicle.role,
-             'roleMessage': self.__getRoleMessage()})
+             'roleId': vehicle.role if self.__isRankedPrbActive() else ROLE_TYPE.NOT_DEFINED,
+             'roleMessage': self.__getRoleMessage() if self.__isRankedPrbActive() else ''})
 
     def __inventoryUpdateCallBack(self, *args):
         self.update()
 
     def __applyCustomizationNewCounter(self, vehicle):
-        if vehicle.isCustomizationEnabled() and not self.__bootcampCtrl.isInBootcamp():
+        if vehicle.isCustomizationEnabled() and not self.bootcampCtrl.isInBootcamp():
             availableItemTypes = getItemTypesAvailableForVehicle()
-            counter = vehicle.getC11nItemsNoveltyCounter(self.__itemsCache.items, itemTypes=availableItemTypes)
-            serverSettings = self.__settingsCore.serverSettings
+            counter = vehicle.getC11nItemsNoveltyCounter(self.itemsCache.items, itemTypes=availableItemTypes)
+            serverSettings = self.settingsCore.serverSettings
             progressiveItemsViewVisited = serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT)
-            if not progressiveItemsViewVisited and self.__uiSpamController.shouldBeHidden(OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT):
+            if not progressiveItemsViewVisited and self.uiSpamController.shouldBeHidden(OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT):
                 progressiveItemsViewVisited = True
                 serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT: True,
                  OnceOnlyHints.C11N_EDITABLE_STYLES_HINT: True,
@@ -139,6 +140,9 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         if g_currentVehicle.isPresent():
             stateWarning = vehicle.isBroken
         self.as_setWarningStateS(stateWarning)
+
+    def __isRankedPrbActive(self):
+        return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.RANKED)
 
     @staticmethod
     def __getRoleMessage():

@@ -47,7 +47,7 @@ class QUESTS(object):
     BONUSES_ITEM_FREEXPFACTOR = '#quests:bonuses/item/freeXPFactor'
     BONUSES_ITEM_TANKMENXPFACTOR = '#quests:bonuses/item/tankmenXPFactor'
     BONUSES_ITEM_SLOTS = '#quests:bonuses/item/slots'
-    BONUSES_ITEM_BERTHS = '#quests:bonuses/item/berths'
+    BONUSES_ITEM_DORMITORIES = '#quests:bonuses/item/dormitories'
     BONUSES_ITEM_PREMIUM = '#quests:bonuses/item/premium'
     BONUSES_ITEM_PREMIUMPLUS = '#quests:bonuses/item/premiumPlus'
     BONUSES_ITEM_CREWSKIN = '#quests:bonuses/item/crewSkin'
@@ -1190,7 +1190,7 @@ class QUESTS(object):
     BONUSNAME_TANKMENXPFACTOR = '#quests:bonusName/tankmenXPFactor'
     BONUSNAME_DAILYXPFACTOR = '#quests:bonusName/dailyXPFactor'
     BONUSNAME_SLOTS = '#quests:bonusName/slots'
-    BONUSNAME_BERTHS = '#quests:bonusName/berths'
+    BONUSNAME_DORMITORIES = '#quests:bonusName/dormitories'
     BONUSNAME_PREMIUM = '#quests:bonusName/premium'
     BONUSNAME_PREMIUM_PLUS = '#quests:bonusName/premium_plus'
     BONUSNAME_TANKMEN_WITH_SKILLS = '#quests:bonusName/tankmen/with_skills'
@@ -1715,7 +1715,7 @@ class QUESTS(object):
      BONUSNAME_TANKMENXPFACTOR,
      BONUSNAME_DAILYXPFACTOR,
      BONUSNAME_SLOTS,
-     BONUSNAME_BERTHS,
+     BONUSNAME_DORMITORIES,
      BONUSNAME_PREMIUM,
      BONUSNAME_PREMIUM_PLUS,
      BONUSNAME_TANKMEN_WITH_SKILLS,

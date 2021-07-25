@@ -1256,6 +1256,8 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'royaleQuests',
  'premiumChanged',
  'customizationProgressionChanged',
+ 'detachmentConverter',
+ 'detachmentReward',
  'battlePassStyleChoiceAvailable',
  'battlePassStyleChosen',
  'battlePassSeasonEnd'])

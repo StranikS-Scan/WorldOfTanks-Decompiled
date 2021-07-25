@@ -180,6 +180,7 @@
     <_122-mm_D-25T_with_wedges_shutter_KV4>	229	</_122-mm_D-25T_with_wedges_shutter_KV4>
     <_107mm_9S1>	230	</_107mm_9S1>
     <_122mm_S_34_49>	232	</_122mm_S_34_49>
+    <_76mm_L_11>	234	</_76mm_L_11>
     <_152mm_BL-10_IGR>	60001	</_152mm_BL-10_IGR>
     <_100mm_LB-1_IGR>	60002	</_100mm_LB-1_IGR>
     <_122mm_BL-9_IGR>	60003	</_122mm_BL-9_IGR>
@@ -2188,6 +2189,64 @@
         </_76mm_UOF-354>
       </shots>
     </_76mm_L-11>
+    <_76mm_L_11>
+      <userString>	#ussr_vehicles:_76mm_L-11	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	25990	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.37	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	39.375	</rotationSpeed>
+      <reloadTime>	4.89142857142857	</reloadTime>
+      <maxAmmo>	77	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	660	</weight>
+      <maxHealth>	106	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.514285714285714	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_76mm_BR_350A_1>
+          <defaultPortion>	0.8	</defaultPortion>
+          <speed>	612	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	68 62	</piercingPower>
+        </_76mm_BR_350A_1>
+        <_76mm_BR_350B>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	700	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	98 80	</piercingPower>
+        </_76mm_BR_350B>
+        <_76mm_F_354>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	612	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_76mm_F_354>
+      </shots>
+    </_76mm_L_11>
     <_76mm_F-32>
       <userString>	#ussr_vehicles:_76mm_F-32	</userString>
       <tags></tags>

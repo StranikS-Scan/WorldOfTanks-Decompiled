@@ -11,11 +11,12 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from gui.Scaleform.daapi.view.lobby.store.browser.shop_view import ShopView, ShopOverlay, PremContentPageOverlay
+    from gui.Scaleform.daapi.view.lobby.store.browser.shop_view import ShopView, ShopOverlay, ShopOverlayDormitory, PremContentPageOverlay
     from gui.Scaleform.daapi.view.lobby.shared.web_view import WebViewTransparent
     from gui.Scaleform.framework import ViewSettings, ScopeTemplates
     return (ViewSettings(VIEW_ALIAS.LOBBY_STORE, ShopView, 'browserScreen.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_STORE, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.OVERLAY_WEB_STORE, ShopOverlay, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.OVERLAY_WEB_STORE, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.OVERLAY_WEB_STORE, ShopOverlay, 'browserScreen.swf', WindowLayer.TOP_WINDOW, VIEW_ALIAS.OVERLAY_WEB_STORE, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.OVERLAY_WEB_STORE_DORMITORY, ShopOverlayDormitory, 'browserScreen.swf', WindowLayer.TOP_WINDOW, VIEW_ALIAS.OVERLAY_WEB_STORE_DORMITORY, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.WEB_VIEW_TRANSPARENT, WebViewTransparent, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW, PremContentPageOverlay, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE))
 
@@ -30,5 +31,6 @@ class StorePackageBusinessHandler(PackageBusinessHandler):
         listeners = ((VIEW_ALIAS.LOBBY_STORE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.WEB_VIEW_TRANSPARENT, self.loadViewByCtxEvent),
          (VIEW_ALIAS.OVERLAY_WEB_STORE, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.OVERLAY_WEB_STORE_DORMITORY, self.loadViewByCtxEvent),
          (VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW, self.loadViewByCtxEvent))
         super(StorePackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

@@ -4,6 +4,7 @@
 
 class CONTEXT_MENU_HANDLER_TYPE(object):
     CREW = 'crew'
+    MOBILIZATION_RECRUIT = 'mobilizationRecruit'
     CHANNEL_LIST = 'channelList'
     VEHICLE = 'vehicle'
     RESEARCH_ITEM = 'researchItem'
@@ -39,6 +40,7 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     STORAGE_CREW_BOOKS_NO_SALE_ITEM = 'storageCrewBooksNoSaleItem'
     STORAGE_DEMOUNT_KIT_ITEM = 'storageDemountKitItem'
     STORAGE_OPTIONAL_DEVICE_ITEM = 'storageOptionalDeviceItem'
+    STORAGE_RECERTIFICATION_FORM_ITEM = 'storageRecertificationFormItem'
     TANK_SETUP_OPTIONAL_DEVICE_ITEM = 'tankSetupOptionalDeviceItem'
     TANK_SETUP_MODULE_ITEM = 'tankSetupModuleItem'
     TANK_SETUP_CONSUMABLE_ITEM = 'tankSetupConsumableItem'
@@ -55,4 +57,8 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     TANK_SETUP_HANGAR_BATTLE_BOOSTER_SLOT = 'tankSetupHangarBattleBoosterSlot'
     TANK_SETUP_HANGAR_BATTLE_ABILITY_SLOT = 'tankSetupHangarBattleAbilitySlot'
     TANK_SETUP_HANGAR_SHELL_SLOT = 'tankSetupHangarShellSlot'
-    POST_PROGRESSION_VEHICLE = 'postProgressionVehicle'
+    HANGAR_WIDGET = 'hangarWidget'
+    DETACHMENT_VEHICLE_SLOT = 'detachmentVehicleSlot'
+    RECRUIT_CARD_CONTEXT_MENU = 'recruitCardContextMenu'
+    DETACHMENT_CARD_CONTEXT_MENU = 'detachmentCardContextMenu'
+    INSTRUCTOR_CARD_CONTEXT_MENU = 'instructorCardContextMenu'

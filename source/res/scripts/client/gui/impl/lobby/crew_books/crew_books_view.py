@@ -28,7 +28,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.filters import switchHangarFilteredFilter
 from helpers.dependency import descriptor
 from items.components.component_constants import EMPTY_STRING
-from items.components.crew_books_constants import CREW_BOOK_INVALID_TYPE, CREW_BOOK_SPREAD, CREW_BOOK_RARITY
+from items.components.crew_books_constants import CREW_BOOK_INVALID_TYPE, CREW_BOOK_RARITY
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -136,9 +136,8 @@ class CrewBooksView(ViewImpl):
             descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(book.getXP()), 'exp', R.styles.ExpTextStyle()))
             bookVM.setDescription(R.strings.crew_books.screen.bookType.dyn(bookSpread).info.title())
             bookNation = book.getNation()
-            if bookSpread != CREW_BOOK_SPREAD.PERSONAL_BOOK:
-                overlayDescriptionFmtArgsVM = bookVM.getOverlayDescriptionFmtArgs()
-                overlayDescriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__vehicle.shortUserName, 'short_name', R.styles.NeutralTextStyle()))
+            overlayDescriptionFmtArgsVM = bookVM.getOverlayDescriptionFmtArgs()
+            overlayDescriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__vehicle.shortUserName, 'short_name', R.styles.NeutralTextStyle()))
             if bookNation is not None:
                 bookVM.setOverlayDescription(R.strings.crew_books.screen.bookType.dyn(bookSpread).info.body.dyn(bookNation)())
             else:
@@ -182,7 +181,7 @@ class CrewBooksView(ViewImpl):
                 self.__updateBooksViewModelData(vm)
 
     def __updateGuiItemList(self):
-        criteria = REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT ^ ~REQ_CRITERIA.CREW_ITEM.BOOK_RARITIES(CREW_BOOK_RARITY.UNIVERSAL)
+        criteria = REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT ^ ~REQ_CRITERIA.CREW_ITEM.BOOK_RARITIES(CREW_BOOK_RARITY.NO_NATION_TYPES)
         criteria |= REQ_CRITERIA.CREW_ITEM.NATIONS([self.__vehicle.nationID])
         items = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, criteria)
         self.__bookGuiItemList = sortItems(items.values())
@@ -299,8 +298,6 @@ class CrewBooksView(ViewImpl):
         self.__selectedTankmanVM = None
         if self.__selectedBookGuiItem is None:
             self.__setNoBookSelectedStates()
-        elif self.__selectedBookGuiItem.getBookSpread() == CREW_BOOK_SPREAD.PERSONAL_BOOK:
-            self.__setPersonalBookSelectedStates()
         else:
             self.__setCrewBookSelectedStates()
         return
@@ -367,11 +364,6 @@ class CrewBooksView(ViewImpl):
                 vm.setIsBookUseEnable(False)
             elif self.__selectedBookGuiItem.getFreeCount() == 0:
                 vm.setIsBookUseEnable(False)
-            elif self.__selectedBookGuiItem.getBookSpread() == CREW_BOOK_SPREAD.PERSONAL_BOOK:
-                if CREW_BOOK_INVALID_TYPE.EMPTY_CREW in self.__invalidTypes:
-                    vm.setIsBookUseEnable(False)
-                else:
-                    vm.setIsBookUseEnable(self.__selectedTankmanVM is not None)
             else:
                 vm.setIsBookUseEnable(not self.__invalidTypes)
         return
@@ -382,8 +374,6 @@ class CrewBooksView(ViewImpl):
         footerTitleFmtArgs.invalidate()
         if self.__selectedBookGuiItem is None:
             self.__setNoBookSelectedFooterDescription()
-        elif self.__selectedBookGuiItem.getBookSpread() == CREW_BOOK_SPREAD.PERSONAL_BOOK:
-            self.__setPersonalBookFooterDescription()
         else:
             self.__setCrewBookFooterDescription()
         footerTitleFmtArgs.invalidate()
@@ -401,34 +391,6 @@ class CrewBooksView(ViewImpl):
             else:
                 vm.setFooterIcon(R.images.gui.maps.icons.library.InformationIcon())
                 vm.setFooterTitle(R.strings.crew_books.screen.info.selectBook.title())
-
-    def __setPersonalBookFooterDescription(self):
-        with self.viewModel.transaction() as vm:
-            vm.setIsInvalidTooltipEnable(False)
-            vm.setIsSimpleInvalidTooltip(False)
-            vm.setIsFooterAlert(False)
-            vm.setFooterIcon(R.images.gui.maps.icons.library.InformationIcon())
-            if self.__selectedBookGuiItem.getFreeCount() == 0:
-                vm.setIsInvalidTooltipEnable(True)
-                vm.setIsSimpleInvalidTooltip(True)
-                vm.setFooterTitle(R.strings.tooltips.crewBooks.screen.invalidItem.title())
-                vm.setTooltipBody(R.strings.tooltips.crewBooks.screen.invalidItem.title())
-            elif CREW_BOOK_INVALID_TYPE.EMPTY_CREW in self.__invalidTypes:
-                vm.setFooterIcon(R.images.gui.maps.icons.library.alertBigIcon())
-                vm.setIsFooterAlert(True)
-                vm.setIsInvalidTooltipEnable(True)
-                vm.setIsSimpleInvalidTooltip(True)
-            elif self.__selectedTankmanVM is None:
-                vm.setIsInvalidTooltipEnable(True)
-                vm.setIsSimpleInvalidTooltip(True)
-                vm.setFooterTitle(R.strings.crew_books.screen.info.personalBook.body())
-                vm.setTooltipBody(R.strings.crew_books.screen.info.personalBook.body())
-            else:
-                vm.setFooterTitle(R.strings.crew_books.screen.info.personalBook.title())
-                footerTitleFmtArgs = vm.getFooterTitleFmtArgs()
-                footerTitleFmtArgs.addViewModel(UserFormatStringArgModel(self.__selectedBookGuiItem.userName, 'book_type'))
-                footerTitleFmtArgs.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__selectedBookGuiItem.getXP()), 'exp'))
-        return
 
     def __setCrewBookFooterDescription(self):
         with self.viewModel.transaction() as vm:

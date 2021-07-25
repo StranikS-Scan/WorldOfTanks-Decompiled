@@ -39,8 +39,7 @@ from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtype
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import Vehicle, GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import getCrewSkinIconBig
-from gui.shared.gui_items.crew_skin import localizedFullName
+from gui.shared.gui_items.crew_skin import localizedFullName, getCrewSkinIconBig
 from gui.shared.money import ZERO_MONEY, Money, Currency
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -81,7 +80,7 @@ _BONUSES_ORDER = (Currency.CREDITS,
  'tankmen',
  'items',
  'slots',
- 'berths',
+ 'dormitories',
  'dossier',
  'customizations',
  'goodies',

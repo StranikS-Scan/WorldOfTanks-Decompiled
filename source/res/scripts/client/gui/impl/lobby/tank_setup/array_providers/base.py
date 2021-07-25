@@ -100,13 +100,12 @@ class VehicleBaseArrayProvider(BaseArrayProvider):
         model.setIsLocked(False)
         model.setItemsInStorage(item.inventoryCount)
         model.setIsMounted(item in self._getInstalledLayout())
-        model.setIsMountedInOtherSetup(self._getSetupLayout().isInOtherLayout(item))
         if item in self._getCurrentLayout():
             model.setInstalledSlotId(self._getCurrentLayout().index(item))
         else:
             model.setInstalledSlotId(NONE_ID)
 
-    def _fillStatus(self, model, item, slotID):
+    def _fillStatus(self, model, item, slotID, isInstalledOrMounted):
         isFit, reason = self._mayInstall(item, slotID)
         if not isFit and reason != 'already installed':
             model.setIsDisabled(True)
@@ -121,14 +120,11 @@ class VehicleBaseArrayProvider(BaseArrayProvider):
         if not item.isInInventory:
             money, exchangeRate = self._itemsCache.items.stats.money, self._itemsCache.items.shop.exchangeRate
             isEnough = item.mayPurchaseWithExchange(money, exchangeRate)
-            if not (isInstalledOrMounted or isEnough or self._isInstallAllowed(item)):
+            if not (isInstalledOrMounted or isEnough):
                 model.setIsDisabled(True)
 
     def _mayInstall(self, item, slotID=None):
         return item.mayInstall(self._getVehicle(), slotID)
-
-    def _isInstallAllowed(self, item):
-        return False
 
     def _getCriteria(self):
         return REQ_CRITERIA.VEHICLE.SUITABLE([self._getVehicle()], self._getItemTypeID()) | self._getItemCriteria()
@@ -144,6 +140,3 @@ class VehicleBaseArrayProvider(BaseArrayProvider):
 
     def _getInstalledLayout(self):
         return self._interactor.getInstalledLayout()
-
-    def _getSetupLayout(self):
-        return self._interactor.getSetupLayout()

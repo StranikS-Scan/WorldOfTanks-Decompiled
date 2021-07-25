@@ -69,6 +69,12 @@ def _baseRibbonFormatter(ribbon, arenaDP, updater):
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=str(ribbon.getPoints()))
 
 
+def _perkRibbonFormatter(ribbon, arenaDP, updater):
+    rightFieldStr = R.strings.ingame_gui.efficiencyRibbons.dyn('PERK_' + str(ribbon.getPerkID()))
+    addChar = 'x' + str(ribbon.getStacks()) if ribbon.getStacks() > 1 else ''
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=addChar, vehName=str(ribbon.getPerkID()), rightFieldStr=backport.text(rightFieldStr()))
+
+
 def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater):
     count = ribbon.getTargetsAmount()
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
@@ -171,7 +177,9 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.RECEIVED_DMG_BY_SPAWNED_BOT: _singleVehRibbonFormatter,
  _BET.DAMAGE_BY_MINEFIELD: _singleVehRibbonFormatter,
  _BET.RECEIVED_BY_MINEFIELD: _singleVehRibbonFormatter,
- _BET.RECEIVED_BY_SMOKE: _singleVehRibbonFormatter}
+ _BET.RECEIVED_BY_SMOKE: _singleVehRibbonFormatter,
+ _BET.PERK: _perkRibbonFormatter,
+ _BET.TALENT: _perkRibbonFormatter}
 
 class BattleRibbonsPanel(RibbonsPanelMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -185,6 +193,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         self.__isWithVehName = True
         self.__isExtendedAnim = True
         self.__isVisible = True
+        self.perksIDs = set()
         self.__arenaDP = self.sessionProvider.getCtx().getArenaDP()
         self.__ribbonsAggregator = ribbons_aggregator.createRibbonsAggregator()
 
@@ -337,4 +346,6 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
          [_BET.RECEIVED_DMG_BY_SPAWNED_BOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedDmgBySpawnedBot())],
          [_BET.DAMAGE_BY_MINEFIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.damageByMinefield())],
          [_BET.RECEIVED_BY_MINEFIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByMinefield())],
-         [_BET.RECEIVED_BY_SMOKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBySmoke())]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])
+         [_BET.RECEIVED_BY_SMOKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBySmoke())],
+         [_BET.PERK, ''],
+         [_BET.TALENT, '']], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])

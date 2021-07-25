@@ -22,7 +22,7 @@ from gui.shared.formatters import text_styles, moneyWithIcon
 from gui.shared.formatters.text_styles import neutral
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
-from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleRestoreProcessor, VehicleTradeInProcessor, showVehicleReceivedResultMessages
+from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleRestoreProcessor, VehicleTradeInProcessor
 from gui.shared.money import Money, Currency
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
@@ -387,7 +387,8 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
                 return
             tradeOffVehicle = self.itemsCache.items.getItemByCD(int(data.tradeOff))
             result = yield VehicleTradeInProcessor(self.vehicle, tradeOffVehicle, data.buySlot, data.buyAmmo, data.crewType).request()
-            showVehicleReceivedResultMessages(result)
+            if result.userMsg:
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             if not result.success:
                 self.onWindowClose()
                 return
@@ -402,7 +403,8 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
                 result = yield VehicleRenter(self.vehicle, data.rentId, data.buyAmmo, data.crewType).request()
             else:
                 result = yield self._getObtainVehicleProcessor(self.vehicle, data).request()
-            showVehicleReceivedResultMessages(result)
+            if result.userMsg:
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if result and result.success:
             self.onWindowClose()
         return

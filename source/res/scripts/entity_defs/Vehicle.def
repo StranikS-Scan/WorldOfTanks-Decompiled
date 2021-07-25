@@ -27,6 +27,7 @@
     <Interface>	RespawnController_Vehicle	</Interface>
     <Interface>	SmokeController_Vehicle	</Interface>
     <Interface>	Wheels	</Interface>
+    <Interface>	Perks_Vehicle	</Interface>
   </Implements>
   <Volatile>
     <position></position>
@@ -124,18 +125,6 @@
       </Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </ammo>
-    <setups>
-      <Type>	PYTHON	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
-      <AllowUnsafeData>	true	</AllowUnsafeData>
-    </setups>
-    <setupsIndexes>
-      <Type>	PYTHON	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
-      <AllowUnsafeData>	true	</AllowUnsafeData>
-    </setupsIndexes>
     <enhancements>
       <Type>	PYTHON	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -144,16 +133,6 @@
       <Type>	PYTHON	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </vehPerks>
-    <vehPostProgression>
-      <Type>	ARRAY	  <of>	INT32	</of>
-      </Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
-    </vehPostProgression>
-    <customRoleSlotTypeId>
-      <Type>	UINT8	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
-    </customRoleSlotTypeId>
     <isClientConnected>
       <Type>	INT8	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -182,6 +161,10 @@
       <Type>	FLOAT	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </xRayFactor>
+    <foliageInvisibilityFactor>
+      <Type>	FLOAT	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </foliageInvisibilityFactor>
     <masterVehID>
       <Type>	UINT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -190,11 +173,6 @@
       <Type>	BOOL	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </needsCount>
-    <crewCompactDescrs>
-      <Type>	TUPLE	  <of>	STRING	</of>
-      </Type>
-      <Flags>	CELL_PRIVATE	</Flags>
-    </crewCompactDescrs>
     <arenaTypeID>
       <Type>	INT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -280,6 +258,10 @@
       <Flags>	ALL_CLIENTS	</Flags>
       <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </isMyVehicle>
+    <hasOldCrew>
+      <Type>	BOOL	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </hasOldCrew>
     <quickShellChangerFactor>
       <Type>	FLOAT	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -480,13 +462,6 @@
     <sendPositionsToClient>
       <Arg>	BOOL	</Arg>
     </sendPositionsToClient>
-    <requestDamagedDevicesFromFor>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	MAILBOX	</Arg>
-    </requestDamagedDevicesFromFor>
-    <sendDamagedDevicesTo>
-      <Arg>	MAILBOX	</Arg>
-    </sendDamagedDevicesTo>
     <setHonorTitle>
       <Arg>	STRING	</Arg>
     </setHonorTitle>
@@ -538,11 +513,6 @@
     <updateActiveDeathZones>
       <Arg>	PYTHON	</Arg>
     </updateActiveDeathZones>
-    <switchSetup>
-      <Exposed></Exposed>
-      <Arg>	UINT8	</Arg>
-      <Arg>	UINT8	</Arg>
-    </switchSetup>
   </CellMethods>
   <BaseMethods>
     <onCreateCellSuccess></onCreateCellSuccess>

@@ -455,16 +455,12 @@
       <marksOnGun>
         <Type>	UINT8	</Type>
       </marksOnGun>
-      <crewGroups>
-        <Type>	ARRAY	  <of>	UINT16	</of>
-        </Type>
-      </crewGroups>
-      <commanderSkinID>
-        <Type>	UINT16	</Type>
-      </commanderSkinID>
       <maxHealth>
         <Type>	UINT16	</Type>
       </maxHealth>
+      <instructorVoice>
+        <Type>	STRING	</Type>
+      </instructorVoice>
     </Properties>
   </PUBLIC_VEHICLE_INFO>
   <ATTACK_RESULTS>	FIXED_DICT	  <Properties>
@@ -795,23 +791,6 @@
         <Type>	ARRAY	  <of>	INT32	</of>
         </Type>
       </vehAmmo>
-      <vehSetups>
-        <Type>	PYTHON	</Type>
-      </vehSetups>
-      <vehSetupsIndexes>
-        <Type>	PYTHON	</Type>
-      </vehSetupsIndexes>
-      <vehCrew>
-        <Type>	TUPLE	  <of>	STRING	</of>
-        </Type>
-      </vehCrew>
-      <vehCrewInvIDs>
-        <Type>	TUPLE	  <of>	INT32	</of>
-        </Type>
-      </vehCrewInvIDs>
-      <vehCrewSkins>
-        <Type>	PYTHON	</Type>
-      </vehCrewSkins>
       <marksOnGun>
         <Type>	UINT8	</Type>
       </marksOnGun>
@@ -830,13 +809,12 @@
       <vehPerks>
         <Type>	PYTHON	</Type>
       </vehPerks>
-      <customRoleSlotTypeId>
-        <Type>	UINT8	</Type>
-      </customRoleSlotTypeId>
-      <vehPostProgression>
-        <Type>	ARRAY	  <of>	INT32	</of>
-        </Type>
-      </vehPostProgression>
+      <instructorVoice>
+        <Type>	STRING	</Type>
+      </instructorVoice>
+      <hasOldCrew>
+        <Type>	BOOL	</Type>
+      </hasOldCrew>
     </Properties>
   </ARENA_VEH_INFO>
   <USER_EXTRA_SETTINGS>	FIXED_DICT	  <Properties>
@@ -924,6 +902,9 @@
         <Type>	ARRAY	  <of>	ARENA_VEH_INFO	</of>
         </Type>
       </vehiclesInfo>
+      <crewsInfo>
+        <Type>	PYTHON	</Type>
+      </crewsInfo>
       <avatarAmmo>
         <Type>	ARRAY	  <of>	INT32	</of>
         </Type>
@@ -1037,6 +1018,21 @@
       <needsCount>
         <Type>	BOOL	</Type>
       </needsCount>
+      <damageDistributionLowerBound>
+        <Type>	FLOAT32	</Type>
+      </damageDistributionLowerBound>
+      <piercingDistributionLowerBound>
+        <Type>	FLOAT32	</Type>
+      </piercingDistributionLowerBound>
+      <damageDistributionUpperBound>
+        <Type>	FLOAT32	</Type>
+      </damageDistributionUpperBound>
+      <piercingDistributionUpperBound>
+        <Type>	FLOAT32	</Type>
+      </piercingDistributionUpperBound>
+      <criticalHitChanceBoost>
+        <Type>	FLOAT32	</Type>
+      </criticalHitChanceBoost>
     </Properties>
   </ATTACKER_INFO>
   <DESTRUCTIBLE_ATTACK_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1217,10 +1213,6 @@
       <compDescr>
         <Type>	STRING	</Type>
       </compDescr>
-      <crewCompactDescrs>
-        <Type>	ARRAY	  <of>	STRING	</of>
-        </Type>
-      </crewCompactDescrs>
       <marksOnGun>
         <Type>	UINT8	</Type>
       </marksOnGun>
@@ -1288,13 +1280,6 @@
       <compDescr>
         <Type>	STRING	</Type>
       </compDescr>
-      <crewCompactDescrs>
-        <Type>	ARRAY	  <of>	STRING	</of>
-        </Type>
-      </crewCompactDescrs>
-      <commanderSkinID>
-        <Type>	UINT16	</Type>
-      </commanderSkinID>
       <marksOnGun>
         <Type>	UINT8	</Type>
       </marksOnGun>
@@ -1543,13 +1528,6 @@
       <maxHealth>
         <Type>	UINT16	</Type>
       </maxHealth>
-      <vehPostProgression>
-        <Type>	ARRAY	  <of>	INT32	</of>
-        </Type>
-      </vehPostProgression>
-      <customRoleSlotTypeId>
-        <Type>	UINT8	</Type>
-      </customRoleSlotTypeId>
     </Properties>
   </CLIENT_VEHICLE_PUBLIC_INFO>
   <PLAY_LIMITS>	FIXED_DICT	  <Properties>
@@ -1622,6 +1600,38 @@
       </reason>
     </Properties>
   </TIME_WITH_REASON>
+  <PERK_INFO_HUD>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <perkID>
+        <Type>	OBJECT_ID	</Type>
+      </perkID>
+      <stacks>
+        <Type>	UINT8	</Type>
+      </stacks>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <coolDown>
+        <Type>	FLOAT32	</Type>
+      </coolDown>
+      <lifeTime>
+        <Type>	FLOAT64	</Type>
+      </lifeTime>
+    </Properties>
+  </PERK_INFO_HUD>
+  <PERK_INFO_RIBBON>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <perkID>
+        <Type>	OBJECT_ID	</Type>
+      </perkID>
+      <stacks>
+        <Type>	UINT8	</Type>
+      </stacks>
+      <endTime>
+        <Type>	FLOAT64	</Type>
+      </endTime>
+    </Properties>
+  </PERK_INFO_RIBBON>
   <TOURNAMEMT_PARTICIPANT>	FIXED_DICT	  <Properties>
       <databaseID>
         <Type>	DB_ID	</Type>

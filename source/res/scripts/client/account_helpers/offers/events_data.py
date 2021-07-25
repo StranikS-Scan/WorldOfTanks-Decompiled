@@ -27,7 +27,7 @@ OFFER_BONUSES_PRIORITY = ('vehicles',
  'crewSkins',
  'goodies',
  'slots',
- 'berths',
+ 'dormitories',
  'blueprints',
  'blueprintsAny',
  'tokens')
@@ -270,14 +270,14 @@ class OfferGift(object):
 
     @property
     def rentType(self):
-        if self.bonus:
+        if self.bonus and hasattr(self.bonus, 'getRentInfo'):
             rentType, _ = self.bonus.getRentInfo()
             return rentType
         return RentType.NO_RENT
 
     @property
     def rentValue(self):
-        if self.bonus:
+        if self.bonus and hasattr(self.bonus, 'getRentInfo'):
             _, rentValue = self.bonus.getRentInfo()
             return rentValue
 

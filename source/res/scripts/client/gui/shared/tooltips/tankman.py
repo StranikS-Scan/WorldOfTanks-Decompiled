@@ -2,30 +2,31 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/tankman.py
 import math
 import nations
+from crew2 import settings_globals
 from gui import makeHtmlString
-from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.gui_items import Tankman
-from gui.shared.tooltips.common import BlocksTooltipData
-from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE, formatters
 from gui.shared.formatters import text_styles, moneyWithIcon
+from gui.shared.gui_items.Tankman import Tankman, getFullUserName, getSkillBigIconPath
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.crew_skin import localizedFullName
+from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE, formatters
+from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from helpers import i18n
 from helpers import time_utils
 from helpers.i18n import makeString
 from items.components.component_constants import EMPTY_STRING
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig
+from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig, MAX_SKILL_LEVEL
 from shared_utils import findFirst
-from skeletons.gui.shared import IItemsCache
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import IBattleRoyaleController
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 TANKMAN_DISMISSED = 'dismissed'
 _TIME_FORMAT_UNITS = [('days', time_utils.ONE_DAY), ('hours', time_utils.ONE_HOUR), ('minutes', time_utils.ONE_MINUTE)]
 
@@ -89,11 +90,15 @@ class TankmanSkillListField(ToolTipDataField):
     @staticmethod
     def _getBaseSkills(tankman):
         skillsList = []
-        for idx, skill in enumerate(tankman.skills):
+        idx = 0
+        for skill in tankman.skills:
+            if skill.name == 'commander_sixthSense':
+                continue
             skillsList.append({'id': str(idx),
              'label': skill.userName,
              'level': skill.level,
              'enabled': tankman.isInTank or skill.isEnable})
+            idx += 1
 
         return skillsList
 
@@ -145,7 +150,7 @@ def formatRecoveryLeftValue(secondsLeft):
     closestUnit = findFirst(lambda (k, v): v < secondsLeft, _TIME_FORMAT_UNITS)
     if closestUnit is not None:
         name, factor = closestUnit
-        timeLeft = int(math.ceil(float(secondsLeft) / factor))
+        timeLeft = int(secondsLeft / factor)
         return makeString(TOOLTIPS.template_all_short(name), value=timeLeft)
     else:
         return makeString(TOOLTIPS.TEMPLATE_TIME_LESSTHENMINUTE)
@@ -157,9 +162,9 @@ def getRecoveryStatusText(restoreInfo):
         itemsCache = dependency.instance(IItemsCache)
         restoreConfig = itemsCache.items.shop.tankmenRestoreConfig
         duration = restoreConfig.billableDuration - restoreConfig.freeDuration
-        text = makeString(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_FREE_BODY, totalLeftValue=formatRecoveryLeftValue(timeLeft), freeLeftValue=formatRecoveryLeftValue(timeLeft - duration), price=moneyWithIcon(restoreConfig.cost), withMoneyLeftValue=formatRecoveryLeftValue(duration))
+        text = makeString(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_FREE_BODY, totalLeftValue=text_styles.stats(formatRecoveryLeftValue(timeLeft)), freeLeftValue=text_styles.stats(formatRecoveryLeftValue(timeLeft - duration)), price=moneyWithIcon(restoreConfig.cost), withMoneyLeftValue=text_styles.stats(formatRecoveryLeftValue(duration)))
     else:
-        text = makeString(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_GOLD_BODY, totalLeftValue=formatRecoveryLeftValue(timeLeft), price=moneyWithIcon(price))
+        text = makeString(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_GOLD_BODY, totalLeftValue=text_styles.stats(formatRecoveryLeftValue(timeLeft)), price=moneyWithIcon(price))
     return text_styles.main(text)
 
 
@@ -242,7 +247,7 @@ class NotRecruitedTooltipData(BlocksTooltipData):
         skills = item.getLearntSkills(multiplyNew=True)
         if skills:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_SKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17 if hasDescr else 18, bottom=10)))
-            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(Tankman.getSkillIconPath(skillName=skillName, size='big')) for skillName in skills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
+            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(getSkillBigIconPath(skillName=skillName)) for skillName in skills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
         expiryTime = item.getExpiryTime()
         if expiryTime:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_EXPIRETITLE), useHtml=True, padding=formatters.packPadding(top=20 if skills else (17 if hasDescr else 16), bottom=2)))
@@ -258,99 +263,136 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
 
     def __init__(self, context):
         super(TankmanTooltipDataBlock, self).__init__(context, TOOLTIP_TYPE.SKILL)
-        self._setWidth(320)
-        self.item = None
-        return
+        self._setWidth(324)
+        self._setContentMargin(top=0, bottom=21)
 
-    def _packBlocks(self, *args, **kwargs):
-        items = super(TankmanTooltipDataBlock, self)._packBlocks()
-        item = self.context.buildItem(*args, **kwargs)
-        self.item = item
-        vehicle = None
-        nativeVehicle = self._itemsCache.items.getItemByCD(item.vehicleNativeDescr.type.compactDescr)
-        if item.isInTank:
-            vehicle = self._itemsCache.items.getVehicle(item.vehicleInvID)
-        fullUserName = self._getFullUserName(item)
-        items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(fullUserName), desc=text_styles.main(self._getTankmanDescription(item))))
-        innerBlock = []
-        if vehicle:
-            self._createLabel(innerBlock)
-            self._createVehicleBlock(innerBlock, vehicle)
-        if innerBlock:
-            items.append(formatters.packBuildUpBlockData(innerBlock, padding=formatters.packPadding(left=0, right=50, top=-5, bottom=0), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
-        commonStatsBlock = [formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_SPECIALTY_SKILLS)}))]
-        penalty = self._getBonusValue(item, [TankmanRoleBonusesField.BONUSES.PENALTY])
-        addition = self._getBonusValue(item, [TankmanRoleBonusesField.BONUSES.COMMANDER,
-         TankmanRoleBonusesField.BONUSES.EQUIPMENTS,
-         TankmanRoleBonusesField.BONUSES.DEVICES,
-         TankmanRoleBonusesField.BONUSES.BROTHERHOOD])
-        addition_ = '' if addition == 0 else self._getSign(addition) + str(addition)
-        penalty_ = '' if penalty == 0 else self._getSign(penalty) + str(penalty)
-        if penalty != 0 or addition != 0:
-            addRoleLevels = ' (' + str(item.roleLevel) + addition_ + penalty_ + ')'
-        else:
-            addRoleLevels = ''
-        vehicleName = self._getVehicleName(vehicle, nativeVehicle)
-        commonStatsBlock.append(formatters.packTextParameterBlockData(text_styles.main(item.roleUserName + ' ') + vehicleName, text_styles.stats(str(item.roleLevel + penalty + addition) + '%' + addRoleLevels), valueWidth=90, padding=formatters.packPadding(left=0, right=0, top=5, bottom=0)))
-        field = self._getSkillList()
-        _, value = field.buildData()
-        skills = value or []
-        maxPopUpBlocks = 14
-        for skill in skills[:maxPopUpBlocks]:
-            commonStatsBlock.append(formatters.packTextParameterBlockData(text_styles.main(skill['label']), text_styles.stats(str(skill['level']) + '%'), valueWidth=90))
-
-        if len(skills) > maxPopUpBlocks:
-            diff = str(len(skills) - maxPopUpBlocks)
-            commonStatsBlock.append(formatters.packAlignedTextBlockData(text=text_styles.middleTitle(makeString(TOOLTIPS.HANGAR_CREW_MORESKILLS, skill_cnt=diff)), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-        items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=5))
-        self._createBlockForNewSkills(items)
-        self._createMoreInfoBlock(items)
+    def _packBlocks(self, tmanInvID, _=None, desiredVehicleIntCD=None, *args, **kwargs):
+        items = super(TankmanTooltipDataBlock, self)._packBlocks(*args, **kwargs)
+        tman = self._itemsCache.items.getTankman(int(tmanInvID))
+        currentVehicle = None
+        if tman.isInTank:
+            currentVehicle = self._itemsCache.items.getVehicle(tman.vehicleInvID)
+        desiredVehicle = None
+        if desiredVehicleIntCD:
+            desiredVehicle = self._itemsCache.items.getStockVehicle(desiredVehicleIntCD)
+        self._buildTankmanNameBlock(items, tman, desiredVehicle or currentVehicle)
+        innerBlocks = []
+        self._buildLockCrew(innerBlocks, tman)
+        self._buildLeaderInfoBlock(innerBlocks, tman, currentVehicle if desiredVehicle is None else None)
+        self._buildUniqueCrewInfoBlock(innerBlocks, tman)
+        self._buildNotFullRoleLevelWarningBlock(innerBlocks, tman)
+        self._buildInstructorInfoBlock(innerBlocks, tman)
+        if innerBlocks:
+            items.append(formatters.packBuildUpBlockData(innerBlocks, gap=8, padding=formatters.packPadding(top=-2, bottom=-8)))
+        self._buildVehicleInfoBlock(items, currentVehicle)
+        self._buildNeedSpecializationForVehicleErrorBlock(items, tman, currentVehicle)
+        if tman.skills or tman.hasNewSkill():
+            self._createBlockForWarningSkillsNotWorking(items, tman, True)
+        self._buildDismissedBlock(items, tman)
+        self._buildStateBlock(items, tman)
         return items
 
-    def _getSign(self, val):
-        return '' if val < 0 else '+'
+    def _buildTankmanNameBlock(self, items, tman, desiredVehicle):
+        fullUserName = self._getFullUserName(tman)
+        nativeVehicle = self._itemsCache.items.getItemByCD(tman.vehicleNativeDescr.type.compactDescr)
+        vehicleName = nativeVehicle.userName
+        if desiredVehicle and desiredVehicle.intCD != tman.vehicleNativeDescr.type.compactDescr:
+            vehicleName = text_styles.error(vehicleName)
+        items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(fullUserName), desc=text_styles.main(backport.text(R.strings.tooltips.hangar.crew.tman_name.text(), roleName=tman.roleUserName, vehicleName=vehicleName)), padding=formatters.packPadding(top=12, bottom=-1)))
 
-    def _getBonusValue(self, tankman, ids):
-        result = 0
-        if tankman:
-            _, roleBonuses = tankman.realRoleLevel
-            for idx in ids:
-                result += roleBonuses[idx]
+    def _buildLockCrew(self, items, tman):
+        nativeVehicle = self._itemsCache.items.getItemByCD(tman.vehicleNativeDescr.type.compactDescr)
+        if nativeVehicle.isCrewLocked:
+            items.append(formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.lockIcon()), imgPadding=formatters.packPadding(left=4, top=4, right=7), desc=text_styles.main(backport.text(R.strings.tooltips.hangar.crew.is_lock_crew.header()))))
 
-        return int(result)
-
-    def _getFullUserName(self, item):
-        if item.skinID != NO_CREW_SKIN_ID and self._lobbyContext.getServerSettings().isCrewSkinsEnabled():
-            skinItem = self._itemsCache.items.getCrewSkin(item.skinID)
+    def _getFullUserName(self, tman):
+        if tman.skinID != NO_CREW_SKIN_ID and self._lobbyContext.getServerSettings().isCrewSkinsEnabled():
+            skinItem = self._itemsCache.items.getCrewSkin(tman.skinID)
             return localizedFullName(skinItem)
-        return item.fullUserName
+        return tman.fullUserName
 
-    def _getTankmanDescription(self, item):
-        return item.rankUserName
+    def _buildLeaderInfoBlock(self, items, tman, vehicle):
+        if not tman.isLeader:
+            return
+        items.append(formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.attentionIcon()), imgPadding=formatters.packPadding(left=-1, right=3, top=2), title=text_styles.yellowTitle(backport.text(R.strings.tooltips.hangar.crew.is_leader.header())), padding=formatters.packPadding(left=2)))
+        if vehicle and len(self._getLeadersFromVehicle(vehicle)) > 1:
+            items.append(formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.alertIcon()), imgPadding=formatters.packPadding(left=0, top=1, right=5), desc=text_styles.statusAlertSmall(backport.text(R.strings.tooltips.hangar.crew.too_many_leaders.header())), padding=formatters.packPadding(top=-8)))
+        detachmentPreset = settings_globals.g_conversion.getDetachmentForTankman(tman.descriptor)
+        if detachmentPreset and detachmentPreset.instructorSlots:
+            instructorsCount = len(detachmentPreset.instructorSlots)
+            if instructorsCount:
+                uniqueCrewName = backport.text(R.strings.detachment.presetName.dyn(detachmentPreset.name)())
+                items.append(formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.detachment.icons.instr_4_icon()), imgPadding=formatters.packPadding(left=-20, top=-14, right=-9), title=text_styles.blueBoosterTitle(backport.text(R.strings.tooltips.hangar.crew.instructors_for_leader.header())), desc=text_styles.mainFieldSmall(makeHtmlString('html_templates:lobby/detachment', 'instructorsForLeader', ctx={'uniqueCrewName': uniqueCrewName})), padding=formatters.packPadding(bottom=-14)))
 
-    def _getVehicleName(self, vehicle=None, nativeVehicle=None):
-        return text_styles.main(nativeVehicle.shortUserName) if not vehicle or nativeVehicle.shortUserName == vehicle.shortUserName else text_styles.critical(nativeVehicle.shortUserName)
+    def _getLeadersFromVehicle(self, vehicle):
+        return [ tman for _, tman in vehicle.crew if tman and tman.isLeader ]
 
-    def _getSkillList(self):
-        return TankmanSkillListField(self, 'skills')
+    def _buildUniqueCrewInfoBlock(self, items, tman):
+        detachmentPresetName, _ = settings_globals.g_conversion.getUnremovableInstructorForTankman(tman.descriptor)
+        if not detachmentPresetName:
+            return
+        detachmentPreset = settings_globals.g_detachmentSettings.presets.getDetachmentPreset(detachmentPresetName)
+        uniqueCrewName = backport.text(R.strings.detachment.presetName.dyn(detachmentPreset.name)())
+        commanderPreset = detachmentPreset.commander
+        commanderName = getFullUserName(detachmentPreset.nationID, commanderPreset.firstNameID, commanderPreset.secondNameID)
+        items.append(formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.attentionIcon()), imgPadding=formatters.packPadding(left=1, top=3, right=3), title=text_styles.yellowTitle(backport.text(R.strings.tooltips.hangar.crew.is_unique_crew_member.header(), crewName=uniqueCrewName)), desc=text_styles.brownSmall(backport.text(R.strings.tooltips.hangar.crew.is_unique_crew_member.text(), crewName=uniqueCrewName, commanderName=commanderName))))
 
-    def _createLabel(self, innerBlock):
-        innerBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': backport.text(R.strings.tooltips.hangar.crew.assignedTo())})))
+    def _buildInstructorInfoBlock(self, items, tman):
+        if not tman.isInstructor:
+            return
+        items.append(formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.detachment.icons.instr_1_icon()), imgPadding=formatters.packPadding(left=-16, top=-14, right=-12), title=text_styles.blueBoosterTitle(backport.text(R.strings.tooltips.hangar.crew.instructor_info.header())), desc=text_styles.mainFieldSmall(backport.text(R.strings.tooltips.hangar.crew.instructor_info.text())), padding=formatters.packPadding(bottom=-14)))
 
-    def _createVehicleBlock(self, innerBlock, vehicle):
-        innerBlock.append(formatters.packImageTextBlockData(img=vehicle.iconContour, txtGap=-4, padding=formatters.packPadding(bottom=0, top=10, left=0), title=text_styles.stats(vehicle.shortUserName), desc=text_styles.stats(backport.text(R.strings.menu.header.vehicleType.dyn(vehicle.type)())), flipHorizontal=True))
+    def _buildNotFullRoleLevelWarningBlock(self, items, tman):
+        if tman.roleLevel < MAX_SKILL_LEVEL and not tman.skills:
+            items.append(formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.WarningIcon_1()), imgPadding=formatters.packPadding(top=2, right=4), title=text_styles.yellowTitle(backport.text(R.strings.tooltips.hangar.crew.not_full_role.header())), desc=text_styles.brownSmall(backport.text(R.strings.tooltips.hangar.crew.not_full_role.text(), roleLevel=text_styles.stats('{}%'.format(tman.roleLevel)))), descPadding=formatters.packPadding(top=-2), padding=formatters.packPadding(bottom=1)))
 
-    def _createBlockForNewSkills(self, items):
-        field = TankmanNewSkillCountField(self, '')
-        _, newSkillCount = field.buildData()
-        return items.append(formatters.packImageTextBlockData(img='../maps/icons/tankmen/skills/small/new_skill.png', txtOffset=20, padding=formatters.packPadding(bottom=0, top=5, left=0), imgPadding=formatters.packPadding(left=0, top=3), title=makeHtmlString('html_templates:lobby/textStyle', 'goldTextTitle', {'message': backport.text(R.strings.tooltips.hangar.crew.new_skill_available.header())}), desc=makeHtmlString('html_templates:lobby/textStyle', 'goldTextField', {'message': backport.text(R.strings.tooltips.hangar.crew.new_skill_available.text())}))) if newSkillCount > 0 else None
+    def _buildVehicleInfoBlock(self, items, vehicle):
+        if not vehicle:
+            return
+        vehType = vehicle.type.replace('-', '_')
+        innerBlock = [formatters.packTextBlockData(text=text_styles.grayTitle(backport.text(R.strings.tooltips.hangar.crew.assignedTo())), padding=formatters.packPadding(top=9)), formatters.packImageTextBlockData(img=vehicle.iconContour, flipHorizontal=True, padding=formatters.packPadding(top=8, bottom=-2), title=text_styles.stats(vehicle.shortUserName), desc=text_styles.stats(backport.text(R.strings.menu.header.vehicleType.dyn(vehType)())), descPadding=formatters.packPadding(top=-4))]
+        items.append(formatters.packBuildUpBlockData(innerBlock, padding=formatters.packPadding(top=-17, bottom=-6), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
 
-    def _createMoreInfoBlock(self, items):
-        field = TankmanStatusField(self, '')
-        _, value = field.buildData()
-        status = value or {}
-        if 'header' in status and status['header'] != '':
-            items.append(formatters.packImageTextBlockData(title=text_styles.warning(status['header']), desc=makeHtmlString('html_templates:lobby/textStyle', 'statusWarningField', {'message': status['text']})))
+    def _buildNeedSpecializationForVehicleErrorBlock(self, items, tman, vehicle):
+        if vehicle and vehicle.intCD != tman.vehicleNativeDescr.type.compactDescr:
+            items.append(formatters.packTitleDescBlock(title=text_styles.errorBold(backport.text(R.strings.tooltips.hangar.crew.need_vehicle_specialization.header(), vehicleName=vehicle.userName)), desc=text_styles.mainFieldSmall(backport.text(R.strings.tooltips.hangar.crew.need_vehicle_specialization.text())), descPadding=formatters.packPadding(top=-2), padding=formatters.packPadding(top=-2, bottom=-8)))
+
+    def _builSixthSenseInfoBlock(self, items):
+        items.append(formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.tankmen.skills.small.commander_sixthSense()), imgPadding=formatters.packPadding(top=4, right=5), title=text_styles.mainTitle(backport.text(R.strings.tooltips.hangar.crew.commander_sixth_sense.header())), desc=text_styles.standardSmall(backport.text(R.strings.tooltips.hangar.crew.commander_sixth_sense.text())), padding=formatters.packPadding(top=-2, bottom=-1)))
+
+    def _createBlockForWarningSkillsNotWorking(self, items, tman, showSixSenth):
+        blocks = [formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.alertIcon()), imgPadding=formatters.packPadding(top=3, right=3), title=text_styles.statusAlert(backport.text(R.strings.tooltips.hangar.crew.skills_not_working.header())), desc=text_styles.statusAlertSmall(backport.text(R.strings.tooltips.hangar.crew.skills_not_working.text())))]
+        self._createSkillsBlock(blocks, tman, showSixSenth)
+        items.append(formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(top=-2, bottom=-8)))
+
+    def _createSkillsBlock(self, items, tman, showSixSenth):
+        skills = [ {'label': backport.text(R.strings.tooltips.hangar.crew.is_permanent_skill(), skillName=skill.userName) if skill.isPermanent else skill.userName,
+         'level': skill.level} for skill in tman.skills if skill.name != 'commander_sixthSense' or showSixSenth ]
+        maxPopUpBlocks = 10
+        commonStatsBlock = [ formatters.packTextParameterBlockData(text_styles.main(skill['label']), text_styles.stats('{}%'.format(skill['level'])), valueWidth=90) for skill in skills[:maxPopUpBlocks] ]
+        newSkillsCount, lastSkillLevel = tman.newSkillCount
+        isPartialLastSkill = bool(newSkillsCount > 0 and lastSkillLevel < MAX_SKILL_LEVEL)
+        fullSkillPoints = newSkillsCount - int(isPartialLastSkill)
+        if fullSkillPoints:
+            commonStatsBlock.append(formatters.packTextParameterBlockData(text_styles.main(backport.text(R.strings.tooltips.barracks.tankmen.recovery.newSkill())), text_styles.stats('{}x{}%'.format(fullSkillPoints, MAX_SKILL_LEVEL)), valueWidth=90))
+        if isPartialLastSkill:
+            commonStatsBlock.append(formatters.packTextParameterBlockData(text_styles.main(backport.text(R.strings.tooltips.barracks.tankmen.recovery.newSkill())), text_styles.stats('{}%'.format(lastSkillLevel)), valueWidth=90))
+        if len(skills) > maxPopUpBlocks:
+            diff = len(skills) - maxPopUpBlocks
+            commonStatsBlock.append(formatters.packTextBlockData(text=text_styles.stats(makeString(TOOLTIPS.HANGAR_CREW_MORESKILLS, skill_cnt=diff)), padding=formatters.packPadding(left=95)))
+        if commonStatsBlock:
+            items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=5, padding=formatters.packPadding(top=8, bottom=-7, left=-30)))
+
+    def _buildStateBlock(self, items, tman):
+        state = tman.getTankmanState()
+        if not state:
+            return
+        items.append(formatters.packAlignedTextBlockData(text=text_styles.mainTitle(state), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-7, bottom=-1)))
+
+    def _buildDismissedBlock(self, items, tman):
+        if not tman.isDismissed:
+            return
+        items.append(formatters.packTitleDescBlock(title=text_styles.whiteOrangeTitle(backport.text(R.strings.tooltips.hangar.crew.is_dismissed.header())), desc=getRecoveryStatusText(getTankmenRestoreInfo(tman)), descPadding=formatters.packPadding(top=-4), padding=formatters.packPadding(top=-3, bottom=-8)))
 
 
 class BattleRoyaleTankmanTooltipDataBlock(TankmanTooltipDataBlock):
@@ -404,3 +446,16 @@ class TankmanTooltipData(ToolTipData):
          TankmanCurrentVehicleAttrField(self, 'vehicleContour', 'iconContour'),
          TankmanCurrentVehicleAttrField(self, 'isCurrentVehiclePremium', 'isPremium'),
          TankmanStatusField(self, 'status'))
+
+
+class TankmanDemobilizedStateTooltipData(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(TankmanDemobilizedStateTooltipData, self).__init__(context, TOOLTIP_TYPE.TANKMAN)
+        self._setContentMargin(bottom=8)
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(TankmanDemobilizedStateTooltipData, self)._packBlocks()
+        tman = self.context.buildItem(*args, **kwargs)
+        items.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.barracks.tankmen.recoveryBtn.header())), desc=getRecoveryStatusText(getTankmenRestoreInfo(tman))))
+        return items

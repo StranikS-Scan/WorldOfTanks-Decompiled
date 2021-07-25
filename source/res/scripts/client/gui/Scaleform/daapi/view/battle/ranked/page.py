@@ -8,11 +8,6 @@ class RankedPage(ClassicPage):
 
     def _populate(self):
         super(RankedPage, self)._populate()
-        self.__tryInitRoleDescription()
-
-    def __tryInitRoleDescription(self):
         if RoleHelpPlugin.isAvailableToShow():
             self.as_createRoleDescriptionS()
             self._blToggling.add(BATTLE_VIEW_ALIASES.ROLE_DESCRIPTION)
-            if self._isBattleLoading:
-                self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.ROLE_DESCRIPTION})

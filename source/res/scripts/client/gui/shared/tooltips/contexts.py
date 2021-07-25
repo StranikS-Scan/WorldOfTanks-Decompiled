@@ -11,17 +11,19 @@ from blueprints.FragmentTypes import getFragmentType
 from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
+from gui.Scaleform.daapi.view.lobby.detachment.detachment_setup_vehicle import g_detachmentTankSetupVehicle
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
-from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
 from gui.server_events import recruit_helper
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import getTankmanSkill, SabatonTankmanSkill, TankmanSkill, OffspringTankmanSkill
 from gui.shared.gui_items.dossier import factories, loadDossier
+from gui.shared.gui_items.perk import PerkGUI
 from gui.shared.items_parameters import params_helper, bonus_helper
 from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from gui.shared.tooltips import TOOLTIP_COMPONENT
@@ -29,6 +31,7 @@ from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
 from helpers import dependency
 from helpers.i18n import makeString
 from shared_utils import findFirst, first
+from skeletons.gui.detachment import IDetachmentCache
 from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.offers import IOffersDataProvider
@@ -75,7 +78,7 @@ class StatsConfiguration(object):
 
 
 class StatusConfiguration(object):
-    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare')
+    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'showEarnCrystals', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare')
 
     def __init__(self):
         self.vehicle = None
@@ -90,11 +93,12 @@ class StatusConfiguration(object):
         self.useWhiteBg = True
         self.withSlots = False
         self.isCompare = False
+        self.showEarnCrystals = True
         return
 
 
 class ParamsConfiguration(object):
-    __slots__ = ('vehicle', 'params', 'crew', 'eqs', 'devices', 'dossier', 'dossierType', 'isCurrentUserDossier', 'historicalBattleID', 'checkAchievementExistence', 'simplifiedOnly', 'externalCrewParam', 'vehicleLevel', 'arenaType', 'colorless')
+    __slots__ = ('vehicle', 'params', 'crew', 'eqs', 'devices', 'dossier', 'dossierType', 'title', 'isCurrentUserDossier', 'historicalBattleID', 'checkAchievementExistence', 'simplifiedOnly', 'externalCrewParam', 'vehicleLevel', 'arenaType', 'colorless')
 
     def __init__(self):
         self.vehicle = None
@@ -111,6 +115,7 @@ class ParamsConfiguration(object):
         self.colorless = False
         self.vehicleLevel = 0
         self.arenaType = ARENA_GUI_TYPE.RANDOM
+        self.title = None
         self.checkAchievementExistence = True
         return
 
@@ -142,6 +147,12 @@ class ToolTipContext(object):
 
     def getParams(self):
         return {}
+
+    def prepare(self, callback, *args, **kwargs):
+        return True
+
+    def finalize(self):
+        pass
 
 
 class EmptyOptDeviceSlotContext(ToolTipContext):
@@ -388,6 +399,14 @@ class CarouselContext(InventoryContext):
     def buildItem(self, intCD):
         return self.itemsCache.items.getItemByCD(int(intCD))
 
+    def prepare(self, callback, *args, **kwargs):
+        vehicle = self.buildItem(*args, **kwargs)
+        isCalculating = g_detachmentTankSetupVehicle.calculateForVehicle(vehicle, callback, useLinkedDetachment=True)
+        return not isCalculating
+
+    def finalize(self):
+        g_detachmentTankSetupVehicle.restoreCurrentVehicle()
+
 
 class PotapovQuestsChainContext(ToolTipContext):
 
@@ -439,14 +458,13 @@ class BaseHangarParamContext(ToolTipContext):
 
     def __init__(self, showTitleValue=False):
         super(BaseHangarParamContext, self).__init__(TOOLTIP_COMPONENT.HANGAR)
-        self.isApproximately = False
         self.showTitleValue = showTitleValue
 
     def getComparator(self):
-        return params_helper.idealCrewComparator(g_currentVehicle.item)
+        return params_helper.idealCrewComparator(g_detachmentTankSetupVehicle.item)
 
     def buildItem(self, *args, **kwargs):
-        return g_currentVehicle.item
+        return g_detachmentTankSetupVehicle.item
 
     def getBonusExtractor(self, vehicle, bonuses, paramName):
         return bonus_helper.BonusExtractor(vehicle, bonuses, paramName)
@@ -457,6 +475,17 @@ class HangarParamContext(BaseHangarParamContext):
     def __init__(self):
         super(HangarParamContext, self).__init__(True)
         self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
+
+    def getStatusConfiguration(self, item):
+        value = super(HangarParamContext, self).getStatusConfiguration(item)
+        value.vehicle = g_currentVehicle.item
+        value.withSlots = True
+        for slotID in range(len(value.vehicle.optDevices.installed)):
+            if item.isInstalled(value.vehicle, slotID):
+                value.slotIdx = slotID
+                break
+
+        return value
 
 
 class PreviewParamContext(HangarParamContext):
@@ -479,7 +508,7 @@ class CmpParamContext(HangarParamContext):
         self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
 
     def getComparator(self):
-        return params_helper.vehiclesComparator(_getCmpVehicle(), _getCmpInitialVehicle()[0])
+        return params_helper.vehiclesComparator(_getCmpVehicle(), _getCmpInitialVehicle())
 
 
 class TankSetupParamContext(HangarParamContext):
@@ -488,30 +517,8 @@ class TankSetupParamContext(HangarParamContext):
         super(TankSetupParamContext, self).__init__()
         self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
 
-    def getComparator(self):
-        return params_helper.idealCrewComparator(g_tankSetupVehicle.item)
-
-    def buildItem(self, *args, **kwargs):
-        return g_tankSetupVehicle.item
-
     def getBonusExtractor(self, vehicle, bonuses, paramName):
         return bonus_helper.TankSetupBonusExtractor(vehicle, bonuses, paramName)
-
-
-class PostProgressionParamContext(TankSetupParamContext):
-
-    def __init__(self):
-        super(PostProgressionParamContext, self).__init__()
-        self.isApproximately = True
-
-    def getComparator(self):
-        return params_helper.tankSetupVehiclesComparator(g_postProgressionVehicle.item, g_postProgressionVehicle.defaultItem, withBonuses=g_postProgressionVehicle.item.isInInventory)
-
-    def buildItem(self, *args, **kwargs):
-        return g_postProgressionVehicle.item
-
-    def getBonusExtractor(self, vehicle, bonuses, paramName):
-        return bonus_helper.PostProgressionBonusExtractor(vehicle, bonuses, paramName)
 
 
 class HangarContext(ToolTipContext):
@@ -640,7 +647,7 @@ class VehCmpConfigurationSlotContext(VehCmpConfigurationContext):
 
 class TankmanHangarContext(HangarContext):
 
-    def buildItem(self, invID):
+    def buildItem(self, invID, *args, **kwargs):
         return self.itemsCache.items.getTankman(int(invID))
 
 
@@ -685,6 +692,14 @@ class TechTreeContext(DefaultContext):
         value = super(TechTreeContext, self).getParamsConfiguration(item)
         value.vehicle = self._vehicle
         return value
+
+    def prepare(self, callback, *args, **kwargs):
+        vehicle = self.buildItem(*args, **kwargs)
+        isCalculating = g_detachmentTankSetupVehicle.calculateForVehicle(vehicle, callback, useLinkedDetachment=True)
+        return not isCalculating
+
+    def finalize(self):
+        g_detachmentTankSetupVehicle.restoreCurrentVehicle()
 
 
 class ModuleContext(TechTreeContext):
@@ -856,6 +871,16 @@ class PreviewCaseContext(ToolTipContext):
         if skillID == 'sabaton_brotherhood':
             return SabatonTankmanSkill('brotherhood')
         return OffspringTankmanSkill('brotherhood') if skillID == 'offspring_brotherhood' else TankmanSkill(skillID)
+
+
+class PerkContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude=None):
+        super(PerkContext, self).__init__(TOOLTIP_COMPONENT.PERK, fieldsToExclude)
+
+    def buildItem(self, *args, **kwargs):
+        perkID, perkLevel = args[0].split('_')
+        return PerkGUI(int(perkID), int(perkLevel))
 
 
 class CrewSkinContext(ToolTipContext):
@@ -1296,3 +1321,40 @@ class BattlePassGiftTokenContext(ToolTipContext):
 
     def getParams(self):
         return {'isOfferEnabled': self.__battlePassController.isOfferEnabled() and self.__hasOffer}
+
+
+class DetachmentVehicleContext(ToolTipContext):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __detachmentCache = dependency.descriptor(IDetachmentCache)
+
+    def buildItem(self, vehCD, detInvID):
+        vehicle = self.__itemsCache.items.getItemByCD(vehCD)
+        return vehicle
+
+    def getParamsConfiguration(self, item):
+        value = super(DetachmentVehicleContext, self).getParamsConfiguration(item)
+        value.simplifiedOnly = True
+        value.title = backport.text(R.strings.tooltips.vehicleParams.simplifiedWithDetachment.title())
+        return value
+
+    def getStatusConfiguration(self, item):
+        value = super(DetachmentVehicleContext, self).getStatusConfiguration(item)
+        value.showEarnCrystals = False
+        value.checkNotSuitable = True
+        return value
+
+    def getStatsConfiguration(self, item):
+        value = super(DetachmentVehicleContext, self).getStatsConfiguration(item)
+        value.dailyXP = False
+        value.rentals = False
+        value.restorePrice = False
+        return value
+
+    def prepare(self, callback, *args, **kwargs):
+        vehicle = self.buildItem(*args, **kwargs)
+        isCalculating = g_detachmentTankSetupVehicle.calculateForVehicle(vehicle, callback)
+        return not isCalculating
+
+    def finalize(self):
+        g_detachmentTankSetupVehicle.setVehicle(None)
+        return

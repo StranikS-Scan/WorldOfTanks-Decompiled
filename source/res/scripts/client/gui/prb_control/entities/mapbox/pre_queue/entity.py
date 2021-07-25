@@ -8,6 +8,7 @@ from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
+from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQueueEntryPoint
 from gui.prb_control.entities.mapbox.pre_queue.vehicles_watcher import MapboxVehiclesWatcher
 from gui.prb_control.entities.mapbox.pre_queue.actions_validator import MapboxActionsValidator
@@ -84,6 +85,10 @@ class MapboxEntity(PreQueueEntity):
             self.__watcher = None
         self.storage.suspend()
         return super(MapboxEntity, self).fini(ctx, woEvents)
+
+    @vehicleAmmoCheck
+    def queue(self, ctx, callback=None):
+        super(MapboxEntity, self).queue(ctx, callback=callback)
 
     @prequeue_storage_getter(QUEUE_TYPE.MAPBOX)
     def storage(self):

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/battle_session.py
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from gui.battle_control.controllers.vehicle_state_ctrl import VehicleStateController
 
 class ISharedControllersLocator(object):
     __slots__ = ()
@@ -15,10 +17,6 @@ class ISharedControllersLocator(object):
 
     @property
     def optionalDevices(self):
-        raise NotImplementedError
-
-    @property
-    def vehiclePostProgression(self):
         raise NotImplementedError
 
     @property

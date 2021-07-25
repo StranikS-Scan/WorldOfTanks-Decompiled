@@ -180,7 +180,7 @@ class ConcealmentBonus(object):
         self._season = season
 
     def getValue(self, vehicle):
-        _, still = vehicle.descriptor.computeBaseInvisibility(crewFactor=0, camouflageId=self._camouflageId)
+        _, still = vehicle.descriptor.computeBaseInvisibility(camouflageId=self._camouflageId, abilityAndCrewFactor=0.0)
         return still
 
     def getFormattedValue(self, vehicle):

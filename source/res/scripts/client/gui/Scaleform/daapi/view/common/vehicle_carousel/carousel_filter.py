@@ -195,6 +195,9 @@ class SessionCarouselFilter(_CarouselFilter):
 
 
 class BasicCriteriesGroup(CriteriesGroup):
+    __CREW_GROUP_CRITERIA = {'recruits': REQ_CRITERIA.VEHICLE.HAS_OLD_CREW,
+     'noDetachment': ~REQ_CRITERIA.VEHICLE.HAS_DETACHMENT | ~REQ_CRITERIA.VEHICLE.HAS_OLD_CREW,
+     'detachment': REQ_CRITERIA.VEHICLE.HAS_DETACHMENT}
 
     @staticmethod
     def isApplicableFor(vehicle):
@@ -239,8 +242,17 @@ class BasicCriteriesGroup(CriteriesGroup):
             self._criteria |= REQ_CRITERIA.VEHICLE.FAVORITE
         if filters['crystals']:
             self._criteria |= REQ_CRITERIA.VEHICLE.EARN_CRYSTALS
+        self._criteria |= self._getCrewCriteria(filters)
         if filters['searchNameVehicle']:
             self._criteria |= REQ_CRITERIA.VEHICLE.NAME_VEHICLE(makeSearchableString(filters['searchNameVehicle']))
+
+    def _getCrewCriteria(self, filters):
+        crewCriteriaList = [ c for f, c in BasicCriteriesGroup.__CREW_GROUP_CRITERIA.iteritems() if filters.get(f, False) ]
+        crewCriteria = REQ_CRITERIA.NONE if crewCriteriaList else REQ_CRITERIA.EMPTY
+        for criteria in crewCriteriaList:
+            crewCriteria ^= criteria
+
+        return crewCriteria
 
 
 class EventCriteriesGroup(CriteriesGroup):

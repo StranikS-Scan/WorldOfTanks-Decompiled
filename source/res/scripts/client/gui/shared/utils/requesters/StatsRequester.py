@@ -6,7 +6,6 @@ from account_helpers.premium_info import PremiumInfo
 from adisp import async
 from gui.shared.money import Money, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
-from gui.veh_post_porgression.models.ext_money import ExtendedMoney
 from helpers import time_utils, dependency
 from constants import SPA_ATTRS, MIN_VEHICLE_LEVEL
 from skeletons.gui.game_control import IWalletController
@@ -14,7 +13,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils.requesters import IStatsRequester
 from nation_change.nation_change_helpers import NationalGroupDataAccumulator
 _ADDITIONAL_XP_DATA_KEY = '_additionalXPCache'
-_ControllableXPData = namedtuple('_ControllableXPData', ('vehicleID', 'bonusType', 'extraXP', 'extraFreeXP', 'extraTmenXP', 'isXPToTMan'))
+_ControllableXPData = namedtuple('_ControllableXPData', ('vehicleID', 'bonusType', 'extraXP', 'extraFreeXP', 'extraDetXP', 'isXPToDet'))
 
 class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     wallet = dependency.descriptor(IWalletController)
@@ -187,12 +186,24 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return (self.getDailyTimeLimits(), self.getWeeklyTimeLimits())
 
     @property
-    def tankmenBerthsCount(self):
-        return self.getCacheValue('berths', 0)
+    def dormitoriesCount(self):
+        return self.getCacheValue('dormitories', 0)
 
     @property
     def vehicleSellsLeft(self):
         return self.getCacheValue('vehicleSellsLeft', 0)
+
+    @property
+    def detachmentSellsLeft(self):
+        return self.getCacheValue('detachmentSellsLeft', 0)
+
+    @property
+    def detachmentSellsDailyLimit(self):
+        return self._getDetachmentSellsDailyConfig().get('limit', 0)
+
+    @property
+    def isDetachmentSellsDailyLimitEnabled(self):
+        return self._getDetachmentSellsDailyConfig().get('enabled', 0)
 
     @property
     def freeTankmenLeft(self):
@@ -274,10 +285,6 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     def getMaxResearchedLevel(self, nationID):
         return self.getMaxResearchedLevelByNations().get(nationID, MIN_VEHICLE_LEVEL)
 
-    def getMoneyExt(self, vehCD):
-        vehicleXP = self.vehiclesXPs.get(vehCD, 0)
-        return ExtendedMoney(xp=(self.freeXP + vehicleXP), vehXP=vehicleXP, freeXP=self.freeXP, **self.money.toDict())
-
     def getWeeklyVehicleCrystals(self, vehCD):
         return self.getCacheValue('weeklyVehicleCrystals', {}).get(vehCD, 0)
 
@@ -296,3 +303,6 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
                     processedXP[arenaUniqueID] = _ControllableXPData(vehicleID, *XPData[1:])
 
         return result
+
+    def _getDetachmentSellsDailyConfig(self):
+        return self.getCacheValue('detachmentSellsDailyConfig', {})

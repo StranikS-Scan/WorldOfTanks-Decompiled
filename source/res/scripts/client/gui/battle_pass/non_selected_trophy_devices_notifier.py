@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_pass/non_selected_trophy_devices_notifier.py
 import weakref
 import typing
+from constants import IS_CREW_SANDBOX
 from gui import SystemMessages
 from gui.battle_pass.battle_pass_bonuses_helper import TROPHY_GIFT_TOKEN_BONUS_NAME, NEW_DEVICE_GIFT_TOKEN_BONUS_NAME
 from gui.battle_pass.battle_pass_helpers import getNotificationStorageKey
@@ -62,7 +63,7 @@ class NonSelectedOldTrophyDeviceNotifier(object):
                 self.__resetNotificationShown(bonusName)
                 self.__removeNotification(bonusName)
                 continue
-            if (self.__hasTokensFromPrevSeason(bonusName) or seasonNotActive) and self.__battlePassController.isOfferEnabled():
+            if (self.__hasTokensFromPrevSeason(bonusName) or seasonNotActive) and self.__battlePassController.isOfferEnabled() and not IS_CREW_SANDBOX:
                 self.__notify(bonusName)
 
     def __removeNotification(self, bonusName):

@@ -16,7 +16,10 @@ class _CrewBooksFilterBit(CONST_CONTAINER):
     RARE_2 = 2
     RARE_3 = 4
     PERSONAL = 8
-    UNIVERSAL = 16
+    UNIVERSAL_BOOK = 16
+    UNIVERSAL_BROCHURE = 32
+    UNIVERSAL_GUIDE = 64
+    UNIVERSAL = UNIVERSAL_BOOK | UNIVERSAL_BROCHURE | UNIVERSAL_GUIDE
 
 
 _TYPE_FILTER_ITEMS = [{'filterValue': _CrewBooksFilterBit.RARE_1,
@@ -31,10 +34,6 @@ _TYPE_FILTER_ITEMS = [{'filterValue': _CrewBooksFilterBit.RARE_1,
   'selected': False,
   'tooltip': makeTooltip(body=TOOLTIPS.CREWBOOKS_STORAGE_FILTERS_CREWBOOK_TITLE),
   'icon': RES_ICONS.MAPS_ICONS_STORAGE_FILTERS_ICON_BUTTON_RARE_3},
- {'filterValue': _CrewBooksFilterBit.PERSONAL,
-  'selected': False,
-  'tooltip': makeTooltip(body=TOOLTIPS.CREWBOOKS_STORAGE_FILTERS_PERSONALBOOK_TITLE),
-  'icon': RES_ICONS.MAPS_ICONS_STORAGE_FILTERS_ICON_BUTTON_PERSONAL},
  {'filterValue': _CrewBooksFilterBit.UNIVERSAL,
   'selected': False,
   'tooltip': makeTooltip(body=TOOLTIPS.CREWBOOKS_STORAGE_FILTERS_UNIVERSALBOOK_TITLE),
@@ -42,8 +41,9 @@ _TYPE_FILTER_ITEMS = [{'filterValue': _CrewBooksFilterBit.RARE_1,
 _TYPE_ID_BIT_TO_TYPE_ID_MAP = {_CrewBooksFilterBit.RARE_1: CREW_BOOK_RARITY.CREW_COMMON,
  _CrewBooksFilterBit.RARE_2: CREW_BOOK_RARITY.CREW_RARE,
  _CrewBooksFilterBit.RARE_3: CREW_BOOK_RARITY.CREW_EPIC,
- _CrewBooksFilterBit.PERSONAL: CREW_BOOK_RARITY.PERSONAL,
- _CrewBooksFilterBit.UNIVERSAL: CREW_BOOK_RARITY.UNIVERSAL}
+ _CrewBooksFilterBit.UNIVERSAL_BOOK: CREW_BOOK_RARITY.UNIVERSAL_BOOK,
+ _CrewBooksFilterBit.UNIVERSAL_BROCHURE: CREW_BOOK_RARITY.UNIVERSAL_BROCHURE,
+ _CrewBooksFilterBit.UNIVERSAL_GUIDE: CREW_BOOK_RARITY.UNIVERSAL_GUIDE}
 
 class CrewBooksTabView(FiltrableInventoryCategoryByNationTabView):
     __lobbyContext = dependency.descriptor(ILobbyContext)

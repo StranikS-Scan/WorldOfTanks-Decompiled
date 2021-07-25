@@ -41,9 +41,6 @@ class BaseBattleBoosterInteractor(BaseEquipmentInteractor):
     def getCurrentLayout(self):
         return self.getItem().battleBoosters.layout
 
-    def getSetupLayout(self):
-        return self.getItem().battleBoosters.setupLayouts
-
 
 class BattleBoosterInteractor(BaseBattleBoosterInteractor):
     __slots__ = ()
@@ -53,16 +50,25 @@ class BattleBoosterInteractor(BaseBattleBoosterInteractor):
         vehicle.battleBoosters.setInstalled(*self.getItem().battleBoosters.layout)
         return vehicle
 
+    def getVehiclePreview(self):
+        vehicle = super(BattleBoosterInteractor, self).getVehicleAfterInstall()
+        vehicle.battleBoosters.setLayout(*self.getItem().battleBoosters.layout)
+        if self._previewEquipment:
+            slotID, item = self._previewEquipment
+            vehicle.battleBoosters.layout[slotID] = item
+        vehicle.battleBoosters.setInstalled(*vehicle.battleBoosters.layout)
+        return vehicle
+
     def revert(self):
         self.getItem().battleBoosters.setLayout(*self.getInstalledLayout())
         self.onSlotAction(actionType=BaseSetupModel.REVERT_SLOT_ACTION)
         self.itemUpdated()
 
     @async
-    def applyQuit(self, callback, skipApplyAutoRenewal):
+    def applyQuit(self, callback):
         if not self.isPlayerLayout():
             yield await_callback(self.confirm)(skipDialog=True)
-        super(BattleBoosterInteractor, self).applyQuit(callback, skipApplyAutoRenewal)
+        super(BattleBoosterInteractor, self).applyQuit(callback)
 
     @process
     def confirm(self, callback, skipDialog=False):
@@ -80,10 +86,7 @@ class BattleBoosterInteractor(BaseBattleBoosterInteractor):
         return
 
     def updateFrom(self, vehicle, onlyInstalled=True):
-        super(BattleBoosterInteractor, self).updateFrom(vehicle, onlyInstalled)
-        items = self.getItem().battleBoosters
-        items.setInstalled(*vehicle.battleBoosters.installed)
-        items.setupLayouts.setSetups(vehicle.battleBoosters.setupLayouts.setups)
+        self.getItem().battleBoosters.setInstalled(*vehicle.battleBoosters.installed)
         self._playerLayout = vehicle.battleBoosters.layout.copy()
         if not onlyInstalled:
             self.getItem().battleBoosters.setLayout(*vehicle.battleBoosters.layout)

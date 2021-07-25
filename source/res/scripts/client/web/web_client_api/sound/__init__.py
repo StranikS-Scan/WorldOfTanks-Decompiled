@@ -5,6 +5,7 @@ import WWISE
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from web.web_client_api import w2c, w2capi, W2CSchema, Field
+SOUND_STATE_WEB_API_ID = 'sound_state'
 
 class _SoundSchema(W2CSchema):
     sound_id = Field(required=True, type=basestring)
@@ -62,7 +63,7 @@ class SoundStateWebApi(object):
      'STATE_clans_craft': 'STATE_clans_craft_progress_off',
      'STATE_gamemode_progress_page': 'STATE_gamemode_progress_page_off'}
 
-    @w2c(_SoundStateSchema, 'sound_state', finiHandlerName='_soundStateFini')
+    @w2c(_SoundStateSchema, SOUND_STATE_WEB_API_ID, finiHandlerName='_soundStateFini')
     def setSoundState(self, cmd):
         WWISE.WW_setState(str(cmd.state_name), str(cmd.state_value))
 

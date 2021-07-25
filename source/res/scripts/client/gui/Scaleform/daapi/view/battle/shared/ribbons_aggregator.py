@@ -86,6 +86,39 @@ class _BasePointsRibbon(_Ribbon):
         self._points += ribbon.getPoints()
 
 
+class _PerkRibbon(_Ribbon):
+    __slots__ = ('_data',)
+
+    def __init__(self, ribbonID, stacks):
+        super(_PerkRibbon, self).__init__(ribbonID)
+        self._data = stacks
+
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, data):
+        return cls(ribbonID, data)
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.PERK
+
+    def getStacks(self):
+        return self._data['stacks']
+
+    def getPerkID(self):
+        return self._data['perkID']
+
+    def _aggregate(self, ribbon):
+        self._data['stacks'] = ribbon.getStacks()
+
+    def _canAggregate(self, ribbon):
+        return self.getType() == ribbon.getType() and self.getPerkID() == ribbon.getPerkID()
+
+
+class _TalentRibbon(_PerkRibbon):
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.TALENT
+
+
 class _BaseCaptureRibbon(_BasePointsRibbon):
     __slots__ = ('_sessionID',)
 
@@ -862,6 +895,7 @@ class RibbonsAggregator(object):
         super(RibbonsAggregator, self).__init__()
         self.__feedbackProvider = None
         self.__vehicleStateCtrl = None
+        self.__perksCtrl = None
         self.__cache = _RibbonsCache()
         self.__accumulatedRibbons = _RibbonsCache()
         self.__rules = {}
@@ -884,6 +918,10 @@ class RibbonsAggregator(object):
             if self.__vehicleStateCtrl is not None:
                 self.__vehicleStateCtrl.onPostMortemSwitched += self._onPostMortemSwitched
                 self.__vehicleStateCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
+        if self.__perksCtrl is None:
+            self.__perksCtrl = self.sessionProvider.dynamic.perks
+            if self.__perksCtrl is not None:
+                self.__perksCtrl.onPerkChanged += self._onPerksChanged
         return
 
     def suspend(self):
@@ -905,6 +943,9 @@ class RibbonsAggregator(object):
             self.__vehicleStateCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
             self.__vehicleStateCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
             self.__vehicleStateCtrl = None
+        if self.__perksCtrl is not None:
+            self.__perksCtrl.onPerkChanged -= self._onPerksChanged
+            self.__perksCtrl = None
         return
 
     def getRibbon(self, ribbonID):
@@ -925,6 +966,17 @@ class RibbonsAggregator(object):
 
     def __onRespawnBaseMoving(self):
         self.__isInPostmortemMode = False
+
+    def _onPerksChanged(self, perkData):
+
+        def _ribbonsGenerator(perkData):
+            cls = _TalentRibbon if perkData['isUltimate'] else _PerkRibbon
+            r = cls.createFromFeedbackEvent(self.__idGenerator.next(), perkData)
+            if r is not None:
+                yield r
+            return
+
+        self._aggregateRibbons(_ribbonsGenerator(perkData))
 
     def _onPlayerFeedbackReceived(self, events):
 

@@ -212,7 +212,7 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
         super(VehicleModulesView, self)._init()
         configuratedVehicle = self._container.getCurrentVehicle()
         basketVehCmpData = self._container.getBasketVehCmpData()
-        self.__configuredVehModulesIDs = set(getInstalledModulesCDs(self._container.getInitialVehicleData()[0]))
+        self.__configuredVehModulesIDs = set(getInstalledModulesCDs(self._container.getInitialVehicleData()))
         self.__initialize(configuratedVehicle.descriptor.makeCompactDescr(), self.__detectModulesType(configuratedVehicle))
         stockVehicle = Vehicle(basketVehCmpData.getStockVehStrCD())
         self.__modulesInstaller = _ModulesInstaller(getInstalledModulesCDs(stockVehicle))

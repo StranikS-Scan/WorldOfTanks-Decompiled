@@ -8,52 +8,52 @@ from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import Ful
 class BlueprintConvertModel(FullScreenDialogWindowModel):
     __slots__ = ('onSelectItem', 'onSliderShift')
 
-    def __init__(self, properties=18, commands=5):
+    def __init__(self, properties=19, commands=5):
         super(BlueprintConvertModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def fragmentsBalance(self):
-        return self._getViewModel(10)
+        return self._getViewModel(11)
 
     @property
     def usedMainPrice(self):
-        return self._getViewModel(11)
+        return self._getViewModel(12)
 
     def getTotalCount(self):
-        return self._getNumber(12)
-
-    def setTotalCount(self, value):
-        self._setNumber(12, value)
-
-    def getCount(self):
         return self._getNumber(13)
 
-    def setCount(self, value):
+    def setTotalCount(self, value):
         self._setNumber(13, value)
 
+    def getCount(self):
+        return self._getNumber(14)
+
+    def setCount(self, value):
+        self._setNumber(14, value)
+
     def getAllianceName(self):
-        return self._getString(14)
+        return self._getString(15)
 
     def setAllianceName(self, value):
-        self._setString(14, value)
+        self._setString(15, value)
 
     def getAdditionalPriceOptions(self):
-        return self._getArray(15)
-
-    def setAdditionalPriceOptions(self, value):
-        self._setArray(15, value)
-
-    def getUsedAdditionalPrice(self):
         return self._getArray(16)
 
-    def setUsedAdditionalPrice(self, value):
+    def setAdditionalPriceOptions(self, value):
         self._setArray(16, value)
 
+    def getUsedAdditionalPrice(self):
+        return self._getArray(17)
+
+    def setUsedAdditionalPrice(self, value):
+        self._setArray(17, value)
+
     def getSyncInitiator(self):
-        return self._getNumber(17)
+        return self._getNumber(18)
 
     def setSyncInitiator(self, value):
-        self._setNumber(17, value)
+        self._setNumber(18, value)
 
     def _initialize(self):
         super(BlueprintConvertModel, self)._initialize()

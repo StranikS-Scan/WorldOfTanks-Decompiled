@@ -385,8 +385,5 @@ class Shell(FittingItem):
 
         return super(Shell, self).isInstalled(vehicle, slotIdx)
 
-    def isInSetup(self, vehicle, setupIndex=None, slotIdx=None):
-        return vehicle.shells.setupLayouts.containsIntCD(self.intCD, slotIdx)
-
     def _sortByType(self, other):
         return SHELL_TYPES_ORDER_INDICES[self.type] - SHELL_TYPES_ORDER_INDICES[other.type]

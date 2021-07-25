@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/formatters.py
 from itertools import chain
+from constants import BonusTypes
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -10,7 +11,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import KPI, kpiFormatValue
-from gui.shared.items_parameters import RELATIVE_PARAMS
+from gui.shared.items_parameters import RELATIVE_PARAMS, RELATIVE_TANK_CONTROL_LEVEL_PARAM, RELATIVE_BAR_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, PARAMS_GROUPS
 from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME
@@ -93,15 +94,7 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  TURBOSHAFT_SPEED_MODE_SPEED: MENU.TANK_PARAMS_MPH,
  DUAL_GUN_CHARGE_TIME: MENU.TANK_PARAMS_S,
  DUAL_GUN_RATE_TIME: MENU.TANK_PARAMS_S,
- 'shotSpeed': MENU.TANK_PARAMS_MPS,
- 'vehicleGunShotDispersionAfterShot': MENU.TANK_PARAMS_PERCENT,
- 'vehicleGunShotDispersionChassisMovement': MENU.TANK_PARAMS_PERCENT,
- 'vehicleGunShotDispersionChassisRotation': MENU.TANK_PARAMS_PERCENT,
- 'vehicleGunShotDispersionTurretRotation': MENU.TANK_PARAMS_PERCENT,
- 'vehicleGunShotDispersionWhileGunDamaged': MENU.TANK_PARAMS_PERCENT,
- 'vehicleRamDamageResistance': MENU.TANK_PARAMS_PERCENT,
- 'damageEnemiesByRamming': MENU.TANK_PARAMS_PERCENT,
- 'vehicleInvisibilityAfterShot': MENU.TANK_PARAMS_PERCENT}
+ 'shotSpeed': MENU.TANK_PARAMS_MPS}
 MEASURE_UNITS_NO_BRACKETS = {'weight': MENU.TANK_PARAMS_NO_BRACKETS_KG,
  'cooldownSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,
  'caliber': MENU.TANK_PARAMS_NO_BRACKETS_MM}
@@ -110,8 +103,9 @@ NO_BONUS_SIMPLIFIED_SCHEME = (text_styles.warning, text_styles.warning, text_sty
 NO_BONUS_BASE_SCHEME = (text_styles.error, text_styles.stats, text_styles.stats)
 SIMPLIFIED_SCHEME = (text_styles.critical, text_styles.warning, text_styles.statInfo)
 BASE_SCHEME = (text_styles.error, text_styles.stats, text_styles.bonusAppliedText)
-EXTRACTED_BONUS_SCHEME = (text_styles.error, text_styles.bonusAppliedText, text_styles.bonusAppliedText)
+EXTRACTED_BONUS_SCHEME = (text_styles.error, text_styles.warning, text_styles.bonusAppliedText)
 SITUATIONAL_SCHEME = (text_styles.critical, text_styles.warning, text_styles.bonusPreviewText)
+SITUATIONAL_BONUS_SCHEME = (text_styles.critical, text_styles.bonusPreviewText, text_styles.bonusPreviewText)
 VEHICLE_PARAMS = tuple(chain(*[ PARAMS_GROUPS[param] for param in RELATIVE_PARAMS ]))
 ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
  ITEM_TYPES.vehicleChassis: ('maxLoad',
@@ -153,7 +147,7 @@ def measureUnitsForParameter(paramName):
 
 
 def isRelativeParameter(paramName):
-    return paramName in RELATIVE_PARAMS
+    return paramName in RELATIVE_PARAMS + (RELATIVE_TANK_CONTROL_LEVEL_PARAM,)
 
 
 def isRelativeParameterVisible(parameter):
@@ -162,6 +156,10 @@ def isRelativeParameterVisible(parameter):
 
 def isDiffEnoughToDisplay(value):
     return abs(int(value)) > 0
+
+
+def getVehicleCrewRoleIconPath(role):
+    return RES_ICONS.MAPS_ICONS_DETACHMENT_PARAMETERS_ROLES + '/%s.png' % role
 
 
 def getParameterSmallIconPath(parameter):
@@ -228,6 +226,7 @@ _niceListFormat = {'rounder': backport.getNiceNumberFormat,
  'separator': _SLASH}
 _integralFormat = {'rounder': backport.getIntegralFormat}
 _percentFormat = {'rounder': lambda v: '%d%%' % v}
+_nicePercentFormat = {'rounder': lambda v: '%s%%' % backport.getNiceNumberFormat(v)}
 
 def _autoReloadPreprocessor(reloadTimes, rowStates):
     times = []
@@ -268,7 +267,8 @@ def _getRoundReload(value):
     return backport.getNiceNumberFormat(round(value, 1))
 
 
-FORMAT_SETTINGS = {'relativePower': _integralFormat,
+FORMAT_SETTINGS = {'relativeTankControlLevel': _nicePercentFormat,
+ 'relativePower': _integralFormat,
  'damage': _niceRangeFormat,
  'piercingPower': _niceRangeFormat,
  'reloadTime': _niceRangeFormat,
@@ -296,6 +296,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'chassisRotationSpeed': _niceFormat,
  'relativeVisibility': _integralFormat,
  'relativeCamouflage': _integralFormat,
+ 'relativeSituationalBonuses': _integralFormat,
  'circularVisionRadius': _niceFormat,
  'radioDistance': _niceFormat,
  'maxLoad': _niceFormat,
@@ -342,15 +343,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  DUAL_GUN_RATE_TIME: _niceListFormat,
  'shotSpeed': _integralFormat,
  'extraRepairSpeed': _percentFormat,
- TURBOSHAFT_SPEED_MODE_SPEED: _niceListFormat,
- 'vehicleGunShotDispersionAfterShot': _integralFormat,
- 'vehicleGunShotDispersionChassisMovement': _integralFormat,
- 'vehicleGunShotDispersionChassisRotation': _integralFormat,
- 'vehicleGunShotDispersionTurretRotation': _integralFormat,
- 'vehicleGunShotDispersionWhileGunDamaged': _integralFormat,
- 'vehicleRamDamageResistance': _integralFormat,
- 'damageEnemiesByRamming': _integralFormat,
- 'vehicleInvisibilityAfterShot': _integralFormat}
+ TURBOSHAFT_SPEED_MODE_SPEED: _niceListFormat}
 
 def _deltaWrapper(fn):
 
@@ -391,7 +384,7 @@ _STATES_INDEX_IN_COLOR_MAP = {PARAM_STATE.WORSE: 0,
  PARAM_STATE.NORMAL: 1,
  PARAM_STATE.BETTER: 2}
 
-def colorize(paramStr, state, colorScheme):
+def _colorize(paramStr, state, colorScheme):
     if isinstance(state, (tuple, list)):
         stateType, _ = state
     else:
@@ -407,16 +400,17 @@ def colorizedFullFormatParameter(parameter, colorScheme):
     return formatParameter(parameter.name, parameter.value, parameter.state, colorScheme, allowSmartRound=False)
 
 
-def simplifiedDeltaParameter(parameter, isSituational=False, isApproximately=False):
+def simplifiedDeltaParameter(parameter, isSituational=False, useAbsoluteValue=True, reverse=False):
     mainFormatter = SIMPLIFIED_SCHEME[1]
-    delta = int(parameter.state[1])
+    delta = parameter.state[1]
     paramStr = formatParameter(parameter.name, parameter.value)
     if delta:
         sign = '-' if delta < 0 else '+'
-        approximatelySymbol = '*' if isApproximately else ''
+        delta = int(abs(delta)) if useAbsoluteValue else formatParameter(parameter.name, abs(delta))
         scheme = SITUATIONAL_SCHEME if isSituational else SIMPLIFIED_SCHEME
-        deltaStr = colorize('%s%s%s' % (sign, abs(delta), approximatelySymbol), parameter.state, scheme)
-        return '(%s) %s' % (deltaStr, mainFormatter(paramStr))
+        deltaStr = _colorize('{}{}'.format(sign, delta), parameter.state, scheme)
+        formatStr = '{param} ({delta})' if reverse else '({delta}) {param}'
+        return formatStr.format(param=mainFormatter(paramStr), delta=deltaStr)
     return mainFormatter(paramStr)
 
 
@@ -430,7 +424,7 @@ def _applyFormat(value, state, settings, doSmartRound, colorScheme):
     else:
         paramStr = settings['rounder'](value)
     if state is not None and colorScheme is not None:
-        paramStr = colorize(paramStr, state, colorScheme)
+        paramStr = _colorize(paramStr, state, colorScheme)
     return paramStr
 
 
@@ -493,11 +487,13 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
     return params
 
 
-def getBonusIcon(bonusId):
-    if bonusId.find('Rammer') >= 0 and bonusId != 'deluxRammer' and bonusId.find('trophy') == -1:
+def getBonusIcon(bonusType, bonusID):
+    if bonusType == BonusTypes.DETACHMENT:
+        return '../maps/icons/perks/normal/24x24/perk_{}.png'.format(bonusID)
+    if bonusID.find('Rammer') >= 0 and bonusID != 'deluxRammer' and bonusID.find('trophy') == -1:
         iconName = 'rammer'
     else:
-        iconName = bonusId.split('_class')[0]
+        iconName = bonusID.split('_tier')[0]
     return RES_ICONS.getParamsTooltipIcon('bonuses', iconName)
 
 
@@ -515,14 +511,14 @@ def getGroupPenaltyIcon(parameter, comparator):
 
 def getAllParametersTitles():
     result = []
-    for _, groupName in enumerate(RELATIVE_PARAMS):
+    for groupName in RELATIVE_BAR_PARAMS:
         data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_TOP, groupName)
         data['titleText'] = formatVehicleParamName(groupName)
         data['isEnabled'] = True
         data['tooltip'] = TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
         result.append(data)
         for paramName in PARAMS_GROUPS[groupName]:
-            data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, paramName, groupName)
+            data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, paramName)
             data['iconSource'] = getParameterSmallIconPath(paramName)
             data['titleText'] = formatVehicleParamName(paramName)
             data['isEnabled'] = False

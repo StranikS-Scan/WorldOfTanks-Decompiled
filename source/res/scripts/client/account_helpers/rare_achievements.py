@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/rare_achievements.py
 import functools
 import ResMgr
+import constants
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 
 def __makeAchievementFileRequest(urlName, params, achievementId, callback):
@@ -12,7 +13,8 @@ def __makeAchievementFileRequest(urlName, params, achievementId, callback):
         url = fileServerSettings[urlName]['url_template']
         url = url % params
     except KeyError:
-        LOG_ERROR('Failed to find fileServer setting: %s' % urlName)
+        if not constants.IS_CREW_SANDBOX:
+            LOG_ERROR('Failed to find fileServer setting: %s' % urlName)
         callback(achievementId, None)
         return
     except TypeError:

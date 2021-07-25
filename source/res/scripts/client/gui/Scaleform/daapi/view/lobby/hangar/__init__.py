@@ -8,6 +8,7 @@ from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.app_loader import settings as app_settings
+from gui.impl.lobby.detachment.adaptors.hangar_widget_adaptor import HangarWidgetAdaptor
 from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -15,12 +16,15 @@ def getContextMenuHandlers():
     from gui.Scaleform.daapi.view.bootcamp.bootcamp_cm_handlers import BCVehicleContextMenuHandler
     from gui.Scaleform.daapi.view.bootcamp.bootcamp_cm_handlers import BCCrewContextMenuHandler
     from gui.Scaleform.daapi.view.bootcamp.bootcamp_cm_handlers import BCTechnicalMaintenanceCMHandler
-    return ((CONTEXT_MENU_HANDLER_TYPE.CREW, BootcampComponentOverride(hangar_cm_handlers.CrewContextMenuHandler, BCCrewContextMenuHandler)), (CONTEXT_MENU_HANDLER_TYPE.VEHICLE, BootcampComponentOverride(hangar_cm_handlers.VehicleContextMenuHandler, BCVehicleContextMenuHandler)), (CONTEXT_MENU_HANDLER_TYPE.TECHNICAL_MAINTENANCE, BootcampComponentOverride(hangar_cm_handlers.TechnicalMaintenanceCMHandler, BCTechnicalMaintenanceCMHandler)))
+    return ((CONTEXT_MENU_HANDLER_TYPE.CREW, BootcampComponentOverride(hangar_cm_handlers.RecruitContextMenuHandler, BCCrewContextMenuHandler)),
+     (CONTEXT_MENU_HANDLER_TYPE.MOBILIZATION_RECRUIT, hangar_cm_handlers.MobilizationRecruitContextMenuHandler),
+     (CONTEXT_MENU_HANDLER_TYPE.VEHICLE, BootcampComponentOverride(hangar_cm_handlers.VehicleContextMenuHandler, BCVehicleContextMenuHandler)),
+     (CONTEXT_MENU_HANDLER_TYPE.TECHNICAL_MAINTENANCE, BootcampComponentOverride(hangar_cm_handlers.TechnicalMaintenanceCMHandler, BCTechnicalMaintenanceCMHandler)))
 
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.ammunition_panel import AmmunitionPanel
-    from gui.Scaleform.daapi.view.lobby.hangar.Crew import Crew
+    from gui.Scaleform.daapi.view.lobby.hangar.recruit_panel import RecruitPanel
     from gui.Scaleform.daapi.view.lobby.hangar.CrewAboutDogWindow import CrewAboutDogWindow
     from gui.Scaleform.daapi.view.lobby.hangar.Hangar import Hangar
     from gui.Scaleform.daapi.view.lobby.hangar.ResearchPanel import ResearchPanel
@@ -45,7 +49,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCResearchPanel import BCResearchPanel
     from gui.Scaleform.daapi.view.bootcamp.BCTankCarousel import BCTankCarousel
     from gui.Scaleform.daapi.view.bootcamp.BCHangarHeader import BCHangarHeader
-    from gui.Scaleform.daapi.view.bootcamp.BCCrew import BCCrew
+    from gui.Scaleform.daapi.view.bootcamp.BCRecruitPanel import BCRecruitPanel
     from gui.Scaleform.daapi.view.bootcamp.BCHangar import BCHangar
     from gui.Scaleform.daapi.view.bootcamp.bootcamp_quest_component import BootcampQuestComponent
     from gui.Scaleform.daapi.view.lobby.hangar.epic_battles_widget import EpicBattlesWidget
@@ -82,7 +86,7 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.MAPBOX_TANK_CAROUSEL, MapboxTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.TMEN_XP_PANEL, TmenXpPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.VEHICLE_PARAMETERS, VehicleParameters, ScopeTemplates.DEFAULT_SCOPE),
-     ConditionalViewSettings(HANGAR_ALIASES.CREW, BootcampComponentOverride(Crew, BCCrew), None, WindowLayer.UNDEFINED, None, None, ScopeTemplates.DEFAULT_SCOPE),
+     ConditionalViewSettings(HANGAR_ALIASES.CREW, BootcampComponentOverride(RecruitPanel, BCRecruitPanel), None, WindowLayer.UNDEFINED, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.RANKED_WIDGET, RankedBattlesHangarWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.ALERT_MESSAGE_BLOCK, AlertMessageBlock, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.EPIC_WIDGET, EpicBattlesWidget, ScopeTemplates.DEFAULT_SCOPE),
@@ -97,6 +101,7 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.AMMUNITION_PANEL_INJECT, AmmunitionPanelInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.ENTRIES_CONTAINER, EventEntryPointsContainer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, CraftMachineEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.DETACHMENT_WIDGET, HangarWidgetAdaptor, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, MapBoxEntryPoint, ScopeTemplates.DEFAULT_SCOPE))
 
 

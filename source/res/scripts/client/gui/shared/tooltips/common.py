@@ -4,7 +4,6 @@ import cPickle
 import logging
 import math
 from collections import namedtuple, defaultdict
-from helpers.i18n import makeString
 import ArenaType
 import ResMgr
 import constants
@@ -30,13 +29,13 @@ from gui.clans.items import formatField
 from gui.impl import backport
 from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.impl.gen import R
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_3d_style_not_chosen_tooltip import BattlePass3dStyleNotChosenTooltip
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
+from gui.impl.lobby.battle_pass.tooltips.battle_pass_3d_style_not_chosen_tooltip import BattlePass3dStyleNotChosenTooltip
 from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
+from gui.impl.lobby.detachment.tooltips.colored_simple_tooltip import ColoredSimpleTooltip
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
-from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.server_events.events_helpers import missionsSortFunc
@@ -51,9 +50,12 @@ from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
 from gui.shared.tooltips import efficiency
 from gui.shared.tooltips import formatters
+from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.view_helpers import UsersInfoHelper
 from helpers import dependency
 from helpers import i18n, time_utils, html, int2roman
+from helpers.i18n import makeString
+from items.components.component_constants import EMPTY_STRING
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeContactStatusDescription
 from messenger.m_constants import USER_TAG
 from messenger.storage import storage_getter
@@ -637,7 +639,7 @@ class ActionTooltipData(ToolTipBaseData):
     def __init__(self, context):
         super(ActionTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
 
-    def getDisplayableData(self, itemType, key, newPrice, oldPrice, isBuying, forCredits=False, rentPackage=None):
+    def getDisplayableData(self, itemType, key, newPrice, oldPrice, isBuying, forCredits=False, rentPackage=None, checkAllCurrencies=False):
         descr = ''
         hasRentCompensation = False
         hasPersonalDiscount = False
@@ -684,7 +686,7 @@ class ActionTooltipData(ToolTipBaseData):
         elif itemType == ACTION_TOOLTIPS_TYPE.ECONOMICS:
             itemName = key
         template = 'html_templates:lobby/quests/actions'
-        formatedOldPrice, formatedNewPrice = formatActionPrices(oldPrice, newPrice, isBuying)
+        formatedOldPrice, formatedNewPrice = formatActionPrices(oldPrice, newPrice, isBuying, checkAllCurrencies)
         body = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=formatedOldPrice, newPrice=formatedNewPrice)
         actionUserName = ''
         if itemName:
@@ -754,23 +756,25 @@ class BaseDiscountTooltipData(ToolTipBaseData):
         super(BaseDiscountTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
 
     @classmethod
-    def _packDisplayableData(cls, cost, fullCost, currencyType=DISCOUNT_TYPE.GOLD):
+    def _packDisplayableData(cls, cost, fullCost, currencyType=DISCOUNT_TYPE.GOLD, isEnoughCost=True, isEnoughFullCost=True):
         headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_HEADER)
-        bodyText = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=cls._formatPrice(fullCost, currencyType), newPrice=cls._formatPrice(cost, currencyType))
+        bodyText = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=cls._formatPrice(fullCost, currencyType, isEnoughFullCost), newPrice=cls._formatPrice(cost, currencyType, isEnoughCost))
         return {'header': headerText,
          'body': bodyText}
 
     @staticmethod
-    def _formatPrice(cost, currencyType):
+    def _formatPrice(cost, currencyType, isEnough=True):
         template = 'html_templates:lobby/quests/actions'
         format_ = backport.getGoldFormat
+        if not isEnough:
+            currencyType += 'Error'
         return makeHtmlString(template, currencyType, {'value': format_(cost)}) if cost is not None else ''
 
 
 class PriceDiscountTooltipData(BaseDiscountTooltipData):
 
-    def getDisplayableData(self, cost, fullCost, currencyType):
-        return self._packDisplayableData(cost, fullCost, currencyType)
+    def getDisplayableData(self, cost, fullCost, currencyType, isEnoughCost=True, isEnoughFullCost=True):
+        return self._packDisplayableData(cost, fullCost, currencyType, isEnoughCost, isEnoughFullCost)
 
 
 class FrontlineDiscountTooltipData(BaseDiscountTooltipData):
@@ -1064,7 +1068,7 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
          'oldPrice': oldPrice.toMoneyTuple(),
          'valuePadding': -2}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding), currency=newPrice.getCurrency())
     else:
-        return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5), nameOffset=iconRightOffset, gap=0)
+        return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5), nameOffset=iconRightOffset, gap=0, iconYOffset=3)
 
 
 def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61, forcedText='', isDeluxe=False, gap=15):
@@ -1217,7 +1221,7 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
         self._btnType = None
         return
 
-    def _packBlocks(self, btnType=None, *args, **kwargs):
+    def _packBlocks(self, btnType=None, hideActionBlock=False, *args, **kwargs):
         tooltipBlocks = super(HeaderMoneyAndXpTooltipData, self)._packBlocks(*args, **kwargs)
         self._btnType = btnType
         if self._btnType is None:
@@ -1225,7 +1229,7 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
             return tooltipBlocks
         else:
             valueBlock = formatters.packMoneyAndXpValueBlock(value=self._getValue(), icon=self._getIcon(), iconYoffset=self._getIconYOffset())
-            return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=[valueBlock])
+            return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=[valueBlock], hideActionBlock=hideActionBlock)
 
     def _getValue(self):
         valueStr = '0'
@@ -1511,6 +1515,22 @@ class TechTreeDiscountInfoTooltip(TechTreeEventTooltipBase):
         return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
 
+class BarracksInfoTooltip(BlocksTooltipData):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, context):
+        super(BarracksInfoTooltip, self).__init__(context, None)
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(BarracksInfoTooltip, self)._packBlocks(*args, **kwargs)
+        recruits = len(self.__itemsCache.items.getTankmen(REQ_CRITERIA.TANKMAN.ACTIVE))
+        barracksRes = R.strings.tooltips.header.buttons.barracks
+        descr = barracksRes.hasRecruits.body() if recruits else barracksRes.body()
+        items.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.header.buttons.barracks.header())), desc=text_styles.main(backport.text(descr))))
+        return items
+
+
 class TechTreeNationDiscountTooltip(TechTreeEventTooltipBase):
 
     def _packBlocks(self, nation):
@@ -1527,10 +1547,15 @@ class TechTreeNationDiscountTooltip(TechTreeEventTooltipBase):
         return items
 
 
-class VehPostProgressionEntryPointTooltipContentWindowData(ToolTipBaseData):
+class SimpleColoredTooltip(ToolTipBaseData):
 
     def __init__(self, context):
-        super(VehPostProgressionEntryPointTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.VEH_POST_PROGRESSION_ENTRY_POINT)
+        super(SimpleColoredTooltip, self).__init__(context, TOOLTIPS_CONSTANTS.GF_SIMPLE_COLORED)
 
-    def getDisplayableData(self, intCD, parentScreen, *args, **kwargs):
-        return DecoratedTooltipWindow(VehPostProgressionEntryPointTooltip(intCD, parentScreen), useDecorator=False)
+    def getDisplayableData(self, *args, **kwargs):
+        data = args[0].children
+        header = data.get('header', EMPTY_STRING)
+        body = data.get('body', EMPTY_STRING)
+        note = data.get('note', EMPTY_STRING)
+        alert = data.get('alert', EMPTY_STRING)
+        return DecoratedTooltipWindow(ColoredSimpleTooltip(header, body, note, alert), useDecorator=False)

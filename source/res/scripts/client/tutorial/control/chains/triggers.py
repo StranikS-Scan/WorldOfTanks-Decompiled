@@ -134,8 +134,7 @@ class CurrentVehicleLockedTrigger(_CurrentVehicleViewStateTrigger):
 class CurrentVehicleNeedChangeTrigger(_CurrentVehicleViewStateTrigger):
 
     def isOn(self):
-        return game_vars.getCurrentVehicleState() in (Vehicle.VEHICLE_STATE.CREW_NOT_FULL,
-         Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
+        return game_vars.getCurrentVehicleState() in (Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
          Vehicle.VEHICLE_STATE.BATTLE,
          Vehicle.VEHICLE_STATE.DAMAGED,
          Vehicle.VEHICLE_STATE.DESTROYED,

@@ -8,20 +8,24 @@ from adisp import process, async
 from gui.SystemMessages import SM_TYPE, ResultMsg
 from gui.shared.utils import code2str
 from gui.shared.gui_items.processors import plugins as proc_plugs
-from gui.shared.money import Currency
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.detachment import IDetachmentCache
 _logger = logging.getLogger(__name__)
 
-def makeSuccess(userMsg='', msgType=SM_TYPE.Information, auxData=None, msgData=None, msgPriority=None):
-    return ResultMsg(True, userMsg, msgType, msgPriority, msgData if msgData is not None else {}, auxData)
+def makeSuccess(userMsg='', msgType=SM_TYPE.Information, auxData=None):
+    return ResultMsg(True, userMsg, msgType, auxData)
 
 
-def makeError(userMsg='', msgType=SM_TYPE.Error, auxData=None, msgData=None, msgPriority=None):
-    return ResultMsg(False, userMsg, msgType, msgPriority, msgData if msgData is not None else {}, auxData)
+def makeError(userMsg='', msgType=SM_TYPE.Error, auxData=None):
+    return ResultMsg(False, userMsg, msgType, auxData)
 
 
 def makeI18nSuccess(sysMsgKey='', auxData=None, *args, **kwargs):
     return makeSuccess(i18n.makeString('#system_messages:{}'.format(sysMsgKey), *args, **kwargs), kwargs.get('type', SM_TYPE.Information), auxData)
+
+
+def makeTextSuccess(text='', auxData=None, *args, **kwargs):
+    return makeSuccess(text, kwargs.get('type', SM_TYPE.Information), auxData)
 
 
 def makeI18nError(sysMsgKey='', defaultSysMsgKey='', auxData=None, *args, **kwargs):
@@ -31,17 +35,9 @@ def makeI18nError(sysMsgKey='', defaultSysMsgKey='', auxData=None, *args, **kwar
     return makeError(i18n.makeString(localKey, *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData)
 
 
-def makeCrewSkinCompensationMessage(comp):
-    compMsg = None
-    if comp is not None:
-        amount = comp.price.get(Currency.CREDITS, None)
-        if amount is not None:
-            compMsg = makeI18nSuccess(sysMsgKey='crewSkinsCompensation/success', compensation=amount, type=SM_TYPE.SkinCompensation)
-    return compMsg
-
-
 class Processor(object):
     itemsCache = dependency.descriptor(IItemsCache)
+    detachmentCache = dependency.descriptor(IDetachmentCache)
     IS_GAMEFACE_SUPPORTED = False
     PLUGIN_RES_CODE = -33
 

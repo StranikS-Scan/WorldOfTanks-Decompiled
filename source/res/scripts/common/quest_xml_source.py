@@ -473,7 +473,6 @@ class Source(object):
          'item',
          'equipment',
          'slots',
-         'berths',
          'premium',
          'premium_plus',
          'premium_vip',
@@ -493,6 +492,7 @@ class Source(object):
          'entitlement',
          'rankedDailyBattles',
          'rankedBonusBattles',
+         'dormitories',
          'dogTagComponent',
          'battlePassPoints'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):

@@ -5,7 +5,6 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CREW_BOOKS_VIEWED
-from adisp import async
 from nations import INDICES, NONE_INDEX
 from frameworks.wulf.view.array import Array
 from gui.impl.gen import R
@@ -18,7 +17,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.dependency import descriptor, replace_none_kwargs
 from items.components.crew_books_constants import CREW_BOOK_RARITY
 from items.components import skills_constants
-from items import tankmen
+from items import tankmen, detachment_customization
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -61,30 +60,30 @@ class _CrewBooksViewedCache(object):
             AccountSettings.setSettings(CREW_BOOKS_VIEWED, self.__viewedItems)
             self.__needUpdate = False
 
-    def haveNewCrewBooks(self):
+    def getNewBooksCount(self):
         vehicle = g_currentVehicle.item
         if vehicle is None or not self._lobbyContext.getServerSettings().isCrewBooksEnabled():
             return False
         else:
             currentNation = vehicle.nationID
+            newBooksCount = 0
             for bookType, count in self.__booksCountByNation.iteritems():
                 if bookType in CREW_BOOK_RARITY.NO_NATION_TYPES:
                     viewedCount = self.__viewedItems.setdefault(bookType, 0)
                     if viewedCount < count:
                         self.__needUpdate = True
-                        return True
+                        newBooksCount += count - viewedCount
                 if self.__viewedItems[bookType].setdefault(currentNation, 0) < count[currentNation]:
                     self.__needUpdate = True
-                    return True
+                    newBooksCount += count[currentNation] - self.__viewedItems[bookType].setdefault(currentNation, 0)
 
-            return False
+            return newBooksCount
 
-    @async
-    def onCrewBooksUpdated(self, diff, callback):
+    def onCrewBooksUpdated(self, diff):
         inventory = diff.get('inventory', {})
         if GUI_ITEM_TYPE.CREW_BOOKS in inventory:
             for cd, count in inventory[GUI_ITEM_TYPE.CREW_BOOKS].iteritems():
-                item = tankmen.getItemByCompactDescr(cd)
+                item = detachment_customization.getItemByCompactDescr(cd)
                 if count is None:
                     count = 0
                 if item.type in CREW_BOOK_RARITY.NO_NATION_TYPES:
@@ -92,7 +91,6 @@ class _CrewBooksViewedCache(object):
                 self.__booksCountByNation[item.type][self.__getNationID(item.nation)] = count
 
             self.__needUpdate = True
-        callback(True)
         return
 
     def destroy(self):

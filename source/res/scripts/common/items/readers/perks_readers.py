@@ -1,30 +1,55 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/perks_readers.py
-import ResMgr
 import os
+import typing
+from collections import OrderedDict
+import ResMgr
 from items import _xml
 from items.components import perks_constants
-from items.components.perks_components import Perk, PerksBranch
+from items.components.perks_components import Perk, PerkArgument, PerkArgumentUISettings
+from items.components.perks_constants import PerkTags
+from constants import IS_CLIENT, IS_WEB
+if typing.TYPE_CHECKING:
+    from items.components.perks_components import PerksCache
+
+def _readPerkArguments(xmlCtx, section):
+    argsSection = _xml.getSubsection(xmlCtx, section, 'defaultBlockSettings', throwIfMissing=False)
+    if not argsSection:
+        return {}
+    else:
+        argsDict = OrderedDict()
+        argTypesMapping = perks_constants.PerksValueType.CONFIGURATION_MAPPING
+        for _, argSection in argsSection.items():
+            argId = _xml.readString(xmlCtx, argSection, 'argId')
+            value = argSection.readFloat('value', 0.0)
+            postValues = map(float, _xml.readStringOrEmpty(xmlCtx, argSection, 'postValues').split())
+            maxStacks = argSection.readInt('maxStacks', 1)
+            diminishingStartsAfter = argSection.readInt('diminishing_starts_after', 10)
+            perkArgUISettings = None
+            if IS_CLIENT or IS_WEB:
+                argUISettingsSection = _xml.getSubsection(xmlCtx, argSection, 'UISettings', throwIfMissing=False)
+                if argUISettingsSection:
+                    valueTypeName = _xml.readStringOrEmpty(xmlCtx, argUISettingsSection, 'type')
+                    argType = argTypesMapping[valueTypeName]
+                    revert = _xml.readBool(xmlCtx, argUISettingsSection, 'revert', default=False)
+                    situationalArg = _xml.readBool(xmlCtx, argUISettingsSection, 'situationalArg', False)
+                    equipmentCooldown = _xml.readStringOrNone(xmlCtx, argUISettingsSection, 'equipmentCooldown')
+                    localeFormatting = _xml.readStringOrEmpty(xmlCtx, argUISettingsSection, 'localeFormatting')
+                    perkTooltipBonus = _xml.readBool(xmlCtx, argUISettingsSection, 'perkTooltipBonus', False)
+                    icon = _xml.readStringOrNone(xmlCtx, argUISettingsSection, 'icon')
+                    perkArgUISettings = PerkArgumentUISettings(argType, revert, situationalArg, equipmentCooldown, localeFormatting, perkTooltipBonus, icon)
+            argsDict[argId] = PerkArgument(value, postValues, diminishingStartsAfter, maxStacks, perkArgUISettings)
+
+        return argsDict
+
 
 def _readPerkItem(xmlCtx, section, storage):
     perkID = _xml.readInt(xmlCtx, section, 'id', 1)
-    name = _xml.readStringOrEmpty(xmlCtx, section, 'name')
-    description = _xml.readNonEmptyString(xmlCtx, section, 'description')
-    icon = _xml.readNonEmptyString(xmlCtx, section, 'icon')
-    branchID = _xml.readInt(xmlCtx, section, 'branchID', 0)
+    flags = PerkTags.pack(_xml.readStringOrEmpty(xmlCtx, section, 'tags').split())
     ultimative = section.readBool('ultimative', False)
-    maxCount = _xml.readInt(xmlCtx, section, 'maxCount', 1)
     situational = _xml.readBool(xmlCtx, section, 'situational', False)
-    perkItem = Perk(perkID, name, description, icon, branchID, ultimative, maxCount, situational)
-    storage[perkID] = perkItem
-
-
-def _readBranchItem(xmlCtx, section, storage):
-    perkID = _xml.readInt(xmlCtx, section, 'id', 1)
-    name = _xml.readStringOrEmpty(xmlCtx, section, 'name')
-    needPoints = section.readInt('needPoints', 0)
-    perkItem = PerksBranch(perkID, name, needPoints)
-    storage[perkID] = perkItem
+    args = _readPerkArguments(xmlCtx, section)
+    storage[perkID] = Perk(perkID, flags, ultimative, situational, args)
 
 
 def _readPerksCacheFromXMLSection(xmlCtx, section, sectionName, storage):
@@ -37,14 +62,11 @@ def _readPerksCacheFromXMLSection(xmlCtx, section, sectionName, storage):
         reader(xmlCtx, gsection, storage)
 
 
-PERKS_READERS = {'perk': _readPerkItem,
- 'branch': _readBranchItem}
+PERKS_READERS = {'perk': _readPerkItem}
 
 def readPerksCacheFromXML(cache, folder):
     xmlCtx = (None, perks_constants.PERKS_XML_FILE)
     pgFile = os.path.join(folder, perks_constants.PERKS_XML_FILE)
     _readPerksCacheFromXMLSection(xmlCtx, ResMgr.openSection(pgFile), 'perk', cache.perks)
-    _readPerksCacheFromXMLSection(xmlCtx, ResMgr.openSection(pgFile), 'branch', cache.branches)
-    cache.attachPerksToBranches()
     ResMgr.purge(pgFile)
     return

@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/crew_book_builders.py
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.tooltips import contexts
+from gui.shared.tooltips import contexts, advanced
 from gui.shared.tooltips import crew_book
-from gui.shared.tooltips.builders import DataBuilder
+from gui.shared.tooltips.builders import DataBuilder, AdvancedDataBuilder
 __all__ = ('getTooltipBuilders',)
 
 class CrewBookTooltipBuilder(DataBuilder):
@@ -26,5 +26,15 @@ class CrewBookRestrictedTooltipBuilder(DataBuilder):
         return super(CrewBookRestrictedTooltipBuilder, self)._buildData(_advanced, vehicleID)
 
 
+class BookItemTooltipBuilder(AdvancedDataBuilder):
+    __slots__ = ()
+
+    def __init__(self, tooltipType, linkage):
+        super(BookItemTooltipBuilder, self).__init__(tooltipType, linkage, crew_book.BookItemToolTipData(contexts.CrewBookContext()), advanced.BookItemAdvanced(contexts.DefaultContext()))
+
+    def _buildData(self, _advanced, bookItem, *args, **kwargs):
+        return super(BookItemTooltipBuilder, self)._buildData(_advanced, bookItem)
+
+
 def getTooltipBuilders():
-    return (CrewBookTooltipBuilder(TOOLTIPS_CONSTANTS.CREW_BOOK, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI), CrewBookRestrictedTooltipBuilder(TOOLTIPS_CONSTANTS.CREW_BOOK_RESTRICTED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI))
+    return (CrewBookTooltipBuilder(TOOLTIPS_CONSTANTS.CREW_BOOK, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI), CrewBookRestrictedTooltipBuilder(TOOLTIPS_CONSTANTS.CREW_BOOK_RESTRICTED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI), BookItemTooltipBuilder(TOOLTIPS_CONSTANTS.BOOK_ITEM, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI))

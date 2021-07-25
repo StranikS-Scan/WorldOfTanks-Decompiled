@@ -8,6 +8,7 @@ from itertools import izip
 from operator import itemgetter
 from collections import namedtuple
 from copy import deepcopy
+from typing import Optional, List
 import BigWorld
 import constants
 from collector_vehicle import CollectorVehicleConsts
@@ -16,7 +17,12 @@ from PerksParametersController import PerksParametersController
 from constants import WIN_XP_FACTOR_MODE, RentType
 from gui.impl import backport
 from gui.impl.gen import R
+from crew2 import settings_globals
+from crew2.sandbox import SANDBOX_CONSTANTS
+from gui.impl.gen_utils import DynAccessor
+from gui.shared.utils.functions import replaceHyphenToUnderscore
 from items.customizations import createNationalEmblemComponents
+from items.components.detachment_constants import NO_DETACHMENT_ID
 from rent_common import parseRentID
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -38,22 +44,22 @@ from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY
 from gui.shared.utils import makeSearchableString
 from helpers import i18n, time_utils, dependency, func_utils
-from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr, filterIntCDsByItemType
-from items.vehicles import getItemByCompactDescr, getVehicleType
+from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr
+from items.vehicles import getItemByCompactDescr
 from items.components.c11n_constants import SeasonType, CustomizationType, HIDDEN_CAMOUFLAGE_ID, ApplyArea, CUSTOM_STYLE_POOL_ID, ItemTags
 from shared_utils import findFirst, CONST_CONTAINER
-from skeletons.gui.game_control import IIGRController, IRentalsController, IVehiclePostProgressionController
+from skeletons.gui.detachment import IDetachmentCache
+from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
-from post_progression_common import TankSetupGroupsId
+from constants import AbilitySystemScopeNames
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
     from items.components.c11n_components import StyleItem
-    from gui.veh_post_porgression.models.progression import PostProgressionItem, AvailabilityCheckResult
-    from post_progression_common import VehicleState
+    from items.AbilitiesManager import AbilitiesManager
 _logger = logging.getLogger(__name__)
 
 class VEHICLE_CLASS_NAME(CONST_CONTAINER):
@@ -64,6 +70,7 @@ class VEHICLE_CLASS_NAME(CONST_CONTAINER):
     AT_SPG = 'AT-SPG'
 
 
+VEHICLE_CLASS_NAME_BY_TYPE = {nativeType:backport.text(R.strings.menu.tankmen.dyn(nativeType)()) for nativeType in VEHICLE_CLASS_NAME.ALL()}
 VEHICLE_TYPES_ORDER = (VEHICLE_CLASS_NAME.LIGHT_TANK,
  VEHICLE_CLASS_NAME.MEDIUM_TANK,
  VEHICLE_CLASS_NAME.HEAVY_TANK,
@@ -155,14 +162,13 @@ class VEHICLE_TAGS(CONST_CONTAINER):
 
 
 EPIC_ACTION_VEHICLE_CDS = (44033, 63265)
-NOT_FULL_AMMO_MULTIPLIER = 0.2
+_NOT_FULL_AMMO_MULTIPLIER = 0.2
 _MAX_RENT_MULTIPLIER = 2
 RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', 'mainRentType', 'seasonType'))
 CrystalsEarnedInfo = namedtuple('CrystalsEarnedInfo', ('current', 'max'))
-EliteStatusProgress = typing.NamedTuple('EliteStatusProgress', (('unlocked', typing.Set[int]), ('toUnlock', typing.Set[int]), ('total', typing.Set[int])))
 
 class Vehicle(FittingItem):
-    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfits', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_perksController', '_personalTradeInAvailableSale', '_personalTradeInAvailableBuy', '_groupIDs', '_postProgression')
+    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_lastDetachmentID', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfits', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_perksController', '_personalTradeInAvailableSale', '_personalTradeInAvailableBuy', '_groupIDs', '_detachmentID')
 
     class VEHICLE_STATE(object):
         DAMAGED = 'damaged'
@@ -172,7 +178,7 @@ class Vehicle(FittingItem):
         BATTLE = 'battle'
         IN_PREBATTLE = 'inPrebattle'
         LOCKED = 'locked'
-        CREW_NOT_FULL = 'crewNotFull'
+        NO_DETACHMENT = 'noDetachment'
         AMMO_NOT_FULL = 'ammoNotFull'
         AMMO_NOT_FULL_EVENTS = 'ammoNotFullEvents'
         SERVER_RESTRICTION = 'serverRestriction'
@@ -191,17 +197,21 @@ class Vehicle(FittingItem):
         RENTABLE = 'rentable'
         RENTABLE_AGAIN = 'rentableAgain'
         DISABLED = 'disabled'
+        OLD_CREW = 'oldCrew'
         TOO_HEAVY = 'tooHeavy'
+        NO_TEST = SANDBOX_CONSTANTS.NO_TEST_STATE
 
     CAN_SELL_STATES = (VEHICLE_STATE.UNDAMAGED,
-     VEHICLE_STATE.CREW_NOT_FULL,
+     VEHICLE_STATE.NO_DETACHMENT,
      VEHICLE_STATE.AMMO_NOT_FULL,
      VEHICLE_STATE.GROUP_IS_NOT_READY,
      VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
      VEHICLE_STATE.UNSUITABLE_TO_UNIT,
      VEHICLE_STATE.ROTATION_GROUP_UNLOCKED,
      VEHICLE_STATE.ROTATION_GROUP_LOCKED,
-     VEHICLE_STATE.TOO_HEAVY)
+     VEHICLE_STATE.TOO_HEAVY,
+     VEHICLE_STATE.OLD_CREW,
+     VEHICLE_STATE.NO_TEST)
     TRADE_OFF_NOT_READY_STATES = (VEHICLE_STATE.DAMAGED,
      VEHICLE_STATE.EXPLODED,
      VEHICLE_STATE.DESTROYED,
@@ -222,17 +232,16 @@ class Vehicle(FittingItem):
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsCache = dependency.descriptor(IEventsCache)
     igrCtrl = dependency.descriptor(IIGRController)
+    detachmentCache = dependency.descriptor(IDetachmentCache)
     itemsCache = dependency.descriptor(IItemsCache)
     __customizationService = dependency.descriptor(ICustomizationService)
-    __postProgressionCtrl = dependency.descriptor(IVehiclePostProgressionController)
 
-    def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None):
-        self.__postProgressionCtrl.processVehExtData(getVehicleType(typeCompDescr or strCompactDescr), extData)
+    def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
         if strCompactDescr is not None:
-            vehDescr = vehicles.VehicleDescr(compactDescr=strCompactDescr, extData=extData)
+            vehDescr = vehicles.VehicleDescr(compactDescr=strCompactDescr)
         else:
             _, nID, innID = vehicles.parseIntCompactDescr(typeCompDescr)
-            vehDescr = vehicles.VehicleDescr(typeID=(nID, innID), extData=extData)
+            vehDescr = vehicles.VehicleDescr(typeID=(nID, innID))
         super(Vehicle, self).__init__(vehDescr.type.compactDescr, proxy, strCD=HasStrCD(strCompactDescr))
         self._descriptor = vehDescr
         self._inventoryID = inventoryID
@@ -260,7 +269,6 @@ class Vehicle(FittingItem):
         self._isInfiniteRotationGroup = False
         self._unlockedBy = []
         self._perksController = None
-        self._postProgression = None
         self._hasNationGroup = hasNationGroup(vehDescr.type.compactDescr)
         self._outfits = {}
         self._isStyleInstalled = False
@@ -307,6 +315,7 @@ class Vehicle(FittingItem):
         self._extraSettings = invData.get('extraSettings', 0)
         self._lock = invData.get('lock', (0, 0))
         self._repairCost, self._health = invData.get('repair', (0, 0))
+        self._detachmentID = self._linkDetachmentID(proxy)
         self._gun = self.itemsFactory.createVehicleGun(vehDescr.gun.compactDescr, proxy, vehDescr.gun)
         self._turret = self.itemsFactory.createVehicleTurret(vehDescr.turret.compactDescr, proxy, vehDescr.turret)
         self._engine = self.itemsFactory.createVehicleEngine(vehDescr.engine.compactDescr, proxy, vehDescr.engine)
@@ -348,6 +357,7 @@ class Vehicle(FittingItem):
         self._crewIndices = dict([ (invID, idx) for idx, invID in enumerate(crewList) ])
         self._crew = self._buildCrew(crewList, proxy)
         self._lastCrew = invData.get('lastCrew')
+        self._lastDetachmentID = invData.get('lastDetachmentID')
         if self.canTradeIn:
             self._rentPackagesInfo = RentPackagesInfo(False, 0, 0)
             self._rentPackages = []
@@ -358,9 +368,6 @@ class Vehicle(FittingItem):
         self._hasModulesToSelect = self.__hasModulesToSelect()
         self.__customState = ''
         self._slotsAnchorsById, self._slotsAnchors = self.__initAnchors()
-        if self.__postProgressionCtrl.isDisabledFor(self):
-            self._descriptor.installModifications([], rebuildAttrs=False)
-            self._equipment.optDevices.dynSlotTypes = []
         return
 
     def __initAnchors(self):
@@ -460,9 +467,20 @@ class Vehicle(FittingItem):
 
         return (-1, 0, set())
 
-    def initPerksController(self, scopedPerks):
-        if not self._perksController:
-            self._perksController = PerksParametersController(self.descriptor.type.compactDescr, scopedPerks)
+    def initPerksController(self, detInvID, bonusPerks=None, comparableInstructors=None):
+        if self._perksController:
+            return
+        detachmentPerks = {}
+        if detInvID != NO_DETACHMENT_ID:
+            detachment = self.detachmentCache.getDetachment(detInvID)
+            detachmentPerks = detachment.getPerks(bonusPerks, vehicle=self, comparableInstructors=comparableInstructors)
+        elif bonusPerks:
+            detachmentPerks = bonusPerks.copy()
+        abilities = BigWorld.player().inventory.abilities.abilitiesManager
+        abilities.addBuild(self.invID, AbilitySystemScopeNames.DETACHMENT, detachmentPerks)
+        scopedPerks = abilities.getPerksByVehicle(self.invID)
+        abilities.removePerksByVehicle(self.invID)
+        self._perksController = PerksParametersController(self.descriptor.type.compactDescr, detInvID, scopedPerks)
 
     def stopPerksController(self):
         if self._perksController:
@@ -475,6 +493,9 @@ class Vehicle(FittingItem):
 
     def setPerksController(self, perksController):
         self._perksController = perksController
+
+    def getLinkedDetachmentID(self):
+        return self._detachmentID
 
     def _calcSellPrice(self, proxy):
         if self.isRented:
@@ -512,23 +533,17 @@ class Vehicle(FittingItem):
     def _calcCrewBonuses(self, crew, proxy):
         bonuses = dict()
         bonuses['equipment'] = 0.0
-        for eq in self.consumables.installed.getItems():
-            bonuses['equipment'] += eq.crewLevelIncrease
-
-        bonuses['optDevices'] = self.descriptor.miscAttrs['crewLevelIncrease']
+        bonuses['optDevices'] = 0.0
         bonuses['commander'] = 0
         commanderEffRoleLevel = 0
-        bonuses['brotherhood'] = tankmen.getSkillsConfig().getSkill('brotherhood').crewLevelIncrease
+        bonuses['brotherhood'] = 0.0
         for tankmanID in crew:
             if tankmanID is None:
-                bonuses['brotherhood'] = 0.0
                 continue
             tmanInvData = proxy.inventory.getItems(GUI_ITEM_TYPE.TANKMAN, tankmanID)
             if not tmanInvData:
                 continue
             tdescr = tankmen.TankmanDescr(compactDescr=tmanInvData['compDescr'])
-            if 'brotherhood' not in tdescr.skills or tdescr.skills.index('brotherhood') == len(tdescr.skills) - 1 and tdescr.lastSkillLevel != tankmen.MAX_SKILL_LEVEL:
-                bonuses['brotherhood'] = 0.0
             if tdescr.role == Tankman.ROLES.COMMANDER:
                 factor, addition = tdescr.efficiencyOnVehicle(self.descriptor)
                 commanderEffRoleLevel = round(tdescr.roleLevel * factor + addition)
@@ -594,6 +609,13 @@ class Vehicle(FittingItem):
 
         return result
 
+    def _linkDetachmentID(self, proxy):
+        if proxy is not None and proxy.inventory.isSynced():
+            detsPdata = proxy.inventory.getCacheValue(GUI_ITEM_TYPE.DETACHMENT, {})
+            return detsPdata.get('vehicle', {}).get(self.invID, NO_DETACHMENT_ID)
+        else:
+            return NO_DETACHMENT_ID
+
     @property
     def iconContour(self):
         return getContourIconPath(self.name)
@@ -633,19 +655,6 @@ class Vehicle(FittingItem):
     @property
     def isFullyElite(self):
         return self._isFullyElite
-
-    def getEliteStatusProgress(self):
-        vehType = self.descriptor.type
-        installable = {intCD for intCD in vehType.installableComponents if getTypeOfCompactDescr(intCD) in GUI_ITEM_TYPE.VEHICLE_MODULES}
-        unlocksDescrs = {data[1] for data in vehType.unlocksDescrs}
-        total = unlocksDescrs | installable
-        if not self.hasTurrets:
-            for turretCD in filterIntCDsByItemType(total, GUI_ITEM_TYPE.TURRET):
-                total.remove(turretCD)
-
-        unlocked = total & self.itemsCache.items.stats.unlocks
-        toUnlock = total - unlocked
-        return EliteStatusProgress(unlocked, toUnlock, total)
 
     @property
     def clanLock(self):
@@ -812,10 +821,6 @@ class Vehicle(FittingItem):
         self._fuelTank = value
 
     @property
-    def setupLayouts(self):
-        return self._equipment.setupLayouts
-
-    @property
     def optDevices(self):
         return self._equipment.optDevices
 
@@ -862,6 +867,10 @@ class Vehicle(FittingItem):
     @property
     def lastCrew(self):
         return self._lastCrew
+
+    @property
+    def lastDetachmentID(self):
+        return self._lastDetachmentID
 
     @property
     def hasModulesToSelect(self):
@@ -944,6 +953,10 @@ class Vehicle(FittingItem):
         return set(vehicles.VEHICLE_CLASS_TAGS & self.tags).pop()
 
     @property
+    def uiType(self):
+        return replaceHyphenToUnderscore(self.type)
+
+    @property
     def typeUserName(self):
         return getTypeUserName(self.type, self.isElite)
 
@@ -966,24 +979,8 @@ class Vehicle(FittingItem):
         return self.descriptor.gun.maxAmmo
 
     @property
-    def ammoMinSize(self):
-        return self.descriptor.gun.maxAmmo * NOT_FULL_AMMO_MULTIPLIER
-
-    @property
     def isAmmoFull(self):
-        return sum((s.count for s in self.shells.installed.getItems())) >= self.ammoMinSize
-
-    @property
-    def isAmmoFullInSetups(self, setupIdx=None):
-        return self.shells.setupLayouts.isAmmoFull(setupIdx, self.ammoMinSize)
-
-    @property
-    def isAmmoNotFullInSetups(self):
-        return self.shells.setupLayouts.isAmmoNotFull(self.ammoMinSize)
-
-    @property
-    def isAmmoCanSwitch(self):
-        return self.isSetupSwitchAvailable(TankSetupGroupsId.EQUIPMENT_AND_SHELLS)
+        return sum((s.count for s in self.shells.installed.getItems())) >= self.ammoMaxSize * _NOT_FULL_AMMO_MULTIPLIER
 
     @property
     def isTooHeavy(self):
@@ -1016,6 +1013,10 @@ class Vehicle(FittingItem):
         return self._descriptor.type.isWheeledVehicle
 
     @property
+    def crewRoles(self):
+        return self._descriptor.type.crewRoles
+
+    @property
     def hasNationGroup(self):
         isEnabled = self.lobbyContext.getServerSettings().isNationChangeEnabled()
         return isEnabled and self._hasNationGroup
@@ -1023,6 +1024,14 @@ class Vehicle(FittingItem):
     @property
     def isNationChangeAvailable(self):
         return self.hasNationGroup and not self.isLocked and not self.isBroken and (self.isPurchased or self.isRented)
+
+    @property
+    def hasOldCrew(self):
+        return any((tman is not None for _, tman in self.crew))
+
+    @property
+    def hasDetachment(self):
+        return self.detachmentCache.getDetachment(self.getLinkedDetachmentID()) is not None
 
     def getAllNationGroupVehs(self, proxy):
         nationGroupVehs = [ proxy.getItemByCD(cd) for cd in iterVehTypeCDsInNationGroup(self.intCD) ]
@@ -1052,6 +1061,22 @@ class Vehicle(FittingItem):
         newItems = [ proxy.getItemByCD(itemCD) for itemCD in newItemsIds ]
         return newItems
 
+    def getCooldownEquipment(self):
+        result = []
+        ammo = []
+        equipments = vehicles.g_cache.equipments()
+        extrasDict = self.descriptor.type.extrasDict
+        for shell in self.shells.installed.getItems():
+            ammo.append(shell.intCD)
+            ammo.append(shell.count)
+
+        for equipmentID in vehicles.getEquipmentIdsFromAmmo(ammo):
+            extraName = equipments[equipmentID].extraName()
+            if extrasDict[extraName].descriptor.cooldownSeconds > 0:
+                result.append(extraName)
+
+        return result
+
     def getState(self, isCurrentPlayer=True):
         ms = self.modelState
         if not self.isInInventory and isCurrentPlayer:
@@ -1080,6 +1105,8 @@ class Vehicle(FittingItem):
         ms = self.__getRentableState(ms, isCurrentPlayer)
         if ms in Vehicle.CAN_SELL_STATES and self.__customState:
             ms = self.__customState
+        if not self.canParticipateInTest():
+            ms = Vehicle.VEHICLE_STATE.NO_TEST
         return (ms, self.__getStateLevel(ms))
 
     def setCustomState(self, state):
@@ -1094,14 +1121,20 @@ class Vehicle(FittingItem):
     def isCustomStateSet(self):
         return self.__customState != ''
 
+    def canParticipateInTest(self):
+        return not SANDBOX_CONSTANTS.LEVEL_RESTRICTION_ENABLED or self.level >= SANDBOX_CONSTANTS.MIN_LEVEL
+
     def checkUndamagedState(self, state, isCurrnentPlayer=True):
         if state == Vehicle.VEHICLE_STATE.UNDAMAGED and isCurrnentPlayer:
             if self.isBroken:
                 return Vehicle.VEHICLE_STATE.DAMAGED
             if self.isTooHeavy:
                 return Vehicle.VEHICLE_STATE.TOO_HEAVY
-            if not self.isCrewFull:
-                return Vehicle.VEHICLE_STATE.CREW_NOT_FULL
+            _isHasOldCrew = self.hasOldCrew
+            if not _isHasOldCrew and not self.hasDetachment:
+                return Vehicle.VEHICLE_STATE.NO_DETACHMENT
+            if _isHasOldCrew:
+                return Vehicle.VEHICLE_STATE.OLD_CREW
             if not self.isAmmoFull:
                 return Vehicle.VEHICLE_STATE.AMMO_NOT_FULL
             if not self.isRotationGroupLocked and self.rotationGroupNum != 0:
@@ -1126,7 +1159,9 @@ class Vehicle(FittingItem):
         return (True, '')
 
     def __getStateLevel(self, state):
-        if state in (Vehicle.VEHICLE_STATE.CREW_NOT_FULL,
+        if state in (Vehicle.VEHICLE_STATE.NO_DETACHMENT,
+         Vehicle.VEHICLE_STATE.OLD_CREW,
+         Vehicle.VEHICLE_STATE.NO_TEST,
          Vehicle.VEHICLE_STATE.DAMAGED,
          Vehicle.VEHICLE_STATE.EXPLODED,
          Vehicle.VEHICLE_STATE.DESTROYED,
@@ -1291,6 +1326,10 @@ class Vehicle(FittingItem):
         return self.lock[0] == LOCK_REASON.BREAKER
 
     @property
+    def lockReason(self):
+        return self.lock[0]
+
+    @property
     def typeOfLockingArena(self):
         return None if not self.isLocked else self.lock[1]
 
@@ -1304,6 +1343,10 @@ class Vehicle(FittingItem):
 
     @property
     def isCrewFull(self):
+        return True if self.hasDetachment else self.isOldCrewFull
+
+    @property
+    def isOldCrewFull(self):
         crew = [ tman for _, tman in self.crew ]
         return None not in crew and len(crew)
 
@@ -1381,6 +1424,8 @@ class Vehicle(FittingItem):
     def isReadyToFight(self):
         if self.rentalIsOver:
             return False
+        if not self.canParticipateInTest():
+            return False
         if not self.isGroupReady()[0]:
             return False
         result = not self.hasLockMode()
@@ -1393,8 +1438,8 @@ class Vehicle(FittingItem):
         return not bool(self._extraSettings & VEHICLE_EXTRA_SETTING_FLAG.NOT_ACTIVE_IN_NATION_GROUP)
 
     @property
-    def isXPToTman(self):
-        return bool(self.settings & VEHICLE_SETTINGS_FLAG.XP_TO_TMAN)
+    def isXPToDet(self):
+        return bool(self.settings & VEHICLE_SETTINGS_FLAG.XP_TO_DET)
 
     @property
     def isAutoRepair(self):
@@ -1449,40 +1494,9 @@ class Vehicle(FittingItem):
     def compactDescr(self):
         return self._descriptor.type.compactDescr
 
-    @property
-    def typeDescr(self):
-        return self._descriptor.type
-
-    @property
-    def isPostProgressionExists(self):
-        return self.postProgression.isExists()
-
-    @property
-    def isRoleSlotAvailable(self):
-        return self.postProgression.isRoleSlotAvailable(self)
-
-    @property
-    def postProgression(self):
-        if self._postProgression is None:
-            self._postProgression = self.itemsCache.items.getVehPostProgression(self.intCD, self._descriptor.type)
-        return self._postProgression
-
-    @property
-    def postProgressionAvailability(self):
-        return self.postProgression.isAvailable(self)
-
-    def clearPostProgression(self):
-        self._postProgression = None
-        self._descriptor.installModifications(self.postProgression.getActiveModifications(self))
-        return
-
-    def installPostProgression(self, customState, ignoreDisabled=False):
-        self._postProgression = self.postProgression.clone()
-        self._postProgression.setState(customState)
-        self._descriptor.installModifications(self.postProgression.getActiveModifications(self, ignoreDisabled))
-
-    def isSetupSwitchAvailable(self, groupID):
-        return self.postProgression.isSetupSwitchAvailable(self, groupID)
+    @prbDispatcherProperty
+    def __prbDispatcher(self):
+        return None
 
     def isCustomizationEnabled(self):
         locked = False
@@ -1707,10 +1721,6 @@ class Vehicle(FittingItem):
     def _sortByType(self, other):
         return compareByVehTypeName(self.type, other.type)
 
-    @prbDispatcherProperty
-    def __prbDispatcher(self):
-        return None
-
     def __hasModulesToSelect(self):
         components = []
         for moduleCD in self.descriptor.type.installableComponents:
@@ -1853,6 +1863,10 @@ def getTypeBigIconResource(vehicleType, isElite=False):
     return R.images.gui.maps.icons.vehicleTypes.big.dyn((vehicleType + '_elite' if isElite else vehicleType).replace('-', '_'))
 
 
+def getTypeFlatIconPath(vehicleType):
+    return backport.image(R.images.gui.maps.icons.vehicleTypes.flat.c_12x14.dyn(vehicleType.replace('-', '_'))())
+
+
 def getUserName(vehicleType, textPrefix=False):
     return _getActualName(vehicleType.userString, vehicleType.tags, textPrefix)
 
@@ -1916,6 +1930,11 @@ def getVehicleClassTag(tags):
     return result
 
 
+def getTankCrewRoleTag(tags):
+    cachedTankRoles = settings_globals.g_builds.tankRoles
+    return next((tag for tag in tags if tag in cachedTankRoles), None)
+
+
 def getCrewCount(vehs):
     return reduce(lambda acc, value: acc + value, [ len([ tankman for _, tankman in veh.crew if tankman is not None ]) for veh in vehs ])
 
@@ -1925,12 +1944,14 @@ _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEH
  Vehicle.VEHICLE_STATE.DAMAGED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
  Vehicle.VEHICLE_STATE.DESTROYED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
  Vehicle.VEHICLE_STATE.EXPLODED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
- Vehicle.VEHICLE_STATE.CREW_NOT_FULL: RES_ICONS.MAPS_ICONS_VEHICLESTATES_CREWNOTFULL,
+ Vehicle.VEHICLE_STATE.NO_DETACHMENT: RES_ICONS.MAPS_ICONS_VEHICLESTATES_CREWNOTFULL,
  Vehicle.VEHICLE_STATE.RENTAL_IS_OVER: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTALISOVER,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY: RES_ICONS.MAPS_ICONS_VEHICLESTATES_GROUP_IS_NOT_READY,
- Vehicle.VEHICLE_STATE.TOO_HEAVY: backport.image(R.images.gui.maps.icons.vehicleStates.weight())}
+ Vehicle.VEHICLE_STATE.OLD_CREW: RES_ICONS.MAPS_ICONS_VEHICLESTATES_CAROUSEL_CONVERT,
+ Vehicle.VEHICLE_STATE.TOO_HEAVY: backport.image(R.images.gui.maps.icons.vehicleStates.weight()),
+ Vehicle.VEHICLE_STATE.NO_TEST: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT}
 _VEHICLE_STATE_TO_ADD_ICON = {Vehicle.VEHICLE_STATE.RENTABLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENT_ICO_BIG,
  Vehicle.VEHICLE_STATE.RENTABLE_AGAIN: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTAGAIN_ICO_BIG}
 

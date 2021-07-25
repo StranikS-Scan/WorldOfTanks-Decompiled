@@ -18,6 +18,8 @@ class RES_COMMON(object):
     MAPS_ICONS_CUSTOMIZATION_PROGRESSION_STYLES_STAGE_SWITCHER_BG = '../maps/icons/customization/progression_styles/stage_switcher/bg.png'
     MAPS_ICONS_DEDICATION_BG = '../maps/icons/dedication/bg.png'
     MAPS_ICONS_DEMOUNTKIT_BG = '../maps/icons/demountKit/bg.png'
+    MAPS_ICONS_DETACHMENT_COMPONENTS_DIALOG_BG = '../maps/icons/detachment/components/dialog/bg.png'
+    MAPS_ICONS_DETACHMENT_COMPONENTS_OPERATIONCURRENCYSLOT_BG = '../maps/icons/detachment/components/operationCurrencySlot/bg.png'
     MAPS_ICONS_MAPBOX_BG = '../maps/icons/mapbox/bg.png'
     MAPS_ICONS_PREMACC_DASHBOARD_HEADER_BADGESLOT_BG = '../maps/icons/premacc/dashboard/header/badgeSlot/bg.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_USSR_DOG_1 = '../maps/icons/tankmen/icons/small/ussr-dog-1.png'

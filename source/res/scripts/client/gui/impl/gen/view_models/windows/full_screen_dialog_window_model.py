@@ -7,7 +7,7 @@ from frameworks.wulf import ViewModel
 class FullScreenDialogWindowModel(ViewModel):
     __slots__ = ('onAcceptClicked', 'onCancelClicked', 'onExit')
 
-    def __init__(self, properties=10, commands=3):
+    def __init__(self, properties=11, commands=3):
         super(FullScreenDialogWindowModel, self).__init__(properties=properties, commands=commands)
 
     def getDialogType(self):
@@ -70,6 +70,12 @@ class FullScreenDialogWindowModel(ViewModel):
     def setCancelButtonText(self, value):
         self._setResource(9, value)
 
+    def getIsWGMAvailable(self):
+        return self._getBool(10)
+
+    def setIsWGMAvailable(self, value):
+        self._setBool(10, value)
+
     def _initialize(self):
         super(FullScreenDialogWindowModel, self)._initialize()
         self._addStringProperty('dialogType', 'simple')
@@ -82,6 +88,7 @@ class FullScreenDialogWindowModel(ViewModel):
         self._addArrayProperty('titleArgs', Array())
         self._addResourceProperty('acceptButtonText', R.invalid())
         self._addResourceProperty('cancelButtonText', R.invalid())
+        self._addBoolProperty('isWGMAvailable', True)
         self.onAcceptClicked = self._addCommand('onAcceptClicked')
         self.onCancelClicked = self._addCommand('onCancelClicked')
         self.onExit = self._addCommand('onExit')

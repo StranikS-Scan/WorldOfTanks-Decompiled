@@ -16,7 +16,7 @@ from AvatarInputHandler import aih_global_binding
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from math_utils import almostZero
-from items.components.component_constants import MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR, MODERN_HE_DAMAGE_ABSORPTION_FACTOR
+from items.components.component_constants import MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS, MODERN_HE_DAMAGE_ABSORPTION_FACTOR
 from skeletons.account_helpers.settings_core import ISettingsCore
 _MARKER_TYPE = aih_constants.GUN_MARKER_TYPE
 _MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
@@ -245,7 +245,7 @@ class _CrosshairShotResults(object):
                 hitAngleCos = cDetails.hitAngleCos if matInfo.useHitAngle else 1.0
                 piercingPercent = 1000.0
                 penetrationArmor = 0
-                if piercingPower > 0.0:
+                if fullPiercingPower > 0.0:
                     penetrationArmor = cls._computePenetrationArmor(shell.kind, hitAngleCos, matInfo, shell.caliber)
                     piercingPercent = 100.0 + (penetrationArmor - piercingPower) / fullPiercingPower * 100.0
                 if matInfo.vehicleDamageFactor:
@@ -256,7 +256,7 @@ class _CrosshairShotResults(object):
                         result = _SHOT_RESULT.LITTLE_PIERCED
                     return result
                 if shell.type.shieldPenetration:
-                    piercingPower -= penetrationArmor * MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR
+                    piercingPower -= penetrationArmor * MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS
                     explosionDamageAbsorption += penetrationArmor * MODERN_HE_DAMAGE_ABSORPTION_FACTOR
                 if piercingPercent > maxPP or not shell.type.shieldPenetration or explosionDamageAbsorption >= shell.type.maxDamage:
                     return _SHOT_RESULT.NOT_PIERCED
@@ -264,8 +264,6 @@ class _CrosshairShotResults(object):
                     result = cls._CRIT_ONLY_SHOT_RESULT
                 if matInfo.collideOnceOnly:
                     ignoredMaterials.add((cDetails.compName, matInfo.kind))
-            if piercingPower <= 0.0:
-                return result
 
         return result
 

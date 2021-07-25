@@ -3,9 +3,7 @@
 from BWUtil import AsyncReturn
 from CurrentVehicle import g_currentVehicle
 from Event import Event
-import adisp
 from async import async, await
-from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
@@ -18,7 +16,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import
 from gui.impl.lobby.tank_setup.ammunition_setup.base import BaseAmmunitionSetupView
 from gui.impl.lobby.tank_setup.backports.context_menu import getContextMenuData
 from gui.impl.lobby.tank_setup.interactors.base import InteractingItem
-from gui.impl.lobby.tank_setup.backports.tooltips import getSlotTooltipData, getShellsPriceDiscountTooltipData, getSlotSpecTooltipData
+from gui.impl.lobby.tank_setup.backports.tooltips import getSlotTooltipData, getShellsPriceDiscountTooltipData
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playEnterTankSetupView, playExitTankSetupView
 from gui.prb_control import prbDispatcherProperty
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -27,9 +25,7 @@ from gui.shared.events import AmmunitionSetupViewEvent, HangarVehicleEvent, PrbA
 from gui.shared.money import Money
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
-from post_progression_common import TANK_SETUP_GROUPS, TankSetupGroupsId
 from skeletons.gui.lobby_context import ILobbyContext
-from soft_exception import SoftException
 
 class TankSetupCloseConfirmatorsHelper(CloseConfirmatorsHelper):
 
@@ -57,7 +53,7 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
         self.__blur = CachedBlur()
         self.__isClosed = False
         self.__closeConfirmatorHelper = TankSetupCloseConfirmatorsHelper()
-        self.__moneyCache = self._itemsCache.items.stats.money
+        self.__moneyCache = Money()
         self.onClose = Event()
         self.onAnimationEnd = Event()
 
@@ -84,48 +80,17 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
 
     def _getBackportTooltipData(self, event):
         tooltipId = event.getArgument('tooltip')
-        if tooltipId == TOOLTIPS_CONSTANTS.PRICE_DISCOUNT:
-            return getShellsPriceDiscountTooltipData(event, tooltipId)
-        return getSlotSpecTooltipData(event, tooltipId) if tooltipId == TOOLTIPS_CONSTANTS.HANGAR_SLOT_SPEC else getSlotTooltipData(event, self._vehItem.getItem(), self.viewModel.ammunitionPanel.getSelectedSlot(), self.viewModel.ammunitionPanel.getSelectedSection())
+        return getShellsPriceDiscountTooltipData(event, tooltipId) if tooltipId == TOOLTIPS_CONSTANTS.PRICE_DISCOUNT else getSlotTooltipData(event, self._vehItem.getItem(), self.viewModel.ammunitionPanel.getSelectedSlot(), self.viewModel.ammunitionPanel.getSelectedSection())
 
     def _getBackportContextMenuData(self, event):
         return getContextMenuData(event, self.uniqueID, self.getSelectedSetup())
 
     def _createVehicleItem(self):
-        copyVehicle = self.__createCopyVehicle()
+        currentVehicle = g_currentVehicle.item
+        copyVehicle = self._itemsCache.items.getVehicleCopy(currentVehicle)
+        copyVehicle.battleAbilities.setInstalled(*currentVehicle.battleAbilities.installed)
+        copyVehicle.battleAbilities.setLayout(*currentVehicle.battleAbilities.layout)
         return InteractingItem(copyVehicle)
-
-    def _recreateVehicleItem(self):
-        copyVehicle = self.__createCopyVehicle()
-        self._vehItem.setItem(copyVehicle)
-
-    def _recreateVehicleSetups(self):
-        currentVehicle = g_currentVehicle.item
-        vehicle = self._vehItem.getItem()
-        for groupID, setupIdx in vehicle.setupLayouts.groups.iteritems():
-            newIdx = g_currentVehicle.item.setupLayouts.getLayoutIndex(groupID)
-            if setupIdx != newIdx:
-                eqPairs = self._getEquipmentsPairs(groupID)
-                for vehEquip, curVehEquip in eqPairs:
-                    vehEquip.setInstalled(*curVehEquip.installed)
-                    vehEquip.setLayout(*curVehEquip.layout)
-                    vehEquip.setupLayouts.setLayoutIndex(newIdx)
-
-        vehicle.setupLayouts.setGroups(currentVehicle.setupLayouts.groups.copy())
-
-    def _getEquipmentsPairs(self, groupID):
-        currentVehicle = g_currentVehicle.item
-        vehicle = self._vehItem.getItem()
-        eqPairs = set()
-        if groupID == TankSetupGroupsId.EQUIPMENT_AND_SHELLS:
-            eqPairs.add((vehicle.consumables, currentVehicle.consumables))
-            eqPairs.add((vehicle.shells, currentVehicle.shells))
-        elif groupID == TankSetupGroupsId.OPTIONAL_DEVICES_AND_BOOSTERS:
-            eqPairs.add((vehicle.optDevices, currentVehicle.optDevices))
-            eqPairs.add((vehicle.battleBoosters, currentVehicle.battleBoosters))
-        else:
-            raise SoftException('Vehicle setup group id must match for any type of equipments. groupID {}'.format(groupID))
-        return eqPairs
 
     def _createMainTankSetup(self):
         raise NotImplementedError
@@ -158,24 +123,24 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
         super(BaseHangarAmmunitionSetupView, self)._addListeners()
         self.__closeConfirmatorHelper.start(self.__closeConfirmator)
         self._vehItem.onAcceptComplete += self.__onAcceptComplete
+        self._vehItem.onItemPreviewUpdated += self._onVehicleItemPreviewUpdated
         self._itemsCache.onSyncCompleted += self.__onSyncCompleted
         self.viewModel.onResized += self.__onResized
         self.viewModel.onViewRendered += self.__onViewRendered
         self.viewModel.onAnimationEnd += self.__onAnimationEnd
         self.viewModel.ammunitionPanel.onDragDropSwap += self.__onDragDropSwap
-        self.viewModel.ammunitionPanel.onSpecializationSelect += self.__onSpecializationSelect
         g_eventBus.addListener(AmmunitionSetupViewEvent.CLOSE_VIEW, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
 
     def _removeListeners(self):
         super(BaseHangarAmmunitionSetupView, self)._removeListeners()
         self.__closeConfirmatorHelper.stop()
         self._vehItem.onAcceptComplete -= self.__onAcceptComplete
+        self._vehItem.onItemPreviewUpdated -= self._onVehicleItemPreviewUpdated
         self._itemsCache.onSyncCompleted -= self.__onSyncCompleted
         self.viewModel.onResized -= self.__onResized
         self.viewModel.onViewRendered -= self.__onViewRendered
         self.viewModel.onAnimationEnd -= self.__onAnimationEnd
         self.viewModel.ammunitionPanel.onDragDropSwap -= self.__onDragDropSwap
-        self.viewModel.ammunitionPanel.onSpecializationSelect -= self.__onSpecializationSelect
         g_eventBus.removeListener(AmmunitionSetupViewEvent.CLOSE_VIEW, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
 
     @async
@@ -184,30 +149,21 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
         if quitResult:
             self.__closeWindow()
 
-    @adisp.process
-    def __onSpecializationSelect(self, args=None):
-        action = ActionsFactory.getAction(ActionsFactory.SET_EQUIPMENT_SLOT_TYPE, self._vehItem.getItem())
-        if action is not None:
-            yield action.doAction()
-        return
-
     def _updateAmmunitionPanel(self, sectionName=None):
         super(BaseHangarAmmunitionSetupView, self)._updateAmmunitionPanel(sectionName)
         if sectionName != TankSetupConstants.SHELLS:
             self.__updateTTC()
 
-    def __updateTTC(self):
+    def _onVehicleItemPreviewUpdated(self, sectionName):
+        self.__updateTTC(True)
+
+    def __updateTTC(self, isPreview=False):
         currentSubView = self._tankSetup.getCurrentSubView()
         if currentSubView is not None:
-            g_eventBus.handleEvent(AmmunitionSetupViewEvent(AmmunitionSetupViewEvent.UPDATE_TTC, {'vehicleItem': currentSubView.getInteractor().getVehicleAfterInstall()}), EVENT_BUS_SCOPE.LOBBY)
+            interactor = currentSubView.getInteractor()
+            vehicle = interactor.getVehiclePreview() if isPreview else interactor.getVehicleAfterInstall()
+            g_eventBus.handleEvent(AmmunitionSetupViewEvent(AmmunitionSetupViewEvent.UPDATE_TTC, {'vehicleItem': vehicle}), EVENT_BUS_SCOPE.LOBBY)
         return
-
-    def __createCopyVehicle(self):
-        currentVehicle = g_currentVehicle.item
-        copyVehicle = self._itemsCache.items.getVehicleCopy(currentVehicle)
-        copyVehicle.battleAbilities.setInstalled(*currentVehicle.battleAbilities.installed)
-        copyVehicle.battleAbilities.setLayout(*currentVehicle.battleAbilities.layout)
-        return copyVehicle
 
     def __onResized(self, args):
         g_eventBus.handleEvent(AmmunitionSetupViewEvent(AmmunitionSetupViewEvent.GF_RESIZED, args), EVENT_BUS_SCOPE.LOBBY)
@@ -249,42 +205,14 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
     def __onSyncCompleted(self, _, diff):
         if not diff and self._itemsCache.items.stats.money == self.__moneyCache:
             return
-        else:
-            self.__moneyCache = self._itemsCache.items.stats.money
-            if g_currentVehicle.isLocked() or not g_currentVehicle.isPresent():
-                self.__closeWindow()
-                return
-            isRentalChange = self._vehItem.getItem().rentalIsOver != g_currentVehicle.isDisabledInRent()
-            if self._vehItem.getItem().setupLayouts != g_currentVehicle.item.setupLayouts or isRentalChange:
-                needRecreateVehicle = isRentalChange
-                if not isRentalChange:
-                    changedGroupID = None
-                    oldLayouts = self._vehItem.getItem().setupLayouts
-                    newLayouts = g_currentVehicle.item.setupLayouts
-                    for groupID in TANK_SETUP_GROUPS.iterkeys():
-                        if oldLayouts.getLayoutIndex(groupID) != newLayouts.getLayoutIndex(groupID):
-                            changedGroupID = groupID
-                            break
-
-                    selectedSetup = self._tankSetup.getSelectedSetup()
-                    selectedSetupGroup = self._ammunitionPanel.getGroupIdBySection(selectedSetup)
-                    needRecreateVehicle = changedGroupID == selectedSetupGroup
-                if needRecreateVehicle:
-                    self._resetVehicleItem()
-                    self._vehItem.getItem().settings = g_currentVehicle.item.settings
-                    self._tankSetup.resetVehicle(self._vehItem)
-                    self._tankSetup.update(fullUpdate=True)
-                else:
-                    self._resetVehicleSetups()
-                    self._vehItem.getItem().settings = g_currentVehicle.item.settings
-                self._ammunitionPanel.updateVehicle(self._vehItem.getItem())
-            else:
-                self._vehItem.getItem().settings = g_currentVehicle.item.settings
-                self._vehItem.getItem().optDevices.dynSlotTypes = g_currentVehicle.item.optDevices.dynSlotTypes
-                self._tankSetup.currentVehicleUpdated(g_currentVehicle.item)
-                self._tankSetup.update(fullUpdate=True)
-            self._updateAmmunitionPanel()
+        self.__moneyCache = self._itemsCache.items.stats.money
+        if g_currentVehicle.isLocked() or not g_currentVehicle.isPresent():
+            self.__closeWindow()
             return
+        self._vehItem.getItem().settings = g_currentVehicle.item.settings
+        self._tankSetup.currentVehicleUpdated(g_currentVehicle.item)
+        self._tankSetup.update(fullUpdate=True)
+        self._updateAmmunitionPanel()
 
     def __closeWindow(self):
         if not self.__isClosed:

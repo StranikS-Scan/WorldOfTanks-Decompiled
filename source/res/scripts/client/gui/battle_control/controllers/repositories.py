@@ -1,19 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/repositories.py
+from typing import TYPE_CHECKING
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
-from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, korea_msgs_ctrl, callout_ctrl, deathzones_ctrl, progression_ctrl, death_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, korea_msgs_ctrl, callout_ctrl, deathzones_ctrl, progression_ctrl, death_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, perk_ctrl
 from gui.battle_control.controllers.appearance_cache_ctrls.battle_royale_appearance_cache_ctrl import BattleRoyaleAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.event_appearance_cache_ctrl import EventAppearanceCacheController
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
-from gui.battle_control.controllers import vehicle_post_progression_ctrl as vpp_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 from gui.battle_control.controllers import battle_hints_ctrl
 from gui.battle_control.controllers import radar_ctrl
 from gui.battle_control.controllers import spawn_ctrl
 from gui.battle_control.controllers import vehicles_count_ctrl
+if TYPE_CHECKING:
+    from gui.battle_control.controllers.vehicle_state_ctrl import VehicleStateController
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -92,10 +94,6 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
     @property
     def optionalDevices(self):
         return self._repository.getController(BATTLE_CTRL_ID.OPTIONAL_DEVICES)
-
-    @property
-    def vehiclePostProgression(self):
-        return self._repository.getController(BATTLE_CTRL_ID.VEHICLE_POST_PROGRESSION_CTRL)
 
     @property
     def vehicleState(self):
@@ -246,6 +244,10 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.VEHICLES_COUNT_CTRL)
 
     @property
+    def perks(self):
+        return self._repository.getController(BATTLE_CTRL_ID.PERKS)
+
+    @property
     def battleHints(self):
         return self._repository.getController(BATTLE_CTRL_ID.BATTLE_HINTS)
 
@@ -333,7 +335,6 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addController(ammo)
         repository.addController(consumables.createEquipmentCtrl(setup))
         repository.addController(consumables.createOptDevicesCtrl(setup))
-        repository.addController(vpp_ctrl.VehiclePostProgressionBattleController(setup))
         state = vehicle_state_ctrl.createCtrl(setup)
         repository.addController(state)
         repository.addController(avatar_stats_ctrl.AvatarStatsController())
@@ -392,6 +393,7 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addArenaViewController(team_bases_ctrl.createTeamsBasesCtrl(setup), setup)
         repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
+        repository.addViewController(perk_ctrl.PerksController(), setup)
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addArenaController(DefaultAppearanceCacheController(setup), setup)

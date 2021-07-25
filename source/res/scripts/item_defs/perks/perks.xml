@@ -1,96 +1,841 @@
 <perks.xml>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:noNamespaceSchemaLocation>	../../development/xml_schema/items/perks.xsd	</xsi:noNamespaceSchemaLocation>
+  <perk>
+    <id>	101	</id>
+    <situational>	true	</situational>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewMastery	</argId>
+        <value>	0.0025	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
   <perk>
     <id>	102	</id>
-    <name>	#item_types:abilities/perk_name_102	</name>
-    <description>	#item_types:abilities/perk_descr_102	</description>
-    <icon>	perk_102.png	</icon>
-    <branchID>	1	</branchID>
-    <maxCount>	10	</maxCount>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleCircularVisionRadius	</argId>
+        <value>	0.005	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <icon>	circularVisionRadius	</icon>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	radioDistance	</argId>
+        <value>	0.02	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	103	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewMastery	</argId>
+        <value>	0.005	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	104	</id>
+    <situational>	true	</situational>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleEnemySpottingTime	</argId>
+        <value>	0.2	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	seconds	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	teamRadioBonusFactor	</argId>
+        <value>	0.02	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	false	</situationalArg>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	105	</id>
+    <situational>	true	</situational>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleCamouflage	</argId>
+        <value>	0.01	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <icon>	invisibilityStillFactor	</icon>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	111	</id>
+    <situational>	true	</situational>
+    <ultimative>	true	</ultimative>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewMastery	</argId>
+        <value>	0.025	</value>
+        <maxStacks>	3	</maxStacks>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	112	</id>
+    <situational>	true	</situational>
+    <ultimative>	true	</ultimative>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewMastery	</argId>
+        <value>	0.025	</value>
+        <maxStacks>	3	</maxStacks>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	201	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	enemyModulesCrewDamageProbability	</argId>
+        <value>	0.03	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	damageMonitoringDelay	</argId>
+        <value>	-0.15	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	seconds	</type>
+          <localeFormatting>	dmgMonitoringDelayBaseValue	</localeFormatting>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
   </perk>
   <perk>
     <id>	202	</id>
-    <name>	#item_types:abilities/perk_name_202	</name>
-    <description>	#item_types:abilities/perk_descr_202	</description>
-    <icon>	perk_202.png	</icon>
-    <branchID>	2	</branchID>
-    <maxCount>	10	</maxCount>
+    <situational>	true	</situational>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	aimingDispersion	</argId>
+        <value>	-0.005	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+          <situationalArg>	true	</situationalArg>
+          <icon>	shotDispersionAngle	</icon>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
   </perk>
   <perk>
     <id>	203	</id>
-    <name>	#item_types:abilities/perk_name_203	</name>
-    <description>	#item_types:abilities/perk_descr_203	</description>
-    <icon>	perk_203.png	</icon>
-    <branchID>	2	</branchID>
-    <maxCount>	10	</maxCount>
+    <situational>	true	</situational>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewMastery	</argId>
+        <value>	0.0025	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	204	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	lowDamageDispersion	</argId>
+        <value>	0.005	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	upDamageDispersion	</argId>
+        <value>	0.005	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+          <localeFormatting>	dmgPenDispersionCombinedBase	</localeFormatting>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	lowPenetrationDispersion	</argId>
+        <value>	0.005	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	upPenetrationDispersion	</argId>
+        <value>	0.005	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	205	</id>
+    <situational>	true	</situational>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	gunReloadSpeed	</argId>
+        <value>	-0.008	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+          <icon>	reloadTimeSecs	</icon>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
   </perk>
   <perk>
     <id>	211	</id>
-    <name>	#item_types:abilities/perk_name_211	</name>
-    <description>	#item_types:abilities/perk_descr_211	</description>
-    <icon>	perk_211.png	</icon>
-    <branchID>	2	</branchID>
-    <maxCount>	1	</maxCount>
+    <situational>	true	</situational>
     <ultimative>	true	</ultimative>
-    <needPoints>	30	</needPoints>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	gunAimingSpeed	</argId>
+        <value>	-0.1	</value>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+          <icon>	aimingTime	</icon>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	movingAimingDispersion	</argId>
+        <value>	-0.1	</value>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	turretAimingDispersion	</argId>
+        <value>	-0.1	</value>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	212	</id>
+    <situational>	true	</situational>
+    <ultimative>	true	</ultimative>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	lowDamageDispersion	</argId>
+        <value>	0.1	</value>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	lowPenetrationDispersion	</argId>
+        <value>	0.1	</value>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
   </perk>
   <perk>
     <id>	301	</id>
-    <name>	#item_types:abilities/perk_name_301	</name>
-    <description>	#item_types:abilities/perk_descr_301	</description>
-    <icon>	perk_301.png	</icon>
-    <branchID>	3	</branchID>
-    <maxCount>	10	</maxCount>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleRepairSpeed	</argId>
+        <value>	0.1	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	aimingDispersionWhileGunDamaged	</argId>
+        <value>	0.05	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+          <situationalArg>	false	</situationalArg>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	302	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleCamouflage	</argId>
+        <value>	0.1	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <icon>	invisibilityStillFactor	</icon>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	303	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleReloadTimeAfterShellChange	</argId>
+        <value>	-0.06	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+          <situationalArg>	false	</situationalArg>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	304	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	equipmentPreparationTime	</argId>
+        <value>	-0.02	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	seconds	</type>
+          <revert>	false	</revert>
+          <equipmentCooldown></equipmentCooldown>
+          <localeFormatting>	equipmentCdTime	</localeFormatting>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	305	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleAmmoBayEngineFuelStrength	</argId>
+        <value>	0.02	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	moduleCritMod	</argId>
+        <value>	-0.05	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	vehicleFireChance	</argId>
+        <value>	-0.03	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	fireExtinguishingRate	</argId>
+        <value>	0.08	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	311	</id>
+    <situational>	true	</situational>
+    <ultimative>	true	</ultimative>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	shotDispersion	</argId>
+        <value>	-0.02	</value>
+        <maxStacks>	5	</maxStacks>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+          <icon>	shotDispersionAngle	</icon>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	aimingTime	</argId>
+        <value>	-0.02	</value>
+        <maxStacks>	5	</maxStacks>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+          <icon>	aimingTime	</icon>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
   </perk>
   <perk>
     <id>	312	</id>
-    <name>	#item_types:abilities/perk_name_312	</name>
-    <description>	#item_types:abilities/perk_descr_312	</description>
-    <icon>	perk_312.png	</icon>
-    <branchID>	3	</branchID>
-    <maxCount>	1	</maxCount>
+    <situational>	true	</situational>
     <ultimative>	true	</ultimative>
-    <needPoints>	30	</needPoints>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	aimingDispersion	</argId>
+        <value>	-0.15	</value>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+          <icon>	shotDispersionAngle	</icon>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	401	</id>
+    <situational>	true	</situational>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleEnginePower	</argId>
+        <value>	0.005	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <icon>	enginePower	</icon>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	402	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	turretAimingDispersion	</argId>
+        <value>	-0.0075	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	movingAimingDispersion	</argId>
+        <value>	-0.004	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
   </perk>
   <perk>
     <id>	403	</id>
-    <name>	#item_types:abilities/perk_name_403	</name>
-    <description>	#item_types:abilities/perk_descr_403	</description>
-    <icon>	perk_403.png	</icon>
-    <branchID>	4	</branchID>
-    <maxCount>	10	</maxCount>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleAllGroundRotationSpeed	</argId>
+        <value>	0.005	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <icon>	chassisRotationSpeed	</icon>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	vehicleSpeedGain	</argId>
+        <value>	-0.005	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	404	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	damageEnemiesByRamming	</argId>
+        <value>	0.02	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	vehicleRamDamageResistance	</argId>
+        <value>	0.01	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	trackRamDamageResist	</argId>
+        <value>	-0.06	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
   </perk>
   <perk>
     <id>	405	</id>
-    <name>	#item_types:abilities/perk_name_405	</name>
-    <description>	#item_types:abilities/perk_descr_405	</description>
-    <icon>	perk_405.png	</icon>
-    <branchID>	4	</branchID>
-    <maxCount>	10	</maxCount>
     <situational>	true	</situational>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	gunReloadSpeed	</argId>
+        <value>	-0.005	</value>
+        <UISettings>
+          <type>	percents	</type>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+          <icon>	reloadTimeSecs	</icon>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
   </perk>
-  <branch>
+  <perk>
+    <id>	411	</id>
+    <situational>	true	</situational>
+    <ultimative>	true	</ultimative>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	demaskFoliageFactor	</argId>
+        <value>	-0.1	</value>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	demaskMovingFactor	</argId>
+        <value>	-0.1	</value>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	412	</id>
+    <situational>	true	</situational>
+    <ultimative>	true	</ultimative>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleEnginePower	</argId>
+        <value>	0.1	</value>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <icon>	enginePower	</icon>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	501	</id>
+    <situational>	false	</situational>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleOwnSpottingTime	</argId>
+        <value>	0.3	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	seconds	</type>
+          <revert>	true	</revert>
+          <situationalArg>	false	</situationalArg>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	502	</id>
+    <situational>	false	</situational>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	folliageMaskingFactor	</argId>
+        <value>	0.01	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	false	</situationalArg>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	shotDemaskFactor	</argId>
+        <value>	0.01	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	false	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	503	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewHitChance	</argId>
+        <value>	-0.025	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	deathPenaltyFactor	</argId>
+        <value>	0.05	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	postMortemVision	</argId>
+        <value>	0.3	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	seconds	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	504	</id>
+    <situational>	false	</situational>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	stunResistanceEffect	</argId>
+        <value>	0.025	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	505	</id>
+    <situational>	false	</situational>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewStunDuration	</argId>
+        <value>	0.0075	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	vehicleExplosionDamageResistance	</argId>
+        <value>	0.0075	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	vehicleRamDamageResistance	</argId>
+        <value>	0.015	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	vehicleChassisFallDamage	</argId>
+        <value>	0.015	</value>
+        <diminishing_starts_after>	15	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	true	</revert>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	511	</id>
+    <situational>	true	</situational>
+    <ultimative>	true	</ultimative>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewMastery	</argId>
+        <value>	0.075	</value>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	firstAidKitPreparationTime	</argId>
+        <value>	0.5	</value>
+        <UISettings>
+          <type>	seconds	</type>
+          <revert>	false	</revert>
+          <situationalArg>	false	</situationalArg>
+          <equipmentCooldown>	largeMedkit smallMedkit	</equipmentCooldown>
+          <localeFormatting>	equipmentCdTime	</localeFormatting>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	512	</id>
+    <situational>	true	</situational>
+    <ultimative>	true	</ultimative>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	gunReloadSpeed	</argId>
+        <value>	-0.075	</value>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <situationalArg>	true	</situationalArg>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+          <icon>	reloadTimeSecs	</icon>
+        </UISettings>
+      </arg>
+      <arg>
+        <argId>	repairKitPreparationTime	</argId>
+        <value>	0.5	</value>
+        <UISettings>
+          <type>	seconds	</type>
+          <revert>	false	</revert>
+          <situationalArg>	false	</situationalArg>
+          <equipmentCooldown>	smallRepairkit largeRepairkit builtinRepairkit	</equipmentCooldown>
+          <localeFormatting>	equipmentCdTime	</localeFormatting>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
     <id>	1	</id>
-    <name>	#item_types:abilities/branch_01	</name>
-    <needPoints>	30	</needPoints>
-  </branch>
-  <branch>
-    <id>	2	</id>
-    <name>	#item_types:abilities/branch_02	</name>
-    <needPoints>	30	</needPoints>
-  </branch>
-  <branch>
-    <id>	3	</id>
-    <name>	#item_types:abilities/branch_03	</name>
-    <needPoints>	30	</needPoints>
-  </branch>
-  <branch>
-    <id>	4	</id>
-    <name>	#item_types:abilities/branch_04	</name>
-    <needPoints>	30	</needPoints>
-  </branch>
-  <branch>
-    <id>	5	</id>
-    <name>	#item_types:abilities/branch_05	</name>
-    <needPoints>	30	</needPoints>
-  </branch>
+    <tags>	autoperk	</tags>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewMastery	</argId>
+        <value>	0	</value>
+        <postValues>	0.03 0.03 0.02 0.02 0.02 0.01 0.01 0.01	</postValues>
+        <diminishing_starts_after>	0	</diminishing_starts_after>
+        <UISettings>
+          <type>	percents	</type>
+          <revert>	false	</revert>
+          <perkTooltipBonus>	true	</perkTooltipBonus>
+        </UISettings>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
 </perks.xml>

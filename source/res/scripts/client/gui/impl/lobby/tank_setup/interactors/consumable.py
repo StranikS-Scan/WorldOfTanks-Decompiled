@@ -40,9 +40,6 @@ class BaseConsumableInteractor(BaseEquipmentInteractor):
     def getCurrentLayout(self):
         return self.getItem().consumables.layout
 
-    def getSetupLayout(self):
-        return self.getItem().consumables.setupLayouts
-
 
 class ConsumableInteractor(BaseConsumableInteractor):
     __slots__ = ('__installedIndices',)
@@ -52,6 +49,22 @@ class ConsumableInteractor(BaseConsumableInteractor):
         vehicle.consumables.setInstalled(*self.getItem().consumables.layout)
         return vehicle
 
+    def getVehiclePreview(self):
+        vehicle = super(ConsumableInteractor, self).getVehicleAfterInstall()
+        vehicle.consumables.setLayout(*self.getItem().consumables.layout)
+        if self._previewEquipment:
+            slotID, item = self._previewEquipment
+            layout = vehicle.consumables.layout
+            if item in layout:
+                installedSlotID = list(layout).index(item)
+                if installedSlotID != slotID:
+                    otherItem = layout[slotID]
+                    vehicle.consumables.layout[installedSlotID] = otherItem
+            slotID, item = self._previewEquipment
+            layout[slotID] = item
+        vehicle.consumables.setInstalled(*vehicle.consumables.layout)
+        return vehicle
+
     def revert(self):
         self.getItem().consumables.setLayout(*self.getInstalledLayout())
         self._resetInstalledIndices()
@@ -59,10 +72,10 @@ class ConsumableInteractor(BaseConsumableInteractor):
         self.itemUpdated()
 
     @async
-    def applyQuit(self, callback, skipApplyAutoRenewal):
+    def applyQuit(self, callback):
         if not self.isPlayerLayout():
             yield await_callback(self.confirm)(skipDialog=True)
-        super(ConsumableInteractor, self).applyQuit(callback, skipApplyAutoRenewal)
+        super(ConsumableInteractor, self).applyQuit(callback)
 
     @process
     def confirm(self, callback, skipDialog=False):
@@ -80,10 +93,7 @@ class ConsumableInteractor(BaseConsumableInteractor):
         return
 
     def updateFrom(self, vehicle, onlyInstalled=True):
-        super(ConsumableInteractor, self).updateFrom(vehicle, onlyInstalled)
-        items = self.getItem().consumables
-        items.setInstalled(*vehicle.consumables.installed)
-        items.setupLayouts.setSetups(vehicle.consumables.setupLayouts.setups)
+        self.getItem().consumables.setInstalled(*vehicle.consumables.installed)
         self._playerLayout = vehicle.consumables.layout.copy()
         if not onlyInstalled:
             self.getItem().consumables.setLayout(*vehicle.consumables.layout)

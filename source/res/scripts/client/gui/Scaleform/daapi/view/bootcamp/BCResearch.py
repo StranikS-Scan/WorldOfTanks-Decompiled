@@ -118,8 +118,8 @@ class BCResearch(Research):
 
     def _getRootData(self):
         result = super(BCResearch, self)._getRootData()
-        result['vehicleButton']['compareBtnEnabled'] = False
-        result['vehicleButton']['previewBtnEnabled'] = False
+        result['compareBtnEnabled'] = False
+        result['previewBtnEnabled'] = False
         return result
 
     def _dispose(self):

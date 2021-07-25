@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ResearchPanel.py
-import typing
 from CurrentVehicle import g_currentVehicle
 from constants import IGR_TYPE
 from debug_utils import LOG_ERROR
@@ -13,15 +12,10 @@ from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.time_formatters import getTimeLeftStr
-from gui.veh_post_porgression.models.ext_money import ExtendedMoney
-from gui.veh_post_porgression.models.progression import PostProgressionAvailability
 from helpers import i18n, dependency
-from nation_change.nation_change_helpers import iterVehiclesWithNationGroupInOrder
 from skeletons.gui.game_control import IVehicleComparisonBasket, IIGRController
 from skeletons.gui.shared import IItemsCache
-from uilogging.veh_post_progression.constants import EntryPointCallers
-if typing.TYPE_CHECKING:
-    from gui.shared.gui_items.Vehicle import Vehicle
+from nation_change.nation_change_helpers import iterVehiclesWithNationGroupInOrder
 
 class ResearchPanel(ResearchPanelMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -57,10 +51,6 @@ class ResearchPanel(ResearchPanelMeta):
         else:
             LOG_ERROR('Current vehicle is not preset or navigation is disabled')
 
-    def goToPostProgression(self):
-        vehicle = g_currentVehicle.item
-        shared_events.showVehPostProgressionView(vehicle.intCD, isUnlocked=vehicle.postProgression.isUnlocked(vehicle).result, caller=EntryPointCallers.HANGAR)
-
     def addVehToCompare(self):
         if g_currentVehicle.isPresent():
             vehCD = g_currentVehicle.item.intCD
@@ -73,9 +63,7 @@ class ResearchPanel(ResearchPanelMeta):
             xp = xps.get(vehicle.intCD, 0)
             self.as_updateCurrentVehicleS({'earnedXP': xp,
              'isElite': vehicle.isElite,
-             'vehCompareData': self.__getVehCompareData(vehicle),
-             'vehPostProgressionData': self.__getVehPostProgressionData(vehicle),
-             'intCD': vehicle.intCD})
+             'vehCompareData': self.__getVehCompareData(vehicle)})
         else:
             self.as_updateCurrentVehicleS({'earnedXP': 0})
         self.__onIgrTypeChanged()
@@ -121,13 +109,3 @@ class ResearchPanel(ResearchPanelMeta):
         return {'modeAvailable': self.comparisonBasket.isEnabled(),
          'btnEnabled': state,
          'btnTooltip': tooltip}
-
-    def __getVehPostProgressionData(self, vehicle):
-        showCounter = False
-        isVehicleUnlocked = vehicle.postProgression.isUnlocked(vehicle)
-        isAvailable = isVehicleUnlocked.result or isVehicleUnlocked.reason == PostProgressionAvailability.VEH_IS_RENT_OVER
-        if vehicle.xp > 0 and isAvailable:
-            showCounter = vehicle.postProgression.hasPurchasableSteps(ExtendedMoney(xp=vehicle.xp))
-        return {'showCounter': showCounter,
-         'btnEnabled': isAvailable,
-         'btnVisible': vehicle.isPostProgressionExists}

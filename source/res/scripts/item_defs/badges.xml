@@ -757,19 +757,6 @@
         <item>	True	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
-        <item>
-          <name>	realm	</name>
-          <type>	dict	</type>
-          <value>
-            <item>
-              <name>	exclude	</name>
-              <type>	list	</type>
-              <value>
-                <item>	CN	</item>
-              </value>
-            </item>
-          </value>
-        </item>
       </value>
     </badge>
     <badge>
@@ -2471,6 +2458,24 @@
         </item>
         <item>	True	  <name>	temporary	</name>
           <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	crew_mastery	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	200	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.37	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>	CrewMasteryBadge	  <name>	customLogicImpl	</name>
+          <type>	string	</type>
         </item>
       </value>
     </badge>

@@ -9,7 +9,12 @@ from gui.impl.lobby.tank_setup.tank_setup_helper import NONE_ID
 from gui.shared.event_dispatcher import showTankSetupExitConfirmDialog
 
 class BaseEquipmentInteractor(BaseInteractor):
-    __slots__ = ('_installedIndices', '_playerLayout')
+    __slots__ = ('_installedIndices', '_playerLayout', '_previewEquipment')
+
+    def __init__(self, item):
+        super(BaseEquipmentInteractor, self).__init__(item)
+        self._previewEquipment = None
+        return
 
     def setItem(self, item):
         super(BaseEquipmentInteractor, self).setItem(item)
@@ -27,6 +32,12 @@ class BaseEquipmentInteractor(BaseInteractor):
         else:
             self.onSlotAction(actionType=BaseSetupModel.REVERT_SLOT_ACTION, slotID=slotID)
         self.itemUpdated()
+        return
+
+    def setPreviewSlotItem(self, slotID, itemIntCD):
+        item = self._itemsCache.items.getItemByCD(int(itemIntCD)) if itemIntCD is not None else None
+        self._previewEquipment = (slotID, item) if item else None
+        self.itemPreviewUpdated()
         return
 
     def swapSlots(self, leftID, rightID, actionType=BaseSetupModel.SWAP_SLOTS_ACTION):
@@ -60,7 +71,7 @@ class BaseEquipmentInteractor(BaseInteractor):
         return
 
     def _resetInstalledIndices(self):
-        self._installedIndices = [ i for i in range(len(self.getInstalledLayout())) ]
+        self._installedIndices = [ i for i in xrange(len(self.getInstalledLayout())) ]
 
     def _resetPlayerLayout(self):
         self._playerLayout = self.getCurrentLayout().copy()

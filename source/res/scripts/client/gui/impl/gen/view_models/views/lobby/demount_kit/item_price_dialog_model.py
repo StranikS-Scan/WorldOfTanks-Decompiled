@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.demount_kit.item_base_dialog_model imp
 class ItemPriceDialogModel(ItemBaseDialogModel):
     __slots__ = ()
 
-    def __init__(self, properties=18, commands=3):
+    def __init__(self, properties=17, commands=3):
         super(ItemPriceDialogModel, self).__init__(properties=properties, commands=commands)
 
     def getPriceDescription(self):
@@ -33,16 +33,9 @@ class ItemPriceDialogModel(ItemBaseDialogModel):
     def setDiscount(self, value):
         self._setNumber(16, value)
 
-    def getShowPriceWarning(self):
-        return self._getBool(17)
-
-    def setShowPriceWarning(self, value):
-        self._setBool(17, value)
-
     def _initialize(self):
         super(ItemPriceDialogModel, self)._initialize()
         self._addResourceProperty('priceDescription', R.invalid())
         self._addNumberProperty('itemPrice', 0)
         self._addStringProperty('currencyType', '')
         self._addNumberProperty('discount', 0)
-        self._addBoolProperty('showPriceWarning', False)

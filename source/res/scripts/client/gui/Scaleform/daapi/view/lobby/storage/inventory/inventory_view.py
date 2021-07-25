@@ -43,9 +43,12 @@ def _getTabDataIndexById(tabID):
             return i
 
 
-_TABS_ITEM_TYPES = {STORAGE_CONSTANTS.INVENTORY_TAB_ALL: GUI_ITEM_TYPE.VEHICLE_COMPONENTS + (GUI_ITEM_TYPE.CREW_BOOKS, GUI_ITEM_TYPE.DEMOUNT_KIT),
+_TABS_ITEM_TYPES = {STORAGE_CONSTANTS.INVENTORY_TAB_ALL: GUI_ITEM_TYPE.VEHICLE_COMPONENTS + (GUI_ITEM_TYPE.CREW_BOOKS, GUI_ITEM_TYPE.DEMOUNT_KIT, GUI_ITEM_TYPE.RECERTIFICATION_FORM),
  STORAGE_CONSTANTS.INVENTORY_TAB_EQUIPMENT: GUI_ITEM_TYPE.OPTIONALDEVICE,
- STORAGE_CONSTANTS.INVENTORY_TAB_CONSUMABLE: (GUI_ITEM_TYPE.EQUIPMENT, GUI_ITEM_TYPE.BATTLE_BOOSTER, GUI_ITEM_TYPE.DEMOUNT_KIT),
+ STORAGE_CONSTANTS.INVENTORY_TAB_CONSUMABLE: (GUI_ITEM_TYPE.EQUIPMENT,
+                                              GUI_ITEM_TYPE.BATTLE_BOOSTER,
+                                              GUI_ITEM_TYPE.DEMOUNT_KIT,
+                                              GUI_ITEM_TYPE.RECERTIFICATION_FORM),
  STORAGE_CONSTANTS.INVENTORY_TAB_MODULES: GUI_ITEM_TYPE.VEHICLE_MODULES,
  STORAGE_CONSTANTS.INVENTORY_TAB_SHELLS: GUI_ITEM_TYPE.SHELL,
  STORAGE_CONSTANTS.INVENTORY_TAB_CREW_BOOKS: GUI_ITEM_TYPE.CREW_BOOKS}
@@ -59,7 +62,8 @@ TABS_SORT_ORDER = {n:idx for idx, n in enumerate((GUI_ITEM_TYPE.OPTIONALDEVICE,
  GUI_ITEM_TYPE.RADIO,
  GUI_ITEM_TYPE.SHELL,
  GUI_ITEM_TYPE.CREW_BOOKS,
- GUI_ITEM_TYPE.DEMOUNT_KIT))}
+ GUI_ITEM_TYPE.DEMOUNT_KIT,
+ GUI_ITEM_TYPE.RECERTIFICATION_FORM))}
 
 def _defaultInGroupComparator(a, b):
     return cmp(storage_helpers.getStorageItemName(a), storage_helpers.getStorageItemName(b))
@@ -92,6 +96,10 @@ def _optionalDevicesComparator(a, b):
     return cmp(aIdx, bIdx) or _defaultInGroupComparator(a, b) if a.isDeluxe else cmp(aIdx, bIdx) or cmp(_getDeviceCategoriesOrder(a), _getDeviceCategoriesOrder(b)) or _defaultInGroupComparator(a, b)
 
 
+def _battleBoosterComparator(a, b):
+    return cmp(a.descriptor.perkId, b.descriptor.perkId) or _defaultInGroupComparator(a, b) if a.isCrewBooster() and a.isCrewBooster() == b.isCrewBooster() else -cmp(a.isCrewBooster(), b.isCrewBooster()) or _defaultInGroupComparator(a, b)
+
+
 def _shellsComparator(a, b):
     return cmp(a.descriptor.caliber, b.descriptor.caliber) or _defaultInGroupComparator(a, b)
 
@@ -106,7 +114,7 @@ def _crewBookComparator(a, b):
 
 IN_GROUP_COMPARATOR = {GUI_ITEM_TYPE.OPTIONALDEVICE: _optionalDevicesComparator,
  GUI_ITEM_TYPE.EQUIPMENT: _defaultInGroupComparator,
- GUI_ITEM_TYPE.BATTLE_BOOSTER: _defaultInGroupComparator,
+ GUI_ITEM_TYPE.BATTLE_BOOSTER: _battleBoosterComparator,
  GUI_ITEM_TYPE.TURRET: _defaultInGroupComparator,
  GUI_ITEM_TYPE.ENGINE: _defaultInGroupComparator,
  GUI_ITEM_TYPE.GUN: _gunsComparator,
@@ -114,7 +122,8 @@ IN_GROUP_COMPARATOR = {GUI_ITEM_TYPE.OPTIONALDEVICE: _optionalDevicesComparator,
  GUI_ITEM_TYPE.CHASSIS: _defaultInGroupComparator,
  GUI_ITEM_TYPE.SHELL: _shellsComparator,
  GUI_ITEM_TYPE.CREW_BOOKS: _crewBookComparator,
- GUI_ITEM_TYPE.DEMOUNT_KIT: _defaultInGroupComparator}
+ GUI_ITEM_TYPE.DEMOUNT_KIT: _defaultInGroupComparator,
+ GUI_ITEM_TYPE.RECERTIFICATION_FORM: _defaultInGroupComparator}
 
 class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
     __demountKitNovelty = dependency.descriptor(IDemountKitNovelty)
@@ -210,6 +219,8 @@ class RegularInventoryCategoryTabView(InventoryCategoryView):
         for itemType in self._getItemTypeIDs():
             if itemType == GUI_ITEM_TYPE.DEMOUNT_KIT:
                 items.update(self._goodiesCache.getDemountKits(REQ_CRITERIA.DEMOUNT_KIT.IN_ACCOUNT | REQ_CRITERIA.DEMOUNT_KIT.IS_ENABLED))
+            if itemType == GUI_ITEM_TYPE.RECERTIFICATION_FORM:
+                items.update(self._goodiesCache.getRecertificationForms(REQ_CRITERIA.DEMOUNT_KIT.IN_ACCOUNT | REQ_CRITERIA.DEMOUNT_KIT.IS_ENABLED))
             items.update(self._itemsCache.items.getItems(itemType, criteria, nationID=None))
 
         return items

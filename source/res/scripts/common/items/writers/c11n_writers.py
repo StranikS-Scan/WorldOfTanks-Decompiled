@@ -15,7 +15,7 @@ from items.components.c11n_components import StyleItem, ApplyArea
 from items.customizations import FieldTypes, FieldFlags, FieldType, SerializableComponent, SerializationException
 from items.type_traits import equalComparator
 from nations import NAMES
-from items.utils import getDefaultGlossTexture
+from items.utils.common import getDefaultGlossTexture
 if IS_EDITOR:
     from reflection_framework.helpers.editor_shared_properties import isPropertyShared
 else:

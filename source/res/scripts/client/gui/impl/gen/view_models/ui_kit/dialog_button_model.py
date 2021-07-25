@@ -7,6 +7,7 @@ class DialogButtonModel(ViewModel):
     __slots__ = ('onClicked',)
     BTN_SUBMIT = 'submit'
     BTN_CANCEL = 'cancel'
+    BTN_EXIT = 'exit'
     BTN_RESEARCH = 'research'
     BTN_PURCHASE = 'purchase'
 

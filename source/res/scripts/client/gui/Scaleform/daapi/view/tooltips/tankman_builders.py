@@ -23,10 +23,8 @@ class TankmanTooltipBuilder(AdvancedDataBuilder):
     __slots__ = ()
 
     def __init__(self, tooltipType, linkage):
-        super(TankmanTooltipBuilder, self).__init__(tooltipType, linkage, tankman.TankmanTooltipDataBlock(contexts.TankmanHangarContext()), advanced.TankmanTooltipAdvanced(contexts.TankmanHangarContext()))
-
-    def _buildData(self, _advanced, invID, *args, **kwargs):
-        return super(TankmanTooltipBuilder, self)._buildData(_advanced, invID)
+        super(TankmanTooltipBuilder, self).__init__(tooltipType, linkage, tankman.TankmanTooltipDataBlock(contexts.ToolTipContext(None)), advanced.TankmanTooltipAdvanced(contexts.TankmanHangarContext()))
+        return
 
 
 class BattleRoyaleTankmanTooltipBuilder(DataBuilder):
@@ -70,4 +68,5 @@ def getTooltipBuilders():
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.TANKMAN_SKILL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, skill.SkillTooltipDataBlock(contexts.PersonalCaseContext(fieldsToExclude=('count',))), advanced.SkillTooltipAdvanced(contexts.PersonalCaseContext(fieldsToExclude=('count',))), condition=_advancedBlockCondition(contexts.PersonalCaseContext(fieldsToExclude=('count',)))),
      TankmanNewSkillTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN_NEW_SKILL, TOOLTIPS_CONSTANTS.TANKMEN_BUY_SKILL_UI),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.PREVIEW_CREW_SKILL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, skill.SkillTooltipDataBlock(contexts.PreviewCaseContext()), advanced.SkillTooltipAdvanced(contexts.PreviewCaseContext())),
-     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.TANKMAN_SKILL_EXTENDED, TOOLTIPS_CONSTANTS.TANKMAN_SKILL_EXTENDED_UI, skill.TankmanSkillTooltipData(contexts.HangarParamContext()), advanced.SkillExtendedTooltipAdvanced(contexts.HangarParamContext())))
+     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.TANKMAN_SKILL_EXTENDED, TOOLTIPS_CONSTANTS.TANKMAN_SKILL_EXTENDED_UI, skill.TankmanSkillTooltipData(contexts.HangarParamContext()), advanced.SkillExtendedTooltipAdvanced(contexts.HangarParamContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.TANKMAN_DEMOBILIZED_STATE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, tankman.TankmanDemobilizedStateTooltipData(contexts.TankmanHangarContext())))

@@ -62,6 +62,9 @@ class AbstractRequester(object):
 
 class AbstractSyncDataRequester(AbstractRequester):
 
+    def getDataRoot(self):
+        return self._data
+
     def getCacheValue(self, key, defaultValue=None):
         return self._data[key] if key in self._data else defaultValue
 

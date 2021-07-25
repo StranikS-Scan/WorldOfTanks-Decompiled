@@ -3,14 +3,6 @@
 CREW_SKINS_XML_FILE = 'crewSkins.xml'
 CREW_SKINS_PRICE_GROUPS_XML_FILE = 'priceGroups.xml'
 NO_CREW_SKIN_ID = 0
-NO_CREW_SKIN_SOUND_SET = '-'
-
-class CREW_SKIN_PROPERTIES_MASKS:
-    ROLE = 1
-    SEX = 2
-    NATION = 4
-    EMPTY_MASK = 0
-
 
 class CrewSkinType:
     CREW_SKIN = 1

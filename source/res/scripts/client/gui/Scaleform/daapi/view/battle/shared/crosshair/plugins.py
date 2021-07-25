@@ -528,7 +528,7 @@ class AmmoPlugin(CrosshairPlugin):
                 self.__autoReloadCallbackID = BigWorld.callback(actualTime, self.__autoReloadFirstShellCallback)
                 self.__scaledInterval = clipInterval
             else:
-                self.__reloadAnimator.setClipAutoLoading(actualTime, self.__reCalcFirstShellAutoReload(baseTime), isRedText=True)
+                self.__reloadAnimator.setClipAutoLoading(actualTime, self.__reCalcFirstShellAutoReload(baseTime), isTimerOn=True, isRedText=True)
                 actualTime = baseTime = 0
             self.__autoReloadSnapshot = state
         self.__reloadAnimator.setShellLoading(actualTime, baseTime)

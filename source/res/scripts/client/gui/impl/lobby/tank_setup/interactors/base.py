@@ -10,11 +10,12 @@ if typing.TYPE_CHECKING:
 
 class InteractingItem(object):
     _itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ('__item', 'onItemUpdated', 'onSlotAction', 'onAcceptComplete')
+    __slots__ = ('__item', 'onItemUpdated', 'onItemPreviewUpdated', 'onSlotAction', 'onAcceptComplete')
 
     def __init__(self, item):
         self.__item = item
         self.onItemUpdated = Event.Event()
+        self.onItemPreviewUpdated = Event.Event()
         self.onSlotAction = Event.Event()
         self.onAcceptComplete = Event.Event()
 
@@ -52,9 +53,6 @@ class BaseAutoRenewal(object):
     def changeValue(self, callback):
         raise NotImplementedError
 
-    def updateVehicle(self, vehicle):
-        self._vehicle = vehicle
-
 
 class BaseInteractor(object):
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -62,9 +60,8 @@ class BaseInteractor(object):
 
     def __init__(self, item):
         self._item = None
-        self.__autoRenewal = None
         self.setItem(item)
-        self.__createAutoRenewal()
+        self.__autoRenewal = self._createAutoRenewal()
         return
 
     def getName(self):
@@ -83,17 +80,11 @@ class BaseInteractor(object):
 
     def setItem(self, item):
         self._item = item
-        if self.__autoRenewal is not None:
-            self.__autoRenewal.updateVehicle(self.getItem())
-        return
 
     def getInstalledLayout(self):
         raise NotImplementedError
 
     def getCurrentLayout(self):
-        raise NotImplementedError
-
-    def getSetupLayout(self):
         raise NotImplementedError
 
     def getPlayerLayout(self):
@@ -107,6 +98,9 @@ class BaseInteractor(object):
 
     def itemUpdated(self):
         self._item.onItemUpdated(self.getName())
+
+    def itemPreviewUpdated(self):
+        self._item.onItemPreviewUpdated(self.getName())
 
     def onSlotAction(self, actionType, intCD=NONE_ID, slotID=NONE_ID, leftID=NONE_ID, rightID=NONE_ID, leftIntCD=NONE_ID, rightIntCD=NONE_ID):
         self._item.onSlotAction(self.getName(), actionType, intCD, slotID, leftID, rightID, leftIntCD, rightIntCD)
@@ -147,15 +141,8 @@ class BaseInteractor(object):
             callback(None)
         return
 
-    def applyQuit(self, callback, skipApplyAutoRenewal):
-        if skipApplyAutoRenewal:
-            callback(None)
-        else:
-            self.applyAutoRenewal(callback)
-        return
+    def applyQuit(self, callback):
+        self.applyAutoRenewal(callback)
 
     def _createAutoRenewal(self):
         return None
-
-    def __createAutoRenewal(self):
-        self.__autoRenewal = self._createAutoRenewal()

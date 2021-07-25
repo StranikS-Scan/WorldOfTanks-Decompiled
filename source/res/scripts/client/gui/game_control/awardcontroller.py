@@ -55,7 +55,7 @@ from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBan
 from gui.server_events.events_helpers import isDailyQuest, isACEmailConfirmationQuest
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
-from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showBadgeInvoiceAwardWindow
+from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showBadgeInvoiceAwardWindow, showMultiAwardWindow, showNewLevelWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -66,6 +66,7 @@ from helpers import dependency
 from helpers import i18n
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
@@ -79,7 +80,9 @@ from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.sounds import ISoundsController
+from skeletons.gui.cdn import IPurchaseCache
 _logger = logging.getLogger(__name__)
 
 class QUEST_AWARD_POSTFIX(object):
@@ -150,7 +153,6 @@ class AwardController(IAwardController, IGlobalListener):
          MotiveQuestsWindowHandler(self),
          VehiclesResearchHandler(self),
          VictoryHandler(self),
-         BattlesCountHandler(self),
          PveBattlesCountHandler(self),
          PersonalMissionBonusHandler(self),
          PersonalMissionWindowAfterBattleHandler(self),
@@ -181,7 +183,9 @@ class AwardController(IAwardController, IGlobalListener):
          ProgressiveItemsRewardHandler(self),
          DedicationReward(self),
          BadgesInvoiceHandler(self),
-         MapboxProgressionRewardHandler(self)]
+         DetachmentReward(self),
+         MapboxProgressionRewardHandler(self),
+         PurchaseHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -1585,6 +1589,37 @@ class BadgesInvoiceHandler(ServiceChannelHandler):
         showBadgeInvoiceAwardWindow(badge)
 
 
+class DetachmentReward(ServiceChannelHandler):
+    _itemsFactory = dependency.descriptor(IGuiItemsFactory)
+    _itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, awardCtrl):
+        super(DetachmentReward, self).__init__(SYS_MESSAGE_TYPE.detachmentReward.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        detInvID = message.data.get('detInvID')
+        vehInvID = message.data.get('vehInvID')
+        newDetCompDescr = message.data.get('newDetCompDescr')
+        oldDetCompDescr = message.data.get('oldDetCompDescr')
+        skinID = message.data.get('skinID', NO_CREW_SKIN_ID)
+        isConversionProcess = message.data.get('isConversionProcess', False)
+        accountBadgeLevel = message.data.get('accountBadgeLevel', 0)
+        newDetachment = self._itemsFactory.createDetachment(newDetCompDescr, vehInvID=vehInvID) if newDetCompDescr else None
+        oldDetachment = self._itemsFactory.createDetachment(oldDetCompDescr) if oldDetCompDescr else None
+        oldMilestone = oldDetachment.milestone if oldDetachment else 0
+        newMilestone = newDetachment.milestone if newDetachment and not (isConversionProcess and newDetachment.rawLevel == 1) else 0
+        if newMilestone > oldMilestone:
+            useQueue = self._useQueue(newDetachment, oldDetachment)
+            showNewLevelWindow(detInvID, newDetCompDescr, oldDetCompDescr, skinID, accountBadgeLevel, useQueue=useQueue)
+        return
+
+    @staticmethod
+    def _useQueue(newDetachment, oldDetachment):
+        isMobilized = oldDetachment is None and newDetachment and newDetachment.vehInvID
+        return not isMobilized
+
+
 class MapboxProgressionRewardHandler(AwardHandler):
     __notificationMgr = dependency.descriptor(INotificationWindowController)
     __eventsCache = dependency.descriptor(IEventsCache)
@@ -1608,3 +1643,21 @@ class MapboxProgressionRewardHandler(AwardHandler):
         self.__notificationMgr.append(WindowNotificationCommand(window))
         self.__eventsCache.onEventsVisited()
         yield async.await(self.__mapboxCtrl.forceUpdateProgressData())
+
+
+class PurchaseHandler(ServiceChannelHandler):
+    __purchaseCache = dependency.descriptor(IPurchaseCache)
+
+    def __init__(self, awardCtrl):
+        super(PurchaseHandler, self).__init__(SYS_MESSAGE_TYPE.invoiceReceived.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        invoiceData = message.data
+        if invoiceData.get('assetType', 0) == INVOICE_ASSET.PURCHASE:
+            if self.__purchaseCache.canBeRequestedFromProduct(invoiceData):
+                if 'data' not in invoiceData:
+                    _logger.error('Invalid purchase invoice data!')
+                showMultiAwardWindow(invoiceData)
+            else:
+                _logger.debug('Data can not be requested from the product! Award window will not be shown!')

@@ -58,6 +58,7 @@ class SYSTEM_MESSAGES(object):
     ARENA_START_ERRORS_JOIN_WRONG_BATTLE_ID = '#system_messages:arena_start_errors/join/WRONG_BATTLE_ID'
     ARENA_START_ERRORS_JOIN_EVENT_DISABLED = '#system_messages:arena_start_errors/join/EVENT_DISABLED'
     ARENA_START_ERRORS_JOIN_QUEUE_FULL = '#system_messages:arena_start_errors/join/QUEUE_FULL'
+    ARENA_START_ERRORS_JOIN_NO_TEST = '#system_messages:arena_start_errors/join/NO_TEST'
     PREBATTLE_KICK_TYPE_SQUAD = '#system_messages:prebattle/kick/type/squad'
     PREBATTLE_KICK_TYPE_UNKNOWN = '#system_messages:prebattle/kick/type/unknown'
     PREBATTLE_KICK_REASON_ARENA_CREATION_FAILURE = '#system_messages:prebattle/kick/reason/ARENA_CREATION_FAILURE'
@@ -304,13 +305,11 @@ class SYSTEM_MESSAGES(object):
     EQUIP_TANKMAN_SUCCESS = '#system_messages:equip_tankman/success'
     EQUIP_TANKMAN_SERVER_ERROR = '#system_messages:equip_tankman/server_error'
     EQUIP_TANKMAN_INVALID_VEHICLE = '#system_messages:equip_tankman/invalid_vehicle'
-    EQUIP_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:equip_tankman/vehicle_need_repair'
     EQUIP_TANKMAN_VEHICLE_LOCKED = '#system_messages:equip_tankman/vehicle_locked'
     EQUIP_TANKMAN_FORBIDDEN = '#system_messages:equip_tankman/FORBIDDEN'
     REEQUIP_TANKMAN_SUCCESS = '#system_messages:reequip_tankman/success'
     REEQUIP_TANKMAN_SERVER_ERROR = '#system_messages:reequip_tankman/server_error'
     REEQUIP_TANKMAN_INVALID_VEHICLE = '#system_messages:reequip_tankman/invalid_vehicle'
-    REEQUIP_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:reequip_tankman/vehicle_need_repair'
     REEQUIP_TANKMAN_VEHICLE_LOCKED = '#system_messages:reequip_tankman/vehicle_locked'
     REEQUIP_TANKMAN_FORBIDDEN = '#system_messages:reequip_tankman/FORBIDDEN'
     BUY_AND_EQUIP_TANKMAN_SUCCESS = '#system_messages:buy_and_equip_tankman/success'
@@ -342,36 +341,47 @@ class SYSTEM_MESSAGES(object):
     DISMISS_TANKMAN_FORBIDDEN = '#system_messages:dismiss_tankman/FORBIDDEN'
     UNLOAD_TANKMAN_SUCCESS = '#system_messages:unload_tankman/success'
     UNLOAD_TANKMAN_SERVER_ERROR = '#system_messages:unload_tankman/server_error'
-    UNLOAD_TANKMAN_NOT_ENOUGH_SPACE = '#system_messages:unload_tankman/not_enough_space'
     UNLOAD_TANKMAN_INVALID_VEHICLE = '#system_messages:unload_tankman/invalid_vehicle'
-    UNLOAD_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:unload_tankman/vehicle_need_repair'
     UNLOAD_TANKMAN_VEHICLE_LOCKED = '#system_messages:unload_tankman/vehicle_locked'
     UNLOAD_TANKMAN_FORBIDDEN = '#system_messages:unload_tankman/FORBIDDEN'
     UNLOAD_CREW_SUCCESS = '#system_messages:unload_crew/success'
     UNLOAD_CREW_SERVER_ERROR = '#system_messages:unload_crew/server_error'
-    UNLOAD_CREW_NOT_ENOUGH_SPACE = '#system_messages:unload_crew/not_enough_space'
     UNLOAD_CREW_INVALID_VEHICLE = '#system_messages:unload_crew/invalid_vehicle'
-    UNLOAD_CREW_VEHICLE_NEED_REPAIR = '#system_messages:unload_crew/vehicle_need_repair'
     UNLOAD_CREW_VEHICLE_LOCKED = '#system_messages:unload_crew/vehicle_locked'
     UNLOAD_CREW_FORBIDDEN = '#system_messages:unload_crew/FORBIDDEN'
     RETURN_CREW_SUCCESS = '#system_messages:return_crew/success'
     RETURN_CREW_SERVER_ERROR = '#system_messages:return_crew/server_error'
-    RETURN_CREW_NOT_ENOUGH_SPACE = '#system_messages:return_crew/not_enough_space'
     RETURN_CREW_INVALID_VEHICLE = '#system_messages:return_crew/invalid_vehicle'
-    RETURN_CREW_VEHICLE_NEED_REPAIR = '#system_messages:return_crew/vehicle_need_repair'
     RETURN_CREW_VEHICLE_LOCKED = '#system_messages:return_crew/vehicle_locked'
     RETURN_CREW_FORBIDDEN = '#system_messages:return_crew/FORBIDDEN'
+    TANKMAN_LOAD_SUCCESS = '#system_messages:tankman_load/success'
+    TANKMAN_LOAD_SERVER_ERROR = '#system_messages:tankman_load/server_error'
+    TANKMAN_LOAD_INVALID_VEHICLE = '#system_messages:tankman_load/invalid_vehicle'
+    TANKMAN_LOAD_VEHICLE_LOCKED = '#system_messages:tankman_load/vehicle_locked'
+    TANKMAN_LOAD_FORBIDDEN = '#system_messages:tankman_load/FORBIDDEN'
+    TANKMAN_LOAD_NATIVE_SUCCESS = '#system_messages:tankman_load/native/success'
+    TANKMAN_LOAD_NATIVE_SERVER_ERROR = '#system_messages:tankman_load/native/server_error'
+    TANKMAN_LOAD_NATIVE_INVALID_VEHICLE = '#system_messages:tankman_load/native/invalid_vehicle'
+    TANKMAN_LOAD_NATIVE_VEHICLE_LOCKED = '#system_messages:tankman_load/native/vehicle_locked'
+    TANKMAN_LOAD_NATIVE_FORBIDDEN = '#system_messages:tankman_load/native/FORBIDDEN'
     RETRAINING_TANKMAN_SUCCESS = '#system_messages:retraining_tankman/success'
     RETRAINING_TANKMAN_FINANCIAL_SUCCESS = '#system_messages:retraining_tankman/financial_success'
     RETRAINING_TANKMAN_SERVER_ERROR = '#system_messages:retraining_tankman/server_error'
+    RETRAINING_TANKMAN_NOT_ENOUGH_GOLD = '#system_messages:retraining_tankman/not_enough_gold'
+    RETRAINING_TANKMAN_NOT_ENOUGH_CREDITS = '#system_messages:retraining_tankman/not_enough_credits'
+    RETRAINING_TANKMAN_WALLET_NOT_AVAILABLE = '#system_messages:retraining_tankman/wallet_not_available'
     RETRAINING_TANKMAN_INVALID_VEHICLE = '#system_messages:retraining_tankman/invalid_vehicle'
-    RETRAINING_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:retraining_tankman/vehicle_need_repair'
     RETRAINING_TANKMAN_VEHICLE_LOCKED = '#system_messages:retraining_tankman/vehicle_locked'
+    RETRAINING_TANKMAN_TANKMAN_LOCKED = '#system_messages:retraining_tankman/tankman_locked'
+    RETRAINING_TANKMAN_EMPTY_LIST = '#system_messages:retraining_tankman/empty_list'
     RETRAINING_TANKMAN_INVALID_OPERATION = '#system_messages:retraining_tankman/invalid_operation'
     RETRAINING_TANKMAN_FORBIDDEN = '#system_messages:retraining_tankman/FORBIDDEN'
     RETRAINING_CREW_SUCCESS = '#system_messages:retraining_crew/success'
     RETRAINING_CREW_FINANCIAL_SUCCESS = '#system_messages:retraining_crew/financial_success'
     RETRAINING_CREW_SERVER_ERROR = '#system_messages:retraining_crew/server_error'
+    RETRAINING_CREW_NOT_ENOUGH_GOLD = '#system_messages:retraining_crew/not_enough_gold'
+    RETRAINING_CREW_NOT_ENOUGH_CREDITS = '#system_messages:retraining_crew/not_enough_credits'
+    RETRAINING_CREW_WALLET_NOT_AVAILABLE = '#system_messages:retraining_crew/wallet_not_available'
     RETRAINING_CREW_INVALID_VEHICLE = '#system_messages:retraining_crew/invalid_vehicle'
     RETRAINING_CREW_VEHICLE_NEED_REPAIR = '#system_messages:retraining_crew/vehicle_need_repair'
     RETRAINING_CREW_VEHICLE_LOCKED = '#system_messages:retraining_crew/vehicle_locked'
@@ -389,16 +399,23 @@ class SYSTEM_MESSAGES(object):
     DROP_TANKMAN_SKILL_VEHICLE_NEED_REPAIR = '#system_messages:drop_tankman_skill/vehicle_need_repair'
     DROP_TANKMAN_SKILL_VEHICLE_LOCKED = '#system_messages:drop_tankman_skill/vehicle_locked'
     CHANGE_TANKMAN_ROLE_SUCCESS = '#system_messages:change_tankman_role/success'
-    CHANGE_TANKMAN_ROLE_INSTALLED = '#system_messages:change_tankman_role/installed'
-    CHANGE_TANKMAN_ROLE_SLOT_IS_TAKEN = '#system_messages:change_tankman_role/slot_is_taken'
-    CHANGE_TANKMAN_ROLE_NO_VEHICLE = '#system_messages:change_tankman_role/no_vehicle'
+    CHANGE_TANKMAN_ROLE_FINANCIAL_SUCCESS = '#system_messages:change_tankman_role/financial_success'
+    CHANGE_TANKMAN_ROLE_WITH_RETRAINING_SUCCESS = '#system_messages:change_tankman_role/with_retraining/success'
+    CHANGE_TANKMAN_ROLE_WITH_RETRAINING_FINANCIAL_SUCCESS = '#system_messages:change_tankman_role/with_retraining/financial_success'
     CHANGE_TANKMAN_ROLE_SERVER_ERROR = '#system_messages:change_tankman_role/server_error'
+    CHANGE_TANKMAN_ROLE_WITH_RETRAINING_SERVER_ERROR = '#system_messages:change_tankman_role/with_retraining/server_error'
     CHANGE_TANKMAN_ROLE_NOT_ENOUGH_GOLD = '#system_messages:change_tankman_role/not_enough_gold'
     CHANGE_TANKMAN_ROLE_NOT_ENOUGH_CREDITS = '#system_messages:change_tankman_role/not_enough_credits'
     CHANGE_TANKMAN_ROLE_WALLET_NOT_AVAILABLE = '#system_messages:change_tankman_role/wallet_not_available'
-    CHANGE_TANKMAN_ROLE_INVALID_VEHICLE = '#system_messages:change_tankman_role/invalid_vehicle'
-    CHANGE_TANKMAN_ROLE_INVALID_ROLE = '#system_messages:change_tankman_role/invalid_role'
+    CHANGE_TANKMAN_ROLE_WITH_RETRAINING_NOT_ENOUGH_GOLD = '#system_messages:change_tankman_role/with_retraining/not_enough_gold'
+    CHANGE_TANKMAN_ROLE_WITH_RETRAINING_NOT_ENOUGH_CREDITS = '#system_messages:change_tankman_role/with_retraining/not_enough_credits'
+    CHANGE_TANKMAN_ROLE_WITH_RETRAINING_WALLET_NOT_AVAILABLE = '#system_messages:change_tankman_role/with_retraining/wallet_not_available'
+    CHANGE_TANKMAN_ROLE_TANKMAN_LOCKED = '#system_messages:change_tankman_role/tankman_locked'
+    CHANGE_TANKMAN_ROLE_WITH_RETRAINING_TANKMAN_LOCKED = '#system_messages:change_tankman_role/with_retraining/tankman_locked'
     CHANGE_TANKMAN_ROLE_FORBIDDEN = '#system_messages:change_tankman_role/FORBIDDEN'
+    CHANGE_TANKMAN_ROLE_WITH_RETRAINING_FORBIDDEN = '#system_messages:change_tankman_role/with_retraining/FORBIDDEN'
+    CHANGE_TANKMAN_ROLE_VEHICLE_LOCKED = '#system_messages:change_tankman_role/vehicle_locked'
+    CHANGE_TANKMAN_ROLE_WITH_RETRAINING_VEHICLE_LOCKED = '#system_messages:change_tankman_role/with_retraining/vehicle_locked'
     FREE_XP_TO_TMAN_SKILL_SUCCESS = '#system_messages:free_xp_to_tman_skill/success'
     FREE_XP_TO_TMAN_SKILL_SERVER_ERROR = '#system_messages:free_xp_to_tman_skill/server_error'
     FREE_XP_TO_TMAN_SKILL_ERROR_WRONG_ARGS_TYPE = '#system_messages:free_xp_to_tman_skill/error/WRONG_ARGS_TYPE'
@@ -444,7 +461,11 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_SLOT_BUY_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_slot_buy/wallet_not_available'
     VEHICLE_SLOT_BUY_SERVER_ERROR = '#system_messages:vehicle_slot_buy/server_error'
     VEHICLE_SELL_SUCCESS = '#system_messages:vehicle_sell/success'
-    VEHICLE_SELL_SUCCESS_DISMANTLING = '#system_messages:vehicle_sell/success_dismantling'
+    VEHICLE_SELL_SUCCESS_EXCLUDE_INSTRUCTORS_FREE = '#system_messages:vehicle_sell/success/exclude_instructors_free'
+    VEHICLE_SELL_SUCCESS_EXCLUDE_INSTRUCTORS_PAID = '#system_messages:vehicle_sell/success/exclude_instructors_paid'
+    VEHICLE_SELL_SUCCESS_DISMANTLING = '#system_messages:vehicle_sell/success/dismantling'
+    VEHICLE_SELL_SUCCESS_DISMANTLING_EXCLUDE_INSTRUCTORS_FREE = '#system_messages:vehicle_sell/success/dismantling/exclude_instructors_free'
+    VEHICLE_SELL_SUCCESS_DISMANTLING_EXCLUDE_INSTRUCTORS_PAID = '#system_messages:vehicle_sell/success/dismantling/exclude_instructors_paid'
     VEHICLE_SELL_SERVER_ERROR = '#system_messages:vehicle_sell/server_error'
     VEHICLE_SELL_DISABLEDSERVICE = '#system_messages:vehicle_sell/disabledService'
     VEHICLE_SELL_INVALID_VEHICLE = '#system_messages:vehicle_sell/invalid_vehicle'
@@ -457,8 +478,15 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_SELL_VEHICLE_SELL_LIMIT = '#system_messages:vehicle_sell/vehicle_sell_limit'
     VEHICLE_SELL_NOT_ENOUGH_SPACE = '#system_messages:vehicle_sell/not_enough_space'
     VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT = '#system_messages:vehicle_sell/success/with_demount_kit'
-    VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT = '#system_messages:vehicle_sell/success_dismantling/with_demount_kit'
+    VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_FREE = '#system_messages:vehicle_sell/success/with_demount_kit/exclude_instructors_free'
+    VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_PAID = '#system_messages:vehicle_sell/success/with_demount_kit/exclude_instructors_paid'
+    VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT = '#system_messages:vehicle_sell/success/dismantling/with_demount_kit'
+    VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_FREE = '#system_messages:vehicle_sell/success/dismantling/with_demount_kit/exclude_instructors_free'
+    VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_PAID = '#system_messages:vehicle_sell/success/dismantling/with_demount_kit/exclude_instructors_paid'
     VEHICLE_SELL_DEMOUNT_KIT_DISABLED = '#system_messages:vehicle_sell/demount_kit_disabled'
+    VEHICLE_SELL_VEHICLE_CREW_FORBIDDEN_DISMISS = '#system_messages:vehicle_sell/vehicle_crew_forbidden_dismiss'
+    VEHICLE_SELL_DETACHMENT_SELL_LIMIT = '#system_messages:vehicle_sell/detachment_sell_limit'
+    VEHICLE_SELL_DETACHMENT_DISMISS_SWITCHED_OFF = '#system_messages:vehicle_sell/detachment_dismiss_switched_off'
     VEHICLE_TRADE_IN_SERVER_ERROR = '#system_messages:vehicle_trade_in/server_error'
     VEHICLE_TRADE_IN_SERVER_ERROR_CENTERDOWN = '#system_messages:vehicle_trade_in/server_error_centerDown'
     VEHICLE_TRADE_IN_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_trade_in/not_enough_credits'
@@ -474,7 +502,11 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_TRADE_IN_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_trade_in/wallet_not_available'
     VEHICLE_TRADE_IN_SUCCESS = '#system_messages:vehicle_trade_in/success'
     VEHICLE_REMOVE_SUCCESS = '#system_messages:vehicle_remove/success'
-    VEHICLE_REMOVE_SUCCESS_DISMANTLING = '#system_messages:vehicle_remove/success_dismantling'
+    VEHICLE_REMOVE_SUCCESS_EXCLUDE_INSTRUCTORS_FREE = '#system_messages:vehicle_remove/success/exclude_instructors_free'
+    VEHICLE_REMOVE_SUCCESS_EXCLUDE_INSTRUCTORS_PAID = '#system_messages:vehicle_remove/success/exclude_instructors_paid'
+    VEHICLE_REMOVE_SUCCESS_DISMANTLING = '#system_messages:vehicle_remove/success/dismantling'
+    VEHICLE_REMOVE_SUCCESS_DISMANTLING_EXCLUDE_INSTRUCTORS_FREE = '#system_messages:vehicle_remove/success/dismantling/exclude_instructors_free'
+    VEHICLE_REMOVE_SUCCESS_DISMANTLING_EXCLUDE_INSTRUCTORS_PAID = '#system_messages:vehicle_remove/success/dismantling/exclude_instructors_paid'
     VEHICLE_REMOVE_SERVER_ERROR = '#system_messages:vehicle_remove/server_error'
     VEHICLE_REMOVE_INVALID_VEHICLE = '#system_messages:vehicle_remove/invalid_vehicle'
     VEHICLE_REMOVE_VEHICLE_CANNOT_BE_SOLD = '#system_messages:vehicle_remove/vehicle_cannot_be_sold'
@@ -486,34 +518,43 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_REMOVE_VEHICLE_SELL_LIMIT = '#system_messages:vehicle_remove/vehicle_sell_limit'
     VEHICLE_REMOVE_NOT_ENOUGH_SPACE = '#system_messages:vehicle_remove/not_enough_space'
     VEHICLE_REMOVE_DEMOUNT_KIT_DISABLED = '#system_messages:vehicle_remove/demount_kit_disabled'
+    VEHICLE_REMOVE_VEHICLE_CREW_FORBIDDEN_DISMISS = '#system_messages:vehicle_remove/vehicle_crew_forbidden_dismiss'
     VEHICLE_RESTOREDURATION_HOURS = '#system_messages:vehicle/restoreDuration/hours'
     VEHICLE_RESTOREDURATION_DAYS = '#system_messages:vehicle/restoreDuration/days'
     VEHICLE_RESTORE_FINISHED = '#system_messages:vehicle/restore/finished'
     VEHICLE_REMOVE_SUCCESS_WITH_DEMOUNT_KIT = '#system_messages:vehicle_remove/success/with_demount_kit'
-    VEHICLE_REMOVE_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT = '#system_messages:vehicle_remove/success_dismantling/with_demount_kit'
-    VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE = '#system_messages:vehicle_tmenxp_accelerator/successFalse'
-    VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE = '#system_messages:vehicle_tmenxp_accelerator/successTrue'
-    VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE = '#system_messages:vehicle_tmenxp_accelerator/invalid_vehicle'
-    VEHICLE_TMENXP_ACCELERATOR_VEHICLE_NEED_REPAIR = '#system_messages:vehicle_tmenxp_accelerator/vehicle_need_repair'
-    VEHICLE_TMENXP_ACCELERATOR_VEHICLE_LOCKED = '#system_messages:vehicle_tmenxp_accelerator/vehicle_locked'
-    VEHICLE_TMENXP_ACCELERATOR_SERVER_ERROR = '#system_messages:vehicle_tmenxp_accelerator/server_error'
+    VEHICLE_REMOVE_SUCCESS_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_FREE = '#system_messages:vehicle_remove/success/with_demount_kit/exclude_instructors_free'
+    VEHICLE_REMOVE_SUCCESS_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_PAID = '#system_messages:vehicle_remove/success/with_demount_kit/exclude_instructors_paid'
+    VEHICLE_REMOVE_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT = '#system_messages:vehicle_remove/success/dismantling/with_demount_kit'
+    VEHICLE_REMOVE_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_FREE = '#system_messages:vehicle_remove/success/dismantling/with_demount_kit/exclude_instructors_free'
+    VEHICLE_REMOVE_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_PAID = '#system_messages:vehicle_remove/success/dismantling/with_demount_kit/exclude_instructors_paid'
+    VEHICLE_DETACHMENT_ACCELERATOR_SUCCESSFALSE = '#system_messages:vehicle_detachment_accelerator/successFalse'
+    VEHICLE_DETACHMENT_ACCELERATOR_SUCCESSTRUE = '#system_messages:vehicle_detachment_accelerator/successTrue'
+    VEHICLE_DETACHMENT_ACCELERATOR_INVALID_VEHICLE = '#system_messages:vehicle_detachment_accelerator/invalid_vehicle'
+    VEHICLE_DETACHMENT_ACCELERATOR_VEHICLE_NEED_REPAIR = '#system_messages:vehicle_detachment_accelerator/vehicle_need_repair'
+    VEHICLE_DETACHMENT_ACCELERATOR_VEHICLE_LOCKED = '#system_messages:vehicle_detachment_accelerator/vehicle_locked'
+    VEHICLE_DETACHMENT_ACCELERATOR_SERVER_ERROR = '#system_messages:vehicle_detachment_accelerator/server_error'
+    VEHICLE_DETACHMENT_ACCELERATOR_VEHICLE_HAS_OLD_CREW = '#system_messages:vehicle_detachment_accelerator/vehicle_has_old_crew'
     VEHICLE_REPAIR_SUCCESS = '#system_messages:vehicle_repair/success'
     VEHICLE_REPAIR_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_repair/not_enough_credits'
     VEHICLE_REPAIR_CREDITS_ERROR = '#system_messages:vehicle_repair/credits_error'
     VEHICLE_REPAIR_SERVER_ERROR = '#system_messages:vehicle_repair/server_error'
-    BUY_TANKMEN_BERTHS_SUCCESS = '#system_messages:buy_tankmen_berths/success'
-    BUY_TANKMEN_BERTHS_SERVER_ERROR = '#system_messages:buy_tankmen_berths/server_error'
-    BUY_TANKMEN_BERTHS_NOT_ENOUGH_CREDITS = '#system_messages:buy_tankmen_berths/not_enough_credits'
-    BUY_TANKMEN_BERTHS_NOT_ENOUGH_GOLD = '#system_messages:buy_tankmen_berths/not_enough_gold'
-    BUY_TANKMEN_BERTHS_WALLET_NOT_AVAILABLE = '#system_messages:buy_tankmen_berths/wallet_not_available'
+    BUY_DORMITORY_SUCCESS = '#system_messages:buy_dormitory/success'
+    BUY_DORMITORY_FINANCIAL_SUCCESS = '#system_messages:buy_dormitory/financial_success'
+    BUY_DORMITORY_SERVER_ERROR = '#system_messages:buy_dormitory/server_error'
+    BUY_DORMITORY_CREDITS_ERROR = '#system_messages:buy_dormitory/credits_error'
+    BUY_DORMITORY_GOLD_ERROR = '#system_messages:buy_dormitory/gold_error'
+    BUY_DORMITORY_CRYSTAL_ERROR = '#system_messages:buy_dormitory/crystal_error'
+    BUY_DORMITORY_WALLET_NOT_AVAILABLE = '#system_messages:buy_dormitory/wallet_not_available'
+    BUY_DORMITORY_SWITCHED_OFF = '#system_messages:buy_dormitory/switched_off'
+    CHANGE_PASSPORT_SUCCESS = '#system_messages:change_passport/success'
+    CHANGE_PASSPORT_SERVER_ERROR = '#system_messages:change_passport/server_error'
     RESTORE_TANKMAN_SUCCESS = '#system_messages:restore_tankman/success'
     RESTORE_TANKMAN_FINANCIAL_SUCCESS = '#system_messages:restore_tankman/financial_success'
-    RESTORE_TANKMAN_NOT_ENOUGH_SPACE = '#system_messages:restore_tankman/not_enough_space'
     RESTORE_TANKMAN_DISCONNECTED_FROM_CENTER = '#system_messages:restore_tankman/disconnected_from_center'
     RESTORE_TANKMAN_SERVER_ERROR = '#system_messages:restore_tankman/server_error'
     RESTORE_TANKMAN_DISABLED = '#system_messages:restore_tankman/DISABLED'
     RESTORE_TANKMAN_INVALID_TMAN_ID = '#system_messages:restore_tankman/INVALID_TMAN_ID'
-    RESTORE_TANKMAN_NO_BERTH = '#system_messages:restore_tankman/NO_BERTH'
     RESTORE_TANKMAN_WRONG_ARGS_TYPE = '#system_messages:restore_tankman/WRONG_ARGS_TYPE'
     RESTORE_TANKMAN_NO_GOLD = '#system_messages:restore_tankman/NO_GOLD'
     RESTORE_TANKMAN_RESTORE_TIME_EXPIRED = '#system_messages:restore_tankman/RESTORE_TIME_EXPIRED'
@@ -1109,7 +1150,6 @@ class SYSTEM_MESSAGES(object):
     LOOTBOXES_OPEN_SERVER_ERROR_COOLDOWN = '#system_messages:lootboxes/open/server_error/COOLDOWN'
     BADGES_SELECT_SERVER_ERROR_COOLDOWN = '#system_messages:badges/select/server_error/COOLDOWN'
     BADGES_SELECT_SERVER_ERROR = '#system_messages:badges/select/server_error'
-    CREWSKINSCOMPENSATION_SUCCESS = '#system_messages:crewSkinsCompensation/success'
     CREWSKINSNOTIFICATION_SKINGAIN = '#system_messages:crewSkinsNotification/SkinGain'
     CREWSKINSNOTIFICATION_SKINCHANGED = '#system_messages:crewSkinsNotification/SkinChanged'
     BLUEPRINTS_SWITCH_OFF = '#system_messages:blueprints/switch_off'
@@ -1151,7 +1191,10 @@ class SYSTEM_MESSAGES(object):
     PREMIUMXPBONUS_APPLY_SERVER_ERROR = '#system_messages:premiumXPBonus/apply/server_error'
     CREWBOOKS_SELL_SUCCESS = '#system_messages:crewBooks_sell/success'
     CREWBOOKSNOTIFICATION_BOOKUSED = '#system_messages:crewBooksNotification/bookUsed'
+    CREWBOOKSNOTIFICATION_BOOKADD = '#system_messages:crewBooksNotification/bookAdd'
+    CREWBOOKSNOTIFICATION_CREWTRAINED = '#system_messages:crewBooksNotification/crewTrained'
     CREWBOOKS_FAILED = '#system_messages:crewBooks/failed'
+    CREWBOOKS_DISABLED = '#system_messages:crewBooks/disabled'
     CREWBOOKS_BUY_SUCCESS = '#system_messages:crewBooks_buy/success'
     CREWBOOKS_BUY_SERVER_ERROR = '#system_messages:crewBooks_buy/server_error'
     CREWBOOKS_SELL_SERVER_ERROR = '#system_messages:crewBooks_sell/server_error'
@@ -1214,34 +1257,206 @@ class SYSTEM_MESSAGES(object):
     DOG_TAGS_SWITCH_OFF_BODY = '#system_messages:dog_tags/switch_off/body'
     DOG_TAGS_SWITCH_ON_TITLE = '#system_messages:dog_tags/switch_on/title'
     DOG_TAGS_SWITCH_ON_BODY = '#system_messages:dog_tags/switch_on/body'
-    VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_TITLE = '#system_messages:vehiclePostProgression/researchSteps/title'
-    VEHICLEPOSTPROGRESSION_EXPERIENCESPENT = '#system_messages:vehiclePostProgression/experienceSpent'
-    VEHICLEPOSTPROGRESSION_FREEEXPERIENCESPENT = '#system_messages:vehiclePostProgression/freeExperienceSpent'
-    VEHICLEPOSTPROGRESSION_CREDITSSPENT = '#system_messages:vehiclePostProgression/creditsSpent'
-    VEHICLEPOSTPROGRESSION_RESEARCHSTEP_BODY = '#system_messages:vehiclePostProgression/researchStep/body'
-    VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_BODY = '#system_messages:vehiclePostProgression/researchSteps/body'
-    VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_LEVELS_SEPARATOR = '#system_messages:vehiclePostProgression/researchSteps/levels/separator'
-    VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_SHELLS_CONSUMABLES_SWITCH_TITLE = '#system_messages:vehiclePostProgression/unlockFeature/shells_consumables_switch/title'
-    VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_SHELLS_CONSUMABLES_SWITCH_BODY = '#system_messages:vehiclePostProgression/unlockFeature/shells_consumables_switch/body'
-    VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_OPT_DEV_BOOSTERS_SWITCH_TITLE = '#system_messages:vehiclePostProgression/unlockFeature/opt_dev_boosters_switch/title'
-    VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_OPT_DEV_BOOSTERS_SWITCH_BODY = '#system_messages:vehiclePostProgression/unlockFeature/opt_dev_boosters_switch/body'
-    VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_ROLESLOT_TITLE = '#system_messages:vehiclePostProgression/unlockFeature/roleSlot/title'
-    VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_ROLESLOT_BODY = '#system_messages:vehiclePostProgression/unlockFeature/roleSlot/body'
-    VEHICLEPOSTPROGRESSION_MODIFICATIONPROCESSORERROR_TITLE = '#system_messages:vehiclePostProgression/modificationProcessorError/title'
-    VEHICLEPOSTPROGRESSION_MODIFICATIONPROCESSORERROR_BODY = '#system_messages:vehiclePostProgression/modificationProcessorError/body'
-    VEHICLEPOSTPROGRESSION_DISCARDPAIRMODIFICATION_TITLE = '#system_messages:vehiclePostProgression/discardPairModification/title'
-    VEHICLEPOSTPROGRESSION_DISCARDPAIRMODIFICATION_BODY = '#system_messages:vehiclePostProgression/discardPairModification/body'
-    VEHICLEPOSTPROGRESSION_DISCARDPAIRSMODIFICATION_BODY = '#system_messages:vehiclePostProgression/discardPairsModification/body'
-    VEHICLEPOSTPROGRESSION_DISCARDPAIRSMODIFICATION_MODIFICATIONS_SEPARATOR = '#system_messages:vehiclePostProgression/discardPairsModification/modifications/separator'
-    VEHICLEPOSTPROGRESSION_BUYPAIRMODIFICATION_TITLE = '#system_messages:vehiclePostProgression/buyPairModification/title'
-    VEHICLEPOSTPROGRESSION_BUYPAIRMODIFICATION_BODY = '#system_messages:vehiclePostProgression/buyPairModification/body'
-    VEHICLEPOSTPROGRESSION_CHANGESLOTCATEGORY_TITLE = '#system_messages:vehiclePostProgression/changeSlotCategory/title'
-    VEHICLEPOSTPROGRESSION_CHANGESLOTCATEGORY_BODY = '#system_messages:vehiclePostProgression/changeSlotCategory/body'
-    VEHICLEPOSTPROGRESSION_SETSLOTCATEGORY_TITLE = '#system_messages:vehiclePostProgression/setSlotCategory/title'
-    VEHICLEPOSTPROGRESSION_SETSLOTCATEGORY_BODY = '#system_messages:vehiclePostProgression/setSlotCategory/body'
-    VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_TITLE = '#system_messages:vehiclePostProgression/vehiclesUnlockPostProgression/title'
-    VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_SINGLE_BODY = '#system_messages:vehiclePostProgression/vehiclesUnlockPostProgression/single/body'
-    VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_WELCOMEUNLOCK_BODY = '#system_messages:vehiclePostProgression/vehiclesUnlockPostProgression/welcomeUnlock/body'
+    DETACHMENT_CREATE_SUCCESS = '#system_messages:detachment_create/success'
+    DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_SUCCESS = '#system_messages:detachment_create/assign_to_vehicle/success'
+    DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_SUCCESS = '#system_messages:detachment_create/assign_to_vehicle/has_detachment/success'
+    DETACHMENT_CREATE_SERVER_ERROR = '#system_messages:detachment_create/server_error'
+    DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_SERVER_ERROR = '#system_messages:detachment_create/assign_to_vehicle/server_error'
+    DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_SERVER_ERROR = '#system_messages:detachment_create/assign_to_vehicle/has_detachment/server_error'
+    DETACHMENT_CREATE_NOT_ENOUGH_SPACE = '#system_messages:detachment_create/not_enough_space'
+    DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_NOT_ENOUGH_SPACE = '#system_messages:detachment_create/assign_to_vehicle/not_enough_space'
+    DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_NOT_ENOUGH_SPACE = '#system_messages:detachment_create/assign_to_vehicle/has_detachment/not_enough_space'
+    DETACHMENT_CREATE_INVALID_VEHICLE = '#system_messages:detachment_create/invalid_vehicle'
+    DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_INVALID_VEHICLE = '#system_messages:detachment_create/assign_to_vehicle/invalid_vehicle'
+    DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_INVALID_VEHICLE = '#system_messages:detachment_create/assign_to_vehicle/has_detachment/invalid_vehicle'
+    DETACHMENT_CREATE_VEHICLE_LOCKED = '#system_messages:detachment_create/vehicle_locked'
+    DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_VEHICLE_LOCKED = '#system_messages:detachment_create/assign_to_vehicle/vehicle_locked'
+    DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_VEHICLE_LOCKED = '#system_messages:detachment_create/assign_to_vehicle/has_detachment/vehicle_locked'
+    DETACHMENT_CREATE_FORBIDDEN = '#system_messages:detachment_create/FORBIDDEN'
+    DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_FORBIDDEN = '#system_messages:detachment_create/assign_to_vehicle/FORBIDDEN'
+    DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_FORBIDDEN = '#system_messages:detachment_create/assign_to_vehicle/has_detachment/FORBIDDEN'
+    DETACHMENT_ASSIGN_TO_VEHICLE_SUCCESS = '#system_messages:detachment_assign_to_vehicle/success'
+    DETACHMENT_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_SUCCESS = '#system_messages:detachment_assign_to_vehicle/has_detachment/success'
+    DETACHMENT_ASSIGN_TO_VEHICLE_LAST_SUCCESS = '#system_messages:detachment_assign_to_vehicle/last/success'
+    DETACHMENT_ASSIGN_TO_VEHICLE_BEST_SUCCESS = '#system_messages:detachment_assign_to_vehicle/best/success'
+    DETACHMENT_ASSIGN_TO_VEHICLE_SERVER_ERROR = '#system_messages:detachment_assign_to_vehicle/server_error'
+    DETACHMENT_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_SERVER_ERROR = '#system_messages:detachment_assign_to_vehicle/has_detachment/server_error'
+    DETACHMENT_ASSIGN_TO_VEHICLE_LAST_SERVER_ERROR = '#system_messages:detachment_assign_to_vehicle/last/server_error'
+    DETACHMENT_ASSIGN_TO_VEHICLE_BEST_SERVER_ERROR = '#system_messages:detachment_assign_to_vehicle/best/server_error'
+    DETACHMENT_ASSIGN_TO_VEHICLE_INVALID_VEHICLE = '#system_messages:detachment_assign_to_vehicle/invalid_vehicle'
+    DETACHMENT_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_INVALID_VEHICLE = '#system_messages:detachment_assign_to_vehicle/has_detachment/invalid_vehicle'
+    DETACHMENT_ASSIGN_TO_VEHICLE_LAST_INVALID_VEHICLE = '#system_messages:detachment_assign_to_vehicle/last/invalid_vehicle'
+    DETACHMENT_ASSIGN_TO_VEHICLE_BEST_INVALID_VEHICLE = '#system_messages:detachment_assign_to_vehicle/best/invalid_vehicle'
+    DETACHMENT_ASSIGN_TO_VEHICLE_VEHICLE_LOCKED = '#system_messages:detachment_assign_to_vehicle/vehicle_locked'
+    DETACHMENT_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_VEHICLE_LOCKED = '#system_messages:detachment_assign_to_vehicle/has_detachment/vehicle_locked'
+    DETACHMENT_ASSIGN_TO_VEHICLE_LAST_VEHICLE_LOCKED = '#system_messages:detachment_assign_to_vehicle/last/vehicle_locked'
+    DETACHMENT_ASSIGN_TO_VEHICLE_BEST_VEHICLE_LOCKED = '#system_messages:detachment_assign_to_vehicle/best/vehicle_locked'
+    DETACHMENT_ASSIGN_TO_VEHICLE_FORBIDDEN = '#system_messages:detachment_assign_to_vehicle/FORBIDDEN'
+    DETACHMENT_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_FORBIDDEN = '#system_messages:detachment_assign_to_vehicle/has_detachment/FORBIDDEN'
+    DETACHMENT_ASSIGN_TO_VEHICLE_LAST_FORBIDDEN = '#system_messages:detachment_assign_to_vehicle/last/FORBIDDEN'
+    DETACHMENT_ASSIGN_TO_VEHICLE_BEST_FORBIDDEN = '#system_messages:detachment_assign_to_vehicle/best/FORBIDDEN'
+    DETACHMENT_ASSIGN_TO_VEHICLE_OLD_CREW_REMOVED = '#system_messages:detachment_assign_to_vehicle/old_crew_removed'
+    DETACHMENT_RESET_VEHICLE_LINK_SUCCESS = '#system_messages:detachment_reset_vehicle_link/success'
+    DETACHMENT_RESET_VEHICLE_LINK_SERVER_ERROR = '#system_messages:detachment_reset_vehicle_link/server_error'
+    DETACHMENT_RESET_VEHICLE_LINK_INVALID_VEHICLE = '#system_messages:detachment_reset_vehicle_link/invalid_vehicle'
+    DETACHMENT_RESET_VEHICLE_LINK_VEHICLE_LOCKED = '#system_messages:detachment_reset_vehicle_link/vehicle_locked'
+    DETACHMENT_RESET_VEHICLE_LINK_FORBIDDEN = '#system_messages:detachment_reset_vehicle_link/FORBIDDEN'
+    DEMOBILIZE_DETACHMENT_SUCCESS = '#system_messages:demobilize_detachment/success'
+    DEMOBILIZE_DETACHMENT_SUCCESS_INSTRUCTOR_FREE = '#system_messages:demobilize_detachment/success_instructor_free'
+    DEMOBILIZE_DETACHMENT_SUCCESS_INSTRUCTOR_PAID = '#system_messages:demobilize_detachment/success_instructor_paid'
+    DEMOBILIZE_DETACHMENT_SERVER_ERROR = '#system_messages:demobilize_detachment/server_error'
+    DEMOBILIZE_DETACHMENT_SWITCHED_OFF = '#system_messages:demobilize_detachment/switched_off'
+    DEMOBILIZE_DETACHMENT_INVALID_DETACHMENT = '#system_messages:demobilize_detachment/invalid_detachment'
+    DEMOBILIZE_DETACHMENT_DETACHMENT_ALREADY_DEMOBILIZE = '#system_messages:demobilize_detachment/detachment_already_demobilize'
+    DEMOBILIZE_DETACHMENT_INVALID_VEHICLE = '#system_messages:demobilize_detachment/invalid_vehicle'
+    DEMOBILIZE_DETACHMENT_VEHICLE_LOCKED = '#system_messages:demobilize_detachment/vehicle_locked'
+    DEMOBILIZE_DETACHMENT_FORBIDDEN = '#system_messages:demobilize_detachment/FORBIDDEN'
+    RESTORE_DETACHMENT_SUCCESS = '#system_messages:restore_detachment/success'
+    RESTORE_DETACHMENT_FINANCIAL_SUCCESS = '#system_messages:restore_detachment/financial_success'
+    RESTORE_DETACHMENT_SERVER_ERROR = '#system_messages:restore_detachment/server_error'
+    RESTORE_DETACHMENT_INVALID_DETACHMENT = '#system_messages:restore_detachment/invalid_detachment'
+    RESTORE_DETACHMENT_DETACHMENT_NOT_DEMOBILIZE = '#system_messages:restore_detachment/detachment_not_demobilize'
+    RESTORE_DETACHMENT_CREDITS_ERROR = '#system_messages:restore_detachment/credits_error'
+    RESTORE_DETACHMENT_GOLD_ERROR = '#system_messages:restore_detachment/gold_error'
+    RESTORE_DETACHMENT_WALLET_NOT_AVAILABLE = '#system_messages:restore_detachment/wallet_not_available'
+    RESTORE_DETACHMENT_RESTORE_TIME_EXPIRED = '#system_messages:restore_detachment/restore_time_expired'
+    DETACHMENT_SWAP_SLOTS_SERVER_ERROR = '#system_messages:detachment_swap_slots/server_error'
+    DETACHMENT_SWAP_SLOTS_INVALID_DETACHMENT = '#system_messages:detachment_swap_slots/invalid_detachment'
+    DETACHMENT_SWAP_SLOTS_SAME_SLOT = '#system_messages:detachment_swap_slots/same_slot'
+    DETACHMENT_SWAP_SLOTS_INVALID_SOURCE_SLOT = '#system_messages:detachment_swap_slots/invalid_source_slot'
+    DETACHMENT_SWAP_SLOTS_INVALID_TARGET_SLOT = '#system_messages:detachment_swap_slots/invalid_target_slot'
+    UNPACKED_INSTRUCTOR_SUCCESS = '#system_messages:unpacked_instructor/success'
+    UNPACKED_INSTRUCTOR_SERVER_ERROR = '#system_messages:unpacked_instructor/server_error'
+    UNPACKED_INSTRUCTOR_INSTRUCTOR_IS_NOT_TOKEN = '#system_messages:unpacked_instructor/instructor_is_not_token'
+    UNPACKED_INSTRUCTOR_INCORRECT_INSTRUCTOR_PROFESSION = '#system_messages:unpacked_instructor/incorrect_instructor_profession'
+    UNPACKED_INSTRUCTOR_INCORRECT_INSTRUCTOR_ID = '#system_messages:unpacked_instructor/incorrect_instructor_id'
+    UNPACKED_INSTRUCTOR_INCORRECT_NATION_ID = '#system_messages:unpacked_instructor/incorrect_nation_id'
+    UNPACKED_INSTRUCTOR_INSTRUCTOR_ALREADY_HAS_BONUSES = '#system_messages:unpacked_instructor/instructor_already_has_bonuses'
+    UNPACKED_INSTRUCTOR_INSTRUCTOR_ALREADY_HAS_NATION = '#system_messages:unpacked_instructor/instructor_already_has_nation'
+    DETACHMENT_ADD_INSTRUCTOR_SUCCESS = '#system_messages:detachment_add_instructor/success'
+    DETACHMENT_ADD_INSTRUCTOR_SWITCHED_OFF = '#system_messages:detachment_add_instructor/switched_off'
+    DETACHMENT_ADD_INSTRUCTOR_SERVER_ERROR = '#system_messages:detachment_add_instructor/server_error'
+    DETACHMENT_ADD_INSTRUCTOR_NOT_ADDED_EXCLUDED_INSTRUCTOR = '#system_messages:detachment_add_instructor/not_added_excluded_instructor'
+    DETACHMENT_REMOVE_INSTRUCTOR_FREE_SUCCESS = '#system_messages:detachment_remove_instructor/free/success'
+    DETACHMENT_REMOVE_INSTRUCTOR_PAID_SUCCESS = '#system_messages:detachment_remove_instructor/paid/success'
+    DETACHMENT_REMOVE_INSTRUCTOR_SWITCHED_OFF = '#system_messages:detachment_remove_instructor/switched_off'
+    DETACHMENT_REMOVE_INSTRUCTOR_SERVER_ERROR = '#system_messages:detachment_remove_instructor/server_error'
+    DETACHMENT_RECOVER_INSTRUCTOR_SUCCESS = '#system_messages:detachment_recover_instructor/success'
+    DETACHMENT_PERSONAL_CASE_SERVER_ERROR = '#system_messages:detachment_personal_case/server_error'
+    DETACHMENT_PERSONAL_CASE_INBATTLE = '#system_messages:detachment_personal_case/inBattle'
+    DETACHMENT_PERSONAL_CASE_INUNIT = '#system_messages:detachment_personal_case/inUnit'
+    DETACHMENT_PERSONAL_CASE_DEMOBILIZED = '#system_messages:detachment_personal_case/demobilized'
+    CREWSKIN_EQUIP_SUCCESS = '#system_messages:crewskin_equip/success'
+    BUY_DETACHMENT_VEHICLE_SLOT_SUCCESS = '#system_messages:buy_detachment_vehicle_slot/success'
+    DETACHMENT_LEARN_PERKS_PERKS_SUCCESS = '#system_messages:detachment_learn_perks/perks/success'
+    DETACHMENT_LEARN_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_learn_perks/ultimate_perks/success'
+    DETACHMENT_LEARN_PERKS_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_learn_perks/perks/ultimate_perks/success'
+    DETACHMENT_LEARN_PERKS_SERVER_ERROR = '#system_messages:detachment_learn_perks/server_error'
+    DETACHMENT_DROP_PERKS_PERKS_SUCCESS = '#system_messages:detachment_drop_perks/perks/success'
+    DETACHMENT_DROP_PERKS_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_perks/perks/ultimate_perks/success'
+    DETACHMENT_DROP_PERKS_USERECERTIFICATIONFORM_PERKS_SUCCESS = '#system_messages:detachment_drop_perks/useRecertificationForm/perks/success'
+    DETACHMENT_DROP_PERKS_USERECERTIFICATIONFORM_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_perks/useRecertificationForm/perks/ultimate_perks/success'
+    DETACHMENT_DROP_PERKS_DISCOUNT_PERKS_SUCCESS = '#system_messages:detachment_drop_perks/discount/perks/success'
+    DETACHMENT_DROP_PERKS_DISCOUNT_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_perks/discount/perks/ultimate_perks/success'
+    DETACHMENT_CHANGES_PERKS_PERKS_SUCCESS = '#system_messages:detachment_changes_perks/perks/success'
+    DETACHMENT_CHANGES_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_changes_perks/ultimate_perks/success'
+    DETACHMENT_CHANGES_PERKS_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_changes_perks/perks/ultimate_perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_NOPOINTSRETURN_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/noPointsReturn/perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_NOPOINTSRETURN_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/noPointsReturn/perks/ultimate_perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_NOPOINTSRETURN_USERECERTIFICATIONFORM_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/noPointsReturn/useRecertificationForm/perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_NOPOINTSRETURN_USERECERTIFICATIONFORM_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/noPointsReturn/useRecertificationForm/perks/ultimate_perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_NOPOINTSRETURN_DISCOUNT_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/noPointsReturn/discount/perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_NOPOINTSRETURN_DISCOUNT_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/noPointsReturn/discount/perks/ultimate_perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_POINTSRETURN_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/pointsReturn/perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_POINTSRETURN_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/pointsReturn/perks/ultimate_perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_POINTSRETURN_USERECERTIFICATIONFORM_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/pointsReturn/useRecertificationForm/perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_POINTSRETURN_USERECERTIFICATIONFORM_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/pointsReturn/useRecertificationForm/perks/ultimate_perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_POINTSRETURN_DISCOUNT_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/pointsReturn/discount/perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_POINTSRETURN_DISCOUNT_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/pointsReturn/discount/perks/ultimate_perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/ultimate_perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/perks/ultimate_perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_USERECERTIFICATIONFORM_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/useRecertificationForm/perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_USERECERTIFICATIONFORM_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/useRecertificationForm/ultimate_perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_USERECERTIFICATIONFORM_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/useRecertificationForm/perks/ultimate_perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_DISCOUNT_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/discount/perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_DISCOUNT_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/discount/ultimate_perks/success'
+    DETACHMENT_DROP_PARTIAL_PERKS_DISCOUNT_PERKS_ULTIMATE_PERKS_SUCCESS = '#system_messages:detachment_drop_partial_perks/discount/perks/ultimate_perks/success'
+    DETACHMENT_LEARN_PERKS_PERKS_SERVER_ERROR = '#system_messages:detachment_learn_perks/perks/server_error'
+    DETACHMENT_LEARN_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_learn_perks/ultimate_perks/server_error'
+    DETACHMENT_LEARN_PERKS_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_learn_perks/perks/ultimate_perks/server_error'
+    DETACHMENT_LEARN_PERKS_INVALID_VEHICLE_PERKS_SERVER_ERROR = '#system_messages:detachment_learn_perks/invalid_vehicle/perks/server_error'
+    DETACHMENT_LEARN_PERKS_INVALID_VEHICLE_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_learn_perks/invalid_vehicle/ultimate_perks/server_error'
+    DETACHMENT_LEARN_PERKS_INVALID_VEHICLE_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_learn_perks/invalid_vehicle/perks/ultimate_perks/server_error'
+    DETACHMENT_LEARN_PERKS_VEHICLE_LOCKED_PERKS_SERVER_ERROR = '#system_messages:detachment_learn_perks/vehicle_locked/perks/server_error'
+    DETACHMENT_LEARN_PERKS_VEHICLE_LOCKED_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_learn_perks/vehicle_locked/ultimate_perks/server_error'
+    DETACHMENT_LEARN_PERKS_VEHICLE_LOCKED_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_learn_perks/vehicle_locked/perks/ultimate_perks/server_error'
+    DETACHMENT_DROP_PERKS_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_perks/perks/server_error'
+    DETACHMENT_DROP_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_perks/ultimate_perks/server_error'
+    DETACHMENT_DROP_PERKS_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_perks/perks/ultimate_perks/server_error'
+    DETACHMENT_DROP_PERKS_INVALID_VEHICLE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_perks/invalid_vehicle/perks/server_error'
+    DETACHMENT_DROP_PERKS_INVALID_VEHICLE_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_perks/invalid_vehicle/ultimate_perks/server_error'
+    DETACHMENT_DROP_PERKS_INVALID_VEHICLE_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_perks/invalid_vehicle/perks/ultimate_perks/server_error'
+    DETACHMENT_DROP_PERKS_VEHICLE_LOCKED_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_perks/vehicle_locked/perks/server_error'
+    DETACHMENT_DROP_PERKS_VEHICLE_LOCKED_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_perks/vehicle_locked/ultimate_perks/server_error'
+    DETACHMENT_DROP_PERKS_VEHICLE_LOCKED_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_perks/vehicle_locked/perks/ultimate_perks/server_error'
+    DETACHMENT_CHANGES_PERKS_PERKS_SERVER_ERROR = '#system_messages:detachment_changes_perks/perks/server_error'
+    DETACHMENT_CHANGES_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_changes_perks/ultimate_perks/server_error'
+    DETACHMENT_CHANGES_PERKS_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_changes_perks/perks/ultimate_perks/server_error'
+    DETACHMENT_CHANGES_PERKS_INVALID_VEHICLE_PERKS_SERVER_ERROR = '#system_messages:detachment_changes_perks/invalid_vehicle/perks/server_error'
+    DETACHMENT_CHANGES_PERKS_INVALID_VEHICLE_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_changes_perks/invalid_vehicle/ultimate_perks/server_error'
+    DETACHMENT_CHANGES_PERKS_INVALID_VEHICLE_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_changes_perks/invalid_vehicle/perks/ultimate_perks/server_error'
+    DETACHMENT_CHANGES_PERKS_VEHICLE_LOCKED_PERKS_SERVER_ERROR = '#system_messages:detachment_changes_perks/vehicle_locked/perks/server_error'
+    DETACHMENT_CHANGES_PERKS_VEHICLE_LOCKED_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_changes_perks/vehicle_locked/ultimate_perks/server_error'
+    DETACHMENT_CHANGES_PERKS_VEHICLE_LOCKED_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_changes_perks/vehicle_locked/perks/ultimate_perks/server_error'
+    DETACHMENT_DROP_PARTIAL_PERKS_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_partial_perks/perks/server_error'
+    DETACHMENT_DROP_PARTIAL_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_partial_perks/ultimate_perks/server_error'
+    DETACHMENT_DROP_PARTIAL_PERKS_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_partial_perks/perks/ultimate_perks/server_error'
+    DETACHMENT_DROP_PARTIAL_PERKS_INVALID_VEHICLE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_partial_perks/invalid_vehicle/perks/server_error'
+    DETACHMENT_DROP_PARTIAL_PERKS_INVALID_VEHICLE_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_partial_perks/invalid_vehicle/ultimate_perks/server_error'
+    DETACHMENT_DROP_PARTIAL_PERKS_INVALID_VEHICLE_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_partial_perks/invalid_vehicle/perks/ultimate_perks/server_error'
+    DETACHMENT_DROP_PARTIAL_PERKS_VEHICLE_LOCKED_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_partial_perks/vehicle_locked/perks/server_error'
+    DETACHMENT_DROP_PARTIAL_PERKS_VEHICLE_LOCKED_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_partial_perks/vehicle_locked/ultimate_perks/server_error'
+    DETACHMENT_DROP_PARTIAL_PERKS_VEHICLE_LOCKED_PERKS_ULTIMATE_PERKS_SERVER_ERROR = '#system_messages:detachment_drop_partial_perks/vehicle_locked/perks/ultimate_perks/server_error'
+    SPECIALIZE_VEHICLE_SLOT_SUCCESS = '#system_messages:specialize_vehicle_slot/success'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_SUCCESS = '#system_messages:specialize_vehicle_slot/retraining/success'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_SUCCESS = '#system_messages:specialize_vehicle_slot/change_class/success'
+    SPECIALIZE_VEHICLE_SLOT_DROP_SKILLS_SUCCESS = '#system_messages:specialize_vehicle_slot/drop_skills/success'
+    SPECIALIZE_VEHICLE_SLOT_DROP_SKILLS_WITH_ULTIMATE_SUCCESS = '#system_messages:specialize_vehicle_slot/drop_skills_with_ultimate/success'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_DROP_SKILLS_SUCCESS = '#system_messages:specialize_vehicle_slot/retraining/drop_skills/success'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_DROP_SKILLS_WITH_ULTIMATE_SUCCESS = '#system_messages:specialize_vehicle_slot/retraining/drop_skills_with_ultimate/success'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_DROP_SKILLS_SUCCESS = '#system_messages:specialize_vehicle_slot/change_class/drop_skills/success'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_DROP_SKILLS_WITH_ULTIMATE_SUCCESS = '#system_messages:specialize_vehicle_slot/change_class/drop_skills_with_ultimate/success'
+    SPECIALIZE_VEHICLE_SLOT_FINANCIAL_SUCCESS = '#system_messages:specialize_vehicle_slot/financial_success'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_FINANCIAL_SUCCESS = '#system_messages:specialize_vehicle_slot/retraining/financial_success'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_FINANCIAL_SUCCESS = '#system_messages:specialize_vehicle_slot/change_class/financial_success'
+    SPECIALIZE_VEHICLE_SLOT_DROP_SKILLS_FINANCIAL_SUCCESS = '#system_messages:specialize_vehicle_slot/drop_skills/financial_success'
+    SPECIALIZE_VEHICLE_SLOT_DROP_SKILLS_WITH_ULTIMATE_FINANCIAL_SUCCESS = '#system_messages:specialize_vehicle_slot/drop_skills_with_ultimate/financial_success'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_DROP_SKILLS_FINANCIAL_SUCCESS = '#system_messages:specialize_vehicle_slot/retraining/drop_skills/financial_success'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_DROP_SKILLS_WITH_ULTIMATE_FINANCIAL_SUCCESS = '#system_messages:specialize_vehicle_slot/retraining/drop_skills_with_ultimate/financial_success'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_DROP_SKILLS_FINANCIAL_SUCCESS = '#system_messages:specialize_vehicle_slot/change_class/drop_skills/financial_success'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_DROP_SKILLS_WITH_ULTIMATE_FINANCIAL_SUCCESS = '#system_messages:specialize_vehicle_slot/change_class/drop_skills_with_ultimate/financial_success'
+    SPECIALIZE_VEHICLE_SLOT_SERVER_ERROR = '#system_messages:specialize_vehicle_slot/server_error'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_SERVER_ERROR = '#system_messages:specialize_vehicle_slot/retraining/server_error'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_SERVER_ERROR = '#system_messages:specialize_vehicle_slot/change_class/server_error'
+    SPECIALIZE_VEHICLE_SLOT_NOT_ENOUGH_GOLD = '#system_messages:specialize_vehicle_slot/not_enough_gold'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_NOT_ENOUGH_GOLD = '#system_messages:specialize_vehicle_slot/retraining/not_enough_gold'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_NOT_ENOUGH_GOLD = '#system_messages:specialize_vehicle_slot/change_class/not_enough_gold'
+    SPECIALIZE_VEHICLE_SLOT_NOT_ENOUGH_CREDITS = '#system_messages:specialize_vehicle_slot/not_enough_credits'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_NOT_ENOUGH_CREDITS = '#system_messages:specialize_vehicle_slot/retraining/not_enough_credits'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_NOT_ENOUGH_CREDITS = '#system_messages:specialize_vehicle_slot/change_class/not_enough_credits'
+    SPECIALIZE_VEHICLE_SLOT_WALLET_NOT_AVAILABLE = '#system_messages:specialize_vehicle_slot/wallet_not_available'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_WALLET_NOT_AVAILABLE = '#system_messages:specialize_vehicle_slot/retraining/wallet_not_available'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_WALLET_NOT_AVAILABLE = '#system_messages:specialize_vehicle_slot/change_class/wallet_not_available'
+    SPECIALIZE_VEHICLE_SLOT_INVALID_VEHICLE = '#system_messages:specialize_vehicle_slot/invalid_vehicle'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_INVALID_VEHICLE = '#system_messages:specialize_vehicle_slot/retraining/invalid_vehicle'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_INVALID_VEHICLE = '#system_messages:specialize_vehicle_slot/change_class/invalid_vehicle'
+    SPECIALIZE_VEHICLE_SLOT_VEHICLE_LOCKED = '#system_messages:specialize_vehicle_slot/vehicle_locked'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_VEHICLE_LOCKED = '#system_messages:specialize_vehicle_slot/retraining/vehicle_locked'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_VEHICLE_LOCKED = '#system_messages:specialize_vehicle_slot/change_class/vehicle_locked'
+    SPECIALIZE_VEHICLE_SLOT_FORBIDDEN = '#system_messages:specialize_vehicle_slot/FORBIDDEN'
+    SPECIALIZE_VEHICLE_SLOT_RETRAINING_FORBIDDEN = '#system_messages:specialize_vehicle_slot/retraining/FORBIDDEN'
+    SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_FORBIDDEN = '#system_messages:specialize_vehicle_slot/change_class/FORBIDDEN'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1415,6 +1630,7 @@ class SYSTEM_MESSAGES(object):
      ARENA_START_ERRORS_JOIN_WRONG_BATTLE_ID,
      ARENA_START_ERRORS_JOIN_EVENT_DISABLED,
      ARENA_START_ERRORS_JOIN_QUEUE_FULL,
+     ARENA_START_ERRORS_JOIN_NO_TEST,
      PREBATTLE_KICK_TYPE_SQUAD,
      PREBATTLE_KICK_TYPE_UNKNOWN,
      PREBATTLE_KICK_REASON_ARENA_CREATION_FAILURE,
@@ -1661,13 +1877,11 @@ class SYSTEM_MESSAGES(object):
      EQUIP_TANKMAN_SUCCESS,
      EQUIP_TANKMAN_SERVER_ERROR,
      EQUIP_TANKMAN_INVALID_VEHICLE,
-     EQUIP_TANKMAN_VEHICLE_NEED_REPAIR,
      EQUIP_TANKMAN_VEHICLE_LOCKED,
      EQUIP_TANKMAN_FORBIDDEN,
      REEQUIP_TANKMAN_SUCCESS,
      REEQUIP_TANKMAN_SERVER_ERROR,
      REEQUIP_TANKMAN_INVALID_VEHICLE,
-     REEQUIP_TANKMAN_VEHICLE_NEED_REPAIR,
      REEQUIP_TANKMAN_VEHICLE_LOCKED,
      REEQUIP_TANKMAN_FORBIDDEN,
      BUY_AND_EQUIP_TANKMAN_SUCCESS,
@@ -1699,36 +1913,47 @@ class SYSTEM_MESSAGES(object):
      DISMISS_TANKMAN_FORBIDDEN,
      UNLOAD_TANKMAN_SUCCESS,
      UNLOAD_TANKMAN_SERVER_ERROR,
-     UNLOAD_TANKMAN_NOT_ENOUGH_SPACE,
      UNLOAD_TANKMAN_INVALID_VEHICLE,
-     UNLOAD_TANKMAN_VEHICLE_NEED_REPAIR,
      UNLOAD_TANKMAN_VEHICLE_LOCKED,
      UNLOAD_TANKMAN_FORBIDDEN,
      UNLOAD_CREW_SUCCESS,
      UNLOAD_CREW_SERVER_ERROR,
-     UNLOAD_CREW_NOT_ENOUGH_SPACE,
      UNLOAD_CREW_INVALID_VEHICLE,
-     UNLOAD_CREW_VEHICLE_NEED_REPAIR,
      UNLOAD_CREW_VEHICLE_LOCKED,
      UNLOAD_CREW_FORBIDDEN,
      RETURN_CREW_SUCCESS,
      RETURN_CREW_SERVER_ERROR,
-     RETURN_CREW_NOT_ENOUGH_SPACE,
      RETURN_CREW_INVALID_VEHICLE,
-     RETURN_CREW_VEHICLE_NEED_REPAIR,
      RETURN_CREW_VEHICLE_LOCKED,
      RETURN_CREW_FORBIDDEN,
+     TANKMAN_LOAD_SUCCESS,
+     TANKMAN_LOAD_SERVER_ERROR,
+     TANKMAN_LOAD_INVALID_VEHICLE,
+     TANKMAN_LOAD_VEHICLE_LOCKED,
+     TANKMAN_LOAD_FORBIDDEN,
+     TANKMAN_LOAD_NATIVE_SUCCESS,
+     TANKMAN_LOAD_NATIVE_SERVER_ERROR,
+     TANKMAN_LOAD_NATIVE_INVALID_VEHICLE,
+     TANKMAN_LOAD_NATIVE_VEHICLE_LOCKED,
+     TANKMAN_LOAD_NATIVE_FORBIDDEN,
      RETRAINING_TANKMAN_SUCCESS,
      RETRAINING_TANKMAN_FINANCIAL_SUCCESS,
      RETRAINING_TANKMAN_SERVER_ERROR,
+     RETRAINING_TANKMAN_NOT_ENOUGH_GOLD,
+     RETRAINING_TANKMAN_NOT_ENOUGH_CREDITS,
+     RETRAINING_TANKMAN_WALLET_NOT_AVAILABLE,
      RETRAINING_TANKMAN_INVALID_VEHICLE,
-     RETRAINING_TANKMAN_VEHICLE_NEED_REPAIR,
      RETRAINING_TANKMAN_VEHICLE_LOCKED,
+     RETRAINING_TANKMAN_TANKMAN_LOCKED,
+     RETRAINING_TANKMAN_EMPTY_LIST,
      RETRAINING_TANKMAN_INVALID_OPERATION,
      RETRAINING_TANKMAN_FORBIDDEN,
      RETRAINING_CREW_SUCCESS,
      RETRAINING_CREW_FINANCIAL_SUCCESS,
      RETRAINING_CREW_SERVER_ERROR,
+     RETRAINING_CREW_NOT_ENOUGH_GOLD,
+     RETRAINING_CREW_NOT_ENOUGH_CREDITS,
+     RETRAINING_CREW_WALLET_NOT_AVAILABLE,
      RETRAINING_CREW_INVALID_VEHICLE,
      RETRAINING_CREW_VEHICLE_NEED_REPAIR,
      RETRAINING_CREW_VEHICLE_LOCKED,
@@ -1746,16 +1971,23 @@ class SYSTEM_MESSAGES(object):
      DROP_TANKMAN_SKILL_VEHICLE_NEED_REPAIR,
      DROP_TANKMAN_SKILL_VEHICLE_LOCKED,
      CHANGE_TANKMAN_ROLE_SUCCESS,
-     CHANGE_TANKMAN_ROLE_INSTALLED,
-     CHANGE_TANKMAN_ROLE_SLOT_IS_TAKEN,
-     CHANGE_TANKMAN_ROLE_NO_VEHICLE,
+     CHANGE_TANKMAN_ROLE_FINANCIAL_SUCCESS,
+     CHANGE_TANKMAN_ROLE_WITH_RETRAINING_SUCCESS,
+     CHANGE_TANKMAN_ROLE_WITH_RETRAINING_FINANCIAL_SUCCESS,
      CHANGE_TANKMAN_ROLE_SERVER_ERROR,
+     CHANGE_TANKMAN_ROLE_WITH_RETRAINING_SERVER_ERROR,
      CHANGE_TANKMAN_ROLE_NOT_ENOUGH_GOLD,
      CHANGE_TANKMAN_ROLE_NOT_ENOUGH_CREDITS,
      CHANGE_TANKMAN_ROLE_WALLET_NOT_AVAILABLE,
-     CHANGE_TANKMAN_ROLE_INVALID_VEHICLE,
-     CHANGE_TANKMAN_ROLE_INVALID_ROLE,
+     CHANGE_TANKMAN_ROLE_WITH_RETRAINING_NOT_ENOUGH_GOLD,
+     CHANGE_TANKMAN_ROLE_WITH_RETRAINING_NOT_ENOUGH_CREDITS,
+     CHANGE_TANKMAN_ROLE_WITH_RETRAINING_WALLET_NOT_AVAILABLE,
+     CHANGE_TANKMAN_ROLE_TANKMAN_LOCKED,
+     CHANGE_TANKMAN_ROLE_WITH_RETRAINING_TANKMAN_LOCKED,
      CHANGE_TANKMAN_ROLE_FORBIDDEN,
+     CHANGE_TANKMAN_ROLE_WITH_RETRAINING_FORBIDDEN,
+     CHANGE_TANKMAN_ROLE_VEHICLE_LOCKED,
+     CHANGE_TANKMAN_ROLE_WITH_RETRAINING_VEHICLE_LOCKED,
      FREE_XP_TO_TMAN_SKILL_SUCCESS,
      FREE_XP_TO_TMAN_SKILL_SERVER_ERROR,
      FREE_XP_TO_TMAN_SKILL_ERROR_WRONG_ARGS_TYPE,
@@ -1801,7 +2033,11 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_SLOT_BUY_WALLET_NOT_AVAILABLE,
      VEHICLE_SLOT_BUY_SERVER_ERROR,
      VEHICLE_SELL_SUCCESS,
+     VEHICLE_SELL_SUCCESS_EXCLUDE_INSTRUCTORS_FREE,
+     VEHICLE_SELL_SUCCESS_EXCLUDE_INSTRUCTORS_PAID,
      VEHICLE_SELL_SUCCESS_DISMANTLING,
+     VEHICLE_SELL_SUCCESS_DISMANTLING_EXCLUDE_INSTRUCTORS_FREE,
+     VEHICLE_SELL_SUCCESS_DISMANTLING_EXCLUDE_INSTRUCTORS_PAID,
      VEHICLE_SELL_SERVER_ERROR,
      VEHICLE_SELL_DISABLEDSERVICE,
      VEHICLE_SELL_INVALID_VEHICLE,
@@ -1814,8 +2050,15 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_SELL_VEHICLE_SELL_LIMIT,
      VEHICLE_SELL_NOT_ENOUGH_SPACE,
      VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT,
+     VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_FREE,
+     VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_PAID,
      VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT,
+     VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_FREE,
+     VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_PAID,
      VEHICLE_SELL_DEMOUNT_KIT_DISABLED,
+     VEHICLE_SELL_VEHICLE_CREW_FORBIDDEN_DISMISS,
+     VEHICLE_SELL_DETACHMENT_SELL_LIMIT,
+     VEHICLE_SELL_DETACHMENT_DISMISS_SWITCHED_OFF,
      VEHICLE_TRADE_IN_SERVER_ERROR,
      VEHICLE_TRADE_IN_SERVER_ERROR_CENTERDOWN,
      VEHICLE_TRADE_IN_NOT_ENOUGH_CREDITS,
@@ -1831,7 +2074,11 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_TRADE_IN_WALLET_NOT_AVAILABLE,
      VEHICLE_TRADE_IN_SUCCESS,
      VEHICLE_REMOVE_SUCCESS,
+     VEHICLE_REMOVE_SUCCESS_EXCLUDE_INSTRUCTORS_FREE,
+     VEHICLE_REMOVE_SUCCESS_EXCLUDE_INSTRUCTORS_PAID,
      VEHICLE_REMOVE_SUCCESS_DISMANTLING,
+     VEHICLE_REMOVE_SUCCESS_DISMANTLING_EXCLUDE_INSTRUCTORS_FREE,
+     VEHICLE_REMOVE_SUCCESS_DISMANTLING_EXCLUDE_INSTRUCTORS_PAID,
      VEHICLE_REMOVE_SERVER_ERROR,
      VEHICLE_REMOVE_INVALID_VEHICLE,
      VEHICLE_REMOVE_VEHICLE_CANNOT_BE_SOLD,
@@ -1843,34 +2090,43 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_REMOVE_VEHICLE_SELL_LIMIT,
      VEHICLE_REMOVE_NOT_ENOUGH_SPACE,
      VEHICLE_REMOVE_DEMOUNT_KIT_DISABLED,
+     VEHICLE_REMOVE_VEHICLE_CREW_FORBIDDEN_DISMISS,
      VEHICLE_RESTOREDURATION_HOURS,
      VEHICLE_RESTOREDURATION_DAYS,
      VEHICLE_RESTORE_FINISHED,
      VEHICLE_REMOVE_SUCCESS_WITH_DEMOUNT_KIT,
+     VEHICLE_REMOVE_SUCCESS_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_FREE,
+     VEHICLE_REMOVE_SUCCESS_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_PAID,
      VEHICLE_REMOVE_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT,
-     VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE,
-     VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE,
-     VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE,
-     VEHICLE_TMENXP_ACCELERATOR_VEHICLE_NEED_REPAIR,
-     VEHICLE_TMENXP_ACCELERATOR_VEHICLE_LOCKED,
-     VEHICLE_TMENXP_ACCELERATOR_SERVER_ERROR,
+     VEHICLE_REMOVE_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_FREE,
+     VEHICLE_REMOVE_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT_EXCLUDE_INSTRUCTORS_PAID,
+     VEHICLE_DETACHMENT_ACCELERATOR_SUCCESSFALSE,
+     VEHICLE_DETACHMENT_ACCELERATOR_SUCCESSTRUE,
+     VEHICLE_DETACHMENT_ACCELERATOR_INVALID_VEHICLE,
+     VEHICLE_DETACHMENT_ACCELERATOR_VEHICLE_NEED_REPAIR,
+     VEHICLE_DETACHMENT_ACCELERATOR_VEHICLE_LOCKED,
+     VEHICLE_DETACHMENT_ACCELERATOR_SERVER_ERROR,
+     VEHICLE_DETACHMENT_ACCELERATOR_VEHICLE_HAS_OLD_CREW,
      VEHICLE_REPAIR_SUCCESS,
      VEHICLE_REPAIR_NOT_ENOUGH_CREDITS,
      VEHICLE_REPAIR_CREDITS_ERROR,
      VEHICLE_REPAIR_SERVER_ERROR,
-     BUY_TANKMEN_BERTHS_SUCCESS,
-     BUY_TANKMEN_BERTHS_SERVER_ERROR,
-     BUY_TANKMEN_BERTHS_NOT_ENOUGH_CREDITS,
-     BUY_TANKMEN_BERTHS_NOT_ENOUGH_GOLD,
-     BUY_TANKMEN_BERTHS_WALLET_NOT_AVAILABLE,
+     BUY_DORMITORY_SUCCESS,
+     BUY_DORMITORY_FINANCIAL_SUCCESS,
+     BUY_DORMITORY_SERVER_ERROR,
+     BUY_DORMITORY_CREDITS_ERROR,
+     BUY_DORMITORY_GOLD_ERROR,
+     BUY_DORMITORY_CRYSTAL_ERROR,
+     BUY_DORMITORY_WALLET_NOT_AVAILABLE,
+     BUY_DORMITORY_SWITCHED_OFF,
+     CHANGE_PASSPORT_SUCCESS,
+     CHANGE_PASSPORT_SERVER_ERROR,
      RESTORE_TANKMAN_SUCCESS,
      RESTORE_TANKMAN_FINANCIAL_SUCCESS,
-     RESTORE_TANKMAN_NOT_ENOUGH_SPACE,
      RESTORE_TANKMAN_DISCONNECTED_FROM_CENTER,
      RESTORE_TANKMAN_SERVER_ERROR,
      RESTORE_TANKMAN_DISABLED,
      RESTORE_TANKMAN_INVALID_TMAN_ID,
-     RESTORE_TANKMAN_NO_BERTH,
      RESTORE_TANKMAN_WRONG_ARGS_TYPE,
      RESTORE_TANKMAN_NO_GOLD,
      RESTORE_TANKMAN_RESTORE_TIME_EXPIRED,
@@ -2466,7 +2722,6 @@ class SYSTEM_MESSAGES(object):
      LOOTBOXES_OPEN_SERVER_ERROR_COOLDOWN,
      BADGES_SELECT_SERVER_ERROR_COOLDOWN,
      BADGES_SELECT_SERVER_ERROR,
-     CREWSKINSCOMPENSATION_SUCCESS,
      CREWSKINSNOTIFICATION_SKINGAIN,
      CREWSKINSNOTIFICATION_SKINCHANGED,
      BLUEPRINTS_SWITCH_OFF,
@@ -2508,7 +2763,10 @@ class SYSTEM_MESSAGES(object):
      PREMIUMXPBONUS_APPLY_SERVER_ERROR,
      CREWBOOKS_SELL_SUCCESS,
      CREWBOOKSNOTIFICATION_BOOKUSED,
+     CREWBOOKSNOTIFICATION_BOOKADD,
+     CREWBOOKSNOTIFICATION_CREWTRAINED,
      CREWBOOKS_FAILED,
+     CREWBOOKS_DISABLED,
      CREWBOOKS_BUY_SUCCESS,
      CREWBOOKS_BUY_SERVER_ERROR,
      CREWBOOKS_SELL_SERVER_ERROR,
@@ -2571,34 +2829,206 @@ class SYSTEM_MESSAGES(object):
      DOG_TAGS_SWITCH_OFF_BODY,
      DOG_TAGS_SWITCH_ON_TITLE,
      DOG_TAGS_SWITCH_ON_BODY,
-     VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_TITLE,
-     VEHICLEPOSTPROGRESSION_EXPERIENCESPENT,
-     VEHICLEPOSTPROGRESSION_FREEEXPERIENCESPENT,
-     VEHICLEPOSTPROGRESSION_CREDITSSPENT,
-     VEHICLEPOSTPROGRESSION_RESEARCHSTEP_BODY,
-     VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_BODY,
-     VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_LEVELS_SEPARATOR,
-     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_SHELLS_CONSUMABLES_SWITCH_TITLE,
-     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_SHELLS_CONSUMABLES_SWITCH_BODY,
-     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_OPT_DEV_BOOSTERS_SWITCH_TITLE,
-     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_OPT_DEV_BOOSTERS_SWITCH_BODY,
-     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_ROLESLOT_TITLE,
-     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_ROLESLOT_BODY,
-     VEHICLEPOSTPROGRESSION_MODIFICATIONPROCESSORERROR_TITLE,
-     VEHICLEPOSTPROGRESSION_MODIFICATIONPROCESSORERROR_BODY,
-     VEHICLEPOSTPROGRESSION_DISCARDPAIRMODIFICATION_TITLE,
-     VEHICLEPOSTPROGRESSION_DISCARDPAIRMODIFICATION_BODY,
-     VEHICLEPOSTPROGRESSION_DISCARDPAIRSMODIFICATION_BODY,
-     VEHICLEPOSTPROGRESSION_DISCARDPAIRSMODIFICATION_MODIFICATIONS_SEPARATOR,
-     VEHICLEPOSTPROGRESSION_BUYPAIRMODIFICATION_TITLE,
-     VEHICLEPOSTPROGRESSION_BUYPAIRMODIFICATION_BODY,
-     VEHICLEPOSTPROGRESSION_CHANGESLOTCATEGORY_TITLE,
-     VEHICLEPOSTPROGRESSION_CHANGESLOTCATEGORY_BODY,
-     VEHICLEPOSTPROGRESSION_SETSLOTCATEGORY_TITLE,
-     VEHICLEPOSTPROGRESSION_SETSLOTCATEGORY_BODY,
-     VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_TITLE,
-     VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_SINGLE_BODY,
-     VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_WELCOMEUNLOCK_BODY)
+     DETACHMENT_CREATE_SUCCESS,
+     DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_SUCCESS,
+     DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_SUCCESS,
+     DETACHMENT_CREATE_SERVER_ERROR,
+     DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_SERVER_ERROR,
+     DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_SERVER_ERROR,
+     DETACHMENT_CREATE_NOT_ENOUGH_SPACE,
+     DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_NOT_ENOUGH_SPACE,
+     DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_NOT_ENOUGH_SPACE,
+     DETACHMENT_CREATE_INVALID_VEHICLE,
+     DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_INVALID_VEHICLE,
+     DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_INVALID_VEHICLE,
+     DETACHMENT_CREATE_VEHICLE_LOCKED,
+     DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_VEHICLE_LOCKED,
+     DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_VEHICLE_LOCKED,
+     DETACHMENT_CREATE_FORBIDDEN,
+     DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_FORBIDDEN,
+     DETACHMENT_CREATE_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_FORBIDDEN,
+     DETACHMENT_ASSIGN_TO_VEHICLE_SUCCESS,
+     DETACHMENT_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_SUCCESS,
+     DETACHMENT_ASSIGN_TO_VEHICLE_LAST_SUCCESS,
+     DETACHMENT_ASSIGN_TO_VEHICLE_BEST_SUCCESS,
+     DETACHMENT_ASSIGN_TO_VEHICLE_SERVER_ERROR,
+     DETACHMENT_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_SERVER_ERROR,
+     DETACHMENT_ASSIGN_TO_VEHICLE_LAST_SERVER_ERROR,
+     DETACHMENT_ASSIGN_TO_VEHICLE_BEST_SERVER_ERROR,
+     DETACHMENT_ASSIGN_TO_VEHICLE_INVALID_VEHICLE,
+     DETACHMENT_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_INVALID_VEHICLE,
+     DETACHMENT_ASSIGN_TO_VEHICLE_LAST_INVALID_VEHICLE,
+     DETACHMENT_ASSIGN_TO_VEHICLE_BEST_INVALID_VEHICLE,
+     DETACHMENT_ASSIGN_TO_VEHICLE_VEHICLE_LOCKED,
+     DETACHMENT_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_VEHICLE_LOCKED,
+     DETACHMENT_ASSIGN_TO_VEHICLE_LAST_VEHICLE_LOCKED,
+     DETACHMENT_ASSIGN_TO_VEHICLE_BEST_VEHICLE_LOCKED,
+     DETACHMENT_ASSIGN_TO_VEHICLE_FORBIDDEN,
+     DETACHMENT_ASSIGN_TO_VEHICLE_HAS_DETACHMENT_FORBIDDEN,
+     DETACHMENT_ASSIGN_TO_VEHICLE_LAST_FORBIDDEN,
+     DETACHMENT_ASSIGN_TO_VEHICLE_BEST_FORBIDDEN,
+     DETACHMENT_ASSIGN_TO_VEHICLE_OLD_CREW_REMOVED,
+     DETACHMENT_RESET_VEHICLE_LINK_SUCCESS,
+     DETACHMENT_RESET_VEHICLE_LINK_SERVER_ERROR,
+     DETACHMENT_RESET_VEHICLE_LINK_INVALID_VEHICLE,
+     DETACHMENT_RESET_VEHICLE_LINK_VEHICLE_LOCKED,
+     DETACHMENT_RESET_VEHICLE_LINK_FORBIDDEN,
+     DEMOBILIZE_DETACHMENT_SUCCESS,
+     DEMOBILIZE_DETACHMENT_SUCCESS_INSTRUCTOR_FREE,
+     DEMOBILIZE_DETACHMENT_SUCCESS_INSTRUCTOR_PAID,
+     DEMOBILIZE_DETACHMENT_SERVER_ERROR,
+     DEMOBILIZE_DETACHMENT_SWITCHED_OFF,
+     DEMOBILIZE_DETACHMENT_INVALID_DETACHMENT,
+     DEMOBILIZE_DETACHMENT_DETACHMENT_ALREADY_DEMOBILIZE,
+     DEMOBILIZE_DETACHMENT_INVALID_VEHICLE,
+     DEMOBILIZE_DETACHMENT_VEHICLE_LOCKED,
+     DEMOBILIZE_DETACHMENT_FORBIDDEN,
+     RESTORE_DETACHMENT_SUCCESS,
+     RESTORE_DETACHMENT_FINANCIAL_SUCCESS,
+     RESTORE_DETACHMENT_SERVER_ERROR,
+     RESTORE_DETACHMENT_INVALID_DETACHMENT,
+     RESTORE_DETACHMENT_DETACHMENT_NOT_DEMOBILIZE,
+     RESTORE_DETACHMENT_CREDITS_ERROR,
+     RESTORE_DETACHMENT_GOLD_ERROR,
+     RESTORE_DETACHMENT_WALLET_NOT_AVAILABLE,
+     RESTORE_DETACHMENT_RESTORE_TIME_EXPIRED,
+     DETACHMENT_SWAP_SLOTS_SERVER_ERROR,
+     DETACHMENT_SWAP_SLOTS_INVALID_DETACHMENT,
+     DETACHMENT_SWAP_SLOTS_SAME_SLOT,
+     DETACHMENT_SWAP_SLOTS_INVALID_SOURCE_SLOT,
+     DETACHMENT_SWAP_SLOTS_INVALID_TARGET_SLOT,
+     UNPACKED_INSTRUCTOR_SUCCESS,
+     UNPACKED_INSTRUCTOR_SERVER_ERROR,
+     UNPACKED_INSTRUCTOR_INSTRUCTOR_IS_NOT_TOKEN,
+     UNPACKED_INSTRUCTOR_INCORRECT_INSTRUCTOR_PROFESSION,
+     UNPACKED_INSTRUCTOR_INCORRECT_INSTRUCTOR_ID,
+     UNPACKED_INSTRUCTOR_INCORRECT_NATION_ID,
+     UNPACKED_INSTRUCTOR_INSTRUCTOR_ALREADY_HAS_BONUSES,
+     UNPACKED_INSTRUCTOR_INSTRUCTOR_ALREADY_HAS_NATION,
+     DETACHMENT_ADD_INSTRUCTOR_SUCCESS,
+     DETACHMENT_ADD_INSTRUCTOR_SWITCHED_OFF,
+     DETACHMENT_ADD_INSTRUCTOR_SERVER_ERROR,
+     DETACHMENT_ADD_INSTRUCTOR_NOT_ADDED_EXCLUDED_INSTRUCTOR,
+     DETACHMENT_REMOVE_INSTRUCTOR_FREE_SUCCESS,
+     DETACHMENT_REMOVE_INSTRUCTOR_PAID_SUCCESS,
+     DETACHMENT_REMOVE_INSTRUCTOR_SWITCHED_OFF,
+     DETACHMENT_REMOVE_INSTRUCTOR_SERVER_ERROR,
+     DETACHMENT_RECOVER_INSTRUCTOR_SUCCESS,
+     DETACHMENT_PERSONAL_CASE_SERVER_ERROR,
+     DETACHMENT_PERSONAL_CASE_INBATTLE,
+     DETACHMENT_PERSONAL_CASE_INUNIT,
+     DETACHMENT_PERSONAL_CASE_DEMOBILIZED,
+     CREWSKIN_EQUIP_SUCCESS,
+     BUY_DETACHMENT_VEHICLE_SLOT_SUCCESS,
+     DETACHMENT_LEARN_PERKS_PERKS_SUCCESS,
+     DETACHMENT_LEARN_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_LEARN_PERKS_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_LEARN_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PERKS_PERKS_SUCCESS,
+     DETACHMENT_DROP_PERKS_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PERKS_USERECERTIFICATIONFORM_PERKS_SUCCESS,
+     DETACHMENT_DROP_PERKS_USERECERTIFICATIONFORM_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PERKS_DISCOUNT_PERKS_SUCCESS,
+     DETACHMENT_DROP_PERKS_DISCOUNT_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_CHANGES_PERKS_PERKS_SUCCESS,
+     DETACHMENT_CHANGES_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_CHANGES_PERKS_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_NOPOINTSRETURN_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_NOPOINTSRETURN_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_NOPOINTSRETURN_USERECERTIFICATIONFORM_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_NOPOINTSRETURN_USERECERTIFICATIONFORM_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_NOPOINTSRETURN_DISCOUNT_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_NOPOINTSRETURN_DISCOUNT_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_POINTSRETURN_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_POINTSRETURN_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_POINTSRETURN_USERECERTIFICATIONFORM_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_POINTSRETURN_USERECERTIFICATIONFORM_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_POINTSRETURN_DISCOUNT_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_POINTSRETURN_DISCOUNT_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_USERECERTIFICATIONFORM_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_USERECERTIFICATIONFORM_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_USERECERTIFICATIONFORM_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_DISCOUNT_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_DISCOUNT_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_DROP_PARTIAL_PERKS_DISCOUNT_PERKS_ULTIMATE_PERKS_SUCCESS,
+     DETACHMENT_LEARN_PERKS_PERKS_SERVER_ERROR,
+     DETACHMENT_LEARN_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_LEARN_PERKS_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_LEARN_PERKS_INVALID_VEHICLE_PERKS_SERVER_ERROR,
+     DETACHMENT_LEARN_PERKS_INVALID_VEHICLE_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_LEARN_PERKS_INVALID_VEHICLE_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_LEARN_PERKS_VEHICLE_LOCKED_PERKS_SERVER_ERROR,
+     DETACHMENT_LEARN_PERKS_VEHICLE_LOCKED_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_LEARN_PERKS_VEHICLE_LOCKED_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PERKS_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PERKS_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PERKS_INVALID_VEHICLE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PERKS_INVALID_VEHICLE_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PERKS_INVALID_VEHICLE_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PERKS_VEHICLE_LOCKED_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PERKS_VEHICLE_LOCKED_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PERKS_VEHICLE_LOCKED_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_CHANGES_PERKS_PERKS_SERVER_ERROR,
+     DETACHMENT_CHANGES_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_CHANGES_PERKS_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_CHANGES_PERKS_INVALID_VEHICLE_PERKS_SERVER_ERROR,
+     DETACHMENT_CHANGES_PERKS_INVALID_VEHICLE_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_CHANGES_PERKS_INVALID_VEHICLE_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_CHANGES_PERKS_VEHICLE_LOCKED_PERKS_SERVER_ERROR,
+     DETACHMENT_CHANGES_PERKS_VEHICLE_LOCKED_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_CHANGES_PERKS_VEHICLE_LOCKED_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PARTIAL_PERKS_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PARTIAL_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PARTIAL_PERKS_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PARTIAL_PERKS_INVALID_VEHICLE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PARTIAL_PERKS_INVALID_VEHICLE_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PARTIAL_PERKS_INVALID_VEHICLE_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PARTIAL_PERKS_VEHICLE_LOCKED_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PARTIAL_PERKS_VEHICLE_LOCKED_ULTIMATE_PERKS_SERVER_ERROR,
+     DETACHMENT_DROP_PARTIAL_PERKS_VEHICLE_LOCKED_PERKS_ULTIMATE_PERKS_SERVER_ERROR,
+     SPECIALIZE_VEHICLE_SLOT_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_DROP_SKILLS_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_DROP_SKILLS_WITH_ULTIMATE_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_DROP_SKILLS_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_DROP_SKILLS_WITH_ULTIMATE_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_DROP_SKILLS_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_DROP_SKILLS_WITH_ULTIMATE_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_FINANCIAL_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_FINANCIAL_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_FINANCIAL_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_DROP_SKILLS_FINANCIAL_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_DROP_SKILLS_WITH_ULTIMATE_FINANCIAL_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_DROP_SKILLS_FINANCIAL_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_DROP_SKILLS_WITH_ULTIMATE_FINANCIAL_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_DROP_SKILLS_FINANCIAL_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_DROP_SKILLS_WITH_ULTIMATE_FINANCIAL_SUCCESS,
+     SPECIALIZE_VEHICLE_SLOT_SERVER_ERROR,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_SERVER_ERROR,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_SERVER_ERROR,
+     SPECIALIZE_VEHICLE_SLOT_NOT_ENOUGH_GOLD,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_NOT_ENOUGH_GOLD,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_NOT_ENOUGH_GOLD,
+     SPECIALIZE_VEHICLE_SLOT_NOT_ENOUGH_CREDITS,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_NOT_ENOUGH_CREDITS,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_NOT_ENOUGH_CREDITS,
+     SPECIALIZE_VEHICLE_SLOT_WALLET_NOT_AVAILABLE,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_WALLET_NOT_AVAILABLE,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_WALLET_NOT_AVAILABLE,
+     SPECIALIZE_VEHICLE_SLOT_INVALID_VEHICLE,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_INVALID_VEHICLE,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_INVALID_VEHICLE,
+     SPECIALIZE_VEHICLE_SLOT_VEHICLE_LOCKED,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_VEHICLE_LOCKED,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_VEHICLE_LOCKED,
+     SPECIALIZE_VEHICLE_SLOT_FORBIDDEN,
+     SPECIALIZE_VEHICLE_SLOT_RETRAINING_FORBIDDEN,
+     SPECIALIZE_VEHICLE_SLOT_CHANGE_CLASS_FORBIDDEN)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PersonalCase.py
 import operator
-import SoundGroups
 import constants
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
@@ -19,18 +18,16 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.CREW_SKINS import CREW_SKINS
 from gui.Scaleform.locale.NATIONS import NATIONS
-from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.shop import showBuyGoldForCrew
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import EVENT_BUS_SCOPE, events
-from gui.shared.gui_items.Tankman import getCrewSkinIconSmall, getCrewSkinRolePath, getCrewSkinNationPath
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.dossier import dumpDossier
-from gui.shared.gui_items.crew_skin import localizedFullName, GenderRestrictionsLocales
+from gui.shared.gui_items.crew_skin import localizedFullName, getCrewSkinIconSmall, getCrewSkinNationPath
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRetraining, TankmanAddSkill, TankmanChangePassport, CrewSkinEquip, CrewSkinUnequip
 from gui.shared.gui_items.serializers import packTankman, packVehicle, packTraining, repackTankmanWithSkinData
 from gui.shared.money import Money
@@ -43,10 +40,11 @@ from gui.impl.gen import R
 from gui.impl import backport
 from helpers import dependency
 from helpers import i18n, strcmp
-from items import tankmen
-from items.components.crew_skins_constants import CREW_SKIN_PROPERTIES_MASKS, NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET, TANKMAN_SEX
+from items import tankmen, detachment_customization
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.detachment import IDetachmentCache
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -147,16 +145,6 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     def takeOffNewMarkFromCrewSkin(self, crewSkinID):
         self.crewSkinsHAConfig.addViewedItem(crewSkinID)
         self._updateNewCrewSkinsCount()
-
-    def playCrewSkinSound(self, crewSkinID):
-        crewSkin = self.itemsCache.items.getCrewSkin(crewSkinID)
-        if crewSkin.getSoundSetID() != NO_CREW_SKIN_SOUND_SET:
-            SoundGroups.g_instance.soundModes.setMode(crewSkin.getSoundSetID())
-            sndPath = self.app.soundManager.sounds.getEffectSound(self._SOUND_PREVIEW)
-            self.__previewSound = SoundGroups.g_instance.getSound2D(sndPath)
-            if self.__previewSound is not None:
-                self.__previewSound.play()
-        return
 
     def changeHistoricallyAccurate(self, historicallyAccurate):
         self.crewSkinsHAConfig.changeHistoricalAccurate(historicallyAccurate)
@@ -370,6 +358,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
 class PersonalCaseDataProvider(object):
     itemsCache = dependency.descriptor(IItemsCache)
+    detachmentCache = dependency.descriptor(IDetachmentCache)
     lobbyContext = dependency.instance(ILobbyContext)
     bootcamp = dependency.descriptor(IBootcampController)
 
@@ -420,7 +409,9 @@ class PersonalCaseDataProvider(object):
             modifiers.append({'id': 'penalty',
              'val': bonuses[4]})
         tankmanData = packTankman(tankman)
-        repackTankmanWithSkinData(tankman, tankmanData)
+        detachmentData = self.getDetachmentData()
+        if detachmentData:
+            repackTankmanWithSkinData(tankman, tankmanData, detachmentData)
         callback({'tankman': tankmanData,
          'currentVehicle': packVehicle(currentVehicle) if currentVehicle is not None else None,
          'nativeVehicle': packVehicle(nativeVehicle),
@@ -518,60 +509,46 @@ class PersonalCaseDataProvider(object):
         tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         callback(tankman.getSkillsToLearn())
 
+    def getDetachmentData(self):
+        tankman = self.itemsCache.items.getTankman(self.tmanInvID)
+        vehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
+        return self.detachmentCache.getDetachment(vehicle.getLinkedDetachmentID()) if vehicle else None
+
     @async
     def getCrewSkinsData(self, callback):
-        tankman = self.itemsCache.items.getTankman(self.tmanInvID)
+        detachment = self.getDetachmentData()
         items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_SKINS, REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT)
         crewSkins = []
         newSkinsCount = 0
         if self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
             for item in items.itervalues():
-                uiData = self.__convertCrewSkinData(item, tankman)
-                if uiData['isNew'] and countSkinAsNew(item):
-                    newSkinsCount += 1
-                crewSkins.append(uiData)
+                if detachment:
+                    uiData = self.__convertCrewSkinData(item, detachment)
+                    if uiData['isNew'] and countSkinAsNew(item):
+                        newSkinsCount += 1
+                    crewSkins.append(uiData)
 
         callback({'crewSkins': sorted(crewSkins, key=operator.itemgetter('rarity', 'id'), reverse=True),
          'newSkinsCount': newSkinsCount,
          'historicallyAccurate': bool(PersonalCase.crewSkinsHAConfig.isHistoricallyAccurate())})
 
-    def __convertCrewSkinData(self, crewSkin, tankman):
-        cache = tankmen.g_cache.crewSkins()
-        LOC_MAP = {}
-        if crewSkin.getRoleID() is not None:
-            LOC_MAP[CREW_SKIN_PROPERTIES_MASKS.ROLE] = i18n.makeString(ITEM_TYPES.tankman_roles(crewSkin.getRoleID()))
-        if crewSkin.getSex() in TANKMAN_SEX.ALL:
-            LOC_MAP[CREW_SKIN_PROPERTIES_MASKS.SEX] = backport.text(R.strings.item_types.tankman.gender.dyn(GenderRestrictionsLocales.KEYS[crewSkin.getSex()])())
-        if crewSkin.getNation() is not None:
-            LOC_MAP[CREW_SKIN_PROPERTIES_MASKS.NATION] = i18n.makeString(NATIONS.all(crewSkin.getNation()))
-        validation, validationMask, _ = cache.validateCrewSkin(tankman.descriptor, crewSkin.getID())
-        soundValidation = crewSkin.getRoleID() == tankman.role if crewSkin.getRoleID() is not None else True
-        if not SoundGroups.g_instance.soundModes.currentNationalPreset[1]:
-            soundValidation = False
-        restrictionsMessage = backport.text(R.strings.tooltips.crewSkins.restrictions())
-        if not validation:
-            restrictions = [ loc for key, loc in LOC_MAP.iteritems() if key & validationMask ]
-            restrictionsMessage += ' ' + ', '.join(restrictions)
-        soundSetID = crewSkin.getSoundSetID()
-        soundSetRes = R.strings.crew_skins.feature.sound.dyn(soundSetID)() if soundSetID != NO_CREW_SKIN_SOUND_SET else R.strings.crew_skins.feature.sound.noSound()
+    def __convertCrewSkinData(self, crewSkin, detData):
+        cache = detachment_customization.g_cache.crewSkins()
+        valid = cache.validateCrewSkinNation(crewSkin.getID(), detData.nationID)
+        restrictionsMessage = '%s %s' % (backport.text(R.strings.tooltips.crewSkins.restrictions()), i18n.makeString(NATIONS.all(crewSkin.getNation())))
         return {'id': crewSkin.getID(),
          'fullName': localizedFullName(crewSkin),
          'description': crewSkin.getDescription(),
          'iconID': getCrewSkinIconSmall(crewSkin.getIconID()),
-         'roleIconID': getCrewSkinRolePath(crewSkin.getRoleID()),
          'nationFlagIconID': getCrewSkinNationPath(crewSkin.getNation()),
          'rarity': crewSkin.getRarity(),
-         'maxCount': crewSkin.getMaxCount(),
          'freeCount': crewSkin.getFreeCount(),
          'historical': crewSkin.getHistorical(),
-         'soundSetID': crewSkin.getSoundSetID(),
-         'useCount': len(crewSkin.getTankmenIDs()),
-         'isEquip': self.tmanInvID in crewSkin.getTankmenIDs(),
+         'useCount': len(crewSkin.getDetachmentIDs()),
+         'isEquip': crewSkin.getID() == detData.skinID,
          'isNew': crewSkin.isNew() and not PersonalCase.crewSkinsHAConfig.checkForViewed(crewSkin.getID()),
-         'isAvailable': validation,
-         'notAvailableMessage': restrictionsMessage,
-         'soundSetName': backport.text(soundSetRes),
-         'soundSetIsAvailable': soundValidation if crewSkin.getSoundSetID() != NO_CREW_SKIN_SOUND_SET else True}
+         'isAvailable': valid,
+         'notAvailableMessage': restrictionsMessage}
 
     @async
     def getDocumentsData(self, callback):

@@ -6,9 +6,11 @@ from functools import partial
 import BigWorld
 from shared_utils import nextTick
 from CurrentVehicle import g_currentVehicle
+from gui.Scaleform.daapi.view.lobby.detachment.detachment_setup_vehicle import g_detachmentTankSetupVehicle
 from HeroTank import HeroTank
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from constants import QUEUE_TYPE, PREBATTLE_TYPE, Configs, DOG_TAGS_CONFIG
+from crew2.detachment_states import CanAssignResult
 from frameworks.wulf import WindowFlags, WindowLayer, WindowStatus
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
@@ -16,6 +18,12 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 from gui.Scaleform.daapi.view.lobby.mapbox import mapbox_helpers
 from gui.Scaleform.daapi.view.meta.HangarMeta import HangarMeta
+from gui.impl.gen.view_models.views.lobby.detachment.common.navigation_view_model import NavigationViewModel
+from gui.impl.lobby.detachment.hangar_widget import HangarWidget
+from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
+from gui.shared.utils.requesters import REQ_CRITERIA
+from items.components.detachment_constants import TypeDetachmentAssignToVehicle
+from skeletons.gui.detachment import IDetachmentCache
 from sound_gui_manager import CommonSoundSpaceSettings
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -27,6 +35,7 @@ from gui.game_control.links import URLMacros
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
 from gui.prb_control import prb_getters
+from gui.impl.auxiliary.detachment_helper import getVisibleCrewWidgetName, isDetachmentInRecycleBin, canAssignDetachmentToVehicle
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -35,7 +44,7 @@ from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showRankedPrimeTimeWindow, showAmmunitionSetupView
+from gui.shared.event_dispatcher import showRankedPrimeTimeWindow, showAmmunitionSetupView, showDetachmentViewById
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -60,9 +69,12 @@ from skeletons.helpers.statistics import IStatisticsCollector
 from tutorial.control.context import GLOBAL_FLAG
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
+from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.impl.gen import R
 from gui.impl import backport
 from PlayerEvents import g_playerEvents
+from uilogging.detachment.loggers import DetachmentLogger, g_detachmentFlowLogger
+from uilogging.detachment.constants import ACTION, GROUP
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
 _logger = logging.getLogger(__name__)
@@ -88,6 +100,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     bootcampController = dependency.descriptor(IBootcampController)
     itemsCache = dependency.descriptor(IItemsCache)
+    detachmentCache = dependency.descriptor(IDetachmentCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     statsCollector = dependency.descriptor(IStatisticsCollector)
@@ -97,6 +110,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _promoController = dependency.descriptor(IPromoController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
     _offersBannerController = dependency.descriptor(IOffersBannerController)
+    uiLogger = DetachmentLogger(GROUP.HANGAR_DETACHMENT_WIDGET_BUTTONS)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
@@ -141,8 +155,30 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         nextTick(partial(self.fireEvent, LobbySimpleEvent(LobbySimpleEvent.CLOSE_HELPLAYOUT), EVENT_BUS_SCOPE.LOBBY))
         self.as_closeHelpLayoutS()
 
+    @uiLogger.dLog(ACTION.DETACHMENT_MOVE_TO_BARRACKS)
+    def onUnloadBtnClick(self):
+        if not g_currentVehicle.isPresent():
+            return
+        detInvID = g_currentVehicle.item.getLinkedDetachmentID()
+        if detInvID:
+            ActionsFactory.doAction(ActionsFactory.RESET_DETACHMENT_VEHICLE_LINK, detInvID)
+
+    @g_detachmentFlowLogger.dFlow(uiLogger.group, GROUP.RAISE_EFFICIENCY)
+    def onRaisePerfBtnClick(self):
+        showDetachmentViewById(NavigationViewModel.PERSONAL_CASE_PROGRESSION, {'detInvID': g_currentVehicle.item.getLinkedDetachmentID()})
+
+    @g_detachmentFlowLogger.dFlow(uiLogger.group, GROUP.ASSIGN_DETACHMENT)
+    def onReplaceDetachmentBtnClick(self):
+        shared_events.showAssignDetachmentToVehicleView(g_currentVehicle.invID)
+
+    def onReturnPrevDetachmentBtnClick(self):
+        if not g_currentVehicle.isPresent():
+            return
+        ActionsFactory.doAction(ActionsFactory.ASSIGN_DETACHMENT, g_currentVehicle.item.lastDetachmentID, g_currentVehicle.item.invID, TypeDetachmentAssignToVehicle.IS_LAST)
+
     def _populate(self):
         LobbySelectableView._populate(self)
+        g_detachmentTankSetupVehicle.restoreCurrentVehicle()
         self.__isSpaceReadyForC11n = self.hangarSpace.spaceInited
         self.__isVehicleReadyForC11n = self.hangarSpace.isModelLoaded
         self.__checkVehicleCameraState()
@@ -166,7 +202,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitJoined += self.__onUnitJoined
-        g_clientUpdateManager.addCallbacks({'inventory': self.__updateAlertMessage})
+        g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryUpdate})
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self._settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.battlePassController.onSeasonStateChange += self.__switchCarousels
@@ -180,7 +216,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         isCrewBooksEnabled = lobbyContext.getServerSettings().isCrewBooksEnabled()
         getTutorialGlobalStorage().setValue(GLOBAL_FLAG.CREW_BOOKS_ENABLED, isCrewBooksEnabled)
         self.__timer = CallbackDelayer()
-        self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
         self._offersBannerController.showBanners()
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
         if g_currentVehicle.isPresent():
@@ -307,9 +342,16 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         return
 
     def __updateCrew(self):
+        state = g_currentVehicle.getViewState()
+        self.as_setCrewEnabledS(state.isCrewOpsEnabled() and not (g_currentVehicle.isInBattle() or g_currentVehicle.isInUnit() or g_currentVehicle.isCrewLocked()))
         if self.crewPanel is not None:
-            self.crewPanel.updateTankmen()
+            self.crewPanel.updateRecruitPanel()
+        self.as_setDetachmentWidgetVisibleS(getVisibleCrewWidgetName() == HANGAR_ALIASES.DETACHMENT_WIDGET)
         return
+
+    def __onInventoryUpdate(self, *_):
+        self.__updateDetachmentButtons()
+        self.__updateAlertMessage()
 
     def __updateAlertMessage(self, *_):
         if self.prbDispatcher is not None:
@@ -387,6 +429,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             event -= self.__onOptDeviceClick
 
     @property
+    def detachmentWidgetInject(self):
+        return self.getComponent(HANGAR_ALIASES.DETACHMENT_WIDGET).getInjectView()
+
+    @property
     def ammoPanel(self):
         return self.getComponent(HANGAR_ALIASES.AMMUNITION_PANEL)
 
@@ -415,8 +461,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         return self.getComponent(HANGAR_ALIASES.EPIC_WIDGET)
 
     def onCacheResync(self, reason, diff):
-        if diff is not None and GUI_ITEM_TYPE.CREW_BOOKS in diff:
-            self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
             self.__updateAll()
             return
@@ -430,6 +474,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         if accountInfo.isCurrentPlayer():
             self.__updateState()
             self.__updateAmmoPanel()
+            self.__updateCrew()
 
     def onUnitPlayerStateChanged(self, pInfo):
         if pInfo.isCurrentPlayer():
@@ -470,6 +515,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__switchCarousels()
         self.__updateState()
         self.__updateAmmoPanel()
+        self.__updateCrew()
         self.__updateParams()
         self.__updateVehicleInResearchPanel()
         self.__updateNavigationInResearchPanel()
@@ -477,7 +523,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderComponent()
         self.__updateRankedHeaderComponent()
         self.__updateHeaderEpicWidget()
-        self.__updateCrew()
         self.__updateAlertMessage()
         self.__updateBattleRoyaleComponents()
         self._updateBattleRoyaleMode()
@@ -487,13 +532,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         Waiting.show('updateVehicle')
         self.__updateState()
         self.__updateAmmoPanel()
+        self.__updateCrew()
         self.__updateParams()
         self.__updateVehicleInResearchPanel()
         self.__updateHeader()
         self.__updateHeaderComponent()
         self.__updateHeaderEpicWidget()
-        self.__updateCrew()
-        self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
         self._updateBattleRoyaleMode()
         Waiting.hide('updateVehicle')
 
@@ -521,9 +565,42 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderEpicWidget()
         self.__updateParams()
 
+    def __getDetachmentButtonsState(self):
+        if g_currentVehicle.isInBattle():
+            return (True, TOOLTIPS.FASTOPERATION_INBATTLE_BODY)
+        return (True, TOOLTIPS.FASTOPERATION_INPLATOON_BODY) if g_currentVehicle.isInUnit() else (False, '')
+
+    def __updateDetachmentButtons(self):
+        if not g_currentVehicle.isPresent():
+            return
+        isLocked, tooltipBody = self.__getDetachmentButtonsState()
+        self.as_setDetachmentBtnsLockedS(isLocked, makeTooltip(body=tooltipBody) if tooltipBody else '')
+        if getVisibleCrewWidgetName() != HANGAR_ALIASES.DETACHMENT_WIDGET:
+            return
+        dataVO = {'returnPrevious': self.__getReturnDetachmentOperationData(),
+         'raisePerf': self.__getRaiseDetachmentOperationData(),
+         'unload': self.__getUnloadDetachmentOperationData(),
+         'replace': self.__getReplaceDetachhmentOperationData()}
+        booksCount = crewBooksViewedCache().getNewBooksCount()
+        self.as_updateDetachmentBtnsS(dataVO)
+        self.as_setRaisePerfBtnCounterS(booksCount)
+        self.as_setDetachmentLinkedS(g_currentVehicle.getLinkedDetachmentID())
+        if self.detachmentWidgetInject:
+            self.detachmentWidgetInject.updateView()
+
     def __updateState(self):
         state = g_currentVehicle.getViewState()
-        self.as_setCrewEnabledS(state.isCrewOpsEnabled())
+        if g_currentVehicle.hasOldCrew():
+            if g_currentVehicle.isInBattle():
+                operationsBtnTooltip = makeTooltip(body=backport.text(R.strings.crew_operations.crewOperationsDisabled.btn.tooltip.inBattle.body()))
+            elif g_currentVehicle.isInUnit():
+                operationsBtnTooltip = makeTooltip(body=backport.text(R.strings.crew_operations.crewOperationsDisabled.btn.tooltip.inUnit.body()))
+            elif g_currentVehicle.isCrewLocked():
+                operationsBtnTooltip = makeTooltip(body=backport.text(R.strings.crew_operations.crewOperationsDisabled.btn.tooltip.crewLocked.body()))
+            else:
+                operationsBtnTooltip = makeTooltip(_ms(backport.text(R.strings.crew_operations.crewOperations.btn.tooltip.header())), _ms(backport.text(R.strings.crew_operations.crewOperations.btn.tooltip.body())))
+            self.as_setOpeationsBtnTooltipS(operationsBtnTooltip)
+        self.__updateDetachmentButtons()
         isBattleRoyaleMode = self.battleRoyaleController.isBattleRoyaleMode()
         isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and not state.isOnlyForEventBattles() and self.__isSpaceReadyForC11n and self.__isVehicleReadyForC11n and self.__isVehicleCameraReadyForC11n and not isBattleRoyaleMode
         if isC11nEnabled:
@@ -572,6 +649,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __onEntityChanged(self):
         self.__updateState()
         self.__updateAmmoPanel()
+        self.__updateCrew()
         self.__updateAlertMessage()
         self.__updateNavigationInResearchPanel()
         self.__updateHeader()
@@ -586,6 +664,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __onVehicleClientStateChanged(self, _):
         self.__updateAmmoPanel()
+        self.__updateState()
+        self.__updateCrew()
 
     def __onServerSettingChanged(self, diff):
         if 'isRegularQuestEnabled' in diff:
@@ -633,3 +713,54 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __onResetUnitJoiningProgress(self):
         self.__isUnitJoiningInProgress = False
+
+    def __getAvailableRecruits(self, nationID):
+        items = self.itemsCache.items
+        criteria = REQ_CRITERIA.TANKMAN.ACTIVE | ~REQ_CRITERIA.TANKMAN.DISMISSED | REQ_CRITERIA.NATIONS([nationID]) | ~REQ_CRITERIA.TANKMAN.IN_TANK
+        excludeCriteria = ~REQ_CRITERIA.VEHICLE.LOCKED | ~REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.CREW_LOCKED])
+        excludeCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+        dirtyRecruits = items.getTankmen(criteria)
+        suitableRecruits = items.removeUnsuitableTankmen(dirtyRecruits.itervalues(), excludeCriteria)
+        return len(suitableRecruits)
+
+    def __getReplaceDetachhmentOperationData(self):
+        recruitCount = self.__getAvailableRecruits(g_currentVehicle.item.nationID)
+        if g_currentVehicle.isCrewLocked():
+            return self.__getDetachmentButtonTooltipObject('replaceDetachment', False, 'locked')
+        return self.__getDetachmentButtonTooltipObject('replaceDetachment', True, 'hasRecruits') if recruitCount else self.__getDetachmentButtonTooltipObject('replaceDetachment', True, 'noRecruits')
+
+    def __getUnloadDetachmentOperationData(self):
+        return self.__getDetachmentButtonTooltipObject('unloadDetachment', False, 'locked') if g_currentVehicle.isCrewLocked() else self.__getDetachmentButtonTooltipObject('unloadDetachment', g_currentVehicle.hasDetachment())
+
+    def __getRaiseDetachmentOperationData(self):
+        return self.__getDetachmentButtonTooltipObject('raisePerformance', True)
+
+    def __getReturnDetachmentOperationData(self):
+        currentVehicle = g_currentVehicle.item
+        lastCrewIDs = currentVehicle.lastCrew
+        if lastCrewIDs and not all((recruit is None for recruit in lastCrewIDs)):
+            return self.__getDetachmentButtonTooltipObject('returnDetachment', False, 'usedOldCrew')
+        lastDetachmentID = currentVehicle.lastDetachmentID
+        if lastDetachmentID is None:
+            return self.__getDetachmentButtonTooltipObject('returnDetachment', False, 'noPrevious')
+        lastDetachment = self.detachmentCache.getDetachment(lastDetachmentID)
+        if lastDetachment is None or isDetachmentInRecycleBin(lastDetachment):
+            return self.__getDetachmentButtonTooltipObject('returnDetachment', False, 'dismissed')
+        assignResult = canAssignDetachmentToVehicle(lastDetachment, currentVehicle)
+        if assignResult == CanAssignResult.DETACHMENT_LOCKED:
+            return self.__getDetachmentButtonTooltipObject('returnDetachment', False, 'inBattle')
+        elif assignResult == CanAssignResult.DETACHMENT_LOCKED_BY_LOCK_CREW:
+            return self.__getDetachmentButtonTooltipObject('returnDetachment', False, 'otherVehicleLocked')
+        elif assignResult == CanAssignResult.NON_SUITABLE_TYPE or assignResult == CanAssignResult.WRONG_CLASS:
+            return self.__getDetachmentButtonTooltipObject('returnDetachment', False, 'retrained')
+        else:
+            return self.__getDetachmentButtonTooltipObject('returnDetachment', False, 'alreadyLinked') if assignResult == CanAssignResult.SAME_VEHICLE else self.__getDetachmentButtonTooltipObject('returnDetachment', True)
+
+    def __getDetachmentButtonTooltipObject(self, tooltipId, isEnabled, stateId=None):
+        tooltipHeaderText = backport.text(R.strings.crew_operations.dyn(tooltipId).btn.tooltip.header())
+        if stateId:
+            tooltipBodyText = backport.text(R.strings.crew_operations.dyn(tooltipId).btn.tooltip.dyn(stateId).body())
+        else:
+            tooltipBodyText = backport.text(R.strings.crew_operations.dyn(tooltipId).btn.tooltip.body())
+        return {'tooltip': makeTooltip(tooltipHeaderText, tooltipBodyText),
+         'isEnabled': isEnabled}

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/configurations/battle_booster.py
-from gui.impl.common.tabs_controller import tabUpdateFunc
+from gui.impl.lobby.tabs_controller import tabUpdateFunc
 from gui.impl.lobby.tank_setup.array_providers.battle_booster import OptDeviceBattleBoosterProvider, CrewBattleBoosterProvider
 from gui.impl.lobby.tank_setup.configurations.base import BaseTankSetupTabsController
 

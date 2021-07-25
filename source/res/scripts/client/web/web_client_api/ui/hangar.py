@@ -68,10 +68,6 @@ class HangarWindowsWebApiMixin(object):
     def openBuySlotWindow(self, _):
         ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
 
-    @w2c(W2CSchema, 'show_buy_berth_window')
-    def openBuyBerthWindow(self, _):
-        ActionsFactory.doAction(ActionsFactory.BUY_BERTHS)
-
     def validateItems(self, itemCD):
         item = self.itemsCache.items.getItemByCD(itemCD)
         if item is None or item.itemTypeID == GUI_ITEM_TYPE.FUEL_TANK:

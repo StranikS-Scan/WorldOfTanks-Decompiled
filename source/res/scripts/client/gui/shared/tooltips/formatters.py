@@ -169,6 +169,14 @@ def packTitleDescBlockSmallTitle(title, desc=None, useHtml=True, textBlockLinkag
     return packTitleDescBlock(title, desc, TXT_GAP_FOR_SMALL_TITLE, useHtml, textBlockLinkage, blocksLinkage, padding)
 
 
+def packTitleDescAsComplexBlock(header, body, headerStyle=None, bodyStyle=None, padding=None):
+    if headerStyle is None:
+        headerStyle = text_styles.highTitle
+    if bodyStyle is None:
+        bodyStyle = text_styles.main
+    return packTitleDescBlock(title=headerStyle(header), desc=bodyStyle(body), padding=padding)
+
+
 def packResultBlockData(title, text):
     return packBuildUpBlockData([packTextBlockData(title, True, BATTLE_RESULT_TYPES.TOOLTIP_RESULT_TTILE_LEFT_LINKAGE), packTextBlockData(text, True, BATTLE_RESULT_TYPES.TOOLTIP_ICON_TEXT_PARAMETER_LINKAGE)])
 
@@ -501,7 +509,7 @@ def packMoneyAndXpValueBlock(value, icon, iconYoffset, paddingBottom=15, valueWi
     return valueBlock
 
 
-def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=None):
+def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=None, hideActionBlock=False):
     titleBlocks = list()
     alternativeData = alternativeData or {}
     titleBlocks.append(packTitleDescBlock(text_styles.highTitle(TOOLTIPS.getHeaderBtnTitle(alternativeData.get('title') or btnType)), None, padding=packPadding(bottom=15)))
@@ -521,17 +529,18 @@ def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=No
         else:
             decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=15)))
         tooltipBlocks.append(packBuildUpBlockData(decsBlocks, linkage=descLinkage))
-    if btnType != CURRENCIES_CONSTANTS.CRYSTAL:
-        actionBlocks = list()
-        actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-        tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
+    if not hideActionBlock:
+        if btnType != CURRENCIES_CONSTANTS.CRYSTAL:
+            actionBlocks = list()
+            actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+            tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
     return tooltipBlocks
 
 
-def packSeparatorBlockData(paddings=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT):
+def packSeparatorBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_SEPARATOR, paddings=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT):
     if paddings is None:
         paddings = packPadding(top=-40)
-    return packImageBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_SEPARATOR, align=align, padding=paddings)
+    return packImageBlockData(img=img, align=align, padding=paddings)
 
 
 def packItemPriceBlockData(price, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_COMPOUND_PRICE_BLOCK_LINKAGE, padding=None):

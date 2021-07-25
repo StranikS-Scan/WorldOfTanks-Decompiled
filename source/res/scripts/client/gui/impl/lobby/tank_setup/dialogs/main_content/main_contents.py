@@ -5,7 +5,7 @@ from gui.impl.gen.view_models.constants.fitting_types import FittingTypes
 from gui.impl.lobby.dialogs.auxiliary.confirmed_item_helpers import ConfirmedItemWarningTypes
 from gui.impl.lobby.dialogs.contents.multiple_items_content import MultipleItemsContent
 from gui.impl.lobby.tank_setup.dialogs.helpers.ammunition_buy_helper import modulesSortFunction
-from gui.impl.common.base_sub_model_view import BaseSubModelView
+from gui.impl.lobby.tank_setup.base_sub_model_view import BaseSubModelView
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.tank_setup.dialogs.main_content.ammunition_buy_content import AmmunitionBuyContent
     from gui.shared.utils.requesters import RequestCriteria

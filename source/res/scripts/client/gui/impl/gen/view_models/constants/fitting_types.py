@@ -21,8 +21,6 @@ class FittingTypes(ViewModel):
     VEHICLE_WHEELED_CHASSIS = 'vehicleWheeledChassis'
     VEHICLE_ENGINE = 'vehicleEngine'
     VEHICLE_RADIO = 'vehicleRadio'
-    POST_PROGRESSION_MODIFICATION = 'postProgressionModification'
-    POST_PROGRESSION_PAIR_MODIFICATION = 'postProgressionPairModification'
 
     def __init__(self, properties=0, commands=0):
         super(FittingTypes, self).__init__(properties=properties, commands=commands)

@@ -59,9 +59,6 @@ class ShellInteractor(BaseInteractor):
     def getCurrentLayout(self):
         return self.getItem().shells.layout
 
-    def getSetupLayout(self):
-        return self.getItem().shells.setupLayouts
-
     def getPlayerLayout(self):
         return self._playerLayout
 
@@ -72,10 +69,10 @@ class ShellInteractor(BaseInteractor):
         return not _hasChanged(self.getPlayerLayout(), self.getCurrentLayout())
 
     @async
-    def applyQuit(self, callback, skipApplyAutoRenewal):
+    def applyQuit(self, callback):
         if not self.isPlayerLayout():
             yield await_callback(self.confirm)(skipDialog=True)
-        super(ShellInteractor, self).applyQuit(callback, skipApplyAutoRenewal)
+        super(ShellInteractor, self).applyQuit(callback)
 
     def getCurrentShellSlotID(self, intCD):
         changedSlotID = None
@@ -129,10 +126,7 @@ class ShellInteractor(BaseInteractor):
         self._playerLayout = self.getCurrentLayout().copy()
 
     def updateFrom(self, vehicle, onlyInstalled=True):
-        super(ShellInteractor, self).updateFrom(vehicle, onlyInstalled)
-        items = self.getItem().shells
-        items.setInstalled(*vehicle.shells.installed)
-        items.setupLayouts.setSetups(vehicle.shells.setupLayouts.setups)
+        self.getItem().shells.setInstalled(*vehicle.shells.installed)
         self._playerLayout = vehicle.shells.layout.copy()
         if not onlyInstalled:
             self.getItem().shells.setLayout(*vehicle.shells.layout)

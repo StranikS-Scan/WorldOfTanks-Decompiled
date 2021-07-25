@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/browser/shop_helpers.py
 import typing
-import constants
+from crew2.sandbox import SANDBOX_CONSTANTS
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
 from helpers import dependency, getLanguageCode
@@ -11,13 +11,15 @@ from skeletons.gui.shared import IItemsCache
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _getUrl(urlName=None, lobbyContext=None):
-    if constants.SANDBOX_CONSTANTS.IS_SHOP_OFFLINE_PAGE_ENABLED:
-        if getLanguageCode() == 'ru':
-            return 'wotdata://gui/html/shop_dummy/offlinePage.html'
-        return 'wotdata://gui/html/shop_dummy/offlinePage.en.html'
+    if SANDBOX_CONSTANTS.SHOP_PLACEHOLDER_ON:
+        return getShopDummyUrl()
     else:
         hostUrl = lobbyContext.getServerSettings().shop.hostUrl
         return hostUrl + ('' if urlName is None else GUI_SETTINGS.shop.get(urlName))
+
+
+def getShopDummyUrl():
+    return 'wotdata://gui/html/shop_dummy/offlinePage.html' if getLanguageCode() == 'ru' else 'wotdata://gui/html/shop_dummy/offlinePage.en.html'
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

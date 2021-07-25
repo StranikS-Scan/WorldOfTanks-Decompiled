@@ -28,4 +28,7 @@ def getFilterPopoverSetupContexts(xpRateMultiplier):
      'rented': FilterSetupContext(asset='marathon/time_icon'),
      'event': FilterSetupContext(asset='event_small_icon'),
      'isCommonProgression': FilterSetupContext(asset='common_progression'),
-     'crystals': FilterSetupContext(asset='bons_small')}
+     'crystals': FilterSetupContext(asset='bons_small'),
+     'recruits': FilterSetupContext(asset='carousel_recruits'),
+     'noDetachment': FilterSetupContext(asset='carousel_no_detachment'),
+     'detachment': FilterSetupContext(asset='carousel_detachment')}

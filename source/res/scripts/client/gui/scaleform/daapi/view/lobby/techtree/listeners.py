@@ -165,8 +165,6 @@ class _ItemsCacheListener(_Listener):
 
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
             self._page.redraw()
-        if GUI_ITEM_TYPE.VEH_POST_PROGRESSION in invalidated:
-            self._page.invalidateVehPostProgression()
 
     def __center_onIsLongDisconnected(self, _):
         self._page.redraw()

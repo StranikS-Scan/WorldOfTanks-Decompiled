@@ -84,9 +84,6 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.notifyPlayerVehicleSet(vID)
-        ctrl = self.__sharedRepo.vehiclePostProgression
-        if ctrl is not None:
-            ctrl.setupVehicle(vID)
         ctrl = self.__sharedRepo.vehicleState
         if ctrl is not None:
             ctrl.setPlayerVehicle(vID)

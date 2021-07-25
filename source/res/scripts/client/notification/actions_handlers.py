@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/actions_handlers.py
 from collections import defaultdict
+from functools import partial
 import typing
 import BigWorld
+from AccountCommands import LOCK_REASON
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from adisp import process
 from async import async, await
+from crew2.detachment_states import CanAssignResult
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.battle_pass.battle_pass_helpers import showOfferByBonusName
@@ -15,7 +18,6 @@ from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTab
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
@@ -26,11 +28,13 @@ from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression, showBattlePass3dStyleChoiceWindow, showMissionsMapboxProgression
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showBlueprintsSalePage, showConfirmEmailOverlay
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showBlueprintsSalePage, showConfirmEmailOverlay, showDetachmentViewById
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
+from gui.impl.gen.view_models.views.lobby.detachment.common.navigation_view_model import NavigationViewModel
+from gui.impl.auxiliary.detachment_helper import getVehicleLockStatusForDetachment
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.platform.wgnp_controller import IWGNPRequestController
@@ -45,6 +49,7 @@ from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IMapboxController
 from skeletons.gui.web import IWebController
+from skeletons.gui.detachment import IDetachmentCache
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
 if typing.TYPE_CHECKING:
@@ -777,7 +782,7 @@ class _OpenNotrecruitedHandler(_NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_BARRACKS), ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
+        showDetachmentViewById(NavigationViewModel.BARRACK_INSTRUCTOR)
 
 
 class _OpenNotrecruitedSysMessageHandler(_OpenNotrecruitedHandler):
@@ -919,6 +924,48 @@ class _OpentBlueprintsConvertSale(_NavigationDisabledActionHandler):
         showBlueprintsSalePage()
 
 
+class _OpenDetachmentPersonalCaseView(_NavigationDisabledActionHandler):
+    _detachmentCache = dependency.descriptor(IDetachmentCache)
+    _LOCKED_KEY = {CanAssignResult.DETACHMENT_DISSOLVED: 'demobilized',
+     CanAssignResult.DETACHMENT_LOCKED: 'server_error'}
+    _REASON_KEY = {LOCK_REASON.ON_ARENA: 'inBattle',
+     LOCK_REASON.IN_QUEUE: 'inBattle',
+     LOCK_REASON.PREBATTLE: 'inUnit',
+     LOCK_REASON.UNIT: 'inUnit'}
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        if savedData and 'detInvID' in savedData:
+            detInvID = savedData['detInvID']
+            result, reasonLock = self._canShowDetachmentPersonalCase(detInvID)
+            if result == CanAssignResult.OK:
+                showDetachmentViewById(NavigationViewModel.PERSONAL_CASE_BASE, {'detInvID': savedData['detInvID']})
+            else:
+                BigWorld.callback(0.0, partial(self._pushErrorMsg, result, reasonLock))
+
+    def _canShowDetachmentPersonalCase(self, detInvID):
+        detachmentGuiItem = self._detachmentCache.getDetachment(detInvID)
+        return (CanAssignResult.DETACHMENT_LOCKED, None) if not detachmentGuiItem else getVehicleLockStatusForDetachment(detachmentGuiItem, checkLockCrew=False)
+
+    def _pushErrorMsg(self, result, reasonLock):
+        if reasonLock:
+            key = self._REASON_KEY.get(reasonLock, 'server_error')
+        elif result:
+            key = self._LOCKED_KEY.get(result, 'server_error')
+        else:
+            key = 'server_error'
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.detachment_personal_case.dyn(key)()), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.MEDIUM)
+
+
 class _OpenBattlePassStyleChoiceView(_NavigationDisabledActionHandler):
     __settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -1007,6 +1054,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenMissingEventsHandler,
  _OpenNotrecruitedSysMessageHandler,
  _OpentBlueprintsConvertSale,
+ _OpenDetachmentPersonalCaseView,
  _OpenConfirmEmailHandler,
  _OpenMapboxProgression,
  _OpenMapboxSurvey)

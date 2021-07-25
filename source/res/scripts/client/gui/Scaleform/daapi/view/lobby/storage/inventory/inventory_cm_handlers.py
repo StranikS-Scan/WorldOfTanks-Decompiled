@@ -163,7 +163,7 @@ class DemountKitsCMHandler(ContextMenu):
 
     @option(__sqGen.next(), CMLabel.INFORMATION)
     def showInfo(self):
-        shared_events.showDemountKitInfo(self._id)
+        shared_events.showGoodieInfo(self._id)
 
     @option(__sqGen.next(), CMLabel.SELL)
     @process
@@ -176,6 +176,29 @@ class DemountKitsCMHandler(ContextMenu):
 
     def _getOptionCustomData(self, label):
         optionData = super(DemountKitsCMHandler, self)._getOptionCustomData(label)
+        if label in (CMLabel.SELL, CMLabel.BUY_MORE):
+            optionData.enabled = False
+        return optionData
+
+
+class RecertificationFormsCMHandler(ContextMenu):
+    __sqGen = SequenceIDGenerator()
+
+    @option(__sqGen.next(), CMLabel.INFORMATION)
+    def showInfo(self):
+        shared_events.showGoodieInfo(self._id)
+
+    @option(__sqGen.next(), CMLabel.SELL)
+    @process
+    def sell(self):
+        raise NotImplementedError
+
+    @option(__sqGen.next(), CMLabel.BUY_MORE)
+    def buy(self):
+        raise NotImplementedError
+
+    def _getOptionCustomData(self, label):
+        optionData = super(RecertificationFormsCMHandler, self)._getOptionCustomData(label)
         if label in (CMLabel.SELL, CMLabel.BUY_MORE):
             optionData.enabled = False
         return optionData

@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/browser/shop_view.py
 import logging
 from functools import partial
-import constants
 from PlayerEvents import g_playerEvents
+from crew2.sandbox import SANDBOX_CONSTANTS
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
@@ -14,8 +14,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from sound_constants import SHOP_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
-from web.web_client_api import webApiCollection, w2c, W2CSchema, w2capi
-from web.web_client_api.sound import SoundWebApi
+from web.web_client_api import w2capi, w2c, W2CSchema, webApiCollection
+from web.web_client_api.sound import SOUND_STATE_WEB_API_ID, SoundWebApi
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
@@ -76,28 +76,38 @@ class ShopOverlay(_ShopOverlayBase):
             self.destroy()
 
     def onCloseBtnClick(self):
-        if constants.SANDBOX_CONSTANTS.IS_SHOP_OFFLINE_PAGE_ENABLED:
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        if not SANDBOX_CONSTANTS.SHOP_PLACEHOLDER_ON:
+            super(ShopOverlay, self).onCloseBtnClick()
             return
-        super(ShopOverlay, self).onCloseBtnClick()
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def webHandlers(self):
-        if constants.SANDBOX_CONSTANTS.IS_SHOP_OFFLINE_PAGE_ENABLED:
+        if not SANDBOX_CONSTANTS.SHOP_PLACEHOLDER_ON:
+            return super(ShopOverlay, self).webHandlers()
 
-            @w2capi(name='open_tab', key='tab_id')
-            class OpenTabWebApiOverride(object):
+        @w2capi(name='open_tab', key='tab_id')
+        class OpenTabWebApiOverride(object):
 
-                def __init__(self, overlay):
-                    super(OpenTabWebApiOverride, self).__init__()
-                    self.__overlay = overlay
+            def __init__(self, overlay):
+                super(OpenTabWebApiOverride, self).__init__()
+                self.__overlay = overlay
 
-                @w2c(W2CSchema)
-                def hangar(self, cmd):
-                    self.__overlay.onEscapePress()
+            @w2c(W2CSchema)
+            def hangar(self, cmd):
+                self.__overlay.onEscapePress()
 
-            _OpenTabWebApi = partial(OpenTabWebApiOverride, self)
-            return webApiCollection(_OpenTabWebApi, SoundWebApi)
-        return super(ShopOverlay, self).webHandlers()
+        _OpenTabWebApi = partial(OpenTabWebApiOverride, self)
+        return webApiCollection(_OpenTabWebApi, SoundWebApi)
+
+
+class ShopOverlayDormitory(ShopOverlay):
+
+    def webHandlers(self):
+        webHandlers = super(ShopOverlayDormitory, self).webHandlers()
+        soundStateWebApi = next((handler for handler in webHandlers if handler.name == SOUND_STATE_WEB_API_ID), None)
+        if soundStateWebApi is not None:
+            webHandlers.remove(soundStateWebApi)
+        return webHandlers
 
 
 class PremContentPageOverlay(WebView):

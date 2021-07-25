@@ -3,18 +3,19 @@
 import logging
 from itertools import chain
 import constants
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.impl.backport import createTooltipData, BackportTooltipWindow
-from gui.impl.gen.view_models.views.common_balance_content_model import CommonBalanceContentModel
-from shared_utils import CONST_CONTAINER
 from frameworks.wulf import NumberFormatType, ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
+from gui.impl import backport
+from gui.impl.backport import createTooltipData, BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.currency_item_model import CurrencyItemModel
+from gui.impl.gen.view_models.views.common_balance_content_model import CommonBalanceContentModel
 from gui.impl.gen.view_models.views.value_price import ValuePrice
 from gui.impl.pub.view_impl import ViewImpl
 from gui.shared.money import Currency
 from helpers import dependency
+from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
@@ -32,9 +33,11 @@ class CommonBalanceContent(ViewImpl):
     __CURRENCY_FORMATTER = {Currency.CREDITS: NumberFormatType.INTEGRAL,
      Currency.GOLD: NumberFormatType.GOLD,
      Currency.CRYSTAL: NumberFormatType.INTEGRAL,
-     'freeXP': NumberFormatType.INTEGRAL}
-    __SPECIAL_TOOLTIPS = {Currency.GOLD: TOOLTIPS_CONSTANTS.GOLD_STATS,
-     Currency.CREDITS: TOOLTIPS_CONSTANTS.CREDITS_STATS}
+     ValuePrice.FREE_XP: NumberFormatType.INTEGRAL}
+    __CURRENCY_NOT_AVAILABLE_TOOLTIPS = {Currency.CREDITS: (R.strings.tooltips.header.buttons.credits.header(), R.strings.tooltips.wallet.not_available_credits.body()),
+     Currency.GOLD: (R.strings.tooltips.header.buttons.gold.header(), R.strings.tooltips.wallet.not_available_gold.body()),
+     Currency.CRYSTAL: (R.strings.tooltips.header.buttons.crystal.header(), R.strings.tooltips.wallet.not_available_crystal.body()),
+     ValuePrice.FREE_XP: (R.strings.tooltips.header.buttons.freeXP.header(), R.strings.tooltips.wallet.not_available_freexp.body())}
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.common.dialog_view.components.balance_contents.CommonBalanceContent())
@@ -53,12 +56,11 @@ class CommonBalanceContent(ViewImpl):
             tooltipId = event.getArgument('tooltipId')
             if tooltipId is None:
                 return
-            if tooltipId in self.__SPECIAL_TOOLTIPS.values():
-                tooltipData = createTooltipData(isSpecial=True, specialAlias=tooltipId)
-                window = BackportTooltipWindow(tooltipData, self.getParentWindow())
-                window.load()
-                return window
-        return
+            window = BackportTooltipWindow(createTooltipData(isSpecial=True, specialAlias=tooltipId, specialArgs=(True,)), self.getParentWindow())
+            window.load()
+            return window
+        else:
+            return super(CommonBalanceContent, self).createToolTip(event)
 
     def _initialize(self, *args, **kwargs):
         super(CommonBalanceContent, self)._initialize()
@@ -84,10 +86,13 @@ class CommonBalanceContent(ViewImpl):
         currencyModel = CurrencyItemModel()
         currencyModel.setCurrency(currency)
         currencyModel.setValue(value)
-        if constants.IS_SINGAPORE and currency in self.__SPECIAL_TOOLTIPS:
-            currencyModel.setSpecialTooltip(self.__SPECIAL_TOOLTIPS[currency])
-        else:
-            currencyModel.setSpecialTooltip('')
+        if constants.IS_SINGAPORE and currency in CURRENCIES_CONSTANTS.SINGAPORE_ALTERNATIVE_CURRENCIES_SET:
+            currencyModel.setSpecialTooltip(currency + 'StatsFullScreen')
+        elif not constants.IS_SINGAPORE:
+            currencyModel.setSpecialTooltip(currency + 'InfoFullScreen')
+        naTooltip = self.__CURRENCY_NOT_AVAILABLE_TOOLTIPS[currency]
+        currencyModel.setTooltipHeader(backport.text(naTooltip[0]))
+        currencyModel.setTooltipBody(backport.text(naTooltip[1]))
         self.viewModel.currency.addViewModel(currencyModel)
         self.__currencyIndexes.append(currency)
 
@@ -99,7 +104,7 @@ class CommonBalanceContent(ViewImpl):
         return self.gui.systemLocale.getNumberFormat(value, formatType=formatType)
 
     def __onFreeXpUpdated(self, value):
-        self.__onCurrencyUpdated('freeXP', value)
+        self.__onCurrencyUpdated(ValuePrice.FREE_XP, value)
 
     def __onMoneyUpdated(self, _):
         for currency in Currency.GUI_ALL:
@@ -117,5 +122,5 @@ class CommonBalanceContent(ViewImpl):
         for currency in Currency.GUI_ALL:
             self.__onCurrencyUpdated(currency, self.__stats.actualMoney.get(currency) if status[currency] == CurrencyStatus.AVAILABLE else None)
 
-        self.__onCurrencyUpdated('freeXP', self.__stats.actualFreeXP if status['freeXP'] == CurrencyStatus.AVAILABLE else None)
+        self.__onCurrencyUpdated(ValuePrice.FREE_XP, self.__stats.actualFreeXP if status[ValuePrice.FREE_XP] == CurrencyStatus.AVAILABLE else None)
         return

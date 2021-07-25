@@ -24,7 +24,7 @@ class MapboxProgressionTooltip(BlocksTooltipData):
         progressionData = self.__mapboxCtrl.getProgressionData()
         if progressionData is not None and self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime():
             items.append(self.__packHeaderBlock())
-            items.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.mapbox.questFlag.description(), highlightedText=text_styles.stats(backport.text(R.strings.mapbox.questFlag.highlightedText())))), padding=formatters.packPadding(left=18)))
+            items.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.mapbox.questFlag.description(), highlightedText=text_styles.stats(backport.text(R.strings.mapbox.questFlag.highlightedText())))), padding=formatters.packPadding(left=18, right=10)))
             items.append(formatters.packBuildUpBlockData(self.__packTotalProgressionBlock(progressionData), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
             items.append(self.__packMapsProgressionBlock(progressionData))
         else:

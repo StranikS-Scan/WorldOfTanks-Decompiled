@@ -20,6 +20,13 @@ class BaseEquipmentSetupSubView(DealBaseSetupSubView):
         self._addSlotAction(BaseSetupModel.SWAP_SLOTS_ACTION, partial(self._onSwapSlots, BaseSetupModel.SWAP_SLOTS_ACTION))
         self._addSlotAction(BaseSetupModel.DRAG_AND_DROP_SLOT_ACTION, partial(self._onSwapSlots, BaseSetupModel.DRAG_AND_DROP_SLOT_ACTION))
         self._addSlotAction(BaseSetupModel.SHOW_INFO_SLOT_ACTION, self._onShowItemInfo)
+        self._viewModel.onSlotHover += self._onSlotHover
+        self._viewModel.onSlotHoverLeave += self._onSlotHoverLeave
+
+    def _removeListeners(self):
+        super(BaseEquipmentSetupSubView, self)._removeListeners()
+        self._viewModel.onSlotHover -= self._onSlotHover
+        self._viewModel.onSlotHoverLeave -= self._onSlotHoverLeave
 
     def _onSelectItem(self, args):
         itemCD = args.get('intCD')
@@ -49,6 +56,14 @@ class BaseEquipmentSetupSubView(DealBaseSetupSubView):
     def _onShowItemInfo(self, args):
         itemIntCD = int(args.get('intCD'))
         showModuleInfo(itemIntCD, self._interactor.getItem().descriptor)
+
+    def _onSlotHover(self, args):
+        itemIntCD = int(args.get('intCD'))
+        self._interactor.setPreviewSlotItem(self._curSlotID, itemIntCD)
+
+    def _onSlotHoverLeave(self):
+        self._interactor.setPreviewSlotItem(self._curSlotID, None)
+        return
 
     def __confirmDialogInShowing(self):
         return self.__gui.windowsManager.getViewByLayoutID(R.views.lobby.tanksetup.dialogs.Confirm()) is not None

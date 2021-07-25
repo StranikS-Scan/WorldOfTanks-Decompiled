@@ -23,8 +23,10 @@ from gui.shared.utils.requesters.session_stats_requester import SessionStatsRequ
 from gui.shared.compat_vehicles_cache import CompatVehiclesCache
 from helpers import dependency
 from skeletons.festivity_factory import IFestivityFactory
+from skeletons.gui.detachment import IDetachmentCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from utils.requesters import REQ_CRITERIA
 
 class CACHE_SYNC_REASON(object):
     SHOW_GUI, CLIENT_UPDATE, SHOP_RESYNC, INVENTORY_RESYNC, DOSSIER_RESYNC, STATS_RESYNC = range(1, 7)
@@ -155,3 +157,40 @@ class ItemsCache(IItemsCache):
 
     def __pe_onDossiersResync(self, *args):
         self._onResync(CACHE_SYNC_REASON.DOSSIER_RESYNC)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def hasFreeDormsRooms(itemsCache=None):
+    return getFreeDormsRooms(itemsCache=itemsCache) > 0
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache, detachmentCache=IDetachmentCache)
+def needDormsBlock(itemsCache=None, detachmentCache=None):
+    items = itemsCache.items
+    rooms = len(detachmentCache.getDetachments(criteria=~REQ_CRITERIA.DETACHMENT.DEMOBILIZE)) - getTotalDormsRooms(itemsCache=itemsCache)
+    return rooms // items.shop.getDormitoryRoomsCount + 1 if rooms >= 0 else 0
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache, detachmentCache=IDetachmentCache)
+def getFreeDormsRooms(itemsCache=None, detachmentCache=None):
+    return getTotalDormsRooms(itemsCache=itemsCache) - len(detachmentCache.getDetachments(criteria=~REQ_CRITERIA.DETACHMENT.DEMOBILIZE))
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getBarrackDormRooms(itemsCache=None):
+    items = itemsCache.items
+    return items.shop.getDormitoryRoomsCount * items.stats.dormitoriesCount
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getVehicleDormRooms(itemsCache=None):
+    items = itemsCache.items
+    rentCriteria = REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.RENT_PROMOTION ^ REQ_CRITERIA.VEHICLE.TELECOM
+    rentVehiclesCount = len(items.getVehicles(rentCriteria | REQ_CRITERIA.INVENTORY))
+    inactiveMultiNationVehicleCount = len(items.getVehicles(REQ_CRITERIA.VEHICLE.INACTIVE_IN_NATION_GROUP | REQ_CRITERIA.INVENTORY | ~rentCriteria))
+    return items.stats.vehicleSlots + inactiveMultiNationVehicleCount - rentVehiclesCount
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getTotalDormsRooms(itemsCache=None):
+    return getBarrackDormRooms(itemsCache=itemsCache) + getVehicleDormRooms(itemsCache=itemsCache)

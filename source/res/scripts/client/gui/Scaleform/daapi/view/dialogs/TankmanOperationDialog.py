@@ -13,8 +13,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared.formatters import text_styles, icons, currency
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
-from gui.shared.gui_items.Tankman import getCrewSkinIconBig
-from gui.shared.gui_items.crew_skin import localizedFullName
+from gui.shared.gui_items.crew_skin import localizedFullName, getCrewSkinIconBig
 from gui.shared.gui_items.serializers import packTankman
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip

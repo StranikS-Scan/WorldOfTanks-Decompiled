@@ -5,26 +5,26 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_slot_model i
 class BattleBoosterSlotModel(BaseSlotModel):
     __slots__ = ()
 
-    def __init__(self, properties=18, commands=0):
+    def __init__(self, properties=16, commands=0):
         super(BattleBoosterSlotModel, self).__init__(properties=properties, commands=commands)
 
     def getDescription(self):
-        return self._getString(15)
+        return self._getString(13)
 
     def setDescription(self, value):
-        self._setString(15, value)
+        self._setString(13, value)
 
     def getIsBuyMoreVisible(self):
-        return self._getBool(16)
+        return self._getBool(14)
 
     def setIsBuyMoreVisible(self, value):
-        self._setBool(16, value)
+        self._setBool(14, value)
 
     def getIsBuyMoreDisabled(self):
-        return self._getBool(17)
+        return self._getBool(15)
 
     def setIsBuyMoreDisabled(self, value):
-        self._setBool(17, value)
+        self._setBool(15, value)
 
     def _initialize(self):
         super(BattleBoosterSlotModel, self)._initialize()

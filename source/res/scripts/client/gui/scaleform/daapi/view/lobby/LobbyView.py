@@ -24,7 +24,7 @@ from helpers import i18n, dependency, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.gui.app_loader import IWaitingWidget
-from skeletons.gui.game_control import IIGRController
+from skeletons.gui.game_control import IIGRController, IDetachmentController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -96,6 +96,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    detController = dependency.descriptor(IDetachmentController)
 
     def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
@@ -130,6 +131,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
 
     @uniprof.regionDecorator(label='account.show_gui', scope='enter')
     def _populate(self):
+        self.detController.tryLockPopups()
         View._populate(self)
         self.__currIgrType = self.igrCtrl.getRoomType()
         g_prbLoader.setEnabled(True)

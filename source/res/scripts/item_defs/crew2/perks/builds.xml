@@ -1,0 +1,984 @@
+<builds.xml>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:noNamespaceSchemaLocation>	../../../development/xml_schema/crew2/perks/builds.xsd	</xsi:noNamespaceSchemaLocation>
+  <builds>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_HT_universal	</name>
+      <tankRole>	role_HT_universal	</tankRole>
+      <perks>
+        <p>
+          <id>	304	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	305	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	212	</id>
+        </p>
+        <p>
+          <id>	101	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	203	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	204	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	205	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	311	</id>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_HT_support	</name>
+      <tankRole>	role_HT_support	</tankRole>
+      <perks>
+        <p>
+          <id>	304	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	305	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	402	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	211	</id>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	201	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	204	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	205	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	311	</id>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_MT_support	</name>
+      <tankRole>	role_MT_support	</tankRole>
+      <perks>
+        <p>
+          <id>	401	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	402	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	211	</id>
+        </p>
+        <p>
+          <id>	412	</id>
+        </p>
+        <p>
+          <id>	405	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	201	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	204	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	205	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	10	</points>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_ATSPG_support	</name>
+      <tankRole>	role_ATSPG_support	</tankRole>
+      <perks>
+        <p>
+          <id>	303	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	311	</id>
+        </p>
+        <p>
+          <id>	101	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	104	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	202	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	205	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	111	</id>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_LT_wheeled	</name>
+      <tankRole>	role_LT_wheeled	</tankRole>
+      <perks>
+        <p>
+          <id>	112	</id>
+        </p>
+        <p>
+          <id>	401	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	404	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	405	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	102	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	105	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	411	</id>
+        </p>
+        <p>
+          <id>	502	</id>
+          <points>	5	</points>
+        </p>
+        <p>
+          <id>	501	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	5	</points>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_HT_assault	</name>
+      <tankRole>	role_HT_assault	</tankRole>
+      <perks>
+        <p>
+          <id>	304	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	305	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	402	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	511	</id>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	312	</id>
+        </p>
+        <p>
+          <id>	504	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	505	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	503	</id>
+          <points>	10	</points>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_ATSPG_assault	</name>
+      <tankRole>	role_ATSPG_assault	</tankRole>
+      <perks>
+        <p>
+          <id>	304	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	305	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	403	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	505	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	503	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	312	</id>
+        </p>
+        <p>
+          <id>	504	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	202	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	512	</id>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_MT_sniper	</name>
+      <tankRole>	role_MT_sniper	</tankRole>
+      <perks>
+        <p>
+          <id>	305	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	311	</id>
+        </p>
+        <p>
+          <id>	101	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	502	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	104	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	202	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	111	</id>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_SPG	</name>
+      <tankRole>	role_SPG	</tankRole>
+      <perks>
+        <p>
+          <id>	303	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	212	</id>
+        </p>
+        <p>
+          <id>	101	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	102	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	201	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	202	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	204	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	111	</id>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	V_VII_role_heavyTank	</name>
+      <tankRole>	V_VII_role_HT	</tankRole>
+      <perks>
+        <p>
+          <id>	304	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	305	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	101	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	512	</id>
+        </p>
+        <p>
+          <id>	503	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	312	</id>
+        </p>
+        <p>
+          <id>	504	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	505	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	203	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	I_IV_role_ALL	</name>
+      <tankRole>	I_IV_role_ALL	</tankRole>
+      <perks>
+        <p>
+          <id>	305	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	402	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	101	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	102	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	311	</id>
+        </p>
+        <p>
+          <id>	202	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	111	</id>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	V_VII_role_lightTank	</name>
+      <tankRole>	V_VII_role_LT	</tankRole>
+      <perks>
+        <p>
+          <id>	112	</id>
+        </p>
+        <p>
+          <id>	401	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	403	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	405	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	102	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	502	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	104	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	105	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	411	</id>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	10	</points>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_LT_universal	</name>
+      <tankRole>	role_LT_universal	</tankRole>
+      <perks>
+        <p>
+          <id>	112	</id>
+        </p>
+        <p>
+          <id>	401	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	402	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	403	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	501	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	102	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	104	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	105	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	412	</id>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	10	</points>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_MT_assault	</name>
+      <tankRole>	role_MT_assault	</tankRole>
+      <perks>
+        <p>
+          <id>	304	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	305	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	512	</id>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	312	</id>
+        </p>
+        <p>
+          <id>	504	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	505	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	203	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	503	</id>
+          <points>	10	</points>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	V_VII_role_SPG	</name>
+      <tankRole>	V_VII_role_SPG	</tankRole>
+      <perks>
+        <p>
+          <id>	502	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	212	</id>
+        </p>
+        <p>
+          <id>	101	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	102	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	201	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	202	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	204	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	111	</id>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	V_VII_role_ATSPG	</name>
+      <tankRole>	V_VII_role_ATSPG	</tankRole>
+      <perks>
+        <p>
+          <id>	502	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	212	</id>
+        </p>
+        <p>
+          <id>	101	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	102	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	201	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	202	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	204	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	111	</id>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	V_VII_role_mediumTank	</name>
+      <tankRole>	V_VII_role_MT	</tankRole>
+      <perks>
+        <p>
+          <id>	304	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	401	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	402	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	101	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	102	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	311	</id>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	111	</id>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_HT_break	</name>
+      <tankRole>	role_HT_break	</tankRole>
+      <perks>
+        <p>
+          <id>	304	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	305	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	402	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	403	</id>
+          <points>	5	</points>
+        </p>
+        <p>
+          <id>	404	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	312	</id>
+        </p>
+        <p>
+          <id>	401	</id>
+          <points>	5	</points>
+        </p>
+        <p>
+          <id>	505	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	412	</id>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_ATSPG_universal	</name>
+      <tankRole>	role_ATSPG_universal	</tankRole>
+      <perks>
+        <p>
+          <id>	403	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	212	</id>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	502	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	311	</id>
+        </p>
+        <p>
+          <id>	202	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	204	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	205	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	303	</id>
+          <points>	10	</points>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_MT_universal	</name>
+      <tankRole>	role_MT_universal	</tankRole>
+      <perks>
+        <p>
+          <id>	305	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	402	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	403	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	101	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	102	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	401	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	412	</id>
+        </p>
+        <p>
+          <id>	301	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	111	</id>
+        </p>
+      </perks>
+    </build>
+    <build>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <name>	role_ATSPG_sniper	</name>
+      <tankRole>	role_ATSPG_sniper	</tankRole>
+      <perks>
+        <p>
+          <id>	201	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	212	</id>
+        </p>
+        <p>
+          <id>	101	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	501	</id>
+          <points>	5	</points>
+        </p>
+        <p>
+          <id>	103	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	105	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	202	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	502	</id>
+          <points>	5	</points>
+        </p>
+        <p>
+          <id>	205	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	302	</id>
+          <points>	10	</points>
+        </p>
+        <p>
+          <id>	111	</id>
+        </p>
+      </perks>
+    </build>
+  </builds>
+</builds.xml>

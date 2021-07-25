@@ -29,7 +29,6 @@ _BONUSES_COUNT = 9
 _EXCLUDED_BONUSES = ('slots',)
 _SENIORITY_BONUSES_ORDER = (('crystal', 'crystal'),
  ('credits', 'credits'),
- ('crewBooks', 'personalBook'),
  ('crewBooks', 'universalBook'),
  ('customizations', 'projectionDecal'),
  ('premium_plus', 'premium_plus'),

@@ -84,7 +84,7 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
     def _isAvatarEquipment(self, item):
         return False
 
-    def _addOptionalDeviceSlot(self, idx, intCD):
+    def _addOptionalDeviceSlot(self, idx, intCD, descriptor, isActive):
         pass
 
     def _updateShellSlot(self, idx, quantity):

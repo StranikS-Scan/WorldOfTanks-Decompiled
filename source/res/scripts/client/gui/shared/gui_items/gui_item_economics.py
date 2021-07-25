@@ -76,23 +76,24 @@ def getMinRentItemPrice(item):
 
 
 def getVehicleConsumablesLayoutPrice(vehicle):
-    return sum([ item.getBuyPrice() for item in vehicle.consumables.layout.getItems() if not item.isInInventory and not vehicle.consumables.setupLayouts.isInSetup(item) ], ITEM_PRICE_ZERO)
+    return sum([ item.getBuyPrice() for item in vehicle.consumables.layout.getItems() if not item.isInInventory and item not in vehicle.consumables.installed ], ITEM_PRICE_ZERO)
 
 
 def getVehicleBattleBoostersLayoutPrice(vehicle):
-    return sum([ item.getBuyPrice() for item in vehicle.battleBoosters.layout.getItems() if not item.isInInventory and not vehicle.battleBoosters.setupLayouts.isInSetup(item) ], ITEM_PRICE_ZERO)
+    return sum([ item.getBuyPrice() for item in vehicle.battleBoosters.layout.getItems() if not item.isInInventory and item not in vehicle.battleBoosters.installed ], ITEM_PRICE_ZERO)
 
 
 def getVehicleOptionalDevicesLayoutPrice(vehicle):
-    return sum([ item.getBuyPrice() for item in vehicle.optDevices.layout.getItems() if not item.isInInventory and not vehicle.optDevices.setupLayouts.isInSetup(item) ], ITEM_PRICE_ZERO)
+    return sum([ item.getBuyPrice() for item in vehicle.optDevices.layout.getItems() if not item.isInInventory and item not in vehicle.optDevices.installed ], ITEM_PRICE_ZERO)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getVehicleShellsLayoutPrice(vehicle, itemsCache=None):
     price = ITEM_PRICE_ZERO
+    installedShells = {shell.intCD:shell.count for shell in vehicle.shells.installed.getItems()}
     newShells = {shell.intCD:shell.count for shell in vehicle.shells.layout.getItems()}
     for shell in vehicle.shells.layout.getItems():
-        installCount = vehicle.shells.setupLayouts.ammoLoaded(shell.intCD)
+        installCount = installedShells.get(shell.intCD, 0)
         newCount = newShells[shell.intCD]
         if newCount > installCount:
             shellInInvenory = itemsCache.items.getItemByCD(shell.intCD)

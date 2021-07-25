@@ -149,3 +149,16 @@ class EventsSubscriber(object):
             event -= delegate
 
         self.__subscribeList = []
+
+
+class EventCallback(object):
+    __slots__ = ('event', '_callback')
+
+    def __init__(self, event, callback):
+        self.event = event
+        self._callback = callback
+        self.event += self.callback
+
+    def callback(self, *args, **kwargs):
+        self._callback(*args, **kwargs)
+        self.event -= self.callback

@@ -568,6 +568,99 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_STUN = '#ingame_gui:efficiencyRibbons/stun'
     EFFICIENCYRIBBONS_ASSISTSTUN = '#ingame_gui:efficiencyRibbons/assistStun'
     EFFICIENCYRIBBONS_DEATHZONE = '#ingame_gui:efficiencyRibbons/deathZone'
+    PERKSPANEL_PERK_101_HEADER = '#ingame_gui:perksPanel/perk_101/header'
+    PERKSPANEL_PERK_101_BODY = '#ingame_gui:perksPanel/perk_101/body'
+    PERKSPANEL_PERK_103_HEADER = '#ingame_gui:perksPanel/perk_103/header'
+    PERKSPANEL_PERK_103_BODY = '#ingame_gui:perksPanel/perk_103/body'
+    PERKSPANEL_PERK_104_HEADER = '#ingame_gui:perksPanel/perk_104/header'
+    PERKSPANEL_PERK_105_HEADER = '#ingame_gui:perksPanel/perk_105/header'
+    PERKSPANEL_PERK_105_BODY = '#ingame_gui:perksPanel/perk_105/body'
+    PERKSPANEL_PERK_111_HEADER = '#ingame_gui:perksPanel/perk_111/header'
+    PERKSPANEL_PERK_111_BODY = '#ingame_gui:perksPanel/perk_111/body'
+    PERKSPANEL_PERK_112_HEADER = '#ingame_gui:perksPanel/perk_112/header'
+    PERKSPANEL_PERK_112_BODY = '#ingame_gui:perksPanel/perk_112/body'
+    PERKSPANEL_PERK_201_HEADER = '#ingame_gui:perksPanel/perk_201/header'
+    PERKSPANEL_PERK_202_HEADER = '#ingame_gui:perksPanel/perk_202/header'
+    PERKSPANEL_PERK_202_BODY = '#ingame_gui:perksPanel/perk_202/body'
+    PERKSPANEL_PERK_203_HEADER = '#ingame_gui:perksPanel/perk_203/header'
+    PERKSPANEL_PERK_203_BODY = '#ingame_gui:perksPanel/perk_203/body'
+    PERKSPANEL_PERK_205_HEADER = '#ingame_gui:perksPanel/perk_205/header'
+    PERKSPANEL_PERK_205_BODY = '#ingame_gui:perksPanel/perk_205/body'
+    PERKSPANEL_PERK_211_HEADER = '#ingame_gui:perksPanel/perk_211/header'
+    PERKSPANEL_PERK_211_BODY = '#ingame_gui:perksPanel/perk_211/body'
+    PERKSPANEL_PERK_212_HEADER = '#ingame_gui:perksPanel/perk_212/header'
+    PERKSPANEL_PERK_212_BODY = '#ingame_gui:perksPanel/perk_212/body'
+    PERKSPANEL_PERK_301_HEADER = '#ingame_gui:perksPanel/perk_301/header'
+    PERKSPANEL_PERK_301_BODY = '#ingame_gui:perksPanel/perk_301/body'
+    PERKSPANEL_PERK_302_HEADER = '#ingame_gui:perksPanel/perk_302/header'
+    PERKSPANEL_PERK_302_BODY = '#ingame_gui:perksPanel/perk_302/body'
+    PERKSPANEL_PERK_303_HEADER = '#ingame_gui:perksPanel/perk_303/header'
+    PERKSPANEL_PERK_303_BODY = '#ingame_gui:perksPanel/perk_303/body'
+    PERKSPANEL_PERK_304_HEADER = '#ingame_gui:perksPanel/perk_304/header'
+    PERKSPANEL_PERK_304_BODY = '#ingame_gui:perksPanel/perk_304/body'
+    PERKSPANEL_PERK_305_HEADER = '#ingame_gui:perksPanel/perk_305/header'
+    PERKSPANEL_PERK_305_BODY = '#ingame_gui:perksPanel/perk_305/body'
+    PERKSPANEL_PERK_311_HEADER = '#ingame_gui:perksPanel/perk_311/header'
+    PERKSPANEL_PERK_311_BODY = '#ingame_gui:perksPanel/perk_311/body'
+    PERKSPANEL_PERK_312_HEADER = '#ingame_gui:perksPanel/perk_312/header'
+    PERKSPANEL_PERK_312_BODY = '#ingame_gui:perksPanel/perk_312/body'
+    PERKSPANEL_PERK_401_HEADER = '#ingame_gui:perksPanel/perk_401/header'
+    PERKSPANEL_PERK_401_BODY = '#ingame_gui:perksPanel/perk_401/body'
+    PERKSPANEL_PERK_405_HEADER = '#ingame_gui:perksPanel/perk_405/header'
+    PERKSPANEL_PERK_405_BODY = '#ingame_gui:perksPanel/perk_405/body'
+    PERKSPANEL_PERK_411_HEADER = '#ingame_gui:perksPanel/perk_411/header'
+    PERKSPANEL_PERK_411_BODY = '#ingame_gui:perksPanel/perk_411/body'
+    PERKSPANEL_PERK_412_HEADER = '#ingame_gui:perksPanel/perk_412/header'
+    PERKSPANEL_PERK_412_BODY = '#ingame_gui:perksPanel/perk_412/body'
+    PERKSPANEL_PERK_501_HEADER = '#ingame_gui:perksPanel/perk_501/header'
+    PERKSPANEL_PERK_501_BODY = '#ingame_gui:perksPanel/perk_501/body'
+    PERKSPANEL_PERK_502_HEADER = '#ingame_gui:perksPanel/perk_502/header'
+    PERKSPANEL_PERK_502_BODY = '#ingame_gui:perksPanel/perk_502/body'
+    PERKSPANEL_PERK_503_HEADER = '#ingame_gui:perksPanel/perk_503/header'
+    PERKSPANEL_PERK_503_BODY = '#ingame_gui:perksPanel/perk_503/body'
+    PERKSPANEL_PERK_504_HEADER = '#ingame_gui:perksPanel/perk_504/header'
+    PERKSPANEL_PERK_504_BODY = '#ingame_gui:perksPanel/perk_504/body'
+    PERKSPANEL_PERK_505_HEADER = '#ingame_gui:perksPanel/perk_505/header'
+    PERKSPANEL_PERK_505_BODY = '#ingame_gui:perksPanel/perk_505/body'
+    PERKSPANEL_PERK_511_HEADER = '#ingame_gui:perksPanel/perk_511/header'
+    PERKSPANEL_PERK_511_BODY = '#ingame_gui:perksPanel/perk_511/body'
+    PERKSPANEL_PERK_512_HEADER = '#ingame_gui:perksPanel/perk_512/header'
+    PERKSPANEL_PERK_512_BODY = '#ingame_gui:perksPanel/perk_512/body'
+    EFFICIENCYRIBBONS_PERK_101 = '#ingame_gui:efficiencyRibbons/PERK_101'
+    EFFICIENCYRIBBONS_PERK_102 = '#ingame_gui:efficiencyRibbons/PERK_102'
+    EFFICIENCYRIBBONS_PERK_103 = '#ingame_gui:efficiencyRibbons/PERK_103'
+    EFFICIENCYRIBBONS_PERK_104 = '#ingame_gui:efficiencyRibbons/PERK_104'
+    EFFICIENCYRIBBONS_PERK_105 = '#ingame_gui:efficiencyRibbons/PERK_105'
+    EFFICIENCYRIBBONS_PERK_111 = '#ingame_gui:efficiencyRibbons/PERK_111'
+    EFFICIENCYRIBBONS_PERK_112 = '#ingame_gui:efficiencyRibbons/PERK_112'
+    EFFICIENCYRIBBONS_PERK_201 = '#ingame_gui:efficiencyRibbons/PERK_201'
+    EFFICIENCYRIBBONS_PERK_202 = '#ingame_gui:efficiencyRibbons/PERK_202'
+    EFFICIENCYRIBBONS_PERK_203 = '#ingame_gui:efficiencyRibbons/PERK_203'
+    EFFICIENCYRIBBONS_PERK_204 = '#ingame_gui:efficiencyRibbons/PERK_204'
+    EFFICIENCYRIBBONS_PERK_205 = '#ingame_gui:efficiencyRibbons/PERK_205'
+    EFFICIENCYRIBBONS_PERK_211 = '#ingame_gui:efficiencyRibbons/PERK_211'
+    EFFICIENCYRIBBONS_PERK_212 = '#ingame_gui:efficiencyRibbons/PERK_212'
+    EFFICIENCYRIBBONS_PERK_301 = '#ingame_gui:efficiencyRibbons/PERK_301'
+    EFFICIENCYRIBBONS_PERK_302 = '#ingame_gui:efficiencyRibbons/PERK_302'
+    EFFICIENCYRIBBONS_PERK_303 = '#ingame_gui:efficiencyRibbons/PERK_303'
+    EFFICIENCYRIBBONS_PERK_304 = '#ingame_gui:efficiencyRibbons/PERK_304'
+    EFFICIENCYRIBBONS_PERK_305 = '#ingame_gui:efficiencyRibbons/PERK_305'
+    EFFICIENCYRIBBONS_PERK_311 = '#ingame_gui:efficiencyRibbons/PERK_311'
+    EFFICIENCYRIBBONS_PERK_312 = '#ingame_gui:efficiencyRibbons/PERK_312'
+    EFFICIENCYRIBBONS_PERK_401 = '#ingame_gui:efficiencyRibbons/PERK_401'
+    EFFICIENCYRIBBONS_PERK_402 = '#ingame_gui:efficiencyRibbons/PERK_402'
+    EFFICIENCYRIBBONS_PERK_403 = '#ingame_gui:efficiencyRibbons/PERK_403'
+    EFFICIENCYRIBBONS_PERK_404 = '#ingame_gui:efficiencyRibbons/PERK_404'
+    EFFICIENCYRIBBONS_PERK_405 = '#ingame_gui:efficiencyRibbons/PERK_405'
+    EFFICIENCYRIBBONS_PERK_411 = '#ingame_gui:efficiencyRibbons/PERK_411'
+    EFFICIENCYRIBBONS_PERK_412 = '#ingame_gui:efficiencyRibbons/PERK_412'
+    EFFICIENCYRIBBONS_PERK_501 = '#ingame_gui:efficiencyRibbons/PERK_501'
+    EFFICIENCYRIBBONS_PERK_502 = '#ingame_gui:efficiencyRibbons/PERK_502'
+    EFFICIENCYRIBBONS_PERK_503 = '#ingame_gui:efficiencyRibbons/PERK_503'
+    EFFICIENCYRIBBONS_PERK_504 = '#ingame_gui:efficiencyRibbons/PERK_504'
+    EFFICIENCYRIBBONS_PERK_505 = '#ingame_gui:efficiencyRibbons/PERK_505'
+    EFFICIENCYRIBBONS_PERK_511 = '#ingame_gui:efficiencyRibbons/PERK_511'
+    EFFICIENCYRIBBONS_PERK_512 = '#ingame_gui:efficiencyRibbons/PERK_512'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING'
     DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE = '#ingame_gui:damageLog/shellType/HIGH_EXPLOSIVE'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_HE = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_HE'
@@ -769,6 +862,14 @@ class INGAME_GUI(object):
     REWARDWINDOW_TWITCH22_SUBHEADERTEXT = '#ingame_gui:rewardWindow/twitch22/subHeaderText'
     REWARDWINDOW_TWITCH22_DESCTEXT = '#ingame_gui:rewardWindow/twitch22/descText'
     REWARDWINDOW_TWITCH22_BTNLABEL = '#ingame_gui:rewardWindow/twitch22/btnLabel'
+    REWARDWINDOW_TWITCH23_HEADERTEXT = '#ingame_gui:rewardWindow/twitch23/headerText'
+    REWARDWINDOW_TWITCH23_SUBHEADERTEXT = '#ingame_gui:rewardWindow/twitch23/subHeaderText'
+    REWARDWINDOW_TWITCH23_DESCTEXT = '#ingame_gui:rewardWindow/twitch23/descText'
+    REWARDWINDOW_TWITCH23_BTNLABEL = '#ingame_gui:rewardWindow/twitch23/btnLabel'
+    REWARDWINDOW_TWITCH24_HEADERTEXT = '#ingame_gui:rewardWindow/twitch24/headerText'
+    REWARDWINDOW_TWITCH24_SUBHEADERTEXT = '#ingame_gui:rewardWindow/twitch24/subHeaderText'
+    REWARDWINDOW_TWITCH24_DESCTEXT = '#ingame_gui:rewardWindow/twitch24/descText'
+    REWARDWINDOW_TWITCH24_BTNLABEL = '#ingame_gui:rewardWindow/twitch24/btnLabel'
     REWARDWINDOW_LOOTBOX_WINHEADERTEXT = '#ingame_gui:rewardWindow/lootbox/winHeaderText'
     REWARDWINDOW_LOOTBOX_HEADERTEXT = '#ingame_gui:rewardWindow/lootbox/headerText'
     REWARDWINDOW_LOOTBOX_DESCTEXT = '#ingame_gui:rewardWindow/lootbox/descText'
@@ -862,10 +963,6 @@ class INGAME_GUI(object):
     OPTDEVICERESURRECTION_FUELTANK = '#ingame_gui:optDeviceResurrection/fuelTank'
     OPTDEVICERESURRECTION_AMMOBAY = '#ingame_gui:optDeviceResurrection/ammoBay'
     LEVELPROGRESS_MAXLEVEL = '#ingame_gui:levelProgress/maxLevel'
-    PREBATTLEAMMUNITIONPANEL_HEADER = '#ingame_gui:prebattleAmmunitionPanel/header'
-    PREBATTLEAMMUNITIONPANEL_SUBHEADER = '#ingame_gui:prebattleAmmunitionPanel/subHeader'
-    PREBATTLEAMMUNITIONPANEL_FOOTER = '#ingame_gui:prebattleAmmunitionPanel/footer'
-    PREBATTLEAMMUNITIONPANEL_SUBFOOTER = '#ingame_gui:prebattleAmmunitionPanel/subFooter'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,
@@ -971,6 +1068,41 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_STUN,
      EFFICIENCYRIBBONS_ASSISTSTUN,
      EFFICIENCYRIBBONS_DEATHZONE,
+     EFFICIENCYRIBBONS_PERK_101,
+     EFFICIENCYRIBBONS_PERK_102,
+     EFFICIENCYRIBBONS_PERK_103,
+     EFFICIENCYRIBBONS_PERK_104,
+     EFFICIENCYRIBBONS_PERK_105,
+     EFFICIENCYRIBBONS_PERK_111,
+     EFFICIENCYRIBBONS_PERK_112,
+     EFFICIENCYRIBBONS_PERK_201,
+     EFFICIENCYRIBBONS_PERK_202,
+     EFFICIENCYRIBBONS_PERK_203,
+     EFFICIENCYRIBBONS_PERK_204,
+     EFFICIENCYRIBBONS_PERK_205,
+     EFFICIENCYRIBBONS_PERK_211,
+     EFFICIENCYRIBBONS_PERK_212,
+     EFFICIENCYRIBBONS_PERK_301,
+     EFFICIENCYRIBBONS_PERK_302,
+     EFFICIENCYRIBBONS_PERK_303,
+     EFFICIENCYRIBBONS_PERK_304,
+     EFFICIENCYRIBBONS_PERK_305,
+     EFFICIENCYRIBBONS_PERK_311,
+     EFFICIENCYRIBBONS_PERK_312,
+     EFFICIENCYRIBBONS_PERK_401,
+     EFFICIENCYRIBBONS_PERK_402,
+     EFFICIENCYRIBBONS_PERK_403,
+     EFFICIENCYRIBBONS_PERK_404,
+     EFFICIENCYRIBBONS_PERK_405,
+     EFFICIENCYRIBBONS_PERK_411,
+     EFFICIENCYRIBBONS_PERK_412,
+     EFFICIENCYRIBBONS_PERK_501,
+     EFFICIENCYRIBBONS_PERK_502,
+     EFFICIENCYRIBBONS_PERK_503,
+     EFFICIENCYRIBBONS_PERK_504,
+     EFFICIENCYRIBBONS_PERK_505,
+     EFFICIENCYRIBBONS_PERK_511,
+     EFFICIENCYRIBBONS_PERK_512,
      EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED,
@@ -1007,6 +1139,8 @@ class INGAME_GUI(object):
      REWARDWINDOW_TWITCH20_HEADERTEXT,
      REWARDWINDOW_TWITCH21_HEADERTEXT,
      REWARDWINDOW_TWITCH22_HEADERTEXT,
+     REWARDWINDOW_TWITCH23_HEADERTEXT,
+     REWARDWINDOW_TWITCH24_HEADERTEXT,
      REWARDWINDOW_LOOTBOX_HEADERTEXT,
      REWARDWINDOW_ANNIVERSARY_GA_HEADERTEXT,
      REWARDWINDOW_PIGGYBANK_HEADERTEXT,
@@ -1038,6 +1172,8 @@ class INGAME_GUI(object):
      REWARDWINDOW_TWITCH20_SUBHEADERTEXT,
      REWARDWINDOW_TWITCH21_SUBHEADERTEXT,
      REWARDWINDOW_TWITCH22_SUBHEADERTEXT,
+     REWARDWINDOW_TWITCH23_SUBHEADERTEXT,
+     REWARDWINDOW_TWITCH24_SUBHEADERTEXT,
      REWARDWINDOW_ANNIVERSARY_GA_SUBHEADERTEXT,
      REWARDWINDOW_PIGGYBANK_SUBHEADERTEXT,
      REWARDWINDOW_COMMANDER_MARINA_SUBHEADERTEXT,
@@ -1068,6 +1204,8 @@ class INGAME_GUI(object):
      REWARDWINDOW_TWITCH20_BTNLABEL,
      REWARDWINDOW_TWITCH21_BTNLABEL,
      REWARDWINDOW_TWITCH22_BTNLABEL,
+     REWARDWINDOW_TWITCH23_BTNLABEL,
+     REWARDWINDOW_TWITCH24_BTNLABEL,
      REWARDWINDOW_LOOTBOX_BTNLABEL,
      REWARDWINDOW_ANNIVERSARY_GA_BTNLABEL,
      REWARDWINDOW_PIGGYBANK_BTNLABEL,
@@ -1099,6 +1237,8 @@ class INGAME_GUI(object):
      REWARDWINDOW_TWITCH20_DESCTEXT,
      REWARDWINDOW_TWITCH21_DESCTEXT,
      REWARDWINDOW_TWITCH22_DESCTEXT,
+     REWARDWINDOW_TWITCH23_DESCTEXT,
+     REWARDWINDOW_TWITCH24_DESCTEXT,
      REWARDWINDOW_LOOTBOX_DESCTEXT,
      REWARDWINDOW_ANNIVERSARY_GA_DESCTEXT,
      REWARDWINDOW_PIGGYBANK_DESCTEXT,

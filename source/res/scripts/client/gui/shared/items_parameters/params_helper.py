@@ -1,20 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/params_helper.py
 import copy
-import typing
+from collections import namedtuple
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.perk import PerkGUI
 from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VALUE
-from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator, PARAM_STATE
-from gui.shared.items_parameters.functions import getBasicShell
+from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator
+from gui.shared.items_parameters.functions import getBasicShell, isSituationalBonus
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, TURBOSHAFT_SPEED_MODE_SPEED, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME
 from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst, first
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from skeletons.gui.shared import IItemsCache
+from constants import BonusTypes
+_ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: params.RadioParams,
+ ITEM_TYPES.vehicleEngine: params.EngineParams,
+ ITEM_TYPES.vehicleChassis: params.ChassisParams,
+ ITEM_TYPES.vehicleTurret: params.TurretParams,
+ ITEM_TYPES.vehicleGun: params.GunParams,
+ ITEM_TYPES.shell: params.ShellParams,
+ ITEM_TYPES.equipment: params.EquipmentParams,
+ ITEM_TYPES.optionalDevice: params.OptionalDeviceParams,
+ ITEM_TYPES.vehicle: params.VehicleParams}
 RELATIVE_POWER_PARAMS = ('avgDamage',
  'avgPiercingPower',
  'stunMinDuration',
@@ -53,30 +65,27 @@ PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
  'relativeArmor': RELATIVE_ARMOR_PARAMS,
  'relativeMobility': RELATIVE_MOBILITY_PARAMS,
  'relativeCamouflage': RELATIVE_CAMOUFLAGE_PARAMS,
- 'relativeVisibility': RELATIVE_VISIBILITY_PARAMS}
-EXTRA_POWER_PARAMS = ('vehicleGunShotDispersion', 'vehicleGunShotDispersionChassisMovement', 'vehicleGunShotDispersionChassisRotation', 'vehicleGunShotDispersionTurretRotation', 'vehicleGunShotDispersionWhileGunDamaged', 'vehicleGunShotDispersionAfterShot', 'vehicleReloadTimeAfterShellChange')
-EXTRA_ARMOR_PARAMS = ('vehicleRepairSpeed', 'vehicleRamOrExplosionDamageResistance', 'crewHitChance', 'crewRepeatedStunDuration', 'crewStunDuration', 'vehicleChassisStrength', 'vehicleChassisFallDamage', 'vehicleChassisRepairSpeed', 'vehicleAmmoBayEngineFuelStrength', 'vehPenaltyForDamageEngineAndCombat', 'vehicleFireChance', 'vehicleRamDamageResistance', 'damageEnemiesByRamming')
-EXTRA_MOBILITY_PARAMS = ('vehicleSpeedGain',)
-EXTRA_CAMOUFLAGE_PARAMS = ('vehicleOwnSpottingTime',)
-EXTRA_VISIBILITY_PARAMS = ('vehicleEnemySpottingTime', 'demaskFoliageFactor', 'demaskMovingFactor')
+ 'relativeVisibility': RELATIVE_VISIBILITY_PARAMS,
+ 'relativeSituationalBonuses': ()}
+EXTRA_POWER_PARAMS = ('enemyModulesCrewDamageProbability', 'lowDamageDispersion', 'lowPenetrationDispersion', 'upDamageDispersion', 'upPenetrationDispersion', 'turretAimingDispersion', 'movingAimingDispersion', 'vehicleReloadTimeAfterShellChange', 'firstAidKitPreparationTime', 'repairKitPreparationTime', 'aimingDispersionWhileGunDamaged')
+EXTRA_ARMOR_PARAMS = ('equipmentPreparationTime', 'fireExtinguishingRate', 'deathPenaltyFactor', 'moduleCritMod', 'vehicleRepairSpeed', 'damageEnemiesByRamming', 'vehicleRamDamageResistance', 'vehicleExplosionDamageResistance', 'crewHitChance', 'crewRepeatedStunDuration', 'crewStunDuration', 'vehicleChassisStrength', 'vehicleChassisFallDamage', 'vehicleChassisRepairSpeed', 'vehicleAmmoBayEngineFuelStrength', 'vehPenaltyForDamageEngineAndCombat', 'vehicleFireChance', 'trackRamDamageResist', 'stunResistanceEffect')
+EXTRA_MOBILITY_PARAMS = ('vehicleSpeedGain', 'tankAcceleration')
+EXTRA_CAMOUFLAGE_PARAMS = ('folliageMaskingFactor', 'vehicleOwnSpottingTime')
+EXTRA_VISIBILITY_PARAMS = ('vehicleEnemySpottingTime', 'teamRadioBonusFactor', 'demaskFoliageFactor', 'demaskMovingFactor')
 EXTRA_PARAMS_GROUP = {'relativePower': EXTRA_POWER_PARAMS,
  'relativeArmor': EXTRA_ARMOR_PARAMS,
  'relativeMobility': EXTRA_MOBILITY_PARAMS,
  'relativeCamouflage': EXTRA_CAMOUFLAGE_PARAMS,
- 'relativeVisibility': EXTRA_VISIBILITY_PARAMS}
-_ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: params.RadioParams,
- ITEM_TYPES.vehicleEngine: params.EngineParams,
- ITEM_TYPES.vehicleChassis: params.ChassisParams,
- ITEM_TYPES.vehicleTurret: params.TurretParams,
- ITEM_TYPES.vehicleGun: params.GunParams,
- ITEM_TYPES.shell: params.ShellParams,
- ITEM_TYPES.equipment: params.EquipmentParams,
- ITEM_TYPES.optionalDevice: params.OptionalDeviceParams,
- ITEM_TYPES.vehicle: params.VehicleParams}
-_STATE_TO_HIGHLIGHT = {PARAM_STATE.WORSE: HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NEGATIVE,
- PARAM_STATE.BETTER: HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_POSITIVE,
- PARAM_STATE.NOT_APPLICABLE: HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE,
- PARAM_STATE.NORMAL: HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE}
+ 'relativeVisibility': EXTRA_VISIBILITY_PARAMS,
+ 'relativeSituationalBonuses': ()}
+_SITUATIONAL_BONUSES_CMP_ORDER = [BonusTypes.DETACHMENT,
+ BonusTypes.ROLE,
+ BonusTypes.SKILL,
+ BonusTypes.BATTLE_BOOSTER,
+ BonusTypes.OPTIONAL_DEVICE,
+ BonusTypes.EQUIPMENT,
+ BonusTypes.EXTRA]
+_SITUATIONAL_BONUSES_CMP_ORDER_INDICES = {bnsType:i for i, bnsType in enumerate(_SITUATIONAL_BONUSES_CMP_ORDER)}
 
 def _getParamsProvider(item, vehicleDescr=None):
     if vehicles.isVehicleDescr(item.descriptor):
@@ -85,36 +94,16 @@ def _getParamsProvider(item, vehicleDescr=None):
     return _ITEM_TYPE_HANDLERS[itemTypeIdx](item.descriptor, vehicleDescr)
 
 
-@dependency.replace_none_kwargs(factory=IGuiItemsFactory)
-def camouflageComparator(vehicle, camo, factory=None):
-    currParams = params.VehicleParams(vehicle).getParamsDict()
-    if camo:
-        season = first(camo.seasons)
-        outfit = vehicle.getOutfit(season)
-        if not outfit:
-            outfit = factory.createOutfit(vehicleCD=vehicle.descriptor.makeCompactDescr())
-            vehicle.setCustomOutfit(season, outfit)
-        slot = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
-        oldCamoCD = slot.getItemCD()
-        oldComponent = slot.getComponent()
-        slot.set(camo.intCD)
-        newParams = params.VehicleParams(vehicle).getParamsDict(preload=True)
-        if oldCamoCD:
-            slot.set(oldCamoCD, component=oldComponent)
-        else:
-            slot.clear()
-    else:
-        newParams = currParams.copy()
-    return VehiclesComparator(newParams, currParams)
-
-
 def get(item, vehicleDescr=None):
     try:
-        return _getParamsProvider(item, vehicleDescr).getAllDataDict()
+        p = _getParamsProvider(item, vehicleDescr)
+        return p.getAllDataDict()
     except Exception:
         LOG_CURRENT_EXCEPTION()
         return dict()
 
+
+_DescriptorWrapper = namedtuple('DescriptorWrapper', 'descriptor')
 
 def getParameters(item, vehicleDescr=None):
     return get(item, vehicleDescr).get('parameters', dict())
@@ -127,13 +116,14 @@ def getCompatibles(item, vehicleDescr=None):
 def idealCrewComparator(vehicle):
     vehicleParamsObject = params.VehicleParams(vehicle)
     vehicleParams = vehicleParamsObject.getParamsDict()
-    bonuses = vehicleParamsObject.getBonuses(vehicle)
-    penalties = vehicleParamsObject.getPenalties(vehicle)
+    bonuses = vehicleParamsObject.getBonuses()
+    extraBonuses = vehicleParamsObject.getExtraBonuses(vehicle)
     compatibleArtefacts = g_paramsCache.getCompatibleArtefacts(vehicle.descriptor)
     idealCrewVehicle = copy.copy(vehicle)
     idealCrewVehicle.crew = vehicle.getPerfectCrew()
-    perfectVehicleParams = params.VehicleParams(idealCrewVehicle).getParamsDict()
-    return VehiclesComparator(vehicleParams, perfectVehicleParams, compatibleArtefacts, bonuses, penalties)
+    perfectVehicleParams = params.VehicleParams(idealCrewVehicle)
+    perfectBonuses = perfectVehicleParams.getBonuses()
+    return VehiclesComparator(vehicleParams, perfectVehicleParams.getParamsDict(), compatibleArtefacts, bonuses, extraBonuses=extraBonuses, otherBonuses=perfectBonuses, otherExtraBonuses=extraBonuses)
 
 
 def itemOnVehicleComparator(vehicle, item):
@@ -213,25 +203,49 @@ def artifactRemovedComparator(vehicle, item, slotIdx):
     return VehiclesComparator(withItemParams, vehicleParams)
 
 
-def vehiclesComparator(comparableVehicle, vehicle):
-    return VehiclesComparator(params.VehicleParams(comparableVehicle).getParamsDict(), params.VehicleParams(vehicle).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(vehicle.descriptor))
+def vehiclesComparator(comparableVehicle, vehicle, bonuses=False):
+    comparableVehicleParamsObject = params.VehicleParams(comparableVehicle)
+    vehicleParamsObject = params.VehicleParams(vehicle)
+    bonuses = comparableVehicleParamsObject.getBonuses(comparableInstructor=True) if bonuses else None
+    extraBonuses = comparableVehicleParamsObject.getExtraBonuses(comparableVehicle, comparableInstructor=True) if bonuses else None
+    otherBonuses = vehicleParamsObject.getBonuses() if bonuses else None
+    otherExtraBonuses = vehicleParamsObject.getExtraBonuses(vehicle) if bonuses else None
+    return VehiclesComparator(comparableVehicleParamsObject.getParamsDict(), params.VehicleParams(vehicle).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(vehicle.descriptor), bonuses=bonuses, extraBonuses=extraBonuses, otherBonuses=otherBonuses, otherExtraBonuses=otherExtraBonuses)
 
 
-def tankSetupVehiclesComparator(comparableVehicle, vehicle, withBonuses=False):
-    vehicleParamsObject = params.VehicleParams(comparableVehicle)
-    perfectCrew = vehicle.getPerfectCrew()
-    changedCrew = []
-    for idx, tmanData in enumerate(vehicle.crew):
-        _, tman = tmanData
-        changedCrew.append(tmanData if tman and tman.isMaxRoleEfficiency else perfectCrew[idx])
-
+def tankSetupVehiclesComparator(comparableVehicle, vehicle):
     idealCrewVehicle = copy.copy(vehicle)
+    perfectCrew = vehicle.getPerfectCrew()
+    changedCrew = [ ((tmanRole, tman) if tman and tman.isMaxRoleLevel else perfectCrew[idx]) for idx, (tmanRole, tman) in enumerate(vehicle.crew) ]
     idealCrewVehicle.crew = changedCrew
-    return VehiclesComparator(vehicleParamsObject.getParamsDict(), params.VehicleParams(idealCrewVehicle).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(vehicle.descriptor), bonuses=vehicleParamsObject.getBonuses(vehicle) if withBonuses else None, penalties=vehicleParamsObject.getPenalties(vehicle) if withBonuses else None)
+    return VehiclesComparator(params.VehicleParams(comparableVehicle).getParamsDict(), params.VehicleParams(idealCrewVehicle).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(vehicle.descriptor))
 
 
 def itemsComparator(currentItem, otherItem, vehicleDescr=None):
     return ItemsComparator(getParameters(currentItem, vehicleDescr), getParameters(otherItem, vehicleDescr))
+
+
+@dependency.replace_none_kwargs(factory=IGuiItemsFactory)
+def camouflageComparator(vehicle, camo, factory=None):
+    currParams = params.VehicleParams(vehicle).getParamsDict()
+    if camo:
+        season = first(camo.seasons)
+        outfit = vehicle.getOutfit(season)
+        if not outfit:
+            outfit = factory.createOutfit(vehicleCD=vehicle.descriptor.makeCompactDescr())
+            vehicle.setCustomOutfit(season, outfit)
+        slot = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
+        oldCamoCD = slot.getItemCD()
+        oldComponent = slot.getComponent()
+        slot.set(camo.intCD)
+        newParams = params.VehicleParams(vehicle).getParamsDict(preload=True)
+        if oldCamoCD:
+            slot.set(oldCamoCD, component=oldComponent)
+        else:
+            slot.clear()
+    else:
+        newParams = currParams.copy()
+    return VehiclesComparator(newParams, currParams)
 
 
 def shellOnVehicleComparator(shell, vehicle):
@@ -270,11 +284,9 @@ def hasGroupPenalties(groupName, comparator):
     return False
 
 
-def getCommonParam(state, name, parentID='', highlight=HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE):
+def getCommonParam(state, name):
     return {'state': state,
-     'paramID': name,
-     'parentID': parentID,
-     'highlight': highlight}
+     'paramID': name}
 
 
 class SimplifiedBarVO(dict):
@@ -291,111 +303,124 @@ class SimplifiedBarVO(dict):
 
 
 class VehParamsBaseGenerator(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
-    def getFormattedParams(self, comparator, expandedGroups=None, vehIntCD=None, diffParams=None):
+    def getFormattedParams(self, comparator, expandedGroups=None, vehIntCD=None):
         result = []
-        if not GUI_SETTINGS.technicalInfo:
-            return result
-        else:
-            diffParams = diffParams if diffParams is not None else {}
+        stockVehicle = self.itemsCache.items.getStockVehicle(vehIntCD) if vehIntCD else None
+        showValues = self._shouldShowValues(vehIntCD)
+        if GUI_SETTINGS.technicalInfo:
             for groupIdx, groupName in enumerate(RELATIVE_PARAMS):
                 hasParams = False
                 relativeParam = comparator.getExtendedData(groupName)
                 isOpened = expandedGroups is None or expandedGroups.get(groupName, False)
-                result.append(self._makeSimpleParamHeaderVO(relativeParam, isOpened, comparator))
-                bottomVo = self._makeSimpleParamBottomVO(relativeParam, vehIntCD)
-                if bottomVo:
+                result.append(self._makeSimpleParamHeaderVO(relativeParam, isOpened, comparator, showValues))
+                bottomVo = self._makeSimpleParamBottomVO(relativeParam, stockVehicle)
+                if bottomVo and groupName != 'relativeSituationalBonuses':
                     result.append(bottomVo)
                 if isOpened:
+                    if groupName == 'relativeSituationalBonuses':
+                        result.extend(self._getSituationalParams(comparator))
                     for paramName in PARAMS_GROUPS[groupName]:
                         param = comparator.getExtendedData(paramName)
-                        highlight = diffParams.get(paramName, HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE)
-                        formattedParam = self._makeAdvancedParamVO(param, groupName, highlight)
+                        formattedParam = self._makeAdvancedParamVO(param, showValues)
                         if formattedParam:
                             result.append(formattedParam)
                             hasParams = True
 
-                    result.extend(self._getExtraParams(comparator, groupName, diffParams))
+                    result.extend(self._getExtraParams(comparator, groupName))
                 if hasParams and groupIdx < len(RELATIVE_PARAMS) - 1:
-                    separator = self._makeSeparator(groupName)
+                    separator = self._makeSeparator()
                     if separator:
                         result.append(separator)
 
-            return result
+        return result
 
-    def processDiffParams(self, comparator=None, expandedGroups=None):
-        result = {}
-        if comparator is None:
-            return result
-        else:
-            for groupName in RELATIVE_PARAMS:
-                needOpenGroup = False
-                extraParams = EXTRA_PARAMS_GROUP[groupName] if self._isExtraParamEnabled() else []
-                for paramName in PARAMS_GROUPS[groupName] + extraParams:
-                    result[paramName] = highlight = self._getHighlightType(comparator, paramName)
-                    needOpenGroup = needOpenGroup or highlight != HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE
+    def _getSituationalParams(self, comparator):
+        result = []
+        for b in params.ALWAYS_ACTIVE_SITUATIONAL_BONUSES:
+            result.append(self._makeTankmanSkillAdvancedParamVO(b))
 
-                if needOpenGroup and expandedGroups is not None:
-                    expandedGroups[groupName] = True
+        extraBonuses, _, overcapBonuses = comparator.getExtraBonuses()
+        prevBonuses = {}
+        for bonusID, bonusType in comparator.getOtherBonusesWithBoosters():
+            if bonusType == BonusTypes.DETACHMENT:
+                perkName, perkLevel = bonusID.split('_')
+                perkID = int(perkName)
+                prevBonuses[perkID] = int(perkLevel)
 
-            return result
+        def _bonusCmp(x, y):
+            return cmp(_SITUATIONAL_BONUSES_CMP_ORDER_INDICES[x[1]], _SITUATIONAL_BONUSES_CMP_ORDER_INDICES[y[1]]) or cmp(x[0], y[0])
 
-    def _isExtraParamEnabled(self):
-        return False
+        bonuses = sorted(comparator.getBonusesWithBoosters(), cmp=_bonusCmp)
+        for bonusID, bonusType in bonuses:
+            if not isSituationalBonus(bonusID, bonusType):
+                continue
+            if bonusType == BonusTypes.DETACHMENT:
+                perkName, perkLevel = bonusID.split('_')
+                perkID = int(perkName)
+                perk = PerkGUI(perkID, int(perkLevel))
+                result.append(self._makeDetachmentPerkAdvancedParamVO(perk, prevBonuses.get(perkID, 0), extraBonuses.get(perkID, 0), overcapBonuses.get(perkID, 0) > 0))
+            if bonusType in (BonusTypes.OPTIONAL_DEVICE, BonusTypes.EQUIPMENT):
+                paramBonusID = vehicles.getBonusID(bonusType, bonusID)
+                result.append(self._makeModuleAdvancedParamVO(paramBonusID, bonusType))
 
-    def _getExtraParams(self, comparator, groupName, diffParams):
+        return result
+
+    def _getExtraParams(self, comparator, groupName):
         result = []
         if self._isExtraParamEnabled():
             hasExtraParams = False
             for extraParamName in EXTRA_PARAMS_GROUP[groupName]:
-                param = comparator.getExtendedData(extraParamName)
-                highlight = diffParams.get(extraParamName, HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE)
-                formattedParam, nSlashCount = self._makeExtraParamVO(param, groupName, highlight)
+                param = comparator.getExtendedData(extraParamName, compareWithEmpty=True)
+                passiveValue = comparator.getKpiPassiveParam(extraParamName)
+                formattedParam, nSlashCount = self._makeExtraParamVO(param, passiveValue)
                 if formattedParam:
                     if not hasExtraParams:
-                        lineSeparator = self._makeLineSeparator(groupName)
+                        lineSeparator = self._makeLineSeparator()
                         if lineSeparator:
                             result.append(lineSeparator)
                         hasExtraParams = True
                     result.append(formattedParam)
                     for _ in xrange(nSlashCount):
-                        block = self._makeExtraAdditionalBlock(extraParamName, groupName, formattedParam['tooltip'])
+                        block = self._makeExtraAdditionalBlock(formattedParam['paramID'], formattedParam['tooltip'])
                         if block is not None:
                             result.append(block)
 
         return result
 
-    def _getHighlightType(self, comparator, paramName):
-        paramState = comparator.getExtendedData(paramName).state
-        if not isinstance(paramState[0], (tuple, list)):
-            return _STATE_TO_HIGHLIGHT[paramState[0]]
-        highlight = HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE
-        for state in paramState:
-            stateHighlight = _STATE_TO_HIGHLIGHT[state[0]]
-            if highlight == HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE:
-                highlight = stateHighlight
-            if stateHighlight != HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE and highlight != stateHighlight:
-                highlight = HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_MIXED
+    def _isExtraParamEnabled(self):
+        return False
 
-        return highlight
+    def _shouldShowValues(self, vehIntCD):
+        return True
 
-    def _makeSimpleParamHeaderVO(self, param, isOpen, comparator):
+    def _makeSimpleParamHeaderVO(self, param, isOpen, comparator, showValues=True):
         return getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_TOP, param.name)
 
-    def _makeAdvancedParamVO(self, param, parentID, highlight):
-        return getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, param.name, parentID, highlight)
+    def _makeAdvancedParamVO(self, param, showValues=True):
+        return getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, param.name)
 
-    def _makeExtraParamVO(self, param, parentID, highlight):
-        return (getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_EXTRA, param.name, parentID, highlight), 0)
+    def _makeExtraParamVO(self, param, passiveValue=0.0):
+        return (getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_EXTRA, param.name), 0)
 
-    def _makeSimpleParamBottomVO(self, param, vehIntCD=None):
+    def _makeTankmanSkillAdvancedParamVO(self, skillName):
+        return getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, skillName)
+
+    def _makeDetachmentPerkAdvancedParamVO(self, perk):
+        return getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SITUATIONAL, str(perk.id))
+
+    def _makeModuleAdvancedParamVO(self, moduleName, moduleType):
+        return getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, moduleName)
+
+    def _makeSimpleParamBottomVO(self, param, vehicle=None):
         return None
 
-    def _makeExtraAdditionalBlock(self, paramID, parentID, tooltip):
+    def _makeExtraAdditionalBlock(self, paramID, tooltip):
         return None
 
-    def _makeSeparator(self, parentID):
+    def _makeSeparator(self):
         return None
 
-    def _makeLineSeparator(self, parentID):
+    def _makeLineSeparator(self):
         return None

@@ -15,6 +15,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control.settings import VEHICLE_LEVELS
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_ACTION_GROUPS_LABELS, VEHICLE_CLASS_NAME, VEHICLE_ACTION_GROUPS_LABELS_BY_CLASS
+from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers import int2roman
@@ -283,11 +284,17 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
 
     @classmethod
     def _getBaseSpecialSection(cls):
-        return ['bonus',
+        baseSection = ['bonus',
          'favorite',
          'premium',
          'elite',
          'crystals']
+        recruits = TankCarouselFilterPopover.itemsCache.items.getTankmen(REQ_CRITERIA.TANKMAN.REGULAR)
+        if recruits:
+            crewSection = ['recruits', 'noDetachment', 'detachment']
+        else:
+            crewSection = ['noDetachment', 'detachment']
+        return baseSection + crewSection
 
 
 class BattlePassCarouselFilterPopover(TankCarouselFilterPopover):

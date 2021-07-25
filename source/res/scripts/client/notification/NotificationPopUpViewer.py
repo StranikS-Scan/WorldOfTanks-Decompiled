@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationPopUpViewer.py
+from typing import TYPE_CHECKING, List
 from gui.Scaleform.daapi.view.meta.NotificationPopUpViewerMeta import NotificationPopUpViewerMeta
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGroup
 from helpers import dependency
@@ -10,9 +11,13 @@ from notification import NotificationMVC
 from notification.BaseNotificationView import BaseNotificationView
 from notification.settings import NOTIFICATION_STATE
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.game_control import IDetachmentController
+if TYPE_CHECKING:
+    from notification.decorators import _NotificationDecorator
 
 class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView):
     connectionMgr = dependency.descriptor(IConnectionManager)
+    _detachmentController = dependency.descriptor(IDetachmentController)
 
     def __init__(self):
         mvc = NotificationMVC.g_instance
@@ -53,7 +58,8 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         self._model.onNotificationRemoved += self.__onNotificationRemoved
         self._model.onDisplayStateChanged += self.__displayStateChangeHandler
         mvcInstance = NotificationMVC.g_instance
-        mvcInstance.getAlertController().onAllAlertsClosed += self.__allAlertsMessageCloseHandler
+        mvcInstance.onPopupsUnlock += self.__showMessagesFromQueue
+        mvcInstance.getAlertController().onAllAlertsClosed += self.__showMessagesFromQueue
         g_messengerEvents.onLockPopUpMessages += self.__onLockPopUpMassages
         g_messengerEvents.onUnlockPopUpMessages += self.__onUnlockPopUpMessages
         self.as_initInfoS(self.__maxAvailableItemsCount, self.__messagesPadding)
@@ -66,7 +72,8 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         self._model.onNotificationRemoved -= self.__onNotificationRemoved
         self._model.onDisplayStateChanged -= self.__displayStateChangeHandler
         mvcInstance = NotificationMVC.g_instance
-        mvcInstance.getAlertController().onAllAlertsClosed -= self.__allAlertsMessageCloseHandler
+        mvcInstance.onPopupsUnlock -= self.__showMessagesFromQueue
+        mvcInstance.getAlertController().onAllAlertsClosed -= self.__showMessagesFromQueue
         g_messengerEvents.onLockPopUpMessages -= self.__onLockPopUpMassages
         g_messengerEvents.onUnlockPopUpMessages -= self.__onUnlockPopUpMessages
         self.cleanUp()
@@ -76,21 +83,28 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
     def _getSettings(self):
         return g_settings.lobby.serviceChannel
 
+    def _canShowAnyNotifications(self):
+        mvcInstance = NotificationMVC.g_instance
+        if mvcInstance.arePopupsLocked():
+            return False
+        return False if mvcInstance.getAlertController().isAlertShowing() else True
+
+    def _canShowNotification(self, notification):
+        if self.__isLocked(notification):
+            return False
+        return False if notification.isAlert() and not self.__noDisplayingPopups else True
+
     def __onNotificationReceived(self, notification):
         if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
             if notification.isNotify() and (notification.getGroup() != NotificationGroup.INFO or notification.getPriorityLevel() == NotificationPriorityLevel.LOW):
                 self._model.incrementNotifiedMessagesCount(*notification.getCounterInfo())
-            if NotificationMVC.g_instance.getAlertController().isAlertShowing():
-                self.__pendingMessagesQueue.append(notification)
-            elif self.__pendingMessagesQueue or self.__isLocked(notification):
-                self.__pendingMessagesQueue.append(notification)
-            elif notification.isAlert():
-                if self.__noDisplayingPopups:
+            if not self.__pendingMessagesQueue and self._canShowAnyNotifications() and self._canShowNotification(notification):
+                if notification.isAlert():
                     self.__showAlertMessage(notification)
                 else:
-                    self.__pendingMessagesQueue.append(notification)
+                    self.__sendMessageForDisplay(notification)
             else:
-                self.__sendMessageForDisplay(notification)
+                self.__pendingMessagesQueue.append(notification)
 
     def __onNotificationUpdated(self, notification, isStateChanged):
         flashID = self._getFlashID(notification.getID())
@@ -111,11 +125,8 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
     def __showAlertMessage(self, notification):
         NotificationMVC.g_instance.getAlertController().showAlertMessage(notification)
 
-    def __allAlertsMessageCloseHandler(self):
-        self.__showMessagesFromQueue()
-
     def __showMessagesFromQueue(self):
-        if self.__pendingMessagesQueue:
+        if self.__pendingMessagesQueue and self._canShowAnyNotifications():
             needToShowFromQueueMessages = []
             while self.__pendingMessagesQueue:
                 notification = self.__pendingMessagesQueue.pop(0)

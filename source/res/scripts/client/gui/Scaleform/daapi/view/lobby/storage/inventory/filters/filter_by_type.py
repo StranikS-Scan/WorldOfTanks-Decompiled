@@ -176,6 +176,8 @@ class FiltrableRegularCategoryByTypeTabView(FiltrableInventoryCategoryByTypeTabV
         for itemType in self._getItemTypeIDs():
             if itemType == GUI_ITEM_TYPE.DEMOUNT_KIT:
                 items.update(self._goodiesCache.getDemountKits(REQ_CRITERIA.DEMOUNT_KIT.IN_ACCOUNT | REQ_CRITERIA.DEMOUNT_KIT.IS_ENABLED))
+            if itemType == GUI_ITEM_TYPE.RECERTIFICATION_FORM:
+                items.update(self._goodiesCache.getRecertificationForms(REQ_CRITERIA.DEMOUNT_KIT.IN_ACCOUNT | REQ_CRITERIA.DEMOUNT_KIT.IS_ENABLED))
             items.update(self._itemsCache.items.getItems(itemType, criteria, nationID=None))
 
         return items

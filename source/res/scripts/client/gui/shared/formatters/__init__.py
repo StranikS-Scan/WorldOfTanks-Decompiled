@@ -23,21 +23,16 @@ _logger = logging.getLogger(__name__)
 __all__ = ('icons', 'text_styles', 'time_formatters')
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def _checkPriceIsAllowed(price, itemsCache=None):
-    isPurchaseAllowed = True
-    for currencyType in Currency.ALL:
-        if price.get(currencyType):
-            isPurchaseAllowed &= currencyType == Currency.GOLD
-
-    return itemsCache.items.stats.money >= price or isPurchaseAllowed
+def _checkPriceIsAllowed(price, itemsCache=None, checkForAll=False):
+    return itemsCache.items.stats.money >= (price if checkForAll else price.replace(Currency.GOLD, 0))
 
 
-def _getFormattedPrice(price, isBuying):
+def _getFormattedPrice(price, isBuying, checkAvailabilityForAllCurrencies):
     format_ = backport.getGoldFormat
     postfix = ''
     template = 'html_templates:lobby/quests/actions'
     fmtCurrency = {currencyName:'' for currencyName in Currency.ALL}
-    if isBuying and not _checkPriceIsAllowed(price):
+    if isBuying and not _checkPriceIsAllowed(price, checkForAll=checkAvailabilityForAllCurrencies):
         postfix = 'Error'
     for currencyName in fmtCurrency:
         currencyValue = price.get(currencyName)
@@ -55,14 +50,14 @@ def _getFormattedPrice(price, isBuying):
     return
 
 
-def formatActionPrices(oldPrice, newPrice, isBuying):
+def formatActionPrices(oldPrice, newPrice, isBuying, checkAvailabilityForAllCurrencies=False):
     oldPrice = Money.makeFromMoneyTuple(oldPrice)
     if not oldPrice.isDefined():
         oldPrice = Money(credits=0)
     newPrice = Money.makeFromMoneyTuple(newPrice)
     if not newPrice.isDefined():
         newPrice = Money.makeFrom(oldPrice.getCurrency(), 0)
-    return (_getFormattedPrice(oldPrice, isBuying), _getFormattedPrice(newPrice, isBuying))
+    return (_getFormattedPrice(oldPrice, isBuying, checkAvailabilityForAllCurrencies), _getFormattedPrice(newPrice, isBuying, checkAvailabilityForAllCurrencies))
 
 
 def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False, useStyle=False, ignoreZeros=False):

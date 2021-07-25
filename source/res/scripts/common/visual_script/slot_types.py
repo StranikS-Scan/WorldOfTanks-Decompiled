@@ -23,6 +23,7 @@ class SLOT_TYPE(object):
     AREA_TRIGGER = 'AreaTrigger'
     TRIGGER_VEHICLE_AREA = 'TriggerVehicleArea'
     CONTROL_POINT = 'ControlPoint'
+    PERK = 'Perk'
     SOUND = 'Sound'
     E_MODULE_STATE = 'EModuleState'
     E_VEHICLE_DEVICE = 'EVehicleDevice'

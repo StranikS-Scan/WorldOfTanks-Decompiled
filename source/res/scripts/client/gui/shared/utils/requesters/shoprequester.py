@@ -12,9 +12,11 @@ from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE, GOODIE_
 from goodies.goodie_helpers import getPremiumCost, getPriceWithDiscount, GoodieData
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
-from items.item_price import getNextSlotPrice, getNextBerthPackPrice
+from items.components.dormitory_constants import DormitorySections
+from items.item_price import getNextSlotPrice
 from skeletons.gui.shared.utils.requesters import IShopCommonStats, IShopRequester
 from gui.shared.gui_items.gui_item_economics import ItemPrice
+from items.components.detachment_constants import DetachmentOperations
 _logger = logging.getLogger(__name__)
 _DEFAULT_EXCHANGE_RATE = 400
 _DEFAULT_CRYSTAL_EXCHANGE_RATE = 200
@@ -214,19 +216,26 @@ class ShopCommonStats(IShopCommonStats):
         return self.getValue('winXPFactorMode', WIN_XP_FACTOR_MODE.DAILY)
 
     @property
-    def berthsPrices(self):
-        return self.getValue('berthsPrices', (0, 1, [300]))
+    def getDormitoryPrice(self):
+        dormitorySettings = self.getValue('dormitory', {})
+        return dormitorySettings.get(DormitorySections.PRICE_GROUP, {'currency': Currency.GOLD,
+         'price': 100})
+
+    @property
+    def getDormitoryBuyingSettings(self):
+        dormitorySettings = self.getValue('dormitory', {})
+        return dormitorySettings.get(DormitorySections.PRICE_GROUP, {}).get(DormitorySections.ENABLED, 1)
+
+    @property
+    def getDormitoryRoomsCount(self):
+        dormitorySettings = self.getValue('dormitory', {})
+        return dormitorySettings.get(DormitorySections.NUMBER_ROOMS, 3)
 
     def getBattlePassCost(self):
         return Money(**self.getValue('battlePassCost', defaultValue={Currency.GOLD: 6500}))
 
     def getBattlePassLevelCost(self):
         return Money(**self.getValue('battlePassLevelCost', defaultValue={Currency.GOLD: 250}))
-
-    def getTankmanBerthPrice(self, berthsCount):
-        prices = self.berthsPrices
-        goldCost = getNextBerthPackPrice(berthsCount, prices)
-        return (Money(gold=goldCost), prices[1])
 
     @property
     def isEnabledBuyingGoldShellsForCredits(self):
@@ -241,6 +250,10 @@ class ShopCommonStats(IShopCommonStats):
         return self.getValue('tankmanCost', tuple())
 
     @property
+    def detachmentPriceGroups(self):
+        return self.getValue('detachmentPriceGroups')
+
+    @property
     def changeRoleCost(self):
         return self.getValue('changeRoleCost', 600)
 
@@ -251,6 +264,14 @@ class ShopCommonStats(IShopCommonStats):
     @property
     def freeXPToTManXPRate(self):
         return self.getValue('freeXPToTManXPRate', 10)
+
+    @property
+    def freeXPToDetXPRate(self):
+        return self.getValue('freeXPToDetXPRate', 5)
+
+    @property
+    def recoverInstructorCost(self):
+        return Money(**self.getValue(DetachmentOperations.RECOVER_INSTRUCTOR, defaultValue={Currency.GOLD: 200}))
 
     def getItemsData(self):
         return self.getValue('items', {})
@@ -307,6 +328,10 @@ class ShopCommonStats(IShopCommonStats):
     @property
     def demountKits(self):
         return self.getGoodiesByVariety(GOODIE_VARIETY.DEMOUNT_KIT)
+
+    @property
+    def recertificationForms(self):
+        return self.getGoodiesByVariety(GOODIE_VARIETY.RECERTIFICATION_FORM)
 
     def getPremiumPacketCost(self, days):
         return self.premiumCost.get(days)
@@ -528,11 +553,6 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
         else:
             return None
 
-    def customRoleSlotChangeCost(self, vehLevel, isRaw=False):
-        costs = self.getValue('customRoleSlotChangeCost', {})
-        cost = costs.get(vehLevel, {Currency.CREDITS: 6000})
-        return cost if isRaw else Money(**cost)
-
     def __getDiscountsDescriptionsByTarget(self, targetType):
         return dict(((discountID, item) for discountID, item in self.discounts.iteritems() if item.target.targetType == targetType and item.enabled))
 
@@ -681,8 +701,19 @@ class DefaultShopRequester(ShopCommonStats):
         return self.getValue('winXPFactorMode', self.__proxy.winXPFactorMode)
 
     @property
-    def berthsPrices(self):
-        return self.getValue('berthsPrices', self.__proxy.berthsPrices)
+    def getDormitoryPrice(self):
+        dormitorySettings = self.getValue('dormitory', {})
+        return dormitorySettings.get(DormitorySections.PRICE_GROUP, self.__proxy.getDormitoryPrice)
+
+    @property
+    def getDormitoryBuyingSettings(self):
+        dormitorySettings = self.getValue('dormitory', {})
+        return dormitorySettings.get(DormitorySections.PRICE_GROUP, {}).get(DormitorySections.ENABLED, self.__proxy.getDormitoryBuyingSettings)
+
+    @property
+    def getDormitoryRoomsCount(self):
+        dormitorySettings = self.getValue('dormitory', {})
+        return dormitorySettings.get(DormitorySections.NUMBER_ROOMS, self.__proxy.getDormitoryRoomsCount)
 
     def getBattlePassCost(self):
         cost = self.getValue('battlePassCost')
@@ -727,6 +758,14 @@ class DefaultShopRequester(ShopCommonStats):
     @property
     def freeXPToTManXPRate(self):
         return self.getValue('freeXPToTManXPRate', self.__proxy.freeXPToTManXPRate)
+
+    @property
+    def freeXPToDetXPRate(self):
+        return self.getValue('freeXPToDetXPRate', self.__proxy.freeXPToDetXPRate)
+
+    @property
+    def recoverInstructorCost(self):
+        return self.getValue(DetachmentOperations.RECOVER_INSTRUCTOR, self.__proxy.recoverInstructorCost)
 
     def getItemsData(self):
         return self.getValue('items', self.__proxy.getItemsData())

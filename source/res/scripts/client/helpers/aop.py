@@ -335,7 +335,7 @@ class Weaver(object):
             try:
                 pointcut = pointcut(*args, **kwargs)
             except ImportError:
-                _logger.exception()
+                _logger.exception('weave')
                 return -1
 
         result = len(self.__pointcuts)
@@ -345,7 +345,7 @@ class Weaver(object):
             try:
                 pointcut.addAspect(aspect)
             except TypeError:
-                _logger.exception()
+                _logger.exception('weave')
 
         self.__pointcuts.append(pointcut)
         return result
@@ -356,7 +356,7 @@ class Weaver(object):
             try:
                 pointcut.addAspect(aspect, *args, **kwargs)
             except TypeError:
-                _logger.exception()
+                _logger.exception('addAspect')
 
     def findPointcut(self, pointcut):
         if isinstance(pointcut, PointcutType):

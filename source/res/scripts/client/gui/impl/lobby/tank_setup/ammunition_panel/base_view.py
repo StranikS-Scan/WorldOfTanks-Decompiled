@@ -4,14 +4,13 @@ import logging
 from CurrentVehicle import g_currentVehicle
 from Event import Event
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.ammunition_panel_view_model import AmmunitionPanelViewModel
 from gui.impl.lobby.tank_setup.ammunition_panel.hangar import HangarAmmunitionPanel
 from gui.impl.lobby.tank_setup.backports.context_menu import getHangarContextMenuData
-from gui.impl.lobby.tank_setup.backports.tooltips import getSlotTooltipData, getSlotSpecTooltipData
+from gui.impl.lobby.tank_setup.backports.tooltips import getSlotTooltipData
 from gui.impl.lobby.tank_setup.tank_setup_helper import setLastSlotAction, clearLastSlotAction
 from gui.impl.pub import ViewImpl
 from helpers import dependency
@@ -29,22 +28,16 @@ class BaseAmmunitionPanelView(ViewImpl):
         settings.flags = flags
         settings.model = AmmunitionPanelViewModel()
         super(BaseAmmunitionPanelView, self).__init__(settings)
-        self._ammunitionPanel = None
         self.onSizeChanged = Event()
         self.onPanelSectionSelected = Event()
         self.onPanelSectionResized = Event()
-        return
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             if self._hangarSpace.spaceLoading():
                 _logger.warning('Failed to get slotData. HangarSpace is currently loading.')
                 return
-            tooltipId = event.getArgument('tooltip')
-            if tooltipId == TOOLTIPS_CONSTANTS.HANGAR_SLOT_SPEC:
-                tooltipData = getSlotSpecTooltipData(event, tooltipId)
-            else:
-                tooltipData = getSlotTooltipData(event, self.vehItem, self.viewModel.ammunitionPanel.getSelectedSlot())
+            tooltipData = getSlotTooltipData(event, g_currentVehicle.item, self.viewModel.ammunitionPanel.getSelectedSlot())
             if tooltipData is not None:
                 window = BackportTooltipWindow(tooltipData, self.getParentWindow())
                 window.load()
@@ -70,19 +63,15 @@ class BaseAmmunitionPanelView(ViewImpl):
     def viewModel(self):
         return super(BaseAmmunitionPanelView, self).getViewModel()
 
-    @property
-    def vehItem(self):
-        return g_currentVehicle.item
-
     def setLastSlotAction(self, *args, **kwargs):
-        setLastSlotAction(self.viewModel, self.vehItem, *args, **kwargs)
+        setLastSlotAction(self.viewModel, g_currentVehicle.item, *args, **kwargs)
 
     def update(self, fullUpdate=True):
         if fullUpdate:
             clearLastSlotAction(self.viewModel)
         self.viewModel.setIsMaintenanceEnabled(not g_currentVehicle.isLocked())
         self.viewModel.setIsDisabled(self._getIsDisabled())
-        self._ammunitionPanel.update(self.vehItem, fullUpdate=fullUpdate)
+        self._ammunitionPanel.update(g_currentVehicle.item, fullUpdate=fullUpdate)
 
     def destroy(self):
         self.onSizeChanged.clear()
@@ -111,7 +100,7 @@ class BaseAmmunitionPanelView(ViewImpl):
         super(BaseAmmunitionPanelView, self)._finalize()
 
     def _createAmmunitionPanel(self):
-        return HangarAmmunitionPanel(self.viewModel.ammunitionPanel, self.vehItem)
+        return HangarAmmunitionPanel(self.viewModel.ammunitionPanel, g_currentVehicle.item)
 
     def _addListeners(self):
         self.viewModel.onViewSizeInitialized += self.__onViewSizeInitialized

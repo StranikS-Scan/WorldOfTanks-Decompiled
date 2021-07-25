@@ -8,7 +8,6 @@
     <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_SPG	</postProgressionTree>
   <speedLimits>
     <forward>	56.3	</forward>
     <backward>	14	</backward>
@@ -2616,7 +2615,7 @@
       </armor>
       <weight>	100	</weight>
       <maxHealth>	63	</maxHealth>
-      <rotationSpeed>	10	</rotationSpeed>
+      <rotationSpeed>	9	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -2633,7 +2632,7 @@
             <gun>	_155mm_Howitzer_M45	  <cost>	6900	</cost>
             </gun>
           </unlocks>
-          <reloadTime>	20.3	</reloadTime>
+          <reloadTime>	23	</reloadTime>
           <maxAmmo>	44	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -65 1 -65	</minPitch>
@@ -2644,10 +2643,10 @@
             <gunBreech>	0	</gunBreech>
           </armor>
           <shotDispersionRadius>	0.74	</shotDispersionRadius>
-          <aimingTime>	4.6	</aimingTime>
+          <aimingTime>	5.2	</aimingTime>
           <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.38	</turretRotation>
+            <turretRotation>	0.4	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2775,7 +2774,7 @@
       </armor>
       <weight>	100	</weight>
       <maxHealth>	63	</maxHealth>
-      <rotationSpeed>	10	</rotationSpeed>
+      <rotationSpeed>	9	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -2793,7 +2792,7 @@
             <minPitch>	0 -65 1 -65	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <reloadTime>	19.9	</reloadTime>
+          <reloadTime>	22	</reloadTime>
           <unlocks>
             <vehicle>	A32_M12	  <cost>	59400	</cost>
             </vehicle>
@@ -2805,10 +2804,10 @@
             <gunBreech>	0	</gunBreech>
           </armor>
           <shotDispersionRadius>	0.72	</shotDispersionRadius>
-          <aimingTime>	4.9	</aimingTime>
+          <aimingTime>	5.4	</aimingTime>
           <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.36	</turretRotation>
+            <turretRotation>	0.38	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

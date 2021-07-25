@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/battle_royale/battle_level_panel.py
+import BigWorld
 import BattleReplay
 from helpers import int2roman
 import WWISE
@@ -7,14 +8,15 @@ from gui.Scaleform.daapi.view.meta.BattleLevelPanelMeta import BattleLevelPanelM
 from gui.battle_control.controllers.progression_ctrl import IProgressionListener
 
 class BattleLevelPanel(BattleLevelPanelMeta, IProgressionListener):
-    __slots__ = ('__firstShow', '__maxLevelAchieved', '__isInitialized')
     __SOUND_XP_DIFF = 1
+    __XP_UPDATE_TIME_DIFF = 1.0
 
     def __init__(self):
         super(BattleLevelPanel, self).__init__()
         self.__firstShow = True
         self.__maxLevelAchieved = False
         self.__isInitialized = False
+        self.__lastXPUpdateTime = 0.0
 
     def updateData(self, arenaLevelData):
         animationState = arenaLevelData.xpIsChanged
@@ -30,6 +32,9 @@ class BattleLevelPanel(BattleLevelPanelMeta, IProgressionListener):
         self.__firstShow = False
 
     def __update(self, arenaLevel, animationState):
+        if BigWorld.time() - self.__lastXPUpdateTime < self.__XP_UPDATE_TIME_DIFF:
+            animationState = False
+        self.__lastXPUpdateTime = BigWorld.time()
         if not self.__isInitialized:
             self.as_setAnimationS(False)
             self.__isInitialized = True

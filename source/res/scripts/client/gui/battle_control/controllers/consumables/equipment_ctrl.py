@@ -163,8 +163,7 @@ class _EquipmentItem(object):
         self._prevStage = self._stage
         self._stage = stage
         self._timeRemaining = timeRemaining
-        if not self.isReusable:
-            self._totalTime = totalTime
+        self._totalTime = totalTime
         self._soundUpdate(self._prevQuantity, quantity)
 
     def updateMapCase(self, stage=None):
@@ -301,12 +300,19 @@ class _ExpandedItem(_EquipmentItem):
         else:
             extrasDict = avatar_getter.getVehicleExtrasDict(avatar)
             if entityName is None:
-                return
+                vehicle = BigWorld.player().getVehicleAttached()
+                if self._descriptor.name in vehicle.perkEffects['equipment']:
+                    entityName = self._getDefaultPart()
+                else:
+                    return
             extraName = makeExtraName(entityName)
             if extraName not in extrasDict:
                 return
             return (extrasDict[extraName].index << 16) + self._descriptor.id[1]
             return
+
+    def _getDefaultPart(self):
+        pass
 
     def _getEntitiesAreSafeKey(self):
         pass
@@ -325,7 +331,8 @@ class _ExpandedItem(_EquipmentItem):
 
     def _canActivate(self, entityName=None, avatar=None):
         deviceStates = avatar_getter.getVehicleDeviceStates(avatar)
-        if not deviceStates:
+        vehicle = BigWorld.player().getVehicleAttached()
+        if not deviceStates and not vehicle.perkEffects['equipment'].__len__():
             return (False, _ActivationError(self._getEntitiesAreSafeKey(), None))
         elif entityName is None:
             for item in self.getEntitiesIterator():
@@ -333,6 +340,8 @@ class _ExpandedItem(_EquipmentItem):
                     isEntityNotRequired = not self.isEntityRequired()
                     return (isEntityNotRequired, None if isEntityNotRequired else NeedEntitySelection('', None))
 
+            if self._descriptor.name in vehicle.perkEffects['equipment']:
+                return (True, IgnoreEntitySelection('', None))
             return (False, _ActivationError(self._getEntitiesAreSafeKey(), None))
         else:
             return (False, NotApplyingError(self._getEntityIsSafeKey(), {'entity': self._getEntityUserString(entityName)})) if entityName not in deviceStates else (True, None)
@@ -345,7 +354,8 @@ class _ExtinguisherItem(_RefillEquipmentItem, _EquipmentItem):
         if not result:
             return (result, error)
         else:
-            return (False, _ActivationError('extinguisherDoesNotActivated', {'name': self._descriptor.userString})) if not avatar_getter.isVehicleInFire(avatar) else (True, None)
+            vehicle = BigWorld.player().getVehicleAttached()
+            return (False, _ActivationError('extinguisherDoesNotActivated', {'name': self._descriptor.userString})) if not avatar_getter.isVehicleInFire(avatar) and self._descriptor.name not in vehicle.perkEffects['equipment'] else (True, None)
 
     def getActivationCode(self, entityName=None, avatar=None):
         return 65536 + self._descriptor.id[1]
@@ -357,8 +367,11 @@ class _MedKitItem(_RefillEquipmentItem, _ExpandedItem):
         activationCode = super(_MedKitItem, self).getActivationCode(entityName, avatar)
         if activationCode is None and avatar_getter.isVehicleStunned() and self.isReusable:
             extrasDict = avatar_getter.getVehicleExtrasDict(avatar)
-            activationCode = (extrasDict[makeExtraName('commander')].index << 16) + self._descriptor.id[1]
+            activationCode = (extrasDict[makeExtraName(self._getDefaultPart())].index << 16) + self._descriptor.id[1]
         return activationCode
+
+    def _getDefaultPart(self):
+        pass
 
     def getEntitiesIterator(self, avatar=None):
         return vehicle_getter.TankmenStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
@@ -385,6 +398,9 @@ class _RepairKitItem(_RefillEquipmentItem, _ExpandedItem):
 
     def getGuiIterator(self, avatar=None):
         return vehicle_getter.VehicleGUIItemStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
+
+    def _getDefaultPart(self):
+        pass
 
     def _getEntitiesAreSafeKey(self):
         pass
@@ -875,7 +891,7 @@ class EquipmentsController(MethodsRules, IBattleController):
         return item
 
     def getOrderedEquipmentsLayout(self):
-        return [ (intCD, self._equipments[intCD]) for intCD in self._order if intCD ]
+        return map(lambda intCD: (intCD, self._equipments[intCD]), self._order)
 
     @MethodsRules.delayable()
     def notifyPlayerVehicleSet(self, vID):
@@ -888,26 +904,29 @@ class EquipmentsController(MethodsRules, IBattleController):
 
     @MethodsRules.delayable('notifyPlayerVehicleSet')
     def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime):
-        _logger.debug('Equipment added: intCD=%d, quantity=%d, stage=%s, timeRemaining=%d, totalTime=%d', intCD, quantity, stage, timeRemaining, totalTime)
-        item = None
-        if not intCD:
-            if len(self._order) < self.__equipmentCount:
-                self._order.append(0)
-                self.onEquipmentAdded(0, None)
-        elif intCD in self._equipments:
-            item = self._equipments[intCD]
-            item.update(quantity, stage, timeRemaining, totalTime)
-            self.onEquipmentUpdated(intCD, item)
+        if timeRemaining == -1 and totalTime == -1:
+            return
         else:
-            descriptor = vehicles.getItemByCompactDescr(intCD)
-            if descriptor.equipmentType in (EQUIPMENT_TYPES.regular, EQUIPMENT_TYPES.battleAbilities):
-                item = self.createItem(descriptor, quantity, stage, timeRemaining, totalTime)
-                self._equipments[intCD] = item
-                self._order.append(intCD)
-                self.onEquipmentAdded(intCD, item)
-        if item:
-            item.setServerPrevStage(None)
-        return
+            _logger.debug('Equipment added: intCD=%d, quantity=%d, stage=%s, timeRemaining=%d, totalTime=%d', intCD, quantity, stage, timeRemaining, totalTime)
+            item = None
+            if not intCD:
+                if len(self._order) < self.__equipmentCount:
+                    self._order.append(0)
+                    self.onEquipmentAdded(0, None)
+            elif intCD in self._equipments:
+                item = self._equipments[intCD]
+                item.update(quantity, stage, timeRemaining, totalTime)
+                self.onEquipmentUpdated(intCD, item)
+            else:
+                descriptor = vehicles.getItemByCompactDescr(intCD)
+                if descriptor.equipmentType in (EQUIPMENT_TYPES.regular, EQUIPMENT_TYPES.battleAbilities):
+                    item = self.createItem(descriptor, quantity, stage, timeRemaining, totalTime)
+                    self._equipments[intCD] = item
+                    self._order.append(intCD)
+                    self.onEquipmentAdded(intCD, item)
+            if item:
+                item.setServerPrevStage(None)
+            return
 
     def updateMapCase(self):
         for item in self._equipments.itervalues():
@@ -1262,6 +1281,8 @@ def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, totalT
     if descriptor.name.startswith('recon'):
         return _ReplayReconItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('smoke'):
+        return _ReplaySmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('arcade_smoke'):
         return _ReplaySmokeItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.endswith('afterburning'):
         return _ReplayAfterburningItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)

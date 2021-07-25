@@ -28,7 +28,7 @@ from gui.prb_control import prb_getters, prbEntityProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME, getTypeBigIconPath
 from gui.shared.view_helpers import ClanEmblemsHelper
 from gui.shared.image_helper import getTextureLinkByID, ImagesFetchCoordinator
@@ -263,6 +263,22 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         super(BattleQueue, self)._dispose()
 
+    def _getInformationText(self, guiType):
+        infoLines = []
+        if self.__provider.needAdditionalInfo():
+            infoLines.append(self.__provider.additionalInfo())
+        mmKey = MENU.loading_battletypes_desc(guiType)
+        mmStr = makeString(mmKey)
+        if mmStr is not None and not mmStr.isspace():
+            infoLines.append(text_styles.main(mmKey))
+        if not g_currentVehicle.item.hasDetachment:
+            alertIcon = icons.alert()
+            alertMessage = text_styles.alert(makeString(MENU.PREBATTLE_NODETACHMENTWARNING))
+            warning = text_styles.concatStylesWithSpace(alertIcon, alertMessage)
+            infoLines.append(warning)
+        newline = '\n' if len(infoLines) > 2 else '\n\n'
+        return newline.join(infoLines)
+
     def __updateClientState(self):
         if self.prbEntity is None:
             return
@@ -272,15 +288,10 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
                 self.as_showExitS(False)
             guiType = prb_getters.getArenaGUIType(queueType=self.__provider.getQueueType())
             title = MENU.loading_battletypes(guiType)
-            description = MENU.loading_battletypes_desc(guiType)
             if guiType != constants.ARENA_GUI_TYPE.UNKNOWN and guiType in constants.ARENA_GUI_TYPE_LABEL.LABELS:
                 iconlabel = constants.ARENA_GUI_TYPE_LABEL.LABELS[guiType]
             else:
                 iconlabel = 'neutral'
-            if self.__provider.needAdditionalInfo():
-                additional = self.__provider.additionalInfo()
-            else:
-                additional = ''
             vehicle = g_currentVehicle.item
             textLabel = self.__provider.getTankInfoLabel()
             tankName = vehicle.shortUserName
@@ -288,8 +299,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             layoutStr = self.__provider.getLayoutStr()
             self.as_setTypeInfoS({'iconLabel': iconlabel,
              'title': title,
-             'description': description,
-             'additional': additional,
+             'information': self._getInformationText(guiType),
              'tankLabel': text_styles.main(textLabel),
              'tankIcon': iconPath,
              'tankName': tankName,

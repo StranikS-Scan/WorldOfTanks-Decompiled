@@ -74,7 +74,7 @@ class HintsManager(object):
     def __showHint(self, hint):
         text = hint['text']
         uniqueID = hintID = hint['hintID']
-        props = HintProps(uniqueID, hintID, hint['itemID'], text, hasBox=hint['hasBox'], arrow=hint['arrow'], padding=None, updateRuntime=hint['updateRuntime'], hideImmediately=hint['hideImmediately'], checkViewArea=hint['checkViewArea'])
+        props = HintProps(uniqueID, hintID, hint['itemID'], text, hasBox=hint['hasBox'], arrow=hint['arrow'], padding=None, updateRuntime=hint['updateRuntime'], hideImmediately=hint['hideImmediately'], checkViewArea=hint['checkViewArea'], persistent=hint['persistent'])
         actionType = hint.get('ignoreOutsideClick')
         self._gui.showHint(props, actionType)
         self.__activeHints[hint['itemID']] = hint
@@ -92,12 +92,15 @@ class HintsManager(object):
 
     def __onGUIInput(self, event):
         itemID = event.getTargetID()
-        if itemID in self.__activeHints:
-            hintID = self.__getActiveHintIdByItemId(itemID)
-            self.__hideHint(itemID)
-            self.__stopOnceOnlyHint(itemID, hintID)
-            if self._data.getHintsCount() == 0:
-                self.stop()
+        if itemID not in self.__activeHints:
+            return
+        hintID = self.__getActiveHintIdByItemId(itemID)
+        if self.__isPersistentHint(itemID, hintID):
+            return
+        self.__hideHint(itemID)
+        self.__stopOnceOnlyHint(itemID, hintID)
+        if self._data.getHintsCount() == 0:
+            self.stop()
 
     def __onItemFound(self, itemID):
         if itemID not in self.__activeHints:
@@ -184,3 +187,6 @@ class HintsManager(object):
             if self._data.getHintsCount() == 0:
                 self.stop()
                 return
+
+    def __isPersistentHint(self, itemID, hintID):
+        return any((hint['hintID'] == hintID and hint['persistent'] for hint in self._data.hintsForItem(itemID)))

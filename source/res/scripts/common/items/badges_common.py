@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/badges_common.py
 import struct
-from typing import TYPE_CHECKING, List, Tuple, Any
-import battle_pass_common
+from typing import TYPE_CHECKING, List, Tuple, Any, Optional
+from battle_pass_common import MAX_BADGE_LEVEL, BATTLE_PASS_BADGE_ID
+from items.components.detachment_constants import CREW2_BADGE_IDS, BADGE_TOKEN_TMPL
 if TYPE_CHECKING:
     from BaseAccount import BaseAccount
 ExtraInfo = List[Any]
@@ -14,10 +15,9 @@ class BadgesCommon(object):
     _BADGES_EXTRA_INFO = '<I'
 
     @staticmethod
-    def getExtraInfo(account):
-        battlePassLevel = min(account._battlePass.level, battle_pass_common.MAX_BADGE_LEVEL)
-        extraInfo = [battlePassLevel]
-        return extraInfo
+    def getExtraInfo(account, badgeID):
+        badgeLevel = BadgesCommon._createBadge(badgeID).getLevel(account)
+        return [badgeLevel] if badgeLevel else []
 
     @staticmethod
     def selectedBadgesEmpty():
@@ -66,3 +66,31 @@ class BadgesCommon(object):
         lenValue = struct.unpack_from(BadgesCommon._BADGE_IDS_LEN_FORMAT, packedData, offset)[0]
         newOffset = offset + struct.calcsize(BadgesCommon._BADGE_IDS_LEN_FORMAT)
         return (lenValue, newOffset)
+
+    @staticmethod
+    def _createBadge(badgeID):
+        if badgeID == BATTLE_PASS_BADGE_ID:
+            return BattlePassBadge(badgeID)
+        return CrewMasteryBadge(badgeID) if badgeID in CREW2_BADGE_IDS else SimpleBadge(badgeID)
+
+
+class SimpleBadge(object):
+
+    def __init__(self, badgeID):
+        self._badgeID = badgeID
+
+    def getLevel(self, account):
+        return None
+
+
+class BattlePassBadge(SimpleBadge):
+
+    def getLevel(self, account):
+        return min(account._battlePass.level, MAX_BADGE_LEVEL)
+
+
+class CrewMasteryBadge(SimpleBadge):
+
+    def getLevel(self, account):
+        badgeToken = BADGE_TOKEN_TMPL.format(self._badgeID)
+        return account._quests.getToken(badgeToken).count if account._quests.hasToken(badgeToken) else 0

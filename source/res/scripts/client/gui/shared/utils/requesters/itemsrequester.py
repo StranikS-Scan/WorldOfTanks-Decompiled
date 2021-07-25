@@ -2,8 +2,10 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict, namedtuple
-import typing
+from typing import TYPE_CHECKING, Any, List
+import time
 import operator
+import typing
 import constants
 import dossiers2
 import nations
@@ -16,22 +18,25 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollec
 from gui.shared.utils.requesters import vehicle_items_getter
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.requesters.battle_pass_requester import BattlePassRequester
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
+from gui.shared.gui_items.instructor import Instructor
 from helpers import dependency
 from items import vehicles, tankmen, getTypeOfCompactDescr, makeIntCompactDescrByID
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import CrewSkinType
+from items.components.detachment_constants import NO_DETACHMENT_ID
+from skeletons.gui.detachment import IDetachmentCache
 from skeletons.gui.shared import IItemsRequester, IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from skeletons.gui.game_control import IVehiclePostProgressionController
 from nation_change.nation_change_helpers import iterVehiclesWithNationGroupInOrder, iterVehTypeCDsInNationGroup, isMainInNationGroupSafe
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
+    from gui.shared.gui_items import Vehicle
+    from gui.shared.gui_items import Tankman
     import skeletons.gui.shared.utils.requesters as requesters
-    from gui.veh_post_porgression.models.progression import PostProgressionItem
-    from items.vehicles import VehicleType
 DO_LOG_BROKEN_SYNC = False
 
-def getDiffID(itemdID):
+def _getDiffID(itemdID):
     if isinstance(itemdID, tuple):
         itemdID, _ = itemdID
     return itemdID
@@ -226,7 +231,7 @@ class REQ_CRITERIA(object):
     UNLOCKED = RequestCriteria(PredicateCondition(operator.attrgetter('isUnlocked')))
     REMOVABLE = RequestCriteria(PredicateCondition(operator.attrgetter('isRemovable')))
     INVENTORY = RequestCriteria(InventoryPredicateCondition(lambda item: item.inventoryCount > 0))
-    NATIONS = staticmethod(lambda nationIDs=nations.INDICES.keys(): RequestCriteria(PredicateCondition(lambda item: item.nationID in nationIDs)))
+    NATIONS = staticmethod(lambda nationIDs: RequestCriteria(PredicateCondition(lambda item: item.nationID in nationIDs)))
     INNATION_IDS = staticmethod(lambda innationIDs: RequestCriteria(PredicateCondition(lambda item: item.innationID in innationIDs)))
     ITEM_TYPES = staticmethod(lambda *args: RequestCriteria(PredicateCondition(lambda item: item.itemTypeID in args)))
     ITEM_TYPES_NAMES = staticmethod(lambda *args: RequestCriteria(PredicateCondition(lambda item: item.itemTypeName in args)))
@@ -239,6 +244,7 @@ class REQ_CRITERIA(object):
 
     class VEHICLE(object):
         ACTIVE_IN_NATION_GROUP = RequestCriteria(PredicateCondition(lambda item: item.activeInNationGroup))
+        INACTIVE_IN_NATION_GROUP = ~ACTIVE_IN_NATION_GROUP
         ACTIVE_OR_MAIN_IN_NATION_GROUP = RequestCriteria(PredicateCondition(lambda item: item.activeInNationGroup if item.isInInventory else isMainInNationGroupSafe(item.intCD)))
         FAVORITE = RequestCriteria(PredicateCondition(lambda item: item.isFavorite))
         PREMIUM = RequestCriteria(PredicateCondition(lambda item: item.isPremium))
@@ -288,18 +294,63 @@ class REQ_CRITERIA(object):
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
         FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
+        HAS_DETACHMENT = RequestCriteria(PredicateCondition(lambda item: item.hasDetachment))
+        HAS_OLD_CREW = RequestCriteria(PredicateCondition(lambda item: item.hasOldCrew))
 
     class TANKMAN(object):
+        itemsCache = dependency.descriptor(IItemsCache)
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
         ROLES = staticmethod(lambda roles=tankmen.ROLES: RequestCriteria(PredicateCondition(lambda item: item.descriptor.role in roles)))
         NATIVE_TANKS = staticmethod(lambda vehiclesList=[]: RequestCriteria(PredicateCondition(lambda item: item.vehicleNativeDescr.type.compactDescr in vehiclesList)))
+        NATIVE_VEH_TYPE = staticmethod(lambda vehTypes=VEHICLE_CLASS_NAME.ALL(): RequestCriteria(PredicateCondition(lambda item: item.vehicleNativeType in vehTypes)))
+        NOT_REGULAR = RequestCriteria(PredicateCondition(lambda item: (REQ_CRITERIA.VEHICLE.BATTLE_ROYALE ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE)(REQ_CRITERIA.TANKMAN.itemsCache.items.getItemByCD(item.vehicleNativeDescr.type.compactDescr))))
+        REGULAR = ~NOT_REGULAR
         DISMISSED = RequestCriteria(PredicateCondition(lambda item: item.isDismissed))
         ACTIVE = ~DISMISSED
+        ALL = ACTIVE ^ DISMISSED
 
     class CREW_ITEM(object):
         IN_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.inAccount()))
         BOOK_RARITIES = staticmethod(lambda rarityTypes: RequestCriteria(PredicateCondition(lambda item: item.getBookType() in rarityTypes)))
         NATIONS = staticmethod(lambda nationIDs=nations.INDICES.keys(): RequestCriteria(PredicateCondition(lambda item: item.nationID in nationIDs or item.getNationID() == nations.NONE_INDEX)))
+
+    class DETACHMENT(object):
+        CLASSES_NAME = staticmethod(lambda types=constants.VEHICLE_CLASSES: RequestCriteria(PredicateCondition(lambda item: item.classType in types)))
+        CLASSES_ID = staticmethod(lambda types=constants.VEHICLE_CLASS_INDICES.keys(): RequestCriteria(PredicateCondition(lambda item: item.classID in types)))
+        NATIONS = staticmethod(lambda nationIDs: RequestCriteria(PredicateCondition(lambda item: item.nationID in nationIDs or item.nationID == nations.NONE_INDEX)))
+        IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
+
+        @staticmethod
+        def isTimeExpire(expDate):
+            return time.time() > expDate
+
+        DEMOBILIZE = RequestCriteria(PredicateCondition(lambda item: item.expDate and not REQ_CRITERIA.DETACHMENT.isTimeExpire(item.expDate)))
+        EXPIRED = RequestCriteria(PredicateCondition(lambda item: item.expDate and REQ_CRITERIA.DETACHMENT.isTimeExpire(item.expDate)))
+        IN_BARRACKS = ~IN_TANK
+
+    class INSTRUCTOR(object):
+
+        @staticmethod
+        def hasMatchingNation(item, nationIDs):
+            if item.nationID in nationIDs:
+                return True
+            if item.nationID == nations.NONE_INDEX:
+                if REQ_CRITERIA.INSTRUCTOR.hasMatchingAvailableNation(item, nationIDs):
+                    return True
+            return False
+
+        @staticmethod
+        def hasMatchingAvailableNation(item, nationIDs):
+            result = len(set(item.getAvailableNationIDs()).intersection(nationIDs)) > 0
+            return result
+
+        NATIONS = staticmethod(lambda nationIDs=nations.INDICES.keys(): RequestCriteria(PredicateCondition(lambda item: REQ_CRITERIA.INSTRUCTOR.hasMatchingNation(item, nationIDs))))
+        CLASSES_ID = staticmethod(lambda classesIDs: RequestCriteria(PredicateCondition(lambda item: item.classID in classesIDs)))
+        TOKENS = RequestCriteria(PredicateCondition(lambda item: item.isToken()))
+        ASSIGNED_TO_DETACHMENT = RequestCriteria(PredicateCondition(lambda item: item.detInvID != NO_DETACHMENT_ID))
+        IN_BARRACKS = ~ASSIGNED_TO_DETACHMENT
+        EXCLUDED = RequestCriteria(PredicateCondition(lambda item: item.isExcluded))
+        IS_UNREMOVABLE = RequestCriteria(PredicateCondition(lambda item: item.isUnremovable))
 
     class BOOSTER(object):
         ENABLED = RequestCriteria(PredicateCondition(lambda item: item.enabled))
@@ -367,12 +418,12 @@ class RESEARCH_CRITERIA(object):
 
 class ItemsRequester(IItemsRequester):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
-    __vehPostProgressionCtrl = dependency.descriptor(IVehiclePostProgressionController)
     _AccountItem = namedtuple('_AccountItem', ['dossier',
      'clanInfo',
      'seasons',
      'ranked',
      'dogTag'])
+    _detachmentCache = dependency.descriptor(IDetachmentCache)
 
     def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None):
         self.__inventory = inventory
@@ -614,7 +665,7 @@ class ItemsRequester(IItemsRequester):
         for cacheType, data in diff.get('cache', {}).iteritems():
             if cacheType == 'vehsLock':
                 for itemID in data.keys():
-                    vehData = self.__inventory.getVehicleData(getDiffID(itemID))
+                    vehData = self.__inventory.getVehicleData(_getDiffID(itemID))
                     if vehData is not None:
                         invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehData.descriptor.type.compactDescr)
 
@@ -633,7 +684,7 @@ class ItemsRequester(IItemsRequester):
 
                 for data in itemsDiff.itervalues():
                     for itemID in data.iterkeys():
-                        vehData = self.__inventory.getVehicleData(getDiffID(itemID))
+                        vehData = self.__inventory.getVehicleData(_getDiffID(itemID))
                         if vehData is not None:
                             invalidate[itemTypeID].add(vehData.descriptor.type.compactDescr)
                             invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForVehicle(vehData))
@@ -642,27 +693,23 @@ class ItemsRequester(IItemsRequester):
                 for data in itemsDiff.itervalues():
                     invalidate[itemTypeID].update(data.keys())
                     for itemID in data.keys():
-                        tmanInvID = getDiffID(itemID)
+                        tmanInvID = _getDiffID(itemID)
                         tmanData = self.__inventory.getTankmanData(tmanInvID)
                         if tmanData is not None and tmanData.vehicle != -1:
-                            invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCDForTankman(tmanData))
+                            invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCD(tmanData.vehicle))
                             invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForTankman(tmanData))
 
             if itemTypeID == GUI_ITEM_TYPE.CREW_SKINS:
-                for data in itemsDiff.itervalues():
-                    invalidate[GUI_ITEM_TYPE.TANKMAN].update(data.keys())
-
                 if SkinInvData.ITEMS in itemsDiff:
                     skinsDiff = itemsDiff[SkinInvData.ITEMS]
                     skinCDs = [ makeIntCompactDescrByID('crewSkin', CrewSkinType.CREW_SKIN, v) for v in skinsDiff.keys() ]
                     invalidate[itemTypeID].update(skinCDs)
                 if SkinInvData.OUTFITS in itemsDiff:
                     outfitDiff = itemsDiff[SkinInvData.OUTFITS]
-                    for tmanInvID in outfitDiff.keys():
-                        tmanData = self.__inventory.getTankmanData(tmanInvID)
-                        if tmanData is not None and tmanData.vehicle != constants.VEHICLE_NO_INV_ID:
-                            invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCDForTankman(tmanData))
-                            invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForTankman(tmanData))
+                    for detInvID in outfitDiff.keys():
+                        detData = self.__inventory.getTankmanData(detInvID)
+                        if detData is not None and detData.vehicle != constants.VEHICLE_NO_INV_ID:
+                            invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCD(detData.vehicle))
 
             if itemTypeID == GUI_ITEM_TYPE.CREW_BOOKS:
                 invalidate[itemTypeID].update(itemsDiff.keys())
@@ -682,6 +729,10 @@ class ItemsRequester(IItemsRequester):
                                         gunIntCD = vehicleData.descriptor.gun.compactDescr
                                         invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
 
+            if itemTypeID == GUI_ITEM_TYPE.DETACHMENT:
+                for vehInvID, detInvID in itemsDiff.get('vehicle', {}).iteritems():
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCD(vehInvID))
+
             if itemTypeID == GUI_ITEM_TYPE.CUSTOMIZATION:
                 for vehicleIntCD, outfitsData in itemsDiff.get(CustomizationInvData.OUTFITS, {}).iteritems():
                     invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
@@ -695,7 +746,7 @@ class ItemsRequester(IItemsRequester):
                 for storageKey in storageKeys:
                     for cType, items in itemsDiff.get(storageKey, {}).iteritems():
                         for idx in items.iterkeys():
-                            intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, getDiffID(idx))
+                            intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, _getDiffID(idx))
                             invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(intCD)
 
                 for vehicleIntCD, outfitsData in itemsDiff.get(CustomizationInvData.OUTFITS_POOL, {}).iteritems():
@@ -725,11 +776,6 @@ class ItemsRequester(IItemsRequester):
         vehicleSelectedAbilities = diff.get('epicMetaGame', {}).get('selectedAbilities', {}).keys()
         if vehicleSelectedAbilities:
             invalidate[GUI_ITEM_TYPE.VEHICLE].update(vehicleSelectedAbilities)
-        existingIDs = self.__itemsCache[GUI_ITEM_TYPE.VEH_POST_PROGRESSION].keys()
-        invalidIDs = self.__vehPostProgressionCtrl.getInvalidProgressions(diff, existingIDs)
-        if invalidIDs:
-            invalidate[GUI_ITEM_TYPE.VEH_POST_PROGRESSION].update(invalidIDs)
-            invalidate[GUI_ITEM_TYPE.VEHICLE].update(invalidIDs)
         for itemTypeID, uniqueIDs in invalidate.iteritems():
             self._invalidateItems(itemTypeID, uniqueIDs)
 
@@ -743,20 +789,19 @@ class ItemsRequester(IItemsRequester):
         return self.itemsFactory.createVehicle(typeCompDescr=typeCompDescr) if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE else None
 
     def getVehicleCopy(self, vehicle):
-        return self.itemsFactory.createVehicle(typeCompDescr=vehicle.intCD, strCompactDescr=vehicle.descriptor.makeCompactDescr(), inventoryID=vehicle.invID, proxy=self, extData=self.__inventory.getVehExtData(vehicle.intCD))
+        return self.itemsFactory.createVehicle(typeCompDescr=vehicle.intCD, strCompactDescr=vehicle.descriptor.makeCompactDescr(), inventoryID=vehicle.invID, proxy=self)
 
     def getVehicleCopyByCD(self, typeCompDescr):
         vehicle = self.getItemByCD(typeCompDescr)
         vehicleCopy = self.getVehicleCopy(vehicle)
         return vehicleCopy
 
-    def getLayoutsVehicleCopy(self, vehicle, ignoreDisabledProgression=False):
+    def getLayoutsVehicleCopy(self, vehicle):
         copyVehicle = self.getVehicleCopy(vehicle)
         copyVehicle.optDevices.setInstalled(*vehicle.optDevices.installed)
         copyVehicle.shells.setInstalled(*vehicle.shells.installed)
         copyVehicle.consumables.setInstalled(*vehicle.consumables.installed)
         copyVehicle.battleBoosters.setInstalled(*vehicle.battleBoosters.installed)
-        copyVehicle.installPostProgression(vehicle.postProgression.getState(), ignoreDisabledProgression)
         return copyVehicle
 
     def getTankman(self, tmanInvID):
@@ -831,6 +876,16 @@ class ItemsRequester(IItemsRequester):
                 result.append(tankman)
 
             return result
+
+    def getDescrItems(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY):
+        result = ItemsCollection()
+        activeInvData = self.__inventory.getItemsData(itemTypeID)
+        for invID, invData in activeInvData.iteritems():
+            item = self.__makeItem(itemTypeID, invID, strCompactDescr=invData.compDescr, proxy=self)
+            if criteria(item):
+                result[invID] = item
+
+        return result
 
     def getVehicles(self, criteria=REQ_CRITERIA.EMPTY):
         return self.getItems(GUI_ITEM_TYPE.VEHICLE, criteria=criteria)
@@ -918,12 +973,17 @@ class ItemsRequester(IItemsRequester):
         else:
             return dogTag
 
-    def getVehPostProgression(self, vehIntCD, vehType=None):
-        return self.__makeItem(GUI_ITEM_TYPE.VEH_POST_PROGRESSION, uid=vehIntCD, vehIntCD=vehIntCD, state=self.__inventory.getVehPostProgression(vehIntCD), vehType=vehType)
-
     def getPreviousItem(self, itemTypeID, invDataIdx):
         itemData = self.__inventory.getPreviousItem(itemTypeID, invDataIdx)
         return self.__makeItem(itemTypeID, invDataIdx, strCompactDescr=itemData.compDescr, inventoryID=itemData.invID, proxy=self)
+
+    def getEquipmentSuitableForVehicle(self, vehicle=None, itemNames=None):
+        criteria = ~REQ_CRITERIA.HIDDEN
+        if vehicle is not None:
+            criteria |= REQ_CRITERIA.VEHICLE.SUITABLE((vehicle,), (GUI_ITEM_TYPE.EQUIPMENT,))
+        if itemNames is not None and itemNames:
+            criteria |= REQ_CRITERIA.VEHICLE.SPECIFIC_BY_NAME(itemNames)
+        return self.getItems(GUI_ITEM_TYPE.EQUIPMENT, criteria)
 
     def doesVehicleExist(self, intCD):
         itemTypeID, nationID, innationID = vehicles.parseIntCompactDescr(intCD)
@@ -993,8 +1053,7 @@ class ItemsRequester(IItemsRequester):
 
     def __makeVehicle(self, typeCompDescr, vehInvData=None):
         vehInvData = vehInvData or self.__inventory.getItemData(typeCompDescr)
-        vehExtData = self.__inventory.getVehExtData(typeCompDescr)
-        return self.__makeItem(GUI_ITEM_TYPE.VEHICLE, typeCompDescr, strCompactDescr=vehInvData.compDescr, inventoryID=vehInvData.invID, typeCompDescr=typeCompDescr, proxy=self, extData=vehExtData) if vehInvData is not None else self.__makeItem(GUI_ITEM_TYPE.VEHICLE, typeCompDescr, typeCompDescr=typeCompDescr, proxy=self, extData=vehExtData)
+        return self.__makeItem(GUI_ITEM_TYPE.VEHICLE, typeCompDescr, strCompactDescr=vehInvData.compDescr, inventoryID=vehInvData.invID, proxy=self) if vehInvData is not None else self.__makeItem(GUI_ITEM_TYPE.VEHICLE, typeCompDescr, typeCompDescr=typeCompDescr, proxy=self)
 
     def __makeTankman(self, tmanInvID, tmanInvData=None):
         tmanInvData = tmanInvData or self.__inventory.getTankmanData(tmanInvID)
@@ -1025,8 +1084,8 @@ class ItemsRequester(IItemsRequester):
         vehData = self.__inventory.getVehicleData(tmanData.vehicle)
         return self.__getTankmenIDsForVehicle(vehData) if vehData is not None else set()
 
-    def __getVehicleCDForTankman(self, tmanData):
-        vehData = self.__inventory.getVehicleData(tmanData.vehicle)
+    def __getVehicleCD(self, vehicle):
+        vehData = self.__inventory.getVehicleData(vehicle)
         return {vehData.descriptor.type.compactDescr} if vehData is not None else set()
 
     def __checkFittingItemsSync(self, itemTypeID):

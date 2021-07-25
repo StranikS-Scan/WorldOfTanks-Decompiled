@@ -59,7 +59,7 @@ class MapboxItemPacker(ItemBonusUIPacker):
         model = RewardItemModel()
         cls._packCommon(bonus, model)
         model.setValue(str(count))
-        model.setIcon(item.getGUIEmblemID())
+        model.setIcon(item.name)
         model.setLabel(item.userName)
         return model
 

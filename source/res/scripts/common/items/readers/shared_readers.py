@@ -5,7 +5,7 @@ import typing
 import ResMgr
 from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH, IS_EDITOR
 from debug_utils import LOG_ERROR
-from items import _xml, getTypeInfoByName
+from items import _xml
 from items import customization_slot_tags_validator
 from items.components import component_constants
 from items.components import shared_components
@@ -123,11 +123,6 @@ def readTags(xmlCtx, section, allowedTagNames, subsectionName='tags'):
         res.add(intern(tagName))
 
     return frozenset(res)
-
-
-def readAllowedTags(xmlCtx, section, subsectionName, itemTypeName):
-    allowedTagNames = getTypeInfoByName(itemTypeName)['tags']
-    return readTags(xmlCtx, section, allowedTagNames, subsectionName)
 
 
 def readTagsOrEmpty(xmlCtx, section, allowedTagNames, subsectionName='tags'):

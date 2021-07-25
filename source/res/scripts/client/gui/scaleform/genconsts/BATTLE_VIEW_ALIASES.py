@@ -27,6 +27,7 @@ class BATTLE_VIEW_ALIASES(object):
     REPORT_BUG = 'reportBug'
     FULL_STATS = 'fullStats'
     RIBBONS_PANEL = 'ribbonsPanel'
+    PERKS_PANEL = 'perksPanel'
     MINIMAP = 'minimap'
     RADIAL_MENU = 'radialMenu'
     PLAYERS_PANEL = 'playersPanel'
@@ -81,4 +82,3 @@ class BATTLE_VIEW_ALIASES(object):
     FRAG_PANEL = 'fragPanel'
     BR_PLAYER_STATS_IN_BATTLE = 'brPlayerStatsInBattle'
     ROLE_DESCRIPTION = 'roleDescription'
-    PREBATTLE_AMMUNITION_PANEL = 'prebattleAmmunitionPanel'

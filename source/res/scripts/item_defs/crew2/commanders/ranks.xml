@@ -1,0 +1,831 @@
+<ranks.xml>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:noNamespaceSchemaLocation>	../../../development/xml_schema/crew2/commander/ranks.xsd	</xsi:noNamespaceSchemaLocation>
+  <nation_ranks>
+    <nation>
+      <name>	china	</name>
+      <ranks>
+        <rank>
+          <id>	lance_corporal	</id>
+          <name>	#china_tankmen:ranksCHI/lance_corporal	</name>
+          <icon>	china-2.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_sergeant	</id>
+          <name>	#china_tankmen:ranksCHI/junior_sergeant	</name>
+          <icon>	china-3.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant	</id>
+          <name>	#china_tankmen:ranksCHI/sergeant	</name>
+          <icon>	china-4.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_sergeant	</id>
+          <name>	#china_tankmen:ranksCHI/senior_sergeant	</name>
+          <icon>	china-5.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant_major	</id>
+          <name>	#china_tankmen:ranksCHI/sergeant_major	</name>
+          <icon>	china-6.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_lieutenant	</id>
+          <name>	#china_tankmen:ranksCHI/junior_lieutenant	</name>
+          <icon>	china-7.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant	</id>
+          <name>	#china_tankmen:ranksCHI/lieutenant	</name>
+          <icon>	china-8.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_lieutenant	</id>
+          <name>	#china_tankmen:ranksCHI/senior_lieutenant	</name>
+          <icon>	china-9.png	</icon>
+        </rank>
+        <rank>
+          <id>	captain	</id>
+          <name>	#china_tankmen:ranksCHI/captain	</name>
+          <icon>	china-10.png	</icon>
+        </rank>
+        <rank>
+          <id>	major	</id>
+          <name>	#china_tankmen:ranksCHI/major	</name>
+          <icon>	china-11.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant_colonel	</id>
+          <name>	#china_tankmen:ranksCHI/lieutenant_colonel	</name>
+          <icon>	china-12.png	</icon>
+        </rank>
+        <rank>
+          <id>	colonel	</id>
+          <name>	#china_tankmen:ranksCHI/colonel	</name>
+          <icon>	china-13.png	</icon>
+        </rank>
+        <rank>
+          <id>	brigadier_general	</id>
+          <name>	#china_tankmen:ranksCHI/brigadier_general	</name>
+          <icon>	china-14.png	</icon>
+        </rank>
+        <rank>
+          <id>	major_general	</id>
+          <name>	#china_tankmen:ranksCHI/major_general	</name>
+          <icon>	china-15.png	</icon>
+        </rank>
+      </ranks>
+    </nation>
+    <nation>
+      <name>	czech	</name>
+      <ranks>
+        <rank>
+          <id>	lance_corporal	</id>
+          <name>	#czech_tankmen:ranksCZ/svobodnik	</name>
+          <icon>	czech-2.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_sergeant	</id>
+          <name>	#czech_tankmen:ranksCZ/desatnik	</name>
+          <icon>	czech-3.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant	</id>
+          <name>	#czech_tankmen:ranksCZ/cetar	</name>
+          <icon>	czech-4.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_sergeant	</id>
+          <name>	#czech_tankmen:ranksCZ/rotny	</name>
+          <icon>	czech-5.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant_major	</id>
+          <name>	#czech_tankmen:ranksCZ/praporcik	</name>
+          <icon>	czech-6.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_lieutenant	</id>
+          <name>	#czech_tankmen:ranksCZ/podpoducik	</name>
+          <icon>	czech-7.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant	</id>
+          <name>	#czech_tankmen:ranksCZ/porucik	</name>
+          <icon>	czech-8.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_lieutenant	</id>
+          <name>	#czech_tankmen:ranksCZ/nadporucik	</name>
+          <icon>	czech-9.png	</icon>
+        </rank>
+        <rank>
+          <id>	captain	</id>
+          <name>	#czech_tankmen:ranksCZ/kapitan	</name>
+          <icon>	czech-10.png	</icon>
+        </rank>
+        <rank>
+          <id>	major	</id>
+          <name>	#czech_tankmen:ranksCZ/major	</name>
+          <icon>	czech-11.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant_colonel	</id>
+          <name>	#czech_tankmen:ranksCZ/lieutenant_colonel	</name>
+          <icon>	czech-12.png	</icon>
+        </rank>
+        <rank>
+          <id>	colonel	</id>
+          <name>	#czech_tankmen:ranksCZ/colonel	</name>
+          <icon>	czech-13.png	</icon>
+        </rank>
+        <rank>
+          <id>	brigadier_general	</id>
+          <name>	#czech_tankmen:ranksCZ/brigadier_general	</name>
+          <icon>	czech-14.png	</icon>
+        </rank>
+        <rank>
+          <id>	major_general	</id>
+          <name>	#czech_tankmen:ranksCZ/major_general	</name>
+          <icon>	czech-15.png	</icon>
+        </rank>
+      </ranks>
+    </nation>
+    <nation>
+      <name>	france	</name>
+      <ranks>
+        <rank>
+          <id>	lance_corporal	</id>
+          <name>	#france_tankmen:ranksfra/caporal	</name>
+          <icon>	france-2.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_sergeant	</id>
+          <name>	#france_tankmen:ranksfra/caporal-chef	</name>
+          <icon>	france-3.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant	</id>
+          <name>	#france_tankmen:ranksfra/sergent	</name>
+          <icon>	france-4.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_sergeant	</id>
+          <name>	#france_tankmen:ranksfra/sergent-chef	</name>
+          <icon>	france-5.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant_major	</id>
+          <name>	#france_tankmen:ranksfra/adjudant	</name>
+          <icon>	france-6.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_lieutenant	</id>
+          <name>	#france_tankmen:ranksfra/adjudant-chef	</name>
+          <icon>	france-7.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant	</id>
+          <name>	#france_tankmen:ranksfra/sous-lieutenant	</name>
+          <icon>	france-8.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_lieutenant	</id>
+          <name>	#france_tankmen:ranksfra/lieutenant	</name>
+          <icon>	france-9.png	</icon>
+        </rank>
+        <rank>
+          <id>	captain	</id>
+          <name>	#france_tankmen:ranksfra/capitaine	</name>
+          <icon>	france-10.png	</icon>
+        </rank>
+        <rank>
+          <id>	major	</id>
+          <name>	#france_tankmen:ranksfra/commandant	</name>
+          <icon>	france-11.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant_colonel	</id>
+          <name>	#france_tankmen:ranksfra/lieutenant_colonel	</name>
+          <icon>	france-12.png	</icon>
+        </rank>
+        <rank>
+          <id>	colonel	</id>
+          <name>	#france_tankmen:ranksfra/colonel	</name>
+          <icon>	france-13.png	</icon>
+        </rank>
+        <rank>
+          <id>	brigadier_general	</id>
+          <name>	#france_tankmen:ranksfra/brigadier_general	</name>
+          <icon>	france-14.png	</icon>
+        </rank>
+        <rank>
+          <id>	major_general	</id>
+          <name>	#france_tankmen:ranksfra/major_general	</name>
+          <icon>	france-15.png	</icon>
+        </rank>
+      </ranks>
+    </nation>
+    <nation>
+      <name>	germany	</name>
+      <ranks>
+        <rank>
+          <id>	lance_corporal	</id>
+          <name>	#germany_tankmen:ranksGER/gefreiter	</name>
+          <icon>	germany-2.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_sergeant	</id>
+          <name>	#germany_tankmen:ranksGER/unteroffizier	</name>
+          <icon>	germany-3.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant	</id>
+          <name>	#germany_tankmen:ranksGER/unterfeldwebel	</name>
+          <icon>	germany-4.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_sergeant	</id>
+          <name>	#germany_tankmen:ranksGER/feldwebel	</name>
+          <icon>	germany-5.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant_major	</id>
+          <name>	#germany_tankmen:ranksGER/oberfeldwebel	</name>
+          <icon>	germany-6.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_lieutenant	</id>
+          <name>	#germany_tankmen:ranksGER/stabsfeldwebel	</name>
+          <icon>	germany-7.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant	</id>
+          <name>	#germany_tankmen:ranksGER/leutnant	</name>
+          <icon>	germany-8.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_lieutenant	</id>
+          <name>	#germany_tankmen:ranksGER/oberleutnant	</name>
+          <icon>	germany-9.png	</icon>
+        </rank>
+        <rank>
+          <id>	captain	</id>
+          <name>	#germany_tankmen:ranksGER/hauptmann	</name>
+          <icon>	germany-10.png	</icon>
+        </rank>
+        <rank>
+          <id>	major	</id>
+          <name>	#germany_tankmen:ranksGER/major	</name>
+          <icon>	germany-11.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant_colonel	</id>
+          <name>	#germany_tankmen:ranksGER/lieutenant_colonel	</name>
+          <icon>	germany-12.png	</icon>
+        </rank>
+        <rank>
+          <id>	colonel	</id>
+          <name>	#germany_tankmen:ranksGER/colonel	</name>
+          <icon>	germany-13.png	</icon>
+        </rank>
+        <rank>
+          <id>	brigadier_general	</id>
+          <name>	#germany_tankmen:ranksGER/brigadier_general	</name>
+          <icon>	germany-14.png	</icon>
+        </rank>
+        <rank>
+          <id>	major_general	</id>
+          <name>	#germany_tankmen:ranksGER/major_general	</name>
+          <icon>	germany-15.png	</icon>
+        </rank>
+      </ranks>
+    </nation>
+    <nation>
+      <name>	italy	</name>
+      <ranks>
+        <rank>
+          <id>	lance_corporal	</id>
+          <name>	#italy_tankmen:ranksIt/caporale_maggiore	</name>
+          <icon>	italy-2.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_sergeant	</id>
+          <name>	#italy_tankmen:ranksIt/sergente	</name>
+          <icon>	italy-3.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant	</id>
+          <name>	#italy_tankmen:ranksIt/sergente_maggiore	</name>
+          <icon>	italy-4.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_sergeant	</id>
+          <name>	#italy_tankmen:ranksIt/aspirante	</name>
+          <icon>	italy-5.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant_major	</id>
+          <name>	#italy_tankmen:ranksIt/sottotenente	</name>
+          <icon>	italy-6.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_lieutenant	</id>
+          <name>	#italy_tankmen:ranksIt/tenente	</name>
+          <icon>	italy-7.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant	</id>
+          <name>	#italy_tankmen:ranksIt/primo_tenente	</name>
+          <icon>	italy-8.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_lieutenant	</id>
+          <name>	#italy_tankmen:ranksIt/capitano	</name>
+          <icon>	italy-9.png	</icon>
+        </rank>
+        <rank>
+          <id>	captain	</id>
+          <name>	#italy_tankmen:ranksIt/primo_capitano	</name>
+          <icon>	italy-10.png	</icon>
+        </rank>
+        <rank>
+          <id>	major	</id>
+          <name>	#italy_tankmen:ranksIt/maggiore	</name>
+          <icon>	italy-11.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant_colonel	</id>
+          <name>	#italy_tankmen:ranksIt/lieutenant_colonel	</name>
+          <icon>	italy-12.png	</icon>
+        </rank>
+        <rank>
+          <id>	colonel	</id>
+          <name>	#italy_tankmen:ranksIt/colonel	</name>
+          <icon>	italy-13.png	</icon>
+        </rank>
+        <rank>
+          <id>	brigadier_general	</id>
+          <name>	#italy_tankmen:ranksIt/brigadier_general	</name>
+          <icon>	italy-14.png	</icon>
+        </rank>
+        <rank>
+          <id>	major_general	</id>
+          <name>	#italy_tankmen:ranksIt/major_general	</name>
+          <icon>	italy-15.png	</icon>
+        </rank>
+      </ranks>
+    </nation>
+    <nation>
+      <name>	japan	</name>
+      <ranks>
+        <rank>
+          <id>	lance_corporal	</id>
+          <name>	#japan_tankmen:ranksJP/private_1st	</name>
+          <icon>	japan-2.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_sergeant	</id>
+          <name>	#japan_tankmen:ranksJP/private_top	</name>
+          <icon>	japan-3.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant	</id>
+          <name>	#japan_tankmen:ranksJP/corporal	</name>
+          <icon>	japan-4.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_sergeant	</id>
+          <name>	#japan_tankmen:ranksJP/sergeant	</name>
+          <icon>	japan-5.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant_major	</id>
+          <name>	#japan_tankmen:ranksJP/senior_sergeant	</name>
+          <icon>	japan-6.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_lieutenant	</id>
+          <name>	#japan_tankmen:ranksJP/sergeant_major	</name>
+          <icon>	japan-7.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant	</id>
+          <name>	#japan_tankmen:ranksJP/junior_lieutenant	</name>
+          <icon>	japan-8.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_lieutenant	</id>
+          <name>	#japan_tankmen:ranksJP/lieutenant	</name>
+          <icon>	japan-9.png	</icon>
+        </rank>
+        <rank>
+          <id>	captain	</id>
+          <name>	#japan_tankmen:ranksJP/captain	</name>
+          <icon>	japan-10.png	</icon>
+        </rank>
+        <rank>
+          <id>	major	</id>
+          <name>	#japan_tankmen:ranksJP/major	</name>
+          <icon>	japan-11.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant_colonel	</id>
+          <name>	#japan_tankmen:ranksJP/lieutenant_colonel	</name>
+          <icon>	japan-12.png	</icon>
+        </rank>
+        <rank>
+          <id>	colonel	</id>
+          <name>	#japan_tankmen:ranksJP/colonel	</name>
+          <icon>	japan-13.png	</icon>
+        </rank>
+        <rank>
+          <id>	brigadier_general	</id>
+          <name>	#japan_tankmen:ranksJP/brigadier_general	</name>
+          <icon>	japan-14.png	</icon>
+        </rank>
+        <rank>
+          <id>	major_general	</id>
+          <name>	#japan_tankmen:ranksJP/major_general	</name>
+          <icon>	japan-15.png	</icon>
+        </rank>
+      </ranks>
+    </nation>
+    <nation>
+      <name>	poland	</name>
+      <ranks>
+        <rank>
+          <id>	lance_corporal	</id>
+          <name>	#poland_tankmen:ranksPl/starszy_szeregowiec	</name>
+          <icon>	poland-2.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_sergeant	</id>
+          <name>	#poland_tankmen:ranksPl/kapral	</name>
+          <icon>	poland-3.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant	</id>
+          <name>	#poland_tankmen:ranksPl/plutonowy	</name>
+          <icon>	poland-4.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_sergeant	</id>
+          <name>	#poland_tankmen:ranksPl/sierzant	</name>
+          <icon>	poland-5.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant_major	</id>
+          <name>	#poland_tankmen:ranksPl/starszy_sierzant	</name>
+          <icon>	poland-6.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_lieutenant	</id>
+          <name>	#poland_tankmen:ranksPl/chorazy	</name>
+          <icon>	poland-7.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant	</id>
+          <name>	#poland_tankmen:ranksPl/podporucznik	</name>
+          <icon>	poland-8.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_lieutenant	</id>
+          <name>	#poland_tankmen:ranksPl/porucznik	</name>
+          <icon>	poland-9.png	</icon>
+        </rank>
+        <rank>
+          <id>	captain	</id>
+          <name>	#poland_tankmen:ranksPl/kapitan	</name>
+          <icon>	poland-10.png	</icon>
+        </rank>
+        <rank>
+          <id>	major	</id>
+          <name>	#poland_tankmen:ranksPl/major	</name>
+          <icon>	poland-11.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant_colonel	</id>
+          <name>	#poland_tankmen:ranksPl/lieutenant_colonel	</name>
+          <icon>	poland-12.png	</icon>
+        </rank>
+        <rank>
+          <id>	colonel	</id>
+          <name>	#poland_tankmen:ranksPl/colonel	</name>
+          <icon>	poland-13.png	</icon>
+        </rank>
+        <rank>
+          <id>	brigadier_general	</id>
+          <name>	#poland_tankmen:ranksPl/brigadier_general	</name>
+          <icon>	poland-14.png	</icon>
+        </rank>
+        <rank>
+          <id>	major_general	</id>
+          <name>	#poland_tankmen:ranksPl/major_general	</name>
+          <icon>	poland-15.png	</icon>
+        </rank>
+      </ranks>
+    </nation>
+    <nation>
+      <name>	sweden	</name>
+      <ranks>
+        <rank>
+          <id>	lance_corporal	</id>
+          <name>	#sweden_tankmen:ranksSW/korpral	</name>
+          <icon>	sweden-2.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_sergeant	</id>
+          <name>	#sweden_tankmen:ranksSW/furir	</name>
+          <icon>	sweden-3.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant	</id>
+          <name>	#sweden_tankmen:ranksSW/overfurir	</name>
+          <icon>	sweden-4.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_sergeant	</id>
+          <name>	#sweden_tankmen:ranksSW/sergeant	</name>
+          <icon>	sweden-5.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant_major	</id>
+          <name>	#sweden_tankmen:ranksSW/fanjunkare	</name>
+          <icon>	sweden-6.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_lieutenant	</id>
+          <name>	#sweden_tankmen:ranksSW/forvaltare	</name>
+          <icon>	sweden-7.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant	</id>
+          <name>	#sweden_tankmen:ranksSW/fanrik	</name>
+          <icon>	sweden-8.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_lieutenant	</id>
+          <name>	#sweden_tankmen:ranksSW/lojtnant	</name>
+          <icon>	sweden-9.png	</icon>
+        </rank>
+        <rank>
+          <id>	captain	</id>
+          <name>	#sweden_tankmen:ranksSW/kapten	</name>
+          <icon>	sweden-10.png	</icon>
+        </rank>
+        <rank>
+          <id>	major	</id>
+          <name>	#sweden_tankmen:ranksSW/major	</name>
+          <icon>	sweden-11.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant_colonel	</id>
+          <name>	#sweden_tankmen:ranksSW/lieutenant_colonel	</name>
+          <icon>	sweden-12.png	</icon>
+        </rank>
+        <rank>
+          <id>	colonel	</id>
+          <name>	#sweden_tankmen:ranksSW/colonel	</name>
+          <icon>	sweden-13.png	</icon>
+        </rank>
+        <rank>
+          <id>	brigadier_general	</id>
+          <name>	#sweden_tankmen:ranksSW/brigadier_general	</name>
+          <icon>	sweden-14.png	</icon>
+        </rank>
+        <rank>
+          <id>	major_general	</id>
+          <name>	#sweden_tankmen:ranksSW/major_general	</name>
+          <icon>	sweden-15.png	</icon>
+        </rank>
+      </ranks>
+    </nation>
+    <nation>
+      <name>	uk	</name>
+      <ranks>
+        <rank>
+          <id>	lance_corporal	</id>
+          <name>	#gb_tankmen:ranksUK/corporal	</name>
+          <icon>	uk-2.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_sergeant	</id>
+          <name>	#gb_tankmen:ranksUK/sergeant	</name>
+          <icon>	uk-3.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant	</id>
+          <name>	#gb_tankmen:ranksUK/staff_sergeant	</name>
+          <icon>	uk-4.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_sergeant	</id>
+          <name>	#gb_tankmen:ranksUK/officer_3rd	</name>
+          <icon>	uk-5.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant_major	</id>
+          <name>	#gb_tankmen:ranksUK/officer_2nd	</name>
+          <icon>	uk-6.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_lieutenant	</id>
+          <name>	#gb_tankmen:ranksUK/officer_1st	</name>
+          <icon>	uk-7.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant	</id>
+          <name>	#gb_tankmen:ranksUK/second_lieutenant	</name>
+          <icon>	uk-8.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_lieutenant	</id>
+          <name>	#gb_tankmen:ranksUK/first_lieutenant	</name>
+          <icon>	uk-9.png	</icon>
+        </rank>
+        <rank>
+          <id>	captain	</id>
+          <name>	#gb_tankmen:ranksUK/captain	</name>
+          <icon>	uk-10.png	</icon>
+        </rank>
+        <rank>
+          <id>	major	</id>
+          <name>	#gb_tankmen:ranksUK/major	</name>
+          <icon>	uk-11.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant_colonel	</id>
+          <name>	#gb_tankmen:ranksUK/lieutenant_colonel	</name>
+          <icon>	uk-12.png	</icon>
+        </rank>
+        <rank>
+          <id>	colonel	</id>
+          <name>	#gb_tankmen:ranksUK/colonel	</name>
+          <icon>	uk-13.png	</icon>
+        </rank>
+        <rank>
+          <id>	brigadier_general	</id>
+          <name>	#gb_tankmen:ranksUK/brigadier_general	</name>
+          <icon>	uk-14.png	</icon>
+        </rank>
+        <rank>
+          <id>	major_general	</id>
+          <name>	#gb_tankmen:ranksUK/major_general	</name>
+          <icon>	uk-15.png	</icon>
+        </rank>
+      </ranks>
+    </nation>
+    <nation>
+      <name>	usa	</name>
+      <ranks>
+        <rank>
+          <id>	lance_corporal	</id>
+          <name>	#usa_tankmen:ranksUSA/lance_corporal	</name>
+          <icon>	usa-2.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_sergeant	</id>
+          <name>	#usa_tankmen:ranksUSA/junior_sergeant	</name>
+          <icon>	usa-3.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant	</id>
+          <name>	#usa_tankmen:ranksUSA/sergeant	</name>
+          <icon>	usa-4.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_sergeant	</id>
+          <name>	#usa_tankmen:ranksUSA/senior_sergeant	</name>
+          <icon>	usa-5.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant_major	</id>
+          <name>	#usa_tankmen:ranksUSA/sergeant_major	</name>
+          <icon>	usa-6.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_lieutenant	</id>
+          <name>	#usa_tankmen:ranksUSA/junior_lieutenant	</name>
+          <icon>	usa-7.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant	</id>
+          <name>	#usa_tankmen:ranksUSA/lieutenant	</name>
+          <icon>	usa-8.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_lieutenant	</id>
+          <name>	#usa_tankmen:ranksUSA/senior_lieutenant	</name>
+          <icon>	usa-9.png	</icon>
+        </rank>
+        <rank>
+          <id>	captain	</id>
+          <name>	#usa_tankmen:ranksUSA/captain	</name>
+          <icon>	usa-10.png	</icon>
+        </rank>
+        <rank>
+          <id>	major	</id>
+          <name>	#usa_tankmen:ranksUSA/major	</name>
+          <icon>	usa-11.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant_colonel	</id>
+          <name>	#usa_tankmen:ranksUSA/lieutenant_colonel	</name>
+          <icon>	usa-12.png	</icon>
+        </rank>
+        <rank>
+          <id>	colonel	</id>
+          <name>	#usa_tankmen:ranksUSA/colonel	</name>
+          <icon>	usa-13.png	</icon>
+        </rank>
+        <rank>
+          <id>	brigadier_general	</id>
+          <name>	#usa_tankmen:ranksUSA/brigadier_general	</name>
+          <icon>	usa-14.png	</icon>
+        </rank>
+        <rank>
+          <id>	major_general	</id>
+          <name>	#usa_tankmen:ranksUSA/major_general	</name>
+          <icon>	usa-15.png	</icon>
+        </rank>
+      </ranks>
+    </nation>
+    <nation>
+      <name>	ussr	</name>
+      <ranks>
+        <rank>
+          <id>	lance_corporal	</id>
+          <name>	#ussr_tankmen:ranksRUS/lance_corporal	</name>
+          <icon>	ussr-2.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_sergeant	</id>
+          <name>	#ussr_tankmen:ranksRUS/junior_sergeant	</name>
+          <icon>	ussr-3.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant	</id>
+          <name>	#ussr_tankmen:ranksRUS/sergeant	</name>
+          <icon>	ussr-4.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_sergeant	</id>
+          <name>	#ussr_tankmen:ranksRUS/senior_sergeant	</name>
+          <icon>	ussr-5.png	</icon>
+        </rank>
+        <rank>
+          <id>	sergeant_major	</id>
+          <name>	#ussr_tankmen:ranksRUS/sergeant_major	</name>
+          <icon>	ussr-6.png	</icon>
+        </rank>
+        <rank>
+          <id>	junior_lieutenant	</id>
+          <name>	#ussr_tankmen:ranksRUS/junior_lieutenant	</name>
+          <icon>	ussr-7.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant	</id>
+          <name>	#ussr_tankmen:ranksRUS/lieutenant	</name>
+          <icon>	ussr-8.png	</icon>
+        </rank>
+        <rank>
+          <id>	senior_lieutenant	</id>
+          <name>	#ussr_tankmen:ranksRUS/senior_lieutenant	</name>
+          <icon>	ussr-9.png	</icon>
+        </rank>
+        <rank>
+          <id>	captain	</id>
+          <name>	#ussr_tankmen:ranksRUS/captain	</name>
+          <icon>	ussr-10.png	</icon>
+        </rank>
+        <rank>
+          <id>	major	</id>
+          <name>	#ussr_tankmen:ranksRUS/major	</name>
+          <icon>	ussr-11.png	</icon>
+        </rank>
+        <rank>
+          <id>	lieutenant_colonel	</id>
+          <name>	#ussr_tankmen:ranksRUS/lieutenant_colonel	</name>
+          <icon>	ussr-12.png	</icon>
+        </rank>
+        <rank>
+          <id>	colonel	</id>
+          <name>	#ussr_tankmen:ranksRUS/colonel	</name>
+          <icon>	ussr-13.png	</icon>
+        </rank>
+        <rank>
+          <id>	brigadier_general	</id>
+          <name>	#ussr_tankmen:ranksRUS/brigadier_general	</name>
+          <icon>	ussr-14.png	</icon>
+        </rank>
+        <rank>
+          <id>	major_general	</id>
+          <name>	#ussr_tankmen:ranksRUS/major_general	</name>
+          <icon>	ussr-15.png	</icon>
+        </rank>
+      </ranks>
+    </nation>
+  </nation_ranks>
+</ranks.xml>

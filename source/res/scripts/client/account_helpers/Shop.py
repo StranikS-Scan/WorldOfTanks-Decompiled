@@ -10,7 +10,7 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from items import vehicles, tankmen
 from AccountCommands import BUY_VEHICLE_FLAG
 from account_shared import AmmoIterator
-from items.item_price import getNextSlotPrice, getNextBerthPackPrice
+from items.item_price import getNextSlotPrice
 from persistent_caches import SimpleCache
 from SyncController import SyncController
 from PlayerEvents import g_playerEvents as events
@@ -60,10 +60,10 @@ class Shop(object):
         return
 
     def synchronize(self, serverCacheRev=None):
-        LOG_DEBUG('Shop.synchronize: cli_rev=%s, serv_rev=%s' % (self.__getCacheRevision(), serverCacheRev))
+        LOG_DEBUG('Shop.synchronize: cli_rev=%s, serv_rev=%s' % (self.getCacheRevision(), serverCacheRev))
         if self.__ignore:
             return
-        elif self.__getCacheRevision() == serverCacheRev:
+        elif self.getCacheRevision() == serverCacheRev:
             return
         elif self.__isSynchronizing:
             return
@@ -93,10 +93,10 @@ class Shop(object):
                 callback(AccountCommands.RES_NON_PLAYER, None)
             return
         elif not self.__isSynchronizing:
-            callback(AccountCommands.RES_CACHE, self.__getCacheRevision())
+            callback(AccountCommands.RES_CACHE, self.getCacheRevision())
             return
         else:
-            proxy = lambda resultID, data: callback(resultID, self.__getCacheRevision())
+            proxy = lambda resultID, data: callback(resultID, self.getCacheRevision())
             self.__syncController.request(self.__syncID, proxy)
             return
 
@@ -113,7 +113,7 @@ class Shop(object):
 
     def getSellPrice(self, buyPrice, sellPriceModifiers, itemTypeID):
         shopRev, exchangeRate, exchangeRateForShellsAndEqs, _, sellPriceFactor, sellForGold = sellPriceModifiers
-        if shopRev != self.__getCacheRevision():
+        if shopRev != self.getCacheRevision():
             raise SoftException('Shop cache is not actual')
         if itemTypeID in (_SHELL, _EQUIPMENT):
             exchangeRate = exchangeRateForShellsAndEqs
@@ -172,12 +172,6 @@ class Shop(object):
     def getNextSlotPrice(self, slots, slotsPrices):
         return getNextSlotPrice(slots, slotsPrices)
 
-    def getBerthsPrices(self, callback):
-        self.__getValue('berthsPrices', callback)
-
-    def getNextBerthPackPrice(self, berths, berthsPrices):
-        return getNextBerthPackPrice(berths, berthsPrices)
-
     def getExchangeRate(self, callback):
         self.__getValue('exchangeRate', callback)
 
@@ -192,6 +186,9 @@ class Shop(object):
 
     def getFreeXPToTManXPRate(self, callback):
         self.__getValue('freeXPToTManXPRate', callback)
+
+    def getFreeXPToDetXPRate(self, callback):
+        self.__getValue('freeXPToDetXPRate', callback)
 
     def getFreeXPConversion(self, callback):
         self.__getValue('freeXPConversion', callback)
@@ -234,7 +231,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdInt4(AccountCommands.CMD_BUY_ITEM, self.__getCacheRevision(), itemShopID, count, goldForCredits, proxy)
+            self.__account._doCmdInt4(AccountCommands.CMD_BUY_ITEM, self.getCacheRevision(), itemShopID, count, goldForCredits, proxy)
             return
 
     def buyAndEquipItem(self, vehInvID, compDescr, slotIdx, isPaidRemoval, gunCompDescr, callback):
@@ -247,7 +244,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
             else:
                 proxy = None
-            arr = [self.__getCacheRevision(),
+            arr = [self.getCacheRevision(),
              compDescr,
              vehInvID,
              slotIdx,
@@ -266,7 +263,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
             else:
                 proxy = None
-            self.__account._doCmdInt4(AccountCommands.CMD_BUY_AND_EQUIP_TMAN, self.__getCacheRevision(), vehInvID, slot, tmanCostTypeIdx, proxy)
+            self.__account._doCmdInt4(AccountCommands.CMD_BUY_AND_EQUIP_TMAN, self.getCacheRevision(), vehInvID, slot, tmanCostTypeIdx, proxy)
             return
 
     def buyVehicle(self, nationIdx, innationIdx, buyShells, recruitCrew, tmanCostTypeIdx, rentPeriod, callback):
@@ -279,16 +276,13 @@ class Shop(object):
             flags = BUY_VEHICLE_FLAG.NONE
             if buyShells:
                 flags |= BUY_VEHICLE_FLAG.SHELLS
-            if recruitCrew:
-                flags |= BUY_VEHICLE_FLAG.CREW
             if callback is not None:
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            arr = [self.__getCacheRevision(),
+            arr = [self.getCacheRevision(),
              typeCompDescr,
              flags,
-             tmanCostTypeIdx,
              rentPeriod]
             self.__account._doCmdIntArr(AccountCommands.CMD_BUY_VEHICLE, arr, proxy)
             return
@@ -309,7 +303,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            arr = [self.__getCacheRevision(),
+            arr = [self.getCacheRevision(),
              vehInvID,
              typeCompDescr,
              flags,
@@ -333,7 +327,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            arr = [self.__getCacheRevision(),
+            arr = [self.getCacheRevision(),
              vehInvID,
              typeCompDescr,
              flags,
@@ -348,7 +342,7 @@ class Shop(object):
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext.get('tmanInvID', None), ext.get('tmanCompDescr', None))
         else:
             proxy = None
-        self.__account._doCmdInt4(AccountCommands.CMD_BUY_TMAN, self.__getCacheRevision(), vehTypeCompDescr, roleIdx, tmanCostTypeIdx, proxy)
+        self.__account._doCmdInt4(AccountCommands.CMD_BUY_TMAN, self.getCacheRevision(), vehTypeCompDescr, roleIdx, tmanCostTypeIdx, proxy)
         return
 
     def buyTokenTankman(self, nationIdx, innationIdx, role, tokenName, callback):
@@ -372,7 +366,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdInt4(AccountCommands.CMD_BUY_GOODIE, self.__getCacheRevision(), goodieID, count, forGold, proxy)
+            self.__account._doCmdInt4(AccountCommands.CMD_BUY_GOODIE, self.getCacheRevision(), goodieID, count, forGold, proxy)
             return
 
     def buyAndEquipOutfit(self, vehInvID, outfitData, callback):
@@ -385,7 +379,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            intArr = [self.__getCacheRevision(), vehInvID]
+            intArr = [self.getCacheRevision(), vehInvID]
             strArr = []
             for outfitDescr, season in outfitData:
                 intArr.append(season)
@@ -404,7 +398,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            intArr = [self.__getCacheRevision(), vehInvID]
+            intArr = [self.getCacheRevision(), vehInvID]
             for intCD, count in itemsCount.iteritems():
                 intArr.extend((intCD, count))
 
@@ -421,7 +415,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext)
             else:
                 proxy = None
-            self.__account._doCmdInt4(AccountCommands.CMD_SELL_C11N_ITEMS, self.__getCacheRevision(), itemCD, count, vehInvID, proxy)
+            self.__account._doCmdInt4(AccountCommands.CMD_SELL_C11N_ITEMS, self.getCacheRevision(), itemCD, count, vehInvID, proxy)
             return
 
     def resetC11nItemsNovelty(self, itemsList, callback):
@@ -434,7 +428,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            intArr = [self.__getCacheRevision()]
+            intArr = [self.getCacheRevision()]
             for item in itemsList:
                 intArr.extend(item)
 
@@ -451,7 +445,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(requestID, resultID, errorStr)
             else:
                 proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_APPLY_ADDITIONAL_XP, self.__getCacheRevision(), arenaUniqueID, vehTypeCompDescr, proxy)
+            self.__account._doCmdInt3(AccountCommands.CMD_APPLY_ADDITIONAL_XP, self.getCacheRevision(), arenaUniqueID, vehTypeCompDescr, proxy)
             return
 
     def buyBattlePass(self, seasonID, chapter, callback):
@@ -466,7 +460,7 @@ class Shop(object):
                 proxy = None
             if chapter is None:
                 chapter = 0
-            self.__account._doCmdInt3(AccountCommands.CMD_BUY_BATTLE_PASS, self.__getCacheRevision(), seasonID, chapter, proxy)
+            self.__account._doCmdInt3(AccountCommands.CMD_BUY_BATTLE_PASS, self.getCacheRevision(), seasonID, chapter, proxy)
             return
 
     def buyBattlePassLevels(self, seasonID, levels, callback):
@@ -479,8 +473,11 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(requestID, resultID, errorStr)
             else:
                 proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_BUY_BATTLE_PASS_LEVELS, self.__getCacheRevision(), seasonID, levels, proxy)
+            self.__account._doCmdInt3(AccountCommands.CMD_BUY_BATTLE_PASS_LEVELS, self.getCacheRevision(), seasonID, levels, proxy)
             return
+
+    def getCacheRevision(self):
+        return self.__cache.get('rev', 0)
 
     def __onSyncResponse(self, syncID, resultID, ext=None):
         ext = ext or {}
@@ -533,13 +530,13 @@ class Shop(object):
         else:
             result = self.__cache.get('items', {}).get(nationIdx, {}).get(itemTypeIdx, None)
         if callback is not None:
-            callback(resultID, result, self.__getCacheRevision())
+            callback(resultID, result, self.getCacheRevision())
         return
 
     def __onGetValueResponse(self, resultID, key, callback):
         if resultID < 0:
             if callback is not None:
-                callback(resultID, None, self.__getCacheRevision())
+                callback(resultID, None, self.getCacheRevision())
             return
         elif self.__isSynchronizing:
             self.__getValue(key, callback)
@@ -547,7 +544,7 @@ class Shop(object):
         else:
             value = self.__cache if key is None else self.__cache.get(key, None)
             if callback is not None:
-                callback(resultID, value, self.__getCacheRevision())
+                callback(resultID, value, self.getCacheRevision())
             return
 
     def __onGetPriceResponse(self, resultID, typeCompDescr, callback):
@@ -556,7 +553,7 @@ class Shop(object):
         else:
             price = self.__getPriceFromCache(typeCompDescr)
         if callback is not None:
-            callback(resultID, price, self.__getCacheRevision())
+            callback(resultID, price, self.getCacheRevision())
         return
 
     def __onGetRentPacketsResponse(self, resultID, typeCompDescr, callback):
@@ -565,13 +562,13 @@ class Shop(object):
         else:
             packets = self.__getRentPacketsFromCache(typeCompDescr)
         if callback is not None:
-            callback(resultID, packets, self.__getCacheRevision())
+            callback(resultID, packets, self.getCacheRevision())
         return
 
     def __onGetVehiclePriceResponse(self, resultID, vehCompDescr, isSellPrice, callback):
         if resultID < 0:
             if callback is not None:
-                callback(resultID, None, self.__getCacheRevision())
+                callback(resultID, None, self.getCacheRevision())
             return
         else:
             price = self.__getVehiclePriceFromCache(vehCompDescr, None)
@@ -579,13 +576,13 @@ class Shop(object):
                 typeCompDescr = vehicles.getVehicleTypeCompactDescr(vehCompDescr)
                 price = self.getSellPrice(price, self.__getSellPriceModifiersFromCache(typeCompDescr), _VEHICLE)
             if callback is not None:
-                callback(resultID, price, self.__getCacheRevision())
+                callback(resultID, price, self.getCacheRevision())
             return
 
     def __onGetVehiclesSellPriceResponse(self, resultID, vehCompDescrs, callback):
         if resultID < 0:
             if callback is not None:
-                callback(resultID, None, self.__getCacheRevision())
+                callback(resultID, None, self.getCacheRevision())
             return
         else:
             prices = []
@@ -597,13 +594,13 @@ class Shop(object):
                 prices.append(self.getSellPrice(price, self.__getSellPriceModifiersFromCache(vehCompDescr), _VEHICLE))
 
             if callback is not None:
-                callback(resultID, prices, self.__getCacheRevision())
+                callback(resultID, prices, self.getCacheRevision())
             return
 
     def __onGetComponentPriceResponse(self, resultID, compDescr, isSellPrice, callback):
         if resultID < 0:
             if callback is not None:
-                callback(resultID, None, self.__getCacheRevision())
+                callback(resultID, None, self.getCacheRevision())
             return
         else:
             itemTypeIdx, _, _ = vehicles.parseIntCompactDescr(compDescr)
@@ -611,13 +608,13 @@ class Shop(object):
             if isSellPrice:
                 price = self.getSellPrice(price, self.__getSellPriceModifiersFromCache(compDescr), itemTypeIdx)
             if callback is not None:
-                callback(resultID, price, self.__getCacheRevision())
+                callback(resultID, price, self.getCacheRevision())
             return
 
     def __onGetComponentsPriceResponse(self, resultID, compDescrs, callback):
         if resultID < 0:
             if callback is not None:
-                callback(resultID, None, self.__getCacheRevision())
+                callback(resultID, None, self.getCacheRevision())
             return
         else:
             prices = []
@@ -632,13 +629,13 @@ class Shop(object):
                 prices.append(self.getSellPrice(price, self.__getSellPriceModifiersFromCache(compDescr), itemTypeIdx))
 
             if callback is not None:
-                callback(resultID, prices, self.__getCacheRevision())
+                callback(resultID, prices, self.getCacheRevision())
             return
 
     def __onGetAmmoSellPriceResponse(self, resultID, ammo, callback):
         if resultID < 0:
             if callback is not None:
-                callback(resultID, None, self.__getCacheRevision())
+                callback(resultID, None, self.getCacheRevision())
             return
         else:
             price = 0
@@ -650,7 +647,7 @@ class Shop(object):
                 price += shellSellPrice * count
 
             if callback is not None:
-                callback(resultID, price, self.__getCacheRevision())
+                callback(resultID, price, self.getCacheRevision())
             return
 
     def __onGetSellPriceModifiers(self, resultID, compDescr, callback):
@@ -665,13 +662,10 @@ class Shop(object):
     def __sendSyncRequest(self, syncID, proxy):
         if self.__ignore:
             return
-        clientRev = self.__getCacheRevision()
+        clientRev = self.getCacheRevision()
         descr = self.__persistentCache.getDescr()
         dataLen, dataCrc = descr if descr else (0, 0)
         self.__account._doCmdInt3(AccountCommands.CMD_SYNC_SHOP, clientRev, dataLen, dataCrc, proxy)
-
-    def __getCacheRevision(self):
-        return self.__cache.get('rev', 0)
 
     def __getPriceFromCache(self, typeCompDescr, default=(0, 0)):
         vehPrices = self.__cache.get('items', {}).get('itemPrices', {})
@@ -715,7 +709,7 @@ class Shop(object):
         sellPriceModif = cache.get('sellPriceModif', 0)
         sellPriceFactors = result.get('vehicleSellPriceFactors', {})
         sellForGold = result.get('vehiclesToSellForGold', {})
-        return (self.__getCacheRevision(),
+        return (self.getCacheRevision(),
          cache.get('exchangeRate', 0),
          cache.get('exchangeRateForShellsAndEqs', 0),
          sellPriceModif,
@@ -725,7 +719,7 @@ class Shop(object):
     def __getValue(self, key, callback):
         if self.__ignore:
             if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER, None, self.__getCacheRevision())
+                callback(AccountCommands.RES_NON_PLAYER, None, self.getCacheRevision())
             return
         elif not self.__isSynchronizing:
             self.__onGetValueResponse(AccountCommands.RES_CACHE, key, callback)

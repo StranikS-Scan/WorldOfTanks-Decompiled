@@ -2,59 +2,62 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/vehicle.py
 import collections
 import logging
+from constants import ACCOUNT_ATTR, BonusTypes, TANK_CONTROL_LEVEL, AbilitySystemScopeNames
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
-import constants
-from gui.impl.gen import R
-from gui.impl import backport
+from gui import makeHtmlString
+from gui.Scaleform.daapi.view.lobby.detachment.detachment_setup_vehicle import g_detachmentTankSetupVehicle
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
+from gui.impl.backport import getNiceNumberFormat
+from gui.impl.gen import R
 from gui.shared.formatters import getItemUnlockPricesVO, getItemRestorePricesVO, getItemSellPricesVO, getMoneyVO
-from gui.shared.gui_items.gui_item_economics import getMinRentItemPrice
 from gui.shared.formatters import text_styles, moneyWithIcon, icons, getItemPricesVO
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, KPI
 from gui.shared.gui_items.Tankman import Tankman, getRoleUserName, CrewTypes
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.shared.gui_items.Vehicle import Vehicle, getBattlesLeft, getTypeBigIconPath
+from gui.shared.gui_items.artefacts import getArtefactName
 from gui.shared.gui_items.fitting_item import RentalInfoProvider
-from gui.shared.items_parameters import RELATIVE_PARAMS, params_helper
+from gui.shared.gui_items.gui_item_economics import getMinRentItemPrice
+from gui.shared.gui_items.perk import PerkGUI
+from gui.shared.items_parameters import RELATIVE_BAR_PARAMS, params_helper
+from gui.shared.items_parameters.bonus_helper import isBonusAutoPerk
 from gui.shared.items_parameters import formatters as param_formatter
-from gui.shared.items_parameters.bonus_helper import isSituationalBonus
 from gui.shared.items_parameters.comparator import PARAM_STATE
-from gui.shared.items_parameters.formatters import isRelativeParameter, SITUATIONAL_SCHEME, EXTRACTED_BONUS_SCHEME
+from gui.shared.items_parameters.formatters import isRelativeParameter, SITUATIONAL_SCHEME, EXTRACTED_BONUS_SCHEME, getVehicleCrewRoleIconPath
+from gui.shared.items_parameters.functions import isSituationalBonus, getPerkKpi
+from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import Currency
 from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makeCompoundPriceBlock, CURRENCY_SETTINGS
 from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_SPEED_MODE_SPEED
+from items import perks
+from items.VehicleDescrCrew import _calcCommanderBonus
+from items.vehicles import getBonusID
+from crew2 import settings_globals
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import ITradeInController, IBootcampController
+from skeletons.gui.game_control import ITradeInController, IBootcampController, IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from items import perks
 _logger = logging.getLogger(__name__)
-_EQUIPMENT = 'equipment'
-_OPTION_DEVICE = 'optionalDevice'
-_BATTLE_BOOSTER = 'battleBooster'
 _IS_SENIORITY = 'isSeniority'
-_ARTEFACT_TYPES = (_EQUIPMENT, _OPTION_DEVICE)
-_SKILL_BONUS_TYPE = 'skill'
-_PERK_BONUS_TYPE = 'perk'
-_ROLE_BONUS_TYPE = 'role'
-_EXTRA_BONUS_TYPE = 'extra'
-_CREW_TYPES = (_PERK_BONUS_TYPE, _SKILL_BONUS_TYPE)
 _TOOLTIP_MIN_WIDTH = 420
 _TOOLTIP_MAX_WIDTH = 460
 _TOOLTIP_ANNOUNCEMENT_MAX_WIDTH = 310
+_TOOLTIP_VEHICLE_STATUS_WIDTH = 346
 _CREW_TOOLTIP_PARAMS = {Tankman.ROLES.COMMANDER: {'paramName': TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE,
                            'commanderPercents': '10%',
                            'crewPercents': '1%'},
@@ -63,8 +66,8 @@ _CREW_TOOLTIP_PARAMS = {Tankman.ROLES.COMMANDER: {'paramName': TOOLTIPS.VEHICLEP
  Tankman.ROLES.RADIOMAN: {'paramName': TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE},
  Tankman.ROLES.LOADER: {'paramName': TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_FIREPOWER}}
 _MULTI_KPI_PARAMS = frozenset(['vehicleRepairSpeed',
- 'vehicleRamOrExplosionDamageResistance',
- 'vehicleGunShotDispersion',
+ 'vehicleRamDamageResistance',
+ 'vehicleExplosionDamageResistance',
  'crewHitChance',
  'crewRepeatedStunDuration',
  'vehicleChassisStrength',
@@ -74,16 +77,53 @@ _MULTI_KPI_PARAMS = frozenset(['vehicleRepairSpeed',
  'vehicleFireChance',
  'demaskFoliageFactor',
  'demaskMovingFactor'])
+_BONUSES_CMP_ORDER = [BonusTypes.DETACHMENT,
+ BonusTypes.ROLE,
+ BonusTypes.SKILL,
+ BonusTypes.BATTLE_BOOSTER,
+ BonusTypes.EQUIPMENT,
+ BonusTypes.OPTIONAL_DEVICE,
+ BonusTypes.EXTRA]
+_BONUSES_EXTRACT_CMP_ORDER = [BonusTypes.SKILL,
+ BonusTypes.DETACHMENT,
+ BonusTypes.ROLE,
+ BonusTypes.BATTLE_BOOSTER,
+ BonusTypes.EQUIPMENT,
+ BonusTypes.OPTIONAL_DEVICE,
+ BonusTypes.EXTRA]
 
-def _bonusCmp(x, y):
-    return cmp(x[1], y[1]) or cmp(x[0], y[0])
+def _bonusCmp(x, y, extract=False, paramName='', sortByValue=False, sortSituational=True):
+    bonusIdX, bonusTypeX = x[:2]
+    bonusIdY, bonusTypeY = y[:2]
+    if not extract:
+        if sortByValue:
+            bonusInfoX = x[2].getParamDiff()
+            bonusInfoY = y[2].getParamDiff()
+            if isinstance(bonusInfoX, list) and isinstance(bonusInfoY, list):
+                result = next((cmp(bonusInfoY[i], bonusInfoX[i]) for i in xrange(len(bonusInfoX))))
+            else:
+                result = cmp(bonusInfoY, bonusInfoX)
+            if result:
+                return result
+        if sortSituational:
+            result = cmp(isSituationalBonus(bonusIdX, bonusTypeX, paramName), isSituationalBonus(bonusIdY, bonusTypeY, paramName))
+            if result:
+                return result
+        if bonusTypeX == BonusTypes.DETACHMENT and bonusTypeY == BonusTypes.DETACHMENT:
+            perkX = PerkGUI(int(bonusIdX))
+            perkY = PerkGUI(int(bonusIdY))
+            result = cmp(perkX.isAutoperk, perkY.isAutoperk)
+            if result:
+                return result
+    bonusOrder = _BONUSES_EXTRACT_CMP_ORDER if extract else _BONUSES_CMP_ORDER
+    return cmp(bonusOrder.index(bonusTypeX), bonusOrder.index(bonusTypeY)) or cmp(bonusIdX, bonusIdY)
 
 
 def _makeModuleFitTooltipError(reason):
     return '#tooltips:moduleFits/{}'.format(reason)
 
 
-_SHORTEN_TOOLTIP_CASES = ('shopVehicle',)
+_SHORTEN_TOOLTIP_CASES = ('shopVehicle', TOOLTIPS_CONSTANTS.DETACHMENT_VEHICLE_PARAMETERS)
 
 class VehicleInfoTooltipData(BlocksTooltipData):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -112,20 +152,20 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
         valueWidth = 75
         textGap = -2
-        headerItems = [formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=34, right=0), blockWidth=20)]
-        headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16))]
+        headerItems = [formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=6, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=21, right=0), blockWidth=20)]
+        headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-7))]
         telecomBlock = TelecomBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
         if telecomBlock:
             headerBlockItems.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
         self.__createStatusBlock(vehicle, headerBlockItems, statsConfig, paramsConfig, valueWidth)
         items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-8)))
-        if vehicle.isEarnCrystals:
+        if vehicle.isEarnCrystals and statusConfig.showEarnCrystals:
             crystalBlock, linkage = CrystalBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
             if crystalBlock:
                 items.append(formatters.packBuildUpBlockData(crystalBlock, linkage=linkage, padding=leftRightPadding))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
         if simplifiedStatsBlock:
-            items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
+            items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=2, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
         if not vehicle.isRotationGroupLocked:
             commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
             if commonStatsBlock:
@@ -159,10 +199,9 @@ class VehicleInfoTooltipData(BlocksTooltipData):
     def _getCrewIconBlock(self):
         block = []
         vehicle = self.item
-        crewSorted = sorted(vehicle.crew, key=lambda tankman: tankman[1], reverse=True)
-        for _, tankman in crewSorted:
-            tImg = RES_ICONS.MAPS_ICONS_MESSENGER_ICONCONTACTS
-            tAlpha = 0.5 if tankman is not None else 0.25
+        for idx, role in enumerate(vehicle.crewRoles):
+            tImg = getVehicleCrewRoleIconPath(role[0])
+            tAlpha = 0.5 if vehicle.crew[idx][1] is not None or vehicle.hasDetachment else 0.25
             block.append(formatters.packImageBlockData(img=tImg, alpha=tAlpha))
 
         return block
@@ -192,7 +231,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.rankedBonusBattle())), value='', icon=ICON_TEXT_FRAMES.BONUS_BATTLE, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
         if statsConfig.dailyXP:
             attrs = self.__itemsCache.items.stats.attributes
-            if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and vehicle.dailyXPFactor > 0:
+            if attrs & ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and vehicle.dailyXPFactor > 0:
                 dailyXPText = text_styles.main(text_styles.expText(''.join(('x', backport.getIntegralFormat(vehicle.dailyXPFactor)))))
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=2, top=-2, bottom=5)))
         if statsConfig.restorePrice:
@@ -216,32 +255,9 @@ class BaseVehicleParametersTooltipData(BlocksTooltipData):
 
     def _packData(self, paramName):
         comparator = self.context.getComparator()
-        self._hasPerksBonuses = comparator.hasBonusOfType(constants.BonusTypes.PERK)
+        self._hasPerksBonuses = comparator.hasBonusOfType(BonusTypes.DETACHMENT)
         self._extendedData = comparator.getExtendedData(paramName)
         self._paramName = self._extendedData.name
-
-    def _getPenalties(self):
-        notFullCrew = False
-        result = []
-        penalties = self._extendedData.penalties
-        actualPenalties, _ = _getNumNotNullPenaltyTankman(penalties)
-        penaltiesLen = len(penalties)
-        numNotNullPenaltyTankman = len(actualPenalties)
-        if penaltiesLen > numNotNullPenaltyTankman:
-            notFullCrew = True
-            result.append(formatters.packTitleDescParameterWithIconBlockData(text_styles.main(_ms(TOOLTIPS.VEHICLEPARAMS_PENALTY_CREWNOTFULL_TEMPLATE)), icon=RES_ICONS.MAPS_ICONS_VEHPARAMS_TOOLTIPS_PENALTIES_ALL, iconPadding=self.__iconPadding, titlePadding=self.__titlePadding, padding=self.__listPadding))
-        if numNotNullPenaltyTankman > 0:
-            for penalty in penalties:
-                valueStr = _formatValueChange(self._paramName, penalty.value)
-                if valueStr:
-                    if penalty.vehicleIsNotNative:
-                        locKey = TOOLTIPS.VEHICLEPARAMS_PENALTY_TANKMANDIFFERENTVEHICLE_TEMPLATE
-                    else:
-                        locKey = TOOLTIPS.VEHICLEPARAMS_PENALTY_TANKMANLEVEL_TEMPLATE
-                    penaltyStr = text_styles.main(_ms(locKey, tankmanType=_ms(ITEM_TYPES.tankman_roles(penalty.roleName))))
-                    result.append(formatters.packTitleDescParameterWithIconBlockData(penaltyStr, text_styles.warning(_ms(TOOLTIPS.VEHICLEPARAMS_TITLE_VALUETEMPLATE, value=valueStr)), icon=param_formatter.getPenaltyIcon(penalty.roleName), iconPadding=self.__iconPadding, titlePadding=self.__titlePadding, padding=self.__listPadding))
-
-        return (notFullCrew, result)
 
 
 class VehicleSimpleParametersTooltipData(BaseVehicleParametersTooltipData):
@@ -275,10 +291,15 @@ class BaseVehicleAdvancedParametersTooltipData(BaseVehicleParametersTooltipData)
 
     def _packBlocks(self, paramName):
         blocks = super(BaseVehicleAdvancedParametersTooltipData, self)._packBlocks(paramName)
-        self._packData(paramName)
         isExtraParam = KPI.Name.hasValue(paramName)
         if isExtraParam:
-            title = text_styles.highTitle(backport.text(R.strings.menu.extraParams.header(), paramName=backport.text(R.strings.tank_setup.kpi.bonus.dyn(paramName)())))
+            comparator = self.context.getComparator()
+            paramInfo = comparator.getExtendedData(paramName, compareWithEmpty=True)
+            reverted = paramInfo.state[0] == PARAM_STATE.WORSE
+            if reverted:
+                title = text_styles.highTitle(backport.text(R.strings.menu.extraParams.reverted.header(), paramName=backport.text(R.strings.tank_setup.kpi.bonus.reverted.dyn(paramName)())))
+            else:
+                title = text_styles.highTitle(backport.text(R.strings.menu.extraParams.header(), paramName=backport.text(R.strings.tank_setup.kpi.bonus.dyn(paramName)())))
             desc = text_styles.main(backport.text(R.strings.menu.extraParams.name.dyn(paramName, R.strings.menu.extraParams.desc)()))
         else:
             title = text_styles.highTitle(MENU.tank_params(paramName))
@@ -290,7 +311,6 @@ class BaseVehicleAdvancedParametersTooltipData(BaseVehicleParametersTooltipData)
                 descText = backport.text(R.strings.tooltips.tank_params.desc.dyn(paramName)())
             desc = text_styles.main(descText)
         if isRelativeParameter(paramName):
-            desc = self._getApproximatelyDescription(desc) if self.context.isApproximately else desc
             blocks.append(formatters.packTitleDescBlock(title, desc))
         else:
             blocks.append(formatters.packImageTextBlockData(title, desc, img=param_formatter.getParameterBigIconPath(paramName), imgPadding=formatters.packPadding(top=10, left=1), txtPadding=formatters.packPadding(left=10)))
@@ -302,13 +322,6 @@ class BaseVehicleAdvancedParametersTooltipData(BaseVehicleParametersTooltipData)
 
     def _hasExtendedInfo(self):
         return True
-
-    def _getApproximatelyDescription(self, desc):
-        approxImgRes = R.images.gui.maps.icons.vehPostProgression.tooltips.dyn(self._extendedData.state[0])
-        if approxImgRes.exists():
-            approxDesc = text_styles.concatStylesWithSpace(icons.makeImageTag(source=backport.image(approxImgRes()), vSpace=-1), text_styles.main(backport.text(R.strings.veh_post_progression.tooltips.ttc.approximately())))
-            return text_styles.concatStylesToMultiLine(desc, '', approxDesc)
-        return desc
 
     def _getAutoReloadTimeDescription(self):
         return backport.text(R.strings.tooltips.tank_params.desc.autoReloadTime())
@@ -323,6 +336,7 @@ class VehicleAvgParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):
 
     def _packBlocks(self, paramName):
         blocks = super(VehicleAvgParameterTooltipData, self)._packBlocks(paramName)
+        self._packData(paramName)
         rangeParamName = self._AVG_TO_RANGE_PARAMETER_NAME[paramName]
         value = self.context.getComparator().getExtendedData(rangeParamName).value
         fmtValue = param_formatter.formatParameter(rangeParamName, value)
@@ -330,39 +344,77 @@ class VehicleAvgParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):
         return blocks
 
 
-def _getBonusID(bnsType, bnsId):
-    return bnsId.split('_tier')[0] if bnsType == _OPTION_DEVICE else bnsId
+def _packEquipmentName(bnsId):
+    return (_ms(getArtefactName(bnsId)), '')
 
+
+def _packSkillName(bnsId):
+    reason = ''
+    itemStr = _ms(ITEM_TYPES.tankman_skills(bnsId))
+    if bnsId != TANK_CONTROL_LEVEL:
+        itemStr = _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_SKILL_TEMPLATE, name=itemStr)
+    else:
+        reason = TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_NOTINCREASED
+    return (itemStr, reason)
+
+
+def _packDetachmentName(bnsId):
+    perk = PerkGUI(int(bnsId))
+    itemStr = backport.text(perk.name)
+    if not perk.isAutoperk:
+        if perk.isUltimate:
+            perkType = TOOLTIPS.VEHICLEPARAMS_BONUS_TALENT_TEMPLATE
+        else:
+            perkType = TOOLTIPS.VEHICLEPARAMS_BONUS_PERK_TEMPLATE
+        itemStr = _ms(perkType, name=itemStr)
+        reason = TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_NOTLEARNED
+    else:
+        reason = TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_NOTACHIEVED
+    return (itemStr, reason)
+
+
+def _packRoleName(bnsId):
+    itemStr = _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_ROLE_TEMPLATE, name=_ms(TOOLTIPS.vehicleparams_bonus_tankmanlevel(bnsId)))
+    return (itemStr, '')
+
+
+def _packExtraName(bnsId):
+    itemStr = _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_ROLE_TEMPLATE, name=_ms(TOOLTIPS.vehicleparams_bonus_extra(bnsId)))
+    return (itemStr, '')
+
+
+def _packBattleBoosterName(bnsId):
+    itemStr = _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_BATTLEBOOSTER_TEMPLATE, name=_ms(getArtefactName(bnsId)))
+    return (itemStr, '')
+
+
+_BONUS_NAME_PACK_MAP = {BonusTypes.EQUIPMENT: _packEquipmentName,
+ BonusTypes.OPTIONAL_DEVICE: _packEquipmentName,
+ BonusTypes.SKILL: _packSkillName,
+ BonusTypes.DETACHMENT: _packDetachmentName,
+ BonusTypes.ROLE: _packRoleName,
+ BonusTypes.EXTRA: _packExtraName,
+ BonusTypes.BATTLE_BOOSTER: _packBattleBoosterName}
 
 def _packBonusName(bnsType, bnsId, enabled=True, inactive=False):
-    itemStr = None
     textStyle = text_styles.main if enabled else text_styles.standard
-    if bnsType in (_EQUIPMENT, _OPTION_DEVICE):
-        itemStr = textStyle(_ms('#artefacts:%s/name' % bnsId))
-    elif bnsType == _SKILL_BONUS_TYPE:
-        itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_SKILL_TEMPLATE, name=_ms(ITEM_TYPES.tankman_skills(bnsId)), type=text_styles.standard(_ms(TOOLTIPS.VEHICLEPARAMS_SKILL_NAME))))
-    elif bnsType == _PERK_BONUS_TYPE:
-        cache = perks.g_cache.perks()
-        perkItem = cache.perks[int(bnsId)]
-        itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_PERK_TEMPLATE, name=perkItem.name, type=text_styles.standard(_ms(TOOLTIPS.VEHICLEPARAMS_SKILL_NAME))))
-    elif bnsType == _ROLE_BONUS_TYPE:
-        itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_ROLE_TEMPLATE, name=_ms(TOOLTIPS.vehicleparams_bonus_tankmanlevel(bnsId))))
-    elif bnsType == _EXTRA_BONUS_TYPE:
-        itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_ROLE_TEMPLATE, name=_ms(TOOLTIPS.vehicleparams_bonus_extra(bnsId))))
-    elif bnsType == _BATTLE_BOOSTER:
-        itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_BATTLEBOOSTER_TEMPLATE, name=_ms('#artefacts:{boosterId}/name'.format(boosterId=bnsId))))
-    if not enabled:
-        if bnsType not in _CREW_TYPES:
-            itemStr += _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_NOTINSTALLED)
-        else:
-            itemStr += _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_ISINACTIVE)
-            if inactive:
-                icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_RED, 16, 16, 0, 2)
-                itemStr = param_formatter.packSituationalIcon(itemStr, icon)
-    return textStyle(itemStr)
+    packFn = _BONUS_NAME_PACK_MAP.get(bnsType, None)
+    if not packFn:
+        _logger.error('Unknown bonus type "%s"!', bnsType)
+        return
+    else:
+        itemStr, reason = packFn(bnsId)
+        if inactive:
+            itemStr += _ms(reason or TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_ISINACTIVE)
+            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_RED_DISABLED, 16, 16, 0, 2)
+            itemStr = param_formatter.packSituationalIcon(itemStr, icon)
+        elif not enabled:
+            itemStr += _ms(reason or TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_NOTINSTALLED)
+        return textStyle(itemStr)
 
 
 class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipData):
+    _DEFAULT_PROGRESSION_LAYOUT_ID = 1
 
     def __init__(self, context):
         super(VehicleAdvancedParametersTooltipData, self).__init__(context)
@@ -373,18 +425,18 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
 
     def _packBlocks(self, paramName):
         blocks = super(VehicleAdvancedParametersTooltipData, self)._packBlocks(paramName)
+        self._packData(paramName)
         bonuses, hasSituational = self._getBonuses()
         self._packListBlock(blocks, bonuses, text_styles.warning(_ms(TOOLTIPS.VEHICLEPARAMS_BONUSES_TITLE)))
-        notFullCrew, penalties = self._getPenalties()
-        if notFullCrew:
-            blocks.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(TOOLTIPS.VEHICLE_STATS_FOOTNOTE), img=RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_OFF, imgPadding=formatters.packPadding(top=4), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=20)))
-        self._packListBlock(blocks, penalties, text_styles.critical(_ms(TOOLTIPS.VEHICLEPARAMS_PENALTIES_TITLE)))
         if len(self._extendedData.bonuses) > 1 and paramName in _MULTI_KPI_PARAMS:
             blocks.append(formatters.packTextBlockData(text_styles.standard(backport.text(R.strings.menu.extraParams.multiDesc()))))
-        if self._extendedData.inactiveBonuses:
-            blocks.append(formatters.packBuildUpBlockData(self._getFootNoteBlock('inactive'), padding=0))
+        footNoteBlocks = []
         if hasSituational:
-            blocks.append(formatters.packBuildUpBlockData(self._getFootNoteBlock('optional'), padding=0))
+            footNoteBlocks.extend(self._getFootNoteBlock('optional'))
+        if self._extendedData.inactiveBonuses:
+            footNoteBlocks.extend(self._getFootNoteBlock('inactive'))
+        if footNoteBlocks:
+            blocks.append(formatters.packBuildUpBlockData(footNoteBlocks, padding=0))
         return blocks
 
     def _packListBlock(self, blocks, listBlock, title):
@@ -399,26 +451,42 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
             desc = text_styles.standard(TOOLTIPS.VEHICLEPARAMS_BONUS_SITUATIONAL)
             img = RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_OPTIONAL
         else:
-            conditionsToActivate = set(self._extendedData.inactiveBonuses.values())
-            conditionsToActivate = [ _ms(ITEM_TYPES.tankman_skills(bnsID)) for bnsID, _ in conditionsToActivate ]
-            desc = text_styles.standard(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_INACTIVEDESCRIPTION, skillName=', '.join(conditionsToActivate)))
+            conditionsToActivate = set((condition for conditions in self._extendedData.inactiveBonuses.itervalues() for condition in conditions))
+            progressionInactive = any((isBonusAutoPerk(bnsID, bnsType) for bnsID, bnsType in conditionsToActivate))
+            if progressionInactive:
+                progressionLayoutID = self._DEFAULT_PROGRESSION_LAYOUT_ID
+                progressionSettings = settings_globals.g_detachmentSettings.progression
+                progression = progressionSettings.getProgressionByID(progressionLayoutID)
+                desc = text_styles.standard(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_NOTACHIEVEDDESCRIPTION, tier=''.join(str(progression.maxLevel))))
+            else:
+
+                def getPerkName(perkID):
+                    perk = PerkGUI(perkID)
+                    return backport.text(perk.name)
+
+                conditionsToActivate = [ getPerkName(int(bnsID)) for bnsID, bnsType in conditionsToActivate if bnsType == BonusTypes.DETACHMENT ]
+                desc = text_styles.standard(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_INACTIVEDESCRIPTION, skillName=', '.join(conditionsToActivate)))
             img = RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_RED
         return [formatters.packImageTextBlockData(title='', desc=desc, img=img, imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=20))]
 
     def _getBonuses(self):
         result = []
+        disabledBonuses = []
         item = self.context.buildItem()
         if item is None:
             return (result, False)
         else:
-            bonuses = sorted(self._extendedData.bonuses, cmp=_bonusCmp)
+            bonuses = sorted(self._extendedData.bonuses, cmp=lambda a, b: _bonusCmp(a, b, extract=True))
             bonusExtractor = self.context.getBonusExtractor(item, bonuses, self._paramName)
             hasSituational = False
-            for bnsType, bnsId, pInfo in bonusExtractor.getBonusInfo():
-                bnsId = _getBonusID(bnsType, bnsId)
-                isSituational = isSituationalBonus(bnsId, bnsType)
+            for bnsId, bnsType, pInfo in sorted(bonusExtractor.getBonusInfo(), cmp=lambda a, b: _bonusCmp(a, b, paramName=self._paramName, sortByValue=True)):
+                isSituational = isSituationalBonus(bnsId, bnsType, self._paramName)
                 scheme = SITUATIONAL_SCHEME if isSituational else EXTRACTED_BONUS_SCHEME
-                valueStr = param_formatter.formatParameterDelta(pInfo, scheme)
+                paramDiff = pInfo.getParamDiff()
+                showValue = not isSituational or paramDiff
+                if not paramDiff and bnsId == 'tankControlLevel':
+                    showValue = False
+                valueStr = param_formatter.formatParameterDelta(pInfo, scheme) if showValue else ''
                 if valueStr is not None:
                     hasSituational = hasSituational or isSituational
                     bonusName = _packBonusName(bnsType, bnsId)
@@ -428,25 +496,33 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
                         titlePadding = formatters.packPadding(left=8, top=-2)
                     else:
                         titlePadding = self.__titlePadding
-                    result.append(self.__packBonusField(bnsId, bonusName, value=_ms(TOOLTIPS.VEHICLEPARAMS_TITLE_VALUETEMPLATE, value=valueStr), padding=titlePadding))
+                    container = result if paramDiff else disabledBonuses
+                    container.append(self.__packBonusField(bnsType, bnsId, bonusName, value=_ms(TOOLTIPS.VEHICLEPARAMS_TITLE_VALUETEMPLATE, value=valueStr), padding=titlePadding))
 
+            result.extend(disabledBonuses)
             perksController = item.getPerksController()
             if perksController:
                 perksController.restore()
-            possibleBonuses = sorted(self._extendedData.possibleBonuses, cmp=_bonusCmp)
+            possibleBonuses = sorted(self._extendedData.possibleBonuses, cmp=lambda a, b: _bonusCmp(a, b, sortSituational=False))
             inactiveBonuses = self._extendedData.inactiveBonuses
             for bnsId, bnsType in possibleBonuses:
-                if bnsType == constants.BonusTypes.PERK and not self._hasPerksBonuses:
-                    continue
-                tirelessBnsId = _getBonusID(bnsType, bnsId)
-                isEnabled = (bnsId, bnsType) in bonuses if bnsType in _CREW_TYPES else False
+                bonusID = getBonusID(bnsType, bnsId)
                 isInactive = (bnsId, bnsType) in inactiveBonuses
-                result.append(self.__packBonusField(tirelessBnsId, _packBonusName(bnsType, tirelessBnsId, enabled=isEnabled, inactive=isInactive), isDisabled=True))
+                bonusName = _packBonusName(bnsType, bonusID, enabled=False, inactive=isInactive)
+                isSituational = isSituationalBonus(bnsId, bnsType, self._paramName)
+                hasSituational = hasSituational or isSituational
+                if isSituational:
+                    icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_OPTIONAL_DISABLED, 16, 16, 0, 2)
+                    bonusName = param_formatter.packSituationalIcon(bonusName, icon)
+                    titlePadding = formatters.packPadding(left=8, top=-2)
+                else:
+                    titlePadding = self.__titlePadding
+                result.append(self.__packBonusField(bnsType, bonusID, bonusName, isDisabled=True, padding=titlePadding))
 
             return (result, hasSituational)
 
-    def __packBonusField(self, bonusID, name, value='', isDisabled=False, padding=None):
-        return formatters.packTitleDescParameterWithIconBlockData(name, value=value, icon=param_formatter.getBonusIcon(bonusID), iconAlpha=self.__iconDisabledAlpha if isDisabled else 1, iconPadding=self.__iconPadding, titlePadding=padding or self.__titlePadding, padding=self.__listPadding)
+    def __packBonusField(self, bonusType, bonusID, name, value='', isDisabled=False, padding=None):
+        return formatters.packTitleDescParameterWithIconBlockData(name, value=value, icon=param_formatter.getBonusIcon(bonusType, bonusID), iconAlpha=self.__iconDisabledAlpha if isDisabled else 1, iconPadding=self.__iconPadding, titlePadding=padding or self.__titlePadding, padding=self.__listPadding)
 
     def _getAutoReloadTimeDescription(self):
         return backport.text(R.strings.tooltips.tank_params.desc.autoReloadTime.boost())
@@ -463,35 +539,111 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
         return item and item.descriptor.gun.autoreloadHasBoost or not item
 
 
-class DefaultCrewMemberTooltipData(BlocksTooltipData):
+class VehicleListDescParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):
 
-    def __init__(self, context):
-        super(DefaultCrewMemberTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
-        self._setWidth(360)
-        self._setMargins(13, 13)
-
-    def _packBlocks(self, role):
-        blocks = []
-        bodyStr = '{}/{}'.format(TOOLTIPS.VEHICLEPREVIEW_CREW, role)
-        crewParams = {k:text_styles.neutral(v) for k, v in _CREW_TOOLTIP_PARAMS[role].iteritems()}
-        blocks.append(formatters.packTitleDescBlock(text_styles.highTitle(ITEM_TYPES.tankman_roles(role)), text_styles.main(_ms(bodyStr, **crewParams))))
-        vehicle = self.context.getVehicle()
-        for idx, tankman in vehicle.crew:
-            if tankman.role == role:
-                otherRoles = list(vehicle.descriptor.type.crewRoles[idx])
-                otherRoles.remove(tankman.role)
-                if otherRoles:
-                    rolesStr = ', '.join([ text_styles.stats(_ms(ITEM_TYPES.tankman_roles(r))) for r in otherRoles ])
-                    blocks.append(formatters.packTextBlockData(text_styles.main(_ms(TOOLTIPS.VEHICLEPREVIEW_CREW_ADDITIONALROLES, roles=rolesStr))))
-
+    def _packBlocks(self, paramName):
+        blocks = super(VehicleListDescParameterTooltipData, self)._packBlocks(paramName)
+        blocks.append(formatters.packTextBlockData(text_styles.main(TOOLTIPS.TANK_PARAMS_DESC_EFFECTIVEARMORDESC)))
         return blocks
 
 
-class VehiclePreviewCrewMemberTooltipData(DefaultCrewMemberTooltipData):
+def _calcCrewMasteryBonuses(vehicle):
+    bonuses = {'eqBonus': 0,
+     'perkBonus': 0,
+     'autoPerkBonus': 0,
+     'mentorBonus': 0,
+     'optBonus': vehicle.descriptor.miscAttrs['crewMasteryFactor']}
+    for eq in vehicle.consumables.installed.getItems():
+        for kpi in eq.descriptor.kpi:
+            if kpi.name == 'crewMastery':
+                bonuses['eqBonus'] += kpi.value - 1.0
+
+    for bb in vehicle.battleBoosters.installed.getItems():
+        if not bb.isAffectsOnVehicle(vehicle):
+            continue
+        for kpi in bb.descriptor.kpi:
+            if kpi.name == 'crewMastery':
+                bonuses['eqBonus'] += kpi.value - 1.0
+
+    perksController = vehicle.getPerksController()
+    if perksController:
+        perksCache = perks.g_cache.perks()
+        for perkID, perkLevel in perksController.mergedPerks.iteritems():
+            perk = perksCache.perks[perkID]
+            ignoredLevel = perksController.getPerkIgnoredLevel(AbilitySystemScopeNames.DETACHMENT, perkID)
+            for kpi in getPerkKpi(perk, perkLevel - ignoredLevel, vehicle):
+                if kpi.name == 'crewMastery':
+                    if perk.isAutoperk:
+                        bonuses['autoPerkBonus'] += kpi.value - 1.0
+                    elif not perk.situational:
+                        bonuses['perkBonus'] += kpi.value - 1.0
+
+    vehParams = VehicleParams(vehicle)
+    totalCrewMastery = vehParams.relativeTankControlLevel
+    bonuses['mentorBonus'] = _calcCommanderBonus(totalCrewMastery / 100.0) * 100.0
+    return (totalCrewMastery, bonuses)
+
+
+class CrewMemberTooltipData(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(CrewMemberTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
+        self._setWidth(300)
+        self._setMargins(0, 15)
+
+    @property
+    def vehicle(self):
+        return g_detachmentTankSetupVehicle.item
+
+    def _packBlocks(self, role):
+
+        def formatFloat(value):
+            return getNiceNumberFormat(round(value, 1))
+
+        header = []
+        bodyStr = '{}/{}'.format(TOOLTIPS.VEHICLEPREVIEW_CREW, role)
+        crewParams = {k:text_styles.neutral(v) for k, v in _CREW_TOOLTIP_PARAMS[role].iteritems()}
+        header.append(formatters.packTitleDescBlock(text_styles.highTitle(ITEM_TYPES.tankman_roles(role)), text_styles.main(_ms(bodyStr, **crewParams))))
+        vehicle = self.vehicle
+        for roles in vehicle.crewRoles:
+            if role != roles[0]:
+                continue
+            otherRoles = roles[1:]
+            if otherRoles:
+                rolesStr = ', '.join([ text_styles.stats(_ms(ITEM_TYPES.tankman_roles(r))) for r in otherRoles ]) + '.'
+                header.append(formatters.packTextBlockData(text_styles.main(_ms(TOOLTIPS.VEHICLEPREVIEW_CREW_ADDITIONALROLES, roles=rolesStr)), padding=formatters.packPadding(bottom=12)))
+
+        blocks = [formatters.packBuildUpBlockData(blocks=header, padding=formatters.packPadding(bottom=-5))]
+        totalCrewMastery, bonuses = _calcCrewMasteryBonuses(vehicle)
+        if role != 'commander':
+            totalCrewMastery += bonuses['mentorBonus']
+        blocksLocal = [formatters.packTextParameterBlockData(name=text_styles.main(_ms(MENU.TANK_PARAMS_RELATIVETANKCONTROLLEVEL)), value=makeHtmlString('html_templates:lobby/detachment', 'relativeTankControlLevel', {'msg': '%s%%' % formatFloat(totalCrewMastery)}), padding=formatters.packPadding(bottom=5)), formatters.packTextParameterBlockData(name=text_styles.standardSmall(_ms(TOOLTIPS.VEHICLEPREVIEW_CREW_CREWMASTERY_BASIC)), value=text_styles.counter('100%'))]
+        if role != 'commander':
+            blocksLocal.append(formatters.packTextParameterBlockData(name=text_styles.standardSmall(_ms(TOOLTIPS.VEHICLEPREVIEW_CREW_CREWMASTERY_CMDRBONUS)), value=text_styles.counter('+%s%%' % formatFloat(bonuses['mentorBonus']))))
+        if bonuses['perkBonus']:
+            blocksLocal.append(formatters.packTextParameterBlockData(name=text_styles.standardSmall(_ms(TOOLTIPS.VEHICLEPREVIEW_CREW_CREWMASTERY_PERKS)), value=text_styles.counter('+%s%%' % formatFloat(bonuses['perkBonus'] * 100))))
+        if bonuses['autoPerkBonus']:
+            blocksLocal.append(formatters.packTextParameterBlockData(name=text_styles.standardSmall(_ms(TOOLTIPS.VEHICLEPREVIEW_CREW_CREWMASTERY_AUTOPERKS)), value=text_styles.counter('+%s%%' % formatFloat(bonuses['autoPerkBonus'] * 100))))
+        if bonuses['eqBonus'] or bonuses['optBonus']:
+            blocksLocal.append(formatters.packTextParameterBlockData(name=text_styles.standardSmall(_ms(TOOLTIPS.VEHICLEPREVIEW_CREW_CREWMASTERY_EQUIPMENT)), value=text_styles.counter('+%s%%' % formatFloat((bonuses['eqBonus'] + bonuses['optBonus']) * 100))))
+        blocks.append(formatters.packBuildUpBlockData(blocks=blocksLocal, padding=formatters.packPadding(left=12, bottom=7)))
+        if role == 'commander':
+            itemStr = '%s  ' % _ms(TOOLTIPS.VEHICLEPREVIEW_CREW_MENTOR)
+            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_BATTLEPASS_TOOLTIPS_ICONS_ICON_PERK_MENTOR, 24, 24, -16)
+            itemStr = param_formatter.packSituationalIcon(itemStr, icon)
+            blocks.append(formatters.packTitleDescBlock(text_styles.middleTitle(itemStr), text_styles.main(_ms(TOOLTIPS.VEHICLEPREVIEW_CREW_MENTORDESCR, bonusAmount=text_styles.mainGreen('+1%'), vehicleProficiencyAmount=text_styles.mainGreen('10%'))), blocksLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(top=-2, bottom=7), gap=-2))
+        return blocks
+
+
+class VehiclePreviewCrewMemberTooltipData(CrewMemberTooltipData):
 
     def __init__(self, context):
         super(VehiclePreviewCrewMemberTooltipData, self).__init__(context)
         self._setWidth(295)
+
+    @property
+    def vehicle(self):
+        return self.context.getVehicle()
 
     def _packBlocks(self, role, name, vehicleName, icon, description, skillsItems, *args, **kwargs):
         blocks = []
@@ -569,7 +721,7 @@ class VehicleStatusTooltipData(BlocksTooltipData):
 
     def __init__(self, context):
         super(VehicleStatusTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
-        self._setWidth(346)
+        self._setWidth(_TOOLTIP_VEHICLE_STATUS_WIDTH)
 
     def _packBlocks(self, *args, **kwargs):
         vehicle = self.context.buildItem(*args, **kwargs)
@@ -596,6 +748,7 @@ class VehicleTooltipBlockConstructor(object):
 
 
 class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
+    rankedController = dependency.descriptor(IRankedBattlesController)
 
     def construct(self):
         block = []
@@ -610,10 +763,10 @@ class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
         typeStr = text_styles.main(vehicleType)
         levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(self.vehicle.level)), text_styles.standard(_ms(TOOLTIPS.VEHICLE_LEVEL)))
         icon = getTypeBigIconPath(self.vehicle.type, self.vehicle.isElite)
-        headerBlocks.append(formatters.packImageTextBlockData(title=nameStr, desc=text_styles.concatStylesToMultiLine(levelStr + ' ' + typeStr, ''), img=icon, imgPadding=formatters.packPadding(left=10, top=-15), txtGap=-9, txtOffset=99, padding=formatters.packPadding(top=15, bottom=-15 if self.vehicle.isFavorite else -21)))
-        if self.vehicle.role != constants.ROLE_TYPE.NOT_DEFINED:
-            roleLabel = self.vehicle.roleLabel
-            headerBlocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.menu.roleExp.roleLabel()) + ' ' + backport.text(R.strings.menu.roleExp.roleName.dyn(roleLabel)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleLabel)()))), padding=formatters.packPadding(top=-9, left=99, bottom=9)))
+        headerBlocks.append(formatters.packImageTextBlockData(title=nameStr, desc=text_styles.concatStylesToMultiLine(levelStr + ' ' + typeStr, ''), img=icon, imgPadding=formatters.packPadding(left=10, top=-15), txtGap=-8, txtOffset=99, padding=formatters.packPadding(top=15, bottom=-15 if self.vehicle.isFavorite else -21)))
+        if self.rankedController.isRankedPrbActive():
+            role = self.vehicle.roleLabel
+            headerBlocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.menu.roleExp.roleLabel()) + ' ' + backport.text(R.strings.menu.roleExp.roleName.dyn(role)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(role)()))), padding=formatters.packPadding(top=-9, left=99, bottom=9)))
         block.append(formatters.packBuildUpBlockData(headerBlocks, stretchBg=False, linkage=bgLinkage, padding=formatters.packPadding(left=-self.leftPadding)))
         return block
 
@@ -854,7 +1007,7 @@ class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
         if self.configuration.params:
             comparator = params_helper.idealCrewComparator(self.vehicle)
             stockParams = params_helper.getParameters(self.itemsCache.items.getStockVehicle(self.vehicle.intCD))
-            for paramName in RELATIVE_PARAMS:
+            for paramName in RELATIVE_BAR_PARAMS:
                 paramInfo = comparator.getExtendedData(paramName)
                 fmtValue = param_formatter.colorizedFormatParameter(paramInfo, param_formatter.NO_BONUS_SIMPLIFIED_SCHEME)
                 if fmtValue is not None:
@@ -868,7 +1021,7 @@ class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
                     block.append(formatters.packStatusDeltaBlockData(title=param_formatter.formatVehicleParamName(paramName), valueStr=fmtValue, statusBarData=SimplifiedBarVO(value=paramInfo.value, delta=delta, markerValue=stockParams[paramName]), buffIconSrc=buffIconSrc, padding=formatters.packPadding(left=74, top=8)))
 
         if block:
-            block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(_ms(TOOLTIPS.VEHICLEPARAMS_SIMPLIFIED_TITLE)), padding=formatters.packPadding(top=-4)))
+            block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(self.configuration.title or _ms(TOOLTIPS.VEHICLEPARAMS_SIMPLIFIED_TITLE)), padding=formatters.packPadding(top=-4)))
         return block
 
 
@@ -1078,17 +1231,6 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             return {'header': header,
              'text': text,
              'level': level}
-
-
-def _getNumNotNullPenaltyTankman(penalties):
-    nullPenaltyTypes = []
-    actualPenalties = []
-    for penalty in penalties:
-        if penalty.value != 0:
-            actualPenalties.append(penalty)
-        nullPenaltyTypes.append(penalty.roleName)
-
-    return (actualPenalties, nullPenaltyTypes)
 
 
 def _formatValueChange(paramName, value):

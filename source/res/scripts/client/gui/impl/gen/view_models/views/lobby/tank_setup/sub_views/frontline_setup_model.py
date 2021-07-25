@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.battle_ability_sl
 class FrontlineSetupModel(BaseSetupModel):
     __slots__ = ('showBattleAbilitiesSetup',)
 
-    def __init__(self, properties=7, commands=8):
+    def __init__(self, properties=7, commands=10):
         super(FrontlineSetupModel, self).__init__(properties=properties, commands=commands)
 
     def getIsLocked(self):

@@ -11,7 +11,7 @@ from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampCompone
 from gui.Scaleform.framework.entities.abstract.ContextMenuManagerMeta import ContextMenuManagerMeta
 from soft_exception import SoftException
 CM_BUY_COLOR = 13347959
-_SEPARATOR_ID = 'separate'
+SEPARATOR_ID = 'separate'
 _handlers = {}
 
 def registerHandlers(*handlers):
@@ -160,7 +160,7 @@ class AbstractContextMenuHandler(object):
          'linkage': linkage}
 
     def _makeSeparator(self):
-        return self._makeItem(_SEPARATOR_ID)
+        return self._makeItem(SEPARATOR_ID)
 
     @abstractmethod
     def _generateOptions(self, ctx=None):

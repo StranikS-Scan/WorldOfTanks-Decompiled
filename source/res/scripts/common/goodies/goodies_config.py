@@ -73,8 +73,10 @@ def _readPrice(reader, subsectionName):
         return
 
 
-def _validator(uid, variety, resource, price):
+def _validator(goodiesStorage, uid, variety, resource, price):
     t, value, isPercentage = resource
+    if uid in goodiesStorage:
+        raise SoftException('Duplicate goodie uid: %d, check goodies.xml and find duplicate' % uid)
     if value < 0:
         raise SoftException('Bad goodie %d value (negative) %d' % uid % value)
     if variety in GOODIE_VARIETY.DISCOUNT_LIKE and isPercentage and value > 100:
@@ -89,7 +91,8 @@ def _readGoodies(reader, subsectionName):
     if section is None:
         return {}
     else:
-        goodies = {'goodies': {},
+        goodiesStorage = {}
+        goodies = {'goodies': goodiesStorage,
          'prices': {},
          'notInShop': set()}
         for packet_name, packet in section.items():
@@ -117,8 +120,8 @@ def _readGoodies(reader, subsectionName):
             condition = _readGoodieCondition(reader.getSubsection('/'.join((subsectionName, packet_name, 'condition'))))
             target, resource = _readGoodieTarget(reader, '/'.join((subsectionName, packet_name)))
             price = _readPrice(reader, '/'.join((subsectionName, packet_name)))
-            _validator(uid, variety, resource, price)
-            goodies['goodies'][uid] = (variety,
+            _validator(goodiesStorage, uid, variety, resource, price)
+            goodiesStorage[uid] = (variety,
              target,
              enabled,
              lifetime,

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/vehicle_state_ctrl.py
 from functools import partial
+from typing import TYPE_CHECKING, Optional
 import weakref
 import BigWorld
 import BattleReplay
@@ -14,6 +15,8 @@ from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_WAIN
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.TimeInterval import TimeInterval
 from shared_utils import first
+if TYPE_CHECKING:
+    from Vehicle import Vehicle
 
 class _StateHandler(object):
     __slots__ = ('__updater',)

@@ -2,13 +2,16 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/barracks/__init__.py
 from frameworks.wulf import WindowLayer
 from gui.app_loader import settings as app_settings
+from gui.impl.lobby.detachment.context_menu.detachment_card_context_menu import DetachmentCardContextMenu
+from gui.impl.lobby.detachment.context_menu.instructor_card_context_menu import InstructorCardContextMenu
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 
 def getContextMenuHandlers():
-    pass
+    return ((CONTEXT_MENU_HANDLER_TYPE.DETACHMENT_CARD_CONTEXT_MENU, DetachmentCardContextMenu), (CONTEXT_MENU_HANDLER_TYPE.INSTRUCTOR_CARD_CONTEXT_MENU, InstructorCardContextMenu))
 
 
 def getViewSettings():

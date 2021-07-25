@@ -7,4 +7,4 @@ from gui.shared.tooltips.builders import DataBuilder
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
-    return (DataBuilder(TOOLTIPS_CONSTANTS.VEH_CMP_CUSTOMIZATION, TOOLTIPS_CONSTANTS.VEH_CMP_CUSTOMIZATION_UI, veh_cmp.VehCmpCustomizationTooltip(contexts.HangarParamContext())), DataBuilder(TOOLTIPS_CONSTANTS.VEH_CMP_SKILLS, TOOLTIPS_CONSTANTS.VEH_CMP_SKILLS_UI, veh_cmp.VehCmpSkillsTooltip(contexts.HangarParamContext())))
+    return (DataBuilder(TOOLTIPS_CONSTANTS.VEH_CMP_CUSTOMIZATION, TOOLTIPS_CONSTANTS.VEH_CMP_CUSTOMIZATION_UI, veh_cmp.VehCmpCustomizationTooltip(contexts.HangarParamContext())),)

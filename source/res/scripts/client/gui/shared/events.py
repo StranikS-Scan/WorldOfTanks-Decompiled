@@ -80,7 +80,6 @@ class GameEvent(HasCtxEvent):
     TOGGLE_VOIP_CHANNEL_ENABLED = 'game/voip/toggleEnabled'
     ROLE_HINT_TOGGLE = 'roleHintToggle'
     COMMANDER_HINT = 'game/commanderHint'
-    CHANGE_AMMUNITION_SETUP = 'game/changeAmmunitionSetup'
 
 
 class GUICommonEvent(SharedEvent):
@@ -325,6 +324,16 @@ class TechnicalMaintenanceEvent(HasCtxEvent):
     RESET_EQUIPMENT = 'resetEquipment'
 
 
+class CrewPanelEvent(HasCtxEvent):
+    OPEN_CHANGE_ROLE = 'openChangeRole'
+    UNLOAD_RECRUITS = 'unloadRecruits'
+    RETURN_RECRUITS = 'returnRecruits'
+    SET_BEST_RECRUITS = 'setBestRecruits'
+    UNLOAD_RECRUIT = 'unloadRecruit'
+    RETRAIN_RECRUITS = 'retrainRecruits'
+    CONVERT_RECRUITS = 'convertRecruitsIntoDetachment'
+
+
 class ContactsEvent(HasCtxEvent):
     EDIT_GROUP = 'editGroup'
     REMOVE_GROUP = 'removeGroup'
@@ -356,8 +365,6 @@ class SkillDropEvent(SharedEvent):
 class CloseWindowEvent(SharedEvent):
     EULA_CLOSED = 'EULAClosed'
     GOLD_FISH_CLOSED = 'GoldFishClosed'
-    ELITE_WINDOW_CLOSED = 'EliteWindowClosed'
-    BUY_VEHICLE_VIEW_CLOSED = 'BuyVehicleViewClosed'
 
     def __init__(self, eventType=None, isAgree=False):
         super(CloseWindowEvent, self).__init__(eventType)
@@ -747,6 +754,16 @@ class DogTagsEvent(SharedEvent):
 
 class PlatoonDropdownEvent(HasCtxEvent):
     NAME = 'DropdownEvent'
+
+
+class DetachmentViewEvent(HasCtxEvent):
+    UPDATE_TTC_VEHICLE = 'detachment/updateTTCVehicle'
+    UPDATE_TTC_CURRENT_DETACHMENT = 'detachment/updateTTCCurrentDetachment'
+    UPDATE_TTC_BONUS_DETACHMENT = 'detachment/updateTTCBonusDetachment'
+    UPDATE_TTC_PERKS = 'detachment/updateTTCPerks'
+    UPDATE_TTC_DISPLAY_PROPS = 'detachment/updateTTCDisplayProps'
+    ESCAPE = 'detachment/closeView'
+    VEHICLE_SELECTED = 'detachment/mobilization/vehicleSelected'
 
 
 class FullscreenModeSelectorEvent(HasCtxEvent):

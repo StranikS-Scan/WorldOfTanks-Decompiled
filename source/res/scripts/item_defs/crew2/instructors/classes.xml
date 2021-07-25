@@ -1,0 +1,30 @@
+<classes.xml>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:noNamespaceSchemaLocation>	../../../development/xml_schema/crew2/instructor/classes.xsd	</xsi:noNamespaceSchemaLocation>
+  <classes>
+    <class>
+      <id>	1	</id>
+      <slotsCount>	4	</slotsCount>
+      <xpBonus>	1.0	</xpBonus>
+      <perkPoints>	10 10 4	</perkPoints>
+      <overcapPoints>	4 4 4	</overcapPoints>
+      <rules>	9 9 9	</rules>
+    </class>
+    <class>
+      <id>	2	</id>
+      <slotsCount>	2	</slotsCount>
+      <xpBonus>	0.40	</xpBonus>
+      <perkPoints>	5 2	</perkPoints>
+      <overcapPoints>	2 2	</overcapPoints>
+      <rules>	9 9	</rules>
+    </class>
+    <class>
+      <id>	3	</id>
+      <slotsCount>	1	</slotsCount>
+      <xpBonus>	0.10	</xpBonus>
+      <perkPoints>	2	</perkPoints>
+      <overcapPoints>	1	</overcapPoints>
+      <rules>	9	</rules>
+    </class>
+  </classes>
+</classes.xml>

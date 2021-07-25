@@ -1,0 +1,14 @@
+<detachment.xml>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:noNamespaceSchemaLocation>	../../../development/xml_schema/crew2/detachment/detachment.xsd	</xsi:noNamespaceSchemaLocation>
+  <maxDetachments>	999	</maxDetachments>
+  <maxInstructors>	999	</maxInstructors>
+  <maxVehicleSlots>	3	</maxVehicleSlots>
+  <maxInstructorSlots>	4	</maxInstructorSlots>
+  <dissolveSettings>
+    <recycleBinMaxSize>	100	</recycleBinMaxSize>
+    <garbageThreshold>	91000	</garbageThreshold>
+    <holdInRecycleBinTerm>	32	</holdInRecycleBinTerm>
+    <specialRestoreTerm>	2	</specialRestoreTerm>
+  </dissolveSettings>
+</detachment.xml>

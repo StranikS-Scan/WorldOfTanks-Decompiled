@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/factories.py
 import logging
-import typing
 from debug_utils import LOG_WARNING
+from gui.shared.gui_items.detachment import Detachment
+from gui.shared.gui_items.instructor import Instructor
 from items import vehicles, EQUIPMENT_TYPES, getTypeOfCompactDescr
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from items.components.detachment_constants import NO_DETACHMENT_ID, NO_INSTRUCTOR_ID
 from items.components.c11n_constants import CustomizationType, DecalType
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.c11n_items import Customization, Paint, Camouflage, Modification, Insignia, Decal, Emblem, Inscription, Style, ProjectionDecal, PersonalNumber, Sequence, Attachment
@@ -17,11 +20,7 @@ import gui.shared.gui_items.badge as badges
 from gui.shared.gui_items.loot_box import LootBox
 from gui.shared.gui_items.crew_skin import CrewSkin
 from gui.shared.gui_items.crew_book import CrewBook
-from gui.veh_post_porgression.models.progression import PostProgressionItem
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-if typing.TYPE_CHECKING:
-    from items.vehicles import VehicleType
-    from post_progression_common import VehicleState
 _logger = logging.getLogger(__name__)
 _NONE_GUI_ITEM_TYPE = 0
 
@@ -75,8 +74,8 @@ class GuiItemFactory(IGuiItemsFactory):
     def createVehicleFuelTank(self, intCompactDescr, proxy=None, descriptor=None):
         return VehicleFuelTank(intCompactDescr, proxy, descriptor)
 
-    def createVehicle(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None):
-        return Vehicle(strCompactDescr, inventoryID, typeCompDescr, proxy, extData)
+    def createVehicle(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
+        return Vehicle(strCompactDescr, inventoryID, typeCompDescr, proxy)
 
     def createTankman(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None):
         return Tankman(strCompactDescr, inventoryID, vehicle, dismissedAt, proxy)
@@ -149,11 +148,11 @@ class GuiItemFactory(IGuiItemsFactory):
     def createCrewBook(self, intCompactDescr, proxy=None):
         return CrewBook(intCompactDescr, proxy)
 
-    def createVehPostProgression(self, vehIntCD, state, vehType):
-        if vehType is None:
-            _, vehNationID, vehID = vehicles.parseIntCompactDescr(vehIntCD)
-            vehType = vehicles.g_cache.vehicle(vehNationID, vehID)
-        return PostProgressionItem(state, vehType)
+    def createDetachment(self, strCompactDescr, proxy=None, invID=NO_DETACHMENT_ID, vehInvID=-1, skinID=NO_CREW_SKIN_ID):
+        return Detachment(strCompactDescr, proxy, invID, vehInvID, skinID)
+
+    def createInstructor(self, strCompactDescr, proxy=None, invID=NO_INSTRUCTOR_ID, detInvID=NO_DETACHMENT_ID):
+        return Instructor(strCompactDescr, proxy, invID, detInvID)
 
 
 _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
@@ -187,4 +186,5 @@ _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.OUTFIT: GuiItemFactory.createOutfit,
  GUI_ITEM_TYPE.CREW_SKINS: GuiItemFactory.createCrewSkin,
  GUI_ITEM_TYPE.CREW_BOOKS: GuiItemFactory.createCrewBook,
- GUI_ITEM_TYPE.VEH_POST_PROGRESSION: GuiItemFactory.createVehPostProgression}
+ GUI_ITEM_TYPE.DETACHMENT: GuiItemFactory.createDetachment,
+ GUI_ITEM_TYPE.INSTRUCTOR: GuiItemFactory.createInstructor}

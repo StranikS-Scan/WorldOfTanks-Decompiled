@@ -279,9 +279,6 @@
       <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
     </updateVehicleAmmo>
-    <resetVehicleAmmo>
-      <Arg>	OBJECT_ID	</Arg>
-    </resetVehicleAmmo>
     <updateDualGunState>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
@@ -358,13 +355,6 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT16	</Arg>
     </showVehicleDamageInfo>
-    <showOtherVehicleDamagedDevices>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	ARRAY	  <of>	EXTRA_ID	</of>
-      </Arg>
-      <Arg>	ARRAY	  <of>	EXTRA_ID	</of>
-      </Arg>
-    </showOtherVehicleDamagedDevices>
     <showShotResults>
       <Arg>	ARRAY	  <of>	UINT64	</of>
       </Arg>
@@ -504,10 +494,6 @@
       <Arg>	PYTHON	</Arg>
       <AllowUnsafeData>	true	</AllowUnsafeData>
     </updateQuestProgress>
-    <updateVehicleQuickShellChanger>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	BOOL	</Arg>
-    </updateVehicleQuickShellChanger>
     <enemySPGHit>
       <Arg>	VECTOR3	</Arg>
     </enemySPGHit>
@@ -530,10 +516,6 @@
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	OBJECT_ID	</Arg>
     </bindToVehicle>
-    <monitorVehicleDamagedDevices>
-      <Exposed>	OWN_CLIENT	</Exposed>
-      <Arg>	OBJECT_ID	</Arg>
-    </monitorVehicleDamagedDevices>
     <onOwnVehicleStatusChanged>
       <Arg>	INT8	</Arg>
       <Arg>	INT8	</Arg>
@@ -572,13 +554,6 @@
       <Arg>	ARRAY	  <of>	BOOL	</of>
       </Arg>
     </receivePositionsFromArena>
-    <receiveVehicleDamagedDevices>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	ARRAY	  <of>	EXTRA_ID	</of>
-      </Arg>
-      <Arg>	ARRAY	  <of>	EXTRA_ID	</of>
-      </Arg>
-    </receiveVehicleDamagedDevices>
     <lockGunOnClient>
       <Arg>	BOOL	</Arg>
     </lockGunOnClient>

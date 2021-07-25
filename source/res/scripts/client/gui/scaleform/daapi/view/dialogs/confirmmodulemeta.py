@@ -15,7 +15,6 @@ from gui.shared.money import MONEY_UNDEFINED, Currency, Money, CurrencyCollectio
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui import SystemMessages
 MAX_ITEMS_FOR_OPERATION = 1000000
-_DEFAULT_VALUE = 1
 
 class ConfirmModuleMeta(IDialogMeta):
 
@@ -51,7 +50,7 @@ class ConfirmModuleMeta(IDialogMeta):
         return CurrencyCollection(*(1 for _ in Currency.ALL))
 
     def getDefaultValue(self, module):
-        return _DEFAULT_VALUE
+        pass
 
     def getActualPrices(self, module):
         return MONEY_UNDEFINED
@@ -76,6 +75,9 @@ class SellModuleMeta(ConfirmModuleMeta):
 
     def getMaxAvailableItemsCount(self, module):
         return CurrencyCollection(*(min(module.inventoryCount, MAX_ITEMS_FOR_OPERATION) for _ in Currency.ALL))
+
+    def getDefaultValue(self, module):
+        return module.inventoryCount
 
     @process('sellItem')
     def submit(self, item, count, currency):
@@ -127,6 +129,9 @@ class BuyModuleMeta(ConfirmModuleMeta):
 
     def getMaxAvailableItemsCount(self, module):
         return CurrencyCollection(*(self.__getMaxCount(module, currency) for currency in Currency.ALL))
+
+    def getDefaultValue(self, module):
+        pass
 
     def getActualPrices(self, module):
         return module.buyPrices.getSum().price

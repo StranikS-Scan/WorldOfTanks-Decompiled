@@ -12,7 +12,8 @@ from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import isUniversalFragment
 from dossiers2.custom.cache import getCache
 from invoices_helpers import checkAccountDossierOperation
-from items import vehicles, tankmen, utils
+from items import vehicles, tankmen, detachment_customization
+from items.utils.common import getItemDescrByCompactDescr
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS
@@ -414,7 +415,7 @@ def __readBonus_optionalDevice(bonus, _name, section, eventType, checkLimit):
 def __readBonus_item(bonus, _name, section, eventType, checkLimit):
     compDescr = section.asInt
     try:
-        descr = utils.getItemDescrByCompactDescr(compDescr)
+        descr = getItemDescrByCompactDescr(compDescr)
         if descr.itemTypeName not in items.SIMPLE_ITEM_TYPE_NAMES:
             raise SoftException('Wrong compact descriptor (%d). Not simple item.' % compDescr)
     except:
@@ -612,7 +613,7 @@ def __readBonus_crewSkin(bonus, _name, section, eventType, checkLimit):
     crewSkinID = section.readInt('id', NO_CREW_SKIN_ID)
     skinData = {'id': crewSkinID,
      'count': section.readInt('count', 0)}
-    if crewSkinID not in tankmen.g_cache.crewSkins().skins:
+    if crewSkinID not in detachment_customization.g_cache.crewSkins().skins:
         raise SoftException("Unknown crew skin id '%s'" % crewSkinID)
     if skinData['count'] == 0:
         raise SoftException("Invalid count for crew skin id '%s'" % crewSkinID)
@@ -964,7 +965,6 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'bpcoin': bonusReaderLimitDecorator(INVOICE_LIMITS.BPCOIN_MAX, __readBonus_int),
  'freeXP': bonusReaderLimitDecorator(INVOICE_LIMITS.FREEXP_MAX, __readBonus_int),
  'slots': bonusReaderLimitDecorator(INVOICE_LIMITS.SLOTS_MAX, __readBonus_int),
- 'berths': bonusReaderLimitDecorator(INVOICE_LIMITS.BERTHS_MAX, __readBonus_int),
  'premium': __readBonus_int,
  'premium_plus': __readBonus_int,
  'premium_vip': __readBonus_int,
@@ -994,6 +994,7 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'rankedBonusBattles': bonusReaderLimitDecorator(INVOICE_LIMITS.RANKED_BONUS_BATTLES_MAX, __readBonus_int),
  'dogTagComponent': __readBonus_dogTag,
  'battlePassPoints': __readBonus_battlePassPoints,
+ 'dormitories': bonusReaderLimitDecorator(INVOICE_LIMITS.DORMITORIES_MAX, __readBonus_int),
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
  'blueprintAny': __readBonus_blueprintAny}

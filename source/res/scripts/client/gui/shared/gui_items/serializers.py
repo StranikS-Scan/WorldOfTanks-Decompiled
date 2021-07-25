@@ -5,13 +5,22 @@ import math
 import collections
 from gui.shared.money import Money, Currency
 from helpers import dependency, i18n
+from items import vehicles
 from items.components import skills_constants
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from gui.shared.gui_items.crew_skin import localizedFullName
+from gui.shared.gui_items.crew_skin import localizedFullName, getCrewSkinIconBig
 from gui.shared.gui_items.fitting_item import ICONS_MASK
 from gui.shared.gui_items import Tankman, Vehicle
+from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL_75
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
+from gui.shared.tooltips.formatters import packActionTooltipData
+_LOSS_ACADEMY_LEVEL = 0
+_LOSS_SCHOOL_LEVEL_MIN = 10
+_LOSS_SCHOOL_LEVEL_MAX = 20
+_LOSS_COURSE_LEVEL_MIN = 20
+_LOSS_COURSE_LEVEL_MAX = 40
 
 def packTankmanSkill(skill, isPermanent=False, tankman=None):
     if skill.roleType in skills_constants.ACTIVE_SKILLS or skill.roleType in skills_constants.ROLES:
@@ -40,10 +49,13 @@ def packTankman(tankman, isCountPermanentSkills=True):
          'subtype': subtype,
          'unicName': vDescr.name.replace(':', '-')}
 
+    nativeVehType = set(vehicles.VEHICLE_CLASS_TAGS & tankman.vehicleNativeDescr.type.tags).pop()
     nativeVehicleData = {'typeCompDescr': tankman.vehicleNativeDescr.type.compactDescr,
      'userName': Vehicle.getShortUserName(tankman.vehicleNativeDescr.type),
      'icon': vehicleIcon(tankman.vehicleNativeDescr),
-     'iconContour': vehicleIcon(tankman.vehicleNativeDescr, 'contour/')}
+     'iconContour': vehicleIcon(tankman.vehicleNativeDescr, 'contour/'),
+     'type': nativeVehType,
+     'typeIconFlat': Vehicle.getTypeFlatIconPath(nativeVehType)}
     currentVehicleData = None
     if tankman.isInTank:
         currentVehicleData = {'inventoryID': tankman.vehicleInvID,
@@ -76,7 +88,8 @@ def packTankman(tankman, isCountPermanentSkills=True):
               'barracks': Tankman.getBarracksIconPath(tankman.nationID, tankman.descriptor.iconID)},
      'iconRole': {'big': Tankman.getRoleBigIconPath(tankman.descriptor.role),
                   'medium': Tankman.getRoleMediumIconPath(tankman.descriptor.role),
-                  'small': Tankman.getRoleSmallIconPath(tankman.descriptor.role)},
+                  'small': Tankman.getRoleSmallIconPath(tankman.descriptor.role),
+                  '42x42': Tankman.getRole42x42IconPath(tankman.descriptor.role)},
      'iconRank': {'big': Tankman.getRankBigIconPath(tankman.nationID, tankman.descriptor.rankID),
                   'small': Tankman.getRankSmallIconPath(tankman.nationID, tankman.descriptor.rankID)},
      'isInTank': tankman.isInTank,
@@ -182,7 +195,7 @@ def packDropSkill(tankman, itemsCache=None):
     return result
 
 
-_ButtonData = collections.namedtuple('ButtonData', 'moneyDefault, moneyActual, trainingLevel, state, nativeVehicle')
+_ButtonData = collections.namedtuple('ButtonData', 'moneyDefault, moneyActual, lossLevel, state, nativeVehicle,percentLoss')
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def packTraining(vehicle, crew=None, itemsCache=None):
@@ -198,29 +211,37 @@ def packTraining(vehicle, crew=None, itemsCache=None):
     for buttons in zip(*tankmansTrainingData):
         defaultPrice = min((button.moneyDefault for button in buttons))
         actualPrice = max((button.moneyActual for button in buttons))
-        buttonMinLevel = min((button.trainingLevel for button in buttons))
-        buttonMaxLevel = max((button.trainingLevel for button in buttons))
+        buttonMinLevel = min((button.lossLevel for button in buttons))
+        buttonMaxLevel = max((button.lossLevel for button in buttons))
+        totalMaxLevel = sum((button.lossLevel for button in buttons))
+        buttonMaxPercentLoss = max((button.percentLoss for button in buttons))
         buttonState = any((button.state for button in buttons))
         allNative = all((button.nativeVehicle for button in buttons))
         isRange = crew is not None and len(crew) > 1 and buttonMinLevel != buttonMaxLevel
         currency = actualPrice.getCurrency()
         price = actualPrice.getSignValue(actualPrice.getCurrency())
+        actionData = {}
+        if actualPrice != defaultPrice:
+            actionData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, '{}TankmanCost'.format(currency), True, actualPrice, defaultPrice)
         result.append({'level': _formatLevel(buttonMinLevel, buttonMaxLevel, isRange),
+         'penalty': '-{}%'.format(buttonMaxPercentLoss) if buttonMaxPercentLoss else '',
+         'penaltyXP': -totalMaxLevel,
          'enabled': buttonState,
          'price': [currency, price],
          'isMoneyEnough': currentMoney >= actualPrice or currency == Currency.GOLD,
          'isNativeVehicle': allNative,
          'nation': vehicle.nationName if vehicle is not None else None,
-         'showAction': actualPrice != defaultPrice})
+         'showAction': actualPrice != defaultPrice,
+         'actionPrice': actionData})
 
     return result
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache, lobbyContext=ILobbyContext)
-def repackTankmanWithSkinData(item, data, itemsCache=None, lobbyContext=None):
-    if item.skinID != NO_CREW_SKIN_ID and lobbyContext.getServerSettings().isCrewSkinsEnabled():
-        skinItem = itemsCache.items.getCrewSkin(item.skinID)
-        data['icon']['big'] = Tankman.getCrewSkinIconBig(skinItem.getIconID())
+def repackTankmanWithSkinData(item, data, detachmentData, itemsCache=None, lobbyContext=None):
+    if detachmentData.skinID != NO_CREW_SKIN_ID and lobbyContext.getServerSettings().isCrewSkinsEnabled():
+        skinItem = itemsCache.items.getCrewSkin(detachmentData.skinID)
+        data['icon']['big'] = getCrewSkinIconBig(skinItem.getIconID())
         data['firstUserName'] = i18n.makeString(skinItem.getFirstName())
         data['lastUserName'] = i18n.makeString(skinItem.getLastName())
         data['fullName'] = localizedFullName(skinItem)
@@ -228,35 +249,44 @@ def repackTankmanWithSkinData(item, data, itemsCache=None, lobbyContext=None):
         data['fullName'] = item.fullUserName
 
 
+def makePercentLoss(roleLevel, sameVehicleType):
+    if roleLevel == MAX_SKILL_LEVEL:
+        percentLoss = _LOSS_ACADEMY_LEVEL
+    elif sameVehicleType:
+        percentLoss = _LOSS_SCHOOL_LEVEL_MIN if roleLevel == MIN_ROLE_LEVEL_75 else _LOSS_COURSE_LEVEL_MIN
+    else:
+        percentLoss = _LOSS_SCHOOL_LEVEL_MAX if roleLevel == MIN_ROLE_LEVEL_75 else _LOSS_COURSE_LEVEL_MAX
+    return percentLoss
+
+
 def _getTrainingButtonsForTankman(costsActual, costsDefault, currentMoney, vehicle=None, tankman=None):
     trainingButtonsData = []
     defaults = vehicle is None or tankman is None
-    roleLevel = 0
     sameVehicle = True
     sameVehicleType = True
+    lossLevel = 0
+    percentLoss = 0
     if not defaults:
-        roleLevel = tankman.roleLevel
         sameVehicle = vehicle.intCD == tankman.vehicleNativeDescr.type.compactDescr
         sameVehicleType = sameVehicle if sameVehicle else vehicle.type == tankman.vehicleNativeType
     for costActual, costDefault in zip(costsActual, costsDefault):
         moneyDefault = Money(credits=costDefault[Currency.CREDITS] or None, gold=costDefault[Currency.GOLD] or None)
         moneyActual = Money(credits=costActual[Currency.CREDITS] or None, gold=costActual[Currency.GOLD] or None)
-        trainingLevel = defaultTrainingLevel = costActual['roleLevel']
+        minRoleLevel = costActual['roleLevel']
         buttonState = moneyActual <= currentMoney or moneyActual.get(Currency.GOLD) is not None
         if not defaults:
             baseRoleLoss = costActual['baseRoleLoss']
             classChangeRoleLoss = costActual['classChangeRoleLoss']
             if sameVehicle:
-                trainingLossMultiplier = 0.0
+                lossLevel = 0
+                percentLoss = 0
             elif sameVehicleType:
-                trainingLossMultiplier = baseRoleLoss
+                lossLevel = tankman.descriptor.calculateRealDecreaseXP(baseRoleLoss, minRoleLevel)
+                percentLoss = makePercentLoss(minRoleLevel, sameVehicleType)
             else:
-                trainingLossMultiplier = baseRoleLoss + classChangeRoleLoss
-            trainingLevel = roleLevel - roleLevel * trainingLossMultiplier
-            if trainingLevel < defaultTrainingLevel or sameVehicle:
-                trainingLevel = defaultTrainingLevel
-            buttonState = buttonState and (trainingLevel > roleLevel if sameVehicle else trainingLevel >= defaultTrainingLevel)
-        trainingButtonsData.append(_ButtonData(moneyDefault, moneyActual, trainingLevel, buttonState, sameVehicle))
+                lossLevel = tankman.descriptor.calculateRealDecreaseXP(classChangeRoleLoss, minRoleLevel)
+                percentLoss = makePercentLoss(minRoleLevel, sameVehicleType)
+        trainingButtonsData.append(_ButtonData(moneyDefault, moneyActual, lossLevel, buttonState, sameVehicle, percentLoss))
 
     return trainingButtonsData
 

@@ -12,7 +12,7 @@ from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK
 from debug_utils import LOG_DEBUG_DEV
 from items import ITEM_OPERATION, PREDEFINED_HEAL_GROUPS
 from items import _xml, vehicles
-from items.artefacts_helpers import VehicleFilter, _ArtefactFilter, readKpi
+from items.artefacts_helpers import VehicleFilter, _ArtefactFilter
 from items.basic_item import BasicItem
 from items.components import shared_components, component_constants
 from items.components.supply_slot_categories import SupplySlotFilter, LevelsFactor, AttrsOperation, SlotCategories
@@ -188,7 +188,7 @@ class Artefact(BasicItem):
             self.icon = _xml.readIcon(xmlCtx, section, 'icon')
             self.iconName = os.path.splitext(os.path.basename(self.icon[0]))[0]
         if IS_CLIENT and section.has_key('kpi'):
-            self.kpi = readKpi(xmlCtx, section['kpi'])
+            self.kpi = _readKpi(xmlCtx, section['kpi'])
         else:
             self.kpi = []
         if section.has_key('vehicleFilter'):
@@ -594,14 +594,17 @@ class Fuel(Equipment):
 
 
 class Stimulator(Equipment):
-    __slots__ = ('crewLevelIncrease',)
+    __slots__ = ('crewMasteryFactor',)
 
     def __init__(self):
         super(Stimulator, self).__init__()
-        self.crewLevelIncrease = component_constants.ZERO_FLOAT
+        self.crewMasteryFactor = component_constants.ZERO_FLOAT
+
+    def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect, *args, **kwargs):
+        factors['crewMasteryFactor'] += self.crewMasteryFactor
 
     def _readConfig(self, xmlCtx, section):
-        self.crewLevelIncrease = _xml.readFloat(xmlCtx, section, 'crewLevelIncrease', component_constants.ZERO_FLOAT)
+        self.crewMasteryFactor = _xml.readFloat(xmlCtx, section, 'crewMasteryFactor', component_constants.ZERO_FLOAT)
 
 
 class Repairkit(Equipment):
@@ -1233,161 +1236,20 @@ class InvisibilityBattleBooster(DynamicEquipment):
         factors[attribute][1] *= factor[1]
 
 
-class FactorSkillBattleBooster(Equipment):
-    __slots__ = ('skillName', 'efficiencyFactor')
+class PerkLevelBooster(Equipment):
+    __slots__ = ('perkId', 'levelIncrease', 'levelOvercap')
 
     def __init__(self):
-        super(FactorSkillBattleBooster, self).__init__()
-        self.skillName = None
-        self.efficiencyFactor = component_constants.ZERO_FLOAT
+        super(PerkLevelBooster, self).__init__()
+        self.perkId = None
+        self.levelIncrease = component_constants.ZERO_INT
+        self.levelOvercap = component_constants.ZERO_INT
         return
 
     def _readConfig(self, xmlCtx, section):
-        self.skillName = _xml.readNonEmptyString(xmlCtx, section, 'skillName')
-        self.efficiencyFactor = _xml.readPositiveFloat(xmlCtx, section, 'efficiencyFactor')
-
-    def updateCrewSkill(self, factor, baseAvgLevel):
-        if baseAvgLevel < 100:
-            factor = max(1.0, factor)
-            baseAvgLevel = 100
-        else:
-            factor = 0.57 + (factor - 0.57) * self.efficiencyFactor
-        return (factor, baseAvgLevel)
-
-
-class SixthSenseBattleBooster(Equipment):
-    __slots__ = ('skillName', 'delay')
-
-    def __init__(self):
-        super(SixthSenseBattleBooster, self).__init__()
-        self.skillName = 'commander_sixthSense'
-        self.delay = component_constants.ZERO_FLOAT
-
-    def _readConfig(self, xmlCtx, section):
-        self.delay = _xml.readNonNegativeFloat(xmlCtx, section, 'delay')
-
-    def updateCrewSkill(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
-        isFire = True
-        if level < MAX_SKILL_LEVEL or not isActive:
-            level = MAX_SKILL_LEVEL
-            isActive = True
-        else:
-            skillConfig = skillConfig.recreate(self.delay)
-        return (idxInCrew,
-         level,
-         levelIncrease,
-         isActive,
-         isFire,
-         skillConfig)
-
-
-class RancorousBattleBooster(Equipment):
-    __slots__ = ('skillName', 'duration', 'sectorHalfAngle')
-
-    def __init__(self):
-        super(RancorousBattleBooster, self).__init__()
-        self.skillName = 'gunner_rancorous'
-        self.duration = component_constants.ZERO_FLOAT
-        self.sectorHalfAngle = component_constants.ZERO_FLOAT
-
-    def _readConfig(self, xmlCtx, section):
-        self.skillName = 'gunner_rancorous'
-        self.duration = _xml.readPositiveFloat(xmlCtx, section, 'duration')
-        self.sectorHalfAngle = math.radians(_xml.readPositiveFloat(xmlCtx, section, 'sectorHalfAngle'))
-
-    def updateCrewSkill(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
-        if level < MAX_SKILL_LEVEL or not isActive or isFire:
-            level = MAX_SKILL_LEVEL
-            isActive = True
-            isFire = False
-        else:
-            skillConfig = skillConfig.recreate(self.duration, self.sectorHalfAngle)
-        return (idxInCrew,
-         level,
-         levelIncrease,
-         isActive,
-         isFire,
-         skillConfig)
-
-
-class PedantBattleBooster(Equipment):
-    __slots__ = ('skillName', 'ammoBayHealthFactor')
-
-    def __init__(self):
-        super(PedantBattleBooster, self).__init__()
-        self.skillName = 'loader_pedant'
-        self.ammoBayHealthFactor = component_constants.ZERO_FLOAT
-
-    def _readConfig(self, xmlCtx, section):
-        self.skillName = 'loader_pedant'
-        self.ammoBayHealthFactor = _xml.readPositiveFloat(xmlCtx, section, 'ammoBayHealthFactor')
-
-    def updateCrewSkill(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
-        if level < MAX_SKILL_LEVEL:
-            level = MAX_SKILL_LEVEL
-        else:
-            skillConfig = skillConfig.recreate(self.ammoBayHealthFactor)
-        return (idxInCrew,
-         level,
-         levelIncrease,
-         isActive,
-         isFire,
-         skillConfig)
-
-
-class FactorPerLevelBattleBooster(Equipment):
-    __slots__ = ('skillName', 'factorName', 'factorPerLevel')
-
-    def __init__(self):
-        super(FactorPerLevelBattleBooster, self).__init__()
-        self.skillName = component_constants.EMPTY_STRING
-        self.factorName = component_constants.EMPTY_STRING
-        self.factorPerLevel = component_constants.ZERO_FLOAT
-
-    def _readConfig(self, xmlCtx, section):
-        self.skillName = _xml.readNonEmptyString(xmlCtx, section, 'skillName')
-        self.factorName = _xml.readNonEmptyString(xmlCtx, section, 'factorName')
-        self.factorPerLevel = _xml.readNonNegativeFloat(xmlCtx, section, 'factorPerLevel')
-
-    def updateCrewSkill(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
-        if level < MAX_SKILL_LEVEL or not isActive or isFire:
-            level = MAX_SKILL_LEVEL
-            isActive = True
-            isFire = False
-        else:
-            skillConfig = skillConfig.recreate(self.factorPerLevel)
-        return (idxInCrew,
-         level,
-         levelIncrease,
-         isActive,
-         isFire,
-         skillConfig)
-
-
-class LastEffortBattleBooster(Equipment):
-    __slots__ = ('skillName', 'duration')
-
-    def __init__(self):
-        super(LastEffortBattleBooster, self).__init__()
-        self.skillName = 'radioman_lastEffort'
-        self.duration = component_constants.ZERO_FLOAT
-
-    def _readConfig(self, xmlCtx, section):
-        self.skillName = 'radioman_lastEffort'
-        self.duration = _xml.readNonNegativeFloat(xmlCtx, section, 'duration')
-
-    def updateCrewSkill(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
-        if level < MAX_SKILL_LEVEL or not isActive:
-            level = MAX_SKILL_LEVEL
-            isActive = True
-        else:
-            skillConfig = skillConfig.recreate(self.duration)
-        return (idxInCrew,
-         level,
-         levelIncrease,
-         isActive,
-         isFire,
-         skillConfig)
+        self.perkId = _xml.readPositiveInt(xmlCtx, section, 'perkId')
+        self.levelIncrease = _xml.readPositiveInt(xmlCtx, section, 'levelIncrease')
+        self.levelOvercap = _xml.readPositiveInt(xmlCtx, section, 'levelOvercap')
 
 
 class _OptionalDeviceFilter(object):
@@ -1991,6 +1853,55 @@ class ConsumableSpawnKamikaze(Equipment, TooltipConfigReader, CountableConsumabl
 
 class SpawnKamikaze(ConsumableSpawnKamikaze):
     pass
+
+
+def _readKpi(xmlCtx, section):
+    from gui.shared.gui_items import KPI
+    kpi = []
+    for kpiType, subsec in section.items():
+        if kpiType not in KPI.Type.ALL():
+            _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported KPI type')
+            return
+        if kpiType == KPI.Type.ONE_OF:
+            kpi.append(KPI(KPI.Name.COMPOUND_KPI, _readKpi(xmlCtx, subsec), KPI.Type.ONE_OF))
+        if kpiType == KPI.Type.AGGREGATE_MUL:
+            kpi.append(_readAggregateKPI(xmlCtx, subsec, kpiType))
+        kpi.append(_readKpiValue(xmlCtx, subsec, kpiType))
+
+    return kpi
+
+
+def _readKpiValue(xmlCtx, section, kpiType):
+    from gui.shared.gui_items import KPI
+    name = section.readString('name')
+    value = section.readFloat('value')
+    specValue = section.readString('specValue')
+    situational = section.readBool('situational', False)
+    vehicleTypes = section.readString('vehicleTypes').split()
+    if not name:
+        _xml.raiseWrongXml(xmlCtx, kpiType, 'empty <name> tag not allowed')
+    elif name not in KPI.Name.ALL():
+        _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported value in <name> tag')
+    return KPI(name, value, kpiType, float(specValue) if specValue else None, vehicleTypes, situational)
+
+
+def _readAggregateKPI(xmlCtx, section, kpiType):
+    from gui.shared.gui_items import KPI, AGGREGATE_TO_SINGLE_TYPE_KPI_MAP
+    subKpies = []
+    for key, subsec in section.items():
+        if key in KPI.Type.ALL():
+            if key != AGGREGATE_TO_SINGLE_TYPE_KPI_MAP.get(kpiType, None):
+                _xml.raiseWrongXml(xmlCtx, key, 'unsupported KPI type for aggregating')
+            subKpies.append(_readKpiValue(xmlCtx, subsec, key))
+
+    if not subKpies:
+        _xml.raiseWrongXml(xmlCtx, kpiType, 'has not KPI for aggregating')
+    name = section.readString('name')
+    if not name:
+        _xml.raiseWrongXml(xmlCtx, kpiType, 'empty <name> tag not allowed')
+    elif name not in KPI.Name.ALL():
+        _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported value in <name> tag')
+    return KPI(name, subKpies, kpiType)
 
 
 _readTags = vehicles._readTags

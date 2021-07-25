@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
-import typing
-import logging
 from collections import namedtuple
 import async as future_async
 from account_helpers import AccountSettings
@@ -17,7 +15,6 @@ from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMe
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import MAX_ITEMS_FOR_OPERATION
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta
-from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import RestoreExchangeCreditsMeta
 from gui.Scaleform.daapi.view.lobby.techtree import unlock
 from gui.Scaleform.daapi.view.lobby.techtree.settings import RequestState
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
@@ -31,12 +28,14 @@ from gui.shared.economics import getGUIPrice
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import canBuyWithGoldExchange
 from gui.shared.gui_items.gui_item_economics import getVehicleShellsLayoutPrice
-from gui.shared.gui_items.processors.common import ConvertBlueprintFragmentProcessor
-from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
+from gui.shared.gui_items.processors.common import ConvertBlueprintFragmentProcessor, DormitoryBuyer
 from gui.shared.gui_items.processors.common import UseCrewBookProcessor
+from gui.shared.gui_items.processors.common import LearnPerksProcessor
+from gui.shared.gui_items.processors.common import RemoveInstructorFromDetachmentProcessor
+from gui.shared.gui_items.processors.common import RecoverInstructorProcessor
+from gui.shared.gui_items.processors.common import AddInstructorToSlotProcessor
 from gui.shared.gui_items.processors.goodies import BoosterBuyer
 from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor, BCBuyAndInstallItemProcessor, OptDeviceInstaller
-from gui.shared.gui_items.processors.veh_post_progression import ChangeVehicleSetupEquipments, DiscardPairsProcessor, PurchasePairProcessor, PurchaseStepsProcessor, SetEquipmentSlotTypeProcessor
 from gui.shared.gui_items.processors.module import ModuleSeller
 from gui.shared.gui_items.processors.module import ModuleUpgradeProcessor
 from gui.shared.gui_items.processors.module import MultipleModulesSeller
@@ -46,17 +45,17 @@ from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
 from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
 from gui.shared.money import ZERO_MONEY, Money
 from gui.shared.utils import decorators
+from gui.shared.gui_items.processors.detachment import DetachmentDemobilize, DetachmentRestore, DetachmentResetVehicleLink, DetachmentAssignToVehicle
 from helpers import dependency
 from items import vehicles
+from items.components.detachment_constants import TypeDetachmentAssignToVehicle
 from shared_utils import first, allEqual
+from skeletons.gui.detachment import IDetachmentCache
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-if typing.TYPE_CHECKING:
-    from gui.shared.gui_items.Vehicle import Vehicle
-    from gui.SystemMessages import ResultMsg
-_logger = logging.getLogger(__name__)
 ItemSellSpec = namedtuple('ItemSellSpec', ('typeIdx', 'intCD', 'count'))
 
 def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
@@ -102,10 +101,10 @@ def getGunCD(item, vehicle, itemsCache=None):
 
 def processMsg(result):
     if result and result.userMsg:
-        SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority, messageData=result.msgData)
+        SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
     if result and hasattr(result, 'auxData') and not isinstance(result.auxData, dict) and result.auxData:
         for m in result.auxData:
-            SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType, priority=m.msgPriority, messageData=m.msgData)
+            SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -138,6 +137,7 @@ class IGUIItemAction(object):
 
 class CachedItemAction(IGUIItemAction):
     _itemsCache = dependency.descriptor(IItemsCache)
+    _detachmentCache = dependency.descriptor(IDetachmentCache)
 
 
 class BuyAction(CachedItemAction):
@@ -253,19 +253,7 @@ class VehicleBuyAction(BuyAction):
                 if price is None:
                     showShopMsg('not_found', item)
                     return
-                if not self._mayObtainForMoney(item):
-                    if self._mayObtainWithMoneyExchange(item):
-                        if item.isRestoreAvailable():
-                            meta = RestoreExchangeCreditsMeta(self.__vehCD)
-                        else:
-                            meta = ExchangeCreditsSingleItemMeta(self.__vehCD)
-                        isOk, _ = yield DialogsInterface.showDialog(meta)
-                        if not isOk:
-                            return
-                    else:
-                        showShopMsg('common_rent_or_buy_error', item)
-                if self._mayObtainForMoney(item):
-                    shared_events.showVehicleBuyDialog(item, self.__actionType, self.__isTradeIn, self.__previousAlias, returnAlias=self.__returnAlias, returnCallback=self.__returnCallback)
+                shared_events.showVehicleBuyDialog(item, self.__actionType, self.__isTradeIn, self.__previousAlias, returnAlias=self.__returnAlias, returnCallback=self.__returnCallback)
                 yield lambda callback=None: callback
             return
 
@@ -546,7 +534,7 @@ class BuyAndInstallOptDevices(AmmunitionBuyAndInstall):
 
     def __init__(self, vehicle, confirmOnlyExchange=False):
         optDevices = vehicle.optDevices
-        changeItems = [ item for item in optDevices.layout.getItems() if not vehicle.optDevices.setupLayouts.isInSetup(item) ]
+        changeItems = [ item for item in optDevices.layout.getItems() if item not in optDevices.installed ]
         super(BuyAndInstallOptDevices, self).__init__(vehicle, changeItems, confirmOnlyExchange)
 
     @async
@@ -560,7 +548,7 @@ class BuyAndInstallConsumables(AmmunitionBuyAndInstall):
     __slots__ = ()
 
     def __init__(self, vehicle, confirmOnlyExchange=False):
-        changeItems = [ item for item in vehicle.consumables.layout.getItems() if not vehicle.consumables.setupLayouts.isInSetup(item) ]
+        changeItems = [ item for item in vehicle.consumables.layout.getItems() if item not in vehicle.consumables.installed ]
         super(BuyAndInstallConsumables, self).__init__(vehicle, changeItems, confirmOnlyExchange)
 
     @async
@@ -574,7 +562,7 @@ class BuyAndInstallBattleBoosters(AmmunitionBuyAndInstall):
     __slots__ = ()
 
     def __init__(self, vehicle, confirmOnlyExchange=False):
-        changeItems = [ item for item in vehicle.battleBoosters.layout.getItems() if not vehicle.battleBoosters.setupLayouts.isInSetup(item) ]
+        changeItems = [ item for item in vehicle.battleBoosters.layout.getItems() if item not in vehicle.battleBoosters.installed ]
         super(BuyAndInstallBattleBoosters, self).__init__(vehicle, changeItems, confirmOnlyExchange)
 
     @async
@@ -643,20 +631,27 @@ class VehicleRepairAction(AsyncGUIItemAction):
 
 class BuyVehicleSlotAction(CachedItemAction):
 
+    def __init__(self, showConfirm=True, showWarning=True):
+        super(BuyVehicleSlotAction, self).__init__()
+        self._showConfirm = showConfirm
+        self._showWarning = showWarning
+
     @decorators.process('buySlot')
     def doAction(self):
-        result = yield VehicleSlotBuyer().request()
+        result = yield VehicleSlotBuyer(self._showConfirm, self._showWarning).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 
-class BuyBerthsAction(CachedItemAction):
+class BuyDormitoryAction(CachedItemAction):
 
-    @decorators.process('buyBerths')
+    def __init__(self, count=1):
+        super(BuyDormitoryAction, self).__init__()
+        self._count = count
+
+    @decorators.process('buyDormitory')
     def doAction(self):
-        items = self._itemsCache.items
-        berthPrice, berthsCount = items.shop.getTankmanBerthPrice(items.stats.tankmenBerthsCount)
-        result = yield TankmanBerthsBuyer(berthPrice, berthsCount).request()
+        result = yield DormitoryBuyer(self._count).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
@@ -693,20 +688,23 @@ class ConvertBlueprintFragmentAction(IGUIItemAction):
 
 
 class UseCrewBookAction(IGUIItemAction):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, bookCD, vehicleCD, tankmanId=None):
+    def __init__(self, bookCD, detInvId, bookCount):
         super(UseCrewBookAction, self).__init__()
         self.__bookCD = bookCD
-        self.__vehicleCD = vehicleCD
-        self.__tankmanId = tankmanId
+        self.__detInvId = detInvId
+        self.__bookCount = bookCount
 
     @decorators.process('crewBooks/useCrewBook')
     def doAction(self):
-        result = yield UseCrewBookProcessor(self.__bookCD, self.__vehicleCD, self.__tankmanId).request()
+        result = yield UseCrewBookProcessor(self.__bookCD, self.__detInvId, self.__bookCount).request()
         if result.success:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-        else:
+        elif self.__lobbyContext.getServerSettings().isCrewBooksEnabled():
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CREWBOOKS_FAILED, type=result.sysMsgType)
+        else:
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CREWBOOKS_DISABLED, type=result.sysMsgType)
 
 
 class UpgradeOptDeviceAction(AsyncGUIItemAction):
@@ -790,113 +788,120 @@ class RemoveOptionalDevice(AsyncGUIItemAction):
         callback(result)
 
 
-class ChangeSetupEquipmentsIndex(AsyncGUIItemAction):
-    __slots__ = ('__vehicle', '__groupID', '__layoutIdx')
+class LearnPerksAction(IGUIItemAction):
 
-    def __init__(self, vehicle, groupID, layoutIdx):
-        super(ChangeSetupEquipmentsIndex, self).__init__()
-        self.__vehicle = vehicle
-        self.__groupID = groupID
-        self.__layoutIdx = layoutIdx
+    def __init__(self, detachmentID, perks, dropMode, useRecertificationForm, isUIEditMode=False):
+        super(LearnPerksAction, self).__init__()
+        self.__detachmentID = detachmentID
+        self.__perks = perks
+        self.__dropMode = dropMode
+        self.__isUIEditMode = isUIEditMode
+        self.__useRecertificationForm = useRecertificationForm
 
-    @async
     @process
-    def _action(self, callback):
-        result = yield ChangeVehicleSetupEquipments(self.__vehicle, self.__groupID, self.__layoutIdx).request()
-        callback(result)
+    def doAction(self):
+        result = yield LearnPerksProcessor(self.__detachmentID, self.__perks, self.__dropMode, self.__useRecertificationForm, self.__isUIEditMode).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 
-class DiscardPostProgressionPairs(AsyncGUIItemAction):
-    __slots__ = ('__vehicle', '__stepIDs', '__modIDs')
+class RemoveInstructorFromDetachmentAction(IGUIItemAction):
 
-    def __init__(self, vehicle, stepIDs, modIDs):
-        super(DiscardPostProgressionPairs, self).__init__()
-        self.__vehicle = vehicle
-        self.__stepIDs = stepIDs
-        self.__modIDs = modIDs
+    def __init__(self, detachmentID, slotID, excludeInstructorOption):
+        super(RemoveInstructorFromDetachmentAction, self).__init__()
+        self.__detachmentID = detachmentID
+        self.__slotID = slotID
+        self.__excludeInstructorOption = excludeInstructorOption
 
-    @async
-    @decorators.process('loadPage')
-    def _action(self, callback):
-        result = yield DiscardPairsProcessor(self.__vehicle, self.__stepIDs, self.__modIDs).request()
-        callback(result)
-
-    @async
-    @future_async.async
-    def _confirm(self, callback):
-        result = yield future_async.await(shared_events.showDestroyPairModificationsDialog)(self.__vehicle, self.__stepIDs)
-        callback(result.result[0] if not result.busy else False)
+    @process
+    def doAction(self):
+        result = yield RemoveInstructorFromDetachmentProcessor(self.__detachmentID, self.__slotID, self.__excludeInstructorOption).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 
-class PurchasePostProgressionPair(AsyncGUIItemAction):
-    __slots__ = ('__vehicle', '__stepID', '__modificationID')
+class RecoverInstructorAction(IGUIItemAction):
 
-    def __init__(self, vehicle, stepID, modificationID):
-        super(PurchasePostProgressionPair, self).__init__()
-        self.__vehicle = vehicle
-        self.__stepID = stepID
-        self.__modificationID = modificationID
+    def __init__(self, instructorID):
+        super(RecoverInstructorAction, self).__init__()
+        self.__instructorID = instructorID
 
-    @async
-    @decorators.process('loadPage')
-    def _action(self, callback):
-        result = yield PurchasePairProcessor(self.__vehicle, self.__stepID, self.__modificationID).request()
-        callback(result)
-
-    @async
-    @future_async.async
-    def _confirm(self, callback):
-        result = yield future_async.await(shared_events.showPostProgressionPairModDialog)(self.__vehicle, self.__stepID, self.__modificationID)
-        callback(result.result[0] if not result.busy else False)
+    @process
+    def doAction(self):
+        result = yield RecoverInstructorProcessor(self.__instructorID).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 
-class PurchasePostProgressionSteps(AsyncGUIItemAction):
-    __slots__ = ('__vehicle', '__stepIDs')
+class AddInstructorToSlotAction(IGUIItemAction):
 
-    def __init__(self, vehicle, stepIDs):
-        super(PurchasePostProgressionSteps, self).__init__()
-        self.__vehicle = vehicle
-        self.__stepIDs = stepIDs
+    def __init__(self, detachmentID, instructorID, slotID):
+        super(AddInstructorToSlotAction, self).__init__()
+        self.__detachmentID = detachmentID
+        self.__instructorID = instructorID
+        self.__slotID = slotID
 
-    @async
-    @decorators.process('loadPage')
-    def _action(self, callback):
-        result = yield PurchaseStepsProcessor(self.__vehicle, self.__stepIDs).request()
-        callback(result)
-
-    @async
-    @future_async.async
-    def _confirm(self, callback):
-        result = yield future_async.await(shared_events.showPostProgressionResearchDialog)(self.__vehicle, self.__stepIDs)
-        callback(result.result[0] if not result.busy else False)
+    @process
+    def doAction(self):
+        result = yield AddInstructorToSlotProcessor(self.__detachmentID, self.__instructorID, self.__slotID).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 
-class SetEquipmentSlotType(AsyncGUIItemAction):
-    __slots__ = ('__vehicle', '__slotID')
+class DemobilizeDetachment(CachedItemAction):
 
-    def __init__(self, vehicle):
-        super(SetEquipmentSlotType, self).__init__()
-        self.__vehicle = vehicle
-        self.__slotID = 0
+    def __init__(self, detInvID, allowRemove, freeExcludeInstructors):
+        super(DemobilizeDetachment, self).__init__()
+        self._detachment = self._detachmentCache.getDetachment(detInvID)
+        self._allowRemove = allowRemove
+        self._freeExcludeInstructors = freeExcludeInstructors
 
-    @async
-    @decorators.process('loadContent')
-    def _action(self, callback):
-        result = yield SetEquipmentSlotTypeProcessor(self.__vehicle, self.__slotID).request()
-        callback(result)
+    @process
+    def doAction(self):
+        result = yield DetachmentDemobilize(self._detachment, self._allowRemove, self._freeExcludeInstructors).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
-    @async
-    @future_async.async
-    def _confirm(self, callback):
-        from gui.impl.lobby.common.select_slot_spec_dialog import showDialog
-        result = yield future_async.await(showDialog(self.__vehicle))
-        if result.busy:
-            callback(False)
-        else:
-            isOk, idx = result.result
-            _logger.debug('Select slot specialization dialog result: isOk: %r, idx: %r', isOk, idx)
-            if isOk and idx > 0:
-                self.__slotID = idx
-                callback(True)
-            else:
-                callback(False)
+
+class ResetDetachmentVehicleLink(CachedItemAction):
+
+    def __init__(self, detInvID):
+        super(ResetDetachmentVehicleLink, self).__init__()
+        self._detInvID = detInvID
+
+    @decorators.process('unloading')
+    def doAction(self):
+        result = yield DetachmentResetVehicleLink(self._detInvID).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+
+class AssignDetachment(CachedItemAction):
+
+    def __init__(self, detInvID, vehInvID, detType=TypeDetachmentAssignToVehicle.IS_NONE):
+        super(AssignDetachment, self).__init__()
+        self._detInvID = detInvID
+        self._vehInvID = vehInvID
+        self._detType = detType
+
+    @decorators.process('equipping')
+    def doAction(self):
+        result = yield DetachmentAssignToVehicle(self._detInvID, self._vehInvID, self._detType).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+
+class RestoreDetachment(CachedItemAction):
+
+    def __init__(self, detInvID, curPrice, curCurrency, specialTerm):
+        super(RestoreDetachment, self).__init__()
+        self._detachment = self._detachmentCache.getDetachment(detInvID)
+        self._curPrice = curPrice
+        self._curCurrency = curCurrency
+        self._specialTerm = specialTerm
+
+    @process
+    def doAction(self):
+        result = yield DetachmentRestore(self._detachment, self._curPrice, self._curCurrency, self._specialTerm).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)

@@ -1,8 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/backport/backport_r.py
 import logging
+import typing
 from frameworks import wulf
+from gui.impl.gen import R
+if typing.TYPE_CHECKING:
+    from gui.impl.gen_utils import DynAccessor
 _logger = logging.getLogger(__name__)
+
+def textRes(key):
+    path = key.replace('#', '').replace(':', '/').split('/')
+    r = R.strings
+    for p in path:
+        r = r.dyn(p)
+
+    return r
+
 
 def text(resId, *args, **kwargs):
     if resId <= 0:
@@ -10,19 +23,21 @@ def text(resId, *args, **kwargs):
         return ''
     if args:
         try:
-            return wulf.getTranslatedTextByResId(resId, args)
+            translatedText = wulf.getTranslatedTextByResId(resId, args)
         except (TypeError, ValueError):
             _logger.warning("Arguments do not match string with resId '%r': %r", resId, args)
             return ''
 
     elif kwargs:
         try:
-            return wulf.getTranslatedTextByResId(resId, kwargs)
+            translatedText = wulf.getTranslatedTextByResId(resId, kwargs)
         except (TypeError, ValueError):
             _logger.warning("Arguments do not match string with resId '%r': %r", resId, kwargs)
             return ''
 
-    return wulf.getTranslatedTextByResId(resId)
+    else:
+        translatedText = wulf.getTranslatedTextByResId(resId)
+    return '' if translatedText == '?empty?' else translatedText
 
 
 def msgid(resId):

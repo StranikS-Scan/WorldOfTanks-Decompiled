@@ -1,24 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/bonus_helper.py
+import typing
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.perk import PerkGUI
 from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES, getParamExtendedData
-from gui.shared.items_parameters.params import VehicleParams
-from gui.shared.items_parameters.params import EXTRAS_CAMOUFLAGE
+from gui.shared.items_parameters.params import VehicleParams, EXTRAS_CAMOUFLAGE
+from gui.Scaleform.daapi.view.lobby.detachment.detachment_setup_vehicle import g_detachmentTankSetupVehicle
 from helpers import dependency
-from items import perks
-from constants import BonusTypes
+from constants import BonusTypes, TANK_CONTROL_LEVEL, AbilitySystemScopeNames
 from items.components.c11n_components import SeasonType
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.detachment import IDetachmentCache
+if typing.TYPE_CHECKING:
+    from items.vehicles import VehicleDescriptor
+    from gui.shared.gui_items.Vehicle import Vehicle
+    from gui.shared.items_parameters.comparator import _ParameterInfo
 
-def isSituationalBonus(bonusName, bonusType=''):
-    if bonusType == BonusTypes.PERK:
-        cache = perks.g_cache.perks()
-        perkItem = cache.perks[int(bonusName)]
-        return perkItem.situational
-    return bonusName in _SITUATIONAL_BONUSES
+def isBonusAutoPerk(bnsID, bnsType):
+    if bnsType != BonusTypes.DETACHMENT:
+        return False
+    perk = PerkGUI(int(bnsID))
+    return perk.isAutoperk
 
-
-_SITUATIONAL_BONUSES = ('camouflageNet', 'stereoscope', 'removedRpmLimiter', 'gunner_rancorous')
 
 def _removeCamouflageModifier(vehicle, bonusID):
     if bonusID == EXTRAS_CAMOUFLAGE:
@@ -30,22 +33,49 @@ def _removeCamouflageModifier(vehicle, bonusID):
     return vehicle
 
 
-def _removePlatoonPerkModifier(vehicle, perkName):
+def _removeDetachmentPerkModifier(vehicle, perkName):
     perksController = vehicle.getPerksController()
+    detachmentCache = dependency.instance(IDetachmentCache)
+    detachment = detachmentCache.getDetachment(vehicle.getLinkedDetachmentID())
     if not perksController:
         return vehicle
-    perksController.customizedRecalc(int(perkName))
+    bonusPerks = g_detachmentTankSetupVehicle.getBackupedBonusPerks()
+    perkID = int(perkName)
+    perksDict = perksController.mergedPerks
+    perkLevel = perksDict.get(perkID, 0)
+    comparableInstructors = g_detachmentTankSetupVehicle.comparableInstructors
+    boosterPerkBonus = detachment.getPerkBoosterInfluence(perkID=perkID, vehicle=vehicle, bonusPerks=bonusPerks, comparableInstructors=comparableInstructors) if detachment else []
+    boosterPerkLevel = sum((points for _, points, _ in boosterPerkBonus))
+    perksController.customizedRecalc(AbilitySystemScopeNames.DETACHMENT, {perkID: perkLevel - boosterPerkLevel})
     return vehicle
 
 
 def _removeSkillModifier(vehicle, skillName):
-    vehicle.crew = vehicle.getCrewWithoutSkill(skillName)
+    if skillName == TANK_CONTROL_LEVEL:
+        perksController = vehicle.getPerksController()
+        if not perksController:
+            return vehicle
+        perksController.ignoreCrewMastery()
+    else:
+        vehicle.crew = vehicle.getCrewWithoutSkill(skillName)
     return vehicle
 
 
 def _removeBattleBoosterModifier(vehicle, boosterName):
-    if vehicle.battleBoosters.installed[0] is not None:
-        vehicle.battleBoosters.installed[0] = None
+    battleBooster = vehicle.battleBoosters.installed[0]
+    if battleBooster is not None:
+        if not battleBooster.isCrewBooster():
+            vehicle.battleBoosters.installed[0] = None
+        else:
+            perksController = vehicle.getPerksController()
+            detachmentCache = dependency.instance(IDetachmentCache)
+            detachment = detachmentCache.getDetachment(vehicle.getLinkedDetachmentID())
+            if not perksController:
+                return vehicle
+            bonusPerks = g_detachmentTankSetupVehicle.getBackupedBonusPerks()
+            comparableInstructors = g_detachmentTankSetupVehicle.comparableInstructors
+            boosterPerksBonus = detachment.getPerksBoosterInfluence(vehicle=vehicle, bonusPerks=bonusPerks, comparableInstructors=comparableInstructors) if detachment else []
+            perksController.customizedRecalc(AbilitySystemScopeNames.DETACHMENT, {perkID:level for _, perkID, level, _ in boosterPerksBonus})
     return vehicle
 
 
@@ -71,7 +101,7 @@ _VEHICLE_MODIFIERS = {BonusTypes.SKILL: _removeSkillModifier,
  BonusTypes.EQUIPMENT: _removeEquipmentModifier,
  BonusTypes.OPTIONAL_DEVICE: _removeOptionalDeviceModifier,
  BonusTypes.BATTLE_BOOSTER: _removeBattleBoosterModifier,
- BonusTypes.PERK: _removePlatoonPerkModifier}
+ BonusTypes.DETACHMENT: _removeDetachmentPerkModifier}
 _NOT_STACK_BONUSES = {'circularVisionRadius': (('stereoscope_tier1', BonusTypes.OPTIONAL_DEVICE), ('stereoscope_tier2', BonusTypes.OPTIONAL_DEVICE), ('stereoscope_tier3', BonusTypes.OPTIONAL_DEVICE)),
  'invisibilityStillFactor': (('camouflageNet_tier2', BonusTypes.OPTIONAL_DEVICE), ('camouflageNet_tier3', BonusTypes.OPTIONAL_DEVICE))}
 
@@ -118,7 +148,7 @@ class BonusExtractor(object):
 
     def getBonusInfo(self):
         for bnsId, bnsGroup in self.__bonuses:
-            yield (bnsGroup, bnsId, self.extractBonus(bnsGroup, bnsId))
+            yield (bnsId, bnsGroup, self.extractBonus(bnsGroup, bnsId))
 
     def extractBonus(self, bonusGroup, bonusID):
         oldValue = self.__currValue
@@ -141,12 +171,6 @@ class TankSetupBonusExtractor(BonusExtractor):
         return self.itemsCache.items.getLayoutsVehicleCopy(vehicle)
 
 
-class PostProgressionBonusExtractor(BonusExtractor):
-
-    def _getCopyVehicle(self, vehicle):
-        return self.itemsCache.items.getLayoutsVehicleCopy(vehicle, ignoreDisabledProgression=True)
-
-
 class _CustomizedVehicleParams(VehicleParams):
 
     def __init__(self, vehicle, removeCamouflage):
@@ -155,3 +179,10 @@ class _CustomizedVehicleParams(VehicleParams):
 
     def _getVehicleDescriptor(self, vehicle):
         return vehicle.descriptor if self.__removeCamouflage else super(_CustomizedVehicleParams, self)._getVehicleDescriptor(vehicle)
+
+    @staticmethod
+    def getIgnoreSituational():
+        return False
+
+    def __getattr__(self, item):
+        return self.getKpiFactor(item, toCompare=True)

@@ -67,10 +67,6 @@ class ExtendedSkill(BasicSkill):
 class BrotherhoodSkill(ExtendedSkill):
     __slots__ = ()
 
-    @property
-    def crewLevelIncrease(self):
-        return self._setOfParameters[0]
-
 
 class CommanderTutorSkill(ExtendedSkill):
     __slots__ = ()

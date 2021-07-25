@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/battle_selector_items.py
 import logging
 import typing
-import constants
 from account_helpers import isDemonstrator
 from CurrentVehicle import g_currentVehicle
 from adisp import process
@@ -10,7 +9,7 @@ from battle_selector_event_progression_item import EventProgressionItem
 from battle_selector_event_progression_providers import EventProgressionDataProvider
 from battle_selector_item import SelectorItem
 from account_helpers import isDemonstratorExpert
-from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR
+from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR, IS_CREW_SANDBOX
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.battle_royale.constants import BattleRoyalePerfProblems
@@ -761,24 +760,24 @@ _DEFAULT_SQUAD_PAN = PREBATTLE_ACTION_NAME.SQUAD
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _createItems(lobbyContext=None):
+    settings = lobbyContext.getServerSettings()
+    isInRoaming = settings.roaming.isInRoaming()
     items = []
-    extraItems = []
     _addRandomBattleType(items)
-    if constants.SANDBOX_CONSTANTS.IS_BATTLE_SELECTOR_ENABLED:
-        settings = lobbyContext.getServerSettings()
-        isInRoaming = settings.roaming.isInRoaming()
+    if not IS_CREW_SANDBOX:
         _addRankedBattleType(items, settings)
+        _addRoyaleBattleType(items)
+        _addMapboxBattleType(items)
         _addCommandBattleType(items, settings)
         _addStrongholdsBattleType(items, isInRoaming)
         _addTrainingBattleType(items)
         _addEpicTrainingBattleType(items, settings)
-        _addRoyaleBattleType(items)
-        _addMapboxBattleType(items)
         if GUI_SETTINGS.specPrebatlesVisible:
             _addSpecialBattleType(items)
         if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
             _addSandboxType(items)
-        _addEventProgressionItems(extraItems)
+    extraItems = []
+    _addEventProgressionItems(extraItems)
     return _BattleSelectorItems(items, extraItems)
 
 

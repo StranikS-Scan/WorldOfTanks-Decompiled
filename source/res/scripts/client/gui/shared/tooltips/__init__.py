@@ -22,12 +22,15 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     TANKMAN = 'tankman'
     NOT_RECRUITED_TANKMAN = 'notRecruitedTankman'
     SKILL = 'skill'
+    PERK = 'perk'
+    PERK_TTC = 'perkTTC'
     CREW_SKIN = 'crew_skin'
     CREW_BOOK = 'crew_book'
     CREW_BUNDLE = 'crewBundle'
     ACHIEVEMENT = 'achievement'
     ACHIEVEMENT_ATTR = 'achievementAttr'
     MODULE = 'module'
+    MODULE_PARAMETER = 'moduleParameter'
     SHELL = 'shell'
     EQUIPMENT = 'equipment'
     EFFICIENCY = 'efficiency'
@@ -78,6 +81,8 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE_COLLECTOR = 'vehicleCollector'
     BATTLE_PASS_GIFT_TOKEN = 'battlePassGiftToken'
     BATTLE_PASS_POINTS = 'battlePassPoints'
+    BUY_VEHICLE = 'buyVehicle'
+    RECERTIFICATION_FORM = 'recertificationForm'
     MAPBOX_SELECTOR_INFO = 'mapboxSelectorInfo'
     SELECTABLE_CREWBOOK = 'selectableCrewbook'
     RANDOM_CREWBOOK = 'randomCrewbook'
@@ -114,6 +119,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     DEMOUNT_KIT = 'demountKit'
     MODULE_INFO = 'moduleInfo'
     BATTLE_PASS = 'battlePass'
+    PERK = 'perk'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

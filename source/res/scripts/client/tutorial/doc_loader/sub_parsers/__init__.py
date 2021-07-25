@@ -982,4 +982,5 @@ def parseHint(xmlCtx, section):
     sectionInfo['updateRuntime'] = section.readBool('update-runtime', False)
     sectionInfo['hideImmediately'] = section.readBool('hide-immediately', False)
     sectionInfo['checkViewArea'] = section.readBool('check-view-area', False)
+    sectionInfo['persistent'] = section.readBool('persistent', False)
     return sectionInfo

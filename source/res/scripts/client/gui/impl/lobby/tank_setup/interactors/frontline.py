@@ -21,9 +21,6 @@ class FrontlineInteractor(BaseEquipmentInteractor):
     def getCurrentLayout(self):
         return self.getItem().battleAbilities.layout
 
-    def getSetupLayout(self):
-        return self.getItem().battleAbilities.setupLayouts
-
     def revert(self):
         self.getItem().battleAbilities.setLayout(*self.getPlayerLayout())
         self._resetInstalledIndices()
@@ -31,10 +28,7 @@ class FrontlineInteractor(BaseEquipmentInteractor):
         self.itemUpdated()
 
     def updateFrom(self, vehicle, onlyInstalled=True):
-        super(FrontlineInteractor, self).updateFrom(vehicle, onlyInstalled)
-        items = self.getItem().battleAbilities
-        items.setInstalled(*vehicle.battleAbilities.installed)
-        items.setupLayouts.setSetups(vehicle.battleAbilities.setupLayouts.setups)
+        self.getItem().battleAbilities.setInstalled(*vehicle.battleAbilities.installed)
         self._playerLayout = vehicle.battleAbilities.layout.copy()
         if not onlyInstalled:
             self.getItem().battleAbilities.setLayout(*vehicle.battleAbilities.layout)

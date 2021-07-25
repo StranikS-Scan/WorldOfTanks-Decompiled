@@ -10,10 +10,9 @@ from .view_model import ViewModel
 from ..py_object_binder import PyObjectEntity, getProxy, getObject
 from ..py_object_wrappers import PyObjectView, PyObjectViewSettings
 from ..gui_constants import ViewFlags, ViewStatus, ViewEventType
-TViewModel = typing.TypeVar('TViewModel', bound=ViewModel)
 _logger = logging.getLogger(__name__)
 
-class ViewSettings(typing.Generic[TViewModel]):
+class ViewSettings(object):
     __slots__ = ('__proxy', 'args', 'kwargs')
 
     def __init__(self, layoutID, flags=ViewFlags.VIEW, model=None):
@@ -62,14 +61,14 @@ class ViewSettings(typing.Generic[TViewModel]):
         return
 
 
-class View(PyObjectEntity, typing.Generic[TViewModel]):
-    __slots__ = ('__viewStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged', '__soundExtension', '__weakref__')
+class View(PyObjectEntity):
+    __slots__ = ('__viewStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged', '__soundExtension')
     _COMMON_SOUND_SPACE = None
 
     def __init__(self, settings, wsFlags=ViewFlags.VIEW, viewModelClazz=ViewModel, *args, **kwargs):
         if not isinstance(settings, ViewSettings):
             _logger.warning('%r: Creation of view using statement View(layoutID, wsFlags, viewModelClazz, *args, **kwargs) is deprecated and will be removed in next iteration. Please, use View(ViewSettings(...))', self.__class__.__name__)
-            settings = ViewSettings[TViewModel](settings)
+            settings = ViewSettings(settings)
             settings.flags = wsFlags
             settings.model = viewModelClazz()
             settings.args = args

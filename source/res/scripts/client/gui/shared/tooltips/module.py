@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/module.py
 import logging
-import typing
 from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
@@ -13,23 +12,25 @@ from gui.impl.gen import R
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE, getKpiValueString
 from gui.shared.gui_items.gui_item_economics import isItemBuyPriceAvailable
-from gui.shared.items_parameters import params_helper, formatters as params_formatters, bonus_helper
+from gui.shared.gui_items.artefacts import getArtefactName
+from gui.shared.items_parameters import params_helper, formatters as params_formatters
+from gui.shared.items_parameters.functions import isSituationalBonus
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import MONEY_UNDEFINED, Currency
 from gui.shared.tooltips import getComplexStatusWULF, getUnlockPrice, TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS, makeRemovalPriceBlock
 from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME, GUN_DUAL_GUN, GUN_CAN_BE_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_CAN_BE_DUAL_GUN, TURBOSHAFT_ENGINE_POWER
 from gui.shared.utils.requesters import REQ_CRITERIA
+from constants import BonusTypes
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.supply_slot_categories import SlotCategories
+from items.vehicles import getBonusID
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-if typing.TYPE_CHECKING:
-    from gui.shared.gui_items.Vehicle import Vehicle
 _TOOLTIP_WIDTH = 468
 _DEFAULT_PADDING = 20
 _EMPTY_TOOLTIP_WIDTH = 350
@@ -128,7 +129,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         if statusBlock:
             statusTopPadding = -30 if showModuleCompatibles else blockTopPadding
             items.append(formatters.packBuildUpBlockData(statusBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=statusTopPadding, bottom=-15)))
-        if bonus_helper.isSituationalBonus(module.name):
+        if isSituationalBonus(module.name):
             items.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(backport.text(R.strings.tooltips.vehicleParams.bonus.situational())), img=backport.image(R.images.gui.maps.icons.tooltip.asterisk_optional()), imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=_DEFAULT_PADDING)))
         if itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle) and module.hasSimilarDevicesInstalled(statsConfig.vehicle):
             items.append(formatters.packBuildUpBlockData(blocks=[formatters.packTitleDescBlock(title=text_styles.critical(backport.text(R.strings.tooltips.moduleFits.duplicated.header())), gap=0, desc=text_styles.standard(backport.text(R.strings.tooltips.moduleFits.duplicated.note())))], padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=-13), stretchBg=False))
@@ -587,7 +588,7 @@ class SimplifiedStatsBlockConstructor(ModuleTooltipBlockConstructor):
     def __init__(self, module, configuration, leftPadding, rightPadding, stockParams, comparator):
         self.__stockParams = stockParams
         self.__comparator = comparator
-        self.__isSituational = bonus_helper.isSituationalBonus(module.name)
+        self.__isSituational = isSituationalBonus(module.name)
         super(SimplifiedStatsBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
 
     def construct(self):
@@ -651,7 +652,7 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
         isSpecMatch = False
         slotCategories = set()
         if vehicle is not None:
-            slotCategories = vehicle.optDevices.getSlot(slotIdx).item.categories
+            slotCategories = vehicle.optDevices.slots[slotIdx].categories
             isSpec = bool(slotCategories & categories)
             if categories and isSpec:
                 isSpecMatch = True
@@ -838,8 +839,8 @@ class OptDeviceSlotsHeaderBlockConstructor(ModuleTooltipBlockConstructor):
         slotIdx = self.configuration.slotIdx
         slotsBlocks = []
         hasSlotSpecs = False
-        for idx in range(len(vehicle.optDevices.slots)):
-            categories = vehicle.optDevices.getSlot(idx).item.categories
+        for idx, slot in enumerate(vehicle.optDevices.slots):
+            categories = slot.categories
             selectedSlot = idx == slotIdx
             moduleInSlot = vehicle.optDevices.installed[idx]
             hasModuleInSlot = moduleInSlot is not None
@@ -859,7 +860,7 @@ class OptDeviceSlotsHeaderBlockConstructor(ModuleTooltipBlockConstructor):
                 deviceSpecs = []
                 for spec in SlotCategories.ORDER:
                     if spec in moduleCategories:
-                        deviceSpecs.append(formatters.packImageListIconData(imgSrc=backport.image(R.images.gui.maps.icons.specialization.dyn('{}_off'.format(spec))()), imgAlpha=_OPT_DEVICE_SELECTED_SPEC_ALPHA))
+                        deviceSpecs.append(formatters.packImageListIconData(imgSrc=backport.image(R.images.gui.maps.icons.tanksetup.specialization.dyn('{}_off'.format(spec))()), imgAlpha=_OPT_DEVICE_SELECTED_SPEC_ALPHA))
 
             slotSpecs = None
             if categories:
@@ -871,7 +872,7 @@ class OptDeviceSlotsHeaderBlockConstructor(ModuleTooltipBlockConstructor):
                         status = 'on'
                     else:
                         status = 'off'
-                    slotSpecs.append(formatters.packImageListIconData(imgSrc=backport.image(R.images.gui.maps.icons.specialization.dyn('medium_{}_{}'.format(spec, status))()), imgAlpha=_OPT_DEVICE_SELECTED_SPEC_ALPHA))
+                    slotSpecs.append(formatters.packImageListIconData(imgSrc=backport.image(R.images.gui.maps.icons.tanksetup.specialization.dyn('medium_{}_{}'.format(spec, status))()), imgAlpha=_OPT_DEVICE_SELECTED_SPEC_ALPHA))
 
             icon = self._getIcon(moduleInSlot) if hasModuleInSlot else None
             if selectedSlot and hasModuleInSlot and isSpecMatch:
@@ -930,11 +931,11 @@ class OptDeviceEmptyBlockTooltipData(BlocksTooltipData):
         leftPadding = _DEFAULT_PADDING
         rightPadding = _DEFAULT_PADDING
         topPadding = _DEFAULT_PADDING
-        slotItem, isDyn = vehicle.optDevices.getSlot(slotIdx)
+        categories = vehicle.optDevices.slots[slotIdx].categories
         title = backport.text(R.strings.tooltips.hangar.ammo_panel.device.empty.header())
         descList = []
-        if slotItem.categories:
-            specDesc, specText = _getSpecsDescAndText(slotItem.categories)
+        if categories:
+            specDesc, specText = _getSpecsDescAndText(categories)
             descList.append('{}{}'.format(specDesc, specText))
             descBlock = formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tank_setup.tooltips.specializationDesc(), spec=specText)))
         else:
@@ -947,10 +948,6 @@ class OptDeviceEmptyBlockTooltipData(BlocksTooltipData):
         headerBlocks.insert(0, titleBlock)
         items.append(formatters.packBuildUpBlockData(blocks=headerBlocks, gap=10, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding, bottom=-_DEFAULT_PADDING)))
         items.append(formatters.packBuildUpBlockData(blocks=[descBlock], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, stretchLast=True, padding=formatters.packPadding(left=leftPadding, right=rightPadding)))
-        if isDyn:
-            dynCatsTitle = backport.text(R.strings.tank_setup.tooltips.dynamicCategory.title())
-            dynCatsDesc = backport.text(R.strings.tank_setup.tooltips.dynamicCategory.desc())
-            items.append(formatters.packTitleDescBlock(title=text_styles.warning(dynCatsTitle), desc=text_styles.main(dynCatsDesc), padding=formatters.packPadding(left=leftPadding, right=rightPadding)))
         return items
 
 
@@ -972,29 +969,6 @@ class AmmunitionEmptyBlockTooltipData(BlocksTooltipData):
         return items
 
 
-class AmmunitionSlotSpecTooltipData(BlocksTooltipData):
-
-    def __init__(self, context):
-        super(AmmunitionSlotSpecTooltipData, self).__init__(context, TOOLTIP_TYPE.MODULE)
-        self._setWidth(_EMPTY_TOOLTIP_WIDTH)
-        self._setContentMargin(bottom=7)
-
-    def _packBlocks(self, spec, isDyn, isClickable):
-        items = super(AmmunitionSlotSpecTooltipData, self)._packBlocks()
-        title = backport.text(R.strings.tank_setup.categories.dyn(spec)())
-        desc = backport.text(R.strings.tank_setup.categories.slotEffect.dyn(spec)())
-        blocks = [formatters.packTitleDescBlock(title=text_styles.middleTitle(title), desc=text_styles.main(desc))]
-        if isDyn:
-            titleDyn = backport.text(R.strings.tank_setup.tooltips.dynamicCategory.title())
-            if isClickable:
-                descDyn = backport.text(R.strings.tank_setup.tooltips.dynamicCategoryClickable.desc())
-            else:
-                descDyn = backport.text(R.strings.tank_setup.tooltips.dynamicCategory.desc())
-            blocks.append(formatters.packTitleDescBlock(title=text_styles.warning(titleDyn), desc=text_styles.main(descDyn)))
-        items.append(formatters.packBuildUpBlockData(blocks))
-        return items
-
-
 def _getSpecsDescAndText(categories):
     specText = text_styles.standard(' / ').join((text_styles.expText(backport.text(R.strings.tank_setup.categories.dyn(spec)())) for spec in SlotCategories.ORDER if spec in categories))
     specDesc = text_styles.main(backport.text(R.strings.tooltips.parameter.categories()))
@@ -1012,10 +986,65 @@ def _packSpecsIconsBlockData(vehicle, categories, slotIdx, topOffset=0, leftOffs
         else:
             status = 'off'
             alpha = _OPT_DEVICE_SPEC_ALPHA
-        specIcons.append(formatters.packImageListIconData(imgSrc=backport.image(R.images.gui.maps.icons.specialization.dyn('medium_{}_{}'.format(spec, status))()), imgAlpha=alpha))
+        specIcons.append(formatters.packImageListIconData(imgSrc=backport.image(R.images.gui.maps.icons.tanksetup.specialization.dyn('medium_{}_{}'.format(spec, status))()), imgAlpha=alpha))
 
     iconSize = 64
     hGap = -32
     catsLen = len(categories)
     paddingLeft = leftOffset - (catsLen * iconSize + (catsLen - 1) * hGap) * 0.5
     return formatters.packImageListParameterBlockData(listIconSrc=specIcons, columnWidth=iconSize, rowHeight=iconSize, horizontalGap=hGap, padding=formatters.packPadding(left=paddingLeft, top=topOffset))
+
+
+class ModuleTTCTooltipData(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(ModuleTTCTooltipData, self).__init__(context, TOOLTIP_TYPE.MODULE_PARAMETER)
+        self._setContentMargin(top=20, left=20, bottom=20, right=20)
+        self._setMargins(afterBlock=14)
+        self._setWidth(445)
+        self._moduleType = None
+        self._module = None
+        return
+
+    def _getModule(self):
+        optDevs = self.item.optDevices.installed.getItems()
+        return next(iter((optDev for optDev in optDevs if getBonusID(BonusTypes.OPTIONAL_DEVICE, optDev.name) == self._moduleType)), None)
+
+    def _getEffectsBlock(self, statusConfig, leftPadding, rightPadding):
+        return OptDeviceEffectsBlockConstructor(self._module, statusConfig, leftPadding, 10).construct()
+
+    def _packBlocks(self, *args, **kwargs):
+        self.item = self.context.buildItem(*args, **kwargs)
+        self._moduleType = args[0]
+        self._module = self._getModule()
+        if not self._module:
+            return []
+        items = [self.__packTitleBlock()]
+        statusConfig = self.context.getStatusConfiguration(self._module)
+        leftPadding = _DEFAULT_PADDING
+        rightPadding = _DEFAULT_PADDING
+        effectsBlock = self._getEffectsBlock(statusConfig, leftPadding, rightPadding)
+        if effectsBlock:
+            effectsPaddings = formatters.packPadding(left=leftPadding, right=rightPadding, top=-4, bottom=-8)
+            if statusConfig.useWhiteBg:
+                bgLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE
+            else:
+                bgLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
+            items.append(formatters.packBuildUpBlockData(effectsBlock, padding=effectsPaddings, linkage=bgLinkage, stretchBg=True))
+        return items
+
+    def __packTitleBlock(self):
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(_ms(getArtefactName(self._moduleType))), img=self._module.getBonusIcon(), imgPadding={'left': 0,
+         'top': 3}, txtGap=-4, txtOffset=60, padding={'top': -1,
+         'left': 7,
+         'bottom': 10})
+
+
+class EquipmentTTCTooltipData(ModuleTTCTooltipData):
+
+    def _getModule(self):
+        consumables = self.item.consumables.installed.getItems()
+        return next(iter((consumable for consumable in consumables if getBonusID(BonusTypes.OPTIONAL_DEVICE, consumable.name) == self._moduleType)), None)
+
+    def _getEffectsBlock(self, statusConfig, leftPadding, rightPadding):
+        return EffectsBlockConstructor(self._module, statusConfig, leftPadding, rightPadding).construct()

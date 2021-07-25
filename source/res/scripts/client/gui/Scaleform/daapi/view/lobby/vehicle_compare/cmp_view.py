@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_view.py
+import typing
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -20,7 +22,8 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
-from account_helpers.settings_core.settings_constants import OnceOnlyHints
+if typing.TYPE_CHECKING:
+    from typing import Optional
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
@@ -134,12 +137,12 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
     def __updateDifferenceAttention(self):
         vehiclesCount = self.comparisonBasket.getVehiclesCount()
         if vehiclesCount > 1 and len(set(self.comparisonBasket.getVehiclesCDs())) > 1:
-            comparisonDataIter = self.comparisonBasket.getVehiclesPropertiesIter(lambda vehCmpData: (vehCmpData.getConfigurationType(), vehCmpData.getCrewData()))
-            prevModuleType, prevCrewData = next(comparisonDataIter)
-            for moduleType, crewData in comparisonDataIter:
-                if prevModuleType != moduleType or prevCrewData != crewData:
+            comparisonDataIter = self.comparisonBasket.getVehiclesPropertiesIter(lambda vehCmpData: (vehCmpData.getConfigurationType(), vehCmpData.getPerks()))
+            prevModuleType, prevPerks = next(comparisonDataIter)
+            for moduleType, perks in comparisonDataIter:
+                if prevModuleType != moduleType or prevPerks != perks:
                     break
-                prevModuleType, prevCrewData = moduleType, crewData
+                prevModuleType, prevPerks = moduleType, perks
 
     def __onVehicleParamsChanged(self, _):
         self.__updateDifferenceAttention()

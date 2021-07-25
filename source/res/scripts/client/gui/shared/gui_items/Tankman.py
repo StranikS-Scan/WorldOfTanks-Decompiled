@@ -3,15 +3,19 @@
 from helpers import i18n
 from items import tankmen, vehicles, ITEM_TYPE_NAMES, special_crew
 from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT
+from shared_utils import CONST_CONTAINER
 from gui.shared.utils.functions import getShortDescr
 from gui.shared.gui_items import ItemsCollection, GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item import HasStrCD, GUIItem
 from gui.impl.gen import R
 from gui.impl import backport
 from items.components import skills_constants
-from constants import SkinInvData
 from items.vehicles import VEHICLE_CLASS_TAGS
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from crew2 import settings_globals
+from gui.shared.formatters import text_styles
+from skeletons.gui.shared import IItemsCache
+from helpers import dependency
 
 class CrewTypes(object):
     SKILL_100 = 100
@@ -68,8 +72,9 @@ class TankmenComparator(object):
 
 class Tankman(GUIItem):
     __slots__ = ('__descriptor', '_invID', '_nationID', '_itemTypeID', '_itemTypeName', '_combinedRoles', '_dismissedAt', '_isDismissed', '_areClassesCompatible', '_vehicleNativeDescr', '_vehicleInvID', '_vehicleDescr', '_vehicleBonuses', '_vehicleSlotIdx', '_skills', '_skillsMap', '_skinID', '_comparator')
+    itemsCache = dependency.descriptor(IItemsCache)
 
-    class ROLES(object):
+    class ROLES(CONST_CONTAINER):
         COMMANDER = 'commander'
         RADIOMAN = 'radioman'
         DRIVER = 'driver'
@@ -125,8 +130,7 @@ class Tankman(GUIItem):
 
     def _equippedSkinID(self, proxy):
         if proxy is not None and proxy.inventory.isSynced():
-            skinsPdata = proxy.inventory.getCacheValue(GUI_ITEM_TYPE.CREW_SKINS, {})
-            tankmanSkins = skinsPdata[SkinInvData.OUTFITS]
+            tankmanSkins = proxy.inventory.getCacheValue(GUI_ITEM_TYPE.TANKMAN, {}).get('crewSkins', {})
             return tankmanSkins.get(self._invID, NO_CREW_SKIN_ID)
         else:
             return NO_CREW_SKIN_ID
@@ -184,6 +188,10 @@ class Tankman(GUIItem):
         return self._vehicleSlotIdx
 
     @property
+    def freeSkillsNumber(self):
+        return self.descriptor.freeSkillsNumber
+
+    @property
     def skills(self):
         return self._skills
 
@@ -214,7 +222,7 @@ class Tankman(GUIItem):
 
     @property
     def descriptor(self):
-        if self.__descriptor is None or self.__descriptor.dossierCompactDescr != self.strCD:
+        if self.__descriptor is None or self.__descriptor.compactDescr != self.strCD:
             self.__descriptor = tankmen.TankmanDescr(compactDescr=self.strCD)
         return self.__descriptor
 
@@ -273,6 +281,15 @@ class Tankman(GUIItem):
     @property
     def roleUserName(self):
         return getRoleUserName(self.descriptor.role)
+
+    @property
+    def isLeader(self):
+        return settings_globals.g_conversion.getDetachmentForTankman(self.descriptor) is not None
+
+    @property
+    def isInstructor(self):
+        instructor, _ = settings_globals.g_conversion.getInstructorForTankman(self.descriptor)
+        return instructor is not None
 
     def availableSkills(self, useCombinedRoles=False):
         if useCombinedRoles:
@@ -348,10 +365,6 @@ class Tankman(GUIItem):
         return self.roleLevel == tankmen.MAX_SKILL_LEVEL
 
     @property
-    def isMaxRoleEfficiency(self):
-        return self.efficiencyRoleLevel == tankmen.MAX_SKILL_LEVEL
-
-    @property
     def vehicleNativeType(self):
         for tag in vehicles.VEHICLE_CLASS_TAGS.intersection(self.vehicleNativeDescr.type.tags):
             return tag
@@ -388,6 +401,14 @@ class Tankman(GUIItem):
 
     def isRestorable(self):
         return self.descriptor.isRestorable()
+
+    def getTankmanState(self):
+        if self.isInTank:
+            vehicle = self.itemsCache.items.getVehicle(self.vehicleInvID)
+            if vehicle.isInBattle or vehicle.isAwaitingBattle:
+                return text_styles.vehicleStatusCritical(backport.text(R.strings.detachment.mobilization.vehicleStatus.inBattle()))
+            if vehicle.isInPrebattle:
+                return text_styles.vehicleStatusWarning(backport.text(R.strings.detachment.mobilization.vehicleStatus.inPlatoon()))
 
     def __packSkill(self, skillItem):
         return {'id': skillItem.name,
@@ -433,6 +454,11 @@ class TankmanSkill(GUIItem):
             self._isActive = False
             self._isEnable = False
         return
+
+    def fullActive(self):
+        self._level = tankmen.MAX_SKILL_LEVEL
+        self._isActive = True
+        self._isEnable = True
 
     def __getEnabledSkill(self, tankman):
         for role in tankman.combinedRoles:
@@ -619,6 +645,8 @@ def getRoleUserName(role):
     return i18n.convert(userString)
 
 
+ROLE_NAMES = {role:getRoleUserName(role) for role in Tankman.ROLES.ALL()}
+
 def getRoleIconName(role):
     return tankmen.getSkillsConfig().getSkill(role).icon
 
@@ -637,6 +665,10 @@ def getRoleMediumIconPath(role):
 
 def getRoleSmallIconPath(role):
     return '../maps/icons/tankmen/roles/small/%s' % getRoleIconName(role)
+
+
+def getRole42x42IconPath(role):
+    return '../maps/icons/tankmen/roles/42x42/{}'.format(getRoleIconName(role))
 
 
 def getRoleWhiteIconPath(role):
@@ -707,10 +739,6 @@ def getCrewSkinNationPath(nationID):
     return backport.image(R.images.gui.maps.icons.tankmen.crewSkins.nations.dyn(nationID)()) if nationID else ''
 
 
-def getCrewSkinRolePath(roleID):
-    return backport.image(R.images.gui.maps.icons.tankmen.roles.big.crewSkins.dyn(roleID)()) if roleID else ''
-
-
 def getCrewSkinIconSmall(iconID):
     return backport.image(R.images.gui.maps.icons.tankmen.icons.small.crewSkins.dyn(iconID)())
 
@@ -755,15 +783,12 @@ def __isCommonSkillLearnt(skillName, vehicle):
 
 
 def __isPersonalSkillLearnt(skillName, vehicle):
-    if not vehicle.crew:
-        return True
-    else:
-        for _, tankman in vehicle.crew:
-            if tankman is not None:
-                if skillName in tankman.skillsMap and tankman.skillsMap[skillName].level == tankmen.MAX_SKILL_LEVEL:
-                    return True
+    for _, tankman in vehicle.crew:
+        if tankman is not None:
+            if skillName in tankman.skillsMap and tankman.skillsMap[skillName].level == tankmen.MAX_SKILL_LEVEL:
+                return True
 
-        return False
+    return False
 
 
 def __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID, skills=(), freeSkills=(), lastSkillLevel=tankmen.MAX_SKILL_LEVEL):

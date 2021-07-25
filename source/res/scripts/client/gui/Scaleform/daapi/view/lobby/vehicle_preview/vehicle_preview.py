@@ -39,7 +39,8 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IHeroTankController, IVehicleComparisonBasket
+from skeletons.gui.game_control import IHeroTankController, IRestoreController, ITradeInController, IVehicleComparisonBasket, IRankedBattlesController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import SHOP_PREVIEW_SOUND_SPACE
@@ -60,7 +61,6 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.EPIC_BATTLE_PAGE: 'frontline',
  VIEW_ALIAS.RANKED_BATTLE_PAGE: 'ranked',
  VIEW_ALIAS.ADVENT_CALENDAR: 'adventCalendar',
- VIEW_ALIAS.VEH_POST_PROGRESSION: 'vehPostProgression',
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards'}
 _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_BROWSE_NAME,
@@ -99,10 +99,14 @@ def _getModulesTabIdx():
 class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     __background_alpha__ = 0.0
     __metaclass__ = event_bus_handlers.EventBusListener
-    __itemsCache = dependency.descriptor(IItemsCache)
-    __comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    itemsCache = dependency.descriptor(IItemsCache)
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    tradeIn = dependency.descriptor(ITradeInController)
+    restores = dependency.descriptor(IRestoreController)
     __heroTanksControl = dependency.descriptor(IHeroTankController)
-    __hangarSpace = dependency.descriptor(IHangarSpace)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    hangarSpace = dependency.descriptor(IHangarSpace)
+    rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, ctx=None):
         self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
@@ -111,7 +115,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             self._COMMON_SOUND_SPACE = SHOP_PREVIEW_SOUND_SPACE
         elif self._backAlias in (VIEW_ALIAS.LOBBY_TECHTREE, VIEW_ALIAS.LOBBY_RESEARCH):
             self._COMMON_SOUND_SPACE = RESEARCH_PREVIEW_SOUND_SPACE
-        elif self._backAlias in (VIEW_ALIAS.RANKED_BATTLE_PAGE, VIEW_ALIAS.VEH_POST_PROGRESSION):
+        elif self._backAlias == VIEW_ALIAS.RANKED_BATTLE_PAGE:
             self._COMMON_SOUND_SPACE = VEHICLE_PREVIEW_SOUND_SPACE
         super(VehiclePreview, self).__init__(ctx)
         self.__currentOffer = None
@@ -129,9 +133,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__description = ctx.get('description')
         self.__endTime = ctx.get('endTime')
         self.__buyParams = ctx.get('buyParams')
-        addBuiltInEquipment(self._itemsPack, self.__itemsCache, self._vehicleCD)
-        notInteractive = (VIEW_ALIAS.LOBBY_STORE, VIEW_ALIAS.RANKED_BATTLE_PAGE, VIEW_ALIAS.VEH_POST_PROGRESSION)
-        self._heroInteractive = not (self._itemsPack or self.__offers or self._backAlias in notInteractive)
+        addBuiltInEquipment(self._itemsPack, self.itemsCache, self._vehicleCD)
+        self._heroInteractive = not (self._itemsPack or self.__offers or self._backAlias in (VIEW_ALIAS.LOBBY_STORE, VIEW_ALIAS.RANKED_BATTLE_PAGE))
         self.__haveCustomCrew = any((item.type == ItemPackType.CREW_CUSTOM for item in self._itemsPack)) if self._itemsPack else False
         if 'previewAppearance' in ctx:
             self.__vehAppearanceChanged = True
@@ -141,7 +144,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__keepVehicleSelectionEnabled = False
         self._needToResetAppearance = True
         if not self.__isHeroTank:
-            self.__hangarSpace.removeVehicle()
+            self.hangarSpace.removeVehicle()
         g_currentPreviewVehicle.selectHeroTank(self.__isHeroTank)
         return
 
@@ -155,10 +158,10 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         super(VehiclePreview, self)._populate()
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
         g_currentPreviewVehicle.onVehicleInventoryChanged += self.__onInventoryChanged
-        self.__comparisonBasket.onChange += self.__onCompareBasketChanged
-        self.__comparisonBasket.onSwitchChange += self.__updateHeaderData
-        self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
-        self.__hangarSpace.setVehicleSelectable(True)
+        self.comparisonBasket.onChange += self.__onCompareBasketChanged
+        self.comparisonBasket.onSwitchChange += self.__updateHeaderData
+        self.hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
+        self.hangarSpace.setVehicleSelectable(True)
         if not g_currentPreviewVehicle.isPresent():
             event_dispatcher.showHangar()
         if not self._heroInteractive:
@@ -179,10 +182,10 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
         g_currentPreviewVehicle.onVehicleInventoryChanged -= self.__onInventoryChanged
-        self.__comparisonBasket.onChange -= self.__onCompareBasketChanged
-        self.__comparisonBasket.onSwitchChange -= self.__updateHeaderData
-        self.__hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
-        self.__hangarSpace.setVehicleSelectable(self.__keepVehicleSelectionEnabled)
+        self.comparisonBasket.onChange -= self.__onCompareBasketChanged
+        self.comparisonBasket.onSwitchChange -= self.__updateHeaderData
+        self.hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
+        self.hangarSpace.setVehicleSelectable(self.__keepVehicleSelectionEnabled)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
         if self._needToResetAppearance:
             g_currentPreviewVehicle.selectNoVehicle()
@@ -209,7 +212,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         AccountSettings.setSettings(PREVIEW_INFO_PANEL_IDX, index)
 
     def onCompareClick(self):
-        self.__comparisonBasket.addVehicle(self._vehicleCD, initParameters={'strCD': g_currentPreviewVehicle.item.descriptor.makeCompactDescr()})
+        self.comparisonBasket.addVehicle(self._vehicleCD, initParameters={'strCD': g_currentPreviewVehicle.item.descriptor.makeCompactDescr()})
 
     def handleSelectedEntityUpdated(self, event):
         ctx = event.ctx
@@ -220,7 +223,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
                 if descriptor:
                     self._needToResetAppearance = False
                     event_dispatcher.showHeroTankPreview(descriptor.type.compactDescr, previewAlias=VIEW_ALIAS.VEHICLE_PREVIEW, previousBackAlias=self._backAlias)
-            elif entity.id == self.__hangarSpace.space.vehicleEntityId:
+            elif entity.id == self.hangarSpace.space.vehicleEntityId:
                 self._processBackClick({'entity': entity})
         return
 
@@ -278,7 +281,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         vehicleLevel = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNameRegular', {'name': backport.text(R.strings.menu.header.level.num(vehicle.level)())})
         vehicleNameStyle = 'vehicleNamePremium' if vehicle.isPremium else 'vehicleNameRegular'
         vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', vehicleNameStyle, {'name': vehicle.descriptor.type.shortUserString})
-        compareBtnEnabled, compareBtnTooltip = resolveStateTooltip(self.__comparisonBasket, vehicle, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
+        compareBtnEnabled, compareBtnTooltip = resolveStateTooltip(self.comparisonBasket, vehicle, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
+        isRanked = self.rankedController.isRankedPrbActive()
         result = {'closeBtnLabel': VEHICLE_PREVIEW.HEADER_CLOSEBTN_LABEL,
          'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
          'backBtnDescrLabel': self._getBackBtnLabel(),
@@ -293,13 +297,13 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
          'showCompareBtn': compareBtnEnabled,
          'listDesc': self.__getInfoPanelListDescription(vehicle),
          'isMultinational': vehicle.hasNationGroup,
-         'roleText': getRoleText(vehicle.role, vehicle.roleLabel),
+         'roleText': getRoleText(vehicle.role, vehicle.roleLabel) if isRanked else '',
          'roleId': vehicle.role}
         return result
 
     def __onVehicleLoading(self, ctxEvent):
         if self.__customizationCD is not None and not ctxEvent.ctx.get('started'):
-            customizationItem = self.__itemsCache.items.getItemByCD(self.__customizationCD)
+            customizationItem = self.itemsCache.items.getItemByCD(self.__customizationCD)
             if customizationItem is None:
                 return
             if customizationItem.itemTypeID == GUI_ITEM_TYPE.STYLE:
@@ -384,6 +388,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def _processBackClick(self, ctx=None):
         if self._previewBackCb:
+            print 'self._previewBackCb', self._previewBackCb
             self._previewBackCb()
         elif self._backAlias == VIEW_ALIAS.LOBBY_RESEARCH and g_currentPreviewVehicle.isPresent():
             event_dispatcher.showResearchView(self._vehicleCD, exitEvent=events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={'nation': g_currentPreviewVehicle.item.nationName}))
@@ -397,7 +402,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         elif self._backAlias == VIEW_ALIAS.LOBBY_STORE:
             showShop()
         else:
+            print 'self._backAlias', self._backAlias
             event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self._backAlias), {'isBackEvent': True})
+            print 'event', event
             self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 

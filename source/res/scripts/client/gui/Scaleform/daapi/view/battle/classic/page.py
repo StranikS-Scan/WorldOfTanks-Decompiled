@@ -26,9 +26,9 @@ class _ClassicComponentsConfig(ComponentsConfig):
            BATTLE_VIEW_ALIASES.PLAYERS_PANEL,
            BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL,
            BATTLE_VIEW_ALIASES.HINT_PANEL,
-           BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL,
            DynamicAliases.DRONE_MUSIC_PLAYER,
            DynamicAliases.PERIOD_MUSIC_LISTENER)),
+         (BATTLE_CTRL_ID.PERKS, (BATTLE_VIEW_ALIASES.PERKS_PANEL,)),
          (BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, DynamicAliases.DRONE_MUSIC_PLAYER)),
          (BATTLE_CTRL_ID.CALLOUT, (BATTLE_VIEW_ALIASES.CALLOUT_PANEL,)),
          (BATTLE_CTRL_ID.MAPS, (BATTLE_VIEW_ALIASES.MINIMAP,)),
@@ -52,16 +52,6 @@ class ClassicPage(SharedPage):
 
     def __del__(self):
         LOG_DEBUG('ClassicPage is deleted')
-
-    def _populate(self):
-        super(ClassicPage, self)._populate()
-        self._setAmmunitionPanelState()
-
-    def _setAmmunitionPanelState(self):
-        if BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL in self.components.iterkeys():
-            ctrl = self.sessionProvider.shared.vehiclePostProgression
-            isPrbAmmunitionPanelEnabled = ctrl and ctrl.postProgression.isPostProgressionEnabled
-            self.as_enablePrebattleAmmunitionPanelS(isPrbAmmunitionPanelEnabled)
 
     def _toggleRadialMenu(self, isShown, allowAction=True):
         radialMenuLinkage = BATTLE_VIEW_ALIASES.RADIAL_MENU

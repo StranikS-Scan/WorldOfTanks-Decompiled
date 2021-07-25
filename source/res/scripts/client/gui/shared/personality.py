@@ -34,6 +34,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
+from skeletons.gui.detachment import IDetachmentCache
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared.utils import IHangarSpace, IRaresCache
 from skeletons.gui.web import IWebController
@@ -66,6 +67,7 @@ class ServicesLocator(object):
     settingsCache = dependency.descriptor(ISettingsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
     goodiesCache = dependency.descriptor(IGoodiesCache)
+    detachmentCache = dependency.descriptor(IDetachmentCache)
     battleResults = dependency.descriptor(IBattleResultsService)
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
@@ -82,6 +84,7 @@ class ServicesLocator(object):
     def clear(cls):
         cls.itemsCache.clear()
         cls.goodiesCache.clear()
+        cls.detachmentCache.clear()
         cls.eventsCache.clear()
         cls.lobbyContext.clear()
         cls.settingsCore.clear()
@@ -155,6 +158,7 @@ def onAccountBecomeNonPlayer():
     g_currentVehicle.destroy()
     ServicesLocator.itemsCache.clear()
     ServicesLocator.goodiesCache.clear()
+    ServicesLocator.detachmentCache.clear()
     g_currentPreviewVehicle.destroy()
     ServicesLocator.hangarSpace.destroy()
     g_prbLoader.onAccountBecomeNonPlayer()
@@ -193,7 +197,8 @@ def onClientUpdate(diff, updateOnlyLobbyCtx):
         ServicesLocator.lobbyContext.update(diff)
     else:
         if isPlayerAccount():
-            yield crewBooksViewedCache().onCrewBooksUpdated(diff)
+            crewBooksViewedCache().onCrewBooksUpdated(diff)
+            ServicesLocator.detachmentCache.update(diff)
             yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.CLIENT_UPDATE, diff)
             yield ServicesLocator.eventsCache.update(diff)
             yield g_clanCache.update(diff)

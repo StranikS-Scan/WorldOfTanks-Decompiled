@@ -3,11 +3,12 @@
 import logging
 from operator import attrgetter
 import typing
-from BWUtil import AsyncReturn
 import adisp
+from BWUtil import AsyncReturn
 from CurrentVehicle import HeroTankPreviewAppearance
 from async import async, await
-from constants import RentType, GameSeasonType, SANDBOX_CONSTANTS
+from constants import RentType, GameSeasonType
+from crew2.sandbox import SANDBOX_CONSTANTS
 from debug_utils import LOG_WARNING
 from frameworks.wulf import ViewFlags, WindowLayer
 from frameworks.wulf import Window
@@ -40,6 +41,8 @@ from gui.impl.lobby.account_completion.decorators import waitShowOverlay
 from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
 from gui.impl.lobby.demount_kit.optional_device_dialogs import BuyAndInstallOpDevDialog, BuyAndStorageOpDevDialog, DemountOpDevSinglePriceDialog, DestroyOpDevDialog, InstallOpDevDialog
 from gui.impl.lobby.demount_kit.selector_dialog import DemountOpDevDialog
+from gui.impl.lobby.detachment import getViews
+from gui.impl.lobby.detachment.navigation_view_settings import NavigationViewSettings
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.lobby.offers.offer_gift_dialog import makeOfferGiftDialog
 from gui.impl.lobby.tank_setup.dialogs.battle_abilities_confirm import BattleAbilitiesSetupConfirm
@@ -47,9 +50,6 @@ from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDia
 from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import RefillShells, ExitFromShellsConfirm
 from gui.impl.lobby.techtree.techtree_intro_view import TechTreeIntroWindow
-from gui.impl.lobby.veh_post_progression.dialogs.buy_pair_modification import BuyPairModificationDialog
-from gui.impl.lobby.veh_post_progression.dialogs.destroy_pair_modification import DestroyPairModificationsDialog
-from gui.impl.lobby.veh_post_progression.dialogs.research_confirm import PostProgressionResearchConfirm
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
@@ -57,7 +57,7 @@ from gui.shared import events, g_eventBus, money
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Vehicle import getUserName
+from gui.shared.gui_items.Vehicle import getUserName, Vehicle
 from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.money import Currency
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -74,13 +74,13 @@ from items import vehicles as vehicles_core, parseIntCompactDescr, ITEM_TYPES
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.detachment import IDetachmentCache
 from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController, IClanNotificationController, IEventProgressionController, IBrowserController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from uilogging.veh_post_progression.loggers import VehPostProgressionEntryPointLogger
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers import ContainerManager
 _logger = logging.getLogger(__name__)
@@ -243,9 +243,9 @@ def showStorageBoosterInfo(boosterID):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOSTER_INFO_WINDOW, getViewName(VIEW_ALIAS.BOOSTER_INFO_WINDOW, boosterID)), ctx={'boosterID': boosterID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showDemountKitInfo(demountKitID):
-    demountKitID = int(demountKitID)
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.DEMOUNT_KIT_INFO_WINDOW, getViewName(VIEW_ALIAS.DEMOUNT_KIT_INFO_WINDOW, demountKitID)), ctx={'demountKitID': demountKitID}), EVENT_BUS_SCOPE.LOBBY)
+def showGoodieInfo(goodieID):
+    goodieID = int(goodieID)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.GOODIE_INFO_WINDOW, getViewName(VIEW_ALIAS.GOODIE_INFO_WINDOW, goodieID)), ctx={'goodieID': goodieID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showVehicleSellDialog(vehInvID):
@@ -362,7 +362,8 @@ def showEventProgressionPage(url=None, eventProgression=None):
 
 
 def showBarracks():
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_BARRACKS)), scope=EVENT_BUS_SCOPE.LOBBY)
+    from gui.impl.gen.view_models.views.lobby.detachment.common.navigation_view_model import NavigationViewModel
+    showDetachmentViewById(NavigationViewModel.BARRACK_DETACHMENT)
 
 
 def showBadges(backViewName=''):
@@ -417,7 +418,7 @@ def showShop(url='', path='', params=None, isClientCloseControl=False):
         else:
             url = getShopURL()
     url = '/'.join((node.strip('/') for node in (url, path) if node))
-    if SANDBOX_CONSTANTS.IS_SHOP_OFFLINE_PAGE_ENABLED:
+    if SANDBOX_CONSTANTS.SHOP_PLACEHOLDER_ON:
         url = getShopURL()
     appLoader = dependency.instance(IAppLoader)
     app = appLoader.getApp()
@@ -753,7 +754,7 @@ def showTankPremiumAboutPage():
 
 
 @adisp.process
-def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False, browserParams=None, hiddenLayers=None):
+def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False, browserParams=None, onDone=None, hiddenLayers=None):
     if url:
         if browserParams is None:
             browserParams = {}
@@ -763,8 +764,11 @@ def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=N
          'callbackOnLoad': callbackOnLoad,
          'webHandlers': webHandlers,
          'forcedSkipEscape': forcedSkipEscape,
+         'onDisposeCallback': onDone,
          'browserParams': browserParams,
          'hiddenLayers': hiddenLayers or ()}), EVENT_BUS_SCOPE.LOBBY)
+    elif onDone is not None:
+        onDone()
     return
 
 
@@ -851,6 +855,28 @@ def isViewLoaded(layoutID):
     else:
         view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
         return view is not None
+
+
+def isViewLoadedByCondition(layoutID, ctx):
+    uiLoader = dependency.instance(IGuiLoader)
+    if not uiLoader or not uiLoader.windowsManager:
+        return False
+    view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
+    if view is None:
+        return False
+    elif hasattr(view, 'isParamsEqual') and callable(getattr(view, 'isParamsEqual')) and not view.isParamsEqual(ctx):
+        view.destroyWindow()
+        return False
+    else:
+        return True
+
+
+def getLoadedView(layoutID):
+    uiLoader = dependency.instance(IGuiLoader)
+    if not uiLoader or not uiLoader.windowsManager:
+        return False
+    view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
+    return view
 
 
 def showEventProgressionStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel=''):
@@ -1072,10 +1098,10 @@ def showOptionalDeviceDemount(deviceDescr, callback, forFitting=False):
         callback((False, {}))
     else:
         isOK, data = result.result
-        if data.get('openSingleDemountWindow', False):
-            showOptionalDeviceDemountSinglePrice(deviceDescr, callback, forFitting=forFitting)
-        else:
-            callback((isOK, data))
+    if data.get('openSingleDemountWindow', False):
+        showOptionalDeviceDemountSinglePrice(deviceDescr, callback, forFitting=forFitting)
+    else:
+        callback((isOK, data))
 
 
 @async
@@ -1086,10 +1112,10 @@ def showOptionalDeviceDemountSinglePrice(deviceDescr, callback, forFitting=False
         callback((False, {}))
     else:
         isOK, data = result.result
-        if data.get('openDemountSelectorWindow', False):
-            showOptionalDeviceDemount(deviceDescr, callback, forFitting=forFitting)
-        else:
-            callback((isOK, data))
+    if data.get('openDemountSelectorWindow', False):
+        showOptionalDeviceDemount(deviceDescr, callback, forFitting=forFitting)
+    else:
+        callback((isOK, data))
 
 
 @async
@@ -1160,6 +1186,13 @@ def showProgressionRequiredStyleUnlockedWindow(vehicleCD, notificationMgr=None):
 def showBadgeInvoiceAwardWindow(badge, notificationMgr=None):
     from gui.impl.lobby.awards.badge_award_view import BadgeAwardViewWindow
     window = BadgeAwardViewWindow(badge)
+    notificationMgr.append(WindowNotificationCommand(window))
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showMultiAwardWindow(invoiceData, notificationMgr=None):
+    from gui.impl.lobby.awards.multiple_awards_view import MultipleAwardsViewWindow
+    window = MultipleAwardsViewWindow(invoiceData)
     notificationMgr.append(WindowNotificationCommand(window))
 
 
@@ -1243,6 +1276,126 @@ def showBlueprintsExchangeStylePreview(vehCD, style, styleDescr, backCallback, b
     showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel, VIEW_ALIAS.BLUEPRINTS_EXCHANGE_STYLE_PREVIEW)
 
 
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def showAssignDetachmentToVehicleView(vehicleInvID, itemsCache=None):
+    vehicle = itemsCache.items.getVehicle(vehicleInvID)
+    detachmentCache = dependency.instance(IDetachmentCache)
+    detachmentsCount = len(detachmentCache.getDetachments(REQ_CRITERIA.DETACHMENT.NATIONS([vehicle.nationID])).values())
+    if detachmentsCount > 0:
+        showAssignToVehicleView(vehicleInvID)
+    else:
+        showNoDetachmentsView(vehicleInvID)
+
+
+def showNoDetachmentsView(vehicleInvID):
+    from gui.impl.lobby.detachment.assign_to_vehicle_view import NoDetachmentsView
+    from gui.impl.gen.view_models.views.lobby.detachment.common.navigation_view_model import NavigationViewModel
+    if isViewLoaded(R.views.lobby.detachment.NoDetachmentsView()):
+        return
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.detachment.NoDetachmentsView(), NoDetachmentsView, ScopeTemplates.LOBBY_SUB_SCOPE), navigationViewSettings=NavigationViewSettings(NavigationViewModel.NO_DETACHMENT, viewContextSettings={'vehicleInvID': vehicleInvID})), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showAssignToVehicleView(vehicleInvID):
+    from gui.impl.gen.view_models.views.lobby.detachment.common.navigation_view_model import NavigationViewModel
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.DETACHMENT_VIEW), ctx={'viewId': NavigationViewModel.ASSIGN_TO_VEHICLE,
+     'navigationViewSettings': NavigationViewSettings(NavigationViewModel.ASSIGN_TO_VEHICLE, {'vehicleInvID': vehicleInvID})}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showPresentationView():
+    if isViewLoaded(R.views.lobby.detachment.PresentationView()):
+        return
+    from gui.impl.lobby.detachment.presentation_view import PresentationWindow
+    wnd = PresentationWindow()
+    wnd.load()
+
+
+def showDetachmentViewById(viewId, viewContextSettings=None, previousViewSettings=None):
+    if viewContextSettings is None:
+        viewContextSettings = {}
+    views = getViews()
+    navigationViewSettings = NavigationViewSettings(viewId, viewContextSettings, previousViewSettings)
+    if viewId not in views:
+        raise SoftException("Invalid view item id: '{}'".format(viewId))
+    viewSettings = views[viewId]
+    if viewSettings.isFlashView:
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.DETACHMENT_VIEW), ctx={'navigationViewSettings': navigationViewSettings}), scope=EVENT_BUS_SCOPE.LOBBY)
+    else:
+        args = {'navigationViewSettings': navigationViewSettings,
+         'viewId': navigationViewSettings.getViewId()}
+        if isViewLoadedByCondition(viewSettings.layoutID, args):
+            return
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID=viewSettings.layoutID, viewClass=viewSettings.viewClass, scope=ScopeTemplates.LOBBY_SUB_SCOPE), args), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
+def showConvertView(vehicle, recruits=None, prevViewID=None):
+    if isViewLoaded(R.views.lobby.detachment.ConvertWindow()):
+        return
+    from gui.impl.lobby.detachment.convert_window_view import ConvertWindow
+    if isViewLoaded(R.views.lobby.detachment.ConvertWindow()):
+        return
+    wnd = ConvertWindow(vehicle, recruits, prevViewID)
+    wnd.load()
+
+
+def showNewLevelWindow(detInvID, detCompDescr, oldDetCompDescr, skinID, accountBadgeLevel=0, useQueue=False):
+    from gui.impl.lobby.detachment.new_level_window import NewLevelWindow
+    from gui.impl.gen.view_models.views.lobby.detachment.common.navigation_view_model import NavigationViewModel
+    findAndLoadWindow(useQueue, NewLevelWindow, detInvID, detCompDescr, oldDetCompDescr, skinID, NavigationViewSettings(NavigationViewModel.NEW_LEVEL), accountBadgeLevel)
+
+
+def showNewCommanderWindow(vehInvID, *args, **kwargs):
+    if isViewLoaded(R.views.lobby.detachment.NewCommanderWindow()):
+        return
+    from gui.impl.lobby.detachment.new_commander_window_view import NewCommanderWindow
+    wnd = NewCommanderWindow(vehInvID, *args, **kwargs)
+    wnd.load()
+
+
+def showInstructorUnpackingWindow(args=None):
+    if isViewLoaded(R.views.lobby.detachment.InstructorUnpackingView()):
+        return
+    from gui.impl.lobby.detachment.instructor_unpacking_view import InstructorUnpackingWindow
+    wnd = InstructorUnpackingWindow(args)
+    wnd.load()
+
+
+def showInstructorPageWindow(args=None):
+    if isViewLoaded(R.views.lobby.detachment.InstructorPageView()):
+        return
+    from gui.impl.lobby.detachment.instructor_page_view import InstructorPageWindow
+    wnd = InstructorPageWindow(args)
+    wnd.load()
+
+
+def showConvertInfoWindow(args=None):
+    if isViewLoaded(R.views.lobby.detachment.ConvertInfoWindow()):
+        return
+    from gui.impl.lobby.detachment.convert_info_window_view import ConvertInfoWindow
+    wnd = ConvertInfoWindow(args)
+    wnd.load()
+
+
+def showDetachmentMobilizationView(useCurrentVehicle, navigationViewSettings=None, installRecruit=None):
+    from gui.impl.gen.view_models.views.lobby.detachment.common.navigation_view_model import NavigationViewModel
+    if navigationViewSettings is None:
+        navigationViewSettings = NavigationViewSettings(NavigationViewModel.MOBILIZATION)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.DETACHMENT_MOBILIZATION_VIEW), ctx={'viewId': NavigationViewModel.MOBILIZATION,
+     'useCurrentVehicle': useCurrentVehicle,
+     'installRecruit': installRecruit,
+     'navigationViewSettings': navigationViewSettings}), EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
+@async
+def showActiveTestConfirmDialog(startTime, finishTime, link, parent=None):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.matchmaker.active_test_confirm_view import ActiveTestConfirmView
+    result = yield await(dialogs.showSingleDialog(layoutID=R.views.lobby.matchmaker.ActiveTestConfirmView(), wrappedViewClass=ActiveTestConfirmView, startTime=startTime, finishTime=finishTime, link=link, parent=parent))
+    isOK = result.result
+    raise AsyncReturn(isOK)
+
+
 def showBattlePassDailyQuestsIntroWindow(parent=None):
     from gui.impl.lobby.battle_pass.battle_pass_daily_quests_intro_view import BattlePassDailyQuestsIntroWindow
     window = BattlePassDailyQuestsIntroWindow(parent=parent if parent is not None else getParentWindow())
@@ -1254,17 +1407,6 @@ def showBattlePassRewardChoiceWindow():
     from gui.impl.lobby.battle_pass.battle_pass_reward_choice_view import BattlePassRewardChoiceWindow
     window = BattlePassRewardChoiceWindow()
     window.load()
-
-
-@async
-def showVehPostProgressionView(vehTypeCompDescr, exitEvent=None, isUnlocked=None, caller=None):
-    from gui.impl.lobby.veh_post_progression.post_progression_intro import getPostProgressionIntroWindowProc
-    intoProc = getPostProgressionIntroWindowProc()
-    yield intoProc.show()
-    loadEvent = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.VEH_POST_PROGRESSION), ctx={'intCD': vehTypeCompDescr,
-     'exit': exitEvent})
-    g_eventBus.handleEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
-    VehPostProgressionEntryPointLogger().logEnter(caller, isUnlocked)
 
 
 def getParentWindow():
@@ -1320,24 +1462,3 @@ def showModeSelectorWindow(isEventEnabled, provider=None):
     app = appLoader.getApp()
     containerManager = app.containerManager
     containerManager.load(GuiImplViewLoadParams(ModeSelectorView.layoutID, ModeSelectorView, ScopeTemplates.DEFAULT_SCOPE), isEventEnabled=isEventEnabled, provider=provider)
-
-
-@async
-def showPostProgressionPairModDialog(vehicle, stepID, modID, parent=None):
-    from gui.impl.dialogs import dialogs
-    result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=BuyPairModificationDialog, vehicle=vehicle, stepID=stepID, modID=modID, parent=parent))
-    raise AsyncReturn(result)
-
-
-@async
-def showDestroyPairModificationsDialog(vehicle, stepIDs, parent=None):
-    from gui.impl.dialogs import dialogs
-    result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.demountkit.CommonWindow(), wrappedViewClass=DestroyPairModificationsDialog, vehicle=vehicle, stepIDs=stepIDs, parent=parent))
-    raise AsyncReturn(result)
-
-
-@async
-def showPostProgressionResearchDialog(vehicle, stepIDs, parent=None):
-    from gui.impl.dialogs import dialogs
-    result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.veh_post_progression.PostProgressionResearchSteps(), parent=parent, wrappedViewClass=PostProgressionResearchConfirm, vehicle=vehicle, stepIDs=stepIDs))
-    raise AsyncReturn(result)

@@ -4,8 +4,6 @@ import typing
 if typing.TYPE_CHECKING:
     from collections import OrderedDict
     from gui.shared.money import Money
-    from gui.veh_post_porgression.models.ext_money import ExtendedMoney
-    from post_progression_common import VehicleState
 
 class IRequester(object):
 
@@ -104,13 +102,7 @@ class IInventoryRequester(IRequester):
     def getInstalledEnhancements(self):
         raise NotImplementedError
 
-    def getVehPostProgression(self, vehIntCD):
-        raise NotImplementedError
-
-    def getVehExtData(self, vehIntCD):
-        raise NotImplementedError
-
-    def getDynSlotTypeID(self, vehIntCD):
+    def getEquippedCrewSkinID(self, detInvID):
         raise NotImplementedError
 
 
@@ -277,11 +269,23 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     @property
-    def tankmenBerthsCount(self):
+    def dormitoriesCount(self):
         raise NotImplementedError
 
     @property
     def vehicleSellsLeft(self):
+        raise NotImplementedError
+
+    @property
+    def detachmentSellsLeft(self):
+        raise NotImplementedError
+
+    @property
+    def detachmentSellsDailyLimit(self):
+        raise NotImplementedError
+
+    @property
+    def isDetachmentSellsDailyLimitEnabled(self):
         raise NotImplementedError
 
     @property
@@ -351,9 +355,6 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     def getMaxResearchedLevel(self, nationID):
-        raise NotImplementedError
-
-    def getMoneyExt(self, vehCD):
         raise NotImplementedError
 
     def getWeeklyVehicleCrystals(self, vehCD):
@@ -486,10 +487,15 @@ class IShopCommonStats(object):
         raise NotImplementedError
 
     @property
-    def berthsPrices(self):
+    def getDormitoryPrice(self):
         raise NotImplementedError
 
-    def getTankmanBerthPrice(self, berthsCount):
+    @property
+    def getDormitoryBuyingSettings(self):
+        raise NotImplementedError
+
+    @property
+    def getDormitoryRoomsCount(self):
         raise NotImplementedError
 
     @property
@@ -505,6 +511,10 @@ class IShopCommonStats(object):
         raise NotImplementedError
 
     @property
+    def detachmentPriceGroups(self):
+        raise NotImplementedError
+
+    @property
     def changeRoleCost(self):
         raise NotImplementedError
 
@@ -514,6 +524,14 @@ class IShopCommonStats(object):
 
     @property
     def freeXPToTManXPRate(self):
+        raise NotImplementedError
+
+    @property
+    def freeXPToDetXPRate(self):
+        raise NotImplementedError
+
+    @property
+    def recoverInstructorCost(self):
         raise NotImplementedError
 
     def getItemsData(self):
@@ -573,6 +591,10 @@ class IShopCommonStats(object):
 
     @property
     def demountKits(self):
+        raise NotImplementedError
+
+    @property
+    def recertificationForms(self):
         raise NotImplementedError
 
     def getPremiumPacketCost(self, days):
@@ -662,9 +684,6 @@ class IShopRequester(IShopCommonStats, IRequester):
         raise NotImplementedError
 
     def bestGoody(self, goodies):
-        raise NotImplementedError
-
-    def customRoleSlotChangeCost(self, vehLevel, isRaw=False):
         raise NotImplementedError
 
     def getVehicleSlotsItemPrice(self, currentSlotsCount):

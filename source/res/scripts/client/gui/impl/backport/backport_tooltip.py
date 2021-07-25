@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/impl/backport/backport_tooltip.py
 from collections import namedtuple
 from frameworks.wulf import ViewModel, Window, WindowFlags, WindowSettings, ViewSettings
+from gui.impl.gen import R
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.pub.window_view import WindowView
-from gui.impl.gen import R
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 _STATE_TYPE_INFO = 'INFO'
@@ -21,6 +21,12 @@ def createAndLoadBackportTooltipWindow(parentWindow, tooltip=None, isSpecial=Fal
     window = BackportTooltipWindow(tooltipData, parentWindow)
     window.load()
     return window
+
+
+def createBackportTooltipContent(specialAlias=None, specialArgs=None, isSpecial=True, tooltip=None):
+    if specialArgs is None:
+        specialArgs = []
+    return _BackportTooltipContent(createTooltipData(tooltip, isSpecial, specialAlias, specialArgs))
 
 
 class _BackportTooltipContent(ViewImpl):

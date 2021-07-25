@@ -224,6 +224,8 @@ class BADGE(object):
     BADGE_94_SHORT = '#badge:badge_94_short'
     BADGE_94_DESCR = '#badge:badge_94_descr'
     SUFFIX_BADGE_94 = '#badge:suffix/badge_94'
+    BADGE_200 = '#badge:badge_200'
+    BADGE_200_DESCR = '#badge:badge_200_descr'
     BADGE_95 = '#badge:badge_95'
     BADGE_95_DESCR = '#badge:badge_95_descr'
     BADGE_96 = '#badge:badge_96'
@@ -447,6 +449,8 @@ class BADGE(object):
      BADGE_94,
      BADGE_94_SHORT,
      BADGE_94_DESCR,
+     BADGE_200,
+     BADGE_200_DESCR,
      BADGE_95,
      BADGE_95_DESCR,
      BADGE_96,
@@ -577,6 +581,7 @@ class BADGE(object):
      BADGE_92_DESCR,
      BADGE_93_DESCR,
      BADGE_94_DESCR,
+     BADGE_200_DESCR,
      BADGE_95_DESCR,
      BADGE_96_DESCR,
      BADGE_97_DESCR,

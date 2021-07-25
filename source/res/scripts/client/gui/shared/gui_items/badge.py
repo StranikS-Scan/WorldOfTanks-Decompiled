@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/badge.py
 import re
+import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_BADGES_VISIT
 from battle_pass_common import MAX_BADGE_LEVEL, BattlePassState
@@ -11,8 +12,10 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items.gui_item import GUIItem
 from helpers import i18n, dependency
+from items.components.detachment_constants import BADGE_TOKEN_TMPL
 from shared_utils import CONST_CONTAINER, first
 from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.shared import IItemsRequester, IItemsCache
 CUSTOM_LOGIC_KEY = 'customLogicImpl'
 
 class BadgeTypes(CONST_CONTAINER):
@@ -29,7 +32,7 @@ class Badge(GUIItem):
     __slots__ = ('badgeID', 'data', 'isSelected', 'isAchieved', 'achievedAt', 'group', 'isAchievable', 'isTemporary', 'showCongratsView')
 
     def __init__(self, data, proxy=None):
-        super(Badge, self).__init__(proxy)
+        super(Badge, self).__init__()
         self.badgeID = data['id']
         self.data = data
         self.group = data.get('group')
@@ -224,3 +227,27 @@ class BattlePassBadge(Badge):
             return self.__battlePassController.getState()
         else:
             return BattlePassState.COMPLETED if self.__level >= MAX_BADGE_LEVEL else BattlePassState.POST
+
+
+class CrewMasteryBadge(Badge):
+    _itemsCache = dependency.descriptor(IItemsCache)
+    _MIN_LEVEL = 1
+    _MAX_LEVEL = 9
+
+    def __init__(self, data, proxy=None, extraData=None):
+        super(CrewMasteryBadge, self).__init__(data, proxy)
+        self._level = extraData[0] if extraData else None
+        return
+
+    def getIconPostfix(self):
+        badgeLevel = self._badgeLevel
+        return super(CrewMasteryBadge, self).getIconPostfix() if badgeLevel < self._MIN_LEVEL else '{}_{}'.format(self.badgeID, badgeLevel)
+
+    def getUserName(self):
+        badgeLevel = self._badgeLevel
+        return super(CrewMasteryBadge, self).getUserName() if badgeLevel < self._MIN_LEVEL else backport.text(R.strings.detachment.progressionLevel.elite.num(badgeLevel - 1)())
+
+    @property
+    def _badgeLevel(self):
+        badgeToken = BADGE_TOKEN_TMPL.format(self.badgeID)
+        return min(self._level or self._itemsCache.items.tokens.getTokenCount(badgeToken), self._MAX_LEVEL)

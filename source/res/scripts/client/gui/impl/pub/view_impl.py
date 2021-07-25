@@ -9,10 +9,8 @@ from gui.impl.pub.tooltip_window import SimpleToolTipWindow, ToolTipWindow, Adva
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 from soft_exception import SoftException
-from frameworks.wulf import ViewModel
-TViewModel = typing.TypeVar('TViewModel', bound=ViewModel)
 
-class ViewImpl(View, typing.Generic[TViewModel]):
+class ViewImpl(View):
     __slots__ = ()
     gui = dependency.descriptor(IGuiLoader)
 

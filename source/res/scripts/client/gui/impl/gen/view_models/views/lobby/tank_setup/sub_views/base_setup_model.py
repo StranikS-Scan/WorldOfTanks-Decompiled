@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.setup_tabs_model imp
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_slot_model import BaseSlotModel
 
 class BaseSetupModel(ViewModel):
-    __slots__ = ('onSlotAction', 'onDealConfirmed', 'onDealCancelled', 'onAutoRenewalChanged', 'onTabChanged', 'onFilterChanged', 'onFilterReset')
+    __slots__ = ('onSlotAction', 'onSlotHover', 'onSlotHoverLeave', 'onDealConfirmed', 'onDealCancelled', 'onAutoRenewalChanged', 'onTabChanged', 'onFilterChanged', 'onFilterReset')
     SELECT_SLOT_ACTION = 'select'
     REVERT_SLOT_ACTION = 'undo'
     RETURN_TO_STORAGE_ACTION = 'cancel'
@@ -20,7 +20,7 @@ class BaseSetupModel(ViewModel):
     ADD_ONE_SLOT_ACTION = 'add_one'
     DRAG_AND_DROP_SLOT_ACTION = 'drag_drop'
 
-    def __init__(self, properties=5, commands=7):
+    def __init__(self, properties=5, commands=9):
         super(BaseSetupModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -55,6 +55,8 @@ class BaseSetupModel(ViewModel):
         self._addArrayProperty('slots', Array())
         self._addNumberProperty('syncInitiator', 0)
         self.onSlotAction = self._addCommand('onSlotAction')
+        self.onSlotHover = self._addCommand('onSlotHover')
+        self.onSlotHoverLeave = self._addCommand('onSlotHoverLeave')
         self.onDealConfirmed = self._addCommand('onDealConfirmed')
         self.onDealCancelled = self._addCommand('onDealCancelled')
         self.onAutoRenewalChanged = self._addCommand('onAutoRenewalChanged')

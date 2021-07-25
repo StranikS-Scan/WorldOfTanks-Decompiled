@@ -587,8 +587,8 @@ class EconomicsSet(ActionModifier):
          'clanCreationCost': bwr(self.handlerClanCreationCost),
          'paidRemovalCost': bwr(self.handlerPaidRemovalCost),
          'paidDeluxeRemovalCost': bwr(self.handlerPaidDeluxeRemovalCost),
-         'berthsPrices': bwr(self.handlerBerthsPrices),
          'freeXPToTManXPRate': bwr(self.handlerFreeXPToTManXPRate),
+         'freeXPToDetXPRate': bwr(self.handlerFreeXPToDetXPRate),
          'tradeInSellPriceFactor': bwr(self.handlerTradeInSellPriceFactor)}
 
     def getParamName(self):
@@ -650,10 +650,6 @@ class EconomicsSet(ActionModifier):
         default = self.itemsCache.items.shop.defaults.getVehicleSlotsPrice(self.itemsCache.items.stats.vehicleSlots)
         return self._calculateDiscount('slotsPrices', ctx.getValue(), default, _DT.PERCENT)
 
-    def handlerBerthsPrices(self, ctx):
-        default, _ = self.itemsCache.items.shop.defaults.getTankmanBerthPrice(self.itemsCache.items.stats.tankmenBerthsCount)
-        return self._calculateDiscount('berthsPrices', ctx.getValue(), default.gold, _DT.PERCENT)
-
     def handlerCreditsTankmanCost(self, ctx):
         tankmanCost = self.itemsCache.items.shop.defaults.tankmanCost
         return self._calculateDiscount('creditsTankmanCost', ctx.getValue(), tankmanCost[1][Currency.CREDITS], _DT.PERCENT) if tankmanCost is not None else float(ctx.getValue())
@@ -704,6 +700,11 @@ class EconomicsSet(ActionModifier):
         default = self.itemsCache.items.shop.defaults.freeXPToTManXPRate
         shopValue = self.itemsCache.items.shop.freeXPToTManXPRate
         return self._calculateDiscount('freeXPToTManXPRate', shopValue, default, _DT.MULTIPLIER, discountValueCalculator=self._calculateModifier)
+
+    def handlerFreeXPToDetXPRate(self, ctx):
+        default = self.itemsCache.items.shop.defaults.freeXPToDetXPRate
+        shopValue = self.itemsCache.items.shop.freeXPToDetXPRate
+        return self._calculateDiscount('freeXPToDetXPRate', shopValue, default, _DT.MULTIPLIER, discountValueCalculator=self._calculateModifier)
 
     def handlerPremiumPacket1(self, ctx):
         default = self.itemsCache.items.shop.defaults.getPremiumPacketCost(1)

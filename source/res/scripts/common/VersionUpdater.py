@@ -39,6 +39,13 @@ class VersionUpdaterBase(object):
                 self.__buildUpdaters()
             return enumerate(self._updaters[startVersion - self._startVersion:], start=startVersion)
 
+    def _addLastCustomUpdate(self, pdata):
+        funcName = '_updateAdditionalData'
+        func = getattr(self._module, funcName, None)
+        if func is not None:
+            func(pdata)
+        return
+
     def _updateToLatestVersion(self, versionOrGetter, checkerForCallback, logID, *args):
         isCallable = callable(versionOrGetter)
         currentVersion = versionOrGetter(*args) if isCallable else versionOrGetter

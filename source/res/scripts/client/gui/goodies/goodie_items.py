@@ -547,3 +547,75 @@ class DemountKit(_Goodie):
     @property
     def demountKitGuiType(self):
         return DEMOUNT_KIT_NAMES[self.demountKitType]
+
+
+class RecertificationForm(_Goodie):
+
+    def __init__(self, goodieID, goodieDescription, stateProvider=None):
+        super(RecertificationForm, self).__init__(goodieID, goodieDescription, stateProvider)
+        self.__sellPrices = ITEM_PRICES_EMPTY
+
+    @property
+    def userName(self):
+        return backport.text(R.strings.recertification_form.userName())
+
+    @property
+    def description(self):
+        pass
+
+    def getFormattedValue(self, formatter=None):
+        pass
+
+    @property
+    def icon(self):
+        return backport.image(R.images.gui.maps.shop.artefacts.c_180x135.recertification())
+
+    @property
+    def bigIcon(self):
+        pass
+
+    @property
+    def iconInfo(self):
+        return backport.image(R.images.gui.maps.icons.detachment.icons.present_sheets_48())
+
+    @property
+    def itemTypeID(self):
+        return GUI_ITEM_TYPE.RECERTIFICATION_FORM
+
+    @property
+    def itemTypeName(self):
+        return GUI_ITEM_TYPE_NAMES[self.itemTypeID]
+
+    def getOverlayType(self, vehicle=None):
+        pass
+
+    @property
+    def nationID(self):
+        return nations.NONE_INDEX
+
+    @property
+    def isForSale(self):
+        return False
+
+    def getSellPrice(self):
+        return self.__sellPrices.itemPrice
+
+    @property
+    def intCD(self):
+        return self._goodieID
+
+    @property
+    def shortDescription(self):
+        return backport.text(R.strings.recertification_form.storage.description())
+
+    @property
+    def longDescription(self):
+        return backport.text(R.strings.recertification_form.dialogue.description())
+
+    def formattedShortDescription(self, formatter):
+        description = self.shortDescription
+        return description.format(**formatter)
+
+    @property
+    def inventoryCount(self):
+        return self.count

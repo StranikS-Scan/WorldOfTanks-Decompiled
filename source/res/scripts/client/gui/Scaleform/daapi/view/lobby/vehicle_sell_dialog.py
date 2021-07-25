@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_sell_dialog.py
 import typing
 from account_helpers.AccountSettings import AccountSettings
+from async import await, async
+from crew2 import settings_globals
 from goodies.goodie_constants import GOODIE_VARIETY
 from gui import SystemMessages, makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -9,13 +11,14 @@ from gui.Scaleform.daapi.view.lobby.customization.shared import TYPES_ORDER
 from gui.Scaleform.daapi.view.meta.VehicleSellDialogMeta import VehicleSellDialogMeta
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.goodies.demount_kit import isDemountKitApplicableTo, getDemountKitForOptDevice
 from gui.impl import backport
+from gui.impl.dialogs.dialogs import showDetachmentDemobilizeDialogView
 from gui.impl.gen import R
-from gui.shop import showBuyGoldForEquipment
+from gui.impl.pub.dialog_window import DialogButtons
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles
-from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.vehicle import VehicleSeller, getCustomizationItemSellCountForVehicle
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -24,12 +27,18 @@ from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.utils import decorators
+from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shop import showBuyGoldForEquipment
 from helpers import int2roman, dependency
 from items.components.c11n_constants import ItemTags
+from items.components.detachment_constants import DemobilizeReason
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
+from shared_utils import CONST_CONTAINER
+from skeletons.gui.detachment import IDetachmentCache
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import List, Set, Iterator, Optional, Tuple, Dict, Union, Any
@@ -47,11 +56,19 @@ _SETTINGS_OPEN_ENTRY = 'isOpened'
 _INVENTORY_SHELLS = 'inventoryShells'
 _BARRACKS_DROP_DOWN_DATA_PROVIDER = [{'label': R.strings.menu.barracks.btnUnload()}, {'label': R.strings.menu.barracks.btnDissmiss()}]
 
+class LockDropDownStats(CONST_CONTAINER):
+    EMPTY_BLOCKED = -1
+    BARRACK_BLOCKED = 0
+    DISMISS_BLOCKED = 1
+
+
 class VehicleSellDialog(VehicleSellDialogMeta):
     __itemsCache = dependency.descriptor(IItemsCache)
     __restore = dependency.descriptor(IRestoreController)
     __goodiesCache = dependency.descriptor(IGoodiesCache)
-    __slots__ = ('__vehInvID', '__vehicle', '__nationGroupVehicles', '__controlNumber', '__enteredControlNumber', '__income', '__accountMoney', '__isCrewDismissal', '__vehicleSellPrice', '__items', '__otherVehicleShells', '__isDemountKitEnabled')
+    __detachmentCache = dependency.descriptor(IDetachmentCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __slots__ = ('__vehInvID', '__vehicle', '__nationGroupVehicles', '__controlNumber', '__enteredControlNumber', '__income', '__accountMoney', '__isDismissal', '__vehicleSellPrice', '__items', '__otherVehicleShells', '__isDemountKitEnabled')
 
     def __init__(self, ctx=None):
         super(VehicleSellDialog, self).__init__()
@@ -62,7 +79,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         self.__enteredControlNumber = None
         self.__income = _VSDMoney()
         self.__accountMoney = _VSDMoney()
-        self.__isCrewDismissal = False
+        self.__isDismissal = False
         self.__vehicleSellPrice = MONEY_UNDEFINED
         self.__items = list()
         self.__otherVehicleShells = set()
@@ -77,14 +94,9 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         self.__updateSubmitButton()
 
     def setCrewDismissal(self, checkTankman):
-        self.__isCrewDismissal = checkTankman
-        if self.__useCtrlQuestion:
-            self.__sendControlQuestion()
-            self.as_visibleControlBlockS(True)
-            self.setUserInput('')
-        else:
-            self.as_visibleControlBlockS(False)
-            self.setUserInput(self.__controlNumber)
+        self.__updateCrewDismissal(checkTankman)
+        _, tooltip = self.__getCrewData()
+        self.as_updateCrewTooltipS(tooltip)
 
     def setUserInput(self, userInput):
         self.__enteredControlNumber = userInput
@@ -113,7 +125,11 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             container = sellMap[item.itemType]
             container.append(guiItem)
 
-        self.__doSellVehicle(self.__vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, self.__isCrewDismissal, itemsForDemountKit, boosters)
+        hasDetachment = self.__vehicle.hasDetachment
+        if hasDetachment and self.__isDismissal:
+            self._sellWithDismiss(shells, eqs, optDevicesToSell, inventory, customizationItems, itemsForDemountKit, boosters)
+        else:
+            self._sellGeneral(shells, eqs, optDevicesToSell, inventory, customizationItems, itemsForDemountKit, boosters)
 
     def onWindowClose(self):
         self.destroy()
@@ -125,7 +141,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         super(VehicleSellDialog, self)._populate()
         self.__subscribe()
         vehInvID = self.__vehInvID
-        self.__items = list()
+        self.__items = []
         self.__vehicle = self.__itemsCache.items.getVehicle(vehInvID)
         self.__nationGroupVehicles = self.__getNationGroupVehicles(self.__vehicle.intCD)
         self.__otherVehicleShells = self.__getOtherVehiclesShells(vehInvID)
@@ -165,32 +181,87 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'customizationOnVehicle': customizationOnVehicle}
         self.as_setDataS(data)
         self.__updateTotalCost()
-        self.setCrewDismissal(self.__isCrewDismissal)
+        self.__updateCrewDismissal(self.__isDismissal)
         return
 
     def _dispose(self):
         super(VehicleSellDialog, self)._dispose()
         self.__unsubscribe()
 
+    def _sellGeneral(self, shells, eqs, optDevicesToSell, inventory, customizationItems, itemsForDemountKit, boosters):
+        self.__doSellVehicle(self.__vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, self.__isDismissal, itemsForDemountKit, boosters, False, True)
+
+    @async
+    def _sellWithDismiss(self, shells, eqs, optDevicesToSell, inventory, customizationItems, itemsForDemountKit, boosters):
+        sdr = yield await(showDetachmentDemobilizeDialogView(self.__vehicle.getLinkedDetachmentID(), DemobilizeReason.SELL_VEHICLE))
+        if sdr.busy:
+            return
+        isOk, data = sdr.result
+        if isOk == DialogButtons.SUBMIT:
+            self.__doSellVehicle(self.__vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, self.__isDismissal, itemsForDemountKit, boosters, data['allowRemove'], data['freeExcludeInstructors'])
+
+    def __updateCrewDismissal(self, checkTankman):
+        self.__isDismissal = checkTankman
+        if self.__useCtrlQuestion:
+            self.__sendControlQuestion()
+            self.as_visibleControlBlockS(True)
+            self.setUserInput('')
+        else:
+            self.as_visibleControlBlockS(False)
+            self.setUserInput(self.__controlNumber)
+
     def __getCrewData(self):
-        tankmenGoingToBuffer, deletedTankmen = self.__restore.getTankmenDeletedBySelling(*self.__nationGroupVehicles)
-        deletedCount = len(deletedTankmen)
-        if deletedCount > 0:
-            deletedStr = formatDeletedTankmanStr(deletedTankmen[0])
-            maxCount = self.__restore.getMaxTankmenBufferLength()
-            currCount = len(self.__restore.getDismissedTankmen())
-            header = backport.text(R.strings.tooltips.vehicleSellDialog.crew.alertIcon.recovery.header())
-            if deletedCount == 1:
-                crewTooltip = text_styles.concatStylesToMultiLine(text_styles.middleTitle(header), text_styles.main(backport.text(R.strings.tooltips.vehicleSellDialog.crew.alertIcon.recovery.body(), maxVal=maxCount, curVal=currCount, sourceName=tankmenGoingToBuffer[-1].fullUserName, targetInfo=deletedStr)))
-            else:
-                crewTooltip = text_styles.concatStylesToMultiLine(text_styles.middleTitle(header), text_styles.main(backport.text(R.strings.tooltips.dismissTankmanDialog.bufferIsFullMultiple.body(), deletedStr=deletedStr, extraCount=deletedCount - 1, maxCount=maxCount, currCount=currCount)))
+        hasOldCrew = any((veh.hasCrew for veh in self.__nationGroupVehicles))
+        return self._getCrewDataForOldTankman() if hasOldCrew else self._getCrewDataForDetachment()
+
+    def _getCrewDataForDetachment(self):
+        lockedDropdownIndex = LockDropDownStats.EMPTY_BLOCKED
+        crewTooltip = None
+        if not self.__vehicle.hasDetachment:
+            lockedDropdownIndex = LockDropDownStats.BARRACK_BLOCKED
+            return (lockedDropdownIndex, crewTooltip)
         else:
-            crewTooltip = None
+            isDissolveDetachmentEnabled = self.__lobbyContext.getServerSettings().isDissolveDetachmentEnabled()
+            detachment = self.__detachmentCache.getDetachment(self.__vehicle.getLinkedDetachmentID())
+            if not isDissolveDetachmentEnabled:
+                lockedDropdownIndex = LockDropDownStats.BARRACK_BLOCKED
+                crewTooltip = self.__createCrewDismissDisabledTooltip()
+                self.__isDismissal = True
+            elif self.__vehicle.isCrewLocked:
+                lockedDropdownIndex = LockDropDownStats.DISMISS_BLOCKED
+                crewTooltip = self.__createCrewLockedTooltip()
+                self.__isDismissal = True
+            elif detachment.isSellsDailyLimitReached():
+                lockedDropdownIndex = LockDropDownStats.BARRACK_BLOCKED
+                crewTooltip = self.__createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.DETACHMENT_SELL_LIMIT)
+            elif self.__isDismissal and self.__isRecycleBinFull() and not detachment.isGarbage:
+                crewTooltip = self.__createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.DETACHMENT_RECYCLE_BIN_FULL)
+            return (lockedDropdownIndex, crewTooltip)
+
+    def _getCrewDataForOldTankman(self):
+        lockedDropdownIndex = LockDropDownStats.BARRACK_BLOCKED
+        crewTooltip = None
         if self.__vehicle.isCrewLocked:
-            hasCrew = False
-        else:
-            hasCrew = any([ veh.hasCrew for veh in self.__nationGroupVehicles ])
-        return (hasCrew, crewTooltip)
+            lockedDropdownIndex = LockDropDownStats.DISMISS_BLOCKED
+            crewTooltip = self.__createCrewLockedTooltip()
+            self.__isDismissal = True
+        return (lockedDropdownIndex, crewTooltip)
+
+    def __createCrewLockedTooltip(self):
+        return self.__createTooltipData(tooltip=makeTooltip(backport.text(R.strings.tooltips.dismissDetachment.uniqueDetachment.header()), backport.text(R.strings.tooltips.dismissDetachment.uniqueDetachment.body())))
+
+    def __createCrewDismissDisabledTooltip(self):
+        return self.__createTooltipData(tooltip=makeTooltip(backport.text(R.strings.tooltips.dismissDetachment.switched_off.header()), backport.text(R.strings.tooltips.dismissDetachment.switched_off.body())))
+
+    def __createTooltipData(self, tooltip=None, isSpecial=None, specialAlias=None, specialArgs=None):
+        return {'tooltip': tooltip,
+         'isSpecial': isSpecial,
+         'specialAlias': specialAlias,
+         'specialArgs': specialArgs}
+
+    def __isRecycleBinFull(self):
+        demobilizedDetachments = self.__detachmentCache.getDetachments(REQ_CRITERIA.DETACHMENT.DEMOBILIZE)
+        return len(demobilizedDetachments) >= settings_globals.g_detachmentSettings.recycleBinMaxSize
 
     def __addVSDItem(self, item):
         item.setItemID(len(self.__items))
@@ -213,7 +284,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             description = backport.text(R.strings.dialogs.vehicleSellDialog.vehicleType.dyn(vehType.replace('-', '_'))())
         levelText = backport.text(R.strings.dialogs.vehicleSellDialog.vehicle.level())
         levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(self.__vehicle.level)), text_styles.main(levelText))
-        hasCrew, crewTooltip = self.__getCrewData()
+        lockedDropdownIndex, crewTooltip = self.__getCrewData()
         barracksDropDownData = []
         for buttons in _BARRACKS_DROP_DOWN_DATA_PROVIDER:
             barracksDropDownData.append({key:backport.text(value) for key, value in buttons.iteritems()})
@@ -232,7 +303,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'priceTextColor': priceTextColor,
          'currencyIcon': currencyIcon,
          'action': vehicleAction,
-         'hasCrew': hasCrew,
+         'lockedDropdownIndex': lockedDropdownIndex,
          'isRented': self.__vehicle.isRented,
          'description': description,
          'levelStr': levelStr,
@@ -384,6 +455,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
                 if item.guiItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isRemovableForMoney:
                     currency = item.removeCurrency
                     optionalDevices -= item.itemRemovalPrice.extract(currency)
+            if item.guiItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+                optionalDevices += item.itemSellPrice
             common += item.itemSellPrice
 
         self.__income = _VSDMoney()
@@ -426,7 +499,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
     def __useCtrlQuestion(self):
         if self.__vehicle.level >= 3 or self.__vehicle.isPremium:
             return True
-        if self.__isCrewDismissal:
+        if self.__isDismissal:
             for _, tankman in self.__vehicle.crew:
                 if tankman and (tankman.roleLevel >= 100 or tankman.skills):
                     return True
@@ -434,8 +507,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         return False
 
     @decorators.process('sellVehicle')
-    def __doSellVehicle(self, vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew, itemsForDemountKit, boosters):
-        vehicleSeller = VehicleSeller(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, boosters, isDismissCrew, itemsForDemountKit)
+    def __doSellVehicle(self, vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew, itemsForDemountKit, boosters, allowRemove, freeExcludeInstructors):
+        vehicleSeller = VehicleSeller(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, boosters, isDismissCrew, itemsForDemountKit, allowRemove, freeExcludeInstructors)
         currentMoneyGold = self.__itemsCache.items.stats.money.get(Currency.GOLD, 0)
         spendMoneyGold = vehicleSeller.spendMoney.get(Currency.GOLD, 0)
         if currentMoneyGold < spendMoneyGold:

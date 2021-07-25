@@ -6,7 +6,9 @@ from math import ceil
 from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, RELOAD_TIME_SECS_PROP_NAME
 from helpers import i18n, time_utils
 from items import vehicles, artefacts
-RELATIVE_PARAMS = ('relativePower', 'relativeArmor', 'relativeMobility', 'relativeCamouflage', 'relativeVisibility')
+RELATIVE_BAR_PARAMS = ('relativePower', 'relativeArmor', 'relativeMobility', 'relativeCamouflage', 'relativeVisibility')
+RELATIVE_PARAMS = RELATIVE_BAR_PARAMS + ('relativeSituationalBonuses',)
+RELATIVE_TANK_CONTROL_LEVEL_PARAM = 'relativeTankControlLevel'
 MAX_RELATIVE_VALUE = 1000
 NO_DATA = 'no data'
 _AUTO_RELOAD_TAG = 'autoreload'

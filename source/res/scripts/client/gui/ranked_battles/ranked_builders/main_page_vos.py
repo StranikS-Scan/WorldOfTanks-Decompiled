@@ -9,7 +9,7 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils
-_EMPTY_WEB_PAGES = {RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}
+_EMPTY_WEB_PAGES = {RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID, RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID}
 
 def _getYearLeaderboardBG():
     defaultBG = R.images.gui.maps.icons.rankedBattles.bg.lb_default

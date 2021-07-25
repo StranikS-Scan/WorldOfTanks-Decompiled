@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/goodies/goodies_cache.py
 from collections import defaultdict
 from debug_utils import LOG_WARNING
-from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE
+from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE, RECERTIFICATION_FORM_ID
 from goodies.goodie_helpers import CURRENCY_TO_RESOURCE_TYPE
-from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter, DemountKit
+from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter, DemountKit, RecertificationForm
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.money import Money
 from helpers import dependency
@@ -28,9 +28,14 @@ def _createDemountKit(demountKitID, demountKitDescription, proxy):
     return DemountKit(demountKitID, demountKitDescription, proxy)
 
 
+def _createRecertificationForm(recertificationFormID, recertificationFormDescription, proxy):
+    return RecertificationForm(recertificationFormID, recertificationFormDescription, proxy)
+
+
 _GOODIES_VARIETY_MAPPING = {GOODIE_VARIETY.BOOSTER: _createBooster,
  GOODIE_VARIETY.DISCOUNT: _createDiscount,
- GOODIE_VARIETY.DEMOUNT_KIT: _createDemountKit}
+ GOODIE_VARIETY.DEMOUNT_KIT: _createDemountKit,
+ GOODIE_VARIETY.RECERTIFICATION_FORM: _createRecertificationForm}
 _DISCOUNT_TYPES_MAPPING = {GOODIE_TARGET_TYPE.ON_BUY_VEHICLE: PersonalVehicleDiscount}
 
 class GoodiesCache(IGoodiesCache):
@@ -125,6 +130,16 @@ class GoodiesCache(IGoodiesCache):
 
     def getDemountKits(self, criteria=REQ_CRITERIA.EMPTY):
         return self.__getGoodies(self._items.shop.demountKits, criteria)
+
+    def getRecertificationForm(self, recertificationID=RECERTIFICATION_FORM_ID):
+        description = self._items.shop.recertificationForms.get(recertificationID, None)
+        return self.__makeGoodie(recertificationID, description)
+
+    def getRecertificationForms(self, criteria=REQ_CRITERIA.EMPTY):
+        return self.__getGoodies(self._items.shop.recertificationForms, criteria)
+
+    def getGoodie(self, goodieID=None):
+        return self.__makeGoodie(goodieID, self.getGoodieByID(goodieID))
 
     def getGoodieByID(self, goodieID):
         return self._items.shop.goodies.get(goodieID)

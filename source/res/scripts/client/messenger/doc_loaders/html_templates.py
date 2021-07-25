@@ -34,15 +34,10 @@ class MessageTemplates(templates.XMLCollection):
 
     def format(self, key, ctx=None, **kwargs):
         bgIconSource = kwargs.pop('bgIconSource', None)
+        iconSource = kwargs.pop('iconSource', None)
         formatted = super(MessageTemplates, self).format(key, ctx, **kwargs)
-        if 'bgIcon' in formatted:
-            source = formatted['bgIcon']
-        else:
-            source = {}
-        if bgIconSource in source:
-            formatted['bgIcon'] = source[bgIconSource]
-        else:
-            formatted['bgIcon'] = source.get(None, '')
+        self._selectResourceIcon('icon', iconSource, formatted)
+        self._selectResourceIcon('bgIcon', bgIconSource, formatted)
         return formatted
 
     def priority(self, key):
@@ -55,14 +50,28 @@ class MessageTemplates(templates.XMLCollection):
         self[key] = value = _MessageTemplate(key, {}, NotificationPriorityLevel.MEDIUM, NotificationGroup.INFO)
         return value
 
+    def _selectResourceIcon(self, key, resource, formatted):
+        if key in formatted:
+            source = formatted[key]
+        else:
+            source = {}
+        if not isinstance(source, dict):
+            return
+        else:
+            if resource in source:
+                formatted[key] = source[resource]
+            else:
+                formatted[key] = source.get(None, '')
+            return
+
     def _make(self, source):
         sourceID = source.name
         data = {'type': source.readString('type'),
          'timestamp': -1,
          'savedData': None,
-         'bgIcon': self._makeBgIconsData(source['bgIcon']),
+         'bgIcon': self._makeResourceIconsData(source['bgIcon']),
          'bgIconSizeAuto': source.readBool('bgIconSizeAuto'),
-         'icon': source.readString('icon'),
+         'icon': self._makeResourceIconsData(source['icon']),
          'defaultIcon': source.readString('defaultIcon'),
          'filters': [],
          'buttonsLayout': []}
@@ -121,7 +130,7 @@ class MessageTemplates(templates.XMLCollection):
                 result['width'] = width
             return result
 
-    def _makeBgIconsData(self, section):
+    def _makeResourceIconsData(self, section):
         result = {}
         if section is not None:
             result[None] = section.readString('')

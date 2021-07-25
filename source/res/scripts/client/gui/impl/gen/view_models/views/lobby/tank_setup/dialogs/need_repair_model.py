@@ -7,16 +7,16 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.dialogs.main_content.need_r
 class NeedRepairModel(DialogWithExchange):
     __slots__ = ()
 
-    def __init__(self, properties=16, commands=3):
+    def __init__(self, properties=17, commands=3):
         super(NeedRepairModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def dealPanel(self):
-        return self._getViewModel(14)
+        return self._getViewModel(15)
 
     @property
     def needRepairContent(self):
-        return self._getViewModel(15)
+        return self._getViewModel(16)
 
     def _initialize(self):
         super(NeedRepairModel, self)._initialize()

@@ -689,7 +689,7 @@ class LegacyEntity(_LegacyEntity):
 
     def _processValidationResult(self, ctx, result):
         if result is not None and not result.isValid:
-            if not (ctx.isInitial() and result.restriction == PREBATTLE_RESTRICTION.VEHICLE_NOT_READY):
+            if not (ctx.isInitial() and result.restriction in (PREBATTLE_RESTRICTION.VEHICLE_NOT_READY, PREBATTLE_RESTRICTION.VEHICLE_NO_TEST)):
                 SystemMessages.pushMessage(messages.getInvalidVehicleMessage(result.restriction, self), type=SystemMessages.SM_TYPE.Error)
             return False
         else:

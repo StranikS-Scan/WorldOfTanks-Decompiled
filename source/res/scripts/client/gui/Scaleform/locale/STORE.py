@@ -3,24 +3,27 @@
 from debug_utils import LOG_WARNING
 
 class STORE(object):
-    BUYVEHICLEWINDOW_TITLE = '#store:buyVehicleWindow/title'
-    BUYVEHICLEWINDOW_TITLE_RESTORE = '#store:buyVehicleWindow/title_restore'
-    BUYVEHICLEWINDOW_RENT_TITLE = '#store:buyVehicleWindow/rent/title'
-    BUYVEHICLEWINDOW_SLOT_0 = '#store:buyVehicleWindow/slot/0'
-    BUYVEHICLEWINDOW_FREESLOT = '#store:buyVehicleWindow/freeSlot'
-    BUYVEHICLEWINDOW_BOOTCAMP_TOPCOMMANDERFREE = '#store:buyVehicleWindow/bootcamp/topCommanderFree'
-    BUYVEHICLEWINDOW_SLOT_1 = '#store:buyVehicleWindow/slot/1'
-    BUYVEHICLEWINDOW_SLOT_2 = '#store:buyVehicleWindow/slot/2'
-    BUYVEHICLEWINDOW_CHECKBOX_BUY_WITHOUTCREW = '#store:buyVehicleWindow/checkBox/buy/withoutCrew'
-    BUYVEHICLEWINDOW_CHECKBOX_RESTORE_WITHOUTCREW = '#store:buyVehicleWindow/checkBox/restore/withoutCrew'
-    BUYVEHICLEWINDOW_COUNTCREWLBL = '#store:buyVehicleWindow/countCrewLbl'
     BUYVEHICLEWINDOW_EQUIPMENT_AMMO = '#store:buyVehicleWindow/equipment/ammo'
     BUYVEHICLEWINDOW_EQUIPMENT_SLOT = '#store:buyVehicleWindow/equipment/slot'
     BUYVEHICLEWINDOW_BUYBTN = '#store:buyVehicleWindow/buyBtn'
     BUYVEHICLEWINDOW_RENTBTN = '#store:buyVehicleWindow/rentBtn'
     BUYVEHICLEWINDOW_EXCHANGE = '#store:buyVehicleWindow/exchange'
     BUYVEHICLEWINDOW_RESTORE = '#store:buyVehicleWindow/restore'
+    BUYVEHICLEWINDOW_CANCEL = '#store:buyVehicleWindow/cancel'
     BUYVEHICLEWINDOW_TRADEINBTNLABEL = '#store:buyVehicleWindow/tradeInBtnLabel'
+    BUYVEHICLEWINDOW_FREE = '#store:buyVehicleWindow/free'
+    BUYVEHICLEWINDOW_DESCRIPTION = '#store:buyVehicleWindow/description'
+    BUYVEHICLEWINDOW_FOOTERTEXT = '#store:buyVehicleWindow/footerText'
+    BUYVEHICLEWINDOW_FOOTERTEXTRENT = '#store:buyVehicleWindow/footerTextRent'
+    BUYVEHICLEWINDOW_FOOTERTEXTRESTORE = '#store:buyVehicleWindow/footerTextRestore'
+    BUYVEHICLEWINDOW_TYPE_LIGHTTANK = '#store:buyVehicleWindow/type/lightTank'
+    BUYVEHICLEWINDOW_TYPE_MEDIUMTANK = '#store:buyVehicleWindow/type/mediumTank'
+    BUYVEHICLEWINDOW_TYPE_HEAVYTANK = '#store:buyVehicleWindow/type/heavyTank'
+    BUYVEHICLEWINDOW_TYPE_AT_SPG = '#store:buyVehicleWindow/type/AT-SPG'
+    BUYVEHICLEWINDOW_TYPE_SPG = '#store:buyVehicleWindow/type/SPG'
+    BUYVEHICLEWINDOW_TITLEBUY = '#store:buyVehicleWindow/titleBuy'
+    BUYVEHICLEWINDOW_TITLERESTORE = '#store:buyVehicleWindow/titleRestore'
+    BUYVEHICLEWINDOW_TITLERENT = '#store:buyVehicleWindow/titleRent'
     BUYVEHICLEWINDOW_RENTBTNLABELSEASON_EPICSEASON = '#store:buyVehicleWindow/rentBtnLabelSeason/epicSeason'
     BUYVEHICLEWINDOW_RENTBTNLABELSEASON_EPICCYCLE = '#store:buyVehicleWindow/rentBtnLabelSeason/epicCycle'
     BUYVEHICLEWINDOW_RENTBTNLABELSEASON_RANKEDSEASON = '#store:buyVehicleWindow/rentBtnLabelSeason/rankedSeason'
@@ -32,7 +35,6 @@ class STORE(object):
     BUYVEHICLEWINDOW_RENTBTNLABELANY = '#store:buyVehicleWindow/rentBtnLabelAny'
     BUYVEHICLEWINDOW_TOGGLEBTN_RENT = '#store:buyVehicleWindow/toggleBtn/rent'
     BUYVEHICLEWINDOW_TOGGLEBTN_BUY = '#store:buyVehicleWindow/toggleBtn/buy'
-    BUYVEHICLEWINDOW_CREWINVEHICLE = '#store:buyVehicleWindow/crewInVehicle'
     SELLCONFIRMATIONPOPOVER_TITLELABEL = '#store:sellConfirmationPopover/titleLabel'
     SELLCONFIRMATIONPOPOVER_PRICELABEL = '#store:sellConfirmationPopover/priceLabel'
     RENTALTERMSELECTIONPOPOVER_TITLELABEL = '#store:rentalTermSelectionPopover/titleLabel'
@@ -53,17 +55,7 @@ class STORE(object):
     CONGRATULATIONANIM_RESTORELABEL = '#store:congratulationAnim/restoreLabel'
     CONGRATULATIONANIM_SHOWPREVIEWBTNLABEL = '#store:congratulationAnim/showPreviewBtnLabel'
     CONGRATULATIONANIM_BACKTOEPICLABEL = '#store:congratulationAnim/backToEpicLabel'
-    BUYVEHICLEWINDOW_SLOT_ENUM = (BUYVEHICLEWINDOW_SLOT_0, BUYVEHICLEWINDOW_SLOT_1, BUYVEHICLEWINDOW_SLOT_2)
     RENTALTERMSELECTIONPOPOVER_TERMSLOTALLDAYS_ENUM = (RENTALTERMSELECTIONPOPOVER_TERMSLOT3DAYS, RENTALTERMSELECTIONPOPOVER_TERMSLOT7DAYS, RENTALTERMSELECTIONPOPOVER_TERMSLOT30DAYS)
-
-    @classmethod
-    def getBuyVehicleSlotTitle(cls, key0):
-        outcome = '#store:buyVehicleWindow/slot/{}'.format(key0)
-        if outcome not in cls.BUYVEHICLEWINDOW_SLOT_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
 
     @classmethod
     def getRentTermDays(cls, days):

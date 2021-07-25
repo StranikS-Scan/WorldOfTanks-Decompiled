@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/pub/dialog_window.py
 import logging
 from collections import namedtuple
+from PlayerEvents import g_playerEvents
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
 from frameworks.wulf import ViewFlags, WindowSettings, ViewSettings
 from frameworks.wulf import WindowFlags, Window
@@ -19,10 +20,12 @@ DialogResult = namedtuple('DialogResult', ('result', 'data'))
 class DialogButtons(CONST_CONTAINER):
     SUBMIT = DialogButtonModel.BTN_SUBMIT
     CANCEL = DialogButtonModel.BTN_CANCEL
+    EXIT = DialogButtonModel.BTN_EXIT
     PURCHASE = DialogButtonModel.BTN_PURCHASE
     RESEARCH = DialogButtonModel.BTN_RESEARCH
     ALL = (SUBMIT,
      CANCEL,
+     EXIT,
      PURCHASE,
      RESEARCH)
     ACCEPT_BUTTONS = (SUBMIT, PURCHASE, RESEARCH)
@@ -120,8 +123,10 @@ class DialogWindow(Window):
         super(DialogWindow, self)._initialize()
         self.viewModel.onClosed += self._onClosed
         self.viewModel.buttons.onUserItemClicked += self._onButtonClick
+        g_playerEvents.onAccountBecomeNonPlayer += self.destroy
 
     def _finalize(self):
+        g_playerEvents.onAccountBecomeNonPlayer -= self.destroy
         self.viewModel.onClosed -= self._onClosed
         self.viewModel.buttons.onUserItemClicked -= self._onButtonClick
         super(DialogWindow, self)._finalize()

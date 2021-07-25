@@ -1,0 +1,221 @@
+<detachment_presets.xml>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:noNamespaceSchemaLocation>	../../../development/xml_schema/crew2/detachment/detachment_presets.xsd	</xsi:noNamespaceSchemaLocation>
+  <detachmentPresets>
+    <preset>
+      <id>	1	</id>
+      <name>	Simple	</name>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+    </preset>
+    <preset>
+      <id>	2	</id>
+      <name>	Sabaton_crew	</name>
+      <nation>	sweden	</nation>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <image>	sabbaton	</image>
+      <commander>
+        <isFemale>	false	</isFemale>
+        <characterIDs>	4001	</characterIDs>
+      </commander>
+      <instructorSlots>
+        <unlockedSlot>
+          <instructorName>	sabaton_instructor	</instructorName>
+          <canRemove>	false	</canRemove>
+        </unlockedSlot>
+      </instructorSlots>
+      <customizeLock>	instructors, commander_customization	</customizeLock>
+    </preset>
+    <preset>
+      <id>	3	</id>
+      <name>	Rudy_crew_ussr	</name>
+      <nation>	ussr	</nation>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <image>	draft	</image>
+      <commander>
+        <isFemale>	false	</isFemale>
+        <characterIDs>	3001	</characterIDs>
+      </commander>
+      <instructorSlots>
+        <unlockedSlot>
+          <instructorName>	rudy_ussr_instructor	</instructorName>
+          <canRemove>	false	</canRemove>
+        </unlockedSlot>
+      </instructorSlots>
+      <customizeLock>	instructors, commander_customization	</customizeLock>
+    </preset>
+    <preset>
+      <id>	4	</id>
+      <name>	Rudy_crew_poland	</name>
+      <nation>	poland	</nation>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <image>	draft	</image>
+      <commander>
+        <isFemale>	false	</isFemale>
+        <characterIDs>	2001	</characterIDs>
+      </commander>
+      <instructorSlots>
+        <unlockedSlot>
+          <instructorName>	rudy_pl_instructor	</instructorName>
+          <canRemove>	false	</canRemove>
+        </unlockedSlot>
+      </instructorSlots>
+      <customizeLock>	instructors, commander_customization	</customizeLock>
+    </preset>
+    <preset>
+      <id>	5	</id>
+      <name>	TheOffspring_crew	</name>
+      <nation>	usa	</nation>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <image>	theoffspring	</image>
+      <commander>
+        <isFemale>	false	</isFemale>
+        <characterIDs>	4001	</characterIDs>
+      </commander>
+      <instructorSlots>
+        <unlockedSlot>
+          <instructorName>	theoffspring_instructor	</instructorName>
+          <canRemove>	false	</canRemove>
+        </unlockedSlot>
+      </instructorSlots>
+      <customizeLock>	instructors, commander_customization	</customizeLock>
+    </preset>
+    <preset>
+      <id>	6	</id>
+      <name>	Edelweiss_crew	</name>
+      <nation>	japan	</nation>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <image>	draft	</image>
+      <commander>
+        <isFemale>	false	</isFemale>
+        <characterIDs>	3001	</characterIDs>
+      </commander>
+      <instructorSlots>
+        <unlockedSlot>
+          <instructorName>	edelweiss_instructor	</instructorName>
+          <canRemove>	false	</canRemove>
+        </unlockedSlot>
+      </instructorSlots>
+      <customizeLock>	instructors, commander_customization	</customizeLock>
+    </preset>
+    <preset>
+      <id>	7	</id>
+      <name>	Nameless_crew	</name>
+      <nation>	japan	</nation>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <image>	draft	</image>
+      <commander>
+        <isFemale>	true	</isFemale>
+        <characterIDs>	3006	</characterIDs>
+      </commander>
+      <instructorSlots>
+        <unlockedSlot>
+          <instructorName>	nameless_instructor	</instructorName>
+          <canRemove>	false	</canRemove>
+        </unlockedSlot>
+      </instructorSlots>
+      <customizeLock>	instructors, commander_customization	</customizeLock>
+    </preset>
+    <preset>
+      <id>	8	</id>
+      <name>	BeijingOpera_crew	</name>
+      <nation>	china	</nation>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <image>	opera	</image>
+      <commander>
+        <isFemale>	false	</isFemale>
+        <characterIDs>	3001	</characterIDs>
+      </commander>
+      <instructorSlots>
+        <unlockedSlot>
+          <instructorName>	beijingopera_instructor	</instructorName>
+          <canRemove>	false	</canRemove>
+        </unlockedSlot>
+      </instructorSlots>
+      <customizeLock>	instructors, commander_customization	</customizeLock>
+    </preset>
+    <preset>
+      <id>	9	</id>
+      <name>	Fury_crew	</name>
+      <nation>	usa	</nation>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <image>	draft	</image>
+      <commander>
+        <isFemale>	false	</isFemale>
+        <characterIDs>	3001	</characterIDs>
+      </commander>
+      <instructorSlots>
+        <unlockedSlot>
+          <instructorName>	fury_instructor	</instructorName>
+          <canRemove>	false	</canRemove>
+        </unlockedSlot>
+      </instructorSlots>
+      <customizeLock>	instructors, commander_customization	</customizeLock>
+    </preset>
+    <preset>
+      <id>	10	</id>
+      <name>	Theboys_crew	</name>
+      <nation>	usa	</nation>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <image>	draft	</image>
+      <commander>
+        <isFemale>	false	</isFemale>
+        <characterIDs>	3034	</characterIDs>
+      </commander>
+      <instructorSlots>
+        <unlockedSlot>
+          <instructorName>	theboys_instructor	</instructorName>
+          <canRemove>	false	</canRemove>
+        </unlockedSlot>
+      </instructorSlots>
+      <customizeLock>	instructors, commander_customization	</customizeLock>
+    </preset>
+    <preset>
+      <id>	11	</id>
+      <name>	Seven_crew	</name>
+      <nation>	usa	</nation>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <image>	draft	</image>
+      <commander>
+        <isFemale>	false	</isFemale>
+        <characterIDs>	3038	</characterIDs>
+      </commander>
+      <instructorSlots>
+        <unlockedSlot>
+          <instructorName>	theseven_instructor	</instructorName>
+          <canRemove>	false	</canRemove>
+        </unlockedSlot>
+      </instructorSlots>
+      <customizeLock>	instructors, commander_customization	</customizeLock>
+    </preset>
+    <preset>
+      <id>	12	</id>
+      <name>	girls_und_panzer_crew	</name>
+      <nation>	germany	</nation>
+      <matrixID>	1	</matrixID>
+      <progressionID>	1	</progressionID>
+      <image>	draft	</image>
+      <commander>
+        <isFemale>	true	</isFemale>
+        <characterIDs>	15531	</characterIDs>
+      </commander>
+      <instructorSlots>
+        <unlockedSlot>
+          <instructorName>	girls_und_panzer_instructor	</instructorName>
+          <canRemove>	false	</canRemove>
+        </unlockedSlot>
+      </instructorSlots>
+      <customizeLock>	instructors, commander_customization	</customizeLock>
+    </preset>
+  </detachmentPresets>
+</detachment_presets.xml>

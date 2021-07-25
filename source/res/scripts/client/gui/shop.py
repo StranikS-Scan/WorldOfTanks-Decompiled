@@ -6,7 +6,8 @@ import uuid
 from collections import namedtuple
 import BigWorld
 from adisp import async, process
-from constants import RentType, GameSeasonType, SANDBOX_CONSTANTS
+from constants import RentType, GameSeasonType
+from crew2.sandbox import SANDBOX_CONSTANTS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
 from gui.Scaleform.daapi.view.lobby.store.browser import shop_helpers as helpers
@@ -47,13 +48,20 @@ class _GoldPurchaseReason(object):
     RENT = 'rent'
     XP = 'experience'
     SLOT = 'slot'
-    BERTH = 'barracks'
+    DORMITORY = 'barracks'
     CREW = 'crew'
     EQUIPMENT = 'equipment'
     CUSTOMIZATION = 'customization'
     BUNDLE = 'bundle'
     BATTLE_PASS = 'battle_pass'
     BATTLE_PASS_LEVELS = 'battle_pass_levels'
+    DETACHMENT_VEHICLE_SLOT = 'detachment_vehicle_slot'
+    DETACHMENT_DEMOUNT_INSTRUCTOR = 'detachment_demount_instructor'
+    DETACHMENT_RECOVER_INSTRUCTOR = 'detachment_recover_instructor'
+    DETACHMENT_SPECIALIZE = 'detachment_specialize'
+    DETACHMENT_RESTORE = 'detachment_restore'
+    DETACHMENT_SKILL_DROP = 'detachment_skill_drop'
+    DETACHMENT_SKILL_EDIT = 'detachment_skill_edit'
 
 
 class Source(object):
@@ -168,8 +176,12 @@ def showBuyGoldForSlot(fullPrice):
     showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.SLOT, fullPrice))
 
 
-def showBuyGoldForBerth(fullPrice):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.BERTH, fullPrice))
+def showBuyGoldForDormitory(fullPrice):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.DORMITORY, fullPrice), alias=VIEW_ALIAS.OVERLAY_WEB_STORE_DORMITORY)
+
+
+def showBuyGoldForDetachmentRestore(fullPrice):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.DETACHMENT_RESTORE, fullPrice))
 
 
 def showBuyGoldForCrew(fullPrice):
@@ -203,6 +215,30 @@ def showBluprintsExchangeOverlay(url=None, parent=None):
     _showBlurredWebOverlay(_url, parent=parent)
 
 
+def showBuyGoldForDetachmentVehicleSlot(fullPrice):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.DETACHMENT_VEHICLE_SLOT, fullPrice))
+
+
+def showBuyGoldForDetachmentDemountInstructor(fullPrice):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.DETACHMENT_DEMOUNT_INSTRUCTOR, fullPrice))
+
+
+def showBuyGoldForDetachmentRecoverInstructor(fullPrice):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.DETACHMENT_RECOVER_INSTRUCTOR, fullPrice))
+
+
+def showBuyGoldForDetachmentSpecizalize(fullPrice, intCD):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.DETACHMENT_SPECIALIZE, fullPrice, intCD))
+
+
+def showBuyGoldForDetachmentSkillDrop(fullPrice):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.DETACHMENT_SKILL_DROP, fullPrice))
+
+
+def showBuyGoldForDetachmentSkillEdit(fullPrice):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.DETACHMENT_SKILL_EDIT, fullPrice))
+
+
 @process
 def _showBlurredWebOverlay(url, params=None, parent=None, isClientCloseControl=False):
     url = yield URLMacros().parse(url, params)
@@ -221,16 +257,16 @@ def showBuyItemWebView(url, itemId, source=None, origin=None, alias=VIEW_ALIAS.O
         params['source'] = source
     if origin:
         params['origin'] = origin
-    url = yield URLMacros().parse(url=_makeBuyItemUrl(url, itemId) if not SANDBOX_CONSTANTS.IS_SHOP_OFFLINE_PAGE_ENABLED else url, params=params)
+    url = yield URLMacros().parse(url=_makeBuyItemUrl(url, itemId) if not SANDBOX_CONSTANTS.SHOP_PLACEHOLDER_ON else url, params=params)
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @process
-def showBuyGoldWebOverlay(params=None, parent=None):
+def showBuyGoldWebOverlay(params=None, parent=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
     url = helpers.getBuyMoreGoldUrl()
     if url:
         url = yield URLMacros().parse(url, params=params)
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.OVERLAY_WEB_STORE, parent=parent), ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, parent=parent), ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @process

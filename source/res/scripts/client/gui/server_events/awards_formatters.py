@@ -158,7 +158,7 @@ def getDefaultFormattersMap():
      'crewSkins': CrewSkinsBonusFormatter(),
      'crewBooks': CrewBooksBonusFormatter(),
      'slots': countableIntegralBonusFormatter,
-     'berths': countableIntegralBonusFormatter,
+     'dormitories': DormitoriesIntegralBonusFormatter(),
      'entitlements': EntitlementFormatter(),
      'rankedDailyBattles': countableIntegralBonusFormatter,
      'rankedBonusBattles': countableIntegralBonusFormatter,
@@ -459,6 +459,7 @@ class AwardsPacker(object):
 
 
 class AwardFormatter(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def format(self, bonus):
         return self._format(bonus)
@@ -558,6 +559,12 @@ class CountableIntegralBonusFormatter(SimpleBonusFormatter):
             result[size] = RES_ICONS.getBonusIcon(size, bonus.getName())
 
         return result
+
+
+class DormitoriesIntegralBonusFormatter(CountableIntegralBonusFormatter):
+
+    def _format(self, bonus):
+        return [PreformattedBonus(bonusName=bonus.getName(), label=formatCountLabel(bonus.getValue() * self.itemsCache.items.shop.getDormitoryRoomsCount), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), tooltip=bonus.getTooltip(), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))]
 
 
 class CompletionTokensBonusFormatter(SimpleBonusFormatter):
@@ -676,7 +683,6 @@ class SeniorityPremiumDaysBonusFormatter(LinkedSetPremiumDaysBonusFormatter):
 
 class TokenBonusFormatter(SimpleBonusFormatter):
     eventsCache = dependency.descriptor(IEventsCache)
-    itemsCache = dependency.descriptor(IItemsCache)
     _eventProgressionController = dependency.descriptor(IEventProgressionController)
 
     @staticmethod

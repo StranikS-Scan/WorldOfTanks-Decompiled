@@ -5,7 +5,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model 
 class ConsumablesSetupModel(BaseSetupModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=7):
+    def __init__(self, properties=6, commands=9):
         super(ConsumablesSetupModel, self).__init__(properties=properties, commands=commands)
 
     def getTempString(self):

@@ -3,12 +3,12 @@
 import logging
 import Windowing
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
+from gui.Scaleform.Waiting import Waiting
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.video.video_view_model import VideoViewModel
 from gui.impl.lobby.video.video_sound_manager import DummySoundManager
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
-from gui.Scaleform.Waiting import Waiting
 from gui.sounds.filters import switchVideoOverlaySoundFilter
 from helpers import getClientLanguage
 from shared_utils import CONST_CONTAINER
@@ -67,14 +67,15 @@ _SUBTITLE_TO_LOCALES_MAP = {_SubtitlesLanguages.CS: {'cs'},
 _LOCALE_TO_SUBTITLE_MAP = {loc:subID for subID, locales in _SUBTITLE_TO_LOCALES_MAP.iteritems() for loc in locales}
 
 class VideoView(ViewImpl):
-    __slots__ = ('__onVideoStartedHandle', '__onVideoStoppedHandle', '__onVideoClosedHandle', '__isAutoClose', '__soundControl')
+    __slots__ = ('__onVideoStartedHandle', '__onVideoStoppedHandle', '__onVideoClosedHandle', '__isAutoClose', '__soundControl', '__isPaused')
 
-    def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.video.video_view.VideoView())
+    def __init__(self, layoutID=None, *args, **kwargs):
+        settings = ViewSettings(layoutID or R.views.lobby.video.video_view.VideoView())
         settings.model = VideoViewModel()
         settings.args = args
         settings.kwargs = kwargs
         super(VideoView, self).__init__(settings)
+        self.__isPaused = False
         self.__onVideoStartedHandle = kwargs.get('onVideoStarted')
         self.__onVideoStoppedHandle = kwargs.get('onVideoStopped')
         self.__onVideoClosedHandle = kwargs.get('onVideoClosed')
@@ -85,6 +86,15 @@ class VideoView(ViewImpl):
     def viewModel(self):
         return super(VideoView, self).getViewModel()
 
+    @property
+    def isPaused(self):
+        return self.__isPaused
+
+    @isPaused.setter
+    def isPaused(self, value):
+        self.__isPaused = value
+        self.__updatePausedFlag()
+
     def _onLoading(self, videoSource, *args, **kwargs):
         super(VideoView, self)._initialize(*args, **kwargs)
         if videoSource is None:
@@ -93,12 +103,12 @@ class VideoView(ViewImpl):
             self.viewModel.setVideoSource(videoSource)
             language = getClientLanguage()
             self.viewModel.setSubtitleTrack(_LOCALE_TO_SUBTITLE_MAP.get(language, 0))
-            self.viewModel.setIsWindowAccessible(Windowing.isWindowAccessible())
-            self.viewModel.onCloseBtnClick += self.__onCloseWindow
+            self.viewModel.onCloseBtnClick += self._onCloseWindow
             self.viewModel.onVideoStarted += self.__onVideoStarted
             self.viewModel.onVideoStopped += self.__onVideoStopped
             Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
             switchVideoOverlaySoundFilter(on=True)
+            self.__updatePausedFlag()
         return
 
     def _onLoaded(self, *args, **kwargs):
@@ -106,7 +116,7 @@ class VideoView(ViewImpl):
 
     def _finalize(self):
         Waiting.resume(id(self))
-        self.viewModel.onCloseBtnClick -= self.__onCloseWindow
+        self.viewModel.onCloseBtnClick -= self._onCloseWindow
         self.viewModel.onVideoStarted -= self.__onVideoStarted
         self.viewModel.onVideoStopped -= self.__onVideoStopped
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
@@ -118,7 +128,7 @@ class VideoView(ViewImpl):
         switchVideoOverlaySoundFilter(on=False)
         return
 
-    def __onCloseWindow(self, _=None):
+    def _onCloseWindow(self, _=None):
         self.destroyWindow()
 
     def __onVideoStarted(self, _=None):
@@ -126,7 +136,7 @@ class VideoView(ViewImpl):
             self.__onVideoStartedHandle()
             self.__onVideoStartedHandle = None
         self.__soundControl.start()
-        if not self.viewModel.getIsWindowAccessible():
+        if self.viewModel.getIsPaused():
             self.__soundControl.pause()
         return
 
@@ -139,17 +149,21 @@ class VideoView(ViewImpl):
             self.destroyWindow()
         return
 
-    def __onWindowAccessibilityChanged(self, isWindowAccessible):
-        if isWindowAccessible:
-            self.__soundControl.unpause()
-        else:
-            self.__soundControl.pause()
-        self.viewModel.setIsWindowAccessible(isWindowAccessible)
+    def __onWindowAccessibilityChanged(self, _):
+        self.__updatePausedFlag()
+
+    def __updatePausedFlag(self):
+        isPaused = self.__isPaused or not Windowing.isWindowAccessible()
+        if self.viewModel.getIsPaused() != isPaused:
+            if isPaused:
+                self.__soundControl.pause()
+            else:
+                self.__soundControl.unpause()
+            self.viewModel.setIsPaused(isPaused)
 
 
 class VideoViewWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        super(VideoViewWindow, self).__init__(content=VideoView(*args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.OVERLAY, decorator=None)
-        return
+        super(VideoViewWindow, self).__init__(content=VideoView(*args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.OVERLAY)

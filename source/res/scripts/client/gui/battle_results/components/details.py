@@ -726,11 +726,11 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.statusBonusTooltip = TOOLTIPS.BATTLERESULTS_PREMIUMBONUS_TANKSTATECHANGED
 
     def __isBlockedByXPToTman(self):
-        return not self.__battleResults.isXPToTManSameForArena(self.__arenaUniqueID)
+        return not self.__battleResults.isXPToDetSameForArena(self.__arenaUniqueID)
 
     def __setBlockedByXPToTman(self):
         self.xpValue = ''
-        if self.__battleResults.getVehicleForArena(self.__arenaUniqueID).isXPToTman:
+        if self.__battleResults.getVehicleForArena(self.__arenaUniqueID).isXPToDet:
             textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenEnabled()
         else:
             textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenDisabled()

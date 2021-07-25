@@ -3,7 +3,7 @@
 from inspect import getargspec, ismethod, getmembers, getmro
 from functools import wraps
 from types import FunctionType
-from typing import Tuple
+from typing import Tuple, Callable, List, Sequence
 from soft_exception import SoftException
 from misc import ASPECT
 
@@ -139,6 +139,20 @@ def vse_event_out(*args, **kwargs):
     return wrapper
 
 
+def vse_forward_event(name, argsSpecs, **kwargs):
+    meta = MetaData(MetaData.EVENT_OUT, name, argsSpecs, **kwargs)
+
+    def dummyMethod(self, *args_):
+        if self._vse_aspect not in meta.aspects:
+            raise UnsupportedMemberException(meta.name, self._vse_aspect)
+        getattr(self._vse_dispatchers, meta.name).call(args_)
+
+    dummyMethod.__name__ = name
+    dummyMethod.__doc__ = name
+    dummyMethod.vse_meta = meta
+    return dummyMethod
+
+
 class DispatchersHolder(object):
     pass
 
@@ -160,6 +174,16 @@ class VScriptContext(object):
 
     def destroy(self):
         pass
+
+    def triggerEvent(self, name, *args):
+        method = getattr(self, name, None)
+        if method is None or not ismethod(method):
+            raise RuntimeError('%s: forward event method "%s" not found in context' % (self.__class__.__name__, name))
+        meta = getattr(method, 'vse_meta', None)
+        if meta is None:
+            raise RuntimeError('%s: forward event "%s" does not have vse_meta' % (self.__class__.__name__, name))
+        method(*args)
+        return
 
     @property
     def _vse_aspect(self):

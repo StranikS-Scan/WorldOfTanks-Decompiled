@@ -22,9 +22,8 @@ from gui.impl.auxiliary.rewards_helper import getProgressiveRewardVO
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, getItemUnlockPricesVO, getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman, getVehicleComponentsByType
-from gui.shared.gui_items.crew_skin import localizedFullName
+from gui.shared.gui_items.crew_skin import localizedFullName, getCrewSkinIconSmall
 from gui.shared.gui_items.Vehicle import getLevelIconPath
-from gui.shared.gui_items.Tankman import getCrewSkinIconSmall
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Currency
 from helpers import dependency

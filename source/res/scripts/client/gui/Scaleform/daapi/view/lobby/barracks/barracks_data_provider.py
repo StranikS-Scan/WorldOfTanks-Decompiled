@@ -6,16 +6,15 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.server_events import recruit_helper
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import Tankman
 from gui.shared.gui_items.Tankman import getCrewSkinIconSmallWithoutPath
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.money import Currency
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
-from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.tankman import getRecoveryStatusText, formatRecoveryLeftValue
-from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.functions import makeTooltip, replaceHyphenToUnderscore
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency, i18n
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -108,7 +107,7 @@ def _packNotRecruitedTankman(recruitInfo):
      'specializationLevel': recruitInfo.getRoleLevel(),
      'role': text_styles.counter(recruitInfo.getLabel()),
      'vehicleType': '',
-     'iconFile': recruitInfo.getBarracksIcon(),
+     'iconFile': backport.image(R.images.gui.maps.icons.tankmen.icons.small.dyn(replaceHyphenToUnderscore(recruitInfo.getBarracksIcon()))()),
      'roleIconFile': Tankman.getRoleBigIconPath(roleType) if roleType else '',
      'rankIconFile': '',
      'contourIconFile': '',
@@ -166,20 +165,6 @@ def _packDismissedTankman(tankman):
      'skills': skillsList,
      'isSkillsVisible': True})
     return tankmanData
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def _packBuyBerthsSlot(itemsCache=None):
-    berths = itemsCache.items.stats.tankmenBerthsCount
-    berthPrice, berthCount = itemsCache.items.shop.getTankmanBerthPrice(berths)
-    defaultBerthPrice, _ = itemsCache.items.shop.defaults.getTankmanBerthPrice(berths)
-    action = None
-    if berthPrice != defaultBerthPrice:
-        action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'berthsPrices', True, berthPrice, defaultBerthPrice)
-    return {'buy': True,
-     'price': backport.getGoldFormat(berthPrice.getSignValue(Currency.GOLD)),
-     'actionPriceData': action,
-     'count': berthCount}
 
 
 def _packActiveTankman(tankman):
@@ -259,7 +244,7 @@ class BarracksDataProvider(DAAPIDataProvider):
         allTankmen = self.itemsCache.items.removeUnsuitableTankmen(self.itemsCache.items.getTankmen().values(), ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE)
         self.__totalCount = len(allTankmen)
         tankmenInBarracks = 0
-        tankmenList = [_packBuyBerthsSlot()]
+        tankmenList = []
         for tankman in allTankmen:
             if not tankman.isInTank:
                 tankmenInBarracks += 1
@@ -267,10 +252,8 @@ class BarracksDataProvider(DAAPIDataProvider):
                 tankmenList.append(tankman)
 
         self.__filteredCount = len(tankmenList) - 1
-        slots = self.itemsCache.items.stats.tankmenBerthsCount
-        if tankmenInBarracks < slots:
-            tankmenList.insert(1, {'empty': True,
-             'freePlaces': slots - tankmenInBarracks})
-        self.__placeCount = max(slots - tankmenInBarracks, 0)
+        tankmenList.insert(1, {'empty': True,
+         'freePlaces': 0})
+        self.__placeCount = 0
         self.setItemWrapper(_packActiveTankman)
         self.buildList(tankmenList)

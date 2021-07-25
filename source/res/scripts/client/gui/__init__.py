@@ -123,6 +123,7 @@ def getGuiServicesConfig(manager):
     from gui import event_boards
     from gui import game_control
     from gui import goodies
+    from gui import detachment
     from gui import login
     from gui import lobby_context
     from gui import server_events
@@ -133,6 +134,7 @@ def getGuiServicesConfig(manager):
     from gui import impl
     from gui import offers
     from gui.platform import wgnp
+    from gui import cdn
     from skeletons.gui.lobby_context import ILobbyContext
     manager.addConfig(app_loader.getAppLoaderConfig)
     manager.addConfig(shared.getSharedServices)
@@ -146,6 +148,7 @@ def getGuiServicesConfig(manager):
     manager.addConfig(wgcg.getWebServicesConfig)
     manager.addConfig(event_boards.getEventServicesConfig)
     manager.addConfig(goodies.getGoodiesCacheConfig)
+    manager.addConfig(detachment.getDetachmentCacheConfig)
     manager.addConfig(goodies.getDemountKitNoveltyConfig)
     manager.addConfig(battle_results.getBattleResultsServiceConfig)
     manager.addConfig(customization.getCustomizationServiceConfig)
@@ -155,6 +158,7 @@ def getGuiServicesConfig(manager):
     manager.addConfig(offers.getOffersConfig)
     manager.addConfig(server_events.getLinkedSetController)
     manager.addConfig(wgnp.getWGNPRequestController)
+    manager.addConfig(cdn.getPurchaseCache)
     if HAS_DEV_RESOURCES:
         try:
             from gui.development import getDevelopmentServicesConfig

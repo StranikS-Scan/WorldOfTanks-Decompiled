@@ -12,7 +12,8 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.artefacts import OptionalDevice
+from gui.shared.gui_items.artefacts import OptionalDevice, getArtefactName
+from gui.shared.gui_items.perk import PerkGUI
 from gui.shared.items_parameters import formatters as param_formatter
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
@@ -52,8 +53,8 @@ class BaseAdvancedTooltip(BlocksTooltipData):
         return
 
     @staticmethod
-    def getMovieAnimationPath(moviename):
-        return 'animations/advancedHints/%s.swf' % moviename
+    def getMovieAnimationPath(movieName):
+        return 'animations/advancedHints/%s.swf' % movieName
 
     def _packBlocks(self, *args, **kwargs):
         from debug_utils import LOG_DEBUG
@@ -73,12 +74,21 @@ class BaseAdvancedTooltip(BlocksTooltipData):
     def _getBlocksList(self, *args, **kwargs):
         pass
 
-    def _packAdvancedBlocks(self, movie, header, description):
-        descrTextR = R.strings.tooltips.advanced.dyn(description)
-        if descrTextR is None:
+    def _getAdvancedDescription(self, description):
+        descrText = TOOLTIPS.getAdvancedDescription(description)
+        if descrText is None:
             descrText = '#advanced/' + description
+        return
+
+    def _packAdvancedBlocks(self, movie, header, description, descriptionIsReady=False):
+        if descriptionIsReady:
+            descrText = description
         else:
-            descrText = backport.text(descrTextR())
+            descrTextR = R.strings.tooltips.advanced.dyn(description)
+            if descrTextR is None:
+                descrText = '#advanced/' + description
+            else:
+                descrText = backport.text(descrTextR())
         if movie is None:
             items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20))]
         else:
@@ -120,13 +130,21 @@ class HangarBoosterAdvanced(BaseAdvancedTooltip):
 
     def _getBlocksList(self, *args, **kwargs):
         item = self._item
-        itemId = item.getGUIEmblemID()
         header = self._item.userName
+        descriptionIsReady = False
         if 'crewSkillBattleBooster' in item.tags:
-            movie = SKILL_MOVIES[itemId]
+            perkID, levelIncrease, _ = item.getPerkBonus()
+            perk = PerkGUI(perkID, levelIncrease)
+            description = perk.flashFormattedDescription
+            descriptionIsReady = True
+            movie = perk.video
         else:
-            movie = MODULE_MOVIES[itemId]
-        return self._packAdvancedBlocks(movie, header, itemId)
+            description = item.getGUIEmblemID()
+            movie = MODULE_MOVIES[description]
+        return self._packAdvancedBlocks(movie, header, description, descriptionIsReady)
+
+    def _getAdvancedDescription(self, description):
+        return description if 'crewSkillBattleBooster' in self._item.tags else super(HangarBoosterAdvanced, self)._getAdvancedDescription(description)
 
 
 class HangarModuleAdvanced(BaseAdvancedTooltip):
@@ -179,19 +197,28 @@ class SkillExtendedTooltipAdvanced(BaseAdvancedTooltip):
         return self._packAdvancedBlocks(SKILL_MOVIES[skillType], TOOLTIPS.skillTooltipHeader(skillType), skillType)
 
 
+class ModuleExtendedTooltipAdvanced(BaseAdvancedTooltip):
+
+    def _getBlocksList(self, *args, **kwargs):
+        moduleType = args[0]
+        return self._packAdvancedBlocks(MODULE_MOVIES[moduleType], getArtefactName(moduleType), moduleType)
+
+
 class VehicleParametersAdvanced(BaseAdvancedTooltip):
     _movies = {'relativePower': 'statFirepower',
      'relativeArmor': 'statSurvivability',
      'relativeMobility': 'statMobility',
      'relativeCamouflage': 'statConcealment',
-     'relativeVisibility': 'statSpotting'}
+     'relativeVisibility': 'statSpotting',
+     'relativeTankControlLevel': 'vehicleOwnership'}
 
     def _getBlocksList(self, paramName, *args, **kwargs):
         return self._packAdvancedBlocks(VehicleParametersAdvanced._movies[paramName], MENU.tank_params(paramName), paramName)
 
     @staticmethod
     def readyForAdvanced(*args, **_):
-        return param_formatter.isRelativeParameter(args[0])
+        paramName = args[0]
+        return param_formatter.isRelativeParameter(paramName) and paramName in VehicleParametersAdvanced._movies
 
 
 class MoneyAndXpAdvanced(BaseAdvancedTooltip):
@@ -226,6 +253,36 @@ class DemountKitTooltipAdvanced(BaseAdvancedTooltip):
         demountKit = self.context.buildItem(*args, **kwargs)
         dkType = demountKit.demountKitGuiType
         return self._packAdvancedBlocks('demountKit', demountKit.userName, 'demountKit/{}'.format(dkType))
+
+
+class PerkTooltipAdvanced(BaseAdvancedTooltip):
+
+    def _getAdvancedDescription(self, description):
+        return description
+
+    def _getBlocksList(self, *args, **kwargs):
+        perk = self.context.buildItem(*args, **kwargs)
+        header = backport.text(perk.name)
+        description = perk.flashFormattedDescription
+        return self._packAdvancedBlocks(perk.video, header, description)
+
+
+class RecertificationAdvanced(BaseAdvancedTooltip):
+
+    def _getBlocksList(self, *args, **kwargs):
+        return self._packAdvancedBlocks('recertificationForm', i18n.makeString(TOOLTIPS.DETACHMENT_RECERTIFICATION_HEADER), 'recertification')
+
+
+class DormitoriesAdvanced(BaseAdvancedTooltip):
+
+    def _getBlocksList(self, *args, **kwargs):
+        return self._packAdvancedBlocks('barracks', i18n.makeString(TOOLTIPS.DETACHMENT_DORMITORY_HEADER), 'dormitories')
+
+
+class BookItemAdvanced(BaseAdvancedTooltip):
+
+    def _getBlocksList(self, *args, **kwargs):
+        return self._packAdvancedBlocks('crewBooks', i18n.makeString(TOOLTIPS.CREWBOOKS_ITEM_HEADER), 'crewBooks')
 
 
 SKILL_MOVIES = {'repair': 'skillRepairs',

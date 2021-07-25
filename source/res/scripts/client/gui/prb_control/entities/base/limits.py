@@ -37,6 +37,8 @@ class VehicleIsValid(IVehicleLimit):
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_READY)
         if g_currentVehicle.isUnsuitableToQueue():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
+        if not g_currentVehicle.canParticipateInTest():
+            return (False, PREBATTLE_RESTRICTION.VEHICLE_NO_TEST)
         vehicle = g_currentVehicle.item
         shellsList = []
         for shell in vehicle.shells.installed.getItems():

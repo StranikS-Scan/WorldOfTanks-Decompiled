@@ -12,7 +12,7 @@ import WWISE
 import constants
 import nations
 from account_helpers import gameplay_ctx
-from account_helpers.settings_core.settings_constants import GAME, BattleCommStorageKeys, ScorePanelStorageKeys, SPGAim, SOUND, AIM, GuiSettingsBehavior
+from account_helpers.settings_core.settings_constants import GAME, BattleCommStorageKeys, ScorePanelStorageKeys, SPGAim, SOUND, AIM
 from aih_constants import CTRL_MODE_NAME
 from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -145,7 +145,7 @@ HINTS_LEFT = 'hintsLeft'
 NUM_BATTLES = 'numBattles'
 SELECTED_INTRO_VEHICLES_FIELD = 'selectedIntroVehicles'
 NATION_CHANGE_VIEWED = 'nation_change_viewed'
-CREW_SKINS_VIEWED = 'crew_skins_viewed'
+CREW_SKINS_VIEWED = 'crewSkinsViewed'
 CREW_BOOKS_VIEWED = 'crew_books_viewed'
 CREW_SKINS_HISTORICAL_VISIBLE = 'crew_skins_historical_visible'
 VEHICLES_WITH_BLUEPRINT_CONFIRM = 'showedBlueprintConfirm'
@@ -170,11 +170,12 @@ QUEST_DELTAS = 'questDeltas'
 QUEST_DELTAS_COMPLETION = 'questCompletion'
 QUEST_DELTAS_PROGRESS = 'questProgress'
 QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
+BEST_CREW_OPTION_USED = 'best_crew_option_used'
 TOP_OF_TREE_CONFIG = 'topOfTree'
 DOG_TAGS = 'dogTags'
 LAST_ARTY_CTRL_MODE = 'lastArtyCtrlMode'
+ACTIVE_TEST_PARTICIPATION_CONFIRMED = 'activeTestParticipateConfirmed'
 MAPBOX_PROGRESSION = 'mapbox_progression'
-BECOME_ELITE_VEHICLES_WATCHED = 'becomeEliteWatched'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -261,7 +262,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'event': True,
                                    'favorite': False,
                                    'bonus': False,
-                                   'crystals': False},
+                                   'crystals': False,
+                                   'recruits': False,
+                                   'noDetachment': False,
+                                   'detachment': False},
                CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                BATTLEPASS_CAROUSEL_FILTER_CLIENT_1: {'battlePassSeason': 0},
                RANKED_CAROUSEL_FILTER_1: {'ussr': False,
@@ -315,7 +319,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'role_ATSPG_burstDamage': False,
                                           'role_LT_tracked': False,
                                           'role_LT_wheeled': False,
-                                          'role_SPG': False},
+                                          'role_SPG': False,
+                                          'recruits': False,
+                                          'noDetachment': False,
+                                          'detachment': False},
                RANKED_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                ROYALE_CAROUSEL_FILTER_1: {'ussr': False,
                                           'germany': False,
@@ -388,7 +395,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'gameMode': False,
                                               'favorite': False,
                                               'bonus': False,
-                                              'crystals': False},
+                                              'crystals': False,
+                                              'recruits': False,
+                                              'noDetachment': False,
+                                              'detachment': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
                MAPBOX_CAROUSEL_FILTER_1: {'ussr': False,
@@ -443,8 +453,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'lastShownEpicWelcomeScreen': 0,
                                     'techTreeIntroBlueprintsReceived': False,
                                     'techTreeIntroShowed': False,
-                                    'isDisplayPlatoonMembersClicked': False,
-                                    GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: True},
+                                    'isDisplayPlatoonMembersClicked': False},
                EULA_VERSION: {'version': 0},
                LINKEDSET_QUESTS: {'shown': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
@@ -659,6 +668,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'relativeMobility': False,
                 'relativeVisibility': False,
                 'relativeCamouflage': False,
+                'relativeSituationalBonuses': False,
                 'interfaceScale': 0,
                 DEFAULT_QUEUE: constants.QUEUE_TYPE.SANDBOX,
                 'medKitInstalled': False,
@@ -769,12 +779,14 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RADAR_HINT_SECTION: {HINTS_LEFT: 3,
                                      LAST_DISPLAY_DAY: 0,
                                      NUM_BATTLES: 0},
-                CREW_SKINS_VIEWED: set(),
+                CREW_SKINS_VIEWED: {},
                 CREW_BOOKS_VIEWED: {CREW_BOOK_RARITY.CREW_COMMON: {},
                                     CREW_BOOK_RARITY.CREW_EPIC: {},
                                     CREW_BOOK_RARITY.CREW_RARE: {},
-                                    CREW_BOOK_RARITY.PERSONAL: 0,
-                                    CREW_BOOK_RARITY.UNIVERSAL: 0},
+                                    CREW_BOOK_RARITY.UNIVERSAL_BOOK: 0,
+                                    CREW_BOOK_RARITY.UNIVERSAL_BROCHURE: 0,
+                                    CREW_BOOK_RARITY.UNIVERSAL_GUIDE: 0},
+                BEST_CREW_OPTION_USED: False,
                 CREW_SKINS_HISTORICAL_VISIBLE: (True, True),
                 VEHICLES_WITH_BLUEPRINT_CONFIRM: {},
                 IS_FIRST_ENTRY_BY_DIVISION_ID: {},
@@ -791,7 +803,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SUBTITLES: True,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
-                BECOME_ELITE_VEHICLES_WATCHED: set(),
+                NATION_CHANGE_VIEWED: False,
                 GAME.GAMEPLAY_ONLY_10_MODE: False,
                 MAPBOX_PROGRESSION: {'previous_battles_played': 0,
                                      'visited_maps': [],
@@ -907,7 +919,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                              'can_convert': False,
                                                              'scroll_to': None},
                         LAST_STORAGE_VISITED_TIMESTAMP: -1,
-                        SESSION_STATS_PREV_BATTLE_COUNT: 0},
+                        SESSION_STATS_PREV_BATTLE_COUNT: 0,
+                        ACTIVE_TEST_PARTICIPATION_CONFIRMED: False},
  KEY_UI_FLAGS: {}}
 
 def _filterAccountSection(dataSec):

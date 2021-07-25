@@ -51,7 +51,7 @@ class IBattleResultsService(object):
     def isCrewSameForArena(self, arenaUniqueID):
         raise NotImplementedError
 
-    def isXPToTManSameForArena(self, arenaUniqueID):
+    def isXPToDetSameForArena(self, arenaUniqueID):
         raise NotImplementedError
 
     def getVehicleForArena(self, arenaUniqueID):

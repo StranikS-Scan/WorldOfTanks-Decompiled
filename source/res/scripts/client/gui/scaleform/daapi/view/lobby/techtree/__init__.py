@@ -2,10 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/__init__.py
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ConditionalViewSettings, ScopeTemplates, ComponentSettings
+from gui.Scaleform.framework import ConditionalViewSettings, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
-from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampComponentOverride

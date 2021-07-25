@@ -19,5 +19,20 @@ class CurrencyTooltipBuilder(DataBuilder):
         return super(CurrencyTooltipBuilder, self)._buildData(advanced, self.__btnType)
 
 
+class CurrencyFullscreenTooltipBuilder(DataBuilder):
+    __slots__ = ('__btnType',)
+
+    def __init__(self, btnType, tooltipType, linkage):
+        super(CurrencyFullscreenTooltipBuilder, self).__init__(tooltipType, linkage, wgm_currency.WGMCurrencyFullscreenTooltip(contexts.ToolTipContext(None)))
+        self.__btnType = btnType
+        return
+
+    def _buildData(self, advanced, *args):
+        return super(CurrencyFullscreenTooltipBuilder, self)._buildData(advanced, self.__btnType)
+
+
 def getTooltipBuilders():
-    return (CurrencyTooltipBuilder(CURRENCIES_CONSTANTS.GOLD, TOOLTIPS_CONSTANTS.GOLD_STATS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI), CurrencyTooltipBuilder(CURRENCIES_CONSTANTS.CREDITS, TOOLTIPS_CONSTANTS.CREDITS_STATS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI))
+    return (CurrencyTooltipBuilder(CURRENCIES_CONSTANTS.GOLD, TOOLTIPS_CONSTANTS.GOLD_STATS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
+     CurrencyTooltipBuilder(CURRENCIES_CONSTANTS.CREDITS, TOOLTIPS_CONSTANTS.CREDITS_STATS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
+     CurrencyFullscreenTooltipBuilder(CURRENCIES_CONSTANTS.CREDITS, TOOLTIPS_CONSTANTS.CREDITS_STATS_FULL_SCREEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
+     CurrencyFullscreenTooltipBuilder(CURRENCIES_CONSTANTS.GOLD, TOOLTIPS_CONSTANTS.GOLD_STATS_FULL_SCREEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI))

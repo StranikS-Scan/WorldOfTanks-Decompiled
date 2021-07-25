@@ -45,6 +45,16 @@
           <valueByLevel>	2.5 2.5	</valueByLevel>
         </factor>
         <factor>
+          <attribute>	miscAttrs/turretRotatorHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.5 2.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/radioHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.5 2.5	</valueByLevel>
+        </factor>
+        <factor>
           <attribute>	miscAttrs/fireStartingChanceFactor	</attribute>
           <type>	mul	</type>
           <valueByLevel>	0.3 0.3	</valueByLevel>
@@ -93,15 +103,15 @@
     <script>	StaticOptionalDevice	  <weight>	100	</weight>
       <factors>
         <factor>
-          <attribute>	miscAttrs/crewLevelIncrease	</attribute>
+          <attribute>	miscAttrs/crewMasteryFactor	</attribute>
           <type>	add	</type>
-          <valueByLevel>	8.5 8.5	</valueByLevel>
+          <valueByLevel>	0.085	</valueByLevel>
         </factor>
       </factors>
     </script>
     <kpi>
       <mul>
-        <name>	crewLevel	</name>
+        <name>	crewMastery	</name>
         <value>	1.085	</value>
       </mul>
     </kpi>
@@ -201,7 +211,11 @@
     </script>
     <kpi>
       <mul>
-        <name>	vehicleGunShotDispersion	</name>
+        <name>	turretAimingDispersion	</name>
+        <value>	0.725	</value>
+      </mul>
+      <mul>
+        <name>	movingAimingDispersion	</name>
         <value>	0.725	</value>
       </mul>
     </kpi>

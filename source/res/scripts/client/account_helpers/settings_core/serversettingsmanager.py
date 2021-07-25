@@ -76,7 +76,8 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     OPTIONAL_DEVICE_SETUP_INTRO_SHOWN = 'optional_device_setup_intro_shown'
     TURBOSHAFT_HIGHLIGHTS_COUNTER = 'turboshaft_highlights_count'
     TURBOSHAFT_MARK_IS_SHOWN = 'turboshaft_mark_shown'
-    POST_PROGRESSION_INTRO_SHOWN = 'post_progression_intro_shown'
+    PROMO_SCREEN_IS_SHOWN = 'promo_screen_is_shown'
+    DETACHMENT_INTRO_VIDEO_IS_SHOWN = 'detachment_intro_video_is_shown'
 
 
 class ServerSettingsManager(object):
@@ -214,7 +215,10 @@ class ServerSettingsManager(object):
                                            'favorite': 5,
                                            'bonus': 6,
                                            'event': 7,
-                                           'crystals': 8}, offsets={}),
+                                           'crystals': 8,
+                                           'recruits': 9,
+                                           'noDetachment': 10,
+                                           'detachment': 11}, offsets={}),
      SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                   'germany': 1,
                                                   'usa': 2,
@@ -266,7 +270,10 @@ class ServerSettingsManager(object):
                                                   'role_ATSPG_burstDamage': 22,
                                                   'role_LT_tracked': 23,
                                                   'role_LT_wheeled': 24,
-                                                  'role_SPG': 25}, offsets={}),
+                                                  'role_SPG': 25,
+                                                  'recruits': 26,
+                                                  'noDetachment': 27,
+                                                  'detachment': 28}, offsets={}),
      SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                       'germany': 1,
                                                       'usa': 2,
@@ -301,7 +308,10 @@ class ServerSettingsManager(object):
                                                       'favorite': 5,
                                                       'bonus': 6,
                                                       'event': 7,
-                                                      'crystals': 8}, offsets={}),
+                                                      'crystals': 8,
+                                                      'recruits': 9,
+                                                      'noDetachment': 10,
+                                                      'detachment': 11}, offsets={}),
      SETTINGS_SECTIONS.BATTLEPASS_CAROUSEL_FILTER_1: Section(masks={'isCommonProgression': 0}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
@@ -310,8 +320,7 @@ class ServerSettingsManager(object):
                                             GuiSettingsBehavior.EPIC_WELCOME_VIEW_SHOWED: 5,
                                             GuiSettingsBehavior.TECHTREE_INTRO_BLUEPRINTS_RECEIVED: 23,
                                             GuiSettingsBehavior.TECHTREE_INTRO_SHOWED: 24,
-                                            GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED: 25,
-                                            GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: 26}, offsets={GuiSettingsBehavior.LAST_SHOWN_EPIC_WELCOME_SCREEN: Offset(7, 8388480)}),
+                                            GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED: 25}, offsets={GuiSettingsBehavior.LAST_SHOWN_EPIC_WELCOME_SCREEN: Offset(7, 8388480)}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
@@ -414,7 +423,8 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.DISABLE_EDITABLE_STYLE_REWRITE_WARNING: 22,
                                     UI_STORAGE_KEYS.TURBOSHAFT_MARK_IS_SHOWN: 26,
                                     UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN: 27,
-                                    UI_STORAGE_KEYS.POST_PROGRESSION_INTRO_SHOWN: 28}, offsets={PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
+                                    UI_STORAGE_KEYS.PROMO_SCREEN_IS_SHOWN: 28,
+                                    UI_STORAGE_KEYS.DETACHMENT_INTRO_VIDEO_IS_SHOWN: 29}, offsets={PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168),
                                     UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(19, 3670016),
                                     UI_STORAGE_KEYS.TURBOSHAFT_HIGHLIGHTS_COUNTER: Offset(23, 58720256)}),

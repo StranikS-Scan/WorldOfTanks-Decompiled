@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/shared/utils/__init__.py
-import typing
+from typing import TYPE_CHECKING, Optional, Any, List
 from skeletons.gui.shared.utils import requesters
-if typing.TYPE_CHECKING:
-    from gui.veh_post_porgression.models.progression import PostProgressionItem
-    from items.vehicles import VehicleType
+if TYPE_CHECKING:
+    from gui.shared.gui_items.Tankman import Tankman
+    from gui.shared.gui_items.Vehicle import Vehicle
 
 class IItemsRequester(requesters.IRequester):
 
@@ -30,10 +30,6 @@ class IItemsRequester(requesters.IRequester):
 
     @property
     def recycleBin(self):
-        raise NotImplementedError
-
-    @property
-    def vehicleRotation(self):
         raise NotImplementedError
 
     @property
@@ -96,7 +92,7 @@ class IItemsRequester(requesters.IRequester):
     def getVehicleCopyByCD(self, typeCompDescr):
         raise NotImplementedError
 
-    def getLayoutsVehicleCopy(self, vehicle, ignoreDisabledProgression=False):
+    def getLayoutsVehicleCopy(self, vehicle):
         raise NotImplementedError
 
     def getTankman(self, tmanInvID):
@@ -112,6 +108,9 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     def getItems(self, itemTypeID=None, criteria=None, nationID=None, onlyWithPrices=True):
+        raise NotImplementedError
+
+    def getDescrItems(self, itemTypeID=None, criteria=None):
         raise NotImplementedError
 
     def getVehicles(self, criteria=None):
@@ -150,10 +149,10 @@ class IItemsRequester(requesters.IRequester):
     def getDogTag(self, databaseID=None):
         raise NotImplementedError
 
-    def getVehPostProgression(self, vehIntCD, vehType=None):
+    def getPreviousItem(self, itemTypeID, invDataIdx):
         raise NotImplementedError
 
-    def getPreviousItem(self, itemTypeID, invDataIdx):
+    def getEquipmentSuitableForVehicle(self, vehicle, itemNames):
         raise NotImplementedError
 
     def doesVehicleExist(self, intCD):
@@ -229,9 +228,6 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     def startToUpdateVehicle(self, vehicle, outfit=None):
-        raise NotImplementedError
-
-    def updateVehicleDescriptor(self, descr):
         raise NotImplementedError
 
     def updatePreviewVehicle(self, vehicle, outfit=None):

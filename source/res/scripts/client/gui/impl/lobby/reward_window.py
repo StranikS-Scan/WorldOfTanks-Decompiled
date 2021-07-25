@@ -44,7 +44,7 @@ class BaseRewardWindowContent(ViewImpl):
      'tankmen',
      'items',
      'slots',
-     'berths',
+     'dormitories',
      'dossier',
      'customizations',
      'tokens',

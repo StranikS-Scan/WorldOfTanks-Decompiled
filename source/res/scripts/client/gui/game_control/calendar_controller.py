@@ -28,7 +28,7 @@ from web.web_client_api import w2capi, webApiCollection, w2c, W2CSchema
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.shop import ShopWebApi
 from web.web_client_api.sound import SoundWebApi
-from web.web_client_api.ui import CloseWindowWebApi, NotificationWebApi, ShopWebApiMixin, UtilWebApi, VehiclePreviewWebApiMixin
+from web.web_client_api.ui import OpenWindowWebApi, CloseWindowWebApi, NotificationWebApi, ShopWebApiMixin, UtilWebApi, VehiclePreviewWebApiMixin
 
 @w2capi(name='open_tab', key='tab_id')
 class _OpenTabWebApi(ShopWebApiMixin, VehiclePreviewWebApiMixin):
@@ -272,7 +272,7 @@ class CalendarController(GameWindowController, ICalendarController):
 
     @process
     def __openBrowser(self, browserID, url, browserSize, invokedFrom):
-        browserHandlers = webApiCollection(NotificationWebApi, RequestWebApi, ShopWebApi, SoundWebApi, UtilWebApi, _CloseWindowWebApi, _OpenTabWebApi)
+        browserHandlers = webApiCollection(NotificationWebApi, RequestWebApi, ShopWebApi, SoundWebApi, UtilWebApi, _CloseWindowWebApi, _OpenTabWebApi, OpenWindowWebApi)
 
         def showBrowserWindow():
             ctx = {'size': browserSize,

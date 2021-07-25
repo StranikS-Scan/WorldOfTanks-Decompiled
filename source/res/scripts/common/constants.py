@@ -30,7 +30,7 @@ IS_CHINA = CURRENT_REALM == 'CN'
 IS_KOREA = CURRENT_REALM == 'KR'
 IS_SINGAPORE = CURRENT_REALM == 'ASIA'
 IS_SANDBOX = CURRENT_REALM == 'SB'
-IS_VEH_POST_PROGRESSION_SANDBOX_MODE = True
+IS_CREW_SANDBOX = True
 IS_CT = CURRENT_REALM == 'CT'
 REALMS = frozenset(['RU',
  'EU',
@@ -62,14 +62,6 @@ REGIONAL_REALMS = frozenset(['RU',
  'CN',
  'KR'])
 CURRENT_REALM_IS_REGIONAL = CURRENT_REALM in REGIONAL_REALMS
-
-class SANDBOX_CONSTANTS(object):
-    IS_PREMIUM_SHOP_ENABLED = not IS_VEH_POST_PROGRESSION_SANDBOX_MODE
-    IS_BATTLE_SELECTOR_ENABLED = not IS_VEH_POST_PROGRESSION_SANDBOX_MODE
-    IS_TRAINING_ENABLED = not IS_VEH_POST_PROGRESSION_SANDBOX_MODE
-    IS_PERSONAL_MISSIONS_ENABLED = not IS_VEH_POST_PROGRESSION_SANDBOX_MODE
-    IS_SHOP_OFFLINE_PAGE_ENABLED = IS_VEH_POST_PROGRESSION_SANDBOX_MODE
-
 
 class REALM_HELPER:
 
@@ -394,6 +386,7 @@ class ARENA_SYNC_OBJECTS:
 ARENA_SYNC_OBJECT_NAMES = dict([ (v, k) for k, v in ARENA_SYNC_OBJECTS.__dict__.iteritems() if not k.startswith('_') ])
 
 class JOIN_FAILURE:
+    OK = 0
     TIME_OUT = 1
     NOT_FOUND = 2
     ACCOUNT_LOCK = 3
@@ -410,6 +403,7 @@ class JOIN_FAILURE:
     WRONG_PERIPHERY_ID = 15
     WRONG_VEHICLE_LVL = 16
     QUEUE_FULL = 17
+    NO_TEST = 18
 
 
 JOIN_FAILURE_NAMES = dict([ (v, k) for k, v in JOIN_FAILURE.__dict__.iteritems() if not k.startswith('_') ])
@@ -800,6 +794,7 @@ SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
 MAGNETIC_AUTO_AIM_CONFIG = 'magnetic_auto_aim_config'
 BATTLE_NOTIFIER_CONFIG = 'battle_notifier_config'
 BATTLE_ACHIEVEMENTS_CONFIG = 'battle_achievements_config'
+ACTIVE_TEST_CONFIRMATION_CONFIG = 'active_test_confirmation_config'
 META_GAME_SETTINGS = 'meta_game_settings'
 
 class Configs(enum.Enum):
@@ -893,7 +888,6 @@ class VEHICLE_TTC_ASPECTS:
 
 
 class VEHICLE_MISC_STATUS:
-    OTHER_VEHICLE_DAMAGED_DEVICES_VISIBLE = 0
     IS_OBSERVED_BY_ENEMY = 1
     _NOT_USED = 2
     VEHICLE_IS_OVERTURNED = 3
@@ -905,6 +899,8 @@ class VEHICLE_MISC_STATUS:
     BURNOUT_UNAVAILABLE_DUE_TO_BROKEN_ENGINE = 11
     DUALGUN_CHARGER_STATE = 14
 
+
+VEHICLE_LOD_PROPERTY_LIFE_TIME = 1
 
 class DUALGUN_CHARGER_STATUS:
     BEFORE_PREPARING = -1
@@ -1245,10 +1241,12 @@ class PROMO_CUTOUT:
 
 VEHICLE_CLASSES = ('lightTank', 'mediumTank', 'heavyTank', 'SPG', 'AT-SPG')
 VEHICLE_CLASS_INDICES = dict(((x[1], x[0]) for x in enumerate(VEHICLE_CLASSES)))
+VEHICLE_CLASS_MAP = {index:vehClassName for index, vehClassName in enumerate(VEHICLE_CLASSES)}
 VEHICLE_CLASSES_DETECTED_BY_ENEMY_SHOT_PREDICTOR = {'SPG'}
 MIN_VEHICLE_LEVEL = 1
 MAX_VEHICLE_LEVEL = 10
 VEHICLE_NO_INV_ID = -1
+RECRUIT_NO_INV_ID = -1
 
 class TEAMS_IN_ARENA:
     MAX_TEAMS = 40
@@ -1351,6 +1349,7 @@ class INVOICE_ASSET:
     CRYSTAL = 7
     EVENT_COIN = 8
     BPCOIN = 9
+    PURCHASE = 10
 
 
 class INVOICE_LIMITS:
@@ -1362,7 +1361,6 @@ class INVOICE_LIMITS:
     EVENT_COIN_MAX = 1000000
     BPCOIN_MAX = 1000000
     SLOTS_MAX = 1000
-    BERTHS_MAX = 1000
     TOKENS_MAX = 10000
     GOODIES_MAX = 1000
     PERMANENT_CUST_MAX = 100
@@ -1376,6 +1374,7 @@ class INVOICE_LIMITS:
     ENTITLEMENTS_MAX = 10000
     RANKED_DAILY_BATTLES_MAX = 1000
     RANKED_BONUS_BATTLES_MAX = 1000
+    DORMITORIES_MAX = 1000
 
 
 class RentType(object):
@@ -1514,13 +1513,17 @@ class REQUEST_COOLDOWN:
     REPAIR_VEHICLE = 0.5
     RECEIVE_OFFER_GIFT = 1.0
     SET_OFFER_BANNER_SEEN = 0.3
+    DETACHMENT = 1.0
+    UNPACK_INSTRUCTOR = 1.0
+    ADD_INSTRUCTOR = 1.0
     EQUIP_OPTDEV = 1.0
     CHANGE_EVENT_ENQUEUE_DATA = 1.0
     CMD_EQUIP_OPT_DEVS_SEQUENCE = 1.0
     BLUEPRINTS_CONVERT_SALE = 1.0
+    BUY_DORMITORY = 1.0
+    ASSIGN_DETACHMENT = 1.0
+    RESET_DETACHMENT_LINK = 1.0
     TANKMAN_RESPECIALIZE = 1.0
-    POST_PROGRESSION_BASE = 1.0
-    POST_PROGRESSION_CELL = 0.5
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2180,6 +2183,7 @@ class VISIBILITY:
 
 VEHICLE_ATTRS_TO_SYNC = frozenset(['circularVisionRadius', 'gun/piercing'])
 VEHICLE_ATTRS_TO_SYNC_ALIASES = {'gun/piercing': 'gunPiercing'}
+SIXTH_SENSE_BASE_TIME_DELAY = 3.0
 
 class OBSTACLE_KIND:
     CHUNK_DESTRUCTIBLE = 1
@@ -2457,7 +2461,7 @@ class CLIENT_COMMAND_SOURCES:
 
 
 EMPTY_GEOMETRY_ID = 0
-ROLE_LEVELS = range(6, 11)
+ROLE_LEVELS = (10,)
 
 class ROLE_TYPE:
     NOT_DEFINED = 0
@@ -2606,6 +2610,10 @@ class DUAL_GUN:
         RELOADING = 1
         READY = 2
 
+    class RELOAD_ORDER:
+        FIRST = 0
+        SECOND = 1
+
     class COOLDOWNS:
         LEFT = 0
         RIGHT = 1
@@ -2714,15 +2722,18 @@ class BonusTypes(object):
     SKILL = 'skill'
     ROLE = 'role'
     EXTRA = 'extra'
-    PERK = 'perk'
+    DETACHMENT = 'detachment'
     OPTIONAL_DEVICE = 'optionalDevice'
     EQUIPMENT = 'equipment'
     BATTLE_BOOSTER = 'battleBooster'
     POSSIBLE = (SKILL,
      ROLE,
      EXTRA,
-     PERK)
+     DETACHMENT)
 
+
+TANK_CONTROL_LEVEL = 'tankControlLevel'
+SITUATIONAL_BONUSES = ('camouflageNet', 'stereoscope', 'removedRpmLimiter', 'gunner_rancorous', 'deluxImprovedConfiguration', 'trophyBasicImprovedConfiguration', 'trophyUpgradedImprovedConfiguration')
 
 class GF_RES_PROTOCOL(object):
     IMG = 'img://'
@@ -2775,6 +2786,20 @@ DamageAbsorptionLabelToType = {'FRAGMENTS': DamageAbsorptionTypes.FRAGMENTS,
  'BLAST': DamageAbsorptionTypes.BLAST,
  'SPALLS': DamageAbsorptionTypes.SPALLS}
 DamageAbsorptionTypeToLabel = dict(((type, label) for label, type in DamageAbsorptionLabelToType.items()))
+EQUIPMENT_COOLDOWN_MOD_SUFFIX = 'CooldownMod'
+CREW_CRIT_FACTOR_MOD_SUFFIX = 'CrewCritMod'
+BASE_DAMAGE_MONITORING_DELAY = 2.55
+
+class AbilitySystemScopeNames(object):
+    DETACHMENT = 'detachment'
+
+
+class CommonSkillFactors(object):
+    REPAIR = 'crewRepairSpeed'
+    FIREFIGHTING = 'crewHealthBurnPerSecLossFraction'
+    CAMOUFLAGE = 'crewCamouflageFactor'
+    ALL = (REPAIR, FIREFIGHTING, CAMOUFLAGE)
+
 
 class ReloadRestriction(object):
     CYCLE_RELOAD = 1.0

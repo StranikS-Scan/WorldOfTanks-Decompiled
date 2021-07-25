@@ -1,0 +1,28 @@
+<200101-0000_500101-0000_crew2_quests.xml>
+  <quests>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <id>	crew2_badge_200	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	crew2:badgeToken:200	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	playerBadges:200	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+  </quests>
+</200101-0000_500101-0000_crew2_quests.xml>

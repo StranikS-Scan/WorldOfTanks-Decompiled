@@ -19,7 +19,6 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.CLANS import CLANS
-from gui.SystemMessages import SM_TYPE
 from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
@@ -1241,28 +1240,6 @@ class EmailConfirmationReminderListener(_NotificationListener):
         return
 
 
-class VehiclePostProgressionUnlockListener(_NotificationListener):
-    __itemsCache = dependency.descriptor(IItemsCache)
-
-    def start(self, model):
-        super(VehiclePostProgressionUnlockListener, self).start(model)
-        g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
-        return True
-
-    def stop(self):
-        g_playerEvents.onVehicleBecomeElite -= self.__onVehicleBecomeElite
-        super(VehiclePostProgressionUnlockListener, self).stop()
-
-    def __onVehicleBecomeElite(self, *vehicleIntCDs):
-        msgKey = R.strings.system_messages.vehiclePostProgression.vehiclesUnlockPostProgression
-        for intCD in vehicleIntCDs:
-            vehicle = self.__itemsCache.items.getItemByCD(intCD)
-            if vehicle is not None and vehicle.postProgression.isUnlocked(vehicle):
-                SystemMessages.pushMessage(text=backport.text(msgKey.single.body(), vehicle=vehicle.userName), type=SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': backport.text(msgKey.title())})
-
-        return
-
-
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -1280,8 +1257,7 @@ class NotificationsListeners(_NotificationListener):
          UpgradeTrophyDeviceListener(),
          ChoosingDeviceslListener(),
          RecruitReminderlListener(),
-         EmailConfirmationReminderListener(),
-         VehiclePostProgressionUnlockListener())
+         EmailConfirmationReminderListener())
 
     def start(self, model):
         for listener in self.__listeners:

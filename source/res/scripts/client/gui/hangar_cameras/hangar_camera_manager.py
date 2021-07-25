@@ -112,6 +112,10 @@ class HangarCameraManager(object):
     def zoomEnabled(self):
         return self.__zoomEnabled
 
+    @property
+    def isCameraIdleForcedDisable(self):
+        return self.__cameraIdle.isForcedDisable
+
     @handleInactiveCamera.setter
     def handleInactiveCamera(self, value):
         self.__handleInactiveCamera = value

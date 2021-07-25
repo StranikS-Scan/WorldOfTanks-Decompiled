@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/shared/gui_items.py
-import typing
-if typing.TYPE_CHECKING:
-    from gui.veh_post_porgression.models.progression import PostProgressionItem
-    from items.vehicles import VehicleType
-    from post_progression_common import VehicleState
+from typing import TYPE_CHECKING, Any
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from items.components.detachment_constants import NO_INSTRUCTOR_ID, NO_DETACHMENT_ID
+if TYPE_CHECKING:
+    from gui.shared.gui_items.instructor import Instructor
+    from gui.shared.gui_items.detachment import Detachment
 
 class IGuiItemsFactory(object):
 
@@ -44,7 +45,7 @@ class IGuiItemsFactory(object):
     def createVehicleFuelTank(self, intCompactDescr, proxy=None, descriptor=None):
         raise NotImplementedError
 
-    def createVehicle(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None):
+    def createVehicle(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
         raise NotImplementedError
 
     def createTankman(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None):
@@ -71,5 +72,8 @@ class IGuiItemsFactory(object):
     def createOutfit(self, strCompactDescr=None, component=None, vehicleCD=''):
         raise NotImplementedError
 
-    def createVehPostProgression(self, vehIntCD, state, vehType):
+    def createDetachment(self, strCompactDescr, proxy=None, invID=NO_DETACHMENT_ID, vehInvID=-1, skinID=NO_CREW_SKIN_ID):
+        raise NotImplementedError
+
+    def createInstructor(self, strCompactDescr, proxy=None, invID=NO_INSTRUCTOR_ID, detInvID=NO_DETACHMENT_ID):
         raise NotImplementedError

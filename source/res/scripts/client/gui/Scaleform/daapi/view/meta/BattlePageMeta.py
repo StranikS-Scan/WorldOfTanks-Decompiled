@@ -27,6 +27,3 @@ class BattlePageMeta(View):
 
     def as_setArtyShotIndicatorFlagS(self, isVisible):
         return self.flashObject.as_setArtyShotIndicatorFlag(isVisible) if self._isDAAPIInited() else None
-
-    def as_enablePrebattleAmmunitionPanelS(self, value):
-        return self.flashObject.as_enablePrebattleAmmunitionPanel(value) if self._isDAAPIInited() else None

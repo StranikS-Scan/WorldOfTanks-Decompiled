@@ -4,17 +4,23 @@ from gui.Scaleform.framework.entities.abstract.AbstractWindowView import Abstrac
 
 class RoleChangeMeta(AbstractWindowView):
 
-    def onVehicleSelected(self, vehicleId):
-        self._printOverrideError('onVehicleSelected')
+    def submit(self):
+        self._printOverrideError('submit')
 
-    def changeRole(self, role, vehicleId):
-        self._printOverrideError('changeRole')
+    def changeRetrainType(self, retrainTypeIndex):
+        self._printOverrideError('changeRetrainType')
 
     def as_setCommonDataS(self, data):
         return self.flashObject.as_setCommonData(data) if self._isDAAPIInited() else None
 
-    def as_setRolesS(self, roles):
-        return self.flashObject.as_setRoles(roles) if self._isDAAPIInited() else None
+    def as_setRoleS(self, role, infoText):
+        return self.flashObject.as_setRole(role, infoText) if self._isDAAPIInited() else None
 
-    def as_setPriceS(self, priceString, actionChangeRole):
-        return self.flashObject.as_setPrice(priceString, actionChangeRole) if self._isDAAPIInited() else None
+    def as_setPriceS(self, priceString, actionChangeRole, enableSubmitButton, tooltip):
+        return self.flashObject.as_setPrice(priceString, actionChangeRole, enableSubmitButton, tooltip) if self._isDAAPIInited() else None
+
+    def as_setVehicleDataS(self, data):
+        return self.flashObject.as_setVehicleData(data) if self._isDAAPIInited() else None
+
+    def as_setCrewOperationDataS(self, data):
+        return self.flashObject.as_setCrewOperationData(data) if self._isDAAPIInited() else None

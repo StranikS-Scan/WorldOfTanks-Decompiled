@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/vehicle_items_getter.py
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params
-from items import vehicles, tankmen, EQUIPMENT_TYPES, ItemsPrices
+from items import vehicles, detachment_customization, EQUIPMENT_TYPES, ItemsPrices
 from items.components.c11n_constants import DecalType
 from soft_exception import SoftException
 import nations
@@ -82,11 +82,11 @@ def _getCamouflages(_):
 
 
 def _getCrewSkins(_):
-    return tankmen.g_cache.crewSkins().skins.itervalues()
+    return detachment_customization.g_cache.crewSkins().skins.itervalues()
 
 
 def _getCrewBooks(_):
-    return tankmen.g_cache.crewBooks().books.itervalues()
+    return detachment_customization.g_cache.crewBooks().books.itervalues()
 
 
 def _getModifications(_):

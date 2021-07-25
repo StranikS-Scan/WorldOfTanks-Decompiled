@@ -34,10 +34,3 @@ def getNextSlotPrice(slots, slotsPrices):
     if addSlotNumber < 0:
         return 0
     return slotsPrices[1][addSlotNumber] if addSlotNumber < len(slotsPrices[1]) else slotsPrices[1][-1]
-
-
-def getNextBerthPackPrice(berths, berthsPrices):
-    addPackNumber = (berths - berthsPrices[0]) / berthsPrices[1]
-    if addPackNumber < 0:
-        return 0
-    return berthsPrices[2][addPackNumber] if addPackNumber < len(berthsPrices[2]) else berthsPrices[2][-1]

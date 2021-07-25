@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/settings.py
+from crew2.sandbox import SANDBOX_CONSTANTS
 from UnitBase import UNIT_ERROR, UNIT_BROWSER_ERROR, LEADER_SLOT
 from constants import PREBATTLE_TYPE, PREBATTLE_INVITE_STATE
 from prebattle_shared import SETTING_DEFAULTS, PrebattleSettings
@@ -259,6 +260,7 @@ class PREBATTLE_RESTRICTION(object):
     VEHICLE_ROTATION_GROUP_LOCKED = 'vehicle/rotationGroupLocked'
     UNSUITABLE_VEHICLE_FOR_BATTLE_ROYALE = 'vehicle/notForBattleRoyaleMode'
     VEHICLE_TOO_HEAVY = 'vehicle/tooHeavy'
+    VEHICLE_NO_TEST = 'vehicle/{}'.format(SANDBOX_CONSTANTS.NO_TEST_STATE)
     CREW_NOT_FULL = 'crew/notFull'
     UNIT_NOT_FULL = 'squad/notFull'
     TUTORIAL_NOT_FINISHED = 'tutorial/notFinished'

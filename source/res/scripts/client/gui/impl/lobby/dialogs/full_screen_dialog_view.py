@@ -1,22 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/dialogs/full_screen_dialog_view.py
 import logging
+from abc import abstractproperty
 import typing
+import constants
 from PlayerEvents import g_playerEvents
 from async import AsyncScope, AsyncEvent, await, async, BrokenPromiseError, AsyncReturn
+from frameworks.wulf import WindowLayer
+from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
+from gui.impl.backport import BackportTooltipWindow, createTooltipData
+from gui.impl.gen import R
 from gui.impl.gen.view_models.common.format_resource_string_arg_model import FormatResourceStringArgModel
-from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import FullScreenDialogWindowModel
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.dialog_window import DialogResult, DialogButtons, DialogFlags
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.shared.money import Currency
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from frameworks import wulf
-TViewModel = typing.TypeVar('TViewModel', bound=FullScreenDialogWindowModel)
 _logger = logging.getLogger(__name__)
 
 class DIALOG_TYPES(object):
@@ -27,7 +32,7 @@ class DIALOG_TYPES(object):
     BLUEPRINTS_CONVERSION = 'blueprintsConversion'
 
 
-class FullScreenDialogView(ViewImpl, typing.Generic[TViewModel]):
+class FullScreenDialogView(ViewImpl):
     __slots__ = ('__scope', '__event', '__result', '_stats')
     _itemsCache = dependency.descriptor(IItemsCache)
 
@@ -38,9 +43,9 @@ class FullScreenDialogView(ViewImpl, typing.Generic[TViewModel]):
         self.__result = DialogButtons.CANCEL
         self._stats = self._itemsCache.items.stats
 
-    @property
+    @abstractproperty
     def viewModel(self):
-        return self.getViewModel()
+        pass
 
     def _getAdditionalData(self):
         return None
@@ -54,7 +59,17 @@ class FullScreenDialogView(ViewImpl, typing.Generic[TViewModel]):
 
         raise AsyncReturn(DialogResult(self.__result, self._getAdditionalData()))
 
-    def _initialize(self, *args, **kwargs):
+    def createToolTip(self, event):
+        if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
+            tooltipId = event.getArgument('tooltipId')
+            if tooltipId in CURRENCIES_CONSTANTS.CURRENCIES_SET:
+                specialAlias = tooltipId + 'StatsFullScreen' if constants.IS_SINGAPORE and tooltipId in CURRENCIES_CONSTANTS.SINGAPORE_ALTERNATIVE_CURRENCIES_SET else tooltipId + 'InfoFullScreen'
+                window = BackportTooltipWindow(createTooltipData(isSpecial=True, specialAlias=specialAlias, specialArgs=[]), self.getParentWindow())
+                window.load()
+                return window
+        return super(FullScreenDialogView, self).createToolTip(event)
+
+    def _initialize(self):
         super(FullScreenDialogView, self)._initialize()
         self._addListeners()
 
@@ -107,7 +122,8 @@ class FullScreenDialogView(ViewImpl, typing.Generic[TViewModel]):
         self.__event.set()
 
     def _onExitClicked(self):
-        self._onCancel()
+        self.__result = DialogButtons.EXIT
+        self.__event.set()
 
     def _setTitleArgs(self, arrModel, frmtArgs):
         for name, resource in frmtArgs:
@@ -119,6 +135,7 @@ class FullScreenDialogView(ViewImpl, typing.Generic[TViewModel]):
         arrModel.invalidate()
 
     def __setStats(self, model):
+        model.setIsWGMAvailable(bool(self._stats.mayConsumeWalletResources))
         model.setCredits(int(self._stats.money.getSignValue(Currency.CREDITS)))
         model.setGolds(int(self._stats.money.getSignValue(Currency.GOLD)))
         model.setCrystals(int(self._stats.money.getSignValue(Currency.CRYSTAL)))
@@ -126,27 +143,30 @@ class FullScreenDialogView(ViewImpl, typing.Generic[TViewModel]):
 
 
 class FullScreenDialogWindowWrapper(LobbyWindow):
-    __slots__ = ('__wrappedView', '__blur')
+    __slots__ = ('_wrappedView', '_blur', '__blurLayers')
     __gui = dependency.descriptor(IGuiLoader)
 
-    def __init__(self, wrappedView, parent=None):
-        super(FullScreenDialogWindowWrapper, self).__init__(DialogFlags.TOP_FULLSCREEN_WINDOW, None, content=wrappedView, parent=parent)
-        self.__wrappedView = wrappedView
-        self.__blur = None
+    def __init__(self, wrappedView, parent=None, blurLayers=True, layer=WindowLayer.UNDEFINED):
+        super(FullScreenDialogWindowWrapper, self).__init__(DialogFlags.TOP_FULLSCREEN_WINDOW, content=wrappedView, parent=parent, layer=layer)
+        self._wrappedView = wrappedView
+        self._blur = None
+        self.__blurLayers = blurLayers
         return
 
     def _initialize(self):
         super(FullScreenDialogWindowWrapper, self)._initialize()
-        self.__blur = CachedBlur(enabled=True, ownLayer=self.layer - 1)
+        if self.__blurLayers:
+            self._blur = CachedBlur(enabled=True, ownLayer=self.layer - 1)
 
     def wait(self):
-        return self.__wrappedView.wait()
+        return self._wrappedView.wait()
 
     @classmethod
-    def createIfNotExist(cls, layoutID, wrappedViewClass, parent=None, *args, **kwargs):
+    def createIfNotExist(cls, layoutID, wrappedViewClass, parent=None, blurLayers=True, layer=WindowLayer.UNDEFINED, *args, **kwargs):
         currentView = cls.__gui.windowsManager.getViewByLayoutID(layoutID)
-        return FullScreenDialogWindowWrapper(wrappedViewClass(*args, **kwargs), parent) if currentView is None else None
+        return FullScreenDialogWindowWrapper(wrappedViewClass(*args, **kwargs), parent, blurLayers, layer) if currentView is None else None
 
     def _finalize(self):
-        self.__blur.fini()
+        if self._blur:
+            self._blur.fini()
         super(FullScreenDialogWindowWrapper, self)._finalize()

@@ -4,35 +4,45 @@ from logging import getLogger
 from CurrentVehicle import g_currentVehicle
 from adisp import process
 from constants import GameSeasonType, RentType
-from gui import SystemMessages
+from crew2 import settings_globals
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeInVehiclesUrl, getPersonalTradeInVehiclesUrl
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler, CM_BUY_COLOR
+from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler, CM_BUY_COLOR, SEPARATOR_ID
 from gui.Scaleform.locale.MENU import MENU
+from gui.impl.auxiliary.detachmnet_convert_helper import isBarracksNotEmpty
+from gui.impl.auxiliary.vehicle_helper import validateBestCrewForVehicle, isReturnCrewOptionAvailable
 from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
 from gui.prb_control import prbDispatcherProperty
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showVehicleRentRenewDialog, showShop
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
-from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
-from gui.shared.utils import decorators
 from helpers import dependency
+from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController, IPersonalTradeInController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
-from uilogging.veh_post_progression.constants import EntryPointCallers
+from gui.shared.utils.requesters import REQ_CRITERIA
+from uilogging.detachment.loggers import DynamicGroupLogger, g_detachmentFlowLogger
+from uilogging.detachment.constants import GROUP, ACTION
 _logger = getLogger(__name__)
+CM_HIGHLIGHT_COLOR = 13347959
 
-class CREW(object):
-    PERSONAL_CASE = 'personalCase'
-    UNLOAD = 'tankmanUnload'
+class RECRUITS(CONST_CONTAINER):
+    UNLOAD = 'unloadRecruit'
+    UNLOAD_ALL = 'unloadRecruits'
+    CONVERT_RECRUITS = 'convertRecruitsIntoDetachment'
+    RETRAIN_WINDOW = 'retrainWindow'
+    CHANGE_ROLE_WINDOW = 'changeRoleWindow'
+    RETURN = 'returnRecruits'
+    SET_BEST = 'setBestRecruits'
+    SET_NATIVE_CREW = 'setNativeCrew'
 
 
-class MODULE(object):
+class MODULE(CONST_CONTAINER):
     INFO = 'moduleInfo'
     CANCEL_BUY = 'cancelBuy'
     UNLOAD = 'unload'
@@ -42,7 +52,7 @@ class MODULE(object):
     BUY_AND_EQUIP = 'buyAndEquip'
 
 
-class VEHICLE(object):
+class VEHICLE(CONST_CONTAINER):
     EXCHANGE = 'exchange'
     PERSONAL_EXCHANGE = 'personalTradeExchange'
     INFO = 'vehicleInfo'
@@ -53,7 +63,6 @@ class VEHICLE(object):
     SELL = 'sell'
     BUY = 'buy'
     RESEARCH = 'vehicleResearch'
-    POST_PROGRESSION = 'vehiclePostProgression'
     RENEW = 'vehicleRentRenew'
     REMOVE = 'vehicleRemove'
     CHECK = 'vehicleCheck'
@@ -64,32 +73,192 @@ class VEHICLE(object):
     GO_TO_COLLECTION = 'goToCollection'
 
 
-class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
+def _dismissContextMenuItems(options, exceptions=()):
+    return [ item for item in options if item['id'] not in exceptions ]
+
+
+def _replaceLabelMenuItem(options, itemID, label):
+    for item in options:
+        if item['id'] != itemID:
+            continue
+        item.update({'label': label})
+
+
+class _BaseRecruitContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
     itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    uiLogger = DynamicGroupLogger()
 
-    def __init__(self, cmProxy, ctx=None):
-        super(CrewContextMenuHandler, self).__init__(cmProxy, ctx, {CREW.PERSONAL_CASE: 'showPersonalCase',
-         CREW.UNLOAD: 'unloadTankman'})
-
-    def showPersonalCase(self):
-        shared_events.showPersonalCase(self._tankmanID, 0, EVENT_BUS_SCOPE.LOBBY)
-
-    @decorators.process('unloading')
-    def unloadTankman(self):
-        tankman = self.itemsCache.items.getTankman(self._tankmanID)
-        result = yield TankmanUnload(g_currentVehicle.item, tankman.vehicleSlotIdx).request()
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-
-    def _generateOptions(self, ctx=None):
-        return [self._makeItem(CREW.PERSONAL_CASE, MENU.contextmenu('personalCase')), self._makeSeparator(), self._makeItem(CREW.UNLOAD, MENU.contextmenu('tankmanUnload'), {'enabled': not g_currentVehicle.isInBattle()})]
+    def __init__(self, cmProxy, ctx=None, handlers=None, eventNameSuffix=''):
+        super(_BaseRecruitContextMenuHandler, self).__init__(cmProxy, ctx, handlers)
+        self.__eventNameSuffix = eventNameSuffix
 
     def _initFlashValues(self, ctx):
-        self._tankmanID = int(ctx.tankmanID)
+        self._recruitID = int(ctx.tankmanID)
+        self._vehicle = None
+        self._crew = None
+        self._recruitIDs = None
+        return
 
     def _clearFlashValues(self):
-        self._tankmanID = None
+        self.uiLogger.reset()
+        self._recruitID = None
+        self._vehicle = None
+        self._crew = None
+        self._recruitIDs = None
         return
+
+    def _fireEvent(self, eventName, ctx=None):
+        self.fireEvent(events.CrewPanelEvent(eventName + self.__eventNameSuffix, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def showRetrainWindow(self):
+        g_detachmentFlowLogger.flow(self.uiLogger.group, GROUP.RETRAIN_CREW_DIALOG)
+        self._fireEvent(events.CrewPanelEvent.RETRAIN_RECRUITS, {'recruitID': self._recruitID})
+
+    def openChangeRoleWindow(self):
+        g_detachmentFlowLogger.flow(self.uiLogger.group, GROUP.RETRAIN_TANKMAN_DIALOG)
+        self._fireEvent(events.CrewPanelEvent.OPEN_CHANGE_ROLE, {'recruitID': self._recruitID})
+
+    def unloadRecruit(self):
+        self.uiLogger.log(ACTION.UNLOAD_RECRUIT)
+        self._fireEvent(events.CrewPanelEvent.UNLOAD_RECRUIT, {'recruitID': self._recruitID})
+
+    def unloadRecruits(self):
+        self.uiLogger.log(ACTION.UNLOAD_ALL_RECRUITS)
+        self._fireEvent(events.CrewPanelEvent.UNLOAD_RECRUITS)
+
+    def returnRecruits(self):
+        self.uiLogger.log(ACTION.RETURN_PREVIOUS_RECRUIT_CONFIGURATION)
+        self._fireEvent(events.CrewPanelEvent.RETURN_RECRUITS)
+
+    def setBestRecruits(self):
+        self.uiLogger.log(ACTION.SELECT_BEST_RECRUITS)
+        self._fireEvent(events.CrewPanelEvent.SET_BEST_RECRUITS, {'isNative': False})
+
+    def setNativeCrew(self):
+        self.uiLogger.log(ACTION.SET_NATIVE_CREW)
+        self._fireEvent(events.CrewPanelEvent.SET_BEST_RECRUITS, {'isNative': True})
+
+    def convertRecruitsIntoDetachment(self):
+        g_detachmentFlowLogger.flow(self.uiLogger.group, GROUP.MOBILIZE_CREW_CONFIRMATION)
+        self._fireEvent(events.CrewPanelEvent.CONVERT_RECRUITS)
+
+    def _generateOptions(self, ctx=None):
+        vehicle = self._vehicle
+        recruitIDs = self._recruitIDs
+        processStrict = vehicle.isLocked or vehicle.isCrewLocked
+        recruitRetrainEnabled = not processStrict and self._isRecruitReadyForRetrain()
+        crewRetrainEnabled = not processStrict and self._isRetrainCrewOptionAvailable()
+        crewConvertEnabled = not vehicle.isLocked and self._isConvertAvailable()
+        return [self._makeItem(RECRUITS.CONVERT_RECRUITS, MENU.contextmenu('convertRecruitsIntoDetachment'), {'enabled': crewConvertEnabled,
+          'textColor': CM_HIGHLIGHT_COLOR,
+          'disabledTextColor': CM_HIGHLIGHT_COLOR,
+          'textAlpha': 1.0 if crewConvertEnabled else 0.5}),
+         self._makeSeparator(),
+         self._makeItem(RECRUITS.SET_BEST, MENU.contextmenu('setBestCrew'), {'enabled': not processStrict and not validateBestCrewForVehicle(vehicle, recruitIDs, native=False)}),
+         self._makeItem(RECRUITS.SET_NATIVE_CREW, MENU.contextmenu('setNativeCrew'), {'enabled': not processStrict and not validateBestCrewForVehicle(vehicle, recruitIDs, native=True)}),
+         self._makeItem(RECRUITS.RETURN, MENU.contextmenu('returnCrew'), {'enabled': not processStrict and isReturnCrewOptionAvailable(vehicle, recruitIDs)}),
+         self._makeItem(RECRUITS.CHANGE_ROLE_WINDOW, MENU.contextmenu('changeRoleWindow'), {'enabled': recruitRetrainEnabled,
+          'textColor': CM_HIGHLIGHT_COLOR,
+          'disabledTextColor': CM_HIGHLIGHT_COLOR,
+          'textAlpha': 1.0 if recruitRetrainEnabled else 0.5}),
+         self._makeItem(RECRUITS.RETRAIN_WINDOW, MENU.contextmenu('retrainWindow'), {'enabled': crewRetrainEnabled,
+          'textColor': CM_HIGHLIGHT_COLOR,
+          'disabledTextColor': CM_HIGHLIGHT_COLOR,
+          'textAlpha': 1.0 if crewRetrainEnabled else 0.5}),
+         self._makeItem(RECRUITS.UNLOAD, MENU.contextmenu('tankmanUnload'), {'enabled': not processStrict and self._recruitID}),
+         self._makeItem(RECRUITS.UNLOAD_ALL, MENU.contextmenu('unloadCrew'), {'enabled': not processStrict and any(self._crew)})]
+
+    def _isRecruitReadyForRetrain(self):
+        vehicle = self._vehicle
+        recruit = self.itemsCache.items.getTankman(self._recruitID)
+        if not recruit:
+            return False
+        recruitVehicle = self.itemsCache.items.getVehicle(recruit.vehicleInvID)
+        isLocked = recruitVehicle and recruitVehicle.isLocked
+        return not isLocked and recruit.vehicleNativeDescr.type.compactDescr != vehicle.intCD
+
+    def _isRetrainCrewOptionAvailable(self):
+        vehicle = self._vehicle
+        crew = self._crew
+        actualRecruits = [ recruit for recruit in crew if recruit is not None ]
+        recruitVehs = [ self.itemsCache.items.getVehicle(recruit.vehicleInvID) for recruit in actualRecruits ]
+        return any((recruit.vehicleNativeDescr.type.compactDescr != vehicle.intCD for recruit in actualRecruits)) and all((not recruitVehicle.isLocked for recruitVehicle in recruitVehs if recruitVehicle))
+
+    def _isConvertAvailable(self):
+        if not self.lobbyContext.getServerSettings().isDetachmentManualConversionEnabled():
+            return False
+        else:
+            conversion = settings_globals.g_conversion
+            vehicle = self._vehicle
+            crew = self._crew
+            recruitDescrs = [ (recruit.descriptor if recruit else None) for recruit in crew ]
+            barracksNotEmpty = self._isBarracksNotEmpty()
+            validation, _, _ = conversion.validateCrewToConvertIntoDetachment(recruitDescrs, vehicle.compactDescr, barracksNotEmpty)
+            return validation
+
+    def _isBarracksNotEmpty(self):
+        return False
+
+
+class RecruitContextMenuHandler(_BaseRecruitContextMenuHandler):
+
+    def __init__(self, cmProxy, ctx=None):
+        super(RecruitContextMenuHandler, self).__init__(cmProxy, ctx, {RECRUITS.CONVERT_RECRUITS: 'convertRecruitsIntoDetachment',
+         RECRUITS.UNLOAD: 'unloadRecruit',
+         RECRUITS.RETRAIN_WINDOW: 'showRetrainWindow',
+         RECRUITS.CHANGE_ROLE_WINDOW: 'openChangeRoleWindow',
+         RECRUITS.UNLOAD_ALL: 'unloadRecruits',
+         RECRUITS.RETURN: 'returnRecruits',
+         RECRUITS.SET_BEST: 'setBestRecruits',
+         RECRUITS.SET_NATIVE_CREW: 'setNativeCrew'})
+        self.uiLogger.setGroup(GROUP.RECRUIT_PANEL_CONTEXT_MENU)
+
+    def _initFlashValues(self, ctx):
+        super(RecruitContextMenuHandler, self)._initFlashValues(ctx)
+        self._vehicle = g_currentVehicle.item
+        self._crew = [ recruit for _, recruit in self._vehicle.crew ]
+        self._recruitIDs = [ (recruit.invID if recruit is not None else None) for recruit in self._crew ]
+        return
+
+    def _isBarracksNotEmpty(self):
+        itemsCache = self.itemsCache
+        criteria = REQ_CRITERIA.EMPTY | ~REQ_CRITERIA.TANKMAN.IN_TANK | REQ_CRITERIA.NATIONS([self._vehicle.nationID]) | ~REQ_CRITERIA.TANKMAN.DISMISSED
+        allTankmen = itemsCache.items.getTankmen(criteria)
+        return any(itemsCache.items.removeUnsuitableTankmen(allTankmen.values(), ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE))
+
+
+class MobilizationRecruitContextMenuHandler(_BaseRecruitContextMenuHandler):
+    itemsCache = dependency.descriptor(IItemsCache)
+    _INVALID_TANKMAN_ID = -1
+    _EXCLUDE = (RECRUITS.CONVERT_RECRUITS, SEPARATOR_ID)
+
+    def __init__(self, cmProxy, ctx=None):
+        super(MobilizationRecruitContextMenuHandler, self).__init__(cmProxy, ctx, {RECRUITS.CONVERT_RECRUITS: 'convertRecruitsIntoDetachment',
+         RECRUITS.SET_BEST: 'setBestRecruits',
+         RECRUITS.SET_NATIVE_CREW: 'setNativeCrew',
+         RECRUITS.RETURN: 'returnRecruits',
+         RECRUITS.CHANGE_ROLE_WINDOW: 'openChangeRoleWindow',
+         RECRUITS.RETRAIN_WINDOW: 'showRetrainWindow',
+         RECRUITS.UNLOAD: 'unloadRecruit',
+         RECRUITS.UNLOAD_ALL: 'unloadRecruits'}, eventNameSuffix='_mobilization')
+        self.uiLogger.setGroup(GROUP.RECRUIT_MOBILIZATION_CONTEXT_MENU)
+
+    def _generateOptions(self, ctx=None):
+        options = super(MobilizationRecruitContextMenuHandler, self)._generateOptions(ctx)
+        options = _dismissContextMenuItems(options, self._EXCLUDE)
+        _replaceLabelMenuItem(options, RECRUITS.UNLOAD, MENU.contextmenu('tankmanUnloadFromSlot'))
+        return options
+
+    def _initFlashValues(self, ctx):
+        super(MobilizationRecruitContextMenuHandler, self)._initFlashValues(ctx)
+        self._recruitIDs = [ (int(recruitID) if int(recruitID) != self._INVALID_TANKMAN_ID else None) for recruitID in ctx.tankmanList ]
+        self._vehicle = self.itemsCache.items.getItemByCD(int(ctx.vehicleID))
+        self._crew = [ self.itemsCache.items.getTankman(recruitID) for recruitID in self._recruitIDs ]
+        return
+
+    def _isBarracksNotEmpty(self):
+        return isBarracksNotEmpty(self._vehicle.nationID, [ recruit.invID for recruit in self._crew if recruit ], itemsCache=self.itemsCache)
 
 
 class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntity):
@@ -170,7 +339,6 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.INFO: 'showVehicleInfo',
          VEHICLE.SELL: 'sellVehicle',
          VEHICLE.RESEARCH: 'toResearch',
-         VEHICLE.POST_PROGRESSION: 'showPostProgression',
          VEHICLE.CHECK: 'checkFavoriteVehicle',
          VEHICLE.UNCHECK: 'uncheckFavoriteVehicle',
          VEHICLE.STATS: 'showVehicleStats',
@@ -197,10 +365,6 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         else:
             _logger.error('Can not go to Research because id for current vehicle is None')
         return
-
-    def showPostProgression(self):
-        vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
-        shared_events.showVehPostProgressionView(vehicle.intCD, caller=EntryPointCallers.CONTEXT_MENU)
 
     def showVehicleExchange(self):
         self._tradeInController.setActiveTradeOffVehicleCD(self.vehCD)
@@ -274,8 +438,6 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     isNavigationEnabled = True
                 if not vehicle.isOnlyForEpicBattles:
                     options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
-                if vehicle.isPostProgressionExists:
-                    options.append(self._makeItem(VEHICLE.POST_PROGRESSION, MENU.contextmenu(VEHICLE.POST_PROGRESSION), {'enabled': isNavigationEnabled}))
                 if vehicle.isCollectible:
                     options.append(self._makeItem(VEHICLE.GO_TO_COLLECTION, MENU.contextmenu(VEHICLE.GO_TO_COLLECTION), {'enabled': self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()}))
                 if vehicle.hasNationGroup:

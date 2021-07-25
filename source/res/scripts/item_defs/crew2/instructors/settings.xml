@@ -1,0 +1,5870 @@
+<settings.xml>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:noNamespaceSchemaLocation>	../../../development/xml_schema/crew2/instructor/settings.xsd	</xsi:noNamespaceSchemaLocation>
+  <params>
+    <exclusionHours>	168	</exclusionHours>
+  </params>
+  <instructorSettingsList>
+    <settings>
+      <id>	10001	</id>
+      <name>	sabaton_instructor	</name>
+      <classID>	1	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	103 102 101	</defaultPerks>
+      <description>	#detachment:sabaton_instructor_descr	</description>
+      <voiceover>	sabatonSpecialVoice	</voiceover>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4000	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1001	</id>
+      <name>	menSRadioman_1	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	102	</defaultPerks>
+      <description>	#detachment:menSRadioman_1_instructor_descr	</description>
+      <voiceover>	sabatonSpecialVoice	</voiceover>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4002	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1002	</id>
+      <name>	menSLoader_2	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	502	</defaultPerks>
+      <description>	#detachment:menSLoader_2_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4003	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1003	</id>
+      <name>	menSGunner_3	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	201	</defaultPerks>
+      <description>	#detachment:menSGunner_3_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4004	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1004	</id>
+      <name>	menSDriver_4	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	401	</defaultPerks>
+      <description>	#detachment:menSDriver_4_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4005	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	10002	</id>
+      <name>	rudy_ussr_instructor	</name>
+      <classID>	1	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	103 102 105	</defaultPerks>
+      <description>	#detachment:rudy_ussr_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3000	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1005	</id>
+      <name>	rudy_tankman_commander_1_ussr	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	501	</defaultPerks>
+      <description>	#detachment:rudy_tankman_commander_1_ussr_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3001	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1006	</id>
+      <name>	rudy_tankman_gunner_2_ussr	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	205	</defaultPerks>
+      <description>	#detachment:rudy_tankman_gunner_2_ussr_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3002	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1007	</id>
+      <name>	rudy_tankman_driver_3_ussr	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	403	</defaultPerks>
+      <description>	#detachment:rudy_tankman_driver_3_ussr_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3003	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1008	</id>
+      <name>	rudy_tankman_loader_4_ussr	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	302	</defaultPerks>
+      <description>	#detachment:rudy_tankman_loader_4_ussr_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3004	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	10003	</id>
+      <name>	rudy_pl_instructor	</name>
+      <classID>	1	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	103 102 105	</defaultPerks>
+      <description>	#detachment:rudy_pl_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2000	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1009	</id>
+      <name>	rudy_tankman_commander_1_poland	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	501	</defaultPerks>
+      <description>	#detachment:rudy_tankman_commander_1_poland_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2001	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1010	</id>
+      <name>	rudy_tankman_gunner_2_poland	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	205	</defaultPerks>
+      <description>	#detachment:rudy_tankman_gunner_2_poland_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2002	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1011	</id>
+      <name>	rudy_tankman_driver_3_poland	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	403	</defaultPerks>
+      <description>	#detachment:rudy_tankman_driver_3_poland_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2003	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1012	</id>
+      <name>	rudy_tankman_loader_4_poland	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	302	</defaultPerks>
+      <description>	#detachment:rudy_tankman_loader_4_poland_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2004	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	10004	</id>
+      <name>	theoffspring_instructor	</name>
+      <classID>	1	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	103 102 101	</defaultPerks>
+      <description>	#detachment:theoffspring_instructor_descr	</description>
+      <voiceover>	offspringSpecialVoice	</voiceover>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4000	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1013	</id>
+      <name>	men_Offspring_Commander_1	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	502	</defaultPerks>
+      <description>	#detachment:men_Offspring_Commander_1_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <voiceover>	offspringSpecialVoice	</voiceover>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4001	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1014	</id>
+      <name>	men_Offspring_Gunner_2	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	501	</defaultPerks>
+      <description>	#detachment:men_Offspring_Gunner_2_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4002	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1015	</id>
+      <name>	men_Offspring_Driver_3	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	402	</defaultPerks>
+      <description>	#detachment:men_Offspring_Driver_3_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4003	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1016	</id>
+      <name>	men_Offspring_Loader_4	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	204	</defaultPerks>
+      <description>	#detachment:men_Offspring_Loader_4_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4004	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	10005	</id>
+      <name>	edelweiss_instructor	</name>
+      <classID>	1	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	103 102 101	</defaultPerks>
+      <description>	#detachment:edelweiss_instructor_descr	</description>
+      <voiceover>	japan:J30_Edelweiss	</voiceover>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3000	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1017	</id>
+      <name>	Gunner_Edelweiss_1	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	205	</defaultPerks>
+      <description>	#detachment:Gunner_Edelweiss_1_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <voiceover>	japan:J30_Edelweiss	</voiceover>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3003	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1018	</id>
+      <name>	Kreis_Czherny_Edelweiss_2	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	103	</defaultPerks>
+      <description>	#detachment:Kreis_Czherny_Edelweiss_2_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3004	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1019	</id>
+      <name>	Loader_Edelweiss_3	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	201	</defaultPerks>
+      <description>	#detachment:Loader_Edelweiss_3_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3005	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1020	</id>
+      <name>	Isara_Gunther_women_Edelweiss_4	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	503	</defaultPerks>
+      <description>	#detachment:Isara_Gunther_women_Edelweiss_4_instructor_descr	</description>
+      <isFemale>	true	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3002	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	10006	</id>
+      <name>	nameless_instructor	</name>
+      <classID>	1	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	301 305 304	</defaultPerks>
+      <description>	#detachment:nameless_instructor_descr	</description>
+      <voiceover>	japan:J29_Nameless	</voiceover>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	4000	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1021	</id>
+      <name>	Gunner_Nameless_1	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	203	</defaultPerks>
+      <description>	#detachment:Gunner_Nameless_1_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <voiceover>	japan:J29_Nameless	</voiceover>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3007	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1022	</id>
+      <name>	Radio_operator_Nameless_2	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	504	</defaultPerks>
+      <description>	#detachment:Radio_operator_Nameless_2_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3008	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1023	</id>
+      <name>	Loader_Nameless_3	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	303	</defaultPerks>
+      <description>	#detachment:Loader_Nameless_3_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3009	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1024	</id>
+      <name>	Carisa_Contzen_women_Nameless_4	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	105	</defaultPerks>
+      <description>	#detachment:Carisa_Contzen_women_Nameless_4_instructor_descr	</description>
+      <isFemale>	true	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3006	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	10007	</id>
+      <name>	beijingopera_instructor	</name>
+      <classID>	1	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	301 305 304	</defaultPerks>
+      <description>	#detachment:beijingopera_instructor_descr	</description>
+      <backgrounds>
+        <page>	unique_beijingopera	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3000	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1025	</id>
+      <name>	men_Beijing_Opera_1	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	103	</defaultPerks>
+      <description>	#detachment:men_Beijing_Opera_1_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	unique_beijingopera	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3001	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1026	</id>
+      <name>	men_Beijing_Opera_2	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	201	</defaultPerks>
+      <description>	#detachment:men_Beijing_Opera_2_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	unique_beijingopera	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3002	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1027	</id>
+      <name>	men_Beijing_Opera_3	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	401	</defaultPerks>
+      <description>	#detachment:men_Beijing_Opera_3_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	unique_beijingopera	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3004	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1028	</id>
+      <name>	women_Beijing_Opera	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	303	</defaultPerks>
+      <description>	#detachment:women_Beijing_Opera_instructor_descr	</description>
+      <isFemale>	true	</isFemale>
+      <backgrounds>
+        <page>	unique_beijingopera	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3003	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	10008	</id>
+      <name>	fury_instructor	</name>
+      <classID>	1	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	103 102 105	</defaultPerks>
+      <description>	#detachment:fury_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3000	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1029	</id>
+      <name>	fury_tankman_1	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	203	</defaultPerks>
+      <description>	#detachment:fury_tankman_1_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3002	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1030	</id>
+      <name>	fury_tankman_2	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:fury_tankman_2_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3003	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1031	</id>
+      <name>	fury_tankman_3	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	501	</defaultPerks>
+      <description>	#detachment:fury_tankman_3_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3004	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1032	</id>
+      <name>	fury_tankman_4	</name>
+      <classID>	3	</classID>
+      <defaultPerks>	105	</defaultPerks>
+      <description>	#detachment:fury_tankman_4_instructor_descr	</description>
+      <isFemale>	false	</isFemale>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3005	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	10009	</id>
+      <name>	theboys_instructor	</name>
+      <classID>	1	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	103 102 105	</defaultPerks>
+      <description>	#detachment:theboys_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3031	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	10010	</id>
+      <name>	theseven_instructor	</name>
+      <classID>	1	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	103 102 105	</defaultPerks>
+      <description>	#detachment:theseven_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3030	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	10011	</id>
+      <name>	girls_und_panzer_instructor	</name>
+      <classID>	1	</classID>
+      <isFemale>	true	</isFemale>
+      <defaultPerks>	103 102 105	</defaultPerks>
+      <description>	#detachment:girls_und_panzer_instructor_descr	</description>
+      <voiceover>	mihoSpecialVoice	</voiceover>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3075	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	1	</id>
+      <name>	men_Buffon_Football	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	303 304	</defaultPerks>
+      <description>	#detachment:men_Buffon_instructor_descr	</description>
+      <voiceover>	buffonSpecialVoice	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	italy	</nameFromNation>
+        <portrait>	men_Buffon_Football	</portrait>
+      </token>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3005	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3006	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2006	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2006	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8007	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3011	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3006	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4006	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2006	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2006	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3006	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	2	</id>
+      <name>	twitch_girl_commander	</name>
+      <classID>	2	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404 401	</defaultPerks>
+      <description>	#detachment:twitch_girl_commander_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	twitch_girl_commander	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_girl_commander	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3006	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3007	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2007	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2007	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8008	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3012	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3007	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4007	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2007	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2007	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3012	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	3	</id>
+      <name>	ny19_girl_L4	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	403	</defaultPerks>
+      <description>	#detachment:ny19_girl_L4_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny19_girl_L4	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3007	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3008	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2008	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2008	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8009	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3013	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3008	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4008	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2008	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2008	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3013	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	4	</id>
+      <name>	ny19_girl_L6	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:ny19_girl_L6_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny19_girl_L6	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3008	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3009	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2009	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2009	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8010	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3009	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4009	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2009	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2009	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3014	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	5	</id>
+      <name>	ny19_girl_L8	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:ny19_girl_L8_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny19_girl_L8	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3009	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3010	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2010	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2010	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8011	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3010	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4010	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2010	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2010	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3015	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	6	</id>
+      <name>	ny19_girl_L10	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:ny19_girl_L10_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny19_girl_L10	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3010	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3011	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2011	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2011	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8012	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3011	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4011	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2011	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2011	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3016	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	7	</id>
+      <name>	ny19_men	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	301 302	</defaultPerks>
+      <description>	#detachment:ny19_men_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny19_men	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3011	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3012	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2012	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2012	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8013	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3017	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3012	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4012	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2012	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2012	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3017	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	8	</id>
+      <name>	twitch_guy_commander	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	201	</defaultPerks>
+      <description>	#detachment:twitch_guy_commander_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	twitch_guy_commander	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_guy_commander	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	2014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2014	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	9	</id>
+      <name>	commander_marina	</name>
+      <classID>	2	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	201 205	</defaultPerks>
+      <description>	#detachment:commander_marina_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	commander_marina	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_commander_marina	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	2015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3021	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2021	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8021	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2021	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2021	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2015	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	10	</id>
+      <name>	men_race19_commanderA	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	201	</defaultPerks>
+      <description>	#detachment:men_race19_commanderA_instructor_descr	</description>
+      <voiceover>	racerSpecialVoice	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	men_race19_commanderA	</portrait>
+      </token>
+      <backgrounds>
+        <page>	race19	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3012	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3018	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3013	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4013	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3018	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	11	</id>
+      <name>	men_race19_commanderB	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:men_race19_commanderB_instructor_descr	</description>
+      <voiceover>	racerSpecialVoice	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	men_race19_commanderB	</portrait>
+      </token>
+      <backgrounds>
+        <page>	race19	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3013	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2017	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3019	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3019	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	12	</id>
+      <name>	men_race19_commanderC	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:men_race19_commanderC_instructor_descr	</description>
+      <voiceover>	racerSpecialVoice	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	men_race19_commanderC	</portrait>
+      </token>
+      <backgrounds>
+        <page>	race19	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3014	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3017	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2017	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2018	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8017	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3020	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2017	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2017	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3020	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	13	</id>
+      <name>	men_race19_commanderA_en	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:men_race19_commanderA_instructor_descr	</description>
+      <voiceover>	racerSpecialVoiceEn	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	men_race19_commanderA	</portrait>
+      </token>
+      <backgrounds>
+        <page>	race19	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3015	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3018	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2018	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2019	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8018	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3021	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2018	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2018	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3021	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	14	</id>
+      <name>	men_race19_commanderB_en	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:men_race19_commanderB_instructor_descr	</description>
+      <voiceover>	racerSpecialVoiceEn	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	men_race19_commanderB	</portrait>
+      </token>
+      <backgrounds>
+        <page>	race19	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3019	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2019	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2020	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8019	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3017	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4017	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2019	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2019	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3022	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	15	</id>
+      <name>	men_race19_commanderC_en	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:men_race19_commanderC_instructor_descr	</description>
+      <voiceover>	racerSpecialVoiceEn	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	men_race19_commanderC	</portrait>
+      </token>
+      <backgrounds>
+        <page>	race19	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3017	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3020	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2020	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2021	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8020	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3018	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4018	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2020	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2020	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3023	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	16	</id>
+      <name>	commander_pumpkin	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:commander_pumpkin_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	commander_pumpkin	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_commander_pumpkin	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	2022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2022	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	17	</id>
+      <name>	commander_natale	</name>
+      <classID>	2	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	101 104	</defaultPerks>
+      <description>	#detachment:commander_natale_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	commander_natale	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_commander_natale	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	2016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	4016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	7016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3016	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2016	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	18	</id>
+      <name>	ny20_girl_Christmas	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:ny20_girl_Christmas_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny20_girl_Christmas	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3018	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3019	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4019	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4005	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3024	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	19	</id>
+      <name>	ny20_girl_Fairytale	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:ny20_girl_Fairytale_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny20_girl_Fairytale	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3019	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3020	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4020	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4006	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3025	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	20	</id>
+      <name>	ny20_girl_NewYear	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:ny20_girl_NewYear_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny20_girl_NewYear	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3020	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3026	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3021	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4021	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4007	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3026	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	21	</id>
+      <name>	ny20_girl_Oriental	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:ny20_girl_Oriental_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny20_girl_Oriental	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3021	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3026	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2026	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2026	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8026	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3027	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2026	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4008	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3027	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	22	</id>
+      <name>	ny20_men	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	105 104	</defaultPerks>
+      <description>	#detachment:ny20_men_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny20_men	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3022	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3027	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2027	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2027	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8027	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3028	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2027	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4009	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3028	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	23	</id>
+      <name>	ny20_snowmen	</name>
+      <classID>	2	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	205 204	</defaultPerks>
+      <description>	#detachment:ny20_snowmen_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny20_snowmen	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3028	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2028	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2028	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8028	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3029	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2028	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4010	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3029	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	24	</id>
+      <name>	bob20_commander1_ru	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	303 304	</defaultPerks>
+      <description>	#detachment:bob20_commander1_ru_instructor_descr	</description>
+      <voiceover>	ru1_LebwaSpecialVoice	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob20_commander1_ru	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3029	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2029	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2029	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8029	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2029	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2023	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2024	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	25	</id>
+      <name>	bob20_commander2_ru	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	401 404	</defaultPerks>
+      <description>	#detachment:bob20_commander2_ru_instructor_descr	</description>
+      <voiceover>	ru2_YushaSpecialVoice	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob20_commander2_ru	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3030	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2030	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2030	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8030	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2030	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2024	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2025	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	26	</id>
+      <name>	bob20_commander3_ru	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404 403	</defaultPerks>
+      <description>	#detachment:bob20_commander3_ru_instructor_descr	</description>
+      <voiceover>	ru3_Amway921SpecialVoice	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob20_commander3_ru	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3026	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3031	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2031	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2031	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8031	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2031	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2026	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	27	</id>
+      <name>	bob20_commander4_ru	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404 403	</defaultPerks>
+      <description>	#detachment:bob20_commander4_ru_instructor_descr	</description>
+      <voiceover>	ru4_KorbenDallasSpecialVoice	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob20_commander4_ru	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3027	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2026	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2026	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2026	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2026	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2027	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	28	</id>
+      <name>	bob20_commander1_eu	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404 403	</defaultPerks>
+      <description>	#detachment:bob20_commander1_eu_instructor_descr	</description>
+      <voiceover>	eu1_MailandSpecialVoice	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	bob20_commander1_eu	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3028	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3033	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2033	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2033	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8033	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2027	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2027	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2027	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2033	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2027	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2028	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	29	</id>
+      <name>	bob20_commander2_eu	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404 405	</defaultPerks>
+      <description>	#detachment:bob20_commander2_eu_instructor_descr	</description>
+      <voiceover>	eu2_Skill4ltuSpecialVoice	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	bob20_commander2_eu	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3029	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3034	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2034	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2034	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8034	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2028	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2028	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2028	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2034	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2028	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2029	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	30	</id>
+      <name>	bob20_commander3_eu	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404 402	</defaultPerks>
+      <description>	#detachment:bob20_commander3_eu_instructor_descr	</description>
+      <voiceover>	eu3_DezgamezSpecialVoice	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	bob20_commander3_eu	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3030	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3035	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2035	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2035	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8035	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2029	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2029	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2029	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2035	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2029	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2030	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	31	</id>
+      <name>	bob20_commander4_eu	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404 401	</defaultPerks>
+      <description>	#detachment:bob20_commander4_eu_instructor_descr	</description>
+      <voiceover>	eu4_AwesomeEpicGuysSpecialVoice	</voiceover>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	bob20_commander4_eu	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3031	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3036	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2036	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2036	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8036	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2030	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2030	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2030	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2036	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2030	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2031	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	32	</id>
+      <name>	bob20_commander1_na	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404 401	</defaultPerks>
+      <description>	#detachment:bob20_commander1_na_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	bob20_commander1_na	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3037	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2037	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2037	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8037	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2031	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2031	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2031	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2037	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2031	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2032	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	33	</id>
+      <name>	bob20_commander2_na	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404 401	</defaultPerks>
+      <description>	#detachment:bob20_commander2_na_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	bob20_commander2_na	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3033	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3038	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2038	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2038	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8038	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2038	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2033	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	34	</id>
+      <name>	bob20_commander1_asia	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404 402	</defaultPerks>
+      <description>	#detachment:bob20_commander1_asia_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	china	</nameFromNation>
+        <portrait>	bob20_commander1_asia	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3034	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3039	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2039	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2039	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8039	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2033	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2033	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2033	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2039	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2033	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2034	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	35	</id>
+      <name>	bob20_commander2_asia	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	101 104	</defaultPerks>
+      <description>	#detachment:bob20_commander2_asia_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	china	</nameFromNation>
+        <portrait>	bob20_commander2_asia	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3035	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3040	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2040	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2040	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8040	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	2034	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	2034	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	2034	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2040	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2034	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2035	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	36	</id>
+      <name>	men1	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <portrait>	siluet_man	</portrait>
+      </token>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <firstNameIDs>	1:20, 2001:2005	</firstNameIDs>
+          <secondNameIDs>	1:69, 2001:2005	</secondNameIDs>
+          <portraitIDs>	301	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <firstNameIDs>	1:202, 3001:3005	</firstNameIDs>
+          <secondNameIDs>	1:2023, 3001:3005	</secondNameIDs>
+          <portraitIDs>	301	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <firstNameIDs>	1:423, 2001:2005, 3002:3004	</firstNameIDs>
+          <secondNameIDs>	1:1077, 2001:2005, 3002:3004	</secondNameIDs>
+          <portraitIDs>	301	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <firstNameIDs>	1:271, 2001:2005	</firstNameIDs>
+          <secondNameIDs>	1:1027, 2001:2005	</secondNameIDs>
+          <portraitIDs>	301	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <firstNameIDs>	1:152, 8001:8005	</firstNameIDs>
+          <secondNameIDs>	1:23, 25:63, 65:133, 135:188, 190:261, 263:286, 288:324, 326:386, 388:433, 435:446, 448:505, 507:557, 559:615, 618:645, 647:672, 676:780, 783:845, 847:1092, 1094:1151, 1153:1183, 1185:1705, 1707:1788, 1790:1920, 1923:1924, 1926:1940, 1942:1953, 1955:2046, 2050:2050, 2052:2068, 2070:2261, 2263:2267, 2269:2425, 2427:2484, 2486:2859, 2861:2960, 2962:3059, 3061:3295, 3297:3426, 3428:3440, 3442:3569, 3571:3741, 3743:4039, 4041:4050, 4052:4054, 4062:4112, 4114:4258, 4260:4476, 4478:4498, 4500:4507, 4509:4577, 4579:4626, 4629:4629, 4635:4881, 4883:4995, 4997:5055, 5057:5059, 5061:5094, 5096:5162, 5164:5207, 5209:5445, 5447:5530, 8001:8005	</secondNameIDs>
+          <portraitIDs>	301	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <firstNameIDs>	1:30, 32:190, 2001:2005	</firstNameIDs>
+          <secondNameIDs>	1:30, 33:35, 38:46, 48:50, 52:66, 68:83, 85:86, 91:118, 120:123, 125:128, 131:136, 138:151, 153:170, 172:180, 182:189, 191:192, 194, 196:205, 207:212, 214:228, 230:238, 240:246, 248:257, 259, 261:281, 283:285, 287:304, 2001:2005	</secondNameIDs>
+          <portraitIDs>	301	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <firstNameIDs>	1:35, 3001:3005	</firstNameIDs>
+          <secondNameIDs>	1:44, 3001:3005	</secondNameIDs>
+          <portraitIDs>	301	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <firstNameIDs>	1:102, 3001:3005	</firstNameIDs>
+          <secondNameIDs>	1:145, 3001:3005	</secondNameIDs>
+          <portraitIDs>	301	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <firstNameIDs>	1:489, 2001:2005, 3001:3004	</firstNameIDs>
+          <secondNameIDs>	1:1756, 2001:2005, 3001:3004	</secondNameIDs>
+          <portraitIDs>	301	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <firstNameIDs>	1:500, 2001:2005	</firstNameIDs>
+          <secondNameIDs>	1:1821, 2001:2005	</secondNameIDs>
+          <portraitIDs>	301:302	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <firstNameIDs>	1:127, 2001:2005	</firstNameIDs>
+          <secondNameIDs>	1:1196, 2001:2005	</secondNameIDs>
+          <portraitIDs>	301	</portraitIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	37	</id>
+      <name>	women1	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <portrait>	siluet_woman	</portrait>
+      </token>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <firstNameIDs>	11001:11040	</firstNameIDs>
+          <secondNameIDs>	11001:11020	</secondNameIDs>
+          <portraitIDs>	401	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <firstNameIDs>	11001:11024	</firstNameIDs>
+          <secondNameIDs>	11001:11069	</secondNameIDs>
+          <portraitIDs>	401	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <firstNameIDs>	11001:11045	</firstNameIDs>
+          <secondNameIDs>	11001:11020	</secondNameIDs>
+          <portraitIDs>	401	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <firstNameIDs>	11001:11045	</firstNameIDs>
+          <secondNameIDs>	11001:11019	</secondNameIDs>
+          <portraitIDs>	401	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <firstNameIDs>	11001:11152	</firstNameIDs>
+          <secondNameIDs>	10001:10023, 10025:10063, 10065:10133, 10135:10188, 10190:10261, 10263:10286, 10288:10324, 10326:10386, 10388:10433, 10435:10446, 10448:10505, 10507:10557, 10559:10615, 10618:10645, 10647:10672, 10676:10780, 10783:10845, 10847:11092, 11094:11151, 11153:11183, 11185:11705, 11707:11788, 11790:11920, 11923:11924, 11926:11940, 11942:11953, 11955:12046, 12050:12050, 12052:12068, 12070:12261, 12263:12267, 12269:12425, 12427:12484, 12486:12859, 12861:12960, 12962:13059, 13061:13295, 13297:13426, 13428:13440, 13442:13569, 13571:13741, 13743:14039, 14041:14050, 14052:14054, 14062:14112, 14114:14258, 14260:14476, 14478:14498, 14500:14507, 14509:14577, 14579:14626, 14629:14629, 14635:14881, 14883:14995, 14997:15055, 15057:15059, 15061:15094, 15096:15162, 15164:15207, 15209:15445, 15447:15530	</secondNameIDs>
+          <portraitIDs>	401	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <firstNameIDs>	11001:11042	</firstNameIDs>
+          <secondNameIDs>	11001:11020	</secondNameIDs>
+          <portraitIDs>	401	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <firstNameIDs>	11001:11027	</firstNameIDs>
+          <secondNameIDs>	11001:11029	</secondNameIDs>
+          <portraitIDs>	401	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <firstNameIDs>	11001:11078	</firstNameIDs>
+          <secondNameIDs>	11001:11020	</secondNameIDs>
+          <portraitIDs>	401	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <firstNameIDs>	11001:11042	</firstNameIDs>
+          <secondNameIDs>	11001:11020	</secondNameIDs>
+          <portraitIDs>	401:402	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <firstNameIDs>	11001:11051	</firstNameIDs>
+          <secondNameIDs>	11001:11020	</secondNameIDs>
+          <portraitIDs>	401:403	</portraitIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <firstNameIDs>	11001:11049	</firstNameIDs>
+          <secondNameIDs>	11001:11108	</secondNameIDs>
+          <portraitIDs>	401	</portraitIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	38	</id>
+      <name>	men_Loza	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	103	</defaultPerks>
+      <description>	#detachment:men_Loza_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	men_Loza	</portrait>
+      </token>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3005	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	39	</id>
+      <name>	commander_kharlamov	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	502	</defaultPerks>
+      <description>	#detachment:commander_kharlamov_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	commander_kharlamov	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_commander_kharlamov	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2023	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	40	</id>
+      <name>	commander_bp1	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	505 504	</defaultPerks>
+      <description>	#detachment:commander_bp1_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	commander_bp1	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bp1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	2036	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	42	</id>
+      <name>	commander_bp2	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	203 202	</defaultPerks>
+      <description>	#detachment:commander_bp2_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	uk	</nameFromNation>
+        <portrait>	commander_bp2	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bp1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2041	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	43	</id>
+      <name>	men_Buffon	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	504 501	</defaultPerks>
+      <description>	#detachment:men_Buffon_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	italy	</nameFromNation>
+        <portrait>	men_Buffon	</portrait>
+      </token>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8006	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	44	</id>
+      <name>	commander_henri	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	502	</defaultPerks>
+      <description>	#detachment:commander_henri_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	france	</nameFromNation>
+        <portrait>	commander_henri	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_commander_henri	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3017	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	45	</id>
+      <name>	twitch_commander_usa	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	503	</defaultPerks>
+      <description>	#detachment:twitch_commander_usa_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	twitch_commander_usa	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_commander_usa	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	2013	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	46	</id>
+      <name>	twitch_commander_uk	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	501	</defaultPerks>
+      <description>	#detachment:twitch_commander_uk_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	uk	</nameFromNation>
+        <portrait>	twitch_commander_uk	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_commander_uk	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2013	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	47	</id>
+      <name>	twitch_commander_germany	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	504	</defaultPerks>
+      <description>	#detachment:twitch_commander_germany_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	germany	</nameFromNation>
+        <portrait>	twitch_commander_germany	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_commander_germany	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2013	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	48	</id>
+      <name>	commander_cesare	</name>
+      <classID>	2	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	303 304	</defaultPerks>
+      <description>	#detachment:commander_cesare_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	commander_cesare	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_commander_cesare	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3036	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3042	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	2041	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	2041	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8041	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3030	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	4025	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	2042	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4012	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3031	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	49	</id>
+      <name>	bp-commander-1_1	</name>
+      <classID>	2	</classID>
+      <isFemale>	true	</isFemale>
+      <defaultPerks>	205 201	</defaultPerks>
+      <description>	#detachment:bp_commander_1_1_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	czech	</nameFromNation>
+        <portrait>	bp_commander_1_1	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bp2	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3041	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	50	</id>
+      <name>	bp-commander-1_2	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	105 102	</defaultPerks>
+      <description>	#detachment:bp_commander_1_2_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	bp_commander_1_2	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bp2	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	4011	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	52	</id>
+      <name>	tankmen_bp2_1	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	204 201	</defaultPerks>
+      <description>	#detachment:tankmen_bp2_1_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	tankmen_bp2_1	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bp3	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3033	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	53	</id>
+      <name>	tankmen_bp2_2	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	501 503	</defaultPerks>
+      <description>	#detachment:tankmen_bp2_2_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	tankmen_bp2_2	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bp3	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3033	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	54	</id>
+      <name>	commander_starlight	</name>
+      <classID>	2	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	401 404	</defaultPerks>
+      <description>	#detachment:commander_starlight_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	commander_starlight	</portrait>
+      </token>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3037	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3043	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8042	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3032	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3032	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	55	</id>
+      <name>	theboys_commander_1	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	502	</defaultPerks>
+      <description>	#detachment:theboys_commander_1_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3034	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	56	</id>
+      <name>	theboys_gunner_2	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	503	</defaultPerks>
+      <description>	#detachment:theboys_gunner_2_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3035	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	57	</id>
+      <name>	theboys_driver_3	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	303	</defaultPerks>
+      <description>	#detachment:theboys_driver_3_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3036	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	58	</id>
+      <name>	theboys_loader_4	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	405	</defaultPerks>
+      <description>	#detachment:theboys_loader_4_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3037	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	59	</id>
+      <name>	seven_commander_1	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	303	</defaultPerks>
+      <description>	#detachment:seven_commander_1_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3038	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	60	</id>
+      <name>	seven_gunner_2	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	301	</defaultPerks>
+      <description>	#detachment:seven_gunner_2_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3039	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	61	</id>
+      <name>	seven_driver_3	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	505	</defaultPerks>
+      <description>	#detachment:seven_driver_3_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3040	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	62	</id>
+      <name>	seven_loader_4	</name>
+      <classID>	3	</classID>
+      <isFemale>	false	</isFemale>
+      <defaultPerks>	203	</defaultPerks>
+      <description>	#detachment:seven_loader_4_instructor_descr	</description>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3041	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	63	</id>
+      <name>	commander_maeve	</name>
+      <classID>	2	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	402 404	</defaultPerks>
+      <description>	#detachment:commander_maeve_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	commander_maeve	</portrait>
+      </token>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3042	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3044	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3042	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3042	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8043	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3042	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3042	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3042	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3042	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3042	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3042	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	64	</id>
+      <name>	ny21_men	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	403 404	</defaultPerks>
+      <description>	#detachment:ny21_men_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny21_men	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <voiceover>	celebrity21SpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3043	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3045	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3043	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3043	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8044	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3043	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3043	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3043	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3043	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3043	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3043	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	65	</id>
+      <name>	ny21_girl_1	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:ny21_girl_1_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny21_girl_1	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3044	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3046	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3044	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3044	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8045	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3044	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3044	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3044	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3044	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3044	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3044	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	66	</id>
+      <name>	ny21_girl_2	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:ny21_girl_2_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny21_girl_2	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3045	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3047	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3045	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3045	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8046	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3045	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3045	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3045	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3045	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3045	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3045	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	67	</id>
+      <name>	ny21_girl_3	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:ny21_girl_3_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny21_girl_3	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3046	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3048	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3046	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3046	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8047	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3046	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3046	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3046	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3046	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3046	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3046	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	68	</id>
+      <name>	ny21_girl_4	</name>
+      <classID>	3	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404	</defaultPerks>
+      <description>	#detachment:ny21_girl_4_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	ny21_girl_4	</portrait>
+      </token>
+      <backgrounds>
+        <page>	ny_bg	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3047	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3049	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3047	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3047	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8048	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3047	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3047	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3047	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3047	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3047	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3047	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	69	</id>
+      <name>	commander_omelia	</name>
+      <classID>	2	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	404 401	</defaultPerks>
+      <description>	#detachment:commander_omelia_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	usa	</nameFromNation>
+        <portrait>	commander_omelia	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_commander_omelia	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3048	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3050	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3048	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3048	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8049	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3048	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3048	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3048	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3048	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3048	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3048	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	70	</id>
+      <name>	bob21_commander_ru1_Yusha	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	303 304	</defaultPerks>
+      <description>	#detachment:bob21_commander_ru1_Yusha_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_ru1_Yusha	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_ru1_YushaSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3049	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	2099	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3049	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3049	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8050	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3049	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3049	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3049	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3049	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3049	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3049	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	71	</id>
+      <name>	bob21_commander_ru1_Vspishka	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	504 501	</defaultPerks>
+      <description>	#detachment:bob21_commander_ru1_Vspishka_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_ru1_Vspishka	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_ru1_VspishkaSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3050	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	2098	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3050	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3050	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8051	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3050	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3050	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3050	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3050	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3050	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3050	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	72	</id>
+      <name>	bob21_commander_ru2_Amway921	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	202 204	</defaultPerks>
+      <description>	#detachment:bob21_commander_ru2_Amway921_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_ru2_Amway921	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_ru2_Amway921SpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3051	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3051	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3051	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3051	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8052	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3051	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3051	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3051	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3051	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3051	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3051	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	73	</id>
+      <name>	bob21_commander_ru2_Korbendailas	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	501 504	</defaultPerks>
+      <description>	#detachment:bob21_commander_ru2_Korbendailas_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_ru2_Korbendailas	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_ru2_KorbendailasSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3052	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3052	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3052	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3052	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8053	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3052	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3052	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3052	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3052	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3052	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3052	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	74	</id>
+      <name>	bob21_commander_ru3_Lebwa	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	405 404	</defaultPerks>
+      <description>	#detachment:bob21_commander_ru3_Lebwa_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_ru3_Lebwa	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_ru3_LebwaSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3053	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3053	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3053	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3053	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8054	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3053	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3053	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3053	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3053	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3053	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3053	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	75	</id>
+      <name>	bob21_commander_ru3_Inspirer	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	301 304	</defaultPerks>
+      <description>	#detachment:bob21_commander_ru3_Inspirer_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_ru3_Inspirer	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_ru3_InspirerSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3054	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3054	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3054	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3054	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8055	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3054	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3054	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3054	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3054	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3054	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3054	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	76	</id>
+      <name>	bob21_commander_ru4_Evilgranny	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	501 504	</defaultPerks>
+      <description>	#detachment:bob21_commander_ru4_Evilgranny_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_ru4_Evilgranny	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_ru4_EvilgrannySpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3055	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3055	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3055	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3055	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8056	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3055	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3055	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3055	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3055	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3055	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3055	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	77	</id>
+      <name>	bob21_commander_ru4_Nearyou	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	102 104	</defaultPerks>
+      <description>	#detachment:bob21_commander_ru4_Nearyou_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_ru4_Nearyou	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_ru4_NearyouSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3056	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3056	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3056	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3056	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8057	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3056	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3056	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3056	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3056	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3056	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3056	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	78	</id>
+      <name>	bob21_commander_eu1_Circon	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	301 304	</defaultPerks>
+      <description>	#detachment:bob21_commander_eu1_Circon_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_eu1_Circon	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_eu1_CirconSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3057	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3057	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3057	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3057	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8058	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3057	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3057	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3057	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3057	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3057	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3057	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	79	</id>
+      <name>	bob21_commander_eu2_Dakillzor	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	405 404	</defaultPerks>
+      <description>	#detachment:bob21_commander_eu2_Dakillzor_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_eu2_Dakillzor	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_eu2_DakillzorSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3058	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3058	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3058	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3058	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8059	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3058	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3058	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3058	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3058	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3058	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3058	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	80	</id>
+      <name>	bob21_commander_eu3_Newmulti2k	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	105 104	</defaultPerks>
+      <description>	#detachment:bob21_commander_eu3_Newmulti2k_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_eu3_Newmulti2k	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_eu3_Newmulti2kSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3059	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3059	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3059	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3059	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8060	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3059	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3059	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3059	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3059	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3059	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3059	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	81	</id>
+      <name>	bob21_commander_eu4_Orzanel	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	102 104	</defaultPerks>
+      <description>	#detachment:bob21_commander_eu4_Orzanel_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_eu4_Orzanel	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_eu4_OrzanelSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3060	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3060	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3060	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3060	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8061	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3060	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3060	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3060	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3060	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3060	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3060	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	82	</id>
+      <name>	bob21_commander_na1_Cabbagemechanic	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	305 304	</defaultPerks>
+      <description>	#detachment:bob21_commander_na1_Cabbagemechanic_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_na1_Cabbagemechanic	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_na1_CabbagemechanicSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3061	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3061	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3061	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3061	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8062	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3061	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3061	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3061	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3061	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3061	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3061	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	83	</id>
+      <name>	bob21_commander_na2_Tragicloss	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	402 404	</defaultPerks>
+      <description>	#detachment:bob21_commander_na2_Tragicloss_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_na2_Tragicloss	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_na2_TragiclossSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3062	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3062	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3062	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3062	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8063	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3062	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3062	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3062	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3062	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3062	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3062	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	84	</id>
+      <name>	bob21_commander_na3_Cmdraf	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	405 404	</defaultPerks>
+      <description>	#detachment:bob21_commander_na3_Cmdraf_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_na3_Cmdraf	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_na3_CmdrafSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3063	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3063	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3063	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3063	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8064	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3063	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3063	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3063	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3063	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3063	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3063	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	85	</id>
+      <name>	bob21_commander_asia1_Mastertortoise	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	501 504	</defaultPerks>
+      <description>	#detachment:bob21_commander_asia1_Mastertortoise_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_asia1_Mastertortoise	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_asia1_MastertortoiseSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3064	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3064	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3064	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3064	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8065	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3064	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3064	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3064	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3064	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3064	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3064	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	86	</id>
+      <name>	bob21_commander_asia2_Summertiger	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	303 304	</defaultPerks>
+      <description>	#detachment:bob21_commander_asia2_Summertiger_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_asia2_Summertiger	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_asia2_SummertigerSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3065	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3065	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3065	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3065	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8066	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3065	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3065	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3065	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3065	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3065	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3065	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	87	</id>
+      <name>	bob21_commander_asia3_Maharlika	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	403 404	</defaultPerks>
+      <description>	#detachment:bob21_commander_asia3_Maharlika_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	bob21_commander_asia3_Maharlika	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bob2	</page>
+      </backgrounds>
+      <voiceover>	bb21_asia3_MaharlikaSpecialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3066	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3066	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3066	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3066	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8067	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3066	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3066	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3066	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3066	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3066	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3066	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	88	</id>
+      <name>	tankmen_bp3_1	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	403 404	</defaultPerks>
+      <description>	#detachment:tankmen_bp3_1_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	tankmen_bp3_1	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bp4_1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3067	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3067	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3067	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3067	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8068	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3067	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3067	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3067	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3067	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3067	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3067	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	89	</id>
+      <name>	tankmen_bp3_2	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	403 404	</defaultPerks>
+      <description>	#detachment:tankmen_bp3_2_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	tankmen_bp3_2	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bp4_2	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3068	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3068	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3068	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3068	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8069	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3068	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3068	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3068	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3068	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3068	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3068	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	90	</id>
+      <name>	tankmen_bp3_3	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	403 404	</defaultPerks>
+      <description>	#detachment:tankmen_bp3_3_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	tankmen_bp3_3	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bp4_3	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3069	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3069	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3069	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3069	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8070	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3069	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3069	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3069	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3069	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3069	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3069	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	91	</id>
+      <name>	commander_duke	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	403 404	</defaultPerks>
+      <description>	#detachment:commander_duke_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	commander_duke	</portrait>
+      </token>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <voiceover>	duke_specialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3070	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3070	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3070	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3070	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8071	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3070	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3070	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3070	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3070	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3070	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3070	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	92	</id>
+      <name>	commander_cobra	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	403 404	</defaultPerks>
+      <description>	#detachment:commander_cobra_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	commander_cobra	</portrait>
+      </token>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <voiceover>	cobra_specialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3071	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3071	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3071	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3071	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8072	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3071	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3071	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3071	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3071	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3071	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3071	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	93	</id>
+      <name>	commander_gagarin21	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	403 404	</defaultPerks>
+      <description>	#detachment:commander_gagarin21_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	commander_gagarin21	</portrait>
+      </token>
+      <backgrounds>
+        <page>	default	</page>
+      </backgrounds>
+      <voiceover>	gagarin21_specialVoice	</voiceover>
+      <nations>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3072	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	94	</id>
+      <name>	tankmen_bp5_1	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	403 404	</defaultPerks>
+      <description>	#detachment:tankmen_bp5_1_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	tankmen_bp5_1	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bp5_1	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3072	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3072	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3072	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3072	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8073	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3072	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3072	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3072	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3072	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3072	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3073	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	95	</id>
+      <name>	tankmen_bp5_2	</name>
+      <classID>	2	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	403 404	</defaultPerks>
+      <description>	#detachment:tankmen_bp5_2_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	tankmen_bp5_2	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bp5_2	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3073	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3073	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3073	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3073	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8074	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3073	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3073	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3073	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3073	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3073	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3074	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	96	</id>
+      <name>	tankmen_bp5_3	</name>
+      <classID>	2	</classID>
+      <isFemale>	false	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	403 404	</defaultPerks>
+      <description>	#detachment:tankmen_bp5_3_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/male	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	tankmen_bp5_3	</portrait>
+      </token>
+      <backgrounds>
+        <page>	bp5_3	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3074	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3074	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3074	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3074	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8075	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3074	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3074	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3074	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3074	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3074	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3075	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+    <settings>
+      <id>	97	</id>
+      <name>	commander_twitch_mochizuki	</name>
+      <classID>	2	</classID>
+      <isFemale>	true	</isFemale>
+      <professionVariants>	1 2 3 4 5	</professionVariants>
+      <defaultPerks>	101 104	</defaultPerks>
+      <description>	#detachment:commander_twitch_mochizuki_instructor_descr	</description>
+      <token>
+        <name>	#detachment:instructor/token/female	</name>
+        <nameFromNation>	ussr	</nameFromNation>
+        <portrait>	commander_mochizuki	</portrait>
+      </token>
+      <backgrounds>
+        <page>	twitch_commander_mochizuki	</page>
+      </backgrounds>
+      <nations>
+        <nation>
+          <name>	china	</name>
+          <characterIDs>	3075	</characterIDs>
+        </nation>
+        <nation>
+          <name>	czech	</name>
+          <characterIDs>	3075	</characterIDs>
+        </nation>
+        <nation>
+          <name>	france	</name>
+          <characterIDs>	3075	</characterIDs>
+        </nation>
+        <nation>
+          <name>	germany	</name>
+          <characterIDs>	3076	</characterIDs>
+        </nation>
+        <nation>
+          <name>	italy	</name>
+          <characterIDs>	8076	</characterIDs>
+        </nation>
+        <nation>
+          <name>	japan	</name>
+          <characterIDs>	3075	</characterIDs>
+        </nation>
+        <nation>
+          <name>	poland	</name>
+          <characterIDs>	3075	</characterIDs>
+        </nation>
+        <nation>
+          <name>	sweden	</name>
+          <characterIDs>	3075	</characterIDs>
+        </nation>
+        <nation>
+          <name>	uk	</name>
+          <characterIDs>	3075	</characterIDs>
+        </nation>
+        <nation>
+          <name>	usa	</name>
+          <characterIDs>	3075	</characterIDs>
+        </nation>
+        <nation>
+          <name>	ussr	</name>
+          <characterIDs>	3076	</characterIDs>
+        </nation>
+      </nations>
+    </settings>
+  </instructorSettingsList>
+</settings.xml>

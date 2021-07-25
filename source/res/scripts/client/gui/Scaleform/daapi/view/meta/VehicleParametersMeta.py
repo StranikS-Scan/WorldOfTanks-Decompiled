@@ -15,3 +15,9 @@ class VehicleParametersMeta(BaseDAAPIComponent):
 
     def as_setIsParamsAnimatedS(self, isParamsAnimated):
         return self.flashObject.as_setIsParamsAnimated(isParamsAnimated) if self._isDAAPIInited() else None
+
+    def as_setDetachmentDataS(self, data):
+        return self.flashObject.as_setDetachmentData(data) if self._isDAAPIInited() else None
+
+    def as_setDetachmentVisibleS(self, visible):
+        return self.flashObject.as_setDetachmentVisible(visible) if self._isDAAPIInited() else None

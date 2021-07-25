@@ -16,8 +16,8 @@ def buySlots():
     ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
 
 
-def buyBerths():
-    ActionsFactory.doAction(ActionsFactory.BUY_BERTHS)
+def buyDormitories():
+    ActionsFactory.doAction(ActionsFactory.BUY_DORMITORY)
 
 
 def createClan():

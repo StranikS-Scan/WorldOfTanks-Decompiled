@@ -7,23 +7,21 @@ from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import Vehic
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, icons
+from helpers import dependency
+from skeletons.gui.game_control import IEventProgressionController
+from web.web_client_api.common import ItemPackEntry, ItemPackType
 from gui.shared.utils.functions import makeTooltip
 from gui.impl import backport
 from gui.impl.gen import R
-from helpers import dependency
-from skeletons.gui.game_control import IEventProgressionController
-from skeletons.gui.shared import IItemsCache
-from web.web_client_api.common import ItemPackEntry, ItemPackType
 
 class EventProgressionVehiclePreview(VehiclePreview):
     __eventProgression = dependency.descriptor(IEventProgressionController)
-    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         super(EventProgressionVehiclePreview, self).__init__(ctx)
         self._heroInteractive = False
         self.__itemsPack = [ItemPackEntry(type=ItemPackType.CREW_100, count=1, groupID=1), ItemPackEntry(type=ItemPackType.CUSTOM_SLOT, count=1, groupID=1)]
-        addBuiltInEquipment(self.__itemsPack, self.__itemsCache, self._vehicleCD)
+        addBuiltInEquipment(self.__itemsPack, self.itemsCache, self._vehicleCD)
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(EventProgressionVehiclePreview, self)._onRegisterFlashComponent(viewPy, alias)

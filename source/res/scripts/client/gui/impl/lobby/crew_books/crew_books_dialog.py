@@ -3,15 +3,14 @@
 import logging
 from gui.ClientUpdateManager import g_clientUpdateManager
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
-from frameworks.wulf import Window, WindowStatus, WindowSettings, ViewSettings
+from frameworks.wulf import Window, WindowSettings, ViewSettings
 from gui.shared.view_helpers.blur_manager import CachedBlur
-from gui.impl.auxiliary.crew_books_helper import TankmanModelPresenterBase, TankmanSkillListPresenter
+from gui.impl.auxiliary.crew_books_helper import TankmanSkillListPresenter
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew_books.crew_books_dialog_content_model import CrewBooksDialogContentModel
 from gui.impl.pub.dialog_window import DialogButtons, DialogFlags, DialogContent, DialogResult
 from gui.impl.wrappers.user_format_string_arg_model import UserFormatStringArgModel
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.items_actions import factory
 from helpers.dependency import descriptor
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -58,26 +57,13 @@ class CrewBooksDialog(Window):
         super(CrewBooksDialog, self)._initialize()
         with self.contentViewModel.transaction() as model:
             model.setTitle(R.strings.dialogs.crewBooks.confirmation.title())
-            if self.__tankman is not None:
-                tankmanVM = TankmanModelPresenterBase().getModel(0, self.__tankman.invID, False)
-                tankmanVM.tankmanSkillList.setItems(TankmanSkillListPresenter().getList(self.__tankman.invID, False))
-                tankmanList = model.crewBookTankmenList.getItems()
-                tankmanList.addViewModel(tankmanVM)
-                tankmanList.invalidate()
-                model.setDescription(R.strings.dialogs.crewBooks.confirmation.desc.personalBook())
-                descriptionFmtArgsVM = model.getDescriptionFmtArgs()
-                descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__tankman.fullUserName, 'name'))
-                descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__selectedBook.getXP()), 'exp'))
-                descriptionFmtArgsVM.invalidate()
-            else:
-                model.setIsAllCrewIconVisible(True)
-                model.setDescription(R.strings.dialogs.crewBooks.confirmation.desc.crewBook())
-                descriptionFmtArgsVM = model.getDescriptionFmtArgs()
-                descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(str(self.__vehicle.shortUserName), 'vehicle_name'))
-                descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__selectedBook.getXP()), 'exp'))
-                descriptionFmtArgsVM.invalidate()
+            model.setIsAllCrewIconVisible(True)
+            model.setDescription(R.strings.dialogs.crewBooks.confirmation.desc.crewBook())
+            descriptionFmtArgsVM = model.getDescriptionFmtArgs()
+            descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(str(self.__vehicle.shortUserName), 'vehicle_name'))
+            descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__selectedBook.getXP()), 'exp'))
+            descriptionFmtArgsVM.invalidate()
         self.__addListeners()
-        return
 
     def __addListeners(self):
         self.contentViewModel.onUseBtnClick += self.__onUseBtnClick
@@ -122,29 +108,14 @@ class CrewBooksDialog(Window):
             model.setTitle(R.strings.dialogs.crewBooks.success.title())
             descriptionFmtArgsVM = model.getDescriptionFmtArgs()
             descriptionFmtArgsVM.clear()
-            if self.__tankman is not None:
-                model.setDescription(R.strings.dialogs.crewBooks.success.desc.personalBook())
-                descriptionFmtArgsVM = model.getDescriptionFmtArgs()
-                descriptionFmtArgsVM.clear()
-                descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__tankman.fullUserName, 'name'))
-                descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__selectedBook.getXP()), 'exp'))
-            else:
-                model.setDescription(R.strings.dialogs.crewBooks.success.desc.crewBook())
-                descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__selectedBook.getXP()), 'exp'))
-                descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(str(self.__vehicle.shortUserName), 'vehicle_name'))
-                descriptionFmtArgsVM.invalidate()
+            model.setDescription(R.strings.dialogs.crewBooks.success.desc.crewBook())
+            descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__selectedBook.getXP()), 'exp'))
+            descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(str(self.__vehicle.shortUserName), 'vehicle_name'))
             descriptionFmtArgsVM.invalidate()
-        return
+            descriptionFmtArgsVM.invalidate()
 
     def __onUseBtnClick(self):
-        if self.windowStatus == WindowStatus.LOADED:
-            factory.doAction(factory.USE_CREW_BOOK, self.__selectedBook.intCD, self.__vehicle.invID, self.__tankmanInvID)
-            if not self.__lobbyContext.getServerSettings().isCrewBooksEnabled():
-                self.__result = DialogButtons.CANCEL
-                self.__event.set()
-            else:
-                self.__result = DialogButtons.SUBMIT
-                self.__startUseModelUpdate()
+        pass
 
     def __onClosed(self, _=None):
         if self.__result is None:

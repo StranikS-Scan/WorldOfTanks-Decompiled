@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/tooltip_mgr.py
 import logging
+from functools import partial
 import Keys
 from Event import SafeEvent, EventManager
 from gui import InputHandler
@@ -42,6 +43,7 @@ class ToolTip(ToolTipMgrMeta):
         self.as_showS(data, linkage, self.__fastRedraw)
 
     def hide(self):
+        self.__stopDataPreparation()
         self.as_hideS()
 
     def handleKeyEvent(self, event):
@@ -70,16 +72,11 @@ class ToolTip(ToolTipMgrMeta):
         else:
             builder = self._builders.getBuilder(tooltipType)
             if builder is not None:
-                data = builder.build(self, stateType, self.__isAdvancedKeyPressed, *args)
+                if builder.prepare(partial(self._buildTypedTooltip, tooltipType, stateType, *args), *args):
+                    self._buildTypedTooltip(tooltipType, stateType, *args)
+                self.__cacheTooltipData(False, tooltipType, args, stateType)
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
-                return
-            self.__cacheTooltipData(False, tooltipType, args, stateType)
-            self.onShow(tooltipType, args, self.__isAdvancedKeyPressed)
-            if data is not None and data.isDynamic():
-                data.changeVisibility(True)
-                if tooltipType not in self._dynamic:
-                    self._dynamic[tooltipType] = data
             return
 
     def onCreateWulfTooltip(self, tooltipType, args, x, y):
@@ -91,22 +88,19 @@ class ToolTip(ToolTipMgrMeta):
                 data = builder.build(self, None, self.__isAdvancedKeyPressed, *args)
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
-                return
             window = data.getDisplayableData(*args)
             window.load()
             window.move(x, y)
             self.__tooltipWindowId = window.uniqueID
-            self.onShow(tooltipType, args, self.__isAdvancedKeyPressed)
+            self.onShow(tooltipType, self.__isAdvancedKeyPressed)
             return
 
     def onCreateComplexTooltip(self, tooltipID, stateType):
         if self._areTooltipsDisabled:
             return
-        else:
-            self._complex.build(self, stateType, self.__isAdvancedKeyPressed, tooltipID)
-            self.__cacheTooltipData(True, tooltipID, tuple(), stateType)
-            self.onShow(tooltipID, None, self.__isAdvancedKeyPressed)
-            return
+        self._complex.build(self, stateType, self.__isAdvancedKeyPressed, tooltipID)
+        self.__cacheTooltipData(True, tooltipID, tuple(), stateType)
+        self.onShow(tooltipID, self.__isAdvancedKeyPressed)
 
     def onHideTooltip(self, tooltipId):
         if not self._areTooltipsDisabled and tooltipId in self._dynamic:
@@ -114,8 +108,23 @@ class ToolTip(ToolTipMgrMeta):
         hideTooltipId = tooltipId or self.__tooltipID or ''
         self.__tooltipID = None
         self.__fastRedraw = False
+        self.__stopDataPreparation(hideTooltipId)
         self.__destroyTooltipWindow()
         self.onHide(hideTooltipId)
+        return
+
+    def _buildTypedTooltip(self, tooltipType, stateType, *args):
+        builder = self._builders.getBuilder(tooltipType)
+        if builder is not None:
+            data = builder.build(self, stateType, self.__isAdvancedKeyPressed, *args)
+        else:
+            _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
+            return
+        self.onShow(tooltipType, self.__isAdvancedKeyPressed)
+        if data is not None and data.isDynamic():
+            data.changeVisibility(True)
+            if tooltipType not in self._dynamic:
+                self._dynamic[tooltipType] = data
         return
 
     def _populate(self):
@@ -138,6 +147,13 @@ class ToolTip(ToolTipMgrMeta):
         self.__destroyTooltipWindow()
         self.__em.clear()
         super(ToolTip, self)._dispose()
+
+    def __stopDataPreparation(self, tooltipId=None):
+        hideTooltipId = tooltipId or self.__tooltipID or ''
+        builder = self._builders.getBuilder(hideTooltipId)
+        if builder is not None:
+            builder.stopPreparation()
+        return
 
     def __onGUISpaceEntered(self, spaceID):
         self._isAllowedTypedTooltip = spaceID not in self._noTooltipSpaceIDs

@@ -15,7 +15,6 @@ from gui.shared import event_dispatcher, formatters
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
-from skeletons.gui.shared import IItemsCache
 from web.web_client_api.common import ItemPackEntry, ItemPackType, ItemPackTypeGroup
 from gui.impl import backport
 from gui.impl.gen import R
@@ -26,21 +25,20 @@ CREW_LVL_BY_TYPE = {ItemPackType.CREW_50: '50%',
  ItemPackType.CUSTOM_CREW_100: '100%'}
 
 class OfferGiftVehiclePreview(VehiclePreview):
-    __offersProvider = dependency.descriptor(IOffersDataProvider)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-    __itemsCache = dependency.descriptor(IItemsCache)
+    _offersProvider = dependency.descriptor(IOffersDataProvider)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx):
         if any((key not in ctx for key in ['offerID', 'giftID', 'confirmCallback'])):
             _logger.error('Wrong context for offer preview window: %s', ctx)
-        self._offer = self.__offersProvider.getOffer(ctx['offerID'])
+        self._offer = self._offersProvider.getOffer(ctx['offerID'])
         self._gift = self._offer.getGift(ctx['giftID'])
         self._vehicle = self._gift.bonus.displayedItem
         ctx['itemCD'] = self._vehicle.intCD
         super(OfferGiftVehiclePreview, self).__init__(ctx)
         self._confirmCallback = ctx.get('confirmCallback')
         self.__itemsPack = self._generateItemsPack()
-        addBuiltInEquipment(self.__itemsPack, self.__itemsCache, self._vehicleCD)
+        addBuiltInEquipment(self.__itemsPack, self.itemsCache, self._vehicleCD)
 
     def setBottomPanel(self):
         self.as_setBottomPanelS(VEHPREVIEW_CONSTANTS.OFFER_GIFT_BUYING_PANEL_LINKAGE)
@@ -109,22 +107,22 @@ class OfferGiftVehiclePreview(VehiclePreview):
 
     def _populate(self):
         super(OfferGiftVehiclePreview, self)._populate()
-        self.__offersProvider.onOffersUpdated += self.__onOffersUpdated
-        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        self._offersProvider.onOffersUpdated += self.__onOffersUpdated
+        self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
 
     def _dispose(self):
         super(OfferGiftVehiclePreview, self)._dispose()
-        self.__offersProvider.onOffersUpdated -= self.__onOffersUpdated
-        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        self._offersProvider.onOffersUpdated -= self.__onOffersUpdated
+        self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
 
     def __onServerSettingsChange(self, *args, **kwargs):
-        if not self.__lobbyContext.getServerSettings().isOffersEnabled():
+        if not self._lobbyContext.getServerSettings().isOffersEnabled():
             event_dispatcher.showHangar()
 
     def __onOffersUpdated(self):
-        offer = self.__offersProvider.getOffer(self._offer.id)
+        offer = self._offersProvider.getOffer(self._offer.id)
         if offer is None or not offer.isOfferAvailable:
-            if self.__offersProvider.getAvailableOffers(onlyVisible=True):
+            if self._offersProvider.getAvailableOffers(onlyVisible=True):
                 event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.OFFERS)
             else:
                 event_dispatcher.showHangar()

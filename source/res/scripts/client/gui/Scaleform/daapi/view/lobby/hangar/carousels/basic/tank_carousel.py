@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/tank_carousel.py
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
+from async import async, await
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -11,11 +12,12 @@ from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
-from gui.shop import showBuyGoldForSlot
+from gui.impl.dialogs.dialogs import showBuyCarouselSlotView
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showStorage
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.shared.utils.functions import makeTooltip
+from gui.shop import showBuyGoldForSlot
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IRestoreController, IBattleRoyaleController
@@ -70,6 +72,12 @@ class TankCarousel(TankCarouselMeta):
     def resetFilters(self):
         super(TankCarousel, self).resetFilters()
         self.updateHotFilters()
+
+    def resetFilterByKey(self, key):
+        if self.filter.get(key):
+            self.filter.switch(key, save=True)
+            self.blinkCounter()
+            self.applyFilter()
 
     def setFilter(self, idx):
         self.filter.switch(self._usedFilters[idx])
@@ -134,13 +142,18 @@ class TankCarousel(TankCarouselMeta):
 
         return filtersVO
 
+    @async
     def __buySlot(self):
-        price = self.itemsCache.items.shop.getVehicleSlotsPrice(self.itemsCache.items.stats.vehicleSlots)
-        availableMoney = self.itemsCache.items.stats.money
-        if price and availableMoney.gold < price:
-            showBuyGoldForSlot(price)
-        else:
-            ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
+        busy, isOk = yield await(showBuyCarouselSlotView())
+        if busy:
+            return
+        if isOk:
+            price = self.itemsCache.items.shop.getVehicleSlotsPrice(self.itemsCache.items.stats.vehicleSlots)
+            availableMoney = self.itemsCache.items.stats.money
+            if price and availableMoney.gold < price:
+                showBuyGoldForSlot(price)
+            else:
+                ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT, False, False)
 
     def __onFittingUpdate(self, *args):
         self.updateParams()

@@ -82,11 +82,3 @@ class CrewBooksCache(object):
         else:
             nation = nations.NAMES[nationID]
             return False if item.nation and item.nation != nation else True
-
-    def validateBookPersonality(self, itemId, tmanInvID):
-        item = self.books.get(itemId, None)
-        if item is None:
-            return False
-        else:
-            isPersonal = item.type == CREW_BOOK_RARITY.PERSONAL
-            return not bool(tmanInvID) ^ isPersonal

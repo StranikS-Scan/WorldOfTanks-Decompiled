@@ -22,7 +22,7 @@ _TANKMAN = items.ITEM_TYPE_INDICES['tankman']
 _OPTIONALDEVICE = items.ITEM_TYPE_INDICES['optionalDevice']
 _SHELL = items.ITEM_TYPE_INDICES['shell']
 _EQUIPMENT = items.ITEM_TYPE_INDICES['equipment']
-_SIMPLE_VALUE_STATS = ('fortResource', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'denunciationsLeft', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits', 'applyAdditionalXPCount') + Currency.ALL
+_SIMPLE_VALUE_STATS = ('fortResource', 'slots', 'dormitories', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'denunciationsLeft', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits', 'applyAdditionalXPCount', 'detachmentSellsLeft') + Currency.ALL
 _DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks', 'dummySessionStats', 'maxResearchedLevelByNation', 'weeklyVehicleCrystals')
 _GROWING_SET_STATS = ('unlocks', 'eliteVehicles', 'multipliedXPVehs', 'multipliedRankedBattlesVehs')
 _ACCOUNT_STATS = ('clanDBID', 'attrs', 'premiumExpiryTime', 'autoBanTime', 'globalRating')
@@ -206,13 +206,13 @@ class Stats(object):
             self.__account.shop.waitForSync(partial(self.__slot_onShopSynced, callback))
             return
 
-    def buyBerths(self, callback=None):
+    def buyDormitory(self, count, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, 0)
             return
         else:
-            self.__account.shop.waitForSync(partial(self.__berths_onShopSynced, callback))
+            self.__account.shop.waitForSync(partial(self.__dormitory_onShopSynced, count, callback))
             return
 
     def setMapsBlackList(self, selectedMaps, callback=None):
@@ -304,19 +304,6 @@ class Stats(object):
             else:
                 proxy = None
             self.__account._doCmdInt3(AccountCommands.CMD_UNLOCK_ALL, 0, 0, 0, proxy)
-            return
-
-    def unlockVPPTree(self, vehTypeCDs, callback=None):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER)
-            return
-        else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            self.__account._doCmdIntArr(AccountCommands.CMD_VPP_UNLOCK_TREE, vehTypeCDs, proxy)
             return
 
     def setRankedInfo(self, data, callback=None):
@@ -548,7 +535,7 @@ class Stats(object):
             self.__account._doCmdInt3(AccountCommands.CMD_BUY_SLOT, shopRev, 0, 0, proxy)
             return
 
-    def __berths_onShopSynced(self, callback, resultID, shopRev):
+    def __dormitory_onShopSynced(self, count, callback, resultID, shopRev):
         if resultID < 0:
             if callback is not None:
                 callback(resultID)
@@ -558,5 +545,5 @@ class Stats(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_BUY_BERTHS, shopRev, 0, 0, proxy)
+            self.__account._doCmdInt2(AccountCommands.CMD_BUY_DORMITORY, shopRev, count, proxy)
             return

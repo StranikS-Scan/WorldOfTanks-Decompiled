@@ -6,11 +6,11 @@ from collections import namedtuple
 import functools
 import logging
 import constants
-import post_progression_common
 from Event import Event
 from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs, DOG_TAGS_CONFIG, BATTLE_NOTIFIER_CONFIG
 from ranked_common import SwitchState
 from collector_vehicle import CollectorVehicleConsts
+from crew2.sandbox import SANDBOX_CONSTANTS
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from battle_pass_common import BattlePassConfig, BATTLE_PASS_CONFIG_NAME
 from gui import GUI_SETTINGS, SystemMessages
@@ -18,7 +18,6 @@ from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.utils.decorators import ReprInjector
 from personal_missions import PM_BRANCH
-from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
 from shared_utils import makeTupleByDict, updateDict
 from UnitBase import PREBATTLE_TYPE_TO_UNIT_ASSEMBLER, UNIT_ASSEMBLER_IMPL_TO_CONFIG
 from BonusCaps import BonusCapsConst
@@ -268,6 +267,15 @@ class _BwShop(namedtuple('_BwShop', ('hostUrl', 'backendHostUrl', 'isStorageEnab
 
 
 _BwShop.__new__.__defaults__ = ('', '', False)
+
+class _BwProductCatalog(namedtuple('_BwProductCatalog', ('url',))):
+
+    @classmethod
+    def defaults(cls):
+        return cls('')
+
+
+_BwProductCatalog.__new__.__defaults__ = ('',)
 
 class RankedBattlesConfig(namedtuple('RankedBattlesConfig', ('isEnabled',
  'peripheryIDs',
@@ -742,38 +750,6 @@ class _MapboxConfig(namedtuple('_MapboxConfig', ('isEnabled',
         return cls()
 
 
-class VehiclePostProgressionConfig(namedtuple('_VehiclePostProgression', ('isPostProgressionEnabled',
- 'enabledFeatures',
- 'forbiddenVehicles',
- 'enabledRentedVehicles'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isPostProgressionEnabled=False, enabledFeatures=frozenset(), forbiddenVehicles=frozenset(), enabledRentedVehicles=frozenset())
-        defaults.update(kwargs)
-        return super(VehiclePostProgressionConfig, cls).__new__(cls, **defaults)
-
-    @classmethod
-    def defaults(cls):
-        return cls(False, frozenset(), frozenset(), frozenset)
-
-    @property
-    def isEnabled(self):
-        return self.isPostProgressionEnabled
-
-    @property
-    def isRoleSlotEnabled(self):
-        return ROLESLOT_FEATURE in self.enabledFeatures
-
-    def isSetupSwitchEnabled(self, groupID):
-        return FEATURE_BY_GROUP_ID[groupID] in self.enabledFeatures
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -804,7 +780,7 @@ class ServerSettings(object):
         self.__crystalRewardsConfig = _crystalRewardsConfig()
         self.__reactiveCommunicationConfig = _ReactiveCommunicationConfig()
         self.__blueprintsConvertSaleConfig = _BlueprintsConvertSaleConfig()
-        self.__vehiclePostProgressionConfig = VehiclePostProgressionConfig()
+        self.__bwProductCatalog = _BwProductCatalog()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -895,8 +871,8 @@ class ServerSettings(object):
             self.__mapboxSettings = makeTupleByDict(_MapboxConfig, self.__serverSettings[Configs.MAPBOX_CONFIG.value])
         else:
             self.__mapboxSettings = _MapboxConfig.defaults()
-        if post_progression_common.SERVER_SETTINGS_KEY in self.__serverSettings:
-            self.__vehiclePostProgressionConfig = makeTupleByDict(VehiclePostProgressionConfig, self.__serverSettings[post_progression_common.SERVER_SETTINGS_KEY])
+        if 'productsCatalog' in self.__serverSettings:
+            self.__bwProductCatalog = makeTupleByDict(_BwProductCatalog, self.__serverSettings['productsCatalog'])
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -964,8 +940,6 @@ class ServerSettings(object):
             self.__serverSettings[CollectorVehicleConsts.CONFIG_NAME] = serverSettingsDiff[CollectorVehicleConsts.CONFIG_NAME]
         if _crystalRewardsConfig.CONFIG_NAME in serverSettingsDiff:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
-        if post_progression_common.SERVER_SETTINGS_KEY in serverSettingsDiff:
-            self.__updateVehiclePostProgressionConfig(serverSettingsDiff)
         self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
@@ -1068,15 +1042,11 @@ class ServerSettings(object):
     def squadPremiumBonus(self):
         return self.__squadPremiumBonus
 
-    @property
-    def vehiclePostProgression(self):
-        return self.__vehiclePostProgressionConfig
-
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
 
     def isPersonalMissionsEnabled(self, branch=None):
-        if not constants.SANDBOX_CONSTANTS.IS_PERSONAL_MISSIONS_ENABLED:
+        if SANDBOX_CONSTANTS.DISABLE_PERSONAL_MISSIONS:
             return False
         if branch == PM_BRANCH.REGULAR:
             return self.__getGlobalSetting('isRegularQuestEnabled', True)
@@ -1137,6 +1107,10 @@ class ServerSettings(object):
     @property
     def shop(self):
         return self.__bwShop
+
+    @property
+    def productCatalog(self):
+        return self.__bwProductCatalog
 
     def isShopDataChangedInDiff(self, diff, fieldName=None):
         if 'shop' in diff:
@@ -1288,6 +1262,9 @@ class ServerSettings(object):
     def isBattleBoostersEnabled(self):
         return self.__getGlobalSetting('isBattleBoostersEnabled', False)
 
+    def isCrewBattleBoostersEnabled(self):
+        return self.__getGlobalSetting('isCrewBattleBoostersEnabled', False)
+
     def isCrewBooksEnabled(self):
         return self.__getGlobalSetting('isCrewBooksEnabled', False)
 
@@ -1330,8 +1307,38 @@ class ServerSettings(object):
     def getBlueprintsConvertSaleConfig(self):
         return self.__blueprintsConvertSaleConfig
 
+    def isDetachmentSellsDailyLimitEnabled(self):
+        return self.__getDetachmentSellsDailyConfig().get('enabled', False)
+
+    def getDetachmentSellsDailyLimit(self):
+        return self.__getDetachmentSellsDailyConfig().get('limit', 0)
+
+    def isDetachmentManualConversionEnabled(self):
+        return self.__getDetachmentConfig().get('isManualConversionEnabled', True)
+
+    def isDissolveDetachmentEnabled(self):
+        return self.__getDetachmentConfig().get('isDissolveDetachmentEnabled', True)
+
+    def isUnpackInstructorEnabled(self):
+        return self.__getDetachmentConfig().get('isUnpackInstructorEnabled', True)
+
+    def isInstructorSlotsEnabled(self):
+        return self.__getDetachmentConfig().get('isInstructorSlotsEnabled', True)
+
+    def isExcludeInstructorEnabled(self):
+        return self.__getDetachmentConfig().get('isExcludeInstructorEnabled', True)
+
+    def getActiveTestConfirmationConfig(self):
+        return self.__getGlobalSetting(constants.ACTIVE_TEST_CONFIRMATION_CONFIG, {})
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
+
+    def __getDetachmentConfig(self):
+        return self.__getGlobalSetting('detachment_config', {})
+
+    def __getDetachmentSellsDailyConfig(self):
+        return self.__getDetachmentConfig().get('sellsDailyLimit', {})
 
     def __updateClanProfile(self, targetSettings):
         cProfile = targetSettings['clanProfile']
@@ -1402,9 +1409,6 @@ class ServerSettings(object):
     def __updateBlueprintsConvertSaleConfig(self, targetSettings):
         if 'blueprints_convert_sale_config' in targetSettings:
             self.__blueprintsConvertSaleConfig = self.__blueprintsConvertSaleConfig.replace(targetSettings['blueprints_convert_sale_config'])
-
-    def __updateVehiclePostProgressionConfig(self, serverSettingsDiff):
-        self.__vehiclePostProgressionConfig = self.__vehiclePostProgressionConfig.replace(serverSettingsDiff[post_progression_common.SERVER_SETTINGS_KEY])
 
 
 def serverSettingsChangeListener(configKey):

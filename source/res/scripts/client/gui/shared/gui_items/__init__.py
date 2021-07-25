@@ -9,11 +9,10 @@ from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES,
 from gui.shared.money import Currency
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from helpers import dependency
-from gui.shared.items_parameters.comparator import BACKWARD_QUALITY_PARAMS
 _logger = logging.getLogger(__name__)
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
-GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'vehPostProgression', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment')
+GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'recertificationForm', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment')
 GUI_ITEM_TYPE_INDICES = dict(((n, idx) for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)))
 
 class GUI_ITEM_TYPE(CONST_CONTAINER):
@@ -46,6 +45,9 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
     SEQUENCE = GUI_ITEM_TYPE_INDICES['sequence']
     ATTACHMENT = GUI_ITEM_TYPE_INDICES['attachment']
     DEMOUNT_KIT = GUI_ITEM_TYPE_INDICES['demountKit']
+    RECERTIFICATION_FORM = GUI_ITEM_TYPE_INDICES['recertificationForm']
+    DETACHMENT = GUI_ITEM_TYPE_INDICES['detachment']
+    INSTRUCTOR = GUI_ITEM_TYPE_INDICES['instructor']
     COMMON = tuple(ITEM_TYPE_INDICES.keys())
     BATTLE_BOOSTER = GUI_ITEM_TYPE_INDICES['battleBooster']
     ARTEFACTS = (EQUIPMENT, OPTIONALDEVICE, BATTLE_BOOSTER)
@@ -56,7 +58,6 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
     SKILL = GUI_ITEM_TYPE_INDICES['tankmanSkill']
     BADGE = GUI_ITEM_TYPE_INDICES['badge']
     LOOT_BOX = GUI_ITEM_TYPE_INDICES['lootBox']
-    VEH_POST_PROGRESSION = GUI_ITEM_TYPE_INDICES['vehPostProgression']
     GUI = (ACCOUNT_DOSSIER,
      VEHICLE_DOSSIER,
      TANKMAN_DOSSIER,
@@ -88,7 +89,7 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
      PERSONAL_NUMBER)
 
 
-def formatMoneyError(currency):
+def _formatMoneyError(currency):
     return '{}_error'.format(currency)
 
 
@@ -104,12 +105,12 @@ class GUI_ITEM_ECONOMY_CODE(CONST_CONTAINER):
     NO_RENT_PRICE = 'no_rent_price'
     RENTAL_TIME_EXCEEDED = 'rental_time_exceeded'
     RENTAL_DISABLED = 'rental_disabled'
-    NOT_ENOUGH_GOLD = formatMoneyError(Currency.GOLD)
-    NOT_ENOUGH_CREDITS = formatMoneyError(Currency.CREDITS)
-    NOT_ENOUGH_CRYSTAL = formatMoneyError(Currency.CRYSTAL)
-    NOT_ENOUGH_EVENT_COIN = formatMoneyError(Currency.EVENT_COIN)
-    NOT_ENOUGH_BPCOIN = formatMoneyError(Currency.BPCOIN)
-    NOT_ENOUGH_CURRENCIES = (NOT_ENOUGH_GOLD,
+    NOT_ENOUGH_GOLD = _formatMoneyError(Currency.GOLD)
+    NOT_ENOUGH_CREDITS = _formatMoneyError(Currency.CREDITS)
+    NOT_ENOUGH_CRYSTAL = _formatMoneyError(Currency.CRYSTAL)
+    NOT_ENOUGH_EVENT_COIN = _formatMoneyError(Currency.EVENT_COIN)
+    NOT_ENOUGH_BPCOIN = _formatMoneyError(Currency.BPCOIN)
+    _NOT_ENOUGH_CURRENCIES = (NOT_ENOUGH_GOLD,
      NOT_ENOUGH_CRYSTAL,
      NOT_ENOUGH_CREDITS,
      NOT_ENOUGH_EVENT_COIN,
@@ -118,11 +119,11 @@ class GUI_ITEM_ECONOMY_CODE(CONST_CONTAINER):
 
     @classmethod
     def getCurrencyError(cls, currency):
-        return formatMoneyError(currency)
+        return _formatMoneyError(currency)
 
     @classmethod
     def isCurrencyError(cls, errCode):
-        return errCode in GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CURRENCIES
+        return errCode in GUI_ITEM_ECONOMY_CODE._NOT_ENOUGH_CURRENCIES
 
 
 class ItemsCollection(dict):
@@ -264,7 +265,7 @@ class ACTION_ENTITY_ITEM(object):
 
 
 class KPI(object):
-    __slots__ = ('__name', '__value', '__type', '__specValue', '__vehicleTypes', '__isDebuff')
+    __slots__ = ('__name', '__value', '__type', '__specValue', '__vehicleTypes', '__situational')
 
     class Name(CONST_CONTAINER):
         COMPOUND_KPI = 'compoundKPI'
@@ -279,12 +280,6 @@ class KPI(object):
         VEHICLE_FIRE_CHANCE = 'vehicleFireChance'
         VEHICLE_GUN_RELOAD_TIME = 'vehicleGunReloadTime'
         VEHICLE_GUN_AIM_SPEED = 'vehicleGunAimSpeed'
-        VEHICLE_GUN_SHOT_DISPERSION = 'vehicleGunShotDispersion'
-        VEHICLE_GUN_SHOT_DISPERSION_AFTER_SHOT = 'vehicleGunShotDispersionAfterShot'
-        VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_MOVEMENT = 'vehicleGunShotDispersionChassisMovement'
-        VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_ROTATION = 'vehicleGunShotDispersionChassisRotation'
-        VEHICLE_GUN_SHOT_DISPERSION_TURRET_ROTATION = 'vehicleGunShotDispersionTurretRotation'
-        VEHICLE_GUN_SHOT_DISPERSION_WHILE_GUN_DAMAGED = 'vehicleGunShotDispersionWhileGunDamaged'
         VEHICLE_GUN_SHOT_FULL_DISPERSION = 'vehicleGunShotFullDispersion'
         VEHICLE_AMMO_BAY_STRENGTH = 'vehicleAmmoBayStrength'
         VEHICLE_FUEL_TANK_STRENGTH = 'vehicleFuelTankStrength'
@@ -293,14 +288,12 @@ class KPI(object):
         VEHICLE_AMMO_BAY_ENGINE_FUEL_STRENGTH = 'vehicleAmmoBayEngineFuelStrength'
         VEHICLE_CHASSIS_LOAD = 'vehicleChassisLoad'
         VEHICLE_CHASSIS_FALL_DAMAGE = 'vehicleChassisFallDamage'
-        VEHICLE_RAM_OR_EXPLOSION_DAMAGE_RESISTANCE = 'vehicleRamOrExplosionDamageResistance'
         VEHICLE_RAM_DAMAGE_RESISTANCE = 'vehicleRamDamageResistance'
-        VEHICLE_DAMAGE_ENEMIES_BY_RAMMING = 'damageEnemiesByRamming'
+        VEHICLE_EXPLOSION_DAMAGE_RESISTANCE = 'vehicleExplosionDamageResistance'
         VEHICLE_SOFT_GROUND_PASSABILITY = 'vehicleSoftGroundPassability'
         VEHICLE_MEDIUM_GROUND_PASSABILITY = 'vehicleMediumGroundPassability'
         VEHICLE_ENEMY_SPOTTING_TIME = 'vehicleEnemySpottingTime'
         VEHICLE_OWN_SPOTTING_TIME = 'vehicleOwnSpottingTime'
-        VEHICLE_INVISIBILITY_AFTER_SHOT = 'vehicleInvisibilityAfterShot'
         VEHICLE_RELOAD_TIME_AFTER_SHELL_CHANGE = 'vehicleReloadTimeAfterShellChange'
         VEHICLE_STRENGTH = 'vehicleStrength'
         VEHICLE_PENALTY_FOR_DAMAGED_ENGINE_AND_COMBAT = 'vehPenaltyForDamageEngineAndCombat'
@@ -311,7 +304,7 @@ class KPI(object):
         VEHICLE_BACKWARD_MAX_SPEED = 'vehicleBackwardMaxSpeed'
         VEHICLE_CAMOUFLAGE_GROUP = 'vehicleCamouflageGroup'
         VEHICLE_STILL_CAMOUFLAGE_GROUP = 'vehicleStillCamouflageGroup'
-        CREW_LEVEL = 'crewLevel'
+        CREW_MASTERY = 'crewMastery'
         CREW_HIT_CHANCE = 'crewHitChance'
         CREW_STUN_DURATION = 'crewStunDuration'
         CREW_REPEATED_STUN_DURATION = 'crewRepeatedStunDuration'
@@ -329,6 +322,26 @@ class KPI(object):
         CREW_SKILL_RANCOROUS_DURATION = 'crewSkillRancorousDuration'
         CREW_SKILL_PEDANT = 'crewSkillPedant'
         CREW_SKILL_SMOOTH_TURRET = 'crewSkillSmoothTurret'
+        DETACHMENT_PERK_EQUIPMENT_PREPARATION_TIME = 'equipmentPreparationTime'
+        DETACHMENT_PERK_ENEMY_MODULES_CREW_DAMAGE_PROBABILITY = 'enemyModulesCrewDamageProbability'
+        DETACHMENT_PERK_LOW_DAMAGE_DISPERSION = 'lowDamageDispersion'
+        DETACHMENT_PERK_LOW_PENETRATION_DISPERSION = 'lowPenetrationDispersion'
+        DETACHMENT_PERK_UP_DAMAGE_DISPERSION = 'upDamageDispersion'
+        DETACHMENT_PERK_UP_PENETRATION_DISPERSION = 'upPenetrationDispersion'
+        DETACHMENT_PERK_TURRET_AIMING_DISPERSION = 'turretAimingDispersion'
+        DETACHMENT_PERK_MOVING_AIMING_DISPERSION = 'movingAimingDispersion'
+        DETACHMENT_PERK_FIRE_EXTINGUISHING_RATE = 'fireExtinguishingRate'
+        DETACHMENT_PERK_DEATH_PENALTY_FACTOR = 'deathPenaltyFactor'
+        DETACHMENT_PERK_TANK_ACCELERATION = 'tankAcceleration'
+        DETACHMENT_PERK_DAMAGE_ENEMIES_BY_RAMMING = 'damageEnemiesByRamming'
+        DETACHMENT_PERK_MODULE_CRIT_MOD = 'moduleCritMod'
+        DETACHMENT_PERK_TEAM_RADIO_BONUS = 'teamRadioBonusFactor'
+        DETACHMENT_PERK_FOLLIAGE_MASKING = 'folliageMaskingFactor'
+        DETACHMENT_PERK_AIMING_DISPERSION_WHILE_GUN_DAMAGED = 'aimingDispersionWhileGunDamaged'
+        DETACHMENT_PERK_FIRST_AID_KIT_PREPARATION_TIME = 'firstAidKitPreparationTime'
+        DETACHMENT_PERK_REPAIR_KIT_PREPARATION_TIME = 'repairKitPreparationTime'
+        DETACHMENT_PERK_TRACK_RAM_DAMAGE_RESIST = 'trackRamDamageResist'
+        DETACHMENT_PERK_STUN_RESISTANCE_EFFECT = 'stunResistanceEffect'
         DEMASK_FOLIAGE_FACTOR = 'demaskFoliageFactor'
         DEMASK_MOVING_FACTOR = 'demaskMovingFactor'
         GAME_XP = 'gameXp'
@@ -344,12 +357,13 @@ class KPI(object):
         ONE_OF = 'oneOf'
         AGGREGATE_MUL = 'aggregateMul'
 
-    def __init__(self, kpiName, kpiValue, kpyType=Type.MUL, specValue=None, vehicleTypes=None):
+    def __init__(self, kpiName, kpiValue, kpyType=Type.MUL, specValue=None, vehicleTypes=None, situational=False):
         self.__name = kpiName
         self.__value = kpiValue
         self.__type = kpyType
         self.__specValue = specValue
         self.__vehicleTypes = vehicleTypes or None
+        self.__situational = situational
         return
 
     @property
@@ -373,9 +387,8 @@ class KPI(object):
         return self.__vehicleTypes
 
     @property
-    def isDebuff(self):
-        cmpValue = 0 if self.type == self.Type.ADD else 1
-        return self.value >= cmpValue if self.name in BACKWARD_QUALITY_PARAMS else self.value < cmpValue
+    def situational(self):
+        return self.__situational
 
     def getDescriptionR(self):
         res = R.strings.tank_setup.kpi.bonus.dyn(self.__name)
@@ -444,34 +457,6 @@ def mergeAggregateKpi(aggregateKpi):
         return KPI(aggregateKpi.name, value, aggregateKpi.type, specValue, vehicleTypes)
 
 
-def collectKpi(descriptor, vehicle=None):
-    if vehicle is None:
-        return [ (mergeAggregateKpi(kpi) if kpi.type == KPI.Type.AGGREGATE_MUL else kpi) for kpi in descriptor.kpi ]
-    else:
-        result = []
-        for kpi in descriptor.kpi:
-            if kpi.type == KPI.Type.AGGREGATE_MUL:
-                for subKpi in kpi.value:
-                    if not subKpi.vehicleTypes or vehicle.type in subKpi.vehicleTypes:
-                        result.append(subKpi)
-
-            if not kpi.vehicleTypes or vehicle.type in kpi.vehicleTypes:
-                result.append(kpi)
-
-        return result
-
-
-VEHICLE_ATTR_TO_KPI_NAME_MAP = {'repairSpeed': KPI.Name.VEHICLE_REPAIR_SPEED,
- 'repairSpeedFactor': KPI.Name.VEHICLE_REPAIR_SPEED,
- 'circularVisionRadius': KPI.Name.VEHICLE_CIRCULAR_VISION_RADIUS,
- 'circularVisionRadiusFactor': KPI.Name.VEHICLE_CIRCULAR_VISION_RADIUS,
- 'gunReloadTimeFactor': KPI.Name.VEHICLE_GUN_RELOAD_TIME,
- 'gunAimingTimeFactor': KPI.Name.VEHICLE_GUN_AIM_SPEED,
- 'crewLevelIncrease': KPI.Name.CREW_LEVEL,
- 'ammoBayHealthFactor': KPI.Name.VEHICLE_AMMO_BAY_STRENGTH,
- 'fuelTankHealthFactor': KPI.Name.VEHICLE_FUEL_TANK_STRENGTH,
- 'engineHealthFactor': KPI.Name.VEHICLE_ENGINE_STRENGTH,
- 'additiveShotDispersionFactor': KPI.Name.VEHICLE_GUN_SHOT_DISPERSION}
 CREW_SKILL_TO_KPI_NAME_MAP = {'repair': KPI.Name.CREW_SKILL_REPAIR,
  'fireFighting': KPI.Name.CREW_SKILL_FIRE_FIGHTING,
  'camouflage': KPI.Name.CREW_SKILL_CAMOUFLAGE,

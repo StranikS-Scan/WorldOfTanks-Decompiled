@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/bootcamp/opt_device.py
-from gui.impl.common.tabs_controller import tabUpdateFunc
+from gui.impl.lobby.tabs_controller import tabUpdateFunc
 from gui.impl.lobby.tank_setup.array_providers.opt_device import SimpleOptDeviceProvider
 from gui.impl.lobby.tank_setup.configurations.base import BaseTankSetupTabsController
 from gui.impl.lobby.tank_setup.configurations.opt_device import OptDeviceTabs
@@ -8,8 +8,8 @@ from gui.impl.lobby.tank_setup.sub_views.opt_device_setup import OptDeviceSetupS
 
 class _BootcampSimpleOptDeviceProvider(SimpleOptDeviceProvider):
 
-    def _fillStatus(self, model, item, slotID):
-        super(_BootcampSimpleOptDeviceProvider, self)._fillStatus(model, item, slotID)
+    def _fillStatus(self, model, item, slotID, isInstalledOrMounted):
+        super(_BootcampSimpleOptDeviceProvider, self)._fillStatus(model, item, slotID, isInstalledOrMounted)
         if not item.isInInventory:
             model.setIsDisabled(True)
 

@@ -22,6 +22,18 @@ class HangarMeta(View):
     def onTeaserClick(self):
         self._printOverrideError('onTeaserClick')
 
+    def onUnloadBtnClick(self):
+        self._printOverrideError('onUnloadBtnClick')
+
+    def onRaisePerfBtnClick(self):
+        self._printOverrideError('onRaisePerfBtnClick')
+
+    def onReplaceDetachmentBtnClick(self):
+        self._printOverrideError('onReplaceDetachmentBtnClick')
+
+    def onReturnPrevDetachmentBtnClick(self):
+        self._printOverrideError('onReturnPrevDetachmentBtnClick')
+
     def as_setCrewEnabledS(self, value):
         return self.flashObject.as_setCrewEnabled(value) if self._isDAAPIInited() else None
 
@@ -82,11 +94,29 @@ class HangarMeta(View):
     def as_destroyDQWidgetS(self):
         return self.flashObject.as_destroyDQWidget() if self._isDAAPIInited() else None
 
+    def as_setDQWidgetLayoutS(self, lyout):
+        return self.flashObject.as_setDQWidgetLayout(lyout) if self._isDAAPIInited() else None
+
     def as_showSwitchToAmmunitionS(self):
         return self.flashObject.as_showSwitchToAmmunition() if self._isDAAPIInited() else None
 
     def as_toggleBattleRoyaleS(self, isBattleRoyale):
         return self.flashObject.as_toggleBattleRoyale(isBattleRoyale) if self._isDAAPIInited() else None
 
-    def as_setDQWidgetLayoutS(self, lyout):
-        return self.flashObject.as_setDQWidgetLayout(lyout) if self._isDAAPIInited() else None
+    def as_setOpeationsBtnTooltipS(self, tooltip):
+        return self.flashObject.as_setOpeationsBtnTooltip(tooltip) if self._isDAAPIInited() else None
+
+    def as_setDetachmentWidgetVisibleS(self, isVisible):
+        return self.flashObject.as_setDetachmentWidgetVisible(isVisible) if self._isDAAPIInited() else None
+
+    def as_setDetachmentLinkedS(self, isLinked):
+        return self.flashObject.as_setDetachmentLinked(isLinked) if self._isDAAPIInited() else None
+
+    def as_setDetachmentBtnsLockedS(self, isLocked, tooltip):
+        return self.flashObject.as_setDetachmentBtnsLocked(isLocked, tooltip) if self._isDAAPIInited() else None
+
+    def as_updateDetachmentBtnsS(self, data):
+        return self.flashObject.as_updateDetachmentBtns(data) if self._isDAAPIInited() else None
+
+    def as_setRaisePerfBtnCounterS(self, value):
+        return self.flashObject.as_setRaisePerfBtnCounter(value) if self._isDAAPIInited() else None

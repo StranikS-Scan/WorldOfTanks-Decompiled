@@ -692,7 +692,7 @@ class EventHeader(object):
             return result
 
 
-BONUS_PRIORITY = ('gold', 'crystal', 'tokens', 'battleToken', 'vehicles', 'badgesGroup', 'dossier', 'lootbox', 'credits', 'items', 'goodies', 'customizations', 'tankmen', 'premium', 'slots', 'berths')
+BONUS_PRIORITY = ('gold', 'crystal', 'tokens', 'battleToken', 'vehicles', 'badgesGroup', 'dossier', 'lootbox', 'credits', 'items', 'goodies', 'customizations', 'tankmen', 'premium', 'slots', 'dormitories')
 
 def _readEventBoardsRewards(rewards):
     badgesGroupData = rewards.pop('badgesGroup', None)

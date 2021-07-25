@@ -1,12 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
+from functools import partial
 import logging
 from string import lower
 import BigWorld
 from constants import EMPTY_GEOMETRY_ID
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from crew2 import settings_globals
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
+from items.components.detachment_components import isPerksRepartition
+from items.components.detachment_constants import DetachmentSlotType, ChangePerksMode, DetachmentOperations, ExcludeInstructorOption
+from items.components.dormitory_constants import DormitorySections
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
 from gui import SystemMessages
@@ -14,32 +18,42 @@ from gui.impl.gen import R
 from gui.impl import backport
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
+from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE, FIN_TO_SM_TYPE
 from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons, getBWFormatter
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.impl.auxiliary.detachment_helper import getDropSkillsPrice
 from gui.shared.money import Money, Currency
 from messenger import g_settings
 from helpers import dependency
+from helpers.time_utils import HOURS_IN_DAY
 from items.customizations import isEditedStyle
-from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import IVehicleComparisonBasket, IDetachmentController
 _logger = logging.getLogger(__name__)
 
-class TankmanBerthsBuyer(Processor):
+class DormitoryBuyer(Processor):
 
-    def __init__(self, berthsPrice, berthsCount):
-        super(TankmanBerthsBuyer, self).__init__((plugins.MessageInformator('barracksExpandNotEnoughMoney', activeHandler=lambda : not plugins.MoneyValidator(berthsPrice).validate().success), plugins.MessageConfirmator('barracksExpand', ctx={'price': text_styles.concatStylesWithSpace(text_styles.gold(str(berthsPrice.gold)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2)),
-          'count': text_styles.stats(berthsCount)}), plugins.MoneyValidator(berthsPrice)))
-        self.berthsPrice = berthsPrice
+    def __init__(self, count=1):
+        super(DormitoryBuyer, self).__init__()
+        items = self.itemsCache.items
+        self._roomsCount = items.shop.getDormitoryRoomsCount
+        price = items.shop.getDormitoryPrice
+        self._currency = price[DormitorySections.CURRENCY]
+        self._cost = price[DormitorySections.PRICE] * count
+        self._money = Money.makeFrom(self._currency, self._cost)
+        self._count = count
+        self.addPlugin(plugins.MoneyValidator(self._money))
+        self.addPlugin(plugins.DormitoriesBuyingEnableValidator())
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='buy_tankmen_berths/{}'.format(errStr), defaultSysMsgKey='buy_tankmen_berths/server_error')
+        return makeI18nError(sysMsgKey='buy_dormitory/{}'.format(errStr), defaultSysMsgKey='buy_dormitory/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='buy_tankmen_berths/success', money=formatPrice(self.berthsPrice), type=SM_TYPE.PurchaseForGold)
+        return makeI18nSuccess(sysMsgKey='buy_dormitory/financial_success', money=formatPrice(self._money), amount=text_styles.stats(str(self._roomsCount * self._count)), block=self._count, type=FIN_TO_SM_TYPE.get(self._currency, SM_TYPE.Information)) if self._cost else makeI18nSuccess(sysMsgKey='buy_dormitory/success', amount=text_styles.stats(str(self._roomsCount * self._count)), block=self._count, type=SM_TYPE.Information)
 
     def _request(self, callback):
-        _logger.debug('Make server request to buy tankman berths')
-        BigWorld.player().stats.buyBerths(lambda code: self._response(code, callback))
+        _logger.debug('Make server request to buy dormitory')
+        BigWorld.player().stats.buyDormitory(self._count, lambda code: self._response(code, callback))
 
 
 class PremiumAccountBuyer(Processor):
@@ -430,18 +444,214 @@ class PremiumBonusApplier(Processor):
 
 class UseCrewBookProcessor(Processor):
 
-    def __init__(self, crewBookCD, vehInvID, tmanInvID):
+    def __init__(self, crewBookCD, detInvID, bookCount):
         super(UseCrewBookProcessor, self).__init__()
         self.__crewBookCD = crewBookCD
-        self.__vehInvID = vehInvID
-        self.__tmanInvID = tmanInvID
+        self.__detInvID = detInvID
+        self.__bookCount = bookCount
 
     def _successHandler(self, code, ctx=None):
         itemsCache = dependency.instance(IItemsCache)
         return makeI18nSuccess(sysMsgKey='crewBooksNotification/bookUsed', name=itemsCache.items.getItemByCD(self.__crewBookCD).userName)
 
     def _request(self, callback):
-        BigWorld.player().inventory.useCrewBook(self.__crewBookCD, self.__vehInvID, self.__tmanInvID, lambda code: self._response(code, callback))
+        BigWorld.player().inventory.useCrewBook(self.__crewBookCD, self.__detInvID, self.__bookCount, lambda code: self._response(code, callback))
+
+
+class LearnPerksProcessor(Processor):
+
+    def __init__(self, detachmentID, perks, dropMode, useRecertificationForm, isUIEditMode=False):
+        super(LearnPerksProcessor, self).__init__(plugins=[plugins.DetachmentValidator(detachmentID)])
+        self._detachmentID = detachmentID
+        self._perks = perks
+        self._isUIEditMode = isUIEditMode
+        self._useRecertificationForm = useRecertificationForm
+        detachment = self.detachmentCache.getDetachment(self._detachmentID)
+        self._perksCount = self._perksUltimateCount = 0
+        self._isPerksRepartition = False
+        self._dropMode = dropMode
+        self._oldBuildLevel = 0
+        self._price = Money()
+        if detachment:
+            self._price = self._getPrice(detachment)
+            self._isPerksRepartition = isPerksRepartition(detachment.build, self._perks)
+            self._oldBuildLevel = detachment.getDescriptor().getBuildLevel()
+            if self._dropMode == ChangePerksMode.ADD_PERKS or self._dropMode == ChangePerksMode.DROP_PARTIAL:
+                self._perksCount, self._perksUltimateCount = self._calculatePerks(detachment, self._perks)
+            else:
+                self._perksCount, self._perksUltimateCount = self._calculatePerks(detachment, detachment.build)
+            if detachment.isInTank:
+                vehicle = self.itemsCache.items.getVehicle(detachment.vehInvID)
+                self.addPlugin(plugins.VehicleLockValidator(vehicle))
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        sysMsgKey = self._getSysMsgBase() + '/'
+        errStr += self._getPerkMsgKey(self._perksCount, self._perksUltimateCount, error=True)
+        sysMsgKey += errStr
+        return makeI18nError(sysMsgKey=sysMsgKey, defaultSysMsgKey='detachment_learn_perks/server_error')
+
+    def _successHandler(self, code, ctx=None):
+        detachment = self.detachmentCache.getDetachment(self._detachmentID)
+        sysMsgKey = self._getSysMsgBase()
+        if self._dropMode == ChangePerksMode.ADD_PERKS or self._dropMode == ChangePerksMode.DROP_PARTIAL and not self._isPerksRepartition:
+            smType = SM_TYPE.DetachmentLearnPerks
+            sysMsgKey += self._getPerkMsgKey(self._perksCount, self._perksUltimateCount)
+            makeMsg = partial(makeI18nSuccess, number=self._perksCount)
+        else:
+            if self._dropMode == ChangePerksMode.DROP_PARTIAL:
+                newBuildLevel = detachment.getDescriptor().getBuildLevel()
+                pointsChanges = self._oldBuildLevel - newBuildLevel
+                if pointsChanges > 0:
+                    sysMsgKey += '/pointsReturn'
+                elif pointsChanges < 0:
+                    sysMsgKey += '/noPointsReturn'
+                points = text_styles.perkYellow(str(detachment.level - newBuildLevel)) if pointsChanges > 0 else abs(pointsChanges)
+                makeMsg = partial(makeI18nSuccess, number=points)
+            else:
+                makeMsg = partial(makeI18nSuccess, number=text_styles.perkYellow(str(detachment.level)))
+            if self._useRecertificationForm:
+                smType = SM_TYPE.DetachmentLearnPerks
+                sysMsgKey += '/useRecertificationForm'
+            elif any(self._price.toDict().itervalues()):
+                smType = FIN_TO_SM_TYPE.get(self._price.getCurrency(), SM_TYPE.DetachmentLearnPerks)
+                makeMsg = partial(makeMsg, price=formatPrice(self._price, ignoreZeros=True))
+            else:
+                smType = SM_TYPE.DetachmentLearnPerks
+                sysMsgKey += '/discount'
+            sysMsgKey += self._getPerkMsgKey(self._perksCount, self._perksUltimateCount)
+        return makeMsg(sysMsgKey=sysMsgKey, type=smType)
+
+    def _request(self, callback):
+        BigWorld.player().inventory.learnPerks(self._detachmentID, self._perks, self._dropMode, self._useRecertificationForm, lambda code: self._response(code, callback))
+
+    def _getSysMsgBase(self):
+        if not self._isUIEditMode:
+            sysMsgKey = 'detachment_learn_perks' if self._dropMode == ChangePerksMode.ADD_PERKS else 'detachment_drop_perks'
+        elif self._dropMode == ChangePerksMode.ADD_PERKS:
+            sysMsgKey = 'detachment_changes_perks'
+        elif self._dropMode == ChangePerksMode.DROP_PARTIAL:
+            sysMsgKey = 'detachment_drop_partial_perks'
+        else:
+            sysMsgKey = 'detachment_drop_perks'
+        return sysMsgKey
+
+    def _getPerkMsgKey(self, perksCount, perksUltimateCount, error=False):
+        key = ''
+        if perksCount > 0:
+            key += '/perks'
+        if perksUltimateCount > 0:
+            key += '/ultimate_perks'
+        key += '/server_error' if error else '/success'
+        return key
+
+    def _calculatePerks(self, detachment, perks):
+        perksCount = perksUltimateCount = 0
+        if not detachment:
+            return (perksCount, perksUltimateCount)
+        detDescr = detachment.getDescriptor()
+        perksMatrix = detDescr.getPerksMatrix()
+        if not perksMatrix:
+            return (perksCount, perksUltimateCount)
+        perksMat = perksMatrix.perks
+        for perkID, count in perks.iteritems():
+            perk = perksMat.get(perkID)
+            if not perk:
+                continue
+            if perk.ultimate:
+                perksUltimateCount += abs(count)
+            perksCount += abs(count)
+
+        return (perksCount, perksUltimateCount)
+
+    def _getPrice(self, detachment):
+        _, price, _ = getDropSkillsPrice(detachment.invID)
+        return price
+
+
+class RemoveInstructorFromDetachmentProcessor(Processor):
+    __detachmentController = dependency.descriptor(IDetachmentController)
+
+    def __init__(self, detachmentID, slotID, optionID):
+        super(RemoveInstructorFromDetachmentProcessor, self).__init__(plugins=[plugins.InstructorSlotsBreakerValidator(), plugins.DetachmentValidator(detachmentID), plugins.InstructorSlotValidator(detachmentID, slotID)])
+        self.__detachment = self.detachmentCache.getDetachment(detachmentID)
+        self.__slotID = slotID
+        self.__optionID = optionID
+        instructorsIDs = self.__detachment.getInstructorsIDs()
+        instructorInvID = instructorsIDs[slotID]
+        self.__instructor = self.detachmentCache.getInstructor(instructorInvID)
+        capacity = self.__instructor.descriptor.getSlotsCount()
+        self.__animationSlots = [ slotID for slotID in xrange(slotID, slotID + capacity) ]
+        priceGroups = self.itemsCache.items.shop.detachmentPriceGroups
+        priceGroup = priceGroups[self.__detachment.progression.priceGroup]
+        excludeOption = priceGroup[DetachmentOperations.REMOVE_INSTRUCTOR_FROM_SLOT][ExcludeInstructorOption.PAID]
+        self.__price = Money(**excludeOption)
+        self.__exclusionDays = settings_globals.g_instructorSettingsProvider.exclusionHours / HOURS_IN_DAY
+
+    def _successHandler(self, code, ctx=None):
+        self.__detachmentController.renewSlotsAnimation(self.__detachment.invID, DetachmentSlotType.INSTRUCTORS, self.__animationSlots)
+        return self._getPaidOperationMessage() if self.__optionID == ExcludeInstructorOption.PAID else self._getFreeOperationMessage()
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='detachment_remove_instructor/{}'.format(errStr), defaultSysMsgKey='detachment_remove_instructor/server_error')
+
+    def _request(self, callback):
+        BigWorld.player().inventory.removeInstructorFromDetachment(self.__detachment.invID, self.__slotID, self.__optionID, lambda code: self._response(code, callback))
+
+    def _getFreeOperationMessage(self):
+        return makeI18nSuccess(sysMsgKey=self._getSysMsgBase(), instructorName=text_styles.stats(self.__instructor.getFullName()), detName=text_styles.stats(self.__detachment.cmdrFullName), exclusionDays=text_styles.highlightText(self.__exclusionDays))
+
+    def _getPaidOperationMessage(self):
+        return makeI18nSuccess(sysMsgKey=self._getSysMsgBase(), instructorName=text_styles.stats(self.__instructor.getFullName()), detName=text_styles.stats(self.__detachment.cmdrFullName), price=formatPrice(self.__price, ignoreZeros=True), type=FIN_TO_SM_TYPE.get(self.__price.getCurrency(byWeight=True)))
+
+    def _getSysMsgBase(self):
+        prefix = 'detachment_remove_instructor'
+        msgType = 'paid' if self.__optionID == ExcludeInstructorOption.PAID else 'free'
+        opResult = 'success'
+        msg = '{}/{}/{}'.format(prefix, msgType, opResult)
+        return msg
+
+
+class RecoverInstructorProcessor(Processor):
+
+    def __init__(self, instructorID):
+        super(RecoverInstructorProcessor, self).__init__(plugins=[plugins.InstructorValidator(instructorID)])
+        self.__instructor = self.detachmentCache.getInstructor(instructorID)
+        self.__price = self.itemsCache.items.shop.recoverInstructorCost
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess(sysMsgKey='detachment_recover_instructor/success', price=formatPrice(self.__price, ignoreZeros=True), instructorName=text_styles.stats(self.__instructor.getFullName()), type=FIN_TO_SM_TYPE.get(self.__price.getCurrency(byWeight=True)))
+
+    def _request(self, callback):
+        BigWorld.player().inventory.recoverInstructor(self.__instructor.invID, lambda code: self._response(code, callback))
+
+
+class AddInstructorToSlotProcessor(Processor):
+    __detachmentController = dependency.descriptor(IDetachmentController)
+
+    def __init__(self, detachmentID, instructorID, slotID, isActive=False, isAnim=True):
+        super(AddInstructorToSlotProcessor, self).__init__(plugins=[plugins.InstructorSlotsBreakerValidator(),
+         plugins.InstructorValidator(instructorID),
+         plugins.DetachmentValidator(detachmentID),
+         plugins.InstructorSlotValidator(detachmentID, slotID)])
+        self.__detachment = self.detachmentCache.getDetachment(detachmentID)
+        self.__instructor = self.detachmentCache.getInstructor(instructorID)
+        self.__slotID = slotID
+        self.__isActive = isActive
+        self.__isAnim = isAnim
+
+    def _successHandler(self, code, ctx=None):
+        if self.__isAnim:
+            capacity = self.__instructor.descriptor.getSlotsCount()
+            slotIDStart = ctx.get('slotID', 0)
+            self.__detachmentController.renewSlotsAnimation(self.__detachment.invID, DetachmentSlotType.INSTRUCTORS, [ slotID for slotID in xrange(slotIDStart, slotIDStart + capacity) ])
+        return makeI18nSuccess(sysMsgKey='detachment_add_instructor/success', instructorName=text_styles.stats(self.__instructor.getFullName()), detName=text_styles.stats(self.__detachment.cmdrFullName))
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='detachment_add_instructor/{}'.format(errStr), defaultSysMsgKey='detachment_add_instructor/server_error')
+
+    def _request(self, callback):
+        BigWorld.player().inventory.addInstructorToSlot(self.__detachment.invID, self.__instructor.invID, self.__slotID, self.__isActive, lambda code, ext=None: self._response(code, callback, ctx=ext))
+        return
 
 
 class VehicleChangeNation(Processor):

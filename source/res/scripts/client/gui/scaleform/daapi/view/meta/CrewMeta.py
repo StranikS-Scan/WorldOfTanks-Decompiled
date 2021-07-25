@@ -4,8 +4,8 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class CrewMeta(BaseDAAPIComponent):
 
-    def onShowRecruitWindowClick(self, rendererData, menuEnabled):
-        self._printOverrideError('onShowRecruitWindowClick')
+    def onFilterToggle(self, index):
+        self._printOverrideError('onFilterToggle')
 
     def unloadAllTankman(self):
         self._printOverrideError('unloadAllTankman')
@@ -13,17 +13,20 @@ class CrewMeta(BaseDAAPIComponent):
     def equipTankman(self, tankmanID, slot):
         self._printOverrideError('equipTankman')
 
-    def updateTankmen(self):
-        self._printOverrideError('updateTankmen')
-
-    def openPersonalCase(self, value, tabNumber):
-        self._printOverrideError('openPersonalCase')
-
     def onCrewDogMoreInfoClick(self):
         self._printOverrideError('onCrewDogMoreInfoClick')
 
     def onCrewDogItemClick(self):
         self._printOverrideError('onCrewDogItemClick')
+
+    def onConvertClick(self):
+        self._printOverrideError('onConvertClick')
+
+    def openChangeRoleWindow(self, tankmanID):
+        self._printOverrideError('openChangeRoleWindow')
+
+    def onPlayVideoClick(self):
+        self._printOverrideError('onPlayVideoClick')
 
     def as_tankmenResponseS(self, data):
         return self.flashObject.as_tankmenResponse(data) if self._isDAAPIInited() else None
@@ -33,3 +36,9 @@ class CrewMeta(BaseDAAPIComponent):
 
     def as_setDogTooltipS(self, tooltipId):
         return self.flashObject.as_setDogTooltip(tooltipId) if self._isDAAPIInited() else None
+
+    def as_setConvertDataS(self, data):
+        return self.flashObject.as_setConvertData(data) if self._isDAAPIInited() else None
+
+    def as_setVisibleS(self, value):
+        return self.flashObject.as_setVisible(value) if self._isDAAPIInited() else None

@@ -338,7 +338,7 @@ def makeBattleBoosterFormatter(fittedVehGetter=None):
         return i18n.makeString(key)
 
     def formatBoosterDescription(i):
-        return i.getCrewBoosterDescription(False) if i.isCrewBooster() else i.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=formatValueToColorTag)
+        return i.getCrewBoosterDescription() if i.isCrewBooster() else i.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=formatValueToColorTag)
 
     fields.extend([Field('affectedSkill', formatAffectedSkill),
      Field('affectedSkillName', lambda i: i.getAffectedSkillUserName()),

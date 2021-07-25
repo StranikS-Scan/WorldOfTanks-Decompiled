@@ -13,6 +13,7 @@ from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.tooltips.wgm_currency import WGMCurrencyTooltip
 from helpers import dependency
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 
 class GoldToolTipData(BlocksTooltipData):
@@ -84,6 +85,7 @@ class DemountKitToolTipData(BlocksTooltipData):
 
 
 class NotEnoughMoneyTooltipData(ToolTipBaseData):
+    gui = dependency.descriptor(IGuiLoader)
     RESOURCES_BY_CURRENCY = {Currency.CREDITS: (R.strings.tooltips.moduleFits.credits_error.header(), R.strings.tooltips.moduleFits.credits_error.text(), R.images.gui.maps.icons.library.CreditsIcon_2()),
      Currency.CRYSTAL: (R.strings.demount_kit.equipmentDemount.notEnoughBonds.text(), R.strings.demount_kit.equipmentDemount.notEnoughBonds.description(), R.images.gui.maps.icons.library.CrystalIcon_2()),
      Currency.GOLD: (R.strings.tooltips.moduleFits.gold_error.header(), R.strings.tooltips.moduleFits.gold_error.text(), R.images.gui.maps.icons.library.GoldIcon_2())}
@@ -94,7 +96,7 @@ class NotEnoughMoneyTooltipData(ToolTipBaseData):
     def getDisplayableData(self, value, currencyType):
         header, body, icon = self.RESOURCES_BY_CURRENCY.get(currencyType, ('', '', ''))
         formattedBody = makeHtmlString('html_templates:lobby/tooltips', 'not_enough_money', {'description': backport.text(body),
-         'value': value,
+         'value': text_styles.error(self.gui.systemLocale.getNumberFormat(value)),
          'icon': backport.image(icon)})
         return {'header': backport.text(header),
          'body': formattedBody}

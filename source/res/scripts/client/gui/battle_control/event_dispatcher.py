@@ -39,10 +39,6 @@ def choiceConsumable(key):
     g_eventBus.handleEvent(GameEvent(GameEvent.CHOICE_CONSUMABLE, _makeKeyCtx(key=key)), scope=_SCOPE)
 
 
-def changeAmmunitionSetup(key):
-    g_eventBus.handleEvent(GameEvent(GameEvent.CHANGE_AMMUNITION_SETUP, _makeKeyCtx(key=key)), scope=_SCOPE)
-
-
 def toggleHelp():
     if _killHelpView():
         return

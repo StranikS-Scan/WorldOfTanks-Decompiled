@@ -363,19 +363,27 @@
     <priceGroup>	crewBook	</priceGroup>
   </crewBook>
   <crewBook>
-    <id>	60	</id>
-    <name>	#crew_books:items/personalBook/Name	</name>
-    <description>	#crew_books:items/personalBook/Descr	</description>
-    <icon>	personalBook.png	</icon>
-    <type>	personalBook	</type>
-    <priceGroup>	personalBook	</priceGroup>
-  </crewBook>
-  <crewBook>
     <id>	61	</id>
     <name>	#crew_books:items/universalBook/Name	</name>
     <description>	#crew_books:items/crewBook/Descr	</description>
     <icon>	universalBook.png	</icon>
     <type>	universalBook	</type>
     <priceGroup>	universalBook	</priceGroup>
+  </crewBook>
+  <crewBook>
+    <id>	62	</id>
+    <name>	#crew_books:items/universalBrochure/Name	</name>
+    <description>	#crew_books:items/crewBook/Descr	</description>
+    <icon>	universalBrochure.png	</icon>
+    <type>	universalBrochure	</type>
+    <priceGroup>	universalBrochure	</priceGroup>
+  </crewBook>
+  <crewBook>
+    <id>	63	</id>
+    <name>	#crew_books:items/universalGuide/Name	</name>
+    <description>	#crew_books:items/crewBook/Descr	</description>
+    <icon>	universalGuide.png	</icon>
+    <type>	universalGuide	</type>
+    <priceGroup>	universalGuide	</priceGroup>
   </crewBook>
 </crewBooks.xml>

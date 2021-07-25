@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/AchievementsUtils.py
+import constants
 from dossiers2.ui.achievements import ACHIEVEMENT_SECTION, ACHIEVEMENT_TYPE
 from dossiers2.custom.config import RECORD_CONFIGS
 from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
@@ -10,7 +11,10 @@ class AchievementsUtils(object):
 
     @staticmethod
     def packAchievementList(target, dossierType, dossierCompactDescriptor, isDossierForCurrentUser, defaultShowProgress=True, defaultSeriesCounter=None):
-        return [ AchievementsUtils.packAchievement(a, dossierType, dossierCompactDescriptor, isDossierForCurrentUser, defaultShowProgress, defaultSeriesCounter) for a in target ]
+        result = [ AchievementsUtils.packAchievement(a, dossierType, dossierCompactDescriptor, isDossierForCurrentUser, defaultShowProgress, defaultSeriesCounter) for a in target ]
+        if constants.IS_CREW_SANDBOX:
+            result = [ packed for packed in result if not (packed['isRare'] and packed['rareIconId'] is None) ]
+        return result
 
     @staticmethod
     def packAchievement(achievement, dossierType, dossierCompDescr, isDossierForCurrentUser, defaultShowProgress=True, defaultSeriesCounter=None):

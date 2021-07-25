@@ -1,6 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_configurator_base.py
+import typing
 from gui.Scaleform.daapi.view.meta.VehicleCompareConfiguratorBaseViewMeta import VehicleCompareConfiguratorBaseViewMeta
+if typing.TYPE_CHECKING:
+    from typing import Optional
+    from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_view import VehicleCompareConfiguratorMain
 
 class VehicleCompareConfiguratorBaseView(VehicleCompareConfiguratorBaseViewMeta):
 
@@ -28,10 +32,7 @@ class VehicleCompareConfiguratorBaseView(VehicleCompareConfiguratorBaseViewMeta)
     def onModulesUpdated(self):
         pass
 
-    def onCrewSkillUpdated(self):
-        pass
-
-    def onCrewLevelUpdated(self, newLvl):
+    def onPerksUpdated(self):
         pass
 
     def onResetToDefault(self):

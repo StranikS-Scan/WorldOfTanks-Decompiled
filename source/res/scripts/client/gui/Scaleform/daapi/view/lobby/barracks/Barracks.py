@@ -21,12 +21,10 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons, moneyWithIcon
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmenComparator
-from gui.shared.gui_items.items_actions import factory as ActionsFactory
-from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRestore
+from gui.shared.gui_items.processors.tankman import TankmanUnload, TankmanRestore, TankmanDismiss
 from gui.shared.utils import decorators, flashObject2Dict
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shop import showBuyGoldForBerth
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
@@ -83,14 +81,6 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
             self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.RECRUIT_WINDOW), ctx={'data': rendererData,
              'menuEnabled': menuEnabled}))
         return
-
-    def buyBerths(self):
-        price, _ = self.itemsCache.items.shop.getTankmanBerthPrice(self.itemsCache.items.stats.tankmenBerthsCount)
-        availableMoney = self.itemsCache.items.stats.money
-        if price and availableMoney.gold < price.gold:
-            showBuyGoldForBerth(price.gold)
-        else:
-            ActionsFactory.doAction(ActionsFactory.BUY_BERTHS)
 
     def setTankmenFilter(self):
         self.as_setTankmenFilterS(self.filter['nation'], self.filter['role'], self.filter['tankType'], self.filter['location'], self.filter['nationID'])
@@ -219,7 +209,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     def __showActiveTankmen(self, criteria):
         self.__dataProvider.showActiveTankmen(criteria)
         self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(self.__dataProvider.filteredCount, totalCount=self.__dataProvider.totalCount),
-         'placesCount': self.__getPlaceCountStr(free=self.__dataProvider.placeCount, totalCount=self.itemsCache.items.stats.tankmenBerthsCount),
+         'placesCount': self.__getPlaceCountStr(free=self.__dataProvider.placeCount, totalCount=0),
          'placesCountTooltip': None,
          'hasNoInfoData': False})
         return

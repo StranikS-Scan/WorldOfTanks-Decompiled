@@ -1,0 +1,426 @@
+<progression.xml>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:noNamespaceSchemaLocation>	../../../development/xml_schema/crew2/detachment/progression.xsd	</xsi:noNamespaceSchemaLocation>
+  <progression>
+    <layout>
+      <id>	1	</id>
+      <priceGroupID>	1	</priceGroupID>
+      <badgeID>	200	</badgeID>
+      <levels>
+        <level>
+          <xp>	0	</xp>
+          <milestone>	true	</milestone>
+          <vehicleSlots>	1	</vehicleSlots>
+          <rank>	lance_corporal	</rank>
+          <levelIcon>	badge_0	</levelIcon>
+          <specializationPriceType>
+            <type>	gold	</type>
+            <enable>	true	</enable>
+            <discount>	100	</discount>
+          </specializationPriceType>
+          <dropSkill>
+            <firstDropEnable>	false	</firstDropEnable>
+            <discount>	100	</discount>
+          </dropSkill>
+        </level>
+        <level>
+          <xp>	1000	</xp>
+        </level>
+        <level>
+          <xp>	3500	</xp>
+        </level>
+        <level>
+          <xp>	8500	</xp>
+        </level>
+        <level>
+          <xp>	16000	</xp>
+        </level>
+        <level>
+          <xp>	26000	</xp>
+        </level>
+        <level>
+          <xp>	38000	</xp>
+        </level>
+        <level>
+          <xp>	52000	</xp>
+        </level>
+        <level>
+          <xp>	68000	</xp>
+        </level>
+        <level>
+          <xp>	86000	</xp>
+          <milestone>	true	</milestone>
+          <rank>	junior_sergeant	</rank>
+          <specializationPriceType>
+            <type>	gold	</type>
+            <enable>	true	</enable>
+            <discount>	50	</discount>
+          </specializationPriceType>
+          <specializationPriceType>
+            <type>	silver	</type>
+            <enable>	true	</enable>
+            <discount>	50	</discount>
+          </specializationPriceType>
+          <specializationPriceType>
+            <type>	free	</type>
+            <enable>	true	</enable>
+          </specializationPriceType>
+          <dropSkill>
+            <firstDropEnable>	true	</firstDropEnable>
+            <discount>	50	</discount>
+          </dropSkill>
+        </level>
+        <level>
+          <xp>	106000	</xp>
+        </level>
+        <level>
+          <xp>	126812	</xp>
+        </level>
+        <level>
+          <xp>	147624	</xp>
+        </level>
+        <level>
+          <xp>	168436	</xp>
+        </level>
+        <level>
+          <xp>	189248	</xp>
+        </level>
+        <level>
+          <xp>	210060	</xp>
+        </level>
+        <level>
+          <xp>	234772	</xp>
+        </level>
+        <level>
+          <xp>	259485	</xp>
+        </level>
+        <level>
+          <xp>	284198	</xp>
+        </level>
+        <level>
+          <xp>	308911	</xp>
+          <milestone>	true	</milestone>
+          <instructorSlots>	1	</instructorSlots>
+          <vehicleSlots>	1	</vehicleSlots>
+          <rank>	sergeant	</rank>
+          <levelIcon>	badge_1	</levelIcon>
+          <specializationPriceType>
+            <type>	gold	</type>
+            <enable>	true	</enable>
+            <discount>	0	</discount>
+          </specializationPriceType>
+          <specializationPriceType>
+            <type>	silver	</type>
+            <enable>	true	</enable>
+            <discount>	0	</discount>
+          </specializationPriceType>
+          <dropSkill>
+            <firstDropEnable>	true	</firstDropEnable>
+            <discount>	0	</discount>
+          </dropSkill>
+        </level>
+        <level>
+          <xp>	333624	</xp>
+        </level>
+        <level>
+          <xp>	358337	</xp>
+        </level>
+        <level>
+          <xp>	383050	</xp>
+        </level>
+        <level>
+          <xp>	407763	</xp>
+        </level>
+        <level>
+          <xp>	432476	</xp>
+        </level>
+        <level>
+          <xp>	457189	</xp>
+        </level>
+        <level>
+          <xp>	481902	</xp>
+        </level>
+        <level>
+          <xp>	506615	</xp>
+        </level>
+        <level>
+          <xp>	531328	</xp>
+        </level>
+        <level>
+          <xp>	556041	</xp>
+        </level>
+        <level>
+          <xp>	580754	</xp>
+        </level>
+        <level>
+          <xp>	605467	</xp>
+        </level>
+        <level>
+          <xp>	630180	</xp>
+        </level>
+        <level>
+          <xp>	679604	</xp>
+        </level>
+        <level>
+          <xp>	729030	</xp>
+          <milestone>	true	</milestone>
+          <instructorSlots>	1	</instructorSlots>
+          <rank>	senior_sergeant	</rank>
+          <levelIcon>	badge_2	</levelIcon>
+        </level>
+        <level>
+          <xp>	778456	</xp>
+        </level>
+        <level>
+          <xp>	827882	</xp>
+        </level>
+        <level>
+          <xp>	877308	</xp>
+        </level>
+        <level>
+          <xp>	926734	</xp>
+        </level>
+        <level>
+          <xp>	976160	</xp>
+        </level>
+        <level>
+          <xp>	1025586	</xp>
+        </level>
+        <level>
+          <xp>	1075012	</xp>
+        </level>
+        <level>
+          <xp>	1124438	</xp>
+        </level>
+        <level>
+          <xp>	1173864	</xp>
+        </level>
+        <level>
+          <xp>	1223290	</xp>
+        </level>
+        <level>
+          <xp>	1272716	</xp>
+        </level>
+        <level>
+          <xp>	1322142	</xp>
+        </level>
+        <level>
+          <xp>	1371568	</xp>
+        </level>
+        <level>
+          <xp>	1420994	</xp>
+        </level>
+        <level>
+          <xp>	1470420	</xp>
+          <milestone>	true	</milestone>
+          <instructorSlots>	1	</instructorSlots>
+          <vehicleSlots>	1	</vehicleSlots>
+          <rank>	sergeant_major	</rank>
+          <levelIcon>	badge_3	</levelIcon>
+        </level>
+        <level>
+          <xp>	1582452	</xp>
+        </level>
+        <level>
+          <xp>	1694484	</xp>
+        </level>
+        <level>
+          <xp>	1806516	</xp>
+        </level>
+        <level>
+          <xp>	1918548	</xp>
+        </level>
+        <level>
+          <xp>	2030580	</xp>
+        </level>
+        <level>
+          <xp>	2142612	</xp>
+        </level>
+        <level>
+          <xp>	2254644	</xp>
+        </level>
+        <level>
+          <xp>	2366676	</xp>
+        </level>
+        <level>
+          <xp>	2478708	</xp>
+        </level>
+        <level>
+          <xp>	2590740	</xp>
+        </level>
+        <level>
+          <xp>	2702772	</xp>
+        </level>
+        <level>
+          <xp>	2814804	</xp>
+        </level>
+        <level>
+          <xp>	2926836	</xp>
+        </level>
+        <level>
+          <xp>	3038868	</xp>
+        </level>
+        <level>
+          <xp>	3150900	</xp>
+          <milestone>	true	</milestone>
+          <instructorSlots>	1	</instructorSlots>
+          <rank>	junior_lieutenant	</rank>
+          <levelIcon>	badge_4	</levelIcon>
+        </level>
+        <level>
+          <xp>	3374964	</xp>
+        </level>
+        <level>
+          <xp>	3599028	</xp>
+        </level>
+        <level>
+          <xp>	3823092	</xp>
+        </level>
+        <level>
+          <xp>	4047156	</xp>
+        </level>
+        <level>
+          <xp>	4271220	</xp>
+        </level>
+        <level>
+          <xp>	4495284	</xp>
+        </level>
+        <level>
+          <xp>	4719348	</xp>
+        </level>
+        <level>
+          <xp>	4943412	</xp>
+        </level>
+        <level>
+          <xp>	5167476	</xp>
+        </level>
+        <level>
+          <xp>	5391540	</xp>
+        </level>
+        <level>
+          <xp>	5615604	</xp>
+        </level>
+        <level>
+          <xp>	5839668	</xp>
+        </level>
+        <level>
+          <xp>	6063732	</xp>
+        </level>
+        <level>
+          <xp>	6287796	</xp>
+        </level>
+        <level>
+          <xp>	6511860	</xp>
+          <milestone>	true	</milestone>
+          <maxLevel>	80	</maxLevel>
+          <levelIcon>	badge_5	</levelIcon>
+          <badgeLevel>	1	</badgeLevel>
+        </level>
+        <level>
+          <xp>	6750000	</xp>
+          <milestone>	true	</milestone>
+          <rank>	lieutenant	</rank>
+          <levelIcon>	badge_6	</levelIcon>
+          <badgeLevel>	2	</badgeLevel>
+          <autoPerks>
+            <perk>
+              <id>	1	</id>
+              <level>	1	</level>
+            </perk>
+          </autoPerks>
+        </level>
+        <level>
+          <xp>	7250000	</xp>
+          <milestone>	true	</milestone>
+          <rank>	senior_lieutenant	</rank>
+          <levelIcon>	badge_7	</levelIcon>
+          <badgeLevel>	3	</badgeLevel>
+          <autoPerks>
+            <perk>
+              <id>	1	</id>
+              <level>	2	</level>
+            </perk>
+          </autoPerks>
+        </level>
+        <level>
+          <xp>	8250000	</xp>
+          <milestone>	true	</milestone>
+          <rank>	captain	</rank>
+          <levelIcon>	badge_8	</levelIcon>
+          <badgeLevel>	4	</badgeLevel>
+          <autoPerks>
+            <perk>
+              <id>	1	</id>
+              <level>	3	</level>
+            </perk>
+          </autoPerks>
+        </level>
+        <level>
+          <xp>	10000000	</xp>
+          <milestone>	true	</milestone>
+          <rank>	major	</rank>
+          <levelIcon>	badge_9	</levelIcon>
+          <badgeLevel>	5	</badgeLevel>
+          <autoPerks>
+            <perk>
+              <id>	1	</id>
+              <level>	4	</level>
+            </perk>
+          </autoPerks>
+        </level>
+        <level>
+          <xp>	15000000	</xp>
+          <milestone>	true	</milestone>
+          <rank>	lieutenant_colonel	</rank>
+          <levelIcon>	badge_10	</levelIcon>
+          <badgeLevel>	6	</badgeLevel>
+          <autoPerks>
+            <perk>
+              <id>	1	</id>
+              <level>	5	</level>
+            </perk>
+          </autoPerks>
+        </level>
+        <level>
+          <xp>	25000000	</xp>
+          <milestone>	true	</milestone>
+          <rank>	colonel	</rank>
+          <levelIcon>	badge_11	</levelIcon>
+          <badgeLevel>	7	</badgeLevel>
+          <autoPerks>
+            <perk>
+              <id>	1	</id>
+              <level>	6	</level>
+            </perk>
+          </autoPerks>
+        </level>
+        <level>
+          <xp>	40000000	</xp>
+          <milestone>	true	</milestone>
+          <rank>	brigadier_general	</rank>
+          <levelIcon>	badge_12	</levelIcon>
+          <badgeLevel>	8	</badgeLevel>
+          <autoPerks>
+            <perk>
+              <id>	1	</id>
+              <level>	7	</level>
+            </perk>
+          </autoPerks>
+        </level>
+        <level>
+          <xp>	60000000	</xp>
+          <milestone>	true	</milestone>
+          <rank>	major_general	</rank>
+          <levelIcon>	badge_13	</levelIcon>
+          <badgeLevel>	9	</badgeLevel>
+          <autoPerks>
+            <perk>
+              <id>	1	</id>
+              <level>	8	</level>
+            </perk>
+          </autoPerks>
+        </level>
+      </levels>
+    </layout>
+  </progression>
+</progression.xml>

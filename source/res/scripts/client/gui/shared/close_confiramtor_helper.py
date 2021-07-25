@@ -42,7 +42,7 @@ class CloseConfirmatorsHelper(object):
          VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW]
 
     def getRestrictedGuiImplViews(self):
-        return [R.views.lobby.dog_tags.DogTagsView()]
+        return [R.views.lobby.dog_tags.DogTagsView(), R.views.lobby.detachment.PersonalCase()]
 
     def start(self, closeConfirmator):
         self.__closeConfirmator = closeConfirmator

@@ -3,8 +3,9 @@
 import nations
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
+from gui.impl.backport import getIntegralFormat
 from gui.impl.gen import R
-from items import tankmen, parseIntCompactDescr
+from items import detachment_customization, parseIntCompactDescr
 from gui.shared.gui_items.Vehicle import getIconResourceName
 from gui.shared.utils.functions import stripExpAmountTags
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -57,12 +58,7 @@ class CrewBook(FittingItem):
         return CREW_BOOK_RARITY.ORDER[self.getBookType()]
 
     def getBookSpread(self):
-        if self.isPersonal():
-            return CREW_BOOK_SPREAD.PERSONAL_BOOK
         return CREW_BOOK_SPREAD.CREW_BOOK_NO_NATION if self.getNationID() == nations.NONE_INDEX else CREW_BOOK_SPREAD.CREW_BOOK
-
-    def isPersonal(self):
-        return self.getBookType() == CREW_BOOK_RARITY.PERSONAL
 
     def hasNoNation(self):
         return self.getBookType() in CREW_BOOK_RARITY.NO_NATION_TYPES
@@ -127,7 +123,7 @@ class CrewBook(FittingItem):
 
     @property
     def shortDescription(self):
-        return backport.text(R.strings.crew_books.items.dyn(self.getBookSpread()).Descr(), exp=self.getXP())
+        return backport.text(R.strings.crew_books.items.dyn(self.getBookSpread()).Descr(), exp=getIntegralFormat(self.getXP()))
 
     @property
     def icon(self):
@@ -137,7 +133,7 @@ class CrewBook(FittingItem):
         return self._crewBooksConfig()[self.__id]
 
     def _getDescriptor(self):
-        return tankmen.getItemByCompactDescr(self.intCD)
+        return detachment_customization.getItemByCompactDescr(self.intCD)
 
     def _getShortInfoKey(self):
         return backport.text(R.strings.menu.descriptions.dyn(self.getBookSpread())())
@@ -147,8 +143,8 @@ class CrewBook(FittingItem):
 
     @staticmethod
     def _crewBooksConfig():
-        return tankmen.g_cache.crewBooks().books
+        return detachment_customization.g_cache.crewBooks().books
 
     @staticmethod
     def _crewBookTypesConfig():
-        return tankmen.g_cache.crewBooks().rarityGroups
+        return detachment_customization.g_cache.crewBooks().rarityGroups

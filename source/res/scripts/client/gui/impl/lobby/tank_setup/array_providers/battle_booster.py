@@ -27,7 +27,7 @@ class BaseBattleBoosterProvider(VehicleBaseArrayProvider):
     def updateSlot(self, model, item, ctx):
         super(BaseBattleBoosterProvider, self).updateSlot(model, item, ctx)
         isInstalledOrMounted = item in self._getCurrentLayout() or item in self._getInstalledLayout()
-        self._fillStatus(model, item, ctx.slotID)
+        self._fillStatus(model, item, ctx.slotID, isInstalledOrMounted)
         self._fillBuyStatus(model, item, isInstalledOrMounted)
         self._fillDescription(model, item)
 
@@ -35,8 +35,8 @@ class BaseBattleBoosterProvider(VehicleBaseArrayProvider):
         model.setHighlightType(ItemHighlightTypes.BATTLE_BOOSTER)
         model.setOverlayType(ItemHighlightTypes.BATTLE_BOOSTER)
 
-    def _fillStatus(self, model, item, slotID):
-        super(BaseBattleBoosterProvider, self)._fillStatus(model, item, slotID)
+    def _fillStatus(self, model, item, slotID, isInstalledOrMounted):
+        super(BaseBattleBoosterProvider, self)._fillStatus(model, item, slotID, isInstalledOrMounted)
         if not item.isAffectsOnVehicle(self._getVehicle()):
             model.setIsLocked(True)
 
@@ -75,9 +75,11 @@ class CrewBattleBoosterProvider(BaseBattleBoosterProvider):
     def _fillHighlights(self, model, item):
         super(CrewBattleBoosterProvider, self)._fillHighlights(model, item)
         if not item.isAffectedSkillLearnt(self._getVehicle()):
-            model.setOverlayType(ItemHighlightTypes.BATTLE_BOOSTER_REPLACE)
+            model.setOverlayType(ItemHighlightTypes.EMPTY)
 
     def _fillDescription(self, model, item):
-        skillLearnt = item.isAffectedSkillLearnt(self._getVehicle())
-        model.setDescription(item.getCrewBoosterDescription(not skillLearnt, {'colorTagOpen': COLOR_TAG_OPEN,
+        model.setDescription(item.getCrewBoosterDescription({'colorTagOpen': COLOR_TAG_OPEN,
          'colorTagClose': COLOR_TAG_CLOSE}))
+
+    def _getItemSortKey(self, item, ctx):
+        return item.descriptor.perkId

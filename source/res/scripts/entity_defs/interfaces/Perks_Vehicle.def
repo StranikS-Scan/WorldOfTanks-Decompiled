@@ -1,0 +1,56 @@
+<Perks_Vehicle.def>
+  <Properties>
+    <perkEffects>
+      <Type>	FIXED_DICT	  <Properties>
+          <equipment>
+            <Type>	ARRAY	  <of>	STRING	</of>
+            </Type>
+          </equipment>
+        </Properties>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </perkEffects>
+    <perks>
+      <Type>	ARRAY	  <of>	PERK_INFO_HUD	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </perks>
+    <perksRibbonNotify>
+      <Type>	ARRAY	  <of>	PERK_INFO_RIBBON	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </perksRibbonNotify>
+    <canSeeDamagedDevices>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </canSeeDamagedDevices>
+    <seesDamagedDevices>
+      <Type>	FIXED_DICT	  <Properties>
+          <vehicleID>
+            <Type>	OBJECT_ID	</Type>
+          </vehicleID>
+          <damaged>
+            <Type>	ARRAY	  <of>	EXTRA_ID	</of>
+            </Type>
+          </damaged>
+          <destroyed>
+            <Type>	ARRAY	  <of>	EXTRA_ID	</of>
+            </Type>
+          </destroyed>
+        </Properties>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </seesDamagedDevices>
+  </Properties>
+  <CellMethods>
+    <monitorVehicleDamagedDevices>
+      <Exposed></Exposed>
+      <Arg>	OBJECT_ID	</Arg>
+    </monitorVehicleDamagedDevices>
+  </CellMethods>
+</Perks_Vehicle.def>

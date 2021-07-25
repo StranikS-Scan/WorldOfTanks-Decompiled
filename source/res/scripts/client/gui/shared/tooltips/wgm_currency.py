@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/wgm_currency.py
-from debug_utils import LOG_ERROR
+import logging
 from gui.impl import backport
 from gui.shared.money import Currency
 from gui.shared.tooltips.common import DynamicBlocksTooltipData
@@ -11,6 +11,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
+_logger = logging.getLogger(__name__)
 _WAITING_FOR_DATA = ''
 _UNKNOWN_VALUE = '-'
 
@@ -57,10 +58,10 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
         tooltipBlocks = super(WGMCurrencyTooltip, self)._packBlocks(*args, **kwargs)
         self._btnType = btnType
         if self._btnType is None:
-            LOG_ERROR('WGMGoldCurrencyTooltip empty btnType!')
+            _logger.error('WGMGoldCurrencyTooltip empty btnType!')
             return tooltipBlocks
         else:
-            return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=self.__getValueBlocks(), alternativeData=self._getAlternativeData())
+            return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=self._getValueBlocks(), alternativeData=self._getAlternativeData())
 
     def _getAlternativeData(self):
         return None
@@ -77,7 +78,7 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
         s2 = frozenset(d2.itervalues())
         return s1 ^ s2
 
-    def __getValueBlocks(self):
+    def _getValueBlocks(self):
         valueBlocks = list()
         if self._btnType == Currency.GOLD:
             valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE), value=self.__getGoldString(wgm_balance_info_requester.GOLD_PURCHASED), icon=Currency.GOLD, valueWidth=84, iconYOffset=2))
@@ -102,3 +103,15 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
 
     def __getCreditsTotal(self):
         return backport.getIntegralFormat(self.itemsCache.items.stats.credits) if self.isWGMAvailable() else _UNKNOWN_VALUE
+
+
+class WGMCurrencyFullscreenTooltip(WGMCurrencyTooltip):
+
+    def _packBlocks(self, btnType=None, *args, **kwargs):
+        tooltipBlocks = super(WGMCurrencyFullscreenTooltip, self)._packBlocks(*args, **kwargs)
+        self._btnType = btnType
+        if self._btnType is None:
+            _logger.error('WGMGoldCurrencyTooltip empty btnType!')
+            return tooltipBlocks
+        else:
+            return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=self._getValueBlocks())

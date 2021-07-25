@@ -303,4 +303,308 @@
     <directVisionRadius>	445	</directVisionRadius>
     <normalRadioDistance>	5000	</normalRadioDistance>
   </type>
+  <type>
+    <id>	3	</id>
+    <display_name>	Headquarter	</display_name>
+    <health>	3600	</health>
+    <destroyedNotificationRadius>	150	</destroyedNotificationRadius>
+    <materials>	"	  <undamaged_1>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	2000	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_1>
+      <undamaged_2>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	2000	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_2>
+      <undamaged_3>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	210	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_3>
+      <undamaged_4>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	90	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_4>
+      <undamaged_5>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	25	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_5>
+      <undamaged_6>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	70	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_6>
+      <undamaged_7>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	25	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_7>
+      <undamaged_8>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	25	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_8>
+      <broken_1>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	100	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </broken_1>
+      <broken_2>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	100	</armor>
+        <effectMaterial>	stone	</effectMaterial>
+      </broken_2>
+      <metal>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	1000000	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </metal>
+      <stone>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	1000000	</armor>
+        <effectMaterial>	stone	</effectMaterial>
+      </stone>
+      <armor_1>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	200	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_1>
+      <armor_2>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	200	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_2>
+      <armor_3>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	185	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_3>
+      <armor_4>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	160	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_4>
+      <armor_5>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	140	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_5>
+      <armor_6>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	50	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_6>
+      <armor_7>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	55	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_7>
+      <armor_8>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	160	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_8>
+      <armor_9>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	105	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_9>
+      <armor_10>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	55	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_10>
+      <armor_11>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	250	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_11>
+      <armor_12>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	100	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_12>
+      <armor_13>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	60	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_13>
+      <armor_14>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	100	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_14>
+      <armor_15>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	0	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_15>
+      <armor_16>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	100	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </armor_16>
+    </materials>
+    <states>
+      <state>
+        <name>	alive	</name>
+        <components>
+          <component>
+            <id>	socket	</id>
+            <destructible>	false	</destructible>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_s_B.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_s.model	</visual_model>
+          </component>
+          <component>
+            <id>	structure	</id>
+            <destructible>	true	</destructible>
+            <gui_node>	HP_gui	</gui_node>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t_B.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t.model	</visual_model>
+          </component>
+        </components>
+      </state>
+      <state>
+        <name>	destroyed	</name>
+        <effect>	lrg_destruction	</effect>
+        <components>
+          <component>
+            <id>	socket	</id>
+            <destructible>	false	</destructible>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_s_crash_B.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_s_crash.model	</visual_model>
+          </component>
+          <component>
+            <id>	structure	</id>
+            <destructible>	false	</destructible>
+            <gui_node>	HP_gui	</gui_node>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t_crash_B.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t_crash.model	</visual_model>
+          </component>
+        </components>
+      </state>
+    </states>
+    <observationPoints>
+      <point>	0 15 0	</point>
+    </observationPoints>
+    <observedPoints></observedPoints>
+    <directVisionRadius>	445	</directVisionRadius>
+    <normalRadioDistance>	5000	</normalRadioDistance>
+  </type>
 </destructible_entities.xml>

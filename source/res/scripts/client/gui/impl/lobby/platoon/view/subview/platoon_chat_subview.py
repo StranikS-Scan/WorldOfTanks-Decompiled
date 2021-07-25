@@ -34,7 +34,7 @@ class ChatSubview(ViewImpl, GFChannelViewInterface):
         return self.getViewModel()
 
     def onChannelControllerInited(self, channelCtrl):
-        if channelCtrl is not None:
+        if channelCtrl is not None and not self.__platoonCtrl.isPlayerRoleAutoSearch():
             self.__clearMessages()
             messagesCache = channelCtrl.getHistory()
             for msg in messagesCache:
@@ -42,8 +42,9 @@ class ChatSubview(ViewImpl, GFChannelViewInterface):
 
         return
 
-    def addMessageToView(self, message):
-        self.__addMessage(message)
+    def addMessageToView(self, message, isHistoryMessage=False):
+        if not isHistoryMessage or not self.__platoonCtrl.isPlayerRoleAutoSearch():
+            self.__addMessage(message)
         return not self.getParentWindow().isHidden()
 
     def _initialize(self, *args, **kwargs):

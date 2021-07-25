@@ -73,7 +73,7 @@ class SmokeScreen(object):
         self.__effectID = -1
         self.__smokeID = smokeId
         self.__debugGizmo = None
-        self.__loadSmokeScreen(args[0], args[1])
+        self.__loadSmokeScreen(args[0], args[1], args[4])
         if _SHOW_DEBUG_SMOKE:
             self.__debugGizmo = _SmokeDebugVisualization(args[1], args[0], args[3])
         return
@@ -85,9 +85,14 @@ class SmokeScreen(object):
             self.__debugGizmo = None
         return
 
-    def __loadSmokeScreen(self, equipmentID, position):
+    def __loadSmokeScreen(self, equipmentID, position, team):
         smokeScreenEquipment = vehicles.g_cache.equipments()[equipmentID]
-        settingsData = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE + '/' + smokeScreenEquipment.smokeEffectName)
+        player = BigWorld.player()
+        if team is player.followTeamID:
+            effectName = smokeScreenEquipment.smokeEffectNameAlly
+        else:
+            effectName = smokeScreenEquipment.smokeEffectNameEnemy
+        settingsData = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE + '/' + effectName)
         if settingsData is None:
             return
         else:

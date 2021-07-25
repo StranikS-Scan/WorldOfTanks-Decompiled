@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/bootcamp/bootcamp_lesson_model.py
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
+from gui.impl.gen.view_models.views.bootcamp.bootcamp_reward_item_model import BootcampRewardItemModel
 
 class BootcampLessonModel(ViewModel):
     __slots__ = ()

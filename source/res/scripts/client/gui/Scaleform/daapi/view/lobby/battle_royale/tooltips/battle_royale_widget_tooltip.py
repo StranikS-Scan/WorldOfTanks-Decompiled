@@ -43,7 +43,7 @@ class BattleRoyaleWidgetTooltip(RankedSelectorTooltip):
         currentSeason = self._battleController.getCurrentSeason()
         if currentSeason:
             cycleNumber = self._battleController.getCurrentOrNextActiveCycleNumber(currentSeason)
-            seasonResID = R.strings.epic_battle.season.num(currentSeason.getSeasonID())
+            seasonResID = R.strings.battle_royale.season.num(currentSeason.getSeasonID())
             seasonName = backport.text(seasonResID.name()) if seasonResID else None
             scheduleStr = backport.text(R.strings.menu.headerButtons.battle.types.battleRoyale.extra.currentCycle(), season=seasonName, cycle=int2roman(cycleNumber))
             body = '{}\n\n\n{}'.format(scheduleStr, backport.text(R.strings.tooltips.battleTypes.battleRoyale.body2()))

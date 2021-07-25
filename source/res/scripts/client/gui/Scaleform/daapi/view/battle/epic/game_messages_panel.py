@@ -16,6 +16,16 @@ class EpicMessagePanel(GameMessagesPanelMeta):
         super(EpicMessagePanel, self).__init__()
         self.__blockNewMessages = False
 
+    def showHint(self, hint, data):
+        if hint.name == 'CaptureBase':
+            ctrl = self.sessionProvider.dynamic.missions
+            if ctrl is not None:
+                ctrl.onSectorBaseCaptured(int(data.get('param1', 0)), data.get('param2', 'false') == 'true')
+        return
+
+    def hideHint(self, hint):
+        pass
+
     def sendEndGameMessage(self, winningTeam, reason):
         isWinner = avatar_getter.getPlayerTeam() == winningTeam
         if winningTeam == 0:
@@ -31,10 +41,18 @@ class EpicMessagePanel(GameMessagesPanelMeta):
         self.__onIngameMessageReady(msg)
         self.__blockNewMessages = True
 
-    def onMessageStarted(self, messageType, id_):
+    def onMessageStarted(self, messageType, modificator, id_):
         ctrl = self.sessionProvider.dynamic.gameNotifications
         if ctrl is not None:
-            ctrl.onMessagePlaybackStarted(messageType, {'id': id_})
+            ctrl.onMessagePlaybackStarted(messageType, {'id': id_,
+             'modificator': modificator})
+        return
+
+    def onMessagePhaseStarted(self, messageType, modificator, id_):
+        ctrl = self.sessionProvider.dynamic.gameNotifications
+        if ctrl is not None:
+            ctrl.onMessagePlaybackPhaseStarted(messageType, {'id': id_,
+             'modificator': modificator})
         return
 
     def onMessageEnded(self, messageType, id_):

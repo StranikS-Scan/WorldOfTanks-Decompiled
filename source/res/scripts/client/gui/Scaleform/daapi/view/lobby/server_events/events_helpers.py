@@ -137,11 +137,11 @@ class _QuestInfo(_EventInfo, QuestInfoModel):
     def _getStatus(self, pCur=None):
         if self.event.isCompleted(progress=pCur):
             if self.event.bonusCond.isDaily():
-                msg = self._getCompleteDailyStatus('#quests:details/status/completed/daily')
+                msg = self._getCompleteDailyStatus(self._getCompleteKey())
             elif self.event.bonusCond.isWeekly():
-                msg = self._getCompleteWeeklyStatus('#quests:details/status/completed/weekly')
+                msg = self._getCompleteWeeklyStatus(self._getCompleteWeeklyKey())
             else:
-                msg = i18n.makeString('#quests:details/status/completed')
+                msg = backport.text(R.strings.quests.details.status.completed())
             return (MISSIONS_STATES.COMPLETED, msg)
         else:
             isAvailable, errorMsg = self.event.isAvailable()
@@ -375,7 +375,7 @@ def getBattlePassQuestInfo(progress):
     questName = backport.text(postBattleR.title(), level=progress.level, chapter=chapterName)
     progressDesc = backport.text(postBattleR.progress())
     progressDiffTooltip = backport.text(postBattleR.progress.tooltip(), points=progress.pointsBattleDiff)
-    questInfo = {'status': 'done' if progress.isDone else '',
+    questInfo = {'status': MISSIONS_STATES.COMPLETED if progress.isDone else MISSIONS_STATES.IN_PROGRESS,
      'questID': BattlePassConsts.FAKE_QUEST_ID,
      'rendererType': QUESTS_ALIASES.RENDERER_TYPE_QUEST,
      'eventType': EVENT_TYPE.BATTLE_QUEST,
@@ -384,7 +384,7 @@ def getBattlePassQuestInfo(progress):
      'description': questName,
      'currentProgrVal': progress.pointsNew,
      'tasksCount': -1,
-     'progrBarType': 'current' if not progress.isDone else '',
+     'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE if not progress.isDone else formatters.PROGRESS_BAR_TYPE.NONE,
      'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS}
     progressList = []
     if not progress.isDone:
@@ -393,7 +393,7 @@ def getBattlePassQuestInfo(progress):
           'progressDiff': '+ {}'.format(progress.pointsDiff),
           'progressDiffTooltip': progressDiffTooltip,
           'currentProgrVal': progress.pointsNew,
-          'progrBarType': 'current'}]
+          'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE}]
     awards = []
     if progress.isDone:
         awardsList = QuestsBonusComposer(BattlePassTextBonusesPacker()).getPreformattedBonuses(progress.awards)
@@ -405,7 +405,7 @@ def getBattlePassQuestInfo(progress):
      'questInfo': questInfo,
      'questType': EVENT_TYPE.BATTLE_QUEST,
      'progressList': progressList,
-     'questState': {'statusState': 'done' if progress.isDone else 'inProgress'},
+     'questState': {'statusState': MISSIONS_STATES.COMPLETED if progress.isDone else MISSIONS_STATES.IN_PROGRESS},
      'linkBtnTooltip': '' if progress.isEnabled else backport.text(R.strings.battle_pass.progression.error()),
      'linkBtnEnabled': progress.isEnabled}
     return info

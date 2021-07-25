@@ -19,6 +19,9 @@ class BCIntroVideoPageMeta(View):
     def handleError(self, data):
         self._printOverrideError('handleError')
 
+    def onHighlightShow(self):
+        self._printOverrideError('onHighlightShow')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 

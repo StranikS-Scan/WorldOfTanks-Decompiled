@@ -89,7 +89,7 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
         return (TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO, True) if self.__rankedController.isAvailable() else (TOOLTIPS_CONSTANTS.RANKED_UNAVAILABLE_INFO, True)
 
     def __getEpicAvailabilityData(self):
-        return (TOOLTIPS_CONSTANTS.EVENT_PROGRESSION_SELECTOR_INFO, True)
+        return (TOOLTIPS_CONSTANTS.EPIC_BATTLE_SELECTOR_INFO, True)
 
     @process
     def __selectFight(self, actionName):

@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 class ActiveVehicleSeasonType(object):
 
     def __init__(self):
-        self._vehTypeDescrToSeason = {'historical': {}}
+        self._vehTypeDescrToSeason = {'customizationDisplayType': {}}
 
     def get(self, vehTypeDescr, defaultSeasonType):
         season = self._vehTypeDescrToSeason.get(vehTypeDescr, defaultSeasonType)

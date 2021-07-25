@@ -5,20 +5,20 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.base_ammunition_slot
 class CompareToggleAmmunitionSlot(BaseAmmunitionSlot):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=13, commands=0):
         super(CompareToggleAmmunitionSlot, self).__init__(properties=properties, commands=commands)
 
     def getIsSelected(self):
-        return self._getBool(8)
+        return self._getBool(11)
 
     def setIsSelected(self, value):
-        self._setBool(8, value)
+        self._setBool(11, value)
 
     def getIsLocked(self):
-        return self._getBool(9)
+        return self._getBool(12)
 
     def setIsLocked(self, value):
-        self._setBool(9, value)
+        self._setBool(12, value)
 
     def _initialize(self):
         super(CompareToggleAmmunitionSlot, self)._initialize()

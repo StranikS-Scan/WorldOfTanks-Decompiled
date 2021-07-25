@@ -34,9 +34,9 @@ class ConfirmExchangeDialog(ConfirmExchangeDialogMeta):
             self.__exchangeMutex = True
             exchangedValue = goldValue * self.meta.getExchangeRate()
             result = yield self.meta.submit(goldValue, exchangedValue)
-            if result.userMsg:
-                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-            if result.success and self.meta is not None:
+            if result is not None:
+                SystemMessages.pushMessagesFromResult(result)
+            if result is not None and result.success and self.meta is not None:
                 self._callHandler(True, self.meta.getTypeCompDescr())
                 self.destroy()
             else:

@@ -20,7 +20,8 @@ _EquipmentAdapter = namedtuple('_EquipmentAdapter', ['areaWidth',
  'areaColor',
  'areaMarker'])
 _DYNAMIC_OBJECTS_CONFIG_FILE = 'scripts/dynamic_objects.xml'
-_STUN_AREA_VISUAL_SECTION = 'stunAreaVisual'
+_AREA_VISUAL_SECTION = {BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA: 'stunAreaVisual',
+ BATTLE_CHAT_COMMAND_NAMES.SHOOTING_POINT: 'shootAreaVisual'}
 _DIR_UP = Math.Vector3(0.0, 1.0, 0.0)
 _STUN_AREA_DEFAULTS = {'radius': 15.0,
  'areasNum': 3,
@@ -34,7 +35,10 @@ _DISTANCE_FOR_MARKER_REMOVAL = 15.0
 COMMAND_NAME_TO_LOCATION_MARKER_SUBTYPE = {BATTLE_CHAT_COMMAND_NAMES.GOING_THERE: LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE,
  BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION: LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE,
  BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT: LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE,
- BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA: LocationMarkerSubType.SPG_AIM_AREA_SUBTYPE}
+ BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA: LocationMarkerSubType.SPG_AIM_AREA_SUBTYPE,
+ BATTLE_CHAT_COMMAND_NAMES.VEHICLE_SPOTPOINT: LocationMarkerSubType.VEHICLE_SPOTPOINT_SUBTYPE,
+ BATTLE_CHAT_COMMAND_NAMES.SHOOTING_POINT: LocationMarkerSubType.SHOOTING_POINT_SUBTYPE,
+ BATTLE_CHAT_COMMAND_NAMES.NAVIGATION_POINT: LocationMarkerSubType.NAVIGATION_POINT_SUBTYPE}
 
 class LocationPointData(object):
 
@@ -57,7 +61,7 @@ class LocationPointManager(CallbackDelayer):
         self.__markedAreas = dict()
         self.__activeLocationMarkerID = None
         self.__resources = {}
-        self.__visualisationData = {BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA: self.__getStunAreaParamsConfig()}
+        self.__visualisationData = dict(((k, self.__getAreaParamsConfig(v)) for k, v in _AREA_VISUAL_SECTION.iteritems()))
         return
 
     def activate(self):
@@ -96,11 +100,16 @@ class LocationPointManager(CallbackDelayer):
             commandName = _ACTIONS.battleChatCommandFromActionID(cmdID).name
             self.__markedAreas[targetID] = LocationPointData(creatorID, position, targetID, cmdID, numberOfReplies, markerText, COMMAND_NAME_TO_LOCATION_MARKER_SUBTYPE[commandName])
             if commandName in self.__visualisationData.keys():
-                self.__addVisualisationArea(targetID, position, self.__visualisationData[commandName], True)
+                params = self.__visualisationData[commandName]
+                isServerCommand = creatorID == self.sessionProvider.arenaVisitor.getArenaUniqueID()
+                if isServerCommand and commandName == BATTLE_CHAT_COMMAND_NAMES.SHOOTING_POINT and markerText:
+                    params = dict(((k, v if k != 'radius' else float(markerText)) for k, v in params.iteritems()))
+                    markerText = ''
+                self.__addVisualisationArea(targetID, position, params, not isServerCommand)
             if isTargetForPlayer:
                 self.__activeLocationMarkerID = targetID
                 self.delayCallback(_CHECK_DISTANCE_CALLBACK_TIME, self.__checkDistanceForRepliersCB)
-            ctrl.onStaticMarkerAdded(targetID, creatorID, position, COMMAND_NAME_TO_LOCATION_MARKER_SUBTYPE[commandName], True, markerText, numberOfReplies, isTargetForPlayer)
+            ctrl.onStaticMarkerAdded(targetID, creatorID, position, COMMAND_NAME_TO_LOCATION_MARKER_SUBTYPE[commandName], markerText, numberOfReplies, isTargetForPlayer)
             return
 
     def getLocationPointData(self, targetID):
@@ -170,7 +179,8 @@ class LocationPointManager(CallbackDelayer):
         for i in xrange(0, visualisationParams['areasNum']):
             area = self.__createArea(position, visualisationParams, areaIndex=i)
             if area is not None:
-                area.setGUIVisible(showArea)
+                area.setGUIVisible(True)
+                area.enableAccurateCollision(showArea)
                 areas.append(area)
 
         self.__markedAreas[targetID].areas = areas
@@ -185,10 +195,10 @@ class LocationPointManager(CallbackDelayer):
         return area
 
     @staticmethod
-    def __getStunAreaParamsConfig():
+    def __getAreaParamsConfig(section):
         configSection = ResMgr.openSection(_DYNAMIC_OBJECTS_CONFIG_FILE)
-        if configSection and configSection.has_key(_STUN_AREA_VISUAL_SECTION):
-            configSection = configSection[_STUN_AREA_VISUAL_SECTION]
+        if configSection and configSection.has_key(section):
+            configSection = configSection[section]
             return {'radius': configSection.readFloat('radius', _STUN_AREA_DEFAULTS['radius']),
              'areasNum': configSection.readInt('areasNum', _STUN_AREA_DEFAULTS['areasNum']),
              'color': int(configSection.readString('color', _STUN_AREA_DEFAULTS['color']), 0),

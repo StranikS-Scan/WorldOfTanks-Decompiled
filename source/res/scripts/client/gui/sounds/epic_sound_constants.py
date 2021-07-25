@@ -19,13 +19,8 @@ class EPIC_OVERTIME_SOUND_NOTIFICATIONS(object):
 
 
 class EPIC_METAGAME_WWISE_SOUND_EVENTS(object):
-    EB_WELCOME_SCREEN_BUTTON_ANIM = 'eb_welcome_01'
-    EB_WELCOME_SCREEN_MOVE = 'eb_welcome_02'
-    EB_WELCOME_SCREEN_DONE = 'eb_welcome_03'
     EB_ACHIEVED_RANK = 'eb_achieved_rank'
     EB_LEVEL_REACHED = 'eb_level_reached'
-    EB_ABILITY_UPGRADE = 'eb_ability_upgrade_02'
-    EB_PRESTIGE_RESET = 'eb_prestige_reset'
     EB_PROGRESS_BAR_START = 'gui_progress_bar'
     EB_PROGRESS_BAR_STOP = 'gui_progress_bar_stop'
     EB_LEVEL_REACHED_MAX = 'eb_level_reached_maximum'
@@ -33,15 +28,7 @@ class EPIC_METAGAME_WWISE_SOUND_EVENTS(object):
 
 class EPIC_SOUND(object):
     EPIC_MSG_SOUNDS_ENABLED = True
-    BF_EB_ABILITY_LIST = ()
-    BF_EB_ABILITY_DEPLOYING = 'eb_ability_deployed'
-    BF_EB_ABILITY_INSPIRE_DEPLOYED = 'eb_ability_inspire_deployed'
     BF_EB_EQUIPMENT_SOUND_LIST = ('INSPIRE', 'ARTILLERY', 'RECON', 'BOMBER')
-    BF_EB_ABILITY_USED = {'RECON': BF_EB_ABILITY_DEPLOYING,
-     'BOMBER': BF_EB_ABILITY_DEPLOYING,
-     'ARTILLERY': BF_EB_ABILITY_DEPLOYING,
-     'SMOKE': BF_EB_ABILITY_DEPLOYING,
-     'INSPIRE': BF_EB_ABILITY_INSPIRE_DEPLOYED}
     EB_READY_FOR_DEPLOYMENT = 'eb_ready_for_deployment'
     BF_EB_START_BATTLE = {EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER: 'vo_eb_start_ATK',
      EPIC_BATTLE_TEAM_ID.TEAM_DEFENDER: 'vo_eb_start_DEF'}
@@ -130,6 +117,23 @@ class EPIC_SOUND(object):
      GAME_MESSAGES_CONSTS.RETREAT_SUCCESSFUL: BF_EB_RETREAT_SUCCESSFUL,
      GAME_MESSAGES_CONSTS.GENERAL_RANK_REACHED: BF_EB_GENERAL,
      GAME_MESSAGES_CONSTS.RANK_UP: BF_EB_RANK_UP}
+    EB_UI_REPPAIR_POINT_COMPLETED = 'eb_ui_repair_point'
+    EB_UI_REPPAIR_POINT_PROGRESS = 'eb_ui_repair_point_progress'
+    EB_UI_REPPAIR_POINT_PROGRESS_STOP = 'eb_ui_repair_point_progress_stop'
+    EB_ABILITY_MINEFIELD_BLOCK = 'eb_ability_minefield_block'
+    EB_ABILITY_MINEFIELD_APPLY = 'eb_ability_minefield_apply'
+    EB_ABILITY_MINEFIELD_HITS_TARGET = 'eb_ability_minefield_hits_target'
+    EB_ABILITY_STEALTH_START = 'eb_ability_stealth_start'
+    EB_ABILITY_STEALTH_STOP = 'eb_ability_stealth_stop'
+    EB_ABILITY_RENOVATION_COMPLETED = 'eb_ability_renovation_completed'
+    EQUIPMENT_ACTIVATED = {'arcade_minefield_epic_battle': 'eb_ability_minefield_zone',
+     'fl_regenerationKit': 'eb_ability_renovation_apply',
+     'stealth_radar': 'eb_ability_stealth_apply'}
+    EB_TANKS_UNLOCKED = 'eb_tanks_9lvl_unlocked'
+    EB_UI_ADD_TIME_EMERGENCE = 'eb_ui_add_time_emergence'
+    EB_UI_CANNON_DESTRUCTION_EMERGENCE = 'eb_ui_cannon_destruction_emergence'
+    EB_UI_CANNON_DESTRUCTION_CROSS = 'eb_ui_cannon_destruction_cross'
+    EB_UI_CANNON_DESTRUCTION_DISAPPEARANCE = 'eb_ui_cannon_destruction_disappearance'
 
 
 class BF_EB_MAIN_OBJECTIVES_SOUND_NOTIFICATIONS(object):

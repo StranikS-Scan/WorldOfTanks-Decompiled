@@ -13,6 +13,7 @@ from gui.shared.items_parameters.formatters import FORMAT_SETTINGS
 from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator
 from helpers import dependency
+from post_progression_common import VehicleState
 from skeletons.gui.game_control import IVehicleComparisonBasket
 _HEADER_PARAM_COLOR_SCHEME = (text_styles.middleTitle, text_styles.middleBonusTitle, text_styles.middleTitle)
 _HEADER_PARAM_NO_COLOR_SCHEME = (text_styles.middleTitle, text_styles.middleTitle, text_styles.middleTitle)
@@ -93,8 +94,8 @@ class _VehParamsValuesGenerator(VehParamsBaseGenerator):
         data['text'] = formatters.formatParameter(param.name, param.value, param.state, self.__headerScheme, FORMAT_SETTINGS, False)
         return data
 
-    def _makeAdvancedParamVO(self, param):
-        data = super(_VehParamsValuesGenerator, self)._makeAdvancedParamVO(param)
+    def _makeAdvancedParamVO(self, param, parent, highlight):
+        data = super(_VehParamsValuesGenerator, self)._makeAdvancedParamVO(param, parent, highlight)
         if param.value:
             data['text'] = formatters.formatParameter(param.name, param.value, param.state, self.__bodyScheme, FORMAT_SETTINGS, False)
         else:
@@ -117,6 +118,8 @@ class _VehCompareParametersData(object):
         self.__selectedShellIdx = 0
         self.__vehicle = None
         self.__battleBooster = None
+        self.__dynSlotType = None
+        self.__postProgressionState = VehicleState()
         self.__isCrewInvalid = False
         self.__isInInvInvalid = False
         self.__isConfigurationTypesInvalid = False
@@ -149,7 +152,7 @@ class _VehCompareParametersData(object):
                 levelsByIndexes = {}
                 defRoleLevel = self.__crewLvl
                 nativeVehiclesByIndexes = None
-            self.__vehicle.crew = self.__vehicle.getCrewBySkillLevels(defRoleLevel, skillsDict, levelsByIndexes, nativeVehiclesByIndexes)
+            self.__vehicle.crew = self.__vehicle.getCrewBySkillLevels(defRoleLevel, skillsDict, levelsByIndexes, nativeVehiclesByIndexes, activateBrotherhood=True)
             self.__isCrewInvalid = True
             self.__isCurrVehParamsInvalid = True
         return self.__isCrewInvalid
@@ -160,11 +163,15 @@ class _VehCompareParametersData(object):
         hasCamouflage = vehCompareData.hasCamouflage()
         selectedShellIdx = vehCompareData.getSelectedShellIndex()
         battleBooster = vehCompareData.getBattleBooster()
+        dynSlotType = vehCompareData.getDynSlotType()
+        postProgressionState = vehCompareData.getPostProgressionState()
         isDifferent = False
         camouflageInvalid = self.__hasCamouflage != hasCamouflage
         equipInvalid = equipment != self.__equipment
         shellInvalid = selectedShellIdx != self.__selectedShellIdx
         battleBoosterInvalid = battleBooster != self.__battleBooster
+        dynSlotsInvalid = dynSlotType != self.__dynSlotType
+        postProgressionInvalid = postProgressionState != self.__postProgressionState
         if vehicleStrCD != self.__vehicleStrCD:
             self.__vehicleStrCD = vehicleStrCD
             self.__vehicle = Vehicle(self.__vehicleStrCD)
@@ -172,6 +179,8 @@ class _VehCompareParametersData(object):
             isDifferent = True
             equipInvalid = True
             camouflageInvalid = True
+            dynSlotsInvalid = True
+            postProgressionInvalid = True
         if equipInvalid:
             for i, eq in enumerate(equipment):
                 vehicle_adjusters.installEquipment(self.__vehicle, eq, i)
@@ -189,6 +198,16 @@ class _VehCompareParametersData(object):
         if shellInvalid:
             self.__vehicle.descriptor.activeGunShotIndex = selectedShellIdx
             self.__selectedShellIdx = selectedShellIdx
+            isDifferent = True
+        if dynSlotsInvalid:
+            self.__dynSlotType = dynSlotType
+            self.__vehicle.optDevices.dynSlotType = dynSlotType
+            self.__isCurrVehParamsInvalid = True
+            isDifferent = True
+        if postProgressionInvalid:
+            self.__postProgressionState = postProgressionState
+            self.__vehicle.installPostProgression(postProgressionState, True)
+            self.__isCurrVehParamsInvalid = True
             isDifferent = True
         return isDifferent
 
@@ -214,6 +233,8 @@ class _VehCompareParametersData(object):
         self.__currentVehParams = None
         self.__parameters = None
         self.__battleBooster = None
+        self.__dynSlotType = None
+        self.__postProgressionState = None
         return
 
     def getVehicleIntCD(self):

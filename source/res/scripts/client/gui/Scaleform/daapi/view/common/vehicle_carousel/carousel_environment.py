@@ -16,6 +16,7 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController, IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -55,8 +56,8 @@ class ICarouselEnvironment(object):
     def hasRoles(self):
         return False
 
-    def hasBattleRoyaleVehicles(self):
-        return False
+    def getCustomParams(self):
+        return dict()
 
 
 class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnvironment):
@@ -68,6 +69,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
     rankedController = dependency.descriptor(IRankedBattlesController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    __battleSession = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(CarouselEnvironment, self).__init__()
@@ -143,6 +145,8 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.as_blinkCounterS()
 
     def selectVehicle(self, idx):
+        if self.__battleSession.isReplayPlaying:
+            return
         self._carouselDP.selectVehicle(idx)
 
     def updateVehicles(self, vehicles=None, filterCriteria=None):

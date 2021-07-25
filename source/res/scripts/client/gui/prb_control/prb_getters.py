@@ -55,6 +55,10 @@ def isInMapboxQueue():
     return getattr(BigWorld.player(), 'isInMapboxQueue', False)
 
 
+def isInMapsTrainingQueue():
+    return getattr(BigWorld.player(), 'isInMapsTrainingQueue', False)
+
+
 def getQueueType():
     queueType = 0
     if isInRandomQueue():
@@ -75,6 +79,8 @@ def getQueueType():
         queueType = QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT
     elif isInMapboxQueue():
         queueType = QUEUE_TYPE.MAPBOX
+    elif isInMapsTrainingQueue():
+        queueType = QUEUE_TYPE.MAPS_TRAINING
     return queueType
 
 
@@ -163,7 +169,8 @@ _ARENA_GUI_TYPE_BY_QUEUE_TYPE = {QUEUE_TYPE.RANDOMS: ARENA_GUI_TYPE.RANDOM,
  QUEUE_TYPE.EPIC: ARENA_GUI_TYPE.EPIC_BATTLE,
  QUEUE_TYPE.BATTLE_ROYALE: ARENA_GUI_TYPE.BATTLE_ROYALE,
  QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT: ARENA_GUI_TYPE.BATTLE_ROYALE,
- QUEUE_TYPE.MAPBOX: ARENA_GUI_TYPE.MAPBOX}
+ QUEUE_TYPE.MAPBOX: ARENA_GUI_TYPE.MAPBOX,
+ QUEUE_TYPE.MAPS_TRAINING: ARENA_GUI_TYPE.MAPS_TRAINING}
 
 def getArenaGUIType(prbType=None, queueType=None):
     if prbType is None:

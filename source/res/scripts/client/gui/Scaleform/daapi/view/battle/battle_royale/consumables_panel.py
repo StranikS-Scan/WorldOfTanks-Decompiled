@@ -19,6 +19,7 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
     def __init__(self):
         super(BattleRoyaleConsumablesPanel, self).__init__()
         self.__quantityMap = [None] * self._PANEL_MAX_LENGTH
+        self.__equipmentRange = range(self._EQUIPMENT_START_IDX, self._EQUIPMENT_END_IDX + 1)
         self.__es = EventsSubscriber()
         return
 
@@ -65,10 +66,10 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
         self.__resetShellSlots()
         self._resetDelayedReload()
 
-    def _onGunReloadTimeSet(self, currShellCD, state):
+    def _onGunReloadTimeSet(self, currShellCD, state, skipAutoLoader):
         if currShellCD not in self._cds:
             return
-        super(BattleRoyaleConsumablesPanel, self)._onGunReloadTimeSet(currShellCD, state)
+        super(BattleRoyaleConsumablesPanel, self)._onGunReloadTimeSet(currShellCD, state, skipAutoLoader)
 
     def _onEquipmentAdded(self, intCD, item):
         if item is None or intCD in self._cds:
@@ -84,7 +85,10 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
     def _isAvatarEquipment(self, item):
         return False
 
-    def _addOptionalDeviceSlot(self, idx, intCD, descriptor, isActive):
+    def _resetOptDevices(self):
+        pass
+
+    def _addOptionalDeviceSlot(self, idx, intCD):
         pass
 
     def _updateShellSlot(self, idx, quantity):
@@ -109,6 +113,8 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
                 self.as_setGlowS(idx, CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL)
             elif currStage == EQUIPMENT_STAGES.COOLDOWN and prevStage in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING, EQUIPMENT_STAGES.ACTIVE):
                 self.as_setGlowS(idx, CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE)
+            elif currStage == EQUIPMENT_STAGES.READY and prevStage == EQUIPMENT_STAGES.PREPARING:
+                self.as_setEquipmentActivatedS(idx, False)
             return
 
     def _updateOptionalDeviceSlot(self, idx, isOn):
@@ -122,7 +128,7 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
 
     def __onEquipmentReset(self):
         self.__resetEquipmentSlots()
-        self.as_resetS()
+        self.as_resetS(list())
 
     def __getNewSlotIdx(self, startIdx=0, endIdx=_PANEL_MAX_LENGTH - 1):
         resultIdx = None
@@ -141,7 +147,7 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel):
         return
 
     def __resetEquipmentSlots(self):
-        for idx in range(self._EQUIPMENT_START_IDX, self._EQUIPMENT_END_IDX + 1):
+        for idx in self.__equipmentRange:
             self._mask &= ~(1 << idx)
             self._cds[idx] = None
 

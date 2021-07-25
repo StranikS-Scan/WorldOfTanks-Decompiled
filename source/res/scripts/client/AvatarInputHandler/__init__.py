@@ -76,6 +76,7 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeM
  _CTRL_MODE.VIDEO: (control_modes.VideoCameraControlMode, 'videoMode', _CTRL_TYPE.OPTIONAL),
  _CTRL_MODE.MAP_CASE: (MapCaseMode.MapCaseControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.MAP_CASE_ARCADE: (MapCaseMode.ArcadeMapCaseControlMode, 'arcadeMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.MAP_CASE_ARCADE_EPIC_MINEFIELD: (MapCaseMode.AracdeMinefieldControleMode, 'arcadeEpicMinefieldMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.RESPAWN_DEATH: (RespawnDeathMode.RespawnDeathMode, 'postMortemMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DEATH_FREE_CAM: (epic_battle_death_mode.DeathFreeCamMode, 'epicVideoMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DUAL_GUN: (control_modes.DualGunControlMode, 'dualGunMode', _CTRL_TYPE.USUAL)}
@@ -288,35 +289,37 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         isDown, key, mods, isRepeat = game.convertKeyEvent(event)
         if isRepeat:
             return False
-        elif self.__isStarted and self.__isDetached:
-            if self.__curCtrl.alwaysReceiveKeyEvents(isDown=isDown) and not self.isObserverFPV or CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
-                self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
-            for command in self.__detachedCommands:
+        else:
+            player = BigWorld.player()
+            if self.__isStarted and self.__isDetached:
+                if self.__curCtrl.alwaysReceiveKeyEvents(isDown=isDown) and not self.isObserverFPV or CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
+                    self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
+                for command in self.__detachedCommands:
+                    if command.handleKeyEvent(isDown, key, mods, event):
+                        return True
+
+                return player.handleKey(isDown, key, mods)
+            if not self.__isStarted or self.__isDetached:
+                return False
+            for command in self.__commands:
                 if command.handleKeyEvent(isDown, key, mods, event):
                     return True
 
-            return BigWorld.player().handleKey(isDown, key, mods)
-        elif not self.__isStarted or self.__isDetached:
-            return False
-        for command in self.__commands:
-            if command.handleKeyEvent(isDown, key, mods, event):
-                return True
-
-        if isDown and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
-            if self.__alwaysShowAimKey is not None and key == self.__alwaysShowAimKey:
-                gui_event_dispatcher.toggleCrosshairVisibility()
-                return True
-            if self.__showMarkersKey is not None and key == self.__showMarkersKey and not self.__isGUIVisible:
-                gui_event_dispatcher.toggleMarkers2DVisibility()
-                return True
-            if key == Keys.KEY_F5 and constants.HAS_DEV_RESOURCES:
-                self.__vertScreenshotCamera.enable(not self.__vertScreenshotCamera.isEnabled)
-                return True
-        if key == Keys.KEY_SPACE and isDown and BigWorld.player().isObserver():
-            BigWorld.player().cell.switchObserverFPV(not BigWorld.player().isObserverFPV)
-            return True
-        else:
-            return True if not self.isObserverFPV and self.__curCtrl.handleKeyEvent(isDown, key, mods, event) else BigWorld.player().handleKey(isDown, key, mods)
+            if isDown and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
+                if self.__alwaysShowAimKey is not None and key == self.__alwaysShowAimKey:
+                    gui_event_dispatcher.toggleCrosshairVisibility()
+                    return True
+                if self.__showMarkersKey is not None and key == self.__showMarkersKey and not self.__isGUIVisible:
+                    gui_event_dispatcher.toggleMarkers2DVisibility()
+                    return True
+                if key == Keys.KEY_F5 and constants.HAS_DEV_RESOURCES:
+                    self.__vertScreenshotCamera.enable(not self.__vertScreenshotCamera.isEnabled)
+                    return True
+            if key == Keys.KEY_SPACE and isDown and player.isObserver():
+                if self.isControlModeChangeAllowed():
+                    player.switchObserverFPV()
+                    return True
+            return True if not self.isObserverFPV and self.__curCtrl.handleKeyEvent(isDown, key, mods, event) else player.handleKey(isDown, key, mods)
 
     def handleMouseEvent(self, dx, dy, dz):
         return False if not self.__isStarted or self.__isDetached else self.__curCtrl.handleMouseEvent(dx, dy, dz)
@@ -857,13 +860,21 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         return
 
     def isControlModeChangeAllowed(self):
-        if not BigWorld.player().observerSeesAll():
+        player = BigWorld.player()
+        if not self.isAllowToSwitchPositionOrFPV():
+            return False
+        if not player.observerSeesAll():
             return True
         if BigWorld.time() - self.__lastSwitchTime < _CONTROL_MODE_SWITCH_COOLDOWN:
             LOG_WARNING('Control mode switch is on cooldown')
             return False
         self.__lastSwitchTime = BigWorld.time()
         return True
+
+    @classmethod
+    def isAllowToSwitchPositionOrFPV(cls):
+        player = BigWorld.player()
+        return not player.positionControl.isSwitching and not player.isFPVModeSwitching
 
 
 class _Targeting(object):

@@ -79,6 +79,7 @@
     <Rolls_Royce_Meteor_MkIV_B12>	100	</Rolls_Royce_Meteor_MkIV_B12>
     <Meteorite_M120>	101	</Meteorite_M120>
     <Leyland_L60_No_4_A>	103	</Leyland_L60_No_4_A>
+    <Rolls_Royce_Griffon_FL>	501	</Rolls_Royce_Griffon_FL>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
     <Rolls_Royse_Meteor_MkIV_IGR>	60003	</Rolls_Royse_Meteor_MkIV_IGR>
@@ -90,6 +91,7 @@
     <Rolls_Royse_Meteor_SH>	10000	</Rolls_Royse_Meteor_SH>
     <Rolls_Royse_Meteor_Mk_XI_supercharged_SH>	10001	</Rolls_Royse_Meteor_Mk_XI_supercharged_SH>
     <Leyland_L60_No_4_SH>	10002	</Leyland_L60_No_4_SH>
+    <Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>	3	</Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>
   </ids>
   <shared>
     <Vickers-Armstrong>
@@ -840,6 +842,23 @@
       <rpm_min>	474	</rpm_min>
       <rpm_max>	2080	</rpm_max>
     </Rolls_Royce_Griffon>
+    <Rolls_Royce_Griffon_FL>
+      <userString>	#gb_vehicles:Rolls_Royce_Griffon	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	952	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+    </Rolls_Royce_Griffon_FL>
     <Rolls_Royce_Griffon_A>
       <userString>	#gb_vehicles:Rolls_Royce_Griffon_A	</userString>
       <tags>	gasoline	</tags>
@@ -1524,7 +1543,6 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <notInShop>	true	</notInShop>
       <rpm_min>	376	</rpm_min>
       <rpm_max>	2072	</rpm_max>
     </Development_Engine>
@@ -1579,5 +1597,22 @@
       <rpm_min>	200	</rpm_min>
       <rpm_max>	2600	</rpm_max>
     </Leyland_L60_No_4_SH>
+    <Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>
+      <userString>	#gb_vehicles:Wright_Continental_R-975C4	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	460	</power>
+      <weight>	550	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2721	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>
   </shared>
 </engines.xml>

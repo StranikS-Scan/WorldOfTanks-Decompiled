@@ -181,12 +181,16 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
                     params.append(bonusParam._asdict())
                     break
 
-        if style.isHistorical():
+        displayType = style.customizationDisplayType()
+        if displayType == 0:
             historicIcon = backport.image(R.images.gui.maps.icons.customization.style_info.historical())
             historicString = backport.text(R.strings.vehicle_customization.styleInfo.historical())
-        else:
+        elif displayType == 1:
             historicIcon = backport.image(R.images.gui.maps.icons.customization.style_info.nonhistorical())
             historicString = backport.text(R.strings.vehicle_customization.styleInfo.nonhistorical())
+        else:
+            historicIcon = backport.image(R.images.gui.maps.icons.customization.style_info.fantastical())
+            historicString = backport.text(R.strings.vehicle_customization.styleInfo.fantastical())
         historicParam = ParamVO(historicIcon, text_styles.main(historicString))
         params.append(historicParam._asdict())
         if style.isRentable:

@@ -51,6 +51,11 @@
       <value>	900	</value>
       <arena_type_label>	battle_royale	</arena_type_label>
     </timeRemained>
+    <timeRemained>
+      <value>	180	</value>
+      <arena_type_label>	maps_training	</arena_type_label>
+      <gameplay_name>	ctf	</gameplay_name>
+    </timeRemained>
     <hpPercentRemained>
       <value>	15	</value>
     </hpPercentRemained>
@@ -73,6 +78,11 @@
     <hpPercentRemained>
       <value>	100	</value>
       <arena_type_label>	battle_royale	</arena_type_label>
+    </hpPercentRemained>
+    <hpPercentRemained>
+      <value>	35	</value>
+      <arena_type_label>	maps_training	</arena_type_label>
+      <gameplay_name>	ctf	</gameplay_name>
     </hpPercentRemained>
     <vehiclesRemained>
       <value>	5	</value>
@@ -105,6 +115,11 @@
       <value>	21	</value>
       <arena_type_label>	battle_royale	</arena_type_label>
     </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	0	</value>
+      <arena_type_label>	maps_training	</arena_type_label>
+      <gameplay_name>	ctf	</gameplay_name>
+    </vehiclesRemained>
     <capturedPoints>
       <value>	15	</value>
     </capturedPoints>
@@ -124,6 +139,11 @@
       <value>	101	</value>
       <arena_type_label>	battle_royale	</arena_type_label>
     </capturedPoints>
+    <capturedPoints>
+      <value>	101	</value>
+      <arena_type_label>	maps_training	</arena_type_label>
+      <gameplay_name>	ctf	</gameplay_name>
+    </capturedPoints>
     <musicStopPredelay>
       <value>	10	</value>
     </musicStopPredelay>
@@ -132,6 +152,13 @@
   <defencePointsLimit>	100	</defencePointsLimit>
   <resetLocalTeamKillerAtRespawn>	False	</resetLocalTeamKillerAtRespawn>
   <leaveDisconnectedTimeout>	-1	</leaveDisconnectedTimeout>
+  <bonusTypeOverrides>
+    <MAPS_TRAINING>
+      <estimatedLoad>	0.1	</estimatedLoad>
+      <maxPlayersInTeam>	1	</maxPlayersInTeam>
+      <runDelay>	20	</runDelay>
+    </MAPS_TRAINING>
+  </bonusTypeOverrides>
   <gameplayTypes>
     <ctf>
       <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
@@ -290,5 +317,17 @@
         </loadBanks>
       </soundRemapping>
     </bootcamp>
+    <maps_training>
+      <soundRemapping>
+        <loadBanks>
+          <bank>
+            <name>	maps_training_gameplay.bnk	</name>
+          </bank>
+          <bank>
+            <name>	maps_training_voiceover.bnk	</name>
+          </bank>
+        </loadBanks>
+      </soundRemapping>
+    </maps_training>
   </extraSoundRemapping>
 </_default_.xml>

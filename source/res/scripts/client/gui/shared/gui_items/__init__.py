@@ -4,15 +4,17 @@ import logging
 from gui.impl import backport
 from gui.impl.backport import getNiceNumberFormat
 from gui.impl.gen import R
+from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from shared_utils import CONST_CONTAINER
 from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES, getTypeOfCompactDescr
 from gui.shared.money import Currency
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from helpers import dependency
+from gui.shared.items_parameters.comparator import BACKWARD_QUALITY_PARAMS
 _logger = logging.getLogger(__name__)
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
-GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment')
+GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'vehPostProgression', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment')
 GUI_ITEM_TYPE_INDICES = dict(((n, idx) for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)))
 
 class GUI_ITEM_TYPE(CONST_CONTAINER):
@@ -55,6 +57,7 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
     SKILL = GUI_ITEM_TYPE_INDICES['tankmanSkill']
     BADGE = GUI_ITEM_TYPE_INDICES['badge']
     LOOT_BOX = GUI_ITEM_TYPE_INDICES['lootBox']
+    VEH_POST_PROGRESSION = GUI_ITEM_TYPE_INDICES['vehPostProgression']
     GUI = (ACCOUNT_DOSSIER,
      VEHICLE_DOSSIER,
      TANKMAN_DOSSIER,
@@ -86,7 +89,7 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
      PERSONAL_NUMBER)
 
 
-def _formatMoneyError(currency):
+def formatMoneyError(currency):
     return '{}_error'.format(currency)
 
 
@@ -102,12 +105,12 @@ class GUI_ITEM_ECONOMY_CODE(CONST_CONTAINER):
     NO_RENT_PRICE = 'no_rent_price'
     RENTAL_TIME_EXCEEDED = 'rental_time_exceeded'
     RENTAL_DISABLED = 'rental_disabled'
-    NOT_ENOUGH_GOLD = _formatMoneyError(Currency.GOLD)
-    NOT_ENOUGH_CREDITS = _formatMoneyError(Currency.CREDITS)
-    NOT_ENOUGH_CRYSTAL = _formatMoneyError(Currency.CRYSTAL)
-    NOT_ENOUGH_EVENT_COIN = _formatMoneyError(Currency.EVENT_COIN)
-    NOT_ENOUGH_BPCOIN = _formatMoneyError(Currency.BPCOIN)
-    _NOT_ENOUGH_CURRENCIES = (NOT_ENOUGH_GOLD,
+    NOT_ENOUGH_GOLD = formatMoneyError(Currency.GOLD)
+    NOT_ENOUGH_CREDITS = formatMoneyError(Currency.CREDITS)
+    NOT_ENOUGH_CRYSTAL = formatMoneyError(Currency.CRYSTAL)
+    NOT_ENOUGH_EVENT_COIN = formatMoneyError(Currency.EVENT_COIN)
+    NOT_ENOUGH_BPCOIN = formatMoneyError(Currency.BPCOIN)
+    NOT_ENOUGH_CURRENCIES = (NOT_ENOUGH_GOLD,
      NOT_ENOUGH_CRYSTAL,
      NOT_ENOUGH_CREDITS,
      NOT_ENOUGH_EVENT_COIN,
@@ -116,11 +119,11 @@ class GUI_ITEM_ECONOMY_CODE(CONST_CONTAINER):
 
     @classmethod
     def getCurrencyError(cls, currency):
-        return _formatMoneyError(currency)
+        return formatMoneyError(currency)
 
     @classmethod
     def isCurrencyError(cls, errCode):
-        return errCode in GUI_ITEM_ECONOMY_CODE._NOT_ENOUGH_CURRENCIES
+        return errCode in GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CURRENCIES
 
 
 class ItemsCollection(dict):
@@ -262,7 +265,7 @@ class ACTION_ENTITY_ITEM(object):
 
 
 class KPI(object):
-    __slots__ = ('__name', '__value', '__type', '__specValue', '__vehicleTypes')
+    __slots__ = ('__name', '__value', '__type', '__specValue', '__vehicleTypes', '__isDebuff')
 
     class Name(CONST_CONTAINER):
         COMPOUND_KPI = 'compoundKPI'
@@ -278,6 +281,11 @@ class KPI(object):
         VEHICLE_GUN_RELOAD_TIME = 'vehicleGunReloadTime'
         VEHICLE_GUN_AIM_SPEED = 'vehicleGunAimSpeed'
         VEHICLE_GUN_SHOT_DISPERSION = 'vehicleGunShotDispersion'
+        VEHICLE_GUN_SHOT_DISPERSION_AFTER_SHOT = 'vehicleGunShotDispersionAfterShot'
+        VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_MOVEMENT = 'vehicleGunShotDispersionChassisMovement'
+        VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_ROTATION = 'vehicleGunShotDispersionChassisRotation'
+        VEHICLE_GUN_SHOT_DISPERSION_TURRET_ROTATION = 'vehicleGunShotDispersionTurretRotation'
+        VEHICLE_GUN_SHOT_DISPERSION_WHILE_GUN_DAMAGED = 'vehicleGunShotDispersionWhileGunDamaged'
         VEHICLE_GUN_SHOT_FULL_DISPERSION = 'vehicleGunShotFullDispersion'
         VEHICLE_AMMO_BAY_STRENGTH = 'vehicleAmmoBayStrength'
         VEHICLE_FUEL_TANK_STRENGTH = 'vehicleFuelTankStrength'
@@ -287,10 +295,13 @@ class KPI(object):
         VEHICLE_CHASSIS_LOAD = 'vehicleChassisLoad'
         VEHICLE_CHASSIS_FALL_DAMAGE = 'vehicleChassisFallDamage'
         VEHICLE_RAM_OR_EXPLOSION_DAMAGE_RESISTANCE = 'vehicleRamOrExplosionDamageResistance'
+        VEHICLE_RAM_DAMAGE_RESISTANCE = 'vehicleRamDamageResistance'
+        VEHICLE_DAMAGE_ENEMIES_BY_RAMMING = 'damageEnemiesByRamming'
         VEHICLE_SOFT_GROUND_PASSABILITY = 'vehicleSoftGroundPassability'
         VEHICLE_MEDIUM_GROUND_PASSABILITY = 'vehicleMediumGroundPassability'
         VEHICLE_ENEMY_SPOTTING_TIME = 'vehicleEnemySpottingTime'
         VEHICLE_OWN_SPOTTING_TIME = 'vehicleOwnSpottingTime'
+        VEHICLE_INVISIBILITY_AFTER_SHOT = 'vehicleInvisibilityAfterShot'
         VEHICLE_RELOAD_TIME_AFTER_SHELL_CHANGE = 'vehicleReloadTimeAfterShellChange'
         VEHICLE_STRENGTH = 'vehicleStrength'
         VEHICLE_PENALTY_FOR_DAMAGED_ENGINE_AND_COMBAT = 'vehPenaltyForDamageEngineAndCombat'
@@ -362,16 +373,20 @@ class KPI(object):
     def vehicleTypes(self):
         return self.__vehicleTypes
 
+    @property
+    def isDebuff(self):
+        return self.isPositive if self.name in BACKWARD_QUALITY_PARAMS else not self.isPositive
+
+    @property
+    def isPositive(self):
+        cmpValue = 0 if self.type == self.Type.ADD else 1
+        return self.value >= cmpValue
+
     def getDescriptionR(self):
-        res = R.strings.tank_setup.kpi.bonus.dyn(self.__name)
-        if not res:
-            _logger.debug('KPI description not found, name %s', self.__name)
-            return R.invalid()
-        return res()
+        return getVehicleParameterText(paramName=self.__name, isPositive=self.isPositive)
 
     def getLongDescriptionR(self):
-        res = R.strings.tank_setup.kpi.bonus.longDescr.dyn(self.__name)
-        return res() if res else self.getDescriptionR()
+        return getVehicleParameterText(paramName=self.__name, isPositive=self.isPositive, isLong=True)
 
 
 def kpiFormatValue(kpiName, value):
@@ -427,6 +442,23 @@ def mergeAggregateKpi(aggregateKpi):
                 vehicleTypes.extend(kpi.vehicleTypes)
 
         return KPI(aggregateKpi.name, value, aggregateKpi.type, specValue, vehicleTypes)
+
+
+def collectKpi(descriptor, vehicle=None):
+    if vehicle is None:
+        return [ (mergeAggregateKpi(kpi) if kpi.type == KPI.Type.AGGREGATE_MUL else kpi) for kpi in descriptor.kpi ]
+    else:
+        result = []
+        for kpi in descriptor.kpi:
+            if kpi.type == KPI.Type.AGGREGATE_MUL:
+                for subKpi in kpi.value:
+                    if not subKpi.vehicleTypes or vehicle.type in subKpi.vehicleTypes:
+                        result.append(subKpi)
+
+            if not kpi.vehicleTypes or vehicle.type in kpi.vehicleTypes:
+                result.append(kpi)
+
+        return result
 
 
 VEHICLE_ATTR_TO_KPI_NAME_MAP = {'repairSpeed': KPI.Name.VEHICLE_REPAIR_SPEED,

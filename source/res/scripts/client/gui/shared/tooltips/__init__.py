@@ -59,11 +59,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE_ELITE_BONUS = 'vehicleEliteBonus'
     VEHICLE_HISTORICAL_REFERENCE = 'vehicleHistoricalReference'
     MARATHON = 'marathon'
-    EVENT_PROGRESSION_SELECTOR_INFO = 'eventProgressionSelectorInfo'
-    EVENT_PROGRESSION_PROGRESS_INFO = 'eventProgressionProgressInfo'
     EPIC_SKILL_INFO = 'epicSkillInfo'
-    EPIC_SELECTOR_UNAVAILABLE_INFO = 'epicSelectorUnavailableInfo'
-    EPIC_PRESTIGE_PROGRESS_BLOCK_INFO = 'epicPrestigeProgressBlockInfo'
     BLUEPRINTS = 'blueprintsInfo'
     FRONTLINE = 'frontlineInfo'
     BATTLE_ROYALE_SELECTOR_INFO = 'battleRoyaleSelectorInfo'
@@ -81,6 +77,8 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     MAPBOX_SELECTOR_INFO = 'mapboxSelectorInfo'
     SELECTABLE_CREWBOOK = 'selectableCrewbook'
     RANDOM_CREWBOOK = 'randomCrewbook'
+    REFERRAL_PROGRAMM = 'referralProgram'
+    EPIC_RANK_UNLOCK = 'epicRankUnlock'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

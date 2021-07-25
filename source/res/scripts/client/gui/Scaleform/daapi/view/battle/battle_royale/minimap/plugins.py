@@ -476,9 +476,9 @@ class BattleRoyalStaticMarkerPlugin(IntervalPlugin):
             locationPoint = g_locationPointManager.markedAreas[key]
             if locationPoint.markerSubType != LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE:
                 continue
-            self.__addStaticMarker(locationPoint.targetID, locationPoint.creatorID, locationPoint.position, locationPoint.markerSubType, True, locationPoint.markerText, locationPoint.replyCount, False)
+            self.__addStaticMarker(locationPoint.targetID, locationPoint.creatorID, locationPoint.position, locationPoint.markerSubType, locationPoint.markerText, locationPoint.replyCount, False)
 
-    def __addStaticMarker(self, areaID, creatorID, position, locationMarkerSubtype, show3DMarker=False, markerText='', numberOfReplies=0, isTargetForPlayer=False):
+    def __addStaticMarker(self, areaID, creatorID, position, locationMarkerSubtype, markerText='', numberOfReplies=0, isTargetForPlayer=False):
         if locationMarkerSubtype != LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE:
             return
         model = self._addEntryEx(areaID, _S_NAME.MARK_POSITION, _C_NAME.EQUIPMENTS, matrix=minimap_utils.makePositionMatrix(position), active=True)

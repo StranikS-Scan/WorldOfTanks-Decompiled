@@ -4,7 +4,7 @@ from collections import namedtuple
 from gui import SystemMessages
 from gui.shared.gui_items.processors.module import ModuleBuyer
 from gui.shared.gui_items.processors.goodies import BoosterBuyer
-from gui.shared.gui_items.processors.vehicle import VehicleBuyer
+from gui.shared.gui_items.processors.vehicle import VehicleBuyer, showVehicleReceivedResultMessages
 from gui.shared.gui_items.processors.common import PremiumAccountBuyer
 from helpers import dependency
 from helpers.time_utils import timestampToISO
@@ -99,7 +99,10 @@ class TradeWebApiMixin(object):
         for response in responses:
             status = response['success']
             if status and status.userMsg:
-                SystemMessages.pushI18nMessage(status.userMsg, type=status.sysMsgType)
+                if response['type'] == ShopItemType.VEHICLE:
+                    showVehicleReceivedResultMessages(status)
+                else:
+                    SystemMessages.pushI18nMessage(status.userMsg, type=status.sysMsgType)
                 statusData = status.auxData
                 if statusData is None or 'errStr' not in statusData or not statusData['errStr']:
                     result = 'success'

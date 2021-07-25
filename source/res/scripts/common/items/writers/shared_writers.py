@@ -17,18 +17,10 @@ def writeProjectionSlots(slotDS, slot):
         slotDS.write('verticalMirror', slot.canBeMirroredVertically)
     _xml.rewriteBool(slotDS, 'doubleSided', slot.doubleSided, False)
     _xml.rewriteFloat(slotDS, 'clipAngle', slot.clipAngle, 0.0)
-    if slot.attachedParts is not None and len(slot.attachedParts) != 0:
-        if not isinstance(slot.attachedParts, set):
-            partTypeToNames = slot.attachedParts.items()
-            partTypeToName = ((pType, pName) for pType, pNames in partTypeToNames for pName in pNames)
-            attachedParts = ' '.join((':'.join((str(pType), pName)) for pType, pName in partTypeToName))
-            if attachedParts:
-                slotDS.write('attachedPart', attachedParts)
     if slot.type == 'projectionDecal':
         writeProjectionSlotsNotFixed(slotDS, slot)
     elif slot.type == 'fixedProjectionDecal':
         writeProjectionSlotsFixed(slotDS, slot)
-    return
 
 
 def writeProjectionSlotsFixed(slotDS, slot):

@@ -5,9 +5,11 @@ from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES, getParam
 from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.items_parameters.params import EXTRAS_CAMOUFLAGE
 from helpers import dependency
-from items import perks
+from items import perks, vehicles
 from constants import BonusTypes
 from items.components.c11n_components import SeasonType
+from post_progression_common import ACTION_TYPES
+from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 
 def isSituationalBonus(bonusName, bonusType=''):
@@ -66,12 +68,40 @@ def _removeEquipmentModifier(vehicle, eqName):
     return vehicle
 
 
+def _removePostProgressionModification(vehicle, modificationName):
+    modID = vehicles.g_cache.postProgression().modificationIDs.get(modificationName, None)
+    state = vehicle.postProgression.getState()
+    if modID is not None:
+        for step in vehicle.postProgression.iterUnorderedSteps():
+            if step.isReceived() and step.action.getActiveID() == modID:
+                if step.action.actionType == ACTION_TYPES.PAIR_MODIFICATION:
+                    state.removePair(step.stepID)
+                state.removeUnlock(step.stepID)
+
+    vehicle.installPostProgression(state, True)
+    return vehicle
+
+
+def _removePostProgressionBaseModifications(vehicle, modificationsName):
+    state = vehicle.postProgression.getState()
+    removedStep = findFirst(lambda s: s.action.getTechName() == modificationsName, vehicle.postProgression.iterUnorderedSteps())
+    if removedStep is not None:
+        for step in vehicle.postProgression.iterUnorderedSteps():
+            if step.isReceived() and step.action.getLocName() == removedStep.action.getLocName():
+                state.removeUnlock(step.stepID)
+
+    vehicle.installPostProgression(state, True)
+    return vehicle
+
+
 _VEHICLE_MODIFIERS = {BonusTypes.SKILL: _removeSkillModifier,
  BonusTypes.EXTRA: _removeCamouflageModifier,
  BonusTypes.EQUIPMENT: _removeEquipmentModifier,
  BonusTypes.OPTIONAL_DEVICE: _removeOptionalDeviceModifier,
  BonusTypes.BATTLE_BOOSTER: _removeBattleBoosterModifier,
- BonusTypes.PERK: _removePlatoonPerkModifier}
+ BonusTypes.PERK: _removePlatoonPerkModifier,
+ BonusTypes.PAIR_MODIFICATION: _removePostProgressionModification,
+ BonusTypes.BASE_MODIFICATION: _removePostProgressionBaseModifications}
 _NOT_STACK_BONUSES = {'circularVisionRadius': (('stereoscope_tier1', BonusTypes.OPTIONAL_DEVICE), ('stereoscope_tier2', BonusTypes.OPTIONAL_DEVICE), ('stereoscope_tier3', BonusTypes.OPTIONAL_DEVICE)),
  'invisibilityStillFactor': (('camouflageNet_tier2', BonusTypes.OPTIONAL_DEVICE), ('camouflageNet_tier3', BonusTypes.OPTIONAL_DEVICE))}
 
@@ -139,6 +169,12 @@ class TankSetupBonusExtractor(BonusExtractor):
 
     def _getCopyVehicle(self, vehicle):
         return self.itemsCache.items.getLayoutsVehicleCopy(vehicle)
+
+
+class PostProgressionBonusExtractor(BonusExtractor):
+
+    def _getCopyVehicle(self, vehicle):
+        return self.itemsCache.items.getLayoutsVehicleCopy(vehicle, ignoreDisabledProgression=True)
 
 
 class _CustomizedVehicleParams(VehicleParams):

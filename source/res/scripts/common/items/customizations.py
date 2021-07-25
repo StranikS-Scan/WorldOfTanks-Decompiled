@@ -790,10 +790,8 @@ class CustomizationOutfit(SerializableComponent):
             newProjectionDecals = []
             for projectionDecal in projectionDecals:
                 if not cn.getVehicleProjectionDecalSlotParams(oldVehDescr, projectionDecal.slotId, differPartNames):
-                    slotDescr = cn.getVehicleProjectionDecalSlotParams(vehDescr, projectionDecal.slotId, CUSTOMIZATION_SLOTS_VEHICLE_PARTS)
-                    if slotDescr and cn.isSlotFitsVehicle(slotDescr, vehDescr):
-                        newProjectionDecals.append(projectionDecal)
-                        continue
+                    newProjectionDecals.append(projectionDecal)
+                    continue
                 toMove[(CustomizationType.PROJECTION_DECAL, projectionDecal.id)] += 1
 
             if toMove:

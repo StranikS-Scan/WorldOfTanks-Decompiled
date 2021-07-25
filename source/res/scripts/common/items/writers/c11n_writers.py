@@ -10,7 +10,7 @@ from string import lower, upper
 import items.vehicles as iv
 from items import _xml, parseIntCompactDescr
 from soft_exception import SoftException
-from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType, CustomizationTypeNames
+from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType, CustomizationTypeNames, DEFAULT_SCALE_FACTOR_ID
 from items.components.c11n_components import StyleItem, ApplyArea
 from items.customizations import FieldTypes, FieldFlags, FieldType, SerializableComponent, SerializationException
 from items.type_traits import equalComparator
@@ -285,7 +285,7 @@ ITEMS_FILTER_VALUE_DESCRIPTION = (Description('tags', 'tags', StringFilterConver
  Description('id', 'ids', IntegerFilterConvertor()),
  Description('itemGroupName', 'itemGroupNames', StringFilterConvertor()),
  Description('type', 'types', ItemsFilterDecalTypeConvertor()),
- Description('historical', 'historical', BoolFilterConvertor()))
+ Description('historical', 'edCustomizationDisplayTypes', IntegerFilterConvertor()))
 FILTER_ID_NAME = {CustomizationType.PROJECTION_DECAL: 'projection_decal',
  CustomizationType.PERSONAL_NUMBER: 'personal_number',
  CustomizationType.DECAL: 'decal'}
@@ -346,21 +346,24 @@ def saveItemFilter(filter, section, filterName, valueDescription):
 
         def saveFilterValue(subFilterSection, valueSectionName, valueHolder, atrributeListName, convertor):
             listOfValues = getattr(valueHolder, atrributeListName)
-            needWrite = True
-            if isinstance(listOfValues, bool):
-                needWrite = listOfValues
-            elif len(listOfValues) == 0:
-                needWrite = False
-            if needWrite is False:
-                if subFilterSection.has_key(valueSectionName):
-                    subFilterSection.deleteSection(valueSectionName)
-                    return True
+            if listOfValues is None:
+                return False
             else:
-                strValue = convertor.convertToString(listOfValues)
-                if strValue is None:
-                    return False
-                return _xml.rewriteString(subFilterSection, valueSectionName, strValue)
-            return False
+                needWrite = True
+                if isinstance(listOfValues, bool):
+                    needWrite = listOfValues
+                elif len(listOfValues) == 0:
+                    needWrite = False
+                if needWrite is False:
+                    if subFilterSection.has_key(valueSectionName):
+                        subFilterSection.deleteSection(valueSectionName)
+                        return True
+                else:
+                    strValue = convertor.convertToString(listOfValues)
+                    if strValue is None:
+                        return False
+                    return _xml.rewriteString(subFilterSection, valueSectionName, strValue)
+                return False
 
         for iname, isection in filterSection.items():
             if iname == filterName:
@@ -382,7 +385,7 @@ class BaseCustomizationItemXmlWriter(object):
     def write(self, item, section):
         changed = False
         changed |= rewriteInt(section, 'id', item, 'id')
-        changed |= rewriteBool(section, 'historical', item, 'historical')
+        changed |= rewriteInt(section, 'historical', item, 'customizationDisplayType')
         changed |= rewriteString(section, 'priceGroup', item, 'priceGroup', '')
         changed |= rewriteString(section, 'requiredToken', item, 'requiredToken', '')
         changed |= rewriteString(section, 'texture', item, 'texture', '')
@@ -443,6 +446,7 @@ class ProjectionDecalXmlWriter(BaseCustomizationItemXmlWriter):
         changed = super(ProjectionDecalXmlWriter, self).write(item, section)
         changed |= rewriteBool(section, 'mirror', item, 'canBeMirroredHorizontally')
         changed |= rewriteString(section, 'glossTexture', item, 'glossTexture', getDefaultGlossTexture())
+        changed |= rewriteInt(section, 'scaleFactorId', item, 'scaleFactorId', DEFAULT_SCALE_FACTOR_ID)
         return changed
 
 

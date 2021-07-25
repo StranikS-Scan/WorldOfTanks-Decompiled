@@ -8,7 +8,6 @@ from gui.impl.gen.view_models.views.lobby.dog_tags.ranked_efficiency_tooltip_mod
 from gui.impl.gen.view_models.views.lobby.dog_tags.ranked_season_efficiency_model import RankedSeasonEfficiencyModel
 from gui.impl.pub import ViewImpl
 from gui.ranked_battles.constants import RankedDossierKeys, SeasonResultTokenPatterns
-from gui.ranked_battles.constants import SEASON_IDS_RB_2020
 from helpers import dependency
 from dog_tags_common.config.common import ComponentViewType
 from skeletons.gui.game_control import IRankedBattlesController
@@ -37,17 +36,24 @@ class RankedEfficiencyTooltip(ViewImpl):
             with self.viewModel.transaction() as model:
                 items = model.getItems()
                 self.__addPassedSeasons(items)
+                self.__addCurrentSeason(items)
+                self.__addFutureSeasons(items)
                 items.invalidate()
 
     def __addPassedSeasons(self, itemsArr):
-        seasons = SEASON_IDS_RB_2020
+        seasons = sorted([ seasonData[0] for seasonData in self.__rankedController.getSeasonPassed() ])
+        previousSeason = self.__rankedController.getPreviousSeason()
+        previousSeasonId = previousSeason.getSeasonID() if previousSeason else None
         playerDogTag = BigWorld.player().dogTags.getDisplayableDT()
         engraving = playerDogTag.getComponentByType(ComponentViewType.ENGRAVING)
         currentEngravingValue = round(engraving.value, EFFICIENCY_DIGITS)
         for seasonID in seasons:
-            efficiency = 0
+            if seasonID == previousSeasonId and self.__rankedController.isSeasonRewarding():
+                itemsArr.addViewModel(self.__getSeasonModel(0, RankedSeasonEfficiencyModel.WAITING_AWARDS))
+            else:
+                efficiency = 0
             if self.__checkInLeague(seasonID):
-                efficiency = self.__getPassedSeasonEfficiency(seasonID, seasons.index(seasonID) + 1)
+                efficiency = self.__getPassedSeasonEfficiency(seasonID)
                 if efficiency == currentEngravingValue:
                     efficiencyState = RankedSeasonEfficiencyModel.EFFICIENCY_BEST
                 else:
@@ -55,6 +61,8 @@ class RankedEfficiencyTooltip(ViewImpl):
             else:
                 efficiencyState = RankedSeasonEfficiencyModel.EFFICIENCY_OUT_OF_LEAGUE
             itemsArr.addViewModel(self.__getSeasonModel(efficiency, RankedSeasonEfficiencyModel.PERIOD_PAST, efficiencyState))
+
+        return
 
     def __addCurrentSeason(self, itemsArr):
         currentSeason = self.__rankedController.getCurrentSeason()
@@ -79,10 +87,11 @@ class RankedEfficiencyTooltip(ViewImpl):
 
         return False
 
-    def __getPassedSeasonEfficiency(self, seasonID, seasonNumber):
+    def __getPassedSeasonEfficiency(self, seasonID):
         accountDossier = self.__itemsCache.items.getAccountDossier()
+        seasonNumber = self.__rankedController.getSeason(seasonID).getNumber()
         seasonKey = RankedDossierKeys.SEASON % seasonNumber
-        stats = accountDossier.getSeasonRanked15x15Stats(seasonKey, seasonID)
+        stats = accountDossier.getSeasonRankedStats(seasonKey, seasonID)
         stepsEfficiency = stats.getStepsEfficiency()
         return round(stepsEfficiency * 100, EFFICIENCY_DIGITS) if stepsEfficiency is not None else 0
 

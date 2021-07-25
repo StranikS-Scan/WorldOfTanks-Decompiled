@@ -12,6 +12,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import RESEARCH_ITEMS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, UnlockStats, DEFAULT_UNLOCK_PROPS
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
+from gui.game_control.veh_comparison_basket import getInstalledModulesCDs
 from gui.shop import canBuyGoldForItemThroughWeb
 from gui.prb_control import prbDispatcherProperty
 from gui.shared.economics import getGUIPrice
@@ -20,6 +21,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.ui_spam.custom_aliases import TECH_TREE_EVENT
 from helpers import dependency
 from items import ITEM_TYPE_NAMES, getTypeOfCompactDescr as getTypeOfCD, vehicles as vehicles_core
+from shared_utils.vehicle_utils import ModuleDependencies
 from skeletons.gui.game_control import ITradeInController, IBootcampController, IUISpamController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -399,7 +401,9 @@ class _ItemsData(object):
 
 
 class ResearchItemsData(_ItemsData):
+    _itemsCache = dependency.descriptor(IItemsCache)
     _rootCD = None
+    _moduleInstaller = None
 
     def __init__(self, dumper):
         super(ResearchItemsData, self).__init__(dumper)
@@ -420,6 +424,12 @@ class ResearchItemsData(_ItemsData):
     @classmethod
     def setRootCD(cls, cd):
         cls._rootCD = int(cd)
+        cls._setModuleInstaller(cls._rootCD)
+
+    @classmethod
+    def _setModuleInstaller(cls, vehicleCD):
+        stockVehicle = cls._itemsCache.items.getStockVehicle(vehicleCD)
+        cls._moduleInstaller = ModuleDependencies(getInstalledModulesCDs(stockVehicle))
 
     @classmethod
     def getRootCD(cls):
@@ -481,6 +491,36 @@ class ResearchItemsData(_ItemsData):
 
         next2Unlock = self._findNext2UnlockItems(mapping.values())
         return (next2Unlock, unlocked, [])
+
+    def invalidateHovered(self, nodeCD):
+        result = []
+        if nodeCD == -1:
+            for node in self._nodes:
+                nodeCD = node.getNodeCD()
+                state = node.getState()
+                state = NODE_STATE.remove(state, NODE_STATE_FLAGS.DASHED)
+                if state > -1:
+                    node.setState(state)
+                    result.append((nodeCD, state))
+
+            _logger.debug('[ModuleDependencies] nodes with "dashed" state cleared: %s', result)
+        else:
+            conflicted = self._moduleInstaller.updateConflicted(nodeCD, self.getRootItem())
+            moduleDependencies = [ moduleCD for moduleTypes in conflicted for moduleCD in moduleTypes ]
+            _logger.debug('[ModuleDependencies] nodeCD = %s, module dependencies %s', nodeCD, moduleDependencies)
+            for node in self._nodes:
+                nodeCD = node.getNodeCD()
+                if nodeCD not in moduleDependencies or getTypeOfCD(nodeCD) not in GUI_ITEM_TYPE.VEHICLE_MODULES:
+                    continue
+                state = node.getState()
+                state = NODE_STATE.add(state, NODE_STATE_FLAGS.DASHED)
+                if state > -1:
+                    node.setState(state)
+                    result.append((node.getNodeCD(), state))
+
+            self._moduleInstaller.clearConflictedModules()
+            _logger.debug('[ModuleDependencies] nodes with "dashed" state set: %s', result)
+        return result
 
     def invalidateInstalled(self):
         nodes_ = self._getNodesToInvalidate()

@@ -26,8 +26,8 @@ class ConsumableDeviceProvider(VehicleBaseArrayProvider):
 
     def updateSlot(self, model, item, ctx):
         super(ConsumableDeviceProvider, self).updateSlot(model, item, ctx)
-        isInstalledOrMounted = item in self._getCurrentLayout() or item in self._getInstalledLayout()
-        self._fillStatus(model, item, ctx.slotID, isInstalledOrMounted)
+        isInstalledOrMounted = item in self._getCurrentLayout() or self._getSetupLayout().containsIntCD(item.intCD)
+        self._fillStatus(model, item, ctx.slotID)
         self._fillBuyStatus(model, item, isInstalledOrMounted)
 
     def _fillHighlights(self, model, item):

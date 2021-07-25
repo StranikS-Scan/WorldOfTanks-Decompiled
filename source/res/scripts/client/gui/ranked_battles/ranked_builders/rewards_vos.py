@@ -75,20 +75,19 @@ def getRankRewardsVO(rank, bonuses, currentRankID):
      'bonuses': bonuses}
 
 
-def getLeagueRewardVO(leagueID, styleID, styleBonus, isCurrent):
-    descr = backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues.awardDescr.dyn('league%s' % leagueID)())
+def getLeagueRewardVO(leagueID, styleBonus, styleID, styleName, badgeID, isCurrent):
+    descr = backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues.awardDescr.style(), styleName=styleName, badgeName=backport.text(R.strings.badge.dyn('badge_{}'.format(badgeID))()))
     return {'leagueID': leagueID,
      'title': backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues.dyn('league%s' % leagueID)()),
      'description': descr,
      'styleID': styleID,
      'isSpecial': styleBonus.isSpecial,
      'specialAlias': styleBonus.specialAlias,
-     'specialArgs': styleBonus.specialArgs,
      'isCurrent': isCurrent}
 
 
-def getYearRewardDataVO(points, awards, isAwarded, awardType, compensation, exchange):
-    if isAwarded:
+def getYearRewardDataVO(points, awards, rewardingComplete, awardType, compensation, exchange):
+    if rewardingComplete:
         title = backport.text(R.strings.ranked_battles.rewardsView.tabs.year.title.awarded(), points=points)
     else:
         title = backport.text(R.strings.ranked_battles.rewardsView.tabs.year.title.notAwarded(), points=points)
@@ -97,7 +96,7 @@ def getYearRewardDataVO(points, awards, isAwarded, awardType, compensation, exch
         exchangePart = backport.text(R.strings.tooltips.rankedBattleView.rewardsView.tabs.year.scorePoint.body.exchangeText(), points=text_styles.stats(str(STANDARD_POINTS_COUNT)), rankedImg=icons.makeImageTag(backport.image(R.images.gui.maps.icons.rankedBattles.ranked_point_16x16()), 16, 16, -3), crystal=text_styles.stats(exchange), crystalImg=icons.crystal())
         tooltipBody = text_styles.concatStylesToMultiLine(tooltipBody, exchangePart)
     compensationText = ''
-    if isAwarded and compensation > 0 and exchange > 0:
+    if rewardingComplete and compensation > 0 and exchange > 0:
         if awardType is not None:
             compensationText = text_styles.mainBig(backport.text(R.strings.ranked_battles.rewardsView.tabs.year.compensation.extraPoints(), points=text_styles.highlightText(compensation), rankedImg=icons.makeImageTag(backport.image(R.images.gui.maps.icons.rankedBattles.ranked_point_16x16()), 16, 16, -3), crystal=text_styles.highlightText(compensation * exchange), crystalImg=icons.crystal()))
         else:

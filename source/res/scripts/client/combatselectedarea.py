@@ -147,6 +147,8 @@ class CombatSelectedArea(object):
             color = self.__color
         if self.__terrainSelectedArea:
             self.__terrainSelectedArea.setColor(color)
-        if self.__terrainAndObjectsSelectedArea:
-            self.__terrainAndObjectsSelectedArea.setColor(color)
         return
+
+    def enableAccurateCollision(self, isEnabled):
+        if self.__terrainSelectedArea:
+            self.__terrainSelectedArea.enableAccurateCollision(isEnabled)

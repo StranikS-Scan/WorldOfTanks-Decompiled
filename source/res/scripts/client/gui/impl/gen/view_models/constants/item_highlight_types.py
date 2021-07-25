@@ -15,6 +15,7 @@ class ItemHighlightTypes(ViewModel):
     BATTLE_ABILITY = 'battleAbility'
     INCOMPATIBLE_EQUIPMENT = 'incompatibleEquipment'
     PROGRESSION_STYLE_UPGRADED = 'progressionStyleUpgraded_'
+    POST_PROGRESSION_MODIFICATION = 'postProgressionModification'
     EMPTY = ''
 
     def __init__(self, properties=0, commands=0):

@@ -73,6 +73,7 @@ class VehicleSelectPopover(VehicleSelectPopoverStorage, VehicleSelectorBase):
         criteria = REQ_CRITERIA.INVENTORY
         criteria |= REQ_CRITERIA.VEHICLE.NAME_VEHICLE(self._searchStr)
         criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        criteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
         allVehicles = self._itemsCache.items.getVehicles(criteria)
         vehicles = self._updateData(allVehicles)
         self._vehDP.buildList(vehicles)

@@ -8,9 +8,12 @@ from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from bootcamp.Bootcamp import g_bootcamp, ICON_SIZE
 from gui.impl.gen.view_models.views.bootcamp.bootcamp_progress_model import BootcampProgressModel
+from uilogging.bootcamp.constants import BCLogKeys, BCLogActions
+from uilogging.bootcamp.loggers import BootcampLogger
 
 class BootcampProgressView(ViewImpl):
     __slots__ = ('__blur', '__tooltipData')
+    uiBootcampLogger = BootcampLogger(BCLogKeys.BC_CURRENT_PROGRESS_WIDGET.value)
 
     def __init__(self, layoutID, *args, **kwargs):
         settings = ViewSettings(layoutID)
@@ -47,6 +50,7 @@ class BootcampProgressView(ViewImpl):
             g_bootcamp.fillProgressBar(model, self.__tooltipData, ICON_SIZE.BIG)
 
     def _finalize(self):
+        self.uiBootcampLogger.log(BCLogActions.CLOSE.value)
         self.__blur.fini()
         super(BootcampProgressView, self)._finalize()
 

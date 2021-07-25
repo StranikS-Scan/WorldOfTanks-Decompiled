@@ -415,8 +415,8 @@ class Customization(FittingItem):
     def getBoundVehicles(self):
         return set(self._boundVehicles)
 
-    def isHistorical(self):
-        return self.descriptor.historical
+    def customizationDisplayType(self):
+        return self.descriptor.customizationDisplayType
 
     def isDim(self):
         return ItemTags.DIM in self.tags
@@ -746,6 +746,10 @@ class ProjectionDecal(Decal):
         return self.descriptor.canBeMirroredOnlyVertically
 
     @property
+    def scaleFactorId(self):
+        return self.descriptor.scaleFactorId
+
+    @property
     def previewIcon(self):
         if not self.__previewIcon:
             self.__previewIcon = self.__getPreviewIcon(self.texture)
@@ -930,10 +934,6 @@ class Style(Customization):
     @property
     def isProgression(self):
         return ItemTags.STYLE_PROGRESSION in self.tags
-
-    @property
-    def is3D(self):
-        return bool(self.modelsSet)
 
     @property
     def rentCount(self):

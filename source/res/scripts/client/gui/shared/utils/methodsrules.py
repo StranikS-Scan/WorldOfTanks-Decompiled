@@ -7,7 +7,6 @@ from helpers.aop import copy
 _logger = logging.getLogger(__name__)
 
 class MethodsRules(object):
-    __slots__ = ('__listenersToSkip', '__notificationToDelay', '__delayersProcessed')
 
     class delayable(object):
 

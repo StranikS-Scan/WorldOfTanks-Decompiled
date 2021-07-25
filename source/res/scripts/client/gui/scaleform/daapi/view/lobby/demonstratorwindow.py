@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/DemonstratorWindow.py
+import logging
 from itertools import ifilter
 from operator import itemgetter
 import ArenaType
@@ -51,6 +52,7 @@ BATTLE_TO_VEHICLE_LEVELS = [(1,),
  (6, 7, 8),
  (7, 8, 9),
  (8, 9, 10)]
+_logger = logging.getLogger(__name__)
 
 class DemonstratorWindow(DemonstratorWindowMeta, IGlobalListener):
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -274,10 +276,16 @@ class ArenasCache(object):
         for arenaTypeID, arenaType in ArenaType.g_cache.iteritems():
             if arenaType.explicitRequestOnly or not gameplay_ctx.isCreationEnabled(arenaType.gameplayName, False):
                 continue
+            iconRes = R.images.gui.maps.icons.map.num(arenaType.geometryName)
+            if iconRes.isValid():
+                icon = backport.image(iconRes())
+            else:
+                _logger.warning('Resource id is not found for area geometry %s', arenaType.geometryName)
+                icon = ''
             self.__cache.append({'id': arenaTypeID,
              'name': arenaType.name,
              'gameplayName': arenaType.gameplayName,
-             'icon': backport.image(R.images.gui.maps.icons.map.num(arenaType.geometryName)()),
+             'icon': icon,
              'points': self.__getPointsList(arenaType),
              'enabled': False})
 

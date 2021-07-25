@@ -10,6 +10,7 @@ AOI_TO_FAR_TIME = 5.0
 MINIMAP_SIZE = (210.0, 210.0)
 EPIC_MINIMAP_HIT_AREA = 210
 _METERS_TO_KILOMETERS = 0.001
+_MAX_SIZE_INDEX = 5
 if AOI.ENABLE_MANUAL_RULES:
     AOI_ESTIMATE = AOI.VEHICLE_CIRCULAR_AOI_RADIUS - 50.0
 
@@ -100,3 +101,8 @@ def getCellName(cellId, dimensions):
     else:
         name = string.ascii_uppercase[row + 1]
     return '{}{}'.format(name, int((column + 1) % dimensions))
+
+
+def getMinimapBasePingScale(minimapSizeIndex, minScale, maxScale):
+    p = minimapSizeIndex / _MAX_SIZE_INDEX
+    return (1 - p) * minScale + maxScale * p

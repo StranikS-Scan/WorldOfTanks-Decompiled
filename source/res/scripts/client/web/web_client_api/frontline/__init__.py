@@ -1,17 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/frontline/__init__.py
 from collections import namedtuple
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkIfVehicleIsHidden
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkEpicRewardVehAlreadyBought
+from battle_pass_common import BattlePassState
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getFrontLineSkills
-from helpers import dependency
-from gui.shared.gui_items import GUI_ITEM_TYPE
-from skeletons.gui.game_control import IEpicBattleMetaGameController, IEventProgressionController
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.server_events.awards_formatters import AWARDS_SIZES
+from gui.shared.utils.functions import getRelativeUrl
+from helpers import dependency, time_utils
+from skeletons.gui.game_control import IEpicBattleMetaGameController, IBattlePassController
 from skeletons.gui.server_events import IEventsCache
-from web.web_client_api import w2c, w2capi, W2CSchema, Field
 from skeletons.gui.shared import IItemsCache
-EpicSeasonAchievements = namedtuple('EpicSeasonAchievements', ('season_id', 'episode_id', 'battle_count', 'average_xp', 'award_points', 'lvl'))
-BattleRoyaleSeasonAchievements = namedtuple('EpicSeasonAchievements', ('season_id', 'episode_id', 'battle_count', 'kill_count', 'award_points', 'lvl'))
+from web.web_client_api import w2c, w2capi, W2CSchema, Field
+from web.web_client_api.common import ItemPackType
+EpicSeasonAchievements = namedtuple('EpicSeasonAchievements', ('season_id', 'episode_id', 'battle_count', 'average_xp', 'lvl', 'battle_bp_points', 'season_bp_points'))
 
 class _RewardsSchema(W2CSchema):
     category = Field(type=basestring)
@@ -21,64 +23,26 @@ class _SkillSchema(W2CSchema):
     skill_id = Field(required=False, type=int)
 
 
-_REWARD_VEHICLE_AVAILABLE = 'available'
-_REWARD_VEHICLE_OWNED = 'owned'
-_REWARD_VEHICLE_PURCHASED = 'purchased'
-
 @w2capi(name='frontline', key='action')
 class FrontLineWebApi(W2CSchema):
-    __frontlineCtrl = dependency.descriptor(IEpicBattleMetaGameController)
-    __eventProgression = dependency.descriptor(IEventProgressionController)
+    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __battlePassController = dependency.descriptor(IBattlePassController)
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
+    _NOT_SUPPORTED_BONUSES = ('battleToken',)
 
     @w2c(_RewardsSchema, name='get_rewards_data')
     def handleGetRewardsData(self, cmd):
         if hasattr(cmd, 'category') and cmd.category:
             if cmd.category == 'level':
-                return self.__eventProgression.getAllLevelAwards()
+                return self.__getAllLevelAwards()
             if cmd.category == 'vehicles':
                 rewardsData = {}
-                vehicleInfo = []
-                for intCD, price in self.__eventProgression.rewardVehicles:
-                    vehicle = self.__itemsCache.items.getItemByCD(intCD)
-                    obtained = checkEpicRewardVehAlreadyBought(intCD)
-                    owned = bool(vehicle.inventoryCount)
-                    if owned:
-                        state = _REWARD_VEHICLE_OWNED
-                    elif obtained:
-                        state = _REWARD_VEHICLE_PURCHASED
-                    else:
-                        state = _REWARD_VEHICLE_AVAILABLE
-                    vehicleInfo.append({'vehIntCD': intCD,
-                     'price': price,
-                     'state': state,
-                     'show_ttc': not checkIfVehicleIsHidden(intCD)})
-
-                rewardsData['vehicles'] = sorted(vehicleInfo, key=lambda v: v['price'])
                 return rewardsData
             if cmd.category == 'styles':
                 rewardsData = {}
-                styleInfo = []
-                styles = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.STYLE)
-                for styleID, price in self.__eventProgression.rewardStyles:
-                    for styleIntCD, style in styles.iteritems():
-                        if style.id == styleID:
-                            styleInfo.append({'styleIntCD': styleIntCD,
-                             'styleId': styleID,
-                             'price': price,
-                             'name': style.userName,
-                             'icon': style.icon,
-                             'count': style.fullCount()})
-                            continue
-
-                rewardsData['styles'] = sorted(styleInfo, key=lambda s: s['price'])
                 return rewardsData
         return None
-
-    @w2c(W2CSchema, name='get_exchange_info')
-    def getExchangeInfo(self, _):
-        return self.__eventProgression.getExchangeInfo()
 
     @w2c(W2CSchema, name='get_all_skills')
     def handleSkillsInfo(self, _):
@@ -86,66 +50,108 @@ class FrontLineWebApi(W2CSchema):
 
     @w2c(W2CSchema, name='get_player_skills_status')
     def handleSkillStatus(self, _):
-        result = {}
-        for skillID, epicSkillsListGenerator in self.__frontlineCtrl.getAllUnlockedSkillLevelsBySkillId().iteritems():
-            skills = list(epicSkillsListGenerator)
-            if skills:
-                result[skillID] = skills[-1].level
-            result[skillID] = 0
-
-        return result
+        return {skillID:int(skill.isActivated) for skillID, skill in self.__epicController.getAllSkillsInformation().iteritems()}
 
     @w2c(W2CSchema, name='get_player_skill_points')
     def handleGetSkillPoints(self, _):
-        return self.__frontlineCtrl.getSkillPoints()
+        return self.__epicController.getSkillPoints()
+
+    @w2c(W2CSchema, name='is_nine_vehicles_level_disabled')
+    def handleIsNineVehiclesLevelDisabled(self, _):
+        return not self.__epicController.isUnlockVehiclesInBattleEnabled()
 
     @w2c(_SkillSchema, name='increase_player_skill')
     def handleIncreaseSkillLevel(self, cmd):
         if hasattr(cmd, 'skill_id') and cmd.skill_id:
-            self.__frontlineCtrl.increaseSkillLevel(cmd.skill_id)
+            self.__epicController.increaseSkillLevel(cmd.skill_id)
 
     @w2c(W2CSchema, name='get_player_discount')
     def handleGetPlayerDiscount(self, _):
-        return self.__frontlineCtrl.getStoredEpicDiscount()
+        return self.__epicController.getStoredEpicDiscount()
+
+    @w2c(W2CSchema, name='get_is_battle_pass_completed')
+    def handleGetIsBattlePassBought(self, _):
+        state = self.__battlePassController.getState()
+        return state == BattlePassState.COMPLETED
 
     @w2c(W2CSchema, name='get_metascreen_data')
     def handleGetMetaScreenData(self, _):
-        levelInfo = self.__eventProgression.getPlayerLevelInfo()
-        nextLevelExp = self.__eventProgression.getPointsProgressForLevel(levelInfo.currentLevel)
-        metaGameStats = self.__eventProgression.getStats()
-        data = {'lvl': levelInfo.currentLevel,
-         'mode_alias': self.__eventProgression.getCurrentModeAlias(),
-         'max_lvl': self.__eventProgression.getMaxPlayerLevel(),
-         'exp': levelInfo.levelProgress,
+        currentLevel, levelProgress = self.__epicController.getPlayerLevelInfo()
+        nextLevelExp = self.__epicController.getPointsProgressForLevel(currentLevel)
+        data = {'lvl': currentLevel,
+         'mode_alias': 'frontline',
+         'max_lvl': self.__epicController.getMaxPlayerLevel(),
+         'exp': levelProgress,
          'exp_for_lvl': nextLevelExp,
-         'rewards_for_lvl': self.__eventProgression.getLevelAwards(levelInfo.currentLevel + 1),
-         'quest_ids': self.__eventProgression.getActiveQuestIDs(),
-         'battle_count': metaGameStats.battleCount,
-         'award_points': self.__eventProgression.actualRewardPoints,
-         'season_award_points': self.__eventProgression.seasonRewardPoints,
-         'max_award_points': self.__eventProgression.maxRewardPoints}
-        modeData = self.__eventProgression.getEpicMetascreenData()
-        if modeData:
-            data.update(modeData)
+         'rewards_for_lvl': self.__getLevelAwards(currentLevel + 1)}
         return data
 
     @w2c(W2CSchema, name='get_calendar_info')
     def handleGetCalendarInfo(self, _):
-        return self.__eventProgression.getCalendarInfo()
+        calendarData = dict()
+        seasons = (self.__epicController.getCurrentSeason(), self.__epicController.getNextSeason(), self.__epicController.getPreviousSeason())
+        for season in seasons:
+            if season is not None:
+                calendarData['season'] = {'id': season.getSeasonID(),
+                 'start': season.getStartDate(),
+                 'end': season.getEndDate()}
+                calendarData['cycles'] = [ {'id': cycle.ID,
+                 'start': cycle.startDate,
+                 'end': cycle.endDate,
+                 'announce_only': cycle.announceOnly} for cycle in season.getAllCycles().values() ]
+                break
+
+        return calendarData
 
     @w2c(W2CSchema, name='get_seasons_achievements')
     def getSeasonAchievements(self, _):
-        dossierDescr = self.__itemsCache.items.getAccountDossier().getDossierDescr()
-        seasonsAchievements = {'frontline': self.__getSeasonAchievements(dossierDescr.expand('epicSeasons'), EpicSeasonAchievements),
-         'steel_hunter': self.__getSeasonAchievements(dossierDescr.expand('battleRoyaleSeasons'), BattleRoyaleSeasonAchievements)}
-        return seasonsAchievements
-
-    def __getSeasonAchievements(self, achievements, template):
+        achievements = self.__itemsCache.items.getAccountDossier().getDossierDescr().expand('epicSeasons')
         seasonsAchievements = []
+        season = self.__epicController.getCurrentSeason() or self.__epicController.getPreviousSeason()
+        if not season:
+            return seasonsAchievements
         for seasonID, cycleID in achievements:
-            if not self.__eventProgression.validateSeasonData(seasonID, cycleID):
-                continue
-            key = (seasonID, cycleID)
-            seasonsAchievements.append(template(*(key + achievements[key]))._asdict())
+            if season.getSeasonID() == seasonID and cycleID in season.getAllCycles():
+                key = (seasonID, cycleID)
+                seasonsAchievements.append(EpicSeasonAchievements(*(key + achievements[key]))._asdict())
 
+        if season.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
+            stats = self.__epicController.getStats()
+            seasonsAchievements.append(EpicSeasonAchievements(season_id=season.getSeasonID(), episode_id=season.getCycleID(), battle_count=stats.battleCount, average_xp=stats.averageXP, lvl=stats.playerLevelInfo[0], battle_bp_points=stats.seasonData[2].get('battlePassPoints', 0), season_bp_points=stats.seasonData[2].get('seasonBattlePassPoints', 0))._asdict())
         return seasonsAchievements
+
+    def __getAllLevelAwards(self):
+        awardsData = dict()
+        abilityPts = self.__epicController.getAbilityPointsForLevel()
+        allQuests = self.__eventsCache.getAllQuests()
+        for questKey, questData in allQuests.iteritems():
+            if self.__epicController.TOKEN_QUEST_ID in questKey:
+                _, _, questNum = questKey.partition(self.__epicController.TOKEN_QUEST_ID)
+                if questNum:
+                    questLvl = int(questNum)
+                    questBonuses = questData.getBonuses()
+                    awardsData[questLvl] = self.__packBonuses(questBonuses, questLvl, abilityPts)
+
+        return awardsData
+
+    def __getLevelAwards(self, level):
+        allAwards = self.__getAllLevelAwards()
+        return allAwards[level] if level in allAwards else []
+
+    @classmethod
+    def __packBonuses(cls, bonuses, level, abilityPts):
+        result = [{'id': 0,
+          'type': ItemPackType.CUSTOM_SUPPLY_POINT,
+          'value': abilityPts[level - 1],
+          'icon': {AWARDS_SIZES.SMALL: getRelativeUrl(backport.image(R.images.gui.maps.icons.epicBattles.awards.c_48x48.abilityToken())),
+                   AWARDS_SIZES.BIG: getRelativeUrl(backport.image(R.images.gui.maps.icons.epicBattles.awards.c_80x80.abilityToken()))}}] if abilityPts else []
+        for bonus in bonuses:
+            if bonus.getName() in cls._NOT_SUPPORTED_BONUSES:
+                continue
+            bonusList = bonus.getWrappedEpicBonusList()
+            for bonusEntry in bonusList:
+                bonusEntry['icon'] = {size:getRelativeUrl(path) for size, path in bonusEntry['icon'].iteritems()}
+
+            result.extend(bonusList)
+
+        return result

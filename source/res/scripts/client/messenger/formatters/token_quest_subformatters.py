@@ -11,7 +11,6 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_YEAR_POSITION
 from dossiers2.custom.records import DB_ID_TO_RECORD, RECORD_DB_IDS
 from dossiers2.ui.achievements import BADGES_BLOCK, ACHIEVEMENT_BLOCK
-from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles import ranked_helpers
@@ -111,52 +110,6 @@ class RecruitQuestsFormatter(AsyncTokenQuestsSubFormatter):
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return getSourceIdFromQuest(questID) is not None
-
-
-class FrontlineExchangeQuestFormatter(AsyncTokenQuestsSubFormatter):
-    __eventsCache = dependency.descriptor(IEventsCache)
-    __FRONTLINE_PRESTIGE_POINTS_EXCHANGE_TEMPLATE = 'PrestigePointsExchange'
-    __TEMPLATE_NAME = 'FlExchangeMessage'
-
-    @async
-    @process
-    def format(self, message, callback=None):
-        isSynced = yield self._waitForSyncItems()
-        formatted, settings = (None, None)
-        if isSynced:
-            data = message.data or {}
-            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
-            questsData = getRewardsForQuests(message, self.getQuestOfThisGroup(completedQuestIDs))
-            questsData['popUpRecords'] = self.getPopUps(message)
-            templateParams = {}
-            rate = {}
-            exchangeQ = self.__eventsCache.getAllQuests().get(self.__FRONTLINE_PRESTIGE_POINTS_EXCHANGE_TEMPLATE)
-            if exchangeQ:
-                for b in exchangeQ.getBonuses():
-                    rate[b.getName()] = b.getValue()
-
-            crystal = questsData.get(Currency.CRYSTAL, 0)
-            if crystal:
-                templateParams[Currency.CRYSTAL] = makeHtmlString('html_templates:lobby/battle_results', 'crystal_small_label', {'value': backport.getIntegralFormat(int(crystal))})
-                if Currency.CRYSTAL in rate:
-                    crystalRate = rate[Currency.CRYSTAL]
-                    if crystalRate:
-                        templateParams['points'] = int(crystal / crystalRate)
-            gold = questsData.get(Currency.GOLD, 0)
-            if gold:
-                templateParams[Currency.GOLD] = makeHtmlString('html_templates:lobby/battle_results', 'gold_small_label', {'value': backport.getIntegralFormat(int(gold))})
-                if Currency.GOLD in rate and 'points' not in templateParams:
-                    goldRate = rate[Currency.GOLD]
-                    if goldRate:
-                        templateParams['points'] = int(gold / goldRate)
-            settings = self._getGuiSettings(message, self.__TEMPLATE_NAME)
-            formatted = g_settings.msgTemplates.format(self.__TEMPLATE_NAME, templateParams)
-        callback([MessageData(formatted, settings)])
-        return None
-
-    @classmethod
-    def _isQuestOfThisGroup(cls, questID):
-        return cls.__FRONTLINE_PRESTIGE_POINTS_EXCHANGE_TEMPLATE in questID
 
 
 class RankedTokenQuestFormatter(AsyncTokenQuestsSubFormatter):
@@ -311,14 +264,6 @@ class RankedSeasonTokenQuestFormatter(RankedTokenQuestFormatter):
         if awardsDict:
             result.extend(self._achievesFormatter.packAwards(awardsDict, self.__seasonAwardsFormatters))
         return EOL.join(result)
-
-
-class FrontlineRewardQuestFormatter(SyncTokenQuestsSubFormatter):
-    __FRONTLINE_REWARD_QUEST_TEMPLATE = 'bought_frontline_reward_veh_'
-
-    @classmethod
-    def _isQuestOfThisGroup(cls, questID):
-        return cls.__FRONTLINE_REWARD_QUEST_TEMPLATE in questID
 
 
 class RankedFinalTokenQuestFormatter(RankedTokenQuestFormatter):

@@ -84,8 +84,10 @@ class BattleResultsService(IBattleResultsService):
             self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI=ctx.needToShowIfPosted())
         else:
             results = yield BattleResultsGetter(arenaUniqueID).request()
+            if not results.success and ctx.getArenaBonusType() == ARENA_BONUS_TYPE.MAPS_TRAINING:
+                results = yield self.waitForBattleResults(arenaUniqueID)
             isSuccess = results.success
-            if not results.success or not self.postResult(results.auxData, ctx.needToShowIfPosted()):
+            if not isSuccess or not self.postResult(results.auxData, ctx.needToShowIfPosted()):
                 self.__composers.pop(arenaUniqueID, None)
                 event_dispatcher.hideBattleResults()
         if callback is not None:
@@ -349,3 +351,22 @@ class BattleResultsService(IBattleResultsService):
 
     def __onAddXPBonusChanged(self):
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED))
+
+    @async
+    @process
+    def waitForBattleResults(self, arenaUniqueID, callback=None):
+
+        @async
+        def wait(t, callback):
+            BigWorld.callback(t, lambda : callback(None))
+
+        isSuccess = False
+        results = None
+        while not isSuccess:
+            yield wait(1)
+            results = yield BattleResultsGetter(arenaUniqueID).request()
+            isSuccess = results.success
+
+        if callback is not None:
+            callback(results)
+        return

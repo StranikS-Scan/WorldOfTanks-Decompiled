@@ -25,6 +25,9 @@ class VehicleCompareConfiguratorBaseView(VehicleCompareConfiguratorBaseViewMeta)
     def onEquipmentUpdated(self):
         pass
 
+    def onBattleBoosterUpdated(self):
+        pass
+
     def onModulesUpdated(self):
         pass
 
@@ -34,7 +37,13 @@ class VehicleCompareConfiguratorBaseView(VehicleCompareConfiguratorBaseViewMeta)
     def onCrewLevelUpdated(self, newLvl):
         pass
 
+    def onPostProgressionUpdated(self):
+        pass
+
     def onResetToDefault(self):
+        pass
+
+    def onBasketParametersChanged(self, basketVehData):
         pass
 
     def setContainer(self, container):

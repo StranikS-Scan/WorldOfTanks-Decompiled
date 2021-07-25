@@ -85,6 +85,7 @@ class MapActivities(IMapActivities):
         self.__pendingActivities = []
         self.__currActivities = []
         self.__arenaPeriod = None
+        self.__previousPeriod = None
         PlayerEvents.g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         PlayerEvents.g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         PlayerEvents.g_playerEvents.onAvatarBecomeNonPlayer += self.__onAvatarBecomeNonPlayer
@@ -194,6 +195,9 @@ class MapActivities(IMapActivities):
         self._generateArenaActivities()
 
     def __onArenaPeriodChange(self, period, periodEndTime, periodLength, periodAdditionalInfo):
+        if period == self.__previousPeriod:
+            return
+        self.__previousPeriod = period
         isOnArena = period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.BATTLE, ARENA_PERIOD.AFTERBATTLE)
         if period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.BATTLE):
             self.__setStartTimes(periodAdditionalInfo)

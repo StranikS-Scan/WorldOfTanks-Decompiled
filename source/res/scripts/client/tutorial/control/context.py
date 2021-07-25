@@ -145,11 +145,15 @@ class GLOBAL_FLAG(object):
     ALL_BONUSES_RECEIVED = '_AllBonusesReceived'
     MAY_PAWN_PERSONAL_MISSION = '_MayPawnPersonalMission'
     HAVE_NEW_BADGE = '_HaveNewBadge'
+    LOBBY_MENU_ITEM_MANUAL = '_LobbyMenuItemManual'
+    LOBBY_MENU_ITEM_BOOTCAMP = '_LobbyMenuItemBootcamp'
     HAVE_NEW_SUFFIX_BADGE = '_HaveNewSuffixBadge'
     BADGE_PAGE_HAS_NEW_SUFFIX_BADGE = '_BadgePageHasNewSuffixBadge'
     CREW_BOOKS_ENABLED = '_CrewBooksEnabled'
     COLLECTIBLE_VEHICLE_PREVIEW_ENABLED = '_CollectibleVehiclePreviewEnabled'
     DOGTAGS_ENABLED = '_DogTagsEnabled'
+    VEH_POST_PROGRESSION_ENABLED = '_VehPostProgressionEnabled'
+    VEH_POST_PROGRESSION_PURCHASABLE = '_VehPostProgressionPurchasable'
     ALL = (IS_FLAGS_RESET,
      SHOW_HISTORY,
      HISTORY_NOT_AVAILABLE,
@@ -226,9 +230,12 @@ class GlobalStorage(object):
         return result
 
     @classmethod
-    def setValue(cls, attribute, value):
-        cls.__storage[attribute] = value
-        cls.onSetValue(attribute, value)
+    def setValue(cls, attribute, value, showImmediately=True):
+        oldValue = cls.__storage.get(attribute)
+        if oldValue != value:
+            cls.__storage[attribute] = value
+            if showImmediately:
+                cls.onSetValue(attribute, value)
 
 
 class ClientCtx(object):

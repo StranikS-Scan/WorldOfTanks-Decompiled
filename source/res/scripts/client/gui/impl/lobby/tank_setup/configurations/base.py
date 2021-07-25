@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/configurations/base.py
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.deal_panel_model import DealPanelModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.setup_tab_model import SetupTabModel
-from gui.impl.lobby.tabs_controller import TabsController
+from gui.impl.common.tabs_controller import TabsController
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
 from gui.shared.gui_items.fitting_item import canBuyWithGoldExchange
 from gui.shared.money import MONEY_UNDEFINED
@@ -29,14 +29,16 @@ class BaseTankSetupTabsController(TabsController):
 class BaseDealPanel(object):
     _itemsCache = dependency.descriptor(IItemsCache)
     _IN_STORAGE = 'inStorage'
+    _ON_VEHICLE_IN_SETUP = 'inSetup'
     _MONEY = 'money'
 
     @classmethod
-    def updateDealPanelPrice(cls, items, dealPanelModel):
+    def updateDealPanelPrice(cls, vehicle, items, dealPanelModel):
         prices = {cls._IN_STORAGE: 0,
+         cls._ON_VEHICLE_IN_SETUP: False,
          cls._MONEY: MONEY_UNDEFINED}
         for item in items:
-            cls.addItem(item, prices)
+            cls.addItem(vehicle, item, prices)
 
         dealPanelModel.setTotalItemsInStorage(prices[cls._IN_STORAGE])
         dealPanelModel.getPrice().clear()
@@ -53,8 +55,11 @@ class BaseDealPanel(object):
         return
 
     @classmethod
-    def addItem(cls, item, prices):
+    def addItem(cls, vehicle, item, prices):
         if item is None:
+            return
+        elif not item.isInstalled(vehicle) and item.isInSetup(vehicle):
+            prices[cls._ON_VEHICLE_IN_SETUP] = True
             return
         elif item.isInInventory:
             prices[cls._IN_STORAGE] += 1

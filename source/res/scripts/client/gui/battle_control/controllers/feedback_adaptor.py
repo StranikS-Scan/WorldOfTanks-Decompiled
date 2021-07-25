@@ -46,7 +46,7 @@ class _DamagedDevicesExtraFetcher(object):
 
 
 class BattleFeedbackAdaptor(IBattleController):
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onVehicleDetected', 'onActionAddedToMarkerReceived', 'onShotDone', 'onAddCommandReceived', 'onEnemySPGShotReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache', '__eManager')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onVehicleDetected', 'onActionAddedToMarkerReceived', 'onShotDone', 'onAddCommandReceived', 'setGoals', 'destroyGoal', 'onLocalKillGoalsUpdated', 'onEnemySPGShotReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache', '__eManager')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -79,6 +79,9 @@ class BattleFeedbackAdaptor(IBattleController):
         self.setInFocusForPlayer = Event.Event(self.__eManager)
         self.onActionAddedToMarkerReceived = Event.Event(self.__eManager)
         self.onEnemySPGShotReceived = Event.Event(self.__eManager)
+        self.setGoals = Event.Event(self.__eManager)
+        self.destroyGoal = Event.Event(self.__eManager)
+        self.onLocalKillGoalsUpdated = Event.Event(self.__eManager)
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.FEEDBACK
@@ -226,6 +229,12 @@ class BattleFeedbackAdaptor(IBattleController):
 
     def invalidateActiveGunChanges(self, vehicleID, data):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_ACTIVE_GUN_CHANGED, vehicleID, data)
+
+    def invalidateStealthRadar(self, vehicleID, data):
+        self.onVehicleFeedbackReceived(_FET.VEHICLE_FRONTLINE_STEALTH_RADAR_ACTIVE, vehicleID, data)
+
+    def invalidateFLRegenerationKit(self, vehicleID, data):
+        self.onVehicleFeedbackReceived(_FET.VEHICLE_FRONTLINE_REGENERATION_KIT_ACTIVE, vehicleID, data)
 
     def markObjectiveOnMinimap(self, senderID, hqIdx, cmdName):
         self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_OBJECTIVE, senderID, (hqIdx, _CELL_BLINKING_DURATION, cmdName))

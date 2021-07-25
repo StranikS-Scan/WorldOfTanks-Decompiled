@@ -13,7 +13,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from web.web_client_api import w2capi, w2c, W2CSchema, webApiCollection
+from web.web_client_api import w2capi, w2c, W2CSchema, webApiCollection, Field
 from web.web_client_api.clans import ClansWebApi
 from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.request import RequestWebApi
@@ -21,6 +21,7 @@ from web.web_client_api.sound import SoundWebApi, SoundStateWebApi, HangarSoundW
 from web.web_client_api.shop import ShopWebApi
 from web.web_client_api.ui import NotificationWebApi, ContextMenuWebApi, OpenWindowWebApi, CloseWindowWebApi, OpenTabWebApi, UtilWebApi
 from web.web_client_api.ui.ranked import OpenRankedPagesMixin
+BROWSER_BRIDGE_EVENT = 'browser_bridge_event'
 
 def _packQuest(quest, rankModel):
     return {'isCompleted': quest.isCompleted(),
@@ -81,6 +82,18 @@ class RankedBattlesWebApi(OpenRankedPagesMixin):
         return self.__itemsCache.items.getAccountDossier().getSeasonRankedStats(seasonKey, seasonID)
 
 
+class _ProxyDataSchema(W2CSchema):
+    data = Field(required=True, type=dict)
+
+
+@w2capi()
+class BrowsersBridgeW2C(object):
+
+    @w2c(_ProxyDataSchema, name='browser_bridge_event')
+    def sendData(self, cmd):
+        g_eventBus.handleEvent(events.HasCtxEvent(BROWSER_BRIDGE_EVENT, ctx=cmd.data))
+
+
 class _OpenTabWebApi(OpenTabWebApi):
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
@@ -103,5 +116,26 @@ class _SoundStateWebApi(SoundStateWebApi):
     _ON_EXIT_STATES = {}
 
 
+DEFAULT_WEB_HANDLERS = {RequestWebApi,
+ ContextMenuWebApi,
+ _OpenTabWebApi,
+ OpenWindowWebApi,
+ CloseWindowWebApi,
+ SoundWebApi,
+ _SoundStateWebApi,
+ HangarSoundWebApi,
+ ClansWebApi,
+ NotificationWebApi,
+ RankedBattlesWebApi,
+ QuestsWebApi,
+ ShopWebApi,
+ UtilWebApi}
+
+def createRankedOverlayHandlers():
+    handlers = DEFAULT_WEB_HANDLERS.copy()
+    handlers.add(BrowsersBridgeW2C)
+    return webApiCollection(*handlers)
+
+
 def createRankedBattlesWebHandlers():
-    return webApiCollection(RequestWebApi, ContextMenuWebApi, _OpenTabWebApi, OpenWindowWebApi, CloseWindowWebApi, SoundWebApi, _SoundStateWebApi, HangarSoundWebApi, ClansWebApi, NotificationWebApi, RankedBattlesWebApi, QuestsWebApi, ShopWebApi, UtilWebApi)
+    return webApiCollection(*DEFAULT_WEB_HANDLERS)

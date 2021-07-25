@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileStatistics.py
 from collections import namedtuple
-import constants
 from debug_utils import LOG_ERROR
 from gui.impl import backport
 from gui.impl.gen import R
@@ -9,7 +8,7 @@ from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import getSta
 from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatisticsMeta
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
-from gui.ranked_battles.constants import RankedDossierKeys, ARCHIVE_SEASON_ID, SEASON_IDS_RB_2020
+from gui.ranked_battles.constants import RankedDossierKeys, ARCHIVE_SEASON_ID
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
@@ -49,24 +48,14 @@ class ProfileStatistics(ProfileStatisticsMeta):
             self.__ctx = {}
 
         super(ProfileStatistics, self).__init__(*args)
-        seasonID = str(SEASON_IDS_RB_2020[-1])
+        seasonID = self.__getLastActiveSeasonID()
         self.__rankedSeasonKey = _RANKED_SEASONS_ARCHIVE
-        if seasonID is not None:
+        if seasonID is not None and not self.rankedController.hasSpecialSeason():
             self.__rankedSeasonKey = str(seasonID)
         return
 
-    def requestDossier(self, bType):
-        if bType == PROFILE_DROPDOWN_KEYS.RANKED_10X10:
-            seasonID = self.__getLastActiveSeasonID()
-            if seasonID is not None:
-                self.__rankedSeasonKey = str(seasonID)
-        elif bType == PROFILE_DROPDOWN_KEYS.RANKED:
-            self.__rankedSeasonKey = str(SEASON_IDS_RB_2020[-1])
-        super(ProfileStatistics, self).requestDossier(bType)
-        return
-
     def setSeason(self, seasonId):
-        if self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
+        if self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED_10X10:
             self.__rankedSeasonKey = seasonId
             self.as_updatePlayerStatsBtnS(self.__getPlayersStatsBtnEnabled())
             self.invokeUpdate()
@@ -113,11 +102,9 @@ class ProfileStatistics(ProfileStatisticsMeta):
         elif self._battlesType in (PROFILE_DROPDOWN_KEYS.RANKED, PROFILE_DROPDOWN_KEYS.RANKED_10X10):
             vo['seasonDropdownAttachToTitle'] = True
             vo['playersStatsLbl'] = backport.text(R.strings.ranked_battles.statistic.playersRaiting())
-            vo['playersStats'] = self.__getPlayersStatsBtnEnabled()
             if self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED_10X10:
-                vo['testText'] = backport.text(R.strings.ranked_battles.rankedBattleMainView.season(), season=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonName()))
-            if self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
                 self.__updateRankedDropdownData(vo, self.__rankedSeasonKey)
+                vo['playersStats'] = self.__getPlayersStatsBtnEnabled()
         self.as_responseDossierS(self._battlesType, vo, _FRAME_LABELS[self._battlesType], '')
         return
 
@@ -133,18 +120,16 @@ class ProfileStatistics(ProfileStatisticsMeta):
             return self._getRanked10x10Stats(accountDossier) if self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED_10X10 else super(ProfileStatistics, self)._getNecessaryStats(accountDossier)
 
     def _getRanked10x10Stats(self, accountDossier):
-        return accountDossier.getRanked10x10Stats()
+        if self.__rankedSeasonKey == _RANKED_SEASONS_ARCHIVE:
+            return accountDossier.getRanked10x10Stats()
+        season = self.rankedController.getSeason(int(self.__rankedSeasonKey))
+        if season:
+            seasonKey = RankedDossierKeys.SEASON % season.getNumber()
+            seasonID = season.getSeasonID()
+            return accountDossier.getSeasonRankedStats(seasonKey, seasonID)
 
     def _getRanked15x15Stats(self, accountDossier):
-        result = None
-        if self.__rankedSeasonKey == _RANKED_SEASONS_ARCHIVE:
-            result = accountDossier.getSeasonRanked15x15Stats(RankedDossierKeys.ARCHIVE, ARCHIVE_SEASON_ID)
-        else:
-            seasonID = int(self.__rankedSeasonKey)
-            if seasonID in SEASON_IDS_RB_2020:
-                seasonKey = RankedDossierKeys.SEASON % (SEASON_IDS_RB_2020.index(seasonID) + 1)
-                result = accountDossier.getSeasonRanked15x15Stats(seasonKey, seasonID)
-        return result
+        return accountDossier.getSeasonRanked15x15Stats(RankedDossierKeys.ARCHIVE, ARCHIVE_SEASON_ID)
 
     @classmethod
     def __updateStaticDropdownData(cls, vo):
@@ -154,18 +139,22 @@ class ProfileStatistics(ProfileStatisticsMeta):
         vo['seasonEnabled'] = False
 
     def __updateRankedDropdownData(self, vo, selectedLabel):
-        showDropDown = vo['showSeasonDropdown'] = self.__hasRankedSeasonsHistory()
+        showDropDown = self.__hasRankedSeasonsHistory() and not self.rankedController.hasSpecialSeason()
+        vo['showSeasonDropdown'] = showDropDown
         if showDropDown:
             seasonItems = vo['seasonItems'] = [self._dataProviderEntry(_RANKED_SEASONS_ARCHIVE, backport.text(R.strings.profile.profile.ranked.seasonsdropdown.archive()))]
-            seasonIds = SEASON_IDS_RB_2020
-            seasonNumber = 1
+            seasonIndex = 0
+            sortedSeasons = sorted(self.rankedController.getSeasonPassed(), key=lambda seasonData: seasonData[1])
+            seasonIds = [ seasonID for seasonID, _ in sortedSeasons ]
+            currentSeason = self.rankedController.getCurrentSeason()
+            if currentSeason:
+                seasonIds.append(currentSeason.getSeasonID())
             for seasonID in seasonIds:
-                seasonsDropdownRes = R.strings.profile.profile.ranked.seasonsdropdown
-                seasonsdropdown = seasonsDropdownRes.dyn(constants.CURRENT_REALM, seasonsDropdownRes)
-                seasonItems.append(self._dataProviderEntry(str(seasonID), backport.text(seasonsdropdown.num(seasonNumber)())))
-                seasonNumber += 1
+                season = self.rankedController.getSeason(seasonID)
+                if season:
+                    seasonsdropdown = R.strings.profile.profile.ranked.seasonsdropdown
+                    seasonItems.append(self._dataProviderEntry(str(seasonID), backport.text(seasonsdropdown.num(season.getNumber())())))
 
-            seasonIndex = len(seasonItems) - 1
             for i, seasonItem in enumerate(seasonItems):
                 if seasonItem['key'] == selectedLabel:
                     seasonIndex = i

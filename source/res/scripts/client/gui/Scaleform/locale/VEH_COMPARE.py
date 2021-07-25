@@ -153,6 +153,7 @@ class VEH_COMPARE(object):
     MODULESVIEW_VEHICLESTATUS_READYTORESEARCH = '#veh_compare:modulesView/vehicleStatus/readyToResearch'
     VEHCONF_HEADER = '#veh_compare:vehConf/header'
     VEHCONF_MODULES = '#veh_compare:vehConf/modules'
+    VEHCONF_MODIFICATIONS_TITLE = '#veh_compare:vehConf/modifications/title'
     VEHCONF_EQUIPMENT = '#veh_compare:vehConf/equipment'
     VEHCONF_TOPMODULESLABEL = '#veh_compare:vehConf/topModulesLabel'
     VEHCONF_TOOLTIPS_TOPMODULESLABEL_HEADER = '#veh_compare:vehConf/tooltips/topModulesLabel/header'
@@ -195,6 +196,10 @@ class VEH_COMPARE(object):
     VEHCONF_TOOLTIPS_DEVICENOTAFFECTEDTTC = '#veh_compare:vehConf/tooltips/deviceNotAffectedTTC'
     VEHCONF_TOOLTIPS_ATTENTIONICONCREW_HEADER = '#veh_compare:vehConf/tooltips/attentionIconCrew/header'
     VEHCONF_TOOLTIPS_ATTENTIONICONCREW_BODY = '#veh_compare:vehConf/tooltips/attentionIconCrew/body'
+    VEHCONF_MODIFICATIONS_CHOOSE = '#veh_compare:vehConf/modifications/choose'
+    VEHCONF_TOOLTIPS_MODIFICATIONS_TITLE = '#veh_compare:vehConf/tooltips/modifications/title'
+    VEHCONF_TOOLTIPS_MODIFICATIONS_DESCRIPTION = '#veh_compare:vehConf/tooltips/modifications/description'
+    VEHCONF_TOOLTIPS_MODIFICATIONS_REMOVE = '#veh_compare:vehConf/tooltips/modifications/remove'
     CARTPOPOVER_CONFIGURATIONTYPE_ENUM = (CARTPOPOVER_CONFIGURATIONTYPE_BASIC,
      CARTPOPOVER_CONFIGURATIONTYPE_CUSTOM,
      CARTPOPOVER_CONFIGURATIONTYPE_CURRENT,

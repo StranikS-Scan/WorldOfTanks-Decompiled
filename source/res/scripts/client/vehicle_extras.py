@@ -3,15 +3,19 @@
 import random
 import weakref
 from functools import partial
+from vehicle_systems.stricted_loading import makeCallbackWeak
 import BigWorld
 import Math
 import material_kinds
+import AnimationSequence
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 from items import vehicles
+from common_tank_appearance import MAX_DISTANCE
 from helpers import i18n
 from helpers.EffectsList import EffectsListPlayer
 from helpers.EntityExtra import EntityExtra
-from constants import IS_EDITOR
+from helpers.laser_sight_matrix_provider import LaserSightMatrixProvider
+from constants import IS_EDITOR, CollisionFlags
 if not IS_EDITOR:
     from vehicle_extras_battle_royale import AfterburningBattleRoyale
 
@@ -326,3 +330,107 @@ class TankmanHealth(DamageMarker):
     @property
     def isTankman(self):
         return True
+
+
+class BlinkingLaserSight(EntityExtra):
+    __slots__ = ('_isEnabledBlinking', '_shouldCollideTarget', '_beamLength', '_bindNode', '_beamSeqs')
+    _SEQUENCE_NAMES = ('beamStaticSeq', 'beamReloadStartSeq', 'beamReloadFininshSeq')
+
+    def _readConfig(self, dataSection, containerName):
+        self._isEnabledBlinking = dataSection.readBool('isEnabledBlinking')
+        self._shouldCollideTarget = dataSection.readBool('shouldCollideTarget')
+        self._beamLength = dataSection.readFloat('beamLength', 1.0)
+        self._bindNode = dataSection.readString('bindNode')
+        self._beamSeqs = dict(((name, dataSection.readString(name)) for name in self._SEQUENCE_NAMES if self._isEnabledBlinking or name == 'beamStaticSeq'))
+
+    def _newData(self, entity):
+        data = super(BlinkingLaserSight, self)._newData(entity)
+        data.update({'beamModelRef': None,
+         'bindNodeRef': None,
+         'beamMP': None,
+         'animatorRefs': {},
+         'currSeq': None,
+         'isVehicleTakenAtGunPoint': False})
+        return data
+
+    def _start(self, data, args):
+        data['bindNodeRef'] = data['entity'].model.node(self._bindNode)
+        if data['bindNodeRef'] is not None:
+            data['beamMP'] = LaserSightMatrixProvider()
+            data['beamMP'].beamMatrix = data['bindNodeRef']
+            data['beamModelRef'] = BigWorld.Model('')
+            data['beamModelRef'].addMotor(BigWorld.Servo(data['beamMP'].beamMatrix))
+            player = BigWorld.player()
+            player.addModel(data['beamModelRef'])
+            for beamSeq in self._beamSeqs.itervalues():
+                loader = AnimationSequence.Loader(beamSeq, player.spaceID)
+                data['animatorRefs'][beamSeq] = loader.loadSync()
+                BigWorld.loadResourceListBG((loader,), makeCallbackWeak(self.__onSequenceLoaded, beamSeq, data))
+
+        return
+
+    def _update(self, data, args):
+        vehicle = data['entity']
+        if not (vehicle.health > 0 and vehicle.isCrewActive):
+            self.stop(data)
+            return
+        elif args is None or data['bindNodeRef'] is None:
+            return
+        else:
+            gunMatr = Math.Matrix(data['bindNodeRef'])
+            gunPos = gunMatr.applyToOrigin()
+            gunDir = gunMatr.applyToAxis(2)
+            endPos = gunPos + gunDir * MAX_DISTANCE
+            collidePos = BigWorld.wg_collideDynamicStatic(vehicle.spaceID, gunPos, endPos, CollisionFlags.TRIANGLE_PROJECTILENOCOLLIDE, vehicle.id, -1)
+            data['isVehicleTakenAtGunPoint'] = args['isTakesAim'] or not self._shouldCollideTarget or collidePos[1]
+            distanceToTarget = gunPos.distTo(collidePos[0]) if collidePos is not None else MAX_DISTANCE
+            beamMode = args['beamMode']
+            if beamMode not in self._beamSeqs:
+                beamMode = 'beamStaticSeq'
+            requestedSeq = self._beamSeqs[beamMode]
+            if data['isVehicleTakenAtGunPoint']:
+                data['beamMP'].beamLength = distanceToTarget / self._beamLength
+                if data['currSeq'] != requestedSeq:
+                    self.__stopAnimator(data)
+                data['currSeq'] = requestedSeq
+                data['animatorRefs'][data['currSeq']].setEnabled(True)
+                data['animatorRefs'][data['currSeq']].start()
+            elif data['currSeq'] is not None:
+                self.__stopAnimator(data)
+            return
+
+    def _cleanup(self, data):
+        self.__stopAnimator(data)
+        self.__stopModel(data)
+        data['bindNodeRef'] = None
+        data['beamMP'] = None
+        for animator in data['animatorRefs'].itervalues():
+            animator.unbind()
+
+        data['animatorRefs'] = {}
+        return
+
+    @staticmethod
+    def __onSequenceLoaded(seqName, data, resourceRefs):
+        if seqName not in resourceRefs.failedIDs and data['beamModelRef'] is not None:
+            data['animatorRefs'][seqName].bindTo(AnimationSequence.ModelWrapperContainer(data['beamModelRef'], BigWorld.player().spaceID))
+        return
+
+    @staticmethod
+    def __stopAnimator(data):
+        if data['currSeq'] is None:
+            return
+        else:
+            data['animatorRefs'][data['currSeq']].stop()
+            data['animatorRefs'][data['currSeq']].setEnabled(False)
+            data['currSeq'] = None
+            return
+
+    @staticmethod
+    def __stopModel(data):
+        if data['beamModelRef'] is None:
+            return
+        else:
+            BigWorld.player().delModel(data['beamModelRef'])
+            data['beamModelRef'] = None
+            return

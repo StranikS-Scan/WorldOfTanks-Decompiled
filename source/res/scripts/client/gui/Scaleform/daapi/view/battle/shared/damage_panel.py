@@ -9,6 +9,7 @@ import GUI
 import Math
 from account_helpers.settings_core import settings_constants
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
+from gui.battle_control.controllers.prebattle_setups_ctrl import IPrebattleSetupsListener
 from gui.Scaleform.daapi.view.battle.shared.formatters import formatHealthProgress, normalizeHealthPercent
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.daapi.view.meta.DamagePanelMeta import DamagePanelMeta
@@ -158,7 +159,7 @@ class _TankIndicatorCtrl(object):
         return
 
 
-class DamagePanel(DamagePanelMeta):
+class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -209,6 +210,10 @@ class DamagePanel(DamagePanelMeta):
     def hideStatusImmediate(self):
         for player in self.__statusAnimPlayers.itervalues():
             player.hideStatus(False)
+
+    def updateVehicleParams(self, vehicle, _):
+        self.__maxHealth = vehicle.descriptor.maxHealth
+        self._updateHealth(self.__maxHealth)
 
     def _populate(self):
         super(DamagePanel, self)._populate()

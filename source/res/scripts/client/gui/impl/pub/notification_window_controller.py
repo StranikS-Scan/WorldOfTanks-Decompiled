@@ -190,11 +190,10 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
 
     def __onWindowStatusChanged(self, uniqueID, newState):
         window = self.__gui.windowsManager.getWindow(uniqueID)
-        if newState == WindowStatus.LOADING:
+        if newState in (WindowStatus.LOADING, WindowStatus.DESTROYING):
             self.__removeSameInstance(WindowNotificationCommand(window))
-        elif newState == WindowStatus.DESTROYING:
-            if self.__currentWindow == window:
-                self.__currentWindow = None
+        if newState == WindowStatus.DESTROYING and self.__currentWindow == window:
+            self.__currentWindow = None
         elif newState == WindowStatus.DESTROYED:
             self.__processNext()
         return

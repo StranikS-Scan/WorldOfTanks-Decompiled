@@ -79,11 +79,11 @@ class CartSlotModel(ViewModel):
     def setFormFactor(self, value):
         self._setString(11, value)
 
-    def getIsHistorical(self):
-        return self._getBool(12)
+    def getCustomizationDisplayType(self):
+        return self._getNumber(12)
 
-    def setIsHistorical(self, value):
-        self._setBool(12, value)
+    def setCustomizationDisplayType(self, value):
+        self._setNumber(12, value)
 
     def getIsSpecial(self):
         return self._getBool(13)
@@ -129,7 +129,7 @@ class CartSlotModel(ViewModel):
         self._addBoolProperty('isWide', False)
         self._addBoolProperty('isDim', False)
         self._addStringProperty('formFactor', '')
-        self._addBoolProperty('isHistorical', False)
+        self._addNumberProperty('customizationDisplayType', 1)
         self._addBoolProperty('isSpecial', False)
         self._addBoolProperty('showUnsupportedAlert', False)
         self._addNumberProperty('progressionLevel', 0)

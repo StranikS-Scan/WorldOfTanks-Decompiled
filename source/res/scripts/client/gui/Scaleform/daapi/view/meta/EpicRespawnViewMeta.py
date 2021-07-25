@@ -33,3 +33,6 @@ class EpicRespawnViewMeta(BaseDAAPIComponent):
 
     def as_setRespawnLocationsS(self, locations):
         return self.flashObject.as_setRespawnLocations(locations) if self._isDAAPIInited() else None
+
+    def as_handleAsReplayS(self):
+        return self.flashObject.as_handleAsReplay() if self._isDAAPIInited() else None

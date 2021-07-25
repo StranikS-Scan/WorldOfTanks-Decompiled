@@ -21,15 +21,16 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.classic import team_bases_panel
     from gui.Scaleform.daapi.view.battle.classic import minimap
     from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
+    from gui.Scaleform.daapi.view.battle.classic.page import ClassicPage
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
     from gui.Scaleform.daapi.view.battle.shared import timers_panel
     from gui.Scaleform.daapi.view.battle.shared import consumables_panel
     from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
     from gui.Scaleform.daapi.view.battle.shared import game_messages_panel
     from gui.Scaleform.daapi.view.battle.shared.hint_panel import component
-    from gui.Scaleform.daapi.view.battle.ranked.page import RankedPage
     from gui.Scaleform.daapi.view.battle.shared.role_description import RoleDescription
-    return (ViewSettings(VIEW_ALIAS.RANKED_BATTLE_PAGE, RankedPage, 'rankedBattlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
+    from gui.impl.battle.battle_page.ammunition_panel import prebattle_ammunition_panel_inject
+    return (ViewSettings(VIEW_ALIAS.RANKED_BATTLE_PAGE, ClassicPage, 'rankedBattlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.RankedBattleLoading, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.RankedStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
@@ -44,7 +45,8 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.GameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.HINT_PANEL, component.BattleHintPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.ROLE_DESCRIPTION, RoleDescription, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.ROLE_DESCRIPTION, RoleDescription, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, prebattle_ammunition_panel_inject.PrebattleAmmunitionPanelInject, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

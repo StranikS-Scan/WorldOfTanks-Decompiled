@@ -17,12 +17,11 @@ from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_control.controllers.progression_ctrl import IProgressionListener, createGuiVehicle
 from gui.doc_loaders.battle_royale_settings_loader import getTreeModuleHeader, getTreeModuleIcon
-from gui.game_control.br_battle_sounds import BREvents
+from gui.battle_control.controllers.sound_ctrls.br_battle_sounds import BREvents
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
-from gui.shared.gui_items.Vehicle import Vehicle
 from items import parseIntCompactDescr
 from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -232,10 +231,6 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
 
     def __getVehicleStateCtrl(self):
         return self.sessionProvider.shared.vehicleState
-
-    def __createVehicle(self):
-        arenaDP = self.sessionProvider.getArenaDP()
-        return Vehicle(strCompactDescr=arenaDP.getVehicleInfo().vehicleType.strCompactDescr)
 
     def __onComponentModulesChanged(self, modules):
         modulesCount = len(modules)

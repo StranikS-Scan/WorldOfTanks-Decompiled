@@ -31,6 +31,8 @@
         </set-visible>
         <set-visible>	HeaderPanel	  <val>	False	</val>
         </set-visible>
+        <set-visible>	DailyQuestPanel	  <val>	False	</val>
+        </set-visible>
         <set-var>	FirstVehicleSetter	</set-var>
         <effects-group>
           <condition>
@@ -51,6 +53,8 @@
       </condition>
       <effects>
         <set-visible>	HeaderPanel	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	DailyQuestPanel	  <val>	True	</val>
         </set-visible>
         <set-allowed-to-fight>
           <value>	True	</value>

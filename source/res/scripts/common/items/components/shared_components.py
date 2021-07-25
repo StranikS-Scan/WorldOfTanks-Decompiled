@@ -39,9 +39,9 @@ class CustomizationSlotDescription(object):
 
 class ProjectionDecalSlotDescription(object):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'canBeMirroredVertically', 'showOn', 'tags', 'clipAngle', 'attachedParts', 'compatibleModels', 'itemId', 'options')
+    __slots__ = ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'canBeMirroredVertically', 'showOn', 'tags', 'clipAngle', 'compatibleModels', 'itemId', 'options')
 
-    def __init__(self, slotType='', slotId=0, anchorPosition=None, anchorDirection=None, position=None, rotation=None, scale=None, scaleFactors=c11n_constants.DEFAULT_DECAL_SCALE_FACTORS, doubleSided=False, canBeMirroredVertically=False, showOn=None, tags=None, clipAngle=c11n_constants.DEFAULT_DECAL_CLIP_ANGLE, attachedParts=None, compatibleModels=(c11n_constants.SLOT_DEFAULT_ALLOWED_MODEL,), itemId=None, options=c11n_constants.Options.NONE):
+    def __init__(self, slotType='', slotId=0, anchorPosition=None, anchorDirection=None, position=None, rotation=None, scale=None, scaleFactors=c11n_constants.DEFAULT_DECAL_SCALE_FACTORS, doubleSided=False, canBeMirroredVertically=False, showOn=None, tags=None, clipAngle=c11n_constants.DEFAULT_DECAL_CLIP_ANGLE, compatibleModels=(c11n_constants.SLOT_DEFAULT_ALLOWED_MODEL,), itemId=None, options=c11n_constants.Options.NONE):
         self.type = slotType
         self.slotId = slotId
         self.anchorPosition = anchorPosition
@@ -55,7 +55,6 @@ class ProjectionDecalSlotDescription(object):
         self.showOn = showOn
         self.tags = tags or ()
         self.clipAngle = clipAngle
-        self.attachedParts = attachedParts
         self.compatibleModels = compatibleModels
         self.itemId = itemId
         self.options = options

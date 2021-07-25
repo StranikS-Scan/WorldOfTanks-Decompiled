@@ -32,7 +32,6 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
         quest = self.__quests.get(self.__selectedQuestID)
         self.__branch = quest.getPMType().branch
         self.__operationID = quest.getOperationID()
-        self.__setMayPawnForQuest(quest)
 
     def closeView(self):
         self.destroy()
@@ -101,6 +100,7 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
         self._eventsCache.onProgressUpdated += self._onProgressUpdated
         self._lobbyCtx.getServerSettings().onServerSettingsChange += self._onSettingsChanged
         self.__setData()
+        self.__setMayPawnForQuest(self.__quests.get(self.__selectedQuestID))
         self.fireEvent(PersonalMissionsEvent(PersonalMissionsEvent.ON_DETAILS_VIEW_OPEN), EVENT_BUS_SCOPE.LOBBY)
 
     def _invalidate(self, ctx=None):
@@ -155,7 +155,7 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
     def __setMayPawnForQuest(self, quest):
         pawn = self._eventsCache.getPersonalMissions().getFreeTokensCount(self.__branch) >= quest.getPawnCost() and quest.canBePawned() and not quest.isDisabled()
         if self.__storage:
-            self.__storage.setValue(GLOBAL_FLAG.MAY_PAWN_PERSONAL_MISSION, pawn)
+            self.__storage.setValue(GLOBAL_FLAG.MAY_PAWN_PERSONAL_MISSION, pawn, showImmediately=False)
 
     def _onSettingsChanged(self, diff):
         disabledBranch = False

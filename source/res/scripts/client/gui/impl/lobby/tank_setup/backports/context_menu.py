@@ -25,14 +25,14 @@ def getContextMenuData(event, uniqueID, selectedSetup):
     cmType = event.getArgument('fieldType')
     slotType = event.getArgument('slotType')
     if cmType == TankSetupFields.TANK_SETUP_CARD:
-        contextMenuArgs = {paramName:event.getArgument(paramName) for paramName in ('intCD', 'slotType', 'isMounted', 'installedSlotId', 'isDisabled')}
+        contextMenuArgs = {paramName:event.getArgument(paramName) for paramName in ('intCD', 'slotType', 'isMounted', 'isMountedMoreThanOne', 'installedSlotId', 'itemInstalledSetupIdx', 'itemInstalledSetupSlotIdx', 'isDisabled')}
         contextMenuArgs['emitterUID'] = uniqueID
         if contextMenuArgs['installedSlotId'] == NONE_ID:
             return createContextMenuData(TANK_SETUP_CARD_CM.get(event.getArgument('slotType')), contextMenuArgs)
         return createContextMenuData(TANK_SETUP_SLOT_CM.get(event.getArgument('slotType')), contextMenuArgs)
     else:
         if cmType == TankSetupFields.AMMO_PANEL_SLOT and slotType == selectedSetup:
-            contextMenuArgs = {paramName:event.getArgument(paramName) for paramName in ('intCD', 'slotType', 'isMounted', 'installedSlotId')}
+            contextMenuArgs = {paramName:event.getArgument(paramName) for paramName in ('intCD', 'slotType', 'isMounted', 'isMountedMoreThanOne', 'installedSlotId', 'itemInstalledSetupIdx', 'itemInstalledSetupSlotIdx')}
             contextMenuArgs['emitterUID'] = uniqueID
             if contextMenuArgs['intCD'] > 0:
                 return createContextMenuData(TANK_SETUP_SLOT_CM.get(event.getArgument('slotType')), contextMenuArgs)
@@ -44,7 +44,7 @@ def getContextMenuData(event, uniqueID, selectedSetup):
 def getHangarContextMenuData(event, uniqueID):
     cmType = event.getArgument('fieldType')
     if cmType == TankSetupFields.AMMO_PANEL_SLOT:
-        contextMenuArgs = {paramName:event.getArgument(paramName) for paramName in ('intCD', 'slotType', 'isMounted', 'installedSlotId')}
+        contextMenuArgs = {paramName:event.getArgument(paramName) for paramName in ('intCD', 'slotType', 'isMounted', 'isMountedMoreThanOne', 'installedSlotId', 'itemInstalledSetupIdx', 'itemInstalledSetupSlotIdx')}
         contextMenuArgs['emitterUID'] = uniqueID
         if contextMenuArgs['intCD'] > 0:
             return createContextMenuData(HANGAR_TANK_SETUP_SLOT_CM.get(event.getArgument('slotType')), contextMenuArgs)

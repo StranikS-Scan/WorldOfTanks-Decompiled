@@ -80,6 +80,7 @@ class GameEvent(HasCtxEvent):
     TOGGLE_VOIP_CHANNEL_ENABLED = 'game/voip/toggleEnabled'
     ROLE_HINT_TOGGLE = 'roleHintToggle'
     COMMANDER_HINT = 'game/commanderHint'
+    CHANGE_AMMUNITION_SETUP = 'game/changeAmmunitionSetup'
 
 
 class GUICommonEvent(SharedEvent):
@@ -193,6 +194,7 @@ class ShowDialogEvent(SharedEvent):
     SHOW_CREW_SKINS_COMPENSATION_DIALOG = 'showCrewSkinsCompensationDialog'
     SHOW_PM_CONFIRMATION_DIALOG = 'showPMConfirmationDialog'
     SHOW_CONFIRM_MODULE = 'showConfirmModule'
+    SHOW_CONFIRM_BOOSTER = 'showConfirmBooster'
     SHOW_SYSTEM_MESSAGE_DIALOG = 'showSystemMessageDialog'
     SHOW_DISMISS_TANKMAN_DIALOG = 'showDismissTankmanDialog'
     SHOW_RESTORE_TANKMAN_DIALOG = 'showRestoreTankmanDialog'
@@ -201,6 +203,7 @@ class ShowDialogEvent(SharedEvent):
     SHOW_PUNISHMENT_DIALOG = 'showPunishmentDialog'
     SHOW_EXCHANGE_DIALOG = 'showExchangeDialog'
     SHOW_EXCHANGE_DIALOG_MODAL = 'showExchangeDialogModal'
+    SHOW_DETAILED_EXCHANGE_XP_DIALOG = 'showDetailedExchangeXPDialog'
     SHOW_CHECK_BOX_DIALOG = 'showCheckBoxDialog'
     SHOW_DESERTER_DLG = 'showDeserterDialog'
     SHOW_EXECUTION_CHOOSER_DIALOG = 'showExecutionChooserDialog'
@@ -355,6 +358,8 @@ class SkillDropEvent(SharedEvent):
 class CloseWindowEvent(SharedEvent):
     EULA_CLOSED = 'EULAClosed'
     GOLD_FISH_CLOSED = 'GoldFishClosed'
+    ELITE_WINDOW_CLOSED = 'EliteWindowClosed'
+    BUY_VEHICLE_VIEW_CLOSED = 'BuyVehicleViewClosed'
 
     def __init__(self, eventType=None, isAgree=False):
         super(CloseWindowEvent, self).__init__(eventType)

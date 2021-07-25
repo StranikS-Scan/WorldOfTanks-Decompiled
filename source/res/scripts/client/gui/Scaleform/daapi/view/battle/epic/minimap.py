@@ -41,13 +41,12 @@ _ZOOM_MODE_STEP = 0.5
 _ZOOM_MULTIPLIER_TEXT = 'x'
 _METERS_IN_1X_ZOOM = 1000
 EPIC_MINIMAP_HIT_AREA = 210
-_EPIC_BASE_PING_RANGE = 150
-_DOWN_SCALE = 0.35
+_EPIC_BASE_PING_RANGE = 145
+_DOWN_SCALE = 0.45
 _UP_SCALE = 1.0
 _MIN_RANGE_SCALE = 1.0
-MIN_BASE_SCALE = 1.0
-MAX_BASE_SCALE = 2.0
-MAX_SIZE_INDEX = 5
+_MIN_BASE_SCALE = 1.0
+_MAX_BASE_SCALE = 2.0
 _logger = logging.getLogger(__name__)
 
 def makeMousePositionToEpicWorldPosition(clickedX, clickedY, bounds, hitArea=EPIC_MINIMAP_HIT_AREA):
@@ -81,6 +80,7 @@ class EpicMinimapComponent(EpicMinimapMeta):
         if mode > self.__maxZoomMode:
             mode = self.__maxZoomMode
         self.updateZoomMode(mode)
+        self.__rangeScale = self.__calculateRangeScale(_ZOOM_MODE_MIN, self.__maxZoomMode, mode)
 
     def setMinimapCenterEntry(self, entryID):
         component = self.getComponent()
@@ -866,9 +866,8 @@ class EpicMinimapPingPlugin(plugins.MinimapPingPlugin):
         return number
 
     def _processCommandByPosition(self, commands, locationCommand, position, minimapScaleIndex):
-        p = minimapScaleIndex / MAX_SIZE_INDEX
-        minimapScaleOffset = (1 - p) * MIN_BASE_SCALE + MAX_BASE_SCALE * p
-        scaledBaseRange = _EPIC_BASE_PING_RANGE / minimapScaleOffset * self.parentObj.getRangeScale()
+        minimapScale = minimap_utils.getMinimapBasePingScale(minimapScaleIndex, _MIN_BASE_SCALE, _MAX_BASE_SCALE)
+        scaledBaseRange = _EPIC_BASE_PING_RANGE / minimapScale * self.parentObj.getRangeScale()
         hqIdx, hqTeam = self.__getNearestHQForPosition(position, scaledBaseRange)
         if hqIdx:
             self.__make3DPingHQ(commands, (hqTeam, 0, hqIdx))

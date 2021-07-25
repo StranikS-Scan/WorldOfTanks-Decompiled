@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/epic_battle_training/limits.py
+from CurrentVehicle import g_currentVehicle
 from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TYPE
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import isVehLevelUnlockableInBattle
 from gui.prb_control.entities.base.limits import AbstractTeamIsValid, LimitsCollection, VehicleIsValid, TeamNoPlayersInBattle, TeamIsValid
 from gui.prb_control.settings import PREBATTLE_RESTRICTION
 from skeletons.gui.shared import IItemsCache
@@ -38,7 +40,10 @@ class EpicVehicleIsValid(VehicleIsValid):
 
     def check(self, teamLimits):
         isValid, restriction = super(EpicVehicleIsValid, self).check(teamLimits)
-        return (True, '') if restriction == PREBATTLE_RESTRICTION.VEHICLE_EPIC_ONLY else (isValid, restriction)
+        if restriction == PREBATTLE_RESTRICTION.VEHICLE_EPIC_ONLY:
+            return (True, '')
+        vehicle = g_currentVehicle.item
+        return (False, PREBATTLE_RESTRICTION.VEHICLE_WILL_BE_UNLOCKED) if vehicle and isVehLevelUnlockableInBattle(vehicle.level) else (isValid, restriction)
 
 
 class EpicBattleTrainingLimits(LimitsCollection):

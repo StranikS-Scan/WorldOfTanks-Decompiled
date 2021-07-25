@@ -245,6 +245,7 @@ class BATTLE_ROYALE(object):
     TOURNAMENT_TYPE_SQUAD = '#battle_royale:tournament/type/squad'
     TOURNAMENT_NOTIFICATION_COMMONERRORMESSAGE = '#battle_royale:tournament/notification/commonErrorMessage'
     TOURNAMENT_NOTIFICATION_NO_PLACES = '#battle_royale:tournament/notification/NO_PLACES'
+    SEASON_202103_NAME = '#battle_royale:season/202103/name'
     PREBATTLE_TITLE = '#battle_royale:preBattle/title'
     PREBATTLE_LISTTITLE = '#battle_royale:preBattle/listTitle'
     PREBATTLE_USERREADY = '#battle_royale:preBattle/userReady'

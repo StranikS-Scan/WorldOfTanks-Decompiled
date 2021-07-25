@@ -86,7 +86,7 @@ def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=Fal
 
 
 class CustomizationCarouselRendererVO(object):
-    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'autoRentEnabled', 'showDetailItems', 'isNonHistoric', 'isSpecial', 'isDarked', 'isAlreadyUsed', 'showAlert', 'buyOperationAllowed', 'extraNames', 'showRareIcon', 'isEquipped', 'rentalInfoText', 'imageCached', 'isAllSeasons', 'noveltyCounter', 'formIconSource', 'defaultIconAlpha', 'lockText', 'isDim', 'formFactor', 'progressionLevel', 'editableIcon', 'editBtnEnabled', 'showEditableHint', 'showEditBtnHint', 'imageScale', 'tooltip', 'isChained', 'isUnsuitable')
+    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'autoRentEnabled', 'showDetailItems', 'customizationDisplayType', 'isSpecial', 'isDarked', 'isAlreadyUsed', 'showAlert', 'buyOperationAllowed', 'extraNames', 'showRareIcon', 'isEquipped', 'rentalInfoText', 'imageCached', 'isAllSeasons', 'noveltyCounter', 'formIconSource', 'defaultIconAlpha', 'lockText', 'isDim', 'formFactor', 'progressionLevel', 'editableIcon', 'editBtnEnabled', 'showEditableHint', 'showEditBtnHint', 'imageScale', 'tooltip', 'isChained', 'isUnsuitable')
 
     def __init__(self, item, icon, hasBonus, locked, buyPrice, quantity=None, showDetailItems=True, isSpecial=False, isDarked=False, isAlreadyUsed=False, showAlert=False, buyOperationAllowed=True, extraNames=None, isEquipped=False, rentalInfoText='', imageCached=True, noveltyCounter=0, autoRentEnabled=False, formIconSource='', defaultIconAlpha=1, lockText='', formFactor=-1, progressionLevel=-1, imageScale=1, editableIcon='', editBtnEnabled=False, showEditableHint=False, showEditBtnHint=False, tooltip='', isChained=False, isUnsuitable=False):
         self.intCD = item.intCD
@@ -100,7 +100,7 @@ class CustomizationCarouselRendererVO(object):
         self.isRental = item.isRentable
         self.autoRentEnabled = autoRentEnabled
         self.showDetailItems = showDetailItems
-        self.isNonHistoric = not item.isHistorical()
+        self.customizationDisplayType = item.customizationDisplayType()
         self.isSpecial = isSpecial
         self.isDarked = isDarked
         self.isAlreadyUsed = isAlreadyUsed
@@ -138,7 +138,7 @@ class CustomizationCarouselRendererVO(object):
          'isRental': self.isRental,
          'autoRentEnabled': self.autoRentEnabled,
          'showDetailItems': self.showDetailItems,
-         'isNonHistoric': self.isNonHistoric,
+         'customizationDisplayType': self.customizationDisplayType,
          'isSpecial': self.isSpecial,
          'isDarked': self.isDarked,
          'isAlreadyUsed': self.isAlreadyUsed,

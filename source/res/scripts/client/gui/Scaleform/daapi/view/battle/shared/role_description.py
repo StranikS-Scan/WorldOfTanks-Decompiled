@@ -61,7 +61,7 @@ class RoleDescription(RoleDescriptionMeta):
         classWithRole = backport.text(roleExp.roleName.dyn(roleName, '')(), groupName=makeHtmlString(_ROLE_HTML_TEMPLATE, 'role', {'role': roleStr}))
         title = makeHtmlString(_ROLE_HTML_TEMPLATE, 'className', {'className': classWithRole})
         actions = getActionsByRole(roleId)
-        self.as_setDataS({'roleIcon': backport.image(R.images.gui.maps.icons.roleExp.actionGroups.c_100x100.dyn(roleName, '')()),
+        self.as_setDataS({'roleIcon': backport.image(R.images.gui.maps.icons.roleExp.roles.c_100x100.dyn(roleName, '')()),
          'roleDescription': title,
          'roleActions': [ self.__getRoleActionVO(action) for action in actions ]})
 

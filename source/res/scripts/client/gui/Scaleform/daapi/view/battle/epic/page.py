@@ -5,6 +5,7 @@ from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import 
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.Scaleform.daapi.view.meta.EpicBattlePageMeta import EpicBattlePageMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
+from gui.battle_control.controllers.sound_ctrls.epic_battle_sounds import EpicBattleSoundController
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from gui.Scaleform.daapi.view.battle.epic import markers2d
@@ -43,7 +44,10 @@ class _EpicBattleComponentsConfig(ComponentsConfig):
          (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.EPIC_DRONE_MUSIC_PLAYER,)),
          (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL,)),
          (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (DynamicAliases.EPIC_DRONE_MUSIC_PLAYER,)),
-         (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), viewsConfig=((DynamicAliases.PERIOD_MUSIC_LISTENER, period_music_listener.PeriodMusicListener), (DynamicAliases.EPIC_DRONE_MUSIC_PLAYER, drone_music_player.EpicDroneMusicPlayer), (ClassicDynAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer)))
+         (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,)),
+         (BATTLE_CTRL_ID.BATTLE_HINTS, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,)),
+         (BATTLE_CTRL_ID.PREBATTLE_SETUPS_CTRL, (BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, BATTLE_VIEW_ALIASES.DAMAGE_PANEL)),
+         (BATTLE_CTRL_ID.AMMO, (BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL,))), viewsConfig=((DynamicAliases.PERIOD_MUSIC_LISTENER, period_music_listener.PeriodMusicListener), (DynamicAliases.EPIC_DRONE_MUSIC_PLAYER, drone_music_player.EpicDroneMusicPlayer), (ClassicDynAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer)))
 
 
 EPIC_BATTLE_CLASSIC_CONFIG = _EpicBattleComponentsConfig()
@@ -81,7 +85,7 @@ _GAME_UI = {BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES,
  BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,
  BATTLE_VIEW_ALIASES.RECOVERY_PANEL,
  BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR,
- BATTLE_VIEW_ALIASES.TIMERS_PANEL,
+ BATTLE_VIEW_ALIASES.STATUS_NOTIFICATIONS_PANEL,
  BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL,
  BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL,
  BATTLE_VIEW_ALIASES.EPIC_INGAME_RANK,
@@ -101,10 +105,11 @@ _ENABLE_CONTROL_MODE = {PageStates.TABSCREEN,
  PageStates.RESPAWN,
  PageStates.RADIAL,
  PageStates.LOADING}
-_PAGE_STATE_TO_CONTROL_PARAMS = {PageStates.TABSCREEN: (BATTLE_VIEW_ALIASES.FULL_STATS, True, True),
- PageStates.RESPAWN: (BATTLE_VIEW_ALIASES.EPIC_RESPAWN_VIEW, True, True),
- PageStates.RADIAL: (BATTLE_VIEW_ALIASES.RADIAL_MENU, False, False),
- PageStates.LOADING: (BATTLE_VIEW_ALIASES.BATTLE_LOADING, True, True)}
+_PAGE_STATE_TO_CONTROL_PARAMS = {(PageStates.TABSCREEN, False): (BATTLE_VIEW_ALIASES.FULL_STATS, True, True),
+ (PageStates.RESPAWN, False): (BATTLE_VIEW_ALIASES.EPIC_RESPAWN_VIEW, True, True),
+ (PageStates.RADIAL, False): (BATTLE_VIEW_ALIASES.RADIAL_MENU, False, False),
+ (PageStates.LOADING, False): (BATTLE_VIEW_ALIASES.BATTLE_LOADING, True, True),
+ (PageStates.RESPAWN, True): (BATTLE_VIEW_ALIASES.EPIC_RESPAWN_VIEW, True, False)}
 _STATE_TO_UI = {PageStates.GAME: _GAME_UI,
  PageStates.LOADING: {BATTLE_VIEW_ALIASES.BATTLE_LOADING, BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP},
  PageStates.TABSCREEN: {BATTLE_VIEW_ALIASES.FULL_STATS, BATTLE_VIEW_ALIASES.DEBUG_PANEL, BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL},
@@ -121,7 +126,7 @@ _STATE_TO_UI = {PageStates.GAME: _GAME_UI,
                       BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP,
                       BATTLE_VIEW_ALIASES.BATTLE_MESSENGER,
                       BATTLE_VIEW_ALIASES.BATTLE_TIMER},
- PageStates.COUNTDOWN: _GAME_UI.difference({BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL, BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL, BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL}).union({BATTLE_VIEW_ALIASES.PREBATTLE_TIMER}),
+ PageStates.COUNTDOWN: _GAME_UI.difference({BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL, BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL, BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL}).union({BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL}),
  PageStates.SPECTATOR_DEATHCAM: _SPECTATOR_UI.union({BATTLE_VIEW_ALIASES.DAMAGE_PANEL,
                                  BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL,
                                  BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL,
@@ -129,7 +134,7 @@ _STATE_TO_UI = {PageStates.GAME: _GAME_UI,
  PageStates.SPECTATOR_FREE: _SPECTATOR_UI.union({BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL}),
  PageStates.SPECTATOR_FOLLOW: _SPECTATOR_UI.union({BATTLE_VIEW_ALIASES.DAMAGE_PANEL,
                                BATTLE_VIEW_ALIASES.RECOVERY_PANEL,
-                               BATTLE_VIEW_ALIASES.TIMERS_PANEL,
+                               BATTLE_VIEW_ALIASES.STATUS_NOTIFICATIONS_PANEL,
                                BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL,
                                BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL}),
  PageStates.GAME_OVER: _GAME_UI.difference({BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL,
@@ -146,6 +151,7 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
             components = _EPIC_BATTLE_CLASSICS_COMPONENTS if self.sessionProvider.isReplayPlaying else _EPIC_BATTLE_EXTENDED_COMPONENTS
         super(EpicBattlePage, self).__init__(components=components, external=external, fullStatsAlias=fullStatsAlias)
         self.__battleStarted = False
+        self.__epicSoundControl = None
         self.__pageState = PageStates.COUNTDOWN
         self.__topState = PageStates.NONE
         self.__activeState = PageStates.NONE
@@ -159,14 +165,16 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         if targetState == PageStates.NONE or self.__activeState == targetState:
             return
         else:
-            if self.__activeState in _ENABLE_CONTROL_MODE and not self.sessionProvider.isReplayPlaying:
-                alias, _, _ = _PAGE_STATE_TO_CONTROL_PARAMS[self.__activeState]
+            controlKey = (self.__activeState, self.sessionProvider.isReplayPlaying)
+            if self.__activeState in _ENABLE_CONTROL_MODE and controlKey in _PAGE_STATE_TO_CONTROL_PARAMS:
+                alias, _, _ = _PAGE_STATE_TO_CONTROL_PARAMS[controlKey]
                 self.app.leaveGuiControlMode(alias)
             self.__activeState = targetState
-            if self.__activeState in _ENABLE_CONTROL_MODE and not self.sessionProvider.isReplayPlaying:
-                alias, p1, p2 = _PAGE_STATE_TO_CONTROL_PARAMS[self.__activeState]
+            controlKey = (self.__activeState, self.sessionProvider.isReplayPlaying)
+            if self.__activeState in _ENABLE_CONTROL_MODE and controlKey in _PAGE_STATE_TO_CONTROL_PARAMS:
+                alias, p1, p2 = _PAGE_STATE_TO_CONTROL_PARAMS[controlKey]
                 self.app.enterGuiControlMode(alias, cursorVisible=p1, enableAiming=p2)
-            visibleUI = _STATE_TO_UI[targetState]
+            visibleUI = _STATE_TO_UI[targetState].copy()
             currVis = set(self.as_getComponentsVisibilityS())
             hiddenUI = currVis.difference(visibleUI).difference(_NEVER_HIDE)
             ctrl = self.sessionProvider.shared.vehicleState
@@ -191,6 +199,10 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
                 ctrl.setOverviewMapScreenVisibility(True)
             elif ctrl and BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN in hiddenUI:
                 ctrl.setOverviewMapScreenVisibility(False)
+            ctrl = self.sessionProvider.shared.prebattleSetups
+            if self.__activeState == PageStates.COUNTDOWN and ctrl and ctrl.isSelectionAvailable():
+                visibleUI.remove(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)
+                hiddenUI.add(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)
             self._setComponentsVisibility(visible=visibleUI, hidden=hiddenUI)
             return
 
@@ -200,12 +212,18 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         if arena is not None:
             arena.onPeriodChange += self.__arena_onPeriodChange
             self.__arena_onPeriodChange(arena.period)
+        self.__epicSoundControl = EpicBattleSoundController()
+        self.__epicSoundControl.init()
+        self.as_setVehPostProgressionEnabledS(True)
         return
 
     def _dispose(self):
         arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
             arena.onPeriodChange -= self.__arena_onPeriodChange
+        if self.__epicSoundControl is not None:
+            self.__epicSoundControl.destroy()
+            self.__epicSoundControl = None
         super(EpicBattlePage, self)._dispose()
         return
 

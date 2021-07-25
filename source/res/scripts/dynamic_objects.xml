@@ -9,6 +9,15 @@
     <lineWidth>	2.0	</lineWidth>
     <lineHeight>	3.0	</lineHeight>
   </stunAreaVisual>
+  <shootAreaVisual>
+    <radius>	6.5	</radius>
+    <areasNum>	1	</areasNum>
+    <visual>	content/Interface/CheckPoint/CheckPoint_white.visual	</visual>
+    <color>	0xffffffff	</color>
+    <lineColor>	0xffffffff	</lineColor>
+    <lineWidth>	2.0	</lineWidth>
+    <lineHeight>	3.0	</lineHeight>
+  </shootAreaVisual>
   <stepRepairPoint>
     <flagModelName>	content/Environment/env_111_04_RepairFlag/normal/lod0/env_111_04_RepairFlag.model	</flagModelName>
     <radiusModel>	content/Interface/CheckPoint/CheckPoint_yellow_black.visual	</radiusModel>
@@ -46,99 +55,204 @@
     </modelSetting>
   </SectorBorderVisual>
   <SmokeScreenEffect_lev1>
-    <timeline>
-      <effectEnd>	36000	</effectEnd>
-    </timeline>
-    <effects>
-      <pixie>
-        <startKey>	start	</startKey>
-        <file>	particles/Environment/interior/208_smokescreen_lev1.eff	</file>
-        <force>	1	</force>
-        <position>	HP_module_0	</position>
-      </pixie>
-      <sound>
-        <dynamic>	true	</dynamic>
-        <startKey>	start	</startKey>
-        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
-        <sound>	/NONE	</sound>
-      </sound>
-    </effects>
+    <ally>
+      <timeline>
+        <effectEnd>	36000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/environment/interior/208_smokescreen_allies_lev1.eff	</file>
+          <force>	1	</force>
+          <position>	HP_module_0	</position>
+        </pixie>
+        <sound>
+          <dynamic>	true	</dynamic>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </ally>
+    <enemy>
+      <timeline>
+        <effectEnd>	36000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/environment/interior/208_smokescreen_enemy_lev1.eff	</file>
+          <force>	1	</force>
+          <position>	HP_module_0	</position>
+        </pixie>
+        <sound>
+          <dynamic>	true	</dynamic>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </enemy>
   </SmokeScreenEffect_lev1>
   <SmokeScreenEffect_lev2>
-    <timeline>
-      <effectEnd>	36000	</effectEnd>
-    </timeline>
-    <effects>
-      <pixie>
-        <startKey>	start	</startKey>
-        <file>	particles/Environment/interior/208_smokescreen_lev2.eff	</file>
-        <force>	1	</force>
-        <position>	HP_module_0	</position>
-      </pixie>
-      <sound>
-        <dynamic>	true	</dynamic>
-        <startKey>	start	</startKey>
-        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
-        <sound>	/NONE	</sound>
-      </sound>
-    </effects>
+    <ally>
+      <timeline>
+        <effectEnd>	36000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/environment/interior/208_smokescreen_allies_lev2.eff	</file>
+          <force>	1	</force>
+          <position>	HP_module_0	</position>
+        </pixie>
+        <sound>
+          <dynamic>	true	</dynamic>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </ally>
+    <enemy>
+      <timeline>
+        <effectEnd>	36000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/environment/interior/208_smokescreen_enemy_lev2.eff	</file>
+          <force>	1	</force>
+          <position>	HP_module_0	</position>
+        </pixie>
+        <sound>
+          <dynamic>	true	</dynamic>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </enemy>
   </SmokeScreenEffect_lev2>
   <SmokeScreenEffect_lev3>
-    <timeline>
-      <effectEnd>	36000	</effectEnd>
-    </timeline>
-    <effects>
-      <pixie>
-        <startKey>	start	</startKey>
-        <file>	particles/Environment/interior/208_smokescreen_lev3.eff	</file>
-        <force>	1	</force>
-        <position>	HP_module_0	</position>
-      </pixie>
-      <sound>
-        <dynamic>	true	</dynamic>
-        <startKey>	start	</startKey>
-        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
-        <sound>	/NONE	</sound>
-      </sound>
-    </effects>
+    <ally>
+      <timeline>
+        <effectEnd>	36000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/environment/interior/208_smokescreen_allies_lev3.eff	</file>
+          <force>	1	</force>
+          <position>	HP_module_0	</position>
+        </pixie>
+        <sound>
+          <dynamic>	true	</dynamic>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </ally>
+    <enemy>
+      <timeline>
+        <effectEnd>	36000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/environment/interior/208_smokescreen_enemy_lev3.eff	</file>
+          <force>	1	</force>
+          <position>	HP_module_0	</position>
+        </pixie>
+        <sound>
+          <dynamic>	true	</dynamic>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </enemy>
   </SmokeScreenEffect_lev3>
   <SmokeScreenEffect_lev4>
-    <timeline>
-      <effectEnd>	36000	</effectEnd>
-    </timeline>
-    <effects>
-      <pixie>
-        <startKey>	start	</startKey>
-        <file>	particles/Environment/interior/208_smokescreen_lev4.eff	</file>
-        <force>	1	</force>
-        <position>	HP_module_0	</position>
-      </pixie>
-      <sound>
-        <dynamic>	true	</dynamic>
-        <startKey>	start	</startKey>
-        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
-        <sound>	/NONE	</sound>
-      </sound>
-    </effects>
+    <ally>
+      <timeline>
+        <effectEnd>	36000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/interior/208_smokescreen_lev4.eff	</file>
+          <force>	1	</force>
+          <position>	HP_module_0	</position>
+        </pixie>
+        <sound>
+          <dynamic>	true	</dynamic>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </ally>
+    <enemy>
+      <timeline>
+        <effectEnd>	36000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/interior/250_smokescreen_red.eff	</file>
+          <force>	1	</force>
+          <position>	HP_module_0	</position>
+        </pixie>
+        <sound>
+          <dynamic>	true	</dynamic>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </enemy>
   </SmokeScreenEffect_lev4>
   <SmokeScreenEffect_lev5>
-    <timeline>
-      <effectEnd>	36000	</effectEnd>
-    </timeline>
-    <effects>
-      <pixie>
-        <startKey>	start	</startKey>
-        <file>	particles/Environment/interior/208_smokescreen_lev5.eff	</file>
-        <force>	1	</force>
-        <position>	HP_module_0	</position>
-      </pixie>
-      <sound>
-        <dynamic>	true	</dynamic>
-        <startKey>	start	</startKey>
-        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
-        <sound>	/NONE	</sound>
-      </sound>
-    </effects>
+    <ally>
+      <timeline>
+        <effectEnd>	36000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/interior/208_smokescreen_lev5.eff	</file>
+          <force>	1	</force>
+          <position>	HP_module_0	</position>
+        </pixie>
+        <sound>
+          <dynamic>	true	</dynamic>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </ally>
+    <enemy>
+      <timeline>
+        <effectEnd>	36000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/interior/250_smokescreen_red.eff	</file>
+          <force>	1	</force>
+          <position>	HP_module_0	</position>
+        </pixie>
+        <sound>
+          <dynamic>	true	</dynamic>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </enemy>
   </SmokeScreenEffect_lev5>
   <SmokeScreenEffect_gray>
     <timeline>
@@ -426,6 +540,20 @@
       </effect>
     </enemy>
   </minesIdleEffect>
+  <epicMinesIdleEffect>
+    <ally>
+      <effect>
+        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_allies.seq	</path_fwd>
+        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_allies.seq	</path>
+      </effect>
+    </ally>
+    <enemy>
+      <effect>
+        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_enemy.seq	</path_fwd>
+        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_enemy.seq	</path>
+      </effect>
+    </enemy>
+  </epicMinesIdleEffect>
   <minesBlowUpEffect>
     <timeline>
       <lightingEnd>	0.22	</lightingEnd>
@@ -487,6 +615,67 @@
       </sound>
     </effects>
   </minesBlowUpEffect>
+  <epicMinesBlowUpEffect>
+    <timeline>
+      <lightingEnd>	0.22	</lightingEnd>
+      <soundplaystop>	7	</soundplaystop>
+      <endpixie>	1	</endpixie>
+      <end>	1.2	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+        <file>	particles/Shells_Eff/groundHit_HC_4.eff	</file>
+        <force>	1	</force>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lightingEnd	</endKey>
+        <innerRadius>	0.2	</innerRadius>
+        <outerRadius>	6	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	Scene Root	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 85 0	</color>
+          <multiplier>	3	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 150 100	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	125 45 0	</color>
+          <multiplier>	3	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	1	</multiplier>
+        </animation>
+      </light>
+      <decal>
+        <startKey>	start	</startKey>
+        <groupName>	slow	</groupName>
+        <texName>	explosion_sand_AM	</texName>
+        <bumpTexName>	explosion_sand_NM	</bumpTexName>
+        <smTexName>	explosion_sand_GMM	</smTexName>
+        <size>	6.2 6.2	</size>
+        <variation>	0.2	</variation>
+        <randomYaw>	True	</randomYaw>
+      </decal>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	eb_ability_minefield_explosion	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </epicMinesBlowUpEffect>
   <minesDestroyEffect>
     <effect>
       <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_destroy.seq	</path_fwd>
@@ -506,4 +695,9 @@
     </effect>
   </berserkerTurretEffect>
   <berserkerTransformPath>	particles/content_deferred/GFX_models/gameplay/br_berserk/transform.xml	</berserkerTransformPath>
+  <mapsTrainingBotsLazer>
+    <effect>
+      <path>	particles/eff_sequence/maps_training_laser_e_staticBright_1.seq	</path>
+    </effect>
+  </mapsTrainingBotsLazer>
 </dynamic_objects.xml>

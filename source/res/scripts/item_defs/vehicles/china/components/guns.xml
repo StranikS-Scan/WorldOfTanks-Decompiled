@@ -61,6 +61,7 @@
     <_122mm_60_122T_113>	254	</_122mm_60_122T_113>
     <_120mm_TG>	255	</_120mm_TG>
     <_152mm_GM_45>	256	</_152mm_GM_45>
+    <_130mm_59-130T_FL>	501	</_130mm_59-130T_FL>
     <_100mm_60-100TA_IGR>	60001	</_100mm_60-100TA_IGR>
     <_100mm_62-100T_IGR>	60002	</_100mm_62-100T_IGR>
     <_122-mm_60-122TG_IGR>	60003	</_122-mm_60-122TG_IGR>
@@ -2558,7 +2559,7 @@
           <speed>	800	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	186 163	</piercingPower>
+          <piercingPower>	196 171	</piercingPower>
         </_122mm_Type_57>
         <_122mm_Type_64>
           <defaultPortion>	0.0	</defaultPortion>
@@ -3207,6 +3208,64 @@
         </_130mm_HE>
       </shots>
     </_130mm_59-130T>
+    <_130mm_59-130T_FL>
+      <userString>	#china_vehicles:_130mm_59-130T	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	330000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	15.4	</reloadTime>
+      <maxAmmo>	28	</maxAmmo>
+      <aimingTime>	3.42	</aimingTime>
+      <weight>	3090	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_130mm_AP>
+          <defaultPortion>	0.60	</defaultPortion>
+          <speed>	930	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	244 225	</piercingPower>
+        </_130mm_AP>
+        <_130mm_HEAT>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	930	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	340 340	</piercingPower>
+        </_130mm_HEAT>
+        <_130mm_HE>
+          <defaultPortion>	0.40	</defaultPortion>
+          <speed>	930	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_130mm_HE>
+      </shots>
+    </_130mm_59-130T_FL>
     <_130mm_59_130TA>
       <userString>	#china_vehicles:_130mm_59_130TA	</userString>
       <tags></tags>

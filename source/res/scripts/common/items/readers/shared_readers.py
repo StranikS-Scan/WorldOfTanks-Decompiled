@@ -5,7 +5,7 @@ import typing
 import ResMgr
 from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH, IS_EDITOR
 from debug_utils import LOG_ERROR
-from items import _xml
+from items import _xml, getTypeInfoByName
 from items import customization_slot_tags_validator
 from items.components import component_constants
 from items.components import shared_components
@@ -47,14 +47,6 @@ def _readProjectionDecalSlot(ctx, subsection, slotType):
         availableShowOnRegions = c11n_constants.ApplyArea.HULL | c11n_constants.ApplyArea.TURRET | c11n_constants.ApplyArea.GUN
         if descr.showOn | availableShowOnRegions != availableShowOnRegions:
             _xml.raiseWrongSection(ctx, 'showOn')
-    if subsection.has_key('attachedPart'):
-        attachedPartsData = _xml.readString(ctx, subsection, 'attachedPart')
-        descr.attachedParts = defaultdict(set)
-        for partData in attachedPartsData.split():
-            pType, pName = partData.split(':')
-            if pType != 'hull':
-                descr.attachedParts[pType].add(pName)
-
     if subsection.has_key('compatibleModels'):
         descr.compatibleModels = _xml.readTupleOfStrings(ctx, subsection, 'compatibleModels')
     if subsection.has_key('itemId'):
@@ -123,6 +115,11 @@ def readTags(xmlCtx, section, allowedTagNames, subsectionName='tags'):
         res.add(intern(tagName))
 
     return frozenset(res)
+
+
+def readAllowedTags(xmlCtx, section, subsectionName, itemTypeName):
+    allowedTagNames = getTypeInfoByName(itemTypeName)['tags']
+    return readTags(xmlCtx, section, allowedTagNames, subsectionName)
 
 
 def readTagsOrEmpty(xmlCtx, section, allowedTagNames, subsectionName='tags'):

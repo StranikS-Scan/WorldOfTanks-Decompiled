@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/AwardController.py
 import logging
-import typing
 import types
 import weakref
 from abc import ABCMeta, abstractmethod
@@ -12,7 +11,6 @@ import BigWorld
 import async
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
-from adisp import process
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, AWARDS, SPEAKERS_DEVICE, GUI_START_BEHAVIOR, TECHTREE_INTRO_BLUEPRINTS, RANKED_YEAR_POSITION
 from account_helpers.settings_core.settings_constants import SOUND, GuiSettingsBehavior
@@ -45,7 +43,6 @@ from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
-from gui.impl.lobby.awards.items_collection_provider import MultipleAwardRewardsMainPacker
 from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardWindow
 from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
@@ -58,11 +55,10 @@ from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBan
 from gui.server_events.events_helpers import isDailyQuest, isACEmailConfirmationQuest
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
-from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showBadgeInvoiceAwardWindow, showMultiAwardWindow
+from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showBadgeInvoiceAwardWindow, showMultiAwardWindow, showEliteWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
-from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency
@@ -83,9 +79,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
-from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
-if typing.TYPE_CHECKING:
-    from gui.platform.catalog_service.controller import _PurchaseDescriptor
+from skeletons.gui.cdn import IPurchaseCache
 _logger = logging.getLogger(__name__)
 
 class QUEST_AWARD_POSTFIX(object):
@@ -356,7 +350,7 @@ class EliteWindowHandler(AwardHandler):
     def _showAward(self, ctx):
         vehTypeCompDescrs = ctx
         for vehTypeCompDescr in vehTypeCompDescrs:
-            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.ELITE_WINDOW, getViewName(VIEW_ALIAS.ELITE_WINDOW, vehTypeCompDescr)), ctx={'vehTypeCompDescr': vehTypeCompDescr}), scope=EVENT_BUS_SCOPE.LOBBY)
+            showEliteWindow(vehTypeCompDescr)
 
 
 class PunishWindowHandler(ServiceChannelHandler):
@@ -1630,24 +1624,6 @@ class PurchaseHandler(ServiceChannelHandler):
             if self.__purchaseCache.canBeRequestedFromProduct(invoiceData):
                 if 'data' not in invoiceData:
                     _logger.error('Invalid purchase invoice data!')
-                    return
-                self.__tryToShowAwards(invoiceData)
+                showMultiAwardWindow(invoiceData)
             else:
                 _logger.debug('Data can not be requested from the product! Award window will not be shown!')
-
-    @process
-    def __tryToShowAwards(self, invoiceData):
-        yield lambda callback: callback(True)
-        metaData = invoiceData.get('meta', {})
-        if metaData.get('type') == 'normal':
-            productCode = self.__purchaseCache.getProductCode(metaData)
-            if productCode:
-                pD = yield self.__purchaseCache.requestPurchaseByID(productCode)
-                if pD.getDisplayWays().showAwardScreen:
-                    rewards, tTips = yield MultipleAwardRewardsMainPacker().getWholeBonusesData(invoiceData, productCode)
-                    if rewards:
-                        showMultiAwardWindow(rewards, tTips, productCode)
-                    else:
-                        _logger.info('Reward list is empty, multiple awards window will not be shown for purchase %s', productCode)
-            else:
-                _logger.debug('Product code is empty! Awards Window will not be shown!')

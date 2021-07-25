@@ -13,6 +13,11 @@ class ArenaInfo(BigWorld.Entity, VehiclesAreaMarkerInfo):
         for comp in ARENA_INFO_COMPONENTS:
             comp.__init__(self)
 
+    def set_planeTrajectory(self, _):
+        avatar = BigWorld.player()
+        if self.planeTrajectory and avatar.userSeesWorld():
+            avatar.updatePlaneTrajectory(self.planeTrajectory)
+
     def onEnterWorld(self, prereqs):
         for comp in ARENA_INFO_COMPONENTS:
             comp.onEnterWorld(self)

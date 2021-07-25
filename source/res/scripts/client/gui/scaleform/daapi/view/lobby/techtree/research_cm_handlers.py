@@ -41,7 +41,7 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
         ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self._nodeCD, unlockProps, skipConfirm=self.__skipConfirm)
 
     def buyModule(self):
-        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_ITEM, self._nodeCD, self._rootCD, skipConfirm=self.__skipConfirm)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_AND_SELL_ITEM, self._nodeCD, self._rootCD, skipConfirm=self.__skipConfirm)
 
     def equipModule(self):
         ItemsActionsFactory.doAction(ItemsActionsFactory.INSTALL_ITEM, self._nodeCD, self._rootCD)
@@ -129,7 +129,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         ItemsActionsFactory.doAction(ItemsActionsFactory.CHANGE_NATION, self._nodeCD)
 
     def _initFlashValues(self, ctx):
-        self._nodeCD = int(ctx.nodeCD)
+        self._nodeCD = int(ctx.vehCD)
         self._nodeState = int(ctx.nodeState)
         vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
         self._previewAlias = getattr(ctx, 'previewAlias', VIEW_ALIAS.LOBBY_TECHTREE)
@@ -206,7 +206,7 @@ class BlueprintVehicleContextMenuHandler(SimpleVehicleCMHandler):
         shared_events.showBlueprintView(self._nodeCD)
 
     def _initFlashValues(self, ctx):
-        self._nodeCD = int(ctx.nodeCD)
+        self._nodeCD = int(ctx.vehCD)
         self._nodeState = int(ctx.nodeState)
         self._previewAlias = getattr(ctx, 'previewAlias', VIEW_ALIAS.LOBBY_TECHTREE)
 

@@ -25,6 +25,8 @@ from messenger.proto.bw_chat2.battle_chat_cmd import BASE_CMD_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
+_MIN_BASE_SCALE = 1.0
+_MAX_BASE_SCALE = 0.6
 _logger = logging.getLogger(__name__)
 _CLASSIC_MINIMAP_DIMENSIONS = 10
 
@@ -191,28 +193,28 @@ class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
 
     def __onReplyFeedbackReceived--- This code section failed: ---
 
- 234       0	LOAD_FAST         'markerType'
+ 237       0	LOAD_FAST         'markerType'
            3	LOAD_GLOBAL       'MarkerType'
            6	LOAD_ATTR         'BASE_MARKER_TYPE'
            9	COMPARE_OP        '!='
           12	POP_JUMP_IF_FALSE '19'
 
- 235      15	LOAD_CONST        ''
+ 238      15	LOAD_CONST        ''
           18	RETURN_END_IF     ''
 
- 237      19	LOAD_FAST         'newReplyCount'
+ 240      19	LOAD_FAST         'newReplyCount'
           22	LOAD_FAST         'oldReplyCount'
           25	COMPARE_OP        '>'
           28	STORE_FAST        'newReply'
 
- 238      31	LOAD_FAST         'replierID'
+ 241      31	LOAD_FAST         'replierID'
           34	LOAD_GLOBAL       'avatar_getter'
           37	LOAD_ATTR         'getPlayerVehicleID'
           40	CALL_FUNCTION_0   ''
           43	COMPARE_OP        '=='
           46	STORE_FAST        'playerHasReply'
 
- 239      49	LOAD_FAST         'ucmdID'
+ 242      49	LOAD_FAST         'ucmdID'
           52	LOAD_FAST         'self'
           55	LOAD_ATTR         '__markerIDs'
           58	COMPARE_OP        'in'
@@ -221,10 +223,10 @@ class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
         67_0	COME_FROM         '61'
           67	POP_JUMP_IF_FALSE '179'
 
- 240      70	LOAD_FAST         'playerHasReply'
+ 243      70	LOAD_FAST         'playerHasReply'
           73	POP_JUMP_IF_FALSE '126'
 
- 241      76	LOAD_FAST         'self'
+ 244      76	LOAD_FAST         'self'
           79	LOAD_ATTR         '_invoke'
           82	LOAD_FAST         'self'
           85	LOAD_ATTR         '__markerIDs'
@@ -235,21 +237,21 @@ class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
           98	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
          101	LOAD_ATTR         'SET_STATE'
 
- 242     104	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
+ 245     104	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
          107	LOAD_ATTR         'STATE_REPLY'
          110	CALL_FUNCTION_3   ''
          113	POP_TOP           ''
 
- 243     114	LOAD_GLOBAL       'True'
+ 246     114	LOAD_GLOBAL       'True'
          117	LOAD_FAST         'self'
          120	STORE_ATTR        '__hasActiveCommit'
          123	JUMP_ABSOLUTE     '179'
 
- 244     126	LOAD_FAST         'self'
+ 247     126	LOAD_FAST         'self'
          129	LOAD_ATTR         '__hasActiveCommit'
          132	POP_JUMP_IF_TRUE  '179'
 
- 245     135	LOAD_FAST         'self'
+ 248     135	LOAD_FAST         'self'
          138	LOAD_ATTR         '_invoke'
          141	LOAD_FAST         'self'
          144	LOAD_ATTR         '__markerIDs'
@@ -260,7 +262,7 @@ class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
          157	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
          160	LOAD_ATTR         'SET_STATE'
 
- 246     163	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
+ 249     163	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
          166	LOAD_ATTR         'STATE_IDLE'
          169	CALL_FUNCTION_3   ''
          172	POP_TOP           ''
@@ -268,13 +270,13 @@ class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
          176	JUMP_FORWARD      '179'
        179_0	COME_FROM         '176'
 
- 248     179	LOAD_FAST         'ucmdID'
+ 251     179	LOAD_FAST         'ucmdID'
          182	LOAD_FAST         'self'
          185	LOAD_ATTR         '__markerIDs'
          188	COMPARE_OP        'in'
          191	POP_JUMP_IF_FALSE '286'
 
- 249     194	LOAD_FAST         'newReplyCount'
+ 252     194	LOAD_FAST         'newReplyCount'
          197	LOAD_FAST         'oldReplyCount'
          200	COMPARE_OP        '<'
          203	POP_JUMP_IF_FALSE '212'
@@ -288,7 +290,7 @@ class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
        221_1	COME_FROM         '209'
          221	POP_JUMP_IF_FALSE '286'
 
- 250     224	LOAD_FAST         'self'
+ 253     224	LOAD_FAST         'self'
          227	LOAD_ATTR         '_invoke'
          230	LOAD_FAST         'self'
          233	LOAD_ATTR         '__markerIDs'
@@ -299,15 +301,15 @@ class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
          246	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
          249	LOAD_ATTR         'SET_STATE'
 
- 251     252	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
+ 254     252	LOAD_GLOBAL       'BATTLE_MINIMAP_CONSTS'
          255	LOAD_ATTR         'STATE_IDLE'
          258	CALL_FUNCTION_3   ''
          261	POP_TOP           ''
 
- 252     262	LOAD_FAST         'playerHasReply'
+ 255     262	LOAD_FAST         'playerHasReply'
          265	POP_JUMP_IF_FALSE '283'
 
- 253     268	LOAD_GLOBAL       'False'
+ 256     268	LOAD_GLOBAL       'False'
          271	LOAD_FAST         'self'
          274	STORE_ATTR        '__hasActiveCommit'
          277	JUMP_ABSOLUTE     '283'
@@ -382,7 +384,9 @@ class ClassicMinimapPingPlugin(plugins.MinimapPingPlugin):
         return getUniqueTeamOrControlPointID(team, number)
 
     def _processCommandByPosition(self, commands, locationCommand, position, minimapScaleIndex):
-        bases = self.__getNearestBaseForPosition(position, _BASE_PING_RANGE)
+        minimapScale = minimap_utils.getMinimapBasePingScale(minimapScaleIndex, _MIN_BASE_SCALE, _MAX_BASE_SCALE)
+        scaledBaseRange = _BASE_PING_RANGE * minimapScale
+        bases = self.__getNearestBaseForPosition(position, scaledBaseRange)
         if bases is not None:
             self._make3DPingBases(commands, bases)
             return

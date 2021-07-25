@@ -3,19 +3,19 @@
 import logging
 import random
 import re
-import sys
 from collections import namedtuple
 import nations
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import WATCHED_PRE_BATTLE_TIPS_SECTION
-from constants import ARENA_GUI_TYPE, CURRENT_REALM
+from constants import ARENA_GUI_TYPE
+from gui.battle_pass.battle_pass_helpers import isBattlePassActiveSeason
 from gui.doc_loaders.prebattle_tips_loader import getPreBattleTipsConfig
 from gui.impl.gen import R
-from gui.battle_pass.battle_pass_helpers import isBattlePassActiveSeason
-from helpers import dependency
 from gui.shared.utils.functions import replaceHyphenToUnderscore
+from helpers import dependency
+from realm import CURRENT_REALM
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, IVehiclePostProgressionController
 _logger = logging.getLogger(__name__)
 _SANDBOX_GEOMETRY_INDEX = ('100_thepit', '10_hills')
 _RANDOM_TIPS_PATTERN = '^(tip\\d+)'
@@ -36,19 +36,16 @@ class _TipData(namedtuple('_BattleLoadingTipData', 'status, body, icon')):
 
 
 class _TipsCriteria(object):
-    __slots__ = ('_battlesCount', '_vehicleType')
+    __slots__ = ('_ctx', '_tipsValidator')
 
     def __init__(self):
         super(_TipsCriteria, self).__init__()
-        self._battlesCount = 0
-        self._vehicleType = None
-        return
+        self._ctx = {'arenaType': self._getArenaGuiType()}
+        self._tipsValidator = _TipsValidator()
 
-    def setBattleCount(self, count):
-        self._battlesCount = count
-
-    def setVehicleType(self, vehicleType):
-        self._vehicleType = vehicleType
+    def setContext(self, ctx):
+        self._ctx.update(ctx)
+        _logger.info('Tips context for battle: %s', self._ctx)
 
     def find(self):
         foundTip = self._findRandomTip()
@@ -61,6 +58,9 @@ class _TipsCriteria(object):
     def _findRandomTip(self):
         suitableTips = filter(self._suitableTipPredicate, self._getTargetList())
         precedingTips = [ tip for tip in suitableTips if tip.getPriority() == _BattleLoadingTipPriority.PRECEDING ]
+        if _logger.isEnabledFor(logging.INFO):
+            _logger.info('Suitable preceding tips: %s', precedingTips)
+            _logger.info('Suitable tips: %s', suitableTips)
         foundTip = None
         if precedingTips:
             foundTip = random.choice(precedingTips)
@@ -72,7 +72,7 @@ class _TipsCriteria(object):
         return None
 
     def _suitableTipPredicate(self, tip):
-        return False if tip is None else tip.test(self._getArenaGuiType(), self._battlesCount, self._vehicleType)
+        return False if tip is None else self._tipsValidator.validateRegularTip(tipFilter=tip.tipFilter, ctx=self._ctx)
 
     def _getTargetList(self):
         _logger.error('Method _getTargetList has to be overridden')
@@ -222,8 +222,33 @@ def _tryGetTipIconRes(tipID):
     return res() if res.exists() else R.invalid()
 
 
+class _TipsValidator(object):
+
+    def __init__(self):
+        super(_TipsValidator, self).__init__()
+        self._validatorsList = (_BattlesValidator(),
+         _ArenaGuiTypeValidator(),
+         _TagsValidator(),
+         _LevelValidator(),
+         _NationValidator(),
+         _VehicleClassValidator(),
+         _RealmsValidator(),
+         _BattlePassValidator(),
+         _RankedBattlesValidator(),
+         _PostProgressionValidator())
+
+    def validateRegularTip(self, tipFilter, ctx=None):
+        if not tipFilter:
+            return True
+        for validator in self._validatorsList:
+            if not validator.validate(tipFilter, ctx):
+                return False
+
+        return True
+
+
 class _BattleLoadingTip(object):
-    __slots__ = ('_arenaTypes', '_battlesLimit', '_requiredTags', '_nation', '_level', '_vehicleClass', 'priority', '_tipId', '_statusResId', '_iconResId', '_descriptionResId', '_battlePassCheck', '_rankedCheck', '_realms')
+    __slots__ = ('_tipId', '_statusResId', '_iconResId', '_descriptionResId', '_tipFilter')
 
     def __init__(self):
         super(_BattleLoadingTip, self).__init__()
@@ -231,35 +256,21 @@ class _BattleLoadingTip(object):
         self._statusResId = R.invalid()
         self._iconResId = R.invalid()
         self._descriptionResId = R.invalid()
-        self._battlesLimit = (0, sys.maxint)
-        self._requiredTags = _SubsetValidator()
-        self._arenaTypes = _ValueValidator()
-        self._level = _ValueValidator()
-        self._nation = _ValueValidator()
-        self._vehicleClass = _ValueValidator()
-        self._realms = _ValueValidator()
-        self._battlePassCheck = _BattlePassValidator()
-        self._rankedCheck = _RankedValidator()
+        self._tipFilter = None
         return
 
     def build(self, tipID, descriptionResID, config):
         if config is not None:
             self._statusResId = R.strings.tips.dyn(config['status'])()
             self._iconResId = _getTipIconRes(tipID, config['group'])
-            tipFilter = config['filter']
-            if tipFilter is not None:
-                self._battlesLimit = (tipFilter['minBattles'], tipFilter['maxBattles'])
-                self._requiredTags.update(tipFilter['tags'])
-                self._arenaTypes.update(tipFilter['arenaTypes'])
-                self._level.update(tipFilter['levels'])
-                self._nation.update(tipFilter['nations'])
-                self._vehicleClass.update(tipFilter['vehicleClass'])
-                self._battlePassCheck.update(tipFilter['battlePassActiveCheck'])
-                self._realms.update(tipFilter['realms'])
-                self._rankedCheck.update(tipFilter['rankedYearRewardCheck'], tipFilter['rankedLBCheck'], tipFilter['rankedShopCheck'])
+            self._tipFilter = config['filter']
         self._tipId = tipID
         self._descriptionResId = descriptionResID
         return
+
+    @property
+    def tipFilter(self):
+        return self._tipFilter
 
     def markWatched(self):
         pass
@@ -273,9 +284,8 @@ class _BattleLoadingTip(object):
     def getData(self):
         return _TipData(self._statusResId, self._descriptionResId, self._iconResId)
 
-    def test(self, arenaGuiType, battlesCount, vehicleType):
-        minBattles, maxBattles = self._battlesLimit
-        return minBattles <= battlesCount <= maxBattles and self._requiredTags.validate(vehicleType.tags) and self._arenaTypes.validate(arenaGuiType) and self._level.validate(vehicleType.level) and self._nation.validate(nations.NAMES[vehicleType.nationID]) and self._vehicleClass.validate(vehicleType.classTag) and self._realms.validate(CURRENT_REALM) and self._battlePassCheck.validate() and self._rankedCheck.validateYearReward() and self._rankedCheck.validateYearLeaderBoard() and self._rankedCheck.validateShop()
+    def __repr__(self):
+        return self._tipId
 
 
 class _PrecedingBattleLoadingTip(_BattleLoadingTip):
@@ -296,63 +306,112 @@ class _PrecedingBattleLoadingTip(_BattleLoadingTip):
         return _BattleLoadingTipPriority.PRECEDING if watchedTimes < self._showLimit else _BattleLoadingTipPriority.GENERIC
 
 
-class _ValueValidator(object):
-    __slots__ = ('_possibleValues',)
+class _BattlesValidator(object):
 
-    def __init__(self):
-        super(_ValueValidator, self).__init__()
-        self._possibleValues = frozenset()
+    @staticmethod
+    def validate(tipFilter, ctx):
+        battlesCount = ctx.get('battlesCount')
+        minBattles, maxBattles = tipFilter['minBattles'], tipFilter['maxBattles']
+        return minBattles <= battlesCount <= maxBattles
 
-    def update(self, values):
-        self._possibleValues = frozenset(values.split())
 
-    def validate(self, value):
-        return True if not self._possibleValues else str(value) in self._possibleValues
+class _ArenaGuiTypeValidator(object):
+
+    @staticmethod
+    def validate(tipFilter, ctx):
+        expected = tipFilter['arenaTypes']
+        actual = ctx['arenaType']
+        return not expected or actual in expected
+
+
+class _TagsValidator(object):
+
+    @staticmethod
+    def validate(tipFilter, ctx):
+        requiredTags = tipFilter['tags']
+        tags = ctx['vehicleType'].tags
+        return not requiredTags or requiredTags.issubset(tags)
+
+
+class _LevelValidator(object):
+
+    @staticmethod
+    def validate(tipFilter, ctx):
+        possibleLevels = tipFilter['levels']
+        level = ctx['vehicleType'].level
+        return not possibleLevels or str(level) in possibleLevels
+
+
+class _NationValidator(object):
+
+    @staticmethod
+    def validate(tipFilter, ctx):
+        possibleNations = tipFilter['nations']
+        nation = nations.NAMES[ctx['vehicleType'].nationID]
+        return not possibleNations or nation in possibleNations
+
+
+class _VehicleClassValidator(object):
+
+    @staticmethod
+    def validate(tipFilter, ctx):
+        possibleClasses = tipFilter['vehicleClass']
+        vehicleClassTag = ctx['vehicleType'].classTag
+        return not possibleClasses or vehicleClassTag in possibleClasses
+
+
+class _RealmsValidator(object):
+
+    @staticmethod
+    def validate(tipFilter, _):
+        possibleRealms = tipFilter['vehicleClass']
+        return not possibleRealms or CURRENT_REALM in possibleRealms
 
 
 class _BattlePassValidator(object):
-    __slots__ = ('_checkBattlePass',)
+    __slots__ = ('_isActiveSeason',)
 
     def __init__(self):
         super(_BattlePassValidator, self).__init__()
-        self._checkBattlePass = False
+        self._isActiveSeason = isBattlePassActiveSeason()
 
-    def update(self, value):
-        self._checkBattlePass = bool(value)
-
-    def validate(self):
-        return isBattlePassActiveSeason() if self._checkBattlePass else True
+    def validate(self, tipFilter, _):
+        return tipFilter['isBattlePassActiveSeason'] == self._isActiveSeason if 'isBattlePassActiveSeason' in tipFilter else True
 
 
-class _RankedValidator(object):
-    __slots__ = ('_checkYearReward', '_checkLB', '_checkShop')
+class _RankedBattlesValidator(object):
+    __slots__ = ('_isYearRewardEnabled', '_isLeaderboardEnabled', '_isShopEnabled')
     _rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self):
-        super(_RankedValidator, self).__init__()
-        self._checkYearReward = False
-        self._checkLB = False
-        self._checkShop = False
+        super(_RankedBattlesValidator, self).__init__()
+        self._isYearRewardEnabled = self._rankedController.isYearRewardEnabled()
+        self._isLeaderboardEnabled = self._rankedController.isYearLBEnabled()
+        self._isShopEnabled = self._rankedController.isRankedShopEnabled()
 
-    def update(self, checkYearReward, checkLB, checkShop):
-        self._checkYearReward = checkYearReward
-        self._checkLB = checkLB
-        self._checkShop = checkShop
-
-    def validateYearReward(self):
-        return self._rankedController.isYearRewardEnabled() if self._checkYearReward else True
-
-    def validateYearLeaderBoard(self):
-        return self._rankedController.isYearLBEnabled() if self._checkLB else True
-
-    def validateShop(self):
-        return self._rankedController.isRankedShopEnabled() if self._checkShop else True
+    def validate(self, tipFilter, _):
+        if 'isRankedYearRewardEnabled' in tipFilter:
+            if tipFilter['isRankedYearRewardEnabled'] != self._isYearRewardEnabled:
+                return False
+        if 'isRankedLeaderboardEnabled' in tipFilter:
+            if tipFilter['isRankedLeaderboardEnabled'] != self._isLeaderboardEnabled:
+                return False
+        if 'isRankedShopEnabled' in tipFilter:
+            if tipFilter['isRankedShopEnabled'] != self._isShopEnabled:
+                return False
+        return True
 
 
-class _SubsetValidator(_ValueValidator):
+class _PostProgressionValidator(object):
+    __slots__ = ('_isPostProgressionEnabled',)
+    _postProgressionCtrl = dependency.descriptor(IVehiclePostProgressionController)
 
-    def validate(self, targetValues):
-        return True if not self._possibleValues else self._possibleValues.issubset(targetValues)
+    def __init__(self):
+        super(_PostProgressionValidator, self).__init__()
+        self._isPostProgressionEnabled = self._postProgressionCtrl.isEnabled()
+
+    def validate(self, tipFilter, _):
+        return tipFilter['isPostProgressionEnabled'] == self._isPostProgressionEnabled if 'isPostProgressionEnabled' in tipFilter else True
 
 
 def _getTipWatchedCounter(tipID):

@@ -26,9 +26,7 @@ class TiersFilterSubview(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(layoutID=R.views.lobby.platoon.subViews.SettingsContent(), model=SettingsModel())
-        self.__unitFilter = None
         super(TiersFilterSubview, self).__init__(settings)
-        return
 
     def update(self, *args):
         with self.viewModel.transaction() as model:
@@ -54,15 +52,16 @@ class TiersFilterSubview(ViewImpl):
         self.update()
 
     def __updateTierSettings(self):
-        self.__unitFilter = BitfieldHelper(self.__platoonCtrl.getUnitFilter())
+        userSearchFlags = BitfieldHelper(self.__platoonCtrl.getUserSearchFlags())
         with self.viewModel.transaction() as model:
             tierArray = model.tiersSettings.getTierButtons()
             tierArray.clear()
-            for index in range(self.MIN_LEVEL, self.MAX_LEVEL + 1):
-                self.__addTierButton(tierArray, index)
+            for lvl in range(self.MIN_LEVEL, self.MAX_LEVEL + 1):
+                isTierAvailable = self.__isTierAvailable(lvl)
+                isSelected = userSearchFlags.isSetBit(lvl)
+                self.__createTierButton(tierArray, lvl, isTierAvailable, isSelected)
 
             tierArray.invalidate()
-            self.__platoonCtrl.saveUnitFilter(self.__unitFilter.value)
 
     def __addListeners(self):
         with self.viewModel.transaction() as model:
@@ -81,37 +80,38 @@ class TiersFilterSubview(ViewImpl):
             self.update()
 
     def __updateVoiceChat(self):
-        self.__unitFilter = BitfieldHelper(self.__platoonCtrl.getUnitFilter())
-        enableVoiceChat = self.__unitFilter.isSetFlag(UnitAssemblerSearchFlags.USE_VOICE)
+        userSearchFlags = BitfieldHelper(self.__platoonCtrl.getUserSearchFlags())
+        enableVoiceChat = userSearchFlags.isSetFlag(UnitAssemblerSearchFlags.USE_VOICE)
         with self.viewModel.transaction() as model:
             model.voiceSettings.setIsVoiceChatEnabled(enableVoiceChat)
 
-    def __addTierButton(self, tierArray, tier):
+    @staticmethod
+    def __createTierButton(tierArray, tier, isTierAvailable, isSelected):
         tierButtonModel = TierButtonModel()
-        isTierEnabled = self.__isTierEnabled(tier)
-        tierButtonModel.setIsEnabled(isTierEnabled)
-        if not isTierEnabled:
-            self.__unitFilter.unsetBit(tier)
-        tierButtonModel.setIsSelected(self.__unitFilter.isSetBit(tier) and isTierEnabled)
+        tierButtonModel.setIsEnabled(isTierAvailable)
+        tierButtonModel.setIsSelected(isSelected and isTierAvailable)
         tierButtonModel.setTier(tier)
         tierArray.addViewModel(tierButtonModel)
 
-    def __isTierEnabled(self, tier):
+    def __isTierAvailable(self, tier):
         return self.__platoonCtrl.hasVehiclesForSearch(tierLevel=tier)
 
     def __onSwitchTier(self, *args, **kwargs):
         if args:
             if args[0]['tier'] is not None:
+                platoonCtrl = self.__platoonCtrl
                 tier = int(args[0]['tier'])
-                self.__unitFilter.toggleBit(tier)
-                self.__platoonCtrl.saveUnitFilter(self.__unitFilter.value)
+                userSearchFlags = BitfieldHelper(platoonCtrl.getUserSearchFlags())
+                userSearchFlags.toggleBit(tier)
+                platoonCtrl.saveUserSearchFlags(userSearchFlags.value)
                 self.__updateTierSettings()
         return
 
     def __onSwitchVoiceChat(self):
-        self.__unitFilter = BitfieldHelper(self.__platoonCtrl.getUnitFilter())
-        self.__unitFilter.toggleFlag(UnitAssemblerSearchFlags.USE_VOICE)
-        self.__platoonCtrl.saveUnitFilter(self.__unitFilter.value)
+        platoonCtrl = self.__platoonCtrl
+        userSearchFlags = BitfieldHelper(platoonCtrl.getUserSearchFlags())
+        userSearchFlags.toggleFlag(UnitAssemblerSearchFlags.USE_VOICE)
+        platoonCtrl.saveUserSearchFlags(userSearchFlags.value)
         self.__updateVoiceChat()
 
 

@@ -5,7 +5,7 @@ import sys
 from constants import BonusTypes
 from gui.shared.items_parameters import params_cache
 from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR
-_BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
+BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  'shotDispersionAngle',
  'weight',
  'dispertionRadius',
@@ -31,7 +31,15 @@ _BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  'demaskFoliageFactor',
  'demaskMovingFactor',
  'vehicleRamOrExplosionDamageResistance',
- 'vehicleFireChance'])
+ 'vehicleFireChance',
+ 'vehicleGunReloadTime',
+ 'vehicleGunShotFullDispersion',
+ 'vehicleGunShotDispersionAfterShot',
+ 'vehicleGunShotDispersionChassisMovement',
+ 'vehicleGunShotDispersionChassisRotation',
+ 'vehicleGunShotDispersionTurretRotation',
+ 'vehicleGunShotDispersionWhileGunDamaged',
+ 'vehicleRamDamageResistance'])
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
 _CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
  'clipFireRate': (True, True, False),
@@ -184,13 +192,15 @@ def _getParamStateInfo(paramName, val1, val2, customReverted=False):
                 val2 = round(val2, 2)
             diff = val1 - val2
     if paramName in NEGATIVE_PARAMS and hasNoParam:
+        if val1 is None and val2 is None:
+            return (PARAM_STATE.NORMAL, diff)
         if val1 is None:
             return (PARAM_STATE.BETTER, diff)
         return (PARAM_STATE.WORSE, diff)
     elif diff == 0:
         return (PARAM_STATE.NORMAL, diff)
     else:
-        isInverted = paramName in _BACKWARD_QUALITY_PARAMS or customReverted
+        isInverted = paramName in BACKWARD_QUALITY_PARAMS or customReverted
         return (PARAM_STATE.WORSE, diff) if isInverted and diff > 0 or not isInverted and diff < 0 else (PARAM_STATE.BETTER, diff)
 
 

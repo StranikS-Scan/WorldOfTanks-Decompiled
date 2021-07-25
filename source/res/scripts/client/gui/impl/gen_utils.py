@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen_utils.py
 from typing import Optional, Generator, Iterator
+INVALID_RES_ID = -1
 
 class DynAccessor(object):
     __slots__ = ('__resId',)
@@ -48,4 +49,4 @@ class _InvalidDynAccessor(DynAccessor):
         return False
 
 
-_g_invalid = _InvalidDynAccessor(-1)
+_g_invalid = _InvalidDynAccessor(INVALID_RES_ID)

@@ -1225,6 +1225,9 @@ class UnitEntity(_UnitEntity):
         self._invokeListeners('onUnitPlayerProfileVehicleChanged', accountDBID)
         g_eventDispatcher.updateUI()
 
+    def unit_onUnitSearchFlagsChanged(self, flags):
+        self._invokeListeners('onUnitSearchFlagsChanged', flags)
+
     def unit_onUnitPlayerRemoved(self, playerID, playerData):
         self.unit_onUnitVehicleChanged(playerID, 0, 0)
         unitMgrID, unit = self.getUnit(safe=False)
@@ -1319,6 +1322,7 @@ class UnitEntity(_UnitEntity):
         unit.onUnitPlayerRemoved += self.unit_onUnitPlayerRemoved
         unit.onUnitPlayerInfoChanged += self.unit_onUnitPlayerInfoChanged
         unit.onUnitPlayerProfileVehicleChanged += self.unit_onUnitPlayerProfileVehicleChanged
+        unit.onUnitSearchFlagsChanged += self.unit_onUnitSearchFlagsChanged
         unit.onUnitExtraChanged += self.unit_onUnitExtraChanged
 
     def _removeClientUnitListeners(self):

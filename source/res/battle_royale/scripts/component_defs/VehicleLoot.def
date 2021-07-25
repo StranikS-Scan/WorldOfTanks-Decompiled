@@ -1,8 +1,20 @@
 <VehicleLoot.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <Properties>
+    <lootID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lootID>
+    <lootTypeID>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lootTypeID>
+    <pickupEndTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </pickupEndTime>
+  </Properties>
   <CellMethods></CellMethods>
   <ClientMethods></ClientMethods>
-  <ofEntity>
-    <Vehicle></Vehicle>
-  </ofEntity>
   <DefaultKeyName>	vehicleLoot	</DefaultKeyName>
 </VehicleLoot.def>

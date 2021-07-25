@@ -24,7 +24,7 @@ class RegularItemsTabView(RegularItemsTabViewMeta):
 
     def upgradeItem(self, itemId):
         module = self.__itemsCache.items.getItemByCD(int(itemId))
-        ItemsActionsFactory.doAction(ItemsActionsFactory.UPGRADE_OPT_DEVICE, module, None, None)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.UPGRADE_OPT_DEVICE, module, None, None, None)
         return
 
     def navigateToStore(self):

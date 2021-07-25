@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/battle_pass.py
+from battle_pass_common import BattlePassState
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
+from helpers import dependency
 from shared_utils import first
+from skeletons.gui.game_control import IBattlePassController
 
 class BattlePassGiftTokenTooltipData(BlocksTooltipData):
     _MAX_GIFTS_COUNT = 12
@@ -66,6 +69,7 @@ class BattlePassGiftTokenTooltipData(BlocksTooltipData):
 
 
 class BattlePassPointsTooltipData(BlocksTooltipData):
+    __battlePassController = dependency.descriptor(IBattlePassController)
 
     def __init__(self, context):
         super(BattlePassPointsTooltipData, self).__init__(context, TOOLTIP_TYPE.BATTLE_PASS_POINTS)
@@ -79,4 +83,7 @@ class BattlePassPointsTooltipData(BlocksTooltipData):
         self._items.append(titleImageBlock)
         descriptionBlock = text_styles.main(backport.text(R.strings.battle_pass.tooltips.battlePassPoints.description()))
         self._items.append(formatters.packTextBlockData(descriptionBlock))
+        state = self.__battlePassController.getState()
+        if state == BattlePassState.COMPLETED:
+            self._items.append(formatters.packBuildUpBlockData([formatters.packImageTextBlockData(title=text_styles.success(backport.text(R.strings.battle_pass.tooltips.battlePassPoints.completed())), img=backport.image(R.images.gui.maps.icons.library.check()), imgPadding=formatters.packPadding(top=-2))], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(bottom=-10)))
         return self._items

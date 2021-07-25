@@ -12,6 +12,8 @@ import AccountCommands
 import Settings
 import constants
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG, LOG_WARNING
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import getLanguageCode, i18n
 from items import vehicles as vehs_core
 from account_helpers import getAccountDatabaseID
@@ -285,3 +287,9 @@ def isPopupsWindowsOpenDisabled():
     userPrefs = Settings.g_instance.userPrefs
     ds = userPrefs['development']
     return ds.readBool(Settings.POPUPS_WINDOWS_DISABLED) and constants.IS_DEVELOPMENT if ds is not None else False
+
+
+_ROMAN_FORBIDDEN_LANGUAGES = {'ko', 'no'}
+
+def isRomanNumberForbidden():
+    return bool(_ROMAN_FORBIDDEN_LANGUAGES.intersection(backport.text(R.strings.settings.LANGUAGE_CODE())))

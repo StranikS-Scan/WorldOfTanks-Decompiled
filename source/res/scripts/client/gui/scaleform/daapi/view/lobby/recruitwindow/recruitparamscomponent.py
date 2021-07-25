@@ -238,7 +238,6 @@ class RecruitParamsComponent(RecruitParametersMeta):
             data = [self.__getTankmanRoleEmptyRow()]
             modulesAll.sort()
             selectedIndex = 0
-            counter = 0
             for module in modulesAll:
                 for role in module.descriptor.type.crewRoles:
                     roleName = role[0]
@@ -247,9 +246,6 @@ class RecruitParamsComponent(RecruitParametersMeta):
                     if not hasRoles or roleName in self.__predefinedTmanRoles:
                         roles.append(roleName)
                         data.append(_packItemVO(roleName, convert(skillsConfig.getSkill(roleName).userString)))
-                        if self.__selectedTmanRole == roleName:
-                            selectedIndex = counter
-                    counter += 1
 
         self.as_setTankmanRoleDataS(self.__getSendingData(data, len(data) > 1, selectedIndex))
 
@@ -260,7 +256,11 @@ class RecruitParamsComponent(RecruitParametersMeta):
 
     def __getNationsCriteria(self):
         rqc = REQ_CRITERIA
-        return ~(~rqc.UNLOCKED | ~rqc.COLLECTIBLE) | ~rqc.VEHICLE.OBSERVER | ~rqc.VEHICLE.BATTLE_ROYALE
+        criteria = ~(~rqc.UNLOCKED | ~rqc.COLLECTIBLE)
+        criteria |= ~rqc.VEHICLE.OBSERVER
+        criteria |= ~rqc.VEHICLE.BATTLE_ROYALE
+        criteria |= ~rqc.VEHICLE.MAPS_TRAINING
+        return criteria
 
     def __getVehicleTypeCriteria(self, nationID, vclass):
         criteria = self.__getClassesCriteria(nationID) | REQ_CRITERIA.VEHICLE.CLASSES([vclass])

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/module.py
+import typing
 import logging
 import AccountCommands
 import BigWorld
@@ -17,11 +18,13 @@ from gui.shared.gui_items.processors import ItemProcessor, makeI18nSuccess, make
 from gui.shared.gui_items.processors.messages.items_processor_messages import OptDevicesDemountProcessorMessage, OptDeviceRemoveProcessorMessage, ItemDestroyProcessorMessage
 from gui.shared.gui_items.vehicle_modules import VehicleTurret, VehicleGun
 from gui.shared.money import Currency
-from helpers import i18n, dependency
+from helpers import dependency
 from items import vehicles
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+if typing.TYPE_CHECKING:
+    pass
 MULTIPLE_SELLING_TEMPLATE = 'multipleSelling/{}'
 _logger = logging.getLogger(__name__)
 
@@ -180,19 +183,21 @@ class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
 
 
 class OptDeviceInstaller(ModuleInstallProcessor):
-    IS_GAMEFACE_SUPPORTED = True
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, vehicle, item, slotIdx, install=True, financeOperation=False, conflictedEqs=None, skipConfirm=False):
+    def __init__(self, vehicle, item, slotIdx, install=True, allSetups=True, financeOperation=False, conflictedEqs=None, skipConfirm=False):
         super(OptDeviceInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.OPTIONALDEVICE,), slotIdx, install, conflictedEqs, skipConfirm=skipConfirm)
         self.removalPrice = item.getRemovalPrice(self.itemsCache.items)
         addPlugins = []
         if install:
-            addPlugins += (plugins.InstallDeviceConfirmator(isEnabled=not item.isRemovable and not skipConfirm, item=self.item),)
+            addPlugins += (plugins.MessageConfirmator('installConfirmationNotRemovable_{}'.format(self.removalPrice.price.getCurrency()), ctx={'name': item.userName,
+              'complex': _wrapHtmlMessage('confirmationNotRemovable', backport.text(R.strings.dialogs.confirmationNotRemovable.message.complex())),
+              'destroy': _wrapHtmlMessage('confirmationNotRemovable', backport.text(R.strings.dialogs.confirmationNotRemovable.message.destroy()))}, isEnabled=not item.isRemovable and not skipConfirm),)
         else:
             addPlugins += (plugins.DemountDeviceConfirmator(isEnabled=not item.isRemovable and financeOperation and not skipConfirm, item=self.item, vehicle=vehicle), plugins.DestroyDeviceConfirmator(isEnabled=not item.isRemovable and not financeOperation and not skipConfirm, item=item))
         self.addPlugins(addPlugins)
         self.financeOperation = financeOperation
+        self.allSetups = allSetups
 
     def _successHandler(self, code, ctx=None):
         item = self.item if self.install else None
@@ -201,7 +206,7 @@ class OptDeviceInstaller(ModuleInstallProcessor):
         if not self.install and not self.item.isRemovable and self.financeOperation:
             return OptDeviceRemoveProcessorMessage(self.item, removalPrice=self.removalPrice.price, useDemountKit=useDemountKit).makeSuccessMsg()
         else:
-            return ItemDestroyProcessorMessage(self.item).makeSuccessMsg() if not self.install and not self.financeOperation else super(OptDeviceInstaller, self)._successHandler(code, ctx)
+            return ItemDestroyProcessorMessage(self.item).makeSuccessMsg() if not self.install and not self.financeOperation and self.allSetups else super(OptDeviceInstaller, self)._successHandler(code, ctx)
 
     def _request(self, callback):
         from gui.Scaleform.Waiting import Waiting
@@ -210,7 +215,7 @@ class OptDeviceInstaller(ModuleInstallProcessor):
         itemCD = self.item.intCD if self.install else 0
         if not self.install and useDemountKit:
             g_eventBus.handleEvent(ItemRemovalByDemountKitEvent(ItemRemovalByDemountKitEvent.DECLARED, self.slotIdx), EVENT_BUS_SCOPE.LOBBY)
-        BigWorld.player().inventory.equipOptionalDevice(self.vehicle.invID, itemCD, self.slotIdx, self.financeOperation, lambda code, ext=None: self._response(code, callback, ctx=ext), useDemountKit)
+        BigWorld.player().inventory.equipOptionalDevice(self.vehicle.invID, itemCD, self.slotIdx, self.allSetups, self.financeOperation, lambda code, ext=None: self._response(code, callback, ctx=ext), useDemountKit)
         return
 
     def _response(self, code, callback, errStr='', ctx=None):
@@ -352,52 +357,40 @@ class PreviewVehicleModuleInstaller(OtherModuleInstaller):
 
 
 class BuyAndInstallItemProcessor(ModuleBuyer):
-    IS_GAMEFACE_SUPPORTED = True
     lobbyContext = dependency.descriptor(ILobbyContext)
-    _confirmatorPluginCls = plugins.BuyAndInstallConfirmator
+    _installConfirmatorPluginCls = _storeConfirmatorPluginCls = plugins.BuyAndInstallConfirmator
 
     def __init__(self, vehicle, item, slotIdx, gunCompDescr, conflictedEqs=None, skipConfirm=False):
         self.__vehInvID = vehicle.invID
         self.__slotIdx = int(slotIdx)
         self.__gunCompDescr = gunCompDescr
         self.__vehicle = vehicle
+        self._installedModuleCD = vehicle.descriptor.getComponentsByType(item.itemTypeName)[0].compactDescr
         conflictedEqs = conflictedEqs or tuple()
         conflictMsg = ''
         if conflictedEqs:
             self.__makeConflictMsg("', '".join([ eq.userName for eq in conflictedEqs ]))
-        self.__mayInstall, installReason = item.mayInstall(vehicle, slotIdx)
+        self.__mayInstall, self._installReason = item.mayInstall(vehicle, slotIdx)
         super(BuyAndInstallItemProcessor, self).__init__(item, 1, Currency.CREDITS)
         self.addPlugins([plugins.ModuleValidator(item)])
         if self.__mayInstall:
             self.addPlugins([plugins.VehicleValidator(vehicle, True, prop={'isBroken': True,
-              'isLocked': True}), plugins.CompatibilityInstallValidator(vehicle, item, slotIdx), self._confirmatorPluginCls('confirmBuyAndInstall', ctx=self._getItemConfirmationData(conflictMsg), isEnabled=not skipConfirm, item=self.item)])
+              'isLocked': True}), plugins.CompatibilityInstallValidator(vehicle, item, slotIdx), self._installConfirmatorPluginCls('confirmBuyAndInstall', ctx=self._getItemConfirmationData(conflictMsg), isEnabled=not skipConfirm, item=self.item)])
             if item.itemTypeID == GUI_ITEM_TYPE.TURRET:
                 self.addPlugin(plugins.TurretCompatibilityInstallValidator(vehicle, item, self.__gunCompDescr))
             self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ]),
              'reason': _wrapHtmlMessage('incompatibleReason', backport.text(R.strings.dialogs.removeIncompatibleEqs.message.reason()))}, isEnabled=bool(conflictedEqs) and not skipConfirm))
         else:
-            self.addPlugins([plugins.BuyAndStorageConfirmator('confirmBuyNotInstall', ctx={'userString': item.userName,
-              'typeString': item.userType,
-              'currencyIcon': _getIconHtmlTagForCurrency(self._currency),
-              'value': _formatCurrencyValue(self._currency, self._getOpPrice().price.get(self._currency)),
-              'reason': self.__makeInstallReasonMsg(installReason)}, isEnabled=not skipConfirm, item=item)])
+            self.addPlugins([self._storeConfirmatorPluginCls('confirmBuyNotInstall', ctx=self._getItemConfirmationData(conflictMsg), isEnabled=not skipConfirm, item=item)])
 
     def _getItemConfirmationData(self, conflictMsg):
-        return {'userString': self.item.userName,
-         'typeString': self.item.userType,
-         'conflictedEqs': conflictMsg,
-         'currencyIcon': _getIconHtmlTagForCurrency(self._currency),
-         'value': _formatCurrencyValue(self._currency, self._getOpPrice().price.get(self._currency))}
+        return {'installedModuleCD': self._installedModuleCD,
+         'currency': self._currency,
+         'installReason': self._installReason}
 
     def __makeConflictMsg(self, conflictedText):
         attrs = {'conflicted': conflictedText}
         return makeHtmlString('html_templates:lobby/shop/system_messages', 'conflicted', attrs)
-
-    def __makeInstallReasonMsg(self, installReason):
-        reasonTxt = ''
-        if installReason is not None:
-            reasonTxt = '#menu:moduleFits/' + installReason.replace(' ', '_')
-        return i18n.makeString(reasonTxt)
 
     def _successHandler(self, code, ctx=None):
         if self.__mayInstall:
@@ -450,7 +443,7 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
 
 
 class BCBuyAndInstallItemProcessor(BuyAndInstallItemProcessor):
-    _confirmatorPluginCls = plugins.BCBuyAndInstallConfirmator
+    _installConfirmatorPluginCls = plugins.BCBuyAndInstallConfirmator
 
     def _getItemConfirmationData(self, conflictMsg):
         return {'price': self._getOpPrice().price.get(self._currency)}
@@ -458,7 +451,7 @@ class BCBuyAndInstallItemProcessor(BuyAndInstallItemProcessor):
 
 class ModuleUpgradeProcessor(ModuleProcessor):
 
-    def __init__(self, item, vehicle, slotIdx, plugs=tuple()):
+    def __init__(self, item, vehicle, setupIdx, slotIdx, plugs=tuple()):
         super(ModuleUpgradeProcessor, self).__init__(item, 'upgrade', plugs)
         addPlugins = []
         self.__upgradePrice = item.getUpgradePrice(self.itemsCache.items)
@@ -468,6 +461,7 @@ class ModuleUpgradeProcessor(ModuleProcessor):
               'isLocked': True}),)
         self.vehicle = vehicle
         self.slotIdx = slotIdx
+        self.setupIdx = setupIdx
         self.addPlugins(addPlugins)
         return
 
@@ -477,15 +471,16 @@ class ModuleUpgradeProcessor(ModuleProcessor):
          'money': formatPrice(self.__upgradePrice.price)}
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey=self._formMessage('success'), type=SM_TYPE.UpgradeForCredits, **self._getMsgCtx())
+        msg = 'success/analogWasDemounted' if ctx and ctx.get('isAnalogWasDemounted', False) else 'success'
+        return makeI18nSuccess(sysMsgKey=self._formMessage(msg), type=SM_TYPE.UpgradeForCredits, **self._getMsgCtx())
 
     def _request(self, callback):
-        if self.vehicle is not None and self.item.isInstalled(self.vehicle):
-            _logger.debug('Request to upgrade module: %s, %s %s', self.item.intCD, self.vehicle.invID, self.slotIdx)
-            BigWorld.player().inventory.upgradeOptDev(0, self.vehicle.invID, self.slotIdx, lambda code, _: self._response(code, callback))
+        if self.vehicle is not None and self.item.isInSetup(self.vehicle):
+            _logger.debug('Request to upgrade module: %s, %s %s %s', self.item.intCD, self.vehicle.invID, self.setupIdx, self.slotIdx)
+            BigWorld.player().inventory.upgradeOptDev(0, self.vehicle.invID, self.setupIdx, self.slotIdx, lambda code, ext={}: self._response(code, callback, ctx=ext))
         else:
             _logger.debug('Request to upgrade module: %s', self.item.intCD)
-            BigWorld.player().inventory.upgradeOptDev(self.item.intCD, 0, 0, lambda code, _: self._response(code, callback))
+            BigWorld.player().inventory.upgradeOptDev(self.item.intCD, 0, 0, 0, lambda code, ext={}: self._response(code, callback, ctx=ext))
         return
 
 
@@ -496,7 +491,7 @@ class BattleAbilityInstaller(ModuleInstallProcessor):
         super(BattleAbilityInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.BATTLE_ABILITY,), slotIdx, install, conflictedEqs, skipConfirm=skipConfirm)
 
     def _request(self, callback):
-        selectedSkill = next((skillID for skillID, levels in self.__epicMetaGameCtrl.getAllUnlockedSkillLevelsBySkillId().iteritems() if self.item.innationID in (level.eqID for level in levels)), -1)
+        selectedSkill = next((skillID for skillID, levelInfo in self.__epicMetaGameCtrl.getAllUnlockedSkillInfoBySkillId().iteritems() if self.item.innationID == levelInfo.eqID), -1)
         currentSkills = self.__epicMetaGameCtrl.getSelectedSkills(self.vehicle.intCD)[:]
         previousSkill = currentSkills[self.slotIdx] if len(currentSkills) >= self.slotIdx else -1
         for idx, skillID in enumerate(currentSkills):

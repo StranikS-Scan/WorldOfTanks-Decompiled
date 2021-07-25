@@ -4,6 +4,7 @@ import BigWorld
 import constants
 from adisp import process
 from async import async, await
+from account_helpers import AccountSettings
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.impl.dialogs import dialogs
@@ -15,6 +16,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles, icons
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import i18n, getShortClientVersion, dependency
 from skeletons.gui.game_control import IBootcampController
@@ -24,6 +26,9 @@ from skeletons.gui.game_control import IManualController
 from skeletons.gui.lobby_context import ILobbyContext
 from PlayerEvents import g_playerEvents as events
 from gui.prb_control import prbEntityProperty
+from uilogging.manual.constants import ManualLogActions, ManualLogKeys
+from uilogging.manual.loggers import ManualLogger
+from tutorial.control.context import GLOBAL_FLAG
 
 def _getVersionMessage():
     return ('{0} {1}'.format(text_styles.main(i18n.makeString(MENU.PROMO_PATCH_MESSAGE)), text_styles.stats(getShortClientVersion())),)
@@ -31,6 +36,7 @@ def _getVersionMessage():
 
 class LobbyMenu(LobbyMenuMeta):
     __sound_env__ = LobbySubViewEnv
+    manualUILogger = ManualLogger(ManualLogKeys.LOBBY_MENU_BUTTON.value)
     promo = dependency.descriptor(IPromoController)
     bootcamp = dependency.descriptor(IBootcampController)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -88,6 +94,7 @@ class LobbyMenu(LobbyMenuMeta):
             if view is not None:
                 self.destroy()
             else:
+                self.manualUILogger.log(ManualLogActions.CLICK.value, with_trigger=not AccountSettings.isLobbyMenuTriggerShown())
                 self.manualController.show()
         return
 
@@ -126,8 +133,15 @@ class LobbyMenu(LobbyMenuMeta):
         if not self.manualController.isActivated() or self.bootcamp.isInBootcamp() or self.__isInQueue():
             self.as_showManualButtonS(False)
         self.__setPostFieldButtonVisible(self.promo.isActive())
+        if self.manualController.isActivated():
+            self.as_setManualButtonIconS(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INFO, 24, 24, -6, 0))
+            isShowLobbyMenuTrigger = not AccountSettings.isLobbyMenuTriggerShown() and not self.bootcamp.isInBootcamp()
+            getTutorialGlobalStorage().setValue(GLOBAL_FLAG.LOBBY_MENU_ITEM_MANUAL, isShowLobbyMenuTrigger)
+            getTutorialGlobalStorage().setValue(GLOBAL_FLAG.LOBBY_MENU_ITEM_BOOTCAMP, isShowLobbyMenuTrigger and not self.bootcamp.hasFinishedBootcampBefore())
 
     def _dispose(self):
+        if not self.bootcamp.isInBootcamp():
+            AccountSettings.setLobbyMenuTriggerShown()
         self.__removeListeners()
         super(LobbyMenu, self)._dispose()
 
@@ -141,6 +155,8 @@ class LobbyMenu(LobbyMenuMeta):
         toShow, toHide = [], []
         counts = {'settingsBtn': getCountNewSettings(),
          'postBtn': self.promo.getPromoCount()}
+        if not self.bootcamp.isInBootcamp():
+            counts['manualBtn'] = self.manualController.getNewContentCount()
         for componentID, count in counts.iteritems():
             if count > 0:
                 toShow.append({'componentId': componentID,

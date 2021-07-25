@@ -1,25 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/UnitBase.py
-import cPickle
 import copy
 import struct
 import weakref
 from collections import namedtuple
 from typing import TYPE_CHECKING
-from UnitRoster import BaseUnitRosterSlot, _BAD_CLASS_INDEX, buildNamesDict, reprBitMaskFromDict
 from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE, QUEUE_TYPE, INVITATION_TYPE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 from items import vehicles
 from items.badges_common import BadgesCommon
-from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE, QUEUE_TYPE, INVITATION_TYPE
 from UnitRoster import BaseUnitRosterSlot, _BAD_CLASS_INDEX, buildNamesDict, reprBitMaskFromDict
-from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster, BattleRoyaleRoster
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
-from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster, MapBoxRoster
+from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster, BattleRoyaleRoster, MapBoxRoster
 if TYPE_CHECKING:
-    from typing import List as TList, Tuple as TTuple, Dict as TDict, Optional as TOptional
+    from typing import List as TList, Tuple as TTuple, Dict as TDict
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
 ProfileVehicle = namedtuple('ProfileVehicle', ('vehCompDescr', 'vehOutfitCD', 'seasonType', 'marksOnGun'))
 
@@ -228,6 +224,9 @@ class UNIT_OP:
     DEL_PLAYER_PROFILE = 25
     ESTIMATED_TIME_IN_QUEUE = 26
     ONLY_10_MODE = 27
+    CLEAR_SEARCH_FLAGS = 28
+    REMOVE_SEARCH_FLAGS = 29
+    SET_SEARCH_FLAGS = 30
 
 
 class UNIT_ROLE:
@@ -479,6 +478,14 @@ def _invitationTypeFromFlags(flags):
         return INVITATION_TYPE.SQUAD if flags == UNIT_MGR_FLAGS.DEFAULT else None
 
 
+def _unitAssemblerTypeFromFlags(flags):
+    return PREBATTLE_TYPE_TO_UNIT_ASSEMBLER.get(_prebattleTypeFromFlags(flags), None)
+
+
+def extendTiersFilter(filterFlags):
+    return (filterFlags << 1 | filterFlags | filterFlags >> 1) & UnitAssemblerSearchFlags.ALL_VEH_TIERS
+
+
 class ROSTER_TYPE:
     UNIT_ROSTER = 0
     FALLOUT_CLASSIC_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.FALLOUT_CLASSIC
@@ -580,7 +587,10 @@ class UnitBase(OpsUnpacker):
      UNIT_OP.SET_PLAYER_PROFILE: ('', '_setProfileVehicleByData'),
      UNIT_OP.DEL_PLAYER_PROFILE: ('q', '_delProfileVehicle'),
      UNIT_OP.ESTIMATED_TIME_IN_QUEUE: ('i', '_setEstimatedTimeInQueue'),
-     UNIT_OP.ONLY_10_MODE: ('?', '_setOnly10Mode')})
+     UNIT_OP.ONLY_10_MODE: ('?', '_setOnly10Mode'),
+     UNIT_OP.SET_SEARCH_FLAGS: ('qH', 'setAutoSearchFlags'),
+     UNIT_OP.CLEAR_SEARCH_FLAGS: (None, 'clearAutoSearchFlags'),
+     UNIT_OP.REMOVE_SEARCH_FLAGS: ('H', 'removeAutoSearchFlags')})
     MAX_PLAYERS = 250
 
     def __init__(self, limitsDefs={}, slotDefs={}, slotCount=0, packedRoster='', extrasInit=None, packedUnit='', rosterTypeID=ROSTER_TYPE.UNIT_ROSTER, extrasHandlerID=EXTRAS_HANDLER_TYPE.EMPTY, prebattleTypeID=PREBATTLE_TYPE.UNIT):
@@ -620,6 +630,7 @@ class UnitBase(OpsUnpacker):
         self._modalTimestamp = 0
         self._estimatedTimeInQueue = 0
         self._isOnly10ModeEnabled = False
+        self._unitAssemblerSearchFlags = {}
 
     def _initExtrasHandler(self):
         weakSelf = weakref.proxy(self)
@@ -729,6 +740,7 @@ class UnitBase(OpsUnpacker):
     def _removePlayer(self, accountDBID):
         self._players.pop(accountDBID, None)
         self._vehicles.pop(accountDBID, None)
+        self._unitAssemblerSearchFlags.pop(accountDBID, None)
         self._playerProfileVehicles.pop(accountDBID, None)
         self._dirty = 1
         self.storeOp(UNIT_OP.REMOVE_PLAYER, accountDBID)
@@ -772,7 +784,7 @@ class UnitBase(OpsUnpacker):
 
         return True
 
-    _HEADER = '<HHHHHHHBiiii?'
+    _HEADER = '<HHHHHHHHBiiii?'
     _PLAYER_DATA = '<qiIHBHHHq?'
     _PLAYER_VEHICLES_LIST = '<qH'
     _PLAYER_VEHICLE_TUPLE = '<iH'
@@ -781,6 +793,7 @@ class UnitBase(OpsUnpacker):
     _VEHICLE_DICT_HEADER = '<Hq'
     _VEHICLE_DICT_ITEM = '<Hi'
     _VEHICLE_PROFILE_HEADER = '<qBB'
+    _PLAYER_SEARCH_FLAGS_TUPLE = '<qH'
     _HEADER_SIZE = struct.calcsize(_HEADER)
     _SLOT_PLAYERS_SIZE = struct.calcsize(_SLOT_PLAYERS)
     _PLAYER_DATA_SIZE = struct.calcsize(_PLAYER_DATA)
@@ -790,6 +803,7 @@ class UnitBase(OpsUnpacker):
     _VEHICLE_DICT_HEADER_SIZE = struct.calcsize(_VEHICLE_DICT_HEADER)
     _VEHICLE_DICT_ITEM_SIZE = struct.calcsize(_VEHICLE_DICT_ITEM)
     _VEHICLE_PROFILE_HEADER_SIZE = struct.calcsize(_VEHICLE_PROFILE_HEADER)
+    _PLAYER_SEARCH_FLAGS_TUPLE_SIZE = struct.calcsize(_PLAYER_SEARCH_FLAGS_TUPLE)
 
     def pack(self):
         packed = struct.pack(self._IDS, self._rosterTypeID, self._extrasHandlerID, self._prebattleTypeID)
@@ -800,10 +814,12 @@ class UnitBase(OpsUnpacker):
         extras = self._extras
         extrasStr = self._extrasHandler.pack(extras)
         profileVehicles = self._playerProfileVehicles
+        searchFlags = self._unitAssemblerSearchFlags
         args = (len(members),
          len(vehs),
          len(players),
          len(profileVehicles),
+         len(searchFlags),
          len(extrasStr),
          self._readyMask,
          self._flags,
@@ -828,6 +844,9 @@ class UnitBase(OpsUnpacker):
         for accountDBID, profileVehicle in profileVehicles.iteritems():
             packed += self.__packProfileVehicle(accountDBID, profileVehicle)
 
+        for accountDBID, searchFlags in searchFlags.iteritems():
+            packed += struct.pack(self._PLAYER_SEARCH_FLAGS_TUPLE, accountDBID, searchFlags)
+
         packed += extrasStr
         packed += packPascalString(self._strComment)
         self._packed = packed
@@ -844,7 +863,7 @@ class UnitBase(OpsUnpacker):
         unpacking = self._roster.unpack(unpacking)
         slotCount = self.getMaxSlotCount()
         self._freeSlots = set(xrange(0, slotCount))
-        memberCount, vehCount, playerCount, profilesCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._estimatedTimeInQueue, self._gameplaysMask, self._arenaType, self._isOnly10ModeEnabled = struct.unpack_from(self._HEADER, unpacking)
+        memberCount, vehCount, playerCount, profilesCount, searchFlagsCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._estimatedTimeInQueue, self._gameplaysMask, self._arenaType, self._isOnly10ModeEnabled = struct.unpack_from(self._HEADER, unpacking)
         unpacking = unpacking[self._HEADER_SIZE:]
         for i in xrange(0, vehCount):
             accountDBID, vehListCount = struct.unpack_from(self._PLAYER_VEHICLES_LIST, unpacking)
@@ -883,6 +902,11 @@ class UnitBase(OpsUnpacker):
         for i in xrange(0, profilesCount):
             profileLen = self.__unpackProfileVehicle(unpacking)
             unpacking = unpacking[profileLen:]
+
+        for i in xrange(0, searchFlagsCount):
+            accountDBID, searchFlags = struct.unpack_from(self._PLAYER_SEARCH_FLAGS_TUPLE, unpacking)
+            self.setAutoSearchFlags(accountDBID, searchFlags)
+            unpacking = unpacking[self._PLAYER_SEARCH_FLAGS_TUPLE_SIZE:]
 
         self._extras = self._extrasHandler.unpack(unpacking[:extrasLen])
         unpacking = unpacking[extrasLen:]
@@ -1056,6 +1080,54 @@ class UnitBase(OpsUnpacker):
                 self._dirty = 1
                 self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_MEMBER_READY, [isReady])
             return OK
+
+    def setAutoSearchFlags(self, accountDBID, flags):
+        if self._unitAssemblerSearchFlags.get(accountDBID, None) != flags:
+            self._unitAssemblerSearchFlags[accountDBID] = flags
+            self.storeOp(UNIT_OP.SET_SEARCH_FLAGS, accountDBID, flags)
+        return
+
+    def removeAutoSearchFlags(self, flags):
+        anyChange = False
+        for k, v in self._unitAssemblerSearchFlags.iteritems():
+            self._unitAssemblerSearchFlags[k] &= ~flags
+            anyChange = True
+
+        if anyChange:
+            self.storeOp(UNIT_OP.REMOVE_SEARCH_FLAGS, flags)
+
+    def clearAutoSearchFlags(self):
+        if self._unitAssemblerSearchFlags:
+            self._unitAssemblerSearchFlags.clear()
+            self.storeOp(UNIT_OP.CLEAR_SEARCH_FLAGS)
+
+    def getAutoSearchFlags(self):
+        numSearchFlags = len(self._unitAssemblerSearchFlags)
+        if numSearchFlags == 0:
+            return UnitAssemblerSearchFlags.NO_FILTER
+        if numSearchFlags == 1:
+            return self._unitAssemblerSearchFlags.values()[0]
+        tankFilter = 0
+        for userFilter in self._unitAssemblerSearchFlags.itervalues():
+            tankFilter |= userFilter
+
+        for userFilter in self._unitAssemblerSearchFlags.itervalues():
+            if userFilter & UnitAssemblerSearchFlags.ALL_VEH_TIERS != 0:
+                tankFilter &= userFilter
+
+        tankFilter &= UnitAssemblerSearchFlags.ALL_VEH_TIERS
+        commanderFilter = self._unitAssemblerSearchFlags.get(self.getCommanderDBID(), 0)
+        if tankFilter == 0:
+            tankFilter = commanderFilter
+        commanderOverrideMask = UnitAssemblerSearchFlags.USE_VOICE | UnitAssemblerSearchFlags.DESTROY_UNIT_ON_ABORT
+        searchFlags = tankFilter | commanderFilter & commanderOverrideMask
+        return searchFlags
+
+    def hasAutoSearchFlags(self, flags):
+        return self.getAutoSearchFlags() & flags == flags
+
+    def getAutoSearchFlagsOfAccount(self, accountDBID):
+        return self._unitAssemblerSearchFlags.get(accountDBID, 0)
 
     def _canUseVehicles(self, vehiclesList, isSet=False, isCommanderSet=False):
         return True
@@ -1421,13 +1493,12 @@ class UnitBase(OpsUnpacker):
         packed += packPascalString(profileVehicle.vehOutfitCD)
         return packed
 
-    def __unpackProfileVehicle(self, packedData, initialOffset=0):
-        offset = initialOffset
-        accountDBID, seasonType, marksOnGun = struct.unpack_from(self._VEHICLE_PROFILE_HEADER, packedData, offset)
-        offset += self._VEHICLE_PROFILE_HEADER_SIZE
+    def __unpackProfileVehicle(self, packedData):
+        accountDBID, seasonType, marksOnGun = struct.unpack_from(self._VEHICLE_PROFILE_HEADER, packedData)
+        offset = self._VEHICLE_PROFILE_HEADER_SIZE
         profileVehCD, lenString = unpackPascalString(packedData, offset)
         offset += lenString
         profileOutfitCD, lenString = unpackPascalString(packedData, offset)
         offset += lenString
         self._setProfileVehicle(accountDBID, profileVehCD, profileOutfitCD, seasonType, marksOnGun)
-        return offset - initialOffset
+        return offset

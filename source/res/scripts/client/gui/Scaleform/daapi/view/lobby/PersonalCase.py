@@ -60,7 +60,7 @@ class CrewSkinsCache(object):
     def initHistoricalSettings(self):
         self.__isHistoricallyAccurate, self.__isHistoricallyAccurateNeedToSync = AccountSettings.getSettings(CREW_SKINS_HISTORICAL_VISIBLE)
         if self.__isHistoricallyAccurateNeedToSync:
-            self.__isHistoricallyAccurate = self.settingsCore.getSetting(GAME.C11N_HISTORICALLY_ACCURATE)
+            self.__isHistoricallyAccurate = self.settingsCore.getSetting(GAME.CUSTOMIZATION_DISPLAY_TYPE) == 0
 
     def addViewedItem(self, skinID):
         self.__viewedItems.add(int(skinID))
@@ -142,7 +142,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     def equipCrewSkin(self, crewSkinID):
         unloader = CrewSkinEquip(self.tmanInvID, crewSkinID)
         result = yield unloader.request()
-        SystemMessages.pushMessages(result)
+        SystemMessages.pushMessagesFromResult(result)
 
     def takeOffNewMarkFromCrewSkin(self, crewSkinID):
         self.crewSkinsHAConfig.addViewedItem(crewSkinID)
@@ -166,7 +166,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     def unequipCrewSkin(self):
         unloader = CrewSkinUnequip(self.tmanInvID)
         result = yield unloader.request()
-        SystemMessages.pushMessages(result)
+        SystemMessages.pushMessagesFromResult(result)
 
     def openChangeRoleWindow(self):
         ctx = {'tankmanID': self.tmanInvID}
@@ -177,7 +177,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         tankman = self.__getTankmanByInvID(int(tmanInvID))
         proc = TankmanDismiss(tankman)
         result = yield proc.request()
-        SystemMessages.pushMessages(result)
+        SystemMessages.pushMessagesFromResult(result)
 
     @decorators.process('retraining')
     def retrainingTankman(self, inventoryID, tankmanCostTypeIdx):
@@ -491,6 +491,7 @@ class PersonalCaseDataProvider(object):
         criteria |= ~REQ_CRITERIA.VEHICLE.IS_CREW_LOCKED
         criteria |= ~(REQ_CRITERIA.SECRET | ~REQ_CRITERIA.INVENTORY_OR_UNLOCKED)
         criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        criteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
         if not constants.IS_IGR_ENABLED:
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         if constants.IS_DEVELOPMENT:

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_rewards_view.py
+import logging
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_STYLED_VEHICLES_POOL
@@ -17,12 +18,18 @@ from gui.ranked_battles.ranked_helpers import getDataFromFinalTokenQuestID
 from gui.ranked_battles.ranked_helpers.sound_manager import AmbientType
 from gui.shared.event_dispatcher import showStylePreview
 from gui.shared.utils.scheduled_notifications import AcyclicNotifier
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.shared.formatters import text_styles
 from helpers import dependency, time_utils
+from items import parseIntCompactDescr
 from items.vehicles import VehicleDescriptor, getVehicleType
-from shared_utils import first
+from shared_utils import first, findFirst
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.shared import IItemsCache
+_logger = logging.getLogger(__name__)
 _REWARDS_COMPONENTS = (RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI, RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI, RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI)
 
 class RankedBattlesRewardsView(RankedBattlesRewardsMeta, IResetablePage):
@@ -199,8 +206,8 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
         super(RankedBattlesRewardsLeaguesView, self).__init__()
         self.__styleDescriptions = {}
 
-    def onStyleClick(self, styleCD):
-        self.__showStylePreview(int(styleCD))
+    def onStyleClick(self, styleID):
+        self.__showStylePreview(int(styleID))
 
     def reset(self):
         pass
@@ -213,26 +220,39 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
     def _populate(self):
         super(RankedBattlesRewardsLeaguesView, self)._populate()
         data = self.__getLeaguesData()
-        descr = None
+        descr = backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues.description())
         self.as_setRewardsS({'leagues': data,
          'description': descr})
-        return
 
     def __getLeaguesData(self):
         leaguesRewardsData = self.__rankedController.getLeagueRewards()
         result = []
         formatter = getRankedAwardsFormatter()
+
+        def findAndPreformatBonus(awards, bonusName):
+            bonus = findFirst(lambda x: x.getName() == bonusName, awards)
+            if bonus is not None:
+                bonus = first(formatter.getPreformattedBonuses([bonus]))
+            return bonus
+
         for data in leaguesRewardsData:
             leagueID = data['league']
-            styleBonus = first(formatter.getPreformattedBonuses(data['awards']))
-            if leagueID and styleBonus:
+            awards = data['awards']
+            badgeBonus = findAndPreformatBonus(awards, 'dossier')
+            styleBonus = findAndPreformatBonus(awards, 'customizations')
+            if leagueID and styleBonus and badgeBonus:
                 isCurrent = self.__rankedController.getWebSeasonProvider().seasonInfo.league == leagueID
-                styleID = leagueID
-                result.append(rewards_vos.getLeagueRewardVO(leagueID, styleID, styleBonus, isCurrent))
+                styleCD = styleBonus.specialArgs[0]
+                style = self.__itemsCache.items.getItemByCD(styleCD)
+                _, _, styleID = parseIntCompactDescr(styleCD)
+                self.__styleDescriptions[styleID] = backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues.description.dyn('league%s' % leagueID)())
+                badgeID = badgeBonus.specialArgs[0]
+                result.append(rewards_vos.getLeagueRewardVO(leagueID, styleBonus, styleID, style.userName, badgeID, isCurrent))
+            _logger.error('Invalid awards or leagueID in quests')
 
         return result
 
-    def __showStylePreview(self, styleCD):
+    def __showStylePreview(self, styleID):
         styledVehicleCD = None
         minLvl, _ = self.__rankedController.getSuitableVehicleLevels()
         if g_currentVehicle.isPresent() and g_currentVehicle.item.level >= minLvl:
@@ -258,8 +278,8 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
                 styledVehicleCD = VehicleDescriptor(typeName=vehicleName).type.compactDescr
                 vehiclesPool.append(vehicleName)
                 AccountSettings.setSettings(RANKED_STYLED_VEHICLES_POOL, vehiclesPool)
-        styleDescr = self.__styleDescriptions.get(styleCD, '')
-        style = self.__itemsCache.items.getItemByCD(styleCD)
+        styleDescr = self.__styleDescriptions.get(styleID, '')
+        style = first(self.__itemsCache.items.getStyles(REQ_CRITERIA.CUSTOM(lambda item: item.id == styleID)).values())
         showStylePreview(styledVehicleCD, style, styleDescr, self._backToLeaguesCallback)
         return
 
@@ -291,43 +311,54 @@ class RankedBattlesRewardsYearView(RankedBattlesRewardsYearMeta, IResetablePage)
 
     def __update(self):
         currentPoints = self.__rankedController.getYearRewardPoints()
-        isAwarded, awardPoints = self.__getAwardingStatus(currentPoints)
-        points = awardPoints if isAwarded else currentPoints
+        rewardingComplete, awardPoints, isAwarded = self.__getAwardingStatus(currentPoints)
+        points = awardPoints if rewardingComplete else currentPoints
         awardType = self.__rankedController.getAwardTypeByPoints(points)
         exchange = self.__rankedController.getCurrentPointToCrystalRate()
         compensation = self.__rankedController.getCompensation(points)
-        awards = self.__getAwardsData(points, isAwarded)
-        self.as_setDataS(rewards_vos.getYearRewardDataVO(points, awards, isAwarded, awardType, compensation, exchange))
+        awards = self.__getAwardsData(points, rewardingComplete, isAwarded)
+        self.as_setDataS(rewards_vos.getYearRewardDataVO(points, awards, rewardingComplete, awardType, compensation, exchange))
 
     def __getAwardingStatus(self, currentPoints):
-        awardPoints = 0
         if currentPoints > 0:
-            return (False, awardPoints)
+            return (False, 0, False)
         else:
             maxPoints, _ = self.__rankedController.getYearAwardsPointsMap().get(YEAR_AWARDS_ORDER[-1], (0, 0))
             for points in range(STANDARD_POINTS_COUNT, maxPoints + 1):
                 finalQuest = self.__eventsCache.getHiddenQuests().get(FINAL_QUEST_PATTERN.format(points))
                 if finalQuest is None:
-                    return (False, awardPoints)
+                    return (False, 0, False)
                 if finalQuest.isCompleted():
-                    return (True, getDataFromFinalTokenQuestID(finalQuest.getID()))
+                    return (True, getDataFromFinalTokenQuestID(finalQuest.getID()), True)
 
             standardQuest = self.__getStandardFinalQuest()
-            return (standardQuest is not None and standardQuest.getStartTimeLeft() == 0, awardPoints)
+            return (standardQuest is not None and standardQuest.getStartTimeLeft() == 0, 0, False)
 
-    def __getAwardsData(self, points, isRewarded):
+    def __getAwardsData(self, points, rewardingComplete, isAwarded):
         data = []
         awardsMap = self.__rankedController.getYearAwardsPointsMap()
         for awardName in YEAR_AWARDS_ORDER:
             minPoints, maxPoints = awardsMap[awardName]
+            statusText = None
             if points > maxPoints:
-                status = _RBC.YEAR_REWARD_STATUS_PASSED_FINAL if isRewarded else _RBC.YEAR_REWARD_STATUS_PASSED
+                status = _RBC.YEAR_REWARD_STATUS_PASSED_FINAL if rewardingComplete else _RBC.YEAR_REWARD_STATUS_PASSED
             elif maxPoints >= points >= minPoints:
-                status = _RBC.YEAR_REWARD_STATUS_CURRENT_FINAL if isRewarded else _RBC.YEAR_REWARD_STATUS_CURRENT
+                if rewardingComplete:
+                    status = _RBC.YEAR_REWARD_STATUS_CURRENT_FINAL
+                    statusText = text_styles.statInfo(backport.text(R.strings.ranked_battles.rewardsView.tabs.year.currentFinal()))
+                else:
+                    status = _RBC.YEAR_REWARD_STATUS_CURRENT
+                    statusText = text_styles.statusAlert(backport.text(R.strings.ranked_battles.rewardsView.tabs.year.current()))
             else:
-                status = _RBC.YEAR_REWARD_STATUS_LOCKED_FINAL if isRewarded else _RBC.YEAR_REWARD_STATUS_LOCKED
+                status = _RBC.YEAR_REWARD_STATUS_LOCKED_FINAL if rewardingComplete else _RBC.YEAR_REWARD_STATUS_LOCKED
+            pointsVO = {}
+            if not isAwarded:
+                pointsVO = {'text': text_styles.promoTitle(minPoints),
+                 'image': backport.image(R.images.gui.maps.icons.rankedBattles.ranked_point_28x28())}
             data.append({'id': awardName,
-             'status': status})
+             'status': status,
+             'statusText': statusText,
+             'points': pointsVO})
 
         return data
 

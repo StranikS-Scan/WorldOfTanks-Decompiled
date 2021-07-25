@@ -25,6 +25,9 @@ class BattleBoosterItemContextMenu(BaseItemContextMenu):
     def _isVisible(self, label):
         return not self._itemsCache.items.getItemByCD(self._intCD).isHidden if label == CMLabel.BUY_MORE else super(BattleBoosterItemContextMenu, self)._isVisible(label)
 
+    def _getVehicleItems(self):
+        return self._getVehicle().battleBoosters
+
 
 class BattleBoosterSlotContextMenu(BaseSlotContextMenu):
     __sqGen = SequenceIDGenerator()
@@ -45,6 +48,9 @@ class BattleBoosterSlotContextMenu(BaseSlotContextMenu):
     def _isVisible(self, label):
         return not self._itemsCache.items.getItemByCD(self._intCD).isHidden if label == CMLabel.BUY_MORE else super(BattleBoosterSlotContextMenu, self)._isVisible(label)
 
+    def _getVehicleItems(self):
+        return self._getVehicle().battleBoosters
+
 
 class HangarBattleBoosterSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
     _sqGen = SequenceIDGenerator(BaseHangarEquipmentSlotContextMenu._sqGen.currSequenceID)
@@ -54,14 +60,12 @@ class HangarBattleBoosterSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
         shop.showBattleBoosterOverlay(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.BATTLE_BOOSTERS, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
 
     @option(_sqGen.next(), TankSetupCMLabel.UNLOAD)
-    @process
     def unload(self):
-        copyVehicle = self._getCopyVehicle()
-        copyVehicle.battleBoosters.layout[self._installedSlotId] = None
-        result = yield self._doPutOnAction(copyVehicle)
-        if result:
-            self._sendLastSlotAction(TankSetupConstants.BATTLE_BOOSTERS, BaseSetupModel.REVERT_SLOT_ACTION, {'slotID': self._installedSlotId})
-        return
+        self.__unloadAction()
+
+    @option(_sqGen.next(), TankSetupCMLabel.TAKE_OFF)
+    def takeOffFromSlot(self):
+        self.__unloadAction()
 
     def _isVisible(self, label):
         if label == CMLabel.INFORMATION:
@@ -74,3 +78,15 @@ class HangarBattleBoosterSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
         action = ActionsFactory.getAction(ActionsFactory.BUY_AND_INSTALL_BATTLE_BOOSTERS, vehicle, confirmOnlyExchange=True)
         result = yield ActionsFactory.asyncDoAction(action)
         callback(result)
+
+    def _getVehicleItems(self):
+        return self._getVehicle().battleBoosters
+
+    @process
+    def __unloadAction(self):
+        copyVehicle = self._getCopyVehicle()
+        copyVehicle.battleBoosters.layout[self._installedSlotId] = None
+        result = yield self._doPutOnAction(copyVehicle)
+        if result:
+            self._sendLastSlotAction(TankSetupConstants.BATTLE_BOOSTERS, BaseSetupModel.REVERT_SLOT_ACTION, {'slotID': self._installedSlotId})
+        return

@@ -45,9 +45,11 @@ _CTRL_MODE = aih_constants.CTRL_MODE_NAME
 _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME = {LocationMarkerSubType.SPG_AIM_AREA_SUBTYPE: settings.ENTRY_SYMBOL_NAME.ARTY_MARKER,
  LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE: settings.ENTRY_SYMBOL_NAME.LOCATION_MARKER,
  LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE: settings.ENTRY_SYMBOL_NAME.LOCATION_MARKER,
- LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE: settings.ENTRY_SYMBOL_NAME.ATTENTION_MARKER}
+ LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE: settings.ENTRY_SYMBOL_NAME.ATTENTION_MARKER,
+ LocationMarkerSubType.SHOOTING_POINT_SUBTYPE: settings.ENTRY_SYMBOL_NAME.SHOOTING_POINT_MARKER,
+ LocationMarkerSubType.NAVIGATION_POINT_SUBTYPE: settings.ENTRY_SYMBOL_NAME.NAVIGATION_POINT_MARKER}
 _PING_FLASH_MINIMAP_SUBTYPES = {LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE, LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE, LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE}
-_BASE_PING_RANGE = 50
+_BASE_PING_RANGE = 63
 _LOCATION_PING_RANGE = 30
 _MINIMAP_MIN_SCALE_INDEX = 0
 _MINIMAP_MAX_SCALE_INDEX = 5
@@ -552,7 +554,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
 
 
 class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController):
-    __slots__ = ('__playerVehicleID', '__isObserver', '__aoiToFarCallbacksIDs', '__destroyCallbacksIDs', '__flags', '__flagHpMinimap', '__showDestroyEntries', '__isDestroyImmediately', '__destroyDuration', '__isSPG', '__replayRegistrator', '__canShowVehicleHp')
+    __slots__ = ('__playerVehicleID', '__isObserver', '__aoiToFarCallbacksIDs', '__destroyCallbacksIDs', '__flags', '__flagHpMinimap', '__showDestroyEntries', '__isDestroyImmediately', '__destroyDuration', '__isSPG', '__replayRegistrator', '__canShowVehicleHp', '__tempHealthStorage')
 
     def __init__(self, parent):
         super(ArenaVehiclesPlugin, self).__init__(parent, clazz=entries.VehicleEntry)
@@ -571,6 +573,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         if self.__showDestroyEntries and not self.__isDestroyImmediately and not self.__destroyDuration:
             self.__isDestroyImmediately = False
             LOG_WARNING('Gui setting permanentMinimapDeath is ignored because setting minimapDeathDuration is incorrect', self.__destroyDuration)
+        self.__tempHealthStorage = {}
 
     def start(self):
         super(ArenaVehiclesPlugin, self).start()
@@ -696,6 +699,12 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                         self.__setAlive(vehicleID, entry)
                     else:
                         self.__setDestroyed(vehicleID, entry)
+                if vehicleID in self.__tempHealthStorage:
+                    currHealth = self.__tempHealthStorage[vehicleID]
+                    maxHealth = vInfo.vehicleType.maxHealth
+                    if maxHealth >= currHealth:
+                        del self.__tempHealthStorage[vehicleID]
+                        self._onVehicleHealthChanged(vehicleID, currHealth, maxHealth)
                 self._setVehicleInfo(vehicleID, entry, vInfo, arenaDP.getPlayerGuiProps(vehicleID, vInfo.team))
 
     def invalidateVehicleStatus(self, flags, vInfo, arenaDP):
@@ -771,6 +780,10 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
 
     def _onVehicleHealthChanged(self, vehicleID, currH, maxH):
         if vehicleID not in self._entries:
+            return
+        if currH > maxH:
+            self.__tempHealthStorage[vehicleID] = currH
+            _logger.warning('Max Vehicle Health is less then current. Health will be updated after max health update')
             return
         self._invoke(self._entries[vehicleID].getID(), 'setVehicleHealth', normalizeHealthPercent(currH, maxH))
 
@@ -1065,7 +1078,7 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
         if ctrl is not None:
             ctrl.onStaticMarkerAdded += self.__addStaticMarker
             ctrl.onStaticMarkerRemoved += self.__delStaticMarker
-            ctrl.onReplyFeedbackReceived += self.__onReplyFeedbackReceived
+            ctrl.onReplyFeedbackReceived += self._onReplyFeedbackReceived
         minimapSize = settings.clampMinimapSizeIndex(AccountSettings.getSettings('minimapSize'))
         self._curScale = self.__calculateMarkerScale(minimapSize)
         self.__checkMarkers()
@@ -1076,7 +1089,7 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
         if ctrl is not None:
             ctrl.onStaticMarkerAdded -= self.__addStaticMarker
             ctrl.onStaticMarkerRemoved -= self.__delStaticMarker
-            ctrl.onReplyFeedbackReceived -= self.__onReplyFeedbackReceived
+            ctrl.onReplyFeedbackReceived -= self._onReplyFeedbackReceived
         super(AreaStaticMarkerPlugin, self).stop()
         return
 
@@ -1096,9 +1109,11 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
         for key in g_locationPointManager.markedAreas:
             _logger.debug('minimap marker created')
             locationPoint = g_locationPointManager.markedAreas[key]
-            self.__addStaticMarker(locationPoint.targetID, locationPoint.creatorID, locationPoint.position, locationPoint.markerSubType, True, locationPoint.markerText, locationPoint.replyCount, False)
+            self.__addStaticMarker(locationPoint.targetID, locationPoint.creatorID, locationPoint.position, locationPoint.markerSubType, locationPoint.markerText, locationPoint.replyCount, False)
 
-    def __addStaticMarker(self, areaID, creatorID, position, locationMarkerSubtype, show3DMarker=False, markerText='', numberOfReplies=0, isTargetForPlayer=False):
+    def __addStaticMarker(self, areaID, creatorID, position, locationMarkerSubtype, markerText='', numberOfReplies=0, isTargetForPlayer=False):
+        if locationMarkerSubtype not in _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME:
+            return
         matrix = minimap_utils.makePositionAndScaleMatrix(position, (self._curScale, 1.0, self._curScale))
         self._addEntryEx(areaID, _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME[locationMarkerSubtype], _C_NAME.EQUIPMENTS, matrix=matrix, active=True, transformProps=settings.TRANSFORM_FLAG.FULL)
         if locationMarkerSubtype in _PING_FLASH_MINIMAP_SUBTYPES and numberOfReplies > 0 and isTargetForPlayer:
@@ -1111,7 +1126,7 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
     def __delStaticMarker(self, objectID):
         self._delEntryEx(objectID)
 
-    def __onReplyFeedbackReceived(self, ucmdID, replierID, markerType, oldReplyCount, newReplyCount):
+    def _onReplyFeedbackReceived(self, ucmdID, replierID, markerType, oldReplyCount, newReplyCount):
         newReply = newReplyCount > oldReplyCount and replierID == avatar_getter.getPlayerVehicleID()
         if ucmdID in self._entries and newReply:
             self._invoke(self._entries[ucmdID].getID(), 'setState', 'reply')

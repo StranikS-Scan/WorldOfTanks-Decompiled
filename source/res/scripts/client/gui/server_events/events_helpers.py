@@ -10,6 +10,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.server_events import formatters
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
 from helpers import time_utils, i18n, dependency, isPlayerAccount
@@ -18,7 +19,7 @@ from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, EVENT_PROGRESSION_GROUPS_ID, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID, EPIC_BATTLE_GROUPS_ID
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
@@ -163,7 +164,7 @@ class QuestInfoModel(EventInfoModel):
                 return labeFormatter(resetLabelKey) % {'time': dayStr + time.strftime(i18n.makeString('#quests:details/conditions/postBattle/weeklyReset/timeFmt'), resetTime)}
 
     def _getCompleteDailyStatus(self, completeKey):
-        return i18n.makeString(completeKey, time=self._getTillTimeString(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()))
+        return backport.text(completeKey, time=self._getTillTimeString(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()))
 
     def _getCompleteWeeklyStatus(self, completeKey):
         curTime = time_utils.getTimeStructInUTC(time_utils.getCurrentTimestamp())
@@ -174,7 +175,13 @@ class QuestInfoModel(EventInfoModel):
         timeDelta = dayDelta * time_utils.ONE_DAY + resetSeconds - (curTime.tm_hour * time_utils.ONE_HOUR + curTime.tm_min * time_utils.ONE_MINUTE + curTime.tm_sec)
         if timeDelta > time_utils.ONE_WEEK:
             timeDelta -= time_utils.ONE_WEEK
-        return i18n.makeString(completeKey, time=self._getTillTimeString(timeDelta))
+        return backport.text(completeKey, time=self._getTillTimeString(timeDelta))
+
+    def _getCompleteKey(self):
+        return R.strings.quests.missionDetails.status.completed.daily()
+
+    def _getCompleteWeeklyKey(self):
+        return R.strings.quests.missionDetails.status.completed.weekly()
 
 
 class EVENT_STATUS(CONST_CONTAINER):
@@ -259,6 +266,10 @@ def isMarathon(eventID):
     return eventID.startswith(MARATHON_GROUP_PREFIX)
 
 
+def isMapsTraining(groupID):
+    return groupID == MAPS_TRAINING_GROUPS_ID
+
+
 def isLinkedSet(eventID):
     return eventID.startswith(LINKEDSET_GROUP_PREFIX) if eventID else False
 
@@ -268,7 +279,7 @@ def isPremium(eventID):
 
 
 def isDailyEpic(eventID):
-    return eventID in EVENT_PROGRESSION_GROUPS_ID if eventID else False
+    return eventID.startswith(EPIC_BATTLE_GROUPS_ID) if eventID else False
 
 
 def isBattleRoyale(eventID):

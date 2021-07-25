@@ -84,6 +84,9 @@ _MARKERS_TYPE_TO_SUBTYPE_MAP = {MarkerType.VEHICLE_MARKER_TYPE: {DefaultMarkerSu
                                    LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT,
                                    LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT,
                                    LocationMarkerSubType.SPG_AIM_AREA_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT,
+                                   LocationMarkerSubType.SHOOTING_POINT_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT,
+                                   LocationMarkerSubType.VEHICLE_SPOTPOINT_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT,
+                                   LocationMarkerSubType.NAVIGATION_POINT_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT,
                                    INVALID_MARKER_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_DEFAULT},
  MarkerType.INVALID_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: RADIAL_MENU_CONSTS.TARGET_STATE_EMPTY}}
 _CAN_CANCEL_REPLY_SHORTCUT = Shortcut(title=INGAME_HELP.RADIALMENU_CANCEL_REPLY, action=BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY, icon=RADIAL_MENU_CONSTS.NO, groups=RADIAL_MENU_CONSTS.ALL_TARGET_STATES, bState=RADIAL_MENU_CONSTS.NORMAL_BUTTON_STATE, indexInGroup=RADIAL_MENU_CONSTS.ELEMENT_INDEX_FIRST)
@@ -182,6 +185,10 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
     def onHideCompleted(self):
         self.__setVisibility(False)
 
+    def onRefresh(self):
+        if self.__isVisible:
+            self.show()
+
     @loggerEntry
     def show(self, reshowPreviousState=False):
         chatCommands = self.sessionProvider.shared.chatCommands
@@ -207,6 +214,8 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             self._showInternal(menuState, replyStateDiff, position)
             if RadialMenu.__isMarkerEmptyLocationOrOutOfBorder(self.__crosshairData.targetMarkerType, self.__crosshairData.targetMarkerSubtype):
                 self.delayCallback(self._REFRESH_TIME_IN_SECONDS, self.__checkForValidLocationMarkerLoop)
+            if RadialMenu.__isCanRespondToAlly(self.__crosshairData.targetMarkerType, self.__crosshairData.targetMarkerSubtype, self.__crosshairData.replyState):
+                self.delayCallback(self._REFRESH_TIME_IN_SECONDS, self.__checkForTemporaryRespondUpdateLoop)
             return
 
     @simpleLog(action='radial_menu_open')
@@ -435,9 +444,24 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             if RadialMenu.__isMarkerEmptyLocationOrOutOfBorder(targetMarkerType, targetMarkerSubtype) and targetMarkerType != self.__crosshairData.targetMarkerType:
                 self.hide(allowAction=False)
                 self.show(reshowPreviousState=False)
-            self.delayCallback(self._REFRESH_TIME_IN_SECONDS, self.__checkForValidLocationMarkerLoop)
+            return self._REFRESH_TIME_IN_SECONDS
+
+    def __checkForTemporaryRespondUpdateLoop(self):
+        if self.__crosshairData is None or self.__isVisible is False:
             return
+        else:
+            chatCommands = self.sessionProvider.shared.chatCommands
+            _, targetMarkerType, targetMarkerSubtype, replyState, _ = chatCommands.getAimedAtTargetData()
+            if RadialMenu.__isCanRespondToAlly(targetMarkerType, targetMarkerSubtype, replyState):
+                return self._REFRESH_TIME_IN_SECONDS
+            self.hide(allowAction=False)
+            self.show(reshowPreviousState=False)
+            return -1
 
     @staticmethod
     def __isMarkerEmptyLocationOrOutOfBorder(markerType, markerSubType):
         return markerType in (MarkerType.INVALID_MARKER_TYPE, MarkerType.LOCATION_MARKER_TYPE) and markerSubType == INVALID_MARKER_SUBTYPE
+
+    @staticmethod
+    def __isCanRespondToAlly(markerType, markerSubType, replyState):
+        return replyState == ReplyState.CAN_RESPOND and markerType == MarkerType.VEHICLE_MARKER_TYPE and markerSubType == DefaultMarkerSubType.ALLY_MARKER_SUBTYPE

@@ -3,9 +3,12 @@
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.tank_carousel import TankCarousel
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.epicBattle.carousel_data_provider import EpicBattleCarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.epicBattle.carousel_filter import EpicBattleCarouselFilter
+from helpers import dependency
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 _DISABLED_FILTERS = ['bonus']
 
 class EpicBattleTankCarousel(TankCarousel):
+    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self):
         super(EpicBattleTankCarousel, self).__init__()
@@ -22,12 +25,17 @@ class EpicBattleTankCarousel(TankCarousel):
 
         self.as_setCarouselFilterS({'hotFilters': hotFilters})
 
+    def _populate(self):
+        super(EpicBattleTankCarousel, self)._populate()
+        self.as_useExtendedCarouselS(self.__epicController.isUnlockVehiclesInBattleEnabled())
+        indexToScroll = self._carouselDP.getIndexToScroll()
+        if indexToScroll >= 0:
+            self.as_scrollToSlotS(indexToScroll)
+
     def _getInitialFilterVO(self, contexts):
         filtersVO = super(EpicBattleTankCarousel, self)._getInitialFilterVO(contexts)
         filtersVO['isFrontline'] = True
-        length = len(filtersVO['hotFilters'])
-        for id_ in range(0, length):
-            entry = filtersVO['hotFilters'][id_]
+        for entry in filtersVO.get('hotFilters', []):
             if entry['id'] in _DISABLED_FILTERS:
                 entry['enabled'] = False
                 entry['selected'] = False

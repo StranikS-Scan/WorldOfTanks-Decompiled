@@ -1,14 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/vehicle_compare/ammunition_panel.py
+import async as future_async
 from frameworks.wulf import ViewSettings, ViewFlags
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.Waiting import Waiting
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.gen.view_models.views.lobby.tank_setup.vehicle_compare_ammunition_panel_model import VehicleCompareAmmunitionPanelModel
+from gui.impl.lobby.tank_setup.backports.tooltips import getSlotSpecTooltipData
 from gui.impl.lobby.tank_setup.tank_setup_helper import setLastSlotAction, NONE_ID
 from gui.impl.lobby.vehicle_compare.panel import CompareAmmunitionPanel
+from gui.impl.lobby.vehicle_compare.select_slot_spec_compare_dialog import showDialog
 from gui.impl.lobby.vehicle_compare.tooltips import getCmpSlotTooltipData
 from gui.impl.pub import ViewImpl
 from gui.shared.event_dispatcher import showCompareAmmunitionSelectorView
@@ -28,7 +33,11 @@ class CompareAmmunitionPanelView(ViewImpl):
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
-            tooltipData = getCmpSlotTooltipData(event, self.__vehItem.getItem())
+            tooltipId = event.getArgument('tooltip')
+            if tooltipId == TOOLTIPS_CONSTANTS.HANGAR_SLOT_SPEC:
+                tooltipData = getSlotSpecTooltipData(event, tooltipId)
+            else:
+                tooltipData = getCmpSlotTooltipData(event, self.__vehItem.getItem())
             if tooltipData is not None:
                 window = BackportTooltipWindow(tooltipData, self.getParentWindow())
                 window.load()
@@ -44,7 +53,8 @@ class CompareAmmunitionPanelView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(CompareAmmunitionPanelView, self)._onLoading(*args, **kwargs)
         self.__vehItem = cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicleItem()
-        self.__ammunitionPanel = CompareAmmunitionPanel(self.viewModel.ammunitionPanel, self.__vehItem.getItem())
+        ctx = {'specializationClickable': True}
+        self.__ammunitionPanel = CompareAmmunitionPanel(self.viewModel.ammunitionPanel, self.__vehItem.getItem(), ctx=ctx)
         self.__ammunitionPanel.onLoading()
 
     def _initialize(self, *args, **kwargs):
@@ -63,15 +73,17 @@ class CompareAmmunitionPanelView(ViewImpl):
     def __addListeners(self):
         self.viewModel.ammunitionPanel.onSlotClear += self.__onPanelSlotClear
         self.viewModel.ammunitionPanel.onSectionSelect += self.__onPanelSectionSelected
-        self.viewModel.onClose += self.__onClose
+        self.viewModel.ammunitionPanel.onSpecializationSelect += self.__onSpecializationSelect
         self.viewModel.ammunitionPanel.onDragDropSwap += self.__onDragDropSwap
+        self.viewModel.onClose += self.__onClose
         self.__vehItem.onSlotAction += self.__onSlotAction
 
     def __removeListeners(self):
         self.viewModel.ammunitionPanel.onSlotClear -= self.__onPanelSlotClear
         self.viewModel.ammunitionPanel.onSectionSelect -= self.__onPanelSectionSelected
-        self.viewModel.onClose -= self.__onClose
+        self.viewModel.ammunitionPanel.onSpecializationSelect -= self.__onSpecializationSelect
         self.viewModel.ammunitionPanel.onDragDropSwap -= self.__onDragDropSwap
+        self.viewModel.onClose -= self.__onClose
         self.__vehItem.onSlotAction -= self.__onSlotAction
 
     def __onPanelSlotClear(self, args):
@@ -113,6 +125,14 @@ class CompareAmmunitionPanelView(ViewImpl):
         elif sectionName == TankSetupConstants.CONSUMABLES:
             cmp_helpers.getCmpConfiguratorMainView().swapEquipment(leftID, rightID)
             self.__sendDragAndDropSlotAction(sectionName, self.__vehItem.getItem().consumables.layout, leftID, rightID)
+
+    @future_async.async
+    def __onSpecializationSelect(self, *_):
+        Waiting.show('loadModalWindow', softStart=True)
+        cmpConfiguratorView = cmp_helpers.getCmpConfiguratorMainView()
+        result = yield future_async.await(showDialog(cmpConfiguratorView.getCurrentVehicle()))
+        if result.result[0]:
+            cmpConfiguratorView.changeDynRoleSlot(result.result[1])
 
     def __sendDragAndDropSlotAction(self, sectionName, currentLayout, leftID, rightID):
         leftItem, rightItem = currentLayout[leftID], currentLayout[rightID]

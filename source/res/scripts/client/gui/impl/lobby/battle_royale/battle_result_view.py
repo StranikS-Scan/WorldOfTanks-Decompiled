@@ -18,13 +18,13 @@ from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.place
 from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.row_model import RowModel
 from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.battle_pass_progress import BattlePassProgress
 from gui.impl.pub import ViewImpl
+from gui.server_events.bonuses import mergeBonuses, splitBonuses
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE, event_dispatcher
 from gui.shared.events import LobbyHeaderMenuEvent
 from gui.server_events.battle_royale_formatters import BRSections
 from gui.Scaleform.genConsts.HANGAR_HEADER_QUESTS import HANGAR_HEADER_QUESTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
-from gui.Scaleform.daapi.view.lobby.event_progression.after_battle_reward_view_helpers import formatBonuses
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IBattleRoyaleController, IBattlePassController
@@ -32,7 +32,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from shared_utils import first
 from soft_exception import SoftException
 from gui.sounds.ambients import BattleResultsEnv
-from gui.game_control.br_battle_sounds import BREvents
+from gui.battle_control.controllers.sound_ctrls.br_battle_sounds import BREvents
 from constants import ATTACK_REASON_INDICES, ATTACK_REASON, DEATH_REASON_ALIVE
 from gui.server_events import events_dispatcher
 from gui.impl.lobby.battle_royale.tooltips.battle_pass_points_sources_tooltip_view import BattlePassPointsSourcesTooltipView
@@ -263,7 +263,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
 
     def __getBattlePassPointsTotal(self):
         questsBonuses = self.__data[BRSections.PERSONAL][BRSections.REWARDS].get(BRSections.BONUSES)
-        questPoints = sum([ bonus.getValue() for bonuses in questsBonuses for bonus in bonuses if bonus.getName() == 'battlePassPoints' ]) if questsBonuses else 0
+        questPoints = sum([ bonus.getCount() for bonuses in questsBonuses for bonus in bonuses if bonus.getName() == 'battlePassPoints' ]) if questsBonuses else 0
         return self.__data[BRSections.PERSONAL][BRSections.BATTLE_PASS]['earnedPoints'] + questPoints
 
     def __setFinishResult(self, personalResultsModel):
@@ -329,12 +329,14 @@ class BrBattleResultsViewInLobby(ViewImpl):
         personalModel.setQuestCompleted(questsCount)
 
     def __setBonuses(self, model):
-        bonuses = self.__data[BRSections.PERSONAL][BRSections.REWARDS].get(BRSections.BONUSES, {})
-        if not bonuses:
+        questsBonuses = self.__data[BRSections.PERSONAL][BRSections.REWARDS].get(BRSections.BONUSES, [])
+        if not questsBonuses:
             return
         bonusesModel = model.getBonuses()
         bonusesModel.clear()
-        bonuses = [ bonus for bonus in formatBonuses(bonuses) if bonus.getName() not in _CURRENCIES ]
+        bonuses = [ bonus for questBonuses in questsBonuses for bonus in questBonuses ]
+        bonuses = [ bonus for bonus in mergeBonuses(bonuses) if bonus.getName() not in _CURRENCIES ]
+        bonuses = splitBonuses(bonuses)
         packBonusModelAndTooltipData(bonuses, bonusesModel, tooltipData=self.__tooltipsData)
         bonusesModel.invalidate()
 

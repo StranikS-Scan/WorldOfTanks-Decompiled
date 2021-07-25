@@ -1,30 +1,36 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/plugins.py
-from functools import partial
 import logging
+import typing
 from collections import namedtuple
-import async as future_async
-from adisp import process, async
-from account_helpers import isLongDisconnectedFromCenter
+from functools import partial
 from account_helpers.AccountSettings import AccountSettings
-from gui.Scaleform.daapi.view import dialogs
-from gui.goodies.demount_kit import getDemountKitForOptDevice
-from gui.shared.gui_items.artefacts import OptionalDevice
-from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
-from items import tankmen
-from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.daapi.view.dialogs.missions_dialogs_meta import UseAwardSheetDialogMeta
+import async as future_async
+from account_helpers import isLongDisconnectedFromCenter
+from adisp import process, async
 from gui import DialogsInterface
+from gui import makeHtmlString
+from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.view import dialogs
+from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta
+from gui.Scaleform.daapi.view.dialogs.missions_dialogs_meta import UseAwardSheetDialogMeta
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.game_control import restore_contoller
+from gui.goodies.demount_kit import getDemountKitForOptDevice
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
-from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared.utils.vehicle_collector_helper import isAvailableForPurchase
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
+from gui.shared.gui_items.artefacts import OptionalDevice
+from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
 from gui.shared.money import Currency
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.utils.vehicle_collector_helper import isAvailableForPurchase
+from gui.veh_post_progression.models.ext_money import EXT_MONEY_UNDEFINED, ExtendedGuiItemEconomyCode
+from gui.veh_post_progression.models.purchase import PurchaseProvider
 from helpers import dependency
+from items import tankmen
 from items.components import skills_constants
 from items.components.c11n_constants import SeasonType
 from skeletons.gui.game_control import IEpicBattleMetaGameController
@@ -32,10 +38,10 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui import makeHtmlString
-from gui.impl import backport
-from gui.impl.gen import R
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
+    from post_progression_common import ACTION_TYPES
 _logger = logging.getLogger(__name__)
 PluginResult = namedtuple('PluginResult', 'success errorMsg ctx')
 
@@ -477,8 +483,10 @@ class BuyAndInstallConfirmator(ModuleBuyerConfirmator):
         self.item = item
 
     def _gfMakeMeta(self):
-        from gui.shared.event_dispatcher import showOptionalDeviceBuyAndInstall
-        return partial(showOptionalDeviceBuyAndInstall, self.item.intCD) if self.item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else None
+        from gui.shared.event_dispatcher import showBuyModuleDialog
+        itemTypeIdx = self.item.itemTypeID
+        installedModule = self.itemsCache.items.getItemByCD(self.ctx['installedModuleCD'])
+        return partial(showBuyModuleDialog, self.item, installedModule, self.ctx['currency'], self.ctx['installReason']) if itemTypeIdx in GUI_ITEM_TYPE.VEHICLE_MODULES else None
 
 
 class BCBuyAndInstallConfirmator(BuyAndInstallConfirmator):
@@ -490,6 +498,9 @@ class BCBuyAndInstallConfirmator(BuyAndInstallConfirmator):
      'vehicleRadio': 'bcRadio.png',
      'vehicleWheels': 'bcWheels.png',
      'vehicleEngine': 'bcEngine.png'}
+
+    def _gfMakeMeta(self):
+        return None
 
     @staticmethod
     def getPath(itemTypeName):
@@ -505,17 +516,6 @@ class BCBuyAndInstallConfirmator(BuyAndInstallConfirmator):
          'costValue': self.ctx['price'],
          'isBuy': True}
         return dialogs.BCConfirmDialogMeta(dialogData)
-
-
-class BuyAndStorageConfirmator(ModuleBuyerConfirmator):
-
-    def __init__(self, localeKey, ctx=None, activeHandler=None, isEnabled=True, item=None):
-        super(BuyAndStorageConfirmator, self).__init__(localeKey, ctx, activeHandler, isEnabled)
-        self.item = item
-
-    def _gfMakeMeta(self):
-        from gui.shared.event_dispatcher import showOptionalDeviceBuyAndStorage
-        return partial(showOptionalDeviceBuyAndStorage, self.item.intCD) if self.item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else None
 
 
 class HtmlMessageConfirmator(I18nMessageAbstractConfirmator):
@@ -621,18 +621,6 @@ class IconMessageConfirmator(I18nMessageAbstractConfirmator):
 
     def _makeMeta(self):
         return IconDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
-
-
-class InstallDeviceConfirmator(MessageConfirmator):
-
-    def __init__(self, isEnabled=True, item=None):
-        super(InstallDeviceConfirmator, self).__init__(None, isEnabled=isEnabled)
-        self.item = item
-        return
-
-    def _gfMakeMeta(self):
-        from gui.shared import event_dispatcher
-        return partial(event_dispatcher.showOptionalDeviceInstall, self.item.intCD)
 
 
 class DestroyDeviceConfirmator(IconMessageConfirmator):
@@ -1108,3 +1096,123 @@ class CustomizationPurchaseValidator(SyncValidator):
                     return makeError('outfits_must_have_same_style')
 
             return makeSuccess()
+
+
+class PostProgressionStateValidator(SyncValidator):
+    __slots__ = ('__vehicle',)
+
+    def __init__(self, vehicle, isEnabled=True):
+        super(PostProgressionStateValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+
+    def _validate(self):
+        progressionAvailability = self.__vehicle.postProgressionAvailability()
+        return makeError(progressionAvailability.reason.value) if not progressionAvailability else makeSuccess()
+
+
+class PostProgressionStepsValidator(SyncValidator):
+    __slots__ = ('__vehicle', '__stepIDs', '__actionTypes')
+
+    def __init__(self, vehicle, stepIDs, actionTypes, isEnabled=True):
+        super(PostProgressionStepsValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+        self.__stepIDs = stepIDs
+        self.__actionTypes = actionTypes
+
+    def _validate(self):
+        progression = self.__vehicle.postProgression
+        for stepID in self.__stepIDs:
+            if stepID not in progression.getRawTree().steps:
+                return makeError('step_tree_mismatch')
+            if progression.getStep(stepID).action.actionType not in self.__actionTypes:
+                return makeError('step_action_type_mismatch')
+
+        return makeSuccess()
+
+
+class PostProgressionChangeSetupValidator(SyncValidator):
+    __slots__ = ('__vehicle', '__groupID')
+
+    def __init__(self, vehicle, groupID, isEnabled=True):
+        super(PostProgressionChangeSetupValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+        self.__groupID = groupID
+
+    def _validate(self):
+        return makeError('setup_switch_unavailable') if not self.__vehicle.isSetupSwitchActive(self.__groupID) else makeSuccess()
+
+
+class PostProgressionDiscardPairsValidator(SyncValidator):
+    __slots__ = ('__vehicle', '__stepIDs')
+
+    def __init__(self, vehicle, stepIDs, isEnabled=True):
+        super(PostProgressionDiscardPairsValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+        self.__stepIDs = stepIDs
+
+    def _validate(self):
+        progression = self.__vehicle.postProgression
+        for stepID in self.__stepIDs:
+            checkResult = progression.getStep(stepID).action.mayDiscardInner()
+            if not checkResult:
+                return makeError(checkResult.reason)
+
+        return makeSuccess()
+
+
+class PostProgressionPurchasePairValidator(SyncValidator):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __slots__ = ('__vehicle', '__stepID', '__modificationID')
+
+    def __init__(self, vehicle, stepID, modificationID, isEnabled=True):
+        super(PostProgressionPurchasePairValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+        self.__stepID = stepID
+        self.__modificationID = modificationID
+
+    def _validate(self):
+        multiStep = self.__vehicle.postProgression.getStep(self.__stepID)
+        balance = self.__itemsCache.items.stats.getMoneyExt(self.__vehicle.intCD)
+        checkResult = multiStep.action.mayPurchaseInner(balance, self.__modificationID)
+        return makeError(checkResult.reason) if not checkResult else makeSuccess()
+
+
+class PostProgressionPurchaseStepsValidator(SyncValidator):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __slots__ = ('__vehicle', '__stepIDs')
+
+    def __init__(self, vehicle, stepIDs, isEnabled=True):
+        super(PostProgressionPurchaseStepsValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+        self.__stepIDs = stepIDs
+
+    def _validate(self):
+        totalPrice = EXT_MONEY_UNDEFINED
+        progression = self.__vehicle.postProgression
+        stepIDs = self.__stepIDs
+        for stepID in stepIDs:
+            step = progression.getStep(stepID)
+            if step.isRestricted():
+                return makeError(ExtendedGuiItemEconomyCode.STEP_RESTRICTED)
+            parentStep = progression.getStep(step.getParentStepID() or stepID)
+            if parentStep.isLocked() and parentStep.stepID not in stepIDs:
+                return makeError(ExtendedGuiItemEconomyCode.STEP_LOCKED)
+            totalPrice += step.getPrice()
+
+        balance = self.__itemsCache.items.stats.getMoneyExt(self.__vehicle.intCD)
+        checkResult = PurchaseProvider.mayConsume(balance, totalPrice)
+        return makeError(checkResult.reason) if not checkResult else makeSuccess()
+
+
+class PostProgressionSetSlotTypeValidator(SyncValidator):
+    __slots__ = ('__vehicle', '__slotID')
+
+    def __init__(self, vehicle, slotID, isEnabled=True):
+        super(PostProgressionSetSlotTypeValidator, self).__init__(isEnabled)
+        self.__vehicle = vehicle
+        self.__slotID = slotID
+
+    def _validate(self):
+        if not self.__vehicle.isRoleSlotActive:
+            return makeError('role_slot_switch_unavailable')
+        return makeError('role_slot_invalid_option') if self.__slotID not in [ slot.slotID for slot in self.__vehicle.optDevices.dynSlotTypeOptions ] else makeSuccess()

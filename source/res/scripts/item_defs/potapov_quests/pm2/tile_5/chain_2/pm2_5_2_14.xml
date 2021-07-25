@@ -66,6 +66,8 @@ QUEST_EVENT_TYPE = globals().get('QUEST_EVENT_TYPE')
 quest_progress = globals().get('quest_progress')
 """:type: quest_progress"""
 
+filter = globals().get('BattleResults')
+
 server_constants = globals().get('server_constants')
 """:type: server_constants"""
 
@@ -86,7 +88,7 @@ BLOCKED_DAMAGE_IN_BATTLE_SERIES = 'blockedDamageInBattleSeries'
 
 def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
-
+    brfilter = filter.BattleResultsFilter(eventData)
     avatarResults = eventData['avatarResults']
 
     blockedDamagePosition = avatarResults['misc']['max']['damageBlockedByArmor']
@@ -96,9 +98,7 @@ def onFinishBattle(eventType, eventData, quest, processor):
         questProgress.increaseUntilComplete(TOP_BY_BLOCKED_DAMAGE_SERIES, 1)
 
     ownVehCD = next(iter(eventData['vehCompDescrs']))
-    accDBID = avatarResults['accountDBID']
-    ownVehicleHP = items.vehicles.VehicleDescr(
-        eventData['vehPublicResults']['accountCompDescr'][accDBID][0][1]).maxHealth
+    ownVehicleHP = brfilter.getMyHP()
     questProgress.getProgress(BLOCKED_DAMAGE_IN_BATTLE).setGoal(ownVehicleHP*2)
 
     blockedDamage = avatarResults['damageBlockedByArmor']

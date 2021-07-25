@@ -31,6 +31,10 @@ class VehCmpCustomizationTooltip(BlocksTooltipData):
         self._customCamo = args[0]
         self.__vehicle = cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
         self.__camo = cmp_helpers.getSuitableCamouflage(self.__vehicle)
+        camouflage = self.__vehicle.getBonusCamo()
+        if camouflage is not None and not self.__camo:
+            self.__camo = self.itemsCache.items.getItemByCD(camouflage.compactDescr)
+            self._customCamo = False
         items = [self.__packTitleBlock(), self.__packBonusBlock(), self.__packBottomPanelBlock()]
         return items
 

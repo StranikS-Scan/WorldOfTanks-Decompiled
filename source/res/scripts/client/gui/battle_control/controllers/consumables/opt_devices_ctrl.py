@@ -12,18 +12,20 @@ from items import vehicles
 __all__ = ('OptionalDevicesController',)
 
 class OptionalDevicesController(IBattleController):
-    __slots__ = ('__eManager', '__optionalDevices', '__order', '__soundManager', '__sessionProvider', 'onOptionalDeviceAdded', 'onOptionalDeviceUpdated')
+    __slots__ = ('__eManager', '__optionalDevices', '__order', '__soundManager', '__sessionProvider', '__optionalDevicesInDescriptor', 'onOptionalDeviceAdded', 'onOptionalDeviceUpdated', 'onOptionalDevicesCleared', 'onDescriptorDevicesChanged')
 
     def __init__(self, setup):
         super(OptionalDevicesController, self).__init__()
         self.__eManager = Event.EventManager()
         self.onOptionalDeviceAdded = Event.Event(self.__eManager)
         self.onOptionalDeviceUpdated = Event.Event(self.__eManager)
+        self.onOptionalDevicesCleared = Event.Event(self.__eManager)
+        self.onDescriptorDevicesChanged = Event.Event(self.__eManager)
         self.__optionalDevices = {}
         self.__soundManager = OptDeviceSoundController()
         self.__sessionProvider = setup.sessionProvider
         self.__order = []
-        g_playerEvents.onArenaPeriodChange += self.__pe_onArenaPeriodChange
+        self.__optionalDevicesInDescriptor = []
 
     def __repr__(self):
         return 'OptionalDevicesController({0!r:s})'.format(self.__optionalDevices)
@@ -32,6 +34,7 @@ class OptionalDevicesController(IBattleController):
         return BATTLE_CTRL_ID.OPTIONAL_DEVICES
 
     def startControl(self, *args):
+        g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         self.__sessionProvider.onBattleSessionStart += self.__onBattleSessionStart
         self.__sessionProvider.onBattleSessionStop += self.__onBattleSessionStop
 
@@ -49,11 +52,19 @@ class OptionalDevicesController(IBattleController):
                 self.__sessionProvider.onBattleSessionStop -= self.__onBattleSessionStop
             self.__sessionProvider = None
             self.__eManager.clear()
-            g_playerEvents.onArenaPeriodChange -= self.__pe_onArenaPeriodChange
+            g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         self.__soundManager.clear()
         self.__optionalDevices.clear()
         self.__order = []
+        self.__optionalDevicesInDescriptor = []
+        if not leave:
+            self.onOptionalDevicesCleared()
         return
+
+    def reset(self):
+        self.__optionalDevices.clear()
+        self.__order = []
+        self.onOptionalDevicesCleared()
 
     def getOptDeviceInBattle(self, deviceID):
         return self.__optionalDevices.get(deviceID)
@@ -89,7 +100,7 @@ class OptionalDevicesController(IBattleController):
     def startVehicleVisual(self, vProxy, isImmediate):
         self.soundManager.startVehicleVisual(vProxy, isImmediate)
 
-    def __pe_onArenaPeriodChange(self, period, *args):
+    def __onArenaPeriodChange(self, period, *_):
         if period == ARENA_PERIOD.AFTERBATTLE:
             self.clear()
         DevicesSound.arenaPeriodChange(period)
@@ -98,6 +109,9 @@ class OptionalDevicesController(IBattleController):
         if self.__sessionProvider is None:
             return
         else:
+            arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
+            if arena is not None:
+                arena.onVehicleUpdated += self.__onVehicleInfoUpdated
             self.__sessionProvider.shared.vehicleState.onVehicleStateUpdated += self.__onVehicleStateUpdated
             self.__sessionProvider.shared.vehicleState.onVehicleControlling += self.__onVehicleChanged
             self.__sessionProvider.shared.feedback.onVehicleDetected += self.soundManager.onVehicleDetected
@@ -107,6 +121,9 @@ class OptionalDevicesController(IBattleController):
         if self.__sessionProvider is None:
             return
         else:
+            arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
+            if arena is not None:
+                arena.onVehicleUpdated -= self.__onVehicleInfoUpdated
             self.__sessionProvider.shared.vehicleState.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             self.__sessionProvider.shared.vehicleState.onVehicleControlling -= self.__onVehicleChanged
             self.__sessionProvider.shared.feedback.onVehicleDetected -= self.soundManager.onVehicleDetected
@@ -114,7 +131,24 @@ class OptionalDevicesController(IBattleController):
 
     def __onVehicleChanged(self, vehicle):
         if vehicle.isPlayerVehicle and vehicle.isAlive():
-            self.__soundManager.initDevices(vehicle_getter.getOptionalDevicesByVehID(vehicle.id))
+            self.__optionalDevicesInDescriptor = None
+            self.__invalidateOptionalDevices(vehicle.id)
+        return
 
     def __onVehicleStateUpdated(self, state, value):
         self.__soundManager.vehicleStateUpdated(state, value)
+
+    def __onVehicleInfoUpdated(self, vehicleID):
+        vehicle = self.__sessionProvider.shared.vehicleState.getControllingVehicle()
+        if vehicle is not None and vehicleID == vehicle.id and vehicle.isPlayerVehicle and vehicle.isAlive():
+            self.__invalidateOptionalDevices(vehicleID)
+        return
+
+    def __invalidateOptionalDevices(self, vehicleID):
+        optionalDevices = vehicle_getter.getOptionalDevicesByVehID(vehicleID)
+        optionalDevicesInDescriptor = [ (d.id[1] if d is not None else None) for d in optionalDevices ]
+        if optionalDevicesInDescriptor != self.__optionalDevicesInDescriptor:
+            self.__soundManager.initDevices(optionalDevices)
+            self.__optionalDevicesInDescriptor = optionalDevicesInDescriptor
+            self.onDescriptorDevicesChanged(optionalDevices)
+        return

@@ -18,8 +18,11 @@ class RequestResultsContext(object):
     def getArenaUniqueID(self):
         return self.__arenaUniqueID
 
+    def getArenaBonusType(self):
+        return self.__arenaBonusType
+
     def needToShowImmediately(self):
-        return self.__showImmediately and self.__arenaBonusType not in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE
+        return self.__showImmediately and self.__arenaBonusType not in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE and self.__arenaBonusType != ARENA_BONUS_TYPE.MAPS_TRAINING
 
     def needToShowIfPosted(self):
         return self.__showIfPosted

@@ -150,17 +150,18 @@
             </set-button-enabled>
             <set-button-enabled>	VehicleBuySlot	  <val>	False	</val>
             </set-button-enabled>
-            <set-button-enabled>	VehicleBuyAccept	  <val>	False	</val>
-            </set-button-enabled>
             <set-button-enabled>	VehicleBuyFreeCommanderBtn	  <val>	False	</val>
             </set-button-enabled>
             <set-button-enabled>	VehicleBuySchoolCommanderBtn	  <val>	False	</val>
             </set-button-enabled>
-            <set-action>	VehicleBuyAcademyClick	</set-action>
+            <update-exclusive-hints></update-exclusive-hints>
+            <set-button-enabled>	VehicleBuyAccept	  <val>	True	</val>
+            </set-button-enabled>
+            <activate>	VehicleBuyAcademyClicked	</activate>
+            <show-dialog>	TeamTeachingDialog	</show-dialog>
             <set-action>	VehicleBuyAcceptClick	</set-action>
           </on-scene-effects>
           <not-on-scene-effects>
-            <remove-action>	VehicleBuyAcademyClick	</remove-action>
             <remove-action>	VehicleBuyAcceptClick	</remove-action>
             <inactivate>	VehicleBuyAcademyClicked	</inactivate>
           </not-on-scene-effects>
@@ -449,6 +450,7 @@
             <label>	#bootcamp:message/teaching/team/label	</label>
             <text>	#bootcamp:message/teaching/team/text	</text>
             <icon>	../maps/icons/bootcamp/lines/bcCrewEducation.png	</icon>
+            <voiceover>	bc_achievements_shine	</voiceover>
           </data>
         </message>
       </sequence>
@@ -535,7 +537,7 @@
             <label>	#bootcamp:message/skills/and/perks/label	</label>
             <text>	#bootcamp:message/skills/and/perks/text	</text>
             <subtitle>	SubtitleSkillsAbilities	</subtitle>
-            <voiceover>	bc_info_line_universal	</voiceover>
+            <voiceover>	bc_achievements_shine	</voiceover>
           </data>
         </message>
       </sequence>

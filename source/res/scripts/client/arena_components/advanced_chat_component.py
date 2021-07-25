@@ -5,22 +5,21 @@ from collections import OrderedDict, defaultdict, namedtuple
 from functools import partial
 from enum import Enum
 import BigWorld
-import Math
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from arena_component_system.client_arena_component_system import ClientArenaComponent
 from battleground.location_point_manager import g_locationPointManager
 from chat_commands_consts import ReplyState, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, BATTLE_CHAT_COMMAND_NAMES, _DEFAULT_ACTIVE_COMMAND_TIME, _DEFAULT_SPG_AREA_COMMAND_TIME, MarkerType, ONE_SHOT_COMMANDS_TO_REPLIES, COMMAND_RESPONDING_MAPPING
-from constants import ARENA_PERIOD, ARENA_BONUS_TYPE
+from constants import ARENA_BONUS_TYPE
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from helpers import dependency, i18n, CallbackDelayer
 from messenger import MessengerEntry
 from messenger.m_constants import MESSENGER_COMMAND_TYPE, USER_ACTION_ID
-from messenger.proto.bw_chat2.battle_chat_cmd import BattleCommandFactory, AUTOCOMMIT_COMMAND_NAMES
+from messenger.proto.bw_chat2.battle_chat_cmd import BattleCommandFactory, AUTOCOMMIT_COMMAND_NAMES, LOCATION_CMD_NAMES
 from messenger.proto.bw_chat2.chat_handlers import g_mutedMessages
 from messenger.proto.events import g_messengerEvents
-from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES
+from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES, messageArgs
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -80,9 +79,20 @@ class AdvancedChatComponent(ClientArenaComponent):
                 self.settingsCache.onSyncCompleted += self.__onSettingsReady
             else:
                 self.__isEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
-        if not self.__isEnabled:
+        player = BigWorld.player()
+        if player is None:
             return
-        self.__addEventListeners()
+        elif not player.userSeesWorld():
+            g_playerEvents.onAvatarReady += self.__onAvatarReady
+            return
+        elif not self.__isEnabled:
+            return
+        else:
+            componentSystem = self._componentSystem()
+            if componentSystem is not None:
+                player.base.messenger_onActionByClient_chat2(_ACTIONS.REINIT_BATTLE_CHAT, 0, messageArgs())
+            self.__addEventListeners()
+            return
 
     def deactivate(self):
         super(AdvancedChatComponent, self).deactivate()
@@ -93,6 +103,12 @@ class AdvancedChatComponent(ClientArenaComponent):
         feedbackCtrl = self.sessionProvider.shared.feedback
         if feedbackCtrl:
             feedbackCtrl.onVehicleMarkerRemoved -= self.__onVehicleMarkerRemoved
+
+    def __onAvatarReady(self):
+        g_playerEvents.onAvatarReady -= self.__onAvatarReady
+        self.__isEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
+        if self.__isEnabled:
+            self.__addEventListeners()
 
     def getReplyStateForTargetIDAndMarkerType(self, targetID, targetMarkerType):
         if targetMarkerType in self._chatCommands and targetID in self._chatCommands[targetMarkerType]:
@@ -154,7 +170,6 @@ class AdvancedChatComponent(ClientArenaComponent):
                     self.__addEpicBattleEventListeners()
         import BattleReplay
         BattleReplay.g_replayCtrl.onCommandReceived += self.__onCommandReceived
-        g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         g_playerEvents.onAvatarBecomeNonPlayer += self.__onAvatarBecomeNonPlayer
         vStateCtrl = self.sessionProvider.shared.vehicleState
@@ -177,7 +192,6 @@ class AdvancedChatComponent(ClientArenaComponent):
     def __removeEventListenersAndClear(self):
         g_messengerEvents.channels.onCommandReceived -= self.__onCommandReceived
         g_messengerEvents.users.onBattleUserActionReceived -= self.__me_onBattleUserActionReceived
-        g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
         vStateCtrl = self.sessionProvider.shared.vehicleState
@@ -214,64 +228,38 @@ class AdvancedChatComponent(ClientArenaComponent):
         if state == VEHICLE_VIEW_STATE.SWITCHING and avatar_getter.isObserver():
             self.__removeActiveCommands()
 
-    def __onArenaPeriodChange(self, period, endTime, *_):
-        if period == ARENA_PERIOD.PREBATTLE:
-            self.__addPrebattleWaypoints(endTime - BigWorld.serverTime())
-        elif period == ARENA_PERIOD.BATTLE:
-            self.__removePrebattleWaypoints()
+    def __onServerCommandReceived(self, cmd):
+        targetID = cmd.getFirstTargetID()
+        if MarkerType.LOCATION_MARKER_TYPE not in self._chatCommands or targetID not in self._chatCommands[MarkerType.LOCATION_MARKER_TYPE]:
+            if cmd.isLocationRelatedCommand():
+                self.__handleServerLocationCommand(cmd)
+            return
+        else:
+            command = BATTLE_CHAT_COMMANDS_BY_NAMES.get(cmd.getRepliedToChatCommand())
+            if command is None:
+                return
+            commandID = command.id
+            commandData = cmd.getCommandData()
+            commandCreatorID = commandData['int64Arg1']
+            if cmd.isReply() or cmd.isCancelReply():
+                self.__notifyReplyCommandUpdate(targetID, commandCreatorID, commandID, int(cmd.isCancelReply()), int(cmd.isReply()))
+            self.__chatCommandsUpdated(MarkerType.LOCATION_MARKER_TYPE, targetID, commandID, commandCreatorID, ChatCommandChange.CHAT_CMD_WAS_REPLIED if cmd.isReply() else ChatCommandChange.CHAT_CMD_WAS_REMOVED)
+            if cmd.isClearChatCommand():
+                self.__tryRemovingCommandFromMarker(commandID, targetID, True)
+            return
 
-    def __addPrebattleWaypoints(self, remainingPrebattleTime):
-        if not hasattr(BigWorld.player(), 'arenaExtraData'):
-            _logger.info('PrebattleMarkers: no arenaExtraData found for Avatar')
+    def __handleServerLocationCommand(self, cmd):
+        targetID = cmd.getFirstTargetID()
+        command = _ACTIONS.battleChatCommandFromActionID(cmd.getID())
+        if command.name not in LOCATION_CMD_NAMES:
             return
-        if self.__isEnabled is False:
-            _logger.info('PrebattleMarkers: no IBC enabled.')
-            return
-        PREBATTLEMARKER_EXTRA_DATA = 'prebattleMarkers'
-        if PREBATTLEMARKER_EXTRA_DATA not in BigWorld.player().arenaExtraData:
-            _logger.info('PrebattleMarkers:  PrebattleMarker extra data not found (no markers set for this map?)')
-            return
-        generatedUniqueID = 0
-        commandName = BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT
-        commandID = BATTLE_CHAT_COMMANDS_BY_NAMES[commandName].id
-        commandCreatorID = -10
-        if not BigWorld.player().userSeesWorld():
-            g_playerEvents.onAvatarReady += self.__onAvatarReady
-            return
-        for item in BigWorld.player().arenaExtraData[PREBATTLEMARKER_EXTRA_DATA]:
-            name = item['locationName']
-            team = item['teams']
-            position = item['position']
-            playerTeam = BigWorld.player().team
-            if team != 'both' and team != 'team%s' % playerTeam:
-                continue
-            protoData = {'int32Arg1': generatedUniqueID,
-             'int64Arg1': commandCreatorID,
-             'floatArg1': 0.0,
-             'strArg1': '',
-             'strArg2': ''}
-            actionID = BATTLE_CHAT_COMMANDS_BY_NAMES[BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT].id
-            command = BattleCommandFactory.createByAction(actionID=actionID, args=protoData)
-            localizedName = i18n.makeString(name)
-            position = Math.Vector3(position)
-            pos = Math.Vector3(position.x, position.y, position.z)
-            self.__addCommandToList(commandID, commandName, commandCreatorID, generatedUniqueID, command, remainingPrebattleTime)
-            g_locationPointManager.addLocationPoint(pos, generatedUniqueID, commandCreatorID, commandID, remainingPrebattleTime, localizedName, 0, False)
-            generatedUniqueID += 1
-            commandCreatorID -= 1
-
-    def __removePrebattleWaypoints(self):
-        if MarkerType.LOCATION_MARKER_TYPE not in self._chatCommands:
-            return
-        removeList = list()
-        prebattleCmdID = BATTLE_CHAT_COMMANDS_BY_NAMES[BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT].id
-        for locMarkerID in self._chatCommands[MarkerType.LOCATION_MARKER_TYPE].keys():
-            if prebattleCmdID in self._chatCommands[MarkerType.LOCATION_MARKER_TYPE][locMarkerID] and not self._chatCommands[MarkerType.LOCATION_MARKER_TYPE][locMarkerID][prebattleCmdID].owners:
-                removeList.append((prebattleCmdID, locMarkerID))
-
-        for removeElement in removeList:
-            cmdID, targetID = removeElement
-            self.__tryRemovingCommandFromMarker(cmdID, targetID, True)
+        commandData = cmd.getCommandData()
+        commandCreatorID = commandData['int64Arg1']
+        commandGlobalName = commandData['strArg1']
+        self.__addCommandToList(command.id, command.name, commandCreatorID, targetID, cmd, 0.0)
+        localizedName = i18n.makeString(commandGlobalName)
+        position = cmd.getMarkedPosition()
+        g_locationPointManager.addLocationPoint(position, targetID, commandCreatorID, command.id, 0.0, localizedName, 0, False)
 
     def __chatCommandsUpdated(self, cmdMarkerType, cmdTargetID, cmdID, senderVehID, typeOfUpdate):
         componentSystem = self._componentSystem()
@@ -386,12 +374,6 @@ class AdvancedChatComponent(ClientArenaComponent):
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         return
 
-    def __onAvatarReady(self):
-        arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
-        if arena.period == ARENA_PERIOD.PREBATTLE:
-            self.__addPrebattleWaypoints(arena.periodEndTime - BigWorld.serverTime())
-        g_playerEvents.onAvatarReady -= self.__onAvatarReady
-
     def __onVehicleMarkerRemoved(self, vehicleID):
         if self.__markerInFocus is None or not self.sessionProvider.shared.chatCommands:
             return
@@ -441,6 +423,9 @@ class AdvancedChatComponent(ClientArenaComponent):
                 return
             if not controller.filterMessage(cmd):
                 return
+            if cmd.isServerCommand():
+                self.__onServerCommandReceived(cmd)
+                return
             commandName = _ACTIONS.battleChatCommandFromActionID(cmd.getID()).name
             if commandName in _COMMAND_NAME_TRANSFORM_MARKER_TYPE or commandName in ONE_SHOT_COMMANDS_TO_REPLIES.keys():
                 self.__handleRegularCommand(cmd)
@@ -472,16 +457,18 @@ class AdvancedChatComponent(ClientArenaComponent):
         markerType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE[commandName]
         if markerType not in self._chatCommands:
             self._chatCommands[markerType] = dict()
-        self.__tryRemovalOfPreviousLocationCommands(commandCreatorID)
-        if commandName in AUTOCOMMIT_COMMAND_NAMES:
-            self.__removeReplyContributionFromPlayer(commandCreatorID, markerType, commandTargetID)
-        uniqueCBID = self.__getUniqueCallbackID()
-        self.__delayer.delayCallback(uniqueCBID, activeTime, self.__removeCommandMarkerCB, commandID, commandTargetID)
+        owners = []
+        uniqueCBID = None
+        if not command.isServerCommand():
+            self.__tryRemovalOfPreviousLocationCommands(commandCreatorID)
+            if commandName in AUTOCOMMIT_COMMAND_NAMES:
+                self.__removeReplyContributionFromPlayer(commandCreatorID, markerType, commandTargetID)
+            uniqueCBID = self.__getUniqueCallbackID()
+            self.__delayer.delayCallback(uniqueCBID, activeTime, self.__removeCommandMarkerCB, commandID, commandTargetID)
+            if commandName in AUTOCOMMIT_COMMAND_NAMES:
+                owners.append(commandCreatorID)
         if commandTargetID not in self._chatCommands[markerType]:
             self._chatCommands[markerType][commandTargetID] = OrderedDict()
-        owners = []
-        if commandName in AUTOCOMMIT_COMMAND_NAMES:
-            owners.append(commandCreatorID)
         self._chatCommands[markerType][commandTargetID].update({commandID: AdvancedChatCommandData(command=command, commandCreatorVehID=commandCreatorID, callbackID=uniqueCBID, owners=owners)})
         if self.sessionProvider.shared.feedback:
             self.sessionProvider.shared.feedback.onCommandAdded(commandTargetID, markerType)
@@ -492,6 +479,7 @@ class AdvancedChatComponent(ClientArenaComponent):
             self.__temporaryStickyCommands[commandID][commandTargetID] = (commandTargetID, markerType)
         if commandCreatorID == avatar_getter.getPlayerVehicleID() and commandName in AUTOCOMMIT_COMMAND_NAMES or isTemporarySticky:
             BigWorld.callback(0.1, partial(self.__setInFocusCB, commandID, commandTargetID, markerType, commandName in ONE_SHOT_COMMANDS_TO_REPLIES.keys(), isTemporarySticky))
+        return
 
     def __addPositiveMarkerAboveCreator(self, vehicleMarkerID):
         feedbackCtrl = self.sessionProvider.shared.feedback
@@ -731,7 +719,7 @@ class AdvancedChatComponent(ClientArenaComponent):
                         commandData.owners.remove(replierVehID)
                         updatedCommand = (commandID, targetID)
                         self.__notifyReplyCommandUpdate(targetID, replierVehID, commandID, oldOwnerCount, len(commandData.owners))
-                        if not commandData.owners:
+                        if not commandData.owners and not commandData.command.isServerCommand():
                             checkForRemovalOfCommandFromMarker = True
                         break
 

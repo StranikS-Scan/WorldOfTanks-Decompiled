@@ -60,8 +60,8 @@ def onBattleRoyalePrerequisites(vehicle, oldTypeDescriptor):
             if moduleName == 'gun' and vehicle.id == BigWorld.player().getObservedVehicleID():
                 player = BigWorld.player()
                 if player.isObserver():
-                    player.reloadCurrentVehicleGunSettings()
                     vehicle.guiSessionProvider.shared.ammo.clearAmmo()
+                    vehicle.guiSessionProvider.shared.ammo.setGunSettings(newModule)
                 player.gunRotator.switchActiveGun(0)
 
     return forceReloding

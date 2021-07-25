@@ -1,0 +1,18 @@
+<MapsTrainingStorageComponent.def>
+  <Properties>
+    <globalGoals>
+      <Type>	ARRAY	  <of>	INT8	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </globalGoals>
+    <localGoal>
+      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </localGoal>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	mapsTrainingStorageComponent	</DefaultKeyName>
+</MapsTrainingStorageComponent.def>

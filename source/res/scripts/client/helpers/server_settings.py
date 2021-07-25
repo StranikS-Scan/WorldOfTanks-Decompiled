@@ -1,12 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/server_settings.py
 import copy
+import functools
 import types
 from collections import namedtuple
-import functools
+from typing import TYPE_CHECKING
 import logging
+import constants
+import post_progression_common
 from Event import Event
-from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs, DOG_TAGS_CONFIG, BATTLE_NOTIFIER_CONFIG
+from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs, DOG_TAGS_CONFIG, BATTLE_NOTIFIER_CONFIG, MISC_GUI_SETTINGS
+from helpers import time_utils
 from ranked_common import SwitchState
 from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_WARNING, LOG_DEBUG
@@ -16,11 +20,13 @@ from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.utils.decorators import ReprInjector
 from personal_missions import PM_BRANCH
+from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
 from shared_utils import makeTupleByDict, updateDict
 from UnitBase import PREBATTLE_TYPE_TO_UNIT_ASSEMBLER, UNIT_ASSEMBLER_IMPL_TO_CONFIG
 from BonusCaps import BonusCapsConst
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
-from helpers import time_utils
+if TYPE_CHECKING:
+    from typing import List as TList
 _logger = logging.getLogger(__name__)
 _CLAN_EMBLEMS_SIZE_MAPPING = {16: 'clan_emblems_16',
  32: 'clan_emblems_small',
@@ -226,12 +232,12 @@ class _TournamentSettings(namedtuple('_TournamentSettings', ('tmsHostUrl',))):
         return cls('')
 
 
-class _FrontlineSettings(namedtuple('_FrontlineSettings', ('flHostUrl', 'isEpicTrainingEnabled'))):
+class _FrontlineSettings(namedtuple('_FrontlineSettings', ('isEpicTrainingEnabled',))):
     __slots__ = ()
 
     @classmethod
     def defaults(cls):
-        return cls('', False)
+        return cls(False)
 
 
 class _SpgRedesignFeatures(namedtuple('_SpgRedesignFeatures', ('stunEnabled', 'markTargetAreaEnabled'))):
@@ -309,11 +315,12 @@ class RankedBattlesConfig(namedtuple('RankedBattlesConfig', ('isEnabled',
  'infoPageUrl',
  'introPageUrl',
  'seasonGapPageUrl',
- 'shopPageUrl'))):
+ 'shopPageUrl',
+ 'hasSpecialSeason'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), shields={}, divisions={}, bonusBattlesMultiplier=0, expectedSeasons=0, yearAwardsMarks=(), rankGroups=(), qualificationBattles=0, yearLBSize=0, leaguesBonusBattles=(), forbiddenClassTags=(), forbiddenVehTypes=(), shopState=SwitchState.DISABLED, yearLBState=SwitchState.DISABLED, yearRewardState=SwitchState.ENABLED, seasonRatingPageUrl='', yearRatingPageUrl='', infoPageUrl='', introPageUrl='', seasonGapPageUrl='', shopPageUrl='')
+        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), shields={}, divisions={}, bonusBattlesMultiplier=0, expectedSeasons=0, yearAwardsMarks=(), rankGroups=(), qualificationBattles=0, yearLBSize=0, leaguesBonusBattles=(), forbiddenClassTags=(), forbiddenVehTypes=(), shopState=SwitchState.DISABLED, yearLBState=SwitchState.DISABLED, yearRewardState=SwitchState.ENABLED, seasonRatingPageUrl='', yearRatingPageUrl='', infoPageUrl='', introPageUrl='', seasonGapPageUrl='', shopPageUrl='', hasSpecialSeason=False)
         defaults.update(kwargs)
         return super(RankedBattlesConfig, cls).__new__(cls, **defaults)
 
@@ -346,49 +353,12 @@ _ProgressiveReward.__new__.__defaults__ = (True,
  'pr:probability',
  0)
 
-class _EventProgressionConfig(namedtuple('_EventProgressionConfig', ('isEnabled',
- 'isFrontLine',
- 'isSteelHunter',
- 'url',
- 'questPrefix',
- 'exchange',
- 'rewardVehicles',
- 'rewardStyles',
- 'rewardPointsTokenID',
- 'seasonPointsTokenID',
- 'maxRewardPoints'))):
-
-    def __new__(cls, *args, **kwargs):
-        defaults = {attr:copy.deepcopy(cls.__new__.__defaults__[i]) for i, attr in enumerate(cls._fields)}
-        defaults.update(kwargs)
-        return super(_EventProgressionConfig, cls).__new__(cls, **defaults)
-
-    def asDict(self):
-        return self._asdict()
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-
-_EventProgressionConfig.__new__.__defaults__ = (False,
- False,
- False,
- '',
- '',
- {},
- [],
- [],
- '',
- '',
- 0)
-
 class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLevel',
  'seasonData',
  'metaLevel',
  'rewards',
- 'defaultSlots'])):
+ 'defaultSlots',
+ 'slots'])):
 
     def asDict(self):
         return self._asdict()
@@ -403,19 +373,21 @@ _EpicMetaGameConfig.__new__.__defaults__ = (0,
  (0, False),
  (0, 0, 0),
  {},
+ {},
  {})
 
 class EpicGameConfig(namedtuple('EpicGameConfig', ('isEnabled',
  'validVehicleLevels',
  'seasons',
  'cycleTimes',
+ 'unlockableInBattleVehLevels',
  'peripheryIDs',
  'primeTimes',
- 'reservesAvailableInFLMenu'))):
+ 'url'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, validVehicleLevels=[], seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={}, reservesAvailableInFLMenu=False)
+        defaults = dict(isEnabled=False, validVehicleLevels=[], unlockableInBattleVehLevels=[], seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={}, url='')
         defaults.update(kwargs)
         return super(EpicGameConfig, cls).__new__(cls, **defaults)
 
@@ -443,23 +415,27 @@ class _UnitAssemblerConfig(namedtuple('_UnitAssemblerConfig', ('squad', 'epic'))
         dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
         return self._replace(**dataToUpdate)
 
-    def isPrebattleSupported(self, prebattleType):
+    @staticmethod
+    def isPrebattleSupported(prebattleType):
         return prebattleType in PREBATTLE_TYPE_TO_UNIT_ASSEMBLER
 
     def getConfigOfQueue(self, prebattleType):
-        return self.asDict()[UNIT_ASSEMBLER_IMPL_TO_CONFIG[PREBATTLE_TYPE_TO_UNIT_ASSEMBLER[prebattleType]]]
+        return {} if not self.isPrebattleSupported(prebattleType) else self.asDict().get(UNIT_ASSEMBLER_IMPL_TO_CONFIG[PREBATTLE_TYPE_TO_UNIT_ASSEMBLER[prebattleType]], {})
 
     def isVoicePreferenceEnabled(self, prebattleType):
-        return self.getConfigOfQueue(prebattleType)['voiceChatPreferenceEnabled']
+        return self.getConfigOfQueue(prebattleType).get('voiceChatPreferenceEnabled', False)
 
     def isTankLevelPreferenceEnabled(self, prebattleType):
-        return self.getConfigOfQueue(prebattleType)['tankLevelPreferenceEnabled']
+        return self.getConfigOfQueue(prebattleType).get('tankLevelPreferenceEnabled', False)
 
     def getAllowedTankLevels(self, prebattleType):
-        return self.getConfigOfQueue(prebattleType)['allowedTankLevels']
+        return self.getConfigOfQueue(prebattleType).get('allowedTankLevels', 0)
 
     def isAssemblingEnabled(self, prebattleType):
-        return self.getConfigOfQueue(prebattleType)['isAssemblingEnabled']
+        return self.getConfigOfQueue(prebattleType).get('isAssemblingEnabled', False)
+
+    def getExtendTierFilter(self, prebattleType):
+        return self.getConfigOfQueue(prebattleType).get('extendTierFilter', [])
 
     @classmethod
     def defaults(cls):
@@ -748,6 +724,38 @@ class _MapboxConfig(namedtuple('_MapboxConfig', ('isEnabled',
         return cls()
 
 
+class VehiclePostProgressionConfig(namedtuple('_VehiclePostProgression', ('isPostProgressionEnabled',
+ 'enabledFeatures',
+ 'forbiddenVehicles',
+ 'enabledRentedVehicles'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isPostProgressionEnabled=False, enabledFeatures=frozenset(), forbiddenVehicles=frozenset(), enabledRentedVehicles=frozenset())
+        defaults.update(kwargs)
+        return super(VehiclePostProgressionConfig, cls).__new__(cls, **defaults)
+
+    @classmethod
+    def defaults(cls):
+        return cls(False, frozenset(), frozenset(), frozenset)
+
+    @property
+    def isEnabled(self):
+        return self.isPostProgressionEnabled
+
+    @property
+    def isRoleSlotEnabled(self):
+        return ROLESLOT_FEATURE in self.enabledFeatures
+
+    def isSetupSwitchEnabled(self, groupID):
+        return FEATURE_BY_GROUP_ID[groupID] in self.enabledFeatures
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -768,7 +776,6 @@ class ServerSettings(object):
         self.__bwShop = _BwShop()
         self.__rankedBattlesSettings = RankedBattlesConfig.defaults()
         self.__epicMetaGameSettings = _EpicMetaGameConfig()
-        self.__eventProgressionSettings = _EventProgressionConfig()
         self.__adventCalendar = _AdventCalendarConfig()
         self.__epicGameSettings = EpicGameConfig()
         self.__unitAssemblerConfig = _UnitAssemblerConfig.defaults()
@@ -779,6 +786,7 @@ class ServerSettings(object):
         self.__reactiveCommunicationConfig = _ReactiveCommunicationConfig()
         self.__blueprintsConvertSaleConfig = _BlueprintsConvertSaleConfig()
         self.__bwProductCatalog = _BwProductCatalog()
+        self.__vehiclePostProgressionConfig = VehiclePostProgressionConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -811,15 +819,13 @@ class ServerSettings(object):
             self.__tournamentSettings = _TournamentSettings(settings.get('tmsHostUrl', ''))
         if 'frontlineSettings' in self.__serverSettings:
             settings = self.__serverSettings['frontlineSettings']
-            self.__frontlineSettings = _FrontlineSettings(settings.get('flHostUrl', ''), settings.get('isEpicTrainingEnabled', False))
+            self.__frontlineSettings = _FrontlineSettings(settings.get('isEpicTrainingEnabled', False))
         if 'hallOfFame' in self.__serverSettings:
             self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, self.__serverSettings['hallOfFame'])
         if 'shop' in self.__serverSettings:
             self.__bwShop = makeTupleByDict(_BwShop, self.__serverSettings['shop'])
         if 'ranked_config' in self.__serverSettings:
             self.__rankedBattlesSettings = makeTupleByDict(RankedBattlesConfig, self.__serverSettings['ranked_config'])
-        if 'event_progression_config' in self.__serverSettings:
-            self.__eventProgressionSettings = makeTupleByDict(_EventProgressionConfig, self.__serverSettings['event_progression_config'])
         if 'advent_calendar_config' in self.__serverSettings:
             self.__adventCalendar = makeTupleByDict(_AdventCalendarConfig, self.__serverSettings['advent_calendar_config'])
         if 'epic_config' in self.__serverSettings:
@@ -871,6 +877,8 @@ class ServerSettings(object):
             self.__mapboxSettings = _MapboxConfig.defaults()
         if 'productsCatalog' in self.__serverSettings:
             self.__bwProductCatalog = makeTupleByDict(_BwProductCatalog, self.__serverSettings['productsCatalog'])
+        if post_progression_common.SERVER_SETTINGS_KEY in self.__serverSettings:
+            self.__vehiclePostProgressionConfig = makeTupleByDict(VehiclePostProgressionConfig, self.__serverSettings[post_progression_common.SERVER_SETTINGS_KEY])
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -887,9 +895,6 @@ class ServerSettings(object):
             self.__updateWgcg(serverSettingsDiff)
         if 'wgnp' in serverSettingsDiff:
             self.__updateWgnp(serverSettingsDiff)
-        if 'event_progression_config' in serverSettingsDiff:
-            self.__updateEventProgression(serverSettingsDiff)
-            self.__serverSettings['event_progression_config'] = serverSettingsDiff['event_progression_config']
         if 'advent_calendar_config' in serverSettingsDiff:
             self.__updateAdventCalendar(serverSettingsDiff)
             self.__serverSettings['advent_calendar_config'] = serverSettingsDiff['advent_calendar_config']
@@ -938,6 +943,8 @@ class ServerSettings(object):
             self.__serverSettings[CollectorVehicleConsts.CONFIG_NAME] = serverSettingsDiff[CollectorVehicleConsts.CONFIG_NAME]
         if _crystalRewardsConfig.CONFIG_NAME in serverSettingsDiff:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
+        if post_progression_common.SERVER_SETTINGS_KEY in serverSettingsDiff:
+            self.__updateVehiclePostProgressionConfig(serverSettingsDiff)
         self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
@@ -1001,10 +1008,6 @@ class ServerSettings(object):
         return self.__rankedBattlesSettings
 
     @property
-    def eventProgression(self):
-        return self.__eventProgressionSettings
-
-    @property
     def adventCalendar(self):
         return self.__adventCalendar
 
@@ -1039,6 +1042,10 @@ class ServerSettings(object):
     @property
     def squadPremiumBonus(self):
         return self.__squadPremiumBonus
+
+    @property
+    def vehiclePostProgression(self):
+        return self.__vehiclePostProgressionConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -1135,6 +1142,9 @@ class ServerSettings(object):
     def getBootcampBonuses(self):
         return self.__getGlobalSetting('bootcampBonuses', {})
 
+    def isMapsTrainingEnabled(self):
+        return self.__getGlobalSetting('isMapsTrainingEnabled', False)
+
     def getLootBoxConfig(self):
         return self.__getGlobalSetting('lootBoxes_config', {})
 
@@ -1173,6 +1183,12 @@ class ServerSettings(object):
 
     def isBattleNotifierEnabled(self):
         return self.__getGlobalSetting(BATTLE_NOTIFIER_CONFIG, {}).get('enabled', False)
+
+    def isAutoSellCheckBoxEnabled(self):
+        return self.getMiscGUISettings()['buyModuleDialog']['enableAutoSellCheckBox']
+
+    def getMiscGUISettings(self):
+        return self.__getGlobalSetting(MISC_GUI_SETTINGS, {})
 
     def getMagneticAutoAimConfig(self):
         return self.__getGlobalSetting(MAGNETIC_AUTO_AIM_CONFIG, {})
@@ -1300,6 +1316,9 @@ class ServerSettings(object):
     def getBlueprintsConvertSaleConfig(self):
         return self.__blueprintsConvertSaleConfig
 
+    def getActiveTestConfirmationConfig(self):
+        return self.__getGlobalSetting(constants.ACTIVE_TEST_CONFIRMATION_CONFIG, {})
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -1314,9 +1333,6 @@ class ServerSettings(object):
     def __updateWgnp(self, targetSettings):
         cProfile = targetSettings['wgnp']
         self.__wgnp = _Wgnp(cProfile.get('enabled', False), cProfile.get('url', ''))
-
-    def __updateEventProgression(self, targetSettings):
-        self.__eventProgressionSettings = self.__eventProgressionSettings.replace(targetSettings['event_progression_config'])
 
     def __updateAdventCalendar(self, targetSettings):
         self.__adventCalendar = self.__adventCalendar.replace(targetSettings['advent_calendar_config'])
@@ -1373,14 +1389,17 @@ class ServerSettings(object):
         if 'blueprints_convert_sale_config' in targetSettings:
             self.__blueprintsConvertSaleConfig = self.__blueprintsConvertSaleConfig.replace(targetSettings['blueprints_convert_sale_config'])
 
+    def __updateVehiclePostProgressionConfig(self, serverSettingsDiff):
+        self.__vehiclePostProgressionConfig = self.__vehiclePostProgressionConfig.replace(serverSettingsDiff[post_progression_common.SERVER_SETTINGS_KEY])
 
-def serverSettingsChangeListener(configKey):
+
+def serverSettingsChangeListener(*configKeys):
 
     def decorator(func):
 
         @functools.wraps(func)
         def wrapper(self, diff):
-            if configKey in diff:
+            if any((configKey in diff for configKey in configKeys)):
                 func(self, diff)
 
         return wrapper

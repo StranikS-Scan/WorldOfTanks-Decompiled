@@ -5,7 +5,7 @@ import BigWorld
 import Math
 import SoundGroups
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
-_INIT_OPT_DEVICE_EVENTS = {'improvedVentilation': ('cons_ventilation', None),
+_INIT_OPT_DEVICE_EVENTS = {'improvedVentilation': ('cons_ventilation_start', 'cons_ventilation_stop'),
  'additionalInvisibilityDevice': ('cons_tracks_start', 'cons_tracks_stop'),
  'grousers': ('cons_grousers_start', 'cons_grousers_stop'),
  'antifragmentationLining': ('cons_spall_liner_start', 'cons_spall_liner_stop')}

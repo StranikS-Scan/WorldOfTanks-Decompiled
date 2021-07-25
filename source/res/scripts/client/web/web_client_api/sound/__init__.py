@@ -62,13 +62,21 @@ class SoundStateWebApi(object):
      'STATE_clans_craft': 'STATE_clans_craft_progress_off',
      'STATE_gamemode_progress_page': 'STATE_gamemode_progress_page_off'}
 
+    def __init__(self):
+        super(SoundStateWebApi, self).__init__()
+        self.__setStates = set()
+
     @w2c(_SoundStateSchema, 'sound_state', finiHandlerName='_soundStateFini')
     def setSoundState(self, cmd):
         WWISE.WW_setState(str(cmd.state_name), str(cmd.state_value))
+        self.__setStates.add(str(cmd.state_name))
 
     def _soundStateFini(self):
         for stateName, stateValue in self._ON_EXIT_STATES.iteritems():
-            WWISE.WW_setState(stateName, stateValue)
+            if stateName in self.__setStates:
+                WWISE.WW_setState(stateName, stateValue)
+
+        self.__setStates.clear()
 
 
 @w2capi()

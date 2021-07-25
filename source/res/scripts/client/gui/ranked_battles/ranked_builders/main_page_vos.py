@@ -118,7 +118,7 @@ def getRankedMainSeasonOnItems(isRankedShop, yearLBState, isYearRewardEnabled, y
 
 def getRankedMainSeasonOffItems(isRankedShop, yearLBState, isYearRewardEnabled, yearLBSize):
     result = list()
-    result.append(_getSeasonOffMain(False))
+    result.append(_getSeasonOffMain(yearLBState == SwitchState.ENABLED))
     result.append(_getRewardsPage(True, isYearRewardEnabled))
     result.extend(getRankedMainSeasonAllItems(isRankedShop, yearLBState, yearLBSize))
     return result

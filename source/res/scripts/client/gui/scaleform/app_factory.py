@@ -140,11 +140,10 @@ class AS3_AppFactory(IAppFactory):
         if not battle:
             battle = BattleEntry(_SPACE.SF_BATTLE, self.__ctrlModeFlags[_SPACE.SF_BATTLE])
             self.__apps[_SPACE.SF_BATTLE] = battle
-            packages = sf_config.BATTLE_PACKAGES
             if arenaGuiType in sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE:
-                packages += sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE[arenaGuiType]
+                packages = sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE[arenaGuiType]
             else:
-                packages += sf_config.BATTLE_PACKAGES_BY_DEFAULT
+                packages = sf_config.BATTLE_PACKAGES_BY_DEFAULT
             self.__packages[_SPACE.SF_BATTLE] = packages
             self.__importer.load(battle.proxy, sf_config.COMMON_PACKAGES + packages)
         BattleReplay.g_replayCtrl.enableTimeWrap()
@@ -298,6 +297,8 @@ class AS3_AppFactory(IAppFactory):
             event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EPIC_BATTLE_PAGE))
         elif arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
             event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EVENT_BATTLE_PAGE))
+        elif arenaGuiType == ARENA_GUI_TYPE.MAPS_TRAINING:
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.MAPS_TRAINING_PAGE))
         else:
             event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.CLASSIC_BATTLE_PAGE))
         g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)

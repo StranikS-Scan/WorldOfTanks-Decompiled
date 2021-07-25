@@ -12,12 +12,12 @@ from gui.shared.money import Currency
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 
-def makeSuccess(userMsg='', msgType=SM_TYPE.Information, auxData=None):
-    return ResultMsg(True, userMsg, msgType, auxData)
+def makeSuccess(userMsg='', msgType=SM_TYPE.Information, auxData=None, msgData=None, msgPriority=None):
+    return ResultMsg(True, userMsg, msgType, msgPriority, msgData if msgData is not None else {}, auxData)
 
 
-def makeError(userMsg='', msgType=SM_TYPE.Error, auxData=None):
-    return ResultMsg(False, userMsg, msgType, auxData)
+def makeError(userMsg='', msgType=SM_TYPE.Error, auxData=None, msgData=None, msgPriority=None):
+    return ResultMsg(False, userMsg, msgType, msgPriority, msgData if msgData is not None else {}, auxData)
 
 
 def makeI18nSuccess(sysMsgKey='', auxData=None, *args, **kwargs):
@@ -42,7 +42,6 @@ def makeCrewSkinCompensationMessage(comp):
 
 class Processor(object):
     itemsCache = dependency.descriptor(IItemsCache)
-    IS_GAMEFACE_SUPPORTED = False
     PLUGIN_RES_CODE = -33
 
     def __init__(self, plugins=None):

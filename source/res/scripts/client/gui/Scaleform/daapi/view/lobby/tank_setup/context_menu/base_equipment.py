@@ -50,7 +50,7 @@ class BaseEquipmentItemContextMenu(BaseItemContextMenu):
         return optionData
 
     def _isVisible(self, label):
-        return self._getItem().isUpgradable and self._getItem().isInInventory and self.__lobbyContext.getServerSettings().isTrophyDevicesEnabled() if label == CMLabel.UPGRADE else super(BaseEquipmentItemContextMenu, self)._isVisible(label)
+        return self._getItem().isUpgradable and (self._getItem().isInInventory or self._getItem().isInSetup(self._getVehicle())) and self.__lobbyContext.getServerSettings().isTrophyDevicesEnabled() if label == CMLabel.UPGRADE else super(BaseEquipmentItemContextMenu, self)._isVisible(label)
 
     def _upgradeEquipment(self):
         pass

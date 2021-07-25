@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/interfaces.py
+import typing
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.battle_control.view_components import ViewComponentsController
+if typing.TYPE_CHECKING:
+    from items.vehicles import VehicleDescr
 
 class IArenaController(IBattleController):
     __slots__ = ('__weakref__',)
@@ -309,4 +312,43 @@ class ISpawnController(object):
 class IVehicleCountController(IArenaVehiclesController, ViewComponentsController):
 
     def updateAttachedVehicle(self, vehicleID):
+        raise NotImplementedError
+
+
+class IPrebattleSetupsController(IArenaPeriodController, ViewComponentsController):
+
+    def isSelectionAvailable(self):
+        raise NotImplementedError
+
+    def setPlayerVehicle(self, vehicleID, vehDescr):
+        raise NotImplementedError
+
+    def setCrew(self, vehicleID, crew):
+        raise NotImplementedError
+
+    def setDynSlotType(self, vehicleID, dynSlotTypeID):
+        raise NotImplementedError
+
+    def setEnhancements(self, vehicleID, enhancements):
+        raise NotImplementedError
+
+    def setPerks(self, vehicleID, perks):
+        raise NotImplementedError
+
+    def setPostProgression(self, vehicleID, postProgression):
+        raise NotImplementedError
+
+    def setRespawnReloadFactor(self, vehicleID, reloadFactor):
+        raise NotImplementedError
+
+    def setSetups(self, vehicleID, setups):
+        raise NotImplementedError
+
+    def setSetupsIndexes(self, vehicleID, setupsIndexes):
+        raise NotImplementedError
+
+    def setSiegeState(self, vehicleID, siegeState):
+        raise NotImplementedError
+
+    def switchLayout(self, groupID, layoutIdx):
         raise NotImplementedError

@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.nation_change.nation_change_tank_slot_
 class NationChangeScreenModel(ViewModel):
     __slots__ = ('onCloseBtnClick', 'onSwitchBtnClick', 'onCancelBtnClick', 'onHangarBtnClick', 'onDogClick')
 
-    def __init__(self, properties=13, commands=5):
+    def __init__(self, properties=15, commands=5):
         super(NationChangeScreenModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -53,35 +53,47 @@ class NationChangeScreenModel(ViewModel):
     def setTargetTankName(self, value):
         self._setString(7, value)
 
+    def getCurrentTankSetupsNumber(self):
+        return self._getNumber(8)
+
+    def setCurrentTankSetupsNumber(self, value):
+        self._setNumber(8, value)
+
+    def getTargetTankSetupsNumber(self):
+        return self._getNumber(9)
+
+    def setTargetTankSetupsNumber(self, value):
+        self._setNumber(9, value)
+
     def getCurrentNation(self):
-        return self._getString(8)
-
-    def setCurrentNation(self, value):
-        self._setString(8, value)
-
-    def getTargetNation(self):
-        return self._getString(9)
-
-    def setTargetNation(self, value):
-        self._setString(9, value)
-
-    def getCurrentTankTooltipHeader(self):
         return self._getString(10)
 
-    def setCurrentTankTooltipHeader(self, value):
+    def setCurrentNation(self, value):
         self._setString(10, value)
 
-    def getCurrentTankTooltipBody(self):
+    def getTargetNation(self):
         return self._getString(11)
 
-    def setCurrentTankTooltipBody(self, value):
+    def setTargetNation(self, value):
         self._setString(11, value)
 
+    def getCurrentTankTooltipHeader(self):
+        return self._getString(12)
+
+    def setCurrentTankTooltipHeader(self, value):
+        self._setString(12, value)
+
+    def getCurrentTankTooltipBody(self):
+        return self._getString(13)
+
+    def setCurrentTankTooltipBody(self, value):
+        self._setString(13, value)
+
     def getIsSlotAnimPlaying(self):
-        return self._getBool(12)
+        return self._getBool(14)
 
     def setIsSlotAnimPlaying(self, value):
-        self._setBool(12, value)
+        self._setBool(14, value)
 
     def _initialize(self):
         super(NationChangeScreenModel, self)._initialize()
@@ -93,6 +105,8 @@ class NationChangeScreenModel(ViewModel):
         self._addStringProperty('targetTankType', '')
         self._addStringProperty('currenTankName', '')
         self._addStringProperty('targetTankName', '')
+        self._addNumberProperty('currentTankSetupsNumber', 0)
+        self._addNumberProperty('targetTankSetupsNumber', 0)
         self._addStringProperty('currentNation', '')
         self._addStringProperty('targetNation', '')
         self._addStringProperty('currentTankTooltipHeader', '')

@@ -5,9 +5,12 @@ from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
 from gui.impl.gen.view_models.views.bootcamp.bootcamp_quest_widget_model import BootcampQuestWidgetModel
 from frameworks.wulf import WindowFlags, ViewSettings, ViewFlags
+from uilogging.bootcamp.constants import BCLogKeys, BCLogActions
+from uilogging.bootcamp.loggers import BootcampLogger
 
 class BootcampQuestWidgetView(ViewImpl):
     __slots__ = ()
+    uiBootcampLogger = BootcampLogger(BCLogKeys.BC_PROGRESS_WIDGET.value)
 
     def __init__(self, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.bootcamp.BootcampQuestWidget())
@@ -30,6 +33,7 @@ class BootcampQuestWidgetView(ViewImpl):
 
     def __onQuestClick(self):
         from gui.impl.lobby.bootcamp.bootcamp_progress_view import BootcampProgressWindow
+        self.uiBootcampLogger.log(BCLogActions.CLICK.value)
         wndFlags = WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN
         window = BootcampProgressWindow(wndFlags=wndFlags)
         window.load()

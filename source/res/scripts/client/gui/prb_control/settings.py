@@ -58,7 +58,8 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
     EPIC = 16777216
     BATTLE_ROYALE = 33554432
     MAPBOX = 67108864
-    DEFAULT = 134217728
+    MAPS_TRAINING = 134217728
+    DEFAULT = 268435456
     LEGACY_BITMASK = LEGACY_INTRO | LEGACY
     UNIT_BITMASK = UNIT_INTRO | UNIT_BROWSER | UNIT
     PRE_QUEUE_BITMASK = PRE_QUEUE_INTRO | PRE_QUEUE
@@ -133,6 +134,7 @@ class UNIT_NOTIFICATION_KEY(object):
     PLAYER_OFFLINE = 'playerOffline'
     PLAYER_ONLINE = 'playerOnline'
     PLAYER_ADDED = 'playerAdded'
+    PLAYER_ADDED_WITH_FILTER = 'playerAddedWithFilter'
     PLAYER_REMOVED = 'playerRemoved'
     GIVE_LEADERSHIP = 'giveLeadership'
 
@@ -159,9 +161,9 @@ class PREBATTLE_ACTION_NAME(object):
     EPIC_TRAINING_LIST = 'epicTrainingsList'
     EPIC = 'epicQueue'
     EPIC_FORCED = 'epicForced'
-    EVENT_PROGRESSION = 'eventProgression'
     BATTLE_ROYALE = 'battleRoyaleQueue'
     BATTLE_ROYALE_TOURNAMENT = 'battleRoyaleTournamentQueue'
+    MAPS_TRAINING = 'mapsTraining'
     EVENT_BATTLE = 'eventBattle'
     MAPBOX = 'mapbox'
 
@@ -178,9 +180,9 @@ class SELECTOR_BATTLE_TYPES(object):
     SORTIE = 'sortie'
     RANKED = 'ranked'
     EPIC = 'epic'
-    EVENT_PROGRESSION = 'eventProgression'
     BATTLE_ROYALE = 'battleRoyale'
     MAPBOX = 'mapbox'
+    MAPS_TRAINING = 'mapsTraining'
 
 
 class REQUEST_TYPE(object):
@@ -259,6 +261,7 @@ class PREBATTLE_RESTRICTION(object):
     VEHICLE_ROTATION_GROUP_LOCKED = 'vehicle/rotationGroupLocked'
     UNSUITABLE_VEHICLE_FOR_BATTLE_ROYALE = 'vehicle/notForBattleRoyaleMode'
     VEHICLE_TOO_HEAVY = 'vehicle/tooHeavy'
+    VEHICLE_WILL_BE_UNLOCKED = 'vehicle/willBeUnlocked'
     CREW_NOT_FULL = 'crew/notFull'
     UNIT_NOT_FULL = 'squad/notFull'
     TUTORIAL_NOT_FINISHED = 'tutorial/notFinished'
@@ -359,6 +362,7 @@ class PRE_QUEUE_RESTRICTION(object):
     LIMIT_VEHICLE_CLASS = 'limits/vehicleClass'
     MODE_DISABLED = 'mode/disabled'
     MODE_NOT_SET = 'mode/notSet'
+    VEHICLE_WILL_BE_UNLOCKED = 'vehicle/willBeUnlocked'
 
 
 class PRE_QUEUE_JOIN_ERRORS(object):

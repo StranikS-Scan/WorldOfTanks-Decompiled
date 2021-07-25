@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/material_kinds.py
 import ResMgr
+from constants import IS_EDITOR
 from soft_exception import SoftException
 _MATERIAL_KINDS_FILE = 'system/data/material_kinds.xml'
 _EFFECT_MATERIALS_FILE = 'system/data/effect_materials.xml'
 IDS_BY_NAMES = None
+if IS_EDITOR:
+    NAMES_BY_IDS = None
 EFFECT_MATERIALS = None
 EFFECT_MATERIAL_INDEXES_BY_NAMES = None
 EFFECT_MATERIAL_NAMES_BY_INDEXES = None
@@ -18,11 +21,14 @@ def _init():
     global EFFECT_MATERIAL_INDEXES_BY_IDS
     global EFFECT_MATERIALS
     global EFFECT_MATERIAL_NAMES_BY_INDEXES
-    global EFFECT_MATERIAL_IDS_BY_NAMES
+    global NAMES_BY_IDS
     global NOT_GROUND_MATERIALS
     global EFFECT_MATERIAL_INDEXES_BY_NAMES
     global EFFECT_MATERIAL_PROPERTIES
+    global EFFECT_MATERIAL_IDS_BY_NAMES
     IDS_BY_NAMES = {}
+    if IS_EDITOR:
+        NAMES_BY_IDS = {}
     EFFECT_MATERIALS = []
     EFFECT_MATERIAL_INDEXES_BY_NAMES = {}
     EFFECT_MATERIAL_NAMES_BY_INDEXES = {}
@@ -42,6 +48,8 @@ def _init():
             _raiseWrongXml(xmlPath, "wrong or non-unique 'id' or 'desc' (%d, '%s')" % (id, name))
         ids.add(id)
         IDS_BY_NAMES[name] = id
+        if IS_EDITOR:
+            NAMES_BY_IDS[id] = name
         matName = s.readString('effect_material')
         if matName:
             matName = intern(matName)

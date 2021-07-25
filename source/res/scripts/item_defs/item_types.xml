@@ -29,7 +29,6 @@
       <lightAT-SPG></lightAT-SPG>
       <mediumAT-SPG></mediumAT-SPG>
       <heavyAT-SPG></heavyAT-SPG>
-      <RE_ATSPG_3></RE_ATSPG_3>
       <premium></premium>
       <observer></observer>
       <improvedVentilation_class1_user></improvedVentilation_class1_user>
@@ -78,6 +77,7 @@
       <epic_battles></epic_battles>
       <bob></bob>
       <battle_royale></battle_royale>
+      <maps_training></maps_training>
       <mapbox></mapbox>
       <rent_promotion></rent_promotion>
       <cannot_be_sold></cannot_be_sold>
@@ -113,19 +113,19 @@
       <earn_crystals></earn_crystals>
       <lockOptionalDevices></lockOptionalDevices>
       <spawned></spawned>
-      <role_HT_tank></role_HT_tank>
       <role_HT_assault></role_HT_assault>
+      <role_HT_break></role_HT_break>
       <role_HT_universal></role_HT_universal>
-      <role_HT_fireSupport></role_HT_fireSupport>
-      <role_MT_tank></role_MT_tank>
+      <role_HT_support></role_HT_support>
+      <role_MT_assault></role_MT_assault>
       <role_MT_universal></role_MT_universal>
-      <role_MT_fireSupport></role_MT_fireSupport>
-      <role_MT_assassin></role_MT_assassin>
-      <role_ATSPG_tank></role_ATSPG_tank>
+      <role_MT_sniper></role_MT_sniper>
+      <role_MT_support></role_MT_support>
+      <role_ATSPG_assault></role_ATSPG_assault>
       <role_ATSPG_universal></role_ATSPG_universal>
-      <role_ATSPG_fireSupport></role_ATSPG_fireSupport>
-      <role_ATSPG_burstDamage></role_ATSPG_burstDamage>
-      <role_LT_tracked></role_LT_tracked>
+      <role_ATSPG_sniper></role_ATSPG_sniper>
+      <role_ATSPG_support></role_ATSPG_support>
+      <role_LT_universal></role_LT_universal>
       <role_LT_wheeled></role_LT_wheeled>
       <role_SPG></role_SPG>
       <disableIBA></disableIBA>
@@ -207,6 +207,11 @@
   <shell>
     <userString>	#item_types:shot/name	</userString>
     <description>	#item_types:shot/desc	</description>
+    <tags>
+      <minefield></minefield>
+      <artillery></artillery>
+      <bomber></bomber>
+    </tags>
   </shell>
   <equipment>
     <userString>	#item_types:equipment/name	</userString>
@@ -316,4 +321,8 @@
     <userString></userString>
     <description></description>
   </crewBook>
+  <slot>
+    <userString></userString>
+    <description></description>
+  </slot>
 </item_types.xml>

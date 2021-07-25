@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 import BigWorld
 import constants
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -393,7 +393,7 @@ def _migrateTo38(core, data, initialized):
 
 
 def _migrateTo39(core, data, initialized):
-    data['gameExtData'][GAME.C11N_HISTORICALLY_ACCURATE] = True
+    data['gameExtData2'][GAME.CUSTOMIZATION_DISPLAY_TYPE] = 0
 
 
 def _migrateTo40(core, data, initialized):
@@ -589,23 +589,21 @@ def _migrateTo70(core, data, initialized):
 
 
 def _migrateTo71(core, data, initialized):
-    data['rankedCarouselFilter2'] = {'role_HT_tank': False,
-     'role_HT_assault': False,
+    data['rankedCarouselFilter2'] = {'role_HT_assault': False,
+     'role_HT_break': False,
      'role_HT_universal': False,
-     'role_HT_fireSupport': False,
-     'role_MT_tank': False,
+     'role_HT_support': False,
+     'role_MT_assault': False,
      'role_MT_universal': False,
-     'role_MT_fireSupport': False,
-     'role_MT_assassin': False,
-     'role_ATSPG_tank': False,
+     'role_MT_sniper': False,
+     'role_MT_support': False,
+     'role_ATSPG_assault': False,
      'role_ATSPG_universal': False,
-     'role_ATSPG_fireSupport': False,
-     'role_ATSPG_burstDamage': False,
-     'role_LT_tracked': False,
+     'role_ATSPG_sniper': False,
+     'role_ATSPG_support': False,
+     'role_LT_universal': False,
      'role_LT_wheeled': False,
-     'role_SPG': False,
-     constants.ROLES_COLLAPSE: False,
-     'notDefined': False}
+     'role_SPG': False}
 
 
 def _migrateTo72(core, data, initialized):
@@ -617,6 +615,54 @@ def _migrateTo72(core, data, initialized):
 
 def _migrateTo73(core, data, initialized):
     data['gameExtData2'][GAME.GAMEPLAY_ONLY_10_MODE] = False
+
+
+def _migrateTo74(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, 0)
+    maskOffset = 131072
+    valueToSave = (storedValue & maskOffset) >> 17
+    if data['gameExtData2'].get(GAME.CUSTOMIZATION_DISPLAY_TYPE, None) is None:
+        if valueToSave:
+            clear = data['clear']
+            clear[SETTINGS_SECTIONS.GAME_EXTENDED] = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED, 0) | maskOffset
+            data['gameExtData2'][GAME.CUSTOMIZATION_DISPLAY_TYPE] = 0
+        else:
+            data['gameExtData2'][GAME.CUSTOMIZATION_DISPLAY_TYPE] = 1
+    return
+
+
+def _migrateTo75(core, data, initialized):
+    data['clear']['rankedCarouselFilter2'] = data['clear'].get('rankedCarouselFilter2', 0) | 512 | 1024
+
+
+def _migrateTo76(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED_2, 0)
+    maskOffset = 12
+    valueToCheck = (storedValue & maskOffset) >> 2
+    if valueToCheck == 1 or data['gameExtData2'].get(GAME.CUSTOMIZATION_DISPLAY_TYPE) == 1:
+        data['gameExtData2'][GAME.CUSTOMIZATION_DISPLAY_TYPE] = 2
+
+
+def _migrateTo77(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW] = True
+
+
+def _migrateTo78(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
+    onceOnlyHintsData = data['onceOnlyHints2']
+    onceOnlyHintsData[OnceOnlyHints.VEHICLE_PREVIEW_POST_PROGRESSION_BUTTON_HINT] = False
+    onceOnlyHintsData[OnceOnlyHints.VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT] = False
+    onceOnlyHintsData[OnceOnlyHints.HERO_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT] = False
+    onceOnlyHintsData[OnceOnlyHints.SWITCH_EQUIPMENT_AUXILIARY_LOADOUT_HINT] = False
+    onceOnlyHintsData[OnceOnlyHints.SWITCH_EQUIPMENT_ESSENTIALS_LOADOUT_HINT] = False
+    onceOnlyHintsData[OnceOnlyHints.COMPARE_MODIFICATIONS_PANEL_HINT] = False
+    onceOnlyHintsData[OnceOnlyHints.COMPARE_SPECIALIZATION_BUTTON_HINT] = False
+    onceOnlyHintsData[OnceOnlyHints.TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT] = False
+    onceOnlyHintsData[OnceOnlyHints.PERSONAL_TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT] = False
+    data['uiStorage'][UI_STORAGE_KEYS.VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN] = False
 
 
 _versions = ((1,
@@ -905,6 +951,26 @@ _versions = ((1,
   False),
  (73,
   _migrateTo73,
+  False,
+  False),
+ (74,
+  _migrateTo74,
+  False,
+  False),
+ (75,
+  _migrateTo75,
+  False,
+  False),
+ (76,
+  _migrateTo76,
+  False,
+  False),
+ (77,
+  _migrateTo77,
+  False,
+  False),
+ (78,
+  _migrateTo78,
   False,
   False))
 

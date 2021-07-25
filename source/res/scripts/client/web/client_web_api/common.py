@@ -3,6 +3,7 @@
 import logging
 from Event import Event
 from web.client_web_api.platform import PlatformEventHandler
+from web.client_web_api.ranked import RankedEventHandler, BrowsersBridgeC2W
 from web.client_web_api.shop.stats import BalanceEventHandler
 from web.client_web_api.shop.trade import TradeEventHandler
 from web.client_web_api.reactive_comm import ReactiveCommunicationEventHandler
@@ -36,4 +37,6 @@ class WebEventSender(object):
          VehicleCompareEventHandler(self),
          VehicleStateEventHandler(self),
          ReactiveCommunicationEventHandler(self),
-         PlatformEventHandler(self))
+         PlatformEventHandler(self),
+         RankedEventHandler(self),
+         BrowsersBridgeC2W(self))

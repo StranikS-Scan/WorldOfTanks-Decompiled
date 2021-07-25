@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/visual_script/arena_blocks.py
 import BigWorld
 from block import Meta, Block, InitParam, buildStrKeysValue, EDITOR_TYPE
+from constants import IS_CELLAPP, IS_CLIENT
 from soft_exception import SoftException
 from visual_script.misc import errorVScript
 from visual_script.slot_types import SLOT_TYPE, arrayOf
@@ -76,3 +77,29 @@ class GetUDOByNameBase(Block, ArenaMeta):
                 return allUDOs
             return []
         return [ udo for udo in allUDOs if udo.name in names ]
+
+
+class GetDataFromStorageBase(Block, ArenaMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetDataFromStorageBase, self).__init__(*args, **kwargs)
+        self.componentName, self._valueType = self._getInitParams()
+        self.componentSlot = self._makeDataInputSlot('componentProperty', SLOT_TYPE.STR)
+        self.componentSlot.setDefaultValue(self.componentName)
+        if self.componentName == 'globalGoal':
+            self._keySlot = self._makeDataInputSlot('key', SLOT_TYPE.STR)
+        if self._valueType == SLOT_TYPE.STR:
+            self._valueSlot = self._makeDataOutputSlot('value', SLOT_TYPE.STR, self._exec)
+        elif self._valueType == SLOT_TYPE.INT:
+            self._valueSlot = self._makeDataOutputSlot('value', SLOT_TYPE.INT, self._exec)
+        elif self._valueType == SLOT_TYPE.FLOAT:
+            self._valueSlot = self._makeDataOutputSlot('value', SLOT_TYPE.FLOAT, self._exec)
+
+    @classmethod
+    def initParams(cls):
+        return [InitParam('Component property name', SLOT_TYPE.STR, buildStrKeysValue('globalGoal'), EDITOR_TYPE.STR_KEY_SELECTOR), InitParam('Value Types', SLOT_TYPE.STR, buildStrKeysValue(SLOT_TYPE.STR, SLOT_TYPE.FLOAT, SLOT_TYPE.INT), EDITOR_TYPE.STR_KEY_SELECTOR)]
+
+    def _exec(self):
+        storage = self.arena.arenaInfo.mapsTrainingStorageComponent
+        if self.componentName == 'globalGoal':
+            self._valueSlot.setValue(storage.getGlobalGoal(self._keySlot.getValue()))

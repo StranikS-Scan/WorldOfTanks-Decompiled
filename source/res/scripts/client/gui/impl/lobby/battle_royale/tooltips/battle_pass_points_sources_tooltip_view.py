@@ -41,7 +41,7 @@ class BattlePassPointsSourcesTooltipView(ViewImpl):
                 for bonus in quest.getBonuses():
                     if bonus.getName() == 'battlePassPoints':
                         questModel = BattlePassQuestsPoints()
-                        questModel.setCount(bonus.getValue())
+                        questModel.setCount(bonus.getCount())
                         questModel.setName(quest.getUserName())
                         questPointList.addViewModel(questModel)
 

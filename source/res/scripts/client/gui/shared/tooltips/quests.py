@@ -27,7 +27,7 @@ from helpers import dependency, time_utils
 from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IQuestsController, IEventProgressionController, IRankedBattlesController, IBattleRoyaleController
+from skeletons.gui.game_control import IQuestsController, IRankedBattlesController, IBattleRoyaleController
 from gui.Scaleform.daapi.view.lobby.battle_royale.tooltips.battle_royale_tooltip_quest_helper import getQuestsDescriptionForHangarFlag, getQuestTooltipBlock
 _MAX_AWARDS_PER_TOOLTIP = 5
 _MAX_QUESTS_PER_TOOLTIP = 4
@@ -48,7 +48,6 @@ class _StringTokenBonusFormatter(TokenBonusFormatter):
 
 
 class QuestsPreviewTooltipData(BlocksTooltipData):
-    __eventProgression = dependency.descriptor(IEventProgressionController)
     _questController = dependency.descriptor(IQuestsController)
     _eventsCache = dependency.descriptor(IEventsCache)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
@@ -196,7 +195,6 @@ class ScheduleQuestTooltipData(BlocksTooltipData):
 
 class UnavailableQuestTooltipData(BlocksTooltipData):
     _eventsCache = dependency.descriptor(IEventsCache)
-    __eventProgressionController = dependency.descriptor(IEventProgressionController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, context):
@@ -208,10 +206,6 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
         quest = source.get(args[0])
         items = super(UnavailableQuestTooltipData, self)._packBlocks()
         questID = quest.getID()
-        if questID in self.__eventProgressionController.getActiveQuestIDs() and self.__eventProgressionController.isUnavailableQuestByID(questID):
-            msg = self.__eventProgressionController.getUnavailableQuestMessage(questID)
-            items.append(formatters.packAlignedTextBlockData(text=text_styles.main(msg), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=5)))
-            return items
         if isRankedQuestID(questID):
             rankedOverrides = self.__getRankedOverrides(quest)
             if rankedOverrides:

@@ -14,6 +14,7 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
+from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
 from gui.server_events import recruit_helper
@@ -27,6 +28,7 @@ from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
 from helpers import dependency
 from helpers.i18n import makeString
+from rent_common import RENT_TYPE_TO_DURATION
 from shared_utils import findFirst, first
 from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController
 from skeletons.gui.goodies import IGoodiesCache
@@ -74,7 +76,7 @@ class StatsConfiguration(object):
 
 
 class StatusConfiguration(object):
-    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare')
+    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare', 'eqSetupIDx')
 
     def __init__(self):
         self.vehicle = None
@@ -89,6 +91,7 @@ class StatusConfiguration(object):
         self.useWhiteBg = True
         self.withSlots = False
         self.isCompare = False
+        self.eqSetupIDx = None
         return
 
 
@@ -228,15 +231,18 @@ class AwardContext(DefaultContext):
         self._rentExpiryTime = None
         self._rentBattlesLeft = None
         self._rentWinsLeft = None
-        self._rentSeason = None
+        self._seasonRent = None
+        self._isSeniority = False
         return
 
-    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None):
+    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, rentCycle=None, isSeniority=False):
         self._tmanRoleLevel = tmanCrewLevel
         self._rentExpiryTime = rentExpiryTime
         self._rentBattlesLeft = rentBattles
         self._rentWinsLeft = rentWins
-        self._rentSeason = rentSeason
+        self._seasonRent = {'season': rentSeason or [],
+         'cycle': rentCycle or []}
+        self._isSeniority = isSeniority
         return self.itemsCache.items.getItemByCD(int(intCD))
 
     def getStatsConfiguration(self, item):
@@ -262,38 +268,17 @@ class AwardContext(DefaultContext):
         return value
 
     def getParams(self):
+        seasonRent = dict()
+        for key in ('season', 'cycle'):
+            for seasonType, seasonID in self._seasonRent[key]:
+                seasonRent.setdefault(seasonType, []).append((int(seasonID), RENT_TYPE_TO_DURATION[key]))
+
         return {'tmanRoleLevel': self._tmanRoleLevel,
          'rentExpiryTime': self._rentExpiryTime,
          'rentBattlesLeft': self._rentBattlesLeft,
          'rentWinsLeft': self._rentWinsLeft,
-         'rentSeason': self._rentSeason}
-
-
-class ExtendedAwardContext(AwardContext):
-
-    def __init__(self, fieldsToExclude=None):
-        super(ExtendedAwardContext, self).__init__(fieldsToExclude)
-        self._showCrew = False
-        self._showVehicleSlot = False
-
-    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, showCrew=False, _showVehicleSlot=False):
-        self._showCrew = showCrew
-        self._showVehicleSlot = _showVehicleSlot
-        return super(ExtendedAwardContext, self).buildItem(intCD, tmanCrewLevel, rentExpiryTime, rentBattles, rentWins, rentSeason)
-
-    def getParams(self):
-        params = super(ExtendedAwardContext, self).getParams()
-        params['showCrew'] = self._showCrew
-        params['showVehicleSlot'] = self._showVehicleSlot
-        return params
-
-
-class SeniorityAwardContext(ExtendedAwardContext):
-
-    def __init__(self, fieldsToExclude=None):
-        super(SeniorityAwardContext, self).__init__(fieldsToExclude)
-        self._showCrew = True
-        self._showVehicleSlot = True
+         'rentSeason': seasonRent,
+         'isSeniority': self._isSeniority}
 
 
 class ShopContext(AwardContext):
@@ -462,6 +447,7 @@ class BaseHangarParamContext(ToolTipContext):
 
     def __init__(self, showTitleValue=False):
         super(BaseHangarParamContext, self).__init__(TOOLTIP_COMPONENT.HANGAR)
+        self.isApproximately = False
         self.showTitleValue = showTitleValue
 
     def getComparator(self):
@@ -488,7 +474,7 @@ class PreviewParamContext(HangarParamContext):
         self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
 
     def getComparator(self):
-        return params_helper.vehiclesComparator(g_currentPreviewVehicle.item, g_currentPreviewVehicle.defaultItem)
+        return params_helper.previewVehiclesComparator(g_currentPreviewVehicle.item, g_currentPreviewVehicle.defaultItem)
 
     def buildItem(self, *args, **kwargs):
         return g_currentPreviewVehicle.item
@@ -518,6 +504,22 @@ class TankSetupParamContext(HangarParamContext):
 
     def getBonusExtractor(self, vehicle, bonuses, paramName):
         return bonus_helper.TankSetupBonusExtractor(vehicle, bonuses, paramName)
+
+
+class PostProgressionParamContext(TankSetupParamContext):
+
+    def __init__(self):
+        super(PostProgressionParamContext, self).__init__()
+        self.isApproximately = True
+
+    def getComparator(self):
+        return params_helper.postProgressionVehiclesComparator(g_postProgressionVehicle.item, g_postProgressionVehicle.defaultItem)
+
+    def buildItem(self, *args, **kwargs):
+        return g_postProgressionVehicle.item
+
+    def getBonusExtractor(self, vehicle, bonuses, paramName):
+        return bonus_helper.PostProgressionBonusExtractor(vehicle, bonuses, paramName)
 
 
 class HangarContext(ToolTipContext):
@@ -603,10 +605,22 @@ class HangarSlotContext(HangarContext):
 
 
 class NationChangeHangarContext(HangarContext):
+    __slots__ = ('__layoutIDx',)
 
-    def buildItem(self, vehCD, intCD):
+    def __init__(self, fieldsToExclude=None):
+        super(NationChangeHangarContext, self).__init__(fieldsToExclude)
+        self.__layoutIDx = None
+        return
+
+    def buildItem(self, vehCD, intCD, layoutIDx=None):
         self._vehicle = self.itemsCache.items.getItemByCD(int(vehCD))
+        self.__layoutIDx = layoutIDx
         return self.itemsCache.items.getItemByCD(int(intCD))
+
+    def getStatusConfiguration(self, item):
+        value = super(NationChangeHangarContext, self).getStatusConfiguration(item)
+        value.eqSetupIDx = self.__layoutIDx
+        return value
 
 
 class PreviewContext(HangarContext):

@@ -12,6 +12,7 @@ UNLOCK_ITEM = 'unlockAction'
 BC_UNLOCK_ITEM = 'bcUnlockAction'
 INSTALL_ITEM = 'installItemAction'
 BUY_AND_INSTALL_ITEM = 'buyAndInstallItemAction'
+BUY_AND_INSTALL_AND_SELL_ITEM = 'BuyAndInstallWithOptionalSellItemAction'
 BC_BUY_AND_INSTALL_ITEM = 'bcBuyAndInstallItemAction'
 VEHICLE_AUTO_FILL_LAYOUT = 'vehicleAutoFillLayoutAction'
 BUY_BERTHS = 'buyBerths'
@@ -27,6 +28,11 @@ BUY_AND_INSTALL_SHELLS = 'buyAndInstallShells'
 BUY_AND_INSTALL_BATTLE_BOOSTERS = 'buyAndInstallBattleBoosters'
 UPGRADE_OPT_DEVICE = 'upgradeOptDevice'
 REMOVE_OPT_DEVICE = 'removeOptDevice'
+CHANGE_SETUP_EQUIPMENTS_INDEX = 'changeSetupEquipmentsIndex'
+SET_EQUIPMENT_SLOT_TYPE = 'setEquipmentSlotType'
+DISCARD_POST_PROGRESSION_PAIRS = 'discardPostProgressionPairs'
+PURCHASE_POST_PROGRESSION_PAIR = 'purchasePostProgressionPair'
+PURCHASE_POST_PROGRESSION_STEPS = 'purchasePostProgressionSteps'
 _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  SELL_MULTIPLE: actions.SellMultipleItems,
  UNLOCK_ITEM: actions.UnlockItemAction,
@@ -34,7 +40,7 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  BUY_MODULE: actions.ModuleBuyAction,
  BUY_VEHICLE: actions.VehicleBuyAction,
  INSTALL_ITEM: actions.InstallItemAction,
- BUY_AND_INSTALL_ITEM: actions.BuyAndInstallItemAction,
+ BUY_AND_INSTALL_AND_SELL_ITEM: actions.BuyAndInstallWithOptionalSellItemAction,
  BC_BUY_AND_INSTALL_ITEM: actions.BCBuyAndInstallItemAction,
  VEHICLE_AUTO_FILL_LAYOUT: actions.VehicleAutoFillLayoutAction,
  BUY_BERTHS: actions.BuyBerthsAction,
@@ -49,7 +55,12 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  BUY_AND_INSTALL_SHELLS: actions.BuyAndInstallShells,
  BUY_AND_INSTALL_BATTLE_BOOSTERS: actions.BuyAndInstallBattleBoosters,
  UPGRADE_OPT_DEVICE: actions.UpgradeOptDeviceAction,
- REMOVE_OPT_DEVICE: actions.RemoveOptionalDevice}
+ REMOVE_OPT_DEVICE: actions.RemoveOptionalDevice,
+ CHANGE_SETUP_EQUIPMENTS_INDEX: actions.ChangeSetupEquipmentsIndex,
+ DISCARD_POST_PROGRESSION_PAIRS: actions.DiscardPostProgressionPairs,
+ PURCHASE_POST_PROGRESSION_PAIR: actions.PurchasePostProgressionPair,
+ PURCHASE_POST_PROGRESSION_STEPS: actions.PurchasePostProgressionSteps,
+ SET_EQUIPMENT_SLOT_TYPE: actions.SetEquipmentSlotType}
 
 @process
 def doAction(actionType, *args, **kwargs):

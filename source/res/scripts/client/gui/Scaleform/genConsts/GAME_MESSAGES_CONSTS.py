@@ -24,9 +24,14 @@ class GAME_MESSAGES_CONSTS(object):
     OBJECTIVE_UNDER_ATTACK_POSITIVE = 'objectiveUnderAttackPositive'
     OBJECTIVE_UNDER_ATTACK = 'objectiveUnderAttack'
     GENERAL_RANK_REACHED = 'generalRankReached'
+    UNLOCK_TANK_LEVEL = 'unlockTankLevel'
     HQ_BATTLE_STARTED = 'hqBattleStarted'
     HQ_BATTLE_STARTED_POSITIVE = 'hqBattleStartedPositive'
     RETREAT_SUCCESSFUL = 'retreatSuccessful'
+    WITH_ADD_TIME = 'withAddTime'
+    WITH_UNLOCK = 'withUnlock'
+    WITH_EVENT = 'withEvent'
+    WITH_HIDE = 'withHide'
     GAME_MESSAGE_PRIORITY_HIGH = 0
     GAME_MESSAGE_PRIORITY_LOW = 1
     GAME_MESSAGE_PRIORITY_DEFAULT = 2

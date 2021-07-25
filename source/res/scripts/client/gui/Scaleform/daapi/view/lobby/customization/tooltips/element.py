@@ -24,7 +24,7 @@ from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURREN
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
-from items.components.c11n_constants import ProjectionDecalFormTags, SeasonType, ItemTags
+from items.components.c11n_constants import ProjectionDecalFormTags, SeasonType, ItemTags, CustomizationDisplayType
 from items.vehicles import CamouflageBonus
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
@@ -67,18 +67,33 @@ class SimpleCustomizationTooltip(BlocksTooltipData):
 
     @staticmethod
     def _packNonHistoricBlock(topPadding):
-        img = R.images.gui.maps.icons.customization.non_historical
-        nonHistoricTitle = R.strings.vehicle_customization.customization.itemsPopover.historicCheckBox.items
-        nonHistoricDesc = R.strings.vehicle_customization.customization.tooltip.description.historic.false.description
-        blocks = [formatters.packImageTextBlockData(title=text_styles.middleTitle(backport.text(nonHistoricTitle())), img=backport.image(img()), imgPadding={'left': -3,
-          'top': -4}, padding={'top': topPadding}), formatters.packTextBlockData(text=text_styles.main(backport.text(nonHistoricDesc())))]
+        title = R.strings.vehicle_customization.customization.tooltip.description.historic.false.title
+        desc = R.strings.vehicle_customization.customization.tooltip.description.historic.false.description
+        blocks = [formatters.packTextBlockData(text=text_styles.middleTitle(backport.text(title())), padding={'top': topPadding,
+          'bottom': 10}), formatters.packTextBlockData(text=text_styles.main(backport.text(desc())))]
         return blocks
 
 
 class NonHistoricTooltip(SimpleCustomizationTooltip):
 
     def _packItemBlocks(self):
-        return self._packNonHistoricBlock(topPadding=0)
+        img = R.images.gui.maps.icons.customization.non_historical
+        nonHistoricTitle = R.strings.vehicle_customization.customization.tooltip.description.nonHistoric.title
+        nonHistoricDesc = R.strings.vehicle_customization.customization.tooltip.description.historic.false.description
+        blocks = [formatters.packImageTextBlockData(title=text_styles.middleTitle(backport.text(nonHistoricTitle())), img=backport.image(img()), imgPadding={'left': -3,
+          'top': -4}), formatters.packTextBlockData(text=text_styles.main(backport.text(nonHistoricDesc())))]
+        return blocks
+
+
+class FantasticalTooltip(SimpleCustomizationTooltip):
+
+    def _packItemBlocks(self):
+        img = R.images.gui.maps.icons.customization.fantastical
+        fantasticalTitle = R.strings.vehicle_customization.customization.tooltip.description.fantastical.title
+        fantasticalDesc = R.strings.vehicle_customization.customization.tooltip.description.historic.false.description
+        blocks = [formatters.packImageTextBlockData(title=text_styles.middleTitle(backport.text(fantasticalTitle())), img=backport.image(img()), imgPadding={'left': -3,
+          'top': -4}), formatters.packTextBlockData(text=text_styles.main(backport.text(fantasticalDesc())))]
+        return blocks
 
 
 class ChainedTooltip(SimpleCustomizationTooltip):
@@ -126,14 +141,15 @@ class ElementTooltip(BlocksTooltipData):
     service = dependency.descriptor(ICustomizationService)
     CUSTOMIZATION_TOOLTIP_WIDTH = 446
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH = 104
-    CUSTOMIZATION_TOOLTIP_ICON_HEIGHT = 104
+    CUSTOMIZATION_TOOLTIP_ICON_HEIGHT = 102
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_WIDE = 204
-    CUSTOMIZATION_TOOLTIP_ICON_WIDTH_OTHER_BIG = 228
+    CUSTOMIZATION_TOOLTIP_ICON_WIDTH_OTHER_BIG = 226
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_INSCRIPTION = 278
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_PERSONAL_NUMBER = 390
     ALL_SEASON_MAP_ICON = 'all_season'
     HISTORICAL_ICON = 'historical'
     NON_HISTORICAL_ICON = 'non_historical'
+    FANTASTICAL_ICON = 'fantastical'
     RENTABLE_ICON = 'rentable'
     EDITABLE_DISABLE_ICON = 'editable_disable'
     EDITED_ICON = 'edited'
@@ -175,7 +191,7 @@ class ElementTooltip(BlocksTooltipData):
     def _packItemBlocks(self, statsConfig):
         vehIntCD = self.__vehicle.intCD if self.__vehicle is not None else 0
         self.bonusDescription = VEHICLE_CUSTOMIZATION.BONUS_CONDITION_SEASON
-        topBlocks = [self._packTitleBlock(), self._packIconBlock(self._item.isHistorical(), self._item.isDim())]
+        topBlocks = [self._packTitleBlock(), self._packIconBlock(self._item.isDim())]
         items = [formatters.packBuildUpBlockData(blocks=topBlocks, gap=10)]
         self.boundVehs = self._item.getBoundVehicles()
         self.installedVehs = self._item.getInstalledVehicles()
@@ -231,7 +247,7 @@ class ElementTooltip(BlocksTooltipData):
             camo = camo or self._item
             bonusBlock = self._packBonusBlock(bonus, camo, bonusEnabled)
             items.append(bonusBlock)
-        if not self._item.isHistorical() or self._item.fullDescription:
+        if self._item.customizationDisplayType() != CustomizationDisplayType.HISTORICAL or self._item.fullDescription:
             block = self._packDescriptionBlock()
             if block:
                 items.append(block)
@@ -297,10 +313,12 @@ class ElementTooltip(BlocksTooltipData):
             isWideOffset = tag == ProjectionDecalFormTags.RECT1X4 or tag == ProjectionDecalFormTags.RECT1X6
         if mapType:
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(mapType), padding=formatters.packPadding(top=-2), icon=mapIcon, isWideOffset=isWideOffset))
-        if self._item.isHistorical():
+        if self._item.customizationDisplayType() == CustomizationDisplayType.HISTORICAL:
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(rCharacteristics.historicity.historical())), padding=formatters.packPadding(top=-2), icon=self.HISTORICAL_ICON, isWideOffset=isWideOffset))
-        else:
+        elif self._item.customizationDisplayType() == CustomizationDisplayType.NON_HISTORICAL:
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(rCharacteristics.historicity.nonHistorical())), padding=formatters.packPadding(top=-2), icon=self.NON_HISTORICAL_ICON, isWideOffset=isWideOffset))
+        else:
+            blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(rCharacteristics.historicity.fantastical())), padding=formatters.packPadding(top=-2), icon=self.FANTASTICAL_ICON, isWideOffset=isWideOffset))
         if self._item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(_ms(backport.text(rCharacteristics.form.text()), value=text_styles.stats(PROJECTION_DECAL_TEXT_FORM_TAG[self._item.formfactor]))), padding=formatters.packPadding(top=-2), icon='form_' + str(PROJECTION_DECAL_FORM_TO_UI_ID[self._item.formfactor]), isWideOffset=isWideOffset))
         if self._item.isProgressive and self.__vehicle is not None:
@@ -316,7 +334,7 @@ class ElementTooltip(BlocksTooltipData):
             modifiedStrRoot = rCharacteristics.collapsible
             if self._item.isEditable:
                 vehicleIntCD = self.__vehicle.intCD
-                if not self._item.canBeEditedForVehicle(vehicleIntCD) and self._progressionLevel == 0:
+                if not self._item.canBeEditedForVehicle(vehicleIntCD) and self._progressionLevel <= 0:
                     modifiedStr = modifiedStrRoot.mutableWithDecal()
                     modifiedIcon = self.EDITABLE_DISABLE_ICON
                 elif self._item.isEditedForVehicle(vehicleIntCD):
@@ -482,7 +500,7 @@ class ElementTooltip(BlocksTooltipData):
                 iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_OTHER_BIG
         return iconWidth
 
-    def _packIconBlock(self, isHistorical=False, isDim=False):
+    def _packIconBlock(self, isDim=False):
         width = self._countImageWidth()
         formfactor = ''
         if self._item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:

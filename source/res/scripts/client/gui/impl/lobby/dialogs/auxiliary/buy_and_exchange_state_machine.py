@@ -21,6 +21,7 @@ class BuyAndExchangeStateEnum(Enum):
 class BuyAndExchangeEventEnum(Enum):
     ACCEPT_CLICKED = 'acceptClicked'
     NEED_EXCHANGE = 'needExchange'
+    START_EXCHANGE = 'startExchange'
     EXCHANGE_COMPLETED = 'exchangeCompleted'
     EXCHANGE_VALIDATION_ERROR = 'exchangeValidationError'
     CAN_BUY = 'canBuy'
@@ -93,6 +94,10 @@ class BuyAndExchangeStateMachine(object):
         states[BuyAndExchangeStateEnum.CAN_NOT_BUY].addTransition(StringEventTransition(BuyAndExchangeEventEnum.NEED_EXCHANGE), target=states[BuyAndExchangeStateEnum.NEED_EXCHANGE])
         states[BuyAndExchangeStateEnum.GOLD_NOT_ENOUGH].addTransition(StringEventTransition(BuyAndExchangeEventEnum.NEED_EXCHANGE), target=states[BuyAndExchangeStateEnum.EXCHANGE_CONTENT])
         states[BuyAndExchangeStateEnum.EXCHANGE_NOT_REQUIRED].addTransition(StringEventTransition(BuyAndExchangeEventEnum.NEED_EXCHANGE), target=states[BuyAndExchangeStateEnum.EXCHANGE_CONTENT])
+        states[BuyAndExchangeStateEnum.BUY_CONTENT].addTransition(StringEventTransition(BuyAndExchangeEventEnum.START_EXCHANGE), target=states[BuyAndExchangeStateEnum.EXCHANGE_CONTENT])
+        states[BuyAndExchangeStateEnum.CAN_NOT_BUY].addTransition(StringEventTransition(BuyAndExchangeEventEnum.START_EXCHANGE), target=states[BuyAndExchangeStateEnum.EXCHANGE_CONTENT])
+        states[BuyAndExchangeStateEnum.GOLD_NOT_ENOUGH].addTransition(StringEventTransition(BuyAndExchangeEventEnum.START_EXCHANGE), target=states[BuyAndExchangeStateEnum.EXCHANGE_CONTENT])
+        states[BuyAndExchangeStateEnum.EXCHANGE_NOT_REQUIRED].addTransition(StringEventTransition(BuyAndExchangeEventEnum.START_EXCHANGE), target=states[BuyAndExchangeStateEnum.EXCHANGE_CONTENT])
         states[BuyAndExchangeStateEnum.NEED_EXCHANGE].addTransition(StringEventTransition(BuyAndExchangeEventEnum.ACCEPT_CLICKED), target=states[BuyAndExchangeStateEnum.EXCHANGE_CONTENT])
         states[BuyAndExchangeStateEnum.EXCHANGE_CONTENT].addTransition(StringEventTransition(BuyAndExchangeEventEnum.ACCEPT_CLICKED), target=states[BuyAndExchangeStateEnum.EXCHANGE_IN_PROCESS])
         states[BuyAndExchangeStateEnum.EXCHANGE_IN_PROCESS].addTransition(StringEventTransition(BuyAndExchangeEventEnum.EXCHANGE_COMPLETED), target=states[BuyAndExchangeStateEnum.BUY_CONTENT])

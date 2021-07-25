@@ -53,11 +53,19 @@ class RankedCycle(namedtuple('RankedCycle', 'ID, status, startDate, endDate, ord
 
 class RankedSeason(GameSeason):
 
+    def __init__(self, cycleInfo, seasonData, isSpecial):
+        super(RankedSeason, self).__init__(cycleInfo, seasonData)
+        self.__isSpecial = isSpecial
+
     def _buildCycle(self, idx, status, start, end, number, announceOnly):
         return RankedCycle(idx, status, start, end, number, announceOnly)
 
     def getUserName(self):
-        return backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonName())
+        if self.__isSpecial:
+            seasonName = backport.text(R.strings.ranked_battles.rankedBattleMainView.specialSeason())
+        else:
+            seasonName = super(RankedSeason, self).getUserName()
+        return seasonName
 
 
 class RankStep(object):

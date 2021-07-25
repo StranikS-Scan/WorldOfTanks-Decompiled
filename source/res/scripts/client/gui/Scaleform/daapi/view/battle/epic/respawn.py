@@ -33,6 +33,7 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
         self.__mapDim = (0, 0)
         self.__lastRespawnPositions = _DEFAULT_RESPAWN_POSITIONS
         self.__carousel = None
+        self.__ammunitionPanel = None
         self.__shop = None
         self.__battleCtx = None
         return
@@ -40,9 +41,14 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
     def _onRegisterFlashComponent(self, componentPy, alias):
         if alias == BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL:
             self.__carousel = componentPy
+        elif alias == BATTLE_VIEW_ALIASES.EPIC_RESPAWN_AMMUNITION_PANEL:
+            self.__ammunitionPanel = componentPy
 
     def _onUnregisterFlashComponent(self, viewPy, alias):
-        self.__carousel = None
+        if alias == BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL:
+            self.__carousel = None
+        elif alias == BATTLE_VIEW_ALIASES.EPIC_RESPAWN_AMMUNITION_PANEL:
+            self.__ammunitionPanel = None
         super(EpicBattleRespawn, self)._onUnregisterFlashComponent(viewPy, alias)
         return
 
@@ -58,6 +64,8 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
         mapWidthPx, mapHeightPx = minimap_utils.metersToMinimapPixels(*self.sessionProvider.arenaVisitor.type.getBoundingBox())
         self.as_setMapDimensionsS(mapWidthPx, mapHeightPx)
         self.__lastRespawnPositions = _DEFAULT_RESPAWN_POSITIONS
+        if self.sessionProvider.isReplayPlaying:
+            self.as_handleAsReplayS()
         return
 
     def _dispose(self):
@@ -102,7 +110,7 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
             isVehicleChanged = vehicle.intCD != respawnInfo.vehicleID
         return isVehicleChanged
 
-    def updateTimer(self, timeLeft, vehsList, cooldowns, limits=0):
+    def updateTimer(self, timeLeft, vehs, cooldowns, limits=0):
         mainTimer = i18n.makeString(EPIC_BATTLE.RESPAWNSCREEN_SECONDSTIMERTEXT, seconds=int(round(timeLeft[0])))
         secondsLeft = int(math.ceil(timeLeft[0]))
         if secondsLeft <= 0 and not self.__timeOver:
@@ -126,23 +134,26 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
         if secondsLeft <= 0:
             if self.__countDownIsPlaying is True:
                 self.__playCountDownSound(False)
-        self.__updateSlotData(vehsList, cooldowns, limits)
+        self.__updateSlotData(vehs, cooldowns, limits)
 
     def hide(self):
         self.as_resetRespawnStateS()
+        self.__ammunitionPanel.hide()
         if self.__countDownIsPlaying is True:
             self.__playCountDownSound(False)
         BigWorld.wg_enableGUIBackground(False, False)
 
-    def show(self, selectedID, vehsList, cooldowns, limits=0):
+    def show(self, selectedID, vehs, cooldowns, limits=0):
+        self.__ammunitionPanel.show(selectedID, vehs, cooldowns, limits=0)
         self.__carousel.resetFilters()
-        self.__updateSlotData(vehsList, cooldowns, limits)
+        self.__updateSlotData(vehs, cooldowns, limits)
+        self.__carousel.show()
         BigWorld.wg_enableGUIBackground(True, False)
         if self.__battleCtx:
             BigWorld.wg_setGUIBackground(self.__battleCtx.getArenaRespawnIcon())
 
-    def start(self, vehsList, isLimited):
-        self.__carousel.sortVehicles(vehsList)
+    def start(self, vehs, isLimited):
+        self.__carousel.sortVehicles(vehs)
 
     def setLimits(self, limits):
         pass
@@ -180,6 +191,9 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
                 self.as_setSelectedLocationS(self.__selectedPointID)
             return
 
+    def setRespawnInfoExt(self, vehInfo, setupIndexes):
+        self.__ammunitionPanel.setRespawnInfoExt(vehInfo, setupIndexes)
+
     def setLaneState(self, laneID, enabled, blockedText):
         if laneID not in self.__buttonStates or self.__buttonStates[laneID] is not enabled:
             self.as_setLaneStateS(laneID, enabled, blockedText)
@@ -208,11 +222,11 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
         if soundNotifications and hasattr(soundNotifications, 'play'):
             soundNotifications.play(eventName)
 
-    def __updateSlotData(self, vehsList, cooldowns, limits):
+    def __updateSlotData(self, vehs, cooldowns, limits):
         if not isinstance(limits, dict):
             return
         vehLimits = self.__getVehicleLimits(limits)
-        slotsStatesData = respawn_utils.getSlotsStatesData(vehsList, cooldowns, self.__disabled, vehLimits)
+        slotsStatesData = respawn_utils.getSlotsStatesData(vehs, cooldowns, self.__disabled, vehLimits)
         self.__carousel.updateVehicleStates(slotsStatesData)
 
     def __getVehicleLimits(self, limits):

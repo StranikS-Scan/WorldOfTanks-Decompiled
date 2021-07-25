@@ -93,6 +93,7 @@ def getVehicleDataVO(vehicle):
      'smallInfoHoverText': smallHoverStatus,
      'clanLock': vehicle.clanLock,
      'lockBackground': _isLockedBackground(vState, vStateLvl),
+     'unlockedInBattle': False,
      'icon': vehicle.icon,
      'iconAlt': getIconPath('noImage'),
      'iconSmall': vehicle.iconSmall,

@@ -26,8 +26,8 @@ class BaseBattleBoosterProvider(VehicleBaseArrayProvider):
 
     def updateSlot(self, model, item, ctx):
         super(BaseBattleBoosterProvider, self).updateSlot(model, item, ctx)
-        isInstalledOrMounted = item in self._getCurrentLayout() or item in self._getInstalledLayout()
-        self._fillStatus(model, item, ctx.slotID, isInstalledOrMounted)
+        isInstalledOrMounted = item in self._getCurrentLayout() or self._getSetupLayout().containsIntCD(item.intCD)
+        self._fillStatus(model, item, ctx.slotID)
         self._fillBuyStatus(model, item, isInstalledOrMounted)
         self._fillDescription(model, item)
 
@@ -35,8 +35,8 @@ class BaseBattleBoosterProvider(VehicleBaseArrayProvider):
         model.setHighlightType(ItemHighlightTypes.BATTLE_BOOSTER)
         model.setOverlayType(ItemHighlightTypes.BATTLE_BOOSTER)
 
-    def _fillStatus(self, model, item, slotID, isInstalledOrMounted):
-        super(BaseBattleBoosterProvider, self)._fillStatus(model, item, slotID, isInstalledOrMounted)
+    def _fillStatus(self, model, item, slotID):
+        super(BaseBattleBoosterProvider, self)._fillStatus(model, item, slotID)
         if not item.isAffectsOnVehicle(self._getVehicle()):
             model.setIsLocked(True)
 

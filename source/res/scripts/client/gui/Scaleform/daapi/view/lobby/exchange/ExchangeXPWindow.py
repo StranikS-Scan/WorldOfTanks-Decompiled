@@ -23,6 +23,11 @@ from gui.impl import backport
 class ExchangeXPWindow(ExchangeXpWindowMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     wallet = dependency.descriptor(IWalletController)
+    __slots__ = ('__needXP',)
+
+    def __init__(self, ctx=None, needXP=None):
+        super(ExchangeXPWindow, self).__init__(ctx)
+        self.__needXP = needXP
 
     def _populate(self):
         super(ExchangeXPWindow, self)._populate()
@@ -32,6 +37,9 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         self.as_totalExperienceChangedS(self.itemsCache.items.stats.actualFreeXP)
         self.__prepareAndPassVehiclesData()
         self.as_setWalletStatusS(self.wallet.status, True)
+        if self.__needXP is not None:
+            self.as_setTargetXPS(self.__needXP)
+        return
 
     def _subscribe(self):
         g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self._setGoldCallBack)
@@ -124,13 +132,10 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         money = self.itemsCache.items.stats.money
         price = self.__getConversionPrice(xpToExchange).price
         if money.gold < price.gold:
-            showBuyGoldForXpWebOverlay(price.gold)
+            self._goToGoldBuy(price.gold)
         else:
             result = yield FreeXPExchanger(xpToExchange, vehTypeCompDescrs, freeConversion=self.__xpForFree).request()
-            if result.userMsg:
-                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-            if result.success:
-                self.destroy()
+            self._processResult(result, xpToExchange)
 
     def onWindowClose(self):
         self.destroy()
@@ -143,6 +148,15 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         self.wallet.onWalletStatusChanged -= self.__setWalletCallback
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(ExchangeXPWindow, self)._dispose()
+
+    def _processResult(self, result, _):
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        if result.success:
+            self.destroy()
+
+    def _goToGoldBuy(self, gold):
+        showBuyGoldForXpWebOverlay(gold)
 
     def __discountChangedCallback(self, _):
         self.__setRates()

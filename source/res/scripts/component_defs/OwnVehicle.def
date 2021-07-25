@@ -1,0 +1,112 @@
+<OwnVehicle.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <Properties>
+    <vehicleAmmoList>
+      <Type>	VEHICLE_AMMO_LIST	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleAmmoList>
+    <syncVehicleAttrs>
+      <Type>	VEHICLE_SYNC_ATTRS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </syncVehicleAttrs>
+    <vehicleGunReloadTime>
+      <Type>	VEHICLE_GUN_RELOAD_TIME	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleGunReloadTime>
+    <vehicleClipReloadTime>
+      <Type>	VEHICLE_CLIP_RELOAD_TIME	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleClipReloadTime>
+    <vehicleSettings>
+      <Type>	VEHICLE_SETTINGS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleSettings>
+    <destroyedDevicesIsRepairing>
+      <Type>	DESTROYED_DEVICES_IS_REPAIRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </destroyedDevicesIsRepairing>
+    <vehicleDamageInfoList>
+      <Type>	VEHICLE_DAMAGE_INFO_LIST	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleDamageInfoList>
+    <vehicleOptionalDeviceStatusList>
+      <Type>	VEHICLE_OPTIONAL_DEVICE_STATUS_LIST	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleOptionalDeviceStatusList>
+    <dualGunStatus>
+      <Type>	DUAL_GUN_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </dualGunStatus>
+    <dualGunState>
+      <Type>	DUAL_GUN_STATE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </dualGunState>
+    <siegeStateStatus>
+      <Type>	SIEGE_STATE_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </siegeStateStatus>
+    <burnoutWarning>
+      <Type>	BURNOUT_WARNING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </burnoutWarning>
+    <burnoutUnavailable>
+      <Type>	BURNOUT_UNAVAILABLE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </burnoutUnavailable>
+    <drownLevel>
+      <Type>	DROWN_LEVEL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </drownLevel>
+    <isOtherVehicleDamagedDevicesVisible>
+      <Type>	IS_OTHER_VEHICLE_DAMAGED_DEVICES_VISIBLE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isOtherVehicleDamagedDevicesVisible>
+    <overturnLevel>
+      <Type>	OVERTURN_LEVEL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </overturnLevel>
+    <smoke>
+      <Type>	SMOKE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </smoke>
+    <targetVehicleID>
+      <Type>	TARGET_VEHICLE_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </targetVehicleID>
+    <targetingInfo>
+      <Type>	TARGETING_INFO	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </targetingInfo>
+    <vehicleHealthInfo>
+      <Type>	VEHICLE_HEALTH_INFO	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleHealthInfo>
+    <welcomeToSector>
+      <Type>	WELCOME_TO_SECTOR	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </welcomeToSector>
+    <battleEventsSummary>
+      <Type>	BATTLE_EVENTS_SUMMARY	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </battleEventsSummary>
+    <deathZonesStatus>
+      <Type>	DEATH_ZONES_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </deathZonesStatus>
+  </Properties>
+  <CellMethods></CellMethods>
+  <ClientMethods>
+    <onBattleEvents>
+      <Arg>	ARRAY	  <of>	BATTLE_EVENT	</of>
+      </Arg>
+    </onBattleEvents>
+    <onObservedByEnemy></onObservedByEnemy>
+    <onSectorShooting>
+      <Arg>	UINT8	</Arg>
+    </onSectorShooting>
+    <showOwnVehicleHitDirection>
+      <Arg>	VEHICLE_HIT_DIRECTION	</Arg>
+    </showOwnVehicleHitDirection>
+  </ClientMethods>
+  <DefaultKeyName>	ownVehicle	</DefaultKeyName>
+</OwnVehicle.def>

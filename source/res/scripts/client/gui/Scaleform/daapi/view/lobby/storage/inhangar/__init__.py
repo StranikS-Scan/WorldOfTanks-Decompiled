@@ -83,7 +83,10 @@ class StorageCarouselFilter(SessionCarouselFilter):
 class StorageCarouselDataProvider(CarouselDataProvider):
 
     def _setBaseCriteria(self):
-        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.RENT | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        self._baseCriteria = REQ_CRITERIA.INVENTORY
+        self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.RENT
+        self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
 
     def _buildVehicle(self, item):
         return getStorageVehicleVo(item)

@@ -39,10 +39,6 @@ class ItemSortRule(CONST_CONTAINER):
     FRONTLINE = 'frontline'
 
 
-class EventDataType(CONST_CONTAINER):
-    EVENT_PROGRESSION = 'eventProgression'
-
-
 OFFER_CHANGED_EVENT = 'offerChanged'
 _UNLIMITED_ITEMS_COUNT = -1
 _EXCLUDE_ITEMS = {v for v in ItemPackTypeGroup.CREW} | {ItemPackType.FRONTLINE_TOKEN}
@@ -117,7 +113,10 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_MODULE,
  ItemPackType.BLUEPRINT: TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO,
  ItemPackType.BLUEPRINT_NATIONAL: TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO,
  ItemPackType.BLUEPRINT_INTELEGENCE_DATA: TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO,
- ItemPackType.BLUEPRINT_ANY: TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO}
+ ItemPackType.BLUEPRINT_ANY: TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO,
+ ItemPackType.REFERRAL_AWARDS: TOOLTIPS_CONSTANTS.REFERRAL_AWARDS,
+ ItemPackType.CUSTOM_BATTLE_PASS_POINTS: TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS,
+ ItemPackType.DEMOUNT_KIT: TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT}
 _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_WINTER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_SUMMER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
@@ -272,8 +271,6 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
         title = backport.text(R.strings.quests.bonuses.bpcoin.header(), value=backport.getIntegralFormat(rawItem.count))
     elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:
         title = _ms(EPIC_BATTLE.EPICBATTLEITEM_SUPPLYPOINTS_HEADER)
-    elif rawItem.type == ItemPackType.CUSTOM_REWARD_POINT:
-        title = _ms(EPIC_BATTLE.EPICBATTLEITEM_REWARDPOINTS_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
         title = backport.text(R.strings.tooltips.premium.days.header(), rawItem.count)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM_PLUS:
@@ -289,8 +286,6 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
              ItemPackType.CUSTOM_CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
         else:
             title = _ms(TOOLTIPS.CREW_HEADER)
-    elif rawItem.type == ItemPackType.CUSTOM_EVENT_PROGRESSION_REWARD_POINT:
-        title = backport.text(R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression.price.header())
     else:
         title = rawItem.title or ''
     return title
@@ -319,8 +314,6 @@ def getItemDescription(rawItem, item):
         description = _ms(TOOLTIPS.CUSTOMCREW_REFERRAL_BODY, value=CrewTypes.SKILL_100)
     elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:
         description = _ms(EPIC_BATTLE.EPICBATTLEITEM_SUPPLYPOINTS_DESCRIPTION)
-    elif rawItem.type == ItemPackType.CUSTOM_REWARD_POINT:
-        description = _ms(EPIC_BATTLE.EPICBATTLEITEM_REWARDPOINTS_DESCRIPTION)
     elif rawItem.type in ItemPackTypeGroup.CREW:
         if rawItem.type == ItemPackType.CREW_CUSTOM:
             description = _ms(TOOLTIPS.CREWCUSTOM_BODY)
@@ -329,8 +322,6 @@ def getItemDescription(rawItem, item):
              ItemPackType.CREW_75: CrewTypes.SKILL_75,
              ItemPackType.CREW_100: CrewTypes.SKILL_100,
              ItemPackType.CUSTOM_CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
-    elif rawItem.type == ItemPackType.CUSTOM_EVENT_PROGRESSION_REWARD_POINT:
-        description = backport.text(R.strings.tooltips.vehiclePreview.buyingPanel.eventProgression.price.body())
     else:
         description = rawItem.description or ''
     return description
@@ -350,6 +341,13 @@ def showItemTooltip(toolTipMgr, rawItem, item):
         body = getItemDescription(rawItem, item)
         tooltip = makeTooltip(header, body)
         toolTipMgr.onCreateComplexTooltip(tooltip, 'INFO')
+    return
+
+
+def showAwardsTooltip(toolTipMgr, itemType, data):
+    tooltipType = _TOOLTIP_TYPE.get(itemType)
+    if tooltipType is not None:
+        toolTipMgr.onCreateTypedTooltip(tooltipType, [data], 'INFO')
     return
 
 

@@ -7,6 +7,8 @@ import BigWorld
 import Math
 import CGF
 from helpers import dependency
+import BattleReplay
+from ReplayEvents import g_replayEvents
 from battleground import getKamikazeEquipmentDescr
 from battleground.components import SequenceComponent
 from battleground.iself_assembler import ISelfAssembler
@@ -46,6 +48,8 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
         timeToSpawn = self.__deliveryTime - BigWorld.serverTime()
         plannedAnimDuration = equipmentDescr.delay - equipmentDescr.clientVisuals.deliveringAnimationStartDelay
         timeToStartDeliveryAnim = timeToSpawn - plannedAnimDuration
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarpStart
         if self.__markerArea:
             self.delayCallback(equipmentDescr.delay, self.__removeMarkerArea)
         if timeToStartDeliveryAnim > 0:
@@ -58,10 +62,16 @@ class BotAirdrop(ScriptGameObject, CallbackDelayer, ISelfAssembler):
     def destroy(self):
         super(BotAirdrop, self).destroy()
         CallbackDelayer.destroy(self)
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart -= self.__onReplayTimeWarpStart
         self.__removeMarkerArea()
         self.__removeDeliveryEffect()
         ScriptGameObject.destroy(self)
         CallbackDelayer.destroy(self)
+
+    def __onReplayTimeWarpStart(self):
+        self.__removeMarkerArea()
+        self.__removeDeliveryEffect()
 
     def __getEffect(self, effects):
         return effects.ally if self.__sessionProvider.getArenaDP().isAllyTeam(self.__teamID) else effects.enemy

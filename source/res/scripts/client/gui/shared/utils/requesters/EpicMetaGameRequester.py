@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/EpicMetaGameRequester.py
+import typing
 import BigWorld
 from adisp import async
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
@@ -9,11 +10,11 @@ class EpicMetaGameRequester(AbstractSyncDataRequester, IEpicMetaGameRequester):
 
     @property
     def playerLevelInfo(self):
-        return self.getCacheValue('metaLevel', (0, 0, 0))
+        return self.getCacheValue('metaLevel', (1, 0))
 
     @property
     def seasonData(self):
-        return self.getCacheValue('seasonData', (0, False, None))
+        return self.getCacheValue('seasonData', (0, None, dict()))
 
     @property
     def skillPoints(self):

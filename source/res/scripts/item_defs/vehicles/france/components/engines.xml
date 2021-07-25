@@ -98,6 +98,7 @@
     <Mathis_300_exp>	113	</Mathis_300_exp>
     <Maybach_HL_233P50>	114	</Maybach_HL_233P50>
     <SOFAM_12GSds_B>	115	</SOFAM_12GSds_B>
+    <Maybach_HL_295_a_injection_d_essence_FL>	501	</Maybach_HL_295_a_injection_d_essence_FL>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
     <Renault_A_IGR>	60003	</Renault_A_IGR>
@@ -109,6 +110,7 @@
     <AMX_B_271_SH>	10000	</AMX_B_271_SH>
     <Detroit_Diesel_6V53T_SH>	10001	</Detroit_Diesel_6V53T_SH>
     <Hispano-Suiza_HS110_SH>	10002	</Hispano-Suiza_HS110_SH>
+    <_6F11SRY_MapsTraining_Dummy_SPG_2>	11	</_6F11SRY_MapsTraining_Dummy_SPG_2>
   </ids>
   <shared>
     <Somua_S-40>
@@ -1476,6 +1478,23 @@
       <rpm_min>	432	</rpm_min>
       <rpm_max>	2215	</rpm_max>
     </Maybach_HL_295_a_injection_d_essence>
+    <Maybach_HL_295_a_injection_d_essence_FL>
+      <userString>	#france_vehicles:Maybach_HL_295_a_injection_d_essence	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	86000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1100	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	432	</rpm_min>
+      <rpm_max>	2215	</rpm_max>
+    </Maybach_HL_295_a_injection_d_essence_FL>
     <SOFAM_G_s_c_4>
       <userString>	#france_vehicles:SOFAM_G_s_c_4	</userString>
       <tags>	gasoline	</tags>
@@ -1912,5 +1931,22 @@
       <rpm_min>	245	</rpm_min>
       <rpm_max>	2464	</rpm_max>
     </Hispano-Suiza_HS110_SH>
+    <_6F11SRY_MapsTraining_Dummy_SPG_2>
+      <userString>	#france_vehicles:_6F11SRY	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	27000	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	280	</power>
+      <weight>	400	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	275	</rpm_min>
+      <rpm_max>	2149	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </_6F11SRY_MapsTraining_Dummy_SPG_2>
   </shared>
 </engines.xml>

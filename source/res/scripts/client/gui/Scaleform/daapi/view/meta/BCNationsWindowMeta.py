@@ -10,5 +10,8 @@ class BCNationsWindowMeta(TutorialDialog):
     def onNationShow(self, nationId):
         self._printOverrideError('onNationShow')
 
-    def as_selectNationS(self, selectedIndex, nationsList):
-        return self.flashObject.as_selectNation(selectedIndex, nationsList) if self._isDAAPIInited() else None
+    def onHighlightShow(self):
+        self._printOverrideError('onHighlightShow')
+
+    def as_selectNationS(self, selectedIndex, nationsList, promoNationsList):
+        return self.flashObject.as_selectNation(selectedIndex, nationsList, promoNationsList) if self._isDAAPIInited() else None

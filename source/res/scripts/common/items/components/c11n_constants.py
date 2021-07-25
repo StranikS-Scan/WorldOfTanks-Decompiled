@@ -81,6 +81,12 @@ class CustomizationType(object):
 CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if isinstance(getattr(CustomizationType, k), int)}
 CustomizationNamesToTypes = {v:k for k, v in CustomizationTypeNames.iteritems()}
 
+class CustomizationDisplayType(object):
+    HISTORICAL = 0
+    NON_HISTORICAL = 1
+    FANTASTICAL = 2
+
+
 class ItemTags(object):
     VEHICLE_BOUND = 'vehicleBound'
     PREMIUM_IGR = 'premiumIGR'

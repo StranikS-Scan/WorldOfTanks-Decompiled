@@ -93,7 +93,7 @@ class NotEnoughMoneyTooltipData(ToolTipBaseData):
 
     def getDisplayableData(self, value, currencyType):
         header, body, icon = self.RESOURCES_BY_CURRENCY.get(currencyType, ('', '', ''))
-        formattedBody = makeHtmlString('html_templates:lobby/tooltips', 'not_enough_money', {'description': backport.text(body),
+        formattedBody = makeHtmlString('html_templates:lobby/tooltips', 'not_enough_money_general', {'description': backport.text(body),
          'value': value,
          'icon': backport.image(icon)})
         return {'header': backport.text(header),

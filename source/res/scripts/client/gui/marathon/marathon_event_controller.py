@@ -3,15 +3,28 @@
 import Event
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.marathon.marathon_event_dp import MarathonEvent
+from gui.marathon.marathon_event import MarathonEvent
+from gui.marathon.marathon_resource_manager import MarathonResourceManager
 from gui.app_loader.decorators import sf_lobby
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency, isPlayerAccount
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-MARATHON_EVENTS = [MarathonEvent()]
-DEFAULT_MARATHON_PREFIX = MARATHON_EVENTS[0].prefix if any(MARATHON_EVENTS) else None
+_events = []
+
+def marathonCreator(event=MarathonEvent, resourceManager=MarathonResourceManager):
+
+    def wrapper(decoratedClass):
+        _events.append(event(resourceManager, decoratedClass))
+        return decoratedClass
+
+    return wrapper
+
+
+def getMarathons():
+    return _events
+
 
 class MarathonEventsController(IMarathonEventsController, Notifiable):
     _eventsCache = dependency.descriptor(IEventsCache)
@@ -23,8 +36,9 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         self.__isInHangar = False
         self.__eventManager = Event.EventManager()
         self.onFlagUpdateNotify = Event.Event(self.__eventManager)
+        self.onMarathonDataChanged = Event.Event(self.__eventManager)
         self.onVehicleReceived = Event.Event()
-        self.__marathons = MARATHON_EVENTS
+        self.__marathons = _events
 
     @sf_lobby
     def app(self):
@@ -77,7 +91,7 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         return any((marathon.isAvailable() for marathon in self.__marathons))
 
     def doesShowAnyMissionsTab(self):
-        return any((marathon.doesShowMissionsTab() for marathon in self.__marathons))
+        return any((marathon.isEnabled() for marathon in self.__marathons))
 
     def fini(self):
         self.__stop()
@@ -126,6 +140,7 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         for marathon in self.__marathons:
             marathon.updateQuestsData()
             marathon.setState()
+            self.onMarathonDataChanged(marathon.prefix)
 
     def __updateFlagState(self):
         self.__checkEvents()

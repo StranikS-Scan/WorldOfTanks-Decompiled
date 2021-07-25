@@ -31,7 +31,7 @@ class RosterSlot10(BaseUnitRosterSlot):
 
 
 class EpicSlot(BaseUnitRosterSlot):
-    DEFAULT_LEVELS = (8, 8)
+    DEFAULT_LEVELS = (8, 9)
 
 
 class MapboxSlot(BaseUnitRosterSlot):

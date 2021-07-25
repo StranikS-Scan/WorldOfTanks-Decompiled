@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/vehicle.py
 import logging
-from functools import partial
 from itertools import chain
 import BigWorld
 import AccountCommands
 from constants import RentType, SEASON_NAME_BY_TYPE, CLIENT_COMMAND_SOURCES
 from AccountCommands import VEHICLE_SETTINGS_FLAG
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.gui_items.processors.messages.items_processor_messages import ItemBuyProcessorMessage, BattleAbilitiesApplyProcessorMessage, LayoutApplyProcessorMessage, BattleBoostersApplyProcessorMessage, OptDevicesApplyProcessorMessage, ConsumablesApplyProcessorMessage, ShellsApplyProcessorMessage
 from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
+from gui.veh_post_progression.messages import makeVehiclePostProgressionUnlockMsg, makeAllPairsDiscardMsg
 from items import EQUIPMENT_TYPES
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.components.c11n_constants import SeasonType
@@ -59,7 +61,19 @@ def getCustomizationItemSellCountForVehicle(item, vehicleIntCD):
     return min(installedCount, availableForSell)
 
 
+def showVehicleReceivedResultMessages(result):
+    if result and result.userMsg:
+        SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority, messageData=result.msgData)
+    if result is not None and result.auxData is not None:
+        for m in result.auxData.get('additionalMessages', ()):
+            if m.userMsg:
+                SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType, priority=m.msgPriority, messageData=m.msgData)
+
+    return
+
+
 class VehicleReceiveProcessor(ItemProcessor):
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehicle, buyShell=False, crewType=-1):
         self.item = vehicle
@@ -77,6 +91,9 @@ class VehicleReceiveProcessor(ItemProcessor):
 
     def _getSysMsgType(self):
         raise NotImplementedError
+
+    def _getActualVehicle(self):
+        return self.__itemsCache.items.getItemByCD(self.item.intCD)
 
 
 class VehicleBuyer(VehicleReceiveProcessor):
@@ -106,7 +123,7 @@ class VehicleBuyer(VehicleReceiveProcessor):
         return makeI18nError(sysMsgKey=msg, defaultSysMsgKey='vehicle_buy/server_error', auxData={'errStr': errStr}, vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price, useStyle=True), type=self._getSysMsgType())
+        return makeI18nSuccess(sysMsgKey='vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price, useStyle=True), type=self._getSysMsgType(), auxData={'additionalMessages': [makeVehiclePostProgressionUnlockMsg(self._getActualVehicle())]})
 
     def _getSysMsgType(self):
         return CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.getCurrency(byWeight=False), SM_TYPE.Information)
@@ -181,7 +198,7 @@ class VehicleRestoreProcessor(VehicleBuyer):
         return makeI18nError(sysMsgKey=msg, defaultSysMsgKey='vehicle_restore/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='vehicle_restore/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
+        return makeI18nSuccess(sysMsgKey='vehicle_restore/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType(), auxData={'additionalMessages': [makeVehiclePostProgressionUnlockMsg(self._getActualVehicle())]})
 
     def _getSysMsgType(self):
         return SM_TYPE.Restore
@@ -298,8 +315,9 @@ class VehicleSlotBuyer(Processor):
 
 
 class VehicleSeller(ItemProcessor):
-    restore = dependency.descriptor(IRestoreController)
-    lobbyContext = dependency.descriptor(ILobbyContext)
+    __restore = dependency.descriptor(IRestoreController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __slots__ = ('vehicle', 'nationGroupVehs', 'shells', 'eqs', 'optDevs', 'gainMoney', 'spendMoney', 'inventory', 'customizationItems', 'boosters', 'itemsForDemountKit', 'isCrewDismiss', 'isDismantlingForMoney', 'isRemovedAfterRent', 'usedDemountKitsCount', '__hasPairModification')
 
     def __init__(self, vehicle, shells=None, eqs=None, optDevs=None, inventory=None, customizationItems=None, boosters=None, isCrewDismiss=False, itemsForDemountKit=None):
         shells = shells or []
@@ -326,7 +344,7 @@ class VehicleSeller(ItemProcessor):
         crewSkinsNeedDeletion = []
         self.__compensationAmount = ItemPrice(Money(), Money())
         if isCrewDismiss:
-            tankmenGoingToBuffer, deletedTankmen = self.restore.getTankmenDeletedBySelling(*nationGroupVehs)
+            tankmenGoingToBuffer, deletedTankmen = self.__restore.getTankmenDeletedBySelling(*nationGroupVehs)
             countOfDeleted = len(deletedTankmen)
             if countOfDeleted > 0:
                 isBufferOverflowed = True
@@ -335,7 +353,7 @@ class VehicleSeller(ItemProcessor):
                 if countOfDeleted > 1:
                     bufferOverflowCtx['multiple'] = True
                     bufferOverflowCtx['extraCount'] = countOfDeleted - 1
-            if self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
+            if self.__lobbyContext.getServerSettings().isCrewSkinsEnabled():
                 freeCountByItem = {}
                 for veh in nationGroupVehs:
                     for _, tankman in veh.crew:
@@ -358,7 +376,7 @@ class VehicleSeller(ItemProcessor):
          proc_plugs.BattleBoosterValidator(boosters),
          proc_plugs.DismountForDemountKitValidator(vehicle, itemsForDemountKit),
          _getUniqueVehicleSellConfirmator(vehicle)]
-        if self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
+        if self.__lobbyContext.getServerSettings().isCrewSkinsEnabled():
             ctx = {'price': self.__compensationAmount,
              'action': None,
              'items': crewSkinsNeedDeletion}
@@ -369,6 +387,7 @@ class VehicleSeller(ItemProcessor):
         self.isDismantlingForMoney = bool(self.spendMoney)
         self.isRemovedAfterRent = vehicle.isRented
         self.usedDemountKitsCount = len(itemsForDemountKit)
+        self.__hasPairModification = any((step.action.getPurchasedID() is not None for step in vehicle.postProgression.iterUnorderedSteps() if step.action.isMultiAction()))
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
@@ -382,30 +401,37 @@ class VehicleSeller(ItemProcessor):
     def _successHandler(self, code, ctx=None):
         restoreInfo = ''
         sellForGold = self.vehicle.getSellPrice(preferred=True).getCurrency(byWeight=True) == Currency.GOLD
-        if self.vehicle.isPremium and not self.vehicle.isUnique and not self.vehicle.isUnrecoverable and self.lobbyContext.getServerSettings().isVehicleRestoreEnabled() and not sellForGold:
+        if self.vehicle.isPremium and not self.vehicle.isUnique and not self.vehicle.isUnrecoverable and self.__lobbyContext.getServerSettings().isVehicleRestoreEnabled() and not sellForGold:
             timeKey, formattedTime = getTimeLeftInfo(self.itemsCache.items.shop.vehiclesRestoreConfig.restoreDuration)
-            restoreInfo = makeString('#system_messages:vehicle/restoreDuration/{}'.format(timeKey), time=formattedTime)
-        compMsg = None
+            restoreInfo = backport.text(R.strings.system_messages.vehicle.restoreDuration.dyn(timeKey, R.invalid)(), time=formattedTime)
+        additionalMsgs = []
         if self.__compensationRequired:
-            compMsg = makeCrewSkinCompensationMessage(self.__compensationAmount)
+            additionalMsgs.append(makeCrewSkinCompensationMessage(self.__compensationAmount))
+        if self.__hasPairModification:
+            additionalMsgs.append(makeAllPairsDiscardMsg(self.vehicle.userName))
         g_tankActiveCamouflage[self.vehicle.intCD] = SeasonType.UNDEFINED
-        makeMsg = partial(makeI18nSuccess, vehName=self.vehicle.userName, auxData=compMsg)
+        msgCtx = {'vehName': self.vehicle.userName}
         if self.usedDemountKitsCount:
-            makeMsg = partial(makeMsg, countDK=self.usedDemountKitsCount)
+            msgCtx['countDK'] = self.usedDemountKitsCount
         if self.isDismantlingForMoney:
-            makeMsg = partial(makeMsg, gainMoney=formatPrice(self.gainMoney), spendMoney=formatPrice(self.spendMoney))
+            msgCtx['gainMoney'] = formatPrice(self.gainMoney)
+            msgCtx['spendMoney'] = formatPrice(self.spendMoney)
         else:
-            makeMsg = partial(makeMsg, money=formatPrice(self.gainMoney))
+            msgCtx['money'] = formatPrice(self.gainMoney)
         if not self.isRemovedAfterRent:
-            makeMsg = partial(makeMsg, restoreInfo=restoreInfo)
-        sysMsgKey = '{}{}{}'.format('vehicle_remove' if self.isRemovedAfterRent else 'vehicle_sell', '/success_dismantling' if self.isDismantlingForMoney else '/success', '/with_demount_kit' if self.usedDemountKitsCount else '')
+            msgCtx['restoreInfo'] = restoreInfo
+        sysMsgR = R.strings.system_messages.dyn('vehicle_remove' if self.isRemovedAfterRent else 'vehicle_sell', R.invalid)
+        if sysMsgR:
+            sysMsgR = sysMsgR.dyn('success_dismantling' if self.isDismantlingForMoney else 'success', R.invalid)
+        if sysMsgR and self.usedDemountKitsCount:
+            sysMsgR = sysMsgR.dyn('with_demount_kit', R.invalid)
         if self.isRemovedAfterRent:
             smType = SM_TYPE.Remove
         elif sellForGold:
             smType = SM_TYPE.SellingForGold
         else:
             smType = SM_TYPE.Selling
-        return makeMsg(sysMsgKey=sysMsgKey, type=smType)
+        return makeSuccess(userMsg=backport.text(sysMsgR(), **msgCtx), msgType=smType, auxData=additionalMsgs)
 
     def _request(self, callback):
         saleData = self.__splitDataByVehicle()
@@ -459,22 +485,22 @@ class VehicleSeller(ItemProcessor):
             itemsForDemountKit = set()
             customizationItems = []
             for shell in list(self.shells):
-                if shell.isInstalled(vehicle) and shell.intCD not in itemsFromVehicle:
+                if shell.isInSetup(vehicle) and shell.intCD not in itemsFromVehicle:
                     itemsFromVehicle.add(shell.intCD)
                     self.shells.remove(shell)
 
             for booster in self.boosters:
-                if booster.isInstalled(vehicle) and booster.intCD not in itemsFromVehicle:
+                if booster.isInSetup(vehicle) and booster.intCD not in itemsFromVehicle:
                     itemsFromVehicle.add(booster.intCD)
                     self.boosters.remove(booster)
 
             for eq in list(self.eqs):
-                if eq.isInstalled(vehicle) and eq.intCD not in itemsFromVehicle:
+                if eq.isInSetup(vehicle) and eq.intCD not in itemsFromVehicle:
                     itemsFromVehicle.add(eq.intCD)
                     self.eqs.remove(eq)
 
             for od in list(self.optDevs):
-                if od.isInstalled(vehicle) and od.intCD not in itemsFromVehicle:
+                if od.isInSetup(vehicle) and od.intCD not in itemsFromVehicle:
                     itemsFromVehicle.add(od.intCD)
                     self.optDevs.remove(od)
 
@@ -487,7 +513,7 @@ class VehicleSeller(ItemProcessor):
                     self.customizationItems.remove(ci)
 
             for od in list(self.itemsForDemountKit):
-                if od.isInstalled(vehicle) and od.intCD not in itemsForDemountKit and od.intCD not in itemsFromVehicle:
+                if od.isInSetup(vehicle) and od.intCD not in itemsForDemountKit and od.intCD not in itemsFromVehicle:
                     itemsForDemountKit.add(od.intCD)
                     self.itemsForDemountKit.remove(od)
 
@@ -516,7 +542,7 @@ def getDismantlingToInventoryDevices(optDevicesToSell, *vehicles):
     result = []
     optDevicesToSell = [ dev.intCD for dev in optDevicesToSell ]
     for vehicle in vehicles:
-        vehDevices = vehicle.optDevices.installed if vehicle is not None else []
+        vehDevices = vehicle.optDevices.setupLayouts.getUniqueItems() if vehicle is not None else []
         for dev in vehDevices:
             if dev and not dev.isRemovable:
                 if dev.intCD in optDevicesToSell:
@@ -682,7 +708,7 @@ class OptDevicesInstaller(Processor):
 
     def __init__(self, vehicle):
         super(OptDevicesInstaller, self).__init__()
-        self.__buyItems = [ item for item in vehicle.optDevices.layout.getItems() if not item.isInInventory and item not in vehicle.optDevices.installed ]
+        self.__buyItems = [ item for item in vehicle.optDevices.layout.getItems() if not item.isInInventory and not vehicle.optDevices.setupLayouts.isInSetup(item) ]
         self.__price = getVehicleOptionalDevicesLayoutPrice(vehicle).price
         self._vehicle = vehicle
         self.__devices = vehicle.optDevices.layout.getIntCDs()
@@ -783,7 +809,7 @@ class BuyAndInstallBattleBoostersProcessor(Processor):
         return
 
     def _successHandler(self, code, ctx=None):
-        return makeSuccess(auxData=[ ItemBuyProcessorMessage(i, 1).makeSuccessMsg() for i in self.__boosters if not i.isInInventory ])
+        return makeSuccess(auxData=[ ItemBuyProcessorMessage(i, 1).makeSuccessMsg() for i in self.__boosters if not i.isInInventory and not self.__vehicle.battleBoosters.setupLayouts.isInOtherLayout(i) ])
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return BattleBoostersApplyProcessorMessage().makeErrorMsg(errStr)
@@ -862,11 +888,11 @@ class InstallBattleAbilitiesProcessor(Processor):
         return BattleAbilitiesApplyProcessorMessage().makeErrorMsg(errStr)
 
     def __getCurrentSkills(self):
-        skillToAbilitiesIds = {skillID:[ sl.eqID for sl in skillLevels ] for skillID, skillLevels in self.__epicMetaGameCtrl.getAllUnlockedSkillLevelsBySkillId().iteritems()}
+        skillToAbilitiesIds = {skillID:skillInfo.eqID for skillID, skillInfo in self.__epicMetaGameCtrl.getAllUnlockedSkillInfoBySkillId().iteritems()}
         currentSkills = [-1] * self.__epicMetaGameCtrl.getNumAbilitySlots(self.__vehicle.descriptor.type)
         for slotIdx, item in enumerate(self.__vehicle.battleAbilities.layout):
-            for skillID, battleAbilitiesIDs in skillToAbilitiesIds.iteritems():
-                if item != EMPTY_ITEM and item.innationID in battleAbilitiesIDs:
+            for skillID, battleAbilitiesID in skillToAbilitiesIds.iteritems():
+                if item != EMPTY_ITEM and item.innationID == battleAbilitiesID:
                     currentSkills[slotIdx] = skillID
 
         return currentSkills

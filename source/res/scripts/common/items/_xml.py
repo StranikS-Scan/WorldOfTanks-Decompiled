@@ -362,10 +362,12 @@ def readTupleOfBools(xmlCtx, section, subsectionName, count=None):
 
 def readPrice(xmlCtx, section, subsectionName):
     key = 'credits'
-    if section[subsectionName + '/gold'] is not None:
-        key = 'gold'
-    if section[subsectionName + '/crystal'] is not None:
-        key = 'crystal'
+    for currency in ('gold', 'crystal', 'xp', 'freeXP'):
+        if section[subsectionName + '/' + currency] is not None:
+            if key != 'credits':
+                raiseWrongXml(xmlCtx, subsectionName, 'Multiple price not allowed')
+            key = currency
+
     return {key: readInt(xmlCtx, section, subsectionName, 0)}
 
 

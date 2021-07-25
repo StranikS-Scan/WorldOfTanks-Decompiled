@@ -5,6 +5,7 @@ from debug_utils import LOG_ERROR
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.meta.VehicleInfoMeta import VehicleInfoMeta
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
+from gui.shared.formatters import getRoleTextWithLabel
 from gui.shared.items_parameters import formatters
 from gui.shared.utils import AUTO_RELOAD_PROP_NAME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR
 from helpers import i18n, dependency
@@ -87,6 +88,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
                 tankmenParams.append({'tankmanType': i18n.convert(skillsConfig.getSkill(role).userString),
                  'value': tankmanLabel})
 
+            roleStr = getRoleTextWithLabel(vehicle.role, vehicle.roleLabel)
             paramsList = formatters.getFormattedParamsList(vehicle.descriptor, params['parameters'], excludeRelative=True)
             info = {'vehicleName': vehicle.longUserName,
              'vehicleDescription': vehicle.fullDescription,
@@ -97,7 +99,8 @@ class VehicleInfoWindow(VehicleInfoMeta):
              'vehicleType': vehicle.type,
              'propsData': self.__packParams(paramsList),
              'baseData': params['base'],
-             'crewData': tankmenParams}
+             'crewData': tankmenParams,
+             'roleStr': roleStr}
             self.as_setVehicleInfoS(info)
             return
 

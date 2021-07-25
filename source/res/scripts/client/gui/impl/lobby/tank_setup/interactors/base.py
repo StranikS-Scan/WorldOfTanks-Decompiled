@@ -52,6 +52,9 @@ class BaseAutoRenewal(object):
     def changeValue(self, callback):
         raise NotImplementedError
 
+    def updateVehicle(self, vehicle):
+        self._vehicle = vehicle
+
 
 class BaseInteractor(object):
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -59,8 +62,9 @@ class BaseInteractor(object):
 
     def __init__(self, item):
         self._item = None
+        self.__autoRenewal = None
         self.setItem(item)
-        self.__autoRenewal = self._createAutoRenewal()
+        self.__createAutoRenewal()
         return
 
     def getName(self):
@@ -79,11 +83,17 @@ class BaseInteractor(object):
 
     def setItem(self, item):
         self._item = item
+        if self.__autoRenewal is not None:
+            self.__autoRenewal.updateVehicle(self.getItem())
+        return
 
     def getInstalledLayout(self):
         raise NotImplementedError
 
     def getCurrentLayout(self):
+        raise NotImplementedError
+
+    def getSetupLayout(self):
         raise NotImplementedError
 
     def getPlayerLayout(self):
@@ -137,8 +147,15 @@ class BaseInteractor(object):
             callback(None)
         return
 
-    def applyQuit(self, callback):
-        self.applyAutoRenewal(callback)
+    def applyQuit(self, callback, skipApplyAutoRenewal):
+        if skipApplyAutoRenewal:
+            callback(None)
+        else:
+            self.applyAutoRenewal(callback)
+        return
 
     def _createAutoRenewal(self):
         return None
+
+    def __createAutoRenewal(self):
+        self.__autoRenewal = self._createAutoRenewal()

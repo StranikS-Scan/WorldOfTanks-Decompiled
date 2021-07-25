@@ -13,42 +13,49 @@ from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 
 class BaseVehiclesWatcher(object):
+    _VEH_STATE_PRIORITIES = {Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: 0}
 
     def __init__(self):
-        self.__isWatching = False
+        self._isWatching = False
 
     def start(self):
-        self.__setUnsuitableState()
+        self.__setCustomStates()
         g_clientUpdateManager.addCallbacks({'inventory': self._update,
          'eventsData': self._update})
-        self.__isWatching = True
+        self._isWatching = True
         _logger.info("BaseVehiclesWatcher:start() self = '%r'", self)
 
     def stop(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
-        self._clearUnsuitableState()
-        self.__isWatching = False
+        self._clearCustomsStates()
+        self._isWatching = False
         _logger.info("BaseVehiclesWatcher:stop() self = '%r'", self)
 
     def _getUnsuitableVehicles(self, onClear=False):
         raise NotImplementedError
 
     def _update(self, *_):
-        if self.__isWatching:
-            self.__setUnsuitableState()
+        if self._isWatching:
+            self.__setCustomStates()
 
-    def __setUnsuitableState(self):
-        vehicles = self._getUnsuitableVehicles()
+    def _getVehiclesCustomStates(self, onClear=False):
+        return {Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: self._getUnsuitableVehicles(onClear)}
+
+    def __setCustomStates(self):
+        states = self._getVehiclesCustomStates()
         intCDs = set()
-        for vehicle in vehicles:
-            vehicle.setCustomState(Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE)
-            intCDs.add(vehicle.intCD)
+        for state, vehicles in states.iteritems():
+            for vehicle in vehicles:
+                if vehicle.intCD in intCDs and self.__compareVehStateByPriority(vehicle.getCustomState(), state):
+                    continue
+                vehicle.setCustomState(state)
+                intCDs.add(vehicle.intCD)
 
         if intCDs:
             g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)
 
-    def _clearUnsuitableState(self):
-        vehicles = self._getUnsuitableVehicles(True)
+    def _clearCustomsStates(self):
+        vehicles = [ v for vehicles in self._getVehiclesCustomStates(True).itervalues() for v in vehicles ]
         intCDs = set()
         for vehicle in vehicles:
             vehicle.clearCustomState()
@@ -56,6 +63,9 @@ class BaseVehiclesWatcher(object):
 
         if intCDs:
             g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)
+
+    def __compareVehStateByPriority(self, oldState, newState):
+        return self._VEH_STATE_PRIORITIES.get(oldState, -1) >= self._VEH_STATE_PRIORITIES.get(newState, -1)
 
 
 class LimitedLevelVehiclesWatcher(BaseVehiclesWatcher):
@@ -74,7 +84,7 @@ class LimitedLevelVehiclesWatcher(BaseVehiclesWatcher):
     def _getUnsuitableVehicles(self, onClear=False):
         newValidLevels = self._getValidLevels()
         if newValidLevels != self.__validLevels and not onClear:
-            self._clearUnsuitableState()
+            self._clearCustomsStates()
         self.__validLevels = self.__validLevels if onClear else newValidLevels
         vehLevels = list(set(range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)) - set(self.__validLevels)) if self.__validLevels is not None else []
         vehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(vehLevels)).itervalues()
@@ -104,7 +114,7 @@ class ForbiddenVehiclesWatcher(BaseVehiclesWatcher):
         newForbiddenClasses = self._getForbiddenVehicleClasses()
         forbiddenListChanged = newForbiddenTypes != self.__forbiddenVehicleTypes or newForbiddenClasses != self.__forbiddenVehicleClasses
         if forbiddenListChanged and not onClear:
-            self._clearUnsuitableState()
+            self._clearCustomsStates()
         self.__forbiddenVehicleTypes = self.__forbiddenVehicleTypes if onClear else newForbiddenTypes
         self.__forbiddenVehicleClasses = self.__forbiddenVehicleClasses if onClear else newForbiddenClasses
         classVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.CLASSES(self.__forbiddenVehicleClasses)).itervalues() if self.__forbiddenVehicleClasses is not None else []

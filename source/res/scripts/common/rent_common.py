@@ -8,6 +8,9 @@ class SeasonRentDuration(object):
     SEASON_CYCLE = 2
 
 
+RENT_TYPE_TO_DURATION = {'season': SeasonRentDuration.ENTIRE_SEASON,
+ 'cycle': SeasonRentDuration.SEASON_CYCLE}
+
 def makeRentID(rentType, packageID):
     return (rentType << 28) + packageID
 

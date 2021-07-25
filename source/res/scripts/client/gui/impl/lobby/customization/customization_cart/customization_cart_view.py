@@ -420,7 +420,7 @@ class _ItemUIDataPacker(_BaseUIDataPacker):
         component = desc.component
         model.setIsWide(item.isWide())
         model.setIsDim(item.isDim())
-        model.setIsHistorical(item.isHistorical())
+        model.setCustomizationDisplayType(item.customizationDisplayType())
         model.price.assign(item.getBuyPrice())
         if item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
             model.setFormFactor(item.formfactor)

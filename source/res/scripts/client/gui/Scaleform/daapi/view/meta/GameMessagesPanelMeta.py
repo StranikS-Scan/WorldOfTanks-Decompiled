@@ -4,8 +4,11 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class GameMessagesPanelMeta(BaseDAAPIComponent):
 
-    def onMessageStarted(self, type, id):
+    def onMessageStarted(self, type, modificator, id):
         self._printOverrideError('onMessageStarted')
+
+    def onMessagePhaseStarted(self, type, modificator, id):
+        self._printOverrideError('onMessagePhaseStarted')
 
     def onMessageEnded(self, type, id):
         self._printOverrideError('onMessageEnded')

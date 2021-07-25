@@ -84,7 +84,7 @@ class ActionSoundHelper(object):
             cls.playRevertSound(vehicle)
         elif actionType == BaseSetupModel.SWAP_SLOTS_ACTION:
             cls.playSwapSound(vehicle, leftIntCD, rightIntCD)
-        elif actionType == BaseSetupModel.DEMOUNT_SLOT_ACTION:
+        elif actionType in (BaseSetupModel.DEMOUNT_SLOT_ACTION, BaseSetupModel.DEMOUNT_SLOT_FROM_SETUP_ACTION, BaseSetupModel.DEMOUNT_SLOT_FROM_SETUPS_ACTION):
             cls.playDemountSound(vehicle, intCD)
         elif actionType == BaseSetupModel.DRAG_AND_DROP_SLOT_ACTION:
             cls.playDragAndDropSound(vehicle, leftIntCD, rightIntCD)
@@ -151,7 +151,7 @@ class OptDeviceActionSound(ActionSoundHelper):
         intCDs = vehicle.optDevices.layout.getIntCDs(default=None)
         if intCD in intCDs:
             slotID = intCDs.index(intCD)
-            vehCategories = vehicle.optDevices.slots[slotID].categories
+            vehCategories = vehicle.optDevices.getSlot(slotID).item.categories
             itemCategories = vehicle.optDevices.layout[slotID].descriptor.categories
             return bool(vehCategories & itemCategories)
         else:

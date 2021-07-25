@@ -13,6 +13,8 @@ class MARKER_SYMBOL_NAME(object):
     EQUIPMENT_MARKER = 'FortConsumablesMarker'
     LOCATION_MARKER = 'LocationMarkerUI'
     ATTENTION_MARKER = 'AttentionMarkerUI'
+    SHOOTING_MARKER = 'AimMarkerUI'
+    NAVIGATION_MARKER = 'NavigationMarkerUI'
     SAFE_ZONE_MARKER = 'SafeZoneIndicatorUI'
     STATIC_OBJECT_MARKER = 'StaticObjectMarker'
     STATIC_ARTY_MARKER = 'StaticArtyMarkerUI'

@@ -89,9 +89,7 @@ class ModeSelectorItem(object):
             return
         else:
             self._onDisposing()
-            if self._viewModel is not None:
-                self._viewModel.unbind()
-                self._viewModel = None
+            self._viewModel = None
             self._initialized = False
             return
 
@@ -151,6 +149,7 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
         if modeStrings.isValid():
             self.viewModel.setConditions(backport.text(modeStrings.dyn('condition')()))
             self.viewModel.setDescription(backport.text(modeStrings.dyn('description')()))
+            self.viewModel.setCallToAction(backport.text(modeStrings.dyn('callToAction')()))
 
     def _addReward(self, rewardID, locParams=None, **params):
         if locParams is None:

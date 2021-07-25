@@ -7,6 +7,8 @@
     <loader>	radioman	</loader>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
+  <postProgressionTree>	role_MT_assault_level_8	</postProgressionTree>
+  <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	40	</forward>
     <backward>	18	</backward>
@@ -62,7 +64,7 @@
     </armor>
     <primaryArmor>	armor_14 armor_3 armor_9	</primaryArmor>
     <weight>	30696	</weight>
-    <maxHealth>	1160	</maxHealth>
+    <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1322,7 +1324,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8500	</weight>
-      <maxHealth>	290	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -1354,9 +1356,9 @@
             </armor_5>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	7.6	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	7.0	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>

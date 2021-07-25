@@ -424,6 +424,12 @@ class FittingItem(GUIItem):
     def isInstalled(self, vehicle, slotIdx=None):
         return False
 
+    def isInSetup(self, vehicle, setupIndex=None, slotIdx=None):
+        return False
+
+    def isInOtherLayout(self, vehicle):
+        return False
+
     def mayInstall(self, vehicle, slotIdx=None):
         return vehicle.descriptor.mayInstallComponent(self.intCD)
 

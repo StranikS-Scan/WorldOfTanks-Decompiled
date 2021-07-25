@@ -4,7 +4,7 @@ from gui.Scaleform.framework.entities.View import View
 
 class BCOutroVideoPageMeta(View):
 
-    def videoFinished(self):
+    def videoFinished(self, skipped):
         self._printOverrideError('videoFinished')
 
     def handleError(self, data):

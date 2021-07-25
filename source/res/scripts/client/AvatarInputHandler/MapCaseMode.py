@@ -5,6 +5,7 @@ from ArtilleryEquipment import ArtilleryEquipment
 from AvatarInputHandler import gun_marker_ctrl
 from CombatSelectedArea import CombatSelectedArea
 from aih_constants import GUN_MARKER_TYPE, CTRL_MODE_NAME
+from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from items.artefacts import ArcadeEquipmentConfigReader
@@ -96,6 +97,21 @@ class _VehiclesSelector(object):
         for v in selected:
             v.drawEdge(True)
             self.__edgedVehicles.append(v)
+
+
+class _FLMinesSensor(object):
+    _sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self, intersectChecker):
+        self.__intersectChecker = intersectChecker
+
+    def destroy(self):
+        self.__intersectChecker = None
+        return
+
+    def isIntersectMine(self):
+        allyMines = [ e for e in BigWorld.entities.values() if e.__class__.__name__ == 'BasicMine' and self._sessionProvider.getArenaDP().isAlly(e.ownerVehicleID) ]
+        return any(self.__intersectChecker(allyMines))
 
 
 class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
@@ -454,6 +470,39 @@ class _ArcadeBomberStrikeSelector(_ArenaBoundsAreaStrikeSelector, _VehiclesSelec
                 yield v
 
 
+class _ArcadeFLMinesSelector(_ArcadeBomberStrikeSelector, _FLMinesSensor):
+
+    def __init__(self, position, equipment):
+        _ArcadeBomberStrikeSelector.__init__(self, position, equipment)
+        _FLMinesSensor.__init__(self, self.__minesIntersected)
+        self.__checkIntersectMines()
+
+    def processSelection(self, position, reset=False):
+        if not reset and self.isIntersectMine():
+            SoundGroups.g_instance.playSound2D(EPIC_SOUND.EB_ABILITY_MINEFIELD_BLOCK)
+            ctrl = self._sessionProvider.shared.messages
+            if ctrl is not None:
+                ctrl.showVehicleError('minefieldIsIntersected')
+            return False
+        else:
+            return _ArcadeBomberStrikeSelector.processSelection(self, position, reset)
+
+    def tick(self):
+        super(_ArcadeFLMinesSelector, self).tick()
+        self.__checkIntersectMines()
+
+    def __minesIntersected(self, mines):
+        for m in mines:
+            if self.area.pointInside(m.position):
+                yield m
+
+    def __checkIntersectMines(self):
+        if self.isIntersectMine():
+            self.area.setColor(int(4294901760L))
+        else:
+            self.area.setColor(int(4278255360L))
+
+
 _STRIKE_SELECTORS = {artefacts.RageArtillery: _ArtilleryStrikeSelector,
  artefacts.RageBomber: _BomberStrikeSelector,
  artefacts.EpicArtillery: _ArtilleryStrikeSelector,
@@ -466,6 +515,7 @@ _STRIKE_SELECTORS = {artefacts.RageArtillery: _ArtilleryStrikeSelector,
  artefacts.BRSmokeArcade: _ArcadeBomberStrikeSelector,
  artefacts.SpawnKamikaze: _ArcadeBomberStrikeSelector,
  artefacts.BattleRoyaleMinefield: _ArcadeBomberStrikeSelector,
+ artefacts.FrontLineMinefield: _ArcadeFLMinesSelector,
  artefacts.AreaOfEffectEquipment: _ArcadeBomberStrikeSelector,
  artefacts.AttackBomberEquipment: _ArcadeBomberStrikeSelector}
 
@@ -477,6 +527,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     equipmentID = property(lambda self: self.__equipmentID)
     prevCtlMode = None
     deactivateCallback = None
+    MODE_NAME = ''
     _PREFERED_POSITION = 0
     _MODE_NAME = 1
     _AIM_MODE = 2
@@ -714,8 +765,8 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
                 replayCtrl.setEquipmentID(equipmentID)
-            if not isinstance(BigWorld.player().inputHandler.ctrl, MapCaseControlModeBase):
-                self.setGUIVisible(False)
+            isVisible = isinstance(BigWorld.player().inputHandler.ctrl, MapCaseControlModeBase)
+            self.setGUIVisible(isVisible)
             return
 
     def __tick(self):
@@ -723,6 +774,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
 
 
 class MapCaseControlMode(MapCaseControlModeBase):
+    MODE_NAME = CTRL_MODE_NAME.MAP_CASE
 
     def _createCamera(self, config):
         return StrategicCamera.StrategicCamera(config)
@@ -741,12 +793,13 @@ class MapCaseControlMode(MapCaseControlModeBase):
 
 
 class ArcadeMapCaseControlMode(MapCaseControlModeBase):
+    MODE_NAME = CTRL_MODE_NAME.MAP_CASE_ARCADE
 
     def _createCamera(self, config):
         return ArcadeCamera.ArcadeCamera(config, Math.Vector2())
 
     def _initCamera(self):
-        self.camera.create(Math.Vector3(0, 10, 3))
+        self.camera.create()
 
     def _getCameraDesiredShotPoint(self):
         return self.camera.aimingSystem.getDesiredShotPoint()
@@ -756,9 +809,15 @@ class ArcadeMapCaseControlMode(MapCaseControlModeBase):
         return inputHandler.ctrl.camera.aimingSystem.getDesiredShotPoint()
 
 
-def activateMapCase(equipmentID, deactivateCallback, isArcadeCamera=False):
+class AracdeMinefieldControleMode(ArcadeMapCaseControlMode):
+    MODE_NAME = CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD
+
+    def _createCamera(self, config):
+        return ArcadeCamera.ArcadeCameraEpic(config, Math.Vector2())
+
+
+def activateMapCase(equipmentID, deactivateCallback, controlMode):
     inputHandler = BigWorld.player().inputHandler
-    controlMode = ArcadeMapCaseControlMode if isArcadeCamera else MapCaseControlMode
     if isinstance(inputHandler.ctrl, controlMode):
         if controlMode.deactivateCallback is not None:
             controlMode.deactivateCallback()
@@ -775,14 +834,12 @@ def activateMapCase(equipmentID, deactivateCallback, isArcadeCamera=False):
                 pos = camera.aimingSystem.getDesiredShotPoint()
             if pos is None:
                 pos = Vector3(0.0, 0.0, 0.0)
-        modeName = CTRL_MODE_NAME.MAP_CASE_ARCADE if isArcadeCamera else CTRL_MODE_NAME.MAP_CASE
         controlMode.prevCtlMode = [pos, inputHandler.ctrlModeName, inputHandler.ctrl.aimingMode]
-        inputHandler.onControlModeChanged(modeName, preferredPos=pos, aimingMode=inputHandler.ctrl.aimingMode, equipmentID=equipmentID, saveDist=False)
+        inputHandler.onControlModeChanged(controlMode.MODE_NAME, preferredPos=pos, aimingMode=inputHandler.ctrl.aimingMode, equipmentID=equipmentID, saveDist=False)
     return
 
 
-def turnOffMapCase(equipmentID, isArcadeCamera=False):
-    controlMode = ArcadeMapCaseControlMode if isArcadeCamera else MapCaseControlMode
+def turnOffMapCase(equipmentID, controlMode):
     inputHandler = BigWorld.player().inputHandler
     if isinstance(inputHandler.ctrl, controlMode):
         if inputHandler.ctrl.equipmentID == equipmentID:

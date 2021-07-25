@@ -6,6 +6,11 @@
     <Heavy>	204	</Heavy>
     <Large>	205	</Large>
     <Large_SH>	207	</Large_SH>
+    <Medium_MapsTraining_Dummy_LT_1>	2	</Medium_MapsTraining_Dummy_LT_1>
+    <Small_MapsTraining_Dummy_SPG_1>	3	</Small_MapsTraining_Dummy_SPG_1>
+    <Average_MapsTraining_Player_MT_1>	4	</Average_MapsTraining_Player_MT_1>
+    <Average_MapsTraining_Player_MT_2>	5	</Average_MapsTraining_Player_MT_2>
+    <Average_MapsTraining_Dummy_HT_2>	6	</Average_MapsTraining_Dummy_HT_2>
   </ids>
   <shared>
     <Small>
@@ -57,5 +62,52 @@
       <maxRegenHealth>	80	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Large_SH>
+    <Medium_MapsTraining_Dummy_LT_1>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Medium_MapsTraining_Dummy_LT_1>
+    <Small_MapsTraining_Dummy_SPG_1>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	200	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Small_MapsTraining_Dummy_SPG_1>
+    <Average_MapsTraining_Player_MT_1>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </Average_MapsTraining_Player_MT_1>
+    <Average_MapsTraining_Player_MT_2>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </Average_MapsTraining_Player_MT_2>
+    <Average_MapsTraining_Dummy_HT_2>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Average_MapsTraining_Dummy_HT_2>
   </shared>
 </fuelTanks.xml>

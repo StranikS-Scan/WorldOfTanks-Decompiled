@@ -18,6 +18,7 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
     __EVENTS_PATH = 'gui/sound_notifications.xml'
     __CIRCUMSTANCES_PATH = 'gui/sound_circumstances.xml'
     __DEFAULT_LIFETIME = 3.0
+    __TICK_DELAY = 0.5
     QueueItem = namedtuple('QueueItem', ('eventName', 'priority', 'time', 'vehicleID', 'checkFn', 'position', 'boundVehicleID'))
     PlayingEvent = namedtuple('PlayingEvent', ('eventName', 'vehicle', 'position', 'boundVehicle', 'is2D'))
 
@@ -51,7 +52,7 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
         self._vsePlan.setContext(self.__soundNotificationsContext)
         self._vsePlan.start()
         self.measureDeltaTime()
-        self.delayCallback(0.0, self.__tick)
+        self.delayCallback(self.__TICK_DELAY, self.__tick)
 
     def destroy(self):
         CallbackDelayer.destroy(self)
@@ -279,21 +280,24 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
         return
 
     def __tick(self):
-        self.__tickGroup(self.__eventsCooldowns)
-        self.__tickGroup(self.__fxCooldowns)
-        self.__tickGroup(self.__eventsPriorities)
-        self.__tickGroup(self.__circumstancesWeights)
-        self.__tickGroup(self.__circumstancesGroupsWeights)
+        delta = self.measureDeltaTime()
+        self.__tickGroup(self.__eventsCooldowns, delta)
+        self.__tickGroup(self.__fxCooldowns, delta)
+        self.__tickGroup(self.__eventsPriorities, delta)
+        self.__tickGroup(self.__circumstancesWeights, delta)
+        self.__tickGroup(self.__circumstancesGroupsWeights, delta)
         for queueNum in self.__queues:
             self.__queues[queueNum] = [ item for item in self.__queues[queueNum] if self.__checkLifetime(item) ]
+
+        return self.__TICK_DELAY
 
     def __checkLifetime(self, queueItem):
         event = self.__events[queueItem.eventName]
         lifetime = float(event['lifetime']) if 'lifetime' in event else self.__DEFAULT_LIFETIME
         return queueItem.time + lifetime > BigWorld.time()
 
-    def __tickGroup(self, group):
-        delta = self.measureDeltaTime()
+    @staticmethod
+    def __tickGroup(group, delta):
         for name, info in group.items():
             if not info:
                 continue

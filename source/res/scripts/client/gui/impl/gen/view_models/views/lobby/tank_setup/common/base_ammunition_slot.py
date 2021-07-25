@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class BaseAmmunitionSlot(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(BaseAmmunitionSlot, self).__init__(properties=properties, commands=commands)
 
     def getId(self):
@@ -45,17 +45,35 @@ class BaseAmmunitionSlot(ViewModel):
     def setIsInstalled(self, value):
         self._setBool(5, value)
 
+    def getIsMountedMoreThanOne(self):
+        return self._getBool(6)
+
+    def setIsMountedMoreThanOne(self, value):
+        self._setBool(6, value)
+
+    def getItemInstalledSetupIdx(self):
+        return self._getNumber(7)
+
+    def setItemInstalledSetupIdx(self, value):
+        self._setNumber(7, value)
+
     def getOverlayType(self):
-        return self._getString(6)
+        return self._getString(8)
 
     def setOverlayType(self, value):
-        self._setString(6, value)
+        self._setString(8, value)
 
     def getHighlightType(self):
-        return self._getString(7)
+        return self._getString(9)
 
     def setHighlightType(self, value):
-        self._setString(7, value)
+        self._setString(9, value)
+
+    def getCategoryImgSource(self):
+        return self._getResource(10)
+
+    def setCategoryImgSource(self, value):
+        self._setResource(10, value)
 
     def _initialize(self):
         super(BaseAmmunitionSlot, self)._initialize()
@@ -65,5 +83,8 @@ class BaseAmmunitionSlot(ViewModel):
         self._addResourceProperty('imageSource', R.invalid())
         self._addBoolProperty('withAttention', False)
         self._addBoolProperty('isInstalled', True)
+        self._addBoolProperty('isMountedMoreThanOne', False)
+        self._addNumberProperty('itemInstalledSetupIdx', -1)
         self._addStringProperty('overlayType', '')
         self._addStringProperty('highlightType', '')
+        self._addResourceProperty('categoryImgSource', R.invalid())

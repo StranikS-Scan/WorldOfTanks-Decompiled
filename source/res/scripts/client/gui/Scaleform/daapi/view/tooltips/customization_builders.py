@@ -7,12 +7,13 @@ from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementAwardTo
 from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementPurchaseTooltip
 from gui.shared.tooltips import contexts
 from gui.shared.tooltips.builders import DataBuilder
-from gui.Scaleform.daapi.view.lobby.customization.tooltips.element import NonHistoricTooltip, PopoverTooltip, ChainedTooltip
+from gui.Scaleform.daapi.view.lobby.customization.tooltips.element import NonHistoricTooltip, FantasticalTooltip, PopoverTooltip, ChainedTooltip
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
     return (DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementTooltip(contexts.TechCustomizationContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_NONHISTORIC_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, NonHistoricTooltip(contexts.TechCustomizationContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_FANTASTICAL_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, FantasticalTooltip(contexts.TechCustomizationContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_CHAINED_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ChainedTooltip(contexts.TechCustomizationContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_POPOVER_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, PopoverTooltip(contexts.TechCustomizationContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_ICON, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementIconTooltip(contexts.TechCustomizationContext())),

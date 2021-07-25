@@ -34,6 +34,9 @@
     <onXPUpdated>
       <Arg>	INT16	</Arg>
     </onXPUpdated>
+    <onRankUpdate>
+      <Arg>	INT16	</Arg>
+    </onRankUpdate>
     <showDestructibleShotResults>
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
@@ -43,10 +46,18 @@
       <Arg>	OBJECT_ID	</Arg>
     </onDestructibleDestroyed>
   </ClientMethods>
+  <CellMethods>
+    <onXPUpdated>
+      <Arg>	INT16	</Arg>
+    </onXPUpdated>
+  </CellMethods>
   <BaseMethods>
     <enableFrontLineDevInfo>
       <Arg>	BOOL	</Arg>
       <Exposed></Exposed>
     </enableFrontLineDevInfo>
+    <onXPUpdated>
+      <Arg>	INT16	</Arg>
+    </onXPUpdated>
   </BaseMethods>
 </AvatarEpic.def>

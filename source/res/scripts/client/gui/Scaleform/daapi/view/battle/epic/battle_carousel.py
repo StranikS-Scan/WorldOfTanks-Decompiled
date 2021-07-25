@@ -1,25 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/battle_carousel.py
+import logging
+import weakref
+import BigWorld
 import Event
 from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_1, EPICBATTLE_CAROUSEL_FILTER_2
 from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_CLIENT_1
+from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts, FilterSetupContext
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter
 from gui.Scaleform.daapi.view.meta.BattleTankCarouselMeta import BattleTankCarouselMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 import nations
-from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.battle.shared.respawn import respawn_utils
 from gui.shared.gui_items import ItemsCollection
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+_logger = logging.getLogger(__name__)
 _DISABLED_FILTERS = ['bonus']
-_BATTLE_CAROUSEL_FILTERS = ('favorite',)
 
 class BattleCarouselFilter(CarouselFilter):
 
@@ -50,24 +55,66 @@ def getEpicVehicleDataVO(vehicle):
 class BattleCarouselDataProvider(CarouselDataProvider):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
+    def __init__(self, carouselFilter, itemsCache, currentVehicle):
+        super(BattleCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
+        self.__separatorItems = []
+        self.__filteredSeparators = []
+        self.__availableLevels = []
+        self.__indexToScroll = -1
+
+    @property
+    def collection(self):
+        return self._vehicleItems + self.__separatorItems
+
+    def getCurrentVehiclesCount(self):
+        result = super(BattleCarouselDataProvider, self).getCurrentVehiclesCount()
+        return result - len(self.__filteredSeparators)
+
     def setShowStats(self, showVehicleStats):
         self._showVehicleStats = False
 
-    def getVehicles(self):
-        return self._vehicles
+    def clear(self):
+        super(BattleCarouselDataProvider, self).clear()
+        self.__separatorItems = []
+        self.__filteredSeparators = []
+        self.__availableLevels = []
+        self.__indexToScroll = -1
 
-    def _buildVehicle(self, vehicle):
-        rawVehicleData = self._itemsCache.getRawVehicleData(vehicle.invID)
-        if rawVehicleData:
-            vehicle.settings = rawVehicleData.settings
-        result = getEpicVehicleDataVO(vehicle)
-        return result
+    def getIndexToScroll(self):
+        return self.__indexToScroll
 
-    def _getVehicleStats(self, vehicle):
-        return {}
+    def getAvailableLevels(self):
+        return self.__availableLevels
 
-    def _syncRandomStats(self):
-        pass
+    def applyFilter(self, forceApply=False):
+        prevFilteredIndices = self._filteredIndices[:]
+        prevSelectedIdx = self._selectedIdx
+        self._filteredIndices = []
+        self._selectedIdx = -1
+        self.__indexToScroll = -1
+        isSeparatorsNeeded = self.__isVehicleLevelsFilterNeeded()
+        currentVehicleInvID = self._currentVehicle.invID
+        vehLevelsToScroll = self.__getVehLevelsUnlockInBattle()
+        visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
+        sortedVehicleIndices = self._getSortedIndices()
+        self.__filteredSeparators = []
+        for idx in sortedVehicleIndices:
+            vehicle = self._vehicles[idx]
+            if vehicle.intCD in visibleVehiclesIntCDs:
+                if isSeparatorsNeeded and vehicle.level not in self.__filteredSeparators:
+                    separatorIdx = len(self._vehicles) + self.__availableLevels.index(vehicle.level)
+                    if vehicle.level in vehLevelsToScroll:
+                        self.__indexToScroll = len(self._filteredIndices)
+                    self._filteredIndices.append(separatorIdx)
+                    self.__filteredSeparators.append(vehicle.level)
+                self._filteredIndices.append(idx)
+                if currentVehicleInvID == vehicle.invID:
+                    self._selectedIdx = len(self._filteredIndices) - 1
+
+        self._filteredIndices += self._getAdditionalItemsIndexes()
+        needUpdate = forceApply or prevFilteredIndices != self._filteredIndices or prevSelectedIdx != self._selectedIdx
+        if needUpdate:
+            self._filterByIndices()
 
     def updateVehicleStates(self, slotsStatesData):
         updateIndices = []
@@ -106,26 +153,59 @@ class BattleCarouselDataProvider(CarouselDataProvider):
 
         self.applyFilter()
 
-    def sortVehicles(self, vehList):
-        newVehicles = []
-        newVehicleItems = []
-        updateIndices = []
-        for newIdx, newVehicle in enumerate(vehList):
-            for idx, oldVehicle in enumerate(self._vehicles):
-                if oldVehicle.intCD == newVehicle.intCD:
-                    newVehicles.append(self._vehicles[idx])
-                    newVehicleItems.append(self._vehicleItems[idx])
-                    updateIndices.append(newIdx)
-                    break
+    def _buildVehicleItems(self):
+        super(BattleCarouselDataProvider, self)._buildVehicleItems()
+        self.__calculateCountOfVehicleLevels()
+        self.__buildSeparatorItems()
 
-        self.flashObject.invalidateItems(updateIndices, newVehicleItems)
-        self._vehicles = newVehicles
-        self._vehicleItems = newVehicleItems
-        self.applyFilter()
+    def _buildVehicle(self, vehicle):
+        rawVehicleData = self._itemsCache.getRawVehicleData(vehicle.invID)
+        if rawVehicleData:
+            vehicle.settings = rawVehicleData.settings
+        return getEpicVehicleDataVO(vehicle)
+
+    def _getVehicleStats(self, vehicle):
+        return {}
+
+    def _syncRandomStats(self):
+        pass
 
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):
-        pass
+        return (vehicle.level,
+         GUI_NATIONS_ORDER_INDEX[vehicle.nationName],
+         VEHICLE_TYPES_ORDER_INDICES[vehicle.type],
+         vehicle.userName)
+
+    def __isVehicleLevelsFilterNeeded(self):
+        return len(self.__availableLevels) > 1
+
+    def __calculateCountOfVehicleLevels(self):
+        self.__availableLevels = []
+        for vehicle in self._vehicles:
+            if vehicle.level not in self.__availableLevels:
+                self.__availableLevels.append(vehicle.level)
+
+        self.__availableLevels.sort()
+
+    def __buildSeparatorItems(self):
+        self.__separatorItems = []
+        if not self.__isVehicleLevelsFilterNeeded():
+            return
+        for level in self.__availableLevels:
+            self.__separatorItems.append({'levelInfo': {'level': level,
+                           'isCollapsed': True,
+                           'isCollapsible': False,
+                           'infoText': ''}})
+
+    @staticmethod
+    def __getVehLevelsUnlockInBattle():
+        arena = getattr(BigWorld.player(), 'arena', None)
+        if arena is None:
+            _logger.warning('Missing arena')
+            return []
+        else:
+            return arena.settings.get('epic_config', {}).get('unlockableInBattleVehLevels', [])
 
 
 class VehicleData(object):
@@ -134,14 +214,28 @@ class VehicleData(object):
 
     def __init__(self, carousel):
         self.items = self
-        self.__carousel = carousel
+        self.__carouselRef = weakref.ref(carousel)
         self.__vehicles = None
-        ctrl = self.sessionProvider.dynamic.respawn
-        if ctrl is not None:
-            ctrl.onRespawnVehiclesUpdated += self.__updateVehiclesList
         self.__eManager = Event.EventManager()
         self.onSyncCompleted = Event.Event(self.__eManager)
+        ctrl = self.sessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.onRespawnVehiclesUpdated += self.__updateRespawnVehicles
         return
+
+    def dispose(self):
+        ctrl = self.sessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.onRespawnVehiclesUpdated -= self.__updateRespawnVehicles
+        self.__carouselRef = None
+        self.__vehicles = None
+        self.__eManager.clear()
+        self.__eManager = None
+        self.items = None
+        return
+
+    def isSynced(self):
+        return True
 
     def getVehicles(self, criteria=None):
         result = ItemsCollection()
@@ -152,27 +246,15 @@ class VehicleData(object):
 
         return result
 
-    def dispose(self):
-        ctrl = self.sessionProvider.dynamic.respawn
-        if ctrl is not None:
-            ctrl.onRespawnVehiclesUpdated -= self.__updateVehiclesList
-        self.__carousel = None
-        self.__vehicles = None
-        self.__eManager.clear()
-        self.__eManager = None
-        self.items = None
-        return
-
     def getRawVehicleData(self, invID):
         return None if invID >= len(self.__vehicles) else self.__vehicles[invID]
 
-    def __updateVehiclesList(self, vehicleList):
-        self.__vehicles = vehicleList
-        self.__carousel.latePopulate()
+    def __updateRespawnVehicles(self, vehs):
+        self.__vehicles = vehs.values()
+        carousel = self.__carouselRef()
+        if carousel:
+            carousel.latePopulate()
         self.onSyncCompleted()
-
-    def isSynced(self):
-        return True
 
 
 class BattleTankCarousel(BattleTankCarouselMeta):
@@ -182,8 +264,8 @@ class BattleTankCarousel(BattleTankCarouselMeta):
         super(BattleTankCarousel, self).__init__()
         self._carouselDPCls = BattleCarouselDataProvider
         self._carouselFilterCls = BattleCarouselFilter
-        self._usedFilters = _BATTLE_CAROUSEL_FILTERS
         self.__vehicleData = VehicleData(self)
+        self.__isUnlockedVehiclesShown = False
 
     def updateHotFilters(self):
         hotFilters = []
@@ -195,8 +277,8 @@ class BattleTankCarousel(BattleTankCarouselMeta):
 
         self.as_setCarouselFilterS({'hotFilters': hotFilters})
 
-    def sortVehicles(self, vehList):
-        self._carouselDP.sortVehicles(vehList)
+    def sortVehicles(self, _):
+        self._carouselDP.applyFilter()
 
     def resetFilters(self):
         super(BattleTankCarousel, self).resetFilters()
@@ -221,14 +303,23 @@ class BattleTankCarousel(BattleTankCarouselMeta):
         self._carouselDP.selectVehicleByID(vehicleID)
 
     def latePopulate(self):
-        self.updateVehicles()
-        self._carouselDP.buildList()
+        self.updateVehicles(self.__vehicleData.getVehicles())
         self.updateAviability()
         self.resetFilters()
+
+    def getCustomParams(self):
+        return {'vehicleLevelsFilter': self._carouselDP.getAvailableLevels()}
+
+    def show(self):
+        indexToScroll = self._carouselDP.getIndexToScroll()
+        if indexToScroll >= 0 and not self.__isUnlockedVehiclesShown:
+            self.__isUnlockedVehiclesShown = True
+            self.as_scrollToSlotS(indexToScroll)
 
     def _populate(self):
         super(BattleTankCarousel, self)._populate()
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
+        self.as_useExtendedCarouselS(True)
         self.as_initCarouselFilterS(self._getInitialFilterVO(getFilterSetupContexts(1)))
 
     def _dispose(self):
@@ -269,6 +360,9 @@ class BattleTankCarousel(BattleTankCarouselMeta):
                 entry['selected'] = False
 
         return filtersVO
+
+    def _getFilters(self):
+        pass
 
     def __onViewLoaded(self, view, *args):
         if view.settings.alias == BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER:

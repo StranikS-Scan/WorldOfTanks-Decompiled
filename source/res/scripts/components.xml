@@ -1,11 +1,15 @@
 <components.xml>
   <StaticComponents></StaticComponents>
   <DynamicComponents>
+    <OwnVehicle></OwnVehicle>
     <DogTagComponent></DogTagComponent>
     <DogTagsInfo></DogTagsInfo>
     <LabelComponent></LabelComponent>
+    <GunMarkerComponent></GunMarkerComponent>
     <ExtendedSPG></ExtendedSPG>
     <AtGunpoint></AtGunpoint>
     <EnemyShotPredictorController></EnemyShotPredictorController>
+    <MapsTrainingStorageComponent></MapsTrainingStorageComponent>
+    <BattleHintsComponent></BattleHintsComponent>
   </DynamicComponents>
 </components.xml>

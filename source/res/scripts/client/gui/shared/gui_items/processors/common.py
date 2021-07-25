@@ -306,33 +306,6 @@ class BadgesSelector(Processor):
         BigWorld.player().badges.selectBadges(self.__badges, lambda resID, code, errStr: self._response(code, callback, errStr))
 
 
-class EpicPrestigeTrigger(Processor):
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('epicBattles/prestigeTrigger/error')
-
-    def _request(self, callback):
-        _logger.debug('Make server request to trigger prestige')
-        BigWorld.player().epicMetaGame.triggerEpicMetaGamePrestige(lambda code, errStr: self._response(code, callback, errStr=errStr))
-
-
-class EpicPrestigePointsExchange(Processor):
-
-    def _request(self, callback):
-        _logger.debug('Make server request to exchange prestige points')
-        BigWorld.player().epicMetaGame.exchangePrestigePoints(lambda code, errStr: self._response(code, callback, errStr=errStr))
-
-
-class EpicRewardsClaimer(Processor):
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('epicBattles/claimReward/error')
-
-    def _request(self, callback):
-        _logger.debug('Make server request to claim final reward')
-        BigWorld.player().epicMetaGame.claimEpicMetaGameMaxPrestigeReward(lambda code, errStr: self._response(code, callback, errStr=errStr))
-
-
 class ConvertBlueprintFragmentProcessor(Processor):
 
     def __init__(self, vehicleCD, count, fragmentPosition, usedNationalFragments):

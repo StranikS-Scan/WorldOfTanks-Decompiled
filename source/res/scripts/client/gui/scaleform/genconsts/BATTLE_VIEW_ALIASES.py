@@ -81,3 +81,6 @@ class BATTLE_VIEW_ALIASES(object):
     FRAG_PANEL = 'fragPanel'
     BR_PLAYER_STATS_IN_BATTLE = 'brPlayerStatsInBattle'
     ROLE_DESCRIPTION = 'roleDescription'
+    PREBATTLE_AMMUNITION_PANEL = 'prebattleAmmunitionPanel'
+    EPIC_RESPAWN_AMMUNITION_PANEL = 'epicRespawnAmmunitionPanel'
+    MAPS_TRAINING_GOALS = 'mapsTrainingGoals'

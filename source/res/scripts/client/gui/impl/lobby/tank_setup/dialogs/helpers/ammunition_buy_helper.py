@@ -13,3 +13,7 @@ def _getModuleOrderByType(itemType):
 
 def modulesSortFunction(i1, i2):
     return cmp(_getModuleOrderByType(i1.getTypeID()), _getModuleOrderByType(i2.getTypeID()))
+
+
+def isFreeInstalling(item, vehicle):
+    return item.isInInventory or item.isInOtherLayout(vehicle) if vehicle is not None else item.isInInventory

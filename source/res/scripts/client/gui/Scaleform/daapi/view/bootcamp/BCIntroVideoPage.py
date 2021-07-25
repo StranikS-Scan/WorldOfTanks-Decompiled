@@ -94,7 +94,7 @@ class BCIntroVideoPage(BCIntroPage, IArenaVehiclesController):
 
     def _showHighlight(self):
         if self._shouldHighlight(INTRO_HIGHLIGHT_TYPE.START_BUTTON):
-            self._setHighlighting(INTRO_HIGHLIGHT_TYPE.START_BUTTON, True)
+            self._setHighlighting(INTRO_HIGHLIGHT_TYPE.WELCOME_START_BUTTON if self._videoPlayerVisible else INTRO_HIGHLIGHT_TYPE.START_BUTTON, True)
         if self._isCurrentlyHighlighting(INTRO_HIGHLIGHT_TYPE.ARROWS):
             self._setHighlighting(INTRO_HIGHLIGHT_TYPE.ARROWS, False)
 

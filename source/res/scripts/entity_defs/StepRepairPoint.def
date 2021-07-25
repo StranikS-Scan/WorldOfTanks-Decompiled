@@ -49,6 +49,12 @@
       <Default>	25.0	</Default>
       <Editable>	true	</Editable>
     </radius>
+    <healGroup>
+      <Type>	UINT8	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	1	</Default>
+      <Editable>	true	</Editable>
+    </healGroup>
   </Properties>
   <CellMethods>
     <changeOwnerTeam>

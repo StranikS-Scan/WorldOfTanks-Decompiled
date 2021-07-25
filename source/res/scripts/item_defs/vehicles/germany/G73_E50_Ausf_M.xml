@@ -8,6 +8,8 @@
     <loader></loader>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
+  <postProgressionTree>	role_MT_assault_level_10	</postProgressionTree>
+  <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	60	</forward>
     <backward>	20	</backward>
@@ -1036,6 +1038,79 @@
         <anchorPosition>	-1.23357 0.25198 3.14869	</anchorPosition>
         <anchorDirection>	0.00175179 0.931809 0.362945	</anchorDirection>
         <tags>	formfactor_square	</tags>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15068	</slotId>
+        <compatibleModels>	Halloween_3Dst	</compatibleModels>
+        <position>	0.84833 1.68854 2.55383	</position>
+        <rotation>	0.371427 -0.000003 3.13984	</rotation>
+        <scale>	0.686518 0.686519 0.686515	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	0.848365 0.573903 2.56109	</anchorPosition>
+        <anchorDirection>	0.00175168 0.931809 0.362945	</anchorDirection>
+        <attachNode>	HP_light2	</attachNode>
+        <tags>	formfactor_square	</tags>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15069	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Halloween_3Dst	</compatibleModels>
+        <position>	-1.23377 1.28276 3.10877	</position>
+        <rotation>	0.371427 -0.000003 3.13984	</rotation>
+        <scale>	0.491303 0.2 0.4913	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-1.23358 0.251979 3.14869	</anchorPosition>
+        <anchorDirection>	0.00175168 0.931809 0.362945	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15070	</slotId>
+        <position>	-1.98275 1.13212 -1.53803	</position>
+        <rotation>	1.56891 1.56871 -0.000240412	</rotation>
+        <attachNode>	HP_light2	</attachNode>
+        <tags>	direction_right_to_left formfactor_square	</tags>
+        <compatibleModels>	Halloween_3Dst	</compatibleModels>
+        <scale>	0.399752 0.3709 0.399752	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.19998	</clipAngle>
+        <anchorPosition>	-1.98437 -0.00115885 -1.53803	</anchorPosition>
+        <anchorDirection>	-0.999997 -0.00185946 -0.00176078	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15071	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	Halloween_3Dst	</compatibleModels>
+        <position>	1.98276 1.13209 -1.53803	</position>
+        <rotation>	1.56821 -1.56886 0.000387935	</rotation>
+        <scale>	0.399752 0.3709 0.399752	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.19998	</clipAngle>
+        <anchorPosition>	1.98438 -0.00118833 -1.53803	</anchorPosition>
+        <anchorDirection>	0.999995 -0.00254406 -0.00159643	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15072	</slotId>
+        <position>	0.000010 1.83945 -3.22305	</position>
+        <rotation>	3.14159 0.000000 -0.000118732	</rotation>
+        <attachNode>	HP_light2	</attachNode>
+        <tags>	formfactor_square	</tags>
+        <scale>	0.550688 0.0791765 0.550678	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.0178355	</clipAngle>
+        <anchorPosition>	0.000005 0.750189 -3.22305	</anchorPosition>
+        <anchorDirection>	-0.000118732 1 -0.000002	</anchorDirection>
+        <compatibleModels>	Halloween_3Dst	</compatibleModels>
       </slot>
       <slot>
         <slotType>	sequence	</slotType>
@@ -2655,6 +2730,65 @@
           <clipAngle>	0.00466132	</clipAngle>
           <anchorPosition>	-0.000001 0.596286 -2.39161	</anchorPosition>
           <anchorDirection>	-0.000001 0.0916847 -0.995788	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35037	</slotId>
+          <position>	-0.764339 2.04341 0.490553	</position>
+          <rotation>	1.16506 -1.20634 3.13532	</rotation>
+          <attachNode>	HP_light1	</attachNode>
+          <tags>	direction_right_to_left formfactor_square	</tags>
+          <compatibleModels>	Halloween_3Dst	</compatibleModels>
+          <scale>	0.570398 0.5216 0.570401	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.50746	</clipAngle>
+          <anchorPosition>	-0.936066 0.351384 0.474894	</anchorPosition>
+          <anchorDirection>	-0.856209 0.394689 0.333357	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35038	</slotId>
+          <tags>	formfactor_square direction_left_to_right	</tags>
+          <compatibleModels>	Halloween_3Dst	</compatibleModels>
+          <position>	0.750634 2.0425 0.520648	</position>
+          <rotation>	1.16507 1.20636 3.13532	</rotation>
+          <scale>	0.570397 0.5216 0.570401	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.50746	</clipAngle>
+          <anchorPosition>	0.923259 0.350472 0.502633	</anchorPosition>
+          <anchorDirection>	0.860691 0.394679 0.321619	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35039	</slotId>
+          <position>	-0.141892 2.84266 0.541782	</position>
+          <rotation>	-0.000000 0.000001 3.14158	</rotation>
+          <attachNode>	HP_light1	</attachNode>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Halloween_3Dst	</compatibleModels>
+          <scale>	0.48819 0.33945 0.48819	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.13883	</clipAngle>
+          <anchorPosition>	-0.141893 0.950734 0.459262	</anchorPosition>
+          <anchorDirection>	0.000013 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35040	</slotId>
+          <position>	0.000017 2.84266 -1.05495	</position>
+          <rotation>	3.14161 -0.000000 -0.000029	</rotation>
+          <attachNode>	HP_light1	</attachNode>
+          <compatibleModels>	Halloween_3Dst	</compatibleModels>
+          <scale>	0.63137 0.439007 0.63137	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.13883	</clipAngle>
+          <anchorPosition>	0.000020 0.950731 -1.13747	</anchorPosition>
+          <anchorDirection>	-0.000029 1 0.000017	</anchorDirection>
+          <tags>	formfactor_square	</tags>
         </slot>
         <slot>
           <slotType>	sequence	</slotType>

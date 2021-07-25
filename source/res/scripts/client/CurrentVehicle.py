@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/CurrentVehicle.py
 import BigWorld
 from constants import CustomizationInvData
+from gui.SystemMessages import pushMessagesFromResult
 from items.components.c11n_constants import SeasonType
 from Event import Event, EventManager
 from adisp import process
@@ -68,10 +69,10 @@ class _CachedVehicle(object):
     def isCollectible(self):
         return self.isPresent() and self.item.isCollectible
 
-    def onInventoryUpdate(self, invDiff):
+    def refreshModel(self, outfit=None):
         raise NotImplementedError
 
-    def refreshModel(self, outfit=None):
+    def updateVehicleDescriptorInModel(self):
         raise NotImplementedError
 
     @property
@@ -87,9 +88,11 @@ class _CachedVehicle(object):
         raise NotImplementedError
 
     def _addListeners(self):
-        g_clientUpdateManager.addCallbacks({'inventory': self.onInventoryUpdate})
+        g_clientUpdateManager.addCallbacks({'inventory': self._onInventoryUpdate})
+        self.itemsCache.onSyncCompleted += self._onSyncCompleted
 
     def _removeListeners(self):
+        self.itemsCache.onSyncCompleted -= self._onSyncCompleted
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def _changeDone(self):
@@ -97,6 +100,16 @@ class _CachedVehicle(object):
         if isPlayerAccount():
             self._updateVehicle()
         Waiting.hide('updateCurrentVehicle')
+
+    def _onInventoryUpdate(self, invDiff):
+        raise NotImplementedError
+
+    def _onPostProgressionUpdate(self):
+        raise NotImplementedError
+
+    def _onSyncCompleted(self, _, diff):
+        if self.intCD in diff.get(GUI_ITEM_TYPE.VEH_POST_PROGRESSION, {}):
+            self._onPostProgressionUpdate()
 
     def _updateVehicle(self):
         abilities = BigWorld.player().inventory.abilities.abilitiesManager
@@ -159,32 +172,6 @@ class _CurrentVehicle(_CachedVehicle):
             if self.item.intCD in vehicles:
                 self.onChanged()
 
-    def onInventoryUpdate(self, invDiff):
-        vehsDiff = invDiff.get(GUI_ITEM_TYPE.VEHICLE, {})
-        isVehicleSold = False
-        isVehicleDescrChanged = False
-        if 'compDescr' in vehsDiff and self.__vehInvID in vehsDiff['compDescr']:
-            isVehicleSold = vehsDiff['compDescr'][self.__vehInvID] is None
-            isVehicleDescrChanged = not isVehicleSold
-        if isVehicleSold or self.__vehInvID == 0:
-            self.selectVehicle()
-        else:
-            isRepaired = 'repair' in vehsDiff and self.__vehInvID in vehsDiff['repair']
-            customizationDiff = invDiff.get(GUI_ITEM_TYPE.CUSTOMIZATION, {})
-            isCustomizationChanged = CustomizationInvData.OUTFITS in customizationDiff
-            if isCustomizationChanged and self.item is not None:
-                season = g_tankActiveCamouflage.get(self.item.intCD, self.item.getAnyOutfitSeason())
-                vehicleOutfitDiff = customizationDiff[CustomizationInvData.OUTFITS].get(self.item.intCD, {})
-                if vehicleOutfitDiff is not None:
-                    isCustomizationChanged = season in vehicleOutfitDiff or SeasonType.ALL in vehicleOutfitDiff
-            isComponentsChanged = GUI_ITEM_TYPE.TURRET in invDiff or GUI_ITEM_TYPE.GUN in invDiff
-            isVehicleChanged = any((self.__vehInvID in hive or (self.__vehInvID, '_r') in hive for hive in vehsDiff.itervalues()))
-            if isComponentsChanged or isRepaired or isVehicleDescrChanged or isCustomizationChanged:
-                self.refreshModel()
-            if isVehicleChanged or isRepaired or isCustomizationChanged:
-                self._updateVehicle()
-        return
-
     def onRotationUpdate(self, diff):
         isVehicleChanged = False
         if 'groupBattles' in diff:
@@ -205,6 +192,16 @@ class _CurrentVehicle(_CachedVehicle):
         else:
             if self.isPresent() and self.isInHangar() and self.item.modelState:
                 self.hangarSpace.startToUpdateVehicle(self.item, outfit)
+            else:
+                self.hangarSpace.removeVehicle()
+            return
+
+    def updateVehicleDescriptorInModel(self):
+        if g_currentPreviewVehicle.item is not None and not g_currentPreviewVehicle.isHeroTank:
+            return
+        else:
+            if self.isPresent() and self.isInHangar() and self.item.modelState:
+                self.hangarSpace.updateVehicleDescriptor(self.item.descriptor)
             else:
                 self.hangarSpace.removeVehicle()
             return
@@ -394,6 +391,37 @@ class _CurrentVehicle(_CachedVehicle):
         self.refreshModel()
         self._setChangeCallback(callback)
 
+    def _onInventoryUpdate(self, invDiff):
+        vehsDiff = invDiff.get(GUI_ITEM_TYPE.VEHICLE, {})
+        isVehicleSold = False
+        isVehicleDescrChanged = False
+        if 'compDescr' in vehsDiff and self.__vehInvID in vehsDiff['compDescr']:
+            isVehicleSold = vehsDiff['compDescr'][self.__vehInvID] is None
+            isVehicleDescrChanged = not isVehicleSold
+        if isVehicleSold or self.__vehInvID == 0:
+            self.selectVehicle()
+        else:
+            isRepaired = 'repair' in vehsDiff and self.__vehInvID in vehsDiff['repair']
+            customizationDiff = invDiff.get(GUI_ITEM_TYPE.CUSTOMIZATION, {})
+            isCustomizationChanged = CustomizationInvData.OUTFITS in customizationDiff
+            if isCustomizationChanged and self.item is not None:
+                season = g_tankActiveCamouflage.get(self.item.intCD, self.item.getAnyOutfitSeason())
+                vehicleOutfitDiff = customizationDiff[CustomizationInvData.OUTFITS].get(self.item.intCD, {})
+                if vehicleOutfitDiff is not None:
+                    isCustomizationChanged = season in vehicleOutfitDiff or SeasonType.ALL in vehicleOutfitDiff
+            isComponentsChanged = GUI_ITEM_TYPE.TURRET in invDiff or GUI_ITEM_TYPE.GUN in invDiff
+            isVehicleChanged = any((self.__vehInvID in hive or (self.__vehInvID, '_r') in hive for hive in vehsDiff.itervalues()))
+            if isComponentsChanged or isRepaired or isCustomizationChanged:
+                self.refreshModel()
+            elif isVehicleDescrChanged:
+                self.updateVehicleDescriptorInModel()
+            if isVehicleChanged or isRepaired or isCustomizationChanged:
+                self._updateVehicle()
+        return
+
+    def _onPostProgressionUpdate(self):
+        self._updateVehicle()
+
     def __isVehicleSuitable(self, vehicle):
         return False if vehicle is None else not REQ_CRITERIA.VEHICLE.BATTLE_ROYALE(vehicle) or self.battleRoyaleController.isBattleRoyaleMode()
 
@@ -418,7 +446,7 @@ class _CurrentVehicle(_CachedVehicle):
         if vehicle is None:
             return
         else:
-            if not self.battleRoyaleController.isEnabled() and vehicle.isOnlyForBattleRoyaleBattles and not self.battleRoyaleTounamentController.isActive():
+            if not self.battleRoyaleController.isEnabled() and vehicle.isOnlyForBattleRoyaleBattles and not self.battleRoyaleTounamentController.isSelected():
                 self.selectVehicle()
             return
 
@@ -483,6 +511,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         self.__vehAppearance = _RegularPreviewAppearance()
         self.__isHeroTank = False
         self.onComponentInstalled = Event(self._eManager)
+        self.onPostProgressionChanged = Event(self._eManager)
         self.onVehicleUnlocked = Event(self._eManager)
         self.onVehicleInventoryChanged = Event(self._eManager)
         self.onSelected = Event(self._eManager)
@@ -500,7 +529,10 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         super(_CurrentPreviewVehicle, self).init()
         self.resetAppearance()
 
-    def refreshModel(self):
+    def refreshModel(self, outfit=None):
+        pass
+
+    def updateVehicleDescriptorInModel(self):
         pass
 
     def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, style=None):
@@ -551,12 +583,6 @@ class _CurrentPreviewVehicle(_CachedVehicle):
             return VEHPREVIEW_CONSTANTS.COLLECTIBLE_WITHOUT_MODULES
         return VEHPREVIEW_CONSTANTS.REGULAR
 
-    def onInventoryUpdate(self, invDiff):
-        if self.isPresent():
-            vehicle = self.itemsCache.items.getItemByCD(self.item.intCD)
-            if vehicle.isInInventory:
-                self.onVehicleInventoryChanged()
-
     def isModified(self):
         if self.isPresent():
             for module in _MODULES_NAMES:
@@ -573,14 +599,16 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         Waiting.show('applyModule', overlapsUI=False)
         conflictedEqs = newComponentItem.getConflictedEquipments(self.item)
         result = yield getPreviewInstallerProcessor(self.item, newComponentItem, conflictedEqs).request()
-        from gui.shared.gui_items.items_actions.actions import processMsg
-        processMsg(result)
+        pushMessagesFromResult(result)
         Waiting.hide('applyModule')
         if result.success:
             if self.__vehAppearance is not None:
                 self.__vehAppearance.refreshVehicle(self.item)
             self.onComponentInstalled()
         return
+
+    def isPostProgressionExists(self):
+        return self.isPresent() and self.item.isPostProgressionExists
 
     def hasModulesToSelect(self):
         return self.isPresent() and self.item.hasModulesToSelect
@@ -627,7 +655,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
             self.onChangeStarted()
             self.__defaultItem = self.__getPreviewVehicle(vehicleCD)
             if vehicleStrCD is not None:
-                self.__item = self.__makePreviewVehicleFromStrCD(vehicleStrCD)
+                self.__item = self.__makePreviewVehicleFromStrCD(vehicleCD, vehicleStrCD)
             else:
                 self.__item = self.__getPreviewVehicle(vehicleCD)
             outfit = None
@@ -637,6 +665,17 @@ class _CurrentPreviewVehicle(_CachedVehicle):
                 self.__vehAppearance.refreshVehicle(self.__item, outfit)
             self._setChangeCallback()
             return
+
+    def _onInventoryUpdate(self, invDiff):
+        if self.isPresent():
+            vehicle = self.itemsCache.items.getItemByCD(self.item.intCD)
+            if vehicle.isInInventory:
+                self.onVehicleInventoryChanged()
+
+    def _onPostProgressionUpdate(self):
+        self.__defaultItem.clearPostProgression()
+        self.__item.clearPostProgression()
+        self.onPostProgressionChanged()
 
     def _onUpdateUnlocks(self, unlocks):
         if self.isPresent() and self.item.intCD in list(unlocks):
@@ -655,8 +694,9 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def __getPreviewOutfitByStyle(self, style):
         return style.getOutfit(first(style.seasons), vehicleCD=self.item.descriptor.makeCompactDescr()) if self.isPresent() and not self.item.isOutfitLocked and style.mayInstall(self.item) else None
 
-    def __makePreviewVehicleFromStrCD(self, vehicleStrCD):
-        vehicle = Vehicle(strCompactDescr=vehicleStrCD, proxy=self.itemsCache.items)
+    def __makePreviewVehicleFromStrCD(self, vehicleCD, vehicleStrCD):
+        items = self.itemsCache.items
+        vehicle = Vehicle(strCompactDescr=vehicleStrCD, proxy=items, extData=items.inventory.getVehExtData(vehicleCD))
         for slotID, device in enumerate(vehicle.optDevices.installed):
             if device is not None:
                 vehicle.descriptor.removeOptionalDevice(slotID)

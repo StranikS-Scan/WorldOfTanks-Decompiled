@@ -58,16 +58,16 @@ class RankedDossierKeys(CONST_CONTAINER):
 ARCHIVE_SEASON_ID = 0
 STANDARD_POINTS_COUNT = 1
 NOT_IN_LEAGUES_QUEST = 'ranked_{}_0_common'
-FINAL_QUEST_PATTERN = 'ranked_2020_{}_final'
-FINAL_LEADER_QUEST = 'ranked_2020_final_leader'
+FINAL_QUEST_PATTERN = 'ranked_2021_{}_final'
+FINAL_LEADER_QUEST = 'ranked_2021_final_leader'
 RANKED_QUEST_ID_PREFIX = 'ranked'
-YEAR_POINTS_TOKEN = 'rb2020'
-YEAR_STRIPE_SERVER_TOKEN = 'ranked_2020_final_top'
+YEAR_POINTS_TOKEN = 'rb2021'
+YEAR_STRIPE_SERVER_TOKEN = 'ranked_2021_final_top'
 YEAR_STRIPE_CLIENT_TOKEN = 'ranked_final_ready'
+YEAR_AWARD_SELECTABLE_OPT_DEVICE = 'ranked_selectable_opt_device'
 ENTITLEMENT_EVENT_TOKEN = 'ranked_entitlement_event'
 LOBBY_SUB_LANDING_PARAM = '?is_landing='
 SEASON_RATING_PARAM = '?spaID={}'
-SEASON_IDS_RB_2020 = (202007, 202010, 202103)
 
 class RankedTokenQuestPostfix(CONST_CONTAINER):
     COMMON = 'common'

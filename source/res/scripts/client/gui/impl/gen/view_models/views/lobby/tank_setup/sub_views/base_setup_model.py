@@ -14,6 +14,8 @@ class BaseSetupModel(ViewModel):
     RETURN_TO_STORAGE_ACTION = 'cancel'
     SWAP_SLOTS_ACTION = 'swap'
     DEMOUNT_SLOT_ACTION = 'demount'
+    DEMOUNT_SLOT_FROM_SETUP_ACTION = 'demount_from_setup'
+    DEMOUNT_SLOT_FROM_SETUPS_ACTION = 'demount_from_setups'
     DESTROY_SLOT_ACTION = 'destroy'
     SHOW_INFO_SLOT_ACTION = 'show_info'
     UPGRADE_SLOT_ACTION = 'upgrade'

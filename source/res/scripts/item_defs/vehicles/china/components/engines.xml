@@ -51,11 +51,13 @@
     <_12150L7B>	51	</_12150L7B>
     <NORINCO_12150L_59>	52	</NORINCO_12150L_59>
     <Detroit_Diesel_8V71T>	53	</Detroit_Diesel_8V71T>
+    <NORINCO_12150LP>	57	</NORINCO_12150LP>
     <V_2_54SC_QL>	252	</V_2_54SC_QL>
     <V_2_54SC_113>	253	</V_2_54SC_113>
     <_Type_102S_T>	254	</_Type_102S_T>
     <_12150L7BW>	255	</_12150L7BW>
     <V_2_54SCP>	256	</V_2_54SCP>
+    <_12150LT_FL>	501	</_12150LT_FL>
     <_8V135_IGR>	60001	</_8V135_IGR>
     <_12150LS_IGR>	60002	</_12150LS_IGR>
     <_12150L7_IGR>	60003	</_12150L7_IGR>
@@ -98,6 +100,23 @@
       <rpm_min>	346	</rpm_min>
       <rpm_max>	2160	</rpm_max>
     </NORINCO_12150L_59>
+    <NORINCO_12150LP>
+      <userString>	#china_vehicles:NORINCO_12150LP	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <notInShop>	true	</notInShop>
+      <price>	79290	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	620	</power>
+      <weight>	750	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	354	</rpm_min>
+      <rpm_max>	2136	</rpm_max>
+    </NORINCO_12150LP>
     <_12150L-3_V-12>
       <userString>	#china_vehicles:_12150L-3_V-12	</userString>
       <tags>	diesel	</tags>
@@ -390,6 +409,23 @@
       <rpm_min>	360	</rpm_min>
       <rpm_max>	2120	</rpm_max>
     </_12150LT>
+    <_12150LT_FL>
+      <userString>	#china_vehicles:_12150LT	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
+    </_12150LT_FL>
     <_12150LTG>
       <userString>	#china_vehicles:_12150LTG	</userString>
       <tags>	diesel	</tags>

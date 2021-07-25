@@ -8,7 +8,11 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.shared import event_dispatcher as shared_events
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from items import getTypeOfCompactDescr
+from uilogging.bootcamp.constants import BCLogActions
+from uilogging.bootcamp.loggers import BootcampLogger
 from uilogging.deprecated.decorators import loggerTarget, loggerEntry, simpleLog
 from uilogging.deprecated.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS, LIMITS
 from uilogging.deprecated.bootcamp.loggers import BootcampUILogger
@@ -72,6 +76,8 @@ class BCResearchItemsData(ResearchItemsData):
 
 @loggerTarget(logKey=BC_LOG_KEYS.BC_RESEARCH_VEHICLES, loggerCls=BootcampUILogger)
 class BCResearch(Research):
+    uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.BC_RESEARCH_VEHICLES)
+    BC_MESSAGE_WINDOW_OPEN_SOUND_ID = 'bc_info_line_woosh'
 
     def __init__(self, ctx=None):
         super(BCResearch, self).__init__(ctx, skipConfirm=False)
@@ -84,6 +90,7 @@ class BCResearch(Research):
 
     @simpleLog(action=BC_LOG_ACTIONS.UNLOCK_ITEM, restrictions={'lesson_id': lambda x: x <= LIMITS.RESEARCH_MAX_LESSON}, logOnce=True)
     def request4Unlock(self, unlockCD, topLevel):
+        self.soundManager.playSound(self.BC_MESSAGE_WINDOW_OPEN_SOUND_ID)
         super(BCResearch, self).request4Unlock(unlockCD, topLevel)
 
     def _doUnlockItemAction(self, itemCD, unlockProps):
@@ -91,10 +98,15 @@ class BCResearch(Research):
 
     @simpleLog(action=BC_LOG_ACTIONS.BUY_ITEM, restrictions={'lesson_id': lambda x: x <= LIMITS.RESEARCH_MAX_LESSON}, logOnce=True)
     def request4Buy(self, itemCD):
+        if getTypeOfCompactDescr(int(itemCD)) != GUI_ITEM_TYPE.VEHICLE:
+            self.soundManager.playSound(self.BC_MESSAGE_WINDOW_OPEN_SOUND_ID)
         super(BCResearch, self).request4Buy(itemCD)
 
     def _doBuyAndInstallItemAction(self, itemCD):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BC_BUY_AND_INSTALL_ITEM, itemCD, self._data.getRootCD(), skipConfirm=self._skipConfirm)
+
+    def onModuleHover(self, itemCD):
+        pass
 
     def invalidateVehCompare(self):
         pass
@@ -102,15 +114,20 @@ class BCResearch(Research):
     def invalidateUnlocks(self, unlocks):
         self.redraw()
 
+    @uiBootcampLogger.dLogOnce(action=BCLogActions.BUTTON_BACK_TO_HANGAR.value)
+    def exitFromResearch(self):
+        super(BCResearch, self).exitFromResearch()
+
     def goToVehicleView(self, itemCD):
         vehicle = self._itemsCache.items.getItemByCD(int(itemCD))
         if vehicle.isInInventory:
+            self.uiBootcampLogger.logOnce(action=BCLogActions.BUTTON_VIEW_IN_HANGAR.value)
             shared_events.selectVehicleInHangar(itemCD)
 
     def goToNextVehicle(self, vehCD):
         nationData = g_bootcamp.getNationData()
         super(BCResearch, self).goToNextVehicle(vehCD)
-        if nationData['vehicle_second'] != vehCD:
+        if vehCD not in (nationData.get('vehicle_first'), nationData.get('vehicle_second')):
             self.exitFromResearch()
 
     def setupContextHints(self, hintID):
@@ -118,8 +135,8 @@ class BCResearch(Research):
 
     def _getRootData(self):
         result = super(BCResearch, self)._getRootData()
-        result['compareBtnEnabled'] = False
-        result['previewBtnEnabled'] = False
+        result['vehicleButton']['compareBtnEnabled'] = False
+        result['vehicleButton']['previewBtnEnabled'] = False
         return result
 
     def _dispose(self):

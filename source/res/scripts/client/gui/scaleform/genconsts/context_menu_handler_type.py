@@ -55,3 +55,4 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     TANK_SETUP_HANGAR_BATTLE_BOOSTER_SLOT = 'tankSetupHangarBattleBoosterSlot'
     TANK_SETUP_HANGAR_BATTLE_ABILITY_SLOT = 'tankSetupHangarBattleAbilitySlot'
     TANK_SETUP_HANGAR_SHELL_SLOT = 'tankSetupHangarShellSlot'
+    POST_PROGRESSION_VEHICLE = 'postProgressionVehicle'

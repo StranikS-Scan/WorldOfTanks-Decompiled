@@ -93,39 +93,39 @@ class CombatEquipmentManager(object):
         self.__wings = {}
         SmokeScreen.enableSmokePostEffect(False)
 
-    def updatePlaneTrajectory(self, equipmentID, team, curTime, curPos, curDir, nextTime, nextPos, nextDir, isEndOfFlight):
+    def updatePlaneTrajectory(self, planeTrajectory):
         if _ENABLE_DEBUG_LOG:
             LOG_DEBUG('===== updatePlaneTrajectory =====')
-            LOG_DEBUG(equipmentID, team)
-            LOG_DEBUG(curPos, curDir, curTime)
-            LOG_DEBUG(nextPos, nextDir, nextTime)
-            LOG_DEBUG(isEndOfFlight)
-        moveDir = nextPos - curPos
+            LOG_DEBUG(planeTrajectory.equipmentID, planeTrajectory.team)
+            LOG_DEBUG(planeTrajectory.curPos, planeTrajectory.curDir, planeTrajectory.curTime)
+            LOG_DEBUG(planeTrajectory.nextPos, planeTrajectory.nextDir, planeTrajectory.nextTime)
+            LOG_DEBUG(planeTrajectory.isEndOfFlight)
+        moveDir = planeTrajectory.nextPos - planeTrajectory.curPos
         moveDir.normalise()
-        nextDir3d = Vector3(nextDir.x, moveDir.y, nextDir.y)
+        nextDir3d = Vector3(planeTrajectory.nextDir.x, moveDir.y, planeTrajectory.nextDir.y)
         nextDir3d.normalise()
-        startP = BombersWing.CurveControlPoint(curPos, Vector3(curDir.x, 0, curDir.y), curTime)
-        nextP = BombersWing.CurveControlPoint(nextPos, nextDir3d, nextTime)
+        startP = BombersWing.CurveControlPoint(planeTrajectory.curPos, Vector3(planeTrajectory.curDir.x, 0, planeTrajectory.curDir.y), planeTrajectory.curTime)
+        nextP = BombersWing.CurveControlPoint(planeTrajectory.nextPos, nextDir3d, planeTrajectory.nextTime)
         points = (startP, nextP)
-        wingID = (team, equipmentID)
+        wingID = (planeTrajectory.team, planeTrajectory.equipmentID)
         wing = self.__wings.get(wingID)
         if wing is None or wing.withdrawn:
             if wing is not None:
                 wing.destroy()
-            wing = BombersWing.BombersWing(equipmentID, points)
+            wing = BombersWing.BombersWing(planeTrajectory.equipmentID, points)
             self.__wings[wingID] = wing
-            if isEndOfFlight:
-                wing.addControlPoint(points, isEndOfFlight)
+            if planeTrajectory.isEndOfFlight:
+                wing.addControlPoint(points, planeTrajectory.isEndOfFlight)
             if _ENABLE_DEBUG_DRAW:
-                self.debugPoints.append(curPos)
-                self.debugDirs.append(curDir)
+                self.debugPoints.append(planeTrajectory.curPos)
+                self.debugDirs.append(planeTrajectory.curDir)
         else:
-            wing.addControlPoint(points, isEndOfFlight)
+            wing.addControlPoint(points, planeTrajectory.isEndOfFlight)
         if _ENABLE_DEBUG_DRAW:
-            self.debugPoints.append(nextPos)
-            self.debugDirs.append(nextDir)
-            self.debugPoints.append(nextPos + Vector3(nextDir.x, 0, nextDir.y) * 10)
-            self.debugPoints.append(nextPos)
+            self.debugPoints.append(planeTrajectory.nextPos)
+            self.debugDirs.append(planeTrajectory.nextDir)
+            self.debugPoints.append(planeTrajectory.nextPos + Vector3(planeTrajectory.nextDir.x, 0, planeTrajectory.nextDir.y) * 10)
+            self.debugPoints.append(planeTrajectory.nextPos)
             self.debugPolyLine.set(self.debugPoints)
         return
 

@@ -162,6 +162,7 @@
     <V-2-54M_SH>	325	</V-2-54M_SH>
     <M-40-2V_SH>	326	</M-40-2V_SH>
     <V_2>	328	</V_2>
+    <V-55U_FL>	501	</V-55U_FL>
     <M-80_prem_bootcamp>	64001	</M-80_prem_bootcamp>
     <Maybach_HL_120_TRM_A_bootcamp>	64002	</Maybach_HL_120_TRM_A_bootcamp>
     <M-5-400_bootcamp>	64003	</M-5-400_bootcamp>
@@ -170,6 +171,11 @@
     <V-4_bootcamp>	64006	</V-4_bootcamp>
     <GAZ-203_bootcamp>	64007	</GAZ-203_bootcamp>
     <Development_Engine>	65000	</Development_Engine>
+    <GMC_MapsTraining_Dummy_LT_1>	25	</GMC_MapsTraining_Dummy_LT_1>
+    <T-26F_MapsTraining_Dummy_SPG_1>	26	</T-26F_MapsTraining_Dummy_SPG_1>
+    <V-2-34_MapsTraining_Player_MT_1>	30	</V-2-34_MapsTraining_Player_MT_1>
+    <V-54K_MapsTraining_Player_MT_2>	32	</V-54K_MapsTraining_Player_MT_2>
+    <V-5F_MapsTraining_Dummy_HT_2>	33	</V-5F_MapsTraining_Dummy_HT_2>
   </ids>
   <shared>
     <V-2>
@@ -531,8 +537,8 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2152	</rpm_max>
     </V-5>
     <V-5_W>
       <userString>	#ussr_vehicles:V-5_W	</userString>
@@ -548,8 +554,8 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2152	</rpm_max>
     </V-5_W>
     <V-5F>
       <userString>	#ussr_vehicles:V-5F	</userString>
@@ -943,6 +949,23 @@
       <rpm_min>	333	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </V-55U>
+    <V-55U_FL>
+      <userString>	#ussr_vehicles:V-55U	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </V-55U_FL>
     <V-55UM>
       <userString>	#ussr_vehicles:V-55UM	</userString>
       <tags>	diesel	</tags>
@@ -2944,7 +2967,6 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <notInShop>	true	</notInShop>
       <rpm_min>	376	</rpm_min>
       <rpm_max>	2072	</rpm_max>
     </Development_Engine>
@@ -2999,5 +3021,92 @@
       <rpm_min>	200	</rpm_min>
       <rpm_max>	2600	</rpm_max>
     </M-40-2V_SH>
+    <GMC_MapsTraining_Dummy_LT_1>
+      <userString>	#ussr_vehicles:GMC	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	4500	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	210	</power>
+      <weight>	991	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2087	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </GMC_MapsTraining_Dummy_LT_1>
+    <T-26F_MapsTraining_Dummy_SPG_1>
+      <userString>	#ussr_vehicles:T-26F	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	1500	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	130	</power>
+      <weight>	545	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	336	</rpm_min>
+      <rpm_max>	2522	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </T-26F_MapsTraining_Dummy_SPG_1>
+    <V-2-34_MapsTraining_Player_MT_1>
+      <userString>	#ussr_vehicles:V-2-34_MapsTraining_Player_MT_1	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	27860	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	750	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </V-2-34_MapsTraining_Player_MT_1>
+    <V-54K_MapsTraining_Player_MT_2>
+      <userString>	#ussr_vehicles:V-54K_MapsTraining_Player_MT_2	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	58000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </V-54K_MapsTraining_Player_MT_2>
+    <V-5F_MapsTraining_Dummy_HT_2>
+      <userString>	#ussr_vehicles:V-5F	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	39000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	750	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </V-5F_MapsTraining_Dummy_HT_2>
   </shared>
 </engines.xml>

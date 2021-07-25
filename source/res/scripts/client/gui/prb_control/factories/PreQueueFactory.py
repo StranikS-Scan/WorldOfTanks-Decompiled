@@ -6,6 +6,7 @@ from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from gui.prb_control.entities.battle_royale.pre_queue import entity as br_entity
 from gui.prb_control.entities.battle_royale_tournament.pre_queue import entity as br_tournament
+from gui.prb_control.entities.maps_training.pre_queue.entity import MapsTrainingEntryPoint, MapsTrainingEntity
 from gui.prb_control.factories.ControlFactory import ControlFactory
 from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
 from gui.prb_control.entities.random.pre_queue.entity import RandomEntity, RandomEntryPoint
@@ -28,7 +29,8 @@ _SUPPORTED_QUEUES = {QUEUE_TYPE.RANDOMS: RandomEntity,
  QUEUE_TYPE.EPIC: EpicEntity,
  QUEUE_TYPE.BATTLE_ROYALE: br_entity.BattleRoyaleEntity,
  QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT: br_tournament.BattleRoyaleTournamentEntity,
- QUEUE_TYPE.MAPBOX: MapboxEntity}
+ QUEUE_TYPE.MAPBOX: MapboxEntity,
+ QUEUE_TYPE.MAPS_TRAINING: MapsTrainingEntity}
 _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.RANDOM: RandomEntryPoint,
  PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL: TutorialEntryPoint,
  PREBATTLE_ACTION_NAME.SANDBOX: SandboxEntryPoint,
@@ -38,7 +40,8 @@ _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.RANDOM: RandomEntryPoint,
  PREBATTLE_ACTION_NAME.EPIC_FORCED: EpicForcedEntryPoint,
  PREBATTLE_ACTION_NAME.BATTLE_ROYALE: br_entity.BattleRoyaleEntryPoint,
  PREBATTLE_ACTION_NAME.BATTLE_ROYALE_TOURNAMENT: br_tournament.BattleRoyaleTournamentEntryPoint,
- PREBATTLE_ACTION_NAME.MAPBOX: MapboxEntryPoint}
+ PREBATTLE_ACTION_NAME.MAPBOX: MapboxEntryPoint,
+ PREBATTLE_ACTION_NAME.MAPS_TRAINING: MapsTrainingEntryPoint}
 
 class PreQueueFactory(ControlFactory):
 
@@ -60,6 +63,10 @@ class PreQueueFactory(ControlFactory):
 
     @prequeue_storage_getter(QUEUE_TYPE.MAPBOX)
     def mapboxStorage(self):
+        return None
+
+    @prequeue_storage_getter(QUEUE_TYPE.MAPS_TRAINING)
+    def mapsTrainingStorage(self):
         return None
 
     def createEntry(self, ctx):
@@ -118,5 +125,7 @@ class PreQueueFactory(ControlFactory):
             return EpicEntity()
         elif self.battleRoyaleStorage.isModeSelected():
             return br_entity.BattleRoyaleEntity()
+        elif self.mapboxStorage.isModeSelected():
+            return MapboxEntity()
         else:
-            return MapboxEntity() if self.mapboxStorage.isModeSelected() else None
+            return MapsTrainingEntity() if self.mapsTrainingStorage.isModeSelected() else None

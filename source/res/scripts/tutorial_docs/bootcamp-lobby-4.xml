@@ -305,7 +305,7 @@
             <label>	#bootcamp:message/consumables/label	</label>
             <text>	#bootcamp:message/consumables/text	</text>
             <subtitle>	SubtitleKit	</subtitle>
-            <voiceover>	bc_info_line_universal	</voiceover>
+            <voiceover>	bc_achievements_shine	</voiceover>
             <bottom_renderer>	rewards	</bottom_renderer>
             <bottom>
               <data>
@@ -367,7 +367,7 @@
             <label>	#bootcamp:message/equipment/label	</label>
             <text>	#bootcamp:message/equipment/text	</text>
             <subtitle>	SubtitleEquipment	</subtitle>
-            <voiceover>	bc_info_line_universal	</voiceover>
+            <voiceover>	bc_achievements_shine	</voiceover>
             <bottom_renderer>	rewards	</bottom_renderer>
             <bottom>
               <data>
@@ -478,6 +478,8 @@
         <play-animation>	CommonQuestsButton	  <type>	tween	</type>
           <wait_for_finish>	True	</wait_for_finish>
         </play-animation>
+        <play-sound>	bc_new_ui_element_pennant	  <event>	ANIMATION_STARTED	</event>
+        </play-sound>
         <show-window>	SubtitleRandomBattle	  <condition>
             <checkpoint-not-reached>	EndCheckpoint	</checkpoint-not-reached>
           </condition>

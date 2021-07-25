@@ -13,6 +13,7 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class RespawnDeathMode(IControlMode):
+    isEnabled = property(lambda self: self.__isEnabled)
     curVehicleID = property(lambda self: self.__curVehicleID)
     aimingMode = property(lambda self: self._aimingMode)
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)

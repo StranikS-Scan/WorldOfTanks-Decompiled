@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_modules_view.py
+import logging
+import BigWorld
 from adisp import process
-from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers, nodes
 from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
@@ -9,133 +10,23 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_base import
 from gui.Scaleform.daapi.view.meta.VehicleModulesViewMeta import VehicleModulesViewMeta
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.game_control.veh_comparison_basket import getSuitableChassis, getInstalledModulesCDs
+from gui.game_control.veh_comparison_basket import getInstalledModulesCDs
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
-from gui.shared.items_parameters.params_cache import g_paramsCache
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from nations import AVAILABLE_NAMES
 from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CONSTANTS
+from shared_utils.vehicle_utils import ModuleDependencies as ModulesInstaller
 from skeletons.gui.shared import IItemsCache
+_logger = logging.getLogger(__name__)
 
 class _MODULES_TYPES(object):
     BASIC = 'basic'
     CURRENT = 'current'
     CUSTOM = 'custom'
-
-
-_MODULES_INSTALL_ORDER = (GUI_ITEM_TYPE.CHASSIS,
- GUI_ITEM_TYPE.TURRET,
- GUI_ITEM_TYPE.GUN,
- GUI_ITEM_TYPE.ENGINE,
- GUI_ITEM_TYPE.RADIO)
-
-def _getModule(moduleId):
-    module = _getItem(moduleId)
-    return module
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def _getItem(itemID, itemsCache=None):
-    return itemsCache.items.getItemByCD(itemID)
-
-
-@process
-def _installModule(vehicle, module):
-    yield getPreviewInstallerProcessor(vehicle, module).request()
-
-
-def _getSuitableChassisIDs(vehicle):
-    return [ ch.intCD for ch in getSuitableChassis(vehicle) ]
-
-
-class _ModulesInstaller(object):
-
-    def __init__(self, stockModules):
-        super(_ModulesInstaller, self).__init__()
-        self.__initConflictedList()
-        self.__stockModules = stockModules
-        self.__hasConflicted = False
-
-    def dispose(self):
-        self.__conflictedModulesCD = None
-        self.__stockModules = None
-        return
-
-    def hasConflicted(self):
-        return self.__hasConflicted
-
-    def getConflictedModules(self):
-        return self.__conflictedModulesCD
-
-    def updateConflicted(self, moduleId, vehicle):
-        moduleId = int(moduleId)
-        self.__initConflictedList()
-        if moduleId:
-            module = _getModule(moduleId)
-            isFit, reason = module.mayInstall(vehicle)
-            if not isFit:
-                if reason == 'need turret':
-                    turretsCDs, chassisCDs = self.__getSuitableModulesForGun(moduleId, vehicle)
-                    self.__addConflicted(GUI_ITEM_TYPE.TURRET, turretsCDs)
-                    self.__addConflicted(GUI_ITEM_TYPE.CHASSIS, chassisCDs)
-                elif reason == 'too heavy':
-                    chassis = []
-                    for _, _, nodeCD, _ in vehicle.getUnlocksDescrs():
-                        itemTypeID = getTypeOfCompactDescr(nodeCD)
-                        if itemTypeID == GUI_ITEM_TYPE.CHASSIS:
-                            chassisCand = _getModule(nodeCD)
-                            if chassisCand.mayInstall(vehicle) and not chassisCand.isInstalled(vehicle):
-                                chassis.append(nodeCD)
-
-                    if chassis:
-                        self.__addConflicted(GUI_ITEM_TYPE.CHASSIS, chassis)
-                elif reason == 'too heavy chassis':
-                    for i, stockCD in enumerate(self.__stockModules):
-                        if stockCD is not None and not _getModule(stockCD).isInstalled(vehicle):
-                            self.__addConflicted(GUI_ITEM_TYPE.VEHICLE_MODULES[i], (stockCD,))
-
-                elif reason == 'need gun':
-                    stockGunCD = self.__stockModules[GUI_ITEM_TYPE.VEHICLE_MODULES.index(GUI_ITEM_TYPE.GUN)]
-                    if stockGunCD is not None and not _getModule(stockGunCD).isInstalled(vehicle):
-                        self.__addConflicted(GUI_ITEM_TYPE.GUN, (stockGunCD,))
-                else:
-                    LOG_DEBUG('Install component. Unsupported error type: "{}"'.format(reason))
-        return self.__conflictedModulesCD
-
-    def clearConflictedModules(self):
-        self.__initConflictedList()
-
-    def __addConflicted(self, moduleTypeID, moduleCDs):
-        self.__hasConflicted = True
-        self.__conflictedModulesCD[_MODULES_INSTALL_ORDER.index(moduleTypeID)].extend(moduleCDs)
-
-    def __getSuitableModulesForGun(self, gunIntCD, vehicle):
-        chassisCDs = []
-        turretsCDs = g_paramsCache.getPrecachedParameters(gunIntCD).getTurretsForVehicle(vehicle.intCD)
-        for turretIntCS in turretsCDs:
-            suitableTurret = _getModule(turretIntCS)
-            isFit, reason = suitableTurret.mayInstall(vehicle)
-            if not isFit:
-                if reason == 'too heavy':
-                    chassisCDs = [ ch.intCD for ch in getSuitableChassis(vehicle) ]
-            currentTurret = vehicle.turret
-            _installModule(vehicle, suitableTurret)
-            gun = _getModule(gunIntCD)
-            isFit, reason = gun.mayInstall(vehicle)
-            if not isFit:
-                if reason == 'too heavy':
-                    chassisCDs = _getSuitableChassisIDs(vehicle)
-            _installModule(vehicle, currentTurret)
-
-        return (turretsCDs, chassisCDs)
-
-    def __initConflictedList(self):
-        self.__hasConflicted = False
-        self.__conflictedModulesCD = [ [] for _ in GUI_ITEM_TYPE.VEHICLE_MODULES ]
 
 
 class _PreviewItemsData(ResearchItemsData):
@@ -215,7 +106,7 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
         self.__configuredVehModulesIDs = set(getInstalledModulesCDs(self._container.getInitialVehicleData()[0]))
         self.__initialize(configuratedVehicle.descriptor.makeCompactDescr(), self.__detectModulesType(configuratedVehicle))
         stockVehicle = Vehicle(basketVehCmpData.getStockVehStrCD())
-        self.__modulesInstaller = _ModulesInstaller(getInstalledModulesCDs(stockVehicle))
+        self.__modulesInstaller = ModulesInstaller(getInstalledModulesCDs(stockVehicle))
         self.as_setInitDataS({'title': _ms(VEH_COMPARE.MODULESVIEW_TITLE, vehName=stockVehicle.userName),
          'resetBtnLabel': VEH_COMPARE.MODULESVIEW_RESETBTNLABEL,
          'cancelBtnLabel': VEH_COMPARE.MODULESVIEW_CLOSEBTNLABEL,
@@ -246,10 +137,10 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
     def resetConfig(self):
 
         def __logModuleWarning():
-            LOG_WARNING('Unable to apply the following modules type: {}'.format(self.__currentModulesType))
+            _logger.warning('Unable to apply the following modules type: %s', self.__currentModulesType)
 
         def __logModuleError():
-            LOG_ERROR('Attempt to apply unsupported modules type: {}'.format(self.__currentModulesType))
+            _logger.error('Attempt to apply unsupported modules type: %s', self.__currentModulesType)
 
         basketVehicle = self._container.getBasketVehCmpData()
         if basketVehicle.isInInventory():
@@ -274,6 +165,8 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
         moduleId = int(moduleId)
         if moduleId:
             allConflicted = self.__modulesInstaller.updateConflicted(moduleId, self.__vehicle)
+            startTime = BigWorld.timeExact()
+            _logger.debug('[CMP_PROFILE] applying dashed states START - %s', startTime)
             changedNodesStates = []
             for modulesByType in allConflicted:
                 for conflictedIntCD in modulesByType:
@@ -282,10 +175,15 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
                             mData['state'] |= NODE_STATE_FLAGS.DASHED
                             changedNodesStates.append((conflictedIntCD, mData['state']))
 
+            finishTime = BigWorld.timeExact()
+            _logger.debug('[CMP_PROFILE] applying dashed states FINISH - %s', finishTime)
+            _logger.debug('[CMP_PROFILE] applying dashed states DIFF*100 - %s', (finishTime - startTime) * 100)
             if changedNodesStates:
                 self.as_setNodesStatesS(changedNodesStates)
         else:
             allConflicted = self.__modulesInstaller.getConflictedModules()
+            startTime = BigWorld.timeExact()
+            _logger.debug('[CMP_PROFILE] removing dashed states START - %s', startTime)
             if allConflicted:
                 changedNodesStates = []
                 for modulesByType in allConflicted:
@@ -295,24 +193,27 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
                                 mData['state'] &= ~NODE_STATE_FLAGS.DASHED
                                 changedNodesStates.append((conflictedIntCD, mData['state']))
 
+                finishTime = BigWorld.timeExact()
+                _logger.debug('[CMP_PROFILE] removing dashed states FINISH - %s', finishTime)
+                _logger.debug('[CMP_PROFILE] removing dashed states DIFF*100 - %s', (finishTime - startTime) * 100)
                 self.__modulesInstaller.clearConflictedModules()
                 self.as_setNodesStatesS(changedNodesStates)
 
     def onModuleClick(self, moduleId):
         moduleId = int(moduleId)
-        newComponentItem = _getModule(moduleId)
+        newComponentItem = self._getModule(moduleId)
         isMainFit, _ = newComponentItem.mayInstall(self.__vehicle)
         if isMainFit:
-            _installModule(self.__vehicle, newComponentItem)
+            self._installModule(self.__vehicle, newComponentItem)
         conflictedModules = self.__modulesInstaller.getConflictedModules()
         if self.__modulesInstaller.hasConflicted():
             for modulesByType in conflictedModules:
                 for moduleCD in modulesByType:
-                    conflictedModule = _getModule(moduleCD)
-                    _installModule(self.__vehicle, conflictedModule)
+                    conflictedModule = self._getModule(moduleCD)
+                    self._installModule(self.__vehicle, conflictedModule)
 
         if not isMainFit:
-            _installModule(self.__vehicle, newComponentItem)
+            self._installModule(self.__vehicle, newComponentItem)
         self.__updateChangedSlots()
         self.__updateModulesType(self.__detectModulesType(self.__vehicle))
 
@@ -372,3 +273,12 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
         self.__createVehicleData(strCD)
         self.__updateChangedSlots()
         self.__updateModulesType(modulesType)
+
+    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
+    def _getModule(self, moduleId, itemsCache=None):
+        module = itemsCache.items.getItemByCD(moduleId)
+        return module
+
+    @process
+    def _installModule(self, vehicle, module):
+        yield getPreviewInstallerProcessor(vehicle, module).request()

@@ -6,8 +6,6 @@ from messenger.formatters import token_quest_subformatters
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 _TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.LootBoxTokenQuestFormatter(),
  token_quest_subformatters.RecruitQuestsFormatter(),
- token_quest_subformatters.FrontlineExchangeQuestFormatter(),
- token_quest_subformatters.FrontlineRewardQuestFormatter(),
  token_quest_subformatters.RankedSeasonTokenQuestFormatter(),
  token_quest_subformatters.RankedFinalTokenQuestFormatter(),
  token_quest_subformatters.RankedYearLeaderFormatter(),

@@ -110,7 +110,7 @@ class OptionalDeviceCMHandler(_ArmingCMHandler):
     @option(_ArmingCMHandler._sqGen.next(), CMLabel.UPGRADE)
     def upgrade(self):
         module = self._itemsCache.items.getItemByCD(int(self._id))
-        ItemsActionsFactory.doAction(ItemsActionsFactory.UPGRADE_OPT_DEVICE, module, None, None)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.UPGRADE_OPT_DEVICE, module, None, None, None)
         return
 
     def _generateOptions(self, ctx=None):

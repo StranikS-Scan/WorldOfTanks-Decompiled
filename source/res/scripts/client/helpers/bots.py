@@ -6,6 +6,7 @@ from items import tankmen, vehicles
 _NAME_FORMAT_CREW = ':{0} {1}:'
 _DEV_PREFIX_FORMAT_CREW = '{0}_{1}_{2} '
 _DEV_PREFIX_FORMAT_VEHICLE = '[{0}] '
+_DEV_PREFIX_FORMAT_CUSTOM = '[{0}] '
 
 def preprocessBotName(name):
     namingType, args = LocalizableBotName.parse(name)
@@ -23,6 +24,8 @@ def preprocessBotName(name):
         if IS_DEVELOPMENT:
             name = _DEV_PREFIX_FORMAT_VEHICLE.format(uniqueIndex) + name
     elif namingType == BotNamingType.CUSTOM:
-        stringKey = args
+        uniqueIndex, stringKey = args
         name = i18n.makeString(stringKey)
+        if IS_DEVELOPMENT:
+            name = _DEV_PREFIX_FORMAT_CUSTOM.format(uniqueIndex) + name
     return name

@@ -35,12 +35,13 @@ class ViewSoundExtension(object):
         return
 
     def destroySoundManager(self):
-        self.soundManager.unregister(id(self))
-        self.soundManager.clear(requester=id(self))
-        if not self.soundManager.isUsed:
-            if self.__soundSpace and not self.__soundSpace.persistentSounds:
-                self.__commonSoundManagers.pop(self.__soundSpace.name)
-        self.__soundsManager = None
+        if self.soundManager is not None:
+            self.soundManager.unregister(id(self))
+            self.soundManager.clear(requester=id(self))
+            if not self.soundManager.isUsed:
+                if self.__soundSpace and not self.__soundSpace.persistentSounds:
+                    self.__commonSoundManagers.pop(self.__soundSpace.name)
+            self.__soundsManager = None
         if self.__parentManager is not None:
             self.__parentManager.unregister(id(self))
             self.__parentManager.clear(requester=id(self))

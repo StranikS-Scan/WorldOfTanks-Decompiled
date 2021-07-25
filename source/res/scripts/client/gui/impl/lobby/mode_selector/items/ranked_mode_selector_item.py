@@ -46,14 +46,11 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
     def __onGameModeUpdated(self, *_):
         statusText = self.__getRankedStatus()
         timeLeft = self.__getTimeLeft()
-        isTest = self.__rankedBattleController.getCurrentSeason() is not None or self.__rankedBattleController.getNextSeason() is not None
         with self.viewModel.transaction() as vm:
             vm.setEventName(self.__getRankedName())
             vm.setStatus(statusText)
             vm.setTimeLeft(str(timeLeft))
             self.__fillRankedWidget(vm.widget)
-            self.viewModel.setIsTest(isTest)
-        return
 
     def __getRankedName(self):
         currentSeason = self.__rankedBattleController.getCurrentSeason()
@@ -81,8 +78,9 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
 
     def __fillRankedWidget(self, model):
         rankedController = dependency.instance(IRankedBattlesController)
-        model.setIsEnabled(rankedController.isEnabled())
-        if not rankedController.isEnabled():
+        isEnabled = rankedController.isEnabled() and rankedController.getCurrentSeason() is not None
+        model.setIsEnabled(isEnabled)
+        if not isEnabled:
             return
         else:
             currentRankID = rankedController.getCurrentRank()[0]

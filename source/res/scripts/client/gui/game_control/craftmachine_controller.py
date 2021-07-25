@@ -67,7 +67,9 @@ class CraftmachineController(ICraftmachineController):
     @staticmethod
     def __filterEnabledVehiclesCriteria(criteria):
         criteria = criteria | REQ_CRITERIA.VEHICLE.LEVEL(MAX_VEHICLE_LEVEL)
-        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+        criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        criteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
         return criteria
 
     def __vehicleIsAvailableForRestore(self):

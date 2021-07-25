@@ -10,6 +10,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import
 from gui.impl.lobby.dialogs.contents.exchange_content import ExchangeContentResult
 from gui.impl.lobby.dialogs.buy_and_exchange import BuyAndExchange
 from gui.impl.lobby.dialogs.auxiliary.buy_and_exchange_state_machine import BuyAndExchangeStateEnum
+from gui.impl.lobby.tank_setup.dialogs.helpers.ammunition_buy_helper import isFreeInstalling
 from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import AmmunitionBuyMainContent
 from gui.shared.money import ZERO_MONEY
 from gui.impl.lobby.tank_setup.dialogs.bottom_content.bottom_contents import AmmunitionBuyBottomContent
@@ -28,8 +29,9 @@ class TankSetupConfirmDialog(BuyAndExchange):
         settings.args = args
         settings.kwargs = kwargs
         self.__items = kwargs.pop('items', tuple())
-        self.__vehicleInvID = kwargs.pop('vehInvID', None)
-        self.__totalPrice = sum([ item.getBuyPrice().price for item in self.__items if not item.isInInventory ], ZERO_MONEY)
+        vehicle = kwargs.pop('vehicle', None)
+        self.__vehicleInvID = vehicle.invID if vehicle is not None else None
+        self.__totalPrice = sum([ item.getBuyPrice().price for item in self.__items if not isFreeInstalling(item, vehicle) ], ZERO_MONEY)
         self._mainContent = None
         self._buyContent = None
         startState = kwargs.pop('startState', None)
@@ -44,7 +46,8 @@ class TankSetupConfirmDialog(BuyAndExchange):
 
     def _onLoading(self, *args, **kwargs):
         super(TankSetupConfirmDialog, self)._onLoading(*args, **kwargs)
-        self._buyContent = AmmunitionBuyBottomContent(viewModel=self.viewModel.dealPanel, items=self.__items)
+        vehicle = self._itemsCache.items.getVehicle(self.__vehicleInvID)
+        self._buyContent = AmmunitionBuyBottomContent(viewModel=self.viewModel.dealPanel, vehicle=vehicle, items=self.__items)
         self._buyContent.onLoading()
         if self.__startState == BuyAndExchangeStateEnum.EXCHANGE_CONTENT:
             filterItems = REQ_CRITERIA.INVENTORY

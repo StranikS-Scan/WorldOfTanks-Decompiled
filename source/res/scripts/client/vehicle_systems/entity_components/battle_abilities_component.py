@@ -39,9 +39,9 @@ class BattleAbilitiesComponent(VehicleComponent):
             equipmentComp = self._getEquipmentComp()
             if equipmentComp is not None:
                 if data is not None:
-                    equipmentComp.updateInspired(self.id, data.startTime, data.endTime, data.inactivationStartTime, data.inactivationEndTime, data.primary, data.equipmentID)
+                    equipmentComp.updateInspired(self.id, data.startTime, data.endTime, data.inactivationStartTime, data.inactivationEndTime, data.primary, data.equipmentID, data.inactivationSource)
                 else:
-                    equipmentComp.updateInspired(self.id, None, None, None, None, None, None)
+                    equipmentComp.updateInspired(self.id, None, None, None, None, None, None, None)
             return
 
     def set_healingEffect(self, prev=None):

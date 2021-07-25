@@ -1,25 +1,35 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/inject_component_adaptor.py
 import logging
+from functools import wraps
 from frameworks.wulf import WindowSettings, Window, WindowStatus, WindowLayer
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 _logger = logging.getLogger(__name__)
 
+def hasAliveInject(deadUnexpected=False):
+
+    def decorator(method):
+
+        @wraps(method)
+        def wrapper(injectAdapor, *args, **kwargs):
+            if injectAdapor.getInjectView() is not None:
+                method(injectAdapor, *args, **kwargs)
+            elif deadUnexpected:
+                _logger.warning('unexpected call on adaptor %s without alive content', injectAdapor)
+            return
+
+        return wrapper
+
+    return decorator
+
+
 class InjectComponentAdaptor(BaseDAAPIComponent):
     __slots__ = ('__injected',)
-
-    @property
-    def _injectView(self):
-        return self.__injected.content if self.__injected else None
 
     def __init__(self):
         super(InjectComponentAdaptor, self).__init__()
         self.__injected = None
         return
-
-    @property
-    def injectView(self):
-        return self.__injectView
 
     def registerFlashComponent(self, component, alias, *args):
         _logger.warning('InjectComponentAdaptor %s does not support internal components', self.getAlias())
@@ -33,6 +43,10 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
     def getInjectView(self):
         return self.__injected.content if self.__injected else None
 
+    @property
+    def _injectView(self):
+        return self.__injected.content if self.__injected else None
+
     def _populate(self):
         super(InjectComponentAdaptor, self)._populate()
         self._onPopulate()
@@ -44,7 +58,7 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
         self._destroyInjected()
         super(InjectComponentAdaptor, self)._dispose()
 
-    def _makeInjectView(self):
+    def _makeInjectView(self, *args):
         raise NotImplementedError
 
     def _addInjectContentListeners(self):
@@ -53,12 +67,12 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
     def _removeInjectContentListeners(self):
         pass
 
-    def _createInjectView(self):
+    def _createInjectView(self, *args):
         if self.__injected is not None:
             _logger.error('Inject view %r is already created in component %s', self.__injected.content, self.getAlias())
             return
         else:
-            view = self._makeInjectView()
+            view = self._makeInjectView(*args)
             settings = WindowSettings()
             settings.content = view
             self.__injected = InjectWindow(settings)

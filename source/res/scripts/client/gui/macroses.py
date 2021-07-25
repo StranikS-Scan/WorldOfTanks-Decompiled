@@ -9,6 +9,7 @@ from helpers import getClientLanguage, dependency
 from helpers.http.url_formatters import addParamsToUrlQuery
 from skeletons.gui.web import IWebController
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.game_control import IMarathonEventsController
 
 def getLanguageCode(args=None):
     code = getClientLanguage()
@@ -89,6 +90,22 @@ def getCurrentRealm(args=None):
     return constants.CURRENT_REALM
 
 
+@dependency.replace_none_kwargs(marathonCtrl=IMarathonEventsController)
+def getMarathonPackage(args=None, marathonCtrl=None):
+    from gui.marathon.marathon_constants import MarathonState
+    postfix = ''
+    result = ''
+    marathon = marathonCtrl.getPrimaryMarathon()
+    if marathon is not None:
+        currentStep, _ = marathon.getMarathonProgress()
+        packageTemplate = marathon.packageTemplate
+        state = marathon.getState()
+        if state == MarathonState.FINISHED:
+            postfix = marathon.finishedPostfix
+        result = packageTemplate.format(currentStep, postfix)
+    return result
+
+
 def getClanDBID(args=None):
     clansCtrl = dependency.instance(IWebController)
     return str(clansCtrl.getClanDbID())
@@ -104,7 +121,8 @@ def getSyncMacroses():
      'AUTH_REALM': getAuthRealm,
      'UNIT_SERVER_ID': getUnitServerID,
      'CLAN_DBID': getClanDBID,
-     'CURRENT_REALM': getCurrentRealm}
+     'CURRENT_REALM': getCurrentRealm,
+     'PACKAGE_ID': getMarathonPackage}
 
 
 @async

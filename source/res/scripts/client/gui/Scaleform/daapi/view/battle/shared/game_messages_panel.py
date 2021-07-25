@@ -25,7 +25,7 @@ class GameMessagesPanel(GameMessagesPanelMeta):
     def _addMessage(self, msg):
         self.as_addMessageS(msg)
 
-    def onMessageStarted(self, msgType, msgID):
+    def onMessageStarted(self, msgType, modificator, msgID):
         pass
 
     def onMessageEnded(self, msgType, msgID):

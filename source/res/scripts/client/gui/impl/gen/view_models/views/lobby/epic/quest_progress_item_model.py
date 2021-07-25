@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/epic/quest_progress_item_model.py
+from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.views.lobby.epic.epic_quest_reward_model import EpicQuestRewardModel
 
 class QuestProgressItemModel(ViewModel):
     __slots__ = ()
@@ -33,10 +35,10 @@ class QuestProgressItemModel(ViewModel):
         self._setString(3, value)
 
     def getRewards(self):
-        return self._getString(4)
+        return self._getArray(4)
 
     def setRewards(self, value):
-        self._setString(4, value)
+        self._setArray(4, value)
 
     def getValue(self):
         return self._getNumber(5)
@@ -62,7 +64,7 @@ class QuestProgressItemModel(ViewModel):
         self._addNumberProperty('eventType', 0)
         self._addStringProperty('name', '')
         self._addStringProperty('desc', '')
-        self._addStringProperty('rewards', '')
+        self._addArrayProperty('rewards', Array())
         self._addNumberProperty('value', 0)
         self._addStringProperty('deltaLabel', '')
         self._addNumberProperty('maximum', 0)

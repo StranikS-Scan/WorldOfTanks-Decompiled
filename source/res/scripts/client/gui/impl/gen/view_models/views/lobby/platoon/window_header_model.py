@@ -10,7 +10,7 @@ from gui.impl.gen.view_models.views.lobby.platoon.no_bonus_placeholder_model imp
 class WindowHeaderModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(WindowHeaderModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -43,17 +43,11 @@ class WindowHeaderModel(ViewModel):
     def setShowInfoIcon(self, value):
         self._setBool(5, value)
 
-    def getInfoIconTooltipHeader(self):
-        return self._getBool(6)
-
-    def setInfoIconTooltipHeader(self, value):
-        self._setBool(6, value)
-
     def getBonuses(self):
-        return self._getArray(7)
+        return self._getArray(6)
 
     def setBonuses(self, value):
-        self._setArray(7, value)
+        self._setArray(6, value)
 
     def _initialize(self):
         super(WindowHeaderModel, self)._initialize()
@@ -63,5 +57,4 @@ class WindowHeaderModel(ViewModel):
         self._addStringProperty('backgroundImage', '')
         self._addBoolProperty('showNoBonusPlaceholder', False)
         self._addBoolProperty('showInfoIcon', False)
-        self._addBoolProperty('infoIconTooltipHeader', False)
         self._addArrayProperty('bonuses', Array())

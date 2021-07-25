@@ -1,0 +1,2794 @@
+<210101-0000_510101-0000_mt_scenario_rewards_quests.xml>
+  <quests>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_01_karelia_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	01_karelia	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_01_karelia_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	01_karelia	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_01_karelia_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	01_karelia	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_01_karelia_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	01_karelia	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_01_karelia_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	01_karelia	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_02_malinovka_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	02_malinovka	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_02_malinovka_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	02_malinovka	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_02_malinovka_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	02_malinovka	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_02_malinovka_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	02_malinovka	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_02_malinovka_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	02_malinovka	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_03_campania_big_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	03_campania_big	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_03_campania_big_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	03_campania_big	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_03_campania_big_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	03_campania_big	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_03_campania_big_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	03_campania_big	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_03_campania_big_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	03_campania_big	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_05_prohorovka_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	05_prohorovka	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_05_prohorovka_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	05_prohorovka	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_05_prohorovka_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	05_prohorovka	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_05_prohorovka_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	05_prohorovka	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_05_prohorovka_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	05_prohorovka	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_06_ensk_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	06_ensk	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_06_ensk_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	06_ensk	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_06_ensk_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	06_ensk	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_06_ensk_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	06_ensk	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_06_ensk_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	06_ensk	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_07_lakeville_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	07_lakeville	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_07_lakeville_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	07_lakeville	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_07_lakeville_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	07_lakeville	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_07_lakeville_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	07_lakeville	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_07_lakeville_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	07_lakeville	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_08_ruinberg_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	08_ruinberg	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_08_ruinberg_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	08_ruinberg	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_08_ruinberg_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	08_ruinberg	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_08_ruinberg_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	08_ruinberg	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_08_ruinberg_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	08_ruinberg	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_10_hills_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	10_hills	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_10_hills_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	10_hills	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_10_hills_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	10_hills	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_10_hills_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	10_hills	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_10_hills_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	10_hills	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_17_munchen_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	17_munchen	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_17_munchen_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	17_munchen	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_17_munchen_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	17_munchen	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_17_munchen_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	17_munchen	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_17_munchen_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	17_munchen	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_28_desert_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	28_desert	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_28_desert_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	28_desert	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_28_desert_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	28_desert	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_28_desert_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	28_desert	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_28_desert_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	28_desert	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_29_el_hallouf_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	29_el_hallouf	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_29_el_hallouf_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	29_el_hallouf	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_29_el_hallouf_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	29_el_hallouf	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_29_el_hallouf_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	29_el_hallouf	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_29_el_hallouf_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	29_el_hallouf	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_35_steppes_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	35_steppes	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_35_steppes_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	35_steppes	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_35_steppes_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	35_steppes	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_35_steppes_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	35_steppes	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_35_steppes_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	35_steppes	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_37_caucasus_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	37_caucasus	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_37_caucasus_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	37_caucasus	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_37_caucasus_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	37_caucasus	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_37_caucasus_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	37_caucasus	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_37_caucasus_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	37_caucasus	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_38_mannerheim_line_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	38_mannerheim_line	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_38_mannerheim_line_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	38_mannerheim_line	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_38_mannerheim_line_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	38_mannerheim_line	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_38_mannerheim_line_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	38_mannerheim_line	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_38_mannerheim_line_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	38_mannerheim_line	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_83_kharkiv_team_1_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	83_kharkiv	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_83_kharkiv_team_2_heavyTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	83_kharkiv	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	heavyTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_83_kharkiv_team_1_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	83_kharkiv	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_83_kharkiv_team_2_mediumTank_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	83_kharkiv	</geometryNames>
+            </and>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <classes>	mediumTank	</classes>
+            </vehicleDescr>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	team	</key>
+              <equal>	2	</equal>
+            </results>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	20000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_scenario_rewards_quest_83_kharkiv_map_complete	</id>
+      <enabled>	true	</enabled>
+      <serverOnly>	true	</serverOnly>
+      <saveProgress>	false	</saveProgress>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	83_kharkiv	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+            <results>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	1000	</freeXP>
+        <item>	507	  <count>	3	</count>
+        </item>
+        <item>	1531	  <count>	3	</count>
+        </item>
+        <item>	1019	  <count>	3	</count>
+        </item>
+      </bonus>
+    </battleQuest>
+  </quests>
+</210101-0000_510101-0000_mt_scenario_rewards_quests.xml>

@@ -55,12 +55,12 @@ class BaseEquipmentInteractor(BaseInteractor):
 
     @async
     def showExitConfirmDialog(self):
-        result = yield await(showTankSetupExitConfirmDialog(items=self.getChangedList(), vehInvID=self.getItem().invID, fromSection=self.getName(), startState=BuyAndExchangeStateEnum.BUY_NOT_REQUIRED if not self.getChangedList() else None))
+        result = yield await(showTankSetupExitConfirmDialog(items=self.getChangedList(), vehicle=self.getItem(), fromSection=self.getName(), startState=BuyAndExchangeStateEnum.BUY_NOT_REQUIRED if not self.getChangedList() else None))
         raise AsyncReturn(result)
         return
 
     def _resetInstalledIndices(self):
-        self._installedIndices = [ i for i in xrange(len(self.getInstalledLayout())) ]
+        self._installedIndices = [ i for i in range(len(self.getInstalledLayout())) ]
 
     def _resetPlayerLayout(self):
         self._playerLayout = self.getCurrentLayout().copy()

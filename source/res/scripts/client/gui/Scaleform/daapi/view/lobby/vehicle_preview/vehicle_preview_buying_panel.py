@@ -651,8 +651,12 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
 
     @process
     def __purchaseMarathonPackage(self):
-        url = yield self._marathonEvent.getMarathonVehicleUrl()
-        self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
+        if self._marathonEvent.hasIgbLink():
+            url = yield self._marathonEvent.getMarathonVehicleUrlIgb()
+            event_dispatcher.showShop(url)
+        else:
+            url = yield self._marathonEvent.getMarathonVehicleUrl()
+            self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
 
     def __research(self):
         if self._actionType == factory.UNLOCK_ITEM:

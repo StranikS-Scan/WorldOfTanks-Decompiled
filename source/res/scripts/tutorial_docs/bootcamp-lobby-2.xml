@@ -17,30 +17,20 @@
     </scene>
     <scene>	Research	  <post-effects>
         <set-gui-item-criteria>	ResearchItemNodeCriteria	</set-gui-item-criteria>
-        <effects-group>
-          <condition>
-            <checkpoint-not-reached>	ModuleUnlockedCheckpoint	</checkpoint-not-reached>
-          </condition>
-          <effects>
-            <play-sound>	bc_new_ui_element	  <event>	ANIMATION_STARTED	</event>
-            </play-sound>
-            <play-animation>	ResearchXP	  <type>	clip	</type>
-              <wait_for_finish>	True	</wait_for_finish>
-            </play-animation>
-          </effects>
-        </effects-group>
+        <inactivate>	ResearchItemNodePlayed	</inactivate>
       </post-effects>
       <runtime-effects>
         <effects-group>
           <condition>
             <checkpoint-reached>	ModuleUnlockedCheckpoint	</checkpoint-reached>
+            <checkpoint-not-reached>	ModuleBoughtCheckpoint	</checkpoint-not-reached>
+            <inactive>	ResearchItemNodePlayed	</inactive>
           </condition>
           <effects>
-            <play-sound>	bc_new_ui_element	  <event>	ANIMATION_STARTED	</event>
-            </play-sound>
             <play-animation>	ResearchItemNode	  <type>	clip	</type>
               <wait_for_finish>	True	</wait_for_finish>
             </play-animation>
+            <activate>	ResearchItemNodePlayed	</activate>
           </effects>
         </effects-group>
         <request-exclusive-hint>	ResearchItemNodeButton	  <condition>

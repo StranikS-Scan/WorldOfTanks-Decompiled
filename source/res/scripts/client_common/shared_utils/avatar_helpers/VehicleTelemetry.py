@@ -14,8 +14,12 @@ class VehicleTelemetry(object):
 
     def __init__(self, avatar):
         self.avatar = avatar
+        self.logName = None
+        self.saveTextLog = False
         self.dynamicsLog = None
-        self.dynamicsLogKey = None
+        self.dynamicsData = {}
+        self.scenarioName = None
+        self.recordStarted = False
         self.__physicsDebugInfoEnabled = ENABLE_DEBUG_DYNAMICS_INFO
         self.__physicsDebugInfo = None
         self.__completionFlag = None
@@ -43,41 +47,23 @@ class VehicleTelemetry(object):
             LOG_WARNING('DYNAMICS_LOG_DIR not found, creating ...', VehicleTelemetry.DYNAMICS_LOG_DIR)
             os.mkdir(VehicleTelemetry.DYNAMICS_LOG_DIR)
 
-    def __getScenarioFilePath(self, scenarioName):
-        self.__checkDynLogDir()
-        scenarioPath = os.path.join(VehicleTelemetry.DYNAMICS_LOG_DIR, scenarioName)
-        if not os.path.exists(scenarioPath):
-            LOG_ERROR('SCENARIO file not found:', scenarioPath)
-            return None
-        else:
-            return scenarioPath
-
     NAME_DELIMITER = '$'
 
-    def __generateDynamicsLogName(self, scenarioName):
-        vname = self.avatar.getVehicleAttached().typeDescriptor.name
-        vname = vname.replace(':', VehicleTelemetry.NAME_DELIMITER)
-        sname = scenarioName.split('.', 1)[0]
-        stamp = datetime.datetime.now().strftime('%y%m%d%H%M%S')
-        logName = VehicleTelemetry.NAME_DELIMITER.join((vname, sname, stamp))
+    def __generateDynamicsLogName(self):
+        vehicleName = self.avatar.getVehicleAttached().typeDescriptor.name
+        vehicleName = vehicleName.replace(':', VehicleTelemetry.NAME_DELIMITER)
+        timestamp = datetime.datetime.now().strftime('%y%m%d%H%M%S')
+        logName = VehicleTelemetry.NAME_DELIMITER.join((vehicleName, self.scenarioName, timestamp))
         return logName
 
-    def recordVehicleDynamics(self, scenarioName, isRapidMode=True):
+    def recordVehicleDynamics(self, scenarioName, cmd, isRapidMode=True, saveTextLog=False):
         if not self.avatar.inWorld:
             LOG_WARNING('Avatar.base is not available yet on Avatar client')
             LOG_CODEPOINT_WARNING()
             return
-        cmd = ''
-        scenarioPath = self.__getScenarioFilePath(scenarioName)
-        if not scenarioPath:
-            return
-        scenario = open(scenarioPath, 'r')
-        try:
-            cmd = scenario.read()
-        finally:
-            scenario.close()
-
-        self.logName = self.__generateDynamicsLogName(scenarioName)
+        self.scenarioName = scenarioName
+        self.saveTextLog = saveTextLog
+        self.logName = self.__generateDynamicsLogName()
         cmd = cmd.strip()
         zippedArg = zlib.compress(cPickle.dumps((isRapidMode, cmd)), 9)
         self.__completionFlag = False
@@ -86,27 +72,21 @@ class VehicleTelemetry(object):
     def isSimulationComplete(self):
         return self.__completionFlag
 
-    def __openDynamicsLog(self, key, refTime, refDist):
+    def __openDynamicsLog(self, refTime, refDist):
         if self.dynamicsLog:
             self.__closeDynamicsLog()
-        name = VehicleTelemetry.NAME_DELIMITER.join((self.logName, key))
-        self.logPath = os.path.join(VehicleTelemetry.DYNAMICS_LOG_DIR, name)
-        self.dynamicsLog = open(self.logPath, 'w')
+        self.logPath = os.path.join(VehicleTelemetry.DYNAMICS_LOG_DIR, self.logName)
         self.refTime = refTime
         self.refDist = refDist
-        self.__writeHeader(name)
+        if self.saveTextLog:
+            self.dynamicsLog = open(self.logPath, 'w')
+            self.__writeHeader()
 
-    HEADER_TMPL = '\n# vehicle : %(Veh)s\n# engine  : %(Eng)s\n# chassis : %(Css)s\n# scenario: %(Scn)s\n# section : %(Sec)s\n# physics : %(Phy)s\n#   t        s        Vz       Vx       Az       Ax       X        Y        Z        yaw      w        wcc      p        r\n'.lstrip('\r\n')
+    HEADER_TEMPLATE = '# vehicle : {}\n# engine  : {}\n# chassis : {}\n# scenario: {}\n#  time    distance    Vz      Vx        Az       Ax      X        Y       Z         w        wcc     yaw      pitch     roll     r   health\n'
 
-    def __writeHeader(self, name):
+    def __writeHeader(self):
         descr = self.avatar.getVehicleAttached().typeDescriptor
-        parts = name.split(VehicleTelemetry.NAME_DELIMITER)
-        header = VehicleTelemetry.HEADER_TMPL % {'Veh': descr.name,
-         'Eng': descr.engine.name,
-         'Css': descr.chassis.name,
-         'Scn': parts[2],
-         'Sec': parts[-2],
-         'Phy': parts[-1]}
+        header = VehicleTelemetry.HEADER_TEMPLATE.format(descr.name, descr.engine.name, descr.chassis.name, self.scenarioName)
         self.dynamicsLog.write(header)
 
     def __closeDynamicsLog(self):
@@ -114,74 +94,92 @@ class VehicleTelemetry(object):
             self.dynamicsLog.close()
             self.dynamicsLog = None
             os.rename(self.logPath, self.logPath + '.log')
+        if self.dynamicsData:
+            dataFileName = '{}.pkl'.format(self.logName)
+            with open(os.path.join(VehicleTelemetry.DYNAMICS_LOG_DIR, dataFileName), 'wb') as dataFile:
+                cPickle.dump(self.dynamicsData, dataFile, protocol=2)
+        self.dynamicsData = {}
         self.refTime = None
         self.refDist = None
+        self.recordStarted = False
         return
 
     def __onStop(self):
         self.__closeDynamicsLog()
         self.__completionFlag = True
 
-    LOG_TMPL = ' '.join(('%(t)8.3f %(s)8.3f', '%(Vz)8.3f %(Vx)8.3f', '%(Az)8.3f %(Ax)8.3f', '%(X)8.3f %(Y)8.3f %(Z)8.3f', '%(y)8.3f %(w)8.3f %(q)8.3f', '%(p)8.3f %(r)8.3f', '%(h)4d', '%(ltr)8.3f %(rtr)8.3f', '%(ltp)8.3f %(rtp)8.3f', '%(lte)8.3f %(rte)8.3f', '%(hle)8.3f', '%(dhh)8.3f %(dlt)8.3f %(drt)8.3f', '%(hdm)8.3f %(hrc)8.3f', '%(lthp)8.3f %(rthp)8.3f', '%(Vy)8.3f %(Ay)8.3f', '%(ltslp)8.3f %(rtslp)8.3f', '%(ltbf)8.3f %(rtbf)8.3f', '%(roll)8.3f', '\n'))
+    LOG_LINE_TEMPLATE = ' '.join(('{t:8.3f} {dist:8.3f}', '{Vz:8.3f} {Vx:8.3f}', '{Az:8.3f} {Ax:8.3f}', '{X:8.3f} {Y:8.3f} {Z:8.3f}', '{w:8.3f} {wcc:8.3f}', '{yaw:8.3f} {pitch:8.3f} {roll:8.3f}', '{r:8.3f} {health:4d}', '{ltr:8.3f} {rtr:8.3f}', '{ltp:8.3f} {rtp:8.3f}', '{lte:8.3f} {rte:8.3f}', '{hle:8.3f}', '{dhh:8.3f} {dlt:8.3f} {drt:8.3f}', '{hdm:8.3f} {hrc:8.3f}', '{lthp:8.3f} {rthp:8.3f}', '{Vy:8.3f} {Ay:8.3f}', '{ltslp:8.3f} {rtslp:8.3f}', '{ltbf:8.3f} {rtbf:8.3f}', '\n'))
 
     def __logDynamics(self, paramNamesMap, snapshots):
-        nmap = paramNamesMap
-        for sh in snapshots:
-            t = sh[nmap['time']] - self.refTime
-            if t < 0:
-                print 'Nt:', sh[nmap['time']], self.refTime
-            s = sh[nmap['path']] - self.refDist
-            vel = sh[nmap['vel']]
-            acc = sh[nmap['acc']]
-            pos = sh[nmap['pos']]
-            pitch = -math.degrees(sh[nmap['dir']][1])
-            roll = math.degrees(sh[nmap['dir']][2])
-            yaw = math.degrees(sh[nmap['dir']][0])
-            wel = math.degrees(sh[nmap['wel']].y)
-            wcc = math.degrees(sh[nmap['wac']].y)
-            binormal = (acc * vel).length
-            r = abs(vel.length ** 3 / binormal) if abs(binormal) > 0 else 0
+        namesMap = paramNamesMap
+
+        def getSnapshotValue(snapshot, parameterName, default=0.0):
+            return snapshot[namesMap[parameterName]] if namesMap.has_key(parameterName) else default
+
+        snapshot = None
+        for snapshot in snapshots:
+            time = snapshot[namesMap['time']] - self.refTime
+            if time < 0:
+                print 'Nt:', snapshot[namesMap['time']], self.refTime
+            dist = snapshot[namesMap['path']] - self.refDist
+            velocity = snapshot[namesMap['vel']]
+            acceleration = snapshot[namesMap['acc']]
+            position = snapshot[namesMap['pos']]
+            pitch = -math.degrees(snapshot[namesMap['dir']][1])
+            roll = math.degrees(snapshot[namesMap['dir']][2])
+            yaw = math.degrees(snapshot[namesMap['dir']][0])
+            angularVelocity = math.degrees(snapshot[namesMap['wel']].y)
+            angularAcceleration = math.degrees(snapshot[namesMap['wac']].y)
+            binormal = (acceleration * velocity).length
+            r = abs(velocity.length ** 3 / binormal) if abs(binormal) > 0 else 0
             r = min(500, r)
-            vel *= 3.6
-            acc *= 1 / G
-            line = VehicleTelemetry.LOG_TMPL % {'t': t,
-             's': s,
-             'Vz': vel.z,
-             'Vx': vel.x,
-             'Az': acc.z,
-             'Ax': acc.x,
-             'X': pos.x,
-             'Y': pos.y,
-             'Z': pos.z,
-             'y': yaw,
-             'w': wel,
-             'q': wcc,
-             'p': pitch,
+            velocity *= 3.6
+            acceleration *= 1 / G
+            data = {'t': time,
+             'dist': dist,
+             'Vz': velocity.z,
+             'Vx': velocity.x,
+             'Az': acceleration.z,
+             'Ax': acceleration.x,
+             'X': position.x,
+             'Y': position.y,
+             'Z': position.z,
+             'w': angularVelocity,
+             'wcc': angularAcceleration,
+             'yaw': yaw,
+             'pitch': pitch,
              'roll': roll,
              'r': r,
-             'h': int(self.avatar.getVehicleAttached().health),
-             'ltr': sh[nmap['lTrackReaction']] if nmap.has_key('lTrackReaction') else 0.0,
-             'rtr': sh[nmap['rTrackReaction']] if nmap.has_key('rTrackReaction') else 0.0,
-             'ltp': sh[nmap['lTrackPressure']] if nmap.has_key('lTrackPressure') else 0.0,
-             'rtp': sh[nmap['rTrackPressure']] if nmap.has_key('rTrackPressure') else 0.0,
-             'lte': sh[nmap['lTrackEnergy']] if nmap.has_key('lTrackEnergy') else 0.0,
-             'rte': sh[nmap['rTrackEnergy']] if nmap.has_key('rTrackEnergy') else 0.0,
-             'hle': sh[nmap['hullEnergy']] if nmap.has_key('hullEnergy') else 0.0,
-             'dhh': sh[nmap['dmg_hh']] if nmap.has_key('dmg_hh') else 0.0,
-             'dlt': sh[nmap['dmg_lt']] if nmap.has_key('dmg_lt') else 0.0,
-             'drt': sh[nmap['dmg_rt']] if nmap.has_key('dmg_rt') else 0.0,
-             'lthp': sh[nmap['lthp']] if nmap.has_key('lthp') else 0.0,
-             'rthp': sh[nmap['rthp']] if nmap.has_key('rthp') else 0.0,
-             'hdm': sh[nmap['hull_dmgmp']] if nmap.has_key('hull_dmgmp') else 0.0,
-             'hrc': sh[nmap['hull_react']] if nmap.has_key('hull_react') else 0.0,
-             'Vy': vel.y,
-             'Ay': acc.y,
-             'ltslp': sh[nmap['trackScrolling']][0] if nmap.has_key('trackScrolling') else -20.0,
-             'rtslp': sh[nmap['trackScrolling']][1] if nmap.has_key('trackScrolling') else -30.0,
-             'ltbf': sh[nmap['ltbf']] if nmap.has_key('ltbf') else 0.0,
-             'rtbf': sh[nmap['rtbf']] if nmap.has_key('rtbf') else 0.0}
-            self.dynamicsLog.write(line)
-            self.dynamicsLog.flush()
+             'health': int(self.avatar.getVehicleAttached().health),
+             'ltr': getSnapshotValue(snapshot, 'lTrackReaction'),
+             'rtr': getSnapshotValue(snapshot, 'rTrackReaction'),
+             'ltp': getSnapshotValue(snapshot, 'lTrackPressure'),
+             'rtp': getSnapshotValue(snapshot, 'rTrackPressure'),
+             'lte': getSnapshotValue(snapshot, 'lTrackEnergy'),
+             'rte': getSnapshotValue(snapshot, 'rTrackEnergy'),
+             'hle': getSnapshotValue(snapshot, 'hullEnergy'),
+             'dhh': getSnapshotValue(snapshot, 'dmg_hh'),
+             'dlt': getSnapshotValue(snapshot, 'dmg_lt'),
+             'drt': getSnapshotValue(snapshot, 'dmg_rt'),
+             'lthp': getSnapshotValue(snapshot, 'lthp'),
+             'rthp': getSnapshotValue(snapshot, 'rthp'),
+             'hdm': getSnapshotValue(snapshot, 'hull_dmgmp'),
+             'hrc': getSnapshotValue(snapshot, 'hull_react'),
+             'Vy': velocity.y,
+             'Ay': acceleration.y,
+             'ltslp': getSnapshotValue(snapshot, 'trackScrolling', default=-20.0),
+             'rtslp': getSnapshotValue(snapshot, 'trackScrolling', default=-30.0),
+             'ltbf': getSnapshotValue(snapshot, 'ltbf'),
+             'rtbf': getSnapshotValue(snapshot, 'rtbf')}
+            for key, value in data.iteritems():
+                self.dynamicsData.setdefault(key, []).append(value)
+
+            line = VehicleTelemetry.LOG_LINE_TEMPLATE.format(**data)
+            if self.saveTextLog:
+                self.dynamicsLog.write(line)
+                self.dynamicsLog.flush()
+
+        return
 
     def receivePhysicsDebugInfo(self, info, modifDict):
         infoDict = cPickle.loads(zlib.decompress(info))
@@ -206,7 +204,7 @@ class VehicleTelemetry(object):
                 ind += 1
 
             infoDict['snapshots'][0] = temp
-            if self.dynamicsLog:
+            if self.recordStarted:
                 self.__logDynamics(infoDict['paramNamesMap'], infoDict['snapshots'])
             self.__physicsDebugInfo = infoDict
         elif cmd == 'comment':
@@ -214,7 +212,8 @@ class VehicleTelemetry(object):
                 line = '#%(text)s\n' % infoDict
                 self.dynamicsLog.write(line)
         elif cmd == 'openLog':
-            self.__openDynamicsLog(infoDict['key'], infoDict['time'], infoDict['path'])
+            self.recordStarted = True
+            self.__openDynamicsLog(infoDict['time'], infoDict['path'])
         elif cmd == 'closeLog':
             self.__closeDynamicsLog()
         elif cmd == 'stop':

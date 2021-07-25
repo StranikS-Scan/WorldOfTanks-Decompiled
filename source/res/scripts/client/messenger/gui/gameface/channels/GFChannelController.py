@@ -54,7 +54,7 @@ class GFChannelController(IChannelController):
         if self.__channel:
             self.__channel.clearHistory()
             for message in history:
-                self.addMessage(message)
+                self.addMessage(message, isHistoryMessage=True)
 
     def getHistory(self):
         if self.__channel is None:
@@ -90,14 +90,14 @@ class GFChannelController(IChannelController):
     def sendCommand(self, command):
         self._getChat().send(command)
 
-    def addMessage(self, message, doFormatting=True):
+    def addMessage(self, message, doFormatting=True, isHistoryMessage=False):
         if self.__channel:
             if isinstance(message, str):
                 message = UnitMessageVO(0, -1, message, '')
             if doFormatting:
                 message.text = self.__formatText(message.text)
             self.__channel.addMessage(message)
-            return self.__addMessageToView(message)
+            return self.__addMessageToView(message, isHistoryMessage)
         return False
 
     def addToSubscribedList(self, view):
@@ -141,10 +141,10 @@ class GFChannelController(IChannelController):
         for view in self.__subscribedViews:
             view.onChannelControllerInited(self)
 
-    def __addMessageToView(self, message):
+    def __addMessageToView(self, message, isHistoryMessage=False):
         isShowing = False
         for view in self.__subscribedViews:
-            isShowing |= view.addMessageToView(message)
+            isShowing |= view.addMessageToView(message, isHistoryMessage)
 
         return isShowing
 

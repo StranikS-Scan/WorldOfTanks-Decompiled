@@ -9,6 +9,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
     from frameworks.wulf import View
+    from typing import Optional
 
 class LobbyWindow(Window):
     __slots__ = ()

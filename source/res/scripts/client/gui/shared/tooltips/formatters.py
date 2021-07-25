@@ -98,6 +98,16 @@ def packOptDeviceSlotBlockData(imagePath, slotState, showSlotHighlight=False, sh
     return packBlockDataItem(BLOCKS_TOOLTIP_TYPES.TOOLTIP_OPT_DEVICE_SLOT_BLOCK, data, padding)
 
 
+def packAbilityBattleRankedItemBlockData(title, items, padding=None, blockWidth=0):
+    data = {'abilityName': title,
+     'items': items}
+    return packBlockDataItem(BLOCKS_TOOLTIP_TYPES.TOOLTIP_ABILITY_BATTLE_RANK_ITEM_BLOCK, data, padding, blockWidth)
+
+
+def packAbilityBattleRanksBlockData(padding=None, blockWidth=0):
+    return packBlockDataItem(BLOCKS_TOOLTIP_TYPES.TOOLTIP_ABILITY_BATTLE_RANK_BLOCK, {'highlight': False}, padding, blockWidth)
+
+
 def packTextParameterWithIconBlockData(name, value, icon, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueWidth=-1, gap=5, nameOffset=-1, padding=None, iconYOffset=None):
     data = {'name': name,
      'value': value,
@@ -353,11 +363,11 @@ def packCrewSkillsBlockData(crewStr, skillsStr, crewfIconSrc='', linkage=BLOCKS_
     return packBlockDataItem(linkage, data, padding)
 
 
-def packGroupBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_GROUP_BLOCK_LINKAGE, padding=None):
+def packGroupBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_GROUP_BLOCK_LINKAGE, padding=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, rendererWidth=48):
     data = {'rendererType': RANKEDBATTLES_ALIASES.RANKED_AWARD_RENDERER_ALIAS,
      'listIconSrc': listData,
-     'align': BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER,
-     'rendererWidth': 48}
+     'align': align,
+     'rendererWidth': rendererWidth}
     return packBlockDataItem(linkage, data, padding)
 
 
@@ -501,30 +511,30 @@ def packMoneyAndXpValueBlock(value, icon, iconYoffset, paddingBottom=15, valueWi
     return valueBlock
 
 
-def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=None):
+def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=None, hideActionBlock=False):
     titleBlocks = list()
     alternativeData = alternativeData or {}
     titleBlocks.append(packTitleDescBlock(text_styles.highTitle(TOOLTIPS.getHeaderBtnTitle(alternativeData.get('title') or btnType)), None, padding=packPadding(bottom=15)))
     tooltipBlocks.append(packBuildUpBlockData(titleBlocks))
     if valueBlocks is not None:
         tooltipBlocks.append(packBuildUpBlockData(valueBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
-    if btnType != CURRENCIES_CONSTANTS.GOLD:
-        decsBlocks = list()
-        descLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
-        if btnType == CURRENCIES_CONSTANTS.CRYSTAL:
-            descLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_VIOLET_BIG_LINKAGE
-            padding = packPadding(bottom=8)
-            decsBlocks.append(packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.header.buttons.crystal.descriptionTitle())), padding=padding))
-            descVehicle = text_styles.vehicleStatusInfoText(backport.text(R.strings.tooltips.header.buttons.crystal.descriptionVehicle()))
-            decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.crystal.description0(), vehicle=descVehicle)), padding=padding))
-            decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.crystal.description1())), padding=packPadding(bottom=20)))
-        else:
-            decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=15)))
-        tooltipBlocks.append(packBuildUpBlockData(decsBlocks, linkage=descLinkage))
-    if btnType != CURRENCIES_CONSTANTS.CRYSTAL:
-        actionBlocks = list()
-        actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-        tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
+    decsBlocks = list()
+    descLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
+    if btnType == CURRENCIES_CONSTANTS.CRYSTAL:
+        descLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_VIOLET_BIG_LINKAGE
+        padding = packPadding(bottom=8)
+        decsBlocks.append(packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.header.buttons.crystal.descriptionTitle())), padding=padding))
+        descVehicle = text_styles.vehicleStatusInfoText(backport.text(R.strings.tooltips.header.buttons.crystal.descriptionVehicle()))
+        decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.crystal.description0(), vehicle=descVehicle)), padding=padding))
+        decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.crystal.description1())), padding=packPadding(bottom=20)))
+    else:
+        decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=15)))
+    tooltipBlocks.append(packBuildUpBlockData(decsBlocks, linkage=descLinkage))
+    if not hideActionBlock:
+        if btnType != CURRENCIES_CONSTANTS.CRYSTAL:
+            actionBlocks = list()
+            actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+            tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
     return tooltipBlocks
 
 

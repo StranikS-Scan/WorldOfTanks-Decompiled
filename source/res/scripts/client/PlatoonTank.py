@@ -53,7 +53,7 @@ class _PlatoonTankAppearance(HangarVehicleAppearance):
                     vDesc = vehicles.VehicleDescr(vehCompDescr)
                 outfitComp = camouflages.getOutfitComponent(outfitCD=tankInfo.vehOutfitCD, vehicleDescriptor=vDesc, seasonType=tankInfo.seasonType)
                 outfit = self.itemsFactory.createOutfit(component=outfitComp, vehicleCD=vehCompDescr)
-                forceHistorical = self.settingsCore.getSetting(GAME.C11N_HISTORICALLY_ACCURATE) and not outfit.isHistorical()
+                forceHistorical = self.settingsCore.getSetting(GAME.CUSTOMIZATION_DISPLAY_TYPE) < outfit.customizationDisplayType()
                 if forceHistorical:
                     outfit = None
             else:

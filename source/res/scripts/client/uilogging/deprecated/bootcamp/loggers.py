@@ -81,8 +81,7 @@ class BootcampUILogger(BaseLogger):
                     return
             data = {'timeSpent': timeDelta,
              'is_newbie': self._isNewbie,
-             'lesson_id': None,
-             '__intTime__': True}
+             'lesson_id': None}
             self._updateFromContext(data)
             if restrictions:
                 for targetField, targetValue in restrictions.iteritems():

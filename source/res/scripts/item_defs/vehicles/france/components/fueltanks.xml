@@ -6,6 +6,7 @@
     <Heavy>	204	</Heavy>
     <Large>	205	</Large>
     <Large_SH>	207	</Large_SH>
+    <Medium_MapsTraining_Dummy_SPG_2>	1	</Medium_MapsTraining_Dummy_SPG_2>
   </ids>
   <shared>
     <Small>
@@ -57,5 +58,14 @@
       <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Large_SH>
+    <Medium_MapsTraining_Dummy_SPG_2>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Medium_MapsTraining_Dummy_SPG_2>
   </shared>
 </fuelTanks.xml>

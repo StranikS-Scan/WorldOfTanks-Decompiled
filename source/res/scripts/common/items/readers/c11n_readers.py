@@ -12,7 +12,7 @@ import nations
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS, parseArenaBonusType
 from constants import IS_CLIENT, IS_EDITOR, IS_WEB
 from items.components import shared_components
-from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, ProjectionDecalFormTags, CustomizationNamesToTypes, EMPTY_ITEM_ID, SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags, ProjectionDecalType, DEFAULT_GLOSS, DEFAULT_METALLIC
+from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, ProjectionDecalFormTags, CustomizationNamesToTypes, CustomizationDisplayType, EMPTY_ITEM_ID, SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags, ProjectionDecalType, DEFAULT_GLOSS, DEFAULT_METALLIC
 from realm_utils import ResMgr
 from typing import Dict, Type, Tuple, Any, TypeVar
 from contextlib import contextmanager
@@ -62,7 +62,7 @@ class BaseCustomizationItemXmlReader(object):
         if section.has_key('vehicleFilter'):
             target.filter = self.readVehicleFilterFromXml((xmlCtx, 'vehicleFilter'), section['vehicleFilter'])
         target.season = readFlagEnum(xmlCtx, section, 'season', SeasonType, target.season)
-        target.historical = section.readBool('historical', target.historical)
+        target.customizationDisplayType = section.readInt('historical', target.customizationDisplayType)
         if section.has_key('priceGroup'):
             target.priceGroup = section.readString('priceGroup')
         if section.has_key('requiredToken'):
@@ -181,6 +181,8 @@ class ProjectionDecalXmlReader(BaseCustomizationItemXmlReader):
             target.texture = section.readString('texture')
         if section.has_key('glossTexture'):
             target.glossTexture = section.readString('glossTexture')
+        if section.has_key('scaleFactorId'):
+            target.scaleFactorId = section.readInt('scaleFactorId')
 
 
 class PersonalNumberXmlReader(BaseCustomizationItemXmlReader):
@@ -416,7 +418,7 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
                 ix.raiseWrongXml(xmlCtx, 'type', 'unsupported type is used')
             fn.types = types
         if section.has_key('historical'):
-            fn.historical = ix.readBool(xmlCtx, section, 'historical', False)
+            fn.customizationDisplayType = ix.readInt(xmlCtx, section, 'historical', CustomizationDisplayType.NON_HISTORICAL)
         return fn
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):

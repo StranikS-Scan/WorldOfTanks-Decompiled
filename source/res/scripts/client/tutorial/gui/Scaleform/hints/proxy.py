@@ -46,9 +46,9 @@ class HintsProxy(SfLobbyProxy):
         removeListener(events.TutorialEvent.ON_COMPONENT_LOST, self.__onItemLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(events.TutorialEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
 
-    def showHint(self, props, ignoreOutsideClick=False):
+    def showHint(self, props, ignoreOutsideClick=False, silent=False):
         actionType = (ACTION_TAGS['click'],) if ignoreOutsideClick else (ACTION_TAGS['click'], ACTION_TAGS['click-outside'])
-        self.playEffect(GUI_EFFECT_NAME.SHOW_HINT, (props, actionType))
+        return self.playEffect(GUI_EFFECT_NAME.SHOW_HINT, (props, actionType, silent))
 
     def hideHint(self, hintID):
         self.stopEffect(GUI_EFFECT_NAME.SHOW_HINT, hintID)

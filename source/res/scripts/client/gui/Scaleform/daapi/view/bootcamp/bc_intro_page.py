@@ -5,6 +5,7 @@ import BigWorld
 import BattleReplay
 import Windowing
 from PlayerEvents import g_playerEvents
+from bootcamp.Bootcamp import BOOTCAMP_SOUND, BOOTCAMP_UI_COMPONENTS
 from constants import WOT_GAMEPLAY
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BCIntroVideoPageMeta import BCIntroVideoPageMeta
@@ -28,6 +29,7 @@ LINKAGE_BACKGROUNDS = '{0}Page{1}UI'
 class INTRO_HIGHLIGHT_TYPE(object):
     START_BUTTON = 0
     ARROWS = 1
+    WELCOME_START_BUTTON = 2
 
 
 class BCIntroPage(BCIntroVideoPageMeta):
@@ -170,13 +172,16 @@ class BCIntroPage(BCIntroVideoPageMeta):
     def _onFinish(self):
         self.as_loadedS()
 
+    def onHighlightShow(self):
+        self.soundManager.playSound(BOOTCAMP_SOUND.NEW_UI_ELEMENT_SOUND)
+
     def _isCurrentlyHighlighting(self, highlightType):
         return self._highlightingMask & 1 << highlightType != 0
 
     def _setHighlighting(self, highlightType, doHighlight):
         eventId = VIEW_ALIAS.BOOTCAMP_ADD_HIGHLIGHT if doHighlight else VIEW_ALIAS.BOOTCAMP_REMOVE_HIGHLIGHT
-        if highlightType == INTRO_HIGHLIGHT_TYPE.START_BUTTON:
-            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(eventId), ctx='StartBattleButton'), EVENT_BUS_SCOPE.BATTLE)
+        if highlightType in [INTRO_HIGHLIGHT_TYPE.START_BUTTON, INTRO_HIGHLIGHT_TYPE.WELCOME_START_BUTTON]:
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(eventId), ctx=BOOTCAMP_UI_COMPONENTS.START_BATTLE_BUTTON if highlightType == INTRO_HIGHLIGHT_TYPE.START_BUTTON else BOOTCAMP_UI_COMPONENTS.WELCOME_START_BATTLE_BUTTON), EVENT_BUS_SCOPE.BATTLE)
         elif highlightType == INTRO_HIGHLIGHT_TYPE.ARROWS:
             for highlightName in ('LoadingRightButton', 'LoadingLeftButton'):
                 g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(eventId), ctx=highlightName), EVENT_BUS_SCOPE.BATTLE)

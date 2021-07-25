@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/vehicles.py
+import string
 import typing
-from typing import List, Optional, TYPE_CHECKING, Dict, Union, Tuple, Generator
 from items import ItemsPrices
 from items.components.supply_slot_categories import LevelsFactor
 from math_common import ceilTo
@@ -13,17 +13,19 @@ import struct
 import itertools
 import copy
 import os
-from typing import List, Optional, Tuple, Dict, Any, TYPE_CHECKING
+from typing import List, Optional, Tuple, Dict, Any, TYPE_CHECKING, Union, Generator
 import BigWorld
 from Math import Vector2, Vector3
 import nation_change
 import nations
 import items
 from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr, ITEM_TYPES
+from items.attributes_helpers import onCollectAttributes, STATIC_ATTR_PREFIX
 from items.components import component_constants, shell_components, chassis_components, skills_constants
 from items.components.shell_components import HighExplosiveImpactParams
 from items.components import shared_components
 from items.components.c11n_constants import ApplyArea, MATCHING_TAGS_SUFFIX, CamouflageTilingType, CamouflageTilingTypeNameToType
+from items.components.post_progression_components import PostProgressionCache, getActiveModifications
 from items.readers import chassis_readers
 from items.readers import gun_readers
 from items.readers import shared_readers
@@ -37,12 +39,11 @@ from items import vehicle_items
 from items._xml import cachedFloat
 from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
 from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_EDITOR
-from constants import ACTION_LABEL_TO_TYPE, ACTIONS_GROUP_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ACTIONS_GROUP_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL, ROLE_TYPE, ACTIONS_GROUP_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS
+from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from items.stun import g_cfg as stunConfig
 from items import common_extras, decodeEnum
 from string import upper
-from constants import IS_EDITOR
 from constants import SHELL_MECHANICS_TYPE
 from wrapped_reflection_framework import ReflectionMetaclass
 from collector_vehicle import CollectorVehicleConsts
@@ -145,6 +146,7 @@ _VEHICLE_TYPE_XML_PATH = ITEM_DEFS_PATH + 'vehicles/'
 _DEFAULT_HEALTH_BURN_PER_SEC_LOSS_FRACTION = 0.0875
 _CUSTOMIZATION_EPOCH = 1306886400
 _CUSTOMIZATION_XML_PATH = ITEM_DEFS_PATH + 'customization/'
+_readTags = shared_readers.readAllowedTags
 EmblemSlot = namedtuple('EmblemSlot', ['rayStart',
  'rayEnd',
  'rayUp',
@@ -254,7 +256,10 @@ def vehicleAttributeFactors():
      'enginePowerFactor': 1.0,
      'deathZones/sensitivityFactor': 1.0,
      'multShotDispersionFactor': 1.0,
-     'gun/changeShell/reloadFactor': 1.0}
+     'gun/changeShell/reloadFactor': 1.0,
+     'demaskMovingFactor': 1.0,
+     'demaskFoliageFactor': 1.0,
+     'invisibilityAdditiveTerm': 0.0}
 
 
 WHEEL_SIZE_COEF = 2.2
@@ -285,6 +290,7 @@ def init(preloadEverything, pricesToCollect):
 
         g_cache.customization20()
         g_cache.supplySlots()
+        g_cache.postProgression()
         _g_prices = None
     return
 
@@ -301,8 +307,9 @@ def reload(full=True):
 
 class VehicleDescriptor(object):
     __metaclass__ = ReflectionMetaclass
+    __slots__ = ('enhancements', 'turret', 'gun', 'hull', 'engine', 'fuelTank', 'radio', 'chassis', 'turrets', 'optionalDevices', 'shot', 'supplySlots', 'camouflages', 'playerEmblems', 'playerInscriptions', 'type', 'name', 'level', 'extras', 'extrasDict', 'miscAttrs', 'physics', 'visibilityCheckPoints', 'observerPosOnChassis', 'observerPosOnTurret', '_customRoleSlotTypeId', '_modifications', '_optDevSlotsMap', '_maxHealth', '__activeTurretPos', '__activeGunShotIdx', '__activeGunShotPosition', '__boundingRadius')
 
-    def __init__(self, compactDescr=None, typeID=None, typeName=None, vehMode=VEHICLE_MODE.DEFAULT, xmlPath=None):
+    def __init__(self, compactDescr=None, typeID=None, typeName=None, vehMode=VEHICLE_MODE.DEFAULT, xmlPath=None, extData=None):
         self.enhancements = []
         vehType = None
         if compactDescr is None:
@@ -337,6 +344,8 @@ class VehicleDescriptor(object):
             header = items.ITEM_TYPES.vehicle + (nationID << 4)
             compactDescr = struct.pack('<2B6HB', header, vehicleTypeID, type.chassis[0].id[1], type.engines[0].id[1], type.fuelTanks[0].id[1], type.radios[0].id[1], turretDescr.id[1], turretDescr.guns[0].id[1], 0)
         self.__initFromCompactDescr(compactDescr, vehMode, vehType)
+        self.__applyExternalData(extData or {})
+        self.__updateAttributes()
         return
 
     @property
@@ -366,6 +375,8 @@ class VehicleDescriptor(object):
         self.__activeGunShotPosition = gunShotPos
 
     activeGunShotPosition = property(lambda self: self.__activeGunShotPosition, __set_activeGunShotPosition)
+    modifications = property(lambda self: self._modifications)
+    customRoleSlotTypeId = property(lambda self: self._customRoleSlotTypeId)
     hasSiegeMode = property(lambda self: self.type.hasSiegeMode)
     hasAutoSiegeMode = property(lambda self: self.type.hasAutoSiegeMode)
     isWheeledVehicle = property(lambda self: self.type.isWheeledVehicle)
@@ -405,6 +416,32 @@ class VehicleDescriptor(object):
         return radius
 
     boundingRadius = property(__get_boundingRadius)
+
+    def __applyExternalData(self, extData):
+
+        def getValue(key, defaultValue):
+            if isinstance(extData, dict):
+                return extData.get(key, defaultValue)
+            else:
+                return getattr(extData, key, defaultValue)
+
+        self._customRoleSlotTypeId = 0
+        self._modifications = []
+        self.installCustomRoleSlot(getValue('customRoleSlotTypeId', 0), False)
+        modificationIDs = getActiveModifications(getValue('vehPostProgression', []), g_cache.postProgression())
+        self.installModifications(modificationIDs, False)
+
+    def installCustomRoleSlot(self, customRoleSlotTypeId, rebuildAttrs=True):
+        self._customRoleSlotTypeId = customRoleSlotTypeId
+        self._updateSupplySlots()
+        self._rebuildOptDevSlotsMap()
+        if rebuildAttrs:
+            self.__updateAttributes()
+
+    def installModifications(self, modificationIDs, rebuildAttrs=True):
+        self._modifications = modificationIDs
+        if rebuildAttrs:
+            self.__updateAttributes()
 
     def setCamouflage(self, position, camouflageID, startTime, durationDays):
         p = self.camouflages
@@ -577,13 +614,14 @@ class VehicleDescriptor(object):
             removed.append(prevGunDescr.compactDescr)
         return removed
 
-    def installEnhancements(self, enhancements):
+    def installEnhancements(self, enhancements, rebuildAttrs=True):
         for modsInSlot in enhancements.itervalues():
             for mod in modsInSlot.itervalues():
                 for attr in mod['attributes']:
                     self.enhancements.append(EnhancementItem(attr['name'], attr['value'], attr['operation']))
 
-        self.__updateAttributes()
+        if rebuildAttrs:
+            self.__updateAttributes()
 
     def mayInstallComponent(self, compactDescr, positionIndex=0):
         itemTypeID, nationID, compID = parseIntCompactDescr(compactDescr)
@@ -681,7 +719,7 @@ class VehicleDescriptor(object):
             prevOptDevSlotMap = self._optDevSlotsMap
             if device in prevDevices:
                 return (False, 'already installed')
-            if slotIdx >= self.type.supplySlots.getAmountForType(ITEM_TYPES.optionalDevice):
+            if slotIdx >= self.supplySlots.getAmountForType(ITEM_TYPES.optionalDevice):
                 return (False, 'Wrong slotIDx ({})'.format(slotIdx))
             for idx, installedDevice in enumerate(self.optionalDevices):
                 if idx != slotIdx and installedDevice and not device.checkCompatibilityWithOther(installedDevice):
@@ -706,7 +744,7 @@ class VehicleDescriptor(object):
             return (True, None)
 
     def mayInstallOptDevsSequence(self, optDevSequence):
-        result, errorStr = self.type.supplySlots.checkLayoutCompatibility(ITEM_TYPES.optionalDevice, optDevSequence)
+        result, errorStr = self.supplySlots.checkLayoutCompatibility(ITEM_TYPES.optionalDevice, optDevSequence)
         if not result:
             return (False, errorStr)
         else:
@@ -750,7 +788,7 @@ class VehicleDescriptor(object):
         devices = self.optionalDevices
         prevDevice = devices[slotIdx]
         devices[slotIdx] = device
-        self._optDevSlotsMap[compactDescr] = self.type.supplySlots.getSlotByIdxInItemType(ITEM_TYPES.optionalDevice, slotIdx)
+        self._optDevSlotsMap[compactDescr] = self.supplySlots.getSlotByIdxInItemType(ITEM_TYPES.optionalDevice, slotIdx)
         self.__updateAttributes()
         if prevDevice is None:
             return (component_constants.EMPTY_TUPLE, component_constants.EMPTY_TUPLE)
@@ -782,9 +820,9 @@ class VehicleDescriptor(object):
             return ((device.compactDescr,), component_constants.EMPTY_TUPLE) if device.removable else (component_constants.EMPTY_TUPLE, (device.compactDescr,))
 
     def maySwapOptionalDevice(self, leftID, rightID):
-        if leftID >= self.type.supplySlots.getAmountForType(ITEM_TYPES.optionalDevice):
+        if leftID >= self.supplySlots.getAmountForType(ITEM_TYPES.optionalDevice):
             return (False, 'Wrong slotIDx ({})'.format(leftID))
-        elif rightID >= self.type.supplySlots.getAmountForType(ITEM_TYPES.optionalDevice):
+        elif rightID >= self.supplySlots.getAmountForType(ITEM_TYPES.optionalDevice):
             return (False, 'Wrong slotIDx ({})'.format(leftID))
         else:
             prevDevices = self.optionalDevices
@@ -805,13 +843,13 @@ class VehicleDescriptor(object):
         leftDevice, rightDevice = devices[leftID], devices[rightID]
         devices[leftID], devices[rightID] = rightDevice, leftDevice
         if leftDevice:
-            self._optDevSlotsMap[leftDevice.compactDescr] = self.type.supplySlots.getSlotByIdxInItemType(ITEM_TYPES.optionalDevice, rightID)
+            self._optDevSlotsMap[leftDevice.compactDescr] = self.supplySlots.getSlotByIdxInItemType(ITEM_TYPES.optionalDevice, rightID)
         if rightDevice:
-            self._optDevSlotsMap[rightDevice.compactDescr] = self.type.supplySlots.getSlotByIdxInItemType(ITEM_TYPES.optionalDevice, leftID)
+            self._optDevSlotsMap[rightDevice.compactDescr] = self.supplySlots.getSlotByIdxInItemType(ITEM_TYPES.optionalDevice, leftID)
         self.__updateAttributes()
 
     def iterOptDevsWithSlots(self):
-        optDevSlotIDs = self.type.supplySlots.getSlotIDsByType(ITEM_TYPES.optionalDevice)
+        optDevSlotIDs = self.supplySlots.getSlotIDsByType(ITEM_TYPES.optionalDevice)
         for optDev, slotID in itertools.izip(self.optionalDevices, optDevSlotIDs):
             slot = g_cache.supplySlots().getSlotDescr(slotID)
             yield (optDev, slot)
@@ -827,6 +865,17 @@ class VehicleDescriptor(object):
     def getOptDevSupplySlot(self, optDevCompDescr):
         return self._optDevSlotsMap.get(optDevCompDescr, None)
 
+    def _updateSupplySlots(self):
+        supplySlotIDs = list(self.type.supplySlots.slotIDs)
+        if self._customRoleSlotTypeId:
+            for slotIdx, slotID in enumerate(supplySlotIDs):
+                slotDescr = g_cache.supplySlots().getSlotDescr(slotID)
+                if slotDescr.itemType == ITEM_TYPES.optionalDevice and not slotDescr.categories:
+                    supplySlotIDs[slotIdx] = self._customRoleSlotTypeId
+                    break
+
+        self.supplySlots = g_cache.supplySlotsStorage().getStorage(supplySlotIDs)
+
     def makeCompactDescr(self):
         type = self.type
         pack = struct.pack
@@ -835,7 +884,7 @@ class VehicleDescriptor(object):
             turretDescr, gunDescr = self.turrets[n]
             components += pack('<2H', turretDescr.id[1], gunDescr.id[1])
 
-        optDevSlots = self.type.supplySlots.getAmountForType(ITEM_TYPES.optionalDevice)
+        optDevSlots = self.supplySlots.getAmountForType(ITEM_TYPES.optionalDevice)
         if len(self.optionalDevices) != optDevSlots:
             raise SoftException('Optional devices num ({}) is incorrect. Should be equal to {}'.format(len(self.optionalDevices), optDevSlots))
         optionalDevices = ''
@@ -1160,7 +1209,8 @@ class VehicleDescriptor(object):
                 self.hull = type.hulls[0]
             else:
                 self.hull = self.__selectBestHull(self.turrets, self.chassis)
-            optDevSlots = self.type.supplySlots.getAmountForType(ITEM_TYPES.optionalDevice)
+            self.supplySlots = self.type.supplySlots
+            optDevSlots = self.supplySlots.getAmountForType(ITEM_TYPES.optionalDevice)
             self.optionalDevices = [None] * optDevSlots
             self._optDevSlotsMap = {}
             optDevsCache = g_cache.optionalDevices()
@@ -1229,7 +1279,6 @@ class VehicleDescriptor(object):
                         slots[idx] = item
 
                     self.camouflages = tuple(slots)
-            self.__updateAttributes()
         except Exception:
             LOG_ERROR('(compact descriptor to XML mismatch?)', compactDescr)
             raise
@@ -1271,6 +1320,11 @@ class VehicleDescriptor(object):
 
         return
 
+    def applyModificationsAttrs(self):
+        vppCache = g_cache.postProgression()
+        items = iter((vppCache.modifications[modificationID].modifiers for modificationID in self._modifications))
+        onCollectAttributes(self.miscAttrs, items, STATIC_ATTR_PREFIX, True)
+
     @property
     def shootExtraName(self):
         return 'shoot' if not self.isDualgunVehicle else 'dualShoot'
@@ -1280,6 +1334,8 @@ class VehicleDescriptor(object):
         self.physics = None
         type = self.type
         chassis = self.chassis
+        chassisShotDispersionFactors = chassis.shotDispersionFactors
+        gunShotDispersionFactors = self.gun.shotDispersionFactors
         self._maxHealth = self.hull.maxHealth
         for turretDescr, gunDescr in self.turrets:
             self._maxHealth += turretDescr.maxHealth
@@ -1325,7 +1381,17 @@ class VehicleDescriptor(object):
          'gunHealthFactor': 1.0,
          'demaskMovingFactor': 1.0,
          'centerRotationFwdSpeedFactor': 1.0,
-         'deathZones/sensitivityFactor': 1.0}
+         'deathZones/sensitivityFactor': 1.0,
+         'rammingFactor': 1.0,
+         'rollingFrictionFactor': 1.0,
+         'chassis/shotDispersionFactors/movement': chassisShotDispersionFactors[0],
+         'chassis/shotDispersionFactors/rotation': chassisShotDispersionFactors[1],
+         'invisibilityFactorAtShot': self.gun.invisibilityFactorAtShot,
+         'gun/shotDispersionFactors/afterShot': gunShotDispersionFactors['afterShot'],
+         'gun/shotDispersionFactors/turretRotation': gunShotDispersionFactors['turretRotation'],
+         'gun/shotDispersionFactors/whileGunDamaged': gunShotDispersionFactors['whileGunDamaged'],
+         'ammoBayReduceFineFactor': 1.0,
+         'engineReduceFineFactor': 1.0}
         if IS_CLIENT or IS_EDITOR or IS_CELLAPP or IS_WEB or IS_BOT or onAnyApp:
             trackCenterOffset = chassis.topRightCarryingPoint[0]
             self.physics = {'weight': weight,
@@ -1340,8 +1406,12 @@ class VehicleDescriptor(object):
              'brakeForce': chassis.brakeForce,
              'terrainResistance': chassis.terrainResistance,
              'rollingFrictionFactors': [1.0, 1.0, 1.0]}
+            self.applyModificationsAttrs()
             self.applyOptionalDevicesMiscAttrs()
             physics = self.physics
+            rff = physics['rollingFrictionFactors']
+            rollingFrictionFactor = self.miscAttrs['rollingFrictionFactor']
+            physics['rollingFrictionFactors'] = list((rffi * rollingFrictionFactor for rffi in rff))
             defWeight = type.hulls[0].weight + chassis.weight + type.engines[0].weight + type.fuelTanks[0].weight + type.radios[0].weight
             for turretList in type.turrets:
                 defWeight += turretList[0].weight + turretList[0].guns[0].weight
@@ -1423,17 +1493,29 @@ class CompositeVehicleDescriptor(object):
         elif self.__vehicleMode == VEHICLE_MODE.SIEGE:
             self.__dict__['_CompositeVehicleDescriptor__vehicleMode'] = VEHICLE_MODE.DEFAULT
 
-    def installTurret(self, turretCompactDescr, gunCompactDescr, positionIndex=0):
-        self.__siegeDescr.installTurret(turretCompactDescr, gunCompactDescr, positionIndex)
-        return self.__vehicleDescr.installTurret(turretCompactDescr, gunCompactDescr, positionIndex)
-
     def installComponent(self, compactDescr, positionIndex=0):
         self.__siegeDescr.installComponent(compactDescr, positionIndex)
         return self.__vehicleDescr.installComponent(compactDescr, positionIndex)
 
+    def installEnhancements(self, enhancements, rebuildAttrs=True):
+        self.__siegeDescr.installEnhancements(enhancements, rebuildAttrs)
+        return self.__vehicleDescr.installEnhancements(enhancements, rebuildAttrs)
+
+    def installModifications(self, modificationIDs, rebuildAttrs=True):
+        self.__siegeDescr.installModifications(modificationIDs, rebuildAttrs)
+        return self.__vehicleDescr.installModifications(modificationIDs, rebuildAttrs)
+
     def installOptionalDevice(self, compactDescr, slotIdx):
         self.__siegeDescr.installOptionalDevice(compactDescr, slotIdx)
         return self.__vehicleDescr.installOptionalDevice(compactDescr, slotIdx)
+
+    def installOptDevsSequence(self, optDevSequence):
+        self.__siegeDescr.installOptDevsSequence(optDevSequence)
+        return self.__vehicleDescr.installOptDevsSequence(optDevSequence)
+
+    def installTurret(self, turretCompactDescr, gunCompactDescr, positionIndex=0):
+        self.__siegeDescr.installTurret(turretCompactDescr, gunCompactDescr, positionIndex)
+        return self.__vehicleDescr.installTurret(turretCompactDescr, gunCompactDescr, positionIndex)
 
     def removeOptionalDevice(self, slotIdx):
         self.__siegeDescr.removeOptionalDevice(slotIdx)
@@ -1444,11 +1526,11 @@ class CompositeVehicleDescriptor(object):
         return self.__vehicleDescr.__installGun(gunID, turretPositionIdx)
 
 
-def VehicleDescr(compactDescr=None, typeID=None, typeName=None, xmlPath=None):
-    defaultDescriptor = VehicleDescriptor(compactDescr, typeID, typeName, xmlPath=xmlPath)
+def VehicleDescr(compactDescr=None, typeID=None, typeName=None, xmlPath=None, extData=None):
+    defaultDescriptor = VehicleDescriptor(compactDescr, typeID, typeName, xmlPath=xmlPath, extData=extData)
     if not defaultDescriptor.hasSiegeMode:
         return defaultDescriptor
-    siegeDescriptor = VehicleDescriptor(compactDescr, typeID, typeName, VEHICLE_MODE.SIEGE, xmlPath=xmlPath)
+    siegeDescriptor = VehicleDescriptor(compactDescr, typeID, typeName, VEHICLE_MODE.SIEGE, xmlPath=xmlPath, extData=extData)
     return CompositeVehicleDescriptor(defaultDescriptor, siegeDescriptor)
 
 
@@ -1457,6 +1539,91 @@ def isVehicleDescr(descr):
 
 
 VehicleDescrType = Union[VehicleDescriptor, CompositeVehicleDescriptor]
+
+class NoneVehicleSelector(list):
+
+    def matches(self, vehTypeOrDescr=None, vehName=None):
+        return False
+
+    def match(self, tags=(), excludedTags=()):
+        return self
+
+
+class VehicleSelector(NoneVehicleSelector):
+    ANY = ('', '*')
+    ctags = property(lambda self: self.__tags & VEHICLE_CLASS_TAGS)
+    vtags = property(lambda self: self.__tags - VEHICLE_CLASS_TAGS)
+    etags = property(lambda self: self.__etags - VEHICLE_CLASS_TAGS)
+
+    def __init__(self, ns=(), levels=(), vehClasses=(), vehTags=(), excludedVehTags=()):
+        self.__nations = {str(n) for n in ns if str(n) in nations.NAMES} if ns else nations.NAMES
+        self.__levels = {int(l) for l in levels} if levels else set(range(1, 11))
+        self.__tags = {str(vc) for vc in vehClasses if vc in VEHICLE_CLASS_TAGS} if vehClasses else VEHICLE_CLASS_TAGS
+        vtags = set(items.getTypeInfoByName('vehicle')['tags']) - VEHICLE_CLASS_TAGS
+        self.__tags |= {str(vt) for vt in vehTags if vt in vtags}
+        self.__etags = {str(vt) for vt in excludedVehTags if vt in vtags}
+
+    def match(self, tags=(), excludedTags=()):
+        tags = frozenset(tags)
+        excludedTags = frozenset(excludedTags)
+        if not self:
+            nset, levels, vtags, vetags = (self.__nations,
+             self.__levels,
+             self.__tags,
+             self.__etags)
+            tags |= vtags
+            excludedTags |= vetags
+            self.extend((vdict.compactDescr for nn in nset for vdict in g_list.getList(nations.INDICES[nn]).itervalues() if self.matches(vehTypeOrDescr=vdict.compactDescr)))
+        return self
+
+    def matches(self, vehTypeOrDescr=None, vehName=None):
+        if not bool(vehTypeOrDescr) ^ bool(vehName):
+            raise SoftException('Value Error')
+        if vehTypeOrDescr is not None:
+            _, nid, vnid = parseIntCompactDescr(vehTypeOrDescr)
+        elif vehName is not None:
+            nid, vnid = g_list.getIDsByName(vehName)
+        vdata = g_list.getList(nid)[vnid]
+        vct, vt, vet = self.ctags, self.vtags, self.etags
+        return (not self.__nations or nations.MAP[nid] in self.__nations) and (not self.__levels or vdata.level in self.__levels) and not (vct and vdata.tags.isdisjoint(vct)) and not (vt and not vdata.tags >= vt) and not (vet and vdata.tags >= vet)
+
+    def __repr__(self):
+        return super(VehicleSelector, self).__repr__() if self else ':'.join(('|'.join(self.__nations),
+         '|'.join((str(l) for l in self.__levels)),
+         '|'.join(self.ctags),
+         '&'.join(self.vtags | {'~{}'.format(et) for et in self.etags})))
+
+    @staticmethod
+    def fromString(vstr):
+        try:
+            nset, levels, ctags, tags = itertools.islice(itertools.chain(string.split(vstr, ':', 3), iter(str, -1)), 4)
+            nset = VehicleSelector.predicateAsSet(nset, nations.NAMES, str)
+            levels = VehicleSelector.predicateAsSet(levels, range(1, 11), int)
+            vehClasses = VehicleSelector.predicateAsSet(ctags, VEHICLE_CLASS_TAGS, str)
+            tags = tags.split('&')
+            vehTags = {t for t in tags if not (t in VEHICLE_CLASS_TAGS or t.startswith('~'))}
+            excludedVehTags = {t[1:] for t in tags if t and t[1:] not in VEHICLE_CLASS_TAGS and t.startswith('~')}
+        except ValueError:
+            LOG_ERROR('Unable to match any vehicle by {}'.format(vstr))
+            return NoneVehicleSelector()
+
+        return VehicleSelector(nset, levels, vehClasses, vehTags, excludedVehTags)
+
+    @staticmethod
+    def predicateAsSet(predicate, dom, fun=lambda _: _):
+        result = set()
+        dom = frozenset(dom)
+        for p in str(predicate).split('|'):
+            try:
+                if p.startswith('~'):
+                    result |= dom - {fun(p[1:])} if fun(p[1:]) in dom else set()
+                else:
+                    result.add(fun(p)) if fun(p) in dom else None
+            except ValueError:
+                pass
+
+        return result or dom
+
 
 class VehicleType(object):
     currentReadingVeh = None
@@ -1536,7 +1703,10 @@ class VehicleType(object):
      'hasTurboshaftEngine',
      'hasHydraulicChassis',
      'supplySlots',
-     'optDevsOverrides')
+     'optDevsOverrides',
+     'postProgressionTree',
+     'customRoleSlotOptions',
+     '__weakref__')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
@@ -1561,8 +1731,7 @@ class VehicleType(object):
         self.hasBurnout = 'burnout' in self.tags
         self.isCollectorVehicle = CollectorVehicleConsts.COLLECTOR_VEHICLES_TAG in self.tags
         self.role = self.__getRoleFromTags() if self.level in ROLE_LEVELS else ROLE_TYPE.NOT_DEFINED
-        self.actionsGroup = self.__getActionsGroupFromRole(self.role)
-        self.actions = self.__getActionsFromActionsGroup(self.actionsGroup)
+        self.actions = self.__getActionsFromRole(self.role)
         VehicleType.currentReadingVeh = self
         self.baseColorID = section.readInt('baseColorID', 0)
         self.hasCustomDefaultCamouflage = section.readBool('customDefaultCamouflage', False)
@@ -1584,6 +1753,23 @@ class VehicleType(object):
         self.premiumVehicleXPFactor = max(self.premiumVehicleXPFactor, 0.0)
         supplySlotIDs = _xml.readTupleOfInts(xmlCtx, section, 'supplySlots')
         self.supplySlots = g_cache.supplySlotsStorage().getStorage(supplySlotIDs)
+        if section.has_key('postProgressionTree'):
+            treeName = _xml.readString(xmlCtx, section, 'postProgressionTree')
+            treeID = g_cache.postProgression().treeIDs.get(treeName)
+            if treeID is None:
+                _xml.raiseWrongXml(xmlCtx, 'postProgressionTree', 'Unknown postProgression tree: {}'.format(treeName))
+            self.postProgressionTree = treeID
+        else:
+            self.postProgressionTree = None
+        if self.role == ROLE_TYPE.NOT_DEFINED and self.postProgressionTree is not None:
+            LOG_ERROR('Vehicle {} must have role'.format(self.name))
+        if section.has_key('customRoleSlotOptions'):
+            self.customRoleSlotOptions = _xml.readTupleOfInts(xmlCtx, section, 'customRoleSlotOptions')
+            intersection = set(supplySlotIDs) & set(self.customRoleSlotOptions)
+            if intersection:
+                _xml.raiseWrongXml(xmlCtx, 'customRoleSlotOptions', 'Duplicate custom slots: {}'.format(intersection))
+        else:
+            self.customRoleSlotOptions = ()
         if not IS_CLIENT and not IS_BOT:
             self.xpFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'xpFactor')
             self.creditsFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'creditsFactor')
@@ -1810,28 +1996,18 @@ class VehicleType(object):
         return getVehicleClassFromVehicleType(self)
 
     def __getRoleFromTags(self):
-        rolesTags = g_cache.rolesTags()
-        suitableRoles = []
-        vehicleTags = self.tags
-        for roleName, (includeTags, excludeTags) in rolesTags.iteritems():
-            if all((tag in vehicleTags for tag in includeTags)):
-                if not any((tag in vehicleTags for tag in excludeTags)):
-                    suitableRoles.append(roleName)
-
+        roles = g_cache.roles()
+        suitableRoles = [ tag for tag in roles if ROLE_TYPE_TO_LABEL[tag] in self.tags ]
         if not suitableRoles:
-            return None
-        else:
-            if len(suitableRoles) > 1:
-                raise SoftException("There are several roles for vehicle '%s': '%s'" % (self.name, suitableRoles))
-            return suitableRoles[0]
+            LOG_WARNING('All vehicles from levels %s must have role, vehicle: %s(CD:%s)' % (ROLE_LEVELS, self.name, self.compactDescr))
+            return ROLE_TYPE.NOT_DEFINED
+        if len(suitableRoles) > 1:
+            raise SoftException("There are several roles for vehicle '%s': '%s'" % (self.name, suitableRoles))
+        return suitableRoles[0]
 
-    def __getActionsGroupFromRole(self, role):
-        rolesActionsGroup = g_cache.actionGroupsByRoles()
-        return rolesActionsGroup.get(role, ACTIONS_GROUP_TYPE.NOT_DEFINED)
-
-    def __getActionsFromActionsGroup(self, actionsGroup):
-        actionsByGroups = g_cache.actionsByGroups()
-        return actionsByGroups.get(actionsGroup, None)
+    def __getActionsFromRole(self, role):
+        actionsByRoles = g_cache.roles()
+        return actionsByRoles.get(role, None)
 
     def __convertAndValidateUnlocksDescrs(self, srcList):
         nationID = self.id[0]
@@ -1931,17 +2107,20 @@ class VehicleType(object):
 
 
 class SupplySlotsStorageCache(object):
+    __slots__ = ('__cache',)
 
     def __init__(self):
         self.__cache = {}
 
     def getStorage(self, slotIDs):
+        slotIDs = tuple(slotIDs)
         if slotIDs not in self.__cache:
             self.__cache[slotIDs] = SupplySlotsStorage(slotIDs)
         return self.__cache[slotIDs]
 
 
 class SupplySlotsStorage(object):
+    __slots__ = ('_slotIDs', '_slotsByType')
     ALL_IDS_KEY = -1
 
     def __init__(self, slotIDs):
@@ -2004,7 +2183,7 @@ class SupplySlotsStorage(object):
 
 
 class Cache(object):
-    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20', '__rolesTags', '__actionsByGroups', '__rolesActionGroups', '__actionsByRoles', '__supplySlots', '__supplySlotsStorages', '__moduleKind')
+    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20', '__roles', '__supplySlots', '__supplySlotsStorages', '__moduleKind', '__postProgression')
     NATION_COMPONENTS_SECTION = '/components/'
     NATION_ITEM_SOURCE = {ITEM_TYPES.vehicleChassis: 'chassis.xml',
      ITEM_TYPES.vehicleEngine: 'engines.xml',
@@ -2040,13 +2219,11 @@ class Cache(object):
         self.__shotEffects = None
         self.__shotEffectsIndexes = None
         self.__damageStickers = None
-        self.__rolesTags = None
-        self.__rolesActionGroups = None
-        self.__actionsByGroups = None
-        self.__actionsByRoles = None
+        self.__roles = None
         self.__supplySlots = None
         self.__supplySlotsStorages = None
         self.__moduleKind = {}
+        self.__postProgression = None
         if IS_CLIENT or IS_EDITOR:
             self.__vehicleEffects = None
             self.__gunEffects = None
@@ -2141,6 +2318,12 @@ class Cache(object):
             self.__supplySlotsStorages = SupplySlotsStorageCache()
         return self.__supplySlotsStorages
 
+    def postProgression(self):
+        _POST_PROGRESSION_XML_ROOT = _VEHICLE_TYPE_XML_PATH + 'common/post_progression/'
+        if self.__postProgression is None:
+            self.__postProgression = PostProgressionCache(_POST_PROGRESSION_XML_ROOT + 'features.xml', _POST_PROGRESSION_XML_ROOT + 'modifications.xml', _POST_PROGRESSION_XML_ROOT + 'pairs.xml', _POST_PROGRESSION_XML_ROOT + 'trees.xml')
+        return self.__postProgression
+
     def customization(self, nationID):
         descr = self.__customization[nationID]
         if descr is None:
@@ -2195,36 +2378,12 @@ class Cache(object):
             descr = self.__equipmentIDs
         return descr
 
-    def rolesTags(self):
-        rolesTags = self.__rolesTags
-        if rolesTags is None:
-            self.__rolesTags, self.__rolesActionGroups = _readVehicleRolesToTagsActionGroups(_VEHICLE_TYPE_XML_PATH + 'common/roleExp/roles.xml')
-            rolesTags = self.__rolesTags
-        return rolesTags
-
-    def actionGroupsByRoles(self):
-        rolesActionGroups = self.__rolesActionGroups
-        if rolesActionGroups is None:
-            self.__rolesTags, self.__rolesActionGroups = _readVehicleRolesToTagsActionGroups(_VEHICLE_TYPE_XML_PATH + 'common/roleExp/roles.xml')
-            rolesActionGroups = self.__rolesActionGroups
-        return rolesActionGroups
-
-    def actionsByGroups(self):
-        actionsByGroups = self.__actionsByGroups
-        if actionsByGroups is None:
-            self.__actionsByGroups = _readVehicleActionsByGroup(_VEHICLE_TYPE_XML_PATH + 'common/roleExp/actions_by_groups.xml')
-            actionsByGroups = self.__actionsByGroups
-        return actionsByGroups
-
-    def actionsByRoles(self):
-        actionsByRoles = self.__actionsByRoles
-        if actionsByRoles is None:
-            self.__actionsByRoles = {}
-            for role, actionGroup in self.actionGroupsByRoles().iteritems():
-                self.__actionsByRoles[role] = self.actionsByGroups()[actionGroup]
-
-            actionsByRoles = self.__actionsByRoles
-        return actionsByRoles
+    def roles(self):
+        roles = self.__roles
+        if roles is None:
+            self.__roles = _readVehicleRoles(_VEHICLE_TYPE_XML_PATH + 'common/roleExp/roles.xml')
+            roles = self.__roles
+        return roles
 
     @property
     def shotEffects(self):
@@ -2531,7 +2690,8 @@ _itemGetters = {ITEM_TYPES.vehicle: lambda nationID, compTypeID: g_cache.vehicle
  ITEM_TYPES.vehicleRadio: lambda nationID, compTypeID: g_cache.radios(nationID)[compTypeID],
  ITEM_TYPES.vehicleChassis: lambda nationID, compTypeID: g_cache.chassis(nationID)[compTypeID],
  ITEM_TYPES.vehicleFuelTank: lambda nationID, compTypeID: g_cache.fuelTanks(nationID)[compTypeID],
- ITEM_TYPES.customizationItem: lambda cType, compTypeID: g_cache.customization20().itemTypes[cType][compTypeID]}
+ ITEM_TYPES.customizationItem: lambda cType, compTypeID: g_cache.customization20().itemTypes[cType][compTypeID],
+ ITEM_TYPES.slot: lambda _, compTypeID: g_cache.supplySlots().getSlotDescr(compTypeID)}
 VEHICLE_ITEM_TYPES = _itemGetters.keys()
 
 def isVehicleTypeCompactDescr(vehDescr):
@@ -2556,6 +2716,14 @@ def getVehicleClass(compactDescr):
 def getVehicleClassFromVehicleType(vehicleType):
     for vehClass in VEHICLE_CLASS_TAGS & vehicleType.tags:
         return vehClass
+
+
+def makeCompactDescrBy(*args, **kwargs):
+    if 'intCD' in kwargs:
+        vehDescr = VehicleDescr(typeID=parseIntCompactDescr(kwargs['intCD'])[1:])
+    else:
+        vehDescr = VehicleDescr(**kwargs)
+    return vehDescr.makeCompactDescr()
 
 
 def stripCustomizationFromVehicleCompactDescr(compactDescr, stripEmblems=True, stripInscriptions=True, stripCamouflages=True, keepInfinite=False):
@@ -2616,6 +2784,13 @@ def stripPrivateInfoFromVehicleCompactDescr(compactDescr):
     enhancements = ''
     compactDescr = _combineVehicleCompactDescr(type, components, optionalDevicesSlots, optionalDevices, enhancements, emblemSlots, emblems, inscriptions, camouflages)
     return compactDescr
+
+
+def stripOptionalDeviceFromVehicleCompactDescr(compactDescr):
+    vehType, components, optionalDevicesSlots, optionalDevices, enhancements, emblemSlots, emblems, inscriptions, camouflages = _splitVehicleCompactDescr(compactDescr)
+    optionalDevices = ''
+    optionalDevicesSlots = 0
+    return _combineVehicleCompactDescr(vehType, components, optionalDevicesSlots, optionalDevices, enhancements, emblemSlots, emblems, inscriptions, camouflages)
 
 
 def isShellSuitableForGun(shellCompactDescr, gunDescr):
@@ -2711,16 +2886,8 @@ def getUnlocksSources():
     return res
 
 
-def getRolesActionsGroups():
-    return g_cache.actionGroupsByRoles()
-
-
-def getActionsGroups():
-    return g_cache.actionsByGroups()
-
-
 def getRolesActions():
-    return g_cache.actionsByRoles()
+    return g_cache.roles()
 
 
 def getActionsByRole(role):
@@ -2849,11 +3016,6 @@ def _writeMultiGun(item, section):
         return
 
 
-def _readTags(xmlCtx, section, subsectionName, itemTypeName):
-    allowedTagNames = items.getTypeInfoByName(itemTypeName)['tags']
-    return shared_readers.readTags(xmlCtx, section, allowedTagNames, subsectionName)
-
-
 def _readLevel(xmlCtx, section):
     level = section.readInt('level', 1)
     if not 1 <= level <= 10:
@@ -2975,6 +3137,7 @@ def _writeHulls(hulls, section):
     section = _xml.getSubsection(None, section, 'hull')
     item = hulls[0]
     _writeHitTester(item.hitTesterManager, None, section, 'hitTester')
+    _writeArmor(item.materials, None, section, 'armor')
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteInt(section, 'maxHealth', item.maxHealth)
     __writeTurretPitches(section, item.turretPitches)
@@ -3322,6 +3485,7 @@ def _writeChassis(item, section, *args):
     _writeHitTester(item.hitTesterManager, None, section, 'hitTester')
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteFloat(section, 'rotationSpeed', degrees(item.rotationSpeed))
+    _writeArmor(item.materials, None, section, 'armor', optional=True)
     slots = item.emblemSlots + item.slotsAnchors
     shared_writers.writeCustomizationSlots(slots, section, 'customizationSlots')
     chassis_writers.writeWheelsAndGroups(item.wheels, section)
@@ -3750,6 +3914,7 @@ def _writeTurret(item, section, sharedSections):
     _writeHitTester(item.hitTesterManager, None, section, 'hitTester')
     _xml.rewriteString(section, 'wwturretRotatorSoundManual', item.turretRotatorSoundManual)
     _writeCamouflageSettings(section, 'camouflage', item.camouflage)
+    _writeArmor(item.materials, None, section, 'armor')
     slots = item.emblemSlots + item.slotsAnchors
     shared_writers.writeCustomizationSlots(slots, section, 'customizationSlots')
     shared_writers.writeModelsSets(item.modelsSets, section['models'])
@@ -4244,6 +4409,7 @@ def _writeGun(item, section, *args):
     _xml.rewriteVector2(section, 'turretYawLimits', item.editorTurretYawLimits)
     _writeGunEffectName(item, section)
     _writeCamouflageSettings(section, 'camouflage', item.camouflage)
+    _writeArmor(item.materials, None, section, 'armor', optional=True)
     slots = item.emblemSlots + item.slotsAnchors
     shared_writers.writeCustomizationSlots(slots, section, 'customizationSlots')
     shared_writers.writeModelsSets(item.modelsSets, section['models'])
@@ -4463,10 +4629,15 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
         if isModernHighExplosive:
             shellType.obstaclePenetration = _xml.readBool(xmlCtx, section, 'obstaclePenetration', component_constants.DEFAULT_MODERN_HE_OBSTACLE_PENETRATION)
             shellType.shieldPenetration = _xml.readBool(xmlCtx, section, 'shieldPenetration', component_constants.DEFAULT_MODERN_HE_SHIELD_PENETRATION)
-            shellType.blastWave = _readImpactParams(xmlCtx, section, 'blastWave')
-            shellType.shellFragments = _readImpactParams(xmlCtx, section, 'shellFragments')
-            shellType.armorSpalls = _readImpactParams(xmlCtx, section, 'armorSpalls')
-            shellType.maxDamage = max(shellType.shellFragments.damages[0], shellType.shellFragments.damages[1], shellType.armorSpalls.damages[0], shellType.armorSpalls.damages[1], shellType.blastWave.damages[0], shellType.blastWave.damages[1])
+            blastWave = _readImpactParams(xmlCtx, section, 'blastWave')
+            shellFragments = _readImpactParams(xmlCtx, section, 'shellFragments')
+            armorSpalls = _readImpactParams(xmlCtx, section, 'armorSpalls')
+            if not (blastWave.isActive or shellFragments.isActive or armorSpalls.isActive):
+                _xml.raiseWrongXml(xmlCtx, '', 'Modern high explosive shell must contain at least one damage mechanics: blastWave, shellFragments, armorSpalls')
+            shellType.blastWave = blastWave
+            shellType.shellFragments = shellFragments
+            shellType.armorSpalls = armorSpalls
+            shellType.maxDamage = max(shellFragments.damages[0], shellFragments.damages[1], armorSpalls.damages[0], armorSpalls.damages[1], blastWave.damages[0], blastWave.damages[1])
         shellType.explosionRadius = cachedFloat(section.readFloat('explosionRadius'))
         if shellType.explosionRadius <= 0.0:
             shellType.explosionRadius = cachedFloat(shell.caliber * shell.caliber / 5555.0)
@@ -4507,6 +4678,8 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if v is None:
         _xml.raiseWrongXml(xmlCtx, 'effects', "unknown effect '%s'" % effName)
     shell.effectsIndex = v
+    if section.has_key('tags'):
+        shell.tags = _readTags(xmlCtx, section, 'tags', 'shell')
     return shell
 
 
@@ -4612,17 +4785,34 @@ def _readArmor(xmlCtx, section, subsectionName, optional=False, index=0):
                 vals['damageKind'] = damageKind
             res[materialKind] = shared_components.MaterialInfo(**vals)
 
+        if IS_EDITOR:
+            for kind, matInfo in defMaterials.items():
+                if kind not in res.keys():
+                    vals = matInfo._asdict()
+                    vals['armor'] = 0.0
+                    if matInfo.multipleExtra:
+                        vals['extra'] = matInfo.extra.format(index)
+                    res[kind] = shared_components.MaterialInfo(**vals)
+
         return res
 
 
 def _writeArmor(armor, xmlCtx, section, subsectionName, optional=False, index=0):
     if not armor and optional:
         return
-    section = _xml.getSubsection(xmlCtx, section, subsectionName)
-    for matKindName, matKindSection in section.items():
-        materialKind = material_kinds.IDS_BY_NAMES.get(matKindName)
-        materialInfo = armor[materialKind]
-        _xml.rewriteFloat(section, matKindName, materialInfo.armor)
+    section.deleteSection(subsectionName)
+    section.createSection(subsectionName)
+    armorSection = _xml.getSubsection(xmlCtx, section, subsectionName)
+    materials = g_cache.commonConfig['materials']
+    for matKind, matInfo in armor.items():
+        defMatInfo = materials.get(matKind)._asdict()
+        matKindName = material_kinds.NAMES_BY_IDS.get(matKind)
+        hasChanges = matInfo.armor != 0 or matInfo.vehicleDamageFactor != defMatInfo['vehicleDamageFactor'] or matInfo.chanceToHitByProjectile != defMatInfo['chanceToHitByProjectile'] or matInfo.chanceToHitByExplosion != defMatInfo['chanceToHitByExplosion']
+        if hasChanges:
+            _xml.rewriteFloat(armorSection, matKindName, matInfo.armor)
+        _xml.rewriteFloat(armorSection, matKindName + '/vehicleDamageFactor', matInfo.vehicleDamageFactor, defMatInfo['vehicleDamageFactor'])
+        _xml.rewriteFloat(armorSection, matKindName + '/chanceToHitByProjectile', matInfo.chanceToHitByProjectile, defMatInfo['chanceToHitByProjectile'])
+        _xml.rewriteFloat(armorSection, matKindName + '/chanceToHitByExplosion', matInfo.chanceToHitByExplosion, defMatInfo['chanceToHitByExplosion'])
 
 
 _g_boolMatInfoParams = ('useArmorHomogenization',
@@ -5075,8 +5265,8 @@ def _readReloadEffectGroups(xmlPath):
     return res
 
 
-def _readVehicleRolesToTagsActionGroups(xmlPath):
-    resTags, resActions = {}, {}
+def _readVehicleRoles(xmlPath):
+    res = {}
     section = ResMgr.openSection(xmlPath)
     if not section:
         _xml.raiseWrongXml(None, xmlPath, 'can not open or read roles.xml')
@@ -5086,35 +5276,10 @@ def _readVehicleRolesToTagsActionGroups(xmlPath):
         roleType = ROLE_LABEL_TO_TYPE.get(roleName)
         if roleType is None:
             _xml.raiseWrongXml(ctx, roleName, 'no role with such name (roles.xml)')
-        if roleType in resTags:
+        if roleType in res:
             _xml.raiseWrongXml(ctx, roleName, 'duplicated role name in roles.xml')
-        actionsGroup = _xml.readNonEmptyString(ctx, subsection, 'actionsGroup')
-        includeTags = _xml.readNonEmptyString(ctx, subsection, 'includeTags')
-        excludeTags = _xml.readStringOrEmpty(ctx, subsection, 'excludeTags')
-        resTags[roleType] = (frozenset(includeTags.split()), frozenset(excludeTags.split()))
-        actionsGroupType = ACTIONS_GROUP_LABEL_TO_TYPE.get(actionsGroup)
-        if actionsGroupType is None:
-            _xml.raiseWrongXml(ctx, roleName, 'no such actions group (roles.xml)')
-        resActions[roleType] = actionsGroupType
-
-    return (resTags, resActions)
-
-
-def _readVehicleActionsByGroup(xmlPath):
-    res = {}
-    section = ResMgr.openSection(xmlPath)
-    if not section:
-        _xml.raiseWrongXml(None, xmlPath, 'can not open or read actions_by_groups.xml')
-    xmlCtx = (None, xmlPath)
-    for actionsGroup, subsection in section.items():
-        ctx = (xmlCtx, None)
-        actionsGroupType = ACTIONS_GROUP_LABEL_TO_TYPE.get(actionsGroup)
-        if actionsGroupType is None:
-            _xml.raiseWrongXml(ctx, actionsGroup, 'no such actionsGroup (actions_by_groups.xml)')
-        if actionsGroupType in res:
-            _xml.raiseWrongXml(ctx, actionsGroup, 'duplicated actionsGroup name in actions_by_groups.xml')
         actions = _xml.readNonEmptyString(ctx, subsection, 'actions')
-        res[actionsGroupType] = tuple([ ACTION_LABEL_TO_TYPE.get(label) for label in actions.split() ])
+        res[roleType] = tuple([ ACTION_LABEL_TO_TYPE.get(label) for label in actions.split() ])
 
     return res
 
@@ -5474,8 +5639,6 @@ def _readArtefacts(xmlPath):
         objsByIDs[id] = instObj
         idsByNames[name] = id
 
-    section = None
-    subsection = None
     ResMgr.purge(xmlPath, True)
     return (objsByIDs, idsByNames)
 
@@ -6083,18 +6246,24 @@ def _readRepaintParams(xmlCtx, section):
 
 
 def _readImpactParams(xmlCtx, section, paramName):
-    subXmlCtx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, paramName)
+    subXmlCtx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, paramName, throwIfMissing=False)
     params = HighExplosiveImpactParams()
-    params.radius = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'impactRadius', 0.0)
-    params.damages = (_xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/armor', 0.0), _xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/devices', 0.0))
-    if paramName == 'armorSpalls':
-        params.coneAngleCos = cos(radians(_xml.readNonNegativeFloat(subXmlCtx, subsection, 'coneAngle')))
-        params.piercingSpalls = _xml.readBool(subXmlCtx, subsection, 'piercingSpalls', component_constants.DEFAULT_PIERCING_SPALLS)
-    if subsection.has_key('damageAbsorption'):
-        label = _xml.readNonEmptyString(subXmlCtx, subsection, 'damageAbsorption')
-        params.damageAbsorptionType = DamageAbsorptionLabelToType.get(label)
-    params.isActive = params.radius and (params.damages[0] or params.damages[1])
-    return params
+    if subsection is None:
+        params.radius = 0.0
+        params.damages = (0.0, 0.0)
+        params.isActive = False
+        return params
+    else:
+        params.radius = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'impactRadius', 0.0)
+        params.damages = (_xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/armor', 0.0), _xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/devices', 0.0))
+        if paramName == 'armorSpalls':
+            params.coneAngleCos = cos(radians(_xml.readNonNegativeFloat(subXmlCtx, subsection, 'coneAngle')))
+            params.piercingSpalls = _xml.readBool(subXmlCtx, subsection, 'piercingSpalls', component_constants.DEFAULT_PIERCING_SPALLS)
+        if subsection.has_key('damageAbsorption'):
+            label = _xml.readNonEmptyString(subXmlCtx, subsection, 'damageAbsorption')
+            params.damageAbsorptionType = DamageAbsorptionLabelToType.get(label)
+        params.isActive = params.radius and (params.damages[0] or params.damages[1])
+        return params
 
 
 def _readBrokenWheelLosses(xmlCtx, section, axleIsLeading, axleCanBeRised, wheelRiseHeight):
@@ -6282,6 +6451,31 @@ def cachedFloatTuple(args):
 def _deduceNamesFromTankXmlPath(xmlPath):
     parts = xmlPath.split('/')
     return (parts[-2], os.path.splitext(parts[-1])[0])
+
+
+def findAmmoIndexByCompactDescr(ammo, compactDescr):
+    for idx in xrange(0, len(ammo), 2):
+        if ammo[idx] == compactDescr:
+            return idx
+
+    return None
+
+
+def areOptDevicesLayoutsEqual(oldDevicesObjs, newDevicesCDs):
+    oldDevicesCDs = [ (device.compactDescr if device is not None else 0) for device in oldDevicesObjs ]
+    newDevicesCDs = newDevicesCDs or [0] * len(oldDevicesCDs)
+    return oldDevicesCDs == newDevicesCDs
+
+
+def reinstallOptionalDevices(vehDescr, newDevices):
+    for slotIdx in xrange(len(vehDescr.optionalDevices)):
+        vehDescr.removeOptionalDevice(slotIdx)
+
+    for slotIdx, compactDescr in enumerate(newDevices):
+        if compactDescr != 0:
+            vehDescr.installOptionalDevice(compactDescr, slotIdx)
+
+    return vehDescr
 
 
 VEHICLE_HEALTH_DECIMALS = 1

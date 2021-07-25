@@ -5,13 +5,14 @@ from enumerations import Enumeration
 from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.system_messages import ISystemMessages
-ResultMsg = namedtuple('ResultMsg', 'success userMsg sysMsgType auxData')
+ResultMsg = namedtuple('ResultMsg', 'success userMsg sysMsgType msgPriority msgData auxData')
 SM_TYPE = Enumeration('System message type', ['Error',
  'ErrorHeader',
  'ErrorSimple',
  'Warning',
  'WarningHeader',
  'Information',
+ 'InformationHeader',
  'GameGreeting',
  'PowerLevel',
  'FinancialTransactionWithGold',
@@ -43,7 +44,6 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'LootBoxes',
  'LootBoxRewards',
  'SkinCompensation',
- 'FrontlineRewards',
  'FeatureSwitcherOn',
  'FeatureSwitcherOff',
  'DismantlingForDemountKit',
@@ -60,7 +60,10 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'PurchaseForMoney',
  'PaymentMethodLinkWgnc',
  'PaymentMethodUnlinkWgnc',
- 'BattlePassGameModeEnabled'])
+ 'BattlePassGameModeEnabled',
+ 'ResearchVehiclePostProgressionSteps',
+ 'BuyPostProgressionModForCredits',
+ 'ChangeSlotCategory'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold,
  Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal,
@@ -80,11 +83,12 @@ def pushMessage(text, type=SM_TYPE.Information, priority=None, messageData=None,
     _getSystemMessages().pushMessage(text, type, priority, messageData=messageData, savedData=savedData)
 
 
-def pushMessages(resultMsg):
-    if resultMsg.userMsg:
-        pushMessage(resultMsg.userMsg, type=resultMsg.sysMsgType)
-    if resultMsg.auxData and isinstance(resultMsg.auxData, ResultMsg):
-        pushMessages(resultMsg.auxData)
+def pushMessagesFromResult(resultMsg):
+    if resultMsg and resultMsg.userMsg:
+        pushMessage(resultMsg.userMsg, type=resultMsg.sysMsgType, priority=resultMsg.msgPriority, messageData=resultMsg.msgData)
+    if resultMsg and hasattr(resultMsg, 'auxData') and not isinstance(resultMsg.auxData, dict) and resultMsg.auxData:
+        for m in resultMsg.auxData:
+            pushMessage(m.userMsg, type=m.sysMsgType, priority=m.msgPriority, messageData=m.msgData)
 
 
 def pushI18nMessage(key, *args, **kwargs):

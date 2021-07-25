@@ -10,8 +10,11 @@ class ExchangeXpWindowMeta(BaseExchangeWindow):
     def as_vehiclesDataChangedS(self, data):
         return self.flashObject.as_vehiclesDataChanged(data) if self._isDAAPIInited() else None
 
-    def as_totalExperienceChangedS(self, value):
-        return self.flashObject.as_totalExperienceChanged(value) if self._isDAAPIInited() else None
+    def as_totalExperienceChangedS(self, totalXP):
+        return self.flashObject.as_totalExperienceChanged(totalXP) if self._isDAAPIInited() else None
 
     def as_setWalletStatusS(self, walletStatus, enableSubmitButton):
         return self.flashObject.as_setWalletStatus(walletStatus, enableSubmitButton) if self._isDAAPIInited() else None
+
+    def as_setTargetXPS(self, targetXP):
+        return self.flashObject.as_setTargetXP(targetXP) if self._isDAAPIInited() else None

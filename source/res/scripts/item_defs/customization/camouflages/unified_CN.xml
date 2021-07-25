@@ -13,7 +13,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/transparent	</userString>
     <season>	ALL	</season>
-    <historical>	false	</historical>
+    <historical>	1	</historical>
     <priceGroup>	camouflages 50g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
@@ -80,6 +80,44 @@
         <type>	relative	</type>
         <factor>	2.2 2.2	</factor>
         <offset>	-8.99 2.49	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	337	</id>
+      <texture>	vehicles/russian/Camouflage/cn_national_day.dds	</texture>
+      <description>	#vehicle_customization:camouflage/cn_national_day/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/cn_national_day/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	199 146 11 255	</c0>
+          <c1>	199 199 199 255	</c1>
+          <c2>	166 4 4 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.698132	</HULL>
+        <TURRET>	0.698132	</TURRET>
+        <GUN>	0.698132	</GUN>
+      </rotation>
+      <tiling></tiling>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	3.500000 3.500000	</factor>
+        <offset>	-1.370000 -0.530000	</offset>
       </tilingSettings>
     </camouflage>
   </itemGroup>

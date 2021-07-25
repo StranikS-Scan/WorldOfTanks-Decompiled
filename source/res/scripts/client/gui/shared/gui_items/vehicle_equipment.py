@@ -2,14 +2,21 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_equipment.py
 import logging
 import weakref
+import typing
+from itertools import chain
 from account_shared import LayoutIterator
+from items.components.supply_slots_components import SupplySlot
+from items.vehicles import VehicleDescriptor
+from post_progression_common import TankSetupLayouts, MAX_LAYOUTS_NUMBER_ON_VEHICLE, GROUP_ID_BY_LAYOUT
 from shared_utils import first
+from helpers import dependency
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from items import vehicles, EQUIPMENT_TYPES, ITEM_TYPES
-from helpers import dependency
-from skeletons.gui.shared import IItemsCache
-from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.fitting_item import FittingItem
+    from gui.shared.utils.requesters.ItemsRequester import ItemsRequester
 _logger = logging.getLogger(__name__)
 ZERO_COMP_DESCR = 0
 EMPTY_INVENTORY_DATA = [ZERO_COMP_DESCR]
@@ -18,8 +25,6 @@ EMPTY_ITEM = None
 
 class _Equipment(object):
     __slots__ = ('_storage', '__guiItemType', '__capacity', '_proxy')
-    _itemsFactory = dependency.descriptor(IGuiItemsFactory)
-    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, guiItemType, capacity, proxy, fromRawData, *args):
         self.__capacity = capacity
@@ -27,7 +32,8 @@ class _Equipment(object):
         self._proxy = proxy
         if args:
             if len(args) != self.getCapacity():
-                raise SoftException('Length of arguments is not valid, args: {} for equipment: {}'.format(args, self))
+                _logger.warning('Length of arguments is not valid, args: %s for equipment: %s', args, self)
+                args = args[:self.getCapacity()]
             self._storage = []
             for item in args:
                 if fromRawData:
@@ -97,8 +103,8 @@ class _Equipment(object):
     def getIntCDs(self, default=ZERO_COMP_DESCR):
         return [ (self._getIntCD(itemData) if itemData != EMPTY_ITEM else default) for itemData in self._storage ]
 
-    def getItems(self):
-        return [ item for item in self if item != EMPTY_ITEM ]
+    def getItems(self, ignoreEmpty=True):
+        return [ item for item in self if item != EMPTY_ITEM or not ignoreEmpty ]
 
     def copy(self):
         return self.__class__(self.__guiItemType, self.__capacity, self._proxy, True, *self._storage)
@@ -130,17 +136,25 @@ class _Equipment(object):
 
 
 class _EquipmentCollector(object):
-    __slots__ = ('_installed', '_layout', '__slots', '_proxy')
+    __slots__ = ('_installed', '_layout', '__slots', '__setupLayouts', '_proxy', '_vehDescr')
 
-    def __init__(self, vehDescr, proxy, invData=None):
+    def __init__(self, vehDescr, proxy, setupLayouts, invData=None):
         super(_EquipmentCollector, self).__init__()
+        self._vehDescr = vehDescr
         self._proxy = proxy
-        supplySlots = self.__getSupplySlots(vehDescr)
+        groupID = self.__setupGroupID()
+        supplySlots = self._getSupplySlots(vehDescr)
         self.__slots = self._readSlots(supplySlots)
         capacity = self._getCapacity(vehDescr)
-        items, itemsLayout = self._parse(vehDescr, capacity, invData)
+        self.__setupLayouts = self._equipmentSetupClazz()(groupID, setupLayouts, capacity)
+        setups, items, itemsLayout = self._parse(vehDescr, capacity, invData)
         self._installed = self._equipmentClazz()(self._guiItemType(), capacity, proxy, True, *items)
         self._layout = self._equipmentClazz()(self._guiItemType(), capacity, proxy, True, *itemsLayout)
+        for idx, setup in enumerate(setups):
+            if self.__setupLayouts.layoutIndex == idx:
+                self.__setupLayouts.addSetup(idx, self._installed)
+            setupItems = self._equipmentClazz()(self._guiItemType(), capacity, proxy, True, *setup)
+            self.__setupLayouts.addSetup(idx, setupItems)
 
     @property
     def installed(self):
@@ -152,6 +166,10 @@ class _EquipmentCollector(object):
     @property
     def layout(self):
         return self._layout
+
+    @property
+    def setupLayouts(self):
+        return self.__setupLayouts
 
     def setLayout(self, *values):
         self._layout = self._equipmentClazz()(self._guiItemType(), self.layoutCapacity, self._proxy, False, *values)
@@ -172,14 +190,20 @@ class _EquipmentCollector(object):
         self._layout.swap(leftID, rightID)
         self._installed.swap(leftID, rightID)
 
-    def _getCapacity(self, vehDescr):
+    def _getCapacity(self, _):
         return len(self.__slots)
 
     def _equipmentClazz(self):
         raise NotImplementedError
 
+    def _equipmentSetupClazz(self):
+        return _EquipmentSetupLayout
+
     def _itemType(self):
         raise NotImplementedError
+
+    def _layoutType(self):
+        pass
 
     def _guiItemType(self):
         raise NotImplementedError
@@ -190,18 +214,23 @@ class _EquipmentCollector(object):
     def _readSlots(self, supplySlots):
         return [ slot for slot in supplySlots if slot.itemType == self._itemType() ]
 
+    def __setupGroupID(self):
+        layoutType = self._layoutType()
+        return GROUP_ID_BY_LAYOUT.get(layoutType, None)
+
     @staticmethod
-    def __getSupplySlots(vehDescr):
+    def _getSupplySlots(vehDescr):
         slotIDs = vehDescr.type.supplySlots.slotIDs
         slotDescrs = vehicles.g_cache.supplySlots().slotDescrs
         return [ slotDescrs[slotID] for slotID in slotIDs ]
 
 
 class _ExpendableEquipment(_Equipment):
+    __itemsFactory = dependency.descriptor(IGuiItemsFactory)
     __slots__ = ()
 
     def _createItem(self, intCD):
-        return self._itemsCache.items.getItemByCD(intCD)
+        return self.__itemsFactory.createEquipment(intCD, self._proxy)
 
     def _getItemData(self, item):
         return item.intCD
@@ -232,26 +261,42 @@ class _ConsumablesCollector(_ExpendableCollector):
     def _guiItemType(self):
         return GUI_ITEM_TYPE.EQUIPMENT
 
-    def _parse(self, vehDescr, capacity, invData):
-        eqs = self.__getInvData(invData.get('eqs', []), vehDescr, capacity)
-        eqsLayout = self.__getInvData(invData.get('eqsLayout', []), vehDescr, capacity)
-        return (self.__parseEqs(eqs), self.__parseEqs(eqsLayout))
+    def _layoutType(self):
+        return TankSetupLayouts.EQUIPMENT
 
-    def __getInvData(self, data, vehDescr, capacity):
+    def _invType(self):
+        pass
+
+    def _parse(self, vehDescr, capacity, invData):
+        setups = []
+        installedItems = None
+        resultLayoutItems = None
+        eqsLayouts = invData.get(self._layoutType(), [[]])
+        eqsLayoutsSize = len(eqsLayouts)
+        for layoutIdx in range(self.setupLayouts.capacity):
+            if eqsLayoutsSize <= layoutIdx < self.setupLayouts.capacity:
+                eqsLayout = []
+            else:
+                eqsLayout = eqsLayouts[layoutIdx]
+            eqsLayout = self.__getInvData(eqsLayout, capacity)
+            eqs = self.__getInvData(invData.get(self._invType(), []), capacity, eqsLayout)
+            items = self.__parseEqs(eqs)
+            layoutItems = self.__parseEqs(eqsLayout)
+            if layoutIdx == self.setupLayouts.layoutIndex:
+                installedItems = items
+                resultLayoutItems = layoutItems
+            setups.append(items)
+
+        return (setups, installedItems, resultLayoutItems)
+
+    def __getInvData(self, data, capacity, layout=None):
         layoutListSize = len(data)
         if layoutListSize < capacity:
             data += [ZERO_COMP_DESCR] * (capacity - layoutListSize)
-        offset = self.__getOffset(vehDescr)
-        return data[offset:offset + capacity]
-
-    def __getOffset(self, vehDescr):
-        offset = 0
-        for eqType in vehicles.EQUIPMENT_TYPES_ORDER:
-            if eqType == self._expendableType():
-                break
-            offset += vehDescr.type.supplySlots.getAmountForType(ITEM_TYPES.equipment, eqType)
-
-        return offset
+        if layout is not None:
+            return [ (intCD if intCD and intCD in data else ZERO_COMP_DESCR) for intCD in layout ]
+        else:
+            return data
 
     @staticmethod
     def __parseEqs(eqsInvData):
@@ -270,6 +315,12 @@ class _BattleBoostersCollector(_ConsumablesCollector):
 
     def _guiItemType(self):
         return GUI_ITEM_TYPE.BATTLE_BOOSTER
+
+    def _layoutType(self):
+        return TankSetupLayouts.BATTLE_BOOSTERS
+
+    def _invType(self):
+        pass
 
 
 class _BattleAbilitiesCollector(_ExpendableCollector):
@@ -292,10 +343,16 @@ class _BattleAbilitiesCollector(_ExpendableCollector):
 
     def _parse(self, vehDescr, capacity, invData):
         empty = capacity * [EMPTY_ITEM]
-        return (empty, empty)
+        setups = self.setupLayouts.capacity * [empty]
+        return (setups, empty, empty)
+
+    @staticmethod
+    def _getSupplySlots(vehDescr):
+        return vehicles.g_cache.supplySlots().slotDescrs.values()
 
 
 class _ShellsEquipment(_Equipment):
+    __itemsFactory = dependency.descriptor(IGuiItemsFactory)
     __slots__ = ()
 
     def __iter__(self):
@@ -305,7 +362,7 @@ class _ShellsEquipment(_Equipment):
 
     def _createItem(self, itemData):
         intCD, count, isBoughtForAltPrice = itemData
-        return self._itemsFactory.createShell(intCD, count, self._proxy, isBoughtForAltPrice)
+        return self.__itemsFactory.createShell(intCD, count, self._proxy, isBoughtForAltPrice)
 
     def _getItemData(self, item):
         return (item.intCD, item.count, item.isBoughtForAltPrice)
@@ -328,8 +385,8 @@ class _BattleAbilitesEquipment(_ExpendableEquipment):
 
 
 class _ShellsCollector(_EquipmentCollector):
-    __slots__ = ()
     __itemsFactory = dependency.descriptor(IGuiItemsFactory)
+    __slots__ = ()
 
     def setInstalled(self, *values):
         values = self.__fixSize(list(values), self.layoutCapacity)
@@ -345,47 +402,82 @@ class _ShellsCollector(_EquipmentCollector):
     def _equipmentClazz(self):
         return _ShellsEquipment
 
+    def _equipmentSetupClazz(self):
+        return _ShellsSetupLayout
+
     def _itemType(self):
         return ITEM_TYPES.shell
+
+    def _layoutType(self):
+        return TankSetupLayouts.SHELLS
 
     def _guiItemType(self):
         return GUI_ITEM_TYPE.SHELL
 
     def _parse(self, vehDescr, capacity, invData):
-        installedItems = self.__parseInstalled(invData.get('shells', []), vehDescr, capacity)
-        layoutItems = self.__parseLayout(invData.get('shellsLayout', {}), vehDescr, capacity)
-        return (installedItems, layoutItems)
+        setups = []
+        resultInstalledItems = None
+        resultLayoutItems = None
+        for layoutIdx in range(self.setupLayouts.capacity):
+            layoutItems, shellsLayout = self.__parseLayout(invData.get(self._layoutType(), {}), vehDescr, capacity, layoutIdx)
+            installedItems = self.__parseInstalled(invData.get('shells', []), shellsLayout, vehDescr, capacity)
+            setups.append(installedItems)
+            if layoutIdx == self.setupLayouts.layoutIndex:
+                resultInstalledItems = installedItems
+                resultLayoutItems = layoutItems
 
-    def __parseInstalled(self, installed, vehDescr, capacity):
-        shellsDict = {cd:count for cd, count, _ in LayoutIterator(installed)}
-        installed = installed[:]
+        return (setups, resultInstalledItems, resultLayoutItems)
+
+    def __parseInstalled(self, installed, shellsLayout, vehDescr, capacity):
+        installedDict = {cd:count for cd, count, _ in LayoutIterator(installed)}
+        layoutDict = {cd:count for cd, count, _ in LayoutIterator(shellsLayout)}
+        missed = []
+        shellsLayout = shellsLayout[:]
         for shot in vehDescr.gun.shots:
             cd = shot.shell.compactDescr
-            if cd not in shellsDict and len(installed) < capacity * 2:
-                installed.extend([cd, 0])
+            if cd in layoutDict:
+                count = 0
+                if cd in installedDict:
+                    count = min(installedDict.get(cd, 0), layoutDict.get(cd, 0))
+                idx = shellsLayout.index(cd) + 1
+                shellsLayout[idx] = count
+            missed.append(cd)
 
-        result = []
-        for intCD, count, isBoughtForCredits in LayoutIterator(installed):
-            result.append((intCD, count, isBoughtForCredits))
-
-        return self.__fixSize(result, capacity)
-
-    def __parseLayout(self, shellsInvLayout, vehDescr, capacity):
-        shellsLayoutKey = (vehDescr.turret.compactDescr, vehDescr.gun.compactDescr)
-        if shellsLayoutKey in shellsInvLayout:
-            shellsLayout = shellsInvLayout[shellsLayoutKey]
-        else:
-            shellsLayout = []
-            gun = self.__itemsFactory.createVehicleGun(vehDescr.gun.compactDescr, descriptor=vehDescr.gun)
-            if gun is not None:
-                for shell in gun.defaultAmmo:
-                    shellsLayout += (shell.intCD, shell.count)
+        for cd in missed:
+            shellsLayout.extend([cd, 0])
 
         result = []
         for intCD, count, isBoughtForCredits in LayoutIterator(shellsLayout):
             result.append((intCD, count, isBoughtForCredits))
 
         return self.__fixSize(result, capacity)
+
+    def __parseLayout(self, shellsInvLayout, vehDescr, capacity, layoutIdx):
+        shellsLayoutKey = (vehDescr.turret.compactDescr, vehDescr.gun.compactDescr)
+        if shellsLayoutKey in shellsInvLayout:
+            shellsLayouts = shellsInvLayout[shellsLayoutKey]
+            shellsLayoutsSize = len(shellsLayouts)
+            if shellsLayoutsSize <= layoutIdx < self.setupLayouts.capacity or not shellsLayouts[layoutIdx]:
+                shellsLayout = self.__getDefaultShellsLayout(vehDescr, defaultCount=0)
+            else:
+                shellsLayout = shellsLayouts[layoutIdx]
+        else:
+            shellsLayout = self.__getDefaultShellsLayout(vehDescr)
+        result = []
+        for intCD, count, isBoughtForCredits in LayoutIterator(shellsLayout):
+            result.append((intCD, count, isBoughtForCredits))
+
+        return (self.__fixSize(result, capacity), shellsLayout)
+
+    def __getDefaultShellsLayout(self, vehDescr, defaultCount=None):
+        shellsLayout = []
+        gun = self.__itemsFactory.createVehicleGun(vehDescr.gun.compactDescr, descriptor=vehDescr.gun)
+        if gun is not None:
+            for shell in gun.defaultAmmo:
+                count = defaultCount if defaultCount is not None else shell.count
+                shellsLayout += (shell.intCD, count)
+
+        return shellsLayout
 
     @staticmethod
     def __fixSize(parsed, capacity):
@@ -396,17 +488,54 @@ class _ShellsCollector(_EquipmentCollector):
 
 
 class _OptDevicesEquipment(_Equipment):
+    __itemsFactory = dependency.descriptor(IGuiItemsFactory)
     __slots__ = ()
 
     def _createItem(self, intCD):
-        return self._itemsCache.items.getItemByCD(intCD)
+        return self.__itemsFactory.createOptionalDevice(intCD, self._proxy)
 
     def _getItemData(self, item):
         return item.intCD
 
 
+OptDeviceSlotData = typing.NamedTuple('OptDeviceSlotInfo', (('item', SupplySlot), ('isDynamic', bool)))
+
 class _OptDevicesCollector(_EquipmentCollector):
-    __slots__ = ()
+    __slots__ = ('_dynSlotTypeIdx', '_dynSlotType', '_dynSlotTypeOptions')
+
+    def __init__(self, vehDescr, proxy, setupLayouts, invData=None):
+        super(_OptDevicesCollector, self).__init__(vehDescr, proxy, setupLayouts, invData)
+        slotDescrs = vehicles.g_cache.supplySlots().slotDescrs
+        self._dynSlotTypeIdx = self.__getDynSlotTypeIdx()
+        self._dynSlotType = slotDescrs[vehDescr.customRoleSlotTypeId] if vehDescr.customRoleSlotTypeId > 0 else None
+        self._dynSlotTypeOptions = [ slotDescrs[opt] for opt in vehDescr.type.customRoleSlotOptions ]
+        return
+
+    @property
+    def dynSlotTypeIdx(self):
+        return self._dynSlotTypeIdx
+
+    @property
+    def dynSlotType(self):
+        return self._dynSlotType
+
+    @property
+    def dynSlotTypeOptions(self):
+        return self._dynSlotTypeOptions
+
+    @dynSlotType.setter
+    def dynSlotType(self, value):
+        customRoleSlotTypeId = value.slotID if value else 0
+        self._vehDescr.installCustomRoleSlot(customRoleSlotTypeId)
+        self._dynSlotType = value
+
+    def getSlot(self, slotIdx):
+        if slotIdx < 0 or slotIdx >= len(self.slots):
+            raise SoftException('Wrong slotIdx=[%r]' % slotIdx)
+        return OptDeviceSlotData(self._dynSlotType, True) if self._dynSlotType and self.isSlotHasDynamicSpecialization(slotIdx) else OptDeviceSlotData(self.slots[slotIdx], False)
+
+    def isSlotHasDynamicSpecialization(self, slotIdx):
+        return self._dynSlotTypeIdx == slotIdx
 
     def _equipmentClazz(self):
         return _OptDevicesEquipment
@@ -414,27 +543,266 @@ class _OptDevicesCollector(_EquipmentCollector):
     def _itemType(self):
         return ITEM_TYPES.optionalDevice
 
+    def _layoutType(self):
+        return TankSetupLayouts.OPTIONAL_DEVICES
+
     def _guiItemType(self):
         return GUI_ITEM_TYPE.OPTIONALDEVICE
 
     def _parse(self, vehDescr, capacity, invData):
-        result = []
-        for optDevDescr in vehDescr.optionalDevices:
-            result.append(optDevDescr.compactDescr if optDevDescr != EMPTY_ITEM else EMPTY_ITEM)
+        if not invData:
+            optDevices = []
+            for optDevDescr in vehDescr.optionalDevices:
+                optDevices.append(optDevDescr.compactDescr if optDevDescr != EMPTY_ITEM else ZERO_COMP_DESCR)
 
-        return (result, result)
+            devicesLayout = [optDevices]
+        else:
+            devicesLayout = invData.get(self._layoutType(), [[]])
+        eqsLayoutsSize = len(devicesLayout)
+        result = None
+        setups = []
+        for layoutIdx in range(self.setupLayouts.capacity):
+            if eqsLayoutsSize <= layoutIdx < self.setupLayouts.capacity:
+                dvsLayout = []
+            else:
+                dvsLayout = devicesLayout[layoutIdx]
+            items = [ (item if item != ZERO_COMP_DESCR else EMPTY_ITEM) for item in dvsLayout ]
+            layoutSize = len(dvsLayout)
+            if layoutSize < capacity:
+                items += [EMPTY_ITEM] * (capacity - layoutSize)
+            setups.append(items)
+            if layoutIdx == self.setupLayouts.layoutIndex:
+                result = items
+
+        return (setups, result, result)
+
+    def __getDynSlotTypeIdx(self):
+        for idx, slot in enumerate(self.slots):
+            if not slot.categories:
+                return idx
+
+
+class _EquipmentsSetupGroups(object):
+    __slots__ = ('_groups',)
+
+    def __init__(self, invData):
+        super(_EquipmentsSetupGroups, self).__init__()
+        self._groups = self._parse(invData)
+
+    def __eq__(self, setupGroups):
+        if len(self._groups.keys()) != len(setupGroups.groups.keys()):
+            return False
+        for groupID, layoutIdx in setupGroups.groups.items():
+            if self.getLayoutIndex(groupID) != layoutIdx:
+                return False
+
+        return True
+
+    def __ne__(self, setupGroups):
+        return not self.__eq__(setupGroups)
+
+    @property
+    def groups(self):
+        return self._groups
+
+    def setGroups(self, value):
+        self._groups = value
+
+    def getLayoutIndex(self, groupID):
+        return self._groups.get(groupID, 0)
+
+    def getGroupCapacity(self, groupID):
+        return MAX_LAYOUTS_NUMBER_ON_VEHICLE.get(groupID, 0)
+
+    def getNextLayoutIndex(self, groupID):
+        index = self.getLayoutIndex(groupID) + 1
+        return index if index < self.getGroupCapacity(groupID) else 0
+
+    def _parse(self, invData):
+        return invData.get('layoutIndexes', {}).copy()
+
+
+class _EquipmentSetupLayout(object):
+    __slots__ = ('__groupID', '__layoutIdx', '__capacity', '__setups', '__slotsCapacity')
+
+    def __init__(self, groupID, setupLayouts, slotsCapacity):
+        super(_EquipmentSetupLayout, self).__init__()
+        self.__groupID = groupID
+        self.__capacity = setupLayouts.getGroupCapacity(groupID)
+        self.__layoutIdx = setupLayouts.getLayoutIndex(groupID)
+        self.__slotsCapacity = slotsCapacity
+        self.__setups = {}
+
+    def __iter__(self):
+        for item in chain.from_iterable(self.__setups.itervalues()):
+            if item:
+                yield item
+
+    def __contains__(self, item):
+        return self.containsIntCD(item.intCD)
+
+    @property
+    def groupID(self):
+        return self.__groupID
+
+    @property
+    def layoutIndex(self):
+        return self.__layoutIdx
+
+    def setLayoutIndex(self, value):
+        self.__layoutIdx = value
+
+    @property
+    def capacity(self):
+        return self.__capacity
+
+    @property
+    def setups(self):
+        return self.__setups
+
+    def addSetup(self, idx, setup):
+        self.__setups[idx] = setup
+
+    def setSetups(self, value):
+        self.__setups = value
+
+    def setupByIndex(self, idx):
+        return self.__setups.get(idx, None)
+
+    def isInSetup(self, item):
+        for _, setup in self.__setups.iteritems():
+            if item in setup:
+                return True
+
+        return False
+
+    def isInOtherLayout(self, item):
+        return bool([ idx for idx, setup in self.__setups.iteritems() if item in setup and idx != self.__layoutIdx ])
+
+    def getIntCDs(self, setupIdx=None, default=ZERO_COMP_DESCR):
+        if setupIdx is None:
+            return [ (self._getIntCD(itemData) if itemData != EMPTY_ITEM else default) for itemData in chain.from_iterable(self.__setups.itervalues()) ]
+        else:
+            setup = self.setupByIndex(setupIdx)
+            if setup is not None:
+                return [ (self._getIntCD(itemData) if itemData != EMPTY_ITEM else default) for itemData in setup ]
+            return [default] * self.__slotsCapacity
+
+    def containsIntCD(self, intCD, setupIdx=None, slotIdx=None):
+        if setupIdx is None:
+            installed = self.getIntCDs(default=EMPTY_ITEM)
+            return intCD in installed
+        elif slotIdx is None:
+            installed = self.getIntCDs(setupIdx=setupIdx, default=EMPTY_ITEM)
+            return intCD in installed
+        elif slotIdx >= self.__layoutCapacity(setupIdx):
+            return False
+        else:
+            item = self.setupByIndex(setupIdx)[slotIdx]
+            return item != EMPTY_ITEM and self._getIntCD(item) == intCD
+
+    def hasAlternativeItems(self, setupIdx):
+        for idx, setup in self.__setups.iteritems():
+            if idx != setupIdx:
+                for itemData in setup:
+                    if itemData != EMPTY_ITEM:
+                        return True
+
+        return False
+
+    def getUniqueItems(self):
+        equipments = []
+        intCDs = set()
+        for setup in self.__setups.values():
+            for item in setup.getItems():
+                if item.intCD not in intCDs:
+                    intCDs.add(item.intCD)
+                    equipments.append(item)
+
+        return equipments
+
+    def _getIntCD(self, item):
+        return item.intCD
+
+    def __layoutCapacity(self, layoutIdx):
+        return min(self.__slotsCapacity, len(self.setupByIndex(layoutIdx)))
+
+
+class _ShellsSetupLayout(_EquipmentSetupLayout):
+    __slots__ = ()
+
+    def ammoLoaded(self, intCD):
+        ammo = 0
+        for s in chain.from_iterable(self.setups.itervalues()):
+            if s and self._getIntCD(s) == intCD:
+                ammo = max(ammo, s.count)
+
+        return ammo
+
+    def ammoLoadedInOtherSetups(self, intCD):
+        ammo = 0
+        for idx, setup in self.setups.iteritems():
+            if idx != self.layoutIndex:
+                for s in setup:
+                    if s and self._getIntCD(s) == intCD:
+                        ammo = max(ammo, s.count)
+
+        return ammo
+
+    def isAmmoNotFull(self, minAmmo=0):
+        for idx, setup in self.setups.iteritems():
+            count = sum(((s.count if s != EMPTY_ITEM else 0) for s in setup))
+            if count < minAmmo:
+                return (True, idx)
+
+        return (False, None)
+
+    def isAmmoFull(self, setupIdx=None, minAmmo=0):
+        if setupIdx is None:
+            return sum(((s.count if s != EMPTY_ITEM else 0) for s in chain.from_iterable(self.setups.itervalues()))) >= minAmmo
+        else:
+            setup = self.setupByIndex(setupIdx)
+            return sum(((s.count if s != EMPTY_ITEM else 0) for s in setup)) >= minAmmo if setup is not None else True
+
+    def hasAlternativeItems(self, setupIdx):
+        return self.__hasAlternativeAmmo(setupIdx)
+
+    def getUniqueItems(self):
+        shells = []
+        intCDs = set()
+        for setup in self.setups.values():
+            for shell in setup.getItems():
+                if shell.intCD not in intCDs:
+                    intCDs.add(shell.intCD)
+                    shells.append(shell)
+                for idx, item in enumerate(shells):
+                    if shell.intCD == item.intCD:
+                        if shell.count > item.count:
+                            shells[idx] = shell
+                        break
+
+        return shells
+
+    def __hasAlternativeAmmo(self, setupIdx):
+        count = 0
+        for idx, setup in self.setups.iteritems():
+            if idx != setupIdx:
+                count += sum(((s.count if s != EMPTY_ITEM else 0) for s in setup))
+
+        return count > 0
 
 
 class VehicleEquipment(object):
-    __slots__ = ('__consumables', '__battleBoosters', '__battleAbilities', '__shells', '__optDevices')
+    __slots__ = ('__consumables', '__battleBoosters', '__battleAbilities', '__shells', '__optDevices', '__setupLayouts')
 
     def __init__(self, itemRequesterProxy, vehDescr, invData):
         proxy = weakref.proxy(itemRequesterProxy) if itemRequesterProxy else None
-        self.__optDevices = _OptDevicesCollector(vehDescr, proxy)
-        self.__shells = _ShellsCollector(vehDescr, proxy, invData)
-        self.__consumables = _ConsumablesCollector(vehDescr, proxy, invData)
-        self.__battleBoosters = _BattleBoostersCollector(vehDescr, proxy, invData)
-        self.__battleAbilities = _BattleAbilitiesCollector(vehDescr, proxy, invData)
+        self.__setupLayouts = setupLayouts = _EquipmentsSetupGroups(invData)
+        self.__optDevices = _OptDevicesCollector(vehDescr, proxy, setupLayouts, invData)
+        self.__shells = _ShellsCollector(vehDescr, proxy, setupLayouts, invData)
+        self.__consumables = _ConsumablesCollector(vehDescr, proxy, setupLayouts, invData)
+        self.__battleBoosters = _BattleBoostersCollector(vehDescr, proxy, setupLayouts, invData)
+        self.__battleAbilities = _BattleAbilitiesCollector(vehDescr, proxy, setupLayouts, invData)
         return
 
     @property
@@ -456,3 +824,7 @@ class VehicleEquipment(object):
     @property
     def battleAbilities(self):
         return self.__battleAbilities
+
+    @property
+    def setupLayouts(self):
+        return self.__setupLayouts

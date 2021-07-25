@@ -6,6 +6,7 @@ _PREBATTLE_TIPS_XML_PATH = 'gui/prebattle_tips.xml'
 _PRECEDING_DEFAULT_SHOW_TIMES = 1
 DEFAULT_STATUS = 'payAttention'
 DEFAULT_GROUP = 'all'
+_OPTIONAL_FILTER_FLAGS = ('isBattlePassActiveSeason', 'isRankedYearRewardEnabled', 'isRankedLeaderboardEnabled', 'isRankedShopEnabled', 'isPostProgressionEnabled')
 
 def _readPreBattleTips():
     filters = dict()
@@ -15,17 +16,16 @@ def _readPreBattleTips():
         filterId = filterSection.readString('id')
         filters[filterId] = {'minBattles': filterSection.readInt('minBattles', 0),
          'maxBattles': filterSection.readInt('maxBattles', sys.maxint),
-         'arenaTypes': filterSection.readString('arenaTypes'),
-         'nations': filterSection.readString('nations'),
-         'levels': filterSection.readString('levels'),
-         'vehicleClass': filterSection.readString('vehicleClass'),
-         'tags': filterSection.readString('tags'),
-         'realms': filterSection.readString('realms'),
-         'preceding': _readPrecedingData(filterSection),
-         'battlePassActiveCheck': filterSection.readBool('battlePassActiveCheck', False),
-         'rankedYearRewardCheck': filterSection.readBool('rankedYearRewardCheck', False),
-         'rankedLBCheck': filterSection.readBool('rankedLBCheck', False),
-         'rankedShopCheck': filterSection.readBool('rankedShopCheck', False)}
+         'arenaTypes': _readPossibleValues(filterSection, 'arenaTypes'),
+         'nations': _readPossibleValues(filterSection, 'nations'),
+         'levels': _readPossibleValues(filterSection, 'levels'),
+         'vehicleClass': _readPossibleValues(filterSection, 'vehicleClass'),
+         'tags': _readPossibleValues(filterSection, 'tags'),
+         'realms': _readPossibleValues(filterSection, 'realms'),
+         'preceding': _readPrecedingData(filterSection)}
+        for key in _OPTIONAL_FILTER_FLAGS:
+            if filterSection.has_key(key):
+                filters[filterId][key] = filterSection.readBool(key)
 
     for _, tipsSection in resource_helper.getIterator(ctx, root['tips']):
         filterId = tipsSection.readString('filter')
@@ -39,6 +39,10 @@ def _readPreBattleTips():
 
     resource_helper.purgeResource(_PREBATTLE_TIPS_XML_PATH)
     return tips
+
+
+def _readPossibleValues(filterSection, key):
+    return frozenset(filterSection.readString(key).split())
 
 
 def _readPrecedingData(section):

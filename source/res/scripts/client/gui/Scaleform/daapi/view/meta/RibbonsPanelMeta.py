@@ -4,7 +4,7 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class RibbonsPanelMeta(BaseDAAPIComponent):
 
-    def onShow(self):
+    def onShow(self, ribbonId):
         self._printOverrideError('onShow')
 
     def onChange(self):

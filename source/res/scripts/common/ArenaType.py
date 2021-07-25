@@ -3,7 +3,7 @@
 from collections import defaultdict
 from realm_utils import ResMgr
 from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH, ARENA_GUI_TYPE_LABEL
-from constants import ARENA_GAMEPLAY_IDS, TEAMS_IN_ARENA, ARENA_GAMEPLAY_NAMES, IS_DEVELOPMENT
+from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, IS_DEVELOPMENT
 from constants import IS_CELLAPP, IS_BASEAPP
 from constants import CHAT_COMMAND_FLAGS
 from coordinate_system import AXIS_ALIGNED_DIRECTION
@@ -53,6 +53,10 @@ def parseTypeID(typeID):
     return (typeID >> 16, typeID & 65535)
 
 
+def buildArenaTypeID(gameplayID, geometryID):
+    return geometryID | gameplayID << 16
+
+
 _LIST_XML = ARENA_TYPE_XML_PATH + '_list_.xml'
 _DEFAULT_XML = ARENA_TYPE_XML_PATH + '_default_.xml'
 
@@ -85,26 +89,71 @@ def init():
     return
 
 
-class ArenaType(object):
+class _BonusTypeOverridesMixin(object):
+
+    def __init__(self):
+        self._bonusType = None
+        self.__bonusTypeCfg = {}
+        return
+
+    def __getattr__(self, name):
+        return self.__bonusTypeCfg.get(self._bonusType, {}).get(name) if self._bonusType is not None else None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._bonusType = None
+        return
+
+    def useBonusTypeOverrides(self, bonusType=None):
+        self._bonusType = bonusType
+        return self
+
+    def setBonusTypeCfg(self, cfg):
+        if self._bonusType is None:
+            return
+        elif not cfg:
+            return
+        else:
+            self.__bonusTypeCfg[self._bonusType] = cfg
+            return
+
+
+class ArenaType(_BonusTypeOverridesMixin):
 
     def __init__(self, geometryCfg, gameplayCfg):
-        self.__geometryCfg = geometryCfg
+        super(ArenaType, self).__init__()
+        if isinstance(geometryCfg, GeometryType):
+            self.__geometryType = geometryCfg
+        else:
+            self.__geometryType = GeometryType(geometryCfg)
         self.__gameplayCfg = gameplayCfg
-        self.__gameplayCfg['id'] = gameplayCfg['gameplayID'] << 16 | geometryCfg['geometryID']
+        self.__gameplayCfg['id'] = gameplayCfg['gameplayID'] << 16 | self.__geometryType.geometryID
         if self.maxPlayersInTeam < self.minPlayersInTeam:
             raise SoftException("'maxPlayersInTeam' value < 'minPlayersInTeam' value")
 
     def __getattr__(self, name):
-        return self.__gameplayCfg[name] if name in self.__gameplayCfg else self.__geometryCfg.get(name, None)
+        value = super(ArenaType, self).__getattr__(name)
+        if value is not None:
+            return value
+        elif name in self.__gameplayCfg:
+            return self.__gameplayCfg[name]
+        else:
+            with self.__geometryType.useBonusTypeOverrides(self._bonusType) as geometryTypeForBonus:
+                return getattr(geometryTypeForBonus, name, None)
+            return
 
 
-class GeometryType(object):
+class GeometryType(_BonusTypeOverridesMixin):
 
     def __init__(self, cfg):
+        super(GeometryType, self).__init__()
         self.__cfg = cfg
 
     def __getattr__(self, name):
-        return self.__cfg[name]
+        value = super(GeometryType, self).__getattr__(name)
+        return value if value is not None else self.__cfg.get(name)
 
 
 def __buildCache(geometryID, geometryName, defaultXml):
@@ -117,14 +166,47 @@ def __buildCache(geometryID, geometryName, defaultXml):
     if geometryCfg['isDevelopment'] and not IS_DEVELOPMENT:
         return
     else:
-        g_geometryCache[geometryID] = GeometryType(geometryCfg)
+        geometryType = GeometryType(geometryCfg)
+        g_geometryCache[geometryID] = __addBonusTypeOverrides(geometryType, section, defaultXml)
         for gameplayCfg in __readGameplayCfgs(geometryName, section, defaultXml, geometryCfg):
-            arenaType = ArenaType(geometryCfg, gameplayCfg)
+            arenaType = ArenaType(geometryType, gameplayCfg)
             g_cache[arenaType.id] = arenaType
             g_gameplayNames.add(arenaType.gameplayName)
 
         ResMgr.purge(sectionName, True)
         return
+
+
+def __addBonusTypeOverrides(overridable, section, defaultXml):
+    for bonusTypeID, bonusType in ARENA_BONUS_TYPE_IDS.iteritems():
+        with overridable.useBonusTypeOverrides(bonusTypeID) as overriden:
+            bonusTypeCfg = __readBonusTypeCfgs(overridable.geometryName, section, defaultXml, bonusType)
+            overriden.setBonusTypeCfg(bonusTypeCfg)
+
+    return overridable
+
+
+def __readBonusTypeCfgs(geometryName, section, defaultXml, bonusType):
+    overrides = section['bonusTypeOverrides'] or defaultXml['bonusTypeOverrides']
+    if overrides is None:
+        return {}
+    else:
+        bonusOverrides = overrides[bonusType]
+        if bonusOverrides is None:
+            return {}
+        try:
+            cfg = {}
+            if IS_CELLAPP or IS_BASEAPP:
+                cfg['estimatedLoad'] = _readFloat('estimatedLoad', bonusOverrides, defaultXml, ARENA_ESTIMATED_LOAD_DEFAULT)
+            if __hasKey('maxPlayersInTeam', bonusOverrides, defaultXml):
+                cfg['maxPlayersInTeam'] = __readMaxPlayersInTeam(bonusOverrides, defaultXml)
+            if __hasKey('runDelay', bonusOverrides, defaultXml):
+                cfg['runDelay'] = _readInt('runDelay', bonusOverrides, defaultXml)
+        except Exception as e:
+            LOG_CURRENT_EXCEPTION()
+            raise SoftException("wrong %s bonusTypeOverrides section '%s' : %s" % (geometryName, bonusType, e))
+
+        return cfg
 
 
 def __readGeometryCfg(geometryID, geometryName, section, defaultXml):
@@ -889,3 +971,7 @@ def __readGameplayPoints(section, geometryCfg):
 
 def __readWinPoints(section):
     return {'winPointsSettings': section.readString('winPoints', 'DEFAULT')}
+
+
+def readVisualScriptSection(section):
+    return _readVisualScript(section)

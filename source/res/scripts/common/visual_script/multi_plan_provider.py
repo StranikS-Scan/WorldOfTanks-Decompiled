@@ -62,6 +62,8 @@ class MultiPlanProvider(object):
     def __init__(self, aspect):
         self._plans = {}
         self._aspect = aspect
+        self._context = None
+        return
 
     def destroy(self):
         pass
@@ -72,6 +74,8 @@ class MultiPlanProvider(object):
             holder.loadState = PlanHolder.INACTIVE
 
         self._plans = {}
+        self._context = None
+        return
 
     def get(self, planName):
         return self._plans.get(planName, PlanHolder(None, PlanHolder.INACTIVE)).plan
@@ -106,9 +110,10 @@ class MultiPlanProvider(object):
     def load(self, planNames, autoStart=False):
         self.reset()
         for planName in planNames:
-            holder = PlanHolder(VSE.Plan(), PlanHolder.LOADING, autoStart)
-            holder.load(planName, self._aspect)
-            self._plans[planName] = holder
+            self._loadPlan(planName)
+
+    def startPlan(self, planName):
+        self._loadPlan(planName, True)
 
     def setOptionalInputParam(self, name, value):
         for holder in self._plans.itervalues():
@@ -117,6 +122,16 @@ class MultiPlanProvider(object):
     def setContext(self, context):
         for holder in self._plans.itervalues():
             holder.plan.setContext(context)
+
+        self._context = context
+
+    def _loadPlan(self, planName, autoStart=False):
+        holder = PlanHolder(VSE.Plan(), PlanHolder.LOADING, autoStart)
+        if self._context is not None:
+            holder.plan.setContext(self._context)
+        holder.load(planName, self._aspect)
+        self._plans[planName] = holder
+        return holder
 
 
 class CallableProviderType:
@@ -132,9 +147,7 @@ if IS_DEVELOPMENT:
         def __init__(self, aspect, name):
             super(CallablePlanProvider, self).__init__(aspect)
             self._name = name
-            self._context = None
             self.providers[name].add(self)
-            return
 
         def destroy(self):
             self.providers[self._name].remove(self)
@@ -144,22 +157,6 @@ if IS_DEVELOPMENT:
             if self._name in self.plansOnLoad:
                 for planName in self.plansOnLoad[self._name]:
                     self._loadPlan(planName, autoStart)
-
-        def startPlan(self, planName):
-            holder = self._loadPlan(planName, True)
-            if self._context is not None:
-                holder.plan.setContext(self._context)
-            return
-
-        def setContext(self, context):
-            super(CallablePlanProvider, self).setContext(context)
-            self._context = context
-
-        def _loadPlan(self, planName, autoStart=False):
-            holder = PlanHolder(VSE.Plan(), PlanHolder.LOADING, autoStart)
-            holder.load(planName, self._aspect)
-            self._plans[planName] = holder
-            return holder
 
 
     def setPlansOnLoad(name, planNames):

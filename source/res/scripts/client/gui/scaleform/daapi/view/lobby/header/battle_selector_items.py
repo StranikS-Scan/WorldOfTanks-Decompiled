@@ -5,8 +5,6 @@ import typing
 from account_helpers import isDemonstrator
 from CurrentVehicle import g_currentVehicle
 from adisp import process
-from battle_selector_event_progression_item import EventProgressionItem
-from battle_selector_event_progression_providers import EventProgressionDataProvider
 from battle_selector_item import SelectorItem
 from account_helpers import isDemonstratorExpert
 from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR
@@ -24,11 +22,12 @@ from gui.prb_control.prb_getters import areSpecBattlesHidden
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency, int2roman
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.prb_control import prbEntityProperty
@@ -180,6 +179,27 @@ class _SelectorExtraItem(_SelectorItem):
 
     def _update(self, state):
         raise NotImplementedError
+
+
+class _MapsTrainingItem(_SelectorItem):
+    mapsTrainingController = dependency.descriptor(IMapsTrainingController)
+
+    def _update(self, state):
+        self._isVisible = True
+        if self.mapsTrainingController.isMapsTrainingEnabled:
+            self._isDisabled = state.hasLockedState
+            self._isSelected = state.isQueueSelected(QUEUE_TYPE.MAPS_TRAINING)
+            return
+        self._isDisabled = True
+        self._isSelected = False
+
+    @process
+    def _doSelect(self, dispatcher):
+        isSuccess = yield dispatcher.doSelectAction(PrbAction(self.getData()))
+        if isSuccess:
+            if self._isNew:
+                selectorUtils.setBattleTypeAsKnown(self._selectorType)
+            self.mapsTrainingController.showMapsTrainingPage()
 
 
 class _DisabledSelectorItem(_SelectorItem):
@@ -672,7 +692,7 @@ class _BattleRoyaleItem(SelectorItem):
         else:
             currentSeason = self.__battleRoyaleController.getCurrentSeason()
             if currentSeason is not None and currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
-                seasonResID = R.strings.epic_battle.season.num(currentSeason.getSeasonID())
+                seasonResID = R.strings.battle_royale.season.num(currentSeason.getSeasonID())
                 seasonName = backport.text(seasonResID.name()) if seasonResID else None
                 scheduleStr = backport.text(R.strings.menu.headerButtons.battle.types.battleRoyale.extra.currentCycle(), season=seasonName, cycle=int2roman(currentSeason.getCycleOrdinalNumber()))
                 return text_styles.main(scheduleStr)
@@ -753,6 +773,88 @@ class _MapboxItem(SelectorItem):
         return self.__mapboxCtrl.isEnabled() and hasActualSeason
 
 
+class EpicBattleItem(SelectorItem):
+    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+
+    def __init__(self, label, data, order, selectorType=None, isVisible=True):
+        super(EpicBattleItem, self).__init__(label, data, order, selectorType, isVisible)
+        self._isDisabled = not self.__epicController.isEnabled()
+
+    def getFormattedLabel(self):
+        battleTypeName = text_styles.middleTitle(self.getLabel())
+        availabilityStr = self.__getPerformanceAlarmStr() or self.__getScheduleStr()
+        return battleTypeName if availabilityStr is None else '{}\n{}'.format(battleTypeName, availabilityStr)
+
+    def isRandomBattle(self):
+        return True
+
+    @process
+    def _doSelect(self, dispatcher):
+        currentSeason = self.__epicController.getCurrentSeason()
+        if currentSeason is not None:
+            isActiveCycle = self.__epicController.getCurrentCycleInfo()[1]
+            nextCycle = currentSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
+            if isActiveCycle or nextCycle:
+                isSuccess = yield dispatcher.doSelectAction(PrbAction(self._data))
+                if isSuccess and self._isNew:
+                    selectorUtils.setBattleTypeAsKnown(self._selectorType)
+                else:
+                    return
+        self.__epicController.openURL()
+        return
+
+    def _update(self, state):
+        self._isVisible = any((self.__epicController.getCurrentSeason(), self.__epicController.getNextSeason()))
+        self._isDisabled = not self.__epicController.isEnabled()
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EPIC)
+        if self._selectorType is not None:
+            self._isNew = not selectorUtils.isKnownBattleType(self._selectorType)
+        return
+
+    def __getScheduleStr(self):
+        if self._isDisabled:
+            return text_styles.error(backport.text(_R_BATTLE_TYPES.epic.extra.frozen()))
+        else:
+            currentSeason = self.__epicController.getCurrentSeason()
+            if currentSeason:
+                seasonResID = R.strings.epic_battle.season.num(currentSeason.getSeasonID())
+                seasonName = backport.text(seasonResID.name()) if seasonResID else None
+                if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
+                    if currentSeason.isSingleCycleSeason():
+                        scheduleStr = None
+                    else:
+                        scheduleStr = backport.text(R.strings.menu.headerButtons.battle.types.epic.extra.currentCycle(), cycle=int2roman(currentSeason.getCycleInfo().getEpicCycleNumber()), season=seasonName)
+                else:
+                    nextCycle = currentSeason.getNextCycleInfo(time_utils.getCurrentLocalServerTimestamp())
+                    if nextCycle is None:
+                        nextCycle = currentSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
+                    if nextCycle:
+                        nextCycleStartTime = backport.getDateTimeFormat(nextCycle.startDate)
+                        scheduleStr = backport.text(_R_BATTLE_TYPES.epic.extra.startsAt(), time=nextCycleStartTime)
+                    else:
+                        scheduleStr = None
+            else:
+                nextSeason = self.__epicController.getNextSeason()
+                nextCycle = nextSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
+                if nextCycle:
+                    startTime = backport.getDateTimeFormat(nextCycle.startDate)
+                    scheduleStr = backport.text(_R_BATTLE_TYPES.epic.extra.startsAt(), time=startTime)
+                else:
+                    scheduleStr = None
+            return text_styles.main(scheduleStr) if scheduleStr else None
+
+    def __getPerformanceAlarmStr(self):
+        currPerformanceGroup = self.__epicController.getPerformanceGroup()
+        attentionText, iconPath = (None, None)
+        if currPerformanceGroup == EPIC_PERF_GROUP.HIGH_RISK:
+            attentionText = text_styles.error(backport.text(_R_BATTLE_MENU.attention.lowPerformance()))
+            iconPath = backport.image(_R_ICONS.library.marker_blocked())
+        elif currPerformanceGroup == EPIC_PERF_GROUP.MEDIUM_RISK:
+            attentionText = text_styles.alert(backport.text(_R_BATTLE_MENU.attention.reducedPerformance()))
+            iconPath = backport.image(_R_ICONS.library.alertIcon())
+        return icons.makeImageTag(iconPath, vSpace=-3) + ' ' + attentionText if attentionText and iconPath else None
+
+
 _g_items = None
 _g_squadItems = None
 _DEFAULT_PAN = PREBATTLE_ACTION_NAME.RANDOM
@@ -771,17 +873,13 @@ def _createItems(lobbyContext=None):
     _addEpicTrainingBattleType(items, settings)
     _addRoyaleBattleType(items)
     _addMapboxBattleType(items)
+    _addMapsTrainingBattleType(items)
+    _addEpicBattleType(items)
     if GUI_SETTINGS.specPrebatlesVisible:
         _addSpecialBattleType(items)
     if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
         _addSandboxType(items)
-    extraItems = []
-    _addEventProgressionItems(extraItems)
-    return _BattleSelectorItems(items, extraItems)
-
-
-def _addEventProgressionItems(extraItems):
-    extraItems.append(EventProgressionItem(EventProgressionDataProvider()))
+    return _BattleSelectorItems(items)
 
 
 def _createSquadSelectorItems():
@@ -822,26 +920,34 @@ def _addStrongholdsBattleType(items, isInRoaming):
     items.append((_DisabledSelectorItem if isInRoaming else _StrongholdsItem)(backport.text(_R_BATTLE_TYPES.strongholds()), PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, 4, SELECTOR_BATTLE_TYPES.SORTIE, isVisible=visible))
 
 
-def _addTrainingBattleType(items):
-    items.append(_TrainingItem(backport.text(_R_BATTLE_TYPES.training()), PREBATTLE_ACTION_NAME.TRAININGS_LIST, 7))
+def _addEpicBattleType(items):
+    items.append(EpicBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC, PREBATTLE_ACTION_NAME.EPIC, 5, SELECTOR_BATTLE_TYPES.EPIC))
 
 
-def _addEpicTrainingBattleType(items, settings=None):
-    visible = settings is not None and settings.frontline.isEpicTrainingEnabled
-    items.append(_EpicTrainingItem(backport.text(_R_BATTLE_TYPES.epicTraining()), PREBATTLE_ACTION_NAME.EPIC_TRAINING_LIST, 10, SELECTOR_BATTLE_TYPES.EPIC, isVisible=visible))
-    return
+def _addMapsTrainingBattleType(items):
+    items.append(_MapsTrainingItem(backport.text(_R_BATTLE_TYPES.mapsTraining()), PREBATTLE_ACTION_NAME.MAPS_TRAINING, 8, SELECTOR_BATTLE_TYPES.MAPS_TRAINING))
 
 
 def _addSpecialBattleType(items):
     items.append(_SpecBattleItem(backport.text(_R_BATTLE_TYPES.spec()), PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 6))
 
 
+def _addTrainingBattleType(items):
+    items.append(_TrainingItem(backport.text(_R_BATTLE_TYPES.training()), PREBATTLE_ACTION_NAME.TRAININGS_LIST, 7))
+
+
 def _addTutorialBattleType(items, isInRoaming):
-    items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(backport.text(_R_BATTLE_TYPES.battleTutorial()), PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, 8))
+    items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(backport.text(_R_BATTLE_TYPES.battleTutorial()), PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, 9))
 
 
 def _addSandboxType(items):
-    items.append(_SandboxItem(backport.text(_R_BATTLE_TYPES.battleTeaching()), PREBATTLE_ACTION_NAME.SANDBOX, 9))
+    items.append(_SandboxItem(backport.text(_R_BATTLE_TYPES.battleTeaching()), PREBATTLE_ACTION_NAME.SANDBOX, 10))
+
+
+def _addEpicTrainingBattleType(items, settings=None):
+    visible = settings is not None and settings.frontline.isEpicTrainingEnabled
+    items.append(_EpicTrainingItem(backport.text(_R_BATTLE_TYPES.epicTraining()), PREBATTLE_ACTION_NAME.EPIC_TRAINING_LIST, 11, SELECTOR_BATTLE_TYPES.EPIC, isVisible=visible))
+    return
 
 
 def _addSimpleSquadType(items):

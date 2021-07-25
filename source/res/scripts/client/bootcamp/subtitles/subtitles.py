@@ -5,9 +5,16 @@ from account_helpers.AccountSettings import AccountSettings, SUBTITLES
 from gui.Scaleform.framework.entities.View import View
 
 class SubtitlesBase(View):
+    _instance = None
     __STANDARD_DURATION_SEC = 3.0
     __STANDARD_LENGTH_SYMBOLS = 30
     __DURATION_ON_TICK = 0.5
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance:
+            cls._instance.onWindowClose()
+        cls._instance = View.__new__(cls, *args, **kwargs)
+        return cls._instance
 
     def __init__(self, ctx=None):
         super(SubtitlesBase, self).__init__(ctx)
@@ -23,7 +30,9 @@ class SubtitlesBase(View):
     def _dispose(self):
         self.stopSound()
         self.__currSound = {}
+        self._instance = None
         super(SubtitlesBase, self)._dispose()
+        return
 
     def playSound(self):
         self.stopSound()
@@ -61,7 +70,7 @@ class SubtitlesBase(View):
         return max(self.__DURATION_ON_TICK, self.__STANDARD_DURATION_SEC * (len(subtitle) / self.__STANDARD_LENGTH_SYMBOLS - 1.0))
 
     def onWindowClose(self):
-        raise NotImplementedError
+        self.stopSound()
 
     def _asShowSubtitle(self, subtitle):
         raise NotImplementedError

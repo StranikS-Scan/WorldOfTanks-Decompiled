@@ -13,6 +13,9 @@ class GoodieResource(object):
     def __hash__(self):
         return hash(self._value)
 
+    def __repr__(self):
+        return '<{} value={}>'.format(self.__class__.__name__, self._value)
+
     @property
     def value(self):
         return self._value

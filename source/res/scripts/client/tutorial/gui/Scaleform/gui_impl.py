@@ -88,12 +88,15 @@ class ScaleformGuiImpl(IGuiImpl):
             self.__appLoader.onGUIInitialized += self.__setProxy
             return
         else:
-            self.__proxy.onCreated += self.__onProxyCreated
             self.__proxy.onComponentFoundEvent += self.__onComponentFound
             self.__proxy.onComponentDisposedEvent += self.__onComponentDisposed
             self.__proxy.onEffectCompletedEvent += self.__onEffectCompleted
             self.__proxy.onTriggerActivatedEvent += self.__onTriggerActivated
             self.__appLoader.onGUIInitialized -= self.__setProxy
+            if not self.__proxy.isCreated():
+                self.__proxy.onCreated += self.__onProxyCreated
+            else:
+                self.onInit()
             return
 
     def __onComponentFound(self, componentId, viewTutorialId):

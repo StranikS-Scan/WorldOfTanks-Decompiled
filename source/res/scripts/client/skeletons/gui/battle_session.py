@@ -18,6 +18,10 @@ class ISharedControllersLocator(object):
         raise NotImplementedError
 
     @property
+    def prebattleSetups(self):
+        raise NotImplementedError
+
+    @property
     def vehicleState(self):
         raise NotImplementedError
 
@@ -163,6 +167,10 @@ class IDynamicControllersLocator(object):
 
     @property
     def battleNotifier(self):
+        raise NotImplementedError
+
+    @property
+    def gameNotifications(self):
         raise NotImplementedError
 
 

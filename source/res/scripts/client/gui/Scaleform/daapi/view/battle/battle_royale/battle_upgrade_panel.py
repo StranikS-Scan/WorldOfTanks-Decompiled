@@ -14,7 +14,7 @@ from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_control.controllers.progression_ctrl import IProgressionListener
 from gui.doc_loaders.battle_royale_settings_loader import getTreeModuleIcon, getTreeModuleHeader, getBattleRoyaleSettings
-from gui.game_control.br_battle_sounds import BREvents
+from gui.battle_control.controllers.sound_ctrls.br_battle_sounds import BREvents
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items import isItemVehicleHull

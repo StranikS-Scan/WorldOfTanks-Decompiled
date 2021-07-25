@@ -84,6 +84,7 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_readyVehicle'
     PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED = '#system_messages:prebattle/vehicleInvalid/vehicleNotSupported'
     PREBATTLE_VEHICLEINVALID_EPICONLY = '#system_messages:prebattle/vehicleInvalid/epicOnly'
+    PREBATTLE_VEHICLEINVALID_WILLBEUNLOCKEDINBATTLE = '#system_messages:prebattle/vehicleInvalid/willBeUnlockedInBattle'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
     PREBATTLE_VEHICLEINVALID_FALLOUTONLY = '#system_messages:prebattle/vehicleInvalid/falloutOnly'
     PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS = '#system_messages:prebattle/vehicleInvalid/limits/nations'
@@ -631,6 +632,7 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_APPLY_ERROR_TOO_HEAVY = '#system_messages:artefact_apply/error_too_heavy'
     ARTEFACT_REMOVE_ERROR_TOO_HEAVY = '#system_messages:artefact_remove/error_too_heavy'
     ARTEFACT_UPGRADE_SUCCESS = '#system_messages:artefact_upgrade/success'
+    ARTEFACT_UPGRADE_SUCCESS_ANALOGWASDEMOUNTED = '#system_messages:artefact_upgrade/success/analogWasDemounted'
     ARTEFACT_UPGRADE_SERVER_ERROR = '#system_messages:artefact_upgrade/server_error'
     ARTEFACT_UPGRADE_VEHICLE_NEED_REPAIR = '#system_messages:artefact_upgrade/vehicle_need_repair'
     LAYOUT_APPLY_SUCCESS_MONEY_SPENT = '#system_messages:layout_apply/success_money_spent'
@@ -899,6 +901,7 @@ class SYSTEM_MESSAGES(object):
     UNIT_NOTIFICATION_PLAYEROFFLINE = '#system_messages:unit/notification/playerOffline'
     UNIT_NOTIFICATION_PLAYERONLINE = '#system_messages:unit/notification/playerOnline'
     UNIT_NOTIFICATION_PLAYERADDED = '#system_messages:unit/notification/playerAdded'
+    UNIT_NOTIFICATION_PLAYERADDEDWITHFILTER = '#system_messages:unit/notification/playerAddedWithFilter'
     UNIT_NOTIFICATION_PLAYERREMOVED = '#system_messages:unit/notification/playerRemoved'
     UNIT_NOTIFICATION_GIVELEADERSHIP = '#system_messages:unit/notification/giveLeadership'
     UNIT_NOTIFICATION_CHANGEDIVISION = '#system_messages:unit/notification/changeDivision'
@@ -1103,7 +1106,6 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATION_YEARLB_NEGATIVE_TITLE = '#system_messages:ranked/notification/yearLB/negative/title'
     RANKED_NOTIFICATION_YEARLB_NEGATIVE_BODY = '#system_messages:ranked/notification/yearLB/negative/body'
     EPICBATTLES_NOTIFICATION_NOTAVAILABLE = '#system_messages:epicBattles/notification/notAvailable'
-    EPICBATTLES_PRESTIGETRIGGER_ERROR = '#system_messages:epicBattles/prestigeTrigger/error'
     LOOTBOXES_OPEN_SERVER_ERROR = '#system_messages:lootboxes/open/server_error'
     LOOTBOXES_OPEN_SERVER_ERROR_DISABLED = '#system_messages:lootboxes/open/server_error/DISABLED'
     LOOTBOXES_OPEN_SERVER_ERROR_COOLDOWN = '#system_messages:lootboxes/open/server_error/COOLDOWN'
@@ -1119,10 +1121,6 @@ class SYSTEM_MESSAGES(object):
     PROGRESSIVEREWARD_SWITCH_OFF = '#system_messages:progressiveReward/switch_off'
     PROGRESSIVEREWARD_SWITCH_ON = '#system_messages:progressiveReward/switch_on'
     PROGRESSIVEREWARD_ERROR = '#system_messages:progressiveReward/error'
-    EVENT_PROGRESSION_BUY_VEHICLE_SERVER_ERROR = '#system_messages:event_progression_buy_vehicle/server_error'
-    EVENT_PROGRESSION_BUY_VEHICLE_SUCCESS = '#system_messages:event_progression_buy_vehicle/success'
-    EVENT_PROGRESSION_BUY_STYLE_SERVER_ERROR = '#system_messages:event_progression_buy_style/server_error'
-    EVENT_PROGRESSION_BUY_STYLE_SUCCESS = '#system_messages:event_progression_buy_style/success'
     MAPS_BLACK_LIST_SELECT_SUCCESS = '#system_messages:maps_black_list/select/success'
     MAPS_BLACK_LIST_SELECT_SERVER_ERROR_COOLDOWN = '#system_messages:maps_black_list/select/server_error/COOLDOWN'
     MAPS_BLACK_LIST_SELECT_SERVER_ERROR = '#system_messages:maps_black_list/select/server_error'
@@ -1143,6 +1141,9 @@ class SYSTEM_MESSAGES(object):
     PIGGYBANK_SWITCH_ON_TITLE = '#system_messages:piggybank/switch_on/title'
     PIGGYBANK_SWITCH_ON_BODY = '#system_messages:piggybank/switch_on/body'
     PIGGYBANK_PIGGYBANKFULL = '#system_messages:piggyBank/piggyBankFull'
+    MAPS_TRAINING_SWITCH_TITLE = '#system_messages:maps_training/switch/title'
+    MAPS_TRAINING_SWITCH_OFF_BODY = '#system_messages:maps_training/switch_off/body'
+    MAPS_TRAINING_SWITCH_ON_BODY = '#system_messages:maps_training/switch_on/body'
     SQUAD_BONUS_SWITCH_OFF_TITLE = '#system_messages:squad_bonus/switch_off/title'
     SQUAD_BONUS_SWITCH_OFF_BODY = '#system_messages:squad_bonus/switch_off/body'
     SQUAD_BONUS_SWITCH_ON_TITLE = '#system_messages:squad_bonus/switch_on/title'
@@ -1180,8 +1181,10 @@ class SYSTEM_MESSAGES(object):
     BATTLEPASS_SWITCH_DISABLE_BODY_INCOMPLETESTYLE = '#system_messages:battlePass/switch_disable/body/incompleteStyle'
     BATTLEPASS_SWITCH_ENABLED_BODY = '#system_messages:battlePass/switch_enabled/body'
     BATTLEPASS_SWITCH_DISABLE_BATTLE_ROYALE_BODY = '#system_messages:battlePass/switch_disable/battle_royale/body'
-    BATTLEPASS_RANKED_ENABLED = '#system_messages:battlePass/ranked/enabled'
-    BATTLEPASS_RANKED_DISABLED = '#system_messages:battlePass/ranked/disabled'
+    BATTLEPASS_SWITCH_ENABLED_RANKED_BODY = '#system_messages:battlePass/switch_enabled/ranked/body'
+    BATTLEPASS_SWITCH_DISABLE_RANKED_BODY = '#system_messages:battlePass/switch_disable/ranked/body'
+    BATTLEPASS_SWITCH_ENABLED_EPICBATTLE_BODY = '#system_messages:battlePass/switch_enabled/epicBattle/body'
+    BATTLEPASS_SWITCH_DISABLE_EPICBATTLE_BODY = '#system_messages:battlePass/switch_disable/epicBattle/body'
     UPGRADETROPHYDEVICE_SWITCH_ON_BODY = '#system_messages:upgradeTrophyDevice/switch_on/body'
     UPGRADETROPHYDEVICE_SWITCH_OFF_BODY = '#system_messages:upgradeTrophyDevice/switch_off/body'
     BATTLEPASS_BADGEREMOVED_TEXT = '#system_messages:battlePass/badgeRemoved/text'
@@ -1214,6 +1217,35 @@ class SYSTEM_MESSAGES(object):
     DOG_TAGS_SWITCH_OFF_BODY = '#system_messages:dog_tags/switch_off/body'
     DOG_TAGS_SWITCH_ON_TITLE = '#system_messages:dog_tags/switch_on/title'
     DOG_TAGS_SWITCH_ON_BODY = '#system_messages:dog_tags/switch_on/body'
+    VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_TITLE = '#system_messages:vehiclePostProgression/researchSteps/title'
+    VEHICLEPOSTPROGRESSION_EXPERIENCESPENT = '#system_messages:vehiclePostProgression/experienceSpent'
+    VEHICLEPOSTPROGRESSION_FREEEXPERIENCESPENT = '#system_messages:vehiclePostProgression/freeExperienceSpent'
+    VEHICLEPOSTPROGRESSION_CREDITSSPENT = '#system_messages:vehiclePostProgression/creditsSpent'
+    VEHICLEPOSTPROGRESSION_RESEARCHSTEP_BODY = '#system_messages:vehiclePostProgression/researchStep/body'
+    VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_BODY = '#system_messages:vehiclePostProgression/researchSteps/body'
+    VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_LEVELS_SEPARATOR = '#system_messages:vehiclePostProgression/researchSteps/levels/separator'
+    VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_SHELLS_CONSUMABLES_SWITCH_TITLE = '#system_messages:vehiclePostProgression/unlockFeature/shells_consumables_switch/title'
+    VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_SHELLS_CONSUMABLES_SWITCH_BODY = '#system_messages:vehiclePostProgression/unlockFeature/shells_consumables_switch/body'
+    VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_OPT_DEV_BOOSTERS_SWITCH_TITLE = '#system_messages:vehiclePostProgression/unlockFeature/opt_dev_boosters_switch/title'
+    VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_OPT_DEV_BOOSTERS_SWITCH_BODY = '#system_messages:vehiclePostProgression/unlockFeature/opt_dev_boosters_switch/body'
+    VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_ROLESLOT_TITLE = '#system_messages:vehiclePostProgression/unlockFeature/roleSlot/title'
+    VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_ROLESLOT_BODY = '#system_messages:vehiclePostProgression/unlockFeature/roleSlot/body'
+    VEHICLEPOSTPROGRESSION_MODIFICATIONPROCESSORERROR_TITLE = '#system_messages:vehiclePostProgression/modificationProcessorError/title'
+    VEHICLEPOSTPROGRESSION_MODIFICATIONPROCESSORERROR_BODY = '#system_messages:vehiclePostProgression/modificationProcessorError/body'
+    VEHICLEPOSTPROGRESSION_DISCARDPAIRMODIFICATION_TITLE = '#system_messages:vehiclePostProgression/discardPairModification/title'
+    VEHICLEPOSTPROGRESSION_DISCARDPAIRMODIFICATION_BODY = '#system_messages:vehiclePostProgression/discardPairModification/body'
+    VEHICLEPOSTPROGRESSION_DISCARDPAIRSMODIFICATION_BODY = '#system_messages:vehiclePostProgression/discardPairsModification/body'
+    VEHICLEPOSTPROGRESSION_DISCARDPAIRSMODIFICATION_MODIFICATIONS_SEPARATOR = '#system_messages:vehiclePostProgression/discardPairsModification/modifications/separator'
+    VEHICLEPOSTPROGRESSION_BUYPAIRMODIFICATION_TITLE = '#system_messages:vehiclePostProgression/buyPairModification/title'
+    VEHICLEPOSTPROGRESSION_BUYPAIRMODIFICATION_BODY = '#system_messages:vehiclePostProgression/buyPairModification/body'
+    VEHICLEPOSTPROGRESSION_CHANGESLOTCATEGORY_TITLE = '#system_messages:vehiclePostProgression/changeSlotCategory/title'
+    VEHICLEPOSTPROGRESSION_CHANGESLOTCATEGORY_BODY = '#system_messages:vehiclePostProgression/changeSlotCategory/body'
+    VEHICLEPOSTPROGRESSION_SETSLOTCATEGORY_TITLE = '#system_messages:vehiclePostProgression/setSlotCategory/title'
+    VEHICLEPOSTPROGRESSION_SETSLOTCATEGORY_BODY = '#system_messages:vehiclePostProgression/setSlotCategory/body'
+    VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_TITLE = '#system_messages:vehiclePostProgression/vehiclesUnlockPostProgression/title'
+    VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_SINGLE_BODY = '#system_messages:vehiclePostProgression/vehiclesUnlockPostProgression/single/body'
+    VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_WELCOMEUNLOCK_BODY = '#system_messages:vehiclePostProgression/vehiclesUnlockPostProgression/welcomeUnlock/body'
+    VEHICLEPOSTPROGRESSION_DISCARDALLPAIRSMODIFICATION_BODY = '#system_messages:vehiclePostProgression/discardAllPairsModification/body'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1294,6 +1326,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,
      UNIT_NOTIFICATION_PLAYERADDED,
+     UNIT_NOTIFICATION_PLAYERADDEDWITHFILTER,
      UNIT_NOTIFICATION_PLAYERREMOVED,
      UNIT_NOTIFICATION_GIVELEADERSHIP,
      UNIT_NOTIFICATION_CHANGEDIVISION,
@@ -1413,6 +1446,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE,
      PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED,
      PREBATTLE_VEHICLEINVALID_EPICONLY,
+     PREBATTLE_VEHICLEINVALID_WILLBEUNLOCKEDINBATTLE,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
      PREBATTLE_VEHICLEINVALID_FALLOUTONLY,
      PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS,
@@ -1960,6 +1994,7 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_APPLY_ERROR_TOO_HEAVY,
      ARTEFACT_REMOVE_ERROR_TOO_HEAVY,
      ARTEFACT_UPGRADE_SUCCESS,
+     ARTEFACT_UPGRADE_SUCCESS_ANALOGWASDEMOUNTED,
      ARTEFACT_UPGRADE_SERVER_ERROR,
      ARTEFACT_UPGRADE_VEHICLE_NEED_REPAIR,
      LAYOUT_APPLY_SUCCESS_MONEY_SPENT,
@@ -2228,6 +2263,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,
      UNIT_NOTIFICATION_PLAYERADDED,
+     UNIT_NOTIFICATION_PLAYERADDEDWITHFILTER,
      UNIT_NOTIFICATION_PLAYERREMOVED,
      UNIT_NOTIFICATION_GIVELEADERSHIP,
      UNIT_NOTIFICATION_CHANGEDIVISION,
@@ -2432,7 +2468,6 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATION_YEARLB_NEGATIVE_TITLE,
      RANKED_NOTIFICATION_YEARLB_NEGATIVE_BODY,
      EPICBATTLES_NOTIFICATION_NOTAVAILABLE,
-     EPICBATTLES_PRESTIGETRIGGER_ERROR,
      LOOTBOXES_OPEN_SERVER_ERROR,
      LOOTBOXES_OPEN_SERVER_ERROR_DISABLED,
      LOOTBOXES_OPEN_SERVER_ERROR_COOLDOWN,
@@ -2448,10 +2483,6 @@ class SYSTEM_MESSAGES(object):
      PROGRESSIVEREWARD_SWITCH_OFF,
      PROGRESSIVEREWARD_SWITCH_ON,
      PROGRESSIVEREWARD_ERROR,
-     EVENT_PROGRESSION_BUY_VEHICLE_SERVER_ERROR,
-     EVENT_PROGRESSION_BUY_VEHICLE_SUCCESS,
-     EVENT_PROGRESSION_BUY_STYLE_SERVER_ERROR,
-     EVENT_PROGRESSION_BUY_STYLE_SUCCESS,
      MAPS_BLACK_LIST_SELECT_SUCCESS,
      MAPS_BLACK_LIST_SELECT_SERVER_ERROR_COOLDOWN,
      MAPS_BLACK_LIST_SELECT_SERVER_ERROR,
@@ -2472,6 +2503,9 @@ class SYSTEM_MESSAGES(object):
      PIGGYBANK_SWITCH_ON_TITLE,
      PIGGYBANK_SWITCH_ON_BODY,
      PIGGYBANK_PIGGYBANKFULL,
+     MAPS_TRAINING_SWITCH_TITLE,
+     MAPS_TRAINING_SWITCH_OFF_BODY,
+     MAPS_TRAINING_SWITCH_ON_BODY,
      SQUAD_BONUS_SWITCH_OFF_TITLE,
      SQUAD_BONUS_SWITCH_OFF_BODY,
      SQUAD_BONUS_SWITCH_ON_TITLE,
@@ -2509,8 +2543,10 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASS_SWITCH_DISABLE_BODY_INCOMPLETESTYLE,
      BATTLEPASS_SWITCH_ENABLED_BODY,
      BATTLEPASS_SWITCH_DISABLE_BATTLE_ROYALE_BODY,
-     BATTLEPASS_RANKED_ENABLED,
-     BATTLEPASS_RANKED_DISABLED,
+     BATTLEPASS_SWITCH_ENABLED_RANKED_BODY,
+     BATTLEPASS_SWITCH_DISABLE_RANKED_BODY,
+     BATTLEPASS_SWITCH_ENABLED_EPICBATTLE_BODY,
+     BATTLEPASS_SWITCH_DISABLE_EPICBATTLE_BODY,
      UPGRADETROPHYDEVICE_SWITCH_ON_BODY,
      UPGRADETROPHYDEVICE_SWITCH_OFF_BODY,
      BATTLEPASS_BADGEREMOVED_TEXT,
@@ -2542,7 +2578,36 @@ class SYSTEM_MESSAGES(object):
      DOG_TAGS_SWITCH_OFF_TITLE,
      DOG_TAGS_SWITCH_OFF_BODY,
      DOG_TAGS_SWITCH_ON_TITLE,
-     DOG_TAGS_SWITCH_ON_BODY)
+     DOG_TAGS_SWITCH_ON_BODY,
+     VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_TITLE,
+     VEHICLEPOSTPROGRESSION_EXPERIENCESPENT,
+     VEHICLEPOSTPROGRESSION_FREEEXPERIENCESPENT,
+     VEHICLEPOSTPROGRESSION_CREDITSSPENT,
+     VEHICLEPOSTPROGRESSION_RESEARCHSTEP_BODY,
+     VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_BODY,
+     VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_LEVELS_SEPARATOR,
+     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_SHELLS_CONSUMABLES_SWITCH_TITLE,
+     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_SHELLS_CONSUMABLES_SWITCH_BODY,
+     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_OPT_DEV_BOOSTERS_SWITCH_TITLE,
+     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_OPT_DEV_BOOSTERS_SWITCH_BODY,
+     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_ROLESLOT_TITLE,
+     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_ROLESLOT_BODY,
+     VEHICLEPOSTPROGRESSION_MODIFICATIONPROCESSORERROR_TITLE,
+     VEHICLEPOSTPROGRESSION_MODIFICATIONPROCESSORERROR_BODY,
+     VEHICLEPOSTPROGRESSION_DISCARDPAIRMODIFICATION_TITLE,
+     VEHICLEPOSTPROGRESSION_DISCARDPAIRMODIFICATION_BODY,
+     VEHICLEPOSTPROGRESSION_DISCARDPAIRSMODIFICATION_BODY,
+     VEHICLEPOSTPROGRESSION_DISCARDPAIRSMODIFICATION_MODIFICATIONS_SEPARATOR,
+     VEHICLEPOSTPROGRESSION_BUYPAIRMODIFICATION_TITLE,
+     VEHICLEPOSTPROGRESSION_BUYPAIRMODIFICATION_BODY,
+     VEHICLEPOSTPROGRESSION_CHANGESLOTCATEGORY_TITLE,
+     VEHICLEPOSTPROGRESSION_CHANGESLOTCATEGORY_BODY,
+     VEHICLEPOSTPROGRESSION_SETSLOTCATEGORY_TITLE,
+     VEHICLEPOSTPROGRESSION_SETSLOTCATEGORY_BODY,
+     VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_TITLE,
+     VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_SINGLE_BODY,
+     VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_WELCOMEUNLOCK_BODY,
+     VEHICLEPOSTPROGRESSION_DISCARDALLPAIRSMODIFICATION_BODY)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

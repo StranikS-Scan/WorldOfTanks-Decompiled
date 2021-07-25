@@ -12,6 +12,7 @@ class QUESTS(object):
     MISSIONS_TAB_BATTLE_PASS = '#quests:missions/tab/battle_pass'
     MISSIONS_TAB_DAILY = '#quests:missions/tab/daily'
     MISSIONS_TAB_MAPBOX = '#quests:missions/tab/mapbox'
+    MISSIONS_TAB_MAY21_MARATHON = '#quests:missions/tab/may21_marathon'
     IGR_TOOLTIP_BATTLESLABEL = '#quests:igr/tooltip/battlesLabel'
     IGR_TOOLTIP_WINSLABEL = '#quests:igr/tooltip/winsLabel'
     POSTBATTLE_PROGRESSRESET = '#quests:postBattle/progressReset'
@@ -141,6 +142,7 @@ class QUESTS(object):
     ITEM_TIMER_TILLFINISH_LONGFORMAT = '#quests:item/timer/tillFinish/longFormat'
     ITEM_TIMER_TILLFINISH_ONLYHOURS = '#quests:item/timer/tillFinish/onlyHours'
     ITEM_TIMER_TILLFINISH_LESSTHANHOUR = '#quests:item/timer/tillFinish/lessThanHour'
+    ITEM_TIMER_TILLFINISH_LESSTHANDAY = '#quests:item/timer/tillFinish/lessThanDay'
     ITEM_TIMER_TILLFINISH_SHORTFORMAT = '#quests:item/timer/tillFinish/shortFormat'
     ITEM_TIMER_TILLFINISH_SHORTFULLFORMAT = '#quests:item/timer/tillFinish/shortFullFormat'
     ITEM_TIMER_TILLFINISH_LONGFULLFORMAT = '#quests:item/timer/tillFinish/longFullFormat'
@@ -1017,11 +1019,14 @@ class QUESTS(object):
     MISSIONS_GROUP_MOTIVE_LABEL = '#quests:missions/group/motive/label'
     MISSIONS_AWARDS_MERGED = '#quests:missions/awards/merged'
     MISSIONS_TAB_LABEL_KURSK = '#quests:missions/tab/label/kursk'
-    MISSIONS_TAB_LABEL_MARATHONS = '#quests:missions/tab/label/marathons'
+    MISSIONS_TAB_LABEL_MARATHON = '#quests:missions/tab/label/marathon'
     MISSIONS_TAB_KURSK_HEADER = '#quests:missions/tab/kursk/header'
     MISSIONS_TAB_KURSK_BODY = '#quests:missions/tab/kursk/body'
     MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
     MISSIONS_TAB_MARATHONS_BODY = '#quests:missions/tab/marathons/body'
+    MISSIONS_TAB_LABEL_MAY21_MARATHON = '#quests:missions/tab/label/may21_marathon'
+    MISSIONS_TAB_MAY21_MARATHON_HEADER = '#quests:missions/tab/may21_marathon/header'
+    MISSIONS_TAB_MOON_MARATHON_BODY = '#quests:missions/tab/moon_marathon/body'
     MISSIONS_TAB_MISSIONS_HEADER = '#quests:missions/tab/missions/header'
     MISSIONS_TAB_MISSIONS_BODY = '#quests:missions/tab/missions/body'
     MISSIONS_TAB_LABEL_MISSIONS = '#quests:missions/tab/label/missions'
@@ -1242,7 +1247,7 @@ class QUESTS(object):
     BONUSNAME_RANKEDBONUSBATTLES = '#quests:bonusName/rankedBonusBattles'
     BONUSNAME_ENTITLEMENTS_TESTENTITLEMENT = '#quests:bonusName/entitlements/testEntitlement'
     BONUSNAME_ENTITLEMENTS_RANKED_2020_DISCOUNT = '#quests:bonusName/entitlements/ranked_2020_discount'
-    BONUSNAME_ENTITLEMENTS_RANKED_202103_ACCESS = '#quests:bonusName/entitlements/ranked_202103_access'
+    BONUSNAME_ENTITLEMENTS_RANKED_202109_ACCESS = '#quests:bonusName/entitlements/ranked_202109_access'
     BONUSNAME_BATTLE_BONUS_X5 = '#quests:bonusName/battle_bonus_x5'
     BONUSNAME_BATTLEPASSPOINTS = '#quests:bonusName/battlePassPoints'
     BONUSNAME_BATTLEPASSPOINTS_PREVIEW = '#quests:bonusName/battlePassPoints/preview'
@@ -1767,7 +1772,7 @@ class QUESTS(object):
      BONUSNAME_RANKEDBONUSBATTLES,
      BONUSNAME_ENTITLEMENTS_TESTENTITLEMENT,
      BONUSNAME_ENTITLEMENTS_RANKED_2020_DISCOUNT,
-     BONUSNAME_ENTITLEMENTS_RANKED_202103_ACCESS,
+     BONUSNAME_ENTITLEMENTS_RANKED_202109_ACCESS,
      BONUSNAME_BATTLE_BONUS_X5,
      BONUSNAME_BATTLEPASSPOINTS,
      BONUSNAME_BATTLEPASSPOINTS_PREVIEW)

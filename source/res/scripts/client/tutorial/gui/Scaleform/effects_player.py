@@ -227,7 +227,7 @@ class ShowChainHint(ApplicationEffect):
         return result
 
     def play(self, effectData):
-        hintProps, triggers = effectData
+        hintProps, triggers, silent = effectData
         if hintProps.hintID in self._hintsDict:
             _logger.debug('Hint %r is already added', hintProps.hintID)
             return True
@@ -256,7 +256,7 @@ class ShowChainHint(ApplicationEffect):
                     content['padding'] = padding._asdict()
                 triggers = [ _GUI_EVENT_TO_TRIGGER_TYPE[item] for item in triggers ]
                 _logger.debug('layout %r showInteractiveHint with id %r, content %r, triggers %r', layout, hintProps.itemID, content, triggers)
-                return layout.showInteractiveHint(hintProps.itemID, content, triggers)
+                return layout.showInteractiveHint(hintProps.itemID, content, triggers, silent)
             return False
 
     def stop(self, effectID=None, effectSubType=None):

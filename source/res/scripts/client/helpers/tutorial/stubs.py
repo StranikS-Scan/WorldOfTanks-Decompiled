@@ -50,7 +50,7 @@ class StubGuiController(IGuiController):
     def clearTriggers(self, componentID):
         pass
 
-    def showInteractiveHint(self, componentID, content, triggers=None):
+    def showInteractiveHint(self, componentID, content, triggers=None, silent=False):
         pass
 
     def closeInteractiveHint(self, componentID):

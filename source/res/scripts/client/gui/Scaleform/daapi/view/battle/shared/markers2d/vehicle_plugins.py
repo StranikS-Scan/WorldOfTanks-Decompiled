@@ -275,6 +275,10 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             self.__updateRepairingMarker(vehicleID, handle, value.get('duration', 0))
         elif eventID == _EVENT_ID.VEHICLE_PASSIVE_ENGINEERING:
             self.__updatePassiveEngineeringMarker(vehicleID, handle, *value)
+        elif eventID == _EVENT_ID.VEHICLE_FRONTLINE_STEALTH_RADAR_ACTIVE:
+            self.__updateStealthRadarMarker(vehicleID, handle, value)
+        elif eventID == _EVENT_ID.VEHICLE_FRONTLINE_REGENERATION_KIT_ACTIVE:
+            self.__updateFLRegenerationKitMarker(vehicleID, handle, value)
 
     def _onChatCommandTargetUpdate(self, _, chatCommandStates):
         for vehicleID, state in chatCommandStates.iteritems():
@@ -330,6 +334,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         if isInactivation is not None:
             if isSourceVehicle:
                 hideStatusID = BATTLE_MARKER_STATES.INSPIRED_STATE
+                self.__updateMarkerTimer(vehicleID, handle, duration, statusID)
             else:
                 hideStatusID = BATTLE_MARKER_STATES.INSPIRING_STATE
             self._updateStatusMarkerState(vehicleID, False, handle, hideStatusID, duration, animated, isSourceVehicle)
@@ -354,6 +359,24 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             return
         else:
             self.__updateMarkerTimer(vehicleID, handle, duration, BATTLE_MARKER_STATES.REPAIRING_STATE)
+            return
+
+    def __updateStealthRadarMarker(self, vehicleID, handle, info):
+        vehicle = BigWorld.entities.get(vehicleID)
+        if vehicle is None or not vehicle.isAlive() or info is None:
+            return
+        else:
+            duration = info.duration if info.isActive else 0
+            self.__updateMarkerTimer(vehicleID, handle, duration, BATTLE_MARKER_STATES.STEALTH_STATE, True)
+            return
+
+    def __updateFLRegenerationKitMarker(self, vehicleID, handle, info):
+        vehicle = BigWorld.entities.get(vehicleID)
+        if vehicle is None or not vehicle.isAlive():
+            return
+        else:
+            duration = info.duration if info.isActive else 0
+            self.__updateMarkerTimer(vehicleID, handle, duration, BATTLE_MARKER_STATES.FL_REGENERATION_KIT_STATE, True)
             return
 
     def __onCameraChanged(self, mode, vehicleID=0):
@@ -519,6 +542,12 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
                 vehicleID = vehicle.id
                 if vehicleID in self._markers:
                     self.__updateDebuffMarker(vehicleID, self._markers[vehicleID].getMarkerID(), value)
+        elif state == VEHICLE_VIEW_STATE.STEALTH_RADAR:
+            vehicle = BigWorld.player().getVehicleAttached()
+            if vehicle is not None:
+                vehicleID = vehicle.id
+                if vehicleID in self._markers:
+                    self.__updateStealthRadarMarker(vehicleID, self._markers[vehicleID].getMarkerID(), value)
         return
 
     def __makeMarkerSticky(self, targetID, setSticky, isOneShot):

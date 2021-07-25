@@ -25,6 +25,8 @@ class CrewTypes(object):
     CREW_AVAILABLE_SKILLS = (SKILL_50, SKILL_75, SKILL_100)
 
 
+BROTHERHOOD_SKILL_NAME = 'brotherhood'
+
 class TankmenCollection(ItemsCollection):
 
     def _filterItem(self, item, nation=None, role=None, isInTank=None):
@@ -67,7 +69,7 @@ class TankmenComparator(object):
 
 
 class Tankman(GUIItem):
-    __slots__ = ('__descriptor', '_invID', '_nationID', '_itemTypeID', '_itemTypeName', '_combinedRoles', '_dismissedAt', '_isDismissed', '_areClassesCompatible', '_vehicleNativeDescr', '_vehicleInvID', '_vehicleDescr', '_vehicleBonuses', '_vehicleSlotIdx', '_skills', '_skillsMap', '_skinID', '_comparator')
+    __slots__ = ('__descriptor', '_invID', '_nationID', '_itemTypeID', '_itemTypeName', '_combinedRoles', '_dismissedAt', '_isDismissed', '_areClassesCompatible', '_vehicleNativeDescr', '_vehicleInvID', '_vehicleDescr', '_vehicleBonuses', '_vehicleSlotIdx', '_skills', '_skillsMap', '_skinID', '_comparator', '__brotherhoodMarkedAsActive')
 
     class ROLES(object):
         COMMANDER = 'commander'
@@ -83,7 +85,7 @@ class Tankman(GUIItem):
      ROLES.LOADER: 4}
     _NON_COMMANDER_SKILLS = skills_constants.ACTIVE_SKILLS.difference(skills_constants.COMMANDER_SKILLS)
 
-    def __init__(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None):
+    def __init__(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None, vehicleSlotIdx=-1):
         super(Tankman, self).__init__(strCD=HasStrCD(strCompactDescr))
         self.__descriptor = None
         self._invID = inventoryID
@@ -94,16 +96,17 @@ class Tankman(GUIItem):
         self._dismissedAt = dismissedAt
         self._isDismissed = self.dismissedAt is not None
         self._areClassesCompatible = False
+        self.__brotherhoodMarkedAsActive = False
         self._vehicleNativeDescr = vehicles.VehicleDescr(typeID=(self.nationID, self.descriptor.vehicleTypeID))
         self._vehicleInvID = -1
         self._vehicleDescr = None
         self._vehicleBonuses = dict()
-        self._vehicleSlotIdx = -1
+        self._vehicleSlotIdx = vehicleSlotIdx
         if vehicle is not None:
             self._vehicleInvID = vehicle.invID
             self._vehicleDescr = vehicle.descriptor
             self._vehicleBonuses = dict(vehicle.bonuses)
-            self._vehicleSlotIdx = vehicle.crewIndices.get(inventoryID, -1)
+            self._vehicleSlotIdx = vehicle.crewIndices.get(inventoryID, self._vehicleSlotIdx)
             crewRoles = self.vehicleDescr.type.crewRoles
             if -1 < self.vehicleSlotIdx < len(crewRoles):
                 self._combinedRoles = crewRoles[self.vehicleSlotIdx]
@@ -348,6 +351,10 @@ class Tankman(GUIItem):
         return self.roleLevel == tankmen.MAX_SKILL_LEVEL
 
     @property
+    def isMaxRoleEfficiency(self):
+        return self.efficiencyRoleLevel == tankmen.MAX_SKILL_LEVEL
+
+    @property
     def vehicleNativeType(self):
         for tag in vehicles.VEHICLE_CLASS_TAGS.intersection(self.vehicleNativeDescr.type.tags):
             return tag
@@ -384,6 +391,16 @@ class Tankman(GUIItem):
 
     def isRestorable(self):
         return self.descriptor.isRestorable()
+
+    def brotherhoodIsActive(self):
+        return self.vehicleBonuses.get(BROTHERHOOD_SKILL_NAME, 0) > 0 or self.__brotherhoodMarkedAsActive
+
+    def setBrotherhoodActivity(self, active):
+        self.__brotherhoodMarkedAsActive = active
+
+    def rebuildSkills(self, proxy=None):
+        self._skills = self._buildSkills(proxy)
+        self._skillsMap = self._buildSkillsMap()
 
     def __packSkill(self, skillItem):
         return {'id': skillItem.name,
@@ -453,7 +470,7 @@ class TankmanSkill(GUIItem):
         if tankman is None:
             return True
         else:
-            isBrotherhood = tankman.vehicleBonuses.get('brotherhood', 0) > 0
+            isBrotherhood = tankman.brotherhoodIsActive()
             return not self.isPerk or self.name == 'brotherhood' and isBrotherhood or self.name != 'brotherhood' and self.level == tankmen.MAX_SKILL_LEVEL
 
     def __getSkillType(self):
@@ -751,12 +768,15 @@ def __isCommonSkillLearnt(skillName, vehicle):
 
 
 def __isPersonalSkillLearnt(skillName, vehicle):
-    for _, tankman in vehicle.crew:
-        if tankman is not None:
-            if skillName in tankman.skillsMap and tankman.skillsMap[skillName].level == tankmen.MAX_SKILL_LEVEL:
-                return True
+    if not vehicle.crew:
+        return True
+    else:
+        for _, tankman in vehicle.crew:
+            if tankman is not None:
+                if skillName in tankman.skillsMap and tankman.skillsMap[skillName].level == tankmen.MAX_SKILL_LEVEL:
+                    return True
 
-    return False
+        return False
 
 
 def __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID, skills=(), freeSkills=(), lastSkillLevel=tankmen.MAX_SKILL_LEVEL):

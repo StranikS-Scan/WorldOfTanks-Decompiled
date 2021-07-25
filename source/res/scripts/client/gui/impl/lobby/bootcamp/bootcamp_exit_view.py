@@ -11,11 +11,14 @@ from bootcamp.Bootcamp import g_bootcamp
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
+from uilogging.bootcamp.constants import BCLogKeys, BCLogActions
+from uilogging.bootcamp.loggers import BootcampLogger
 
 class BootcampExitView(ViewImpl):
     __slots__ = ('__blur', '__tooltipData', '__callback', '__isInBattle')
     __appLoader = dependency.descriptor(IAppLoader)
     __bootcampController = dependency.descriptor(IBootcampController)
+    uiBootcampLogger = BootcampLogger(BCLogKeys.BC_EXIT_VIEW.value)
 
     def __init__(self, callback, isInBattle, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.bootcamp.BootcampExitView())
@@ -54,6 +57,7 @@ class BootcampExitView(ViewImpl):
         else:
             self.__blur = CachedBlur(enabled=True, ownLayer=window.layer - 1)
 
+    @uiBootcampLogger.dLog(BCLogActions.SHOW.value)
     def _onLoading(self, *args, **kwargs):
         super(BootcampExitView, self)._onLoading(*args, **kwargs)
         with self.viewModel.transaction() as model:
@@ -63,6 +67,7 @@ class BootcampExitView(ViewImpl):
             model.setIsReferral(self.__bootcampController.isReferralEnabled())
             g_bootcamp.fillProgressBar(model, self.__tooltipData)
 
+    @uiBootcampLogger.dLog(BCLogActions.CLOSE.value)
     def _finalize(self):
         if self.__blur:
             self.__blur.fini()
@@ -72,6 +77,7 @@ class BootcampExitView(ViewImpl):
             app.leaveGuiControlMode(self.uniqueID)
         super(BootcampExitView, self)._finalize()
 
+    @uiBootcampLogger.dLog(BCLogActions.LEAVE.value)
     def __onLeave(self):
         self.__callback()
         self.destroyWindow()

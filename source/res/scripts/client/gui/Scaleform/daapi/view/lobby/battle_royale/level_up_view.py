@@ -3,10 +3,11 @@
 import SoundGroups
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import EpicCurtailingAwardsComposer
 from gui.Scaleform.daapi.view.meta.BattleRoyaleLevelUpViewMeta import BattleRoyaleLevelUpViewMeta
-from gui.Scaleform.daapi.view.lobby.event_progression import after_battle_reward_view_helpers
+from gui.Scaleform.daapi.view.lobby.epicBattle import after_battle_reward_view_helpers
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicViewAwardPacker
+from gui.server_events.bonuses import mergeBonuses, splitBonuses
 from gui.sounds.epic_sound_constants import EPIC_METAGAME_WWISE_SOUND_EVENTS
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
@@ -82,7 +83,8 @@ class BattleRoyaleLevelUpView(BattleRoyaleLevelUpViewMeta):
     def __getBonuses(self, level):
         questsProgressData = self.__ctx['reusableInfo'].personal.getQuestsProgress()
         bonuses = after_battle_reward_view_helpers.getQuestBonuses(questsProgressData, (self.__battleRoyaleController.TOKEN_QUEST_ID,), self.__battleRoyaleController.TOKEN_QUEST_ID + str(level))
-        bonuses = after_battle_reward_view_helpers.formatBonuses(bonuses)
+        bonuses = mergeBonuses(bonuses)
+        bonuses = splitBonuses(bonuses)
         return bonuses
 
     def __close(self):

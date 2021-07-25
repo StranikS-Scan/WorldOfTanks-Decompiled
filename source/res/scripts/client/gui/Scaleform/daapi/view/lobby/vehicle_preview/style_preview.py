@@ -16,7 +16,7 @@ from helpers import dependency
 from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.gui.game_control import IHeroTankController, IEventProgressionController
+from skeletons.gui.game_control import IHeroTankController
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 _SHOW_CLOSE_BTN = False
 _SHOW_BACK_BTN = True
@@ -28,7 +28,6 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     __itemsCache = dependency.descriptor(IItemsCache)
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __heroTanksControl = dependency.descriptor(IHeroTankController)
-    __eventProgression = dependency.descriptor(IEventProgressionController)
     _COMMON_SOUND_SPACE = STYLE_PREVIEW_SOUND_SPACE
 
     def __init__(self, ctx=None):

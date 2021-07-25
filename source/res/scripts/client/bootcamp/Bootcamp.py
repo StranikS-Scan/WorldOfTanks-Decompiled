@@ -43,7 +43,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.shared import IItemsCache
 from gui.impl.gen.view_models.views.bootcamp.bootcamp_lesson_model import BootcampLessonModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
+from gui.impl.gen.view_models.views.bootcamp.bootcamp_reward_item_model import BootcampRewardItemModel
 from frameworks.wulf import Array
 from .BootcampGUI import BootcampGUI
 from .BootcampReplayController import BootcampReplayController
@@ -83,6 +83,15 @@ class BOOTCAMP_LESSON(object):
     GARAGE = 1
 
 
+class BOOTCAMP_SOUND(object):
+    NEW_UI_ELEMENT_SOUND = 'bc_new_ui_element_button'
+
+
+class BOOTCAMP_UI_COMPONENTS(object):
+    START_BATTLE_BUTTON = 'StartBattleButton'
+    WELCOME_START_BATTLE_BUTTON = 'WelcomeStartBattleButton'
+
+
 class Bootcamp(EventSystemEntity):
     settingsCore = dependency.descriptor(ISettingsCore)
     connectionMgr = dependency.descriptor(IConnectionManager)
@@ -114,6 +123,7 @@ class Bootcamp(EventSystemEntity):
         self.__showingWaitingActionWindow = False
         self.__nation = 0
         self.__nationsData = {}
+        self.__promoteNationsData = {}
         self.__checkpoint = ''
         self.__replayController = None
         self.__minimapSize = 0.0
@@ -184,7 +194,10 @@ class Bootcamp(EventSystemEntity):
         return self.__checkpoint
 
     def __getLessonStatus(self, lesson):
-        return [BootcampStatuses.RECEIVED if g_bootcamp.getLessonNum() >= lesson or not self.bootcampController.needAwarding() and lesson > g_bootcamp.getContextIntParameter('lastLessonNum') else BootcampStatuses.WAIT, lesson]
+        return [BootcampStatuses.RECEIVED if g_bootcamp.getLessonNum() >= lesson or not self.bootcampController.needAwarding() and self.isLastLesson(lesson - 1) else BootcampStatuses.WAIT, lesson]
+
+    def isLastLesson(self, lesson):
+        return self.getContextIntParameter('lastLessonNum') == lesson
 
     def fillProgressBar(self, viewModel, tooltipData, iconSize=ICON_SIZE.SMALL):
         bootcampIcons = R.images.gui.maps.icons.bootcamp.rewards
@@ -205,16 +218,16 @@ class Bootcamp(EventSystemEntity):
             lessonModel.setCompleted(lessonNumber <= currentLesson)
             lessonModel.setCurrent(lessonNumber == currentLesson + 1)
             lessonModel.setTooltipId(tooltipIndex)
-            if lessonNumber == g_bootcamp.getContextIntParameter('lastLessonNum'):
+            if self.isLastLesson(lessonNumber):
                 lessonModel.setRewardsTaken(not self.bootcampController.needAwarding())
             status = BootcampStatuses.IN_PROGRESS if lessonNumber == currentLesson else (BootcampStatuses.COMPLETED if lessonNumber < currentLesson else None)
             tooltipData[tooltipIndex] = createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BOOTCAMP_LESSON_PROGRESS, specialArgs=lessonRaw['tooltipArgs'] + [status])
             tooltipIndex += 1
             items = Array()
             for itemRaw in lessonRaw['rewards']:
-                itemModel = RewardItemModel()
+                itemModel = BootcampRewardItemModel()
                 itemModel.setIcon(backport.image(itemRaw['icon']))
-                itemModel.setTooltipId(str(tooltipIndex))
+                itemModel.setTooltipId(tooltipIndex)
                 tooltipData[tooltipIndex] = createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BOOTCAMP_REWARD_PROGRESS, specialArgs=itemRaw['tooltipArgs'])
                 tooltipIndex += 1
                 items.addViewModel(itemModel)
@@ -327,6 +340,7 @@ class Bootcamp(EventSystemEntity):
             self.__bonuses['battle'][previousLesson]['showRewards'] = showRewards
         self.__nation = ctx['nation']
         self.__nationsData = ctx['nationsData']
+        self.__promoteNationsData = ctx['promoteNationsData']
         self.__p['completed'] = ctx['completed']
         self.__p['needAwarding'] = ctx['needAwarding']
         weave(self.__weaver)
@@ -355,6 +369,10 @@ class Bootcamp(EventSystemEntity):
         WWISE.activateRemapping('bootcamp')
         self.sessionProvider.getCtx().setPlayerFullNameFormatter(_BCNameFormatter())
         return
+
+    def isNewbie(self):
+        ctx = self.getContext()
+        return True if ctx['isNewbieSettings'] and not ctx['completed'] else False
 
     def stop(self, reason):
         g_bootcampEvents.onBootcampFinished()
@@ -587,7 +605,7 @@ class Bootcamp(EventSystemEntity):
         return
 
     def previewNation(self, nationIndex):
-        nationData = self.__nationsData[nationIndex]
+        nationData = self.__nationsData[nationIndex] if nationIndex in self.__nationsData else self.__promoteNationsData[nationIndex]
         vehicleFirstID = nationData['vehicle_first']
         vehicle = self.itemsCache.items.getVehicles()[vehicleFirstID]
         g_clientHangarSpaceOverride.hangarSpace.startToUpdateVehicle(vehicle)

@@ -81,7 +81,7 @@ def _readSkinItem(pricesCache, cache, xmlCtx, section, storage):
     rarity = _xml.readInt(xmlCtx, section, 'rarity', 1)
     maxCount = _xml.readInt(xmlCtx, section, 'maxCount')
     soundSetID = section.readString('soundSet', crew_skins_constants.NO_CREW_SKIN_SOUND_SET)
-    historical = _xml.readBool(xmlCtx, section, 'historical', False)
+    historical = _xml.readInt(xmlCtx, section, 'historical') == 0
     realmsStr = section.readString('realms', '')
     realms = realmsStr.split()
     unexpectedRealms = set(realms) - REGIONAL_REALMS

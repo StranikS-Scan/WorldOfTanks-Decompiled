@@ -6,7 +6,6 @@ from collections import namedtuple
 import BigWorld
 import SoundGroups
 import constants
-from gui.battle_control import avatar_getter
 from gui.battle_control.view_components import ViewComponentsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared import battle_hints
@@ -35,8 +34,8 @@ class BattleHintComponent(object):
                 if showTimeLeft <= 0:
                     self.__hideCurrentHint()
                 else:
-                    BigWorld.cancelCallback(self.__hideCallback)
-                    self.__hideCallback = BigWorld.callback(showTimeLeft, self.__hideHintCallback)
+                    self.__hideHintCallback()
+                    self.__hideCallback = BigWorld.callback(showTimeLeft, self.__hideCurrentHint)
         else:
             self.__showHint(hint, data)
 
@@ -53,35 +52,40 @@ class BattleHintComponent(object):
     def _hideHint(self):
         raise NotImplementedError
 
+    def _getSoundNotification(self, hint, data):
+        return hint.soundNotification
+
     def __showHint(self, hint, data):
         if hint.soundFx is not None:
             SoundGroups.g_instance.playSound2D(hint.soundFx)
-        if hint.soundNotification is not None:
-            soundNotifications = avatar_getter.getSoundNotifications()
-            if soundNotifications is not None:
-                soundNotifications.play(hint.soundNotification)
+        sound = self._getSoundNotification(hint, data)
+        if sound is not None:
+            player = BigWorld.player()
+            if hasattr(player, 'soundNotifications'):
+                soundNotifications = player.soundNotifications
+                if soundNotifications is not None:
+                    soundNotifications.play(sound)
         _logger.debug('Show battle hint hintName=%s, priority=%d', hint.name, hint.priority)
         self._showHint(hint.makeVO(data))
         self.__currentHint = hint
         self.__hintStartTime = time.time()
         duration = hint.duration
         if duration is not None:
-            self.__hideCallback = BigWorld.callback(duration, self.__hideHintCallback)
+            self.__hideHintCallback()
+            self.__hideCallback = BigWorld.callback(duration, self.__hideCurrentHint)
         return
 
     def __hideCurrentHint(self):
-        hideCallback = self.__hideCallback
-        if hideCallback:
-            BigWorld.cancelCallback(hideCallback)
-            self.__hideCallback = None
+        self.__hideHintCallback()
         self._hideHint()
         self.__currentHint = None
         self.__showDelayedHint()
         return
 
     def __hideHintCallback(self):
-        self.__hideCallback = None
-        self.__hideCurrentHint()
+        if self.__hideCallback is not None:
+            BigWorld.cancelCallback(self.__hideCallback)
+            self.__hideCallback = None
         return
 
     def __showDelayedHint(self):

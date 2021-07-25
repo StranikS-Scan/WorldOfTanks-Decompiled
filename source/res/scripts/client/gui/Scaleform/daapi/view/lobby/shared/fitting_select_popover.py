@@ -349,7 +349,7 @@ class _HangarLogicProvider(PopoverLogicProvider):
     def setModule(self, newId, oldId, isRemove):
         module = self._itemsCache.items.getItemByCD(int(newId))
         if module.isUnlocked:
-            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_ITEM, newId, self._vehicle.intCD)
+            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_AND_SELL_ITEM, newId, self._vehicle.intCD)
 
     def _buildModuleData(self, vehicleModule, isInstalledInSlot, stats):
         itemPrice = vehicleModule.buyPrices.itemPrice

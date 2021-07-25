@@ -17,7 +17,7 @@ _AirDrop = namedtuple('_AirDrop', ('model', 'dropAnimation'))
 _LootEffect = namedtuple('_LootEffect', ('path_fwd', 'path'))
 _LootModel = namedtuple('_LootModel', ('name', 'border'))
 _Loot = namedtuple('_Loot', ('model', 'effect', 'pickupEffect'))
-_MinesEffects = namedtuple('_MinesEffects', ('plantEffect', 'idleEffect', 'destroyEffect'))
+_MinesEffects = namedtuple('_MinesEffects', ('plantEffect', 'idleEffect', 'destroyEffect', 'blowUpEffectName'))
 _BerserkerEffects = namedtuple('_BerserkerEffects', ('turretEffect', 'hullEffect', 'transformPath'))
 MIN_OVER_TERRAIN_HEIGHT = 0
 MIN_UPDATE_INTERVAL = 0
@@ -136,6 +136,10 @@ class _MinesIdleEffect(_TeamRelatedEffect):
     _SECTION_NAME = 'minesIdleEffect'
 
 
+class _EpicMinesIdleEffect(_TeamRelatedEffect):
+    _SECTION_NAME = 'epicMinesIdleEffect'
+
+
 class _MinesDestroyEffect(_SimpleEffect):
     _SECTION_NAME = 'minesDestroyEffect'
 
@@ -203,6 +207,22 @@ class _CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
         pass
 
 
+class _EpicBattleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
+
+    def __init__(self):
+        super(_EpicBattleDynObjects, self).__init__()
+        self.__minesEffects = None
+        return
+
+    def init(self, dataSection):
+        if not self._initialized:
+            self.__minesEffects = _MinesEffects(plantEffect=_MinesPlantEffect(dataSection), idleEffect=_EpicMinesIdleEffect(dataSection), destroyEffect=_MinesDestroyEffect(dataSection), blowUpEffectName='epicMinesBlowUpEffect')
+            super(_EpicBattleDynObjects, self).init(dataSection)
+
+    def getMinesEffect(self):
+        return self.__minesEffects
+
+
 class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
 
     def __init__(self):
@@ -229,7 +249,7 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
             self.__repairPoint = _BattleRoyaleRepairPointEffect(dataSection)
             self.__botDeliveryEffect = _BattleRoyaleBotDeliveryEffect(dataSection)
             self.__botDeliveryMarker = _BattleRoyaleBotDeliveryMarkerArea(dataSection)
-            self.__minesEffects = _MinesEffects(plantEffect=_MinesPlantEffect(dataSection), idleEffect=_MinesIdleEffect(dataSection), destroyEffect=_MinesDestroyEffect(dataSection))
+            self.__minesEffects = _MinesEffects(plantEffect=_MinesPlantEffect(dataSection), idleEffect=_MinesIdleEffect(dataSection), destroyEffect=_MinesDestroyEffect(dataSection), blowUpEffectName='minesBlowUpEffect')
             self.__berserkerEffects = _BerserkerEffects(turretEffect=_BerserkerTurretEffect(dataSection), hullEffect=_BerserkerHullEffect(dataSection), transformPath=dataSection.readString('berserkerTransformPath'))
             prerequisites = set()
             self.__dropPlane = _createDropPlane(dataSection['dropPlane'], prerequisites)
@@ -292,8 +312,8 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
 
 
 _CONF_STORAGES = {ARENA_GUI_TYPE.BATTLE_ROYALE: _BattleRoyaleDynObjects,
- ARENA_GUI_TYPE.EPIC_BATTLE: _CommonForBattleRoyaleAndEpicBattleDynObjects,
- ARENA_GUI_TYPE.EPIC_TRAINING: _CommonForBattleRoyaleAndEpicBattleDynObjects}
+ ARENA_GUI_TYPE.EPIC_BATTLE: _EpicBattleDynObjects,
+ ARENA_GUI_TYPE.EPIC_TRAINING: _EpicBattleDynObjects}
 
 class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
 

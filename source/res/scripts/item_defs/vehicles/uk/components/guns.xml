@@ -102,6 +102,7 @@
     <_120mm_QF_gun>	108	</_120mm_QF_gun>
     <_105mm_AT_Gun_L7A1>	109	</_105mm_AT_Gun_L7A1>
     <_120mm_Gun_LV>	110	</_120mm_Gun_LV>
+    <_120mm_Gun_L1A1_FL>	501	</_120mm_Gun_L1A1_FL>
     <_20pdr_Gun_Type_A_IGR>	60001	</_20pdr_Gun_Type_A_IGR>
     <_20pdr_Gun_Type_B_IGR>	60002	</_20pdr_Gun_Type_B_IGR>
     <_75mm_Gun_Vickers_HV_IGR>	60003	</_75mm_Gun_Vickers_HV_IGR>
@@ -114,6 +115,7 @@
     <_20pdr_Gun_Type_B_SH>	10003	</_20pdr_Gun_Type_B_SH>
     <_105mm_Gun_L7_HEAT_SH>	10004	</_105mm_Gun_L7_HEAT_SH>
     <_5_5inch_AT_Gun_SH>	10005	</_5_5inch_AT_Gun_SH>
+    <OQF_17pdr_Gun_Mk_VII_MapsTraining_Dummy_MT_2>	8	</OQF_17pdr_Gun_Mk_VII_MapsTraining_Dummy_MT_2>
   </ids>
   <shared>
     <_12.7mm_MG_HB_M2>
@@ -4794,6 +4796,64 @@
         </_120mm_HE_L1A1>
       </shots>
     </_120mm_Gun_L1A1>
+    <_120mm_Gun_L1A1_FL>
+      <userString>	#gb_vehicles:_120mm_Gun_L1A1	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	300000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	9.97142857142860	</reloadTime>
+      <maxAmmo>	35	</maxAmmo>
+      <aimingTime>	2.62857142857143	</aimingTime>
+      <weight>	2850	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_AP-T_L1A1>
+          <defaultPortion>	0.60	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	259 239	</piercingPower>
+        </_120mm_AP-T_L1A1>
+        <_120mm_APDS_L1A1>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1334	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	326 298	</piercingPower>
+        </_120mm_APDS_L1A1>
+        <_120mm_HE_L1A1>
+          <defaultPortion>	0.40	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	120 120	</piercingPower>
+        </_120mm_HE_L1A1>
+      </shots>
+    </_120mm_Gun_L1A1_FL>
     <_120mm_Gun_L1A1_A>
       <userString>	#gb_vehicles:_120mm_Gun_L1A1_A	</userString>
       <tags></tags>
@@ -6485,5 +6545,49 @@
         </_5_5inch_APC_Mk_5_SH>
       </shots>
     </_5_5inch_AT_Gun_SH>
+    <OQF_17pdr_Gun_Mk_VII_MapsTraining_Dummy_MT_2>
+      <userString>	#gb_vehicles:OQF_17pdr_Gun_Mk_VII	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	70000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40.25	</rotationSpeed>
+      <reloadTime>	3.25714285714286	</reloadTime>
+      <maxAmmo>	70	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	826	</weight>
+      <maxHealth>	144	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_17pdr_AP_Mk3T_MapsTraining_Dummy_MT_2>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	884	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	140 130	</piercingPower>
+        </_17pdr_AP_Mk3T_MapsTraining_Dummy_MT_2>
+      </shots>
+      <notInShop>	True	</notInShop>
+    </OQF_17pdr_Gun_Mk_VII_MapsTraining_Dummy_MT_2>
   </shared>
 </guns.xml>

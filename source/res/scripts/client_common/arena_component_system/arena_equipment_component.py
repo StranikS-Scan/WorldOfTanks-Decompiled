@@ -28,7 +28,7 @@ class EffectData(object):
     TimerTuple = namedtuple('TimerTuple', ('period', 'callbackID'))
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self, vehicleID, startTime, endTime, visualSettings, inactivationStartTime=None, inactivationEndTime=None, primary=True, radius=None, senderKey=None, equipmentID=None):
+    def __init__(self, vehicleID, startTime, endTime, visualSettings, inactivationStartTime=None, inactivationEndTime=None, primary=True, radius=None, senderKey=None, equipmentID=None, inactivationSource=False):
         self.vehicleID = vehicleID
         self.startTime = startTime
         self.endTime = endTime
@@ -39,6 +39,7 @@ class EffectData(object):
         self.primary = primary
         self.senderKey = senderKey
         self.equipmentID = equipmentID
+        self.inactivationSource = inactivationSource
         self.__timerTuple = None
         return
 
@@ -194,7 +195,7 @@ class ArenaEquipmentComponent(ClientArenaComponent):
                     ctrl.invalidateBuffEffect(effect.feedbackEventID, vehicleId, noneArgs._asdict())
         return
 
-    def __updateExposedToEffect(self, vehicleID, senderKey, startTime, endTime, inactivationStartTime, inactivationEndTime, primary, equipmentID, effect, isInfluenceZone):
+    def __updateExposedToEffect(self, vehicleID, senderKey, startTime, endTime, inactivationStartTime, inactivationEndTime, primary, equipmentID, effect, isInfluenceZone, inactivationSource):
         exposedVehicleData = effect.exposedVehicles.get(vehicleID, None)
         if startTime is None:
             if exposedVehicleData is not None:
@@ -209,7 +210,7 @@ class ArenaEquipmentComponent(ClientArenaComponent):
             return
         else:
             if exposedVehicleData is None:
-                effect.exposedVehicles[vehicleID] = exposedVehicleData = EffectData(vehicleID=vehicleID, startTime=startTime, endTime=endTime, visualSettings=effect.visualSettings, inactivationStartTime=inactivationStartTime, inactivationEndTime=inactivationEndTime, primary=primary, senderKey=senderKey, equipmentID=equipmentID)
+                effect.exposedVehicles[vehicleID] = exposedVehicleData = EffectData(vehicleID=vehicleID, startTime=startTime, endTime=endTime, visualSettings=effect.visualSettings, inactivationStartTime=inactivationStartTime, inactivationEndTime=inactivationEndTime, primary=primary, senderKey=senderKey, equipmentID=equipmentID, inactivationSource=inactivationSource)
             else:
                 exposedVehicleData.startTime = startTime
                 exposedVehicleData.endTime = endTime
@@ -217,6 +218,7 @@ class ArenaEquipmentComponent(ClientArenaComponent):
                 exposedVehicleData.inactivationEndTime = inactivationEndTime
                 exposedVehicleData.senderKey = senderKey
                 exposedVehicleData.equipmentID = equipmentID
+                exposedVehicleData.inactivationSource = inactivationSource
             self.__checkAffectComponent(vehicleID, RepairAffectComponent, isInfluenceZone)
             self.__restartEffectData(exposedVehicleData, effect, isSource=False)
             return
@@ -270,16 +272,16 @@ class ArenaEquipmentComponent(ClientArenaComponent):
     def removeRepairPoint(self, vehicleID):
         self.__removeEffect(vehicleID, self.__repairPointEffect)
 
-    def updateInspired(self, vehicleID, startTime, endTime, inactivationStartTime, inactivationEndTime, primary, equipmentID):
-        self.__updateExposedToEffect(vehicleID, None, startTime, endTime, inactivationStartTime, inactivationEndTime, primary, equipmentID, self.__inspiringEffect, False)
+    def updateInspired(self, vehicleID, startTime, endTime, inactivationStartTime, inactivationEndTime, primary, equipmentID, inactivationSource):
+        self.__updateExposedToEffect(vehicleID, None, startTime, endTime, inactivationStartTime, inactivationEndTime, primary, equipmentID, self.__inspiringEffect, False, inactivationSource)
         return
 
     def updateHealing(self, vehicleID, senderKey, startTime, endTime, inactivationStartTime, inactivationEndTime):
-        self.__updateExposedToEffect(vehicleID, senderKey, startTime, endTime, inactivationStartTime, inactivationEndTime, True, None, self.__healingEffect, False)
+        self.__updateExposedToEffect(vehicleID, senderKey, startTime, endTime, inactivationStartTime, inactivationEndTime, True, None, self.__healingEffect, False, False)
         return
 
     def updateHealOverTime(self, vehicleID, senderKey, startTime, endTime, inactivationStartTime, inactivationEndTime, isInfluenceZone):
-        self.__updateExposedToEffect(vehicleID, senderKey, startTime, endTime, inactivationStartTime, inactivationEndTime, True, None, self.__repairPointEffect, isInfluenceZone)
+        self.__updateExposedToEffect(vehicleID, senderKey, startTime, endTime, inactivationStartTime, inactivationEndTime, True, None, self.__repairPointEffect, isInfluenceZone, False)
         return
 
     def updateDebuff(self, vehicleID, isInfluenceZone):
@@ -296,11 +298,13 @@ class ArenaEquipmentComponent(ClientArenaComponent):
         vehicleID = data.vehicleID
         isAttachedVehicle = attachedVehicle and vehicleID == attachedVehicle.id
         isSourceVehicle = effect.providingVehicles.get(vehicleID, None) is not None
+        if effect.name == 'inspire':
+            isSourceVehicle = data.inactivationSource
         if period == EffectData.EFFECT_PERIOD.EXPOSED:
             args = effect.args(isSourceVehicle, False, data.endTime, data.endTime - BigWorld.serverTime(), data.primary, data.senderKey, data.equipmentID)
             data.setNextCallback(partial(self.__evaluateExposedData, effect=effect))
         elif period == EffectData.EFFECT_PERIOD.INACTIVATION:
-            args = effect.args(False, True, data.inactivationEndTime, data.inactivationEndTime - data.inactivationStartTime, data.primary, data.senderKey, data.equipmentID)
+            args = effect.args(isSourceVehicle, True, data.inactivationEndTime, data.inactivationEndTime - data.inactivationStartTime, data.primary, data.senderKey, data.equipmentID)
             data.setNextCallback(partial(self.__evaluateExposedData, effect=effect))
         else:
             args = effect.args(None, None, None, None, None, None, None)

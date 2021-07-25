@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/wgm_currency.py
 from debug_utils import LOG_ERROR
-from gui.impl import backport
-from gui.shared.money import Currency
-from gui.shared.tooltips.common import DynamicBlocksTooltipData
-from gui.shared.utils.requesters import wgm_balance_info_requester
-from gui.shared.tooltips import formatters
-from gui.shared.formatters import text_styles
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
+from gui.shared.formatters import text_styles
+from gui.shared.money import Currency
+from gui.shared.tooltips import formatters
+from gui.shared.tooltips.common import DynamicBlocksTooltipData
+from gui.shared.utils.requesters import wgm_balance_info_requester
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 _WAITING_FOR_DATA = ''
@@ -25,6 +25,7 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
         self.__requester = wgm_balance_info_requester.WGMBalanceInfoRequester()
         self.__data = None
         self._btnType = None
+        self._hideActionBlock = None
         return
 
     def getWGMCurrencyValue(self, key):
@@ -37,7 +38,7 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
 
     def updateData(self):
         if self.isVisible() and self.app is not None:
-            self.app.updateTooltip(self.buildToolTip(self._btnType), self.getType())
+            self.app.updateTooltip(self.buildToolTip(btnType=self._btnType, hideActionBlock=self._hideActionBlock), self.getType())
         return
 
     def stopUpdates(self):
@@ -53,14 +54,15 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
     def isWGMAvailable(cls):
         return cls.itemsCache.items.stats.mayConsumeWalletResources
 
-    def _packBlocks(self, btnType=None, *args, **kwargs):
+    def _packBlocks(self, btnType=None, hideActionBlock=False, *args, **kwargs):
         tooltipBlocks = super(WGMCurrencyTooltip, self)._packBlocks(*args, **kwargs)
         self._btnType = btnType
+        self._hideActionBlock = hideActionBlock
         if self._btnType is None:
             LOG_ERROR('WGMGoldCurrencyTooltip empty btnType!')
             return tooltipBlocks
         else:
-            return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=self.__getValueBlocks(), alternativeData=self._getAlternativeData())
+            return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=self.__getValueBlocks(), alternativeData=self._getAlternativeData(), hideActionBlock=hideActionBlock)
 
     def _getAlternativeData(self):
         return None

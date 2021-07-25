@@ -12,8 +12,10 @@ from constants import DUAL_GUN
 from constants import VEHICLE_MISC_STATUS
 from debug_utils import LOG_WARNING
 from dualgun_sounds import DualGunSounds
+from items.utils import getFirstReloadTime
 from gui.Scaleform.daapi.view.meta.DualGunPanelMeta import DualGunPanelMeta
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, FEEDBACK_EVENT_ID, DestroyTimerViewState
+from gui.battle_control.controllers.prebattle_setups_ctrl import IPrebattleSetupsListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from helpers import dependency
@@ -109,7 +111,7 @@ class StunAffectPolicy(ReloadingAffectPolicy):
         self._updateFactors(stunInfo.duration > 0)
 
 
-class DualGunComponent(DualGunPanelMeta):
+class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -133,6 +135,12 @@ class DualGunComponent(DualGunPanelMeta):
         self.__currentTotalTimeTimer = 0
         self.__soundManager = DualGunSounds()
         return
+
+    def updateVehicleParams(self, vehicle, factors):
+        leftTime = getFirstReloadTime(vehicle.descriptor, factors)
+        rightTime = getFirstReloadTime(vehicle.descriptor, factors, ignoreRespawn=True)
+        self.__currentTotalTimeTimer = (leftTime + rightTime) * DualGunConstants.CHARGE_TIME_MULTIPLIER
+        self.__updateTimeUntilNextDoubleShot(increaseByDebuff=False)
 
     def _populate(self):
         super(DualGunComponent, self)._populate()
@@ -276,8 +284,8 @@ class DualGunComponent(DualGunPanelMeta):
             return GunStatesUI.READY if state == DUAL_GUN.GUN_STATE.READY else None
 
     def __updateGunState(self, gunID, state, serverCooldownData):
-        leftTime = int(serverCooldownData[gunID][DualGunConstants.LEFT_TIME] * DualGunConstants.TIME_MULTIPLIER)
-        baseTime = int(serverCooldownData[gunID][DualGunConstants.BASE_TIME] * DualGunConstants.TIME_MULTIPLIER)
+        leftTime = int(serverCooldownData[gunID].leftTime * DualGunConstants.TIME_MULTIPLIER)
+        baseTime = int(serverCooldownData[gunID].baseTime * DualGunConstants.TIME_MULTIPLIER)
         self.as_setGunStateS(gunID, state, leftTime, baseTime)
 
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
@@ -301,8 +309,8 @@ class DualGunComponent(DualGunPanelMeta):
         rightGunState = self._convertServerStateToUI(states[DUAL_GUN.ACTIVE_GUN.RIGHT])
         self.__updateGunState(DUAL_GUN.COOLDOWNS.LEFT, leftGunState, cooldownTimes)
         self.__updateGunState(DUAL_GUN.COOLDOWNS.RIGHT, rightGunState, cooldownTimes)
-        leftTime = cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH][DualGunConstants.LEFT_TIME]
-        baseTime = cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH][DualGunConstants.BASE_TIME]
+        leftTime = cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH].leftTime
+        baseTime = cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH].baseTime
         activeGunReloadingTimeLeft = max(leftTime, cooldownTimes[activeGun].leftTime)
         switchLeftTime = int(activeGunReloadingTimeLeft * DualGunConstants.TIME_MULTIPLIER)
         switchBaseTime = int(baseTime * DualGunConstants.TIME_MULTIPLIER)

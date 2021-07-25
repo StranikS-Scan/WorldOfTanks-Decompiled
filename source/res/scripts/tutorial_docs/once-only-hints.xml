@@ -296,6 +296,41 @@
         <global-active>	_DogTagsEnabled	</global-active>
       </condition>
     </hint>
+    <hint>	HangarManualHint	  <item-id>	LobbyMenuBnt	</item-id>
+      <text>	_(#manual:manual_update/hint)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <condition-and>
+          <condition-hint-showed>
+            <hint-id>	DogTagHangarHint	</hint-id>
+            <value>	True	</value>
+          </condition-hint-showed>
+        </condition-and>
+      </condition>
+      <checked-ui-state>
+        <simple-state>
+          <state>	enabled	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+    </hint>
+    <hint>	LobbyMenuManualHint	  <item-id>	LobbyMenuManualItem	</item-id>
+      <text></text>
+      <condition>
+        <global-active>	_LobbyMenuItemManual	</global-active>
+      </condition>
+    </hint>
+    <hint>	LobbyMenuBootcampHint	  <item-id>	LobbyMenuBootcampItem	</item-id>
+      <text></text>
+      <condition>
+        <global-active>	_LobbyMenuItemBootcamp	</global-active>
+      </condition>
+    </hint>
     <hint>	DogTagProfileHint	  <item-id>	DogTagsWidget	</item-id>
       <text>	#dogtags:tutorial/playerProfile/dogtag	</text>
       <arrow>
@@ -527,10 +562,58 @@
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
+    <hint>	AmmunitionPanelBattleAbilitiesHint	  <item-id>	AmmunitionPanelBattleAbilities	</item-id>
+      <text>	_(#tank_setup:hints/ammunitionPanel/reserves/changed)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
     <hint>	FilterHintZoneHint	  <item-id>	FilterTutorialHintZone	</item-id>
       <text>	_(#tank_setup:hints/filters/specialization)	</text>
       <arrow>
         <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	FilterHintZoneHint	  <item-id>	FilterTutorialHintZone	</item-id>
+      <text>	_(#tank_setup:hints/filters/specialization)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	ShowAbilitiesButtonHint	  <item-id>	ShowAbilitiesButton	</item-id>
+      <text>	_(#tank_setup:hints/ammunition/reserves/control)	</text>
+      <arrow>
+        <direction>	T	</direction>
         <loop>	True	</loop>
       </arrow>
       <checked-ui-state>
@@ -555,6 +638,197 @@
     </hint>
     <hint>	ModeSelectorWidgetsBtnHint	  <item-id>	ModeSelectorWidgetsBtn	</item-id>
       <text>	_(#mode_selector:hint/showProgression)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	VehiclePreviewPostProgressionButtonHint	  <item-id>	VehiclePreviewPostProgressionButton	</item-id>
+      <text>	_(#veh_post_progression:hint/vehiclePreview)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_VehPostProgressionEnabled	</global-active>
+        <condition-and>
+          <condition-hint-showed>
+            <hint-id>	HeroVehiclePreviewPostProgressionButtonHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+          <condition-hint-showed>
+            <hint-id>	PersonalTradeInVehiclePreviewPostProgressionButtonHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+          <condition-hint-showed>
+            <hint-id>	TradeInVehiclePreviewPostProgressionButtonHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+        </condition-and>
+      </condition>
+    </hint>
+    <hint>	HeroVehiclePreviewPostProgressionButtonHint	  <item-id>	HeroVehiclePreviewPostProgressionButton	</item-id>
+      <text>	_(#veh_post_progression:hint/vehiclePreview)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_VehPostProgressionEnabled	</global-active>
+        <condition-and>
+          <condition-hint-showed>
+            <hint-id>	VehiclePreviewPostProgressionButtonHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+          <condition-hint-showed>
+            <hint-id>	PersonalTradeInVehiclePreviewPostProgressionButtonHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+          <condition-hint-showed>
+            <hint-id>	TradeInVehiclePreviewPostProgressionButtonHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+        </condition-and>
+      </condition>
+    </hint>
+    <hint>	TradeInVehiclePreviewPostProgressionButtonHint	  <item-id>	TradeInVehiclePreviewPostProgressionButton	</item-id>
+      <text>	_(#veh_post_progression:hint/vehiclePreview)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_VehPostProgressionEnabled	</global-active>
+        <condition-and>
+          <condition-hint-showed>
+            <hint-id>	VehiclePreviewPostProgressionButtonHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+          <condition-hint-showed>
+            <hint-id>	HeroVehiclePreviewPostProgressionButtonHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+          <condition-hint-showed>
+            <hint-id>	PersonalTradeInVehiclePreviewPostProgressionButtonHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+        </condition-and>
+      </condition>
+    </hint>
+    <hint>	PersonalTradeInVehiclePreviewPostProgressionButtonHint	  <item-id>	PersonalTradeInVehiclePreviewPostProgressionButton	</item-id>
+      <text>	_(#veh_post_progression:hint/vehiclePreview)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_VehPostProgressionEnabled	</global-active>
+        <condition-and>
+          <condition-hint-showed>
+            <hint-id>	VehiclePreviewPostProgressionButtonHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+          <condition-hint-showed>
+            <hint-id>	HeroVehiclePreviewPostProgressionButtonHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+          <condition-hint-showed>
+            <hint-id>	TradeInVehiclePreviewPostProgressionButtonHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+        </condition-and>
+      </condition>
+    </hint>
+    <hint>	VehiclePostProgressionEntryPointHint	  <item-id>	VehiclePostProgressionEntryPoint	</item-id>
+      <text>	_(#veh_post_progression:hint/entryPoint)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_VehPostProgressionPurchasable	</global-active>
+      </condition>
+    </hint>
+    <hint>	SwitchEquipmentAuxiliaryLoadoutHint	  <item-id>	SwitchEquipmentAuxiliaryLoadout	</item-id>
+      <text>	_(#veh_post_progression:hint/switchEquipment/auxiliaryLoadout)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <hide-immediately>	True	</hide-immediately>
+    </hint>
+    <hint>	SwitchEquipmentEssentialsLoadoutHint	  <item-id>	SwitchEquipmentEssentialsLoadout	</item-id>
+      <text>	_(#veh_post_progression:hint/switchEquipment/essentialsLoadout)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <hide-immediately>	True	</hide-immediately>
+    </hint>
+    <hint>	CompareModificationsPanelHint	  <item-id>	CompareModificationsPanel	</item-id>
+      <text>	_(#veh_post_progression:hint/CompareModificationsPanel)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	CompareSpecializationButtonHint	  <item-id>	CompareSpecializationButton	</item-id>
+      <text>	_(#veh_post_progression:hint/CompareSpecializationButton)	</text>
       <arrow>
         <direction>	R	</direction>
         <loop>	True	</loop>

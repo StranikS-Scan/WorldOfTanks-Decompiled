@@ -17,11 +17,14 @@ class GoodieTarget(object):
     def limit(self):
         return self._limit
 
-    def __eq__(self, other):
-        return isinstance(other, self.__class__) and self._targetID == other._targetID
-
     def __hash__(self):
         return hash(self._targetID)
+
+    def __eq__(self, other):
+        return self.targetID == other.targetID and self.limit == other.limit if isinstance(other, self.__class__) else False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
 
 class GoodieTargetAvatar(GoodieTarget):

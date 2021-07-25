@@ -311,6 +311,9 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isMapbox(self):
         return self._guiType == _GUI_TYPE.MAPBOX
 
+    def isMapsTraining(self):
+        return self._guiType == _GUI_TYPE.MAPS_TRAINING
+
     def hasLabel(self):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS
 
@@ -378,6 +381,9 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
 
     def hasBattleNotifier(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.BATTLE_NOTIFIER)
+
+    def hasSwitchSetups(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.SWITCH_SETUPS)
 
 
 class _ArenaExtraDataVisitor(IArenaVisitor):

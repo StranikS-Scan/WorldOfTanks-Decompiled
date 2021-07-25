@@ -374,8 +374,8 @@ class OptDeviceBonusesDescriptionBuilder(object):
         value = self.__kpiFormat(kpi, kpi.value)
         specValue = self.__kpiFormat(kpi, kpi.specValue) if kpi.specValue else None
         generalValue = ' / '.join((value, specValue)) if specValue is not None else value
-        bonus = R.strings.tank_setup.kpi.bonus.dyn(kpi.name)
-        description = ' '.join((generalValue, backport.text(bonus()) if bonus else ''))
+        bonus = kpi.getDescriptionR()
+        description = ' '.join((generalValue, backport.text(bonus) if bonus else ''))
         return description.format(**self.KPI_HTML_TEMPLATE.source)
 
     def __kpiFormat(self, kpi, value):
@@ -387,4 +387,4 @@ def getItemExtraParams(item):
 
 
 def getCategoriesIcons(device):
-    return [ backport.image(R.images.gui.maps.icons.tanksetup.specialization.dyn('medium_{}_off'.format(category))()) for category in SlotCategories.ORDER if category in device.descriptor.categories ]
+    return [ backport.image(R.images.gui.maps.icons.specialization.dyn('medium_{}_off'.format(category))()) for category in SlotCategories.ORDER if category in device.descriptor.categories ]

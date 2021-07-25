@@ -57,6 +57,8 @@ def createPlugins():
         result['prebattleRoleHint'] = RoleHelpPlugin
     if CommanderCameraHintPlugin.isSuitable():
         result['commanderCameraHints'] = CommanderCameraHintPlugin
+    if MapsTrainingHelpHintPlugin.isSuitable():
+        result['mapsTrainingHelpHint'] = MapsTrainingHelpHintPlugin
     return result
 
 
@@ -593,7 +595,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
     @classmethod
     def isSuitable(cls):
         guiType = cls.sessionProvider.arenaVisitor.getArenaGuiType()
-        return guiType != ARENA_GUI_TYPE.RANKED and guiType != ARENA_GUI_TYPE.BATTLE_ROYALE
+        return guiType != ARENA_GUI_TYPE.RANKED and guiType != ARENA_GUI_TYPE.BATTLE_ROYALE and guiType != ARENA_GUI_TYPE.MAPS_TRAINING
 
     def start(self):
         prbSettings = dict(AccountSettings.getSettings(PRE_BATTLE_HINT_SECTION))
@@ -669,6 +671,9 @@ class PreBattleHintPlugin(HintPanelPlugin):
                     hintText = backport.text(R.strings.ingame_gui.battleProgress.hint.description())
                 return HintData(keyName, pressText, hintText, 0, 0, HintPriority.QUESTS, False)
 
+    def _canDisplayCustomHelpHint(self):
+        return False
+
     def __onVehicleControlling(self, vehicle):
         if not self.isActive():
             return
@@ -682,7 +687,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
                 self.__updateHintCounterOnStart(self.__vehicleId, vehicle, self.__helpHintSettings)
             if self.__needSPGHelpHintShow():
                 self.__updateHintCounterOnStart(self.__getSPGHintSection(), vehicle, self.__spgHelpHintSettings)
-            if self.__canDisplayVehicleHelpHint(vTypeDesc) or self.__canDisplaySPGHelpHint():
+            if self.__canDisplayVehicleHelpHint(vTypeDesc) or self.__canDisplaySPGHelpHint() or self._canDisplayCustomHelpHint():
                 self.__displayHint(CommandMapping.CMD_SHOW_HELP)
                 return
             if self.__canDisplayBattleCommunicationHint():
@@ -926,7 +931,7 @@ class CommanderCameraHintPlugin(HintPanelPlugin, CallbackDelayer):
 
     @classmethod
     def isSuitable(cls):
-        return True
+        return cls.sessionProvider.arenaVisitor.getArenaGuiType() != ARENA_GUI_TYPE.MAPS_TRAINING
 
     def start(self):
         settings = dict(AccountSettings.getSettings(COMMANDER_CAM_HINT_SECTION))
@@ -967,3 +972,16 @@ class CommanderCameraHintPlugin(HintPanelPlugin, CallbackDelayer):
             self.__displayHint(self.__hintData)
         else:
             self.__hideHint()
+
+
+class MapsTrainingHelpHintPlugin(PreBattleHintPlugin):
+
+    @classmethod
+    def isSuitable(cls):
+        return cls.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.MAPS_TRAINING
+
+    def _getHint(self):
+        return HintData(getReadableKey(CommandMapping.CMD_SHOW_HELP), backport.text(R.strings.maps_training.helpScreen.hint.press()), backport.text(R.strings.maps_training.helpScreen.hint.description()), 0, 0, HintPriority.HELP, False)
+
+    def _canDisplayCustomHelpHint(self):
+        return True

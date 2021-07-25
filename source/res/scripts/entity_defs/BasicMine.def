@@ -1,0 +1,22 @@
+<BasicMine.def>
+  <AppealRadius>	3000	</AppealRadius>
+  <Properties>
+    <equipmentID>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentID>
+    <ownerVehicleID>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </ownerVehicleID>
+    <isDetonated>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isDetonated>
+    <isMarkerEnabled>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isMarkerEnabled>
+  </Properties>
+  <shouldBackup>	false	</shouldBackup>
+</BasicMine.def>

@@ -389,6 +389,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         return {'purchasedEnabled': self.isFilterApplied(FilterTypes.INVENTORY),
          'historicEnabled': self.isFilterApplied(FilterTypes.HISTORIC, FilterAliases.HISTORIC),
          'nonHistoricEnabled': self.isFilterApplied(FilterTypes.HISTORIC, FilterAliases.NON_HISTORIC),
+         'fantasticalEnabled': self.isFilterApplied(FilterTypes.HISTORIC, FilterAliases.FANTASTICAL),
          'appliedEnabled': self.isFilterApplied(FilterTypes.APPLIED),
          'groups': groups,
          'selectedGroup': selectedGroup,
@@ -437,7 +438,8 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
 
     def __initFilters(self):
         self.__carouselFilters[FilterTypes.HISTORIC] = DisjunctionCarouselFilter(criteria={FilterAliases.HISTORIC: REQ_CRITERIA.CUSTOMIZATION.HISTORICAL,
-         FilterAliases.NON_HISTORIC: ~REQ_CRITERIA.CUSTOMIZATION.HISTORICAL})
+         FilterAliases.NON_HISTORIC: REQ_CRITERIA.CUSTOMIZATION.NON_HISTORICAL,
+         FilterAliases.FANTASTICAL: REQ_CRITERIA.CUSTOMIZATION.FANTASTICAL})
         self.__carouselFilters[FilterTypes.INVENTORY] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: self.__ctx.mode.getItemInventoryCount(item) > 0))
         self.__carouselFilters[FilterTypes.APPLIED] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: item.intCD in self.__ctx.mode.getAppliedItems(isOriginal=False)))
         self.__carouselFilters[FilterTypes.USED_UP] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: not isItemUsedUp(item)), requirements=lambda : self.__ctx.isItemsOnAnotherVeh, inverse=True)
@@ -516,6 +518,7 @@ class FilterTypes(object):
 class FilterAliases(object):
     HISTORIC = 'historic'
     NON_HISTORIC = 'nonHistoric'
+    FANTASTICAL = 'fantastical'
     EDITABLE_STYLES = 'editableStyles'
     NON_EDITABLE_STYLES = 'nonEditableStyles'
 

@@ -10,7 +10,7 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_top_modules import TopMo
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.game_control.veh_comparison_basket import PARAMS_AFFECTED_TANKMEN_SKILLS
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import Tankman
+from gui.shared.gui_items.Tankman import Tankman, BROTHERHOOD_SKILL_NAME
 from items.components.c11n_components import SeasonType
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.customization import ICustomizationService
@@ -27,9 +27,13 @@ OPTIONAL_DEVICE_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE]
 EQUIPMENT_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT]
 BATTLE_BOOSTER_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER]
 
-def createTankman(nationID, vehicleTypeID, role, roleLevel, skills):
+def createTankman(nationID, vehicleTypeID, role, roleLevel, skills, vehicle, vehicleSlotIDx):
     descr = tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, roleLevel, skills)
-    return Tankman(descr)
+    newTankmen = Tankman(descr, vehicle=vehicle, vehicleSlotIdx=vehicleSlotIDx)
+    if BROTHERHOOD_SKILL_NAME in skills:
+        newTankmen.setBrotherhoodActivity(True)
+        newTankmen.rebuildSkills()
+    return newTankmen
 
 
 def sortSkills(skillsSet):
@@ -108,9 +112,11 @@ def isCamouflageSet(vehicle):
     return bool(vehicle.getBonusCamo())
 
 
-@dependency.replace_none_kwargs(factory=IGuiItemsFactory)
-def applyCamouflage(vehicle, select, factory=None):
+@dependency.replace_none_kwargs(factory=IGuiItemsFactory, itemsCache=IItemsCache)
+def applyCamouflage(vehicle, select, factory=None, itemsCache=None):
     if select:
+        if not vehicle.outfits:
+            vehicle.createAppliedOutfits(itemsCache.items)
         camo = getSuitableCamouflage(vehicle)
         if camo:
             season = first(camo.seasons)
@@ -123,10 +129,16 @@ def applyCamouflage(vehicle, select, factory=None):
 
 
 def removeVehicleCamouflages(vehicle):
-    for season in SeasonType.SEASONS:
-        outfit = vehicle.getOutfit(season)
-        if outfit:
-            outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).clear()
+    camo = getSuitableCamouflage(vehicle)
+    if camo is None:
+        return
+    else:
+        for season in SeasonType.SEASONS:
+            outfit = vehicle.getOutfit(season)
+            if outfit:
+                outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).clear()
+
+        return
 
 
 def getVehicleModules(vehicle):

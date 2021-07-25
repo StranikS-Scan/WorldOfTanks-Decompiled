@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/battle_royale_controller.py
 import logging
+from operator import itemgetter
 import typing
 import json
 import BigWorld
@@ -30,7 +31,7 @@ from helpers.statistics import HARDWARE_SCORE_PARAMS
 from season_provider import SeasonProvider
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IBattleRoyaleController, IBattleRoyaleTournamentController
+from skeletons.gui.game_control import IBattleRoyaleController, IBattleRoyaleTournamentController, IBootcampController
 from skeletons.gui.game_control import IEventsNotificationsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -47,8 +48,6 @@ from web.web_client_api.battle_royale import createBattleRoyaleWebHanlders
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared.utils.functions import getUniqueViewName
-from gui.ranked_battles.constants import PrimeTimeStatus
-from predefined_hosts import g_preDefinedHosts
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
 if typing.TYPE_CHECKING:
     from helpers.server_settings import BattleRoyaleConfig
@@ -77,6 +76,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     __c11nService = dependency.descriptor(ICustomizationService)
     __connectionMgr = dependency.descriptor(IConnectionManager)
     __battleRoyaleTournamentController = dependency.descriptor(IBattleRoyaleTournamentController)
+    __bootcamp = dependency.descriptor(IBootcampController)
     TOKEN_QUEST_ID = 'token:br:title:'
     MAX_STORED_ARENAS_RESULTS = 20
 
@@ -300,31 +300,8 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             self.__doSelectRandomPrb(dispatcher)
             return
 
-    def hasAvailablePrimeTimeServers(self):
-        if self.__connectionMgr.isStandalone():
-            allPeripheryIDs = {self.__connectionMgr.peripheryID}
-        else:
-            allPeripheryIDs = set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
-        for peripheryID in allPeripheryIDs:
-            primeTimeStatus, _, _ = self.getPrimeTimeStatus(peripheryID)
-            if primeTimeStatus == PrimeTimeStatus.AVAILABLE:
-                return True
-
-        return False
-
     def getPlayerLevelInfo(self):
         return self.__itemsCache.items.battleRoyale.accTitle
-
-    def isInPrimeTime(self):
-        _, _, isNow = self.getPrimeTimeStatus()
-        return isNow
-
-    def isFrozen(self):
-        for primeTime in self.getPrimeTimes().values():
-            if primeTime.hasAnyPeriods():
-                return False
-
-        return True
 
     def getStats(self):
         return self.__itemsCache.items.battleRoyale
@@ -342,39 +319,14 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         return {k:v for k, v in self.__eventsCache.getQuests().items() if v.getGroupID() == BATTLE_ROYALE_GROUPS_ID and self.__tokenIsValid(v)} if self.isGeneralHangarEntryPoint() and isCycleActive else {}
 
     def isDailyQuestsRefreshAvailable(self):
-        dayTimeLeft = time_utils.getDayTimeLeft()
-        cycleTimeLeft = self.getCurrentCycleTimeLeft()
-        currentPrimeTimeEnd = self.getCurrentPrimeTimeEnd()
-        if currentPrimeTimeEnd is None:
-            return False
-        else:
-            primeTimeTimeLeft = currentPrimeTimeEnd - time_utils.getCurrentLocalServerTimestamp()
-            state1 = self.hasPrimeTimesLeft() or primeTimeTimeLeft > dayTimeLeft
-            state2 = cycleTimeLeft > dayTimeLeft
-            return state1 and state2
-
-    def getCurrentCycleTimeLeft(self):
-        currentCycleEndTime, isCycleActive = self.getCurrentCycleInfo()
-        cycleTimeLeft = currentCycleEndTime - time_utils.getCurrentLocalServerTimestamp() if isCycleActive else None
-        return cycleTimeLeft
-
-    def getCurrentPrimeTimeEnd(self):
-        primeTimes = self.getPrimeTimes()
-        currentPrimeTimeEnd = None
-        for primeTime in primeTimes.values():
-            periods = primeTime.getPeriodsActiveForTime(time_utils.getCurrentLocalServerTimestamp())
-            for period in periods:
-                _, endTime = period
-                currentPrimeTimeEnd = max(endTime, currentPrimeTimeEnd)
-
-        return currentPrimeTimeEnd
-
-    def hasPrimeTimesLeft(self):
-        currentCycleEndTime, isCycleActive = self.getCurrentCycleInfo()
-        if not isCycleActive:
-            return False
-        primeTimes = self.getPrimeTimes()
-        return any([ primeTime.getNextPeriodStart(time_utils.getCurrentLocalServerTimestamp(), currentCycleEndTime) for primeTime in primeTimes.values() ])
+        if self.hasPrimeTimesLeftForCurrentCycle():
+            return True
+        primeTimePeriodsForDay = self.getPrimeTimesForDay(time_utils.getCurrentLocalServerTimestamp())
+        if primeTimePeriodsForDay:
+            _, periodTimeEnd = max(primeTimePeriodsForDay.values(), key=itemgetter(1))
+            periodTimeLeft = periodTimeEnd - time_utils.getCurrentLocalServerTimestamp()
+            return periodTimeLeft > time_utils.getDayTimeLeft()
+        return False
 
     def __selectRoyaleBattle(self):
         dispatcher = g_prbLoader.getDispatcher()
@@ -415,12 +367,17 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             self.selectRandomBattle()
 
     def __eventAvailabilityUpdate(self, *_):
-        if self.__battleRoyaleTournamentController.isSelected():
+        if g_prbLoader.getDispatcher() is None:
+            return
+        elif self.__battleRoyaleTournamentController.isSelected():
             return
         else:
             battleRoyaleEnabled = self.isEnabled() and self.getCurrentSeason() is not None
             isSelectRandom = not battleRoyaleEnabled and self.isBattleRoyaleMode()
-            isSelectRandom = isSelectRandom and not self.__battleRoyaleTournamentController.isAvailable()
+            if battleRoyaleEnabled and not self.isActive():
+                currTime = time_utils.getCurrentLocalServerTimestamp()
+                cycle = self.getCurrentSeason().getNextByTimeCycle(currTime)
+                isSelectRandom = cycle is None
             if isSelectRandom:
                 self.selectRandomBattle()
             return
@@ -448,7 +405,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def __updateMode(self):
         if self.isBattleRoyaleMode():
             self.__enableRoyaleMode()
-        else:
+        elif not self.__bootcamp.isInBootcamp():
             self.__disableRoyaleMode()
 
     def __enableRoyaleMode(self):

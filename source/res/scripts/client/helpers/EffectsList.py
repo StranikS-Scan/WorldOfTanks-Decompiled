@@ -961,6 +961,7 @@ class _SoundEffectDesc(_EffectDesc):
                     if isAlly:
                         isFriendlyFireMode = self.__sessionProvider.arenaVisitor.bonus.isFriendlyFireMode()
                         isCustomAllyDamageEffect = self.__sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
+                        soundNames = None
                         if isFriendlyFireMode and isCustomAllyDamageEffect:
                             soundNames = self._impactNames.impactFNPC_PC or self._impactNames.impactNPC_PC
                     if not BigWorld.entity(playerID).isAlive():
@@ -980,7 +981,7 @@ class _SoundEffectDesc(_EffectDesc):
                 if SoundGroups.DEBUG_TRACE_STACK is True:
                     import traceback
                     traceback.print_stack()
-                if sound is not None:
+                if sound is not None and soundNames is not None:
                     if self._switch_impact_surface:
                         sound.setSwitch('SWITCH_ext_impact_surface', self._switch_impact_surface)
                     sound.setSwitch('SWITCH_ext_shell_type', self._switch_shell_type)

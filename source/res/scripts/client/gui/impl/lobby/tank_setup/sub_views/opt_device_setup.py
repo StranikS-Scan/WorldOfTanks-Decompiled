@@ -33,6 +33,8 @@ class OptDeviceSetupSubView(BaseEquipmentSetupSubView):
     def _addListeners(self):
         super(OptDeviceSetupSubView, self)._addListeners()
         self._addSlotAction(BaseSetupModel.DEMOUNT_SLOT_ACTION, self.__onDemountItem)
+        self._addSlotAction(BaseSetupModel.DEMOUNT_SLOT_FROM_SETUP_ACTION, partial(self.__onDemountItem, everywhere=False))
+        self._addSlotAction(BaseSetupModel.DEMOUNT_SLOT_FROM_SETUPS_ACTION, self.__onDemountItem)
         self._addSlotAction(BaseSetupModel.DESTROY_SLOT_ACTION, partial(self.__onDemountItem, isDestroy=True))
         self._addSlotAction(BaseSetupModel.UPGRADE_SLOT_ACTION, self.__onUpgradeItem)
         self._viewModel.onIntroPassed += self._onIntroPassed
@@ -68,9 +70,9 @@ class OptDeviceSetupSubView(BaseEquipmentSetupSubView):
         self._introductionUpdate(self._currentTabName)
 
     @async
-    def __onDemountItem(self, args, isDestroy=False):
+    def __onDemountItem(self, args, isDestroy=False, everywhere=True):
         itemIntCD = int(args.get('intCD'))
-        yield await(self._asyncActionLock.tryAsyncCommand(self._interactor.demountItem, itemIntCD, isDestroy))
+        yield await(self._asyncActionLock.tryAsyncCommand(self._interactor.demountItem, itemIntCD, isDestroy, everywhere))
         self.update()
 
     @async

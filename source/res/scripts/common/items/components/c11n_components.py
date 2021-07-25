@@ -10,7 +10,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from items import vehicles
 from items.components import shared_components
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, HIDDEN_CAMOUFLAGE_ID, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, DecalTypeNames, CustomizationNamesToTypes, ProjectionDecalFormTags, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, CamouflageTilingType, HIDDEN_FOR_USER_TAG, SLOT_TYPE_NAMES, EMPTY_ITEM_ID, SLOT_DEFAULT_ALLOWED_MODEL, EDITING_STYLE_REASONS
+from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, HIDDEN_CAMOUFLAGE_ID, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, DecalTypeNames, CustomizationNamesToTypes, ProjectionDecalFormTags, DEFAULT_SCALE_FACTOR_ID, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, CamouflageTilingType, HIDDEN_FOR_USER_TAG, SLOT_TYPE_NAMES, EMPTY_ITEM_ID, SLOT_DEFAULT_ALLOWED_MODEL, EDITING_STYLE_REASONS, CustomizationDisplayType
 from typing import List, Dict, Type, Tuple, Optional, TypeVar, FrozenSet, Set
 from string import lower, upper
 from copy import deepcopy
@@ -23,7 +23,7 @@ Item = TypeVar('TypeVar')
 
 class BaseCustomizationItem(object):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('id', 'tags', 'filter', 'parentGroup', 'season', 'historical', 'i18n', 'priceGroup', 'requiredToken', 'priceGroupTags', 'maxNumber', 'texture', 'progression')
+    __slots__ = ('id', 'tags', 'filter', 'parentGroup', 'season', 'customizationDisplayType', 'i18n', 'priceGroup', 'requiredToken', 'priceGroupTags', 'maxNumber', 'texture', 'progression')
     allSlots = __slots__
     itemType = 0
 
@@ -32,7 +32,7 @@ class BaseCustomizationItem(object):
         self.tags = frozenset()
         self.filter = None
         self.season = SeasonType.ALL
-        self.historical = False
+        self.customizationDisplayType = CustomizationDisplayType.NON_HISTORICAL
         self.i18n = None
         self.priceGroup = ''
         self.priceGroupTags = frozenset()
@@ -55,7 +55,7 @@ class BaseCustomizationItem(object):
         newItem.tags = deepcopy(self.tags)
         newItem.filter = deepcopy(self.filter)
         newItem.season = self.season
-        newItem.historical = self.historical
+        newItem.customizationDisplayType = self.customizationDisplayType
         newItem.i18n = deepcopy(self.i18n)
         newItem.priceGroup = deepcopy(self.priceGroup)
         newItem.priceGroupTags = deepcopy(self.priceGroupTags)
@@ -162,12 +162,13 @@ class DecalItem(BaseCustomizationItem):
 class ProjectionDecalItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.PROJECTION_DECAL
-    __slots__ = ('canBeMirroredHorizontally', 'glossTexture')
+    __slots__ = ('canBeMirroredHorizontally', 'glossTexture', 'scaleFactorId')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
         self.canBeMirroredHorizontally = False
         self.glossTexture = ''
+        self.scaleFactorId = DEFAULT_SCALE_FACTOR_ID
         super(ProjectionDecalItem, self).__init__(parentGroup)
 
     @property
@@ -195,7 +196,7 @@ class CamouflageItem(BaseCustomizationItem):
          'gun': 0.0}
         self.tiling = {}
         self.tilingSettings = (CamouflageTilingType.LEGACY, None, None)
-        self.scales = (1.2, 1, 0.7)
+        self.scales = (1.2, 1.0, 0.7)
         self.glossMetallicSettings = {'glossMetallicMap': '',
          'gloss': Math.Vector4(0.0),
          'metallic': Math.Vector4(0.0)}
@@ -309,7 +310,7 @@ class StyleItem(BaseCustomizationItem):
     def isItemInstallable(self, item):
         if not self.isEditable:
             return False
-        elif self.historical and not item.historical:
+        elif self.customizationDisplayType < item.customizationDisplayType:
             return False
         elif item.id in self.alternateItems.get(item.itemType, ()):
             return True
@@ -527,14 +528,14 @@ class ItemsFilter(_Filter):
     __metaclass__ = ReflectionMetaclass
 
     class FilterNode(object):
-        __slots__ = ('ids', 'itemGroupNames', 'tags', 'types', 'historical')
+        __slots__ = ('ids', 'itemGroupNames', 'tags', 'types', 'customizationDisplayType')
 
         def __init__(self):
             self.ids = None
             self.itemGroupNames = None
             self.tags = None
             self.types = None
-            self.historical = None
+            self.customizationDisplayType = None
             return
 
         def __str__(self):
@@ -547,8 +548,8 @@ class ItemsFilter(_Filter):
                 result.append(str(self.tags))
             if self.types is not None:
                 result.append(str(self.types))
-            if self.historical is not None:
-                result.append(str(self.historical))
+            if self.customizationDisplayType is not None:
+                result.append(str(self.customizationDisplayType))
             return '; '.join(result)
 
         def matchItem(self, item):
@@ -561,7 +562,7 @@ class ItemsFilter(_Filter):
             elif self.types is not None and item.itemType == CustomizationType.DECAL and item.type not in self.types:
                 return False
             else:
-                return False if self.historical is not None and item.historical != self.historical else True
+                return False if self.customizationDisplayType is not None and item.customizationDisplayType != self.customizationDisplayType else True
 
     def match(self, item):
         include = not self.include or any((f.matchItem(item) for f in self.include))
@@ -738,74 +739,74 @@ class CustomizationCache(object):
 
     def adjustProgression--- This code section failed: ---
 
- 899       0	LOAD_GLOBAL       'False'
+ 902       0	LOAD_GLOBAL       'False'
            3	STORE_FAST        'force'
 
- 900       6	LOAD_GLOBAL       'CustomizationType'
+ 903       6	LOAD_GLOBAL       'CustomizationType'
            9	LOAD_ATTR         'RANGE'
           12	STORE_FAST        'itemTypes'
 
- 901      15	LOAD_FAST         'itemForce'
+ 904      15	LOAD_FAST         'itemForce'
           18	LOAD_CONST        ''
           21	COMPARE_OP        'is not'
           24	POP_JUMP_IF_FALSE '48'
 
- 902      27	LOAD_GLOBAL       'True'
+ 905      27	LOAD_GLOBAL       'True'
           30	STORE_FAST        'force'
 
- 903      33	LOAD_FAST         'itemForce'
+ 906      33	LOAD_FAST         'itemForce'
           36	LOAD_ATTR         'itemType'
           39	BUILD_SET_1       ''
           42	STORE_FAST        'itemTypes'
           45	JUMP_FORWARD      '48'
         48_0	COME_FROM         '45'
 
- 905      48	SETUP_LOOP        '322'
+ 908      48	SETUP_LOOP        '322'
           51	LOAD_FAST         'itemTypes'
           54	GET_ITER          ''
           55	FOR_ITER          '321'
           58	STORE_FAST        'itemType'
 
- 906      61	LOAD_GLOBAL       'lower'
+ 909      61	LOAD_GLOBAL       'lower'
           64	LOAD_GLOBAL       'CustomizationTypeNames'
           67	LOAD_FAST         'itemType'
           70	BINARY_SUBSCR     ''
           71	CALL_FUNCTION_1   ''
           74	STORE_FAST        'typeName'
 
- 907      77	LOAD_CONST        '{}s'
+ 910      77	LOAD_CONST        '{}s'
           80	LOAD_ATTR         'format'
           83	LOAD_FAST         'typeName'
           86	CALL_FUNCTION_1   ''
           89	STORE_FAST        'componentsAttrName'
 
- 908      92	LOAD_GLOBAL       'getattr'
+ 911      92	LOAD_GLOBAL       'getattr'
           95	LOAD_FAST         'outfit'
           98	LOAD_FAST         'componentsAttrName'
          101	LOAD_CONST        ''
          104	CALL_FUNCTION_3   ''
          107	STORE_FAST        'components'
 
- 910     110	LOAD_FAST         'components'
+ 913     110	LOAD_FAST         'components'
          113	POP_JUMP_IF_TRUE  '122'
 
- 911     116	CONTINUE          '55'
+ 914     116	CONTINUE          '55'
          119	JUMP_FORWARD      '122'
        122_0	COME_FROM         '119'
 
- 913     122	LOAD_GLOBAL       'getattr'
+ 916     122	LOAD_GLOBAL       'getattr'
          125	LOAD_FAST         'self'
          128	LOAD_FAST         'componentsAttrName'
          131	CALL_FUNCTION_2   ''
          134	STORE_FAST        'storage'
 
- 915     137	SETUP_LOOP        '318'
+ 918     137	SETUP_LOOP        '318'
          140	LOAD_FAST         'components'
          143	GET_ITER          ''
          144	FOR_ITER          '317'
          147	STORE_FAST        'component'
 
- 916     150	LOAD_FAST         'itemType'
+ 919     150	LOAD_FAST         'itemType'
          153	LOAD_GLOBAL       'CustomizationType'
          156	LOAD_ATTR         'CAMOUFLAGE'
          159	COMPARE_OP        '=='
@@ -817,23 +818,23 @@ class CustomizationCache(object):
        177_0	COME_FROM         '162'
          177	POP_JUMP_IF_FALSE '186'
 
- 917     180	CONTINUE          '144'
+ 920     180	CONTINUE          '144'
          183	JUMP_FORWARD      '186'
        186_0	COME_FROM         '183'
 
- 919     186	SETUP_EXCEPT      '290'
+ 922     186	SETUP_EXCEPT      '290'
 
- 921     189	LOAD_GLOBAL       'isinstance'
+ 924     189	LOAD_GLOBAL       'isinstance'
          192	LOAD_FAST         'component'
          195	LOAD_GLOBAL       'int'
          198	CALL_FUNCTION_2   ''
          201	POP_JUMP_IF_FALSE '210'
 
- 922     204	CONTINUE_LOOP     '144'
+ 925     204	CONTINUE_LOOP     '144'
          207	JUMP_FORWARD      '210'
        210_0	COME_FROM         '207'
 
- 924     210	LOAD_FAST         'force'
+ 927     210	LOAD_FAST         'force'
          213	POP_JUMP_IF_FALSE '240'
          216	LOAD_FAST         'itemForce'
          219	LOAD_ATTR         'id'
@@ -843,18 +844,18 @@ class CustomizationCache(object):
        231_0	COME_FROM         '213'
          231	POP_JUMP_IF_FALSE '240'
 
- 925     234	CONTINUE_LOOP     '144'
+ 928     234	CONTINUE_LOOP     '144'
          237	JUMP_FORWARD      '240'
        240_0	COME_FROM         '237'
 
- 927     240	LOAD_FAST         'storage'
+ 930     240	LOAD_FAST         'storage'
          243	LOAD_ATTR         'get'
          246	LOAD_FAST         'component'
          249	LOAD_ATTR         'id'
          252	CALL_FUNCTION_1   ''
          255	STORE_FAST        'item'
 
- 928     258	LOAD_GLOBAL       '_adjustProgression'
+ 931     258	LOAD_GLOBAL       '_adjustProgression'
          261	LOAD_FAST         'component'
          264	LOAD_FAST         'vehTypeCompDescr'
          267	LOAD_FAST         'item'
@@ -862,14 +863,14 @@ class CustomizationCache(object):
          273	LOAD_CONST        'progressionLevel'
          276	LOAD_CONST        'force'
 
- 929     279	LOAD_FAST         'force'
+ 932     279	LOAD_FAST         'force'
          282	CALL_FUNCTION_261 ''
          285	POP_TOP           ''
          286	POP_BLOCK         ''
          287	JUMP_BACK         '144'
        290_0	COME_FROM         '186'
 
- 930     290	DUP_TOP           ''
+ 933     290	DUP_TOP           ''
          291	LOAD_GLOBAL       'SoftException'
          294	COMPARE_OP        'exception match'
          297	POP_JUMP_IF_FALSE '313'
@@ -877,7 +878,7 @@ class CustomizationCache(object):
          301	POP_TOP           ''
          302	POP_TOP           ''
 
- 931     303	LOAD_GLOBAL       'LOG_CURRENT_EXCEPTION'
+ 934     303	LOAD_GLOBAL       'LOG_CURRENT_EXCEPTION'
          306	CALL_FUNCTION_0   ''
          309	POP_TOP           ''
          310	JUMP_BACK         '144'
@@ -890,15 +891,15 @@ class CustomizationCache(object):
          321	POP_BLOCK         ''
        322_0	COME_FROM         '48'
 
- 933     322	SETUP_EXCEPT      '445'
+ 936     322	SETUP_EXCEPT      '445'
 
- 934     325	LOAD_GLOBAL       'CustomizationType'
+ 937     325	LOAD_GLOBAL       'CustomizationType'
          328	LOAD_ATTR         'STYLE'
          331	LOAD_FAST         'itemTypes'
          334	COMPARE_OP        'in'
          337	POP_JUMP_IF_FALSE '441'
 
- 935     340	LOAD_FAST         'outfit'
+ 938     340	LOAD_FAST         'outfit'
          343	LOAD_ATTR         'styleId'
          346	LOAD_CONST        0
          349	COMPARE_OP        '!='
@@ -919,7 +920,7 @@ class CustomizationCache(object):
        383_2	COME_FROM         '376'
          383	POP_JUMP_IF_FALSE '441'
 
- 936     386	LOAD_FAST         'self'
+ 939     386	LOAD_FAST         'self'
          389	LOAD_ATTR         'styles'
          392	LOAD_ATTR         'get'
          395	LOAD_FAST         'outfit'
@@ -927,7 +928,7 @@ class CustomizationCache(object):
          401	CALL_FUNCTION_1   ''
          404	STORE_FAST        'item'
 
- 937     407	LOAD_GLOBAL       '_adjustProgression'
+ 940     407	LOAD_GLOBAL       '_adjustProgression'
          410	LOAD_FAST         'outfit'
          413	LOAD_FAST         'vehTypeCompDescr'
          416	LOAD_FAST         'item'
@@ -935,7 +936,7 @@ class CustomizationCache(object):
          422	LOAD_CONST        'styleProgressionLevel'
          425	LOAD_CONST        'force'
 
- 938     428	LOAD_FAST         'force'
+ 941     428	LOAD_FAST         'force'
          431	CALL_FUNCTION_261 ''
          434	POP_TOP           ''
          435	JUMP_ABSOLUTE     '441'
@@ -945,7 +946,7 @@ class CustomizationCache(object):
          442	JUMP_FORWARD      '469'
        445_0	COME_FROM         '322'
 
- 939     445	DUP_TOP           ''
+ 942     445	DUP_TOP           ''
          446	LOAD_GLOBAL       'SoftException'
          449	COMPARE_OP        'exception match'
          452	POP_JUMP_IF_FALSE '468'
@@ -953,7 +954,7 @@ class CustomizationCache(object):
          456	POP_TOP           ''
          457	POP_TOP           ''
 
- 940     458	LOAD_GLOBAL       'LOG_CURRENT_EXCEPTION'
+ 943     458	LOAD_GLOBAL       'LOG_CURRENT_EXCEPTION'
          461	CALL_FUNCTION_0   ''
          464	POP_TOP           ''
          465	JUMP_FORWARD      '469'
@@ -1217,20 +1218,6 @@ def getVehicleProjectionDecalSlotParams(vehicleDescr, vehicleSlotId, partNames=C
 
 def isPersonalNumberAllowed(personalNumber):
     return personalNumber not in PersonalNumberItem.getProhibitedNumbers()
-
-
-def isSlotFitsVehicle(slotDescriptor, vehicleDescriptor):
-    if slotDescriptor.attachedParts is None:
-        return True
-    else:
-        for partType, attachedParts in slotDescriptor.attachedParts.iteritems():
-            part = getattr(vehicleDescriptor, partType, None)
-            if part is None:
-                raise SoftException('projection decal {} wrong attached part type: {}'.format(slotDescriptor.slotId, partType))
-            if part.name not in attachedParts:
-                return False
-
-        return True
 
 
 def getAvailableSlotsCount(item, vehicleDescriptor):

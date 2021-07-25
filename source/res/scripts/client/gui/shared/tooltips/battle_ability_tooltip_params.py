@@ -4,10 +4,11 @@ import logging
 from functools import partial
 from collections import namedtuple
 import ResMgr
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import _getFormattedNum, _cutDigits
 from gui.Scaleform.locale.COMMON import COMMON
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
-from gui.shared.items_parameters.params_helper import SimplifiedBarVO
-from gui.shared.items_parameters import formatters as params_formatters
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.tooltips import formatters
 from gui.shared.formatters import text_styles
 from helpers import i18n
@@ -15,218 +16,243 @@ from items import vehicles
 from soft_exception import SoftException
 from constants import IS_DEVELOPMENT
 from items import _xml
-COLOR_SCHEME = (text_styles.critical, text_styles.warning, text_styles.statInfo)
-INVERSE_COLOR_SCHEME = COLOR_SCHEME[::-1]
-NEUTRAL_STYLE = COLOR_SCHEME[1]
+COLOR_SCHEME = (text_styles.stats, text_styles.bonusAppliedText)
+NEUTRAL_STYLE = COLOR_SCHEME[0]
 TOOLTIPS_PATH = 'gui/ability_tooltips.xml'
 
-def _getColorScheme(higherIsBetter=True):
-    return COLOR_SCHEME if higherIsBetter else INVERSE_COLOR_SCHEME
-
-
-def _getTextStyleForDelta(delta, higherIsBetter=True):
-    return _getColorScheme(higherIsBetter)[0 if delta < 0 else (1 if delta == 0 else 2)]
-
-
-def _getSignForDelta(value):
-    if value < 0:
-        return '-'
-    return '+' if value > 0 else ''
-
-
-def _getSignForValue(value):
-    return '-' if value < 0 else ''
+def _getTextStyle(idx):
+    return COLOR_SCHEME[idx > 0]
 
 
 def _getAttrName(param):
     return param.split('-')[0]
 
 
+def _allElementsEq(values):
+    return len(set(values)) == 1
+
+
 class DisplayValuesMixin(object):
 
     @classmethod
-    def _getDisplayParams(cls, curEq, compareEq, eqsRange, param):
+    def _getDisplayParams(cls, curEq, eqsRange, param):
         raise NotImplementedError
 
 
 class DirectValuesMixin(DisplayValuesMixin):
 
     @classmethod
-    def _getDisplayParams(cls, curEq, compareEq, eqsRange, param):
+    def _getDisplayParams(cls, curEq, eqsRange, param):
         param = _getAttrName(param)
-        curValue = getattr(curEq, param)
-        compValue = getattr(compareEq, param)
-        return (curValue, compValue - curValue, max((getattr(eq, param) for eq in eqsRange)))
-
-
-class MultipliedValuesMixin(DisplayValuesMixin):
-
-    @classmethod
-    def _getMultiplier(cls):
-        raise NotImplementedError
-
-    @classmethod
-    def _getDisplayParams(cls, curEq, compareEq, eqsRange, param):
-        param = _getAttrName(param)
-        curValue = getattr(curEq, param)
-        compValue = getattr(compareEq, param)
-        multiplier = cls._getMultiplier()
-        return (curValue * multiplier, (compValue - curValue) * multiplier, max((getattr(eq, param) * multiplier for eq in eqsRange)))
+        values = [ _getFormattedNum(getattr(eq, param)) for eq in eqsRange ]
+        if _allElementsEq(values):
+            values = [values[0]]
+        return values
 
 
 class ReciprocalValuesMixin(DisplayValuesMixin):
 
     @classmethod
-    def _getDisplayParams(cls, curEq, compareEq, eqsRange, param):
+    def _getDisplayParams(cls, curEq, eqsRange, param):
         param = _getAttrName(param)
-        curValue = getattr(curEq, param)
-        compValue = getattr(compareEq, param)
-        curValue = 1 / curValue if curValue != 0 else float('inf')
-        compValue = 1 / compValue if compValue != 0 else float('inf')
-        return (curValue, compValue - curValue, max(((1 / val if val != 0 else float('inf')) for val in (getattr(eq, param) for eq in eqsRange))))
+        values = [ _getFormattedNum(1 / val if val != 0 else float('inf')) for val in (getattr(eq, param) for eq in eqsRange) ]
+        if _allElementsEq(values):
+            values = [values[0]]
+        return values
 
 
 class ShellStunValuesMixin(DisplayValuesMixin):
 
     @classmethod
-    def _getDisplayParams(cls, curEq, compareEq, eqsRange, param):
+    def _getDisplayParams(cls, curEq, eqsRange, param):
         param = _getAttrName(param)
-        curShell = vehicles.getItemByCompactDescr(getattr(curEq, param))
-        compShell = vehicles.getItemByCompactDescr(getattr(compareEq, param))
         shellsRange = (vehicles.getItemByCompactDescr(getattr(eq, param)) for eq in eqsRange)
-        curValue = curShell.stun.stunDuration if curShell.hasStun else 0
-        compValue = compShell.stun.stunDuration if compShell.hasStun else 0
-        return (curValue, compValue - curValue, max(((shell.stun.stunDuration if shell.hasStun else 0) for shell in shellsRange)))
+        values = [ (_getFormattedNum(shell.stun.stunDuration) if shell.hasStun else 0) for shell in shellsRange ]
+        if _allElementsEq(values):
+            values = [values[0]]
+        return values
 
 
 class MultiValuesMixin(DisplayValuesMixin):
 
     @classmethod
-    def _getDisplayParams(cls, curEq, compareEq, eqsRange, param):
+    def _getDisplayParams(cls, curEq, eqsRange, param):
         param = _getAttrName(param)
         eqsRange = list(eqsRange)
         params = param.split('_')
         length = len(params)
-        curValues = [None] * length
-        deltaValues = [None] * length
-        maxValues = [None] * length
+        allValues = [None] * length
         for idx, singleParam in enumerate(params):
-            curValues[idx] = curValue = getattr(curEq, singleParam)
-            deltaValues[idx] = getattr(compareEq, singleParam) - curValue
-            maxValues[idx] = max((getattr(eq, singleParam) for eq in eqsRange))
+            values = [ _getFormattedNum(getattr(eq, singleParam)) for eq in eqsRange ]
+            if _allElementsEq(values):
+                values = [values[0]]
+            allValues[idx] = values
 
-        return (curValues, deltaValues, maxValues)
+        return allValues
+
+
+class NestedValuesMixin(DisplayValuesMixin):
+
+    @classmethod
+    def _getDisplayParams(cls, curEq, eqsRange, param):
+        param = _getAttrName(param)
+        params = param.split('/')
+        values = [ _getFormattedNum(cls.__getEqParam(eq, params)) for eq in eqsRange ]
+        if _allElementsEq(values):
+            values = [values[0]]
+        return values
+
+    @classmethod
+    def __getEqParam(cls, eq, params):
+        data = {}
+        if hasattr(eq, params[0]):
+            data = getattr(eq, params[0])
+        for key in params[1:]:
+            if isinstance(data, dict):
+                data = data.get(key, {})
+            if hasattr(data, key):
+                data = getattr(data, key)
+
+        return data
+
+
+class NestedShellStunValuesMixin(NestedValuesMixin):
+
+    @classmethod
+    def _getDisplayParams(cls, curEq, eqsRange, param):
+        shells = super(NestedShellStunValuesMixin, cls)._getDisplayParams(curEq, eqsRange, param)
+        shellsRange = (vehicles.getItemByCompactDescr(shell) for shell in shells)
+        values = [ (_getFormattedNum(shell.stun.stunDuration) if shell.hasStun else 0) for shell in shellsRange ]
+        if _allElementsEq(values):
+            values = [values[0]]
+        return values
 
 
 class DisplayLabelMixin(object):
 
     @classmethod
-    def _formatDeltaString(cls, delta, value, higherIsBetter=True):
-        raise NotImplementedError
+    def _formatParamStringInternal(cls, values, unitLocalization=None, returnArray=False):
+        formatTemplate = '{}{}' if unitLocalization == COMMON.COMMON_PERCENT else '{} {}'
+        unitLocalization = None if not unitLocalization else i18n.makeString(unitLocalization)
+        formattedValues = []
+        if values:
+            for idx, dv in enumerate(values):
+                dvStr = '{}'.format(abs(dv))
+                if unitLocalization:
+                    dvStr = formatTemplate.format(dvStr, unitLocalization)
+                dvStr = _getTextStyle(idx)(dvStr)
+                formattedValues.append(dvStr)
+
+        return ' '.join(formattedValues) if not returnArray else formattedValues
+
+    @classmethod
+    def _formatParamString(cls, values, isMultiplier=True, returnArray=False):
+        return cls._formatParamStringInternal(values, returnArray=returnArray)
 
 
 class NumericLabelMixin(DisplayLabelMixin):
 
     @classmethod
-    def _formatDeltaStringInternal(cls, delta, value, higherIsBetter=True, unitLocalization=None, signForValue=_getSignForValue, signForDelta=_getSignForDelta):
-        unitLocalization = None if not unitLocalization else i18n.makeString(unitLocalization)
-        displayDelta = params_formatters._cutDigits(delta)
-        displayValue = params_formatters._cutDigits(value)
-        deltaStr = None
-        if displayDelta != 0:
-            deltaStr = '{}{}'.format(signForDelta(displayDelta), abs(int(displayDelta) if displayDelta.is_integer() else displayDelta))
-            if unitLocalization:
-                deltaStr = '{}{}'.format(deltaStr, unitLocalization)
-            deltaStr = _getTextStyleForDelta(displayDelta, higherIsBetter)(deltaStr)
-        valueStr = '{}{}'.format(signForValue(displayValue), abs(int(displayValue) if displayValue.is_integer() else displayValue))
-        if unitLocalization:
-            valueStr = '{}{}'.format(valueStr, unitLocalization)
-        valueStr = NEUTRAL_STYLE(valueStr)
-        return valueStr if deltaStr is None else '({}) {}'.format(deltaStr, valueStr)
+    def _formatParamString(cls, values, isMultiplier=True, returnArray=False):
+        return cls._formatParamStringInternal(values, returnArray=returnArray)
+
+
+class SecondsLabelMixin(DisplayLabelMixin):
 
     @classmethod
-    def _formatDeltaString(cls, delta, value, higherIsBetter=True):
-        return cls._formatDeltaStringInternal(delta, value, higherIsBetter)
+    def _formatParamString(cls, value, isMultiplier=True, returnArray=False):
+        return cls._formatParamStringInternal(value, EPIC_BATTLE.ABILITYINFO_UNITS_SECONDS, returnArray=returnArray)
 
 
-class SecondsLabelMixin(NumericLabelMixin):
-
-    @classmethod
-    def _formatDeltaString(cls, delta, value, higherIsBetter=True):
-        return cls._formatDeltaStringInternal(delta, value, higherIsBetter, EPIC_BATTLE.ABILITYINFO_UNITS_SECONDS)
-
-
-class AdditionalSecondsLabelMixin(NumericLabelMixin):
+class AdditionalSecondsLabelMixin(DisplayLabelMixin):
 
     @classmethod
-    def _formatDeltaString(cls, delta, value, higherIsBetter=True):
-        return cls._formatDeltaStringInternal(delta, value, higherIsBetter, EPIC_BATTLE.ABILITYINFO_UNITS_SECONDS, signForValue=_getSignForDelta)
+    def _formatParamString(cls, value, isMultiplier=True, returnArray=False):
+        return cls._formatParamStringInternal(value, EPIC_BATTLE.ABILITYINFO_UNITS_SECONDS, returnArray=returnArray)
 
 
-class MeterLabelMixin(NumericLabelMixin):
-
-    @classmethod
-    def _formatDeltaString(cls, delta, value, higherIsBetter=True):
-        return cls._formatDeltaStringInternal(delta, value, higherIsBetter, EPIC_BATTLE.ABILITYINFO_UNITS_METER)
-
-
-class PercentageLabelMixin(NumericLabelMixin):
+class MeterLabelMixin(DisplayLabelMixin):
 
     @classmethod
-    def _formatDeltaString(cls, delta, value, higherIsBetter=True):
-        return cls._formatDeltaStringInternal(delta * 100, value * 100 - 100, higherIsBetter, COMMON.COMMON_PERCENT, signForValue=_getSignForDelta)
+    def _formatParamString(cls, value, isMultiplier=True, returnArray=False):
+        return cls._formatParamStringInternal(value, EPIC_BATTLE.ABILITYINFO_UNITS_METER, returnArray=returnArray)
 
 
-class MultiMeterLabelMixin(NumericLabelMixin):
+class PercentageLabelMixin(DisplayLabelMixin):
 
     @classmethod
-    def _formatDeltaString(cls, deltas, values, higherIsBetter=True):
+    def _formatParamString(cls, value, isMultiplier=True, returnArray=False):
+        if isMultiplier:
+            value = [ _getFormattedNum(v * 100 - 100) for v in value ]
+        else:
+            value = [ _getFormattedNum(v * 100) for v in value ]
+        return cls._formatParamStringInternal(value, COMMON.COMMON_PERCENT, returnArray=returnArray)
+
+
+class MultiMeterLabelMixin(DisplayLabelMixin):
+
+    @classmethod
+    def _formatParamString(cls, values, isMultiplier=True, returnArray=False):
         labelParts = []
-        for delta, value in zip(deltas, values):
-            labelParts.append(cls._formatDeltaStringInternal(delta, value, higherIsBetter, EPIC_BATTLE.ABILITYINFO_UNITS_METER))
+        width, length = values
+        for area in zip(width, length):
+            values = [ int(_cutDigits(value)) for value in area ]
+            areaStr = '{} x {}'.format(*values)
+            unitLocalization = backport.text(R.strings.epic_battle.abilityInfo.units.meter())
+            labelParts.append(NEUTRAL_STYLE('{} {}'.format(areaStr, unitLocalization)))
 
-        return NEUTRAL_STYLE(' x ').join(labelParts)
+        return ' '.join(labelParts) if not returnArray else labelParts
 
 
 class AbilityParam(object):
 
     @classmethod
-    def extendBlocks(cls, blocks, curEq, compareEq, eqsRange, param, title, higherIsBetter=True):
+    def extendBlocks(cls, staticBlock, dynamicBlock, curEq, eqsRange, param, title, isMultiplier=True):
         raise NotImplementedError
 
 
 class FixedTextParam(AbilityParam):
 
     @classmethod
-    def extendBlocks(cls, blocks, curEq, compareEq, eqsRange, param, title, higherIsBetter=True):
-        blocks.append(formatters.packTextParameterBlockData(name=text_styles.middleTitle(title), value=NEUTRAL_STYLE(i18n.makeString(param)), padding=formatters.packPadding(left=0, top=0), valueWidth=85))
-
-
-class DeltaBarParam(AbilityParam, DisplayValuesMixin, DisplayLabelMixin):
-
-    @classmethod
-    def extendBlocks(cls, blocks, curEq, compareEq, eqsRange, param, title, higherIsBetter=True):
-        value, delta, maxValue = cls._getDisplayParams(curEq, compareEq, eqsRange, param)
-        tmpVal = value + (delta if delta < 0 else 0)
-        progressBar = SimplifiedBarVO(value=tmpVal, delta=delta, markerValue=value)
-        progressBar['maxValue'] = maxValue
-        blocks.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(title), valueStr=cls._formatDeltaString(delta, value + delta, higherIsBetter), statusBarData=progressBar, padding=formatters.packPadding(left=85, top=0)))
+    def extendBlocks(cls, staticBlock, dynamicBlock, curEq, eqsRange, param, title, isMultiplier=True):
+        curStr = '{}: {}'.format(text_styles.main(title), NEUTRAL_STYLE(i18n.makeString(param)))
+        staticBlock.append(formatters.packTextBlockData(text=curStr, padding=formatters.packPadding(left=0, top=0)))
 
 
 class TextParam(AbilityParam, DisplayValuesMixin, DisplayLabelMixin):
 
     @classmethod
-    def extendBlocks(cls, blocks, curEq, compareEq, eqsRange, param, title, higherIsBetter=True):
-        value, delta, _ = cls._getDisplayParams(curEq, compareEq, eqsRange, param)
-        blocks.append(formatters.packTextParameterBlockData(name=text_styles.middleTitle(title), value=cls._formatDeltaString(delta, value + delta, higherIsBetter), padding=formatters.packPadding(left=0, top=0), valueWidth=85))
+    def extendBlocks(cls, staticBlock, dynamicBlock, curEq, eqsRange, param, title, isMultiplier=True):
+        values = cls._getDisplayParams(curEq, eqsRange, param)
+        if len(values) == 1:
+            curStr = '{}: {}'.format(text_styles.main(title), cls._formatParamString(values, isMultiplier))
+            staticBlock.append(formatters.packTextBlockData(text=curStr, padding=formatters.packPadding(left=0, top=0)))
+        else:
+            dynamicBlock.append(formatters.packAbilityBattleRankedItemBlockData(title=title, items=cls._formatParamString(values, isMultiplier, True)))
 
 
 class MultiTextParam(AbilityParam, DisplayValuesMixin, DisplayLabelMixin):
 
     @classmethod
-    def extendBlocks(cls, blocks, curEq, compareEq, eqsRange, param, title, higherIsBetter=True):
-        values, deltas, _ = cls._getDisplayParams(curEq, compareEq, eqsRange, param)
-        blocks.append(formatters.packTextParameterBlockData(name=text_styles.middleTitle(title), value=cls._formatDeltaString(deltas, [ value + delta for value, delta in zip(values, deltas) ], higherIsBetter), padding=formatters.packPadding(left=0, top=0), valueWidth=85))
+    def extendBlocks(cls, staticBlock, dynamicBlock, curEq, eqsRange, param, title, isMultiplier=True):
+        values = cls._getDisplayParams(curEq, eqsRange, param)
+        if len(values) > 1 and len(values[0]) == 1:
+            curStr = '{}: {}'.format(text_styles.main(title), cls._formatParamString(values, isMultiplier))
+            staticBlock.append(formatters.packTextBlockData(text=curStr, padding=formatters.packPadding(left=0, top=0)))
+        else:
+            dynamicBlock.append(formatters.packAbilityBattleRankedItemBlockData(title=title, items=cls._formatParamString(values, isMultiplier, True)))
+
+
+class NestedTextParam(AbilityParam, DisplayValuesMixin, DisplayLabelMixin):
+
+    @classmethod
+    def extendBlocks(cls, staticBlock, dynamicBlock, curEq, eqsRange, param, title, isMultiplier=True):
+        values = cls._getDisplayParams(curEq, eqsRange, param)
+        if len(values) == 1:
+            curStr = '{}: {}'.format(text_styles.main(title), cls._formatParamString(values, isMultiplier))
+            staticBlock.append(formatters.packTextBlockData(text=curStr, padding=formatters.packPadding(left=0, top=0)))
+        else:
+            dynamicBlock.append(formatters.packAbilityBattleRankedItemBlockData(title=title, items=cls._formatParamString(values, isMultiplier, True)))
 
 
 class DirectNumericTextParam(TextParam, DirectValuesMixin, NumericLabelMixin):
@@ -241,27 +267,15 @@ class DirectMetersTextParam(TextParam, DirectValuesMixin, MeterLabelMixin):
     pass
 
 
-class DirectNumericDeltaBarParam(DeltaBarParam, DirectValuesMixin, NumericLabelMixin):
+class DirectPercentageTextParam(TextParam, DirectValuesMixin, PercentageLabelMixin):
     pass
 
 
-class DirectSecondsDeltaBarParam(DeltaBarParam, DirectValuesMixin, SecondsLabelMixin):
+class ReciprocalPercentageTextParam(TextParam, ReciprocalValuesMixin, PercentageLabelMixin):
     pass
 
 
-class AdditionalSecondsDeltaBarParam(DeltaBarParam, DirectValuesMixin, AdditionalSecondsLabelMixin):
-    pass
-
-
-class DirectPercentageDeltaBarParam(DeltaBarParam, DirectValuesMixin, PercentageLabelMixin):
-    pass
-
-
-class ReciprocalPercentageDeltaBarParam(DeltaBarParam, ReciprocalValuesMixin, PercentageLabelMixin):
-    pass
-
-
-class ShellStunSecondsDeltaBarParam(DeltaBarParam, ShellStunValuesMixin, SecondsLabelMixin):
+class ShellStunSecondsTextParam(TextParam, ShellStunValuesMixin, SecondsLabelMixin):
     pass
 
 
@@ -269,30 +283,41 @@ class MultipleMetersTextParam(MultiTextParam, MultiValuesMixin, MultiMeterLabelM
     pass
 
 
-def makeRenderer(func, higherIsBetter=True):
-    return partial(func, higherIsBetter=higherIsBetter)
+class NestedMetersTextParam(NestedTextParam, NestedValuesMixin, MeterLabelMixin):
+    pass
+
+
+class NestedSecondsTextParam(NestedTextParam, NestedValuesMixin, SecondsLabelMixin):
+    pass
+
+
+class NestedPercentageTextParam(NestedTextParam, NestedValuesMixin, PercentageLabelMixin):
+    pass
+
+
+class NestedShellStunSecondsTextParam(TextParam, NestedShellStunValuesMixin, SecondsLabelMixin):
+    pass
+
+
+def makeRenderer(func, isMultiplier=True):
+    return partial(func, isMultiplier=isMultiplier)
 
 
 g_battleAbilityParamsRenderers = {'FixedTextParam': makeRenderer(FixedTextParam.extendBlocks),
- 'AscDirectNumericTextParam': makeRenderer(DirectNumericTextParam.extendBlocks),
- 'DescDirectNumericTextParam': makeRenderer(DirectNumericTextParam.extendBlocks, higherIsBetter=False),
- 'AscDirectSecondsTextParam': makeRenderer(DirectSecondsTextParam.extendBlocks),
- 'DescDirectSecondsTextParam': makeRenderer(DirectSecondsTextParam.extendBlocks, higherIsBetter=False),
- 'AscDirectMetersTextParam': makeRenderer(DirectMetersTextParam.extendBlocks),
- 'DescDirectMetersTextParam': makeRenderer(DirectMetersTextParam.extendBlocks, higherIsBetter=False),
- 'AscDirectNumericDeltaBarParam': makeRenderer(DirectNumericDeltaBarParam.extendBlocks),
- 'DescDirectNumericDeltaBarParam': makeRenderer(DirectNumericDeltaBarParam.extendBlocks, higherIsBetter=False),
- 'AscDirectAdditionalSecondsDeltaBarParam': makeRenderer(AdditionalSecondsDeltaBarParam.extendBlocks),
- 'AscDirectSecondsDeltaBarParam': makeRenderer(DirectSecondsDeltaBarParam.extendBlocks),
- 'DescDirectSecondsDeltaBarParam': makeRenderer(DirectSecondsDeltaBarParam.extendBlocks, higherIsBetter=False),
- 'AscDirectPercentageDeltaBarParam': makeRenderer(DirectPercentageDeltaBarParam.extendBlocks),
- 'DescDirectPercentageDeltaBarParam': makeRenderer(DirectPercentageDeltaBarParam.extendBlocks, higherIsBetter=False),
- 'AscReciprocalPercentageDeltaBarParam': makeRenderer(ReciprocalPercentageDeltaBarParam.extendBlocks),
- 'DescReciprocalPercentageDeltaBarParam': makeRenderer(ReciprocalPercentageDeltaBarParam.extendBlocks, higherIsBetter=False),
- 'AscShellStunSecondsDeltaBarParam': makeRenderer(ShellStunSecondsDeltaBarParam.extendBlocks),
- 'DescShellStunSecondsDeltaBarParam': makeRenderer(ShellStunSecondsDeltaBarParam.extendBlocks, higherIsBetter=False),
- 'AscMultiMetersTextParam': makeRenderer(MultipleMetersTextParam.extendBlocks),
- 'DescMultiMetersTextParam': makeRenderer(MultipleMetersTextParam.extendBlocks, higherIsBetter=False)}
+ 'DirectNumericTextParam': makeRenderer(DirectNumericTextParam.extendBlocks),
+ 'DirectSecondsTextParam': makeRenderer(DirectSecondsTextParam.extendBlocks),
+ 'DirectMetersTextParam': makeRenderer(DirectMetersTextParam.extendBlocks),
+ 'MulDirectPercentageTextParam': makeRenderer(DirectPercentageTextParam.extendBlocks),
+ 'AddDirectPercentageTextParam': makeRenderer(DirectPercentageTextParam.extendBlocks, isMultiplier=False),
+ 'MulReciprocalPercentageTextParam': makeRenderer(ReciprocalPercentageTextParam.extendBlocks),
+ 'AddReciprocalPercentageTextParam': makeRenderer(ReciprocalPercentageTextParam.extendBlocks, isMultiplier=False),
+ 'ShellStunSecondsTextParam': makeRenderer(ShellStunSecondsTextParam.extendBlocks),
+ 'MultiMetersTextParam': makeRenderer(MultipleMetersTextParam.extendBlocks),
+ 'NestedMetersTextParam': makeRenderer(NestedMetersTextParam.extendBlocks),
+ 'NestedSecondsTextParam': makeRenderer(NestedSecondsTextParam.extendBlocks),
+ 'MulNestedPercentageTextParam': makeRenderer(NestedPercentageTextParam.extendBlocks),
+ 'AddNestedPercentageTextParam': makeRenderer(NestedPercentageTextParam.extendBlocks, isMultiplier=False),
+ 'NestedShellStunSecondsTextParam': makeRenderer(NestedShellStunSecondsTextParam.extendBlocks)}
 ConsumableTooltipEntry = namedtuple('ConsumableTooltipEntry', ('name', 'renderer'))
 
 class BattleAbilityTooltipManager(object):
@@ -336,22 +361,21 @@ class BattleAbilityTooltipManager(object):
             self._validateTooltipsData(self.__tooltipsSettings)
         return
 
-    def createBattleAbilityTooltipRenderers(self, skillInfo, currentLevel, specLevel, bodyBlocks):
+    def createBattleAbilityTooltipRenderers(self, skillInfo, staticBlock, dynamicBlock, level=1):
         equipments = vehicles.g_cache.equipments()
         levels = skillInfo.levels
-        curLvlEq = equipments[levels[currentLevel].eqID]
-        specLvlEq = equipments[levels[specLevel].eqID]
+        curLvlEq = equipments[levels[level].eqID]
         for tooltipIdentifier in curLvlEq.tooltipIdentifiers:
             tooltipInfo = self.__tooltipsSettings.get(tooltipIdentifier, None)
             if tooltipInfo is None:
                 logger = logging.getLogger(__name__)
                 logger.error('[ERROR] createBattleAbilityTooltipRenderers: Failed to find tooltipInfo %(ttid)s for %(us)s (%(name)s).', {'ttid': tooltipIdentifier,
-                 'us': specLvlEq.userString,
-                 'name': specLvlEq.name})
+                 'us': curLvlEq.userString,
+                 'name': curLvlEq.name})
                 continue
             renderer = g_battleAbilityParamsRenderers.get(tooltipInfo.renderer, None)
             if renderer:
-                renderer(bodyBlocks, curLvlEq, specLvlEq, (equipments[lvl.eqID] for lvl in levels.itervalues()), tooltipIdentifier, tooltipInfo.name)
+                renderer(staticBlock, dynamicBlock, curLvlEq, (equipments[lvl.eqID] for lvl in levels.itervalues()), tooltipIdentifier, tooltipInfo.name)
 
         return
 

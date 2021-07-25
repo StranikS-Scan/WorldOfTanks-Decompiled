@@ -1483,13 +1483,8 @@ class AccountDossierStats(_DossierStats):
     def getSeasonRanked15x15Stats(self, seasonKey, seasonID):
         return SeasonRankedStatsBlock(self._getDossierItem(), seasonKey, seasonID)
 
-    @dependency.replace_none_kwargs(rankedController=IRankedBattlesController)
-    def getSeasonRankedStats(self, seasonKey, seasonID, rankedController=None):
-        if rankedController.isRanked2020Season(seasonID):
-            stats = SeasonRankedStatsBlock(self._getDossierItem(), seasonKey, seasonID)
-        else:
-            stats = self.getRanked10x10Stats()
-        return stats
+    def getSeasonRankedStats(self, seasonKey, seasonID):
+        return SeasonRankedStatsBlock(self._getDossierItem(), seasonKey, seasonID)
 
     def getEpicRandomStats(self):
         return AccountEpicRandomStatsBlock(self._getDossierItem())
@@ -1806,12 +1801,6 @@ class TotalAccountRankedStatsBlock(AccountRankedStatsBlock, _VehiclesStatsBlock)
 
 class TotalAccountRanked10x10StatsBlock(TotalAccountRankedStatsBlock):
     __rankedController = dependency.descriptor(IRankedBattlesController)
-
-    def getStepsCount(self):
-        season = self.__rankedController.getCurrentSeason()
-        if season is None:
-            season = self.__rankedController.getPreviousSeason()
-        return self._rankedSeasons.getSeasonStepsCount(season.getSeasonID()) if season else 0
 
     def getAchievedRank(self):
         return self._rankedSeasons.getAchievedRank(self.__getSeasonID())

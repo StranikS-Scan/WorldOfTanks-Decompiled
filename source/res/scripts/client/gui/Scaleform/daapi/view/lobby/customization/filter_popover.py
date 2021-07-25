@@ -64,6 +64,7 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         self._purchasedToggleEnabled = data.purchasedEnabled
         self._historicToggleEnabled = data.historicEnabled
         self._nonHistoricToggleEnabled = data.nonHistoricEnabled
+        self._fantasticalToggleEnabled = data.fantasticalEnabled
         self._appliedToggleEnabled = data.appliedEnabled
         self._groups = data.groups
         self._selectedGroup = data.selectedGroup
@@ -111,6 +112,11 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         self.updateDefaultButton()
         self.__ctx.events.onCarouselFiltered(nonHistoric=value)
 
+    def setShowOnlyFantastical(self, value):
+        self._fantasticalToggleEnabled = value
+        self.updateDefaultButton()
+        self.__ctx.events.onCarouselFiltered(fantastical=value)
+
     def setShowOnlyAcquired(self, value):
         self._purchasedToggleEnabled = value
         self.updateDefaultButton()
@@ -155,12 +161,13 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         else:
             defaultGroup = True
         defaultFormfactorGroups = any(self._formfactorTypes.values())
-        notDefault = not defaultGroup or defaultFormfactorGroups or self._historicToggleEnabled or self._nonHistoricToggleEnabled or self._purchasedToggleEnabled or self._hideOnAnotherVehEnabled or self._showOnlyProgressionDecalsEnabled or self._showOnlyEditableStylesEnabled or self._showOnlyNonEditableStylesEnabled or self._appliedToggleEnabled
+        notDefault = not defaultGroup or defaultFormfactorGroups or self._historicToggleEnabled or self._nonHistoricToggleEnabled or self._fantasticalToggleEnabled or self._purchasedToggleEnabled or self._hideOnAnotherVehEnabled or self._showOnlyProgressionDecalsEnabled or self._showOnlyEditableStylesEnabled or self._showOnlyNonEditableStylesEnabled or self._appliedToggleEnabled
         self.as_enableDefBtnS(notDefault)
 
     def setDefaultFilter(self):
         self._historicToggleEnabled = False
         self._nonHistoricToggleEnabled = False
+        self._fantasticalToggleEnabled = False
         self._purchasedToggleEnabled = False
         self._appliedToggleEnabled = False
         self._hideOnAnotherVehEnabled = False
@@ -172,7 +179,7 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         self.__updateVO = self.__createUpdateVO()
         self.as_setDataS(self.__updateVO.asDict())
         self.updateDefaultButton()
-        self.__ctx.events.onCarouselFiltered(historic=self._historicToggleEnabled, nonHistoric=self._nonHistoricToggleEnabled, inventory=self._purchasedToggleEnabled, applied=self._appliedToggleEnabled, group=self._selectedGroup, formfactorGroups=self._formfactorTypes, onAnotherVeh=self._hideOnAnotherVehEnabled, onlyProgressionDecals=self._showOnlyProgressionDecalsEnabled, onlyEditableStyles=self._showOnlyEditableStylesEnabled, onlyNonEditableStyles=self._showOnlyNonEditableStylesEnabled)
+        self.__ctx.events.onCarouselFiltered(historic=self._historicToggleEnabled, nonHistoric=self._nonHistoricToggleEnabled, fantastical=self._fantasticalToggleEnabled, inventory=self._purchasedToggleEnabled, applied=self._appliedToggleEnabled, group=self._selectedGroup, formfactorGroups=self._formfactorTypes, onAnotherVeh=self._hideOnAnotherVehEnabled, onlyProgressionDecals=self._showOnlyProgressionDecalsEnabled, onlyEditableStyles=self._showOnlyEditableStylesEnabled, onlyNonEditableStyles=self._showOnlyNonEditableStylesEnabled)
 
     def _populate(self):
         super(FilterPopover, self)._populate()
@@ -190,7 +197,10 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         return
 
     def __createUpdateVO(self):
-        _filterBtns = [{'value': backport.image(R.images.gui.maps.icons.buttons.non_historical()),
+        _filterBtns = [{'value': backport.image(R.images.gui.maps.icons.buttons.fantastical()),
+          'tooltip': makeTooltip(backport.text(R.strings.vehicle_customization.carousel.filter.fantasticalBtn.header()), backport.text(R.strings.vehicle_customization.carousel.filter.fantasticalBtn.body())),
+          'selected': self._fantasticalToggleEnabled},
+         {'value': backport.image(R.images.gui.maps.icons.buttons.non_historical()),
           'tooltip': makeTooltip(backport.text(R.strings.vehicle_customization.carousel.filter.nonHistoricalBtn.header()), backport.text(R.strings.vehicle_customization.carousel.filter.nonHistoricalBtn.body())),
           'selected': self._nonHistoricToggleEnabled},
          {'value': backport.image(R.images.gui.maps.icons.buttons.hist_small()),
@@ -202,7 +212,8 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
          {'value': backport.image(R.images.gui.maps.icons.buttons.equipped_icon()),
           'tooltip': makeTooltip(backport.text(R.strings.vehicle_customization.carousel.filter.equippedBtn.header()), backport.text(R.strings.vehicle_customization.carousel.filter.equippedBtn.body())),
           'selected': self._appliedToggleEnabled}]
-        self.__filterChangeHandlers = [self.setShowOnlyNonHistoric,
+        self.__filterChangeHandlers = [self.setShowOnlyFantastical,
+         self.setShowOnlyNonHistoric,
          self.setShowOnlyHistoric,
          self.setShowOnlyAcquired,
          self.setShowOnlyApplied]

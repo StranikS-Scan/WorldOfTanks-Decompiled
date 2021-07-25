@@ -24,6 +24,7 @@
     <C13_B47>	33	</C13_B47>
     <N22_LT>	34	</N22_LT>
     <N19_1>	35	</N19_1>
+    <C42_FL>	501	</C42_FL>
     <C42_IGR>	60001	</C42_IGR>
     <N19Mk3_IGR>	60002	</N19Mk3_IGR>
     <N22_IGR>	60003	</N22_IGR>
@@ -32,6 +33,7 @@
     <N19Mk1_SH>	10000	</N19Mk1_SH>
     <C45A_SH>	10001	</C45A_SH>
     <C42_B47_SH>	10002	</C42_B47_SH>
+    <N19Mk3_MapsTraining_Dummy_MT_2>	3	</N19Mk3_MapsTraining_Dummy_MT_2>
   </ids>
   <shared>
     <Alarm_flags_bot>
@@ -251,6 +253,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C42>
+    <C42_FL>
+      <userString>	#gb_vehicles:C42	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C42_FL>
     <C42_VHF>
       <userString>	#gb_vehicles:C42_VHF	</userString>
       <tags></tags>
@@ -412,5 +426,17 @@
       <radarRadius>	520	</radarRadius>
       <radarCooldown>	45	</radarCooldown>
     </C42_B47_SH>
+    <N19Mk3_MapsTraining_Dummy_MT_2>
+      <userString>	#gb_vehicles:N19Mk3	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	22000	</price>
+      <weight>	40	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </N19Mk3_MapsTraining_Dummy_MT_2>
   </shared>
 </radios.xml>

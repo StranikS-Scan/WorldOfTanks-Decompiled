@@ -28,7 +28,11 @@ _IS_NON_PLAYER_NOTIFICATION = '_npc'
 _SKIP_ON_COMMAND_RECEIVED = {BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
  BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION,
  BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA,
- BATTLE_CHAT_COMMAND_NAMES.CLEAR_CHAT_COMMANDS}
+ BATTLE_CHAT_COMMAND_NAMES.SHOOTING_POINT,
+ BATTLE_CHAT_COMMAND_NAMES.VEHICLE_SPOTPOINT,
+ BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT,
+ BATTLE_CHAT_COMMAND_NAMES.CLEAR_CHAT_COMMANDS,
+ BATTLE_CHAT_COMMAND_NAMES.NAVIGATION_POINT}
 CommandNotificationData = namedtuple('CommandNotificationData', 'matrixProvider, targetID')
 _logger = logging.getLogger(__name__)
 
@@ -284,7 +288,7 @@ class AvatarChatKeyHandling(object):
             self.__playSoundNotificationOnCommandReceived(cmd, MarkerType.VEHICLE_MARKER_TYPE, True, notificationReply)
             return
 
-    def __onStaticMarkerAdded(self, areaID, creatorID, position, markerSymbolName, show3DMarker=False, markerText='', numberOfReplies=0, isTargetForPlayer=False):
+    def __onStaticMarkerAdded(self, areaID, creatorID, position, markerSymbolName, markerText='', numberOfReplies=0, isTargetForPlayer=False):
         originalCmdId = self.__getOriginalCommandID(areaID, MarkerType.LOCATION_MARKER_TYPE)
         if originalCmdId <= 0:
             return
@@ -296,7 +300,7 @@ class AvatarChatKeyHandling(object):
             if notification is None:
                 return
             matrixProvider = self.__createMatrix(position)
-            sentByPlayer = True if creatorID == self.playerVehicleID else False
+            sentByPlayer = creatorID in (self.playerVehicleID, self.sessionProvider.arenaVisitor.getArenaUniqueID())
             self.__playSoundNotification(notification, matrixProvider.translation, True, sentByPlayer)
             return
 
@@ -451,6 +455,6 @@ class AvatarChatKeyHandling(object):
 
     def __isEpicBattleOverviewMapScreenVisible(self):
         arenaVisitor = self.sessionProvider.arenaVisitor
-        isEpicBattle = arenaVisitor.gui.isEpicBattle()
+        isEpicBattle = arenaVisitor.gui.isInEpicRange()
         ctrl = self.guiSessionProvider.dynamic.maps
         return False if not ctrl else isEpicBattle and ctrl.overviewMapScreenVisible

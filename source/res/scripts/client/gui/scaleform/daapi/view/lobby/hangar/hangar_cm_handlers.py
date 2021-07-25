@@ -52,6 +52,7 @@ class VEHICLE(object):
     SELL = 'sell'
     BUY = 'buy'
     RESEARCH = 'vehicleResearch'
+    POST_PROGRESSION = 'vehiclePostProgression'
     RENEW = 'vehicleRentRenew'
     REMOVE = 'vehicleRemove'
     CHECK = 'vehicleCheck'
@@ -168,6 +169,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.INFO: 'showVehicleInfo',
          VEHICLE.SELL: 'sellVehicle',
          VEHICLE.RESEARCH: 'toResearch',
+         VEHICLE.POST_PROGRESSION: 'showPostProgression',
          VEHICLE.CHECK: 'checkFavoriteVehicle',
          VEHICLE.UNCHECK: 'uncheckFavoriteVehicle',
          VEHICLE.STATS: 'showVehicleStats',
@@ -194,6 +196,10 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         else:
             _logger.error('Can not go to Research because id for current vehicle is None')
         return
+
+    def showPostProgression(self):
+        vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
+        shared_events.showVehPostProgressionView(vehicle.intCD)
 
     def showVehicleExchange(self):
         self._tradeInController.setActiveTradeOffVehicleCD(self.vehCD)
@@ -267,6 +273,8 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     isNavigationEnabled = True
                 if not vehicle.isOnlyForEpicBattles:
                     options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
+                if vehicle.isPostProgressionExists:
+                    options.append(self._makeItem(VEHICLE.POST_PROGRESSION, MENU.contextmenu(VEHICLE.POST_PROGRESSION), {'enabled': isNavigationEnabled}))
                 if vehicle.isCollectible:
                     options.append(self._makeItem(VEHICLE.GO_TO_COLLECTION, MENU.contextmenu(VEHICLE.GO_TO_COLLECTION), {'enabled': self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()}))
                 if vehicle.hasNationGroup:

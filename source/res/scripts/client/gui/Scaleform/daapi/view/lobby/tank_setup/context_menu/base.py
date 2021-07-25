@@ -13,6 +13,8 @@ THIRD_SLOT = 2
 
 class TankSetupCMLabel(object):
     DEMOUNT = 'demount'
+    DEMOUNT_FROM_SETUP = 'demountFromSetup'
+    DEMOUNT_FROM_SETUPS = 'demountFromSetups'
     DESTROY = 'destroy'
     SELECT = 'select'
     PUT_ON_FIRST = 'putOnFirst'
@@ -53,7 +55,10 @@ class BaseTankSetupContextMenu(ContextMenu):
         self._intCD = int(ctx.intCD)
         self._slotType = ctx.slotType
         self._installedSlotId = int(ctx.installedSlotId)
+        self._itemInstalledSetupIdx = int(ctx.itemInstalledSetupIdx)
+        self._itemInstalledSetupSlotIdx = int(ctx.itemInstalledSetupSlotIdx)
         self._isMounted = ctx.isMounted
+        self._isMountedMoreThanOne = ctx.isMountedMoreThanOne
         self._slotsCount = 1
 
     def _getEmitterView(self):
@@ -67,6 +72,12 @@ class BaseTankSetupContextMenu(ContextMenu):
 
     def _getItem(self):
         return self._itemsCache.items.getItemByCD(self._intCD)
+
+    def _getVehicleItems(self):
+        return None
+
+    def _isInstalledInCurrentLayout(self):
+        return self._installedSlotId != NONE_ID
 
     def _getOptionCustomData(self, label):
         optionData = super(BaseTankSetupContextMenu, self)._getOptionCustomData(label)
@@ -102,19 +113,26 @@ class BaseItemContextMenu(BaseTankSetupContextMenu):
         return optionData
 
     def _isVisible(self, label):
-        return self._slotsCount == 1 and self._installedSlotId == NONE_ID if label == TankSetupCMLabel.SELECT else super(BaseItemContextMenu, self)._isVisible(label)
+        return self._slotsCount == 1 and not self._isInstalledInCurrentLayout() if label == TankSetupCMLabel.SELECT else super(BaseItemContextMenu, self)._isVisible(label)
 
 
 class BaseSlotContextMenu(BaseTankSetupContextMenu):
 
     def _sendPutOnSlotAction(self, onId):
-        self._sendSlotAction(BaseSetupModel.SWAP_SLOTS_ACTION, currentSlotId=onId)
+        if self._isInstalledInCurrentLayout():
+            self._sendSlotAction(BaseSetupModel.SWAP_SLOTS_ACTION, currentSlotId=onId)
+        else:
+            self._sendSlotAction(BaseSetupModel.SELECT_SLOT_ACTION, currentSlotId=onId)
 
     def _isItemInInventory(self):
         item = self._itemsCache.items.getItemByCD(self._intCD)
         return item.isInInventory
 
+    def _isItemInOtherLayout(self):
+        item = self._itemsCache.items.getItemByCD(self._intCD)
+        return item.isInOtherLayout(self._getVehicle())
+
     def _isVisible(self, label):
         if label == TankSetupCMLabel.TAKE_OFF:
-            return not self._isMounted and not self._isItemInInventory()
-        return self._isMounted or self._isItemInInventory() if label == TankSetupCMLabel.UNLOAD else super(BaseSlotContextMenu, self)._isVisible(label)
+            return not self._isMounted and not self._isItemInInventory() or self._isItemInOtherLayout()
+        return (self._isMounted or self._isItemInInventory()) and not self._isItemInOtherLayout() if label == TankSetupCMLabel.UNLOAD else super(BaseSlotContextMenu, self)._isVisible(label)

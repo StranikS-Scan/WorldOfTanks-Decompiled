@@ -7,6 +7,7 @@ from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.intro_ammunition_setup_view_model import IntroAmmunitionSetupViewModel
+from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playEnterTankSetupView, playExitTankSetupView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
@@ -14,19 +15,21 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.impl import IGuiLoader
 _logger = logging.getLogger(__name__)
+_SETUP_TO_SETTINGS = {TankSetupConstants.OPT_DEVICES: R.views.lobby.tanksetup.IntroScreen(),
+ TankSetupConstants.BATTLE_ABILITIES: R.views.lobby.frontline.IntroScreen()}
 
 class IntroAmmunitionSetupView(ViewImpl):
     _settingsCore = dependency.descriptor(ISettingsCore)
     _guiLoader = dependency.descriptor(IGuiLoader)
     __slots__ = ('__closeCallback', '__hasTankSetupView')
 
-    def __init__(self, closeCallback):
-        settings = ViewSettings(R.views.lobby.tanksetup.IntroScreen())
+    def __init__(self, section, closeCallback):
+        viewSettings = _SETUP_TO_SETTINGS.get(section, R.views.lobby.tanksetup.IntroScreen())
+        settings = ViewSettings(viewSettings)
         settings.model = IntroAmmunitionSetupViewModel()
         super(IntroAmmunitionSetupView, self).__init__(settings)
         self.__closeCallback = closeCallback
         self.__hasTankSetupView = self._guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.tanksetup.HangarAmmunitionSetup())
-        self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN: True})
 
     @property
     def viewModel(self):
@@ -61,21 +64,26 @@ class IntroAmmunitionSetupView(ViewImpl):
 
 class IntroAmmunitionSetupWindow(LobbyWindow):
 
-    def __init__(self, callback=None, parent=None):
-        super(IntroAmmunitionSetupWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, decorator=None, content=IntroAmmunitionSetupView(callback), parent=parent)
+    def __init__(self, setupName=None, callback=None, parent=None):
+        super(IntroAmmunitionSetupWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, decorator=None, content=IntroAmmunitionSetupView(setupName, callback), parent=parent)
         return
 
 
 @dependency.replace_none_kwargs(settingsCore=ISettingsCore)
-def isIntroAmmunitionSetupShown(settingsCore=None):
-    return settingsCore.serverSettings.getUIStorage().get(UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN)
+def isIntroOptionalDevicesSetupShown(settingsCore=None):
+    return settingsCore.serverSettings.getUIStorage().get(UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN, False)
+
+
+@dependency.replace_none_kwargs(settingsCore=ISettingsCore)
+def isIntroEpicBattleAbilitiesShown(settingsCore=None):
+    return settingsCore.serverSettings.getUIStorage().get(UI_STORAGE_KEYS.EPIC_BATTLE_ABILITIES_INTRO_SHOWN, False)
 
 
 @async.async
-def showIntroAmmunitionSetupWindow():
+def showIntroAmmunitionSetupWindow(setupName):
 
     def _loadIntroAmmunitonSetupWindow(callback):
-        window = IntroAmmunitionSetupWindow(callback)
+        window = IntroAmmunitionSetupWindow(setupName, callback)
         window.load()
 
     yield async.await_callback(_loadIntroAmmunitonSetupWindow)()

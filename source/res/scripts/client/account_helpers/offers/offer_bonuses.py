@@ -5,6 +5,7 @@ import typing
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from constants import PREMIUM_ENTITLEMENTS
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageItemDescr, getItemExtraParams
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
@@ -15,9 +16,11 @@ from gui.server_events.formatters import tagText
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeUserName
 from gui.shared.money import Currency
+from gui.shared.utils.functions import stripHTMLTags
 from gui.shared.utils.requesters.blueprints_requester import getVehicleCDForIntelligence, getVehicleCDForNational
 from helpers import int2roman, dependency
 from skeletons.gui.customization import ICustomizationService
+EXTRA_PARAMS_JOINER = ', '
 
 def _canCustomizationBeAdded(c11nItem, count):
     maxNumber = c11nItem.descriptor.maxNumber
@@ -219,7 +222,10 @@ class CrewBooksOfferBonus(OfferItemsBonusMixin, CrewBooksBonus):
 class ItemsOfferBonus(OfferItemsBonusMixin, ItemsBonus):
 
     def getOfferDescription(self):
-        return self.displayedItem.getOptDeviceBoosterDescription(None, None) if self.displayedItem.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER and not self.displayedItem.isCrewBooster() else self.displayedItem.shortDescriptionSpecial
+        description = getStorageItemDescr(self.displayedItem)
+        if not description:
+            description = EXTRA_PARAMS_JOINER.join(getItemExtraParams(self.displayedItem))
+        return stripHTMLTags(description)
 
     def _getItems(self):
         return self.getItems().items()

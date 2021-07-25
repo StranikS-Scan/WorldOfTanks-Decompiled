@@ -28,7 +28,8 @@ class FunctionalShowHint(FunctionalEffect):
             hintID = hint.getID()
             uniqueID = '{}_{}'.format(self._data.getID(), hintID)
             props = HintProps(uniqueID, hintID, hint.getTargetID(), text, hint.hasBox(), hint.getArrow(), hint.getPadding(), updateRuntime=False, hideImmediately=hint.getHideImmediately(), checkViewArea=False)
-            return self._gui.playEffect(GUI_EFFECT_NAME.SHOW_HINT, (props, hint.getActionTypes()))
+            silent = False
+            return self._gui.playEffect(GUI_EFFECT_NAME.SHOW_HINT, (props, hint.getActionTypes(), silent))
 
 
 class FunctionalCloseHint(FunctionalEffect):

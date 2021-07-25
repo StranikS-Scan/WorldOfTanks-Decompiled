@@ -1,33 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_prime_time.py
 from constants import Configs
-from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.lobby.prime_time_view_base import ServerListItemPresenter
 from gui.Scaleform.daapi.view.meta.EpicPrimeTimeMeta import EpicPrimeTimeMeta
-from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
-from gui.shared.event_dispatcher import showHangar
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from gui.shared.formatters import text_styles
+from gui.shared.event_dispatcher import showHangar
+from gui.shared.formatters import text_styles, time_formatters
 from helpers import dependency
 from helpers import time_utils
-from gui.impl.gen import R
-from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IEventProgressionController
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 
-class FrontLineServerPresenter(ServerListItemPresenter):
-    _periodsController = dependency.descriptor(IEventProgressionController)
+class EpicBattleServerPresenter(ServerListItemPresenter):
+    _periodsController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def _buildTooltip(self, peripheryID):
         if not self.getTimeLeft():
-            tooltipStr = text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_ENDOFCYCLE, server=self.getName()))
+            tooltipStr = text_styles.expText(backport.text(R.strings.epic_battle.primeTime.endOfCycle(), server=self.getName()))
         else:
-            timeStr = text_styles.neutral(time_utils.getTillTimeString(self.getTimeLeft(), MENU.TIME_TIMEVALUESHORT))
+            timeStr = text_styles.neutral(time_formatters.getTillTimeByResource(self.getTimeLeft(), R.strings.menu.Time.timeValueShort))
             if self._getIsAvailable():
-                tooltipStr = text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_SERVERTOOLTIP, server=self.getName(), time=timeStr))
+                tooltipStr = text_styles.expText(backport.text(R.strings.epic_battle.primeTime.serverTooltip(), server=self.getName(), time=timeStr))
             else:
-                tooltipStr = text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_SERVERUNAVAILABLETOOLTIP, time=timeStr))
+                tooltipStr = text_styles.expText(backport.text(R.strings.epic_battle.primeTime.serverUnavailableTooltip(), time=timeStr))
         return {'tooltip': tooltipStr,
          'specialArgs': [],
          'specialAlias': None,
@@ -38,22 +35,25 @@ class FrontLineServerPresenter(ServerListItemPresenter):
 
 
 class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
-    __eventProgression = dependency.descriptor(IEventProgressionController)
+    _serverPresenterClass = EpicBattleServerPresenter
+    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
-    _serverPresenterClass = FrontLineServerPresenter
 
     def _populate(self):
         super(EpicBattlesPrimeTimeView, self)._populate()
-        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
-        self._setHeaderText()
-        self._setBackground()
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
+        self.as_setHeaderTextS(backport.text(R.strings.epic_battle.primeTime.title()))
+        self.as_setBackgroundSourceS(backport.image(R.images.gui.maps.icons.epicBattles.primeTime.prime_time_back_default()))
 
     def _dispose(self):
-        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
         super(EpicBattlesPrimeTimeView, self)._dispose()
 
+    def _isAlertBGVisible(self):
+        return not self.__epicController.hasAvailablePrimeTimeServers()
+
     def _getController(self):
-        return self.__eventProgression
+        return self.__epicController
 
     def _prepareData(self, serverList, serverInfo):
         isSingleServer = len(serverList) == 1
@@ -77,7 +77,7 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
 
     def __getStatusText(self):
         if not self._getController().hasAvailablePrimeTimeServers():
-            return EPIC_BATTLE.PRIMETIME_STATUS_NOPRIMETIMESONALLSERVERS
+            return backport.text(R.strings.epic_battle.primeTime.status.noPrimeTimesOnAllServers())
         else:
             currServerName = self._connectionMgr.serverUserName
             primeTime = self._getController().getPrimeTimes().get(self._connectionMgr.peripheryID)
@@ -90,13 +90,13 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
                         startTimeStr = backport.getShortDateFormat(startTime)
                     else:
                         startTimeStr = backport.getShortTimeFormat(startTime)
-                    return _ms(EPIC_BATTLE.PRIMETIME_STATUS_NOPRIMETIMEONTHISSERVER, startTime=startTimeStr, server=currServerName)
+                    return backport.text(R.strings.epic_battle.primeTime.status.noPrimeTimeOnThisServer(), startTime=startTimeStr, server=currServerName)
             season = self._getController().getCurrentSeason()
             if season is not None and primeTime is not None:
                 lastCycle = season.getLastActiveCycleInfo(currTime)
                 if lastCycle:
                     return self._getCycleFinishedOnThisServerText(cycleNumber=lastCycle.ordinalNumber, serverName=currServerName)
-            return _ms(EPIC_BATTLE.PRIMETIME_STATUS_DISABLEDONTHISSERVER, server=currServerName)
+            return backport.text(R.strings.epic_battle.primeTime.status.disabledOnThisServer(), server=currServerName)
 
     def __getTimeText(self, serverInfo):
         if serverInfo:
@@ -108,7 +108,7 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
             serverName = ''
         currentSeason = self._getController().getCurrentSeason()
         if currentSeason and not timeLeft:
-            return _ms(EPIC_BATTLE.PRIMETIME_ENDOFCYCLE, server=serverName)
+            return backport.text(R.strings.epic_battle.primeTime.endOfCycle(), server=serverName)
         if not timeLeft and not isAvailable and not currentSeason:
             nextSeason = self._getController().getNextSeason()
             if nextSeason:
@@ -120,9 +120,12 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
             else:
                 self.destroy()
                 return ''
-        timeLeftStr = time_utils.getTillTimeString(timeLeft, MENU.TIME_TIMEVALUESHORT)
-        i18nKey = EPIC_BATTLE.PRIMETIME_PRIMEISAVAILABLE if isAvailable else EPIC_BATTLE.PRIMETIME_PRIMEWILLBEAVAILABLE
-        return _ms(i18nKey, server=serverName, time=text_styles.neutral(timeLeftStr))
+        timeLeftStr = time_formatters.getTillTimeByResource(timeLeft, R.strings.menu.Time.timeValueShort)
+        if isAvailable:
+            stringR = R.strings.epic_battle.primeTime.primeIsAvailable()
+        else:
+            stringR = R.strings.epic_battle.primeTime.primeWillBeAvailable()
+        return backport.text(stringR, server=serverName, time=text_styles.neutral(timeLeftStr))
 
     def _setHeaderText(self):
         self.as_setHeaderTextS(backport.text(self.__eventProgression.getPrimeTimeTitle()))
@@ -133,8 +136,6 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
     def _getCycleFinishedOnThisServerText(self, cycleNumber, serverName):
         return backport.text(R.strings.epic_battle.primeTime.status.cycleFinishedOnThisServer(), cycleNo=cycleNumber, server=serverName)
 
-    def __onServerSettingsChange(self, diff):
-        eventConfigKeys = (Configs.BATTLE_ROYALE_CONFIG.value, Configs.EVENT_PROGRESSION_CONFIG.value)
-        isDisabled = any([ diff.get(config, {}).get('isEnabled') is False for config in eventConfigKeys ])
-        if isDisabled:
+    def _onServerSettingsChange(self, diff):
+        if diff.get(Configs.EPIC_CONFIG.value, {}).get('isEnabled') is False:
             showHangar()

@@ -6,6 +6,7 @@ from account_helpers.premium_info import PremiumInfo
 from adisp import async
 from gui.shared.money import Money, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
+from gui.veh_post_progression.models.ext_money import ExtendedMoney
 from helpers import time_utils, dependency
 from constants import SPA_ATTRS, MIN_VEHICLE_LEVEL
 from skeletons.gui.game_control import IWalletController
@@ -272,6 +273,10 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     def getMaxResearchedLevel(self, nationID):
         return self.getMaxResearchedLevelByNations().get(nationID, MIN_VEHICLE_LEVEL)
+
+    def getMoneyExt(self, vehCD):
+        vehicleXP = self.vehiclesXPs.get(vehCD, 0)
+        return ExtendedMoney(xp=(self.freeXP + vehicleXP), vehXP=vehicleXP, freeXP=self.freeXP, **self.money.toDict())
 
     def getWeeklyVehicleCrystals(self, vehCD):
         return self.getCacheValue('weeklyVehicleCrystals', {}).get(vehCD, 0)

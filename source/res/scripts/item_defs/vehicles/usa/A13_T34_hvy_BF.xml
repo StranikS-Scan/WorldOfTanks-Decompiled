@@ -9,6 +9,8 @@
     <loader></loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
+  <postProgressionTree>	role_HT_support_level_8	</postProgressionTree>
+  <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	35	</forward>
     <backward>	12	</backward>
@@ -156,10 +158,10 @@
       <terrainResistance>	1.4 1.7 3.4	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.28	</vehicleMovement>
-        <vehicleRotation>	0.28	</vehicleRotation>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -1120,7 +1122,7 @@
       <primaryArmor>	armor_16 armor_3 armor_4	</primaryArmor>
       <weight>	12800	</weight>
       <maxHealth>	300	</maxHealth>
-      <rotationSpeed>	18	</rotationSpeed>
+      <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
@@ -1149,7 +1151,7 @@
           </armor>
           <reloadTime>	15	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.22	</turretRotation>
+            <turretRotation>	0.16	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1330,7 +1332,7 @@
     <detailed>
       <engines>
         <Continental_AV-1790-3A1>
-          <smplEnginePower>	856.3977	</smplEnginePower>
+          <smplEnginePower>	930	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Continental_AV-1790-3A1>
       </engines>

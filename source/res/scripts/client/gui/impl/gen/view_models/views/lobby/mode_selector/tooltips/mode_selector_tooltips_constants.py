@@ -14,6 +14,7 @@ class ModeSelectorTooltipsConstants(ViewModel):
     RANKED_BATTLES_POSITION_TOOLTIP = 'rankedBattlesPosition'
     CALENDAR_TOOLTIP = 'calendarTooltip'
     MAPBOX_CALENDAR_TOOLTIP = 'mapboxCalendar'
+    EPIC_BATTLE_CALENDAR_TOOLTIP = 'epicBattleCalendarTooltip'
 
     def __init__(self, properties=0, commands=0):
         super(ModeSelectorTooltipsConstants, self).__init__(properties=properties, commands=commands)

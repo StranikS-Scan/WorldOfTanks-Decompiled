@@ -39,7 +39,7 @@ def messageArgs(int32Arg1=0, int64Arg1=0, floatArg1=0, strArg1='', strArg2=''):
 
 EMPTY_ARGS = messageArgs()
 
-class MESSENGER_ERRORS:
+class MESSENGER_ERRORS():
     NO_ERROR = _makeID(start=0)
     GENERIC_ERROR = _makeID()
     NOT_READY = _makeID()
@@ -59,7 +59,7 @@ class MESSENGER_ERRORS:
         return name if name is not None else 'ERROR_CODE_' + str(errorCode)
 
 
-class MESSENGER_LIMITS:
+class MESSENGER_LIMITS():
     FIND_USERS_BY_NAME_MAX_RESULT_SIZE = 50
     FIND_USERS_BY_NAME_REQUEST_COOLDOWN_SEC = 5.0 + _COOLDOWN_OFFSET
     BATTLE_CHANNEL_MESSAGE_MAX_SIZE = 140
@@ -71,7 +71,7 @@ class MESSENGER_LIMITS:
     VOIP_CREDENTIALS_REQUEST_COOLDOWN_SEC = 10.0 + _COOLDOWN_OFFSET
 
 
-class MESSENGER_ACTION_IDS:
+class MESSENGER_ACTION_IDS():
     RESPONSE_SUCCESS = _makeID(start=0)
     RESPONSE_FAILURE = _makeID()
     FIND_USERS_BY_NAME = _makeID()
@@ -82,6 +82,7 @@ class MESSENGER_ACTION_IDS:
     _ADMIN_COMMAND_START_ID = _makeID(range=10)
     _BATTLE_ACTION_START_ID = _makeID()
     INIT_BATTLE_CHAT = _makeID()
+    REINIT_BATTLE_CHAT = _makeID()
     DEINIT_BATTLE_CHAT = _makeID()
     BROADCAST_BATTLE_MESSAGE = _makeID()
     ON_BATTLE_MESSAGE_BROADCAST = _makeID()
@@ -161,7 +162,7 @@ class MESSENGER_ACTION_IDS:
         return ADMIN_CHAT_COMMANDS[actionID - startID] if startID <= actionID < startID + len(ADMIN_CHAT_COMMANDS) else None
 
 
-class CHAT_COMMAND_COOLDOWN_TYPE_IDS:
+class CHAT_COMMAND_COOLDOWN_TYPE_IDS():
     TIMEFRAME_DATA_COOLDOWN = _makeID()
     SAME_COMMAND_COOLDOWN = _makeID()
     OTHER_COMMANDS_COOLDOWN = _makeID()
@@ -174,9 +175,26 @@ _MESSENGER_ERROR_NAMES = {_id:_name for _name, _id in MESSENGER_ERRORS.__dict__.
 AdminChatCommand = namedtuple('AdminChatCommand', ('id', 'name', 'timeout'))
 ADMIN_CHAT_COMMANDS = (AdminChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID), name='USERBAN', timeout=30.0), AdminChatCommand(id=_makeID(), name='USERUNBAN', timeout=30.0))
 ADMIN_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in ADMIN_CHAT_COMMANDS}
-BattleChatCommand = namedtuple('BattleChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText', 'vehMarker', 'senderVehMarker', 'soundNotification', 'msgOnMarker', 'soundNotificationReply'))
-BattleChatCommand.__new__.__defaults__ = (0, None, 0, None, None, None, None)
-UnitChatCommand = namedtuple('UnitChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText'))
+BattleChatCommand = namedtuple('BattleChatCommand', ('id',
+ 'name',
+ 'cooldownPeriod',
+ 'msgText',
+ 'vehMarker',
+ 'senderVehMarker',
+ 'soundNotification',
+ 'msgOnMarker',
+ 'soundNotificationReply'))
+BattleChatCommand.__new__.__defaults__ = (0,
+ None,
+ 0,
+ None,
+ None,
+ None,
+ None)
+UnitChatCommand = namedtuple('UnitChatCommand', ('id',
+ 'name',
+ 'cooldownPeriod',
+ 'msgText'))
 UNIT_CHAT_COMMANDS = (UnitChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._UNIT_COMMAND_START_ID), name='ATTENTIONTOCELL', cooldownPeriod=1.0 + _COOLDOWN_OFFSET, msgText='attention_to_cell'),)
 UNIT_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in UNIT_CHAT_COMMANDS}
 BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID), name=BATTLE_CHAT_COMMAND_NAMES.SOS, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='help_me', vehMarker='help_me', senderVehMarker=None, soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_help_me_ex_reply'),
@@ -234,7 +252,10 @@ BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS.
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='defending_base', vehMarker='defendingBase', senderVehMarker=None, soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='attacking_base', vehMarker='attackingBase', senderVehMarker=None, soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='going_there', vehMarker='goingTo', senderVehMarker=None, soundNotification=None, soundNotificationReply='ibc_ping_reply'),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.CONFIRM, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker='positive', senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply=None))
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.CONFIRM, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker='positive', senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.VEHICLE_SPOTPOINT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.SHOOTING_POINT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker=None, senderVehMarker=None, soundNotification='mt_combat_marker', soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.NAVIGATION_POINT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker=None, senderVehMarker=None, soundNotification='mt_navi_marker', soundNotificationReply=None))
 BATTLE_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in BATTLE_CHAT_COMMANDS}
 
 class MUC_SERVICE_TYPE(object):
@@ -261,8 +282,17 @@ def canResolveMucRoomsOfService(service):
     return canResolve
 
 
-ChatCommandBlockedData = namedtuple('ChatCommandBlockedData', ('reqID', 'cmdID', 'cooldownType', 'cooldownEnd', 'targetID'))
-BattleChatCmdGameModeCoolDownData = namedtuple('BattleChatCmdGameModeCoolDownData', ('teamChatCmdCooldown', 'sameChatCmdCooldown', 'sameTargetChatCmdCooldown', 'otherChatCmdCooldown', 'attentionToTeamLimit', 'attentionToTimeframeLimit'))
+ChatCommandBlockedData = namedtuple('ChatCommandBlockedData', ('reqID',
+ 'cmdID',
+ 'cooldownType',
+ 'cooldownEnd',
+ 'targetID'))
+BattleChatCmdGameModeCoolDownData = namedtuple('BattleChatCmdGameModeCoolDownData', ('teamChatCmdCooldown',
+ 'sameChatCmdCooldown',
+ 'sameTargetChatCmdCooldown',
+ 'otherChatCmdCooldown',
+ 'attentionToTeamLimit',
+ 'attentionToTimeframeLimit'))
 SPAM_PROTECTION_SETTING = BattleChatCmdGameModeCoolDownData(teamChatCmdCooldown=_TEAM_BATTLE_CHAT_CMD_COOLDOWN_DURATION, sameChatCmdCooldown=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, sameTargetChatCmdCooldown=_SAME_TARGET_PERSONAL_BATTLE_CHAT_CMD_COOLDOWN_DURATION, otherChatCmdCooldown=_OTHER_BATTLE_CHAT_CMD_COOLDOWN_DURATION, attentionToTeamLimit=_MAX_ATTENTION_TO_PER_TEAM, attentionToTimeframeLimit=_MAX_ATTENTION_TO_CHAT_COMMANDS_WITHIN_TIMEFRAME)
 BATTLE_CMD_COOLDOWN_ALLOWED_MARGIN = 0.1
 

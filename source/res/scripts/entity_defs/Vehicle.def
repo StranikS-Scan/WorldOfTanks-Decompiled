@@ -124,14 +124,47 @@
       </Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </ammo>
+    <crewCompactDescrs>
+      <Type>	TUPLE	  <of>	STRING	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </crewCompactDescrs>
     <enhancements>
       <Type>	PYTHON	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
     </enhancements>
+    <setups>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </setups>
+    <setupsIndexes>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </setupsIndexes>
+    <customRoleSlotTypeId>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </customRoleSlotTypeId>
     <vehPerks>
       <Type>	PYTHON	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
     </vehPerks>
+    <vehPostProgression>
+      <Type>	ARRAY	  <of>	INT32	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </vehPostProgression>
     <isClientConnected>
       <Type>	INT8	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -168,11 +201,6 @@
       <Type>	BOOL	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </needsCount>
-    <crewCompactDescrs>
-      <Type>	TUPLE	  <of>	STRING	</of>
-      </Type>
-      <Flags>	CELL_PRIVATE	</Flags>
-    </crewCompactDescrs>
     <arenaTypeID>
       <Type>	INT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -263,6 +291,16 @@
       <Flags>	ALL_CLIENTS	</Flags>
       <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </quickShellChangerFactor>
+    <onRespawnReloadTimeFactor>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </onRespawnReloadTimeFactor>
+    <ownVehiclePosition>
+      <Type>	OWN_VEHICLE_POSITION	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </ownVehiclePosition>
   </Properties>
   <TempProperties>
     <events></events>
@@ -298,6 +336,11 @@
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
     </showShooting>
+    <updateLaserSight>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	STRING	</Arg>
+    </updateLaserSight>
     <showDamageFromShot>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	ARRAY	  <of>	UINT64	</of>
@@ -455,9 +498,6 @@
       <Arg>	UINT8	</Arg>
       <Arg>	UINT16	</Arg>
     </receiveFirstDetectionFromArena>
-    <sendPositionsToClient>
-      <Arg>	BOOL	</Arg>
-    </sendPositionsToClient>
     <requestDamagedDevicesFromFor>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	MAILBOX	</Arg>
@@ -516,6 +556,11 @@
     <updateActiveDeathZones>
       <Arg>	PYTHON	</Arg>
     </updateActiveDeathZones>
+    <switchSetup>
+      <Exposed></Exposed>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+    </switchSetup>
   </CellMethods>
   <BaseMethods>
     <onCreateCellSuccess></onCreateCellSuccess>

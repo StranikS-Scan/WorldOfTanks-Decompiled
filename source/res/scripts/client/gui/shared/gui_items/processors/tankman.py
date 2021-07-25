@@ -53,10 +53,10 @@ class TankmanDismiss(ItemProcessor):
         return makeI18nError(sysMsgKey='dismiss_tankman/{}'.format(errStr), defaultSysMsgKey='dismiss_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
-        compMsg = None
+        additionalMsgs = []
         if self.__compensationRequired:
-            compMsg = makeCrewSkinCompensationMessage(self.__compensationPriceObject)
-        return makeI18nSuccess('dismiss_tankman/success', type=SM_TYPE.Information, auxData=compMsg)
+            additionalMsgs.append(makeCrewSkinCompensationMessage(self.__compensationPriceObject))
+        return makeI18nSuccess('dismiss_tankman/success', type=SM_TYPE.Information, auxData=additionalMsgs)
 
     def _request(self, callback):
         _logger.debug('Make server request to dismiss tankman: %s', self.item)
@@ -221,10 +221,10 @@ class CrewSkinsProcessorBase(Processor):
         return
 
     def _successHandler(self, code, ctx=None):
-        compMsg = None
+        additionalMsgs = []
         if self.__compensationRequired:
-            compMsg = makeCrewSkinCompensationMessage(self.__compensationPriceObject)
-        return makeI18nSuccess(sysMsgKey='crewSkinsNotification/SkinChanged', type=SM_TYPE.Information, auxData=compMsg)
+            additionalMsgs.append(makeCrewSkinCompensationMessage(self.__compensationPriceObject))
+        return makeI18nSuccess(sysMsgKey='crewSkinsNotification/SkinChanged', type=SM_TYPE.Information, auxData=additionalMsgs)
 
 
 class CrewSkinUnequip(CrewSkinsProcessorBase):
@@ -451,17 +451,17 @@ class TankmanChangeRole(ItemProcessor):
     def _successHandler(self, code, ctx=None):
         msgType = SM_TYPE.FinancialTransactionWithGold
         vehicle = self.itemsCache.items.getItemByCD(self.__vehTypeCompDescr)
-        compMsg = None
+        additionalMsgs = []
         if self.__compensationRequired:
-            compMsg = makeCrewSkinCompensationMessage(self.__compensationPriceObject)
+            additionalMsgs.append(makeCrewSkinCompensationMessage(self.__compensationPriceObject))
         if ctx == EQUIP_TMAN_CODE.OK:
-            auxData = makeI18nSuccess(sysMsgKey='change_tankman_role/installed', vehicle=vehicle.shortUserName, auxData=compMsg)
+            additionalMsgs.append(makeI18nSuccess(sysMsgKey='change_tankman_role/installed', vehicle=vehicle.shortUserName))
         elif ctx == EQUIP_TMAN_CODE.NO_FREE_SLOT:
             roleStr = Tankman.getRoleUserName(SKILL_NAMES[self.__roleIdx])
-            auxData = makeI18nSuccess(sysMsgKey='change_tankman_role/slot_is_taken', vehicle=vehicle.shortUserName, role=roleStr, auxData=compMsg)
+            additionalMsgs.append(makeI18nSuccess(sysMsgKey='change_tankman_role/slot_is_taken', vehicle=vehicle.shortUserName, role=roleStr))
         else:
-            auxData = makeI18nSuccess(sysMsgKey='change_tankman_role/no_vehicle', auxData=compMsg)
-        return makeI18nSuccess('change_tankman_role/success', money=formatPrice(Money(gold=self.__changeRoleCost)), type=msgType, auxData=auxData)
+            additionalMsgs.append(makeI18nSuccess(sysMsgKey='change_tankman_role/no_vehicle'))
+        return makeI18nSuccess('change_tankman_role/success', money=formatPrice(Money(gold=self.__changeRoleCost)), type=msgType, auxData=additionalMsgs)
 
     def _request(self, callback):
         _logger.debug('Make server request to change tankman role: %s, %s, %s', self.item, self.__roleIdx, self.__vehTypeCompDescr)

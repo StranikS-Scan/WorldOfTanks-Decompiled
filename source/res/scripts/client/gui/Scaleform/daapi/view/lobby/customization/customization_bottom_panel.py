@@ -363,7 +363,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.as_setBottomPanelPriceStateS({'buyBtnEnabled': buyBtnEnabled,
          'buyBtnLabel': label,
          'buyBtnTooltip': tooltip,
-         'isHistoric': self.__ctx.mode.currentOutfit.isHistorical(),
+         'customizationDisplayType': self.__ctx.mode.currentOutfit.customizationDisplayType(),
          'billVO': {'title': text_styles.highlightText(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_RESULT)),
                     'priceLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_PRICE), toBuyCount)),
                     'fromStorageLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_FROMSTORAGE), fromStorageCount)),
@@ -453,6 +453,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             self._carouselDP.updateCarouselFilter(FilterTypes.HISTORIC, kwargs['historic'], FilterAliases.HISTORIC)
         if 'nonHistoric' in kwargs:
             self._carouselDP.updateCarouselFilter(FilterTypes.HISTORIC, kwargs['nonHistoric'], FilterAliases.NON_HISTORIC)
+        if 'fantastical' in kwargs:
+            self._carouselDP.updateCarouselFilter(FilterTypes.HISTORIC, kwargs['fantastical'], FilterAliases.FANTASTICAL)
         if 'inventory' in kwargs:
             self._carouselDP.updateCarouselFilter(FilterTypes.INVENTORY, kwargs['inventory'])
         if 'applied' in kwargs:

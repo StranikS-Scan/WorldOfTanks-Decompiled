@@ -138,11 +138,12 @@ class GuiController(IGuiController):
         self.__setTriggers(componentID, ())
         return
 
-    def showInteractiveHint(self, componentID, content, triggers=None):
+    def showInteractiveHint(self, componentID, content, triggers=None, silent=False):
         if not self._validate(componentID):
             return False
         elif componentID not in self._components:
-            _logger.error('showInteractiveHint - target component is not on scene!: %r', componentID)
+            if not silent:
+                _logger.error('showInteractiveHint - target component is not on scene!: %r', componentID)
             return False
         else:
             if 'padding' not in content:

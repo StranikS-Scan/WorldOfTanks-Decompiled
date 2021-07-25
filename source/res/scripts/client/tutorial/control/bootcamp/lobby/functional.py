@@ -129,7 +129,7 @@ class FunctionalFinishBootcampEffect(FunctionalEffect):
 
 
 class FunctionalBootcampLobbyChapterContext(FunctionalChapterContext):
-    _HINT_SOUND_DELAY = 5
+    _HINT_SOUND_DELAY = 0.1
 
     def __init__(self):
         super(FunctionalBootcampLobbyChapterContext, self).__init__()

@@ -68,7 +68,9 @@ class PlayersPanel(IBattleFieldListener, PlayersPanelMeta, IAbstractPeriodView):
             self.as_setPanelModeS(mode)
 
     def switchToOtherPlayer(self, vehicleID):
-        self.guiSessionProvider.shared.viewPoints.selectVehicle(int(vehicleID))
+        aih = avatar_getter.getInputHandler()
+        if aih.isAllowToSwitchPositionOrFPV():
+            self.guiSessionProvider.shared.viewPoints.selectVehicle(int(vehicleID))
 
     def setInitialMode(self):
         self._mode = PlayerPanelStateSetting.read()

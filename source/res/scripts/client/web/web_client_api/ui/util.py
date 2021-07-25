@@ -6,7 +6,7 @@ from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HEADER_BUTTONS_COUNTERS_CHANGED_EVENT
-from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import lookupItem, showItemTooltip, getCDFromId, canInstallStyle
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import lookupItem, showItemTooltip, getCDFromId, canInstallStyle, showAwardsTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as TC
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.shared import g_eventBus
@@ -29,6 +29,8 @@ from web.web_client_api import w2c, W2CSchema, Field, WebCommandException
 from web.web_client_api.common import ItemPackType, ItemPackEntry, SPA_ID_TYPES
 from gui.wgcg.utils.contexts import SPAAccountAttributeCtx, PlatformFetchProductListCtx
 from web.web_client_api.ui.vehicle import _VehicleCustomizationPreviewSchema
+from items import makeIntCompactDescrByID
+from items.components.crew_books_constants import CrewBookCacheType
 _COUNTER_IDS_MAP = {'shop': VIEW_ALIAS.LOBBY_STORE}
 
 def _itemTypeValidator(itemType, _=None):
@@ -79,6 +81,11 @@ class _ShowItemTooltipSchema(W2CSchema):
     id = Field(required=True, type=(basestring, int))
     type = Field(required=True, type=basestring, validator=_itemTypeValidator)
     count = Field(required=True, type=int)
+
+
+class _ShowAwardsTooltipSchema(W2CSchema):
+    type = Field(required=True, type=basestring, validator=_itemTypeValidator)
+    data = Field(required=True, type=dict)
 
 
 class _ChatAvailabilitySchema(W2CSchema):
@@ -172,11 +179,18 @@ class UtilWebApiMixin(object):
     @w2c(_ShowItemTooltipSchema, 'show_item_tooltip')
     def showItemTooltip(self, cmd):
         itemType = cmd.type
-        itemId = getCDFromId(itemType=cmd.type, itemId=cmd.id)
+        if itemType == ItemPackType.CREW_BOOK:
+            itemId = makeIntCompactDescrByID('crewBook', CrewBookCacheType.CREW_BOOK, cmd.id)
+        else:
+            itemId = getCDFromId(itemType=cmd.type, itemId=cmd.id)
         itemsCount = cmd.count
         rawItem = ItemPackEntry(type=itemType, id=itemId, count=itemsCount)
         item = lookupItem(rawItem, self.itemsCache, self.goodiesCache)
         showItemTooltip(self.__getTooltipMgr(), rawItem, item)
+
+    @w2c(_ShowAwardsTooltipSchema, 'show_awards_tooltip')
+    def showAwardsTooltip(self, cmd):
+        showAwardsTooltip(self.__getTooltipMgr(), cmd.type, cmd.data)
 
     @w2c(_ShowCustomTooltipSchema, 'show_custom_tooltip')
     def showCustomTooltip(self, cmd):

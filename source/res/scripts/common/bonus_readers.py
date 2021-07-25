@@ -1010,6 +1010,8 @@ _RESERVED_NAMES = frozenset(['config',
  'probabilityStageDependence',
  'bonusProbability'])
 SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
+SUPPORTED_BONUSES_IDS = dict(((n, i) for i, n in enumerate(SUPPORTED_BONUSES)))
+SUPPORTED_BONUSES_NAMES = {i:n for i, n in enumerate(SUPPORTED_BONUSES)}
 
 def __readBonusLimit(section):
     properties = {}

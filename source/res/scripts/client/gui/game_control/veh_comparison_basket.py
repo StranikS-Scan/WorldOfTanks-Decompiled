@@ -14,18 +14,29 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from helpers.local_cache import FileLocalCache
-from items import getTypeOfCompactDescr, ITEM_TYPE_NAMES, vehicles, EQUIPMENT_TYPES, ITEM_TYPES
+from items import ITEM_TYPE_NAMES, vehicles, EQUIPMENT_TYPES, ITEM_TYPES
 from items.vehicles import VehicleDescr
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
+from post_progression_common import VehicleState
 from skeletons.gui.game_control import IVehicleComparisonBasket, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-PARAMS_AFFECTED_TANKMEN_SKILLS = ('camouflage', 'brotherhood', 'commander_eagleEye', 'driver_virtuoso', 'driver_badRoadsKing', 'radioman_inventor', 'radioman_finder')
+PARAMS_AFFECTED_TANKMEN_SKILLS = ('camouflage',
+ 'brotherhood',
+ 'commander_eagleEye',
+ 'driver_virtuoso',
+ 'driver_badRoadsKing',
+ 'radioman_inventor',
+ 'radioman_finder')
 MAX_VEHICLES_TO_COMPARE_COUNT = 20
 _NO_CREW_SKILLS = set()
 _DEF_SHELL_INDEX = 0
-_ChangedData = namedtuple('_ChangedData', ('addedIDXs', 'addedCDs', 'removedIDXs', 'removedCDs', 'isFullChanged'))
+_ChangedData = namedtuple('_ChangedData', ('addedIDXs',
+ 'addedCDs',
+ 'removedIDXs',
+ 'removedCDs',
+ 'isFullChanged'))
 _COMPARE_INVALID_CRITERIA = ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.SECRET
 
 def getVehicleCriteriaForComparing():
@@ -34,19 +45,6 @@ def getVehicleCriteriaForComparing():
 
 def isValidVehicleForComparing(vehicle):
     return vehicle is not None and getVehicleCriteriaForComparing()(vehicle)
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def getSuitableChassis(vehicle, itemsCache=None):
-    chassis = []
-    for _, _, nodeCD, _ in vehicle.getUnlocksDescrs():
-        itemTypeID = getTypeOfCompactDescr(nodeCD)
-        if itemTypeID == GUI_ITEM_TYPE.CHASSIS:
-            chassisCand = itemsCache.items.getItemByCD(nodeCD)
-            if chassisCand.mayInstall(vehicle) and not chassisCand.isInstalled(vehicle):
-                chassis.append(chassisCand)
-
-    return chassis
 
 
 def getInstalledModulesCDs(vehicle):
@@ -131,7 +129,7 @@ class CONFIGURATION_TYPES(object):
 
 
 class _VehCmpCache(FileLocalCache):
-    VERSION = 3
+    VERSION = 4
 
     def __init__(self, databaseID, dataSetter, dataGetter):
         super(_VehCmpCache, self).__init__('veh_cmp_cache', ('basket_state', databaseID), async=True)
@@ -141,12 +139,15 @@ class _VehCmpCache(FileLocalCache):
     def _getCache(self):
         vehsData = []
         for vehCompareData in self.__dataGetter():
+            dynSlotType = vehCompareData.getDynSlotType()
             vehsData.append((vehCompareData.getVehicleStrCD(),
              vehCompareData.getEquipment(),
              vehCompareData.getCrewData(),
              vehCompareData.getSelectedShellIndex(),
              vehCompareData.hasCamouflage(),
-             vehCompareData.getBattleBooster()))
+             vehCompareData.getBattleBooster(),
+             vehCompareData.getPostProgressionState().toRawData(),
+             dynSlotType.slotID if dynSlotType is not None else None))
 
         return (self.VERSION, vehsData)
 
@@ -165,11 +166,12 @@ class _VehCmpCache(FileLocalCache):
 
 class _VehCompareData(object):
 
-    def __init__(self, vehicleIntCD, vehicleStrCD, vehStockStrCD, isFromCache=False):
+    def __init__(self, vehicleIntCD, vehicleStrCD, vehStockStrCD, isFromCache=False, rentalIsOver=False):
         super(_VehCompareData, self).__init__()
         self.__isInInventory = False
         self.__isFromCache = isFromCache
         self.__invVehStrCD = None
+        self.__rentalIsOver = rentalIsOver
         self.__crewLvl = CrewTypes.SKILL_100
         self.__inventoryCrewLvl = CrewTypes.SKILL_100
         self.__crewSkills = self.getStockCrewSkills()
@@ -184,6 +186,10 @@ class _VehCompareData(object):
         self.__invHasCamouflage = False
         self.__hasCamouflage = False
         self.__hasBattleBooster = False
+        self.__dynSlotType = None
+        self.__invDynSlotType = None
+        self.__postProgressionState = None
+        self.__invPostProgressionState = VehicleState()
         return
 
     def setIsInInventory(self, value):
@@ -194,6 +200,9 @@ class _VehCompareData(object):
 
     def setInvVehStrCD(self, value):
         self.__invVehStrCD = value
+
+    def setRentalIsOver(self, value):
+        self.__rentalIsOver = value
 
     def setCrewData(self, crewLvl, skills):
         if crewLvl not in CrewTypes.ALL:
@@ -227,6 +236,18 @@ class _VehCompareData(object):
 
     def setInvHasCamouflage(self, value):
         self.__invHasCamouflage = value
+
+    def setDynSlotType(self, value):
+        self.__dynSlotType = value
+
+    def setInvDynSlotType(self, value):
+        self.__invDynSlotType = value
+
+    def setPostProgressionState(self, value):
+        self.__postProgressionState = value
+
+    def setInvPostProgressionState(self, value):
+        self.__invPostProgressionState = value
 
     def getSelectedShellIndex(self):
         return self.__selectedShellIndex
@@ -266,6 +287,10 @@ class _VehCompareData(object):
             return cType
         if self.__hasCamouflage != self.__invHasCamouflage:
             return cType
+        if self.__dynSlotType != self.__invDynSlotType:
+            return cType
+        if self.__postProgressionState != self.__invPostProgressionState:
+            return cType
         if self.__strCD == self.__invVehStrCD:
             if self.__equipment == self.__invEquipment and self.__crewLvl == self.__inventoryCrewLvl and self.__crewSkills == self.__inventoryCrewSkills:
                 cType = CONFIGURATION_TYPES.CURRENT
@@ -291,8 +316,23 @@ class _VehCompareData(object):
         self.__addBuiltInEquipment(equipmentIDs)
         return equipmentIDs
 
+    def getDynSlotType(self):
+        return self.__dynSlotType
+
+    def getInvDynSlotType(self):
+        return self.__invDynSlotType
+
+    def getPostProgressionState(self):
+        return self.__postProgressionState
+
+    def getInvPostProgressionState(self):
+        return self.__invPostProgressionState
+
     def isFromCache(self):
         return self.__isFromCache
+
+    def isRentalOver(self):
+        return self.__rentalIsOver
 
     def hasCamouflage(self):
         return self.__hasCamouflage
@@ -307,7 +347,7 @@ class _VehCompareData(object):
         return self.__isInInventory
 
     def clone(self):
-        dataClone = _VehCompareData(self.getVehicleCD(), self.getVehicleStrCD(), self.getStockVehStrCD())
+        dataClone = _VehCompareData(self.getVehicleCD(), self.getVehicleStrCD(), self.getStockVehStrCD(), self.isRentalOver())
         dataClone.setIsInInventory(self.isInInventory())
         dataClone.setInvVehStrCD(self.getInvVehStrCD())
         dataClone.setCrewData(*self.getCrewData())
@@ -318,6 +358,10 @@ class _VehCompareData(object):
         dataClone.setHasBattleBooster(self.__hasBattleBooster)
         dataClone.setInvHasCamouflage(self.__invHasCamouflage)
         dataClone.setSelectedShellIndex(self.getSelectedShellIndex())
+        dataClone.setDynSlotType(self.__dynSlotType)
+        dataClone.setInvDynSlotType(self.__invDynSlotType)
+        dataClone.setPostProgressionState(self.__postProgressionState)
+        dataClone.setInvPostProgressionState(self.__invPostProgressionState)
         return dataClone
 
     def getNoEquipmentLayout(self):
@@ -426,6 +470,12 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         if vehCompareData.getSelectedShellIndex() != selectedShellIndex:
             vehCompareData.setSelectedShellIndex(selectedShellIndex)
             isChanged = True
+        if vehCompareData.getDynSlotType() != vehicle.optDevices.dynSlotType:
+            vehCompareData.setDynSlotType(vehicle.optDevices.dynSlotType)
+            isChanged = True
+        if vehCompareData.getPostProgressionState() != vehicle.postProgression.getState(implicitCopy=False):
+            vehCompareData.setPostProgressionState(vehicle.postProgression.getState())
+            isChanged = True
         if isChanged:
             self.onParametersChange((index,))
         else:
@@ -463,6 +513,8 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         vehicle.setHasCamouflage(vehicle.invHasCamouflage())
         vehicle.setCrewData(*vehicle.getInventoryCrewData())
         vehicle.setSelectedShellIndex(_DEF_SHELL_INDEX)
+        vehicle.setDynSlotType(vehicle.getInvDynSlotType())
+        vehicle.setPostProgressionState(vehicle.getInvPostProgressionState())
         self.onParametersChange((index,))
 
     @_operationLocked
@@ -544,6 +596,8 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         defShellIndex = initParameters.get('shellIndex')
         defHasCamouflage = initParameters.get('hasCamouflage')
         defBattleBooster = initParameters.get('battleBooster')
+        defDynSlotType = initParameters.get('dynSlotType')
+        defPostProgressionState = initParameters.get('postProgressionState')
         try:
             vehicle = self.itemsCache.items.getItemByCD(intCD)
             copyVehicle = Vehicle(_makeStrCD(vehicle), proxy=self.itemsCache.items)
@@ -551,10 +605,11 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             if hasCamouflage:
                 _removeVehicleCamouflages(copyVehicle)
             stockVehicle = self.itemsCache.items.getStockVehicle(intCD)
-            vehCmpData = _VehCompareData(intCD, defStrCD or _makeStrCD(copyVehicle), _makeStrCD(stockVehicle), fromCache)
+            vehCmpData = _VehCompareData(intCD, defStrCD or _makeStrCD(copyVehicle), _makeStrCD(stockVehicle), fromCache, vehicle.rentalIsOver)
             self.__updateInventoryEquipment(vehCmpData, vehicle)
             self.__updateInventoryData(vehCmpData, vehicle)
             self.__updateInventoryCrewData(vehCmpData, vehicle)
+            self.__updatePostProgression(vehCmpData, vehicle, defDynSlotType, defPostProgressionState)
             if defCrewData is not None:
                 vehCmpData.setCrewData(*defCrewData)
             elif vehicle.isInInventory:
@@ -592,22 +647,26 @@ class VehComparisonBasket(IVehicleComparisonBasket):
     def _applyVehiclesFromCache(self, data):
         if not data:
             return
-        vehCDs = []
-        for strCD, equipment, crewData, shellIndex, hasCamouflage, battleBooster in data:
-            intCD = VehicleDescr(strCD).type.compactDescr
-            vehCmpData = self._createVehCompareData(intCD, initParameters={'strCD': strCD,
-             'isFromCache': True,
-             'crewData': crewData,
-             'equipment': equipment,
-             'shellIndex': shellIndex,
-             'hasCamouflage': hasCamouflage,
-             'battleBooster': battleBooster})
-            if vehCmpData:
-                self.__vehicles.append(vehCmpData)
-                vehCDs.append(intCD)
+        else:
+            vehCDs = []
+            for strCD, equipment, crew, shellIndex, hasCamouflage, booster, postProgression, dynSlotID in data:
+                intCD = VehicleDescr(strCD).type.compactDescr
+                vehCmpData = self._createVehCompareData(intCD, initParameters={'strCD': strCD,
+                 'isFromCache': True,
+                 'crewData': crew,
+                 'equipment': equipment,
+                 'shellIndex': shellIndex,
+                 'hasCamouflage': hasCamouflage,
+                 'battleBooster': booster,
+                 'postProgressionState': VehicleState(postProgression),
+                 'dynSlotType': vehicles.g_cache.supplySlots().slotDescrs[dynSlotID] if dynSlotID else None})
+                if vehCmpData:
+                    self.__vehicles.append(vehCmpData)
+                    vehCDs.append(intCD)
 
-        if vehCDs:
-            self.__applyChanges(addedIDXs=range(0, len(vehCDs)), addedCDs=vehCDs)
+            if vehCDs:
+                self.__applyChanges(addedIDXs=range(0, len(vehCDs)), addedCDs=vehCDs)
+            return
 
     def _getVehiclesIterator(self):
         for vehCmpData in self.__vehicles:
@@ -644,10 +703,12 @@ class VehComparisonBasket(IVehicleComparisonBasket):
                         if changedVehCD == vehCompareData.getVehicleCD():
                             vehicle = self.itemsCache.items.getItemByCD(changedVehCD)
                             isCachedVehInInv = vehicle.isInInventory
+                            isRentalChanged = vehicle.rentalIsOver != vehCompareData.isRentalOver()
                             if vehCompareData.isInInventory() != isCachedVehInInv:
                                 self.__updateInventoryData(vehCompareData, vehicle)
                                 self.__updateInventoryEquipment(vehCompareData, vehicle)
                                 self.__updateInventoryCrewData(vehCompareData, vehicle)
+                                self.__updatePostProgression(vehCompareData, vehicle)
                                 if not isCachedVehInInv:
                                     crewLevel, crewSkills = vehCompareData.getCrewData()
                                     if crewLevel == CrewTypes.CURRENT:
@@ -664,6 +725,10 @@ class VehComparisonBasket(IVehicleComparisonBasket):
                                     self.__updateInventoryCrewData(vehCompareData, vehicle)
                                 if GUI_ITEM_TYPE.CUSTOMIZATION in diffKeys or GUI_ITEM_TYPE.OUTFIT in diffKeys:
                                     self.__updateInventoryData(vehCompareData, vehicle)
+                                    changedIDXs.add(idx)
+                                if GUI_ITEM_TYPE.VEH_POST_PROGRESSION in diffKeys or isRentalChanged:
+                                    vehCompareData.setRentalIsOver(vehicle.rentalIsOver)
+                                    self.__updatePostProgression(vehCompareData, vehicle)
                                     changedIDXs.add(idx)
                             vehicleCompactDesr = getValidVehicleCDForNationChange(changedVehCD)
                             if vehicleCompactDesr != changedVehCD:
@@ -702,6 +767,21 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             vehCompareData.setInventoryCrewData(CrewTypes.CURRENT, _getCrewSkills(vehicle))
         else:
             vehCompareData.setInventoryCrewData(CrewTypes.SKILL_100, _NO_CREW_SKILLS.copy())
+
+    @classmethod
+    def __updatePostProgression(cls, vehCmpData, vehicle, dynSlotType=None, progressState=None):
+        invState = vehicle.postProgression.getState() if vehicle.isPostProgressionActive else VehicleState()
+        invDynSlotType = vehicle.optDevices.dynSlotType if vehicle.isRoleSlotActive else None
+        vehCmpData.setInvPostProgressionState(invState)
+        vehCmpData.setInvDynSlotType(invDynSlotType)
+        progressState = progressState if progressState is not None else vehCmpData.getPostProgressionState()
+        progressState = progressState if progressState is not None else invState
+        dynSlotType = dynSlotType if dynSlotType is not None else vehCmpData.getDynSlotType()
+        dynSlotType = dynSlotType if dynSlotType is not None else invDynSlotType
+        postProgressionState = progressState if vehicle.isPostProgressionExists else VehicleState()
+        vehCmpData.setDynSlotType(dynSlotType if vehicle.isRoleSlotExists(postProgressionState) else None)
+        vehCmpData.setPostProgressionState(postProgressionState)
+        return
 
     def __onServerSettingChanged(self, diff):
         if 'isVehiclesCompareEnabled' in diff:

@@ -1,0 +1,17 @@
+<extension.xml>
+  <FeatureName>	FrontLine	</FeatureName>
+  <Components>
+    <StaticComponents>
+      <ArenaFrontLineComponent></ArenaFrontLineComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <ArenaFLMinefieldComponent></ArenaFLMinefieldComponent>
+      <VehicleFLRegenerationKitComponent></VehicleFLRegenerationKitComponent>
+      <StealthRadarComponent></StealthRadarComponent>
+    </DynamicComponents>
+  </Components>
+  <IsEnabled>	True	</IsEnabled>
+  <Entities>
+    <ClientServerEntities></ClientServerEntities>
+  </Entities>
+</extension.xml>

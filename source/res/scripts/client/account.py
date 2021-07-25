@@ -18,6 +18,7 @@ from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
 from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale
 from account_helpers.dog_tags import DogTags
+from account_helpers.maps_training import MapsTraining
 from account_helpers.offers.sync_data import OffersSyncData
 from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import client_ranked, ClientBadges
@@ -162,6 +163,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.battlePass = g_accountRepository.battlePass
         self.offers = g_accountRepository.offers
         self.dogTags = g_accountRepository.dogTags
+        self.mapsTraining = g_accountRepository.mapsTraining
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -187,6 +189,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.anonymizer.setAccount(self)
         self.offers.setAccount(self)
         self.dogTags.setAccount(self)
+        self.mapsTraining.setAccount(self)
         g_accountRepository.commandProxy.setGateway(self.__doCmd)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
@@ -210,6 +213,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInBattleRoyaleQueue = False
         self.isInBattleRoyaleTournamentQueue = False
         self.isInMapboxQueue = False
+        self.isInMapsTrainingQueue = False
         self.platformBlueprintsConvertSaleLimits = g_accountRepository.platformBlueprintsConvertSaleLimits
         self.__onCmdResponse = {}
         self.__onStreamComplete = {}
@@ -243,6 +247,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints.onAccountBecomePlayer()
         self.festivities.onAccountBecomePlayer()
         self.dogTags.onAccountBecomePlayer()
+        self.mapsTraining.onAccountBecomePlayer()
         self.sessionStats.onAccountBecomePlayer()
         self.spaFlags.onAccountBecomePlayer()
         self.anonymizer.onAccountBecomePlayer()
@@ -287,6 +292,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.battlePass.onAccountBecomeNonPlayer()
         self.offers.onAccountBecomeNonPlayer()
         self.dogTags.onAccountBecomeNonPlayer()
+        self.mapsTraining.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -399,7 +405,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             return
 
     def isInBattleQueue(self):
-        return self.isInRandomQueue or self.isInTutorialQueue or self.isInBootcampQueue or self.isInEventBattles or self.isInSandboxQueue or self.isInRankedQueue or self.isInEpicQueue
+        return self.isInRandomQueue or self.isInTutorialQueue or self.isInBootcampQueue or self.isInEventBattles or self.isInSandboxQueue or self.isInRankedQueue or self.isInEpicQueue or self.isInMapsTrainingQueue
 
     def onEnqueued(self, queueType):
         LOG_DEBUG('onEnqueued', queueType)
@@ -431,6 +437,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.MAPBOX:
             self.isInMapboxQueue = True
             events.onEnqueuedMapbox()
+        elif queueType == QUEUE_TYPE.MAPS_TRAINING:
+            self.isInMapsTrainingQueue = True
+            events.onEnqueuedMapsTraining()
         events.onEnqueued(queueType)
 
     def onEnqueueFailure(self, queueType, errorCode, errorStr):
@@ -455,6 +464,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             events.onEnqueuedBattleRoyaleTournamentFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.MAPBOX:
             events.onEnqueuedMapboxFailure(errorCode, errorStr)
+        elif queueType == QUEUE_TYPE.MAPS_TRAINING:
+            events.onEnqueuedMapsTrainingFailure(errorCode, errorStr)
         events.onEnqueueFailure(queueType, errorCode, errorStr)
 
     def onDequeued(self, queueType):
@@ -486,6 +497,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
             self.isInBattleRoyaleTournamentQueue = False
             events.onDequeuedBattleRoyaleTournament()
+        elif queueType == QUEUE_TYPE.MAPS_TRAINING:
+            self.isInMapsTrainingQueue = False
+            events.onDequeuedMapsTraining()
         elif queueType == QUEUE_TYPE.MAPBOX:
             self.isInMapboxQueue = False
             events.onDequeuedMapbox()
@@ -551,6 +565,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.MAPBOX:
             self.isInMapboxQueue = False
             events.onKickedFromMapboxQueue()
+        elif queueType == QUEUE_TYPE.MAPS_TRAINING:
+            self.isInMapsTrainingQueue = False
+            events.onKickedFromMapsTrainingQueue()
         events.onKickedFromQueue(queueType)
 
     def onArenaCreated(self):
@@ -573,6 +590,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInBattleRoyaleQueue = False
         self.isInBattleRoyaleTournamentQueue = False
         self.isInMapboxQueue = False
+        self.isInMapsTrainingQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onArenaJoinFailure(errorCode, errorStr)
@@ -629,6 +647,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInEpicQueue = False
         self.isInBattleRoyaleQueue = False
         self.isInBattleRoyaleTournamentQueue = False
+        self.isInMapsTrainingQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onKickedFromArena(reasonCode)
@@ -670,7 +689,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.databaseID = ctx['databaseID']
         if 'prebattleID' in ctx:
             self.prebattle = ClientPrebattle.ClientPrebattle(ctx['prebattleID'])
-        self.isInRandomQueue = ctx.get('isInRandomQueue', False)
+        self.isInRandomQueue = ctx.get('inQueue', None) == QUEUE_TYPE.RANDOMS
         self.isInTutorialQueue = ctx.get('isInTutorialQueue', False)
         self._initTimeCorrection(ctx)
         if 'isLongDisconnectedFromCenter' in ctx:
@@ -686,6 +705,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             AccountSettings.setFavorites(CURRENT_VEHICLE, currentVehInvID)
         events.isPlayerEntityChanging = False
         events.onAccountShowGUI(ctx)
+        return
 
     def receiveQueueInfo(self, queueInfo):
         events.onQueueInfoReceived(queueInfo)
@@ -795,11 +815,15 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def enqueueRandom(self, vehInvID, gameplaysMask=65535, arenaTypeID=0, isOnly10ModeEnabled=False):
         if events.isPlayerEntityChanging:
             return
-        self.base.doCmdInt4(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_RANDOM, vehInvID, gameplaysMask, arenaTypeID, isOnly10ModeEnabled)
+        self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.RANDOMS,
+         vehInvID,
+         gameplaysMask,
+         arenaTypeID,
+         isOnly10ModeEnabled])
 
     def dequeueRandom(self):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_RANDOM, 0, 0, 0)
+            self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.RANDOMS)
 
     def enqueueTutorial(self):
         if events.isPlayerEntityChanging:
@@ -866,11 +890,11 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def enqueueRanked(self, vehInvID):
         if events.isPlayerEntityChanging:
             return
-        self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_RANKED_BATTLES, vehInvID, 0, 0)
+        self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.RANKED, vehInvID, 0])
 
     def dequeueRanked(self):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_RANKED_BATTLES, 0, 0, 0)
+            self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.RANKED)
 
     def enqueueEpic(self, vehInvID):
         if not events.isPlayerEntityChanging:
@@ -890,15 +914,28 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def enqueueMapbox(self, vehInvID):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_MAPBOX, vehInvID, 0, 0)
+            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.MAPBOX, vehInvID])
 
     def dequeueMapbox(self):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_MAPBOX, 0, 0, 0)
+            self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.MAPBOX)
 
     def forceEpicDevStart(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_FORCE_EPIC_DEV_START, 0, 0, 0)
+
+    def enqueueMapsTraininig(self, mapGeometryID, vehCompDescr, team):
+        if not events.isPlayerEntityChanging:
+            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_MAPS_TRAINING, mapGeometryID, vehCompDescr, team)
+
+    def dequeueMapsTraininig(self):
+        if not events.isPlayerEntityChanging:
+            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_MAPS_TRAINING, 0, 0, 0)
+
+    def requestMapsTrainingInitialConfiguration(self, accountID, callback):
+        if not events.isPlayerEntityChanging:
+            proxy = lambda requestID, resultID, errorStr, ext=[]: callback(resultID, errorStr, ext)
+            self._doCmdInt3(AccountCommands.CMD_REQ_MAPS_TRAINING_INITIAL_CONFIGURATION, accountID, 0, 0, proxy)
 
     def createArenaFromQueue(self):
         if not events.isPlayerEntityChanging:
@@ -1270,6 +1307,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.battlePass.synchronize(isFullSync, diff)
             self.offers.synchronize(isFullSync, diff)
             self.dogTags.synchronize(isFullSync, diff)
+            self.mapsTraining.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeDisabledPersonalMissions(diff)
             self.__synchronizeEventNotifications(diff)
@@ -1513,6 +1551,7 @@ class _AccountRepository(object):
         self.battlePass = BattlePassManager(self.syncData, self.commandProxy)
         self.offers = OffersSyncData(self.syncData)
         self.dogTags = DogTags(self.syncData)
+        self.mapsTraining = MapsTraining(self.syncData)
         self.platformBlueprintsConvertSaleLimits = {}
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()

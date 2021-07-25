@@ -19,7 +19,8 @@ from visual_script.multi_plan_provider import makeMultiPlanProvider, CallablePro
 TeamBaseProvider = namedtuple('TeamBaseProvider', ('points', 'invadersCnt', 'capturingStopped'))
 
 class ClientArena(object):
-    __onUpdate = {ARENA_UPDATE.VEHICLE_LIST: '_ClientArena__onVehicleListUpdate',
+    __onUpdate = {ARENA_UPDATE.SETTINGS: '_ClientArena__onArenaSettingsUpdate',
+     ARENA_UPDATE.VEHICLE_LIST: '_ClientArena__onVehicleListUpdate',
      ARENA_UPDATE.VEHICLE_ADDED: '_ClientArena__onVehicleAddedUpdate',
      ARENA_UPDATE.PERIOD: '_ClientArena__onPeriodInfoUpdate',
      ARENA_UPDATE.STATISTICS: '_ClientArena__onStatisticsUpdate',
@@ -57,8 +58,10 @@ class ClientArena(object):
         self.__hasFogOfWarHiddenVehicles = False
         self.__arenaInfo = None
         self.__teamInfo = None
+        self.__settings = {}
         self.__eventManager = Event.EventManager()
         em = self.__eventManager
+        self.onArenaSettingsReceived = Event.Event(em)
         self.onNewVehicleListReceived = Event.Event(em)
         self.onVehicleAdded = Event.Event(em)
         self.onVehicleUpdated = Event.Event(em)
@@ -96,6 +99,7 @@ class ClientArena(object):
         self.componentSystem = assembler.createComponentSystem(self, self.bonusType, self.arenaType)
         return
 
+    settings = property(lambda self: self.__settings)
     vehicles = property(lambda self: self.__vehicles)
     positions = property(lambda self: self.__positions)
     statistics = property(lambda self: self.__statistics)
@@ -181,6 +185,12 @@ class ClientArena(object):
         self.__arenaBBCollider = _BBCollider(arenaBB, (-500.0, 500.0))
         self.__spaceBBCollider = _BBCollider(spaceBB, (-500.0, 500.0))
         return True
+
+    def __onArenaSettingsUpdate(self, argStr):
+        arenaSettings = cPickle.loads(argStr)
+        LOG_DEBUG_DEV('__onArenaSettingsUpdate', arenaSettings)
+        self.__settings = arenaSettings
+        self.onArenaSettingsReceived()
 
     def __onVehicleListUpdate(self, argStr):
         vehiclesList = cPickle.loads(zlib.decompress(argStr))
@@ -319,7 +329,9 @@ class ClientArena(object):
         self.__vehicleIndexToId = dict(zip(range(len(vehs)), sorted(vehs.keys())))
 
     def __vehicleInfoAsDict(self, info):
-        infoAsDict = {'vehicleType': self.__getVehicleType(info[1]),
+        extVehicleTypeData = {'vehPostProgression': info[25],
+         'customRoleSlotTypeId': info[26]}
+        infoAsDict = {'vehicleType': self.__getVehicleType(info[1], extVehicleTypeData),
          'name': info[2],
          'team': info[3],
          'isAlive': info[4],
@@ -345,8 +357,8 @@ class ClientArena(object):
          'maxHealth': info[24]}
         return (info[0], infoAsDict)
 
-    def __getVehicleType(self, intCD):
-        return None if intCD is None else vehicles.VehicleDescr(compactDescr=intCD)
+    def __getVehicleType(self, intCD, extData):
+        return None if intCD is None else vehicles.VehicleDescr(compactDescr=intCD, extData=extData)
 
     def __vehicleStatisticsAsDict(self, stats):
         return (stats[0], {'frags': stats[1]})

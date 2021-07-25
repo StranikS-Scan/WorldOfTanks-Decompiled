@@ -11,15 +11,24 @@ class SlotCategories(object):
     SURVIVABILITY = 'survivability'
     MOBILITY = 'mobility'
     STEALTH = 'stealth'
+    TACTICS = 'tactics'
+    FIRESUPPORT = 'firesupport'
+    RECONNAISSANCE = 'reconnaissance'
     UNIVERSAL = 'universal'
     ORDER = (FIREPOWER,
      SURVIVABILITY,
      MOBILITY,
-     STEALTH)
+     STEALTH,
+     TACTICS,
+     FIRESUPPORT,
+     RECONNAISSANCE)
     ALL = frozenset([FIREPOWER,
      SURVIVABILITY,
      MOBILITY,
      STEALTH,
+     TACTICS,
+     FIRESUPPORT,
+     RECONNAISSANCE,
      UNIVERSAL])
 
 

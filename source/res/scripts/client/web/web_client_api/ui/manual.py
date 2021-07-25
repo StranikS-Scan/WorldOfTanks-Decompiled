@@ -1,14 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/manual.py
 from helpers import dependency
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import IManualController
 from gui.doc_loaders.manual_xml_data_reader import getPagesIndexesList
 from web.web_client_api import W2CSchema, w2c, Field
 
 def _chapterIndexValidator(key, _):
-    settings = dependency.instance(ILobbyContext).getServerSettings()
-    return key in getPagesIndexesList(settings.isBootcampEnabled())
+    manualController = dependency.instance(IManualController)
+    return key in getPagesIndexesList(manualController.pageFilter)
 
 
 class _OpenManualWindowSchema(W2CSchema):

@@ -7,6 +7,7 @@ from gui.Scaleform.daapi.view.meta.SubtitlesWindowMeta import SubtitlesWindowMet
 class SubtitlesWindow(SubtitlesBase, SubtitlesWindowMeta, TutorialWindow):
 
     def onWindowClose(self):
+        super(SubtitlesWindow, self).onWindowClose()
         self._onMouseClicked('closeID')
         self._stop()
 

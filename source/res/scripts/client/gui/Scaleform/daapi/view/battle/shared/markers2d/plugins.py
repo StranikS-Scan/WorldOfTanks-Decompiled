@@ -40,7 +40,9 @@ _logger = logging.getLogger(__name__)
 _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME = {LocationMarkerSubType.SPG_AIM_AREA_SUBTYPE: settings.MARKER_SYMBOL_NAME.STATIC_ARTY_MARKER,
  LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE: settings.MARKER_SYMBOL_NAME.LOCATION_MARKER,
  LocationMarkerSubType.PREBATTLE_WAYPOINT_SUBTYPE: settings.MARKER_SYMBOL_NAME.LOCATION_MARKER,
- LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE: settings.MARKER_SYMBOL_NAME.ATTENTION_MARKER}
+ LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE: settings.MARKER_SYMBOL_NAME.ATTENTION_MARKER,
+ LocationMarkerSubType.SHOOTING_POINT_SUBTYPE: settings.MARKER_SYMBOL_NAME.SHOOTING_MARKER,
+ LocationMarkerSubType.NAVIGATION_POINT_SUBTYPE: settings.MARKER_SYMBOL_NAME.NAVIGATION_MARKER}
 _STATIC_MARKER_CULL_DISTANCE = 1800
 _STATIC_MARKER_MIN_SCALE = 60.0
 _BASE_MARKER_MIN_SCALE = 100.0
@@ -549,13 +551,15 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
     _DISTANCE_FOR_MIN_Y_OFFSET = 400
     _MAX_Y_BOOST = 1.4
     _BOOST_START = 120
-    __slots__ = ('_markers', '__defaultPostfix', '__clazz')
+    __slots__ = ('_markers', '__defaultPostfix', '__clazz', '__prevPeriod')
 
     def __init__(self, parentObj, clazz=LocationMarker):
         super(AreaStaticMarkerPlugin, self).__init__(parentObj)
         self._markers = {}
         self.__defaultPostfix = 0
         self.__clazz = clazz
+        self.__prevPeriod = None
+        return
 
     def start(self):
         super(AreaStaticMarkerPlugin, self).start()
@@ -625,10 +629,10 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
         for key in g_locationPointManager.markedAreas:
             locationPoint = g_locationPointManager.markedAreas[key]
             _logger.debug('created a marker')
-            self.__onStaticMarkerAdded(locationPoint.targetID, locationPoint.creatorID, locationPoint.position, locationPoint.markerSubType, True, locationPoint.markerText, locationPoint.replyCount, False)
+            self.__onStaticMarkerAdded(locationPoint.targetID, locationPoint.creatorID, locationPoint.position, locationPoint.markerSubType, locationPoint.markerText, locationPoint.replyCount, False)
 
-    def __onStaticMarkerAdded(self, areaID, creatorID, position, locationMarkerSubtype, show3DMarker=False, markerText='', numberOfReplies=0, isTargetForPlayer=False):
-        if not show3DMarker or locationMarkerSubtype not in _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME:
+    def __onStaticMarkerAdded(self, areaID, creatorID, position, locationMarkerSubtype, markerText='', numberOfReplies=0, isTargetForPlayer=False):
+        if locationMarkerSubtype not in _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME:
             return
         if areaID in self._markers:
             _logger.debug('__onStaticMarkerAdded should not be called 2 times with the same areaID')
@@ -665,8 +669,9 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
         return
 
     def __onArenaPeriodChange(self, period, endTime, *_):
-        if period == constants.ARENA_PERIOD.BATTLE:
+        if period == constants.ARENA_PERIOD.BATTLE and period != self.__prevPeriod:
             self.__onArenaPeriodBattleState()
+            self.__prevPeriod = period
 
     def __onArenaPeriodBattleState(self):
         if self.parentObj is None:
@@ -791,6 +796,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
         marker.setState(ReplyStateForMarker.NO_ACTION)
         self._setActiveState(marker, marker.getState())
         self._setMarkerSticky(markerID, False)
+        self.__addActiveCommandsOnMarker(baseOrControlPointID)
 
     def __addTeamBasePositions(self):
         positions = self.sessionProvider.arenaVisitor.type.getTeamBasePositionsIterator()
@@ -818,13 +824,28 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
         marker.setState(ReplyStateForMarker.CREATE_STATE)
         marker.setActiveCommandID(commandID)
         if _ACTIONS.battleChatCommandFromActionID(commandID).name in AUTOCOMMIT_COMMAND_NAMES:
-            marker.setIsSticky(senderID == avatar_getter.getPlayerVehicleID())
-            self._setMarkerRepliesAndCheckState(marker, 1, senderID == avatar_getter.getPlayerVehicleID())
+            isPlayerSender = senderID == avatar_getter.getPlayerVehicleID()
+            marker.setIsSticky(isPlayerSender)
+            self._setMarkerRepliesAndCheckState(marker, 1, isPlayerSender)
         else:
             self._setActiveState(marker, ReplyStateForMarker.CREATE_STATE)
         if not avatar_getter.isVehicleAlive() and marker.getBoundCheckEnabled():
             marker.setBoundCheckEnabled(False)
             self._setMarkerBoundEnabled(marker.getMarkerID(), False)
+
+    def __addActiveCommandsOnMarker(self, markerId):
+        advChatCmp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'advancedChatComponent', None)
+        if advChatCmp is None:
+            return
+        else:
+            cmdData = advChatCmp.getCommandDataForTargetIDAndMarkerType(markerId, MarkerType.BASE_MARKER_TYPE)
+            if cmdData:
+                marker = self._markers[markerId]
+                isPlayerSender = avatar_getter.getPlayerVehicleID() in cmdData.owners
+                countNumber = len(cmdData.owners)
+                marker.setIsSticky(isPlayerSender)
+                self._setMarkerRepliesAndCheckState(marker, countNumber, isPlayerSender)
+            return
 
     def __onRemoveCommandReceived(self, removeID, markerType):
         if markerType != MarkerType.BASE_MARKER_TYPE or removeID not in self._markers:

@@ -14,7 +14,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shop import showBuyGoldForEquipment
 from gui.shared import event_dispatcher
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, getRoleTextWithLabel
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.vehicle import VehicleSeller, getCustomizationItemSellCountForVehicle
@@ -132,7 +132,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         self.__vehicleSellPrice = self.__vehicle.sellPrices.itemPrice.price
         self.__accountMoney = _VSDMoney(self.__itemsCache.items.stats.money)
         if self.__getIsDemountKitEnabled():
-            for optDevice in self.__vehicle.optDevices.installed.getItems():
+            for optDevice in self.__vehicle.optDevices.setupLayouts.getUniqueItems():
                 if optDevice is not None and not optDevice.isRemovable:
                     demountKit, currency = getDemountKitForOptDevice(optDevice)
                     if demountKit is not None and currency == Currency.GOLD:
@@ -207,12 +207,14 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         if self.__vehicle.sellPrices.itemPrice.isActionPrice():
             vehicleAction = packItemActionTooltipData(self.__vehicle, False)
         vehType = self.__vehicle.type
+        levelText = backport.text(R.strings.dialogs.vehicleSellDialog.vehicle.level())
+        levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(self.__vehicle.level)), text_styles.main(levelText))
         if self.__vehicle.isElite:
             description = backport.text(R.strings.tooltips.tankCaruselTooltip.vehicleType.elite.dyn(vehType.replace('-', '_'))())
         else:
             description = backport.text(R.strings.dialogs.vehicleSellDialog.vehicleType.dyn(vehType.replace('-', '_'))())
-        levelText = backport.text(R.strings.dialogs.vehicleSellDialog.vehicle.level())
-        levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(self.__vehicle.level)), text_styles.main(levelText))
+        description = text_styles.concatStylesToSingleLine(levelStr, description)
+        roleStr = getRoleTextWithLabel(self.__vehicle.role, self.__vehicle.roleLabel)
         hasCrew, crewTooltip = self.__getCrewData()
         barracksDropDownData = []
         for buttons in _BARRACKS_DROP_DOWN_DATA_PROVIDER:
@@ -235,12 +237,13 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'hasCrew': hasCrew,
          'isRented': self.__vehicle.isRented,
          'description': description,
-         'levelStr': levelStr,
+         'roleStr': roleStr,
          'priceLabel': backport.text(R.strings.dialogs.vehicleSellDialog.vehicle.emptySellPrice()),
          'crewLabel': backport.text(R.strings.dialogs.vehicleSellDialog.crew.label()),
          'inNationGroupDescription': backport.text(R.strings.dialogs.vehicleSellDialog.message.multinational()),
          'crewTooltip': crewTooltip,
-         'barracksDropDownData': barracksDropDownData}
+         'barracksDropDownData': barracksDropDownData,
+         'isPostProgressionUnlocked': self.__vehicle.postProgressionAvailability(unlockOnly=True).result}
 
     def __prepareInventoryModules(self):
         moduleList = self.__itemsCache.items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE(self.__nationGroupVehicles) | REQ_CRITERIA.INVENTORY).values()
@@ -254,7 +257,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def __prepareVehicleOptionalDevices(self, vehicle, currentBalance):
         onVehicleOptionalDevices = []
-        for optDevice in vehicle.optDevices.installed.getItems():
+        for optDevice in vehicle.optDevices.setupLayouts.getUniqueItems():
             data = _OptionalDeviceData(optDevice, vehicle)
             removeCurrency = _findCurrency(currentBalance, data.itemRemovalPrice)
             if removeCurrency is not None:
@@ -269,7 +272,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def __prepareVehicleEquipments(self, vehicle):
         onVehicleEquipments = []
-        for equipment in vehicle.consumables.installed.getItems():
+        for equipment in vehicle.consumables.setupLayouts.getUniqueItems():
             if equipment.isBuiltIn:
                 continue
             data = _VSDItemData(equipment, FITTING_TYPES.EQUIPMENT)
@@ -280,7 +283,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def __prepareVehicleBoosters(self, vehicle):
         onVehicleBattleBoosters = []
-        installedItems = vehicle.battleBoosters.installed.getItems()
+        installedItems = vehicle.battleBoosters.setupLayouts.getUniqueItems()
         for booster in installedItems:
             data = _BoosterData(booster)
             self.__addVSDItem(data)
@@ -317,7 +320,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def __prepareOnVehicleShells(self, vehicle):
         onVehicleShells = []
-        for shell in vehicle.shells.installed.getItems():
+        for shell in vehicle.shells.setupLayouts.getUniqueItems():
             data = _ShellData(shell, False, shell.intCD in self.__otherVehicleShells)
             self.__addVSDItem(data)
             onVehicleShells.append(data.toFlashVO())
@@ -444,7 +447,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             showBuyGoldForEquipment(spendMoneyGold)
         else:
             result = yield vehicleSeller.request()
-            SystemMessages.pushMessages(result)
+            SystemMessages.pushMessagesFromResult(result)
         self.destroy()
 
 

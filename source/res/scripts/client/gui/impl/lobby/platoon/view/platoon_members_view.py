@@ -193,7 +193,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         g_eventBus.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updateReadyButton, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
-        self.__itemsCache.onSyncCompleted += self.__onVehicleStateChanged
+        self.__platoonCtrl.onAvailableTiersForSearchChanged += self.__onAvailableTiersForSearchChanged
         self.__platoonCtrl.onAutoSearchCooldownChanged += self._updateFindPlayersButton
 
     def __removeListeners(self):
@@ -222,14 +222,14 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         g_eventBus.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updateReadyButton, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
-        self.__itemsCache.onSyncCompleted -= self.__onVehicleStateChanged
+        self.__platoonCtrl.onAvailableTiersForSearchChanged -= self.__onAvailableTiersForSearchChanged
         self.__platoonCtrl.onAutoSearchCooldownChanged -= self._updateFindPlayersButton
 
     def __onServerSettingsChange(self, diff):
         if 'unit_assembler_config' in diff:
             self._updateButtons()
 
-    def __onVehicleStateChanged(self, *args, **kwargs):
+    def __onAvailableTiersForSearchChanged(self):
         self._updateButtons()
 
     def __getEstimatedTimeInQueue(self):
@@ -246,8 +246,9 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
                 return it.player.voice.setIsSpeaking(isSpeak)
 
     def _updateMembers(self):
-        slots = self.__platoonCtrl.getPlatoonSlotsData()
-        searching = self.__platoonCtrl.isInSearch()
+        platoonCtrl = self.__platoonCtrl
+        slots = platoonCtrl.getPlatoonSlotsData()
+        searching = platoonCtrl.isInSearch()
         isWTREnabled = self.__lobbyContext.getServerSettings().isWTREnabled()
         accID = BigWorld.player().id
         estimatedTime = self.__getEstimatedTimeInQueue()
@@ -406,13 +407,14 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
             return None
 
     def _updateButtons(self):
-        isInQueue = self.__platoonCtrl.isInQueue()
-        playerInfo = self.__platoonCtrl.getPlayerInfo()
+        platoonCtrl = self.__platoonCtrl
+        isInQueue = platoonCtrl.isInQueue()
+        playerInfo = platoonCtrl.getPlayerInfo()
         isCommander = False
         if playerInfo:
             isCommander = playerInfo.isCommander()
-        canSendInvite = self.__platoonCtrl.getPermissions().canSendInvite()
-        isInSearch = self.__platoonCtrl.isInSearch()
+        canSendInvite = platoonCtrl.getPermissions().canSendInvite()
+        isInSearch = platoonCtrl.isInSearch()
         self.__updateVoiceChatToggleState()
         with self.viewModel.transaction() as model:
             model.setIsCommander(isCommander)
@@ -421,7 +423,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
             model.header.btnLeavePlatoon.setIsEnabled(not isInQueue)
             model.btnInviteFriends.setCaption(backport.text(_strButtons.invite.caption()))
             model.btnInviteFriends.setDescription(backport.text(_strButtons.invite.description()))
-            model.btnInviteFriends.setIsEnabled(self.__platoonCtrl.hasFreeSlot() and isCommander and canSendInvite and not isInQueue and not isInSearch)
+            model.btnInviteFriends.setIsEnabled(platoonCtrl.hasFreeSlot() and isCommander and canSendInvite and not isInQueue and not isInSearch)
         self._updateFindPlayersButton()
         self.__updateReadyButton()
 
@@ -513,12 +515,12 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
                 model.header.btnMuteAll.setTooltipBody(backport.text(tooltipBody))
 
     def _onFindPlayers(self):
-        if self.__platoonCtrl.isInSearch():
-            self.__platoonCtrl.cancelSearch()
+        platoonCtrl = self.__platoonCtrl
+        if platoonCtrl.isInSearch():
+            platoonCtrl.cancelSearch()
         else:
-            self.__platoonCtrl.startSearch()
-            TiersLimitSubview.resetState()
-            self.__platoonCtrl.requestPlayerQueueInfo()
+            platoonCtrl.startSearch()
+            platoonCtrl.requestPlayerQueueInfo()
 
     def _onToggleMuteAll(self):
         voipMgr = VOIP.getVOIPManager()
@@ -528,7 +530,6 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
 
     def _onLeavePlatoon(self):
         self.__platoonCtrl.leavePlatoon()
-        TiersLimitSubview.resetState()
 
     def __onMinimized(self):
         self.__platoonCtrl.destroyUI(hideOnly=True)

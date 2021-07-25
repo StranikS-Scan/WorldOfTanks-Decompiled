@@ -14,6 +14,8 @@ def getContextMenuHandlers():
     pass
 
 
+TOOLTIP_WINDOW_LAYER = WindowLayer.TOP_SUB_VIEW
+
 def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCOutroVideoPage import BCOutroVideoPage
     from gui.Scaleform.daapi.view.bootcamp.BCTooltipsWindow import BCTooltipsWindow
@@ -24,7 +26,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCSubtitlesWindow import SubtitlesWindow
     from gui.Scaleform.daapi.view.bootcamp.BCInterludeVideoPage import BCInterludeVideoPage
     return (ViewSettings(VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, BCOutroVideoPage, 'BCOutroVideo.swf', WindowLayer.TOP_WINDOW, VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, ScopeTemplates.TOP_WINDOW_SCOPE, canClose=False, canDrag=True),
-     ViewSettings(VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW, BCTooltipsWindow, 'BCTooltipsWindow.swf', WindowLayer.WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW, BCTooltipsWindow, 'BCTooltipsWindow.swf', TOOLTIP_WINDOW_LAYER, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_LOBBY_HIGHLIGHTS, BCHighlights, 'BCHighlights.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.BOOTCAMP_LOBBY_HIGHLIGHTS, ScopeTemplates.DEFAULT_SCOPE, True),
      ComponentSettings(VIEW_ALIAS.BOOTCAMP_VEHICLE_BUY_VIEW, BCVehicleBuyView, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG, BCQueueDialog, 'BCQueueWindow.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
@@ -69,19 +71,19 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
         return
 
     def __onHide(self, _):
-        hintWindow = self.findViewByAlias(WindowLayer.WINDOW, VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW)
+        hintWindow = self.findViewByAlias(TOOLTIP_WINDOW_LAYER, VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW)
         if hintWindow is not None:
             hintWindow.as_hideHandlerS()
         return
 
     def __onComplete(self, _):
-        hintWindow = self.findViewByAlias(WindowLayer.WINDOW, VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW)
+        hintWindow = self.findViewByAlias(TOOLTIP_WINDOW_LAYER, VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW)
         if hintWindow is not None:
             hintWindow.as_completeHandlerS()
         return
 
     def __onClose(self, _):
-        hintWindow = self.findViewByAlias(WindowLayer.WINDOW, VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW)
+        hintWindow = self.findViewByAlias(TOOLTIP_WINDOW_LAYER, VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW)
         if hintWindow is not None:
             hintWindow.destroy()
         return

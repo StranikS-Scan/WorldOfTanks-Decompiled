@@ -8,7 +8,7 @@ from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
 from bonus_readers import readBonusSection, readUTC
-from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ACTIONS_GROUP_LABEL_TO_TYPE
+from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ROLE_LABEL_TO_TYPE
 from debug_utils import LOG_WARNING
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, BinarySetDossierBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -273,6 +273,7 @@ class Source(object):
          'name': questName,
          'type': eventType,
          'description': description,
+         'saveProgress': questSection.readBool('saveProgress', True),
          'progressExpiryTime': progressExpiryTime,
          'weekDays': weekDays,
          'activeTimeIntervals': activeTimeIntervals,
@@ -340,7 +341,7 @@ class Source(object):
          'levels': self.__readVehicleFilter_levels,
          'nations': self.__readVehicleFilter_nations,
          'types': self.__readVehicleFilter_types,
-         'actionsGroups': self.__readVehicleFilter_actionsGroups,
+         'roles': self.__readVehicleFilter_roles,
          'dossier': self.__readBattleResultsConditionList,
          'record': self.__readCondition_dossierRecord,
          'average': self.__readCondition_int,
@@ -743,9 +744,9 @@ class Source(object):
         typeNames = section.asString.split()
         return [ vehicles.makeVehicleTypeCompDescrByName(typeName) for typeName in typeNames ]
 
-    def __readVehicleFilter_actionsGroups(self, _, section, node):
-        actionsGroups = set([ ACTIONS_GROUP_LABEL_TO_TYPE[actionsGroup] for actionsGroup in section.asString.split() ])
-        node.addChild(actionsGroups)
+    def __readVehicleFilter_roles(self, _, section, node):
+        roles = set([ ROLE_LABEL_TO_TYPE[role] for role in section.asString.split() ])
+        node.addChild(roles)
 
     def __readMetaSection(self, section):
         if section is None:

@@ -52,6 +52,10 @@ def getVehicleEpicOnlyMessage():
     return i18n.makeString('#system_messages:prebattle/vehicleInvalid/epicOnly')
 
 
+def getVehicleWillBeUnlockedInBattleMessage():
+    return i18n.makeString('#system_messages:prebattle/vehicleInvalid/willBeUnlockedInBattle')
+
+
 def getClassLimitMessage4Vehicle(teamLimits):
     classesList = [ i18n.makeString('#menu:classes/%s' % clazz) for clazz in teamLimits['classes'] ]
     return i18n.makeString('#system_messages:prebattle/vehicleInvalid/limits/classes') % ', '.join(classesList)
@@ -94,7 +98,8 @@ _INVALID_VEHICLE_STATE = {PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT: getVehicleN
  PREBATTLE_RESTRICTION.VEHICLE_NOT_READY: getVehicleNotReadyMessage,
  PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED: getVehicleNotSupportedMessage,
  PREBATTLE_RESTRICTION.VEHICLE_EPIC_ONLY: getVehicleEpicOnlyMessage,
- PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED: getRotationVehicleIsLockedMessage}
+ PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED: getRotationVehicleIsLockedMessage,
+ PREBATTLE_RESTRICTION.VEHICLE_WILL_BE_UNLOCKED: getVehicleWillBeUnlockedInBattleMessage}
 _INVALID_VEHICLE_IN_TEAM = {PREBATTLE_RESTRICTION.LIMIT_CLASSES: getClassLimitMessage4Vehicle,
  PREBATTLE_RESTRICTION.LIMIT_NATIONS: getNationLimitMessage4Vehicle,
  PREBATTLE_RESTRICTION.LIMIT_LEVEL: getLevelLimitMessage4Vehicle,
@@ -203,8 +208,8 @@ def getUnitBrowserMessage(errorCode, errorString):
     return (SystemMessages.SM_TYPE.Error, msgBody)
 
 
-def getUnitPlayerNotification(key, pInfo):
-    return i18n.makeString(SYSTEM_MESSAGES.unit_notification(key), userName=pInfo.getFullName())
+def getUnitPlayerNotification(key, pInfo, tierRange=None):
+    return i18n.makeString(SYSTEM_MESSAGES.unit_notification(key), userName=pInfo.getFullName(), tierRange=tierRange)
 
 
 def makeEntityI18nKey(ctrlType, entityType, prefix):

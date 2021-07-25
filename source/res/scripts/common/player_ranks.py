@@ -116,3 +116,27 @@ def getSettingsForBonusType(bonusType=None):
 
 def getSettings(settingsName=SETTINGS_NAMES.DEFAULT):
     return g_cache.get(settingsName, g_cache[SETTINGS_NAMES.NONE])
+
+
+def getTresholdForRanks():
+    xpTresholdForRanks = []
+    defaultAlgorithmSettings = getSettings().algorithm
+    for rank in range(PLAYER_RANK.DEFAULT_RANK, PLAYER_RANK.MAX_RANK + 1):
+        if rank == PLAYER_RANK.NO_RANK:
+            xpTresholdForRanks.append(0)
+            continue
+        rankSettings = defaultAlgorithmSettings.byRank.get(rank, None)
+        if rankSettings is not None:
+            xpTresholdForRanks.append(rankSettings.threshold)
+
+    return xpTresholdForRanks
+
+
+def getRank(progressValue):
+    result = -1
+    for rankThreshold in getTresholdForRanks():
+        if progressValue >= rankThreshold:
+            result = result + 1
+        break
+
+    return result

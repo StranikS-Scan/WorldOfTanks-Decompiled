@@ -16,6 +16,7 @@ from gui.impl.gen.view_models.views.lobby.nation_change.nation_change_screen_mod
 from gui.impl.gen.view_models.views.lobby.nation_change.nation_change_shell_model import NationChangeShellModel
 from gui.impl.gen.view_models.views.lobby.nation_change.nation_change_supply_model import NationChangeSupplyModel
 from gui.impl.gen.view_models.views.lobby.nation_change.nation_change_tankman_model import NationChangeTankmanModel
+from gui.impl.gen.view_models.views.lobby.nation_change.nation_change_tank_setup_model import NationChangeTankSetupModel
 from gui.impl.pub import ViewImpl
 from gui.shared import event_dispatcher
 from gui.shared.gui_items.Vehicle import getNationLessName, getIconResourceName, sortCrew
@@ -25,9 +26,11 @@ from gui.shared.utils.functions import getVehTypeIconName
 from helpers import int2roman
 from helpers.dependency import descriptor
 from helpers.i18n import convert
+from helpers.server_settings import serverSettingsChangeListener
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.tankmen import getSkillsConfig
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
+from post_progression_common import MAX_LAYOUTS_NUMBER_ON_VEHICLE, SERVER_SETTINGS_KEY
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -38,6 +41,7 @@ class NationChangeScreen(ViewImpl):
     _HANGAR_SOUND_FILTERED_STATE_NAME = 'STATE_hangar_filtered'
     _HANGAR_SOUND_FILTERED_STATE_ON = 'STATE_hangar_filtered_on'
     _HANGAR_SOUND_FILTERED_STATE_OFF = 'STATE_hangar_filtered_off'
+    __LAYOUTS_IN_SETUP = 4
     __slots__ = ('__currentVehicle', '__targetVehicle', '__icons')
 
     def __init__(self, viewKey, ctx=None):
@@ -86,8 +90,10 @@ class NationChangeScreen(ViewImpl):
             vm.setCurrentTankTooltipBody(self.__currentVehicle.fullDescription)
             currentVehicle = self.__currentVehicle
             targetVehicle = self.__targetVehicle
-            self.__updateTankSlot(vm.currentNation, currentVehicle)
-            self.__updateTankSlot(vm.targetNation, targetVehicle)
+            currentVehNumSetups = self.__updateTankSlot(vm.currentNation, currentVehicle)
+            vm.setCurrentTankSetupsNumber(currentVehNumSetups)
+            targetVehNumSetups = self.__updateTankSlot(vm.targetNation, targetVehicle)
+            vm.setTargetTankSetupsNumber(targetVehNumSetups)
         self.__addListeners()
         self.__setViewed()
         WWISE.WW_setState(self._HANGAR_SOUND_FILTERED_STATE_NAME, self._HANGAR_SOUND_FILTERED_STATE_ON)
@@ -107,6 +113,8 @@ class NationChangeScreen(ViewImpl):
                 args = [vehicleIntCD]
             elif tooltipId == TOOLTIPS_CONSTANTS.TANKMAN:
                 args = [int(event.getArgument('intCD'))]
+            elif tooltipId == TOOLTIPS_CONSTANTS.NATION_CHANGE_BATTLE_BOOSTER:
+                args = [vehicleIntCD, int(event.getArgument('intCD')), int(event.getArgument('layoutIDx'))]
             else:
                 args = [vehicleIntCD, int(event.getArgument('intCD'))]
             return TooltipData(tooltip=tooltipId, isSpecial=True, specialAlias=tooltipId, specialArgs=args)
@@ -116,11 +124,34 @@ class NationChangeScreen(ViewImpl):
         tankSlotVM.setTankNation(getIconResourceName(vehicle.nationName))
         tankSlotVM.setVehicleIntCD(vehicle.intCD)
         self.__setCrewViewModelData(tankSlotVM, vehicle)
-        self.__setEquipmentViewModelData(tankSlotVM.getSupplyList(), vehicle)
-        self.__setDevicesViewModelData(tankSlotVM.getEquipmentList(), vehicle)
-        self.__setShellsViewModelData(tankSlotVM.getShellList(), vehicle)
-        self.__setInstructionViewModelData(tankSlotVM.instructionSlot, vehicle)
-        self.__setInventoryViewStatus(tankSlotVM, vehicle)
+        tankSetups = tankSlotVM.getSetups()
+        if not vehicle.postProgressionAvailability().result:
+            setupsIndexes = [(vehicle.battleBoosters.setupLayouts.layoutIndex,
+              vehicle.consumables.setupLayouts.layoutIndex,
+              vehicle.optDevices.setupLayouts.layoutIndex,
+              vehicle.shells.setupLayouts.layoutIndex)]
+        else:
+            setupsIndexes = [ [layoutID] * self.__LAYOUTS_IN_SETUP for layoutID in range(max(MAX_LAYOUTS_NUMBER_ON_VEHICLE.values())) ]
+        hasEquipment = False
+        numSetups = 0
+        for setupIndexes in setupsIndexes:
+            setupModel = NationChangeTankSetupModel()
+            hasEquipment = self.__setSetupData(setupModel, vehicle, setupIndexes) or hasEquipment
+            tankSetups.addViewModel(setupModel)
+            if hasEquipment:
+                numSetups += 1
+
+        tankSetups.invalidate()
+        tankSlotVM.setNoEquipment(not hasEquipment)
+        return numSetups
+
+    def __setSetupData(self, setupModel, guiVh, layoutIndexes):
+        instructionsIdx, consumablesIdx, devicesIdx, shellsIdx = layoutIndexes
+        hasEquipment = self.__setEquipmentViewModelData(setupModel.getSupplyList(), guiVh, consumablesIdx)
+        hasDevices = self.__setDevicesViewModelData(setupModel.getEquipmentList(), guiVh, devicesIdx)
+        hasShells = self.__setShellsViewModelData(setupModel.getShellList(), guiVh, shellsIdx)
+        hasInstructions = self.__setInstructionViewModelData(setupModel.instructionSlot, guiVh, instructionsIdx)
+        return hasEquipment or hasDevices or hasShells or hasInstructions
 
     def __setCrewViewModelData(self, tankSlotVM, guiVh):
         crewListVM = tankSlotVM.getCrewList()
@@ -160,19 +191,23 @@ class NationChangeScreen(ViewImpl):
             tankSlotVM.setNoCrew(False)
         return
 
-    def __setEquipmentViewModelData(self, slotVM, guiVh):
-        installedEquipment = guiVh.consumables.installed.getItems()
+    def __setEquipmentViewModelData(self, slotVM, guiVh, layoutIdx):
+        installedEquipment = guiVh.consumables.setupLayouts.setups[layoutIdx].getItems()
+        hasEquipment = False
         for equipment in installedEquipment:
             if equipment is not None:
                 supplyModel = NationChangeSupplyModel()
                 supplyModel.setImage(self.__icons.artefact.dyn(getIconResourceName(equipment.descriptor.iconName))())
                 supplyModel.setIntCD(equipment.intCD)
                 slotVM.addViewModel(supplyModel)
+                hasEquipment = True
 
-        return
+        slotVM.invalidate()
+        return hasEquipment
 
-    def __setDevicesViewModelData(self, slotVM, guiVh):
-        for device in guiVh.optDevices.installed.getItems():
+    def __setDevicesViewModelData(self, slotVM, guiVh, layoutIdx):
+        hasDevices = False
+        for device in guiVh.optDevices.setupLayouts.setups[layoutIdx].getItems():
             deviceModel = NationChangeDeviceModel()
             deviceModel.setImage(self.__icons.artefact.dyn(getIconResourceName(device.descriptor.iconName))())
             deviceModel.setIsImproved(device.isDeluxe)
@@ -180,34 +215,37 @@ class NationChangeScreen(ViewImpl):
             deviceModel.setIsTrophyUpgraded(device.isUpgraded)
             deviceModel.setIntCD(device.intCD)
             slotVM.addViewModel(deviceModel)
+            hasDevices = True
 
-    def __setShellsViewModelData(self, slotVM, guiVh):
-        for shell in guiVh.shells.installed.getItems():
+        slotVM.invalidate()
+        return hasDevices
+
+    def __setShellsViewModelData(self, slotVM, guiVh, layoutIdx):
+        hasShells = False
+        for shell in guiVh.shells.setupLayouts.setups[layoutIdx].getItems():
             if shell.count > 0:
                 shellModel = NationChangeShellModel()
                 shellModel.setImage(self.__icons.shell.small.dyn(getIconResourceName(shell.descriptor.iconName))())
                 shellModel.setIntCD(shell.intCD)
                 slotVM.addViewModel(shellModel)
+                hasShells = True
 
-    def __setInstructionViewModelData(self, slotVM, guiVh):
-        booster = guiVh.battleBoosters.installed.getItems()
+        slotVM.invalidate()
+        return hasShells
+
+    def __setInstructionViewModelData(self, slotVM, guiVh, layoutIdx):
+        booster = guiVh.battleBoosters.setupLayouts.setups[layoutIdx].getItems()
         instruction = next(iter(booster or []), None)
-        if instruction:
+        if instruction is not None:
             slotVM.setImage(self.__icons.artefact.dyn(getIconResourceName(instruction.descriptor.iconName))())
-            slotVM.setIsActive(instruction.isAffectsOnVehicle(guiVh))
+            slotVM.setIsActive(instruction.isAffectsOnVehicle(guiVh, layoutIdx))
+            slotVM.setIsPerkReplace(instruction.isCrewBooster() and not instruction.isAffectedSkillLearnt(guiVh))
             slotVM.setIsInstalled(True)
             slotVM.setIntCD(instruction.intCD)
-        return
-
-    def __setInventoryViewStatus(self, slotVM, guiVh):
-        booster = guiVh.battleBoosters.installed.getItems()
-        installedEquipment = guiVh.consumables.installed.getItems()
-        isInstruction = any((instruction is not None for instruction in booster))
-        isShells = any((shell.count > 0 for shell in guiVh.shells.installed.getItems()))
-        isDevices = any((device is not None for device in guiVh.optDevices.installed))
-        isEquip = any((equip is not None for equip in installedEquipment))
-        isInventoryView = isInstruction or isShells or isDevices or isEquip
-        slotVM.setNoEquipment(not isInventoryView)
+            slotVM.setLayoutIDx(layoutIdx)
+            return True
+        else:
+            return False
 
     def __playAnimation(self):
         if self.viewStatus != ViewStatus.LOADED:
@@ -219,6 +257,7 @@ class NationChangeScreen(ViewImpl):
             AccountSettings.setSettings(NATION_CHANGE_VIEWED, True)
 
     def __addListeners(self):
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         self.viewModel.onCloseBtnClick += self.__onWindowClose
         self.viewModel.onSwitchBtnClick += self.__onSwitchBtnClick
         self.viewModel.onCancelBtnClick += self.__onCancelBtnClick
@@ -231,6 +270,16 @@ class NationChangeScreen(ViewImpl):
         self.viewModel.onCancelBtnClick -= self.__onCancelBtnClick
         self.viewModel.onHangarBtnClick -= self.__onHangarBtnClick
         self.viewModel.onDogClick -= self.__onDogClick
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+
+    @serverSettingsChangeListener('isNationChangeEnabled', SERVER_SETTINGS_KEY)
+    def __onServerSettingsChange(self, diff):
+        if not self.__lobbyContext.getServerSettings().isNationChangeEnabled():
+            self.__onWindowClose()
+            return
+        with self.viewModel.transaction() as vm:
+            self.__updateTankSlot(vm.currentNation, self.__currentVehicle)
+            self.__updateTankSlot(vm.targetNation, self.__targetVehicle)
 
     def __onWindowClose(self):
         if g_currentVehicle.item == self.__currentVehicle and not self.__itemsCache.items.getItemByCD(self.__currentVehicle.intCD).activeInNationGroup:

@@ -1,0 +1,11 @@
+<extension.xml>
+  <FeatureName>	event_platform	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Components>
+    <StaticComponents>
+      <KafkaLoggingComponent></KafkaLoggingComponent>
+      <VehicleHealthBroadcastComponent></VehicleHealthBroadcastComponent>
+      <VehicleVisionOverrideComponent></VehicleVisionOverrideComponent>
+    </StaticComponents>
+  </Components>
+</extension.xml>

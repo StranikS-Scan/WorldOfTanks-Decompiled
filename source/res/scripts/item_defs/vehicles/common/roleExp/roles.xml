@@ -1,62 +1,47 @@
 <roles.xml>
-  <role_HT_tank>
-    <actionsGroup>	role_HT_tank	</actionsGroup>
-    <includeTags>	role_HT_tank	</includeTags>
-  </role_HT_tank>
   <role_HT_assault>
-    <actionsGroup>	role_HT_assault	</actionsGroup>
-    <includeTags>	role_HT_assault	</includeTags>
+    <actions>	blockAndTakeDamage doNearDamage	</actions>
   </role_HT_assault>
+  <role_HT_break>
+    <actions>	blockAndTakeDamage doNearDamage	</actions>
+  </role_HT_break>
   <role_HT_universal>
-    <actionsGroup>	role_HT_universal	</actionsGroup>
-    <includeTags>	role_HT_universal	</includeTags>
+    <actions>	blockAndTakeDamage doOwnDamage	</actions>
   </role_HT_universal>
-  <role_HT_fireSupport>
-    <actionsGroup>	role_HT_fireSupport	</actionsGroup>
-    <includeTags>	role_HT_fireSupport	</includeTags>
-  </role_HT_fireSupport>
-  <role_MT_tank>
-    <actionsGroup>	role_MT_tank	</actionsGroup>
-    <includeTags>	role_MT_tank	</includeTags>
-  </role_MT_tank>
+  <role_HT_support>
+    <actions>	blockAndTakeDamage doNearDamage	</actions>
+  </role_HT_support>
+  <role_MT_assault>
+    <actions>	blockAndTakeDamage doNearDamage	</actions>
+  </role_MT_assault>
   <role_MT_universal>
-    <actionsGroup>	role_MT_universal	</actionsGroup>
-    <includeTags>	role_MT_universal	</includeTags>
+    <actions>	blockAndTakeDamage doOwnDamage	</actions>
   </role_MT_universal>
-  <role_MT_fireSupport>
-    <actionsGroup>	role_MT_fireSupport	</actionsGroup>
-    <includeTags>	role_MT_fireSupport	</includeTags>
-  </role_MT_fireSupport>
-  <role_MT_assassin>
-    <actionsGroup>	role_MT_assassin	</actionsGroup>
-    <includeTags>	role_MT_assassin	</includeTags>
-  </role_MT_assassin>
-  <role_ATSPG_tank>
-    <actionsGroup>	role_ATSPG_tank	</actionsGroup>
-    <includeTags>	role_ATSPG_tank	</includeTags>
-  </role_ATSPG_tank>
+  <role_MT_sniper>
+    <actions>	searchEnemy doFarDamage	</actions>
+  </role_MT_sniper>
+  <role_MT_support>
+    <actions>	searchEnemy doNearDamage	</actions>
+  </role_MT_support>
+  <role_ATSPG_assault>
+    <actions>	blockAndTakeDamage doNearDamage	</actions>
+  </role_ATSPG_assault>
   <role_ATSPG_universal>
-    <actionsGroup>	role_ATSPG_universal	</actionsGroup>
-    <includeTags>	role_ATSPG_universal	</includeTags>
+    <actions>	blockAndTakeDamage doOwnDamage	</actions>
   </role_ATSPG_universal>
-  <role_ATSPG_fireSupport>
-    <actionsGroup>	role_ATSPG_fireSupport	</actionsGroup>
-    <includeTags>	role_ATSPG_fireSupport	</includeTags>
-  </role_ATSPG_fireSupport>
-  <role_ATSPG_burstDamage>
-    <actionsGroup>	role_ATSPG_burstDamage	</actionsGroup>
-    <includeTags>	role_ATSPG_burstDamage	</includeTags>
-  </role_ATSPG_burstDamage>
-  <role_LT_tracked>
-    <actionsGroup>	role_LT_tracked	</actionsGroup>
-    <includeTags>	role_LT_tracked	</includeTags>
-  </role_LT_tracked>
+  <role_ATSPG_sniper>
+    <actions>	doFarDamage	</actions>
+  </role_ATSPG_sniper>
+  <role_ATSPG_support>
+    <actions>	doNearDamageSq	</actions>
+  </role_ATSPG_support>
+  <role_LT_universal>
+    <actions>	searchEnemy doOwnDamage doInvisAssist	</actions>
+  </role_LT_universal>
   <role_LT_wheeled>
-    <actionsGroup>	role_LT_wheeled	</actionsGroup>
-    <includeTags>	role_LT_wheeled	</includeTags>
+    <actions>	searchEnemy fragAssist doOwnDamage	</actions>
   </role_LT_wheeled>
   <role_SPG>
-    <actionsGroup>	role_SPG	</actionsGroup>
-    <includeTags>	role_SPG	</includeTags>
+    <actions>	doStun doGroupStun doSpgDamage	</actions>
   </role_SPG>
 </roles.xml>

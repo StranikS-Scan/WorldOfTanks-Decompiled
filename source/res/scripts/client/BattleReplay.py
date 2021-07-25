@@ -26,6 +26,7 @@ from ReplayEvents import g_replayEvents
 from constants import ARENA_PERIOD
 from helpers import dependency
 from gui.app_loader import settings
+from post_progression_common import SERVER_SETTINGS_KEY
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic, ReplayEventID
@@ -34,17 +35,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
-
-def _isVideoCameraCtrl(mode):
-    from AvatarInputHandler.control_modes import VideoCameraControlMode
-    return isinstance(mode, VideoCameraControlMode)
-
-
-def _isCatCtrl(mode):
-    from AvatarInputHandler.control_modes import CatControlMode
-    return isinstance(mode, CatControlMode)
-
-
 g_replayCtrl = None
 REPLAY_FILE_EXTENSION = '.wotreplay'
 AUTO_RECORD_TEMP_FILENAME = 'temp'
@@ -54,6 +44,8 @@ REPLAY_TIME_MARK_REPLAY_FINISHED = 2147483649L
 REPLAY_TIME_MARK_CURRENT_TIME = 2147483650L
 FAST_FORWARD_STEP = 20.0
 _BATTLE_SIMULATION_KEY_PATH = 'development/replayBattleSimulation'
+_POSTMORTEM_CTRL_MODES = (CTRL_MODE_NAME.POSTMORTEM, CTRL_MODE_NAME.DEATH_FREE_CAM, CTRL_MODE_NAME.RESPAWN_DEATH)
+_FORWARD_INPUT_CTRL_MODES = (CTRL_MODE_NAME.VIDEO, CTRL_MODE_NAME.CAT, CTRL_MODE_NAME.DEATH_FREE_CAM)
 
 class CallbackDataNames(object):
     APPLY_ZOOM = 'applyZoom'
@@ -74,6 +66,7 @@ class CallbackDataNames(object):
     GUN_DAMAGE_SOUND = 'gunDamagedSound'
     SHOW_AUTO_AIM_MARKER = 'showAutoAimMarker'
     HIDE_AUTO_AIM_MARKER = 'hideAutoAimMarker'
+    MT_CONFIG_CALLBACK = 'mapsTrainingConfigurationCallback'
 
 
 class BattleReplay(object):
@@ -159,6 +152,7 @@ class BattleReplay(object):
         self.__rewind = False
         self.replayTimeout = 0
         self.__arenaPeriod = -1
+        self.__previousPeriod = -1
         self.enableAutoRecordingBattles(True)
         self.onCommandReceived = Event.Event()
         self.onAmmoSettingChanged = Event.Event()
@@ -364,7 +358,8 @@ class BattleReplay(object):
             if self.isControllingCamera:
                 self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
                 controlMode = self.getControlMode()
-                self.onControlModeChanged('arcade')
+                if controlMode not in _POSTMORTEM_CTRL_MODES:
+                    self.onControlModeChanged('arcade')
                 self.__replayCtrl.isControllingCamera = False
                 self.onControlModeChanged(controlMode)
                 self.__showInfoMessage('replayFreeCameraActivated')
@@ -404,8 +399,6 @@ class BattleReplay(object):
             return True
         if key == Keys.KEY_C and isDown:
             self.__isChatPlaybackEnabled = not self.__isChatPlaybackEnabled
-        playerControlMode = player.inputHandler.ctrl
-        isVideoCamera = _isVideoCameraCtrl(playerControlMode) or _isCatCtrl(playerControlMode)
         suppressCommand = False
         if cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown:
             suppressCommand = True
@@ -427,8 +420,10 @@ class BattleReplay(object):
          CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION), key):
             suppressCommand = True
         if suppressCommand:
-            if isVideoCamera:
-                playerControlMode.handleKeyEvent(isDown, key, mods, event)
+            playerControlModeName = player.inputHandler.ctrlModeName
+            isForwardInputToCtrlMode = playerControlModeName in _FORWARD_INPUT_CTRL_MODES
+            if isForwardInputToCtrlMode:
+                player.inputHandler.ctrl.handleKeyEvent(isDown, key, mods, event)
             return True
         return False
 
@@ -744,8 +739,6 @@ class BattleReplay(object):
                 controlMode = self.getControlMode()
                 if controlMode == CTRL_MODE_NAME.SNIPER or forceControlMode == CTRL_MODE_NAME.STRATEGIC:
                     return
-            if not self.isControllingCamera and forceControlMode is None:
-                return
             controlMode = self.getControlMode() if forceControlMode is None else forceControlMode
             if self.__equipmentId is None and controlMode == CTRL_MODE_NAME.MAP_CASE_ARCADE:
                 return
@@ -809,13 +802,6 @@ class BattleReplay(object):
 
     def acceptVersionDiffering(self):
         self.__replayCtrl.confirmDlgAccepted()
-
-    def setControllingCamera(self):
-        if self.isControllingCamera:
-            controlMode = self.getControlMode()
-            self.onControlModeChanged('arcade')
-            self.__replayCtrl.isControllingCamera = False
-            self.onControlModeChanged(controlMode)
 
     def registerWotReplayFileExtension(self):
         self.__replayCtrl.registerWotReplayFileExtension()
@@ -905,6 +891,8 @@ class BattleReplay(object):
                 self.__serverSettings['spgRedesignFeatures'] = serverSettings['spgRedesignFeatures']
             self.__serverSettings['ranked_config'] = serverSettings['ranked_config']
             self.__serverSettings['battle_royale_config'] = serverSettings['battle_royale_config']
+            self.__serverSettings['epic_config'] = serverSettings['epic_config']
+            self.__serverSettings[SERVER_SETTINGS_KEY] = serverSettings[SERVER_SETTINGS_KEY]
             if player.databaseID is None:
                 BigWorld.callback(0.1, self.__onAccountBecomePlayer)
             else:
@@ -929,8 +917,8 @@ class BattleReplay(object):
         self.__updateGunOnTimeWarp = True
         EffectsList.EffectsListPlayer.clear()
         if self.__rewind:
-            playerControlMode = BigWorld.player().inputHandler.ctrl
-            self.__wasVideoBeforeRewind = _isVideoCameraCtrl(playerControlMode)
+            playerControlModeName = BigWorld.player().inputHandler.ctrlModeName
+            self.__wasVideoBeforeRewind = playerControlModeName == CTRL_MODE_NAME.VIDEO
             self.__videoCameraMatrix.set(BigWorld.camera().matrix)
             BigWorld.PyGroundEffectManager().stopAll()
             BigWorld.wg_clearDecals()
@@ -976,6 +964,7 @@ class BattleReplay(object):
         self.__replayCtrl.onSetEquipmentID(value)
 
     def onSetEquipmentId(self, equipmentId):
+        mapCaseMode = BigWorld.player().inputHandler.ctrls.get('mapcase', None)
         if equipmentId != -1:
             self.__equipmentId = equipmentId
             BigWorld.player().inputHandler.showGunMarker(False)
@@ -994,7 +983,8 @@ class BattleReplay(object):
 
     def __onArenaPeriodChange(self, period, periodEndTime, periodLength, periodAdditionalInfo):
         if self.isRecording:
-            if self.__arenaPeriod == period and period == ARENA_PERIOD.BATTLE:
+            if self.__arenaPeriod == period and period == ARENA_PERIOD.BATTLE and self.__previousPeriod != period:
+                self.__perviousPeriod = period
                 self.resetArenaPeriod()
         self.__arenaPeriod = period
 

@@ -4,6 +4,8 @@ from constants import ARENA_BONUS_TYPE
 from gui.battle_results import templates
 from gui.battle_results.components import base
 from gui.shared import event_dispatcher
+from helpers import dependency
+from skeletons.gui.game_control import IMapsTrainingController
 
 class IStatsComposer(object):
 
@@ -210,6 +212,38 @@ class BootcampStatsComposer(IStatsComposer):
         event_dispatcher.notifyBattleResultsPosted(arenaUniqueID)
 
 
+class MapsTrainingStatsComposer(IStatsComposer):
+    _fromNotifications = set()
+    mapsTrainingController = dependency.descriptor(IMapsTrainingController)
+
+    def __init__(self, _):
+        super(MapsTrainingStatsComposer, self).__init__()
+        self._block = templates.MAPS_TRAINING_RESULTS_BLOCK.clone()
+
+    def clear(self):
+        self._block.clear()
+
+    def setResults(self, results, reusable):
+        self.mapsTrainingController.requestInitialDataFromServer(lambda : self._block.setRecord(results, reusable))
+
+    def getVO(self):
+        return self._block.getVO()
+
+    def popAnimation(self):
+        pass
+
+    @staticmethod
+    def onShowResults(arenaUniqueID):
+        MapsTrainingStatsComposer._fromNotifications.add(arenaUniqueID)
+
+    @staticmethod
+    def onResultsPosted(arenaUniqueID):
+        isFromNotifications = arenaUniqueID in MapsTrainingStatsComposer._fromNotifications
+        event_dispatcher.showMapsTrainingResultsWindow(arenaUniqueID, isFromNotifications)
+        if isFromNotifications:
+            MapsTrainingStatsComposer._fromNotifications.remove(arenaUniqueID)
+
+
 def createComposer(reusable):
     bonusType = reusable.common.arenaBonusType
     if bonusType == ARENA_BONUS_TYPE.CYBERSPORT:
@@ -228,6 +262,8 @@ def createComposer(reusable):
         composer = EpicStatsComposer(reusable)
     elif bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
         composer = BattleRoyaleStatsComposer(reusable)
+    elif bonusType == ARENA_BONUS_TYPE.MAPS_TRAINING:
+        composer = MapsTrainingStatsComposer(reusable)
     else:
         composer = RegularStatsComposer(reusable)
     return composer

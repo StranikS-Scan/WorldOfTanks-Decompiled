@@ -8,9 +8,9 @@ from account_helpers.AccountSettings import CAROUSEL_FILTER_CLIENT_1
 from gui.prb_control.settings import VEHICLE_LEVELS
 from gui.shared.utils import makeSearchableString
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.gui_items.Vehicle import VEHICLE_ROLES_LABELS, VEHICLE_CLASS_NAME
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IBattleRoyaleController
 
 def _filterDict(dictionary, keys):
     return {key:value for key, value in dictionary.iteritems() if key in keys}
@@ -116,7 +116,6 @@ class CriteriesGroup(object):
 
 class CarouselFilter(_CarouselFilter):
     settingsCore = dependency.descriptor(ISettingsCore)
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self):
         super(CarouselFilter, self).__init__()
@@ -127,7 +126,9 @@ class CarouselFilter(_CarouselFilter):
     def save(self):
         self.settingsCore.serverSettings.setSections(self._serverSections, self._filters)
         for section in self._clientSections:
-            AccountSettings.setFilter(section, self._filters)
+            defaultFilter = AccountSettings.getFilterDefault(section)
+            filtersToSave = {key:self._filters.get(key, defaultFilter[key]) for key in defaultFilter}
+            AccountSettings.setFilter(section, filtersToSave)
 
     def load(self):
         defaultFilters = AccountSettings.getFilterDefaults(self._serverSections)
@@ -143,7 +144,21 @@ class CarouselFilter(_CarouselFilter):
         self.update(savedFilters, save=False)
 
     def _setCriteriaGroups(self):
-        self._criteriesGroups = (EventCriteriesGroup(), BasicCriteriesGroup())
+        self._criteriesGroups = (EventCriteriesGroup(), RoleCriteriesGroup())
+
+    def switch(self, key, save=True):
+        updateDict = {key: not self._filters[key]}
+        if key in VEHICLE_CLASS_NAME.ALL() and len(self.__getCurrentVehicleClasses(updateDict)) != 1:
+            updateDict.update(self.__resetRoles())
+        if updateDict:
+            self.update(updateDict, save)
+
+    def __getCurrentVehicleClasses(self, updateDict):
+        return {vehClass for vehClass in VEHICLE_CLASS_NAME.ALL() if (self._filters[vehClass] or updateDict.get(vehClass)) and updateDict.get(vehClass) is not False}
+
+    @staticmethod
+    def __resetRoles():
+        return {role:False for role in VEHICLE_ROLES_LABELS}
 
 
 class SessionCarouselFilter(_CarouselFilter):
@@ -241,6 +256,15 @@ class BasicCriteriesGroup(CriteriesGroup):
             self._criteria |= REQ_CRITERIA.VEHICLE.EARN_CRYSTALS
         if filters['searchNameVehicle']:
             self._criteria |= REQ_CRITERIA.VEHICLE.NAME_VEHICLE(makeSearchableString(filters['searchNameVehicle']))
+
+
+class RoleCriteriesGroup(BasicCriteriesGroup):
+
+    def update(self, filters):
+        super(RoleCriteriesGroup, self).update(filters)
+        roles = [ role for role in VEHICLE_ROLES_LABELS if filters[role] ]
+        if roles:
+            self._criteria |= REQ_CRITERIA.VEHICLE.ROLES(roles)
 
 
 class EventCriteriesGroup(CriteriesGroup):

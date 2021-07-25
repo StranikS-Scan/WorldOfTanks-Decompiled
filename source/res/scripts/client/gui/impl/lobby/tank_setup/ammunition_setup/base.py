@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_setup/base.py
+from account_helpers.settings_core.settings_constants import CONTROLS
 from async import async, await
+from BWUtil import AsyncReturn
 from frameworks.wulf import ViewStatus
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
@@ -11,10 +13,12 @@ from gui.impl.lobby.tank_setup.tank_setup_helper import setLastSlotAction
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playOptDeviceSlotEnter
 from gui.impl.pub import ViewImpl
 from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 
 class BaseAmmunitionSetupView(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
+    __settingsCore = dependency.descriptor(ISettingsCore)
     __slots__ = ('_ammunitionPanel', '_tankSetup', '_vehItem')
 
     def __init__(self, settings):
@@ -68,7 +72,27 @@ class BaseAmmunitionSetupView(ViewImpl):
         super(BaseAmmunitionSetupView, self)._finalize()
         return
 
+    def _resetVehicleItem(self):
+        if self._vehItem is None:
+            self._createVehicleItem()
+        else:
+            self._recreateVehicleItem()
+        return
+
+    def _resetVehicleSetups(self):
+        if self._vehItem is None:
+            self._createVehicleItem()
+        else:
+            self._recreateVehicleSetups()
+        return
+
     def _createVehicleItem(self):
+        raise NotImplementedError
+
+    def _recreateVehicleSetups(self):
+        raise NotImplementedError
+
+    def _recreateVehicleItem(self):
         raise NotImplementedError
 
     def _createMainTankSetup(self):
@@ -83,6 +107,8 @@ class BaseAmmunitionSetupView(ViewImpl):
         self.viewModel.onClose += self._onClose
         self.viewModel.ammunitionPanel.onSectionSelect += self._onPanelSelected
         self.viewModel.ammunitionPanel.onSlotClear += self._onPanelSlotClear
+        self.viewModel.ammunitionPanel.onChangeSetupIndex += self._onChangeSetupIndex
+        self.__settingsCore.onSettingsApplied += self.__onSettingsApplied
 
     def _removeListeners(self):
         self._vehItem.onItemUpdated -= self._onVehicleItemUpdated
@@ -90,6 +116,8 @@ class BaseAmmunitionSetupView(ViewImpl):
         self.viewModel.onClose -= self._onClose
         self.viewModel.ammunitionPanel.onSectionSelect -= self._onPanelSelected
         self.viewModel.ammunitionPanel.onSlotClear -= self._onPanelSlotClear
+        self.viewModel.ammunitionPanel.onChangeSetupIndex -= self._onChangeSetupIndex
+        self.__settingsCore.onSettingsApplied -= self.__onSettingsApplied
 
     def _getBackportTooltipData(self, event):
         return None
@@ -113,6 +141,27 @@ class BaseAmmunitionSetupView(ViewImpl):
         self._tankSetup.getCurrentSubView().revertItem(slotID)
         self._tankSetup.update()
 
+    @async
+    def _doChangeSetupLayoutIndex(self, groupID, layoutIdx):
+        changeSetupLayout = True
+        sections = self._ammunitionPanel.getSectionsByGroup(groupID)
+        currentSection = self._tankSetup.getSelectedSetup()
+        if sections and currentSection in sections:
+            changeSetupLayout = yield await(self._tankSetup.canQuit(skipApplyAutoRenewal=True))
+        if changeSetupLayout:
+            self._ammunitionPanel.onChangeSetupLayoutIndex(groupID, layoutIdx)
+        raise AsyncReturn(changeSetupLayout)
+
+    def _onChangeSetupIndex(self, args):
+        hudGroupID = int(args.get('groupId', None))
+        newLayoutIdx = int(args.get('currentIndex', None))
+        if hudGroupID is None or newLayoutIdx is None:
+            return
+        else:
+            if self._ammunitionPanel.isNewSetupLayoutIndexValid(hudGroupID, newLayoutIdx):
+                self._doChangeSetupLayoutIndex(hudGroupID, newLayoutIdx)
+            return
+
     def _updateAmmunitionPanel(self, sectionName=None):
         if sectionName is None:
             self._ammunitionPanel.update(self._vehItem.getItem())
@@ -128,3 +177,7 @@ class BaseAmmunitionSetupView(ViewImpl):
 
     def _onClose(self):
         pass
+
+    def __onSettingsApplied(self, diff):
+        if CONTROLS.KEYBOARD in diff:
+            self._ammunitionPanel.updateSectionsWithKeySettings()

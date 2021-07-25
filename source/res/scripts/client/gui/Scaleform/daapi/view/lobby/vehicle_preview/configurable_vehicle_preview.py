@@ -26,3 +26,8 @@ class ConfigurableVehiclePreview(VehiclePreview):
         result = super(ConfigurableVehiclePreview, self)._getData()
         result.update({'showCloseBtn': self.__showCloseBtn})
         return result
+
+    def _getExitEvent(self):
+        exitEvent = super(ConfigurableVehiclePreview, self)._getExitEvent()
+        exitEvent.ctx.update({'hiddenBlocks': self.__hiddenBlocks})
+        return exitEvent

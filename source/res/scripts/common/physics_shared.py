@@ -119,7 +119,7 @@ def getDefaultChassisXPhysicsCfg():
      'trackToBeLockedDelay': 1.0,
      'trackGaugeFactor': 0.96,
      'slopeResistTerrain': (1.5, _cosDeg(15.0), _sinDeg(29.0)),
-     'slopeResistStaticObject': (1.5, _cosDeg(15.0), _sinDeg(20.0)),
+     'slopeResistStaticObject': (1.5, _cosDeg(15.0), _sinDeg(29.0)),
      'slopeResistDynamicObject': (1.5, _cosDeg(15.0), _sinDeg(20.0)),
      'slopeGripLngTerrain': (_cosDeg(27.5),
                              1.0,
@@ -129,13 +129,13 @@ def getDefaultChassisXPhysicsCfg():
                              1.0,
                              _cosDeg(29.0),
                              0.1),
-     'slopeGripLngStaticObject': (_cosDeg(20.0),
+     'slopeGripLngStaticObject': (_cosDeg(27.5),
                                   1.0,
-                                  _cosDeg(25.0),
+                                  _cosDeg(32.0),
                                   0.1),
-     'slopeGripSdwStaticObject': (_cosDeg(20.0),
+     'slopeGripSdwStaticObject': (_cosDeg(24.5),
                                   1.0,
-                                  _cosDeg(25.0),
+                                  _cosDeg(29.0),
                                   0.1),
      'slopeGripLngDynamicObject': (_cosDeg(20.0),
                                    1.0,
@@ -533,7 +533,7 @@ def configureModelShapePhysics(cfg, typeDesc):
         __computeModelShape(cfg, cfg['shape']['crashedModelShape'], typeDesc, hitTesters['crashedModel'])
 
 
-def updatePhysics(physics, typeDesc):
+def updatePhysics(physics, typeDesc, isSoftUpdate=False):
     baseCfg = typeDesc.type.xphysics['detailed']
     gravityFactor = baseCfg['gravityFactor']
     updateSiegeModeFromCfg = False
@@ -559,20 +559,23 @@ def updatePhysics(physics, typeDesc):
         updatePhysicsCfg(siegeBaseCfg, siegeVehicleDescr, cfg['modes']['siegeMode'])
     cfg = __buildConfigurations(cfg)
     for name, mode in cfg['modes'].iteritems():
+        if isSoftUpdate:
+            applyVehDescrMiscFactors(typeDesc, mode)
         configurePhysicsMode(mode, typeDesc, gravityFactor)
 
-    oldMatrix = Math.Matrix(physics.matrix)
-    inversedMatrix = Math.Matrix(oldMatrix)
-    inversedMatrix.invert()
-    oldCoM = physics.centerOfMass
-    newCoM = Math.Vector3((0.0, cfg['modes']['normal']['clearance'] + cfg['modes']['normal']['bodyHeight'] * 0.5 + cfg['modes']['normal']['hullCOMShiftY'], physics.hullCOMZ))
-    compression = inversedMatrix.applyPoint(physics.currentCenterOfMass).y / oldCoM.y
-    dy = (newCoM.y - oldCoM.y) * compression
-    physics.centerOfMass = newCoM
-    newMatrix = Math.Matrix()
-    newMatrix.setTranslate(oldMatrix.applyToAxis(1) * dy)
-    newMatrix.preMultiply(oldMatrix)
-    physics.matrix = newMatrix
+    if not isSoftUpdate:
+        oldMatrix = Math.Matrix(physics.matrix)
+        inversedMatrix = Math.Matrix(oldMatrix)
+        inversedMatrix.invert()
+        oldCoM = physics.centerOfMass
+        newCoM = Math.Vector3((0.0, cfg['modes']['normal']['clearance'] + cfg['modes']['normal']['bodyHeight'] * 0.5 + cfg['modes']['normal']['hullCOMShiftY'], physics.hullCOMZ))
+        compression = inversedMatrix.applyPoint(physics.currentCenterOfMass).y / oldCoM.y
+        dy = (newCoM.y - oldCoM.y) * compression
+        physics.centerOfMass = newCoM
+        newMatrix = Math.Matrix()
+        newMatrix.setTranslate(oldMatrix.applyToAxis(1) * dy)
+        newMatrix.preMultiply(oldMatrix)
+        physics.matrix = newMatrix
     physics.isFrozen = False
     physics.updateSettings(cfg)
     return cfg

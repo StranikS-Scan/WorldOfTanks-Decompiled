@@ -243,6 +243,12 @@ class ClientHangarSpace(object):
             vEntity.updateVehicleCustomization(outfit)
         return
 
+    def updateVehicleDescriptor(self, descr):
+        vEntity = self.getVehicleEntity()
+        if vEntity is not None and vEntity.isVehicleLoaded:
+            vEntity.updateVehicleDescriptor(descr)
+        return
+
     def getCentralPointForArea(self, areaId):
         vEntity = self.getVehicleEntity()
         return vEntity.appearance.getCentralPointForArea(areaId) if vEntity is not None and vEntity.isVehicleLoaded else None

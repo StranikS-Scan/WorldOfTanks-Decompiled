@@ -17,9 +17,9 @@ _logger = logging.getLogger(__name__)
 _idsGenerator = Int32IDGenerator()
 
 class CachedBlur(object):
-    __slots__ = ('_blurId', '_enabled', '_fadeTime', '_rectangles', '_ownLayer', '_blurAnimRepeatCount', '__weakref__')
+    __slots__ = ('_blurId', '_enabled', '_fadeTime', '_rectangles', '_ownLayer', '_blurAnimRepeatCount', '__weakref__', '_prevBlurRadius')
 
-    def __init__(self, enabled=False, fadeTime=0, ownLayer=None, blurAnimRepeatCount=_DEFAULT_BLUR_ANIM_REPEAT_COUNT):
+    def __init__(self, enabled=False, fadeTime=0, ownLayer=None, blurAnimRepeatCount=_DEFAULT_BLUR_ANIM_REPEAT_COUNT, blurRadius=None):
         self._blurId = next(_idsGenerator)
         self._rectangles = {}
         self._enabled = enabled
@@ -27,10 +27,19 @@ class CachedBlur(object):
         self._ownLayer = ownLayer
         self._blurAnimRepeatCount = blurAnimRepeatCount
         _manager.registerBlur(self)
+        if blurRadius is not None:
+            self._prevBlurRadius = _manager.getBlurRadius()
+            _manager.setBlurRadius(blurRadius)
+        else:
+            self._prevBlurRadius = None
+        return
 
     def fini(self):
         _manager.unregisterBlur(self)
         self._blurId = None
+        if self._prevBlurRadius is not None:
+            _manager.setBlurRadius(self._prevBlurRadius)
+            self._prevBlurRadius = None
         return
 
     def __del__(self):
@@ -130,6 +139,12 @@ class _BlurManager(object):
         if self._isBlurInCache(blur) and blur is self._activeBlur():
             self._globalBlur.enable = enabled
             self._handleLayersBlur(blur)
+
+    def getBlurRadius(self):
+        return self._globalBlur.blurRadius
+
+    def setBlurRadius(self, value):
+        self._globalBlur.blurRadius = value
 
     @sf_lobby
     def _lobby(self):

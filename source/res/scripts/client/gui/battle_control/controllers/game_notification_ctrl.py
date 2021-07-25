@@ -37,6 +37,9 @@ class GameNotificationsController(IViewComponentsController, TriggersManager.ITr
     def onMessagePlaybackStarted(self, notificationID, data):
         pass
 
+    def onMessagePlaybackPhaseStarted(self, notificationID, data):
+        pass
+
     def onMessagePlaybackHide(self, notificationID, data):
         pass
 
@@ -142,10 +145,9 @@ class EpicGameNotificationsController(GameNotificationsController):
         EPIC_SOUND.EPIC_MSG_SOUNDS_ENABLED = False
 
     def notify(self, messageID, data):
-        notifyID = self._notificationMap[messageID]
-        if notifyID != -1:
-            self.onGameNotificationRecieved(self._notificationMap[messageID], data)
         notificationID = self.translateMsgId(messageID)
+        if notificationID != -1:
+            self.onGameNotificationRecieved(self._notificationMap[messageID], data)
         bfVoMessage = EPIC_SOUND.BF_EB_VO_MESSAGES.get(messageID, None)
         if notificationID == EPIC_NOTIFICATION.HQ_BATTLE_START:
             componentSystem = self._sessionProvider.arenaVisitor.getComponentSystem()
@@ -168,11 +170,23 @@ class EpicGameNotificationsController(GameNotificationsController):
         if notificationID != -1:
             self.onGameNotificationRecieved(notificationID, data)
 
+    def onMessagePlaybackPhaseStarted(self, messageID, data):
+        notificationID = self._notificationMap[messageID]
+        modificator = data['modificator']
+        if notificationID == EPIC_NOTIFICATION.ZONE_CAPTURED and modificator == GAME_MESSAGES_CONSTS.WITH_ADD_TIME:
+            SoundGroups.g_instance.playSound2D(EPIC_SOUND.EB_UI_ADD_TIME_EMERGENCE)
+        elif notificationID == EPIC_NOTIFICATION.HQ_DESTROYED:
+            if modificator == GAME_MESSAGES_CONSTS.WITH_EVENT:
+                SoundGroups.g_instance.playSound2D(EPIC_SOUND.EB_UI_CANNON_DESTRUCTION_CROSS)
+            elif modificator == GAME_MESSAGES_CONSTS.WITH_HIDE:
+                SoundGroups.g_instance.playSound2D(EPIC_SOUND.EB_UI_CANNON_DESTRUCTION_DISAPPEARANCE)
+
     def onMessagePlaybackStarted(self, messageID, data):
         componentSystem = self._sessionProvider.arenaVisitor.getComponentSystem()
         notificationID = self._notificationMap[messageID]
         isAttacker = avatar_getter.getPlayerTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER
         if notificationID == EPIC_NOTIFICATION.HQ_DESTROYED:
+            SoundGroups.g_instance.playSound2D(EPIC_SOUND.EB_UI_CANNON_DESTRUCTION_EMERGENCE)
             bfVoMessage = self.__selectSoundNotifObjDestroy(componentSystem, messageID, data['id'])
             adType = EPIC_SOUND.BF_EB_HQ_DESTROYED_ATK_OR_DEF.get(messageID, None)
             if adType is None:
@@ -200,6 +214,8 @@ class EpicGameNotificationsController(GameNotificationsController):
                 bfVoMessage = bfVoMessage.get(isPlayerLane, None)
                 sectorBaseName = self._getBaseNameByBaseId(data['id'])
                 bfVoMessage += '_' + sectorBaseName
+                if data['modificator'] == GAME_MESSAGES_CONSTS.WITH_UNLOCK:
+                    SoundGroups.g_instance.playSound2D(EPIC_SOUND.EB_TANKS_UNLOCKED)
             elif notificationID == EPIC_NOTIFICATION.OVERTIME:
                 self.__playSound(EPIC_OVERTIME_SOUND_NOTIFICATIONS.BF_EB_OVERTIME_START)
                 if self.__playMsgOvertimeTriggered:

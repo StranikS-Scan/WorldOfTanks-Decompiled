@@ -12,6 +12,7 @@ class TankSetupConstants(ViewModel):
     TOGGLE_SHELLS = 'toggleShells'
     TOGGLE_CAMOUFLAGE = 'toggleCamouflage'
     EMPTY = ''
+    SPECIAL_SETUP_INFO_SLOT_TOOLTIP = 'specialSetupInfoSlotTooltip'
 
     def __init__(self, properties=0, commands=0):
         super(TankSetupConstants, self).__init__(properties=properties, commands=commands)

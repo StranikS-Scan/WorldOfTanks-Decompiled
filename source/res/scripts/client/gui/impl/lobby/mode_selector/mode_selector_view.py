@@ -36,6 +36,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
+from uilogging.bootcamp.loggers import BootcampLogger
 from uilogging.mode_selector.constants import LOG_KEYS, LOG_ACTIONS, LOG_CLOSE_DETAILS
 from uilogging.mode_selector.loggers import BaseModeSelectorLogger
 if typing.TYPE_CHECKING:
@@ -51,6 +52,7 @@ _CLOSE_LAYERS = (WindowLayer.SUB_VIEW, WindowLayer.TOP_SUB_VIEW)
 class ModeSelectorView(ViewImpl):
     __slots__ = ('__blur', '__dataProvider', '__prevAppBackgroundAlpha', '__isEventEnabled', '__isClickProcessing', '__prevOptimizationEnabled', '__isGraphicsRestored')
     uiLogger = BaseModeSelectorLogger(LOG_KEYS.MS_WINDOW)
+    uiBootcampLogger = BootcampLogger(LOG_KEYS.MS_WINDOW)
     _COMMON_SOUND_SPACE = MODE_SELECTOR_SOUND_SPACE
     __appLoader = dependency.descriptor(IAppLoader)
     __bootcamp = dependency.descriptor(IBootcampController)
@@ -104,7 +106,8 @@ class ModeSelectorView(ViewImpl):
              ModeSelectorTooltipsConstants.RANKED_BATTLES_LEAGUE_TOOLTIP,
              ModeSelectorTooltipsConstants.RANKED_BATTLES_EFFICIENCY_TOOLTIP,
              ModeSelectorTooltipsConstants.RANKED_BATTLES_POSITION_TOOLTIP,
-             ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP]:
+             ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
+             ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP]:
                 return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=(None,))
             if tooltipId == ModeSelectorTooltipsConstants.RANKED_BATTLES_RANK_TOOLTIP:
                 rankID = int(event.getArgument('rankID'))
@@ -151,10 +154,12 @@ class ModeSelectorView(ViewImpl):
         g_eventBus.handleEvent(FullscreenModeSelectorEvent(FullscreenModeSelectorEvent.NAME, ctx={'showing': True}))
 
     def _onLoaded(self):
+        self.uiBootcampLogger.logOnlyFromBootcamp(LOG_ACTIONS.OPENED)
         self.inputManager.removeEscapeListener(self.__handleEscape)
         self.uiLogger.log(LOG_ACTIONS.OPENED, isNew=self.__dataProvider.hasNewIndicator, isWidget=self._areWidgetsVisible, isFeatured=self.__isEventEnabled)
 
     def _finalize(self):
+        self.uiBootcampLogger.logOnlyFromBootcamp(LOG_ACTIONS.CLOSED)
         self.__gui.windowsManager.onWindowStatusChanged -= self.__windowStatusChanged
         self.inputManager.removeEscapeListener(self.__handleEscape)
         self.__lobbyContext.deleteHeaderNavigationConfirmator(self.__handleHeaderNavigation)
@@ -240,6 +245,7 @@ class ModeSelectorView(ViewImpl):
         self.viewModel.setAreWidgetsVisible(ModeSelectorView._areWidgetsVisible)
 
     def __infoClickHandler(self, event):
+        self.uiBootcampLogger.logOnlyFromBootcamp(LOG_ACTIONS.INFO_PAGE_ICON_CLICKED)
         index = int(event.get('index'))
         modeSelectorItem = self.__dataProvider.getItemByIndex(index)
         if modeSelectorItem is None:

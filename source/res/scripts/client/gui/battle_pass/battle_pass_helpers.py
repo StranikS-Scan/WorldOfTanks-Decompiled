@@ -107,7 +107,8 @@ def getSupportedArenaBonusTypeFor(queueType, isInUnit):
     else:
         arenaBonusTypeByQueueType = {QUEUE_TYPE.RANDOMS: ARENA_BONUS_TYPE.REGULAR,
          QUEUE_TYPE.RANKED: ARENA_BONUS_TYPE.RANKED,
-         QUEUE_TYPE.MAPBOX: ARENA_BONUS_TYPE.MAPBOX}
+         QUEUE_TYPE.MAPBOX: ARENA_BONUS_TYPE.MAPBOX,
+         QUEUE_TYPE.EPIC: ARENA_BONUS_TYPE.EPIC_BATTLE}
         arenaBonusType = arenaBonusTypeByQueueType.get(queueType, ARENA_BONUS_TYPE.UNKNOWN)
     return arenaBonusType
 

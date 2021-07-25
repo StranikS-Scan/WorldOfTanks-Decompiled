@@ -41,6 +41,7 @@ from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from helpers import dependency, uniprof
 from items import _xml
+from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
@@ -962,6 +963,7 @@ class SniperControlMode(_GunControlMode):
     _LENS_EFFECTS_ENABLED = True
     _BINOCULARS_MODE_SUFFIX = ['usual', 'coated']
     BinocularsModeDesc = namedtuple('BinocularsModeDesc', ('background', 'distortion', 'rgbCube', 'greenOffset', 'blueOffset', 'aberrationRadius', 'distortionAmount'))
+    __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     @staticmethod
     def enableLensEffects(enable):
@@ -984,14 +986,22 @@ class SniperControlMode(_GunControlMode):
     def create(self):
         self._cam.create(self.onChangeControlModeByScroll)
         super(SniperControlMode, self).create()
-        self.__setupBinoculars(vehicle_getter.isCoatedOpticsInstalled())
+        optDevicesCtrl = self.__guiSessionProvider.shared.optionalDevices
+        if optDevicesCtrl is not None:
+            optDevicesCtrl.onDescriptorDevicesChanged += self.__onDescriptorDevicesChanged
+        self.__setupBinoculars(vehicle_getter.getOptionalDevices())
+        return
 
     def destroy(self):
+        optDevicesCtrl = self.__guiSessionProvider.shared.optionalDevices
+        if optDevicesCtrl is not None:
+            optDevicesCtrl.onDescriptorDevicesChanged -= self.__onDescriptorDevicesChanged
         self.disable(True)
         self._binoculars.setEnabled(False)
         self._binoculars.resetTextures()
         self._cam.writeUserPreferences()
         super(SniperControlMode, self).destroy()
+        return
 
     def enable(self, **args):
         super(SniperControlMode, self).enable(**args)
@@ -1035,12 +1045,10 @@ class SniperControlMode(_GunControlMode):
             return
         else:
             vehicleDescr = vehicle.typeDescriptor
-            isCoatedOptics = False
-            for optionalDevice in vehicleDescr.optionalDevices:
-                if optionalDevice is not None and 'coatedOptics' in optionalDevice.tags:
-                    isCoatedOptics = True
-
-            self.__setupBinoculars(isCoatedOptics)
+            vehicleData = self.__guiSessionProvider.arenaVisitor.getArenaVehicles().get(vehicleID)
+            if vehicleData is not None:
+                vehicleDescr = vehicleData.get('vehicleType', vehicleDescr)
+            self.__setupBinoculars(vehicleDescr.optionalDevices)
             isHorizontalStabilizerAllowed = vehicleDescr.gun.turretYawLimits is None
             if self._cam.aimingSystem is not None:
                 self._cam.aimingSystem.enableHorizontalStabilizerRuntime(isHorizontalStabilizerAllowed)
@@ -1153,12 +1161,14 @@ class SniperControlMode(_GunControlMode):
     def _setupCamera(self, dataSection):
         self._cam = SniperCamera.SniperCamera(dataSection['camera'], defaultOffset=self._defaultOffset, binoculars=self._binoculars)
 
-    def __setupBinoculars(self, isCoatedOptics):
+    def __setupBinoculars(self, optDevices):
+        isCoatedOptics = findFirst(lambda d: d is not None and 'coatedOptics' in d.tags, optDevices) is not None
         modeDesc = self.__binocularsModes[SniperControlMode._BINOCULARS_MODE_SUFFIX[1 if isCoatedOptics else 0]]
         self._binoculars.setBackgroundTexture(modeDesc.background)
         self._binoculars.setDistortionTexture(modeDesc.distortion)
         self._binoculars.setColorGradingTexture(modeDesc.rgbCube)
         self._binoculars.setParams(modeDesc.greenOffset, modeDesc.blueOffset, modeDesc.aberrationRadius, modeDesc.distortionAmount)
+        return
 
     def __siegeModeStateChanged(self, newState, timeToNewMode):
         if newState == VEHICLE_SIEGE_STATE.ENABLED or newState == VEHICLE_SIEGE_STATE.DISABLED:
@@ -1168,6 +1178,9 @@ class SniperControlMode(_GunControlMode):
     def __isFullStabilizationRequired(self):
         descriptor = BigWorld.player().vehicleTypeDescriptor
         return descriptor.isPitchHullAimingAvailable or descriptor.isYawHullAimingAvailable
+
+    def __onDescriptorDevicesChanged(self, optDevices):
+        self.__setupBinoculars(optDevices)
 
 
 class DualGunControlMode(SniperControlMode):
@@ -1364,11 +1377,13 @@ class PostMortemControlMode(IControlMode):
             self.__aih.onControlModeChanged(CTRL_MODE_NAME.VIDEO, prevModeName=CTRL_MODE_NAME.POSTMORTEM, camMatrix=self.__cam.camera.matrix, curVehicleID=self.__curVehicleID)
             return True
         if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown and not guiCtrlEnabled:
-            self.__switch()
-            return True
+            if self.__aih.isAllowToSwitchPositionOrFPV():
+                self.__switch()
+                return True
         if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_SELF_VEHICLE, key) and isDown and not guiCtrlEnabled:
-            self.__switch(False)
-            return True
+            if self.__aih.isAllowToSwitchPositionOrFPV():
+                self.__switch(False)
+                return True
         if cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
          CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
          CommandMapping.CMD_CM_CAMERA_ROTATE_UP,

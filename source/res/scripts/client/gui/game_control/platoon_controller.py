@@ -8,12 +8,12 @@ import BigWorld
 import Event
 import SoundGroups
 import VOIP
-from UnitBase import UNIT_ROLE, UnitAssemblerSearchFlags
+from UnitBase import UNIT_ROLE, UnitAssemblerSearchFlags, extendTiersFilter
 from constants import EPlatoonButtonState, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from PlatoonTank import PlatoonTank, PlatoonTankInfo
 from account_helpers.AccountSettings import AccountSettings, UNIT_FILTER, GUI_START_BEHAVIOR
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-from account_helpers.settings_core.settings_constants import GAME, GuiSettingsBehavior
+from account_helpers.settings_core.settings_constants import GAME, GuiSettingsBehavior, OnceOnlyHints
 from adisp import process, async
 from constants import QUEUE_TYPE
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
@@ -22,7 +22,6 @@ from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.lobby.platoon.platoon_helpers import convertTierFilterToList
 from gui.impl.lobby.platoon.view.platoon_members_view import MembersWindow
 from gui.impl.lobby.platoon.view.platoon_search_view import SearchWindow
 from gui.impl.lobby.platoon.view.platoon_welcome_view import SelectionWindow
@@ -34,13 +33,14 @@ from gui.prb_control.entities.base.unit.ctx import AutoSearchUnitCtx
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.formatters import messages
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers.statistics import HARDWARE_SCORE_PARAMS
 from messenger import MessengerEntry
 from messenger.ext import channel_num_gen
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IPlatoonController, IEventProgressionController
+from skeletons.gui.game_control import IPlatoonController, IUISpamController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -51,9 +51,11 @@ from gui.prb_control.entities.base.unit.permissions import UnitPermissions
 from gui.prb_control.entities.base.unit.entity import UnitEntity
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.formatters.ranges import toRomanRangeString
+from gui.impl.lobby.platoon.platoon_helpers import convertTierFilterToList
 from gui.prb_control.settings import REQUEST_TYPE
 if TYPE_CHECKING:
-    from typing import Optional as TOptional
+    from typing import Optional as TOptional, Tuple as TTuple
     from UnitBase import ProfileVehicle
 _logger = logging.getLogger(__name__)
 _QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME = {QUEUE_TYPE.EVENT_BATTLES: PREBATTLE_ACTION_NAME.SQUAD,
@@ -66,8 +68,9 @@ _QUEUE_TYPE_TO_PREBATTLE_TYPE = {QUEUE_TYPE.EVENT_BATTLES: PREBATTLE_TYPE.EVENT,
  QUEUE_TYPE.EPIC: PREBATTLE_TYPE.EPIC,
  QUEUE_TYPE.BATTLE_ROYALE: PREBATTLE_TYPE.BATTLE_ROYALE,
  QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT: PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT,
- QUEUE_TYPE.MAPBOX: PREBATTLE_TYPE.MAPBOX}
-_RANDOM_VEHICLE_CRITERIA = ~(REQ_CRITERIA.VEHICLE.EPIC_BATTLE ^ REQ_CRITERIA.VEHICLE.BATTLE_ROYALE ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE)
+ QUEUE_TYPE.MAPBOX: PREBATTLE_TYPE.MAPBOX,
+ QUEUE_TYPE.MAPS_TRAINING: PREBATTLE_TYPE.MAPS_TRAINING}
+_RANDOM_VEHICLE_CRITERIA = ~(REQ_CRITERIA.VEHICLE.EPIC_BATTLE ^ REQ_CRITERIA.VEHICLE.BATTLE_ROYALE ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE ^ REQ_CRITERIA.VEHICLE.MAPS_TRAINING)
 _PREBATTLE_TYPE_TO_VEH_CRITERIA = {PREBATTLE_TYPE.SQUAD: _RANDOM_VEHICLE_CRITERIA,
  PREBATTLE_TYPE.EPIC: ~(REQ_CRITERIA.VEHICLE.BATTLE_ROYALE ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE),
  PREBATTLE_TYPE.BATTLE_ROYALE: REQ_CRITERIA.VEHICLE.BATTLE_ROYALE,
@@ -75,6 +78,7 @@ _PREBATTLE_TYPE_TO_VEH_CRITERIA = {PREBATTLE_TYPE.SQUAD: _RANDOM_VEHICLE_CRITERI
  PREBATTLE_TYPE.EVENT: REQ_CRITERIA.VEHICLE.EVENT_BATTLE,
  PREBATTLE_TYPE.MAPBOX: _RANDOM_VEHICLE_CRITERIA}
 _MIN_PERF_PRESET_NAME = 'MIN'
+_MAX_SLOT_COUNT_FOR_PLAYER_RESORTING = 3
 SquadInfo = namedtuple('SquadInfo', ['platoonState', 'squadManStates', 'commanderIndex'])
 Position = namedtuple('Position', ['x', 'y'])
 _PlatoonLayout = namedtuple('_PlatoonLayout', ('layoutID', 'windowClass'))
@@ -92,45 +96,70 @@ class _FilterExpander(CallbackDelayer):
 
     def __init__(self):
         super(_FilterExpander, self).__init__()
-        self.__filter = None
+        self.__initialTierFlags = 0
+        self.__expandedTierFlags = 0
+        self.__iterations = 0
         self.__nextDelayGenerator = None
         return
 
-    def start(self, unitFilter):
+    def start(self, userSearchFlags):
         self.clearCallbacks()
-        self.__filter = convertTierFilterToList(unitFilter)
+        self.__initialTierFlags = self.__expandedTierFlags = userSearchFlags & UnitAssemblerSearchFlags.ALL_VEH_TIERS
+        self.__iterations = 0
         delayListByTiers = self.__getExtendDelaysByTiers()
         self.__nextDelayGenerator = self.__getNextDelayByTier(delayListByTiers)
         delayByTier = next(self.__nextDelayGenerator, None)
         if delayByTier is not None:
             self.delayCallback(delayByTier, self.__refreshCurrentlySearchedTiers)
+        else:
+            self.stop()
         return
 
+    def updateSearchFlags(self, newFlags):
+        newTierFlags = newFlags & UnitAssemblerSearchFlags.ALL_VEH_TIERS
+        if self.__nextDelayGenerator is None or self.__initialTierFlags == newTierFlags:
+            return
+        else:
+            self.__initialTierFlags = self.__expandedTierFlags = newTierFlags
+            for _ in xrange(self.__iterations):
+                self.__expandedTierFlags = extendTiersFilter(self.__expandedTierFlags)
+
+            self.__platoonCtrl.onFilterUpdate()
+            return
+
+    def stop(self):
+        self.__initialTierFlags = 0
+        self.__expandedTierFlags = 0
+        self.__iterations = 0
+        self.__platoonCtrl.onFilterUpdate()
+        self.__nextDelayGenerator = None
+        self.clearCallbacks()
+        return
+
+    def getExpandedFilter(self):
+        return self.__expandedTierFlags
+
+    def isExpanded(self):
+        return self.__initialTierFlags != self.__expandedTierFlags
+
     def __getExtendDelaysByTiers(self):
-        queueType = self.__platoonCtrl.getQueueType()
-        if queueType == QUEUE_TYPE.RANDOMS:
-            return self.__lobbyContext.getServerSettings().unitAssemblerConfig.squad['extendTierFilter']
-        return self.__lobbyContext.getServerSettings().unitAssemblerConfig.epic['extendTierFilter'] if queueType == QUEUE_TYPE.EPIC else []
+        prebattleType = self.__platoonCtrl.getPrbEntityType()
+        unitAssemblerConfig = self.__lobbyContext.getServerSettings().unitAssemblerConfig
+        return unitAssemblerConfig.getExtendTierFilter(prebattleType)
 
     def __refreshCurrentlySearchedTiers(self):
         if self.__platoonCtrl.isInSearch():
             if self.__extendCurrentTierFilter():
-                self.__platoonCtrl.setNewTierFilter(self.__filter, isExpanded=True)
+                self.__platoonCtrl.onFilterUpdate()
                 return next(self.__nextDelayGenerator, None)
         return None
 
     def __extendCurrentTierFilter(self):
-        copy = self.__filter[:]
-        for it in copy:
-            plus = it + 1
-            minus = it - 1
-            if it > 1 and minus not in self.__filter:
-                self.__filter.append(minus)
-            if it < 10 and plus not in self.__filter:
-                self.__filter.append(plus)
-
-        self.__filter.sort()
-        return copy != self.__filter
+        self.__iterations += 1
+        newFilterFlags = extendTiersFilter(self.__expandedTierFlags)
+        isFilterChanged = newFilterFlags != self.__expandedTierFlags
+        self.__expandedTierFlags = newFilterFlags
+        return isFilterChanged
 
     def __getNextDelayByTier(self, delayListByTiers):
         lastDelay = 0.0
@@ -148,7 +177,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     __itemsCache = dependency.descriptor(IItemsCache)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __hangarSpace = dependency.descriptor(IHangarSpace)
-    __eventProgression = dependency.descriptor(IEventProgressionController)
+    __uiSpamController = dependency.descriptor(IUISpamController)
 
     def __init__(self):
         super(PlatoonController, self).__init__()
@@ -166,9 +195,12 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__tankDisplayPosition = {}
         self.__executeQueue = False
         self.__areOtherMembersReady = False
+        self.__availableTiersForSearch = 0
+        self.__alreadyJoinedAccountDBIDs = set()
         self.onFilterUpdate = Event.Event()
         self.onPlatoonTankVisualizationChanged = Event.Event()
         self.onChannelControllerChanged = Event.Event()
+        self.onAvailableTiersForSearchChanged = Event.Event()
         self.onMembersUpdate = Event.Event()
         self.onPlatoonTankUpdated = Event.Event()
         self.onAutoSearchCooldownChanged = Event.Event()
@@ -181,9 +213,11 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             self.__validateSystemReq()
         self.__isPlatoonVisualizationEnabled = bool(self.__settingsCore.getSetting(GAME.DISPLAY_PLATOON_MEMBERS))
         self.__startListening()
+        self.__cacheAvailableVehicles()
 
     def onLobbyStarted(self, ctx):
         self.resetUnitTierFilter()
+        self.__cacheAvailableVehicles()
 
     def onPrbEntitySwitching(self):
         queueType = self.getQueueType()
@@ -195,25 +229,28 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.onPlatoonTankVisualizationChanged(False)
         self.destroyUI()
         self.clearCallbacks()
-        self.__isActiveSearchView = False
         self.__startAutoSearchOnUnitJoin = False
         self.__channelCtrl = None
         self.__tankDisplayPosition.clear()
         return
 
-    def getUnitFilter(self):
+    def getUserSearchFlags(self):
         defaults = AccountSettings.getFilterDefault(UNIT_FILTER)
         unitFilter = self.__settingsCore.serverSettings.getSection(SETTINGS_SECTIONS.UNIT_FILTER, defaults)
         return unitFilter[GAME.UNIT_FILTER]
 
-    def saveUnitFilter(self, value):
+    def getCurrentSearchFlags(self):
+        unitMgr = prb_getters.getClientUnitMgr()
+        return unitMgr.unit.getAutoSearchFlags() if unitMgr and unitMgr.unit else 0
+
+    def saveUserSearchFlags(self, value):
         unitFilter = {GAME.UNIT_FILTER: value}
         self.__settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.UNIT_FILTER, unitFilter)
+        self.__updateExpanderSearchFlags()
 
     def resetUnitTierFilter(self):
-        unitFilter = self.getUnitFilter()
-        resetedUnitFilter = unitFilter & 1
-        self.saveUnitFilter(resetedUnitFilter)
+        searchFlagsWithoutTiers = self.getCurrentSearchFlags() & ~UnitAssemblerSearchFlags.ALL_VEH_TIERS
+        self.saveUserSearchFlags(searchFlagsWithoutTiers)
 
     def getPermissions(self):
         return self.prbEntity.getPermissions()
@@ -232,6 +269,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         prevQueueType = self.__prevPrbEntityInfo.queueType
         if prevQueueType != self.getQueueType() and self.hasSearchSupport():
             self.resetUnitTierFilter()
+        self.__cacheAvailableVehicles()
         if not self.__executeQueue:
             return
         self.__executeQueue = False
@@ -266,7 +304,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             if not self.isInSearch():
                 ctx = AutoSearchUnitCtx('prebattle/auto_search')
                 _logger.debug('Unit request: %s', str(ctx))
-                searchFlags = self.getUnitFilter()
+                searchFlags = self.getUserSearchFlags()
                 if self.__isActiveSearchView:
                     searchFlags |= UnitAssemblerSearchFlags.DESTROY_UNIT_ON_ABORT
                 self.prbEntity.doAutoSearch(ctx, self.__startAutoSearchCallback, searchFlags)
@@ -275,7 +313,6 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         if isinstance(self.prbEntity, UnitEntity) and self.isInSearch():
             ctx = AutoSearchUnitCtx('prebattle/auto_search', action=0)
             self.prbEntity.doAutoSearch(ctx, callback=None)
-            self.onFilterUpdate(None, False)
         return
 
     @async
@@ -309,16 +346,16 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def isSearchingForPlayersEnabled(self):
         prebattleType = self.getPrbEntityType()
         unitAssemblerConfig = self.__lobbyContext.getServerSettings().unitAssemblerConfig
-        return unitAssemblerConfig.isAssemblingEnabled(prebattleType) if unitAssemblerConfig.isPrebattleSupported(prebattleType) else False
+        return unitAssemblerConfig.isAssemblingEnabled(prebattleType)
 
     def isTankLevelPreferenceEnabled(self):
         prebattleType = self.getPrbEntityType()
         unitAssemblerConfig = self.__lobbyContext.getServerSettings().unitAssemblerConfig
-        return unitAssemblerConfig.isTankLevelPreferenceEnabled(prebattleType) if unitAssemblerConfig.isPrebattleSupported(prebattleType) else False
+        return unitAssemblerConfig.isTankLevelPreferenceEnabled(prebattleType)
 
     def getAllowedTankLevels(self, prebattleType):
         unitAssemblerConfig = self.__lobbyContext.getServerSettings().unitAssemblerConfig
-        return unitAssemblerConfig.getAllowedTankLevels(prebattleType) if unitAssemblerConfig.isPrebattleSupported(prebattleType) else 0
+        return unitAssemblerConfig.getAllowedTankLevels(prebattleType)
 
     def isVOIPEnabled(self):
         voipMgr = VOIP.getVOIPManager()
@@ -363,6 +400,10 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def destroyUI(self, hideOnly=False):
         self.__destroy(hideOnly)
+        if not hideOnly:
+            self.__alreadyJoinedAccountDBIDs.clear()
+            self.__isActiveSearchView = False
+            self.__filterExpander.stop()
 
     def setPlatoonPopoverPosition(self, xPopoverOffset):
         position = self.__calculateDropdownMove(xPopoverOffset)
@@ -372,12 +413,15 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                 if view:
                     view.getParentWindow().move(position.x, position.y)
 
-    def setNewTierFilter(self, newTierFilter, isExpanded):
-        _logger.debug('PlatoonController: Expanded tier filter %s', str(newTierFilter))
-        if newTierFilter is None:
-            newTierFilter = convertTierFilterToList(self.getUnitFilter())
-        self.onFilterUpdate(newTierFilter, isExpanded)
-        return
+    def getExpandedSearchFlags(self):
+        expander = self.__filterExpander
+        if self.isInSearch():
+            searchFlags = self.getCurrentSearchFlags()
+        else:
+            searchFlags = self.getUserSearchFlags()
+        expandedTiersFilter = expander.getExpandedFilter()
+        expandedSearchFlags = searchFlags | expandedTiersFilter
+        return (expandedSearchFlags, expander.isExpanded())
 
     def hasFreeSlot(self):
         unitMgr = prb_getters.getClientUnitMgr()
@@ -399,8 +443,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             if unitFullData.unit is None:
                 return orderedSlots
             _, slots = vo_converters.makeSlotsVOs(entity, entity.getID(), withPrem=True)
-            self.__updateDisplaySlotsIndices()
-            orderedSlots = self.__sortPlatoonSlots(slots)
+            orderedSlots = self.__orderSlotsBasedOnDisplaySlotsIndices(slots)
         return orderedSlots
 
     def buildExtendedSquadInfoVo(self):
@@ -464,9 +507,16 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         if self.getPrbEntityType() not in PREBATTLE_TYPE.SQUAD_PREBATTLES:
             return
         _logger.debug('PlatoonController: onUnitFlagsChanged')
-        if flags.isSearchStateChanged() and flags.isInSearch():
-            self.__closeSendInviteView()
+        if flags.isSearchStateChanged():
+            if flags.isInSearch():
+                self.__filterExpander.start(self.getCurrentSearchFlags())
+                self.__closeSendInviteView()
+            else:
+                self.__filterExpander.stop()
         self.onMembersUpdate()
+
+    def onUnitSearchFlagsChanged(self, _):
+        self.__updateExpanderSearchFlags()
 
     def onUnitVehiclesChanged(self, dbID, vInfos):
         if self.getPrbEntityType() not in PREBATTLE_TYPE.SQUAD_PREBATTLES:
@@ -511,8 +561,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         if self.getPrbEntityType() not in PREBATTLE_TYPE.SQUAD_PREBATTLES:
             return
         _logger.debug('PlatoonController: onUnitPlayerAdded')
-        if not pInfo.isInvite():
-            self.__addPlayerNotification(settings.UNIT_NOTIFICATION_KEY.PLAYER_ADDED, pInfo)
+        self.__addPlayerJoinNotification(pInfo)
         if pInfo.isInSlot:
             SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.gui_platoon_2_member_joined()))
         self.__areOtherMembersReady = False
@@ -524,6 +573,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         _logger.debug('PlatoonController: onUnitPlayerRemoved')
         if not pInfo.isInvite():
             self.__addPlayerNotification(settings.UNIT_NOTIFICATION_KEY.PLAYER_REMOVED, pInfo)
+            self.__alreadyJoinedAccountDBIDs.remove(pInfo.dbID)
         SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.gui_platoon_2_member_left()))
         self.__updatePlatoonTankInfo()
 
@@ -557,39 +607,31 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.onMembersUpdate()
 
     def hasVehiclesForSearch(self, tierLevel=None):
-        prebattleType = self.getPrbEntityType()
-        allowedLevels = self.getAllowedTankLevels(prebattleType)
-        if tierLevel is not None:
-            tierAllowed = bool(allowedLevels & 1 << tierLevel)
-            if not tierAllowed:
-                return False
-        criteria = REQ_CRITERIA.INVENTORY
-        criteria |= ~REQ_CRITERIA.HIDDEN
-        criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
-        criteria |= _PREBATTLE_TYPE_TO_VEH_CRITERIA.get(prebattleType, REQ_CRITERIA.EMPTY)
-        if tierLevel is not None:
-            criteria |= REQ_CRITERIA.VEHICLE.LEVEL(tierLevel)
-        else:
-            allowedList = [ lvl for lvl in range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1) if allowedLevels & 1 << lvl ]
-            criteria |= REQ_CRITERIA.VEHICLE.LEVELS(allowedList)
-        vehicles = self.__itemsCache.items.getVehicles(criteria)
-        for v in vehicles.itervalues():
-            state, vStateLvl = v.getState()
-            if state in (Vehicle.VEHICLE_STATE.LOCKED, Vehicle.VEHICLE_STATE.IN_PREBATTLE) and v.checkUndamagedState(Vehicle.VEHICLE_STATE.UNDAMAGED) == Vehicle.VEHICLE_STATE.UNDAMAGED:
-                return True
-            if vStateLvl not in (Vehicle.VEHICLE_STATE_LEVEL.CRITICAL, Vehicle.VEHICLE_STATE_LEVEL.WARNING, Vehicle.VEHICLE_STATE_LEVEL.RENTABLE):
-                return True
+        return bool(self.__availableTiersForSearch) if tierLevel is None else self.__availableTiersForSearch & 1 << tierLevel != 0
 
-        return False
+    def __addPlayerJoinNotification(self, pInfo):
+        if not pInfo or pInfo.isInvite() or pInfo.isCurrentPlayer() or pInfo.dbID in self.__alreadyJoinedAccountDBIDs:
+            return
+        self.__alreadyJoinedAccountDBIDs.add(pInfo.dbID)
+        autoSearchFlag = self.__getSearchFlagByDBID(pInfo.dbID)
+        if autoSearchFlag and autoSearchFlag & UnitAssemblerSearchFlags.ALL_VEH_TIERS != UnitAssemblerSearchFlags.ALL_VEH_TIERS:
+            autoSearchFlag = toRomanRangeString(convertTierFilterToList(autoSearchFlag), 1)
+            self.__addPlayerNotification(settings.UNIT_NOTIFICATION_KEY.PLAYER_ADDED_WITH_FILTER, pInfo, autoSearchFlag)
+        else:
+            self.__addPlayerNotification(settings.UNIT_NOTIFICATION_KEY.PLAYER_ADDED, pInfo)
+
+    def __getPlayers(self, unitMgrID=None):
+        return self.prbEntity.getPlayers(unitMgrID) if isinstance(self.prbEntity, UnitEntity) else {}
 
     @staticmethod
     def __closeSendInviteView():
         g_eventBus.handleEvent(events.DestroyViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def __sortPlatoonSlots(self, slots):
+    def __orderSlotsBasedOnDisplaySlotsIndices(self, slots):
+        self.__updateDisplaySlotsIndices()
         orderedSlots = [ slot for slot in slots ]
         for slot in slots:
-            switch = False
+            validPlayerSlot = False
             playerAccId = slot['player']['accID'] if slot['player'] else -1
             for playerId, displayIndex in self.__tankDisplayPosition.items():
                 if playerAccId == playerId:
@@ -597,18 +639,18 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                         _logger.warning('The number %s of display slots in the platoon is invalid', displayIndex)
                         return slots
                     orderedSlots[displayIndex] = slot
-                    switch = True
+                    validPlayerSlot = True
                     break
 
-            if not switch:
+            if not validPlayerSlot:
                 availableSlotIndex = 0
                 while availableSlotIndex in self.__tankDisplayPosition.values():
                     availableSlotIndex += 1
 
-                if availableSlotIndex >= len(orderedSlots):
-                    continue
-                orderedSlots[availableSlotIndex] = slot
-                self.__tankDisplayPosition[playerAccId] = availableSlotIndex
+                if availableSlotIndex < len(orderedSlots):
+                    orderedSlots[availableSlotIndex] = slot
+                else:
+                    _logger.warning('could not find an available index for the empty slot when resorting player')
 
         return orderedSlots
 
@@ -647,8 +689,13 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def __startAutoSearchCallback(self, isStarted):
         self.__startAutoSearchOnUnitJoin = False
-        if isStarted:
-            self.__filterExpander.start(self.getUnitFilter())
+
+    def isPlayerRoleAutoSearch(self):
+        playerInfo = self.getPlayerInfo()
+        if playerInfo:
+            isAutoSearch = bool(playerInfo.role & UNIT_ROLE.AUTO_SEARCH)
+            return isAutoSearch
+        return False
 
     @process
     def __doSelect(self, prebattelActionName):
@@ -700,8 +747,8 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def __preloadLayout(self, ePlatoonLayout):
         layout = self.__ePlatoonLayouts.get(ePlatoonLayout)
-        welcomeWindow = layout.windowClass()
-        welcomeWindow.preload()
+        window = layout.windowClass()
+        window.preload()
 
     def __getPlatoonStateForSquadVO(self):
         if isinstance(self.prbEntity, UnitEntity):
@@ -740,7 +787,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__settingsCore.onSettingsApplied += self.__onSettingsApplied
         self.__hangarSpace.onSpaceCreate += self.__onHangarSpaceCreate
         self.__hangarSpace.onSpaceDestroy += self.hsSpaceDestroy
-        self.__eventProgression.onUpdated += self.__onEventProgressionUpdated
+        self.__itemsCache.onSyncCompleted += self.__onVehicleStateChanged
         g_eventBus.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self.__platoonTankLoaded, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self.__platoonTankDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self.__onChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -762,6 +809,10 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             ctx.clear()
             self.__channelCtrl = controller
             self.onChannelControllerChanged(self.__channelCtrl)
+            players = self.__getPlayers()
+            for _, pInfo in players.iteritems():
+                self.__addPlayerJoinNotification(pInfo)
+
             return
 
     def __onHangarSpaceCreate(self):
@@ -782,7 +833,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__settingsCore.onSettingsApplied -= self.__onSettingsApplied
         self.__hangarSpace.onSpaceCreate -= self.__onHangarSpaceCreate
         self.__hangarSpace.onSpaceDestroy -= self.hsSpaceDestroy
-        self.__eventProgression.onUpdated -= self.__onEventProgressionUpdated
+        self.__itemsCache.onSyncCompleted -= self.__onVehicleStateChanged
         g_eventBus.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self.__platoonTankLoaded, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self.__platoonTankDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self.__onChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -799,13 +850,20 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def __unitMgrOnUnitJoined(self, unitMgrID, prbType):
         _logger.debug('PlatoonController: __unitMgrOnUnitJoined')
         self.__tankDisplayPosition.clear()
+        self.__ensureHintIsHidden()
         if self.hasDelayedCallback(self.destroyUI):
             self.stopCallback(self.destroyUI)
         if self.__startAutoSearchOnUnitJoin:
             self.startSearch()
         else:
             self.__onUnitPlayersListChanged()
+        if self.isInSearch():
+            self.__filterExpander.start(self.getCurrentSearchFlags())
         self.__updatePlatoonTankInfo()
+
+    def __ensureHintIsHidden(self):
+        if not self.__uiSpamController.shouldBeHidden(OnceOnlyHints.PLATOON_BTN_HINT):
+            self.__settingsCore.serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.PLATOON_BTN_HINT: True})
 
     def __unitMgrOnUnitLeft(self, unitMgrID, isFinishedAssembling):
         _logger.debug('PlatoonController: __unitMgrOnUnitLeft')
@@ -814,7 +872,6 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         else:
             self.destroyUI()
         self.__tankDisplayPosition.clear()
-        self.__isActiveSearchView = False
 
     def __calculateDropdownMove(self, xOffset):
         if xOffset is not None:
@@ -823,9 +880,14 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         else:
             return
 
-    def __addPlayerNotification(self, key, pInfo):
-        if self.getChannelController() and not pInfo.isCurrentPlayer():
-            self.__channelCtrl.addMessage(messages.getUnitPlayerNotification(key, pInfo))
+    def __addPlayerNotification(self, key, pInfo, tierRange=None):
+        if self.getChannelController():
+            msg = messages.getUnitPlayerNotification(key, pInfo, tierRange)
+            self.__channelCtrl.addMessage(msg)
+
+    def __getSearchFlagByDBID(self, accountDBID):
+        unitMgr = prb_getters.getClientUnitMgr()
+        return unitMgr.unit.getAutoSearchFlagsOfAccount(accountDBID) if unitMgr and unitMgr.unit else 0
 
     def __onAppResolutionChanged(self, event):
         ctx = event.ctx
@@ -954,10 +1016,13 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def __updateDisplaySlotsIndices(self):
         players = self.prbEntity.getPlayers()
-        playerIds = [ player.accID for player in players.values() ]
+        playerIds = [ player.accID for player in players.values() if player.isInSlot ]
+        maxSlotCount = self.prbEntity.getRosterSettings().getMaxSlots()
+        if len(playerIds) > maxSlotCount:
+            _logger.warning('The number of players in slot (%s) is higher then max slots to display (%s). This state should not happen for this type of unit.', len(playerIds), maxSlotCount)
         if not self.__tankDisplayPosition:
             nextDisplayIndex = 0
-            if self.prbEntity.getRosterSettings().getMaxSlots() == 3:
+            if maxSlotCount == _MAX_SLOT_COUNT_FOR_PLAYER_RESORTING:
                 currentPlayerIndex = 1
                 accID = BigWorld.player().id
                 for playerId in playerIds:
@@ -993,7 +1058,58 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
             self.__tankDisplayPosition[newPlayerId] = availableSlotIndex
 
-    def __onEventProgressionUpdated(self, _):
-        entityType = self.getPrbEntityType()
-        if entityType == PREBATTLE_TYPE.EPIC and not self.__eventProgression.isFrontLine or entityType == PREBATTLE_TYPE.EPIC and not self.__eventProgression.modeIsAvailable():
-            self.leavePlatoon()
+    def __onVehicleStateChanged(self, updateReason, _):
+        if updateReason in (CACHE_SYNC_REASON.CLIENT_UPDATE, CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.INVENTORY_RESYNC):
+            self.__cacheAvailableVehicles()
+            searchFlags = self.getUserSearchFlags()
+            tierSearchFlags = searchFlags & UnitAssemblerSearchFlags.ALL_VEH_TIERS
+            validTierFlags = tierSearchFlags & self.__availableTiersForSearch
+            if tierSearchFlags != validTierFlags:
+                searchFlags = searchFlags & ~UnitAssemblerSearchFlags.ALL_VEH_TIERS | validTierFlags
+                self.saveUserSearchFlags(searchFlags)
+
+    def __cacheAvailableVehicles(self):
+        if not self.hasSearchSupport():
+            return
+        if not self.isSearchingForPlayersEnabled():
+            if self.__availableTiersForSearch != 0:
+                self.__availableTiersForSearch = 0
+                self.onAvailableTiersForSearchChanged()
+            return
+        prebattleType = self.getPrbEntityType()
+        allowedLevels = self.getAllowedTankLevels(prebattleType)
+        criteria = REQ_CRITERIA.INVENTORY
+        criteria |= ~REQ_CRITERIA.HIDDEN
+        criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
+        criteria |= _PREBATTLE_TYPE_TO_VEH_CRITERIA.get(prebattleType, REQ_CRITERIA.EMPTY)
+        allowedList = [ lvl for lvl in range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1) if allowedLevels & 1 << lvl ]
+        criteria |= REQ_CRITERIA.VEHICLE.LEVELS(allowedList)
+        vehicles = self.__itemsCache.items.getVehicles(criteria)
+        availableTiers = 0
+        for v in vehicles.itervalues():
+            state, vStateLvl = v.getState()
+            if state in (Vehicle.VEHICLE_STATE.LOCKED, Vehicle.VEHICLE_STATE.IN_PREBATTLE) and v.checkUndamagedState(Vehicle.VEHICLE_STATE.UNDAMAGED) == Vehicle.VEHICLE_STATE.UNDAMAGED or vStateLvl not in (Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
+             Vehicle.VEHICLE_STATE_LEVEL.WARNING,
+             Vehicle.VEHICLE_STATE_LEVEL.RENTABLE,
+             Vehicle.VEHICLE_STATE_LEVEL.ATTENTION):
+                availableTiers |= 1 << v.level
+
+        availableTiers &= allowedLevels
+        if availableTiers != self.__availableTiersForSearch:
+            self.__availableTiersForSearch = availableTiers
+            self.__updateUserSearchFlagsOnAvailableTiers()
+            self.onAvailableTiersForSearchChanged()
+
+    def __updateUserSearchFlagsOnAvailableTiers(self):
+        userSearchFlags = self.getUserSearchFlags()
+        userVehFlags = userSearchFlags & self.__availableTiersForSearch & UnitAssemblerSearchFlags.ALL_VEH_TIERS
+        newUserSearchFlags = userSearchFlags & ~UnitAssemblerSearchFlags.ALL_VEH_TIERS | userVehFlags
+        if userSearchFlags != newUserSearchFlags:
+            self.saveUserSearchFlags(newUserSearchFlags)
+
+    def __updateExpanderSearchFlags(self):
+        if self.isInSearch():
+            searchFlags = self.getCurrentSearchFlags()
+        else:
+            searchFlags = self.getUserSearchFlags()
+        self.__filterExpander.updateSearchFlags(searchFlags)

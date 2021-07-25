@@ -14,15 +14,15 @@ class EventAppearanceCacheController(DefaultAppearanceCacheController):
 
     def __init__(self, setup):
         super(EventAppearanceCacheController, self).__init__(setup)
-        self.__spawnList = set()
+        self._spawnList = set()
 
     def startControl(self, battleCtx, arenaVisitor):
         super(EventAppearanceCacheController, self).startControl(battleCtx, arenaVisitor)
-        self.__spawnList = set()
+        self._spawnList = set()
 
     def stopControl(self):
         super(EventAppearanceCacheController, self).stopControl()
-        self.__spawnList = set()
+        self._spawnList = set()
 
     def _addListeners(self):
         avatar = BigWorld.player()
@@ -36,12 +36,11 @@ class EventAppearanceCacheController(DefaultAppearanceCacheController):
 
     @uniprof.regionDecorator(label='EventAppearanceCacheController.updateSpawnList', scope='wrap')
     def updateSpawnList(self, spawnListData):
-        toAdd = spawnListData.difference(self.__spawnList)
-        toRemove = self.__spawnList.difference(spawnListData)
+        toAdd = spawnListData.difference(self._spawnList)
+        toRemove = self._spawnList.difference(spawnListData)
         for data in toAdd:
             vDesc = VehicleDescriptor(compactDescr=data.vehicleCD)
-            prereqs = set()
-            prereqs.add(vDesc.prerequisites())
+            prereqs = set(vDesc.prerequisites())
             outfit = Outfit(component=getOutfitComponent(data.outfitCD), vehicleCD=data.vehicleCD)
             modelsSetParams = outfit.modelsSet
             compoundAssembler = model_assembler.prepareCompoundAssembler(vDesc, modelsSetParams, BigWorld.camera().spaceID)
@@ -51,5 +50,5 @@ class EventAppearanceCacheController(DefaultAppearanceCacheController):
         for data in toRemove:
             self._appearanceCache.unloadResources(data.vehicleCD)
 
-        self.__spawnList = spawnListData
+        self._spawnList = spawnListData
         _logger.debug('SpawnList cache updated=%s', spawnListData)

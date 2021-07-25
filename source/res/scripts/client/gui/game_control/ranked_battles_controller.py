@@ -23,7 +23,7 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_RESTRICTION
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.ranked_battles import ranked_helpers
-from gui.ranked_battles.constants import PrimeTimeStatus, ZERO_RANK_ID, YEAR_POINTS_TOKEN, YEAR_AWARDS_ORDER, FINAL_QUEST_PATTERN, STANDARD_POINTS_COUNT, YEAR_STRIPE_SERVER_TOKEN, YEAR_STRIPE_CLIENT_TOKEN, MAX_GROUPS_IN_DIVISION, ENTITLEMENT_EVENT_TOKEN, FINAL_LEADER_QUEST, NOT_IN_LEAGUES_QUEST, SEASON_IDS_RB_2020
+from gui.ranked_battles.constants import PrimeTimeStatus, ZERO_RANK_ID, YEAR_POINTS_TOKEN, YEAR_AWARDS_ORDER, FINAL_QUEST_PATTERN, STANDARD_POINTS_COUNT, YEAR_STRIPE_SERVER_TOKEN, YEAR_STRIPE_CLIENT_TOKEN, MAX_GROUPS_IN_DIVISION, ENTITLEMENT_EVENT_TOKEN, FINAL_LEADER_QUEST, NOT_IN_LEAGUES_QUEST
 from gui.ranked_battles.ranked_builders.postbattle_awards_vos import AwardBlock
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.ranked_battles.ranked_helpers.web_season_provider import RankedWebSeasonProvider, UNDEFINED_WEB_INFO, UNDEFINED_LEAGUE_ID
@@ -207,19 +207,12 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def isAvailable(self):
         return self.isEnabled() and not self.isFrozen() and self.getCurrentSeason() is not None
 
-    def isRanked2020Season(self, seasonID):
-        return seasonID in SEASON_IDS_RB_2020
-
     def isAccountMastered(self):
         currentRank, _ = self.__itemsCache.items.ranked.accRank
         return currentRank == self.getMaxPossibleRank() != ZERO_RANK_ID
 
     def isEnabled(self):
         return self.__rankedSettings.isEnabled
-
-    def isFrozen(self):
-        status, _, _ = self.getPrimeTimeStatus()
-        return status == PrimeTimeStatus.FROZEN
 
     def isRankedPrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.RANKED)
@@ -268,8 +261,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def isYearRewardEnabled(self):
         return self.__rankedSettings.yearRewardState == SwitchState.ENABLED
 
-    def hasAvailablePrimeTimeServers(self):
-        return self.__hasPrimeStatusServer((PrimeTimeStatus.AVAILABLE,))
+    def hasSpecialSeason(self):
+        return self.__rankedSettings.hasSpecialSeason
 
     def hasConfiguredPrimeTimeServers(self):
         return self.__hasPrimeStatusServer((PrimeTimeStatus.AVAILABLE, PrimeTimeStatus.NOT_AVAILABLE))
@@ -689,7 +682,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         return
 
     def _createSeason(self, cycleInfo, seasonData):
-        return RankedSeason(cycleInfo, seasonData)
+        return RankedSeason(cycleInfo, seasonData, self.hasSpecialSeason())
 
     @process
     def __switchForcedToRankedPrb(self):

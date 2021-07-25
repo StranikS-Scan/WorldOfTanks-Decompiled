@@ -20,8 +20,7 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID, VEHICLE_VIEW_STA
 from gui.battle_control.controllers.spawn_ctrl import ISpawnListener
 from gui.battle_royale.br_effect_player import BRUpgradeEffectPlayer
 from gui.game_control.br_battle_messages import ProgressionMessagesPlayer
-from gui.game_control.br_battle_sounds import BRBattleSoundController, RadarSoundPlayer, LevelSoundPlayer, EnemiesAmountSoundPlayer, PhaseSoundPlayer, PostmortemSoundPlayer, InstallModuleSoundPlayer, EquipmentSoundPlayer
-from gui.game_control.br_battle_sounds import SelectRespawnSoundPlayer, ArenaPeriodSoundPlayer
+from gui.battle_control.controllers.sound_ctrls.br_battle_sounds import BRBattleSoundController, RadarSoundPlayer, LevelSoundPlayer, EnemiesAmountSoundPlayer, PhaseSoundPlayer, PostmortemSoundPlayer, InstallModuleSoundPlayer, EquipmentSoundPlayer, SelectRespawnSoundPlayer, ArenaPeriodSoundPlayer
 
 class _DynamicAliases(CONST_CONTAINER):
     SELECT_RESPAWN_SOUND_PLAYER = 'selectRespawnSoundPlayer'
@@ -126,7 +125,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         return self.__isFullStatsShown
 
     def _canShowPostmortemTips(self):
-        return not self.__isFullStatsShown and super(BattleRoyalePage, self)._canShowPostmortemTips() and BigWorld.player().isFollowWinner()
+        arenaDP = self.sessionProvider.getArenaDP()
+        enemiesTeamCount = len({vInfo.team for vInfo, _ in arenaDP.getActiveVehiclesGenerator() if vInfo.isAlive()})
+        return False if enemiesTeamCount <= 1 else not self.__isFullStatsShown and super(BattleRoyalePage, self)._canShowPostmortemTips() and BigWorld.player().isFollowWinner()
 
     def _toggleFullStats(self, isShown, permanent=None, tabIndex=None):
         manager = self.app.containerManager

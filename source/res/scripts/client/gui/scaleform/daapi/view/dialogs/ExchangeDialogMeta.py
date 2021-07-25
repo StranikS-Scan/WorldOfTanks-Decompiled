@@ -4,8 +4,10 @@ import math
 import operator
 import Event
 from adisp import async, process
+from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
+from gui.Scaleform.daapi.view.lobby.exchange.detailed_exchange_xp_dialog import ExchangeDetailedXPDialogMeta
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.genConsts.CONFIRM_EXCHANGE_DIALOG_TYPES import CONFIRM_EXCHANGE_DIALOG_TYPES
@@ -19,7 +21,8 @@ from gui.impl import backport
 from gui.shared import events
 from gui.shared.formatters import icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.processors.common import FreeXPExchanger, GoldToCreditsExchanger
+from gui.shared.gui_items.processors import makeError
+from gui.shared.gui_items.processors.common import GoldToCreditsExchanger
 from gui.shared.money import Currency, Money
 from gui.shared.utils import decorators
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
@@ -570,14 +573,13 @@ class _ExchangeXpSubmitter(_ExchangeSubmitterBase):
         return
 
     @async
-    @decorators.process('exchangeVehiclesXP')
+    @process
     def submit(self, gold, xpToExchange, callback=None):
-        vehiclesCriteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP
-        criteria = vehiclesCriteria | ~REQ_CRITERIA.IN_CD_LIST([self._parentCD])
-        eliteVehicles = self.itemsCache.items.getVehicles(criteria).keys()
-        result = yield FreeXPExchanger(xpToExchange, eliteVehicles).request()
+        isOk, result, xpExchanged = yield DialogsInterface.showDialog(ExchangeDetailedXPDialogMeta(xpToExchange))
+        if xpExchanged < xpToExchange:
+            result = makeError(auxData=[result])
         if callback is not None:
-            callback(result)
+            callback(result if isOk else None)
         return
 
     def _getType(self):

@@ -47,7 +47,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.epic_mode_controller import EpicModeController as _Epic
     from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
     from gui.game_control.hero_tank_controller import HeroTankController as _HeroTankController
-    from gui.game_control.event_progression_controller import EventProgressionController as _EventProgression
     from gui.game_control.platoon_controller import PlatoonController as _PlatoonController
     from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController as _EpicMeta
     from gui.game_control.manual_controller import ManualController as _ManualController
@@ -61,10 +60,12 @@ def getGameControllersConfig(manager):
     from gui.game_control.clan_notification_controller import ClanNotificationController as _ClanNotification
     from gui.game_control.craftmachine_controller import CraftmachineController
     from gui.game_control.reactive_comm import ReactiveCommunicationService
+    from gui.game_control.maps_training_controller import MapsTrainingController as _MapsTrainingController
     from gui.ui_spam.ui_spam_controller import UISpamController
     from gui.game_control.blueprints_convert_sale_controller import BlueprintsConvertSaleController
     from gui.game_control.mapbox_controller import MapboxController
     from gui.game_control.overlay import SteamRegistrationOverlay as _SteamRegistrationOverlay
+    from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -124,7 +125,8 @@ def getGameControllersConfig(manager):
     _config(_interface.ICraftmachineController, CraftmachineController())
     _config(_interface.IClanNotificationController, _ClanNotification())
     _config(_interface.IReactiveCommunicationService, ReactiveCommunicationService())
-    _config(_interface.IEventProgressionController, _EventProgression())
+    _config(_interface.IMapsTrainingController, _MapsTrainingController())
     _config(_interface.IUISpamController, UISpamController())
     _config(_interface.IBlueprintsConvertSaleController, BlueprintsConvertSaleController())
+    _config(_interface.IVehiclePostProgressionController, VehiclePostProgressionController())
     _config(_interface.ISteamRegistrationOverlay, _SteamRegistrationOverlay())

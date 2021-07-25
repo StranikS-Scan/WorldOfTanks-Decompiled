@@ -185,7 +185,7 @@ class Goodies(object):
             goodieDefinition = self.definedGoodies[goodie.uid]
             if goodieDefinition.isActivatable() and not goodie.isActive():
                 continue
-            if goodieDefinition.target == target and goodieDefinition.resource == resource.__class__:
+            if issubclass(target.__class__, goodieDefinition.target.__class__) and target._targetID == goodieDefinition.target._targetID and goodieDefinition.resource == resource.__class__:
                 delta = goodieDefinition.apply_delta(resource, applyToZero)
                 if delta is not None and (bestGoodieDef is None or bestDeltaValue < delta.value):
                     bestGoodieDef, bestDeltaValue = goodieDefinition, delta.value

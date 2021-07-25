@@ -37,7 +37,8 @@ class ObserverPlayersPanel(IBattleFieldListener, IArenaVehiclesController, Battl
         arenaDP = self.__sessionProvider.getArenaDP()
         vehInfo = arenaDP.getVehicleInfo(vehicleID)
         if vehInfo.isAlive() and modeName != CTRL_MODE_NAME.VIDEO:
-            self.__sessionProvider.shared.viewPoints.selectVehicle(vehicleID)
+            if handler.isControlModeChangeAllowed():
+                self.__sessionProvider.shared.viewPoints.selectVehicle(vehicleID)
         return
 
     def updateVehiclesStats(self, updatedItems, arenaDP):

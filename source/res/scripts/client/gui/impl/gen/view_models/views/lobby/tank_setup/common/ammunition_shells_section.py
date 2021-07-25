@@ -5,20 +5,20 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.ammunition_items_sec
 class AmmunitionShellsSection(AmmunitionItemsSection):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(AmmunitionShellsSection, self).__init__(properties=properties, commands=commands)
 
     def getInstalledCount(self):
-        return self._getNumber(4)
+        return self._getNumber(6)
 
     def setInstalledCount(self, value):
-        self._setNumber(4, value)
+        self._setNumber(6, value)
 
     def getMaxCount(self):
-        return self._getNumber(5)
+        return self._getNumber(7)
 
     def setMaxCount(self, value):
-        self._setNumber(5, value)
+        self._setNumber(7, value)
 
     def _initialize(self):
         super(AmmunitionShellsSection, self)._initialize()

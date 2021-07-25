@@ -1,21 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/player_messages.py
 import logging
-import SoundGroups
 from constants import EQUIPMENT_STAGES
-from gui.battle_control import avatar_getter
 from gui.battle_royale.constants import BR_EQUIPMENTS_WITH_MESSAGES
 from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from items import vehicles
-from gui.sounds.epic_sound_constants import EPIC_SOUND
 _logger = logging.getLogger(__name__)
 _ID_TO_DESTRUCTIBLE_ENTITY_NAME = {1: '1',
  2: '2',
  3: '3',
  4: '4',
  5: '5'}
-_EQUIPMENT_NAME_TO_MESSAGE_KEY = {'arcade_bomber_battle_royale': 'COMBAT_EQUIPMENT_USED_BOMBER',
- 'arcade_smoke_battle_royale': 'COMBAT_EQUIPMENT_USED_SMOKE'}
+_EQUIPMENT_NAME_TO_POSTFIX_KEY = {'arcade_bomber_battle_royale': 'BOMBER',
+ 'arcade_smoke_battle_royale': 'SMOKE',
+ 'fl_regenerationKit': 'REGENERATION_KIT_EPIC',
+ 'arcade_minefield_epic_battle': 'MINEFIELD_EPIC',
+ 'stealth_radar': 'STEALTH_RADAR'}
 
 class PlayerMessages(fading_messages.FadingMessages):
 
@@ -72,44 +72,32 @@ class PlayerMessages(fading_messages.FadingMessages):
         self.showMessage(key, args, extra)
 
     def __onCombatEquipmentUpdated(self, _, item):
-        if item.becomeReady:
-            itemDescriptor = item.getDescriptor()
-            if itemDescriptor.name in BR_EQUIPMENTS_WITH_MESSAGES:
-                if item.getPrevStage() == EQUIPMENT_STAGES.COOLDOWN and item.getQuantity() == 0:
-                    return
-                self.showMessage('COMBAT_BR_EQUIPMENT_READY', {'equipment': itemDescriptor.userString})
-            else:
-                postfix = itemDescriptor.name.split('_')[0].upper()
-                self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=postfix)
+        if not item.becomeReady:
+            return
+        itemDescriptor = item.getDescriptor()
+        if itemDescriptor.name in BR_EQUIPMENTS_WITH_MESSAGES:
+            if item.getPrevStage() == EQUIPMENT_STAGES.COOLDOWN and item.getQuantity() == 0:
+                return
+            self.showMessage('COMBAT_BR_EQUIPMENT_READY', {'equipment': itemDescriptor.userString})
+        else:
+            self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=self.__getPostfixFromEquipmentName(itemDescriptor.name))
 
     def __onCombatEquipmentUsed(self, shooterID, eqID):
         battleCxt = self.sessionProvider.getCtx()
         if not battleCxt.isCurrentPlayer(shooterID):
             equipment = vehicles.g_cache.equipments().get(eqID)
             getFullName = battleCxt.getPlayerFullName
-            if equipment is not None:
-                messageKey = _EQUIPMENT_NAME_TO_MESSAGE_KEY.get(equipment.name)
-                if messageKey is None:
-                    postfix = equipment.name.split('_')[0].upper()
-                    messageKey = 'COMBAT_EQUIPMENT_USED'
-                else:
-                    postfix = ''
-                self.showMessage(messageKey, {'player': getFullName(shooterID, showClan=False)}, extra=(('player', shooterID),), postfix=postfix)
-        else:
-            equipment = vehicles.g_cache.equipments().get(eqID)
             if equipment is None:
                 return
-            postfix = equipment.name.split('_')[0].upper()
-            if postfix in EPIC_SOUND.BF_EB_ABILITY_LIST:
-                soundNotifications = avatar_getter.getSoundNotifications()
-                if soundNotifications is not None:
-                    notification = EPIC_SOUND.BF_EB_ABILITY_USED.get(postfix, None)
-                    if notification is not None:
-                        soundNotifications.play(notification)
-            elif postfix in EPIC_SOUND.BF_EB_EQUIPMENT_SOUND_LIST:
-                if equipment.wwsoundEquipmentUsed:
-                    if SoundGroups.g_instance:
-                        SoundGroups.g_instance.playSound2D(equipment.wwsoundEquipmentUsed)
-                    else:
-                        _logger.warning('Can not play "%s" ability. SoundGroups.g_instance is None', postfix)
+            self.showMessage('COMBAT_EQUIPMENT_USED', {'player': getFullName(shooterID, showClan=False)}, extra=(('player', shooterID),), postfix=self.__getPostfixFromEquipmentName(equipment.name))
         return
+
+    @staticmethod
+    def __getPostfixFromEquipmentName(name):
+        if 'level' in name:
+            postfix = _EQUIPMENT_NAME_TO_POSTFIX_KEY.get(name.partition('level')[0].rstrip('_'))
+        else:
+            postfix = _EQUIPMENT_NAME_TO_POSTFIX_KEY.get(name)
+        if postfix is None:
+            postfix = name.split('_')[0].upper()
+        return postfix

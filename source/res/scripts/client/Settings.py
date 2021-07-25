@@ -23,10 +23,12 @@ KEY_FOV = 'fov'
 KEY_GUI_NOTIFY_INFO = 'guiNotifyInfo'
 KEY_DYNAMIC_FOV = 'dynamicFov'
 KEY_DYNAMIC_FOV_ENABLED = 'dynamicFovEnabled'
+IGB_HARDWARE_ACCELERATION_ENABLED = 'igbHardwareAccelerationEnabled'
 INTRO_VIDEO_VERSION = 'introVideoVersion'
 VIDEO_BUFFERING_TIME = 'videoBufferingTime'
 KEY_BOOTCAMP_PREFERENCES = 'bootcampPrefs'
 POPUPS_WINDOWS_DISABLED = 'popupsWindowsDisabled'
+KEY_MAPS_TRAINING_PREFERENCES = 'mapsTraining'
 
 class Settings(object):
 

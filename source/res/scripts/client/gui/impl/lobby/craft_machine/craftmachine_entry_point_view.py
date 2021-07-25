@@ -6,6 +6,7 @@ import time
 from datetime import datetime
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
+from gui.impl import backport
 from gui.impl.gen.view_models.views.lobby.craft_machine.craftmachine_entry_point_view_model import CraftmachineEntryPointViewModel
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getCraftMachineURL
 from gui.impl.pub import ViewImpl
@@ -19,7 +20,7 @@ _TIME_FORMAT = '%d.%m.%Y'
 
 class CraftmachineEntryPointView(ViewImpl):
     __notificationsCtrl = dependency.descriptor(IEventsNotificationsController)
-    __slots__ = ('__additionalUrl', '__startDateUI', '__endDateUI')
+    __slots__ = ('__additionalUrl', '__endDateUI')
 
     def __init__(self, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.craft_machine.CraftmachineEntryPointView())
@@ -27,7 +28,6 @@ class CraftmachineEntryPointView(ViewImpl):
         settings.model = CraftmachineEntryPointViewModel()
         self.__additionalUrl = ''
         self.__endDateUI = ''
-        self.__startDateUI = ''
         super(CraftmachineEntryPointView, self).__init__(settings)
 
     @property
@@ -57,8 +57,7 @@ class CraftmachineEntryPointView(ViewImpl):
                     additionalUrl = entryData.get('craftMachineAdditionalUrl')
                     if additionalUrl is not None:
                         self.__additionalUrl = str(additionalUrl)
-                    self.__startDateUI = entryData.get('startDateUI', '')
-                    self.__endDateUI = entryData.get('endDateUI', '')
+                    self.__endDateUI = entryData.get('endDateUI')
 
             return
 
@@ -87,14 +86,19 @@ class CraftmachineEntryPointView(ViewImpl):
 
     def __updateViewModel(self):
         with self.viewModel.transaction() as tx:
-            tx.setStartDate(0)
-            if self.__startDateUI:
-                startDateUI = time.mktime(datetime.strptime(self.__startDateUI, _TIME_FORMAT).timetuple())
-                tx.setStartDate(startDateUI)
+            tx.setTitle(backport.text(R.strings.event.craftMachine.title()))
+            tx.setSubTitle(backport.text(R.strings.event.craftMachine.subTitle()))
+            tx.setStatusDate(backport.text(R.strings.event.craftMachine.statusDate()))
             tx.setEndDate(0)
             if self.__endDateUI:
                 endDateUI = time.mktime(datetime.strptime(self.__endDateUI, _TIME_FORMAT).timetuple())
                 tx.setEndDate(endDateUI)
+            tx.setIconSmall(R.images.gui.maps.icons.event.craftMachine.entryPoint.logo_small())
+            tx.setIconBig(R.images.gui.maps.icons.event.craftMachine.entryPoint.logo_big())
+            tx.setBgSmallThin(R.images.gui.maps.icons.event.craftMachine.entryPoint.bg_small_thin())
+            tx.setBgBigThin(R.images.gui.maps.icons.event.craftMachine.entryPoint.bg_big_thin())
+            tx.setBgSmallWide(R.images.gui.maps.icons.event.craftMachine.entryPoint.bg_small_wide())
+            tx.setBgBigWide(R.images.gui.maps.icons.event.craftMachine.entryPoint.bg_big_wide())
 
     def __onClick(self):
         self.__openCraftMachine()

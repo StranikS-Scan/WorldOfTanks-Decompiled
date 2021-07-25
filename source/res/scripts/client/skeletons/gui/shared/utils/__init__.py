@@ -1,6 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/shared/utils/__init__.py
+import typing
 from skeletons.gui.shared.utils import requesters
+if typing.TYPE_CHECKING:
+    from gui.veh_post_progression.models.progression import PostProgressionItem
+    from items.vehicles import VehicleType
 
 class IItemsRequester(requesters.IRequester):
 
@@ -26,6 +30,10 @@ class IItemsRequester(requesters.IRequester):
 
     @property
     def recycleBin(self):
+        raise NotImplementedError
+
+    @property
+    def vehicleRotation(self):
         raise NotImplementedError
 
     @property
@@ -88,7 +96,7 @@ class IItemsRequester(requesters.IRequester):
     def getVehicleCopyByCD(self, typeCompDescr):
         raise NotImplementedError
 
-    def getLayoutsVehicleCopy(self, vehicle):
+    def getLayoutsVehicleCopy(self, vehicle, ignoreDisabledProgression=False):
         raise NotImplementedError
 
     def getTankman(self, tmanInvID):
@@ -140,6 +148,9 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     def getDogTag(self, databaseID=None):
+        raise NotImplementedError
+
+    def getVehPostProgression(self, vehIntCD, vehType=None):
         raise NotImplementedError
 
     def getPreviousItem(self, itemTypeID, invDataIdx):
@@ -218,6 +229,9 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     def startToUpdateVehicle(self, vehicle, outfit=None):
+        raise NotImplementedError
+
+    def updateVehicleDescriptor(self, descr):
         raise NotImplementedError
 
     def updatePreviewVehicle(self, vehicle, outfit=None):

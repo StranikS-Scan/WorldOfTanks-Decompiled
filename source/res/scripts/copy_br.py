@@ -12,7 +12,6 @@ g_dynamicComponents = ['ArenaLootComponent',
  'Radar',
  'InBattleUpgradeReadiness',
  'InBattleUpgrades',
- 'VehicleLoot',
  'VehicleDeathZoneEffect',
  'InBattleUpgradesAvatar']
 g_entities = ['Mine',

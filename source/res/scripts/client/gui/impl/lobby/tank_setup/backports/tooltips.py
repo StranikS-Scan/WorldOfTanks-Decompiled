@@ -37,6 +37,10 @@ class HangarModuleTooltipBuilder(object):
         return None
 
     @classmethod
+    def getSpecialInfoSlotTooltip(cls, *args):
+        return None
+
+    @classmethod
     def getVehicle(cls, vehicle, currentSection=None):
         return cls.itemsCache.items.getVehicleCopy(vehicle)
 
@@ -62,6 +66,7 @@ class OptDeviceTooltipBuilder(HangarModuleTooltipBuilder):
     @classmethod
     def getVehicle(cls, vehicle, currentSection=None):
         copyVehicle = super(OptDeviceTooltipBuilder, cls).getVehicle(vehicle, currentSection)
+        copyVehicle.optDevices.dynSlotType = vehicle.optDevices.dynSlotType
         if currentSection == TankSetupConstants.OPT_DEVICES:
             copyVehicle.optDevices.setInstalled(*vehicle.optDevices.layout)
         else:
@@ -171,6 +176,10 @@ class BattleAbilitiesToolitpBuilder(HangarModuleTooltipBuilder):
         return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AMMUNITION_EMPTY_SLOT, specialArgs=[TOOLTIPS.HANGAR_AMMO_PANEL_BATTLEABILITY_EMPTY])
 
     @classmethod
+    def getSpecialInfoSlotTooltip(cls, vehicle, slotID, intCD):
+        return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_SETUP_INFO, specialArgs=[vehicle])
+
+    @classmethod
     def getVehicle(cls, vehicle, currentSection=None):
         copyVehicle = super(BattleAbilitiesToolitpBuilder, cls).getVehicle(vehicle, currentSection)
         if currentSection == TankSetupConstants.BATTLE_ABILITIES:
@@ -195,6 +204,7 @@ def getSlotTooltipData(event, vehicle, currentSlotID, currentSection=None, toolt
     intCD = event.getArgument('intCD')
     slotID = event.getArgument('slotId')
     slotType = event.getArgument('slotType')
+    tooltipId = event.getArgument('tooltipId')
     tooltipBuilder = tooltipsMap.get(slotType)
     if tooltipBuilder is None:
         return
@@ -204,7 +214,14 @@ def getSlotTooltipData(event, vehicle, currentSlotID, currentSection=None, toolt
             if slotType != currentSection:
                 return
             return tooltipBuilder.getTooltipData(copyVehicle, currentSlotID, int(intCD))
-        return tooltipBuilder.getPanelSlotTooltip(copyVehicle, int(slotID))
+        return tooltipBuilder.getSpecialInfoSlotTooltip(copyVehicle, currentSlotID, None) if tooltipId == TankSetupConstants.SPECIAL_SETUP_INFO_SLOT_TOOLTIP else tooltipBuilder.getPanelSlotTooltip(copyVehicle, int(slotID))
+
+
+def getSlotSpecTooltipData(event, tooltipId):
+    isClickable = event.getArgument('isClickable')
+    isDyn = event.getArgument('isDyn')
+    spec = event.getArgument('spec')
+    return createTooltipData(isSpecial=True, specialAlias=tooltipId, specialArgs=[spec, isDyn, isClickable])
 
 
 def getShellsPriceDiscountTooltipData(event, tooltipId):

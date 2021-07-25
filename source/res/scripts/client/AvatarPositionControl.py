@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarPositionControl.py
 import weakref
+import logging
 import math_utils
 import BigWorld
 import Math
@@ -20,6 +21,8 @@ def logFunc(func):
 
     return wrapped
 
+
+_logger = logging.getLogger(__name__)
 
 class ConsistentMatrices(object):
     attachedVehicleMatrix = property(lambda self: self.__attachedVehicleMatrix)
@@ -97,11 +100,13 @@ class ConsistentMatrices(object):
 class AvatarPositionControl(CallbackDelayer):
     FOLLOW_CAMERA_MAX_DEVIATION = 7.0
     onAvatarVehicleChanged = property(lambda self: self.__onAvatarVehicleChanged)
+    isSwitching = property(lambda self: self.__isSwitching)
 
     def __init__(self, avatar):
         CallbackDelayer.__init__(self)
         self.__avatar = weakref.proxy(avatar)
         self.__bFollowCamera = False
+        self.__isSwitching = False
 
     def destroy(self):
         self.__avatar = None
@@ -126,13 +131,21 @@ class AvatarPositionControl(CallbackDelayer):
             self.stopCallback(self.__followCameraTick)
 
     def switchViewpoint(self, isViewpoint, vehOrPointId):
+        if self.__isSwitching:
+            self.stopCallback(self.__resetSwitching)
+            _logger.warning('switchViewpoint happened during switching cooldown! isSwitching check missed!')
+        self.__isSwitching = True
         self.__avatar.cell.switchViewPointOrBindToVehicle(isViewpoint, vehOrPointId)
+        self.delayCallback(0.5, self.__resetSwitching)
 
     def moveTo(self, pos):
         self.__avatar.cell.moveTo(pos)
 
     def getFollowCamera(self):
         return self.__bFollowCamera
+
+    def __resetSwitching(self):
+        self.__isSwitching = False
 
     def __followCameraTick(self):
         if not self.__bFollowCamera:

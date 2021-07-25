@@ -11,6 +11,7 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
+from gui.sounds.ambients import HangarOverlayEnv
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers import ContainerManager
 _logger = logging.getLogger(__name__)
@@ -129,6 +130,7 @@ class WebView(BrowserScreenMeta):
 
 
 class WebViewTransparent(WebView):
+    __sound_env__ = HangarOverlayEnv
 
     def __init__(self, ctx=None):
         super(WebViewTransparent, self).__init__(ctx)

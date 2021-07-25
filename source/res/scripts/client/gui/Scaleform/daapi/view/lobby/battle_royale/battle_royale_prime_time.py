@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/battle_royale/battle_royale_prime_time.py
+from constants import Configs
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prime_time import EpicBattlesPrimeTimeView
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prime_time import FrontLineServerPresenter
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prime_time import EpicBattleServerPresenter
+from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.impl import backport
 from gui.impl.gen import R
 
-class BattleRoyaleServerPresenter(FrontLineServerPresenter):
+class BattleRoyaleServerPresenter(EpicBattleServerPresenter):
     _periodsController = dependency.descriptor(IBattleRoyaleController)
 
 
@@ -33,3 +35,7 @@ class BattleRoyalePrimeTimeView(EpicBattlesPrimeTimeView):
 
     def _getPrbForcedActionName(self):
         return PREBATTLE_ACTION_NAME.BATTLE_ROYALE
+
+    def _onServerSettingsChange(self, diff):
+        if diff.get(Configs.BATTLE_ROYALE_CONFIG.value, {}).get('isEnabled') is False:
+            showHangar()

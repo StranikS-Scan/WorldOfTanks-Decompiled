@@ -55,6 +55,11 @@
     <_71-TK-3_bootcamp>	64003	</_71-TK-3_bootcamp>
     <_9R_bootcamp>	64004	</_9R_bootcamp>
     <Development_Radio>	65000	</Development_Radio>
+    <_9RM_MapsTraining_Dummy_LT_1>	12	</_9RM_MapsTraining_Dummy_LT_1>
+    <_12LL_MapsTraining_Dummy_SPG_1>	33	</_12LL_MapsTraining_Dummy_SPG_1>
+    <_9RM_MapsTraining_Player_MT_1>	37	</_9RM_MapsTraining_Player_MT_1>
+    <_9RM_MapsTraining_Player_MT_2>	38	</_9RM_MapsTraining_Player_MT_2>
+    <_10RK_MapsTraining_Dummy_HT_2>	39	</_10RK_MapsTraining_Dummy_HT_2>
   </ids>
   <shared>
     <Alarm_flags_bot>
@@ -712,5 +717,67 @@
       <radarRadius>	450	</radarRadius>
       <radarCooldown>	45	</radarCooldown>
     </R113_SH>
+    <_9RM_MapsTraining_Dummy_LT_1>
+      <userString>	#ussr_vehicles:_9RM	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <weight>	100	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </_9RM_MapsTraining_Dummy_LT_1>
+    <_12LL_MapsTraining_Dummy_SPG_1>
+      <userString>	#ussr_vehicles:_12LL	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600	</price>
+      <weight>	110	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </_12LL_MapsTraining_Dummy_SPG_1>
+    <_9RM_MapsTraining_Player_MT_1>
+      <userString>	#ussr_vehicles:_9RM_MapsTraining_Player_MT_1	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <weight>	100	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </_9RM_MapsTraining_Player_MT_1>
+    <_9RM_MapsTraining_Player_MT_2>
+      <userString>	#ussr_vehicles:_9RM_MapsTraining_Player_MT_2	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <weight>	100	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </_9RM_MapsTraining_Player_MT_2>
+    <_10RK_MapsTraining_Dummy_HT_2>
+      <userString>	#ussr_vehicles:_10RK	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18600	</price>
+      <weight>	100	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </_10RK_MapsTraining_Dummy_HT_2>
   </shared>
 </radios.xml>

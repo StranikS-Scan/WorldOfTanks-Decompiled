@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/quests_controller.py
 import weakref
+import typing
 from constants import EVENT_TYPE, PremiumConfigs
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -13,6 +14,9 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.server_events.events_helpers import isLinkedSet, isPremium, isBattleRoyale, isDailyEpic, isDailyQuest
 from gui.ranked_battles.ranked_helpers import isRankedQuestID
+if typing.TYPE_CHECKING:
+    from Vehicle import Vehicle
+    from gui.server_events.event_items import Quest
 _MAX_LVL_FOR_TUTORIAL = 3
 
 class _QuestCache(object):

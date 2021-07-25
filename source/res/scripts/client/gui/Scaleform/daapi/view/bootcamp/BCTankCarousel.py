@@ -43,3 +43,6 @@ class BCTankCarousel(TankCarousel):
 
     def updateParams(self):
         pass
+
+    def hasRoles(self):
+        return False

@@ -9,14 +9,14 @@ class EVENT(object):
     BATTLEHINTS_TESTMESSAGEWITHPARAMS = '#event:battleHints/testMessageWithParams'
     CRAFTMACHINE_TITLE = '#event:craftMachine/title'
     CRAFTMACHINE_SUBTITLE = '#event:craftMachine/subTitle'
-    CRAFTMACHINE_ENDDATETEXT = '#event:craftMachine/endDateText'
+    CRAFTMACHINE_STATUSDATE = '#event:craftMachine/statusDate'
     ALL_ENUM = (PUNISHMENTWINDOW_REASON_EVENT_DESERTER,
      PUNISHMENTWINDOW_REASON_EVENT_AFK,
      BATTLEHINTS_TESTMESSAGE,
      BATTLEHINTS_TESTMESSAGEWITHPARAMS,
      CRAFTMACHINE_TITLE,
      CRAFTMACHINE_SUBTITLE,
-     CRAFTMACHINE_ENDDATETEXT)
+     CRAFTMACHINE_STATUSDATE)
 
     @classmethod
     def all(cls, key0):

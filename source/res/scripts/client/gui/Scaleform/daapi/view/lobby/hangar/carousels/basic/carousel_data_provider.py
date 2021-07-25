@@ -39,7 +39,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
     def updateSupplies(self):
         self._supplyItems = []
         self._buildSupplyItems()
-        self.flashObject.invalidateItems(self.__getSupplyIndices(), self._supplyItems)
+        self.flashObject.invalidateItems(self._getSupplyIndices(), self._supplyItems)
         self.applyFilter()
 
     def clear(self):
@@ -47,7 +47,8 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self._supplyItems = []
 
     def _setBaseCriteria(self):
-        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        self._baseCriteria = REQ_CRITERIA.INVENTORY
+        self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
 
     def _buildRentPromitionVehicleItems(self):
         rentPromotionCriteria = REQ_CRITERIA.VEHICLE.RENT_PROMOTION | ~self._baseCriteria
@@ -59,7 +60,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self._buildSupplyItems()
 
     def _getAdditionalItemsIndexes(self):
-        supplyIndices = self.__getSupplyIndices()
+        supplyIndices = self._getSupplyIndices()
         serverSettings = dependency.instance(ILobbyContext).getServerSettings()
         restoreEnabled = serverSettings.isVehicleRestoreEnabled()
         storageEnabled = serverSettings.isStorageEnabled()
@@ -115,7 +116,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
     def _isSuitableForQueue(vehicle):
         return vehicle.getCustomState() != Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
 
-    def __getSupplyIndices(self):
+    def _getSupplyIndices(self):
         return [ len(self._vehicles) + idx for idx in _SUPPLY_ITEMS.ALL ]
 
 

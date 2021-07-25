@@ -72,6 +72,7 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
         return
 
     def _dispose(self):
+        self.clear()
         self.__container.destroy()
         self.__container = None
         if BattleReplay.isPlaying():

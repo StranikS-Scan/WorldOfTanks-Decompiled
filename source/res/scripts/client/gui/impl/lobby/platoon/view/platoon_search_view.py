@@ -92,7 +92,6 @@ class SearchView(ViewImpl, CallbackDelayer):
     def __cancelSearch(self):
         self.__platoonCtrl.cancelSearch()
         self.__platoonCtrl.leavePlatoon(ignoreConfirmation=True)
-        TiersLimitSubview.resetState()
 
     def __onQueueInfoReceived(self, queueInfo):
         actualQueueInfo = getQueueInfoByQueueType(queueInfo, self.__platoonCtrl.getQueueType())

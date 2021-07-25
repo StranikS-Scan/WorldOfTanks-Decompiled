@@ -121,7 +121,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
                 result = yield TankmanUnload(tmanVehile, tankman.vehicleSlotIdx).request()
             else:
                 result = yield TankmanDismiss(tankman).request()
-            SystemMessages.pushMessages(result)
+            SystemMessages.pushMessagesFromResult(result)
         return
 
     def update(self):
@@ -188,7 +188,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     def __updateTanksList(self):
         data = list()
-        modulesAll = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE).values()
+        modulesAll = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING).values()
         modulesAll.sort()
         for module in modulesAll:
             if self.filter['nation'] != -1 and self.filter['nation'] != module.descriptor.type.id[0] or self.filter['tankType'] != 'None' and self.filter['tankType'] != -1 and self.filter['tankType'] != module.type:

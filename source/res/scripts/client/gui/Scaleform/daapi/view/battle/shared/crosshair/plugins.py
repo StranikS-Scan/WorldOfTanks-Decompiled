@@ -384,7 +384,7 @@ class _ASAutoReloadProxy(_ReloadingAnimationsProxy):
         self._panel.as_autoloaderUpdateS(timeLeft, baseTime, isStun=isStun, isTimerOn=isTimerOn, isRedText=isRedText)
 
     def setReloading(self, state):
-        self._panel.as_setReloadingS(state.getActualValue(), state.getBaseValue(), state.getTimePassed(), state.isReloading())
+        self._panel.as_setReloadingS(state.getActualValue(), round(state.getBaseValue(), 1), state.getTimePassed(), state.isReloading())
 
     def showAutoLoadingBoost(self, timeLeft, stateTotalTime):
         self._panel.as_showBoostS(timeLeft, stateTotalTime)
@@ -448,6 +448,7 @@ class AmmoPlugin(CrosshairPlugin):
         ctrl.onGunAutoReloadBoostUpdated += self.__onGunAutoReloadBoostUpd
         ctrl.onShellsUpdated += self.__onShellsUpdated
         ctrl.onCurrentShellChanged += self.__onCurrentShellChanged
+        ctrl.onCurrentShellReset += self.__onCurrentShellReset
         ctrl.onQuickShellChangerUpdated += self.__onQuickShellChangerUpdated
         vehStateCtrl.onVehicleControlling += self.__onVehicleControlling
         g_replayEvents.onPause += self.__onReplayPaused
@@ -468,6 +469,7 @@ class AmmoPlugin(CrosshairPlugin):
             ctrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
             ctrl.onShellsUpdated -= self.__onShellsUpdated
             ctrl.onCurrentShellChanged -= self.__onCurrentShellChanged
+            ctrl.onCurrentShellReset -= self.__onCurrentShellReset
             g_replayEvents.onPause -= self.__onReplayPaused
         if vehStateCtrl is not None:
             vehStateCtrl.onVehicleControlling -= self.__onVehicleControlling
@@ -509,9 +511,9 @@ class AmmoPlugin(CrosshairPlugin):
         self.__guiSettings = guiSettings
         self._parentObj.as_setClipParamsS(guiSettings.getClipCapacity(), guiSettings.getBurstSize(), guiSettings.hasAutoReload)
 
-    def __onGunReloadTimeSet(self, _, state):
+    def __onGunReloadTimeSet(self, _, state, skipAutoLoader):
         self.__setReloadingState(state)
-        if self.__guiSettings.hasAutoReload:
+        if self.__guiSettings.hasAutoReload and not skipAutoLoader:
             self.__notifyAutoLoader(state)
 
     def __notifyAutoLoader(self, state):
@@ -560,19 +562,20 @@ class AmmoPlugin(CrosshairPlugin):
                 timeLeft = AUTOLOADERBOOSTVIEWSTATES.WAITING_TO_START
             else:
                 timeLeft = stateDuration
-            if not self.__isShowingAutoloadingBoost:
-                timeLeft = AUTOLOADERBOOSTVIEWSTATES.CHARGED
-            self.__reloadAnimator.showAutoLoadingBoost(timeLeft, stateTotalTime)
+            if self.__isShowingAutoloadingBoost:
+                self.__reloadAnimator.showAutoLoadingBoost(timeLeft, stateTotalTime)
 
-    def __onReplayPaused(self, _):
-        isReplay = BattleReplay.g_replayCtrl.isPlaying
-        isNormalSpeed = BattleReplay.g_replayCtrl.isNormalSpeed
-        if self.__isShowingAutoloadingBoost and isReplay and not isNormalSpeed:
+    def __onReplayPaused(self, isPaused):
+        if isPaused:
+            return
+        if not BattleReplay.g_replayCtrl.isNormalSpeed and self.__isShowingAutoloadingBoost:
             self.__isShowingAutoloadingBoost = False
             self.__reloadAnimator.showAutoLoadingBoost(AUTOLOADERBOOSTVIEWSTATES.WAITING_TO_START, 0.0)
             self.__reloadAnimator.hideAutoLoadingBoost(showAnimation=False)
-        else:
+        if BattleReplay.g_replayCtrl.isNormalSpeed and not self.__isShowingAutoloadingBoost:
             self.__isShowingAutoloadingBoost = True
+            self.__reloadAnimator.hideAutoLoadingBoost(showAnimation=True)
+            self.__reloadAnimator.showAutoLoadingBoost(AUTOLOADERBOOSTVIEWSTATES.WAITING_TO_START, 0.0)
 
     def __reCalcFirstShellAutoReload(self, baseTime):
         if not self.__scaledInterval:
@@ -598,6 +601,9 @@ class AmmoPlugin(CrosshairPlugin):
             isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
             self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
         return
+
+    def __onCurrentShellReset(self):
+        self._parentObj.as_setAmmoStockS(0, 0, False, 'normal', False)
 
     def __onQuickShellChangerUpdated(self, isActive, time):
         self._parentObj.as_setShellChangeTimeS(isActive, time)

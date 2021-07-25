@@ -3,7 +3,7 @@
 import logging
 from BWUtil import AsyncReturn
 from async import async, await, await_callback
-from gui.impl.lobby.tank_setup.base_sub_model_view import BaseSubModelView
+from gui.impl.common.base_sub_model_view import BaseSubModelView
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playSectionSelectSound
 _logger = logging.getLogger(__name__)
 
@@ -18,6 +18,10 @@ class MainTankSetupView(BaseSubModelView):
     def currentVehicleUpdated(self, vehicle):
         for name, subView in self._subViews.iteritems():
             subView.getInteractor().updateFrom(vehicle, name == self.getSelectedSetup())
+
+    def resetVehicle(self, interactingItem):
+        for subView in self._subViews.values():
+            subView.getInteractor().setItem(interactingItem)
 
     def onLoading(self, selectedSection='', selectedSlot=None):
         self._viewModel.setSelectedSetup(selectedSection)
@@ -59,10 +63,10 @@ class MainTankSetupView(BaseSubModelView):
         return
 
     @async
-    def canQuit(self):
+    def canQuit(self, skipApplyAutoRenewal=None):
         selectedView = self.getCurrentSubView()
         if selectedView is not None:
-            quitResult = yield await(selectedView.canQuit())
+            quitResult = yield await(selectedView.canQuit(skipApplyAutoRenewal=skipApplyAutoRenewal))
         else:
             quitResult = True
         raise AsyncReturn(quitResult)

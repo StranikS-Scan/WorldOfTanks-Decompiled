@@ -33,11 +33,11 @@
     <Interface>	AvatarCreator	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_11300>
+    <requiredVersion_11400>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.13.0_2	</Default>
-    </requiredVersion_11300>
+      <Default>	ct_1.14.0_1	</Default>
+    </requiredVersion_11400>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -355,7 +355,19 @@
       <Arg>	STRING	</Arg>
       <Arg>	UINT64	</Arg>
     </onTutorialEnqueued>
+    <onMapsTrainingEnqueued>
+      <Arg>	UINT8	</Arg>
+    </onMapsTrainingEnqueued>
     <onArenaCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </onArenaCreated>
+    <onMapsTrainingArenaCreated>
       <Arg>	MAILBOX	</Arg>
       <Arg>	UINT64	</Arg>
       <Arg>	UINT8	</Arg>
@@ -363,7 +375,7 @@
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	PYTHON	</Arg>
-    </onArenaCreated>
+    </onMapsTrainingArenaCreated>
     <onTutorialCreated>
       <Arg>	MAILBOX	</Arg>
       <Arg>	UINT64	</Arg>

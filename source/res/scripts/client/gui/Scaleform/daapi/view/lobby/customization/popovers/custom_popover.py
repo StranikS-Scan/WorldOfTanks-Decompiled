@@ -12,6 +12,7 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIData
 from gui.customization.shared import isOutfitVisuallyEmpty, SEASON_TYPE_TO_NAME, C11nId
 from gui.shared.formatters import text_styles, getItemPricesVO
 from helpers import dependency
+from items.components.c11n_constants import CustomizationDisplayType
 from skeletons.gui.customization import ICustomizationService
 
 class CustomPopover(CustomizationItemsPopoverMeta):
@@ -20,6 +21,7 @@ class CustomPopover(CustomizationItemsPopoverMeta):
     def __init__(self, ctx=None):
         super(CustomPopover, self).__init__(ctx)
         self.__isNonHistoric = False
+        self.__isFantastical = False
 
     def onWindowClose(self):
         self.destroy()
@@ -28,13 +30,22 @@ class CustomPopover(CustomizationItemsPopoverMeta):
         self.__ctx.mode.removeFromSlots(slotIds)
 
     def removeAll(self):
-        filterMethod = (lambda item: not item.isHistorical()) if self.__isNonHistoric else None
+        if self.__isNonHistoric and self.__isFantastical:
+            filterMethod = lambda item: item.customizationDisplayType() == CustomizationDisplayType.NON_HISTORICAL or item.customizationDisplayType() == CustomizationDisplayType.FANTASTICAL
+        elif self.__isNonHistoric:
+            filterMethod = lambda item: item.customizationDisplayType() == CustomizationDisplayType.NON_HISTORICAL
+        elif self.__isFantastical:
+            filterMethod = lambda item: item.customizationDisplayType() == CustomizationDisplayType.FANTASTICAL
+        else:
+            filterMethod = None
         self.__ctx.mode.removeItemsFromSeason(filterMethod=filterMethod)
         return
 
-    def showOnlyNonHistoric(self, value):
-        self.__isNonHistoric = value
+    def showNonHistoricAndFantastical(self, showNonHistoric, showFantastical):
+        self.__isNonHistoric = showNonHistoric
+        self.__isFantastical = showFantastical
         self._assignedDP.setNonHistoric(self.__isNonHistoric)
+        self._assignedDP.setFantastical(self.__isFantastical)
         self.__update()
 
     def _populate(self):
@@ -45,7 +56,7 @@ class CustomPopover(CustomizationItemsPopoverMeta):
         self.__ctx.events.onItemInstalled += self.__update
         self.__ctx.events.onItemsRemoved += self.__update
         self.__ctx.events.onChangesCanceled += self.__update
-        self._assignedDP = CustomPopoverDataProvider(self.__isNonHistoric)
+        self._assignedDP = CustomPopoverDataProvider(self.__isNonHistoric, self.__isFantastical)
         self._assignedDP.setFlashObject(self.as_getDPS())
         self.__update()
 
@@ -62,11 +73,16 @@ class CustomPopover(CustomizationItemsPopoverMeta):
 
     def __setHeader(self):
         outfit = self.__ctx.mode.currentOutfit
-        nonHistoricItems = [ intCD for intCD in outfit.items() if not self.__service.getItemByCD(intCD).isHistorical() ]
+        nonHistoricItems = [ intCD for intCD in outfit.items() if self.__service.getItemByCD(intCD).customizationDisplayType() == CustomizationDisplayType.NON_HISTORICAL ]
         nonHistoricItemsCount = len(nonHistoricItems)
-        checkBoxLabel = R.strings.vehicle_customization.customization.itemsPopover.historicCheckBox.items
-        checkBoxLabel = backport.text(checkBoxLabel())
-        counterLabel = text_styles.vehicleStatusSimpleText('({})'.format(nonHistoricItemsCount))
+        fantasticalItems = [ intCD for intCD in outfit.items() if self.__service.getItemByCD(intCD).customizationDisplayType() == CustomizationDisplayType.FANTASTICAL ]
+        fantasticalItemsCount = len(fantasticalItems)
+        nonHistoricCheckBoxText = R.strings.vehicle_customization.customization.itemsPopover.historicCheckBox.items
+        nonHistoricCheckBoxText = backport.text(nonHistoricCheckBoxText())
+        nonHistoricCounterText = text_styles.vehicleStatusSimpleText('({})'.format(nonHistoricItemsCount))
+        fantasticalCheckBoxText = R.strings.vehicle_customization.customization.itemsPopover.fantasticalCheckBox.items
+        fantasticalCheckBoxText = backport.text(fantasticalCheckBoxText())
+        fantasticalCounterText = text_styles.vehicleStatusSimpleText('({})'.format(fantasticalItemsCount))
         seasonName = SEASON_TYPE_TO_NAME[self.__ctx.season]
         seasonImage = R.images.gui.maps.icons.customization.items_popover.dyn('{}_back_list'.format(seasonName))
         seasonImage = backport.image(seasonImage())
@@ -75,8 +91,20 @@ class CustomPopover(CustomizationItemsPopoverMeta):
         title = R.strings.vehicle_customization.customization.itemsPopover.title.items
         title = text_styles.highTitle(backport.text(title(), mapType=seasonLabel))
         if self.__isNonHistoric and nonHistoricItemsCount == 0:
+            if self.__isFantastical and fantasticalItemsCount == 0:
+                isClear = True
+                clearMessage = R.strings.vehicle_customization.customization.itemsPopover.clear.nonHistoricFantasticalMessage
+                clearMessage = backport.text(clearMessage())
+            elif not self.__isFantastical:
+                isClear = True
+                clearMessage = R.strings.vehicle_customization.customization.itemsPopover.clear.nonHistoricMessage
+                clearMessage = backport.text(clearMessage())
+            else:
+                isClear = False
+                clearMessage = ''
+        elif self.__isFantastical and fantasticalItemsCount == 0 and not self.__isNonHistoric:
             isClear = True
-            clearMessage = R.strings.vehicle_customization.customization.itemsPopover.clear.nonHistoricMassage
+            clearMessage = R.strings.vehicle_customization.customization.itemsPopover.clear.fantasticalMessage
             clearMessage = backport.text(clearMessage())
         elif isOutfitVisuallyEmpty(outfit):
             isClear = True
@@ -87,8 +115,10 @@ class CustomPopover(CustomizationItemsPopoverMeta):
             clearMessage = ''
         self.as_showClearMessageS(isClear, text_styles.main(clearMessage))
         headerVO = {'title': title,
-         'checkBoxText': checkBoxLabel,
-         'counterText': counterLabel,
+         'nonHistoricCheckBoxText': nonHistoricCheckBoxText,
+         'nonHistoricCounterText': nonHistoricCounterText,
+         'fantasticalCheckBoxText': fantasticalCheckBoxText,
+         'fantasticalCounterText': fantasticalCounterText,
          'currentSeasonImage': seasonImage}
         self.as_setHeaderDataS(headerVO)
 
@@ -100,11 +130,12 @@ class CustomPopover(CustomizationItemsPopoverMeta):
 class CustomPopoverDataProvider(SortableDAAPIDataProvider):
     __service = dependency.descriptor(ICustomizationService)
 
-    def __init__(self, isNonHistoric):
+    def __init__(self, isNonHistoric, isFantastical):
         super(CustomPopoverDataProvider, self).__init__()
         self._list = []
         self.__ctx = self.__service.getCtx()
         self.__isNonHistoric = isNonHistoric
+        self.__isFantastical = isFantastical
 
     @property
     def collection(self):
@@ -124,6 +155,9 @@ class CustomPopoverDataProvider(SortableDAAPIDataProvider):
 
     def setNonHistoric(self, isNonHistoric):
         self.__isNonHistoric = isNonHistoric
+
+    def setFantastical(self, isFantastical):
+        self.__isFantastical = isFantastical
 
     def buildList(self):
         self.clear()
@@ -151,7 +185,7 @@ class CustomPopoverDataProvider(SortableDAAPIDataProvider):
         modifiedOutfit = self.__ctx.mode.getModifiedOutfit()
         originalOutfit = self.__ctx.mode.getOriginalOutfit()
         for pItem in purchaseItems:
-            if self.__isNonHistoric and pItem.item.isHistorical():
+            if self.isSkipItem(pItem.item):
                 continue
             slotId = C11nId(pItem.areaID, pItem.slotType, pItem.regionIdx)
             modifiedSlotData = getSlotDataFromSlot(modifiedOutfit, slotId)
@@ -173,7 +207,7 @@ class CustomPopoverDataProvider(SortableDAAPIDataProvider):
             item = self.__service.getItemByCD(intCD)
             if item.isHiddenInUI():
                 continue
-            if self.__isNonHistoric and item.isHistorical():
+            if self.isSkipItem(item):
                 continue
             areaId = container.getAreaID()
             slotType = ITEM_TYPE_TO_SLOT_TYPE[item.itemTypeID]
@@ -184,6 +218,14 @@ class CustomPopoverDataProvider(SortableDAAPIDataProvider):
 
         itemBlocks = sorted(itemData.values(), key=orderKey)
         return itemBlocks
+
+    def isSkipItem(self, item):
+        itemCustomizationDisplayType = item.customizationDisplayType()
+        if self.__isNonHistoric and self.__isFantastical and itemCustomizationDisplayType == CustomizationDisplayType.HISTORICAL:
+            return True
+        if self.__isNonHistoric and not self.__isFantastical and itemCustomizationDisplayType != CustomizationDisplayType.NON_HISTORICAL:
+            return True
+        return True if not self.__isNonHistoric and self.__isFantastical and itemCustomizationDisplayType != CustomizationDisplayType.FANTASTICAL else False
 
     @staticmethod
     def __makeItemDataVO(itemData, isModified):
@@ -202,7 +244,7 @@ class CustomPopoverDataProvider(SortableDAAPIDataProvider):
          'icon': icon,
          'userName': name,
          'numItems': countLabel,
-         'isHistoric': item.isHistorical(),
+         'customizationDisplayType': item.customizationDisplayType(),
          'price': price,
          'isApplied': isApplied,
          'isWide': item.isWide(),

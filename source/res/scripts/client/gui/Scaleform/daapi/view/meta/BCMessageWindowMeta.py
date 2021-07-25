@@ -10,7 +10,7 @@ class BCMessageWindowMeta(TutorialDialog):
     def onMessageAppear(self, rendrerer):
         self._printOverrideError('onMessageAppear')
 
-    def onMessageDisappear(self, rendrerer):
+    def onMessageDisappear(self, rendrerer, animation):
         self._printOverrideError('onMessageDisappear')
 
     def onMessageExecuted(self, rendrerer):
@@ -18,6 +18,12 @@ class BCMessageWindowMeta(TutorialDialog):
 
     def onMessageButtonClicked(self):
         self._printOverrideError('onMessageButtonClicked')
+
+    def onMessageAnimationStopped(self, animation):
+        self._printOverrideError('onMessageAnimationStopped')
+
+    def onMessageAnimationStarted(self, animation):
+        self._printOverrideError('onMessageAnimationStarted')
 
     def hideBlur(self):
         self._printOverrideError('hideBlur')

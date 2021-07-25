@@ -214,7 +214,7 @@ class EditableStylePopover(CustomizationEditedKitPopoverMeta):
          'icon': icon,
          'userName': name,
          'numItems': countLabel,
-         'isHistoric': item.isHistorical(),
+         'customizationDisplayType': item.customizationDisplayType(),
          'price': price,
          'isApplied': isApplied,
          'isWide': item.isWide(),

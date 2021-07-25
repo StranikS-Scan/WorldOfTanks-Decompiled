@@ -10,7 +10,7 @@ from collections import namedtuple, defaultdict
 from math import ceil
 from itertools import izip_longest
 import BigWorld
-from constants import SHELL_TYPES, PIERCING_POWER
+from constants import SHELL_TYPES, PIERCING_POWER, BonusTypes
 from gui import GUI_SETTINGS
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import KPI
@@ -28,6 +28,7 @@ from helpers import time_utils, dependency
 from items import getTypeOfCompactDescr, getTypeInfoByIndex, ITEM_TYPES, vehicles, tankmen
 from items import utils as items_utils
 from items.components import component_constants
+from post_progression_common import ACTION_TYPES
 from shared_utils import findFirst, first
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
@@ -260,7 +261,7 @@ class TurretParams(WeightedParam):
 
     @property
     def armor(self):
-        return self._itemDescr.primaryArmor
+        return tuple((round(armor) for armor in self._itemDescr.primaryArmor))
 
     @property
     def rotationSpeed(self):
@@ -326,7 +327,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def wheeledSpeedModeSpeed(self):
-        return self.__speedLimits(self._itemDescr.siegeVehicleDescr.physics['speedLimits']) if self.__hasWheeledSwitchMode() else None
+        return self.__speedLimits(self._itemDescr.siegeVehicleDescr.physics['speedLimits'], ('forwardMaxSpeedKMHTerm', 'backwardMaxSpeedKMHTerm')) if self.__hasWheeledSwitchMode() else None
 
     @property
     def turboshaftSpeedModeSpeed(self):
@@ -522,7 +523,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def invisibilityFactorAtShot(self):
-        return self._itemDescr.gun.invisibilityFactorAtShot
+        return self._itemDescr.miscAttrs['invisibilityFactorAtShot']
 
     @property
     def clipFireRate(self):
@@ -651,7 +652,7 @@ class VehicleParams(_ParameterBase):
         return result
 
     @staticmethod
-    def getBonuses(vehicle):
+    def getBonuses(vehicle, ignoreDisabledPostProgression=True):
         installedItems = [ item for item in vehicle.consumables.installed.getItems() ]
         result = [ (eq.name, eq.itemTypeName) for eq in installedItems ]
         optDevs = vehicle.optDevices.installed.getItems()
@@ -659,6 +660,17 @@ class VehicleParams(_ParameterBase):
         result.extend(optDevs)
         for battleBooster in vehicle.battleBoosters.installed.getItems():
             result.append((battleBooster.name, 'battleBooster'))
+
+        if not (ignoreDisabledPostProgression and vehicle.postProgression.isDisabled(vehicle)):
+            for step in vehicle.postProgression.iterUnorderedSteps():
+                if step.isReceived():
+                    action = step.action
+                    if action.actionType == ACTION_TYPES.MODIFICATION:
+                        result.append((action.getTechName(), BonusTypes.BASE_MODIFICATION))
+                    elif action.actionType == ACTION_TYPES.PAIR_MODIFICATION:
+                        subAction = action.getPurchasedModification()
+                        if subAction is not None:
+                            result.append((subAction.getTechName(), BonusTypes.PAIR_MODIFICATION))
 
         for _, tankman in vehicle.crew:
             if tankman is None:

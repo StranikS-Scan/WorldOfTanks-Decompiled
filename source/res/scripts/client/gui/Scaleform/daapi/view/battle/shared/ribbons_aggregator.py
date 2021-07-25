@@ -4,6 +4,7 @@ from collections import defaultdict
 import logging
 import Event
 import BattleReplay
+from constants import ROLE_TYPE
 from ids_generators import SequenceIDGenerator
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
@@ -20,11 +21,12 @@ class DAMAGE_SOURCE():
 
 
 class _Ribbon(object):
-    __slots__ = ('_id',)
+    __slots__ = ('_id', '_isAggregating')
 
     def __init__(self, ribbonID):
         super(_Ribbon, self).__init__()
         self._id = ribbonID
+        self._isAggregating = True
 
     @classmethod
     def createFromFeedbackEvent(cls, ribbonID, event):
@@ -32,6 +34,9 @@ class _Ribbon(object):
 
     def getType(self):
         raise NotImplementedError
+
+    def isRoleBonus(self):
+        return False
 
     def getID(self):
         return self._id
@@ -42,8 +47,12 @@ class _Ribbon(object):
             return True
         return False
 
+    @property
+    def isAggregating(self):
+        return self._isAggregating
+
     def _aggregate(self, ribbon):
-        pass
+        self._isAggregating = False
 
     def _canAggregate(self, ribbon):
         return self.getType() == ribbon.getType()
@@ -443,11 +452,11 @@ class _EnemiesStunRibbon(_MultiTargetsRibbon):
         return BATTLE_EFFICIENCY_TYPES.STUN
 
 
-class _ReceivedDamageByUnknownSourceRibbon(_Ribbon):
+class _ReceivedDamageByUnknownSourceRibbon(_RoleRibbon):
     __slots__ = ('__extraValue',)
 
     def __init__(self, ribbonID, extra):
-        super(_ReceivedDamageByUnknownSourceRibbon, self).__init__(ribbonID)
+        super(_ReceivedDamageByUnknownSourceRibbon, self).__init__(ribbonID, False, ROLE_TYPE.NOT_DEFINED)
         self.__extraValue = extra
 
     def getDamageSource(self):
@@ -458,9 +467,6 @@ class _ReceivedDamageByUnknownSourceRibbon(_Ribbon):
 
     def getExtraValue(self):
         return self.__extraValue
-
-    def isRoleBonus(self):
-        return False
 
     @classmethod
     def createFromFeedbackEvent(cls, ribbonID, event):
@@ -963,7 +969,8 @@ class RibbonsAggregator(object):
             for cachedRibbon in self.__cache.iterByType(etype):
                 if cachedRibbon.aggregate(ribbon):
                     if not self.__isSuspended:
-                        self.onRibbonUpdated(cachedRibbon)
+                        updateData = cachedRibbon if cachedRibbon.isAggregating else ribbon
+                        self.onRibbonUpdated(updateData)
                     break
             else:
                 if etype in _ACCUMULATED_RIBBON_TYPES:

@@ -5,6 +5,7 @@ import BigWorld
 from bootcamp.BootCampEvents import g_bootcampEvents
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.meta.BCMessageWindowMeta import BCMessageWindowMeta
+from gui.server_events.pm_constants import SOUNDS
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.Scaleform.genConsts.BOOTCAMP_MESSAGE_ALIASES import BOOTCAMP_MESSAGE_ALIASES
 import SoundGroups
@@ -16,11 +17,26 @@ from bootcamp.subtitles.decorators import subtitleDecorator
 
 class BCMessageWindow(BCMessageWindowMeta):
     _hangarSpace = dependency.descriptor(IHangarSpace)
+    BC_NEW_MODULE_UNLOCK_SOUND_ID = 'bc_new_module_unlock'
+    BC_RESOURCE_FLY_SOUND_ID = 'bc_resources_fly'
+    BC_RESOURCE_GLOW_SOUND_ID = 'bc_resources_glow'
+    BC_INFO_LINE_DISAPPEAR_SOUND_ID = 'bc_info_line_disappear'
+    FLY_ANIMATIONS = ['gold',
+     'prem',
+     'credits',
+     'experience']
+    RTPC_EXT_BC_ELEMENT_POSITION = 'RTPC_ext_bc_element_position'
 
     def __init__(self, content):
         super(BCMessageWindow, self).__init__(content)
         self.__blur = None
         return
+
+    def needRTPCCorection(self, animation):
+        return self.isFlyAnimation(animation)
+
+    def isFlyAnimation(self, animation):
+        return animation in self.FLY_ANIMATIONS
 
     def setParentWindow(self, window):
         super(BCMessageWindow, self).setParentWindow(window)
@@ -36,9 +52,9 @@ class BCMessageWindow(BCMessageWindowMeta):
     def onMessageAppear(self, type):
         pass
 
-    def onMessageDisappear(self, type):
-        if type != BOOTCAMP_MESSAGE_ALIASES.RENDERER_INTRO:
-            SoundGroups.g_instance.playSound2D('bc_info_line_disappear')
+    def onMessageDisappear(self, type, animation):
+        if type != BOOTCAMP_MESSAGE_ALIASES.RENDERER_INTRO and not self.isFlyAnimation(animation):
+            SoundGroups.g_instance.playSound2D(self.BC_INFO_LINE_DISAPPEAR_SOUND_ID)
 
     def onMessageRemoved(self):
         callback = self._content.get('callback')
@@ -55,6 +71,18 @@ class BCMessageWindow(BCMessageWindowMeta):
 
     def hideBlur(self):
         self.__blur.disable()
+
+    def onMessageAnimationStopped(self, animation):
+        if self.needRTPCCorection(animation):
+            self.soundManager.setRTPC(self.RTPC_EXT_BC_ELEMENT_POSITION, SOUNDS.MIN_MISSIONS_ZOOM)
+
+    def onMessageAnimationStarted(self, animation):
+        if self.needRTPCCorection(animation):
+            self.soundManager.playSound(self.BC_RESOURCE_FLY_SOUND_ID)
+            self.soundManager.playSound(self.BC_RESOURCE_GLOW_SOUND_ID)
+            self.soundManager.setRTPC(self.RTPC_EXT_BC_ELEMENT_POSITION, SOUNDS.MAX_MISSIONS_ZOOM)
+        else:
+            self.soundManager.playSound(self.BC_NEW_MODULE_UNLOCK_SOUND_ID)
 
     def _populate(self):
         super(BCMessageWindow, self)._populate()

@@ -118,7 +118,7 @@ def buildRoleTypePages(headerTitle, roleType):
 
     roleTypeLabel = ROLE_TYPE_TO_LABEL[roleType]
     pages = []
-    _addPage(pages, headerTitle, text_styles.superPromoTitle(backport.text(R.strings.menu.roleExp.roleName.dyn(roleTypeLabel)(), groupName=makeHtmlString('html_templates:vehicleRoles', 'roleTitle', {'message': backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleTypeLabel)())}))), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.role.description())), [], backport.image(R.images.gui.maps.icons.battleHelp.rolesHelp.dyn(roleTypeLabel)()), roleImage=backport.image(R.images.gui.maps.icons.roleExp.actionGroups.c_100x100.dyn(roleTypeLabel)()), roleActions=roleActions)
+    _addPage(pages, headerTitle, text_styles.superPromoTitle(backport.text(R.strings.menu.roleExp.roleName.dyn(roleTypeLabel)(), groupName=makeHtmlString('html_templates:vehicleRoles', 'roleTitle', {'message': backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleTypeLabel)())}))), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.role.description())), [], backport.image(R.images.gui.maps.icons.battleHelp.rolesHelp.dyn(roleTypeLabel)()), roleImage=backport.image(R.images.gui.maps.icons.roleExp.roles.c_100x100.dyn(roleTypeLabel)()), roleActions=roleActions)
     return pages
 
 

@@ -17,29 +17,37 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.exchange.ExchangeWindow import ExchangeWindow
     from gui.Scaleform.daapi.view.lobby.exchange.ExchangeXPWindow import ExchangeXPWindow
     from gui.Scaleform.daapi.view.lobby.exchange.ExchangeFreeToTankmanXpWindow import ExchangeFreeToTankmanXpWindow
+    from gui.Scaleform.daapi.view.lobby.exchange.detailed_exchange_xp_dialog import ExchangeXPWindowDialog
     return (GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', WindowLayer.WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_MODAL, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', WindowLayer.TOP_WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True),
      GroupedViewSettings(VIEW_ALIAS.EXCHANGE_WINDOW, ExchangeWindow, 'exchangeWindow.swf', WindowLayer.WINDOW, 'exchangeWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.EXCHANGE_XP_WINDOW, ExchangeXPWindow, 'exchangeXPWindow.swf', WindowLayer.WINDOW, 'exchangeXPWindow', None, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, ExchangeFreeToTankmanXpWindow, 'exchangeFreeToTankmanXpWindow.swf', WindowLayer.WINDOW, 'exchangeFreeToTankmanXpWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False))
+     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, ExchangeFreeToTankmanXpWindow, 'exchangeFreeToTankmanXpWindow.swf', WindowLayer.WINDOW, 'exchangeFreeToTankmanXpWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
+     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_XP_WINDOW_DIALOG_MODAL, ExchangeXPWindowDialog, 'exchangeXPWindow.swf', WindowLayer.TOP_WINDOW, 'exchangeXPWindow', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True))
 
 
 def getBusinessHandlers():
-    return (_ExchangeDialogBusinessHandler(), _ExchangeViewsBusinessHandler(), _ExchangeDialogModalBusinessHandler())
+    return (_ExchangeDialogBusinessHandler(),
+     _ExchangeViewsBusinessHandler(),
+     _ExchangeDialogModalBusinessHandler(),
+     _DetailedExchangeXPDialogBusinessHandler())
 
 
 class _ExchangeDialogBusinessHandler(PackageBusinessHandler):
+    _ALIAS = VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG
+    _EVENT = ShowDialogEvent.SHOW_EXCHANGE_DIALOG
+    _LAYER = WindowLayer.WINDOW
 
     def __init__(self):
-        listeners = ((ShowDialogEvent.SHOW_EXCHANGE_DIALOG, self.__exchangeDialogHandler),)
+        listeners = ((self._EVENT, self._exchangeDialogHandler),)
         super(_ExchangeDialogBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.DEFAULT)
 
-    def __exchangeDialogHandler(self, event):
+    def _exchangeDialogHandler(self, event):
         name = 'exchange' + event.meta.getType()
-        self.__loadOrUpdateDialog(name, VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG, event.meta, event.handler)
+        self.__loadOrUpdateDialog(name, self._ALIAS, event.meta, event.handler)
 
     def __loadOrUpdateDialog(self, name, alias, meta, handler):
-        window = self.findViewByName(WindowLayer.WINDOW, name)
+        window = self.findViewByName(self._LAYER, name)
         if window is not None:
             window.updateDialog(meta, handler)
             self.bringViewToFront(name)
@@ -48,24 +56,10 @@ class _ExchangeDialogBusinessHandler(PackageBusinessHandler):
         return
 
 
-class _ExchangeDialogModalBusinessHandler(PackageBusinessHandler):
-
-    def __init__(self):
-        listeners = ((ShowDialogEvent.SHOW_EXCHANGE_DIALOG_MODAL, self.__exchangeDialogHandler),)
-        super(_ExchangeDialogModalBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.DEFAULT)
-
-    def __exchangeDialogHandler(self, event):
-        name = 'exchange' + event.meta.getType()
-        self.__loadOrUpdateDialog(name, VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_MODAL, event.meta, event.handler)
-
-    def __loadOrUpdateDialog(self, name, alias, meta, handler):
-        window = self.findViewByName(WindowLayer.TOP_WINDOW, name)
-        if window is not None:
-            window.updateDialog(meta, handler)
-            self.bringViewToFront(name)
-        else:
-            self.loadViewWithDefName(alias, name, meta, handler)
-        return
+class _ExchangeDialogModalBusinessHandler(_ExchangeDialogBusinessHandler):
+    _ALIAS = VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_MODAL
+    _EVENT = ShowDialogEvent.SHOW_EXCHANGE_DIALOG_MODAL
+    _LAYER = WindowLayer.TOP_WINDOW
 
 
 class _ExchangeViewsBusinessHandler(PackageBusinessHandler):
@@ -73,3 +67,9 @@ class _ExchangeViewsBusinessHandler(PackageBusinessHandler):
     def __init__(self):
         listeners = ((VIEW_ALIAS.EXCHANGE_WINDOW, self.loadViewByCtxEvent), (VIEW_ALIAS.EXCHANGE_XP_WINDOW, self.loadViewByCtxEvent), (VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, self.loadViewByCtxEvent))
         super(_ExchangeViewsBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+
+
+class _DetailedExchangeXPDialogBusinessHandler(_ExchangeDialogBusinessHandler):
+    _ALIAS = VIEW_ALIAS.EXCHANGE_XP_WINDOW_DIALOG_MODAL
+    _EVENT = ShowDialogEvent.SHOW_DETAILED_EXCHANGE_XP_DIALOG
+    _LAYER = WindowLayer.TOP_WINDOW

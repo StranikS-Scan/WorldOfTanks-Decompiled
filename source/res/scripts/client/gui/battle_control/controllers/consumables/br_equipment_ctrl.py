@@ -41,7 +41,6 @@ class SteelHunterEquipmentController(equipment_ctrl.EquipmentsController):
 
     def __onVehicleEnterWorld(self, vehicle):
         if vehicle.id == avatar_getter.getPlayerVehicleID():
-            avatar_getter.getVehicleTypeDescriptor()
             BigWorld.player().onVehicleEnterWorld -= self.__onVehicleEnterWorld
             self.__applyEmptyItems()
 

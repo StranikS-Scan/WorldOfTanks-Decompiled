@@ -196,7 +196,7 @@ class BoosterHasNoEffectBlockConstructor(BattleBoosterTooltipBlockConstructor):
         block = list()
         module = self.module
         vehicle = self.configuration.vehicle
-        if vehicle is not None and not module.isAffectsOnVehicle(vehicle):
+        if vehicle is not None and not module.isAffectsOnVehicle(vehicle, self.configuration.eqSetupIDx):
             block.append(formatters.packTextBlockData(text_styles.statusAlert(backport.text(R.strings.tooltips.battleBooster.useless.header()))))
             block.append(formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.battleBooster.useless.body())), padding=formatters.packPadding(top=8)))
         return block

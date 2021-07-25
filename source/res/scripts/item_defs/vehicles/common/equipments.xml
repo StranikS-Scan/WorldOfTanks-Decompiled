@@ -2291,7 +2291,7 @@
       <longDescription>	#artefacts:recon/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime delay #epic_battle:abilityInfo/params/recon/revealedArea/value spottingDuration	</tooltips>
+      <tooltips>	cooldownTime delay-recon #epic_battle:abilityInfo/params/recon/revealedArea/value entitiesToSearch/Vehicle/spottingDuration	</tooltips>
       <cooldownTime>	180.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	3.0	</sharedCooldownTime>
@@ -2299,9 +2299,19 @@
       <disableAllyDamage>	false	</disableAllyDamage>
       <delay>	6.0	</delay>
       <speed>	112.5	</speed>
-      <areaRadius>	150	</areaRadius>
+      <entitiesToSearch>
+        <entity>
+          <name>	Vehicle	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	15.0	</spottingDuration>
+        </entity>
+        <entity>
+          <name>	BasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
+      </entitiesToSearch>
       <scanPointsAmount>	4	</scanPointsAmount>
-      <spottingDuration>	15.0	</spottingDuration>
       <antepositions>	0	</antepositions>
       <lateropositions>	0	</lateropositions>
       <heights>	170 120	</heights>
@@ -2312,7 +2322,7 @@
     </script>
   </recon_epic>
   <recon_epic_level1>
-    <id>	121	</id>
+    <id>	300	</id>
     <userString>	#artefacts:recon/name	</userString>
     <description>	#artefacts:recon/shortDescr	</description>
     <icon>	recon 0 0	</icon>
@@ -2326,7 +2336,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2334,18 +2344,28 @@
       <longDescription>	#artefacts:recon/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime delay #epic_battle:abilityInfo/params/recon/revealedArea/value spottingDuration	</tooltips>
-      <cooldownTime>	210.0	</cooldownTime>
+      <tooltips>	cooldownTime delay-recon #epic_battle:abilityInfo/params/recon/revealedArea/value entitiesToSearch/Vehicle/spottingDuration	</tooltips>
+      <cooldownTime>	260.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
       <delay>	6.0	</delay>
       <speed>	65	</speed>
-      <areaRadius>	150	</areaRadius>
+      <entitiesToSearch>
+        <entity>
+          <name>	Vehicle	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	15.0	</spottingDuration>
+        </entity>
+        <entity>
+          <name>	BasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
+      </entitiesToSearch>
       <scanPointsAmount>	4	</scanPointsAmount>
-      <spottingDuration>	20.0	</spottingDuration>
       <antepositions>	0	</antepositions>
       <lateropositions>	0	</lateropositions>
       <heights>	170 120	</heights>
@@ -2357,7 +2377,7 @@
     </script>
   </recon_epic_level1>
   <recon_epic_level2>
-    <id>	122	</id>
+    <id>	301	</id>
     <userString>	#artefacts:recon/name	</userString>
     <description>	#artefacts:recon/shortDescr	</description>
     <icon>	recon 0 0	</icon>
@@ -2371,7 +2391,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2379,18 +2399,28 @@
       <longDescription>	#artefacts:recon/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime delay #epic_battle:abilityInfo/params/recon/revealedArea/value spottingDuration	</tooltips>
-      <cooldownTime>	210.0	</cooldownTime>
+      <tooltips>	cooldownTime delay-recon #epic_battle:abilityInfo/params/recon/revealedArea/value entitiesToSearch/Vehicle/spottingDuration	</tooltips>
+      <cooldownTime>	240.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
       <delay>	5.0	</delay>
-      <speed>	60	</speed>
-      <areaRadius>	150	</areaRadius>
+      <speed>	55	</speed>
+      <entitiesToSearch>
+        <entity>
+          <name>	Vehicle	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	17.0	</spottingDuration>
+        </entity>
+        <entity>
+          <name>	BasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
+      </entitiesToSearch>
       <scanPointsAmount>	4	</scanPointsAmount>
-      <spottingDuration>	22.0	</spottingDuration>
       <antepositions>	0	</antepositions>
       <lateropositions>	0	</lateropositions>
       <heights>	170 120	</heights>
@@ -2402,7 +2432,7 @@
     </script>
   </recon_epic_level2>
   <recon_epic_level3>
-    <id>	123	</id>
+    <id>	302	</id>
     <userString>	#artefacts:recon/name	</userString>
     <description>	#artefacts:recon/shortDescr	</description>
     <icon>	recon 0 0	</icon>
@@ -2416,7 +2446,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2424,18 +2454,28 @@
       <longDescription>	#artefacts:recon/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime delay #epic_battle:abilityInfo/params/recon/revealedArea/value spottingDuration	</tooltips>
-      <cooldownTime>	210.0	</cooldownTime>
+      <tooltips>	cooldownTime delay-recon #epic_battle:abilityInfo/params/recon/revealedArea/value entitiesToSearch/Vehicle/spottingDuration	</tooltips>
+      <cooldownTime>	220.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
-      <delay>	5.0	</delay>
-      <speed>	55	</speed>
-      <areaRadius>	150	</areaRadius>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <delay>	4.0	</delay>
+      <speed>	45	</speed>
+      <entitiesToSearch>
+        <entity>
+          <name>	Vehicle	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	20.0	</spottingDuration>
+        </entity>
+        <entity>
+          <name>	BasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
+      </entitiesToSearch>
       <scanPointsAmount>	4	</scanPointsAmount>
-      <spottingDuration>	25.0	</spottingDuration>
       <antepositions>	0	</antepositions>
       <lateropositions>	0	</lateropositions>
       <heights>	170 120	</heights>
@@ -2446,8 +2486,8 @@
       <wwsoundEquipmentUsed>	eb_ability_airScout_apply	</wwsoundEquipmentUsed>
     </script>
   </recon_epic_level3>
-  <recon_epic_level4>
-    <id>	124	</id>
+  <recon_epic_8lvl_level1>
+    <id>	303	</id>
     <userString>	#artefacts:recon/name	</userString>
     <description>	#artefacts:recon/shortDescr	</description>
     <icon>	recon 0 0	</icon>
@@ -2461,7 +2501,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2469,18 +2509,28 @@
       <longDescription>	#artefacts:recon/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime delay #epic_battle:abilityInfo/params/recon/revealedArea/value spottingDuration	</tooltips>
-      <cooldownTime>	210.0	</cooldownTime>
+      <tooltips>	cooldownTime delay-recon #epic_battle:abilityInfo/params/recon/revealedArea/value entitiesToSearch/Vehicle/spottingDuration	</tooltips>
+      <cooldownTime>	220.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
-      <delay>	4.0	</delay>
-      <speed>	50	</speed>
-      <areaRadius>	150	</areaRadius>
+      <delay>	6.0	</delay>
+      <speed>	65	</speed>
+      <entitiesToSearch>
+        <entity>
+          <name>	Vehicle	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	20.0	</spottingDuration>
+        </entity>
+        <entity>
+          <name>	BasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
+      </entitiesToSearch>
       <scanPointsAmount>	4	</scanPointsAmount>
-      <spottingDuration>	27.0	</spottingDuration>
       <antepositions>	0	</antepositions>
       <lateropositions>	0	</lateropositions>
       <heights>	170 120	</heights>
@@ -2490,9 +2540,9 @@
       <areaVisual>	content/Interface/TargetPoint/ReconFlight.visual	</areaVisual>
       <wwsoundEquipmentUsed>	eb_ability_airScout_apply	</wwsoundEquipmentUsed>
     </script>
-  </recon_epic_level4>
-  <recon_epic_level5>
-    <id>	125	</id>
+  </recon_epic_8lvl_level1>
+  <recon_epic_8lvl_level2>
+    <id>	304	</id>
     <userString>	#artefacts:recon/name	</userString>
     <description>	#artefacts:recon/shortDescr	</description>
     <icon>	recon 0 0	</icon>
@@ -2506,7 +2556,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2514,18 +2564,83 @@
       <longDescription>	#artefacts:recon/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime delay #epic_battle:abilityInfo/params/recon/revealedArea/value spottingDuration	</tooltips>
-      <cooldownTime>	210.0	</cooldownTime>
+      <tooltips>	cooldownTime delay-recon #epic_battle:abilityInfo/params/recon/revealedArea/value entitiesToSearch/Vehicle/spottingDuration	</tooltips>
+      <cooldownTime>	200.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <delay>	5.0	</delay>
+      <speed>	55	</speed>
+      <entitiesToSearch>
+        <entity>
+          <name>	Vehicle	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	25.0	</spottingDuration>
+        </entity>
+        <entity>
+          <name>	BasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
+      </entitiesToSearch>
+      <scanPointsAmount>	4	</scanPointsAmount>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <heights>	170 120	</heights>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/ReconFlight.visual	</areaVisual>
+      <wwsoundEquipmentUsed>	eb_ability_airScout_apply	</wwsoundEquipmentUsed>
+    </script>
+  </recon_epic_8lvl_level2>
+  <recon_epic_8lvl_level3>
+    <id>	305	</id>
+    <userString>	#artefacts:recon/name	</userString>
+    <description>	#artefacts:recon/shortDescr	</description>
+    <icon>	recon 0 0	</icon>
+    <soundNotification>	eb_ability_recon	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicRecon	  <shortDescription>	#artefacts:recon/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:recon/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay-recon #epic_battle:abilityInfo/params/recon/revealedArea/value entitiesToSearch/Vehicle/spottingDuration	</tooltips>
+      <cooldownTime>	180.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
       <delay>	4.0	</delay>
       <speed>	45	</speed>
-      <areaRadius>	150	</areaRadius>
+      <entitiesToSearch>
+        <entity>
+          <name>	Vehicle	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	30.0	</spottingDuration>
+        </entity>
+        <entity>
+          <name>	BasicMine	</name>
+          <radius>	150	</radius>
+          <spottingDuration>	80.0	</spottingDuration>
+        </entity>
+      </entitiesToSearch>
       <scanPointsAmount>	4	</scanPointsAmount>
-      <spottingDuration>	30.0	</spottingDuration>
       <antepositions>	0	</antepositions>
       <lateropositions>	0	</lateropositions>
       <heights>	170 120	</heights>
@@ -2535,9 +2650,9 @@
       <areaVisual>	content/Interface/TargetPoint/ReconFlight.visual	</areaVisual>
       <wwsoundEquipmentUsed>	eb_ability_airScout_apply	</wwsoundEquipmentUsed>
     </script>
-  </recon_epic_level5>
+  </recon_epic_8lvl_level3>
   <bomber_epic_level1>
-    <id>	131	</id>
+    <id>	310	</id>
     <userString>	#artefacts:bomber/name	</userString>
     <description>	#artefacts:bomber/shortDescr	</description>
     <icon>	bomber 0 0	</icon>
@@ -2551,7 +2666,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2560,9 +2675,165 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
-      <cooldownTime>	360.0	</cooldownTime>
+      <cooldownTime>	210.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <delay>	2.0	</delay>
+      <speed>	80	</speed>
+      <heights>	100 60	</heights>
+      <areaLength>	45	</areaLength>
+      <areaWidth>	45	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	62	</bombsNumber>
+      <shellCompactDescr>	66842	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	5 5	</piercingPower>
+      <gravity>	10000	</gravity>
+      <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
+    </script>
+  </bomber_epic_level1>
+  <bomber_epic_level2>
+    <id>	311	</id>
+    <userString>	#artefacts:bomber/name	</userString>
+    <description>	#artefacts:bomber/shortDescr	</description>
+    <icon>	bomber 0 0	</icon>
+    <soundNotification>	eb_ability_bomber	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicBomber	  <shortDescription>	#artefacts:bomber/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:bomber/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	190.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <delay>	2.0	</delay>
+      <speed>	80	</speed>
+      <heights>	100 60	</heights>
+      <areaLength>	45	</areaLength>
+      <areaWidth>	45	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	75	</bombsNumber>
+      <shellCompactDescr>	67354	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	5 5	</piercingPower>
+      <gravity>	10000	</gravity>
+      <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
+    </script>
+  </bomber_epic_level2>
+  <bomber_epic_level3>
+    <id>	312	</id>
+    <userString>	#artefacts:bomber/name	</userString>
+    <description>	#artefacts:bomber/shortDescr	</description>
+    <icon>	bomber 0 0	</icon>
+    <soundNotification>	eb_ability_bomber	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicBomber	  <shortDescription>	#artefacts:bomber/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:bomber/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	170.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <delay>	2.0	</delay>
+      <speed>	80	</speed>
+      <heights>	100 60	</heights>
+      <areaLength>	45	</areaLength>
+      <areaWidth>	45	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	91	</bombsNumber>
+      <shellCompactDescr>	67866	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	5 5	</piercingPower>
+      <gravity>	10000	</gravity>
+      <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
+    </script>
+  </bomber_epic_level3>
+  <bomber_epic_8lvl_level1>
+    <id>	313	</id>
+    <userString>	#artefacts:bomber/name	</userString>
+    <description>	#artefacts:bomber/shortDescr	</description>
+    <icon>	bomber 0 0	</icon>
+    <soundNotification>	eb_ability_bomber	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicBomber	  <shortDescription>	#artefacts:bomber/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:bomber/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	220.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
@@ -2587,9 +2858,9 @@
       <noOwner>	false	</noOwner>
       <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
     </script>
-  </bomber_epic_level1>
-  <bomber_epic_level2>
-    <id>	132	</id>
+  </bomber_epic_8lvl_level1>
+  <bomber_epic_8lvl_level2>
+    <id>	314	</id>
     <userString>	#artefacts:bomber/name	</userString>
     <description>	#artefacts:bomber/shortDescr	</description>
     <icon>	bomber 0 0	</icon>
@@ -2603,7 +2874,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2612,61 +2883,9 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
-      <cooldownTime>	360.0	</cooldownTime>
+      <cooldownTime>	200.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
-      <consumeAmmo>	false	</consumeAmmo>
-      <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
-      <delay>	2.0	</delay>
-      <speed>	80	</speed>
-      <heights>	100 60	</heights>
-      <areaLength>	45	</areaLength>
-      <areaWidth>	45	</areaWidth>
-      <antepositions>	0	</antepositions>
-      <lateropositions>	0	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	60	</bombsNumber>
-      <shellCompactDescr>	67098	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	5 5	</piercingPower>
-      <gravity>	10000	</gravity>
-      <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
-      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	false	</noOwner>
-      <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
-    </script>
-  </bomber_epic_level2>
-  <bomber_epic_level3>
-    <id>	133	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <soundNotification>	eb_ability_bomber	</soundNotification>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger	</tags>
-    <type>	battleAbilities	</type>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EpicBomber	  <shortDescription>	#artefacts:bomber/shortDescr	</shortDescription>
-      <longDescription>	#artefacts:bomber/longDescr	</longDescription>
-      <shortFilterAlert></shortFilterAlert>
-      <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
-      <cooldownTime>	360.0	</cooldownTime>
-      <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
@@ -2691,9 +2910,9 @@
       <noOwner>	false	</noOwner>
       <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
     </script>
-  </bomber_epic_level3>
-  <bomber_epic_level4>
-    <id>	134	</id>
+  </bomber_epic_8lvl_level2>
+  <bomber_epic_8lvl_level3>
+    <id>	315	</id>
     <userString>	#artefacts:bomber/name	</userString>
     <description>	#artefacts:bomber/shortDescr	</description>
     <icon>	bomber 0 0	</icon>
@@ -2707,7 +2926,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2716,61 +2935,9 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
-      <cooldownTime>	360.0	</cooldownTime>
+      <cooldownTime>	180.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
-      <consumeAmmo>	false	</consumeAmmo>
-      <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
-      <delay>	2.0	</delay>
-      <speed>	80	</speed>
-      <heights>	100 60	</heights>
-      <areaLength>	45	</areaLength>
-      <areaWidth>	45	</areaWidth>
-      <antepositions>	0	</antepositions>
-      <lateropositions>	0	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	75	</bombsNumber>
-      <shellCompactDescr>	67610	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	5 5	</piercingPower>
-      <gravity>	10000	</gravity>
-      <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
-      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	false	</noOwner>
-      <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
-    </script>
-  </bomber_epic_level4>
-  <bomber_epic_level5>
-    <id>	135	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <soundNotification>	eb_ability_bomber	</soundNotification>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger	</tags>
-    <type>	battleAbilities	</type>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EpicBomber	  <shortDescription>	#artefacts:bomber/shortDescr	</shortDescription>
-      <longDescription>	#artefacts:bomber/longDescr	</longDescription>
-      <shortFilterAlert></shortFilterAlert>
-      <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
-      <cooldownTime>	360.0	</cooldownTime>
-      <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
@@ -2795,9 +2962,9 @@
       <noOwner>	false	</noOwner>
       <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
     </script>
-  </bomber_epic_level5>
+  </bomber_epic_8lvl_level3>
   <artillery_epic_level1>
-    <id>	141	</id>
+    <id>	320	</id>
     <userString>	#artefacts:artillery/name	</userString>
     <description>	#artefacts:artillery/shortDescr	</description>
     <icon>	artillery 0 0	</icon>
@@ -2811,7 +2978,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2820,9 +2987,138 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
-      <cooldownTime>	340.0	</cooldownTime>
+      <cooldownTime>	240.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <delay>	4.0	</delay>
+      <duration>	4.5	</duration>
+      <shotsNumber>	22	</shotsNumber>
+      <areaRadius>	12	</areaRadius>
+      <shellCompactDescr>	65562	</shellCompactDescr>
+      <piercingPower>	20 20	</piercingPower>
+      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
+    </script>
+  </artillery_epic_level1>
+  <artillery_epic_level2>
+    <id>	321	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	eb_ability_artillery	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicArtillery	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	220.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <delay>	4.0	</delay>
+      <duration>	5.0	</duration>
+      <shotsNumber>	24	</shotsNumber>
+      <areaRadius>	12	</areaRadius>
+      <shellCompactDescr>	66074	</shellCompactDescr>
+      <piercingPower>	20 20	</piercingPower>
+      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
+    </script>
+  </artillery_epic_level2>
+  <artillery_epic_level3>
+    <id>	322	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	eb_ability_artillery	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicArtillery	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	200.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <delay>	4.0	</delay>
+      <duration>	6.0	</duration>
+      <shotsNumber>	32	</shotsNumber>
+      <areaRadius>	12	</areaRadius>
+      <shellCompactDescr>	66586	</shellCompactDescr>
+      <piercingPower>	20 20	</piercingPower>
+      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
+    </script>
+  </artillery_epic_level3>
+  <artillery_epic_8lvl_level1>
+    <id>	323	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	eb_ability_artillery	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicArtillery	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	240.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
@@ -2838,9 +3134,9 @@
       <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
       <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
     </script>
-  </artillery_epic_level1>
-  <artillery_epic_level2>
-    <id>	142	</id>
+  </artillery_epic_8lvl_level1>
+  <artillery_epic_8lvl_level2>
+    <id>	324	</id>
     <userString>	#artefacts:artillery/name	</userString>
     <description>	#artefacts:artillery/shortDescr	</description>
     <icon>	artillery 0 0	</icon>
@@ -2854,7 +3150,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2863,52 +3159,9 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
-      <cooldownTime>	330.0	</cooldownTime>
+      <cooldownTime>	220.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
-      <consumeAmmo>	false	</consumeAmmo>
-      <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
-      <delay>	5.0	</delay>
-      <duration>	4.25	</duration>
-      <shotsNumber>	17	</shotsNumber>
-      <areaRadius>	10	</areaRadius>
-      <shellCompactDescr>	65818	</shellCompactDescr>
-      <piercingPower>	20 20	</piercingPower>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	false	</noOwner>
-      <shotSoundPreDelay>	2	</shotSoundPreDelay>
-      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
-      <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
-    </script>
-  </artillery_epic_level2>
-  <artillery_epic_level3>
-    <id>	143	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <soundNotification>	eb_ability_artillery	</soundNotification>
-    <price>	150	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger	</tags>
-    <type>	battleAbilities	</type>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EpicArtillery	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
-      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
-      <shortFilterAlert></shortFilterAlert>
-      <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
-      <cooldownTime>	320.0	</cooldownTime>
-      <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
@@ -2924,9 +3177,9 @@
       <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
       <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
     </script>
-  </artillery_epic_level3>
-  <artillery_epic_level4>
-    <id>	144	</id>
+  </artillery_epic_8lvl_level2>
+  <artillery_epic_8lvl_level3>
+    <id>	325	</id>
     <userString>	#artefacts:artillery/name	</userString>
     <description>	#artefacts:artillery/shortDescr	</description>
     <icon>	artillery 0 0	</icon>
@@ -2940,7 +3193,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2949,52 +3202,9 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
-      <cooldownTime>	310.0	</cooldownTime>
+      <cooldownTime>	200.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
-      <consumeAmmo>	false	</consumeAmmo>
-      <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
-      <delay>	5.0	</delay>
-      <duration>	4.75	</duration>
-      <shotsNumber>	19	</shotsNumber>
-      <areaRadius>	10	</areaRadius>
-      <shellCompactDescr>	66330	</shellCompactDescr>
-      <piercingPower>	20 20	</piercingPower>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	false	</noOwner>
-      <shotSoundPreDelay>	2	</shotSoundPreDelay>
-      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
-      <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
-    </script>
-  </artillery_epic_level4>
-  <artillery_epic_level5>
-    <id>	145	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <soundNotification>	eb_ability_artillery	</soundNotification>
-    <price>	150	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger	</tags>
-    <type>	battleAbilities	</type>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EpicArtillery	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
-      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
-      <shortFilterAlert></shortFilterAlert>
-      <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
-      <cooldownTime>	300.0	</cooldownTime>
-      <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
@@ -3010,9 +3220,9 @@
       <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
       <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
     </script>
-  </artillery_epic_level5>
+  </artillery_epic_8lvl_level3>
   <smoke_epic_level1>
-    <id>	151	</id>
+    <id>	330	</id>
     <userString>	#artefacts:smoke/name	</userString>
     <description>	#artefacts:smoke/shortDescr	</description>
     <icon>	smoke 0 0	</icon>
@@ -3026,7 +3236,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3034,17 +3244,18 @@
       <longDescription>	#artefacts:smoke/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
-      <cooldownTime>	320.0	</cooldownTime>
+      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration visionRadiusFactor	</tooltips>
+      <cooldownTime>	200.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
       <minDelay>	3.0	</minDelay>
       <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
       <smokeModelName>	objects/misc/server_smoke/cylinder1.model	</smokeModelName>
-      <smokeEffectName>	SmokeScreenEffect_lev1	</smokeEffectName>
+      <smokeEffectNameAlly>	SmokeScreenEffect_lev1/ally	</smokeEffectNameAlly>
+      <smokeEffectNameEnemy>	SmokeScreenEffect_lev1/enemy	</smokeEffectNameEnemy>
       <startRadius>	5.	</startRadius>
       <expandedRadius>	25.	</expandedRadius>
       <startHeight>	10.	</startHeight>
@@ -3054,7 +3265,7 @@
       <dispersionRadius>	5.	</dispersionRadius>
       <totalDuration>	40.	</totalDuration>
       <smokeOpacity>	10.	</smokeOpacity>
-      <visionRadiusFactor>	0.66	</visionRadiusFactor>
+      <visionRadiusFactor>	0.7	</visionRadiusFactor>
       <areaLength>	200	</areaLength>
       <areaWidth>	50	</areaWidth>
       <projectilesNumber>	5	</projectilesNumber>
@@ -3068,7 +3279,7 @@
     </script>
   </smoke_epic_level1>
   <smoke_epic_level2>
-    <id>	152	</id>
+    <id>	331	</id>
     <userString>	#artefacts:smoke/name	</userString>
     <description>	#artefacts:smoke/shortDescr	</description>
     <icon>	smoke 0 0	</icon>
@@ -3082,7 +3293,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3090,17 +3301,18 @@
       <longDescription>	#artefacts:smoke/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
-      <cooldownTime>	310.0	</cooldownTime>
+      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration visionRadiusFactor	</tooltips>
+      <cooldownTime>	180.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
       <minDelay>	3.0	</minDelay>
       <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
       <smokeModelName>	objects/misc/server_smoke/cylinder1.model	</smokeModelName>
-      <smokeEffectName>	SmokeScreenEffect_lev2	</smokeEffectName>
+      <smokeEffectNameAlly>	SmokeScreenEffect_lev2/ally	</smokeEffectNameAlly>
+      <smokeEffectNameEnemy>	SmokeScreenEffect_lev2/enemy	</smokeEffectNameEnemy>
       <startRadius>	5.	</startRadius>
       <expandedRadius>	25.	</expandedRadius>
       <startHeight>	10.	</startHeight>
@@ -3108,9 +3320,9 @@
       <heightUpFraction>	0.7	</heightUpFraction>
       <expansionDuration>	5.	</expansionDuration>
       <dispersionRadius>	5.	</dispersionRadius>
-      <totalDuration>	42.	</totalDuration>
+      <totalDuration>	45.	</totalDuration>
       <smokeOpacity>	10.	</smokeOpacity>
-      <visionRadiusFactor>	0.66	</visionRadiusFactor>
+      <visionRadiusFactor>	0.7	</visionRadiusFactor>
       <areaLength>	200	</areaLength>
       <areaWidth>	50	</areaWidth>
       <projectilesNumber>	5	</projectilesNumber>
@@ -3124,7 +3336,7 @@
     </script>
   </smoke_epic_level2>
   <smoke_epic_level3>
-    <id>	153	</id>
+    <id>	332	</id>
     <userString>	#artefacts:smoke/name	</userString>
     <description>	#artefacts:smoke/shortDescr	</description>
     <icon>	smoke 0 0	</icon>
@@ -3138,7 +3350,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3146,17 +3358,18 @@
       <longDescription>	#artefacts:smoke/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
-      <cooldownTime>	300.0	</cooldownTime>
+      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration visionRadiusFactor	</tooltips>
+      <cooldownTime>	160.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
       <minDelay>	3.0	</minDelay>
       <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
       <smokeModelName>	objects/misc/server_smoke/cylinder1.model	</smokeModelName>
-      <smokeEffectName>	SmokeScreenEffect_lev3	</smokeEffectName>
+      <smokeEffectNameAlly>	SmokeScreenEffect_lev3/ally	</smokeEffectNameAlly>
+      <smokeEffectNameEnemy>	SmokeScreenEffect_lev3/enemy	</smokeEffectNameEnemy>
       <startRadius>	5.	</startRadius>
       <expandedRadius>	25.	</expandedRadius>
       <startHeight>	10.	</startHeight>
@@ -3164,9 +3377,9 @@
       <heightUpFraction>	0.7	</heightUpFraction>
       <expansionDuration>	5.	</expansionDuration>
       <dispersionRadius>	5.	</dispersionRadius>
-      <totalDuration>	45.	</totalDuration>
+      <totalDuration>	50.	</totalDuration>
       <smokeOpacity>	10.	</smokeOpacity>
-      <visionRadiusFactor>	0.66	</visionRadiusFactor>
+      <visionRadiusFactor>	0.7	</visionRadiusFactor>
       <areaLength>	200	</areaLength>
       <areaWidth>	50	</areaWidth>
       <projectilesNumber>	5	</projectilesNumber>
@@ -3179,8 +3392,8 @@
       <vignetteIntensity>	0.08	</vignetteIntensity>
     </script>
   </smoke_epic_level3>
-  <smoke_epic_level4>
-    <id>	154	</id>
+  <smoke_epic_8lvl_level1>
+    <id>	333	</id>
     <userString>	#artefacts:smoke/name	</userString>
     <description>	#artefacts:smoke/shortDescr	</description>
     <icon>	smoke 0 0	</icon>
@@ -3194,7 +3407,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3202,17 +3415,18 @@
       <longDescription>	#artefacts:smoke/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
-      <cooldownTime>	290.0	</cooldownTime>
+      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration visionRadiusFactor	</tooltips>
+      <cooldownTime>	200.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
       <minDelay>	3.0	</minDelay>
       <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
       <smokeModelName>	objects/misc/server_smoke/cylinder1.model	</smokeModelName>
-      <smokeEffectName>	SmokeScreenEffect_lev4	</smokeEffectName>
+      <smokeEffectNameAlly>	SmokeScreenEffect_lev1/ally	</smokeEffectNameAlly>
+      <smokeEffectNameEnemy>	SmokeScreenEffect_lev1/enemy	</smokeEffectNameEnemy>
       <startRadius>	5.	</startRadius>
       <expandedRadius>	25.	</expandedRadius>
       <startHeight>	10.	</startHeight>
@@ -3220,9 +3434,9 @@
       <heightUpFraction>	0.7	</heightUpFraction>
       <expansionDuration>	5.	</expansionDuration>
       <dispersionRadius>	5.	</dispersionRadius>
-      <totalDuration>	47.	</totalDuration>
+      <totalDuration>	40.	</totalDuration>
       <smokeOpacity>	10.	</smokeOpacity>
-      <visionRadiusFactor>	0.66	</visionRadiusFactor>
+      <visionRadiusFactor>	0.7	</visionRadiusFactor>
       <areaLength>	200	</areaLength>
       <areaWidth>	50	</areaWidth>
       <projectilesNumber>	5	</projectilesNumber>
@@ -3234,9 +3448,9 @@
       <vignetteColor>	200 200 200	</vignetteColor>
       <vignetteIntensity>	0.08	</vignetteIntensity>
     </script>
-  </smoke_epic_level4>
-  <smoke_epic_level5>
-    <id>	155	</id>
+  </smoke_epic_8lvl_level1>
+  <smoke_epic_8lvl_level2>
+    <id>	334	</id>
     <userString>	#artefacts:smoke/name	</userString>
     <description>	#artefacts:smoke/shortDescr	</description>
     <icon>	smoke 0 0	</icon>
@@ -3250,7 +3464,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3258,17 +3472,75 @@
       <longDescription>	#artefacts:smoke/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
-      <cooldownTime>	280.0	</cooldownTime>
+      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration visionRadiusFactor	</tooltips>
+      <cooldownTime>	180.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
       <minDelay>	3.0	</minDelay>
       <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
       <smokeModelName>	objects/misc/server_smoke/cylinder1.model	</smokeModelName>
-      <smokeEffectName>	SmokeScreenEffect_lev5	</smokeEffectName>
+      <smokeEffectNameAlly>	SmokeScreenEffect_lev2/ally	</smokeEffectNameAlly>
+      <smokeEffectNameEnemy>	SmokeScreenEffect_lev2/enemy	</smokeEffectNameEnemy>
+      <startRadius>	5.	</startRadius>
+      <expandedRadius>	25.	</expandedRadius>
+      <startHeight>	10.	</startHeight>
+      <expandedHeight>	40.	</expandedHeight>
+      <heightUpFraction>	0.7	</heightUpFraction>
+      <expansionDuration>	5.	</expansionDuration>
+      <dispersionRadius>	5.	</dispersionRadius>
+      <totalDuration>	45.	</totalDuration>
+      <smokeOpacity>	10.	</smokeOpacity>
+      <visionRadiusFactor>	0.7	</visionRadiusFactor>
+      <areaLength>	200	</areaLength>
+      <areaWidth>	50	</areaWidth>
+      <projectilesNumber>	5	</projectilesNumber>
+      <shellCompactDescr>	64538	</shellCompactDescr>
+      <areaVisual>	content/Interface/TargetPoint/SmokeScreen.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_smoke_firing	</wwsoundShot>
+      <vignetteColor>	200 200 200	</vignetteColor>
+      <vignetteIntensity>	0.08	</vignetteIntensity>
+    </script>
+  </smoke_epic_8lvl_level2>
+  <smoke_epic_8lvl_level3>
+    <id>	335	</id>
+    <userString>	#artefacts:smoke/name	</userString>
+    <description>	#artefacts:smoke/shortDescr	</description>
+    <icon>	smoke 0 0	</icon>
+    <soundNotification>	eb_ability_smoke_screen	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicSmoke	  <shortDescription>	#artefacts:smoke/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:smoke/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration visionRadiusFactor	</tooltips>
+      <cooldownTime>	160.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <minDelay>	3.0	</minDelay>
+      <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
+      <smokeModelName>	objects/misc/server_smoke/cylinder1.model	</smokeModelName>
+      <smokeEffectNameAlly>	SmokeScreenEffect_lev3/ally	</smokeEffectNameAlly>
+      <smokeEffectNameEnemy>	SmokeScreenEffect_lev3/enemy	</smokeEffectNameEnemy>
       <startRadius>	5.	</startRadius>
       <expandedRadius>	25.	</expandedRadius>
       <startHeight>	10.	</startHeight>
@@ -3278,7 +3550,7 @@
       <dispersionRadius>	5.	</dispersionRadius>
       <totalDuration>	50.	</totalDuration>
       <smokeOpacity>	10.	</smokeOpacity>
-      <visionRadiusFactor>	0.66	</visionRadiusFactor>
+      <visionRadiusFactor>	0.7	</visionRadiusFactor>
       <areaLength>	200	</areaLength>
       <areaWidth>	50	</areaWidth>
       <projectilesNumber>	5	</projectilesNumber>
@@ -3290,9 +3562,9 @@
       <vignetteColor>	200 200 200	</vignetteColor>
       <vignetteIntensity>	0.08	</vignetteIntensity>
     </script>
-  </smoke_epic_level5>
+  </smoke_epic_8lvl_level3>
   <inspire_level1>
-    <id>	164	</id>
+    <id>	340	</id>
     <userString>	#artefacts:inspire/name	</userString>
     <description>	#artefacts:inspire/shortDescr	</description>
     <icon>	inspire 0 0	</icon>
@@ -3306,7 +3578,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3314,24 +3586,27 @@
       <longDescription>	#artefacts:inspire/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime radius duration-inspire increaseFactors[crewRolesFactor] inactivationDelay	</tooltips>
-      <cooldownTime>	240.0	</cooldownTime>
+      <tooltips>	cooldownTime radius duration-inspire increaseFactors/crewRolesFactor selfIncreaseFactors/crewRolesFactor inactivationDelay	</tooltips>
+      <cooldownTime>	230.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
       <increaseFactors>
         <crewRolesFactor>	1.1	</crewRolesFactor>
       </increaseFactors>
-      <duration>	50	</duration>
+      <selfIncreaseFactors>
+        <crewRolesFactor>	1.15	</crewRolesFactor>
+      </selfIncreaseFactors>
+      <duration>	60	</duration>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
       <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
     </script>
   </inspire_level1>
   <inspire_level2>
-    <id>	165	</id>
+    <id>	341	</id>
     <userString>	#artefacts:inspire/name	</userString>
     <description>	#artefacts:inspire/shortDescr	</description>
     <icon>	inspire 0 0	</icon>
@@ -3345,7 +3620,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3353,24 +3628,27 @@
       <longDescription>	#artefacts:inspire/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime radius duration-inspire increaseFactors[crewRolesFactor] inactivationDelay	</tooltips>
-      <cooldownTime>	240.0	</cooldownTime>
+      <tooltips>	cooldownTime radius duration-inspire increaseFactors/crewRolesFactor selfIncreaseFactors/crewRolesFactor inactivationDelay	</tooltips>
+      <cooldownTime>	200.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
       <increaseFactors>
-        <crewRolesFactor>	1.11	</crewRolesFactor>
+        <crewRolesFactor>	1.125	</crewRolesFactor>
       </increaseFactors>
-      <duration>	53	</duration>
+      <selfIncreaseFactors>
+        <crewRolesFactor>	1.175	</crewRolesFactor>
+      </selfIncreaseFactors>
+      <duration>	60	</duration>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
       <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
     </script>
   </inspire_level2>
   <inspire_level3>
-    <id>	166	</id>
+    <id>	342	</id>
     <userString>	#artefacts:inspire/name	</userString>
     <description>	#artefacts:inspire/shortDescr	</description>
     <icon>	inspire 0 0	</icon>
@@ -3384,7 +3662,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3392,24 +3670,111 @@
       <longDescription>	#artefacts:inspire/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime radius duration-inspire increaseFactors[crewRolesFactor] inactivationDelay	</tooltips>
-      <cooldownTime>	240.0	</cooldownTime>
+      <tooltips>	cooldownTime radius duration-inspire increaseFactors/crewRolesFactor selfIncreaseFactors/crewRolesFactor inactivationDelay	</tooltips>
+      <cooldownTime>	170.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.15	</crewRolesFactor>
+      </increaseFactors>
+      <selfIncreaseFactors>
+        <crewRolesFactor>	1.2	</crewRolesFactor>
+      </selfIncreaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	10	</inactivationDelay>
+      <radius>	40	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_level3>
+  <inspire_8lvl_level1>
+    <id>	343	</id>
+    <userString>	#artefacts:inspire/name	</userString>
+    <description>	#artefacts:inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	eb_ability_inspire	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicInspire	  <shortDescription>	#artefacts:inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime radius duration-inspire increaseFactors/crewRolesFactor selfIncreaseFactors/crewRolesFactor inactivationDelay	</tooltips>
+      <cooldownTime>	230.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.1	</crewRolesFactor>
+      </increaseFactors>
+      <selfIncreaseFactors>
+        <crewRolesFactor>	1.15	</crewRolesFactor>
+      </selfIncreaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	10	</inactivationDelay>
+      <radius>	40	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_8lvl_level1>
+  <inspire_8lvl_level2>
+    <id>	344	</id>
+    <userString>	#artefacts:inspire/name	</userString>
+    <description>	#artefacts:inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	eb_ability_inspire	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicInspire	  <shortDescription>	#artefacts:inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime radius duration-inspire increaseFactors/crewRolesFactor selfIncreaseFactors/crewRolesFactor inactivationDelay	</tooltips>
+      <cooldownTime>	200.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
       <increaseFactors>
         <crewRolesFactor>	1.125	</crewRolesFactor>
       </increaseFactors>
-      <duration>	55	</duration>
+      <selfIncreaseFactors>
+        <crewRolesFactor>	1.175	</crewRolesFactor>
+      </selfIncreaseFactors>
+      <duration>	60	</duration>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
       <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
     </script>
-  </inspire_level3>
-  <inspire_level4>
-    <id>	167	</id>
+  </inspire_8lvl_level2>
+  <inspire_8lvl_level3>
+    <id>	345	</id>
     <userString>	#artefacts:inspire/name	</userString>
     <description>	#artefacts:inspire/shortDescr	</description>
     <icon>	inspire 0 0	</icon>
@@ -3423,7 +3788,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3431,63 +3796,27 @@
       <longDescription>	#artefacts:inspire/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime radius duration-inspire increaseFactors[crewRolesFactor] inactivationDelay	</tooltips>
-      <cooldownTime>	240.0	</cooldownTime>
+      <tooltips>	cooldownTime radius duration-inspire increaseFactors/crewRolesFactor selfIncreaseFactors/crewRolesFactor inactivationDelay	</tooltips>
+      <cooldownTime>	170.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
-      <consumeAmmo>	false	</consumeAmmo>
-      <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
-      <increaseFactors>
-        <crewRolesFactor>	1.14	</crewRolesFactor>
-      </increaseFactors>
-      <duration>	58	</duration>
-      <inactivationDelay>	10	</inactivationDelay>
-      <radius>	40	</radius>
-      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
-    </script>
-  </inspire_level4>
-  <inspire_level5>
-    <id>	168	</id>
-    <userString>	#artefacts:inspire/name	</userString>
-    <description>	#artefacts:inspire/shortDescr	</description>
-    <icon>	inspire 0 0	</icon>
-    <soundNotification>	eb_ability_inspire	</soundNotification>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger	</tags>
-    <type>	battleAbilities	</type>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EpicInspire	  <shortDescription>	#artefacts:inspire/shortDescr	</shortDescription>
-      <longDescription>	#artefacts:inspire/longDescr	</longDescription>
-      <shortFilterAlert></shortFilterAlert>
-      <longFilterAlert></longFilterAlert>
-      <tooltips>	cooldownTime radius duration-inspire increaseFactors[crewRolesFactor] inactivationDelay	</tooltips>
-      <cooldownTime>	240.0	</cooldownTime>
-      <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	15.0	</sharedCooldownTime>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
       <increaseFactors>
         <crewRolesFactor>	1.15	</crewRolesFactor>
       </increaseFactors>
+      <selfIncreaseFactors>
+        <crewRolesFactor>	1.2	</crewRolesFactor>
+      </selfIncreaseFactors>
       <duration>	60	</duration>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
       <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
     </script>
-  </inspire_level5>
+  </inspire_8lvl_level3>
   <passive_engineering_level1>
-    <id>	174	</id>
+    <id>	350	</id>
     <userString>	#artefacts:passive_engineering/name	</userString>
     <description>	#artefacts:passive_engineering/shortDescr	</description>
     <icon>	passive_engineering 0 0	</icon>
@@ -3500,7 +3829,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3508,17 +3837,16 @@
       <longDescription>	#artefacts:passive_engineering/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	resupplyCooldownFactor resupplyHealthPointsFactor captureSpeedFactor captureBlockBonusTime	</tooltips>
+      <tooltips>	resupplyCooldownFactor captureSpeedFactor captureBlockBonusTime resupplyShellsFactor	</tooltips>
       <captureStopping>	true	</captureStopping>
       <captureBlockBonusTime>	5	</captureBlockBonusTime>
       <captureSpeedFactor>	1.5	</captureSpeedFactor>
       <resupplyCooldownFactor>	0.7692	</resupplyCooldownFactor>
-      <resupplyHealthPointsFactor>	1.3	</resupplyHealthPointsFactor>
       <resupplyShellsFactor>	1.3	</resupplyShellsFactor>
     </script>
   </passive_engineering_level1>
   <passive_engineering_level2>
-    <id>	175	</id>
+    <id>	351	</id>
     <userString>	#artefacts:passive_engineering/name	</userString>
     <description>	#artefacts:passive_engineering/shortDescr	</description>
     <icon>	passive_engineering 0 0	</icon>
@@ -3531,7 +3859,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3539,17 +3867,16 @@
       <longDescription>	#artefacts:passive_engineering/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	resupplyCooldownFactor resupplyHealthPointsFactor captureSpeedFactor captureBlockBonusTime	</tooltips>
+      <tooltips>	resupplyCooldownFactor captureSpeedFactor captureBlockBonusTime resupplyShellsFactor	</tooltips>
       <captureStopping>	true	</captureStopping>
-      <captureBlockBonusTime>	5	</captureBlockBonusTime>
-      <captureSpeedFactor>	1.5	</captureSpeedFactor>
+      <captureBlockBonusTime>	7	</captureBlockBonusTime>
+      <captureSpeedFactor>	1.7	</captureSpeedFactor>
       <resupplyCooldownFactor>	0.7143	</resupplyCooldownFactor>
-      <resupplyHealthPointsFactor>	1.4	</resupplyHealthPointsFactor>
       <resupplyShellsFactor>	1.4	</resupplyShellsFactor>
     </script>
   </passive_engineering_level2>
   <passive_engineering_level3>
-    <id>	176	</id>
+    <id>	352	</id>
     <userString>	#artefacts:passive_engineering/name	</userString>
     <description>	#artefacts:passive_engineering/shortDescr	</description>
     <icon>	passive_engineering 0 0	</icon>
@@ -3562,7 +3889,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
+          <maxLevel>	9	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3570,77 +3897,992 @@
       <longDescription>	#artefacts:passive_engineering/longDescr	</longDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
-      <tooltips>	resupplyCooldownFactor resupplyHealthPointsFactor captureSpeedFactor captureBlockBonusTime	</tooltips>
-      <captureStopping>	true	</captureStopping>
-      <captureBlockBonusTime>	7	</captureBlockBonusTime>
-      <captureSpeedFactor>	1.7	</captureSpeedFactor>
-      <resupplyCooldownFactor>	0.7143	</resupplyCooldownFactor>
-      <resupplyHealthPointsFactor>	1.4	</resupplyHealthPointsFactor>
-      <resupplyShellsFactor>	1.4	</resupplyShellsFactor>
-    </script>
-  </passive_engineering_level3>
-  <passive_engineering_level4>
-    <id>	177	</id>
-    <userString>	#artefacts:passive_engineering/name	</userString>
-    <description>	#artefacts:passive_engineering/shortDescr	</description>
-    <icon>	passive_engineering 0 0	</icon>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar stimulator	</tags>
-    <type>	battleAbilities	</type>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EpicEngineering	  <shortDescription>	#artefacts:passive_engineering/shortDescr	</shortDescription>
-      <longDescription>	#artefacts:passive_engineering/longDescr	</longDescription>
-      <shortFilterAlert></shortFilterAlert>
-      <longFilterAlert></longFilterAlert>
-      <tooltips>	resupplyCooldownFactor resupplyHealthPointsFactor captureSpeedFactor captureBlockBonusTime	</tooltips>
-      <captureStopping>	true	</captureStopping>
-      <captureBlockBonusTime>	7	</captureBlockBonusTime>
-      <captureSpeedFactor>	1.7	</captureSpeedFactor>
-      <resupplyCooldownFactor>	0.6667	</resupplyCooldownFactor>
-      <resupplyHealthPointsFactor>	1.5	</resupplyHealthPointsFactor>
-      <resupplyShellsFactor>	1.5	</resupplyShellsFactor>
-    </script>
-  </passive_engineering_level4>
-  <passive_engineering_level5>
-    <id>	178	</id>
-    <userString>	#artefacts:passive_engineering/name	</userString>
-    <description>	#artefacts:passive_engineering/shortDescr	</description>
-    <icon>	passive_engineering 0 0	</icon>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar stimulator	</tags>
-    <type>	battleAbilities	</type>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	EpicEngineering	  <shortDescription>	#artefacts:passive_engineering/shortDescr	</shortDescription>
-      <longDescription>	#artefacts:passive_engineering/longDescr	</longDescription>
-      <shortFilterAlert></shortFilterAlert>
-      <longFilterAlert></longFilterAlert>
-      <tooltips>	resupplyCooldownFactor resupplyHealthPointsFactor captureSpeedFactor captureBlockBonusTime	</tooltips>
+      <tooltips>	resupplyCooldownFactor captureSpeedFactor captureBlockBonusTime resupplyShellsFactor	</tooltips>
       <captureStopping>	true	</captureStopping>
       <captureBlockBonusTime>	10	</captureBlockBonusTime>
       <captureSpeedFactor>	1.8	</captureSpeedFactor>
       <resupplyCooldownFactor>	0.6667	</resupplyCooldownFactor>
-      <resupplyHealthPointsFactor>	1.5	</resupplyHealthPointsFactor>
       <resupplyShellsFactor>	1.5	</resupplyShellsFactor>
     </script>
-  </passive_engineering_level5>
+  </passive_engineering_level3>
+  <passive_engineering_8lvl_level1>
+    <id>	353	</id>
+    <userString>	#artefacts:passive_engineering/name	</userString>
+    <description>	#artefacts:passive_engineering/shortDescr	</description>
+    <icon>	passive_engineering 0 0	</icon>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar stimulator	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicEngineering	  <shortDescription>	#artefacts:passive_engineering/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:passive_engineering/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	resupplyCooldownFactor captureSpeedFactor captureBlockBonusTime resupplyShellsFactor	</tooltips>
+      <captureStopping>	true	</captureStopping>
+      <captureBlockBonusTime>	5	</captureBlockBonusTime>
+      <captureSpeedFactor>	1.5	</captureSpeedFactor>
+      <resupplyCooldownFactor>	0.7692	</resupplyCooldownFactor>
+      <resupplyShellsFactor>	1.3	</resupplyShellsFactor>
+    </script>
+  </passive_engineering_8lvl_level1>
+  <passive_engineering_8lvl_level2>
+    <id>	354	</id>
+    <userString>	#artefacts:passive_engineering/name	</userString>
+    <description>	#artefacts:passive_engineering/shortDescr	</description>
+    <icon>	passive_engineering 0 0	</icon>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar stimulator	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicEngineering	  <shortDescription>	#artefacts:passive_engineering/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:passive_engineering/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	resupplyCooldownFactor captureSpeedFactor captureBlockBonusTime resupplyShellsFactor	</tooltips>
+      <captureStopping>	true	</captureStopping>
+      <captureBlockBonusTime>	7	</captureBlockBonusTime>
+      <captureSpeedFactor>	1.7	</captureSpeedFactor>
+      <resupplyCooldownFactor>	0.7143	</resupplyCooldownFactor>
+      <resupplyShellsFactor>	1.4	</resupplyShellsFactor>
+    </script>
+  </passive_engineering_8lvl_level2>
+  <passive_engineering_8lvl_level3>
+    <id>	355	</id>
+    <userString>	#artefacts:passive_engineering/name	</userString>
+    <description>	#artefacts:passive_engineering/shortDescr	</description>
+    <icon>	passive_engineering 0 0	</icon>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	8	</minLevel>
+          <maxLevel>	9	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EpicEngineering	  <shortDescription>	#artefacts:passive_engineering/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:passive_engineering/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	resupplyCooldownFactor captureSpeedFactor captureBlockBonusTime resupplyShellsFactor	</tooltips>
+      <captureStopping>	true	</captureStopping>
+      <captureBlockBonusTime>	10	</captureBlockBonusTime>
+      <captureSpeedFactor>	1.8	</captureSpeedFactor>
+      <resupplyCooldownFactor>	0.6667	</resupplyCooldownFactor>
+      <resupplyShellsFactor>	1.5	</resupplyShellsFactor>
+    </script>
+  </passive_engineering_8lvl_level3>
+  <arcade_minefield_epic_battle_level1>
+    <id>	360	</id>
+    <userString>	#artefacts:eb_minefield/name	</userString>
+    <description>	#artefacts:eb_minefield/descr	</description>
+    <icon>	arcade_minefield 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	FrontLineMinefield	  <shortDescription>	#artefacts:eb_minefield/short_descr	</shortDescription>
+      <longDescription>	#artefacts:eb_minefield/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime mineParams/lifetime bombsNumber-minefield mineParams/shell	</tooltips>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <deployTime>	0	</deployTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <cooldownTime>	240.0	</cooldownTime>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <bombsNumber>	13	</bombsNumber>
+      <bombsPattern>	-10 -10
+				-10 0
+				-10 10
+				-5 -5
+				-5 5
+				0 -10
+				0 0
+				0 10
+				5 -5
+				5 5
+				10 -10
+				10 0
+				10 10	</bombsPattern>
+      <mineParams>
+        <triggerRadius>	6	</triggerRadius>
+        <triggerHeight>	5	</triggerHeight>
+        <triggerDepth>	1	</triggerDepth>
+        <influenceType>	2	</influenceType>
+        <lifetime>	60	</lifetime>
+        <damage>	0	</damage>
+        <shellCompactDescr>	85786	</shellCompactDescr>
+        <shellCompactDescrLowDamage>	86042	</shellCompactDescrLowDamage>
+        <destroyMyMinesOverlappingAlliedMines>	True	</destroyMyMinesOverlappingAlliedMines>
+        <resistAllyDamage>	True	</resistAllyDamage>
+        <directDetectionTypes>	RECON STEALTH_RADAR	</directDetectionTypes>
+      </mineParams>
+      <noOwner>	false	</noOwner>
+      <areaVisual>	content/Interface/TargetPoint/TargetPointMineFieldAim_32x32.visual	</areaVisual>
+      <areaLength>	32	</areaLength>
+      <areaWidth>	32	</areaWidth>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	60	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+    </script>
+  </arcade_minefield_epic_battle_level1>
+  <arcade_minefield_epic_battle_level2>
+    <id>	361	</id>
+    <userString>	#artefacts:eb_minefield/name	</userString>
+    <description>	#artefacts:eb_minefield/descr	</description>
+    <icon>	arcade_minefield 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	FrontLineMinefield	  <shortDescription>	#artefacts:eb_minefield/short_descr	</shortDescription>
+      <longDescription>	#artefacts:eb_minefield/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime mineParams/lifetime bombsNumber-minefield mineParams/shell	</tooltips>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <deployTime>	0	</deployTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <cooldownTime>	220.0	</cooldownTime>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <bombsNumber>	18	</bombsNumber>
+      <bombsPattern>	-10 -15
+				-10 -5
+				-10 5
+				-10 15
+				-5 -10
+				-5 0
+				-5 10
+				0 -15
+				0 -5
+				0 5
+				0 15
+				5 -10
+				5 0
+				5 10
+				10 -15
+				10 -5
+				10 5
+				10 15	</bombsPattern>
+      <mineParams>
+        <triggerRadius>	6	</triggerRadius>
+        <triggerHeight>	5	</triggerHeight>
+        <triggerDepth>	1	</triggerDepth>
+        <influenceType>	2	</influenceType>
+        <lifetime>	65	</lifetime>
+        <damage>	0	</damage>
+        <shellCompactDescr>	86298	</shellCompactDescr>
+        <shellCompactDescrLowDamage>	86554	</shellCompactDescrLowDamage>
+        <destroyMyMinesOverlappingAlliedMines>	True	</destroyMyMinesOverlappingAlliedMines>
+        <resistAllyDamage>	True	</resistAllyDamage>
+        <directDetectionTypes>	RECON STEALTH_RADAR	</directDetectionTypes>
+      </mineParams>
+      <noOwner>	false	</noOwner>
+      <areaVisual>	content/Interface/TargetPoint/TargetPointMineFieldAim_32x42.visual	</areaVisual>
+      <areaLength>	32	</areaLength>
+      <areaWidth>	42	</areaWidth>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	60	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+    </script>
+  </arcade_minefield_epic_battle_level2>
+  <arcade_minefield_epic_battle_level3>
+    <id>	362	</id>
+    <userString>	#artefacts:eb_minefield/name	</userString>
+    <description>	#artefacts:eb_minefield/descr	</description>
+    <icon>	arcade_minefield 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	FrontLineMinefield	  <shortDescription>	#artefacts:eb_minefield/short_descr	</shortDescription>
+      <longDescription>	#artefacts:eb_minefield/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime mineParams/lifetime bombsNumber-minefield mineParams/shell	</tooltips>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <deployTime>	0	</deployTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <cooldownTime>	200.0	</cooldownTime>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <bombsNumber>	18	</bombsNumber>
+      <bombsPattern>	-10 -15
+				-10 -5
+				-10 5
+				-10 15
+				-5 -10
+				-5 0
+				-5 10
+				0 -15
+				0 -5
+				0 5
+				0 15
+				5 -10
+				5 0
+				5 10
+				10 -15
+				10 -5
+				10 5
+				10 15	</bombsPattern>
+      <mineParams>
+        <triggerRadius>	6	</triggerRadius>
+        <triggerHeight>	5	</triggerHeight>
+        <triggerDepth>	1	</triggerDepth>
+        <influenceType>	2	</influenceType>
+        <lifetime>	70	</lifetime>
+        <damage>	0	</damage>
+        <shellCompactDescr>	86810	</shellCompactDescr>
+        <shellCompactDescrLowDamage>	87066	</shellCompactDescrLowDamage>
+        <destroyMyMinesOverlappingAlliedMines>	True	</destroyMyMinesOverlappingAlliedMines>
+        <resistAllyDamage>	True	</resistAllyDamage>
+        <directDetectionTypes>	RECON STEALTH_RADAR	</directDetectionTypes>
+      </mineParams>
+      <noOwner>	false	</noOwner>
+      <areaVisual>	content/Interface/TargetPoint/TargetPointMineFieldAim_32x42.visual	</areaVisual>
+      <areaLength>	32	</areaLength>
+      <areaWidth>	42	</areaWidth>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	60	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+    </script>
+  </arcade_minefield_epic_battle_level3>
+  <arcade_minefield_epic_battle_8lvl_level1>
+    <id>	363	</id>
+    <userString>	#artefacts:eb_minefield/name	</userString>
+    <description>	#artefacts:eb_minefield/descr	</description>
+    <icon>	arcade_minefield 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	FrontLineMinefield	  <shortDescription>	#artefacts:eb_minefield/short_descr	</shortDescription>
+      <longDescription>	#artefacts:eb_minefield/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime mineParams/lifetime bombsNumber-minefield mineParams/shell	</tooltips>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <deployTime>	0	</deployTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <cooldownTime>	180.0	</cooldownTime>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <bombsNumber>	13	</bombsNumber>
+      <bombsPattern>	-10 -10
+				-10 0
+				-10 10
+				-5 -5
+				-5 5
+				0 -10
+				0 0
+				0 10
+				5 -5
+				5 5
+				10 -10
+				10 0
+				10 10	</bombsPattern>
+      <mineParams>
+        <triggerRadius>	6	</triggerRadius>
+        <triggerHeight>	5	</triggerHeight>
+        <triggerDepth>	1	</triggerDepth>
+        <influenceType>	2	</influenceType>
+        <lifetime>	60	</lifetime>
+        <damage>	0	</damage>
+        <shellCompactDescr>	87322	</shellCompactDescr>
+        <shellCompactDescrLowDamage>	87578	</shellCompactDescrLowDamage>
+        <destroyMyMinesOverlappingAlliedMines>	True	</destroyMyMinesOverlappingAlliedMines>
+        <resistAllyDamage>	True	</resistAllyDamage>
+        <directDetectionTypes>	RECON STEALTH_RADAR	</directDetectionTypes>
+      </mineParams>
+      <noOwner>	false	</noOwner>
+      <areaVisual>	content/Interface/TargetPoint/TargetPointMineFieldAim_32x32.visual	</areaVisual>
+      <areaLength>	32	</areaLength>
+      <areaWidth>	32	</areaWidth>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	60	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+    </script>
+  </arcade_minefield_epic_battle_8lvl_level1>
+  <arcade_minefield_epic_battle_8lvl_level2>
+    <id>	364	</id>
+    <userString>	#artefacts:eb_minefield/name	</userString>
+    <description>	#artefacts:eb_minefield/descr	</description>
+    <icon>	arcade_minefield 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	FrontLineMinefield	  <shortDescription>	#artefacts:eb_minefield/short_descr	</shortDescription>
+      <longDescription>	#artefacts:eb_minefield/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime mineParams/lifetime bombsNumber-minefield mineParams/shell	</tooltips>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <deployTime>	0	</deployTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <cooldownTime>	160.0	</cooldownTime>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <bombsNumber>	18	</bombsNumber>
+      <bombsPattern>	-10 -15
+				-10 -5
+				-10 5
+				-10 15
+				-5 -10
+				-5 0
+				-5 10
+				0 -15
+				0 -5
+				0 5
+				0 15
+				5 -10
+				5 0
+				5 10
+				10 -15
+				10 -5
+				10 5
+				10 15	</bombsPattern>
+      <mineParams>
+        <triggerRadius>	6	</triggerRadius>
+        <triggerHeight>	5	</triggerHeight>
+        <triggerDepth>	1	</triggerDepth>
+        <influenceType>	2	</influenceType>
+        <lifetime>	65	</lifetime>
+        <damage>	0	</damage>
+        <shellCompactDescr>	87834	</shellCompactDescr>
+        <shellCompactDescrLowDamage>	88090	</shellCompactDescrLowDamage>
+        <destroyMyMinesOverlappingAlliedMines>	True	</destroyMyMinesOverlappingAlliedMines>
+        <resistAllyDamage>	True	</resistAllyDamage>
+        <directDetectionTypes>	RECON STEALTH_RADAR	</directDetectionTypes>
+      </mineParams>
+      <noOwner>	false	</noOwner>
+      <areaVisual>	content/Interface/TargetPoint/TargetPointMineFieldAim_32x42.visual	</areaVisual>
+      <areaLength>	32	</areaLength>
+      <areaWidth>	42	</areaWidth>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	60	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+    </script>
+  </arcade_minefield_epic_battle_8lvl_level2>
+  <arcade_minefield_epic_battle_8lvl_level3>
+    <id>	365	</id>
+    <userString>	#artefacts:eb_minefield/name	</userString>
+    <description>	#artefacts:eb_minefield/descr	</description>
+    <icon>	arcade_minefield 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	FrontLineMinefield	  <shortDescription>	#artefacts:eb_minefield/short_descr	</shortDescription>
+      <longDescription>	#artefacts:eb_minefield/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime mineParams/lifetime bombsNumber-minefield mineParams/shell	</tooltips>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <deployTime>	0	</deployTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <cooldownTime>	140.0	</cooldownTime>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <bombsNumber>	18	</bombsNumber>
+      <bombsPattern>	-10 -15
+				-10 -5
+				-10 5
+				-10 15
+				-5 -10
+				-5 0
+				-5 10
+				0 -15
+				0 -5
+				0 5
+				0 15
+				5 -10
+				5 0
+				5 10
+				10 -15
+				10 -5
+				10 5
+				10 15	</bombsPattern>
+      <mineParams>
+        <triggerRadius>	6	</triggerRadius>
+        <triggerHeight>	5	</triggerHeight>
+        <triggerDepth>	1	</triggerDepth>
+        <influenceType>	2	</influenceType>
+        <lifetime>	70	</lifetime>
+        <damage>	0	</damage>
+        <shellCompactDescr>	88346	</shellCompactDescr>
+        <shellCompactDescrLowDamage>	88602	</shellCompactDescrLowDamage>
+        <destroyMyMinesOverlappingAlliedMines>	True	</destroyMyMinesOverlappingAlliedMines>
+        <resistAllyDamage>	True	</resistAllyDamage>
+        <directDetectionTypes>	RECON STEALTH_RADAR	</directDetectionTypes>
+      </mineParams>
+      <noOwner>	false	</noOwner>
+      <areaVisual>	content/Interface/TargetPoint/TargetPointMineFieldAim_32x42.visual	</areaVisual>
+      <areaLength>	32	</areaLength>
+      <areaWidth>	42	</areaWidth>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	60	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+    </script>
+  </arcade_minefield_epic_battle_8lvl_level3>
+  <fl_regenerationKit_level1>
+    <id>	370	</id>
+    <userString>	#artefacts:eb_regenerationKit/name	</userString>
+    <description>	#artefacts:eb_regenerationKit/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:eb_regenerationKit/short_descr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:eb_regenerationKit/long_descr	</longDescriptionSpecial>
+    <icon>	regenerationKit 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FLRegenerationKit	  <healthRegenPerTick>	0.05	</healthRegenPerTick>
+      <initialHeal>	0.1	</initialHeal>
+      <healTime>	5	</healTime>
+      <cooldownTime>	240	</cooldownTime>
+      <deployTime>	0	</deployTime>
+      <healGroup>	2	</healGroup>
+      <tickInterval>	1	</tickInterval>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <tooltips>	cooldownTime healTime healthRegenPerTick initialHeal resupplyHealthPointsFactor #epic_battle:abilityInfo/params/fl_regenerationKit/minesDamageReduceFactor/value	</tooltips>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <expireByDamageReceived>	false	</expireByDamageReceived>
+      <resupplyHealthPointsFactor>	1.3	</resupplyHealthPointsFactor>
+      <shortDescription>	#artefacts:eb_regenerationKit/short_descr	</shortDescription>
+      <longDescription>	#artefacts:eb_regenerationKit/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+    </script>
+  </fl_regenerationKit_level1>
+  <fl_regenerationKit_level2>
+    <id>	371	</id>
+    <userString>	#artefacts:eb_regenerationKit/name	</userString>
+    <description>	#artefacts:eb_regenerationKit/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:eb_regenerationKit/short_descr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:eb_regenerationKit/long_descr	</longDescriptionSpecial>
+    <icon>	regenerationKit 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FLRegenerationKit	  <healthRegenPerTick>	0.05	</healthRegenPerTick>
+      <initialHeal>	0.1	</initialHeal>
+      <healTime>	6	</healTime>
+      <cooldownTime>	210	</cooldownTime>
+      <deployTime>	0	</deployTime>
+      <healGroup>	2	</healGroup>
+      <tickInterval>	1	</tickInterval>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <tooltips>	cooldownTime healTime healthRegenPerTick initialHeal resupplyHealthPointsFactor #epic_battle:abilityInfo/params/fl_regenerationKit/minesDamageReduceFactor/value	</tooltips>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <expireByDamageReceived>	false	</expireByDamageReceived>
+      <resupplyHealthPointsFactor>	1.4	</resupplyHealthPointsFactor>
+      <shortDescription>	#artefacts:eb_regenerationKit/short_descr	</shortDescription>
+      <longDescription>	#artefacts:eb_regenerationKit/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+    </script>
+  </fl_regenerationKit_level2>
+  <fl_regenerationKit_level3>
+    <id>	372	</id>
+    <userString>	#artefacts:eb_regenerationKit/name	</userString>
+    <description>	#artefacts:eb_regenerationKit/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:eb_regenerationKit/short_descr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:eb_regenerationKit/long_descr	</longDescriptionSpecial>
+    <icon>	regenerationKit 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FLRegenerationKit	  <healthRegenPerTick>	0.05	</healthRegenPerTick>
+      <initialHeal>	0.1	</initialHeal>
+      <healTime>	7	</healTime>
+      <cooldownTime>	180	</cooldownTime>
+      <deployTime>	0	</deployTime>
+      <healGroup>	2	</healGroup>
+      <tickInterval>	1	</tickInterval>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <tooltips>	cooldownTime healTime healthRegenPerTick initialHeal resupplyHealthPointsFactor #epic_battle:abilityInfo/params/fl_regenerationKit/minesDamageReduceFactor/value	</tooltips>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <expireByDamageReceived>	false	</expireByDamageReceived>
+      <resupplyHealthPointsFactor>	1.5	</resupplyHealthPointsFactor>
+      <shortDescription>	#artefacts:eb_regenerationKit/short_descr	</shortDescription>
+      <longDescription>	#artefacts:eb_regenerationKit/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+    </script>
+  </fl_regenerationKit_level3>
+  <fl_regenerationKit_8lvl_level1>
+    <id>	373	</id>
+    <userString>	#artefacts:eb_regenerationKit/name	</userString>
+    <description>	#artefacts:eb_regenerationKit/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:eb_regenerationKit/short_descr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:eb_regenerationKit/long_descr	</longDescriptionSpecial>
+    <icon>	regenerationKit 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FLRegenerationKit	  <healthRegenPerTick>	0.05	</healthRegenPerTick>
+      <initialHeal>	0.1	</initialHeal>
+      <healTime>	5	</healTime>
+      <cooldownTime>	240	</cooldownTime>
+      <deployTime>	0	</deployTime>
+      <healGroup>	2	</healGroup>
+      <tickInterval>	1	</tickInterval>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <tooltips>	cooldownTime healTime healthRegenPerTick initialHeal resupplyHealthPointsFactor #epic_battle:abilityInfo/params/fl_regenerationKit/minesDamageReduceFactor/value	</tooltips>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <expireByDamageReceived>	false	</expireByDamageReceived>
+      <resupplyHealthPointsFactor>	1.3	</resupplyHealthPointsFactor>
+      <shortDescription>	#artefacts:eb_regenerationKit/short_descr	</shortDescription>
+      <longDescription>	#artefacts:eb_regenerationKit/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+    </script>
+  </fl_regenerationKit_8lvl_level1>
+  <fl_regenerationKit_8lvl_level2>
+    <id>	374	</id>
+    <userString>	#artefacts:eb_regenerationKit/name	</userString>
+    <description>	#artefacts:eb_regenerationKit/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:eb_regenerationKit/short_descr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:eb_regenerationKit/long_descr	</longDescriptionSpecial>
+    <icon>	regenerationKit 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FLRegenerationKit	  <healthRegenPerTick>	0.05	</healthRegenPerTick>
+      <initialHeal>	0.1	</initialHeal>
+      <healTime>	6	</healTime>
+      <cooldownTime>	210	</cooldownTime>
+      <deployTime>	0	</deployTime>
+      <healGroup>	2	</healGroup>
+      <tickInterval>	1	</tickInterval>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <tooltips>	cooldownTime healTime healthRegenPerTick initialHeal resupplyHealthPointsFactor #epic_battle:abilityInfo/params/fl_regenerationKit/minesDamageReduceFactor/value	</tooltips>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <expireByDamageReceived>	false	</expireByDamageReceived>
+      <resupplyHealthPointsFactor>	1.4	</resupplyHealthPointsFactor>
+      <shortDescription>	#artefacts:eb_regenerationKit/short_descr	</shortDescription>
+      <longDescription>	#artefacts:eb_regenerationKit/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+    </script>
+  </fl_regenerationKit_8lvl_level2>
+  <fl_regenerationKit_8lvl_level3>
+    <id>	375	</id>
+    <userString>	#artefacts:eb_regenerationKit/name	</userString>
+    <description>	#artefacts:eb_regenerationKit/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:eb_regenerationKit/short_descr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:eb_regenerationKit/long_descr	</longDescriptionSpecial>
+    <icon>	regenerationKit 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FLRegenerationKit	  <healthRegenPerTick>	0.05	</healthRegenPerTick>
+      <initialHeal>	0.1	</initialHeal>
+      <healTime>	7	</healTime>
+      <cooldownTime>	180	</cooldownTime>
+      <deployTime>	0	</deployTime>
+      <healGroup>	2	</healGroup>
+      <tickInterval>	1	</tickInterval>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <tooltips>	cooldownTime healTime healthRegenPerTick initialHeal resupplyHealthPointsFactor #epic_battle:abilityInfo/params/fl_regenerationKit/minesDamageReduceFactor/value	</tooltips>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <expireByDamageReceived>	false	</expireByDamageReceived>
+      <resupplyHealthPointsFactor>	1.5	</resupplyHealthPointsFactor>
+      <shortDescription>	#artefacts:eb_regenerationKit/short_descr	</shortDescription>
+      <longDescription>	#artefacts:eb_regenerationKit/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+    </script>
+  </fl_regenerationKit_8lvl_level3>
+  <stealth_radar_level1>
+    <id>	380	</id>
+    <userString>	#artefacts:stealthRadar/name	</userString>
+    <description>	#artefacts:stealthRadar/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:stealthRadar/short_descr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:stealthRadar/long_descr	</longDescriptionSpecial>
+    <icon>	stealthRadar 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FLAvatarStealthRadar	  <passiveCircularVisionRadius>	15	</passiveCircularVisionRadius>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <delay>	0.0	</delay>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	140.0	</cooldownTime>
+      <duration>	45	</duration>
+      <inactivationDelay>	3.0	</inactivationDelay>
+      <radius>	250.0	</radius>
+      <minesDetectionTime>	0.0	</minesDetectionTime>
+      <increaseFactors>
+        <demaskMovingFactor>	1.2	</demaskMovingFactor>
+        <demaskFoliageFactor>	1.25	</demaskFoliageFactor>
+      </increaseFactors>
+      <overridableFactors>
+        <invisibility>	0.15	</invisibility>
+      </overridableFactors>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <tooltips>	cooldownTime duration-stealth_radar overridableFactors/invisibility increaseFactors/demaskMovingFactor increaseFactors/demaskFoliageFactor passiveCircularVisionRadius inactivationDelay	</tooltips>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <shortDescription>	#artefacts:stealthRadar/short_descr	</shortDescription>
+      <longDescription>	#artefacts:stealthRadar/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+    </script>
+  </stealth_radar_level1>
+  <stealth_radar_level2>
+    <id>	381	</id>
+    <userString>	#artefacts:stealthRadar/name	</userString>
+    <description>	#artefacts:stealthRadar/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:stealthRadar/short_descr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:stealthRadar/long_descr	</longDescriptionSpecial>
+    <icon>	stealthRadar 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FLAvatarStealthRadar	  <passiveCircularVisionRadius>	15	</passiveCircularVisionRadius>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <delay>	0.0	</delay>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	120.0	</cooldownTime>
+      <duration>	45	</duration>
+      <inactivationDelay>	3.0	</inactivationDelay>
+      <radius>	250.0	</radius>
+      <minesDetectionTime>	0.0	</minesDetectionTime>
+      <increaseFactors>
+        <demaskMovingFactor>	1.2	</demaskMovingFactor>
+        <demaskFoliageFactor>	1.27	</demaskFoliageFactor>
+      </increaseFactors>
+      <overridableFactors>
+        <invisibility>	0.15	</invisibility>
+      </overridableFactors>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <tooltips>	cooldownTime duration-stealth_radar overridableFactors/invisibility increaseFactors/demaskMovingFactor increaseFactors/demaskFoliageFactor passiveCircularVisionRadius inactivationDelay	</tooltips>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <shortDescription>	#artefacts:stealthRadar/short_descr	</shortDescription>
+      <longDescription>	#artefacts:stealthRadar/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+    </script>
+  </stealth_radar_level2>
+  <stealth_radar_level3>
+    <id>	382	</id>
+    <userString>	#artefacts:stealthRadar/name	</userString>
+    <description>	#artefacts:stealthRadar/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:stealthRadar/short_descr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:stealthRadar/long_descr	</longDescriptionSpecial>
+    <icon>	stealthRadar 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FLAvatarStealthRadar	  <passiveCircularVisionRadius>	15	</passiveCircularVisionRadius>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <delay>	0.0	</delay>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	100.0	</cooldownTime>
+      <duration>	45	</duration>
+      <inactivationDelay>	3.0	</inactivationDelay>
+      <radius>	250.0	</radius>
+      <increaseFactors>
+        <demaskMovingFactor>	1.2	</demaskMovingFactor>
+        <demaskFoliageFactor>	1.3	</demaskFoliageFactor>
+      </increaseFactors>
+      <overridableFactors>
+        <invisibility>	0.15	</invisibility>
+      </overridableFactors>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <tooltips>	cooldownTime duration-stealth_radar overridableFactors/invisibility increaseFactors/demaskMovingFactor increaseFactors/demaskFoliageFactor passiveCircularVisionRadius inactivationDelay	</tooltips>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <shortDescription>	#artefacts:stealthRadar/short_descr	</shortDescription>
+      <longDescription>	#artefacts:stealthRadar/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+    </script>
+  </stealth_radar_level3>
+  <stealth_radar_8lvl_level1>
+    <id>	383	</id>
+    <userString>	#artefacts:stealthRadar/name	</userString>
+    <description>	#artefacts:stealthRadar/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:stealthRadar/short_descr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:stealthRadar/long_descr	</longDescriptionSpecial>
+    <icon>	stealthRadar 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FLAvatarStealthRadar	  <passiveCircularVisionRadius>	15	</passiveCircularVisionRadius>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <delay>	0.0	</delay>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	140.0	</cooldownTime>
+      <duration>	45	</duration>
+      <inactivationDelay>	3.0	</inactivationDelay>
+      <radius>	250.0	</radius>
+      <minesDetectionTime>	0.0	</minesDetectionTime>
+      <increaseFactors>
+        <demaskMovingFactor>	1.2	</demaskMovingFactor>
+        <demaskFoliageFactor>	1.25	</demaskFoliageFactor>
+      </increaseFactors>
+      <overridableFactors>
+        <invisibility>	0.15	</invisibility>
+      </overridableFactors>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <tooltips>	cooldownTime duration-stealth_radar overridableFactors/invisibility increaseFactors/demaskMovingFactor increaseFactors/demaskFoliageFactor passiveCircularVisionRadius inactivationDelay	</tooltips>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <shortDescription>	#artefacts:stealthRadar/short_descr	</shortDescription>
+      <longDescription>	#artefacts:stealthRadar/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+    </script>
+  </stealth_radar_8lvl_level1>
+  <stealth_radar_8lvl_level2>
+    <id>	384	</id>
+    <userString>	#artefacts:stealthRadar/name	</userString>
+    <description>	#artefacts:stealthRadar/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:stealthRadar/short_descr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:stealthRadar/long_descr	</longDescriptionSpecial>
+    <icon>	stealthRadar 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FLAvatarStealthRadar	  <passiveCircularVisionRadius>	15	</passiveCircularVisionRadius>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <delay>	0.0	</delay>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	120.0	</cooldownTime>
+      <duration>	45	</duration>
+      <inactivationDelay>	3.0	</inactivationDelay>
+      <radius>	250.0	</radius>
+      <minesDetectionTime>	0.0	</minesDetectionTime>
+      <increaseFactors>
+        <demaskMovingFactor>	1.2	</demaskMovingFactor>
+        <demaskFoliageFactor>	1.27	</demaskFoliageFactor>
+      </increaseFactors>
+      <overridableFactors>
+        <invisibility>	0.15	</invisibility>
+      </overridableFactors>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <tooltips>	cooldownTime duration-stealth_radar overridableFactors/invisibility increaseFactors/demaskMovingFactor increaseFactors/demaskFoliageFactor passiveCircularVisionRadius inactivationDelay	</tooltips>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <shortDescription>	#artefacts:stealthRadar/short_descr	</shortDescription>
+      <longDescription>	#artefacts:stealthRadar/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+    </script>
+  </stealth_radar_8lvl_level2>
+  <stealth_radar_8lvl_level3>
+    <id>	385	</id>
+    <userString>	#artefacts:stealthRadar/name	</userString>
+    <description>	#artefacts:stealthRadar/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:stealthRadar/short_descr	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:stealthRadar/long_descr	</longDescriptionSpecial>
+    <icon>	stealthRadar 0 0	</icon>
+    <soundNotification>	eb_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FLAvatarStealthRadar	  <passiveCircularVisionRadius>	15	</passiveCircularVisionRadius>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <delay>	0.0	</delay>
+      <deployTime>	0.0	</deployTime>
+      <cooldownTime>	100.0	</cooldownTime>
+      <duration>	45	</duration>
+      <inactivationDelay>	3.0	</inactivationDelay>
+      <radius>	250.0	</radius>
+      <increaseFactors>
+        <demaskMovingFactor>	1.2	</demaskMovingFactor>
+        <demaskFoliageFactor>	1.3	</demaskFoliageFactor>
+      </increaseFactors>
+      <overridableFactors>
+        <invisibility>	0.15	</invisibility>
+      </overridableFactors>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <tooltips>	cooldownTime duration-stealth_radar overridableFactors/invisibility increaseFactors/demaskMovingFactor increaseFactors/demaskFoliageFactor passiveCircularVisionRadius inactivationDelay	</tooltips>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <shortDescription>	#artefacts:stealthRadar/short_descr	</shortDescription>
+      <longDescription>	#artefacts:stealthRadar/long_descr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+    </script>
+  </stealth_radar_8lvl_level3>
   <builtinRepairkit>
     <id>	180	</id>
     <userString>	#artefacts:builtinRepairkit/name	</userString>
@@ -4147,7 +5389,8 @@
       <minDelay>	1.0	</minDelay>
       <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
       <smokeModelName>	objects/misc/server_smoke/cylinder1.model	</smokeModelName>
-      <smokeEffectName>	SmokeScreenEffect_gray	</smokeEffectName>
+      <smokeEffectNameAlly>	SmokeScreenEffect_gray	</smokeEffectNameAlly>
+      <smokeEffectNameEnemy>	SmokeScreenEffect_gray	</smokeEffectNameEnemy>
       <startRadius>	5.	</startRadius>
       <expandedRadius>	25.	</expandedRadius>
       <startHeight>	10.	</startHeight>
@@ -4207,7 +5450,8 @@
       <minDelay>	1.0	</minDelay>
       <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
       <smokeModelName>	objects/misc/server_smoke/cylinder1.model	</smokeModelName>
-      <smokeEffectName>	SmokeScreenEffect_red	</smokeEffectName>
+      <smokeEffectNameAlly>	SmokeScreenEffect_red	</smokeEffectNameAlly>
+      <smokeEffectNameEnemy>	SmokeScreenEffect_red	</smokeEffectNameEnemy>
       <startRadius>	5.	</startRadius>
       <expandedRadius>	25.	</expandedRadius>
       <startHeight>	10.	</startHeight>

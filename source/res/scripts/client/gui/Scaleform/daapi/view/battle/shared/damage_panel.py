@@ -399,8 +399,13 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
                 self.__isAutoRotationOff = flag != AUTO_ROTATION_FLAG.TURN_ON
                 self.__isAutoRotationShown = True
         self.__isWheeledTech = vehicle.isWheeledTech
-        self.__maxHealth = vehicle.maxHealth
-        health = vehicle.health
+        prebattleVehicle = self.sessionProvider.shared.prebattleSetups.getPrebattleSetupsVehicle()
+        if prebattleVehicle is not None:
+            self.__maxHealth = prebattleVehicle.descriptor.maxHealth
+            health = self.__maxHealth
+        else:
+            self.__maxHealth = vehicle.maxHealth
+            health = vehicle.health
         healthStr = formatHealthProgress(health, self.__maxHealth)
         healthProgress = normalizeHealthPercent(health, self.__maxHealth)
         self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, not self.__isAutoRotationOff)

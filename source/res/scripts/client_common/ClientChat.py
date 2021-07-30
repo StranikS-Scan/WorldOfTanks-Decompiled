@@ -95,9 +95,9 @@ class ClientChat(object):
         if CHAT_RESPONSES[chatActionData['actionResponse']] != CHAT_RESPONSES.success:
             self.onChatActionFailure(chatActionData)
         else:
-            hanlerName = self.__actionHandlers.get(chatActionData['action'], None)
-            if hanlerName:
-                getattr(self, hanlerName)(chatActionData)
+            handlerName = self.__actionHandlers.get(chatActionData['action'], None)
+            if handlerName:
+                getattr(self, handlerName)(chatActionData)
             chId = chatActionData['channel']
             commonCallbacks = self.__getChatActionCallbacks(CHAT_ACTIONS[chatActionData['action']], 0)
             commonCallbacks(chatActionData)

@@ -63,7 +63,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.sounds import ISoundsController
 from gui import makeHtmlString
-from skeletons.gui.game_control import ISpecialSoundCtrl, IAnonymizerController
+from skeletons.gui.game_control import ISpecialSoundCtrl, IAnonymizerController, IVehiclePostProgressionController
 if TYPE_CHECKING:
     from typing import Tuple as TTuple
 _logger = logging.getLogger(__name__)
@@ -2896,3 +2896,31 @@ class QuestsProgressDisplayType(GroupSetting):
 
     def getDefaultValue(self):
         return self.SHOW_ALL
+
+
+class SwitchSetupsInLoadingSetting(AccountSetting):
+    _PackStructure = namedtuple('SwitchSetupsInLoadingSettingData', 'current options extraData')
+    _ENABLED_BY_DEFAULT = ('LOW', 'MIN')
+    __postProgressionCtrl = dependency.descriptor(IVehiclePostProgressionController)
+
+    def pack(self):
+        return self._PackStructure(self._get(), self._getOptions(), self.getExtraData())._asdict()
+
+    def getExtraData(self):
+        return {'enabled': self.__postProgressionCtrl.isSwitchSetupFeatureEnabled()}
+
+    def _get(self):
+        settingValue = super(SwitchSetupsInLoadingSetting, self)._get()
+        return self.__detectDefaultValue() if settingValue is None else settingValue
+
+    def getDefaultValue(self):
+        settingValue = super(SwitchSetupsInLoadingSetting, self).getDefaultValue()
+        return self.__detectDefaultValue(False) if settingValue is None else settingValue
+
+    def __detectDefaultValue(self, write=True):
+        presetIndx = BigWorld.detectGraphicsPresetFromSystemSettings()
+        enabledPresets = [ BigWorld.getSystemPerformancePresetIdFromName(pName) for pName in self._ENABLED_BY_DEFAULT ]
+        enabledByDefault = presetIndx in enabledPresets
+        if write:
+            AccountSettings.setSettings(self.key, enabledByDefault)
+        return enabledByDefault

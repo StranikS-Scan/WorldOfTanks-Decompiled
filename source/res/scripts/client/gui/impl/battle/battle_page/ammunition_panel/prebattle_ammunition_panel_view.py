@@ -62,6 +62,13 @@ class PrebattleAmmunitionPanelView(ViewImpl):
         self.__ammunitionPanel.update(self.__vehicle, fullUpdate=fullUpdate)
         self.__ammunitionPanel.viewModel.setAmmoNotFull(not self.__vehicle.isAmmoFull)
 
+    def updateState(self, state):
+        self.viewModel.setState(state)
+        self.__ammunitionPanel.onStateChanged(state)
+
+    def setTimer(self, timeLeft):
+        self.viewModel.setTimeTillBattleStart(timeLeft)
+
     def _initialize(self, *args, **kwargs):
         super(PrebattleAmmunitionPanelView, self)._initialize()
         self.__addListeners()
@@ -72,11 +79,12 @@ class PrebattleAmmunitionPanelView(ViewImpl):
         self.__ammunitionPanel.finalize()
         super(PrebattleAmmunitionPanelView, self)._finalize()
 
-    def _onLoading(self, currShellCD, nextShellCD, *args, **kwargs):
+    def _onLoading(self, currShellCD, nextShellCD, state, *args, **kwargs):
         super(PrebattleAmmunitionPanelView, self)._onLoading(*args, **kwargs)
-        self.__ammunitionPanel = PrebattleAmmunitionPanel(self.viewModel.ammunitionPanel, self.__vehicle)
+        self.__ammunitionPanel = PrebattleAmmunitionPanel(self.viewModel.ammunitionPanel, self.__vehicle, ctx={'state': state})
         self.__ammunitionPanel.onLoading()
         self.updateViewVehicle(self.__vehicle, fullUpdate=False)
+        self.viewModel.setState(state)
         self.setCurrentShellCD(currShellCD)
         self.setNextShellCD(nextShellCD)
 

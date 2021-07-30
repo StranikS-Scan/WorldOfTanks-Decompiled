@@ -1895,6 +1895,9 @@ class IVehiclePostProgressionController(IGameController):
     def isExistsFor(self, vehType, settings=None):
         raise NotImplementedError
 
+    def isSwitchSetupFeatureEnabled(self):
+        raise NotImplementedError
+
     def getSettings(self):
         raise NotImplementedError
 

@@ -20,6 +20,9 @@ class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
     def getOnPanelSectionSelected(self):
         return self.getInjectView().onPanelSectionSelected
 
+    def getOnEscKeyDown(self):
+        return self.getInjectView().onEscKeyDown
+
     def onHangarSwitchAnimComplete(self, isComplete):
         self.getInjectView().setHangarSwitchAnimState(isComplete)
 

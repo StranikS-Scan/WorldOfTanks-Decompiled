@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import
 class PrebattleAmmunitionPanel(BaseAmmunitionPanel):
 
     def _createAmmunitionGroupsController(self, vehicle):
-        return PrebattleAmmunitionGroupsController(vehicle)
+        return PrebattleAmmunitionGroupsController(vehicle, ctx=self._ctx)
 
     def onNextShellChanged(self, intCD):
         self._controller.onNextShellChanged(intCD)
@@ -15,6 +15,10 @@ class PrebattleAmmunitionPanel(BaseAmmunitionPanel):
 
     def onCurrentShellChanged(self, intCD):
         self._controller.onCurrentShellChanged(intCD)
+        self.updateSection(TankSetupConstants.SHELLS)
+
+    def onStateChanged(self, state):
+        self._controller.onStateChanged(state)
         self.updateSection(TankSetupConstants.SHELLS)
 
 

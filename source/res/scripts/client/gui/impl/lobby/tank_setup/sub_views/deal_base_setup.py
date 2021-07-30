@@ -28,8 +28,11 @@ class DealBaseSetupSubView(BaseSetupSubView):
                 raise AsyncReturn(False)
             isOK, data = dialogResult.result
             if isOK:
-                yield await_callback(self._onConfirm)(skipDialog=True)
-                playSound(TankSetupSoundEvents.ACCEPT)
+                isOK = yield await_callback(self._onConfirm)(skipDialog=True)
+                if isOK:
+                    playSound(TankSetupSoundEvents.ACCEPT)
+                else:
+                    self._interactor.revert()
             elif data.get('rollBack', False):
                 self._interactor.revert()
             else:

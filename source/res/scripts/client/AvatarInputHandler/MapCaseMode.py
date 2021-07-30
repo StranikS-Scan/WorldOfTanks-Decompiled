@@ -477,6 +477,10 @@ class _ArcadeFLMinesSelector(_ArcadeBomberStrikeSelector, _FLMinesSensor):
         _FLMinesSensor.__init__(self, self.__minesIntersected)
         self.__checkIntersectMines()
 
+    def destroy(self):
+        _ArcadeBomberStrikeSelector.destroy(self)
+        _FLMinesSensor.destroy(self)
+
     def processSelection(self, position, reset=False):
         if not reset and self.isIntersectMine():
             SoundGroups.g_instance.playSound2D(EPIC_SOUND.EB_ABILITY_MINEFIELD_BLOCK)

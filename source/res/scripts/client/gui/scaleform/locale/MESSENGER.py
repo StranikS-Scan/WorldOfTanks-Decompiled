@@ -475,6 +475,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_PURCHASE_TITLE_STEAM_INVENTORY = '#messenger:serviceChannelMessages/invoiceReceived/purchase/title/steam_inventory'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_PURCHASE_RECEIVED_FROM = '#messenger:serviceChannelMessages/invoiceReceived/purchase/received_from'
     SERVICECHANNELMESSAGES_QUOTEDTEXTTEMPLATE = '#messenger:serviceChannelMessages/quotedTextTemplate'
+    SERVICECHANNELMESSAGES_OFFERTOKENBONUS_TITLE = '#messenger:serviceChannelMessages/offerTokenBonus/title'
     SERVICECHANNELMESSAGES_DURATIONOFPREMIUMACCOUNTEXPIRES = '#messenger:serviceChannelMessages/durationOfPremiumAccountExpires'
     SERVICECHANNELMESSAGES_PREMIUMBOUGHT = '#messenger:serviceChannelMessages/premiumBought'
     SERVICECHANNELMESSAGES_PREMIUMEXTENDED = '#messenger:serviceChannelMessages/premiumExtended'

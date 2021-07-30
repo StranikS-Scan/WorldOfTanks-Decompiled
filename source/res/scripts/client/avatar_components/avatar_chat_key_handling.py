@@ -159,11 +159,8 @@ class AvatarChatKeyHandling(object):
         if vehicle is None:
             position = BigWorld.player().arena.positions.get(vehicleID)
             if position is not None:
-                playerVehicle = BigWorld.player().vehicle
-                if playerVehicle is None:
-                    return
                 maxDistance = 600.0
-                playerVehiclePosition = playerVehicle.position
+                playerVehiclePosition = BigWorld.player().getOwnVehiclePosition()
                 if Vector3(position).distSqrTo(playerVehiclePosition) > maxDistance * maxDistance:
                     direction = position - playerVehiclePosition
                     direction.normalise()

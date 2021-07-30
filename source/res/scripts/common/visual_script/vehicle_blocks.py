@@ -57,9 +57,10 @@ class VehicleClass(Block, VehicleMeta):
         self._className = self._makeDataOutputSlot('className', SLOT_TYPE.STR, self._getClassName)
 
     def _getClassName(self):
-        className = vehicles.getVehicleClass(self._vehicle.getValue().typeDescriptor.type.compactDescr)
+        className = ''
+        if self._vehicle.hasValue() and self._vehicle.getValue() is not None:
+            className = vehicles.getVehicleClass(self._vehicle.getValue().typeDescriptor.type.compactDescr)
         if className is None:
             errorVScript(self, 'Unknown vehicle className')
-            className = ''
         self._className.setValue(className)
         return

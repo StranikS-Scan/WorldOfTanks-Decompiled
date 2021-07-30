@@ -879,6 +879,9 @@ class INGAME_GUI(object):
     LEVELPROGRESS_MAXLEVEL = '#ingame_gui:levelProgress/maxLevel'
     PREBATTLEAMMUNITIONPANEL_HEADER = '#ingame_gui:prebattleAmmunitionPanel/header'
     PREBATTLEAMMUNITIONPANEL_FOOTER = '#ingame_gui:prebattleAmmunitionPanel/footer'
+    PREBATTLEAMMUNITIONPANEL_WAITINFORPLAYERS = '#ingame_gui:prebattleAmmunitionPanel/waitinForPlayers'
+    PREBATTLEAMMUNITIONPANEL_LOADINGTIMER = '#ingame_gui:prebattleAmmunitionPanel/loadingTimer'
+    PREBATTLEAMMUNITIONPANEL_CURRENTSETUP = '#ingame_gui:prebattleAmmunitionPanel/currentSetup'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,

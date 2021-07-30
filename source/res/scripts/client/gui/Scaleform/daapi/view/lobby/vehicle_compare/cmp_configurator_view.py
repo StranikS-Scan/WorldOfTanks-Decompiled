@@ -239,7 +239,7 @@ class _CrewSkillsManager(object):
             for idx, (vehCrewRoleIdx, vehCrewRole) in enumerate(veh_crew):
                 if vehCrewRoleIdx == roleIdx:
                     prevRoleLevel = vehCrewRole.roleLevel if vehCrewRole is not None else tankmen.MAX_SKILL_LEVEL
-                    veh_crew[idx] = (roleIdx, cmp_helpers.createTankman(nationID, vehicleTypeID, role, prevRoleLevel, skills.intersection(selectedSkills), vehicle, idx))
+                    veh_crew[idx] = (roleIdx, cmp_helpers.createTankman(nationID, vehicleTypeID, role, prevRoleLevel, skills.intersection(selectedSkills), vehicle, vehCrewRoleIdx))
                     success = True
                     break
             else:

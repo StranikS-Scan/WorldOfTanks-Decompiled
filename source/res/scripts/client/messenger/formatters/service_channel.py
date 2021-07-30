@@ -19,7 +19,7 @@ from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from cache import cached_property
 from chat_shared import decompressSysMessage, SYS_MESSAGE_TYPE, MapRemovedFromBLReason
-from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE
+from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, OFFER_TOKEN_PREFIX
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType
 from gui.dog_tag_composer import dogTagComposer
@@ -73,7 +73,7 @@ from messenger.formatters import TimeFormatter, NCContextItemFormatter
 from messenger.formatters.service_channel_helpers import EOL, getCustomizationItemData, MessageData, getRewardsForQuests, mergeRewards
 from nations import NAMES
 from shared_utils import BoundMethodWeakref, first
-from skeletons.gui.cdn import IPurchaseCache
+from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IBattleRoyaleController, IMapboxController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -82,6 +82,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from account_helpers.offers.events_data import OfferEventData, OfferGift
+    from gui.platform.catalog_service.controller import _PurchaseDescriptor
 _logger = logging.getLogger(__name__)
 _TEMPLATE = 'template'
 _RENT_TYPE_NAMES = {RentDurationKeys.DAYS: 'rentDays',
@@ -232,6 +233,26 @@ def _getAchievementsFromQuestData(data):
             achievesList.append(backport.text(R.strings.achievements.dyn(name)()))
 
     return achievesList
+
+
+def _processTankmanToken(tokenName):
+    if tokenName.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+        tankmanInfo = getRecruitInfo(tokenName)
+        if tankmanInfo is not None:
+            rBattlePass = R.strings.battle_pass
+            text = backport.text(rBattlePass.universalTankmanBonus(), name=tankmanInfo.getFullUserName())
+            return g_settings.htmlTemplates.format('battlePassTMan', {'text': text})
+    return
+
+
+@dependency.replace_none_kwargs(offersProvider=IOffersDataProvider)
+def _processOfferToken(tokenName, offersProvider=None):
+    if tokenName.startswith(OFFER_TOKEN_PREFIX):
+        offers = offersProvider.getAvailableOffersByToken(tokenName)
+        if offers:
+            text = backport.text(R.strings.messenger.serviceChannelMessages.offerTokenBonus.title())
+            return g_settings.htmlTemplates.format('offerTokenText', {'text': text})
+    return None
 
 
 class ServiceChannelFormatter(object):
@@ -960,7 +981,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 if formatted is not None:
                     settings = self._getGuiSettings(message, self._getMessageTemplateKey(assetType))
             else:
-                _logger.error('Message data has not been synchronized properly!')
+                _logger.debug('Message will not be shown!')
             mainMassage = MessageData(formatted, settings)
             auxMessagesHandler = self.__auxMessagesHandlers.get(assetType, None)
             if auxMessagesHandler is not None:
@@ -1439,11 +1460,15 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                             else:
                                 addBadgesStrings.append(backport.text(R.strings.badge.dyn('badge_{}'.format(name))()))
                         elif block != ACHIEVEMENT_BLOCK.RARE:
-                            achieve = getAchievementFactory((block, name)).create(recData['actualValue'])
+                            if 'actualValue' in recData:
+                                achieve = getAchievementFactory((block, name)).create(recData['actualValue'])
+                            else:
+                                achieve = None
+                                _logger.warning("Couldn't find 'actualValue' field in data %s", recData)
                             if achieve is not None:
                                 achieveName = achieve.getUserName()
                             else:
-                                achieveName = backport.text(R.strings.achievements.dyn(name))
+                                achieveName = backport.text(R.strings.achievements.dyn(name)())
                             if isRemoving:
                                 delDossierStrings.append(achieveName)
                             else:
@@ -1634,6 +1659,13 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         count = 0
         tokenStrings = []
         for tokenName, tokenData in data.iteritems():
+            tankmanTokenResult = _processTankmanToken(tokenName)
+            if tankmanTokenResult:
+                tokenStrings.append(tankmanTokenResult)
+            else:
+                offerTokenResult = _processOfferToken(tokenName)
+                if offerTokenResult:
+                    tokenStrings.append(offerTokenResult)
             if tokenName == constants.PERSONAL_MISSION_FREE_TOKEN_NAME:
                 count += tokenData.get('count', 0)
             quests = self.__eventsCache.getQuestsByTokenRequirement(tokenName)
@@ -1713,10 +1745,11 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         if assetType == INVOICE_ASSET.PURCHASE:
             if self.__purchaseCache.canBeRequestedFromProduct(data):
                 purchaseDescrUrl = self.__purchaseCache.getProductCode(data.get('meta'))
-                yield self.__purchaseCache.requestPurchaseByID(purchaseDescrUrl)
+                pD = yield self.__purchaseCache.requestPurchaseByID(purchaseDescrUrl)
+                callback(pD.getDisplayWays().showNotification)
             else:
                 _logger.debug('Data can not be requested from the product! System message will be shown without product data!')
-            callback(True)
+                callback(True)
         else:
             callback(True)
 
@@ -2866,11 +2899,9 @@ class BattlePassQuestAchievesFormatter(QuestAchievesFormatter):
                 offer = cls.__offersProvider.getOfferByToken(getOfferTokenByGift(token))
                 gift = first(offer.getAllGifts())
                 count = gift.giftCount
-            if token.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
-                tankmanInfo = getRecruitInfo(token)
-                if tankmanInfo is not None:
-                    text = backport.text(rBattlePass.universalTankmanBonus(), name=tankmanInfo.getFullUserName())
-                    result.append(g_settings.htmlTemplates.format('battlePassTMan', {'text': text}))
+            tankmanTokenResult = _processTankmanToken(token)
+            if tankmanTokenResult:
+                result.append(tankmanTokenResult)
             if token.startswith(BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER):
                 result.append(g_settings.htmlTemplates.format(rewardSelectTemplate, {'text': backport.text(rBattlePass.chosenBonuses.bonus.trophy_gift()),
                  'count': count}))

@@ -143,6 +143,15 @@ class ARENAS(object):
     C_60_ASIA_MIAO_NAME = '#arenas:60_asia_miao/name'
     C_60_ASIA_MIAO_DESCRIPTION = '#arenas:60_asia_miao/description'
     C_251_BR_BATTLE_CITY3_NAME = '#arenas:251_br_battle_city3/name'
+    C_117_CANYON_ISH_NAME = '#arenas:117_canyon_ish/name'
+    C_119_TURNING_POINT_IF_NAME = '#arenas:119_turning_point_if/name'
+    C_120_GRAF_ZEPPELIN_ISH_NAME = '#arenas:120_graf_zeppelin_ish/name'
+    C_121_LOST_PARADISE_V_NAME = '#arenas:121_lost_paradise_v/name'
+    C_125_HIGHGROUND_V_NAME = '#arenas:125_highground_v/name'
+    C_122_FROZEN_LAND_NAME = '#arenas:122_frozen_land/name'
+    C_128_LAST_FRONTIER_V_NAME = '#arenas:128_last_frontier_v/name'
+    C_123_DALNY_GG_NAME = '#arenas:123_dalny_gg/name'
+    C_126_ASIA_RAVINE_ISH_NAME = '#arenas:126_asia_ravine_ish/name'
     C_127_JAPORT_NAME = '#arenas:127_japort/name'
     C_127_JAPORT_DESCRIPTION = '#arenas:127_japort/description'
     ALL_ENUM = (TYPE_CTF_NAME,
@@ -285,6 +294,15 @@ class ARENAS(object):
      C_60_ASIA_MIAO_NAME,
      C_60_ASIA_MIAO_DESCRIPTION,
      C_251_BR_BATTLE_CITY3_NAME,
+     C_117_CANYON_ISH_NAME,
+     C_119_TURNING_POINT_IF_NAME,
+     C_120_GRAF_ZEPPELIN_ISH_NAME,
+     C_121_LOST_PARADISE_V_NAME,
+     C_125_HIGHGROUND_V_NAME,
+     C_122_FROZEN_LAND_NAME,
+     C_128_LAST_FRONTIER_V_NAME,
+     C_123_DALNY_GG_NAME,
+     C_126_ASIA_RAVINE_ISH_NAME,
      C_127_JAPORT_NAME,
      C_127_JAPORT_DESCRIPTION)
 

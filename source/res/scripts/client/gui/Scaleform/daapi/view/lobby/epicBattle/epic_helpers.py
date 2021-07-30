@@ -342,7 +342,8 @@ epicEquipmentParameterFormaters = {'cooldownTime': DirectNumericTextParam.update
  'selfIncreaseFactors/crewRolesFactor': NestedPercentNumericTextParam.updateParams,
  'resupplyShellsFactor': PercentNumericTextParam.updateParams,
  '#epic_battle:abilityInfo/params/fl_regenerationKit/minesDamageReduceFactor/value': FixedTextParam.updateParams,
- 'visionRadiusFactor': AbsPercentNumericTextParam.updateParams}
+ 'visionRadiusFactor': AbsPercentNumericTextParam.updateParams,
+ 'radius': DirectMetersTextParam.updateParams}
 
 def checkIfVehicleIsHidden(intCD):
     return FRONTLINE_HIDDEN_TAG in vehicles.getVehicleType(intCD).tags

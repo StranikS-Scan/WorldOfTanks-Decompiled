@@ -132,6 +132,7 @@ class GAME(CONST_CONTAINER):
     DISPLAY_PLATOON_MEMBERS = 'displayPlatoonMembers'
     LOGIN_SERVER_SELECTION = 'loginServerSelection'
     UNIT_FILTER = 'unitFilter'
+    SWITCH_SETUPS_IN_LOADING = 'switchEquipment'
 
 
 class TUTORIAL(CONST_CONTAINER):

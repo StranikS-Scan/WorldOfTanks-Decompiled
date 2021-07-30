@@ -292,4 +292,4 @@ def isPopupsWindowsOpenDisabled():
 _ROMAN_FORBIDDEN_LANGUAGES = {'ko', 'no'}
 
 def isRomanNumberForbidden():
-    return bool(_ROMAN_FORBIDDEN_LANGUAGES.intersection(backport.text(R.strings.settings.LANGUAGE_CODE())))
+    return bool(_ROMAN_FORBIDDEN_LANGUAGES.intersection((backport.text(R.strings.settings.LANGUAGE_CODE()),)))

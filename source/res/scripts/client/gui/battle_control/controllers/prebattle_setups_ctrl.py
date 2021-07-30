@@ -3,6 +3,7 @@
 import logging
 import typing
 import BigWorld
+from account_helpers.settings_core.settings_constants import GAME
 from constants import ARENA_PERIOD, VEHICLE_SIEGE_STATE
 from gui.battle_control.arena_info.interfaces import IPrebattleSetupsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -19,6 +20,7 @@ from items.utils import getCircularVisionRadius, getFirstReloadTime
 from PerksParametersController import PerksParametersController
 from post_progression_common import EXT_DATA_PROGRESSION_KEY, EXT_DATA_SLOT_KEY, TANK_SETUP_GROUPS, TankSetupLayouts, TankSetups
 from shared_utils import CONST_CONTAINER
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 if typing.TYPE_CHECKING:
@@ -46,14 +48,16 @@ class _States(CONST_CONTAINER):
     SETUPS = 128
     SETUPS_INDEXES = 256
     INIT_COMPLETE = 512
-    SELECTION_AVAILABLE = 1024
+    SELECTION_STARTED = 1024
     SELECTION_STOPPED = 2048
+    SELECTION_ENDED = 4096
     INIT_READY = VEHICLE_ID | CREW | DYN_SLOT | ENHANCEMENTS | PERKS | PROGRESSION | RESPAWN | SETUPS | SETUPS_INDEXES
+    SELECTION_AWAIT_HIDING = 8192
 
 
 class IPrebattleSetupsListener(object):
 
-    def setSetupsVehicle(self, vehicle):
+    def showSetupsView(self, vehicle, isArenaLoaded=False):
         pass
 
     def updateVehicleParams(self, vehicle, factors):
@@ -65,11 +69,18 @@ class IPrebattleSetupsListener(object):
     def stopSetupsSelection(self):
         pass
 
+    def hideSetupsView(self):
+        pass
+
+    def onArenaLoaded(self):
+        pass
+
 
 class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
     __itemsFactory = dependency.descriptor(IGuiItemsFactory)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __slots__ = ('__state', '__playerVehicleID', '__perksController', '__vehicle', '__invData', '__extData', '__hasValidCaps', '__cooldown')
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __slots__ = ('__state', '__playerVehicleID', '__perksController', '__vehicle', '__invData', '__extData', '__hasValidCaps', '__cooldown', '__arenaLoaded')
 
     def __init__(self):
         super(PrebattleSetupsController, self).__init__()
@@ -81,10 +92,17 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         self.__vehicle = None
         self.__hasValidCaps = False
         self.__cooldown = BattleCooldownManager()
+        self.__arenaLoaded = False
         return
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.PREBATTLE_SETUPS_CTRL
+
+    def getPrebattleSetupsVehicle(self):
+        return self.__vehicle if self.isSelectionStarted() else None
+
+    def getPrebattleVehicleID(self):
+        return self.__playerVehicleID if self.isSelectionStarted() else 0
 
     def startControl(self, battleCtx, arenaVisitor):
         self.__hasValidCaps = arenaVisitor.bonus.hasSwitchSetups()
@@ -99,11 +117,15 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         self.__perksController = None
         self.__vehicle = None
         self.__hasValidCaps = False
+        self.__arenaLoaded = False
         self.__cooldown.reset(_SWITCH_SETUPS_ACTION)
         return
 
-    def isSelectionAvailable(self):
-        return bool(self.__state & _States.SELECTION_AVAILABLE)
+    def isArenaLoaded(self):
+        return self.__arenaLoaded
+
+    def isSelectionStarted(self):
+        return bool(self.__state & _States.SELECTION_STARTED)
 
     @MethodsRules.delayable()
     def setPlayerVehicle(self, vehicleID, vehDescr):
@@ -182,14 +204,36 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         if self.__playerVehicleID != vehicleID or self.__isSelectionStopped():
             return
         self.__extData[_EXT_SIEGE_STATE_KEY] = siegeState
-        if self.__state & _States.SELECTION_AVAILABLE:
+        if self.__state & _States.SELECTION_STARTED:
             self.__updateSiegeState()
 
+    @MethodsRules.delayable('setPlayerVehicle')
+    def setVehicleAttrs(self, vehicleID, attrs):
+        if not self.isSelectionStarted() or self.__playerVehicleID != vehicleID:
+            return
+        newFactors = getVehicleFactors(self.__vehicle)
+        newFactors[_EXT_RESPAWN_BOOST] = self.__extData[_EXT_RESPAWN_BOOST]
+        newAttrs = dict(attrs)
+        newAttrs['circularVisionRadius'] = getCircularVisionRadius(self.__vehicle.descriptor, newFactors)
+        self.__sessionProvider.shared.feedback.setVehicleAttrs(self.__playerVehicleID, newAttrs)
+
     def setViewComponents(self, *components):
-        super(PrebattleSetupsController, self).setViewComponents(*components)
-        if self.isSelectionAvailable():
+        if self.__isSelectionStopped():
+            return
+        self._viewComponents = components
+        if self.isSelectionStarted():
             for component in components:
-                component.setSetupsVehicle(self.__vehicle)
+                component.showSetupsView(self.__vehicle, self.__arenaLoaded)
+
+    def arenaLoadCompleted(self):
+        self.__arenaLoaded = True
+        if not self.__settingsCore.getSetting(GAME.SWITCH_SETUPS_IN_LOADING):
+            self.__onStartSelection()
+        else:
+            for component in self._viewComponents:
+                component.onArenaLoaded()
+
+            self.__onFiniStepCompleted()
 
     def invalidatePeriodInfo(self, period, endTime, length, additionalInfo):
         if not self.__isSelectionStopped():
@@ -198,7 +242,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
     def switchLayout(self, groupID, layoutIdx):
         if self.__sessionProvider.isReplayPlaying:
             return
-        elif not self.isSelectionAvailable():
+        elif not self.isSelectionStarted():
             return
         elif self.__cooldown.isInProcess(_SWITCH_SETUPS_ACTION):
             return
@@ -225,6 +269,12 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
     def __isSelectionStopped(self):
         return bool(self.__state & _States.SELECTION_STOPPED)
 
+    def __isSelectionShouldEnded(self):
+        return self.__arenaLoaded and self.__isSelectionStopped() if self.__settingsCore.getSetting(GAME.SWITCH_SETUPS_IN_LOADING) else self.__isSelectionStopped()
+
+    def __isSelectionShouldStarted(self):
+        return self.__state & _States.INIT_COMPLETE and self.__isSelectionAvailable() if self.__settingsCore.getSetting(GAME.SWITCH_SETUPS_IN_LOADING) else self.__state & _States.INIT_COMPLETE and self.__isSelectionAvailable() and self.isArenaLoaded()
+
     def __onInitStepCompleted(self, stepState):
         if self.__state & _States.INIT_COMPLETE:
             return
@@ -236,8 +286,19 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
             self.__invData[TankSetupLayouts.SHELLS] = {shellsLayoutKey: self.__invData[TankSetupLayouts.SHELLS]}
             self.__updateGuiVehicle()
             self.__updateState(_States.INIT_COMPLETE)
-        if self.__state & _States.INIT_COMPLETE and self.__isSelectionAvailable():
-            self.__updateState(_States.SELECTION_AVAILABLE)
+        self.__onStartSelection()
+
+    def __onFiniStepCompleted(self):
+        if self.__state & _States.SELECTION_ENDED:
+            return
+        if self.__isSelectionShouldEnded():
+            self.__updateState(_States.SELECTION_ENDED)
+
+    def __onStartSelection(self):
+        if self.__state & _States.SELECTION_STARTED or self.__isSelectionStopped():
+            return
+        if self.__isSelectionShouldStarted():
+            self.__updateState(_States.SELECTION_STARTED)
 
     def __updateAmmoCtrl(self):
         ammoCtrl = self.__sessionProvider.shared.ammo
@@ -277,17 +338,25 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
     def __updatePeriod(self, period):
         if period >= ARENA_PERIOD.BATTLE:
             self.__updateState(_States.SELECTION_STOPPED)
+            self.__onFiniStepCompleted()
 
     def __updateState(self, addMask):
-        if addMask == _States.SELECTION_AVAILABLE:
+        if addMask == _States.SELECTION_STARTED:
             for component in self._viewComponents:
-                component.setSetupsVehicle(self.__vehicle)
+                component.showSetupsView(self.__vehicle, self.__arenaLoaded)
 
-        if addMask == _States.SELECTION_STOPPED and self.isSelectionAvailable():
-            self.__state &= ~_States.SELECTION_AVAILABLE
+            self.__updateAmmoCtrl()
+        if addMask == _States.SELECTION_STOPPED and self.isSelectionStarted():
+            self.__state |= _States.SELECTION_AWAIT_HIDING
+            self.__state &= ~_States.SELECTION_STARTED
             self.__vehicle.stopPerksController()
             for component in self._viewComponents:
                 component.stopSetupsSelection()
+
+        if addMask == _States.SELECTION_ENDED and self.__state & _States.SELECTION_AWAIT_HIDING:
+            self.__state &= ~_States.SELECTION_AWAIT_HIDING
+            for component in self._viewComponents:
+                component.hideSetupsView()
 
         self.__state |= addMask
         _logger.debug('[PrebattleSetupsController] addMask %s modifiedState %s', addMask, self.__state)

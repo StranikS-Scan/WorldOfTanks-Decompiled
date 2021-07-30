@@ -78,9 +78,13 @@ class BattleSessionProvider(IBattleSessionProvider):
         self.__requestsCtrl.request(ctx, callback=callback, allowDelay=allowDelay)
 
     def setPlayerVehicle(self, vID, vDesc):
+        ctrl = self.shared.prebattleSetups
+        isSetupsSelectionStarted = ctrl.isSelectionStarted() if ctrl is not None else False
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
-            ctrl.setGunSettings(vDesc.gun)
+            if not isSetupsSelectionStarted:
+                ctrl.clearAmmo()
+                ctrl.setGunSettings(vDesc.gun)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.notifyPlayerVehicleSet(vID)

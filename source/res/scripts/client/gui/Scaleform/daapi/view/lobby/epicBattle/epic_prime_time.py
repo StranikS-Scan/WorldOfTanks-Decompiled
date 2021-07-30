@@ -66,14 +66,10 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
          'showAlertBG': not self._getController().hasAvailablePrimeTimeServers()}
 
     def _getPrbActionName(self):
-        if self._hasAvailableServers():
-            prbAction = PREBATTLE_ACTION_NAME.EPIC
-        else:
-            prbAction = PREBATTLE_ACTION_NAME.EPIC_FORCED
-        return prbAction
+        return PREBATTLE_ACTION_NAME.EPIC
 
     def _getPrbForcedActionName(self):
-        return PREBATTLE_ACTION_NAME.EPIC_FORCED
+        return PREBATTLE_ACTION_NAME.EPIC
 
     def __getStatusText(self):
         if not self._getController().hasAvailablePrimeTimeServers():

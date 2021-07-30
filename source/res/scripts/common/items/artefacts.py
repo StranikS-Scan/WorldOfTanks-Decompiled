@@ -1964,7 +1964,7 @@ class FLAvatarStealthRadar(Equipment, SharedCooldownConsumableConfigReader, Cool
 
 
 class MineParams(object):
-    __slots__ = ('triggerRadius', 'triggerHeight', 'triggerDepth', 'influenceType', 'lifetime', 'damage', 'shell', 'shellAlt', 'destroyMyMinesOverlappingAlliedMines', 'resistAllyDamage', 'directDetectionTypes')
+    __slots__ = ('triggerRadius', 'triggerHeight', 'triggerDepth', 'influenceType', 'lifetime', 'damage', 'shell', 'shellLowDamage', 'destroyMyMinesOverlappingAlliedMines', 'resistAllyDamage', 'directDetectionTypes')
 
     def __init__(self):
         self.triggerRadius = 1.0
@@ -1974,14 +1974,14 @@ class MineParams(object):
         self.lifetime = 10
         self.damage = 100
         self.shell = None
-        self.shellAlt = None
+        self.shellLowDamage = None
         self.resistAllyDamage = False
         self.destroyMyMinesOverlappingAlliedMines = False
         self.directDetectionTypes = []
         return
 
     def __repr__(self):
-        return 'motParams ({}, {}, {}, {}, {}, {}, {}, {})'.format(self.triggerRadius, self.triggerHeight, self.triggerDepth, self.influenceType, self.lifetime, self.damage, self.shell, self.shellAlt)
+        return 'motParams ({}, {}, {}, {}, {}, {}, {}, {})'.format(self.triggerRadius, self.triggerHeight, self.triggerDepth, self.influenceType, self.lifetime, self.damage, self.shell, self.shellLowDamage)
 
     def _readConfig(self, xmlCtx, section):
         self.triggerRadius = _xml.readPositiveFloat(xmlCtx, section, 'triggerRadius')
@@ -1992,8 +1992,8 @@ class MineParams(object):
         self.damage = _xml.readNonNegativeInt(xmlCtx, section, 'damage')
         if section.has_key('shellCompactDescr'):
             self.shell = _xml.readInt(xmlCtx, section, 'shellCompactDescr')
-        if section.has_key('shellAltCompactDescr'):
-            self.shellAlt = _xml.readInt(xmlCtx, section, 'shellAltCompactDescr')
+        if section.has_key('shellCompactDescrLowDamage'):
+            self.shellLowDamage = _xml.readInt(xmlCtx, section, 'shellCompactDescrLowDamage')
         if section.has_key('resistAllyDamage'):
             self.resistAllyDamage = _xml.readBool(xmlCtx, section, 'resistAllyDamage')
         if section.has_key('destroyMyMinesOverlappingAlliedMines'):

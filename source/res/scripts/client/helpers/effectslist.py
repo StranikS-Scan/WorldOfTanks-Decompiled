@@ -1585,13 +1585,8 @@ class RespawnDestroyEffect(object):
     def __playDestroyEffect(cls, entity, effects):
         if entity.model is not None:
             fakeModel = helpers.newFakeModel()
-            entity.addModel(fakeModel)
+            BigWorld.player().addModel(fakeModel)
             fakeModel.position = entity.model.position
             effectsPlayer = EffectsListPlayer(effects[0][1], effects[0][0])
-            effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(cls.__safeDelModel, entity, fakeModel))
+            effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(BigWorld.player().delModel, fakeModel))
         return
-
-    @classmethod
-    def __safeDelModel(cls, entity, model):
-        if not entity.isDestroyed:
-            entity.delModel(model)

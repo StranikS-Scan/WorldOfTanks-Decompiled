@@ -573,7 +573,8 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         _logger.debug('PlatoonController: onUnitPlayerRemoved')
         if not pInfo.isInvite():
             self.__addPlayerNotification(settings.UNIT_NOTIFICATION_KEY.PLAYER_REMOVED, pInfo)
-            self.__alreadyJoinedAccountDBIDs.remove(pInfo.dbID)
+            if pInfo.dbID in self.__alreadyJoinedAccountDBIDs:
+                self.__alreadyJoinedAccountDBIDs.remove(pInfo.dbID)
         SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.gui_platoon_2_member_left()))
         self.__updatePlatoonTankInfo()
 

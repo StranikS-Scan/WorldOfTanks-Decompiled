@@ -22,7 +22,7 @@ _logger = logging.getLogger(__name__)
 class BaseAmmunitionPanelView(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
     _hangarSpace = dependency.descriptor(IHangarSpace)
-    __slots__ = ('_ammunitionPanel', 'onSizeChanged', 'onPanelSectionSelected', 'onPanelSectionResized', 'onVehicleChanged')
+    __slots__ = ('_ammunitionPanel', 'onSizeChanged', 'onPanelSectionSelected', 'onPanelSectionResized', 'onVehicleChanged', 'onEscKeyDown')
 
     def __init__(self, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.tanksetup.AmmunitionPanel())
@@ -34,6 +34,7 @@ class BaseAmmunitionPanelView(ViewImpl):
         self.onPanelSectionSelected = Event()
         self.onPanelSectionResized = Event()
         self.onVehicleChanged = Event()
+        self.onEscKeyDown = Event()
         return
 
     def createToolTip(self, event):
@@ -139,7 +140,6 @@ class BaseAmmunitionPanelView(ViewImpl):
         self.onPanelSectionResized(**kwargs)
 
     def _currentVehicleChanged(self):
-        self.onVehicleChanged()
         self.update()
         self.viewModel.setIsReady(self._getIsReady())
 
@@ -147,6 +147,7 @@ class BaseAmmunitionPanelView(ViewImpl):
         self.viewModel.setIsReady(False)
         self.viewModel.setIsMaintenanceEnabled(False)
         self.viewModel.setIsDisabled(True)
+        self.onVehicleChanged()
 
     def __itemCacheChanged(self, *_):
         self.update(fullUpdate=False)

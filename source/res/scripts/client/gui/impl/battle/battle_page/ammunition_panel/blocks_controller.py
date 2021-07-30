@@ -2,10 +2,13 @@
 # Embedded file name: scripts/client/gui/impl/battle/battle_page/ammunition_panel/blocks_controller.py
 from typing import TYPE_CHECKING
 from gui.impl.common.ammunition_panel.ammunition_blocks_controller import AmmunitionBlocksController
+from gui.impl.gen.view_models.views.battle.battle_page.prebattle_ammunition_panel_view_model import State
 from gui.impl.gen.view_models.views.battle.battle_page.prebattle_shell_ammunition_slot import PrebattleShellAmmunitionSlot, ShellBattleState
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.common.tabs_controller import tabUpdateFunc
 from gui.impl.common.ammunition_panel.ammunition_panel_blocks import ShellsBlock, ConsumablesBlock
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 if TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
 _EMPTY_INT_COMPACT_DESCRIPTOR = 0
@@ -45,13 +48,25 @@ class RespawnShellsBlock(ShellsBlock):
         pass
 
 
+class InLoadingShellsBlock(ShellsBlock):
+
+    def _getAmmunitionSlotModel(self):
+        return PrebattleShellAmmunitionSlot()
+
+    def _getKeySettings(self):
+        pass
+
+
 class PrebattleAmmunitionBlocksController(AmmunitionBlocksController):
-    __slots__ = ('__nextShellIntCD', '__currentShellIntCD')
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __slots__ = ('__nextShellIntCD', '__currentShellIntCD', '__ammunitionPanelState')
 
     def __init__(self, vehicle, autoCreating=True, ctx=None):
         super(PrebattleAmmunitionBlocksController, self).__init__(vehicle, autoCreating, ctx)
         self.__nextShellIntCD = _EMPTY_INT_COMPACT_DESCRIPTOR
         self.__currentShellIntCD = _EMPTY_INT_COMPACT_DESCRIPTOR
+        self.__ammunitionPanelState = ctx.get('state', State.PREBATTLE) if ctx is not None else State.PREBATTLE
+        return
 
     def onNextShellChanged(self, intCD):
         self.__nextShellIntCD = intCD
@@ -59,9 +74,15 @@ class PrebattleAmmunitionBlocksController(AmmunitionBlocksController):
     def onCurrentShellChanged(self, intCD):
         self.__currentShellIntCD = intCD
 
+    def onStateChanged(self, state):
+        self.__ammunitionPanelState = state
+
     @tabUpdateFunc(TankSetupConstants.SHELLS)
     def _updateShells(self, viewModel, isFirst=False):
-        PrebattleShellsBlock(self._vehicle, self._currentSection, self.__nextShellIntCD, self.__currentShellIntCD).adapt(viewModel, isFirst)
+        if self.__ammunitionPanelState == State.PREBATTLE:
+            PrebattleShellsBlock(self._vehicle, self._currentSection, self.__nextShellIntCD, self.__currentShellIntCD).adapt(viewModel, isFirst)
+        else:
+            InLoadingShellsBlock(self._vehicle, self._currentSection).adapt(viewModel, isFirst)
 
 
 class RespawnAmmunitionBlocksController(AmmunitionBlocksController):

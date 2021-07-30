@@ -124,7 +124,9 @@ def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
     totalDossiers = total.setdefault(key, {})
     for _dossierType, changes in value.iteritems():
         totalDossier = totalDossiers.setdefault(_dossierType, {})
-        for record, data in changes.iteritems():
+        duplicatedkeys = not isinstance(changes, dict)
+        it = changes if duplicatedkeys else changes.iteritems()
+        for record, data in it:
             block, name = record
             try:
                 record = (block, int(name))

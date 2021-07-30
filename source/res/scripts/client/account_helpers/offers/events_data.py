@@ -270,15 +270,17 @@ class OfferGift(object):
 
     @property
     def rentType(self):
-        if self.bonus and hasattr(self.bonus, 'getRentInfo'):
-            rentType, _ = self.bonus.getRentInfo()
+        if self.bonus and self.isVehicle:
+            _, vInfo = self.bonus.getVehicles()[0]
+            rentType, _ = self.bonus.getRentInfo(vInfo)
             return rentType
         return RentType.NO_RENT
 
     @property
     def rentValue(self):
-        if self.bonus and hasattr(self.bonus, 'getRentInfo'):
-            _, rentValue = self.bonus.getRentInfo()
+        if self.bonus and self.isVehicle:
+            _, vInfo = self.bonus.getVehicles()[0]
+            _, rentValue = self.bonus.getRentInfo(vInfo)
             return rentValue
 
     @property

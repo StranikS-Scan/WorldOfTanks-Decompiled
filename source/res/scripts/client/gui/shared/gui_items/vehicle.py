@@ -156,7 +156,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     MAPS_TRAINING = 'maps_training'
 
 
-EPIC_ACTION_VEHICLE_CDS = (44033, 63265)
 NOT_FULL_AMMO_MULTIPLIER = 0.2
 _MAX_RENT_MULTIPLIER = 2
 RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', 'mainRentType', 'seasonType'))
@@ -1310,7 +1309,7 @@ class Vehicle(FittingItem):
 
     @property
     def isEpicActionVehicle(self):
-        return self.isOnlyForEpicBattles and self.intCD in EPIC_ACTION_VEHICLE_CDS
+        return self.isOnlyForEpicBattles and self.isRented
 
     @property
     def isOnlyForBattleRoyaleBattles(self):

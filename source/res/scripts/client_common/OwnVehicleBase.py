@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client_common/OwnVehicleBase.py
 from collections import namedtuple
 from functools import partial
-from debug_utils import LOG_DEBUG_DEV
 import BigWorld
 from constants import VEHICLE_SETTING, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES
 from items import vehicles, ITEM_TYPES
@@ -34,7 +33,6 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
 
     @noexcept
     def update_vehicleAmmoList(self, ammoList):
-        LOG_DEBUG_DEV('update_vehicleAmmoList len={}, ammoList={}'.format(len(ammoList), ammoList))
         avatar = self._avatar()
         for vehicleAmmo in ammoList:
             timeRemainig = vehicleAmmo.endTime
@@ -185,6 +183,9 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             self._doLog('onSectorShooting {}'.format(sectorID))
         self._avatar().onSectorShooting(sectorID)
 
+    def beforeSetupUpdate(self):
+        self._avatar().beforeSetupUpdate(self.entity.id)
+
     def showOwnVehicleHitDirection(self, data):
         if _DO_LOG:
             self._doLog('showOwnVehicleHitDirection {}'.format(data))
@@ -194,10 +195,8 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         return self.__getTimeLeftBaseTime(self.vehicleGunReloadTime, True) if self.vehicleGunReloadTime else (0, 0)
 
     def setNested_vehicleAmmoList(self, path, prev):
-        LOG_DEBUG_DEV('setNested_vehicleAmmoList', path, prev)
         changedAmmo = self.vehicleAmmoList[path[0]]
         if changedAmmo.compactDescr != prev.compactDescr:
-            LOG_DEBUG_DEV('setNested_vehicleAmmoList descriptors changed: ', changedAmmo.compactDescr, prev.compactDescr)
             self._avatar().resetVehicleAmmo(prev.compactDescr, changedAmmo.compactDescr, changedAmmo.quantity, changedAmmo.previousStage, changedAmmo.endTime, changedAmmo.totalTime)
         else:
             self.__setNested(self.update_vehicleAmmoList, 'vehicleAmmoList', path, prev)

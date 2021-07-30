@@ -30,6 +30,7 @@ class _EpicBattleComponentsConfig(ComponentsConfig):
     def __init__(self):
         super(_EpicBattleComponentsConfig, self).__init__(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER,
            BATTLE_VIEW_ALIASES.PREBATTLE_TIMER,
+           BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL,
            DynamicAliases.EPIC_DRONE_MUSIC_PLAYER,
            DynamicAliases.PERIOD_MUSIC_LISTENER,
            ClassicDynAliases.PREBATTLE_TIMER_SOUND_PLAYER)),
@@ -111,7 +112,7 @@ _PAGE_STATE_TO_CONTROL_PARAMS = {(PageStates.TABSCREEN, False): (BATTLE_VIEW_ALI
  (PageStates.LOADING, False): (BATTLE_VIEW_ALIASES.BATTLE_LOADING, True, True),
  (PageStates.RESPAWN, True): (BATTLE_VIEW_ALIASES.EPIC_RESPAWN_VIEW, True, False)}
 _STATE_TO_UI = {PageStates.GAME: _GAME_UI,
- PageStates.LOADING: {BATTLE_VIEW_ALIASES.BATTLE_LOADING, BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP},
+ PageStates.LOADING: {BATTLE_VIEW_ALIASES.BATTLE_LOADING, BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP, BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL},
  PageStates.TABSCREEN: {BATTLE_VIEW_ALIASES.FULL_STATS, BATTLE_VIEW_ALIASES.DEBUG_PANEL, BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL},
  PageStates.OVERVIEWMAP: {BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP,
                           BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN,
@@ -200,7 +201,7 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
             elif ctrl and BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN in hiddenUI:
                 ctrl.setOverviewMapScreenVisibility(False)
             ctrl = self.sessionProvider.shared.prebattleSetups
-            if self.__activeState == PageStates.COUNTDOWN and ctrl and ctrl.isSelectionAvailable():
+            if self.__activeState == PageStates.COUNTDOWN and ctrl and ctrl.isSelectionStarted():
                 visibleUI.remove(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)
                 hiddenUI.add(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)
             self._setComponentsVisibility(visible=visibleUI, hidden=hiddenUI)

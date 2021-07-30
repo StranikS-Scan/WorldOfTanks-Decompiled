@@ -173,6 +173,7 @@ class BattleCarouselDataProvider(CarouselDataProvider):
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):
         return (vehicle.level,
+         not vehicle.isFavorite,
          GUI_NATIONS_ORDER_INDEX[vehicle.nationName],
          VEHICLE_TYPES_ORDER_INDICES[vehicle.type],
          vehicle.userName)

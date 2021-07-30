@@ -178,6 +178,7 @@ class SETTINGS(object):
     GAME_BATTLELOADINGRANKEDINFO_TEXTTIP = '#settings:game/battleLoadingRankedInfo/textTip'
     GAME_BATTLELOADINGRANKEDINFO_VISUALTIP = '#settings:game/battleLoadingRankedInfo/visualTip'
     GAME_BATTLELOADINGRANKEDINFO_MINIMAP = '#settings:game/battleLoadingRankedInfo/minimap'
+    GAME_SWITCHEQUIPMENT = '#settings:game/switchEquipment'
     GAME_SHOWVECTORONMAP = '#settings:game/showVectorOnMap'
     GAME_SHOWSECTORONMAP = '#settings:game/showSectorOnMap'
     GAME_MINIMAPGROUPTITLE = '#settings:game/minimapGroupTitle'

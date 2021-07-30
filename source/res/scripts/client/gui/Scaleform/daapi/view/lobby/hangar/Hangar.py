@@ -380,12 +380,16 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         if alias == HANGAR_ALIASES.AMMUNITION_PANEL_INJECT:
             event = viewPy.getOnPanelSectionSelected()
             event += self.__onOptDeviceClick
+            event = viewPy.getOnEscKeyDown()
+            event += self.onEscape
 
     def _onUnregisterFlashComponent(self, viewPy, alias):
         super(Hangar, self)._onUnregisterFlashComponent(viewPy, alias)
         if alias == HANGAR_ALIASES.AMMUNITION_PANEL_INJECT and viewPy.getInjectView():
             event = viewPy.getOnPanelSectionSelected()
             event -= self.__onOptDeviceClick
+            event = viewPy.getOnEscKeyDown()
+            event -= self.onEscape
 
     @property
     def ammoPanel(self):

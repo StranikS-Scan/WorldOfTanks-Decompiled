@@ -82,6 +82,10 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         self.__timer.delayCallback(UtilsManager.ONE_SECOND, self.__showOrHide)
 
     def __showOrHide(self):
+        if not self.__timer.hasDelayedCallback(self.__executeShowOrHide):
+            self.__timer.delayCallback(0.0, self.__executeShowOrHide)
+
+    def __executeShowOrHide(self):
         if self.__shouldHide():
             self.__hide()
             return

@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/awards/multiple_awards_view.py
 import logging
-from copy import deepcopy
 import typing
 from adisp import process
-from constants import OFFER_TOKEN_PREFIX, RentType
+from constants import RentType
 from frameworks.wulf import ViewSettings, ViewStatus, ViewFlags
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.battle_pass.battle_pass_award import awardsFactory
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator
 from gui.impl import backport
 from gui.impl.auxiliary.tooltips.compensation_tooltip import VehicleCompensationTooltipContent
@@ -16,56 +14,20 @@ from gui.impl.gen.view_models.views.lobby.awards.multiple_awards_view_model impo
 from gui.impl.gen.view_models.views.lobby.awards.tooltips.awards_vehicle_for_choose_tooltip_view_model import AwardsVehicleForChooseTooltipViewModel
 from gui.impl.gen.view_models.views.loot_box_compensation_tooltip_types import LootBoxCompensationTooltipTypes
 from gui.impl.gen.view_models.views.loot_box_vehicle_compensation_tooltip_model import LootBoxVehicleCompensationTooltipModel
-from gui.impl.lobby.awards.packers import packBonusModelAndTooltipData
+from gui.impl.lobby.awards import SupportedTokenTypes
 from gui.impl.lobby.awards.tooltip import VEH_FOR_CHOOSE_ID
 from gui.impl.lobby.awards.tooltip.vehicle_for_choose import VehicleForChooseTooltipContent
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
-from gui.server_events.bonuses import TokensBonus, VehiclesBonus, mergeBonuses
 from gui.shared import event_dispatcher
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
-from items.components import component_constants
-from skeletons.gui.cdn import IPurchaseCache
 from skeletons.gui.offers import IOffersDataProvider
+from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
+from gui.impl.gen.view_models.views.lobby.awards.reward_model import RewardModel, RentTypeEnum
 if typing.TYPE_CHECKING:
-    from gui.cdn.controller import _PurchaseDescriptor
+    from gui.platform.catalog_service.controller import _PurchaseDescriptor
 _logger = logging.getLogger(__name__)
-_MAX_AWARDS = 10
-
-def _deepupdate(original, update):
-    for key, value in original.iteritems():
-        if key not in update:
-            update[key] = value
-        if isinstance(value, dict):
-            _deepupdate(value, update[key])
-
-
-def _getSortedBonusList(bonusData, order):
-    sortedList = []
-    for oItem in order:
-        for oKey, oVal in oItem.iteritems():
-            bDataSection = bonusData.get(oKey)
-            if bDataSection:
-                if isinstance(bDataSection, dict):
-                    if isinstance(oVal, dict):
-                        for oValKey in oVal.iterkeys():
-                            if oValKey in bDataSection:
-                                sortedList.append({oKey: {oValKey: bDataSection[oValKey]}})
-                                del bDataSection[oValKey]
-
-                        if not bDataSection:
-                            del bonusData[oKey]
-                    else:
-                        _logger.error('The type of items in order list and data section does not correspond to one another!')
-                else:
-                    sortedList.append({oKey: bDataSection})
-                    del bonusData[oKey]
-
-    if bonusData:
-        sortedList.append(bonusData)
-    return sortedList
-
 
 class MultipleAwardsView(ViewImpl):
     __purchaseCache = dependency.descriptor(IPurchaseCache)
@@ -129,37 +91,25 @@ class MultipleAwardsView(ViewImpl):
         return None if tooltipId is None else self.__tooltipItems.get(tooltipId)
 
     @process
-    def _onLoading(self, invoiceData, *args, **kwargs):
+    def _onLoading(self, rewards, tooltips, productCode, *args, **kwargs):
         super(MultipleAwardsView, self)._onLoading(*args, **kwargs)
+        self.__tooltipItems = tooltips
         yield lambda callback: callback(True)
-        metaData = invoiceData.get('meta', {})
-        productCode = self.__purchaseCache.getProductCode(metaData)
         if productCode:
-            bonusData = deepcopy(invoiceData['data'])
-            compensation = invoiceData.get('compensation', {})
-            _deepupdate(compensation, bonusData)
-            bonuses = []
-            for bData in _getSortedBonusList(bonusData, metaData.get('order', component_constants.EMPTY_TUPLE)):
-                bonuses.extend(awardsFactory(bData))
-
-            bonuses = mergeBonuses(bonuses)
-            viewRevards, self.__tooltipItems = yield packBonusModelAndTooltipData(bonuses[:_MAX_AWARDS], productCode)
             purchasePackage = yield self.__purchaseCache.requestPurchaseByID(productCode)
-            destroyed = self.viewStatus in (ViewStatus.DESTROYED, ViewStatus.DESTROYING)
-            if destroyed or self.viewModel is None:
+            if self.__isDestroyed():
                 return
-            productTitle = purchasePackage.getTitleID()
-            if productTitle:
-                self.viewModel.setTitle(backport.text(R.strings.awards.multipleAwards.steam.dyn(productTitle)(), name=purchasePackage.getProductName()))
-            productIconID = purchasePackage.getIconID()
-            if productIconID:
-                self.viewModel.setTitleIcon(backport.image(R.images.gui.maps.icons.awards.multipleAwards.title.dyn(productIconID)()))
-            self.__setProductTypeData(bonuses)
-            self.viewModel.setMainItemsCount(purchasePackage.getMainAmount())
-            for vR in viewRevards:
-                self.viewModel.rewards.addViewModel(vR)
-
-        return
+            with self.viewModel.transaction() as model:
+                productTitle = purchasePackage.getTitleID()
+                if productTitle:
+                    model.setTitle(backport.text(R.strings.awards.multipleAwards.steam.dyn(productTitle)(), name=purchasePackage.getProductName()))
+                productIconID = purchasePackage.getIconID()
+                if productIconID:
+                    model.setTitleIcon(backport.image(R.images.gui.maps.icons.awards.multipleAwards.title.dyn(productIconID)()))
+                self.__setProductTypeData(rewards)
+                model.setMainItemsCount(purchasePackage.getMainAmount())
+                for vR in rewards:
+                    model.rewards.addViewModel(vR)
 
     def _finalize(self):
         self.viewModel.onClose -= self.__onClose
@@ -171,19 +121,30 @@ class MultipleAwardsView(ViewImpl):
         super(MultipleAwardsView, self)._finalize()
         return
 
-    def __setProductTypeData(self, bonuses):
-        offersForChoice = []
+    def __isDestroyed(self):
+        destroyed = self.viewStatus in (ViewStatus.DESTROYED, ViewStatus.DESTROYING)
+        return destroyed or self.viewModel is None
+
+    def __extendSortedBonusList(self, sortedBList, extraData):
+        for order, extItem in extraData.iterItems():
+            sortedBList.insert(order, extItem)
+
+    def __setProductTypeData(self, rewards):
+        offersForChoice = set()
         vehicles = []
         hasVehicleForChoice = False
         rentVehicles = 0
         maxRentVehiclesForChoice = 0
-        for bonus in bonuses:
-            if isinstance(bonus, TokensBonus):
-                for tID in bonus.getTokens():
-                    if tID.startswith(OFFER_TOKEN_PREFIX):
-                        for offer in self.__offersProvider.getAvailableOffersByToken(tID):
+        for reward in rewards:
+            if isinstance(reward, RewardModel):
+                rewardItemID = reward.getItemID()
+                if rewardItemID:
+                    rewardItemName = reward.getName()
+                    if rewardItemName in SupportedTokenTypes.ALL():
+                        offer = self.__offersProvider.getOffer(rewardItemID)
+                        if offer:
                             giftVehiclesForChoice = 0
-                            offersForChoice.append(offer.id)
+                            offersForChoice.add(rewardItemID)
                             for gift in offer.getAllGifts():
                                 if gift.isVehicle:
                                     if gift.rentType != RentType.NO_RENT:
@@ -192,11 +153,12 @@ class MultipleAwardsView(ViewImpl):
                                         if giftVehiclesForChoice > maxRentVehiclesForChoice:
                                             maxRentVehiclesForChoice = giftVehiclesForChoice
 
-            if isinstance(bonus, VehiclesBonus):
-                for vehicle, vehInfo in bonus.getVehicles():
-                    vehicles.append(vehicle.intCD)
-                    if bonus.isRentVehicle(vehInfo):
-                        rentVehicles += 1
+                        else:
+                            _logger.warning("Couldn't get offer by tokenID = %s", str(rewardItemID))
+                    elif rewardItemName == 'vehicles' or rewardItemName == 'vehicles_rent':
+                        vehicles.append(rewardItemID)
+                        if reward.getVehicleRentType() != RentTypeEnum.NONE:
+                            rentVehicles += 1
 
         if maxRentVehiclesForChoice > 1:
             subtitle = R.strings.awards.multipleAwards.status.onChoiceRentMultiple()
@@ -210,7 +172,7 @@ class MultipleAwardsView(ViewImpl):
             subtitle = R.strings.awards.multipleAwards.status.onChoice()
         else:
             subtitle = R.strings.awards.multipleAwards.status.base()
-        self.__offer = offersForChoice[0] if len(offersForChoice) == 1 else None
+        self.__offer = next(iter(offersForChoice)) if len(offersForChoice) == 1 else None
         self.__vehicleIntCD = vehicles[0] if len(vehicles) == 1 else None
         self.viewModel.setSubTitle(backport.text(subtitle))
         self.viewModel.setHasRewardsOnChoice(bool(offersForChoice))
@@ -222,6 +184,7 @@ class MultipleAwardsView(ViewImpl):
 
     def __handleShowHangar(self):
         event_dispatcher.selectVehicleInHangar(self.__vehicleIntCD)
+        self.destroyWindow()
 
     def __handleMakeChoice(self):
         if self.__offer:
@@ -233,9 +196,13 @@ class MultipleAwardsView(ViewImpl):
 class MultipleAwardsViewWindow(LobbyNotificationWindow):
     __slots__ = ('__blur',)
 
-    def __init__(self, invoiceData):
-        super(MultipleAwardsViewWindow, self).__init__(content=MultipleAwardsView(invoiceData=invoiceData))
+    def __init__(self, rewards, tooltips, productCode):
+        super(MultipleAwardsViewWindow, self).__init__(content=self._getContentView(rewards, tooltips, productCode))
         self.__blur = CachedBlur(enabled=True, ownLayer=self.layer - 1)
+
+    @classmethod
+    def _getContentView(cls, rewards, tooltips, productCode):
+        return MultipleAwardsView(rewards=rewards, tooltips=tooltips, productCode=productCode)
 
     def _finalize(self):
         self.__blur.fini()

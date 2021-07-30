@@ -82,7 +82,7 @@ class Modification(ActionItem):
         super(Modification, self).readFromXML(xmlCtx, section, *args)
         xmlCtx = (xmlCtx, section.name)
         self.modifiers = readModifiers(xmlCtx, section['modifiers'])
-        if (IS_CLIENT or IS_WEB) and section.has_key('kpi'):
+        if IS_CLIENT and section.has_key('kpi'):
             self.kpi = readKpi(xmlCtx, section['kpi'])
 
 

@@ -13,7 +13,7 @@ def getContextMenuHandlers():
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.mapbox.mapbox_prime_time_view import MapboxPrimeTimeView
-    return (ViewSettings(MAPBOX_ALIASES.MAPBOX_PRIME_TIME, MapboxPrimeTimeView, HANGAR_ALIASES.RANKED_PRIME_TIME, WindowLayer.SUB_VIEW, MAPBOX_ALIASES.MAPBOX_PRIME_TIME, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),)
+    return (ViewSettings(MAPBOX_ALIASES.MAPBOX_PRIME_TIME, MapboxPrimeTimeView, HANGAR_ALIASES.RANKED_PRIME_TIME, WindowLayer.SUB_VIEW, MAPBOX_ALIASES.MAPBOX_PRIME_TIME, ScopeTemplates.LOBBY_SUB_SCOPE, True),)
 
 
 def getBusinessHandlers():

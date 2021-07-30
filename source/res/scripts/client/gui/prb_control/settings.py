@@ -160,7 +160,6 @@ class PREBATTLE_ACTION_NAME(object):
     RANKED = 'ranked'
     EPIC_TRAINING_LIST = 'epicTrainingsList'
     EPIC = 'epicQueue'
-    EPIC_FORCED = 'epicForced'
     BATTLE_ROYALE = 'battleRoyaleQueue'
     BATTLE_ROYALE_TOURNAMENT = 'battleRoyaleTournamentQueue'
     MAPS_TRAINING = 'mapsTraining'

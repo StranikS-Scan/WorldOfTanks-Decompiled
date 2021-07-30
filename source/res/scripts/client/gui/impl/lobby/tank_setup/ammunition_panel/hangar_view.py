@@ -35,10 +35,12 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     def _addListeners(self):
         super(HangarAmmunitionPanelView, self)._addListeners()
         self.viewModel.ammunitionPanel.onChangeSetupIndex += self._onChangeSetupIndex
+        self.viewModel.onEscKeyDown += self.__onEscKeyDown
 
     def _removeListeners(self):
         super(HangarAmmunitionPanelView, self)._removeListeners()
         self.viewModel.ammunitionPanel.onChangeSetupIndex -= self._onChangeSetupIndex
+        self.viewModel.onEscKeyDown -= self.__onEscKeyDown
 
     def _onLoading(self, *args, **kwargs):
         super(HangarAmmunitionPanelView, self)._onLoading(*args, **kwargs)
@@ -79,3 +81,6 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
         else:
             self._ammunitionPanel.onChangeSetupLayoutIndex(groupID, newLayoutIdx)
             return
+
+    def __onEscKeyDown(self):
+        self.onEscKeyDown()

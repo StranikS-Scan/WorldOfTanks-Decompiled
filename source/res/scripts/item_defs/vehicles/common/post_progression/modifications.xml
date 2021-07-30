@@ -1037,7 +1037,7 @@
   </role_HT_assault_pair_4_1>
   <role_HT_assault_pair_4_2>
     <id>	1142	</id>
-    <imgName>	improvedTurretTurningWheels	</imgName>
+    <imgName>	improvedSpeedIndicator	</imgName>
     <modifiers>
       <mul>
         <name>	miscAttrs/onStillRotationSpeedFactor	</name>
@@ -1677,7 +1677,7 @@
       </mul>
       <mul>
         <name>	miscAttrs/multShotDispersionFactor	</name>
-        <value>	1.03	</value>
+        <value>	1.02	</value>
       </mul>
     </modifiers>
     <kpi>
@@ -1691,7 +1691,7 @@
       </mul>
       <mul>
         <name>	vehicleGunShotFullDispersion	</name>
-        <value>	1.03	</value>
+        <value>	1.02	</value>
       </mul>
     </kpi>
   </role_mediumTank_pair_2_1>
@@ -1701,7 +1701,7 @@
     <modifiers>
       <mul>
         <name>	miscAttrs/multShotDispersionFactor	</name>
-        <value>	0.97	</value>
+        <value>	0.98	</value>
       </mul>
       <mul>
         <name>	miscAttrs/chassis/shotDispersionFactors/movement	</name>
@@ -1715,7 +1715,7 @@
     <kpi>
       <mul>
         <name>	vehicleGunShotFullDispersion	</name>
-        <value>	0.97	</value>
+        <value>	0.98	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersionChassisMovement	</name>

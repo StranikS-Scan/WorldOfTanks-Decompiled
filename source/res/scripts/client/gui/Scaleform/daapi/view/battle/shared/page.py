@@ -249,7 +249,14 @@ class SharedPage(BattlePageMeta):
         hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
         if hintPanel and hintPanel.getActiveHint():
             self._blToggling.add(_ALIASES.HINT_PANEL)
-        self._setComponentsVisibility(visible={_ALIASES.BATTLE_LOADING}, hidden=self._blToggling)
+        visible, additionalToggling = {_ALIASES.BATTLE_LOADING}, set()
+        if self.getComponent(_ALIASES.PREBATTLE_AMMUNITION_PANEL) is not None:
+            visible.add(_ALIASES.PREBATTLE_AMMUNITION_PANEL)
+            additionalToggling.add(_ALIASES.PREBATTLE_AMMUNITION_PANEL)
+        self._blToggling.difference_update(additionalToggling)
+        self._setComponentsVisibility(visible=visible, hidden=self._blToggling)
+        self._blToggling.update(additionalToggling)
+        return
 
     def _onBattleLoadingFinish(self):
         self._isBattleLoading = False

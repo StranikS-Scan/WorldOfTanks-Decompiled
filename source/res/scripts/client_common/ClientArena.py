@@ -41,7 +41,8 @@ class ClientArena(object):
      ARENA_UPDATE.VIEW_POINTS: '_ClientArena__onViewPoints',
      ARENA_UPDATE.VEHICLE_RECOVERED: '_ClientArena__onVehicleRecovered',
      ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar',
-     ARENA_UPDATE.RADAR_INFO_RECEIVED: '_ClientArena__onRadarInfoReceived'}
+     ARENA_UPDATE.RADAR_INFO_RECEIVED: '_ClientArena__onRadarInfoReceived',
+     ARENA_UPDATE.VEHICLE_DESCR: '_ClientArena__onVehicleDescrUpdate'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, spaceID):
         self.__vehicles = {}
@@ -218,6 +219,15 @@ class ClientArena(object):
         self.__vehicles[vehID] = self.__preprocessVehicleInfo(info)
         self.onVehicleUpdated(vehID)
 
+    def __onVehicleDescrUpdate(self, argStr):
+        vehID, compactDescr, maxHealth = cPickle.loads(argStr)
+        info = self.__vehicles[vehID]
+        extVehicleTypeData = {'vehPostProgression': info['vehPostProgression'],
+         'customRoleSlotTypeId': info['customRoleSlotTypeId']}
+        self.__vehicles[vehID]['vehicleType'] = self.__getVehicleType(compactDescr, extVehicleTypeData)
+        self.__vehicles[vehID]['maxHealth'] = maxHealth
+        self.onVehicleUpdated(vehID)
+
     def __onPeriodInfoUpdate(self, argStr):
         self.__periodInfo = cPickle.loads(zlib.decompress(argStr))
         self.onPeriodChange(*self.__periodInfo)
@@ -354,11 +364,13 @@ class ClientArena(object):
          'fakeName': info[21],
          'badges': info[22],
          'overriddenBadge': info[23],
-         'maxHealth': info[24]}
+         'maxHealth': info[24],
+         'vehPostProgression': info[25],
+         'customRoleSlotTypeId': info[26]}
         return (info[0], infoAsDict)
 
-    def __getVehicleType(self, intCD, extData):
-        return None if intCD is None else vehicles.VehicleDescr(compactDescr=intCD, extData=extData)
+    def __getVehicleType(self, compactDescr, extData):
+        return None if compactDescr is None else vehicles.VehicleDescr(compactDescr=compactDescr, extData=extData)
 
     def __vehicleStatisticsAsDict(self, stats):
         return (stats[0], {'frags': stats[1]})

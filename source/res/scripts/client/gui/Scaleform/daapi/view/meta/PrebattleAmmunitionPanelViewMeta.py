@@ -12,3 +12,6 @@ class PrebattleAmmunitionPanelViewMeta(InjectComponentAdaptor):
 
     def as_hideS(self, useAnim):
         return self.flashObject.as_hide(useAnim) if self._isDAAPIInited() else None
+
+    def as_setIsInLoadingS(self, value):
+        return self.flashObject.as_setIsInLoading(value) if self._isDAAPIInited() else None

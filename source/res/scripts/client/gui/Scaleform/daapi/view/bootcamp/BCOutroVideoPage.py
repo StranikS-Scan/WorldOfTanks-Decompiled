@@ -10,10 +10,6 @@ from uilogging.deprecated.bootcamp.loggers import BootcampUILogger
 class BCOutroVideoPage(BCVideoPage, TutorialDialog):
     _DEFAULT_MASTER_VOLUME = 0.5
 
-    def __init__(self, settings):
-        BCVideoPage.__init__(self, settings)
-        TutorialDialog.__init__(self, settings)
-
     def cancel(self):
         self._onMouseClicked('cancelID')
         self._onFinish()

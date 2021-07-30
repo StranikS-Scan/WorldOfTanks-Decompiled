@@ -30,6 +30,7 @@ from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSyst
 from AvatarInputHandler.AimingSystems.steady_vehicle_matrix import SteadyVehicleMatrixCalculator
 from AvatarInputHandler.commands.bootcamp_mode_control import BootcampModeControl
 from AvatarInputHandler.commands.dualgun_control import DualGunController
+from AvatarInputHandler.commands.prebattle_setups_control import PrebattleSetupsControl
 from AvatarInputHandler.commands.radar_control import RadarControl
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpdateControl
@@ -228,12 +229,16 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__observerIsSwitching = False
         self.__commands = []
         self.__detachedCommands = []
+        self.__persistentCommands = [PrebattleSetupsControl()]
         self.__remoteCameraSender = None
         self.__isGUIVisible = False
         self.__lastSwitchTime = 0
         return
 
     def __constructComponents(self):
+        self.__commands = []
+        self.__detachedCommands = []
+        self.__persistentCommands = []
         player = BigWorld.player()
         vehicle = player.getVehicleAttached()
         if not vehicle:
@@ -275,6 +280,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.__commands.append(VehicleUpdateControl())
                 self.__commands.append(VehicleUpgradePanelControl())
                 self.__detachedCommands.append(VehicleUpgradePanelControl())
+            if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.SWITCH_SETUPS):
+                self.__persistentCommands.append(PrebattleSetupsControl())
             return
 
     def prerequisites(self):
@@ -291,6 +298,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             return False
         else:
             player = BigWorld.player()
+            for command in self.__persistentCommands:
+                if command.handleKeyEvent(isDown, key, mods, event):
+                    return True
+
             if self.__isStarted and self.__isDetached:
                 if self.__curCtrl.alwaysReceiveKeyEvents(isDown=isDown) and not self.isObserverFPV or CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
                     self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
@@ -502,7 +513,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
 
     def __onVehicleChanged(self, isStatic):
         self.steadyVehicleMatrixCalculator.relinkSources()
-        self.__commands = []
         self.__identifyVehicleType()
         self.__constructComponents()
         if self.__waitObserverCallback is not None and self.__observerVehicle is not None:

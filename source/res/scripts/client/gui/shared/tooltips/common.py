@@ -896,6 +896,18 @@ class FortSortieTooltipData(ToolTipBaseData):
          'isInBattle': data.isInBattle}
 
 
+class SettingsSwitchEquipment(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SettingsSwitchEquipment, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+        self._setWidth(width=400)
+
+    def _packBlocks(self, *args, **kwargs):
+        tooltipBlocks = super(SettingsSwitchEquipment, self)._packBlocks()
+        tooltipBlocks.append(formatters.packBuildUpBlockData([formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_SWITCHEQUIPMENT_HEADER), text_styles.main(TOOLTIPS.SETTINGS_SWITCHEQUIPMENT_BODY)), formatters.packTextBlockData(text_styles.neutral(TOOLTIPS.SETTINGS_SWITCHEQUIPMENT_BODYFOOTER), padding={'bottom': -15})]))
+        return tooltipBlocks
+
+
 class SettingsMinimapCircles(BlocksTooltipData):
 
     def __init__(self, context):

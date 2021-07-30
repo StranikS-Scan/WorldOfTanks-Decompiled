@@ -698,6 +698,9 @@ class AmmoController(MethodsRules, ViewComponentsController):
         self.__quickChangerActive = False
         self.__dualGunQuickChangeReady = False
         self.__quickChangerInProcess = False
+        self.__currShellCD = None
+        self.__nextShellCD = None
+        return
 
     def setDualGunShellChangeTime(self, left, right, activeIdx):
         self.__dualGunShellChangeTime = _DualGunShellChangeTime(left, right, activeIdx)

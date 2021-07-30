@@ -10,7 +10,7 @@ from gui.veh_post_progression.messages import showWelcomeUnlockMsg
 from helpers import dependency
 from helpers.server_settings import VehiclePostProgressionConfig
 from items import vehicles
-from post_progression_common import VehiclesPostProgression, SERVER_SETTINGS_KEY, EXT_DATA_SLOT_KEY, EXT_DATA_PROGRESSION_KEY
+from post_progression_common import VehiclesPostProgression, SERVER_SETTINGS_KEY, EXT_DATA_SLOT_KEY, EXT_DATA_PROGRESSION_KEY, FEATURE_BY_GROUP_ID
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IVehiclePostProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -65,6 +65,10 @@ class VehiclePostProgressionController(IVehiclePostProgressionController):
         settings = settings or self.__postProgressionSettings
         vehicleIsNotForbidden = vehType.compactDescr not in settings.forbiddenVehicles
         return settings.isEnabled and vehicleIsNotForbidden and vehType.postProgressionTree is not None
+
+    def isSwitchSetupFeatureEnabled(self):
+        featureDisabled = set(FEATURE_BY_GROUP_ID.values()).isdisjoint(self.__postProgressionSettings.enabledFeatures)
+        return self.isEnabled() and not featureDisabled
 
     def getSettings(self):
         return self.__postProgressionSettings

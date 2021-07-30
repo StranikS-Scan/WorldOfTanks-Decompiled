@@ -176,27 +176,27 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         vehicles.reload()
         Vehicle.respawnVehicle(self.id, self.publicInfo.compDescr)
 
-    def __checkRespawn(self):
+    def __checkDelayedRespawn(self):
         global _g_respawnQueue
         pair = _g_respawnQueue.pop(self.id, None)
         if pair is not None:
             _logger.debug('found delayed respawn request(%d)', self.id)
             self.respawnCompactDescr = pair[0]
             self.respawnOutfitCompactDescr = pair[1]
-        return
+            return True
+        else:
+            return False
 
     def onEnterWorld(self, _=None):
         _logger.debug('onEnterWorld(%d)', self.id)
-        self.__checkRespawn()
-        if self.respawnCompactDescr is not None:
-            self.isCrewActive = True
+        isDelayedRespawn = self.__checkDelayedRespawn()
         if self.respawnOutfitCompactDescr is not None:
             outfitDescr = self.respawnOutfitCompactDescr
             self.respawnOutfitCompactDescr = None
         else:
             outfitDescr = self.publicInfo.outfit
         oldTypeDescriptor = self.typeDescriptor
-        self.typeDescriptor = self.getDescr(self.respawnCompactDescr)
+        self.typeDescriptor = self.getDescr(None if isDelayedRespawn else self.respawnCompactDescr)
         forceReloading = self.respawnCompactDescr is not None
         if 'battle_royale' in self.typeDescriptor.type.tags:
             from InBattleUpgrades import onBattleRoyalePrerequisites
@@ -213,6 +213,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
 
     def getDescr(self, respawnCompactDescr):
         if respawnCompactDescr is not None:
+            self.isCrewActive = True
             descr = vehicles.VehicleDescr(respawnCompactDescr, extData=self)
             if 'battle_royale' not in descr.type.tags:
                 self.health = self.publicInfo.maxHealth
@@ -1105,7 +1106,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.set_wheelsScroll()
         self.set_wheelsState()
         if hasattr(self, 'ownVehicle'):
-            self.ownVehicle.initialUpdate()
+            self.ownVehicle.initialUpdate(True)
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

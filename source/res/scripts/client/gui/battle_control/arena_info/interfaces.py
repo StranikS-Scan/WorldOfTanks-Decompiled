@@ -315,9 +315,21 @@ class IVehicleCountController(IArenaVehiclesController, ViewComponentsController
         raise NotImplementedError
 
 
-class IPrebattleSetupsController(IArenaPeriodController, ViewComponentsController):
+class IPrebattleSetupsController(IArenaPeriodController, IArenaLoadController, ViewComponentsController):
 
-    def isSelectionAvailable(self):
+    def getPrebattleSetupsVehicle(self):
+        raise NotImplementedError
+
+    def getPrebattleVehicleID(self):
+        raise NotImplementedError
+
+    def getCtrlScope(self):
+        return _SCOPE.PERIOD | _SCOPE.LOAD
+
+    def isArenaLoaded(self):
+        raise NotImplementedError
+
+    def isSelectionStarted(self):
         raise NotImplementedError
 
     def setPlayerVehicle(self, vehicleID, vehDescr):
@@ -348,6 +360,9 @@ class IPrebattleSetupsController(IArenaPeriodController, ViewComponentsControlle
         raise NotImplementedError
 
     def setSiegeState(self, vehicleID, siegeState):
+        raise NotImplementedError
+
+    def setVehicleAttrs(self, vehicleID, attrs):
         raise NotImplementedError
 
     def switchLayout(self, groupID, layoutIdx):

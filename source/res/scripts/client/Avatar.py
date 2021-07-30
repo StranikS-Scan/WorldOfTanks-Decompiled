@@ -799,9 +799,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 if not isGuiEnabled and cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown and mods == 0:
                     gui_event_dispatcher.choiceConsumable(key)
                     return True
-                if cmdMap.isFiredList((CommandMapping.CMD_AMMUNITION_SHORTCUT_SWITCH_SETUP_1, CommandMapping.CMD_AMMUNITION_SHORTCUT_SWITCH_SETUP_2), key) and isDown:
-                    gui_event_dispatcher.changeAmmunitionSetup(key)
-                    return True
                 if cmdMap.isFired(CommandMapping.CMD_VOICECHAT_ENABLE, key) and not isDown:
                     if self.__isPlayerInSquad() and not BattleReplay.isPlaying():
                         if VOIP.getVOIPManager().isVoiceSupported():
@@ -1194,7 +1191,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         LOG_DEBUG_DEV('updateDualGunState', vehicleID, activeGun, gunStates, cooldownTimes)
         return
 
-    def resetAmmoForVehicle(self, vehicleID):
+    def beforeSetupUpdate(self, vehicleID):
         vehicleDescriptor = self.__getDetailedVehicleDescriptor()
         self.guiSessionProvider.shared.ammo.clear(leave=False)
         self.guiSessionProvider.shared.equipments.clear(leave=False)
@@ -1602,7 +1599,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def syncVehicleAttrs(self, attrs):
         LOG_DEBUG('syncVehicleAttrs', attrs)
-        self.guiSessionProvider.shared.feedback.setVehicleAttrs(self.playerVehicleID, attrs)
+        if self.guiSessionProvider.shared.prebattleSetups.isSelectionStarted():
+            self.guiSessionProvider.shared.prebattleSetups.setVehicleAttrs(self.playerVehicleID, attrs)
+        else:
+            self.guiSessionProvider.shared.feedback.setVehicleAttrs(self.playerVehicleID, attrs)
 
     def showTracer(self, shooterID, shotID, isRicochet, effectsIndex, refStartPoint, velocity, gravity, maxShotDist, gunIndex):
         if not self.userSeesWorld() or self.__projectileMover is None:
@@ -2144,9 +2144,17 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def getOwnVehiclePosition(self):
         return Math.Matrix(self.getOwnVehicleMatrix()).translation
 
-    def getOwnVehicleMatrix(self):
+    def getOwnVehicleMatrix(self, default=None):
         observedMatrix = self.getObservedVehicleMatrix()
-        return observedMatrix if observedMatrix is not None else self.__ownVehicleMProv
+        if observedMatrix is not None:
+            return observedMatrix
+        else:
+            if Math.Matrix(self.__ownVehicleMProv).translation == Math.Matrix().translation:
+                LOG_WARNING('Invalid vehicle matrix')
+                if default is not None:
+                    self.__ownVehicleMProv.target = default
+            return self.__ownVehicleMProv
+            return
 
     def getOwnVehicleTurretMatrix(self):
         turretMatrix = self.getObservedVehicleTurretMatrix()
@@ -2812,9 +2820,13 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if vehicle is None or not vehicle.isAlive():
                 return
         currentVehicle = self.getVehicleAttached()
-        if currentVehicle is not None and vehicleID == currentVehicle.id:
-            self.guiSessionProvider.shared.ammo.setShells(compactDescr, quantity, quantityInClip)
-        return
+        prebattleVehicleID = self.guiSessionProvider.shared.prebattleSetups.getPrebattleVehicleID()
+        if prebattleVehicleID == vehicleID:
+            return
+        else:
+            if currentVehicle is not None and vehicleID == currentVehicle.id:
+                self.guiSessionProvider.shared.ammo.setShells(compactDescr, quantity, quantityInClip)
+            return
 
     def __processVehicleEquipments(self, vehicleID, compactDescr, quantity, stage, timeRemaining, totalTime):
         if compactDescr:

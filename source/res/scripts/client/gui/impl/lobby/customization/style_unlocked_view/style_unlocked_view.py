@@ -5,6 +5,7 @@ import WWISE
 from CurrentVehicle import g_currentVehicle
 from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl import backport
 from gui.impl.gen.view_models.views.lobby.customization.style_unlocked_view.style_unlocked_view_model import StyleUnlockedViewModel
 from gui.impl.lobby.customization.shared import goToC11nStyledMode
@@ -18,6 +19,7 @@ from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsSteelHunter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ViewEventType
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency, int2roman
 from items.components.c11n_constants import UNBOUND_VEH_KEY
 from skeletons.gui.customization import ICustomizationService
@@ -101,7 +103,11 @@ class StyleUnlockedView(ViewImpl):
 
     def __isCustEnabledForActiveVehicle(self):
         currentVehicle = g_currentVehicle.item
-        return currentVehicle.isCustomizationEnabled() if currentVehicle is not None and currentVehicle.intCD != self.__vehicle.intCD else self.__vehicle.isCustomizationEnabled()
+        if currentVehicle is not None and currentVehicle.intCD != self.__vehicle.intCD:
+            vehicle = currentVehicle
+        else:
+            vehicle = self.__vehicle
+        return vehicle.isCustomizationEnabled() and isVehicleCanBeCustomized(vehicle, GUI_ITEM_TYPE.STYLE)
 
     def __onOkClick(self):
         self.destroyWindow()

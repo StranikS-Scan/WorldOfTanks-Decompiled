@@ -35,7 +35,7 @@ from vehicle_systems.tankStructure import TankNodeNames
 from gui.impl.lobby.maps_training.sound_constants import MapsTrainingSound, MAPS_TRAINING_SOUND_SPACE
 
 class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
-    __slots__ = ('__selectedMap', '__selectedScenario', '__ctxVehicleType', '__ctxSide', '__ctxShowAnimation', '__tooltipData', '__account', '__mapsConfig', '__isDataLoaded', '__blur', '__blurRectId', '__packer', '__hangarCameraManager', '__tickCallback', '__preferences', '__markerPosOffset')
+    __slots__ = ('__selectedMap', '__selectedScenario', '__ctxVehicleType', '__ctxSide', '__ctxShowAnimation', '__tooltipData', '__account', '__mapsConfig', '__isDataLoaded', '__blur', '__blurRectId', '__packer', '__hangarCameraManager', '__tickCallback', '__preferences', '__markerPosOffset', '__finalizationInProgress')
     _TACTICAL_MAPS_CONFIG_PATH = 'scripts/maps_training_tactical_maps.xml'
     _SCENARIO_COUNT = len(VEHICLE_TYPE.ALL_TYPES) * len(VEHICLE_TYPE.ALL_TEAMS)
     _UPDATE_TICK_RATE = 0.1
@@ -67,6 +67,7 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         self.__tickCallback = None
         self.__preferences = self.mapsTrainingController.preferences
         self.__markerPosOffset = 0.0
+        self.__finalizationInProgress = False
         self.__initFromCtx(kwargs.get('ctx', {}))
         return
 
@@ -97,16 +98,21 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
 
     def _onLoading(self, *args, **kwargs):
         super(MapsTrainingView, self)._onLoading(*args, **kwargs)
+        self.__finalizationInProgress = False
         if self.hangarSpace.spaceInited:
             self.__hangarCameraManager = self.hangarSpace.space.getCameraManager()
         self.mapsTrainingController.requestInitialDataFromServer(self.__fillData)
 
     def _finalize(self):
+        self.__finalizationInProgress = True
         self.__blur.fini()
         if self.__tickCallback is not None:
             BigWorld.cancelCallback(self.__tickCallback)
         if not self.__selectedMap:
             MapsTrainingSound.onSelectedMap(True)
+        if self.prbEntity is not None and not self.prbEntity.isInQueue():
+            g_currentPreviewVehicle.selectNoVehicle()
+            g_currentPreviewVehicle.resetAppearance()
         super(MapsTrainingView, self)._finalize()
         return
 
@@ -384,13 +390,13 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
             self.__blurRectId = self.__blur.addRect(blurRect)
 
     def __onPreviewVehicleChangeStarted(self):
-        if self.__tickCallback is not None:
+        if self.__tickCallback is not None and not self.__finalizationInProgress:
             BigWorld.cancelCallback(self.__tickCallback)
             self.__tickCallback = None
         return
 
     def __onPreviewVehicleChanged(self):
-        if self.__tickCallback is None:
+        if self.__tickCallback is None and not self.__finalizationInProgress:
             self.__tickCallback = BigWorld.callback(self._UPDATE_TICK_RATE, self.__tick)
         return
 

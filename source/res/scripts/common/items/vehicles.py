@@ -259,7 +259,9 @@ def vehicleAttributeFactors():
      'gun/changeShell/reloadFactor': 1.0,
      'demaskMovingFactor': 1.0,
      'demaskFoliageFactor': 1.0,
-     'invisibilityAdditiveTerm': 0.0}
+     'invisibilityAdditiveTerm': 0.0,
+     'engineReduceFineFactor': 1.0,
+     'ammoBayReduceFineFactor': 1.0}
 
 
 WHEEL_SIZE_COEF = 2.2
@@ -1346,6 +1348,7 @@ class VehicleDescriptor(object):
          'additiveShotDispersionFactor': 1.0,
          'antifragmentationLiningFactor': 1.0,
          'circularVisionRadiusFactor': 1.0,
+         'circularVisionRadiusBaseFactor': 1.0,
          'gunReloadTimeFactor': 1.0,
          'gunAimingTimeFactor': 1.0,
          'vehicleByChassisDamageFactor': 1.0,
@@ -1364,6 +1367,7 @@ class VehicleDescriptor(object):
          'chassisRepairSpeedFactor': 1.0,
          'turretRotationSpeed': 1.0,
          'invisibilityAdditiveTerm': 0.0,
+         'invisibilityBaseAdditive': 0.0,
          'forwardMaxSpeedKMHTerm': 0.0,
          'backwardMaxSpeedKMHTerm': 0.0,
          'onStillRotationSpeedFactor': 1.0,

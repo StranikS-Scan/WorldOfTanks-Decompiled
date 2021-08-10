@@ -420,10 +420,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
         super(AmmoController, self).clear(True)
         if leave:
             self.__eManager.clear()
-        self.__ammo.clear()
-        self._order = []
-        self.__currShellCD = None
-        self.__nextShellCD = None
+        self.clearAmmo()
         reloadEffect = self.__gunSettings.reloadEffect
         if reloadEffect is not None:
             reloadEffect.stop()
@@ -432,6 +429,9 @@ class AmmoController(MethodsRules, ViewComponentsController):
             self._reloadingState.clear()
             self.__autoShoots.destroy()
             self._autoReloadingBoostState.destroy()
+            self.__dualGunQuickChangeReady = False
+            self.__quickChangerInProcess = False
+            self.__quickChangerActive = False
         else:
             self.onShellsCleared()
         return
@@ -501,8 +501,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
     def setCurrentShellCD(self, intCD):
         result = False
         if intCD in self.__ammo:
-            quantity, _ = self.__ammo[intCD]
-            if self.__currShellCD != intCD and quantity > 0:
+            if self.__currShellCD != intCD:
                 self.__currShellCD = intCD
                 self._reloadingState.startPredictedReloading()
                 self.__onCurrentShellChanged(intCD)
@@ -695,9 +694,6 @@ class AmmoController(MethodsRules, ViewComponentsController):
     def clearAmmo(self):
         self.__ammo.clear()
         self._order = []
-        self.__quickChangerActive = False
-        self.__dualGunQuickChangeReady = False
-        self.__quickChangerInProcess = False
         self.__currShellCD = None
         self.__nextShellCD = None
         return

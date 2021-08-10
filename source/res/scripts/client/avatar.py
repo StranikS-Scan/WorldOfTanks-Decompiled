@@ -1193,6 +1193,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def beforeSetupUpdate(self, vehicleID):
         vehicleDescriptor = self.__getDetailedVehicleDescriptor()
+        self.guiSessionProvider.shared.prebattleSetups.stopSelection()
         self.guiSessionProvider.shared.ammo.clear(leave=False)
         self.guiSessionProvider.shared.equipments.clear(leave=False)
         self.guiSessionProvider.shared.optionalDevices.reset()
@@ -1356,8 +1357,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def updateVehicleSetting(self, vehicleID, code, value):
         if code == VEHICLE_SETTING.CURRENT_SHELLS:
             ammoCtrl = self.guiSessionProvider.shared.ammo
-            if not ammoCtrl.setCurrentShellCD(value):
+            if not ammoCtrl.shellInAmmo(value):
                 return
+            ammoCtrl.setCurrentShellCD(value)
             shotIdx = ammoCtrl.getGunSettings().getShotIndex(value)
             if shotIdx > -1:
                 self.getVehicleDescriptor().activeGunShotIndex = shotIdx

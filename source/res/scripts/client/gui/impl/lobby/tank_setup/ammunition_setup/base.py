@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_setup/base.py
 from account_helpers.settings_core.settings_constants import CONTROLS
-from async import async, await
+from async import async, await, await_callback
 from BWUtil import AsyncReturn
 from frameworks.wulf import ViewStatus
 from gui.impl.backport import BackportTooltipWindow
@@ -144,14 +144,14 @@ class BaseAmmunitionSetupView(ViewImpl):
     @async
     def _doChangeSetupLayoutIndex(self, groupID, layoutIdx):
         changeSetupLayout = True
-        self.viewModel.setIsReady(False)
         sections = self._ammunitionPanel.getSectionsByGroup(groupID)
         currentSection = self._tankSetup.getSelectedSetup()
         if sections and currentSection in sections:
             changeSetupLayout = yield await(self._tankSetup.canQuit(skipApplyAutoRenewal=True))
         if changeSetupLayout:
-            self._ammunitionPanel.onChangeSetupLayoutIndex(groupID, layoutIdx)
-        self.viewModel.setIsReady(True)
+            yield await_callback(self._ammunitionPanel.onChangeSetupLayoutIndex)(groupID, layoutIdx)
+        if changeSetupLayout:
+            self._tankSetup.update()
         raise AsyncReturn(changeSetupLayout)
 
     def _onChangeSetupIndex(self, args):

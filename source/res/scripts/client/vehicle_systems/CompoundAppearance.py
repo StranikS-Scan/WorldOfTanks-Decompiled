@@ -411,20 +411,24 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         return
 
     def onChassisDestroySound(self, isLeft, destroy, wheelsIdx=-1):
-        if not self._vehicle.isEnteringWorld and self.engineAudition:
-            if wheelsIdx == -1:
-                if isLeft:
-                    position = Math.Matrix(self.compoundModel.node(TankNodeNames.TRACK_LEFT_MID)).translation
+        if self._vehicle is None:
+            return
+        else:
+            if not self._vehicle.isEnteringWorld and self.engineAudition:
+                if wheelsIdx == -1:
+                    if isLeft:
+                        position = Math.Matrix(self.compoundModel.node(TankNodeNames.TRACK_LEFT_MID)).translation
+                    else:
+                        position = Math.Matrix(self.compoundModel.node(TankNodeNames.TRACK_RIGHT_MID)).translation
+                    materialType = 0
                 else:
-                    position = Math.Matrix(self.compoundModel.node(TankNodeNames.TRACK_RIGHT_MID)).translation
-                materialType = 0
-            else:
-                position = self.wheelsAnimator.getWheelWorldTransform(wheelsIdx).translation
-                materialType = 0 if self.wheelsAnimator.isWheelDeflatable(wheelsIdx) else 1
-            vehicle = self.getVehicle()
-            if not destroy and vehicle.isPlayerVehicle and any((device.groupName == 'extraHealthReserve' for device in vehicle.getOptionalDevices() if device is not None)):
-                SoundGroups.g_instance.playSound2D('cons_springs')
-            self.engineAudition.onChassisDestroy(position, destroy, materialType)
+                    position = self.wheelsAnimator.getWheelWorldTransform(wheelsIdx).translation
+                    materialType = 0 if self.wheelsAnimator.isWheelDeflatable(wheelsIdx) else 1
+                vehicle = self.getVehicle()
+                if not destroy and vehicle.isPlayerVehicle and any((device.groupName == 'extraHealthReserve' for device in vehicle.getOptionalDevices() if device is not None)):
+                    SoundGroups.g_instance.playSound2D('cons_springs')
+                self.engineAudition.onChassisDestroy(position, destroy, materialType)
+            return
 
     def turretDamaged(self):
         player = BigWorld.player()

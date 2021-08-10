@@ -26,6 +26,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.impl.lobby.dialogs.auxiliary.buy_and_exchange_state_machine import BuyAndExchangeStateEnum
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.economics import getGUIPrice
@@ -52,6 +53,7 @@ from items import vehicles, ITEM_TYPE_NAMES, parseIntCompactDescr
 from shared_utils import first, allEqual
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
@@ -901,6 +903,7 @@ class PurchasePostProgressionSteps(AsyncGUIItemAction):
 
 class SetEquipmentSlotType(AsyncGUIItemAction):
     __slots__ = ('__vehicle', '__slotID')
+    __uiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self, vehicle):
         super(SetEquipmentSlotType, self).__init__()
@@ -916,6 +919,9 @@ class SetEquipmentSlotType(AsyncGUIItemAction):
     @async
     @future_async.async
     def _confirm(self, callback):
+        if self.__uiLoader.windowsManager.getViewByLayoutID(layoutID=R.views.lobby.common.SelectSlotSpecDialog()):
+            callback(False)
+            return
         Waiting.show('loadModalWindow', softStart=True)
         from gui.impl.lobby.common.select_slot_spec_dialog import showDialog
         result = yield future_async.await(showDialog(self.__vehicle))

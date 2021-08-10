@@ -356,7 +356,7 @@
     <locName>	blackout_headlights_1	</locName>
     <modifiers>
       <add>
-        <name>	miscAttrs/invisibilityAdditiveTerm	</name>
+        <name>	miscAttrs/invisibilityBaseAdditive	</name>
         <value>	0.01	</value>
       </add>
     </modifiers>
@@ -372,7 +372,7 @@
     <locName>	blackout_headlights_1	</locName>
     <modifiers>
       <add>
-        <name>	miscAttrs/invisibilityAdditiveTerm	</name>
+        <name>	miscAttrs/invisibilityBaseAdditive	</name>
         <value>	0.01	</value>
       </add>
     </modifiers>
@@ -540,7 +540,7 @@
     <locName>	blackout_headlights_1	</locName>
     <modifiers>
       <add>
-        <name>	miscAttrs/invisibilityAdditiveTerm	</name>
+        <name>	miscAttrs/invisibilityBaseAdditive	</name>
         <value>	0.01	</value>
       </add>
     </modifiers>
@@ -556,7 +556,7 @@
     <locName>	blackout_headlights_1	</locName>
     <modifiers>
       <add>
-        <name>	miscAttrs/invisibilityAdditiveTerm	</name>
+        <name>	miscAttrs/invisibilityBaseAdditive	</name>
         <value>	0.01	</value>
       </add>
     </modifiers>
@@ -932,7 +932,7 @@
         <value>	0.85	</value>
       </mul>
       <mul>
-        <name>	miscAttrs/circularVisionRadiusFactor	</name>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	0.97	</value>
       </mul>
     </modifiers>
@@ -956,7 +956,7 @@
     <imgName>	improvedObservationDevice	</imgName>
     <modifiers>
       <mul>
-        <name>	miscAttrs/circularVisionRadiusFactor	</name>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	1.03	</value>
       </mul>
       <add>
@@ -1740,7 +1740,7 @@
         <value>	1.05	</value>
       </mul>
       <add>
-        <name>	miscAttrs/invisibilityAdditiveTerm	</name>
+        <name>	miscAttrs/invisibilityBaseAdditive	</name>
         <value>	-0.03	</value>
       </add>
     </modifiers>
@@ -1764,7 +1764,7 @@
     <imgName>	improvedLightFilters	</imgName>
     <modifiers>
       <add>
-        <name>	miscAttrs/invisibilityAdditiveTerm	</name>
+        <name>	miscAttrs/invisibilityBaseAdditive	</name>
         <value>	0.03	</value>
       </add>
       <add>
@@ -1844,7 +1844,7 @@
     <imgName>	improvedObservationDevice	</imgName>
     <modifiers>
       <mul>
-        <name>	miscAttrs/circularVisionRadiusFactor	</name>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	1.03	</value>
       </mul>
       <mul>
@@ -1896,7 +1896,7 @@
         <value>	0.08	</value>
       </add>
       <mul>
-        <name>	miscAttrs/circularVisionRadiusFactor	</name>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	0.97	</value>
       </mul>
       <mul>
@@ -1936,7 +1936,7 @@
         <value>	2	</value>
       </add>
       <mul>
-        <name>	miscAttrs/circularVisionRadiusFactor	</name>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	0.97	</value>
       </mul>
     </modifiers>
@@ -1956,7 +1956,7 @@
     <imgName>	improvedObservationDevice	</imgName>
     <modifiers>
       <mul>
-        <name>	miscAttrs/circularVisionRadiusFactor	</name>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	1.03	</value>
       </mul>
       <add>
@@ -2220,7 +2220,7 @@
         <value>	1.02	</value>
       </mul>
       <mul>
-        <name>	miscAttrs/circularVisionRadiusFactor	</name>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	0.97	</value>
       </mul>
     </modifiers>
@@ -2244,7 +2244,7 @@
     <imgName>	improvedObservationDevice	</imgName>
     <modifiers>
       <mul>
-        <name>	miscAttrs/circularVisionRadiusFactor	</name>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	1.03	</value>
       </mul>
       <add>
@@ -2400,7 +2400,7 @@
         <value>	1.06	</value>
       </mul>
       <mul>
-        <name>	miscAttrs/circularVisionRadiusFactor	</name>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	0.98	</value>
       </mul>
     </modifiers>
@@ -2420,7 +2420,7 @@
     <imgName>	improvedObservationDevice	</imgName>
     <modifiers>
       <mul>
-        <name>	miscAttrs/circularVisionRadiusFactor	</name>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	1.02	</value>
       </mul>
       <mul>
@@ -2572,7 +2572,7 @@
     <imgName>	improvedCamouflage	</imgName>
     <modifiers>
       <add>
-        <name>	miscAttrs/invisibilityAdditiveTerm	</name>
+        <name>	miscAttrs/invisibilityBaseAdditive	</name>
         <value>	0.05	</value>
       </add>
       <add>
@@ -2600,7 +2600,7 @@
         <value>	2	</value>
       </add>
       <add>
-        <name>	miscAttrs/invisibilityAdditiveTerm	</name>
+        <name>	miscAttrs/invisibilityBaseAdditive	</name>
         <value>	-0.05	</value>
       </add>
     </modifiers>
@@ -3052,11 +3052,11 @@
     <imgName>	improvedLightFilters	</imgName>
     <modifiers>
       <add>
-        <name>	miscAttrs/invisibilityAdditiveTerm	</name>
+        <name>	miscAttrs/invisibilityBaseAdditive	</name>
         <value>	0.02	</value>
       </add>
       <mul>
-        <name>	miscAttrs/circularVisionRadiusFactor	</name>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	0.98	</value>
       </mul>
     </modifiers>
@@ -3076,11 +3076,11 @@
     <imgName>	improvedObservationDevice	</imgName>
     <modifiers>
       <mul>
-        <name>	miscAttrs/circularVisionRadiusFactor	</name>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	1.02	</value>
       </mul>
       <add>
-        <name>	miscAttrs/invisibilityAdditiveTerm	</name>
+        <name>	miscAttrs/invisibilityBaseAdditive	</name>
         <value>	-0.02	</value>
       </add>
     </modifiers>

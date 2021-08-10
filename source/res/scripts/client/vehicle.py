@@ -218,6 +218,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             if 'battle_royale' not in descr.type.tags:
                 self.health = self.publicInfo.maxHealth
                 self.__prevHealth = self.publicInfo.maxHealth
+                self.__turretDetachmentConfirmed = False
             return descr
         else:
             return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr), extData=self)

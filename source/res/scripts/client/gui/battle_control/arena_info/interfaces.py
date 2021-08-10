@@ -332,6 +332,9 @@ class IPrebattleSetupsController(IArenaPeriodController, IArenaLoadController, V
     def isSelectionStarted(self):
         raise NotImplementedError
 
+    def stopSelection(self):
+        raise NotImplementedError
+
     def setPlayerVehicle(self, vehicleID, vehDescr):
         raise NotImplementedError
 

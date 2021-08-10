@@ -1096,6 +1096,59 @@
       </damage>
     </armorSpalls>
   </_100mm_SB-412G>
+  <_100mm_CJ-412GX>
+    <id>	117	</id>
+    <userString>	#china_vehicles:_100mm_CJ-412GX	</userString>
+    <icon>	ap	</icon>
+    <price>	1050	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_CJ-412GX>
+  <_100mm_TC-412GX>
+    <id>	118	</id>
+    <userString>	#china_vehicles:_100mm_TC-412GX	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_TC-412GX>
+  <_100mm_SB-412GX>
+    <id>	119	</id>
+    <userString>	#china_vehicles:_100mm_SB-412GX	</userString>
+    <icon>	he_modern	</icon>
+    <price>	750	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.76	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_100mm_SB-412GX>
   <_100mm_UBR-412training>
     <id>	71	</id>
     <userString>	#china_vehicles:_100mm_UBR-412	</userString>

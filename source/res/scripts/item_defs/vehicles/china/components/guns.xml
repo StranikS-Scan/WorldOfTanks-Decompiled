@@ -61,6 +61,7 @@
     <_122mm_60_122T_113>	254	</_122mm_60_122T_113>
     <_120mm_TG>	255	</_120mm_TG>
     <_152mm_GM_45>	256	</_152mm_GM_45>
+    <_100mm_D54_TA>	257	</_100mm_D54_TA>
     <_130mm_59-130T_FL>	501	</_130mm_59-130T_FL>
     <_100mm_60-100TA_IGR>	60001	</_100mm_60-100TA_IGR>
     <_100mm_62-100T_IGR>	60002	</_100mm_62-100T_IGR>
@@ -2174,6 +2175,64 @@
         </_100mm_UOF-412>
       </shots>
     </_100mm_60-100TA>
+    <_100mm_D54_TA>
+      <userString>	#china_vehicles:_100mm_D54_TA	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	166000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.56	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_mainext	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	33.25	</rotationSpeed>
+      <reloadTime>	8.0	</reloadTime>
+      <maxAmmo>	34	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	2257	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.27	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_100mm_CJ-412GX>
+          <defaultPortion>	0.80	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	215 185	</piercingPower>
+        </_100mm_CJ-412GX>
+        <_100mm_TC-412GX>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1188	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	265 255	</piercingPower>
+        </_100mm_TC-412GX>
+        <_100mm_SB-412GX>
+          <defaultPortion>	0.20	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	50 50	</piercingPower>
+        </_100mm_SB-412GX>
+      </shots>
+    </_100mm_D54_TA>
     <_100mm_60_100TG_FT>
       <userString>	#china_vehicles:_100mm_60_100TG_FT	</userString>
       <tags></tags>

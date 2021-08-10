@@ -534,11 +534,12 @@ class RotationMechanisms(StaticOptionalDevice):
             return
         else:
             isWheeledVehicle = vehicleDescr.type.isWheeledVehicle
+            miscAttrs = vehicleDescr.miscAttrs
             onMoveFactor = self.trackMoveSpeedFactor if not isWheeledVehicle else self.wheelMoveSpeedFactor
-            vehicleDescr.miscAttrs['onMoveRotationSpeedFactor'] = onMoveFactor.getActiveValue(level)
+            miscAttrs['onMoveRotationSpeedFactor'] *= onMoveFactor.getActiveValue(level)
             onRotationFactor = self.trackRotateSpeedFactor if not isWheeledVehicle else self.wheelRotateSpeedFactor
-            vehicleDescr.miscAttrs['onStillRotationSpeedFactor'] = onRotationFactor.getActiveValue(level)
-            vehicleDescr.miscAttrs['centerRotationFwdSpeedFactor'] = self.wheelCenterRotationFwdSpeed.getActiveValue(level)
+            miscAttrs['onStillRotationSpeedFactor'] *= onRotationFactor.getActiveValue(level)
+            miscAttrs['centerRotationFwdSpeedFactor'] *= self.wheelCenterRotationFwdSpeed.getActiveValue(level)
             return
 
     def _readConfig(self, xmlCtx, section):

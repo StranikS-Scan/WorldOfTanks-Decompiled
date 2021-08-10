@@ -9,10 +9,12 @@ from gui.Scaleform.locale.INVITES import INVITES
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsSteelHunter
 from gui.clans.formatters import ClanSingleNotificationHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanAppActionHtmlTextFormatter
 from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
+from gui.customization.shared import isVehicleCanBeCustomized
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ViewEventType, HangarSpacesSwitcherEvent
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
 from helpers import dependency
@@ -313,7 +315,9 @@ class C11nMessageDecorator(LockButtonMessageDecorator):
         g_eventBus.removeListener(HangarSpacesSwitcherEvent.SWITCH_TO_HANGAR_SPACE, self._updateButtons, EVENT_BUS_SCOPE.LOBBY)
 
     def _updateButtons(self, _):
-        isLocked = currentHangarIsSteelHunter() or self.__vehicle is not None and not self.__vehicle.isCustomizationEnabled()
+        isLocked = True
+        if not currentHangarIsSteelHunter() and self.__vehicle is not None and self.__vehicle.isCustomizationEnabled():
+            isLocked = self._entity.get('savedData', {}).get('toStyle', False) and not isVehicleCanBeCustomized(self.__vehicle, GUI_ITEM_TYPE.STYLE)
         self._updateButtonsState(lock=isLocked)
         return
 

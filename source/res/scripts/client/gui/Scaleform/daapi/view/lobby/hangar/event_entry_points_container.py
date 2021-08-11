@@ -7,6 +7,7 @@ from itertools import chain
 from constants import QUEUE_TYPE
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSenorityEntryPointIsActive
 from gui.Scaleform.daapi.view.meta.EventEntryPointsContainerMeta import EventEntryPointsContainerMeta
+from gui.impl.lobby.eleventh_birthday_calendar.shop_birthday_section_entry_point import isBirthdayEntryPointAvailable
 from gui.impl.lobby.mapbox.mapbox_entry_point_view import isMapboxEntryPointAvailable
 from gui.impl.lobby.ranked.ranked_entry_point import isRankedEntryPointAvailable
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
@@ -27,7 +28,8 @@ _ADDITIONAL_SWFS_MAP = {HANGAR_ALIASES.SENIORITY_AWARDS_ENTRY_POINT_2020: 'senio
 _ENTRY_POINT_ENABLED_VALIDATOR = {HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT: getCraftMachineEntryPointIsActive,
  HANGAR_ALIASES.SENIORITY_AWARDS_ENTRY_POINT_2020: getSenorityEntryPointIsActive,
  RANKEDBATTLES_ALIASES.ENTRY_POINT: isRankedEntryPointAvailable,
- HANGAR_ALIASES.MAPBOX_ENTRY_POINT: isMapboxEntryPointAvailable}
+ HANGAR_ALIASES.MAPBOX_ENTRY_POINT: isMapboxEntryPointAvailable,
+ HANGAR_ALIASES.SHOP_BIRTHDAY_SECTION_ENTRY_POINT: isBirthdayEntryPointAvailable}
 _logger = logging.getLogger(__name__)
 
 class _EntryPointData(object):

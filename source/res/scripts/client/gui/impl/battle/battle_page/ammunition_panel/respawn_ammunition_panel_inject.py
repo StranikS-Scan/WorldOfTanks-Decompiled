@@ -38,7 +38,7 @@ class RespawnAmmunitionPanelInject(InjectComponentAdaptor, IRespawnView):
         if not self.__needVehicleInvalidation(vehInfo, setupIndexes):
             return
         self._updateGuiVehicle(vehInfo, setupIndexes)
-        self._injectView.updateViewVehicle(self._vehicle)
+        self._injectView.updateViewVehicle(self._vehicle, False)
 
     def _onPopulate(self):
         pass

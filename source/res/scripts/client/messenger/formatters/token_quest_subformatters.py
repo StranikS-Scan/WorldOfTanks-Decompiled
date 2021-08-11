@@ -22,7 +22,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BirthdayQuestAchievesFormatter
 from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from shared_utils import findFirst, first
@@ -661,3 +661,34 @@ class RankedYearLeaderFormatter(RankedTokenQuestFormatter):
     def __formatShortMessage(self):
         return g_settings.msgTemplates.format('rankedLeaderNegativeQuest', ctx={'title': backport.text(R.strings.system_messages.ranked.notification.yearLB.negative.title()),
          'body': backport.text(R.strings.system_messages.ranked.notification.yearLB.negative.body())}, data={'savedData': {'ctx': {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}}})
+
+
+class BirthdayTokenQuestSubFormatter(AsyncTokenQuestsSubFormatter):
+    __TEMPLATE_NAME = 'birthdayCalendar'
+    __QUEST_PATTERN = 'birthday_calendar'
+
+    def __init__(self):
+        super(BirthdayTokenQuestSubFormatter, self).__init__()
+        self._achievesFormatter = BirthdayQuestAchievesFormatter()
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        formatted, settings = (None, None)
+        if isSynced:
+            data = message.data or {}
+            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
+            completedQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
+            questsData = getRewardsForQuests(message, self.getQuestOfThisGroup(completedQuestIDs))
+            fmt = self._achievesFormatter.formatQuestAchieves(questsData)
+            if fmt is not None:
+                templateParams = {'achieves': fmt}
+                settings = self._getGuiSettings(message, self.__TEMPLATE_NAME)
+                formatted = g_settings.msgTemplates.format(self.__TEMPLATE_NAME, templateParams)
+        callback([MessageData(formatted, settings)])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return cls.__QUEST_PATTERN in questID

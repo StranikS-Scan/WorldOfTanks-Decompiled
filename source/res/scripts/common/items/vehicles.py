@@ -684,6 +684,9 @@ class VehicleDescriptor(object):
 
             return (True, None)
 
+    def rebuildAttrs(self):
+        return self.__updateAttributes()
+
     def installComponent(self, compactDescr, positionIndex=0):
         itemTypeID, nationID, compID = parseIntCompactDescr(compactDescr)
         itemTypeName = items.ITEM_TYPE_NAMES[itemTypeID]
@@ -785,13 +788,14 @@ class VehicleDescriptor(object):
         self.__updateAttributes()
         return
 
-    def installOptionalDevice(self, compactDescr, slotIdx):
+    def installOptionalDevice(self, compactDescr, slotIdx, rebuildAttrs=True):
         device = g_cache.optionalDevices()[parseIntCompactDescr(compactDescr)[2]]
         devices = self.optionalDevices
         prevDevice = devices[slotIdx]
         devices[slotIdx] = device
         self._optDevSlotsMap[compactDescr] = self.supplySlots.getSlotByIdxInItemType(ITEM_TYPES.optionalDevice, slotIdx)
-        self.__updateAttributes()
+        if rebuildAttrs:
+            self.__updateAttributes()
         if prevDevice is None:
             return (component_constants.EMPTY_TUPLE, component_constants.EMPTY_TUPLE)
         else:
@@ -811,14 +815,15 @@ class VehicleDescriptor(object):
 
         return (True, None)
 
-    def removeOptionalDevice(self, slotIdx, *args):
+    def removeOptionalDevice(self, slotIdx, rebuildAttrs=True):
         device = self.optionalDevices[slotIdx]
         if device is None:
             return (component_constants.EMPTY_TUPLE, component_constants.EMPTY_TUPLE)
         else:
             self.optionalDevices[slotIdx] = None
             self._optDevSlotsMap.pop(device.compactDescr)
-            self.__updateAttributes()
+            if rebuildAttrs:
+                self.__updateAttributes()
             return ((device.compactDescr,), component_constants.EMPTY_TUPLE) if device.removable else (component_constants.EMPTY_TUPLE, (device.compactDescr,))
 
     def maySwapOptionalDevice(self, leftID, rightID):
@@ -1509,9 +1514,9 @@ class CompositeVehicleDescriptor(object):
         self.__siegeDescr.installModifications(modificationIDs, rebuildAttrs)
         return self.__vehicleDescr.installModifications(modificationIDs, rebuildAttrs)
 
-    def installOptionalDevice(self, compactDescr, slotIdx):
-        self.__siegeDescr.installOptionalDevice(compactDescr, slotIdx)
-        return self.__vehicleDescr.installOptionalDevice(compactDescr, slotIdx)
+    def installOptionalDevice(self, compactDescr, slotIdx, rebuildAttrs=True):
+        self.__siegeDescr.installOptionalDevice(compactDescr, slotIdx, rebuildAttrs)
+        return self.__vehicleDescr.installOptionalDevice(compactDescr, slotIdx, rebuildAttrs)
 
     def installOptDevsSequence(self, optDevSequence):
         self.__siegeDescr.installOptDevsSequence(optDevSequence)
@@ -1521,9 +1526,13 @@ class CompositeVehicleDescriptor(object):
         self.__siegeDescr.installTurret(turretCompactDescr, gunCompactDescr, positionIndex)
         return self.__vehicleDescr.installTurret(turretCompactDescr, gunCompactDescr, positionIndex)
 
-    def removeOptionalDevice(self, slotIdx):
-        self.__siegeDescr.removeOptionalDevice(slotIdx)
-        return self.__vehicleDescr.removeOptionalDevice(slotIdx)
+    def removeOptionalDevice(self, slotIdx, rebuildAttrs=True):
+        self.__siegeDescr.removeOptionalDevice(slotIdx, rebuildAttrs)
+        return self.__vehicleDescr.removeOptionalDevice(slotIdx, rebuildAttrs)
+
+    def rebuildAttrs(self):
+        self.__siegeDescr.rebuildAttrs()
+        return self.__vehicleDescr.rebuildAttrs()
 
     def __installGun(self, gunID, turretPositionIdx):
         self.__siegeDescr.__installGun(gunID, turretPositionIdx)
@@ -6473,12 +6482,13 @@ def areOptDevicesLayoutsEqual(oldDevicesObjs, newDevicesCDs):
 
 def reinstallOptionalDevices(vehDescr, newDevices):
     for slotIdx in xrange(len(vehDescr.optionalDevices)):
-        vehDescr.removeOptionalDevice(slotIdx)
+        vehDescr.removeOptionalDevice(slotIdx, rebuildAttrs=False)
 
     for slotIdx, compactDescr in enumerate(newDevices):
         if compactDescr != 0:
-            vehDescr.installOptionalDevice(compactDescr, slotIdx)
+            vehDescr.installOptionalDevice(compactDescr, slotIdx, rebuildAttrs=False)
 
+    vehDescr.rebuildAttrs()
     return vehDescr
 
 

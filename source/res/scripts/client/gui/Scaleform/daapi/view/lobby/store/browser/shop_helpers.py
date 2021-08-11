@@ -138,6 +138,10 @@ def getSplitPageUrl(params):
     return addParamsToUrlQuery(url, params, True)
 
 
+def getBirthdayPageURL():
+    return _getUrl('birthdayPageURL')
+
+
 def getClientControlledCloseCtx():
     return {'browserParams': makeBrowserParams(isCloseBtnVisible=True),
      'forcedSkipEscape': True}

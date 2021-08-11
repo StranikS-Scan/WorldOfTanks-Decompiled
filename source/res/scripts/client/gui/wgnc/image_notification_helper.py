@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 class WebImageHelper(object):
     __slots__ = ('__callbackMethod', '__imageUrl', '__callbackDelayer', '__webCache', '__defLocalDirPath')
-    __DEFAULT_TIMEOUT = 5.0
+    __DEFAULT_TIMEOUT = 10.0
 
     def __init__(self, defLocalDirPath='notifications'):
         self.__callbackMethod = None

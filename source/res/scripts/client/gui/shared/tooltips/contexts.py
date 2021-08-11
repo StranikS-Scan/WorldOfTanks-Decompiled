@@ -232,6 +232,7 @@ class AwardContext(DefaultContext):
         self._rentBattlesLeft = None
         self._rentWinsLeft = None
         self._seasonRent = None
+        self._isSeniority = False
         return
 
     def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, rentCycle=None, isSeniority=False):
@@ -241,6 +242,7 @@ class AwardContext(DefaultContext):
         self._rentWinsLeft = rentWins
         self._seasonRent = {'season': rentSeason or [],
          'cycle': rentCycle or []}
+        self._isSeniority = isSeniority
         return self.itemsCache.items.getItemByCD(int(intCD))
 
     def getStatsConfiguration(self, item):
@@ -275,7 +277,8 @@ class AwardContext(DefaultContext):
          'rentExpiryTime': self._rentExpiryTime,
          'rentBattlesLeft': self._rentBattlesLeft,
          'rentWinsLeft': self._rentWinsLeft,
-         'rentSeason': seasonRent}
+         'rentSeason': seasonRent,
+         'isSeniority': self._isSeniority}
 
 
 class ExtendedAwardContext(AwardContext):

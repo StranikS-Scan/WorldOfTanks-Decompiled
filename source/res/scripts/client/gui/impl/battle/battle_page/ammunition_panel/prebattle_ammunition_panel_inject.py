@@ -53,7 +53,7 @@ class PrebattleAmmunitionPanelInject(PrebattleAmmunitionPanelViewMeta, IPrebattl
 
     @hasAliveInject(deadUnexpected=True)
     def updateVehicleSetups(self, vehicle):
-        self._injectView.updateViewVehicle(vehicle)
+        self._injectView.updateViewVehicle(vehicle, False)
 
     @hasAliveInject(deadUnexpected=True)
     def stopSetupsSelection(self):

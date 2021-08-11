@@ -69,10 +69,6 @@
       <Type>	BOOL	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
     </isAtackerProxy>
-    <arena>
-      <Type>	MAILBOX	</Type>
-      <Flags>	BASE	</Flags>
-    </arena>
   </Properties>
   <ClientMethods>
     <onStaticCollision>
@@ -107,7 +103,4 @@
     </applyForceToCOM>
     <onDamageVehicle></onDamageVehicle>
   </CellMethods>
-  <BaseMethods>
-    <smartDestroy></smartDestroy>
-  </BaseMethods>
 </DetachedTurret.def>

@@ -78,6 +78,7 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_MODULE,
  ItemPackType.GOODIE_CREW_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_BOOSTER,
  ItemPackType.GOODIE_FREE_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_BOOSTER,
  ItemPackType.GOODIE_FRONTLINE_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_BOOSTER,
+ ItemPackType.VEHICLE: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
  ItemPackType.VEHICLE_MEDIUM: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
  ItemPackType.VEHICLE_HEAVY: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
  ItemPackType.VEHICLE_LIGHT: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
@@ -335,7 +336,9 @@ def getItemTooltipType(rawItem, item):
 def showItemTooltip(toolTipMgr, rawItem, item):
     tooltipType = getItemTooltipType(rawItem, item)
     if tooltipType is not None:
-        toolTipMgr.onCreateTypedTooltip(tooltipType, [rawItem.id], 'INFO')
+        defaults = toolTipMgr.getTypedTooltipDefaultBuildArgs(tooltipType)
+        buildArgs = [ rawItem.extra.get(argName, defaultValue) for argName, defaultValue in defaults ]
+        toolTipMgr.onCreateTypedTooltip(tooltipType, [rawItem.id] + buildArgs[1:], 'INFO')
     else:
         header = getItemTitle(rawItem, item)
         body = getItemDescription(rawItem, item)

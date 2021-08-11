@@ -18,6 +18,10 @@ class WebDownloader(IDownloader):
             self.__worker = None
         return
 
+    def downloadLowPriority(self, url, callback):
+        self.__worker.putLowPriorityJob(_HttpOpenUrlJob(url, None, partial(self.__onDownload, url, callback)))
+        return
+
     def download(self, url, callback):
         self.__worker.putJob(_HttpOpenUrlJob(url, None, partial(self.__onDownload, url, callback)))
         return

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/tooltip_mgr.py
+import inspect
+import itertools
 import logging
 import Keys
 from Event import SafeEvent, EventManager
@@ -61,6 +63,19 @@ class ToolTip(ToolTipMgrMeta):
         altPressed = event.key == Keys.KEY_LALT or event.key == Keys.KEY_RALT
         self.__isAdvancedKeyPressed = event.isKeyDown() and altPressed
         return self.__tooltipID is not None and altPressed
+
+    def getTypedTooltipDefaultBuildArgs(self, tooltipType):
+        builder = self._builders.getBuilder(tooltipType)
+        if builder is None:
+            _logger.warning('Builder for tooltip: type "%s" is not found', tooltipType)
+            return
+        else:
+            provider = builder.provider
+            if provider is None:
+                _logger.warning('"%s" does not have any provider', builder.__name__)
+                return
+            spec = inspect.getargspec(provider.context.buildItem)
+            return tuple(reversed([ (argName, defaultValue) for argName, defaultValue in itertools.izip_longest(reversed(spec.args), reversed(spec.defaults or [])) if argName != 'self' ]))
 
     def onCreateTypedTooltip(self, tooltipType, args, stateType):
         if self._areTooltipsDisabled:

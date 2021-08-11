@@ -80,7 +80,8 @@ class _ShowSimpleTooltipSchema(W2CSchema):
 class _ShowItemTooltipSchema(W2CSchema):
     id = Field(required=True, type=(basestring, int))
     type = Field(required=True, type=basestring, validator=_itemTypeValidator)
-    count = Field(required=True, type=int)
+    count = Field(required=False, type=int)
+    extra = Field(required=False, type=dict)
 
 
 class _ShowAwardsTooltipSchema(W2CSchema):
@@ -183,8 +184,7 @@ class UtilWebApiMixin(object):
             itemId = makeIntCompactDescrByID('crewBook', CrewBookCacheType.CREW_BOOK, cmd.id)
         else:
             itemId = getCDFromId(itemType=cmd.type, itemId=cmd.id)
-        itemsCount = cmd.count
-        rawItem = ItemPackEntry(type=itemType, id=itemId, count=itemsCount)
+        rawItem = ItemPackEntry(type=itemType, id=itemId, count=cmd.count or 1, extra=cmd.extra or {})
         item = lookupItem(rawItem, self.itemsCache, self.goodiesCache)
         showItemTooltip(self.__getTooltipMgr(), rawItem, item)
 

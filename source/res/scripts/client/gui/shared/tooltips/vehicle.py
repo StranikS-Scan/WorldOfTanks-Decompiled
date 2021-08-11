@@ -50,6 +50,7 @@ _logger = logging.getLogger(__name__)
 _EQUIPMENT = 'equipment'
 _OPTION_DEVICE = 'optionalDevice'
 _BATTLE_BOOSTER = 'battleBooster'
+_IS_SENIORITY = 'isSeniority'
 _ARTEFACT_TYPES = (_EQUIPMENT, _OPTION_DEVICE)
 _SKILL_BONUS_TYPE = 'skill'
 _PERK_BONUS_TYPE = 'perk'
@@ -145,6 +146,10 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
             if commonStatsBlock:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
+        if self.context.getParams().get(_IS_SENIORITY, False):
+            awardCrewAndHangarBlock = AwardCrewAndHangar(vehicle, paramsConfig, leftPadding, rightPadding, True, 100).construct()
+            if awardCrewAndHangarBlock:
+                items.append(formatters.packBuildUpBlockData(awardCrewAndHangarBlock))
         statsBlockConstructor = None
         if vehicle.isRotationGroupLocked:
             statsBlockConstructor = RotationLockAdditionalStatsBlockConstructor
@@ -914,13 +919,12 @@ class AwardCrewAndHangar(VehicleTooltipBlockConstructor):
         block = []
         if self.configuration.params:
             leftPaddingImg = 30
-            leftPaddingTxtCrew = 2
-            leftPaddingTxtSlot = leftPaddingTxtCrew + 30
+            leftPaddingTxt = 20
             block.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.SENIORITYAWARDS_ADDITIONAL_TOOLTIP_HEADER), padding=formatters.packPadding(left=20)))
             if self._crewLevelValue != self.NO_CREW:
-                block.append(formatters.packImageTextBlockData(title='', desc=text_styles.main(_ms(TOOLTIPS.CUSTOMCREW_REFERRAL_BODY, value=self._crewLevelValue)), img=RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_TANKMEN, imgPadding=formatters.packPadding(left=leftPaddingImg, top=10), txtPadding=formatters.packPadding(left=leftPaddingTxtCrew, top=20)))
+                block.append(formatters.packImageTextBlockData(title='', desc=text_styles.main(_ms(TOOLTIPS.CUSTOMCREW_REFERRAL_BODY, value=self._crewLevelValue)), img=RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_TANKMEN, imgPadding=formatters.packPadding(left=leftPaddingImg, top=10), txtPadding=formatters.packPadding(left=leftPaddingTxt, top=20)))
             if self._showVehicleSlot:
-                block.append(formatters.packImageTextBlockData(title='', desc=text_styles.main(TOOLTIPS.SENIORITYAWARDS_HANGARSLOT_TOOLTIP_HEADER), img=RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_SLOTS, imgPadding=formatters.packPadding(left=leftPaddingImg, top=10), txtPadding=formatters.packPadding(left=leftPaddingTxtSlot, top=20)))
+                block.append(formatters.packImageTextBlockData(title='', desc=text_styles.main(TOOLTIPS.SENIORITYAWARDS_HANGARSLOT_TOOLTIP_HEADER), img=RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_SLOTS, imgPadding=formatters.packPadding(left=leftPaddingImg, top=10), txtPadding=formatters.packPadding(left=leftPaddingTxt, top=20)))
         return block
 
 

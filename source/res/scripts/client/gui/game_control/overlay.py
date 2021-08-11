@@ -22,7 +22,8 @@ _LAYERS = (WindowLayer.MARKER,
  WindowLayer.WINDOW,
  WindowLayer.WAITING,
  WindowLayer.SYSTEM_MESSAGE,
- WindowLayer.FULLSCREEN_WINDOW)
+ WindowLayer.FULLSCREEN_WINDOW,
+ WindowLayer.OVERLAY)
 
 class Overlay(IOverlayController):
     _hangarSpace = dependency.descriptor(IHangarSpace)

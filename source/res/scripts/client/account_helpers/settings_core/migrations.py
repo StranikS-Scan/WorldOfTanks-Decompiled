@@ -665,6 +665,10 @@ def _migrateTo78(core, data, initialized):
     data['uiStorage'][UI_STORAGE_KEYS.VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN] = False
 
 
+def _migrateTo79(core, data, initialized):
+    data['guiStartBehavior']['birthdayCalendarIntroShowed'] = False
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -971,6 +975,10 @@ _versions = ((1,
   False),
  (78,
   _migrateTo78,
+  False,
+  False),
+ (79,
+  _migrateTo79,
   False,
   False))
 

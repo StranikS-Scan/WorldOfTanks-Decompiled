@@ -1906,3 +1906,28 @@ class IVehiclePostProgressionController(IGameController):
 
     def processVehExtData(self, vehCD, extData):
         raise NotImplementedError
+
+
+class IBirthdayCalendarController(IGameController):
+
+    def showWindow(self, url=None, invokedFrom=None):
+        raise NotImplementedError
+
+    def hideWindow(self):
+        raise NotImplementedError
+
+    @property
+    def isInPrimeTime(self):
+        raise NotImplementedError
+
+    @property
+    def eventDates(self):
+        raise NotImplementedError
+
+    @property
+    def hasTokens(self):
+        raise NotImplementedError
+
+    @property
+    def tokenCount(self):
+        raise NotImplementedError

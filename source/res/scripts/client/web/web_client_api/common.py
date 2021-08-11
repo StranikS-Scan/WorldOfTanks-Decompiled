@@ -41,6 +41,7 @@ class ShopItemType(CONST_CONTAINER):
 
 
 class ItemPackType(CONST_CONTAINER):
+    VEHICLE = 'vehicle'
     VEHICLE_LIGHT = 'vehicle/lightTank'
     VEHICLE_MEDIUM = 'vehicle/mediumTank'
     VEHICLE_HEAVY = 'vehicle/heavyTank'

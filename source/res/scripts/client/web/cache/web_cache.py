@@ -115,7 +115,7 @@ class WebExternalCache(IWebExternalCache):
         _logger.info('Web prefetch started...')
         if url is not None:
             _logger.info('Download manifest file: %s', url)
-            self.__downloader.download(url, self.__onManifestLoaded)
+            self.__downloader.downloadLowPriority(url, self.__onManifestLoaded)
         else:
             _logger.error('Manifest url not found in gui_settings.xml')
             self.prefetchEnd()
@@ -181,7 +181,7 @@ class WebExternalCache(IWebExternalCache):
             _logger.info('There are %r new files in manifest', self._prefetchCnt)
             _logger.info('Start downloading...')
             for url, name in filesToDownload.iteritems():
-                self.__downloader.download(url, partial(self._onResourceLoaded, name))
+                self.__downloader.downloadLowPriority(url, partial(self._onResourceLoaded, name))
 
         else:
             _logger.info('There are no new files in manifest')

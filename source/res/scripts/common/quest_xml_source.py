@@ -548,7 +548,7 @@ class Source(object):
         name = section.asString
         if node.name == 'equipment':
             idx = vehicles.g_cache.equipmentIDs()[name]
-            modules.add(vehicles.g_cache.equipmentIDs()[idx].compactDescr)
+            modules.add(vehicles.g_cache.equipments()[idx].compactDescr)
         else:
             raise SoftException('Unknown consumables(%s)' % node.name)
         node.addChild(modules)

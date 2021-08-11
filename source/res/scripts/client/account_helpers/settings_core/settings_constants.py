@@ -312,6 +312,7 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     TECHTREE_INTRO_SHOWED = 'techTreeIntroShowed'
     DISPLAY_PLATOON_MEMBER_CLICKED = 'isDisplayPlatoonMembersClicked'
     VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW = 'vehPostProgressionUnlockMsgNeedShow'
+    BIRTHDAY_CALENDAR_INTRO_SHOWED = 'birthdayCalendarIntroShowed'
 
 
 class OnceOnlyHints(CONST_CONTAINER):

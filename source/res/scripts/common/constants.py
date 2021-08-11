@@ -810,6 +810,7 @@ class Configs(enum.Enum):
     BATTLE_ROYALE_CONFIG = 'battle_royale_config'
     EPIC_CONFIG = 'epic_config'
     MAPBOX_CONFIG = 'mapbox_config'
+    BIRTHDAY_CALENDAR_CONFIG = 'bday_calendar_config'
 
 
 class RESTRICTION_TYPE:

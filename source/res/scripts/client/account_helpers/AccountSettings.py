@@ -101,6 +101,9 @@ SPEAKERS_DEVICE = 'speakersDevice'
 SESSION_STATS_PREV_BATTLE_COUNT = 'sessionStatsPrevBattleCnt'
 UNIT_FILTER = 'UNIT_FILTER'
 BLUEPRINTS_CONVERT_SALE_STARTED_SEEN = 'bcsStartedSeen'
+IS_SHOP_VISITED = 'isShopVisited'
+LAST_SHOP_ACTION_COUNTER_MODIFICATION = 'lastShopActionCounterModification'
+OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES = 'overridenHeaderCounterActionAliases'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -496,7 +499,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'techTreeIntroBlueprintsReceived': False,
                                     'techTreeIntroShowed': False,
                                     'isDisplayPlatoonMembersClicked': False,
-                                    GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: True},
+                                    GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: True,
+                                    'birthdayCalendarIntroShowed': False},
                EULA_VERSION: {'version': 0},
                LINKEDSET_QUESTS: {'shown': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
@@ -965,7 +969,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                              'scroll_to': None},
                         LAST_STORAGE_VISITED_TIMESTAMP: -1,
                         SESSION_STATS_PREV_BATTLE_COUNT: 0,
-                        ACTIVE_TEST_PARTICIPATION_CONFIRMED: False},
+                        ACTIVE_TEST_PARTICIPATION_CONFIRMED: False,
+                        IS_SHOP_VISITED: False,
+                        LAST_SHOP_ACTION_COUNTER_MODIFICATION: None,
+                        OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES: set()},
  KEY_UI_FLAGS: {}}
 
 def _filterAccountSection(dataSec):

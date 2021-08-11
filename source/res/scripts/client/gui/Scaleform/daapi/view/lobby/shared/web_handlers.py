@@ -13,6 +13,7 @@ from web.web_client_api.sound import SoundWebApi, HangarSoundWebApi, SoundStateW
 from web.web_client_api.ui import CloseWindowWebApi, UtilWebApi, OpenWindowWebApi, OpenTabWebApi, NotificationWebApi
 from web.web_client_api.vehicles import VehiclesWebApi
 from web.web_client_api.blueprints_convert_sale import BlueprintsConvertSaleWebApi
+from web.web_client_api.birthday_calendar import BirthdayCalendarWebApi
 _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
  OpenWindowWebApi,
  NotificationWebApi,
@@ -30,7 +31,8 @@ _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
  BlueprintsConvertSaleWebApi,
  PlatformWebApi,
  MapboxWebApi,
- FrontLineWebApi)
+ FrontLineWebApi,
+ BirthdayCalendarWebApi)
 
 def createBrowserOverlayWebHandlers():
     return webApiCollection(*_DEFAULT_WEB_API_COLLECTION)

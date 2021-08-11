@@ -11,6 +11,8 @@ import typing
 from Event import Event
 from helpers import uniprof
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from typing import Callable, Dict, Iterable, NamedTuple, Optional, Type, Union
 _logger = logging.getLogger(__name__)
 
 class CommandHandler(object):

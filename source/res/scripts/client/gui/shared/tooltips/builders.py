@@ -14,12 +14,14 @@ _logger = logging.getLogger(__name__)
 DISABLED_ITEMS_ID = 12793
 
 class TooltipBuilder(object):
-    __slots__ = ('_tooltipType', '_linkage')
+    __slots__ = ('_tooltipType', '_linkage', '_provider')
 
     def __init__(self, tooltipType, linkage):
         super(TooltipBuilder, self).__init__()
         self._tooltipType = tooltipType
         self._linkage = linkage
+        self._provider = None
+        return
 
     @property
     def tooltipType(self):
@@ -28,6 +30,10 @@ class TooltipBuilder(object):
     @property
     def linkage(self):
         return self._linkage
+
+    @property
+    def provider(self):
+        return self._provider
 
     def build(self, manager, stateType, advanced_, *args, **kwargs):
         raise NotImplementedError

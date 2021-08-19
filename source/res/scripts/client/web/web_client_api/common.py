@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/common.py
+import itertools
 from collections import namedtuple
 from gui.shared.money import MONEY_UNDEFINED
 from shared_utils import CONST_CONTAINER
@@ -136,6 +137,7 @@ class ItemPackTypeGroup(CONST_CONTAINER):
     DECAL = (ItemPackType.DECAL_1, ItemPackType.DECAL_2)
     PROJECTION_DECAL = (ItemPackType.PROJECTION_DECAL,)
     PERSONAL_NUMBER = (ItemPackType.PERSONAL_NUMBER,)
+    CUSTOMIZATION = tuple(itertools.chain(STYLE, CAMOUFLAGE, PAINT, DECAL, PROJECTION_DECAL, PERSONAL_NUMBER, MODIFICATION))
     CUSTOM = (ItemPackType.CUSTOM_PREMIUM,
      ItemPackType.CUSTOM_PREMIUM_PLUS,
      ItemPackType.CUSTOM_CRYSTAL,

@@ -81,6 +81,7 @@ class MESSENGER(object):
     DIALOGS_CHANNELS_BUTTONS_CLOSE = '#messenger:dialogs/channels/buttons/close'
     DIALOGS_CREATECHANNEL_TITLE = '#messenger:dialogs/createChannel/title'
     DIALOGS_CREATECHANNEL_LABELS_NAME = '#messenger:dialogs/createChannel/labels/name'
+    DIALOGS_CREATECHANNEL_LABELS_AUTONAME = '#messenger:dialogs/createChannel/labels/autoName'
     DIALOGS_CREATECHANNEL_LABELS_PASSWORD = '#messenger:dialogs/createChannel/labels/password'
     DIALOGS_CREATECHANNEL_LABELS_USEPASSWORD = '#messenger:dialogs/createChannel/labels/usePassword'
     DIALOGS_CREATECHANNEL_LABELS_FILLPASSWORD = '#messenger:dialogs/createChannel/labels/fillPassword'

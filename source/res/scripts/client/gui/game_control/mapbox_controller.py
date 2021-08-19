@@ -27,7 +27,7 @@ from gui.shared.event_dispatcher import showMapboxIntro, showBrowserOverlayView
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.wgcg.mapbox.contexts import MapboxProgressionCtx, MapboxRequestCrewbookCtx, MapboxCompleteSurveyCtx, MapboxRequestAuthorizedURLCtx
-from helpers import dependency, server_settings
+from helpers import dependency, server_settings, time_utils
 from season_provider import SeasonProvider
 from skeletons.gui.game_control import IMapboxController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -210,6 +210,16 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
 
     def onPrbEntitySwitched(self):
         self.__modeEntered()
+
+    def getEventEndTimestamp(self):
+        if self.hasPrimeTimesLeftForCurrentCycle() or self.isInPrimeTime():
+            currServerTime = time_utils.getCurrentLocalServerTimestamp()
+            actualSeason = self.getCurrentSeason() or self.getNextSeason()
+            actualCycle = actualSeason.getCycleInfo() or actualSeason.getNextCycleInfo(currServerTime)
+            lastPrimeTimeEnd = max([ period[1] for primeTime in self.getPrimeTimes().values() for period in primeTime.getPeriodsBetween(int(currServerTime), actualCycle.endDate, True) ])
+            return lastPrimeTimeEnd
+        else:
+            return None
 
     def __onUnitJoined(self, *args):
         self.__modeEntered()

@@ -176,9 +176,9 @@ class QuestsController(IQuestsController):
             if vehicle.isOnlyForBattleRoyaleBattles:
                 return list(self.__battleRoyaleController.getQuests().values())
         if notCompleted:
-            quests = [ q for q in self.getQuestForVehicle(vehicle) if not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID()) and not q.isCompleted() ]
+            quests = [ q for q in self.getQuestForVehicle(vehicle) if not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID()) and q.shouldBeShown() and not q.isCompleted() ]
             return quests
-        return [ q for q in self.getQuestForVehicle(vehicle) if not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID()) ]
+        return [ q for q in self.getQuestForVehicle(vehicle) if not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID()) and q.shouldBeShown() ]
 
     def __invalidateEventsData(self, *args):
         self.__quests.invalidate()

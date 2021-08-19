@@ -172,6 +172,7 @@ class BATTLE_PASS(object):
     TOOLTIPS_INPROGRESS_EPIC = '#battle_pass:tooltips/inProgress/epic'
     TOOLTIPS_INPROGRESS_PLAYGAME_RANDOMS = '#battle_pass:tooltips/inProgress/playGame/randoms'
     TOOLTIPS_INPROGRESS_PLAYGAME_RANKED = '#battle_pass:tooltips/inProgress/playGame/ranked'
+    TOOLTIPS_INPROGRESS_PLAYGAME_MAPBOX = '#battle_pass:tooltips/inProgress/playGame/mapbox'
     TOOLTIPS_INPROGRESS_TIMELEFT = '#battle_pass:tooltips/inProgress/timeLeft'
     TOOLTIPS_INPROGRESS_HURRYUP = '#battle_pass:tooltips/inProgress/hurryUp'
     TOOLTIPS_COMPLETED_TITLE = '#battle_pass:tooltips/completed/title'

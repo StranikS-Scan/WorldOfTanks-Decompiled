@@ -1802,6 +1802,9 @@ class TotalAccountRankedStatsBlock(AccountRankedStatsBlock, _VehiclesStatsBlock)
 class TotalAccountRanked10x10StatsBlock(TotalAccountRankedStatsBlock):
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
+    def getStepsCount(self):
+        pass
+
     def getAchievedRank(self):
         return self._rankedSeasons.getAchievedRank(self.__getSeasonID())
 

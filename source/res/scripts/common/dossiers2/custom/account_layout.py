@@ -627,7 +627,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'mapboxSeason1',
  'mapboxSeason2',
  'mapboxSeason3',
- 'july21']
+ 'july21',
+ 'august21']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -779,7 +780,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'mapboxSeason1',
  'mapboxSeason2',
  'mapboxSeason3',
- 'july21']
+ 'july21',
+ 'august21']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

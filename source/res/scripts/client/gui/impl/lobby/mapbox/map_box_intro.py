@@ -73,13 +73,13 @@ class MapBoxIntro(ViewImpl):
 
     def __onClose(self):
         self.destroyWindow()
+        if not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.MAPBOX):
+            SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.MAPBOX)
         if self.__closeCallback is not None:
             self.__closeCallback()
         elif not self.__mapboxCtrl.isActive():
             showModeSelectorWindow(False)
         else:
-            if not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.MAPBOX):
-                SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.MAPBOX)
             showMissionsMapboxProgression()
         return
 

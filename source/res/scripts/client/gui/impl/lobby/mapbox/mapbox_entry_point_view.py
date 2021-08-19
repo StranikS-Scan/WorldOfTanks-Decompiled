@@ -56,4 +56,4 @@ class MapBoxEntryPointView(ViewImpl):
 
 @dependency.replace_none_kwargs(mapboxCtrl=IMapboxController)
 def isMapboxEntryPointAvailable(mapboxCtrl=None):
-    return mapboxCtrl.isEnabled() and mapboxCtrl.hasPrimeTimesLeftForCurrentCycle()
+    return mapboxCtrl.isEnabled() and (mapboxCtrl.hasPrimeTimesLeftForCurrentCycle() or mapboxCtrl.isInPrimeTime())

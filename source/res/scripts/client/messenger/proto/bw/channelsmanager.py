@@ -3,7 +3,7 @@
 import BigWorld
 import Event
 from chat_shared import CHAT_ACTIONS, CHAT_RESPONSES
-from constants import USER_ACTIVE_CHANNELS_LIMIT
+from constants import USER_ACTIVE_CHANNELS_LIMIT, IS_CHINA
 from debug_utils import LOG_DEBUG
 from helpers import i18n
 from gui.shared.utils import getPlayerDatabaseID
@@ -122,7 +122,8 @@ class ChannelsManager(ChatActionsListener):
         else:
             if name.startswith('#'):
                 name = name[1:]
-            self.__creationInfo[passCensor(name)] = password
+            if not IS_CHINA:
+                self.__creationInfo[passCensor(name)] = password
             BigWorld.player().createChatChannel(name, password)
             return None
 
@@ -206,9 +207,12 @@ class ChannelsManager(ChatActionsListener):
         if not channel:
             raise ChannelNotFound(channelID)
         name = channel.getName()
-        if not isJoinAction and name in self.__creationInfo and channel.getProtoData().owner == getPlayerDatabaseID():
-            self.__creationInfo.pop(name)
-            g_messengerEvents.channels.onPlayerEnterChannelByAction(channel)
+        if not isJoinAction and channel.getProtoData().owner == getPlayerDatabaseID():
+            if not IS_CHINA and name in self.__creationInfo:
+                self.__creationInfo.pop(name)
+                g_messengerEvents.channels.onPlayerEnterChannelByAction(channel)
+            elif IS_CHINA:
+                g_messengerEvents.channels.onPlayerEnterChannelByAction(channel)
         if not channel.isJoined():
             channel.setJoined(True)
             g_messengerEvents.channels.onConnectStateChanged(channel)

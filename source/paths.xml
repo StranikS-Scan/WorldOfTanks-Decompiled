@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.14.0.1</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.14.0.1</Path>
+    <Path cacheSubdirs="true">./res_mods/1.14.0.2</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.14.0.2</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
@@ -129,6 +129,8 @@
       <Package type="hd">./res/packages/h31_battle_royale_2020_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/hangar_v3_marathon_2021.pkg</Package>
+      <Package type="hd">./res/packages/hangar_v3_marathon_2021_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/battle_royale.pkg</Package>

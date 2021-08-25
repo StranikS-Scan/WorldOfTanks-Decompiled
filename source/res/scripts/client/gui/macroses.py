@@ -92,17 +92,29 @@ def getCurrentRealm(args=None):
 
 @dependency.replace_none_kwargs(marathonCtrl=IMarathonEventsController)
 def getMarathonPackage(args=None, marathonCtrl=None):
-    from gui.marathon.marathon_constants import MarathonState
     postfix = ''
     result = ''
     marathon = marathonCtrl.getPrimaryMarathon()
     if marathon is not None:
         currentStep, _ = marathon.getMarathonProgress()
         packageTemplate = marathon.packageTemplate
+        result = packageTemplate.format(currentStep, postfix)
+    return result
+
+
+@dependency.replace_none_kwargs(marathonCtrl=IMarathonEventsController)
+def getMarathonStylePackage(args=None, marathonCtrl=None):
+    from gui.marathon.marathon_constants import MarathonState
+    postfix = ''
+    result = ''
+    marathon = marathonCtrl.getPrimaryMarathon()
+    if marathon is not None:
+        currentDiscount = marathon.getMarathonPostProgress()
+        packageTemplate = marathon.packageStyleTemplate
         state = marathon.getState()
         if state == MarathonState.FINISHED:
             postfix = marathon.finishedPostfix
-        result = packageTemplate.format(currentStep, postfix)
+        result = packageTemplate.format(currentDiscount, postfix)
     return result
 
 
@@ -122,7 +134,8 @@ def getSyncMacroses():
      'UNIT_SERVER_ID': getUnitServerID,
      'CLAN_DBID': getClanDBID,
      'CURRENT_REALM': getCurrentRealm,
-     'PACKAGE_ID': getMarathonPackage}
+     'PACKAGE_ID': getMarathonPackage,
+     'STYLE_PACKAGE_ID': getMarathonStylePackage}
 
 
 @async

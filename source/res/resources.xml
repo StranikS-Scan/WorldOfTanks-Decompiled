@@ -165,6 +165,10 @@
     </havok_processor>
   </asset_pipeline>
   <cgf>
+    <script>
+      <module>	client.cgf_components.client_selectable_components	</module>
+      <module>	client.cgf_components.marker_component	</module>
+    </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
       <module>	client.cgf_demo_client.test_hierarchy_modificator	</module>

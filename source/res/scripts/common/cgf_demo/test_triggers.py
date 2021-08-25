@@ -33,6 +33,7 @@ class TestPrefabSpawner(CGFComponent):
     areaToSpawn = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Area to spawn', value=Triggers.CylinderAreaComponent)
     triggerToMonitor = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Trigger to monitor', value=Triggers.AreaTriggerComponent)
     transform = ComponentProperty(type=CGFMetaTypes.LINK, editorName='transform', value=GenericComponents.TransformComponent)
+    attachToEntered = ComponentProperty(type=CGFMetaTypes.BOOL, editorName='attach to entered', value=False)
 
 
 class TestComponentCreationManager(CGF.ComponentManager):
@@ -70,9 +71,23 @@ class TestComponentCreationManager(CGF.ComponentManager):
 
     def __onPrefabSpawnerEnter(self, spawner, who, where):
         for x in xrange(spawner.instancesCount):
-            self.__spawn(spawner)
+            self.__spawn(spawner, who)
 
-    def __spawn(self, spawner):
+    def __spawn(self, spawner, who):
+        if spawner.attachToEntered:
+
+            def _onLoaded(gameObject):
+                import Vehicle
+                h = CGF.HierarchyManager(self.spaceID)
+                vehicleGo = h.getTopMostParent(who)
+                vehicle = vehicleGo.findComponentByType(Vehicle.Vehicle)
+                appearance = vehicle.appearance
+                appearance.undamagedStateChildren.append(gameObject)
+                gameObject.createComponent(GenericComponents.RedirectorComponent, who)
+                gameObject.createComponent(GenericComponents.DynamicModelComponent, vehicle.model)
+
+            CGF.loadGameObjectIntoHierarchy(spawner.prefabPath, who, Math.Vector3(0, 0, 0), _onLoaded)
+            return
         area = spawner.areaToSpawn()
         transform = spawner.transform()
         if not area:

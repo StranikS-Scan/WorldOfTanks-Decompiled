@@ -2111,6 +2111,7 @@ class MENU(object):
     CRYSTALS_INFO_TAB_EARN_LEVEL_TITLE = '#menu:crystals/info/tab/earn/level/title'
     CRYSTALS_INFO_TAB_EARN_LEVEL_DESCRIPTION = '#menu:crystals/info/tab/earn/level/description'
     CRYSTALS_INFO_TAB_EARN_LEVEL_DESCRIPTIONCONTENT_LEVEL10 = '#menu:crystals/info/tab/earn/level/descriptionContent/level10'
+    CRYSTALS_INFO_TAB_EARN_LEVEL_DESCRIPTIONCONTENT_LEVEL9 = '#menu:crystals/info/tab/earn/level/descriptionContent/level9'
     CRYSTALS_INFO_TAB_EARN_LEVEL_MOD_0 = '#menu:crystals/info/tab/earn/level/mod/0'
     CRYSTALS_INFO_TAB_EARN_LEVEL_MOD_1 = '#menu:crystals/info/tab/earn/level/mod/1'
     CRYSTALS_INFO_TAB_EARN_LEVEL_MOD_2 = '#menu:crystals/info/tab/earn/level/mod/2'

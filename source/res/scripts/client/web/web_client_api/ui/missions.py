@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/missions.py
+from gui.marathon.marathon_event_controller import getMarathons
 from helpers import dependency
 from gui.battle_pass.battle_pass_helpers import BattlePassProgressionSubTabs
-from gui.marathon.marathon_event_controller import getMarathons
 from personal_missions import PM_BRANCH
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.game_control import IMarathonEventsController

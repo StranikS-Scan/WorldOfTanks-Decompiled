@@ -42,6 +42,7 @@ from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankSo
 from vehicle_systems.appearance_cache import VehicleAppearanceCacheInfo
 from shared_utils.vehicle_utils import createWheelFilters
 import GenericComponents
+import Projectiles
 _logger = logging.getLogger(__name__)
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
@@ -301,6 +302,11 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         if not self.isStarted:
             return
         else:
+            hitsReceived = self.appearance.findComponentByType(Projectiles.ProjectileHitsReceivedComponent)
+            if hitsReceived is None:
+                self.appearance.createComponent(Projectiles.ProjectileHitsReceivedComponent)
+            else:
+                hitsReceived.addHit()
             effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
             maxComponentIdx = TankPartIndexes.ALL[-1]
             wheelsConfig = self.appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig

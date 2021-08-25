@@ -85,6 +85,7 @@ class MarathonResourceManager(object):
         self._data.backBtnLabel = self._getLabelObject(R.strings.vehicle_preview.header.backBtn.descrLabel)()
         self._data.tooltips = self._getTooltips()
         self._data.icons = self._getIcons()
+        self._data.introScreenLayoutId = R.views.lobby.marathon.IntroScreen()
 
     def getHangarFlag(self):
         return backport.image(R.images.gui.maps.icons.library.hangarFlag.dyn(self._data.hangarFlagName)())

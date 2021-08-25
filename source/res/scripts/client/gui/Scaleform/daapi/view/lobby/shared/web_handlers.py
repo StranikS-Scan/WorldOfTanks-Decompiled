@@ -3,6 +3,7 @@
 from web.web_client_api import webApiCollection
 from web.web_client_api.frontline import FrontLineWebApi
 from web.web_client_api.mapbox import MapboxWebApi
+from web.web_client_api.marathon import MarathonWebApi
 from web.web_client_api.platform import PlatformWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.rewards import RewardsWebApi
@@ -32,7 +33,8 @@ _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
  PlatformWebApi,
  MapboxWebApi,
  FrontLineWebApi,
- BirthdayCalendarWebApi)
+ BirthdayCalendarWebApi,
+ MarathonWebApi)
 
 def createBrowserOverlayWebHandlers():
     return webApiCollection(*_DEFAULT_WEB_API_COLLECTION)

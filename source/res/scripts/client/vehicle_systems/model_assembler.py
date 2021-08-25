@@ -134,6 +134,8 @@ def attachModels(assembler, vehicleDesc, modelsSetParams, isTurretDetached, rend
         assembler.addPart(gun, TankNodeNames.GUN_JOINT, partNames.GUN)
         if modelsSetParams.state == 'undamaged':
             for attachment in modelsSetParams.attachments:
+                if attachment.attachmentLogic == 'prefab':
+                    continue
                 assembler.addPart(attachment.modelName, attachment.attachNode, attachment.partNodeAlias, attachment.transform)
 
 
@@ -804,7 +806,7 @@ def assembleBurnoutProcessor(appearance):
 
 
 def assembleCustomLogicComponents(appearance, attachments, modelAnimators):
-    assemblers = [('flagAnimation', __assembleAnimationFlagComponent)]
+    assemblers = [('flagAnimation', __assembleAnimationFlagComponent), ('prefab', __assemblePrefabComponent)]
     for assemblerName, assembler in assemblers:
         for attachment in attachments:
             if attachment.attachmentLogic == assemblerName:
@@ -827,3 +829,13 @@ def __assembleAnimationFlagComponent(appearance, attachment, attachments, modelA
             appearance.flagComponent.vehicleSpeedLink = DataLinks.createFloatLink(appearance.filter, 'averageSpeed')
             appearance.flagComponent.allowTransparency(True)
         return True
+
+
+def __assemblePrefabComponent(appearance, attachment, _, __):
+
+    def _onLoaded(gameObject):
+        appearance.undamagedStateChildren.append(gameObject)
+        gameObject.createComponent(GenericComponents.RedirectorComponent, appearance.gameObject)
+        gameObject.createComponent(GenericComponents.DynamicModelComponent, appearance.compoundModel)
+
+    CGF.loadGameObjectIntoHierarchy(attachment.modelName, appearance.gameObject, attachment.transform, _onLoaded)

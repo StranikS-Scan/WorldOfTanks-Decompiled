@@ -1122,6 +1122,9 @@ class IMarathonEventsController(IGameController):
     def doesShowAnyMissionsTab(self):
         raise NotImplementedError
 
+    def handleOpenVideoContent(self, prefix, url):
+        raise NotImplementedError
+
 
 class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     onUpdated = None

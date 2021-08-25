@@ -2568,7 +2568,9 @@ class MarathonConfig(object):
     URL = 'marathonUrl'
     REWARD_VEHICLE_URL = 'rewardVehicleUrl'
     REWARD_VEHICLE_URL_IGB = 'rewardVehicleUrlIgb'
+    REWARD_STYLE_URL_IGB = 'rewardStyleUrlIgb'
     FINISH_SALE_TIME = 'finishSaleTime'
+    VIDEO_CONTENT_URL = 'videoContentUrl'
 
 
 class ClansConfig(object):

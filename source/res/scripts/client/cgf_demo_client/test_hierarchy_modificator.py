@@ -159,3 +159,35 @@ class TestHierarchyModifierManager(CGF.ComponentManager):
                     transfComp.transform = math_utils.createRTMatrix((direction.yaw, direction.pitch, 0.0), matrix.translation)
 
             return
+
+
+class TestModelSwapper(CGFComponent):
+    category = DEMO_CATEGORY
+    model1 = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='model1', annotations={'path': '*.model'})
+    model2 = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='model2', annotations={'path': '*.model'})
+
+    def __init__(self):
+        super(TestModelSwapper, self).__init__()
+        self.currentModel = self.model1
+
+
+class ModelSwapperManager(CGF.ComponentManager):
+    swappers = CGF.QueryConfig(TestModelSwapper, CGF.GameObject)
+
+    def __init__(self):
+        super(ModelSwapperManager, self).__init__()
+        self.__swapTime = 0
+
+    @tickGroup('Simulation')
+    def tick(self):
+        self.__swapTime += self.clock.gameDelta
+        if self.__swapTime > 5.0:
+            self.__swapTime = 0
+            for s, g in self.swappers:
+                model = s.currentModel
+                if model == s.model1:
+                    s.currentModel = s.model2
+                else:
+                    s.currentModel = s.model1
+                g.removeComponentByType(GenericComponents.DynamicModelComponent)
+                g.createComponent(GenericComponents.DynamicModelComponent, model)

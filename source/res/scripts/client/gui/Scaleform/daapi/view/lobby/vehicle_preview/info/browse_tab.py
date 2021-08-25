@@ -64,6 +64,9 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
                 if not (item.isSpecial or self.__isFrontlineCreditsOffer() or item.isOnlyForEpicBattles):
                     bonuses.append({'iconSrc': backport.image(R.images.gui.maps.shop.kpi.money_benefits()),
                      'labelStr': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsMultiplier())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsText())))})
+                if item.isEarnCrystals:
+                    bonuses.append({'iconSrc': backport.image(R.images.gui.maps.shop.kpi.bons_benefits()),
+                     'labelStr': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.bonsTitle())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.bonsText())))})
                 if not item.isCrewLocked:
                     bonuses.append({'iconSrc': backport.image(R.images.gui.maps.shop.kpi.crow_benefits()),
                      'labelStr': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferTitle())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferText())))})

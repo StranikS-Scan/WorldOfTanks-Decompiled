@@ -22,6 +22,7 @@ class RES_COMMON(object):
     MAPS_ICONS_MAPBOX_BG = '../maps/icons/mapbox/bg.png'
     MAPS_ICONS_MAPSTRAINING_BG = '../maps/icons/mapsTraining/bg.png'
     MAPS_ICONS_MAPSTRAINING_MINIMAP_BG = '../maps/icons/mapsTraining/minimap/bg.png'
+    MAPS_ICONS_MARATHON_INTRO_BG = '../maps/icons/marathon/intro/bg.png'
     MAPS_ICONS_PREMACC_DASHBOARD_HEADER_BADGESLOT_BG = '../maps/icons/premacc/dashboard/header/badgeSlot/bg.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_USSR_DOG_1 = '../maps/icons/tankmen/icons/small/ussr-dog-1.png'
     MAPS_ICONS_TANKMEN_ROLES_BIG_DOG = '../maps/icons/tankmen/roles/big/dog.png'

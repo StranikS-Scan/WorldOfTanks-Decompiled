@@ -23,6 +23,8 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         self.__shadowModelFashion = None
         self._isVehicleLoaded = False
         self.__vehicleTransform = None
+        self.__defaultPos = Math.Vector3(0, 0, 0)
+        self.__defaultYPR = Math.Vector3(0, 0, 0)
         return
 
     def prerequisites(self):
@@ -33,6 +35,8 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
 
     def onEnterWorld(self, prereqs):
         super(ClientSelectableCameraVehicle, self).onEnterWorld(prereqs)
+        self.__defaultPos = self.position
+        self.__defaultYPR = Math.Vector3(self.yaw, self.pitch, self.roll)
         cfg = hangarCFG()
         if 'shadow_model_name' in cfg:
             shadowName = cfg['shadow_model_name']
@@ -136,10 +140,12 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         m.setRotateYPR(rotateYPR)
         m.translation = Math.Vector3(targetPos)
         self.model.matrix = m
+        self.teleport(targetPos, rotateYPR)
         self.__setFakeShadowModelTransform(targetPos, rotateYPR[0], shadowModelYOffset)
 
     def _resetVehicleModelTransform(self):
         self.__vehicleTransform = None
+        self.teleport(self.__defaultPos, self.__defaultYPR)
         return
 
     def _addEdgeDetect(self):

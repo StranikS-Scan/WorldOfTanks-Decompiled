@@ -44,7 +44,7 @@ from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from skeletons.gui.game_control import IBootcampController, ITradeInController
 from skeletons.gui.shared import IItemsCache
 _logger = getLogger(__name__)
-_BENEFIT_ITEMS_LIMIT = 3
+_BENEFIT_ITEMS_LIMIT = 4
 
 class _VehicleState(object):
     CAN_UNLOCK = 0
@@ -66,6 +66,11 @@ def _getMoneyBenefits(benefits, root, _=None):
 def _getCrewBenefits(benefits, root, _=None):
     if not root.isCrewLocked:
         benefits.append((backport.image(R.images.gui.maps.shop.kpi.crow_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferTitle()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferText())))
+
+
+def _getCrystalsBenefit(benefits, root, _=None):
+    if root.isEarnCrystals:
+        benefits.append((backport.image(R.images.gui.maps.shop.kpi.bons_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.bonsTitle()), backport.text(R.strings.vehicle_preview.infoPanel.premium.bonsText())))
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -110,6 +115,7 @@ def _getActionBannerStr(paramDate, paramDiscount):
 
 _BENEFIT_GETTERS = (_getPremiumBaseBenefit,
  _getMoneyBenefits,
+ _getCrystalsBenefit,
  _getCrewBenefits,
  _getEquipmentBenefits)
 

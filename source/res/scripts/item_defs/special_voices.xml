@@ -193,6 +193,11 @@
       <gender>	male	</gender>
       <languageMode>	gagarin21	</languageMode>
     </tankman>
+    <tankman>
+      <tag>	sabaton21_specialVoice	</tag>
+      <gender>	male	</gender>
+      <languageMode>	sabaton_v2	</languageMode>
+    </tankman>
   </voiceover>
   <arenaMusic>
     <style>
@@ -206,6 +211,19 @@
         <wwmusicResultWin>	music_off_result_win	</wwmusicResultWin>
         <wwmusicResultDrawn>	music_off_result_drawn	</wwmusicResultDrawn>
         <wwmusicResultDefeat>	music_off_result_defeat	</wwmusicResultDefeat>
+      </wwmusicSetup>
+    </style>
+    <style>
+      <tag>	sabatonArenaMusic	</tag>
+      <wwmusicSetup>
+        <wwmusicLoading>	music_sabaton_loading_screen	</wwmusicLoading>
+        <wwmusicIntensive>	music_sabaton_dron_intensive	</wwmusicIntensive>
+        <wwmusicRelaxed>	music_sabaton_dron_relaxed	</wwmusicRelaxed>
+        <wwmusicStop>	music_dron_stop	</wwmusicStop>
+        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+        <wwmusicResultWin>	music_sabaton_result_win	</wwmusicResultWin>
+        <wwmusicResultDrawn>	music_sabaton_result_drawn	</wwmusicResultDrawn>
+        <wwmusicResultDefeat>	music_sabaton_result_defeat	</wwmusicResultDefeat>
       </wwmusicSetup>
     </style>
   </arenaMusic>

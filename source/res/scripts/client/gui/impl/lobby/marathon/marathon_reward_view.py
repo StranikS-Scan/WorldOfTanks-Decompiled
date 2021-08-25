@@ -7,7 +7,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.marathon.marathon_reward_view_model import MarathonRewardViewModel
 from gui.impl.lobby.marathon.marathon_reward_sounds import MarathonVideos, onVideoStart, onVideoDone
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared.event_dispatcher import selectVehicleInHangar
 _logger = logging.getLogger(__name__)
@@ -77,9 +77,8 @@ class MarathonRewardView(ViewImpl):
         onVideoDone()
 
 
-class MarathonRewardViewWindow(LobbyWindow):
+class MarathonRewardViewWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        super(MarathonRewardViewWindow, self).__init__(content=MarathonRewardView(*args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, decorator=None)
-        return
+        super(MarathonRewardViewWindow, self).__init__(content=MarathonRewardView(*args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN)

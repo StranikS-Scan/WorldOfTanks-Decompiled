@@ -183,6 +183,7 @@ class RES_SHOP(object):
     MAPS_SHOP_CUSTOMIZATION_STYLES_360X270_349 = '../maps/shop/customization/styles/360x270/349.png'
     MAPS_SHOP_CUSTOMIZATION_STYLES_600X450_348 = '../maps/shop/customization/styles/600x450/348.png'
     MAPS_SHOP_CUSTOMIZATION_STYLES_600X450_349 = '../maps/shop/customization/styles/600x450/349.png'
+    MAPS_SHOP_KPI_BONS_BENEFITS = '../maps/shop/kpi/bons_benefits.png'
     MAPS_SHOP_KPI_CROW_BENEFITS = '../maps/shop/kpi/crow_benefits.png'
     MAPS_SHOP_KPI_INFINITY_BENEFITS = '../maps/shop/kpi/infinity_benefits.png'
     MAPS_SHOP_KPI_MONEY_BENEFITS = '../maps/shop/kpi/money_benefits.png'

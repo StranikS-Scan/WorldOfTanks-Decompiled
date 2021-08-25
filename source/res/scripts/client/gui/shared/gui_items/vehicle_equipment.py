@@ -433,13 +433,14 @@ class _ShellsCollector(_EquipmentCollector):
         layoutDict = {cd:count for cd, count, _ in LayoutIterator(shellsLayout)}
         missed = []
         shellsLayout = shellsLayout[:]
+        shellsCDs = shellsLayout[::2]
         for shot in vehDescr.gun.shots:
             cd = shot.shell.compactDescr
             if cd in layoutDict:
                 count = 0
                 if cd in installedDict:
                     count = min(installedDict.get(cd, 0), layoutDict.get(cd, 0))
-                idx = shellsLayout.index(cd) + 1
+                idx = shellsCDs.index(cd) * 2 + 1
                 shellsLayout[idx] = count
             missed.append(cd)
 

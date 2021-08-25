@@ -38,6 +38,8 @@ from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, Camera
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.ClientHangarSpace import hangarCFG
 from gui.battle_control.vehicle_getter import hasTurretRotator
+import GenericComponents
+import CGF
 if TYPE_CHECKING:
     from vehicle_outfit.outfit import Outfit as TOutfit
     from items.vehicles import VehicleDescrType
@@ -157,6 +159,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.itemsCache.onSyncCompleted += self.__onItemsCacheSyncCompleted
         g_eventBus.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
         g_currentVehicle.onChanged += self.__onVehicleChanged
+        self.undamagedStateChildren = []
         return
 
     def recreate(self, vDesc, vState=None, callback=None, outfit=None):
@@ -174,6 +177,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__vState = None
         self.__isVehicleDestroyed = False
         self.__vEntity.model = None
+        self.reset()
         if self.collisions:
             BigWorld.removeCameraCollider(self.collisions.getColliderID())
             self.collisions = None
@@ -208,6 +212,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__onLoadedCallback = None
         self.__onLoadedAfterRefreshCallback = None
         self.turretRotator = None
+        self.undamagedStateChildren = []
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.itemsCache.onSyncCompleted -= self.__onItemsCacheSyncCompleted
         g_eventBus.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
@@ -278,6 +283,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         if self.__vEntity.model is not None and self.__vEntity.model is not None:
             self.shadowManager.unregisterCompoundModel(self.__vEntity.model)
         self.shadowManager = None
+        self.undamagedStateChildren = []
         self.reset()
         self.shadowManager = VehicleShadowManager()
         self.shadowManager.updatePlayerTarget(None)
@@ -369,6 +375,14 @@ class HangarVehicleAppearance(ScriptGameObject):
         return
 
     def __onResourcesLoaded(self, buildInd, resourceRefs):
+        for prevGo in self.undamagedStateChildren:
+            CGF.removeGameObject(prevGo)
+
+        self.undamagedStateChildren = []
+        self.removeComponentByType(GenericComponents.HierarchyComponent)
+        self.removeComponentByType(GenericComponents.TransformComponent)
+        self.createComponent(GenericComponents.HierarchyComponent, self.__vEntity.entityGameObject)
+        self.createComponent(GenericComponents.TransformComponent, Math.Vector3(0, 0, 0))
         if not self.__vDesc:
             self.__fireResourcesLoadedEvent()
             return
@@ -610,6 +624,8 @@ class HangarVehicleAppearance(ScriptGameObject):
         else:
             partHandleNotFoundErrorCode = 4294967295L
             for attachment in self.__attachments:
+                if attachment.partNodeAlias is None:
+                    continue
                 partNode = self.compoundModel.node(attachment.partNodeAlias)
                 if partNode is None:
                     _logger.error('Attachment node "%s" is not found.', attachment.partNodeAlias)
@@ -781,6 +797,9 @@ class HangarVehicleAppearance(ScriptGameObject):
         resources.extend(camouflages.getAttachmentsAnimatorsPrereqs(self.__attachments, self.__spaceId))
         if not resources:
             self.__clearModelAnimators()
+            if not self.__isVehicleDestroyed:
+                from vehicle_systems import model_assembler
+                model_assembler.assembleCustomLogicComponents(self, self.__attachments, self.__modelAnimators)
             return
         BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onAnimatorsLoaded, self.__curBuildInd, outfit))
 
@@ -793,6 +812,10 @@ class HangarVehicleAppearance(ScriptGameObject):
             modelAnimator.animator.stop()
 
         self.__modelAnimators = []
+        for go in self.undamagedStateChildren:
+            CGF.removeGameObject(go)
+
+        self.undamagedStateChildren = []
         return
 
     def __onVehicleChanged(self):

@@ -16,7 +16,7 @@ class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_DESCRLABEL_FRONTLINE = '#vehicle_preview:header/backBtn/descrLabel/frontline'
     HEADER_BACKBTN_DESCRLABEL_EVENTPROGRESSION = '#vehicle_preview:header/backBtn/descrLabel/eventProgression'
     HEADER_BACKBTN_DESCRLABEL_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/marathon'
-    HEADER_BACKBTN_DESCRLABEL_MAY21_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/may21_marathon'
+    HEADER_BACKBTN_DESCRLABEL_SABATON_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/sabaton_marathon'
     HEADER_BACKBTN_DESCRLABEL_RANKED = '#vehicle_preview:header/backBtn/descrLabel/ranked'
     HEADER_BACKBTN_DESCRLABEL_VEHPOSTPROGRESSION = '#vehicle_preview:header/backBtn/descrLabel/vehPostProgression'
     HEADER_BACKBTN_DESCRLABEL_BLUEPRINTSEXCHANGE = '#vehicle_preview:header/backBtn/descrLabel/blueprintsExchange'
@@ -87,6 +87,8 @@ class VEHICLE_PREVIEW(object):
     INFOPANEL_PREMIUM_CREDITSTEXT = '#vehicle_preview:infoPanel/premium/creditsText'
     INFOPANEL_PREMIUM_CREWTRANSFERTITLE = '#vehicle_preview:infoPanel/premium/crewTransferTitle'
     INFOPANEL_PREMIUM_CREWTRANSFERTEXT = '#vehicle_preview:infoPanel/premium/crewTransferText'
+    INFOPANEL_PREMIUM_BONSTITLE = '#vehicle_preview:infoPanel/premium/bonsTitle'
+    INFOPANEL_PREMIUM_BONSTEXT = '#vehicle_preview:infoPanel/premium/bonsText'
     INFOPANEL_PREMIUM_BUILTINEQUPMENTTITLE = '#vehicle_preview:infoPanel/premium/builtInEqupmentTitle'
     INFOPANEL_PREMIUM_BUILTINEQUPMENTTEXT = '#vehicle_preview:infoPanel/premium/builtInEqupmentText'
     INFOPANEL_COLLECTIBLE_TITLE = '#vehicle_preview:infoPanel/collectible/title'
@@ -109,7 +111,7 @@ class VEHICLE_PREVIEW(object):
      HEADER_BACKBTN_DESCRLABEL_FRONTLINE,
      HEADER_BACKBTN_DESCRLABEL_EVENTPROGRESSION,
      HEADER_BACKBTN_DESCRLABEL_MARATHON,
-     HEADER_BACKBTN_DESCRLABEL_MAY21_MARATHON,
+     HEADER_BACKBTN_DESCRLABEL_SABATON_MARATHON,
      HEADER_BACKBTN_DESCRLABEL_RANKED,
      HEADER_BACKBTN_DESCRLABEL_VEHPOSTPROGRESSION,
      HEADER_BACKBTN_DESCRLABEL_BLUEPRINTSEXCHANGE)

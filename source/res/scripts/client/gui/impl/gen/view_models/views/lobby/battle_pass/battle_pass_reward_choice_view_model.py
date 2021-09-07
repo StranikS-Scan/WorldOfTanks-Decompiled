@@ -5,9 +5,9 @@ from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.device_reward_option_model import DeviceRewardOptionModel
 
 class BattlePassRewardChoiceViewModel(ViewModel):
-    __slots__ = ('onTakeClick', 'onCloseClick', 'onAnimationFinished')
+    __slots__ = ('onTakeClick', 'onCloseClick', 'onAnimationFinished', 'onSkipRewardClick')
 
-    def __init__(self, properties=8, commands=3):
+    def __init__(self, properties=8, commands=4):
         super(BattlePassRewardChoiceViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -69,3 +69,4 @@ class BattlePassRewardChoiceViewModel(ViewModel):
         self.onTakeClick = self._addCommand('onTakeClick')
         self.onCloseClick = self._addCommand('onCloseClick')
         self.onAnimationFinished = self._addCommand('onAnimationFinished')
+        self.onSkipRewardClick = self._addCommand('onSkipRewardClick')

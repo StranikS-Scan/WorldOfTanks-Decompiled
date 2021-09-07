@@ -1043,7 +1043,7 @@ class ServerSettingsManager(object):
 
 
 def _updateBattlePassVersion(data):
-    version = 5
+    version = 6
     if data[BattlePassStorageKeys.FLAGS_VERSION] < version:
         data[BattlePassStorageKeys.FLAGS_VERSION] = version
         data[BattlePassStorageKeys.INTRO_SHOWN] = False

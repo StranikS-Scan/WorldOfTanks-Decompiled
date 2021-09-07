@@ -1863,14 +1863,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         self.inputHandler.setAutorotation(True)
             elif vehicle is not None and vehicle.isStarted:
                 vehicle.turnoffThrottle()
-            self.base.vehicle_moveWith(flags)
+            self.cell.vehicle_moveWith(flags)
             if g_bootcamp.isRunning() and not cantMove:
                 g_bootcamp.onBattleAction(BOOTCAMP_BATTLE_ACTION.PLAYER_MOVE, [flags])
             return
 
     def enableOwnVehicleAutorotation(self, enable, triggeredByKey=False):
         self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.AUTO_ROTATION, enable)
-        self.base.vehicle_changeSetting(VEHICLE_SETTING.AUTOROTATION_ENABLED, enable)
+        self.cell.vehicle_changeSetting(VEHICLE_SETTING.AUTOROTATION_ENABLED, enable)
         if triggeredByKey is True:
             self.__playOwnVehicleAutorotationSound(enable)
 
@@ -1975,7 +1975,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 return
             if self.__isOwnVehicleSwitchingSiegeMode():
                 return
-            self.base.vehicle_shoot()
+            self.cell.vehicle_shoot()
             shotArgs = None
             vehicle = BigWorld.entity(self.playerVehicleID)
             if vehicle is not None and vehicle.isStarted:

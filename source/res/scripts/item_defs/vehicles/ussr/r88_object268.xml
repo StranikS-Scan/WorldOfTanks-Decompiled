@@ -85,6 +85,11 @@
           <destroyed>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Hull.model	</exploded>
         </R88_Object268_3Dst>
+        <R88_Object268_3Dst_BVI>
+          <undamaged>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/crash/lod0/Hull.model	</exploded>
+        </R88_Object268_3Dst_BVI>
       </sets>
     </models>
     <swinging>
@@ -1526,6 +1531,72 @@
         <anchorPosition>	1.44677 0.309761 2.64353	</anchorPosition>
         <anchorDirection>	0.000010 0.999143 -0.0413802	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15103	</slotId>
+        <position>	-1.29381 1.16597 3.48565	</position>
+        <rotation>	0.640575 -0.000012 3.14158	</rotation>
+        <attachNode>	V	</attachNode>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R88_Object268_3Dst_BVI	</compatibleModels>
+        <scale>	0.40662 0.470557 0.406621	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.499513	</clipAngle>
+        <anchorPosition>	-1.29381 0.184577 3.43187	</anchorPosition>
+        <anchorDirection>	0.000005 0.801752 0.597656	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15104	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	0.359203 2.45979 1.13967	</position>
+        <rotation>	0.16566 -0.000003 3.14158	</rotation>
+        <scale>	0.615551 0.0999999 0.615571	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.53911	</clipAngle>
+        <anchorPosition>	0.359203 1.57834 1.14432	</anchorPosition>
+        <anchorDirection>	0.000012 0.98631 0.164903	</anchorDirection>
+        <compatibleModels>	R88_Object268_3Dst_BVI	</compatibleModels>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15105	</slotId>
+        <position>	-1.16492 2.03791 1.39063	</position>
+        <rotation>	1.12322 -0.731321 3.06753	</rotation>
+        <attachNode>	V	</attachNode>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R88_Object268_3Dst_BVI	</compatibleModels>
+        <scale>	0.463605 0.102955 0.463612	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.415464	</clipAngle>
+        <anchorPosition>	-1.19748 1.15443 1.43353	</anchorPosition>
+        <anchorDirection>	-0.545344 0.431595 0.718558	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15106	</slotId>
+        <position>	1.16495 2.03789 1.39063	</position>
+        <rotation>	1.12323 0.731278 -3.06761	</rotation>
+        <attachNode>	V	</attachNode>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R88_Object268_3Dst_BVI	</compatibleModels>
+        <scale>	0.463604 0.102955 0.463611	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.415464	</clipAngle>
+        <anchorPosition>	1.19751 1.1544 1.43352	</anchorPosition>
+        <anchorDirection>	0.545378 0.431587 0.718537	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	sequence	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0.000000 0.000000 0.000000	</position>
+        <rotation>	0.000000 0.000000 0.000000	</rotation>
+        <attachNode>	V	</attachNode>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1573,6 +1644,11 @@
             <destroyed>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Chassis.model	</exploded>
           </R88_Object268_3Dst>
+          <R88_Object268_3Dst_BVI>
+            <undamaged>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/crash/lod0/Chassis.model	</exploded>
+          </R88_Object268_3Dst_BVI>
         </sets>
       </models>
       <traces>
@@ -1679,6 +1755,12 @@
         <segmentLength>	0.144	</segmentLength>
         <segmentOffset>	0.219	</segmentOffset>
         <lodDist>	SPLINE_TRACK	</lodDist>
+        <modelSets>
+          <R88_Object268_3Dst_BVI>
+            <segmentModelLeft>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/track/segment_01_L.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/track/segment_01_R.model	</segmentModelRight>
+          </R88_Object268_3Dst_BVI>
+        </modelSets>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -1816,6 +1898,12 @@
             <model>	vehicles/russian/R88_Object268/track/segment.model	</model>
             <length>	0.143998	</length>
           </mainSegment>
+          <modelSets>
+            <R88_Object268_3Dst_BVI>
+              <mainSegmentModel>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/track/segment_01_L.model	</mainSegmentModel>
+              <secSegmentModel></secSegmentModel>
+            </R88_Object268_3Dst_BVI>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -2024,6 +2112,12 @@
             <model>	vehicles/russian/R88_Object268/track/segment.model	</model>
             <length>	0.143999	</length>
           </mainSegment>
+          <modelSets>
+            <R88_Object268_3Dst_BVI>
+              <mainSegmentModel>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/track/segment_01_R.model	</mainSegmentModel>
+              <secSegmentModel></secSegmentModel>
+            </R88_Object268_3Dst_BVI>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -2300,6 +2394,11 @@
                 <destroyed>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Gun_01.model	</exploded>
               </R88_Object268_3Dst>
+              <R88_Object268_3Dst_BVI>
+                <undamaged>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/crash/lod0/Gun_01.model	</exploded>
+              </R88_Object268_3Dst_BVI>
             </sets>
           </models>
           <hitTester>
@@ -2362,7 +2461,7 @@
               <rayStart>	0.000000 0.0123704 1.85118	</rayStart>
               <rayEnd>	-0.105796 0.0442259 1.85066	</rayEnd>
               <rayUp>	0.141 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
+              <applyToFabric>	false	</applyToFabric>
               <size>	0.733	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -2391,6 +2490,11 @@
             <destroyed>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst/crash/lod0/Turret_01.model	</exploded>
           </R88_Object268_3Dst>
+          <R88_Object268_3Dst_BVI>
+            <undamaged>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R88_Object268/_skins/R88_Object268_3Dst_BVI/crash/lod0/Turret_01.model	</exploded>
+          </R88_Object268_3Dst_BVI>
         </sets>
       </models>
       <hitTester>

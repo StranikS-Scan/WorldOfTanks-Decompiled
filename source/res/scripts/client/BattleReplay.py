@@ -733,11 +733,13 @@ class BattleReplay(object):
         player = BigWorld.player()
         if not self.isPlaying or not isPlayerAvatar():
             return
+        elif forceControlMode is None and not self.isControllingCamera:
+            return
         else:
             entity = BigWorld.entities.get(self.playerVehicleID)
             if (entity is None or not entity.isStarted) and forceControlMode is None:
                 controlMode = self.getControlMode()
-                if controlMode == CTRL_MODE_NAME.SNIPER or forceControlMode == CTRL_MODE_NAME.STRATEGIC:
+                if controlMode == CTRL_MODE_NAME.SNIPER:
                     return
             controlMode = self.getControlMode() if forceControlMode is None else forceControlMode
             if self.__equipmentId is None and controlMode == CTRL_MODE_NAME.MAP_CASE_ARCADE:

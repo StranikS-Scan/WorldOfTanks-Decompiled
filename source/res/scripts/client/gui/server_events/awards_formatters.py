@@ -1220,7 +1220,8 @@ class RankedCustomizationsBonusFormatter(CustomizationsBonusFormatter):
                 if iconName == 'style' and c11nItem.modelsSet:
                     iconName = 'style_3d'
                 resource = R.images.gui.maps.icons.quests.bonuses.dyn(size).dyn(iconName)
-            result[size] = backport.image(resource())
+            if resource:
+                result[size] = backport.image(resource())
 
         return result
 

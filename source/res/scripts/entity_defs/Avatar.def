@@ -578,6 +578,31 @@
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
     </onRankUpdated>
+    <vehicle_moveWith>
+      <Exposed></Exposed>
+      <Arg>	UINT8	</Arg>
+    </vehicle_moveWith>
+    <vehicle_shoot>
+      <Exposed></Exposed>
+    </vehicle_shoot>
+    <vehicle_trackWorldPointWithGun>
+      <Exposed></Exposed>
+      <Arg>	VECTOR3	</Arg>
+    </vehicle_trackWorldPointWithGun>
+    <vehicle_trackRelativePointWithGun>
+      <Exposed></Exposed>
+      <Arg>	VECTOR3	</Arg>
+    </vehicle_trackRelativePointWithGun>
+    <vehicle_stopTrackingWithGun>
+      <Exposed></Exposed>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </vehicle_stopTrackingWithGun>
+    <vehicle_changeSetting>
+      <Exposed></Exposed>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+    </vehicle_changeSetting>
   </CellMethods>
   <BaseMethods>
     <onCreateCellSuccess></onCreateCellSuccess>
@@ -649,31 +674,6 @@
       <Arg>	ARRAY	  <of>	FLOAT32	</of>
       </Arg>
     </updatePositions>
-    <vehicle_moveWith>
-      <Exposed></Exposed>
-      <Arg>	UINT8	</Arg>
-    </vehicle_moveWith>
-    <vehicle_shoot>
-      <Exposed></Exposed>
-    </vehicle_shoot>
-    <vehicle_trackWorldPointWithGun>
-      <Exposed></Exposed>
-      <Arg>	VECTOR3	</Arg>
-    </vehicle_trackWorldPointWithGun>
-    <vehicle_trackRelativePointWithGun>
-      <Exposed></Exposed>
-      <Arg>	VECTOR3	</Arg>
-    </vehicle_trackRelativePointWithGun>
-    <vehicle_stopTrackingWithGun>
-      <Exposed></Exposed>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-    </vehicle_stopTrackingWithGun>
-    <vehicle_changeSetting>
-      <Exposed></Exposed>
-      <Arg>	UINT8	</Arg>
-      <Arg>	INT32	</Arg>
-    </vehicle_changeSetting>
     <vehicle_teleport>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>

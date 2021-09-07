@@ -262,6 +262,14 @@
       </exclude>
     </vehicleFilter>
     <paint>
+      <id>	194	</id>
+      <texture>	gui/maps/vehicles/repaints/poland_color_05.png	</texture>
+      <color>	59 65 79 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.6	</metallic>
+      <userString>	#vehicle_customization:repaint/ranked_2021	</userString>
+    </paint>
+    <paint>
       <id>	286	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
       <color>	17 17 34 255	</color>
@@ -2494,6 +2502,32 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	GB86_Centurion_Action_X_3DSt_BVI	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	179	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_13.png	</texture>
+      <color>	171.000000 165.000000 132.000000 255.000000	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/GB86_centurion_action_X_3dst_bvi	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	Maps_training_color1	</name>
     <userString>	#vehicle_customization:Maps_training_color1	</userString>
     <season>	ALL	</season>
@@ -2550,6 +2584,58 @@
     <gloss>	0.509000	</gloss>
     <metallic>	0.230000	</metallic>
     <color>	0.000000 0.000000 0.000000 255.000000	</color>
+  </itemGroup>
+  <itemGroup>
+    <name>	R88_Object268_3DSt_BVI	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	180	</id>
+      <texture>	gui/maps/vehicles/repaints/ussr_color_04.png	</texture>
+      <color>	89.000000 97.000000 70.000000 255.000000	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/R88_Object268_3DSt_BVI	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	F82_AMX_M4_Mle1949_Ter_3DSt_BVI	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	183	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_05.png	</texture>
+      <color>	54 101 104 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/F82_AMX_M4_Mle1949_Ter_3DSt_BVI	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
     <name>	Tanker Day 2021	</name>

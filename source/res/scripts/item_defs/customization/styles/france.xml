@@ -1011,4 +1011,110 @@
     </style>
     <modelsSet></modelsSet>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F82_AMX_M4_Mle1949_Ter	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	532	</id>
+      <texture>	gui/maps/vehicles/styles/F82_AMX_M4_Mle1949_Ter_3DSt_BVI.png	</texture>
+      <modelsSet>	AMX_M4_Mle1949_Ter_3DSt_BVI	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/F82_AMX_M4_Mle1949_Ter_3DSt_BVI	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/F82_AMX_M4_Mle1949_Ter_3DSt_BVI_desc/long	</longDescriptionSpecial>
+      <tags>	styleProgression progression_required	</tags>
+      <styleProgressions>
+        <stage>
+          <materials>	tank_guns_skinned tank_guns_hidden_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <paints>
+                <item>
+                  <id>	183	</id>
+                  <appliedTo>	30583	</appliedTo>
+                </item>
+              </paints>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_02 tank_guns_skinned tank_guns_hidden_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <paints>
+                <item>
+                  <id>	183	</id>
+                  <appliedTo>	30583	</appliedTo>
+                </item>
+              </paints>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_03 tank_guns_03_skinned tank_guns_skinned tank_guns_hidden_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <paints>
+                <item>
+                  <id>	183	</id>
+                  <appliedTo>	30583	</appliedTo>
+                </item>
+              </paints>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_04 tank_guns_04_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <camouflages>
+                <item>
+                  <id>	1	</id>
+                  <appliedTo>	4368	</appliedTo>
+                  <patternSize>	1	</patternSize>
+                  <palette>	0	</palette>
+                </item>
+              </camouflages>
+              <sequences>
+                <item>
+                  <id>	26	</id>
+                  <slotId>	18000	</slotId>
+                </item>
+              </sequences>
+            </outfit>
+          </outfits>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	339	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </france.xml>

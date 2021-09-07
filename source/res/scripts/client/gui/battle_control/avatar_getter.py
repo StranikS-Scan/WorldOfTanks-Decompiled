@@ -260,9 +260,9 @@ def changeVehicleSetting(code, value, avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
-        avatar.base.vehicle_changeSetting(code, value)
+        avatar.cell.vehicle_changeSetting(code, value)
     except AttributeError:
-        _logger.exception('Attribute "base.vehicle_changeSetting" not found')
+        _logger.exception('Attribute "cell.vehicle_changeSetting" not found')
 
     return
 

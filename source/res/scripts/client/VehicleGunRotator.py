@@ -340,12 +340,12 @@ class VehicleGunRotator(object):
             stabilisedVehPos = Math.Matrix(avatar.getOwnVehicleStabilisedMatrix()).translation
             vehicle.cell.trackRelativePointWithGun(shotPoint - stabilisedVehPos)
         else:
-            avatar.base.vehicle_trackWorldPointWithGun(shotPoint)
+            avatar.cell.vehicle_trackWorldPointWithGun(shotPoint)
         self.__prevSentShotPoint = shotPoint
         return
 
     def stopTrackingOnServer(self):
-        self._avatar.base.vehicle_stopTrackingWithGun(self.__turretYaw, self.__gunPitch)
+        self._avatar.cell.vehicle_stopTrackingWithGun(self.__turretYaw, self.__gunPitch)
         self.__prevSentShotPoint = None
         return
 

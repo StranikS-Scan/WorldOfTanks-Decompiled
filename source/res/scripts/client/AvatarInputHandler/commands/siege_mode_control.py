@@ -49,4 +49,4 @@ class SiegeModeControl(InputHandlerCommand):
             enableSiegeMode = False
         else:
             enableSiegeMode = True
-        BigWorld.player().base.vehicle_changeSetting(VEHICLE_SETTING.SIEGE_MODE_ENABLED, enableSiegeMode)
+        BigWorld.player().cell.vehicle_changeSetting(VEHICLE_SETTING.SIEGE_MODE_ENABLED, enableSiegeMode)

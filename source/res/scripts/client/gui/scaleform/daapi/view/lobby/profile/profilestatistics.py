@@ -16,6 +16,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.genConsts.BATTLE_TYPES import BATTLE_TYPES
 _RankedSeasonsKeys = namedtuple('_RankedSeasonsKeys', ['all', 'current', 'previous'])
 _RANKED_SEASONS_ARCHIVE = 'archive'
+RANKED_SEASONS_ARCHIVE_10x10 = '_10x10'
 _FRAME_LABELS = {PROFILE_DROPDOWN_KEYS.ALL: 'random',
  PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: 'epicRandom',
  PROFILE_DROPDOWN_KEYS.FALLOUT: 'fallout',
@@ -121,7 +122,7 @@ class ProfileStatistics(ProfileStatisticsMeta):
 
     def _getRanked10x10Stats(self, accountDossier):
         if self.__rankedSeasonKey == _RANKED_SEASONS_ARCHIVE:
-            return accountDossier.getRanked10x10Stats()
+            return accountDossier.getSeasonRankedStats(RANKED_SEASONS_ARCHIVE_10x10, 0)
         season = self.rankedController.getSeason(int(self.__rankedSeasonKey))
         if season:
             seasonKey = RankedDossierKeys.SEASON % season.getNumber()

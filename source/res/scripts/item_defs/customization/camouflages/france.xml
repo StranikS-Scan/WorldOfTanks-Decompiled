@@ -4630,4 +4630,47 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	10	</levels>
+        <nations>	france	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	339	</id>
+      <texture>	vehicles/russian/Camouflage/GB86_Centurion_Action_X_3DSt_BVI.dds	</texture>
+      <description>	#vehicle_customization:camouflage/F82_AMX_M4_Mle1949_Ter_3DSt_BVI/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/F82_AMX_M4_Mle1949_Ter_3DSt_BVI/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <maxNumber>	1	</maxNumber>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	57 78 79 255	</c0>
+          <c1>	92 91 81 255	</c1>
+          <c2>	15 20 20 255	</c2>
+          <c3>	57 78 79 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.261799	</HULL>
+        <TURRET>	0.261799	</TURRET>
+        <GUN>	0.261799	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.000000 2.000000	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+      <tiling>
+        <france:F07_AMX_M4_19458>	4.000000 4.000000 0.000000 0.000000	</france:F07_AMX_M4_19458>
+      </tiling>
+    </camouflage>
+  </itemGroup>
 </france.xml>

@@ -117,6 +117,7 @@ class BaseBattlePassEntryPointView(IGlobalListener):
         self._battlePassController.onBattlePassIsBought += self._updateData
         self._battlePassController.onSeasonStateChange += self._updateData
         self._battlePassController.onBattlePassSettingsChange += self._updateData
+        g_playerEvents.onClientUpdated += self._updateData
         g_eventBus.addListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
         self.startGlobalListening()
 
@@ -125,6 +126,7 @@ class BaseBattlePassEntryPointView(IGlobalListener):
         self._battlePassController.onBattlePassIsBought -= self._updateData
         self._battlePassController.onSeasonStateChange -= self._updateData
         self._battlePassController.onBattlePassSettingsChange -= self._updateData
+        g_playerEvents.onClientUpdated -= self._updateData
         g_eventBus.removeListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
         self.stopGlobalListening()
 
@@ -155,7 +157,7 @@ class BaseBattlePassEntryPointView(IGlobalListener):
         return getNotChosen3DStylesCount(battlePass=self._battlePassController) == 0
 
     def _isCompleted(self):
-        return self._widgetState == BattlePassState.COMPLETED
+        return True if self._isBattlePassPaused() and self._battlePassController.getCurrentLevel() == self._battlePassController.getMaxLevel() else self._widgetState == BattlePassState.COMPLETED
 
     def _updateWidgetValues(self):
         if self._battlePassController.isOffSeasonEnable():

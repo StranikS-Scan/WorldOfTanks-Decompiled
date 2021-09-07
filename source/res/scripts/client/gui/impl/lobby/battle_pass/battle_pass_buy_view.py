@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_buy_view.py
 import logging
 import SoundGroups
+from PlayerEvents import g_playerEvents
 from battle_pass_common import BattlePassState
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyBattlePassUrl
@@ -22,6 +23,24 @@ from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IWalletController, IBattlePassController
 from skeletons.gui.shared import IItemsCache
+WINDOW_IS_NOT_OPENED = -1
+_NO_CHAPTER_CHOSEN = 0
+
+class BattlePassBuyViewStates(object):
+
+    def __init__(self):
+        self.chapter = WINDOW_IS_NOT_OPENED
+        g_playerEvents.onDisconnected += self.reset
+        g_playerEvents.onAccountBecomePlayer += self.reset
+
+    def reset(self):
+        self.chapter = WINDOW_IS_NOT_OPENED
+
+    def getPackageID(self):
+        return self.chapter - 1
+
+
+g_BPBuyViewStates = BattlePassBuyViewStates()
 _logger = logging.getLogger(__name__)
 
 class BattlePassBuyView(ViewImpl):
@@ -64,6 +83,9 @@ class BattlePassBuyView(ViewImpl):
         self.__packages = generatePackages(battlePass=self.__battlePassController)
         self.__setGeneralFields()
         self.__setPackages()
+        if g_BPBuyViewStates.chapter != WINDOW_IS_NOT_OPENED:
+            self.__choosePackage({'packageID': g_BPBuyViewStates.getPackageID()})
+        g_BPBuyViewStates.reset()
         switchHangarOverlaySoundFilter(on=True)
 
     def _finalize(self):
@@ -148,6 +170,15 @@ class BattlePassBuyView(ViewImpl):
 
     def __onLevelUp(self):
         self.__updateState()
+        if self.__battlePassController.isFinalLevel(self.__battlePassController.getCurrentLevel()):
+            self.__onChapterChange()
+
+    def __onChapterChange(self):
+        if self.__selectedPackage is not None:
+            g_BPBuyViewStates.chapter = self.__selectedPackage.getChapter()
+        else:
+            g_BPBuyViewStates.chapter = _NO_CHAPTER_CHOSEN
+        return
 
     def __onSettingsChange(self, *_):
         if self.__battlePassController.isVisible() and not self.__battlePassController.isPaused():

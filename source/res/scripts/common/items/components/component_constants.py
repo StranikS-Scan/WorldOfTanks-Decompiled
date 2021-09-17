@@ -65,3 +65,4 @@ ALLOWED_PROJECTION_DECALS_ANCHORS = ('projectionDecal', 'fixedProjectionDecal')
 ALLOWED_MISC_SLOTS = ('sequence', 'attachment')
 ALLOWED_SLOTS_ANCHORS = ('paint', 'camouflage', 'effect', 'style')
 TANKMEN_GROUPS = ('normalGroups', 'premiumGroups')
+MAIN_TRACK_PAIR_IDX = 0

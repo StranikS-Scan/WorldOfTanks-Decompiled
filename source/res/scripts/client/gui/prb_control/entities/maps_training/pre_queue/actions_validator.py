@@ -11,7 +11,7 @@ class MapsTrainingValidator(BaseActionsValidator):
     mapsTrainingController = dependency.descriptor(IMapsTrainingController)
 
     def _validate(self):
-        return ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_DISABLED) if not self.mapsTrainingController.isValid() else super(MapsTrainingValidator, self)._validate()
+        return ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE) if not self.mapsTrainingController.isValid() else super(MapsTrainingValidator, self)._validate()
 
 
 class MapsTrainingActionsValidator(PreQueueActionsValidator):

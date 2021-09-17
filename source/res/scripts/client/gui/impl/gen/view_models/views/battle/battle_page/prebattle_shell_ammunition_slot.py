@@ -4,7 +4,7 @@ from enum import IntEnum
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.shell_ammunition_slot import ShellAmmunitionSlot
 
 class ShellBattleState(IntEnum):
-    NORAML = 0
+    NORMAL = 0
     CURRENT = 1
     NEXT = 2
 

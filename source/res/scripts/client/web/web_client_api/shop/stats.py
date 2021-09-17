@@ -18,12 +18,13 @@ class BalanceWebApiMixin(object):
     @w2c(W2CSchema, 'get_balance')
     def getBalance(self, cmd):
         stats = self.itemsCache.items.stats
+        money = stats.actualMoney
         premiumExpireLocalTime = time_utils.makeLocalServerTime(stats.activePremiumExpiryTime)
         if premiumExpireLocalTime:
             premiumExpireISOTime = time_utils.timestampToISO(premiumExpireLocalTime)
         else:
             premiumExpireISOTime = None
-        balanceData = {Currency.currencyExternalName(currency):stats.actualMoney.get(currency, 0) for currency in Currency.ALL}
+        balanceData = {Currency.currencyExternalName(currency):money.get(currency, 0) for currency in Currency.ALL}
         balanceData.update({'walletStatus': {Currency.currencyExternalName(key):WalletController.STATUS.getKeyByValue(code).lower() for key, code in stats.currencyStatuses.items() if key in Currency.ALL},
          'premiumExpireDate': premiumExpireISOTime})
         return balanceData

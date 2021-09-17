@@ -12,6 +12,11 @@ from wrapped_reflection_framework import ReflectionMetaclass
 from items import _xml
 _logger = logging.getLogger(__name__)
 
+class ModelStatus:
+    NORMAL = 0
+    CRASHED = 1
+
+
 class HitTesterManager(object):
     __metaclass__ = ReflectionMetaclass
     NORMAL_MODEL_TAG = 'normal'
@@ -19,33 +24,29 @@ class HitTesterManager(object):
     CLIENT_MODEL_TAG = 'collisionModelClient'
     SERVER_MODEL_TAG = 'collisionModelServer'
 
-    class ModelStatus:
-        NORMAL = 0
-        CRASHED = 1
-
     def __init__(self, dataSection=None):
-        self.__hitTesters = {self.ModelStatus.NORMAL: None,
-         self.ModelStatus.CRASHED: None}
-        self.__status = self.ModelStatus.NORMAL
+        self.__hitTesters = {ModelStatus.NORMAL: None,
+         ModelStatus.CRASHED: None}
+        self.__status = ModelStatus.NORMAL
         if dataSection:
             self.initHitTesters(dataSection)
         return
 
     @property
     def modelHitTester(self):
-        return self.__hitTesters[self.ModelStatus.NORMAL]
+        return self.__hitTesters[ModelStatus.NORMAL]
 
     @modelHitTester.setter
     def modelHitTester(self, hitTester):
-        self.__hitTesters[self.ModelStatus.NORMAL] = hitTester
+        self.__hitTesters[ModelStatus.NORMAL] = hitTester
 
     @property
     def crashedModelHitTester(self):
-        return self.__hitTesters[self.ModelStatus.CRASHED]
+        return self.__hitTesters[ModelStatus.CRASHED]
 
     @crashedModelHitTester.setter
     def crashedModelHitTester(self, hitTester):
-        self.__hitTesters[self.ModelStatus.CRASHED] = hitTester
+        self.__hitTesters[ModelStatus.CRASHED] = hitTester
 
     @property
     def activeHitTester(self):
@@ -53,12 +54,12 @@ class HitTesterManager(object):
 
     def initHitTesters(self, dataSection):
         if dataSection.has_key(self.CRASHED_MODEL_TAG):
-            self.__hitTesters[self.ModelStatus.CRASHED] = self.__createHitTester(dataSection, self.CRASHED_MODEL_TAG)
+            self.__hitTesters[ModelStatus.CRASHED] = self.__createHitTester(dataSection, self.CRASHED_MODEL_TAG)
         normalModelSection = dataSection
         if dataSection.has_key(self.NORMAL_MODEL_TAG):
             normalModelSection = _xml.getSubsection(None, dataSection, self.NORMAL_MODEL_TAG)
         modelHitTester = self.__createHitTester(normalModelSection)
-        self.__hitTesters[self.ModelStatus.NORMAL] = modelHitTester
+        self.__hitTesters[ModelStatus.NORMAL] = modelHitTester
         return
 
     def setStatus(self, modelStatus):
@@ -208,6 +209,42 @@ class ModelHitTester(object):
         return self.__getBspModel(value)
 
 
+class BoundingBoxManager(object):
+
+    def __init__(self, normalBBox=None, crashedBBox=None):
+        self.__status = ModelStatus.NORMAL
+        self.__bboxes = {ModelStatus.NORMAL: normalBBox,
+         ModelStatus.CRASHED: crashedBBox}
+
+    def setStatus(self, modelStatus):
+        if self.__bboxes[modelStatus]:
+            self.__status = modelStatus
+
+    @property
+    def normalBBox(self):
+        return self.__bboxes[ModelStatus.NORMAL]
+
+    @normalBBox.setter
+    def normalBBox(self, bbox):
+        self.__bboxes[ModelStatus.NORMAL] = bbox
+
+    @property
+    def crashedBBox(self):
+        return self.__bboxes[ModelStatus.CRASHED]
+
+    @crashedBBox.setter
+    def crashedBBox(self, bbox):
+        self.__bboxes[ModelStatus.CRASHED] = bbox
+
+    @property
+    def activeBBox(self):
+        return self.__bboxes[self.__status]
+
+    @activeBBox.setter
+    def activeBBox(self, bbox):
+        self.__bboxes[self.__status] = bbox
+
+
 def segmentMayHitVolume(boundingRadius, center, segmentStart, segmentEnd):
     radiusSquared = boundingRadius
     radiusSquared *= radiusSquared
@@ -244,6 +281,38 @@ def coneMayHitVolume(boundingRadius, center, segmentStart, segmentEnd, startDevi
 
 def segmentMayHitVehicle(vehicleDescr, segmentStart, segmentEnd, vehicleCenter):
     return segmentMayHitVolume(vehicleDescr.boundingRadius, vehicleCenter, segmentStart, segmentEnd)
+
+
+def combineBBoxes(bboxes):
+    bboxesCount = len(bboxes)
+    if bboxesCount == 0:
+        return None
+    elif bboxesCount == 1:
+        return bboxes[0]
+    else:
+        minBound, maxBound = bboxes[0][0], bboxes[0][1]
+        for bbox in bboxes[1:]:
+            minBound.x = min(minBound.x, bbox[0].x)
+            minBound.y = min(minBound.y, bbox[0].y)
+            minBound.z = min(minBound.z, bbox[0].z)
+            maxBound.x = max(maxBound.x, bbox[1].x)
+            maxBound.y = max(maxBound.y, bbox[1].y)
+            maxBound.z = max(maxBound.z, bbox[1].z)
+
+        maxDelta = math.sqrt(max(minBound.lengthSquared, maxBound.lengthSquared))
+        return (minBound, maxBound, maxDelta)
+
+
+def createBBoxManagerForModels(hitTesterManagers):
+    normalBBoxes = []
+    crashedBBoxes = []
+    for manager in hitTesterManagers:
+        if manager.modelHitTester and manager.modelHitTester.bbox:
+            normalBBoxes.append(manager.modelHitTester.bbox)
+        if manager.crashedModelHitTester and manager.crashedModelHitTester.bbox:
+            crashedBBoxes.append(manager.crashedModelHitTester.bbox)
+
+    return BoundingBoxManager(combineBBoxes(normalBBoxes), combineBBoxes(crashedBBoxes))
 
 
 SegmentCollisionResult = namedtuple('SegmentCollisionResult', ('dist', 'hitAngleCos', 'armor'))

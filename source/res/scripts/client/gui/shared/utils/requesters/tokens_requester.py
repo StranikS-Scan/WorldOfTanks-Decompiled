@@ -44,17 +44,21 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
     def getToken(self, tokenID):
         return self.getTokens().get(tokenID)
 
+    def getTokenInfo(self, tokenID):
+        token = self.getToken(tokenID)
+        return token or (0, 0)
+
     def getTokenCount(self, tokenID):
-        _, count = self._getTokenInfo(tokenID)
+        _, count = self.getTokenInfo(tokenID)
         return count
 
     def getTokenExpiryTime(self, tokenID):
-        expireTime, _ = self._getTokenInfo(tokenID)
+        expireTime, _ = self.getTokenInfo(tokenID)
         return expireTime
 
     def isTokenAvailable(self, tokenID):
         curTime = int(time.time())
-        expireTime, count = self._getTokenInfo(tokenID)
+        expireTime, count = self.getTokenInfo(tokenID)
         return count > 0 and expireTime > curTime
 
     def getLootBoxes(self):
@@ -116,10 +120,6 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
 
     def hasTokenCountChanged(self, tokenId):
         return self.__tokensProgressDelta.hasDiff(tokenId)
-
-    def _getTokenInfo(self, tokenID):
-        token = self.getToken(tokenID)
-        return token or (0, 0)
 
     def _preprocessValidData(self, data):
         self.__tokensProgressDelta.update(data)

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/battle_royale/pre_queue/permissions.py
 from gui.prb_control.entities.base.pre_queue.permissions import PreQueuePermissions
 from helpers import time_utils, dependency
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.periodic_battles.models import PrimeTimeStatus
 from skeletons.gui.game_control import IBattleRoyaleController
 
 class BattleRoyalePermissions(PreQueuePermissions):

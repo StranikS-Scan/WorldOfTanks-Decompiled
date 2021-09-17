@@ -32,7 +32,7 @@ class HeroTankController(IHeroTankController):
 
     def __init__(self):
         self.__data = {}
-        self.__invVehiclesIntCD = []
+        self.__invVehiclesIntCD = tuple()
         self.__isEnabled = False
         self.__currentTankCD = None
         self.__actionInfo = None
@@ -100,10 +100,9 @@ class HeroTankController(IHeroTankController):
         self.onInteractive(interactive)
 
     def __fullUpdate(self):
-        self.__invVehiclesIntCD = []
-        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.CUSTOM(lambda item: item.inventoryCount > 0 or item.isRestorePossible())).values()
-        for invVeh in invVehicles:
-            self.__invVehiclesIntCD.append(invVeh.intCD)
+        items = self.itemsCache.items
+        getItem = items.getItemByCD
+        self.__invVehiclesIntCD = tuple({intCD for intCD, rData in items.recycleBin.vehiclesBuffer.iteritems() if rData and getItem(intCD).isRestorePossible()}.union(items.inventory.getIventoryVehiclesCDs()))
 
     def __updateInventoryVehiclesData(self, reason, diff):
         if reason != CACHE_SYNC_REASON.CLIENT_UPDATE:
@@ -111,8 +110,7 @@ class HeroTankController(IHeroTankController):
         else:
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
                 vehDiff = diff[GUI_ITEM_TYPE.VEHICLE]
-                heroVehicles = self.lobbyContext.getServerSettings().getHeroVehicles()['vehicles']
-                if not vehDiff & set(heroVehicles.keys()):
+                if self.__currentTankCD not in vehDiff:
                     return
                 self.__fullUpdate()
                 self.__updateSettings()

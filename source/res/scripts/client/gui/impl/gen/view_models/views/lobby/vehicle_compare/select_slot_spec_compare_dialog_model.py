@@ -6,12 +6,12 @@ from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import Ful
 class SelectSlotSpecCompareDialogModel(FullScreenDialogWindowModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=3):
+    def __init__(self, properties=12, commands=3):
         super(SelectSlotSpecCompareDialogModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def mainContent(self):
-        return self._getViewModel(10)
+        return self._getViewModel(11)
 
     def _initialize(self):
         super(SelectSlotSpecCompareDialogModel, self)._initialize()

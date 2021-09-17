@@ -18,7 +18,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import getItemUnlockPricesVO, getItemRestorePricesVO, getItemSellPricesVO, getMoneyVO
 from gui.shared.gui_items.gui_item_economics import getMinRentItemPrice
 from gui.shared.formatters import text_styles, moneyWithIcon, icons, getItemPricesVO
-from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo, getTimeLeftStr
+from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, KPI
 from gui.shared.gui_items.Tankman import Tankman, getRoleUserName, CrewTypes
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
@@ -35,7 +35,7 @@ from gui.shared.money import Currency
 from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makeCompoundPriceBlock, CURRENCY_SETTINGS
-from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, isRomanNumberForbidden
+from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, CHASSIS_REPAIR_TIME, isRomanNumberForbidden
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from post_progression_common import ACTION_TYPES
@@ -78,7 +78,39 @@ _MULTI_KPI_PARAMS = frozenset(['vehicleRepairSpeed',
  'vehicleAmmoBayEngineFuelStrength',
  'vehicleFireChance',
  'demaskFoliageFactor',
- 'demaskMovingFactor'])
+ 'demaskMovingFactor',
+ 'crewStunDuration',
+ 'damageEnemiesByRamming',
+ 'vehPenaltyForDamageEngineAndCombat',
+ 'vehicleGunShotDispersionAfterShot',
+ 'vehicleGunShotDispersionChassisMovement',
+ 'vehicleGunShotDispersionChassisRotation',
+ 'vehicleGunShotDispersionTurretRotation',
+ 'vehicleGunShotDispersionWhileGunDamaged',
+ 'vehicleRamDamageResistance',
+ 'vehicleSpeedGain',
+ 'aimingTime',
+ 'autoReloadTime',
+ 'avgDamagePerMinute',
+ 'avgPiercingPower',
+ 'chargeTime',
+ 'chassisRepairTime',
+ 'chassisRotationSpeed',
+ 'circularVisionRadius',
+ 'clipFireRate',
+ 'enginePower',
+ 'enginePowerPerTon',
+ 'invisibilityMovingFactor',
+ 'invisibilityStillFactor',
+ 'maxHealth',
+ 'radioDistance',
+ 'reloadTime',
+ 'reloadTimeSecs',
+ 'shotDispersionAngle',
+ 'turboshaftEnginePower',
+ 'turboshaftInvisibilityMovingFactor',
+ 'turboshaftInvisibilityStillFactor',
+ 'turretRotationSpeed'])
 _BONUS_TYPES_ORDER = {constants.BonusTypes.SKILL: 1,
  constants.BonusTypes.ROLE: 1,
  constants.BonusTypes.PERK: 1,
@@ -147,7 +179,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             if commonStatsBlock:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
         if self.context.getParams().get(_IS_SENIORITY, False):
-            awardCrewAndHangarBlock = AwardCrewAndHangar(vehicle, paramsConfig, leftPadding, rightPadding, True, 100).construct()
+            awardCrewAndHangarBlock = AwardCrewAndHangar(vehicle, paramsConfig, leftPadding, rightPadding, showVehicleSlot=True, crewLevel=100).construct()
             if awardCrewAndHangarBlock:
                 items.append(formatters.packBuildUpBlockData(awardCrewAndHangarBlock))
         statsBlockConstructor = None
@@ -160,7 +192,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         if statsBlockConstructor is not None:
             items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
         priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
-        shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles or vehicle.isOnlyForClanWarsBattles
+        shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles
         if priceBlock and not shouldBeCut:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=5, padding=formatters.packPadding(left=98), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
@@ -199,18 +231,17 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             else:
                 rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
                 rentInfo = vehicle.rentInfo
-            rentFormatter = RentLeftFormatter(rentInfo)
-            descrStr = rentFormatter.getRentLeftStr(rentLeftKey)
+            descrStr = RentLeftFormatter(rentInfo).getRentLeftStr(rentLeftKey)
             leftStr = ''
-            rentTimeLeft = rentInfo.getTimeLeft()
-            if rentTimeLeft:
-                leftStr = getTimeLeftStr(rentLeftKey, rentTimeLeft)
+            if rentInfo.rentExpiryTime:
+                _, formattedTime = getTimeLeftInfo(rentInfo.getTimeLeft())
+                leftStr = str(formattedTime)
             elif rentInfo.battlesLeft:
                 leftStr = str(rentInfo.battlesLeft)
             elif rentInfo.winsLeft > 0:
                 leftStr = str(rentInfo.winsLeft)
             if descrStr or leftStr:
-                items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descrStr), value=text_styles.main(leftStr), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=0, bottom=-10)))
+                items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descrStr), value=text_styles.expText(leftStr), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=-10)))
         if statsConfig.showRankedBonusBattle:
             items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.rankedBonusBattle())), value='', icon=ICON_TEXT_FRAMES.BONUS_BATTLE, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
         if statsConfig.dailyXP:
@@ -315,16 +346,21 @@ class BaseVehicleAdvancedParametersTooltipData(BaseVehicleParametersTooltipData)
     def _packBlocks(self, paramName):
         blocks = super(BaseVehicleAdvancedParametersTooltipData, self)._packBlocks(paramName)
         self._packData(paramName)
+        vehicle = self.context.buildItem()
         isExtraParam = KPI.Name.hasValue(paramName)
         if isExtraParam:
             title = text_styles.highTitle(backport.text(R.strings.menu.extraParams.header(), paramName=backport.text(getVehicleParameterText(paramName, isPositive=True))))
             desc = text_styles.main(backport.text(R.strings.menu.extraParams.name.dyn(paramName, R.strings.menu.extraParams.desc)()))
         else:
-            title = text_styles.highTitle(MENU.tank_params(paramName))
+            titleParamName = param_formatter.getTitleParamName(vehicle, paramName)
+            measureParamName = param_formatter.getMeasureParamName(vehicle, paramName)
+            title = text_styles.highTitle(MENU.tank_params(titleParamName))
             title += '&nbsp;'
-            title += text_styles.middleTitle(param_formatter.MEASURE_UNITS.get(paramName, ''))
+            title += text_styles.middleTitle(param_formatter.MEASURE_UNITS.get(measureParamName, ''))
             if paramName == 'autoReloadTime' and self._hasExtendedInfo():
                 descText = self._getAutoReloadTimeDescription()
+            elif paramName == CHASSIS_REPAIR_TIME and vehicle and vehicle.isTrackWithinTrack:
+                descText = backport.text(R.strings.tooltips.tank_params.desc.chassisRepairTimeYoh())
             else:
                 descText = backport.text(R.strings.tooltips.tank_params.desc.dyn(paramName)())
             desc = text_styles.main(descText)

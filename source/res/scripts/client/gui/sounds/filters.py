@@ -33,7 +33,7 @@ class Events(CONST_CONTAINER):
     BOB_ENTER = 'gui_bb_bloggers_progress_page_ambient_Entrance'
     BOB_EXIT = 'gui_bb_bloggers_progress_page_ambient_Exit'
     MARATHON_ENTER = 'ev_hangar_marathon_enter'
-    MARATHON_EXIT = 'ev_hangar_marathon_sab_exit'
+    MARATHON_EXIT = 'ev_hangar_marathon_exit'
 
 
 def switchHangarFilteredFilter(on=True):
@@ -165,6 +165,10 @@ class WWISEHangarTasksMissionsFilter(WWISEHangarTasksFilter):
 
 class WWISEMarathonPageFilter(WWISEHangarTasksFilter):
 
+    def start(self):
+        super(WWISEMarathonPageFilter, self).start()
+        WWISE.WW_eventGlobal(Events.MARATHON_ENTER)
+
     def stop(self):
         super(WWISEMarathonPageFilter, self).stop()
         WWISE.WW_eventGlobal(Events.MARATHON_EXIT)
@@ -190,8 +194,7 @@ _filters = {SoundFilters.FILTERED_HANGAR: _selectFilter(WWISEFilteredHangarFilte
  SoundFilters.HANGAR_OVERLAY: _selectFilter(WWISEHangarOverlayFilter()),
  SoundFilters.HANGAR_PLACE_TASKS_DAILY: _selectFilter(WWISEHangarTasksDailyFilter()),
  SoundFilters.HANGAR_PLACE_TASKS_MISSIONS: _selectFilter(WWISEHangarTasksMissionsFilter()),
- SoundFilters.HANGAR_PLACE_TASKS_BATTLE_PASS: _selectFilter(WWISEHangarTasksBPFilter()),
- SoundFilters.MARATHON_FILTER: _selectFilter(WWISEMarathonPageFilter())}
+ SoundFilters.HANGAR_PLACE_TASKS_BATTLE_PASS: _selectFilter(WWISEHangarTasksBPFilter())}
 
 def _setState(stateGroup, stateName):
     WWISE.WW_setState(stateGroup, stateName)

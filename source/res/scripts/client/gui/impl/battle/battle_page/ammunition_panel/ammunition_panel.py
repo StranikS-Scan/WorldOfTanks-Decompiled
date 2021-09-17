@@ -17,10 +17,6 @@ class PrebattleAmmunitionPanel(BaseAmmunitionPanel):
         self._controller.onCurrentShellChanged(intCD)
         self.updateSection(TankSetupConstants.SHELLS)
 
-    def onStateChanged(self, state):
-        self._controller.onStateChanged(state)
-        self.updateSection(TankSetupConstants.SHELLS)
-
 
 class RespawnAmmunitionPanel(BaseAmmunitionPanel):
 

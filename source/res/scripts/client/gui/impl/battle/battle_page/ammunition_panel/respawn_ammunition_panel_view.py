@@ -3,6 +3,7 @@
 import typing
 from Event import Event, EventManager
 from frameworks.wulf import ViewFlags, ViewSettings
+from gui.battle_control.event_dispatcher import showIngameMenu
 from gui.impl.battle.battle_page.ammunition_panel.ammunition_panel import RespawnAmmunitionPanel
 from gui.impl.common.ammunition_panel.ammunition_groups_controller import GROUPS_MAP
 from gui.impl.gen import R
@@ -59,8 +60,10 @@ class RespawnAmmunitionPanelView(ViewImpl):
 
     def __addListeners(self):
         self.viewModel.ammunitionPanel.onChangeSetupIndex += self.__onChangeSetupByButton
+        self.viewModel.onEscKeyDown += self.__onEscKeyDown
 
     def __removeListeners(self):
+        self.viewModel.onEscKeyDown -= self.__onEscKeyDown
         self.viewModel.ammunitionPanel.onChangeSetupIndex -= self.__onChangeSetupByButton
         self.__eventManager.clear()
 
@@ -84,3 +87,6 @@ class RespawnAmmunitionPanelView(ViewImpl):
             model.vehicleInfo.setVehicleType(self.__vehicle.type)
             model.vehicleInfo.setVehicleLvl(self.__vehicle.level)
             model.vehicleInfo.setIsElite(False)
+
+    def __onEscKeyDown(self):
+        showIngameMenu()

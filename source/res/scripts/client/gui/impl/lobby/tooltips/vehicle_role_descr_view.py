@@ -31,17 +31,19 @@ class VehicleRolesTooltipView(ViewImpl, IPrbListener):
         with self.getViewModel().transaction() as model:
             model.setRoleType(roleLabel)
             model.setRoleBgImage(R.images.gui.maps.icons.roleExp.actionsTooltip.headerImage.dyn(roleLabel)())
-            if self.__isRoleXP(vehicle):
-                actions = getActionsByRole(vehicle.role)
-                roleActions = model.roleActions
-                for action in actions:
-                    actionLabel = ACTION_TYPE_TO_LABEL[action]
-                    roleAction = RoleActionModel()
-                    roleAction.setImage(R.images.gui.maps.icons.roleExp.actions.c_128x128.dyn(actionLabel)())
-                    roleAction.setDescription(R.strings.menu.roleExp.action.dyn(actionLabel)())
-                    roleActions.addViewModel(roleAction)
+            isRoleEnable = True
+            if self.__rankedController.isRankedPrbActive():
+                isRoleEnable = self.__rankedController.isSuitableVehicle(vehicle) is None
+                if isRoleEnable:
+                    actions = getActionsByRole(vehicle.role)
+                    roleActions = model.roleActions
+                    for action in actions:
+                        actionLabel = ACTION_TYPE_TO_LABEL[action]
+                        roleAction = RoleActionModel()
+                        roleAction.setImage(R.images.gui.maps.icons.roleExp.actions.c_128x128.dyn(actionLabel)())
+                        roleAction.setDescription(R.strings.menu.roleExp.action.dyn(actionLabel)())
+                        roleActions.addViewModel(roleAction)
 
-                roleActions.invalidate()
-
-    def __isRoleXP(self, vehicle):
-        return self.__rankedController.isRankedPrbActive() and self.__rankedController.isSuitableVehicle(vehicle) is None
+                    roleActions.invalidate()
+            model.setIsRoleActionsEnabled(isRoleEnable)
+        return

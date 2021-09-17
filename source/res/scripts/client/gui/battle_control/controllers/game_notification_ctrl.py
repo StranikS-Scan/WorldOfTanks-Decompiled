@@ -217,9 +217,9 @@ class EpicGameNotificationsController(GameNotificationsController):
                 if data['modificator'] == GAME_MESSAGES_CONSTS.WITH_UNLOCK:
                     SoundGroups.g_instance.playSound2D(EPIC_SOUND.EB_TANKS_UNLOCKED)
             elif notificationID == EPIC_NOTIFICATION.OVERTIME:
-                self.__playSound(EPIC_OVERTIME_SOUND_NOTIFICATIONS.BF_EB_OVERTIME_START)
                 if self.__playMsgOvertimeTriggered:
                     return
+                self.__playSound(EPIC_OVERTIME_SOUND_NOTIFICATIONS.BF_EB_OVERTIME_START)
                 self.__playMsgOvertimeTriggered = True
                 bfVoMessage = bfVoMessage.get(isAttacker, None)
             elif notificationID == EPIC_NOTIFICATION.RANK_CHANGE:

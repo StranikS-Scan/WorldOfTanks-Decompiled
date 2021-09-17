@@ -230,12 +230,18 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
     def getInstalledEnhancements(self):
         return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('enhancements', {})
 
+    def getIventoryVehiclesCDs(self):
+        return self.__vehsCDsByID.values()
+
     def getVehPostProgression(self, vehIntCD):
         return self.__vehPostProgression.getVehicleState(vehIntCD)
 
     def getVehExtData(self, vehIntCD):
         return {EXT_DATA_SLOT_KEY: self.getDynSlotTypeID(vehIntCD),
          EXT_DATA_PROGRESSION_KEY: self.getVehPostProgression(vehIntCD)}
+
+    def getVehPostProgressionFeaturesListByCD(self, vehIntCD):
+        return self.__vehPostProgression.getVehicleFeaturesList(vehIntCD)
 
     def getDynSlotTypeID(self, vehIntCD):
         return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('customRoleSlots', {}).get(vehIntCD, 0)

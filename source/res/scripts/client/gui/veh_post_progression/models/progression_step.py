@@ -6,6 +6,7 @@ from gui.veh_post_progression.models.ext_money import ExtendedMoney, ExtendedGui
 from gui.veh_post_progression.models.modifications import getActionModel
 from gui.veh_post_progression.models.purchase import PurchaseProvider, PurchaseCheckResult, VALID_CHECK_RESULT
 from items.components.post_progression_components import TreeStep
+from post_progression_prices_common import getPostProgressionPrice
 if typing.TYPE_CHECKING:
     from items.artefacts_helpers import VehicleFilter
     from gui.veh_post_progression.models.modifications import SimpleModItem, MultiModsItem, FeatureModItem, RoleSlotModItem
@@ -33,7 +34,7 @@ class PostProgressionStepItem(PurchaseProvider):
         self.__action = getActionModel(descriptor.id, descriptor.action, progression)
         self.__descriptor = descriptor
         self.__isRestricted = limits is not None and not limits.checkCompatibilityWithVehType(progression.getVehType())
-        self.__price = ExtendedMoney(**descriptor.price)
+        self.__price = ExtendedMoney(**getPostProgressionPrice(descriptor.priceTag, progression.getVehType()))
         self.__state = self.__getState(progression.getState(implicitCopy=False))
         return
 

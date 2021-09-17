@@ -6,8 +6,6 @@ from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
 from gui.prb_control import prb_getters
-from helpers import dependency
-from gui.ranked_battles.constants import PrimeTimeStatus
 from skeletons.gui.game_control import IBattleRoyaleController
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.battle_royale import isNeedToLoadHangar
@@ -22,6 +20,8 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_JOIN_ERRORS
 from gui.prb_control.storages import prequeue_storage_getter
+from gui.periodic_battles.models import PrimeTimeStatus
+from helpers import dependency
 _logger = logging.getLogger(__name__)
 
 class _BattleRoyaleSubscriber(spec_entry.SpecialModeSubscriber):

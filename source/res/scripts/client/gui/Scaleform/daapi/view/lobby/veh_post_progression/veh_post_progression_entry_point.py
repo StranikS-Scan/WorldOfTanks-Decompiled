@@ -9,6 +9,7 @@ from gui.Scaleform.genConsts.POSTPROGRESSION_CONSTS import POSTPROGRESSION_CONST
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import events
+from gui.veh_post_progression.helpers import needToShowCounter
 from soft_exception import SoftException
 from gui.shared.gui_items.Vehicle import Vehicle
 if typing.TYPE_CHECKING:
@@ -90,7 +91,8 @@ class VehPostProgressionEntryPoint(EventSystemEntity):
         return {'state': self.__getUnlockState(),
          'vehicleId': vehicle.intCD,
          'moduleIds': eliteProgress.toUnlock,
-         'label': self.__getLabel(eliteProgress)}
+         'label': self.__getLabel(eliteProgress),
+         'showCounter': needToShowCounter(vehicle)}
 
     def __getLabel(self, eliteProgress):
         isPurchased = self._vehicle.isPurchased

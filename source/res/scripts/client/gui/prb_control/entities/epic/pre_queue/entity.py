@@ -21,7 +21,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, PRE_QUEUE_JOIN_ERRORS
 from gui.prb_control.storages import prequeue_storage_getter
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.periodic_battles.models import PrimeTimeStatus
 from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
@@ -55,7 +55,7 @@ class EpicEntryPoint(PreQueueEntryPoint):
 
     def select(self, ctx, callback=None):
         status, _, _ = self.__epicController.getPrimeTimeStatus()
-        if status in (PrimeTimeStatus.DISABLED, PrimeTimeStatus.FROZEN, PrimeTimeStatus.NO_SEASON):
+        if status == PrimeTimeStatus.FROZEN:
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.EPICBATTLES_NOTIFICATION_NOTAVAILABLE), type=SystemMessages.SM_TYPE.Error)
             if callback is not None:
                 callback(False)

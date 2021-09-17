@@ -11,13 +11,15 @@ def _makeColorFromLabel(label):
     return hash(label) % _MAX_RGB_COLOR
 
 
-def enterToRegion(label):
+def enterToRegion(label, color=None):
     if label not in _regions:
-        color = _makeColorFromLabel(label)
+        if color is None:
+            color = _makeColorFromLabel(label)
         _regions[label] = BigWorld.uniprofRegionEnter(label, color)
         _logger.debug('Region is entered: label=%s, color=0x%06X', label, color)
     else:
         _logger.debug('Region is already entered: label=%s', label)
+    return
 
 
 def exitFromRegion(label):

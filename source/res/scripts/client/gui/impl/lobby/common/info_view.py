@@ -13,6 +13,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IUISpamController
 _logger = logging.getLogger(__name__)
 
 class InfoView(ViewImpl):
@@ -89,21 +90,28 @@ class _InfoWindow(LobbyWindow):
 
 
 class _InfoWindowProcessor(IInfoWindowProcessor):
-    __slots__ = ('layoutID', 'contentData', 'uiStorageKey', 'wndFlags')
+    __slots__ = ('layoutID', 'contentData', 'uiStorageKey', 'wndFlags', 'hintKey')
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __uiSpamController = dependency.descriptor(IUISpamController)
 
-    def __init__(self, layoutID, contentData, uiStorageKey, wndFlags):
+    def __init__(self, layoutID, contentData, uiStorageKey, hintKey, wndFlags):
         self.layoutID = layoutID
         self.contentData = contentData
         self.uiStorageKey = uiStorageKey
         self.wndFlags = wndFlags
+        self.hintKey = hintKey
 
     def showAllowed(self):
-        return not self.__settingsCore.serverSettings.getUIStorage().get(self.uiStorageKey, False) if self.uiStorageKey else True
+        allowedByUIStorage = self.uiStorageKey is None or not self.__settingsCore.serverSettings.getUIStorage().get(self.uiStorageKey, False)
+        allowedBySpamController = self.hintKey is None or self.__uiSpamController.shouldBeHidden(self.hintKey)
+        return allowedBySpamController and allowedByUIStorage
 
     def setShown(self):
-        if self.uiStorageKey:
+        if self.uiStorageKey is not None:
             self.__settingsCore.serverSettings.saveInUIStorage({self.uiStorageKey: True})
+        if self.hintKey is not None:
+            self.__uiSpamController.setVisited(self.hintKey)
+        return
 
     @async.async
     def show(self, parent=None):
@@ -115,9 +123,8 @@ class _InfoWindowProcessor(IInfoWindowProcessor):
     def __loadWindow(self, parent, callback):
         window = _InfoWindow(self.layoutID, parent, self.contentData, self.wndFlags, callback)
         window.load()
-        if self.uiStorageKey:
-            self.__settingsCore.serverSettings.saveInUIStorage({self.uiStorageKey: True})
+        self.setShown()
 
 
-def getInfoWindowProc(layoutID, contentData=DEFAULT_CONTENT_DATA, uiStorageKey=None, wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW):
-    return _InfoWindowProcessor(layoutID, contentData, uiStorageKey, wndFlags)
+def getInfoWindowProc(layoutID, contentData=DEFAULT_CONTENT_DATA, uiStorageKey=None, hintKey=None, wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW):
+    return _InfoWindowProcessor(layoutID, contentData, uiStorageKey, hintKey, wndFlags)

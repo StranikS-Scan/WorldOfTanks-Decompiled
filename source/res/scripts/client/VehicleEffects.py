@@ -6,7 +6,7 @@ from Math import Matrix
 from constants import VEHICLE_HIT_EFFECT
 from debug_utils import LOG_CODEPOINT_WARNING
 from items import vehicles
-from vehicle_systems.tankStructure import TankPartIndexes
+from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 DUMMY_NODE_PREFIX = 'DM'
 MAX_FALLBACK_CHECK_DISTANCE = 10000.0
 HitEffectMapping = namedtuple('HitEffectMapping', ('componentName', 'hitTester'))
@@ -26,13 +26,13 @@ class DamageFromShotDecoder(object):
         return vehicleHitEffectCode >= VEHICLE_HIT_EFFECT.ARMOR_PIERCED
 
     @classmethod
-    def decodeHitPoints(cls, encodedPoints, collisionComponent, maxComponentIdx=TankPartIndexes.ALL[-1]):
+    def decodeHitPoints(cls, encodedPoints, collisionComponent, maxComponentIdx=TankPartIndexes.ALL[-1], vehicleDesc=None):
         resultPoints = []
         for encodedPoint in encodedPoints:
-            compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(encodedPoint, collisionComponent, maxComponentIdx)
+            compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(encodedPoint, collisionComponent, maxComponentIdx, vehicleDesc)
             if startPoint == endPoint or compIdx < 0:
                 continue
-            convertedCompIdx = DamageFromShotDecoder.convertComponentIndex(compIdx)
+            convertedCompIdx = DamageFromShotDecoder.convertComponentIndex(compIdx, vehicleDesc)
             hitTestRes = collisionComponent.collideLocal(convertedCompIdx, startPoint, endPoint)
             bbox = collisionComponent.getBoundingBox(convertedCompIdx)
             if not hitTestRes or hitTestRes < 0.0:
@@ -67,22 +67,27 @@ class DamageFromShotDecoder(object):
             matrix.preMultiply(rot)
             effectGroup = cls._HIT_EFFECT_CODE_TO_EFFECT_GROUP[hitEffectCode]
             componentName = TankPartIndexes.getName(compIdx)
-            if not componentName:
+            if not componentName and convertedCompIdx < 0:
                 componentName = collisionComponent.getPartName(convertedCompIdx)
+            if not componentName:
+                componentName = TankPartNames.CHASSIS
             resultPoints.append(DamageFromShotDecoder.ShotPoint(componentName, matrix, hitEffectCode, effectGroup))
 
         return resultPoints
 
     @staticmethod
-    def convertComponentIndex(compIdx):
+    def convertComponentIndex(compIdx, vehicleDesc=None):
         idx = compIdx
         maxStructuralIndex = TankPartIndexes.ALL[-1]
+        if vehicleDesc is not None and vehicleDesc.chassis.tracks is not None:
+            tracks = vehicleDesc.chassis.tracks.trackPairs
+            maxStructuralIndex += len(tracks) - 1
         if compIdx > maxStructuralIndex:
             idx = maxStructuralIndex - compIdx
         return idx
 
     @staticmethod
-    def decodeSegment(segment, collisionComponent, maxComponentIdx=TankPartIndexes.ALL[-1]):
+    def decodeSegment(segment, collisionComponent, maxComponentIdx=TankPartIndexes.ALL[-1], vehicleDesc=None):
         if collisionComponent is None:
             return (-1,
              int(segment & 255),
@@ -96,7 +101,7 @@ class DamageFromShotDecoder(object):
                  int(segment & 255),
                  None,
                  None)
-            bbox = collisionComponent.getBoundingBox(DamageFromShotDecoder.convertComponentIndex(compIdx))
+            bbox = collisionComponent.getBoundingBox(DamageFromShotDecoder.convertComponentIndex(compIdx, vehicleDesc))
             minimum = Math.Vector3(bbox[0])
             delta = (bbox[1] - minimum).scale(1.0 / 255.0)
             segStart = minimum + Math.Vector3(delta[0] * (segment >> 16 & 255), delta[1] * (segment >> 24 & 255), delta[2] * (segment >> 32 & 255))

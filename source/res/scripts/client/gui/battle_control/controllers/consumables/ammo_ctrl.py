@@ -91,6 +91,13 @@ class AutoReloadingBoostStates(CONST_CONTAINER):
 
 class IAmmoListener(object):
 
+    @property
+    def isActive(self):
+        return False
+
+    def handleAmmoKey(self, key):
+        pass
+
     def setCurrentShellCD(self, shellCD):
         pass
 
@@ -744,6 +751,11 @@ class AmmoController(MethodsRules, ViewComponentsController):
 
     def getIntuitionReloadInProcess(self):
         return self.__quickChangerInProcess
+
+    def handleAmmoChoice(self, key):
+        if any([ component.isActive for component in self._viewComponents ]):
+            for component in self._viewComponents:
+                component.handleAmmoKey(key)
 
     def __onCurrentShellChanged(self, intCD):
         self.onCurrentShellChanged(intCD)

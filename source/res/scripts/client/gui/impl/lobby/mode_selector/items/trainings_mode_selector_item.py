@@ -19,4 +19,4 @@ class TrainingsModeSelectorItem(ModeSelectorLegacyItem):
 
     def _onListReceived(self, prebattles):
         count = sum((1 for _ in prebattles))
-        self.viewModel.setCallToAction(backport.text(R.strings.mode_selector.mode.trainingsList.call.c_1(), amount=backport.getIntegralFormat(count)))
+        self.viewModel.setStatusActive(backport.text(R.strings.mode_selector.mode.trainingsList.call.c_1(), amount=backport.getIntegralFormat(count)))

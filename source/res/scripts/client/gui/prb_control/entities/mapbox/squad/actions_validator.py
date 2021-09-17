@@ -9,7 +9,7 @@ from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.prb_control.entities.base.unit.actions_validator import UnitStateValidator
 from helpers import dependency
 from skeletons.gui.game_control import IMapboxController
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.periodic_battles.models import PrimeTimeStatus
 
 class _MapboxVehicleValidator(SquadVehiclesValidator):
 

@@ -481,6 +481,12 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
             requirement |= REQ_CRITERIA.CUSTOM(lambda item: not (ItemTags.HIDE_IF_INCOMPATIBLE in item.tags and item.intCD not in self.__dependentItems))
         if self.__ctx.mode.modeId == CustomizationModes.CUSTOM:
             requirement |= REQ_CRITERIA.CUSTOM(lambda item: not item.isStyleOnly)
+        if self.__ctx.mode.modeId == CustomizationModes.EDITABLE_STYLE and self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
+            baseOutfit = self.__ctx.mode.baseOutfits.get(self.__ctx.mode.season)
+            if baseOutfit:
+                baseComponent = baseOutfit.pack()
+                taggedDecals = [ decal.id for decal in baseComponent.projection_decals if decal.matchingTag ]
+                requirement |= REQ_CRITERIA.CUSTOM(lambda item: item.id not in taggedDecals)
         return requirement
 
     def __createSortCriteria(self):

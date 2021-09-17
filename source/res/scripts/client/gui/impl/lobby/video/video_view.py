@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/impl/lobby/video/video_view.py
 import logging
 import Windowing
-from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.video.video_view_model import VideoViewModel
@@ -98,7 +97,6 @@ class VideoView(ViewImpl):
             self.viewModel.onCloseBtnClick += self.__onCloseWindow
             self.viewModel.onVideoStarted += self.__onVideoStarted
             self.viewModel.onVideoStopped += self.__onVideoStopped
-            g_playerEvents.onDisconnected += self.__onDisconnected
             Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
             switchVideoOverlaySoundFilter(on=True)
         return
@@ -111,7 +109,6 @@ class VideoView(ViewImpl):
         self.viewModel.onCloseBtnClick -= self.__onCloseWindow
         self.viewModel.onVideoStarted -= self.__onVideoStarted
         self.viewModel.onVideoStopped -= self.__onVideoStopped
-        g_playerEvents.onDisconnected -= self.__onDisconnected
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
         if self.__onVideoClosedHandle is not None:
             self.__onVideoClosedHandle()
@@ -120,9 +117,6 @@ class VideoView(ViewImpl):
         self.__soundControl = DummySoundManager()
         switchVideoOverlaySoundFilter(on=False)
         return
-
-    def __onDisconnected(self):
-        self.__soundControl.stop()
 
     def __onCloseWindow(self, _=None):
         self.destroyWindow()

@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/shared_readers.py
+import itertools
+import logging
 from collections import defaultdict
 import typing
 import ResMgr
 from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH, IS_EDITOR
-from debug_utils import LOG_ERROR
 from items import _xml, getTypeInfoByName
-from items import customization_slot_tags_validator
 from items.components import component_constants
 from items.components import shared_components
 from items.components import c11n_constants
@@ -15,6 +15,7 @@ _ALLOWED_SLOTS_ANCHORS = component_constants.ALLOWED_SLOTS_ANCHORS
 _ALLOWED_MISC_SLOTS = component_constants.ALLOWED_MISC_SLOTS
 _ALLOWED_PROJECTION_DECALS_ANCHORS = component_constants.ALLOWED_PROJECTION_DECALS_ANCHORS
 _CUSTOMIZATION_CONSTANTS_PATH = ITEM_DEFS_PATH + '/customization/constants.xml'
+_logger = logging.getLogger(__name__)
 
 def _readEmblemSlot(ctx, subsection, slotType):
     descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), slotType, subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'), _xml.readInt(ctx, subsection, 'slotId'), subsection.readBool('applyToFabric', True))
@@ -29,8 +30,8 @@ def _readMiscSlot(ctx, subsection, slotType):
 
 
 def _customizationSlotTagsValidator(tag):
-    availableTags = c11n_constants.ProjectionDecalDirectionTags.ALL + c11n_constants.ProjectionDecalFormTags.ALL + c11n_constants.ProjectionDecalPreferredTags.ALL + (c11n_constants.HIDDEN_FOR_USER_TAG,)
-    return True if tag in availableTags else tag.endswith(c11n_constants.MATCHING_TAGS_SUFFIX)
+    availableTags = c11n_constants.ProjectionDecalDirectionTags.ALL + c11n_constants.ProjectionDecalFormTags.ALL + c11n_constants.ProjectionDecalPreferredTags.ALL + c11n_constants.ProjectionDecalMatchingTags.ALL
+    return tag in availableTags
 
 
 def _readCustomizationSlot(ctx, subsection, slotType):
@@ -41,8 +42,9 @@ def _readCustomizationSlot(ctx, subsection, slotType):
 
 
 def _readProjectionDecalSlot(ctx, subsection, slotType):
-    descr = shared_components.ProjectionDecalSlotDescription(slotType=slotType, slotId=_xml.readInt(ctx, subsection, 'slotId'), anchorPosition=_xml.readVector3OrNone(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3OrNone(ctx, subsection, 'anchorDirection'), position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3(ctx, subsection, 'scaleFactors', c11n_constants.DEFAULT_DECAL_SCALE_FACTORS), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), canBeMirroredVertically=_xml.readBool(ctx, subsection, 'verticalMirror', False), showOn=_xml.readIntOrNone(ctx, subsection, 'showOn'), tags=readOrderedTagsOrEmpty(ctx, subsection, _customizationSlotTagsValidator), clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', c11n_constants.DEFAULT_DECAL_CLIP_ANGLE))
+    descr = shared_components.ProjectionDecalSlotDescription(slotType=slotType, slotId=_xml.readInt(ctx, subsection, 'slotId'), position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3(ctx, subsection, 'scaleFactors', c11n_constants.DEFAULT_DECAL_SCALE_FACTORS), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), hiddenForUser=_xml.readBool(ctx, subsection, 'hiddenForUser', False), canBeMirroredVertically=_xml.readBool(ctx, subsection, 'verticalMirror', False), showOn=_xml.readIntOrNone(ctx, subsection, 'showOn'), tags=readOrderedTagsOrEmpty(ctx, subsection, _customizationSlotTagsValidator), clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', c11n_constants.DEFAULT_DECAL_CLIP_ANGLE), anchorShift=_xml.readFloat(ctx, subsection, 'anchorShift', c11n_constants.DEFAULT_DECAL_ANCHOR_SHIFT))
     _verifySlotId(ctx, slotType, descr.slotId)
+    _verifyMatchingSlotSettings(ctx, descr)
     if descr.showOn is not None:
         availableShowOnRegions = c11n_constants.ApplyArea.HULL | c11n_constants.ApplyArea.TURRET | c11n_constants.ApplyArea.GUN
         if descr.showOn | availableShowOnRegions != availableShowOnRegions:
@@ -102,7 +104,30 @@ def _verifySlotId(ctx, slotType, slotId):
         while xmlContext is not None:
             xmlContext, fileName = xmlContext
 
-        LOG_ERROR('Wrong customization slot ID{} for {}'.format(slotId, fileName))
+        _logger.error('Wrong customization slot ID%s for %s', slotId, fileName)
+    return
+
+
+def _verifyMatchingSlotSettings(xmlCtx, descr):
+
+    def findTag(function, sequence):
+        return next(itertools.ifilter(function, sequence), None)
+
+    matchingTag = findTag(lambda tag: tag in c11n_constants.ProjectionDecalMatchingTags.ALL, descr.tags)
+    if descr.hiddenForUser:
+        if matchingTag is None:
+            _xml.raiseWrongXml(xmlCtx, 'tags', 'matching tag for hidden slot is missed!')
+    if matchingTag is not None:
+        if not descr.hiddenForUser:
+            _xml.raiseWrongXml(xmlCtx, 'hiddenForUser', 'slot:%s with matching tag must be hiddenForUser!' % descr.slotId)
+        formFactorTag = findTag(lambda tag: tag in c11n_constants.ProjectionDecalFormTags.ALL, descr.tags)
+        if formFactorTag is None:
+            _xml.raiseWrongXml(xmlCtx, 'tags', 'slot:%s with matching tag must have form factor tag!' % descr.slotId)
+        if matchingTag != c11n_constants.ProjectionDecalMatchingTags.COVER:
+            directionTags = (c11n_constants.ProjectionDecalDirectionTags.LEFT, c11n_constants.ProjectionDecalDirectionTags.RIGHT, c11n_constants.ProjectionDecalDirectionTags.FRONT)
+            directionTag = findTag(lambda tag: tag in directionTags, descr.tags)
+            if directionTag is None:
+                _xml.raiseWrongXml(xmlCtx, 'tags', 'slot:%s with matching tag must have direction tag!' % descr.slotId)
     return
 
 
@@ -179,7 +204,7 @@ def readCustomizationSlots(xmlCtx, section, subsectionName):
         while xmlContext is not None:
             xmlContext, fileName = xmlContext
 
-        LOG_ERROR('Repeated customization slot ID{} for {}'.format(descr.slotId, fileName))
+        _logger.error('Repeated customization slot ID%s for %s', descr.slotId, fileName)
 
     return (tuple(slots), tuple(anchors))
 
@@ -250,7 +275,21 @@ def readDeviceHealthParams(xmlCtx, section, subsectionName='', withHysteresis=Tr
                 _xml.raiseWrongSection(xmlCtx, 'hysteresisHealth')
             component.hysteresisHealth = hysteresisHealth
         component.invulnerable = _xml.readBool(xmlCtx, section, 'invulnerable', False)
+        component.repairSpeedLimiter = _readRepairSpeedLimiter(xmlCtx, section)
+    if IS_CLIENT:
+        if section.has_key('repairTime'):
+            component.repairTime = _xml.readFloat(xmlCtx, section, 'repairTime')
     return component
+
+
+def _readRepairSpeedLimiter(xmlCtx, section):
+    if not section.has_key('repairSpeedLimiter'):
+        return None
+    else:
+        ctx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, 'repairSpeedLimiter')
+        return {'repairSpeedModifier': _xml.readNonNegativeFloat(ctx, subsection, 'repairSpeedModifier'),
+         'speedToStartLimitedRepair': component_constants.KMH_TO_MS * _xml.readNonNegativeFloat(ctx, subsection, 'speedToStartLimitedRepair'),
+         'speedToStopLimitedRepair': component_constants.KMH_TO_MS * _xml.readNonNegativeFloat(ctx, subsection, 'speedToStopLimitedRepair')}
 
 
 def readCamouflage(xmlCtx, section, sectionName, default=None):

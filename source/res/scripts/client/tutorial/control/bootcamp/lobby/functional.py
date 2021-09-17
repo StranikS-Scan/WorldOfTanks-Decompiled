@@ -2,13 +2,14 @@
 # Embedded file name: scripts/client/tutorial/control/bootcamp/lobby/functional.py
 from functools import partial
 import BigWorld
+import VSE
+from visual_script import ASPECT
 from tutorial.control.functional import FunctionalCondition, FunctionalEffect, FunctionalChapterContext
 from tutorial.gui import GUI_EFFECT_NAME
-from tutorial.logger import LOG_DEBUG, LOG_ERROR
+from tutorial.logger import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
 from PlayerEvents import g_playerEvents
-from bootcamp.Assistant import LobbyAssistant
 from tutorial.control.context import SOUND_EVENT
 
 class FunctionalCheckpointReachedCondition(FunctionalCondition):
@@ -34,11 +35,11 @@ class FunctionalUpdateExclusiveHintsEffect(FunctionalEffect):
         return True
 
 
-class FunctionalStartAssistant(FunctionalEffect):
+class FunctionalStartVSEPlan(FunctionalEffect):
 
     def triggerEffect(self):
-        hints = self._effect.getHints()
-        self._funcChapterCtx.startAssistant(hints)
+        plan = self._effect.getPlan()
+        self._funcChapterCtx.startVSEPlan(plan)
 
 
 class FunctionalRestoreCheckpointEffect(FunctionalEffect):
@@ -140,12 +141,12 @@ class FunctionalBootcampLobbyChapterContext(FunctionalChapterContext):
         self.__requestedExclusiveHint = None
         self.__requestedExclusiveHintSoundID = None
         self.__exclusiveHintSoundCallback = None
-        self.__assistant = None
+        self.__plans = set()
         return
 
     def clear(self):
         super(FunctionalBootcampLobbyChapterContext, self).clear()
-        self.stopAssistant()
+        self.stopVSEPlans()
 
     def onItemLost(self, itemID):
         if itemID == self.__activeExclusiveHint:
@@ -208,15 +209,30 @@ class FunctionalBootcampLobbyChapterContext(FunctionalChapterContext):
             LOG_DEBUG('forceHideExclusiveHint: nothing to remove')
         return
 
-    def startAssistant(self, hints):
-        self.__assistant = LobbyAssistant(hints)
-        self.__assistant.start()
+    def startVSEPlan(self, planName):
+        for name, _ in self.__plans:
+            if name == planName:
+                LOG_WARNING('Trying to start the VSE plan that is already running', planName)
+                return
 
-    def stopAssistant(self):
-        if self.__assistant is not None:
-            self.__assistant.stop()
-            self.__assistant = None
-        return
+        plan = VSE.Plan()
+        if plan.load(planName, ASPECT.HANGAR):
+            plan.start()
+            self.__plans.add((planName, plan))
+
+    def stopVSEPlan(self, planName):
+        for name, p in self.__plans:
+            if name == planName and p.isActive():
+                p.stop()
+                self.__plans.remove((name, p))
+                break
+
+    def stopVSEPlans(self):
+        for _, p in self.__plans:
+            if p.isActive():
+                p.stop()
+
+        self.__plans.clear()
 
     def __playHintSound(self, soundEvent, soundId):
         self.__cancelHintSoundCallback()

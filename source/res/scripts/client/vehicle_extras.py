@@ -18,8 +18,7 @@ from helpers.laser_sight_matrix_provider import LaserSightMatrixProvider
 from constants import IS_EDITOR, CollisionFlags
 import Projectiles
 import Health
-if not IS_EDITOR:
-    from vehicle_extras_battle_royale import AfterburningBattleRoyale
+from vehicle_extras_battle_royale import AfterburningBattleRoyale
 
 def reload():
     modNames = (reload.__module__,)
@@ -240,19 +239,20 @@ def wheelHealths(name, index, containerName, dataSection, vehType):
 
 
 class TrackHealth(DamageMarker):
-    __slots__ = ('__isLeft',)
+    __slots__ = ('__isLeft', '__trackPairIndex')
 
     def _readConfig(self, dataSection, containerName):
         DamageMarker._readConfig(self, dataSection, containerName)
         self.__isLeft = dataSection.readBool('isLeft')
         functionalCanMoveState = 'functionalCanMove'
         self.sounds[functionalCanMoveState] = dataSection.readString('sounds/' + functionalCanMoveState)
+        self.__trackPairIndex = dataSection.readInt('trackPairIdx', 0)
 
     def _start(self, data, args):
-        data['entity'].appearance.addCrashedTrack(self.__isLeft)
+        data['entity'].appearance.addCrashedTrack(self.__isLeft, self.__trackPairIndex)
 
     def _cleanup(self, data):
-        data['entity'].appearance.delCrashedTrack(self.__isLeft)
+        data['entity'].appearance.delCrashedTrack(self.__isLeft, self.__trackPairIndex)
 
 
 class Fire(EntityExtra):

@@ -45,18 +45,6 @@ class ExampleMarathonEvent(MarathonEvent):
         return self._data.packageTemplate
 
     @property
-    def packageStyleTemplate(self):
-        return self._data.packageStyleTemplate
-
-    @property
-    def postPostfix(self):
-        return self._data.postPostfix
-
-    @property
-    def stageDoneTemplate(self):
-        return self._data.tokenPrefix + self._data.stageDonePostfix
-
-    @property
     def isNeedHandlingEscape(self):
         return True
 
@@ -71,17 +59,12 @@ class ExampleMarathon(MarathonEventContainer):
     def _override(self):
         self.prefix = 'may21_marathon'
         self.tokenPrefix = 'may21_marathon:KPZ07RH_'
-        self.styleTokenPostfix = '3d_style_discount'
         self.packagePrefix = 'KPZ07RH_'
         self.packageTemplate = 'kpz07rh_vehicle_{}0d{}'
-        self.packageStyleTemplate = 'kpz07rh_3d_style_{}{}'
         self.hangarFlagName = 'flag_may_marathon'
         self.grindPostfix = '_GRIND'
         self.proPostfix = '_PRO'
-        self.postPostfix = 'POST_'
         self.finishedPostfix = '_v2'
-        self.stageDonePostfix = '3d_style_Q%STAGE%_DONE'
         self.questsInChain = 10
         self.minVehicleLevel = 6
         self.questsPerStep = 3
-        self.vehicleName = 'sweden:S31_Strv_K'

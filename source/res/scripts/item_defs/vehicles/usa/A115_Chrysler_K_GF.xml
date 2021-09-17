@@ -7,7 +7,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_HT_assault_level_8	</postProgressionTree>
+  <postProgressionTree>	role_HT_assault	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	35	</forward>
@@ -113,9 +113,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.589049	</clipAngle>
-        <anchorPosition>	-1.86241 0.438716 1.77026	</anchorPosition>
-        <anchorDirection>	-0.945348 0.325117 0.0248167	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	0.007259	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -127,9 +126,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	1.3464	</clipAngle>
-        <anchorPosition>	0.941228 0.581493 2.92299	</anchorPosition>
-        <anchorDirection>	-0.000001 0.867363 0.497676	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	0.080485	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -141,9 +139,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.589049	</clipAngle>
-        <anchorPosition>	1.86243 0.438692 1.77026	</anchorPosition>
-        <anchorDirection>	0.945354 0.325104 0.0247682	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	0.007267	</anchorShift>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -1048,6 +1045,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <repairTime>	6.85714293	</repairTime>
     </Chassis_A115_Chrysler_K_GF>
   </chassis>
   <turrets0>
@@ -1182,9 +1180,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	1.18521	</clipAngle>
-          <anchorPosition>	0.00490246 0.655415 -1.35602	</anchorPosition>
-          <anchorDirection>	-0.000044 0.643632 -0.765336	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.150269	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1196,9 +1193,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.263366	</clipAngle>
-          <anchorPosition>	0.778174 0.382487 1.34367	</anchorPosition>
-          <anchorDirection>	0.479101 0.452308 0.75225	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.061845	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1210,9 +1206,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.241152	</clipAngle>
-          <anchorPosition>	-0.777862 0.382182 1.34314	</anchorPosition>
-          <anchorDirection>	-0.47912 0.452335 0.752221	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.061137	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1224,9 +1219,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.977251	</clipAngle>
-          <anchorPosition>	0.0226921 0.912789 0.925162	</anchorPosition>
-          <anchorDirection>	0.000002 0.967025 0.25468	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.341604	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

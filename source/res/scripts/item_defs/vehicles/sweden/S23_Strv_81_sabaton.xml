@@ -8,7 +8,7 @@
     <radioman></radioman>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_MT_universal_level_8	</postProgressionTree>
+  <postProgressionTree>	role_MT_universal	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	50	</forward>
@@ -116,8 +116,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	1.70012 -0.115191 2.31086	</anchorPosition>
-        <anchorDirection>	0.999837 -0.0179904 -0.0015806	</anchorDirection>
+        <anchorShift>	0.000001	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -129,8 +128,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-1.70354 -0.149971 2.31093	</anchorPosition>
-        <anchorDirection>	-0.999839 -0.0179645 0.000018	</anchorDirection>
+        <anchorShift>	0.000001	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -142,8 +140,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	0.00973044 0.637064 -2.77966	</anchorPosition>
-        <anchorDirection>	0.000003 0.99948 -0.0322312	</anchorDirection>
+        <anchorShift>	0.000004	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -155,8 +152,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	0.548648 0.372411 -3.79834	</anchorPosition>
-        <anchorDirection>	0.00446539 0.150469 -0.988605	</anchorDirection>
+        <anchorShift>	-0.060004	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -168,8 +164,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-1.30331 0.350873 2.76638	</anchorPosition>
-        <anchorDirection>	0.0020121 0.999998 -0.000000	</anchorDirection>
+        <anchorShift>	0.000003	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -181,8 +176,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	1.30333 0.350845 2.76638	</anchorPosition>
-        <anchorDirection>	0.0020121 0.999998 -0.000000	</anchorDirection>
+        <anchorShift>	0.000005	</anchorShift>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -1257,6 +1251,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <repairTime>	5.71428585	</repairTime>
     </Chassis_S23_Strv_81_sabaton>
   </chassis>
   <turrets0>
@@ -1398,8 +1393,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	-0.0889596 0.953743 0.546301	</anchorPosition>
-          <anchorDirection>	0.011399 0.958703 0.28418	</anchorDirection>
+          <anchorShift>	0.000000	</anchorShift>
         </slot>
         <slot>
           <slotType>	fixedInscription	</slotType>

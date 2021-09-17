@@ -101,8 +101,8 @@ class PostProgressionItem(object):
     def isDefined(self):
         return self.__tree is not None
 
-    def isDisabled(self, veh, settings=None):
-        return self.__postProgressionCtrl.isDisabledFor(veh, settings)
+    def isDisabled(self, veh, settings=None, skipRentalIsOver=False):
+        return self.__postProgressionCtrl.isDisabledFor(veh, settings, skipRentalIsOver)
 
     def isExists(self, settings=None):
         return self.__postProgressionCtrl.isExistsFor(self.__vehType, settings)
@@ -121,7 +121,10 @@ class PostProgressionItem(object):
 
     def isSetupSwitchActive(self, veh, gID):
         hasFeature = self.__state.hasFeature(vehicles.g_cache.postProgression().featureIDs[FEATURE_BY_GROUP_ID[gID]])
-        return self.isFeatureEnabled(FEATURE_BY_GROUP_ID[gID]) and not self.isDisabled(veh) and hasFeature
+        return self.isFeatureEnabled(FEATURE_BY_GROUP_ID[gID]) and not self.isDisabled(veh, skipRentalIsOver=True) and hasFeature
+
+    def isPrebattleSwitchDisabled(self, groupID):
+        return self.__state.isSwitchDisabled(groupID)
 
     def getFirstPurchasableStep(self, balance):
         for stepItem in self.iterOrderedSteps():

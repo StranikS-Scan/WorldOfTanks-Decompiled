@@ -29,6 +29,9 @@ class _LoadInfo(object):
             self.onConstructed += onConstructedCallback
         return
 
+    def destroy(self):
+        self.onConstructed.clear()
+
 
 class AppearanceCache(IAppearanceCache):
     __slots__ = ('__arena', '__appearanceCache', '__assemblerCache', '__loadingAssemblerQueue')
@@ -62,9 +65,11 @@ class AppearanceCache(IAppearanceCache):
 
     def stopLoading(self, vId):
         _logger.debug('stopLoading(%d)', vId)
-        loadingTask = self.__loadingAssemblerQueue.pop(vId, None)
-        if loadingTask is not None:
-            BigWorld.stopLoadResourceListBGTask(loadingTask.taskId)
+        info = self.__loadingAssemblerQueue.pop(vId, None)
+        if info is not None:
+            _logger.debug('stopLoadResourceListBGTask vehicle = (%d), task = (%d)', vId, info.taskId)
+            info.onConstructed.clear()
+            BigWorld.stopLoadResourceListBGTask(info.taskId)
         return
 
     def loadResources(self, compactDescr, prereqs):
@@ -91,6 +96,7 @@ class AppearanceCache(IAppearanceCache):
         self.__assemblerCache.clear()
         for task in self.__loadingAssemblerQueue.itervalues():
             BigWorld.stopLoadResourceListBGTask(task.taskId)
+            task.onConstructed.clear()
 
         self.__loadingAssemblerQueue.clear()
         self.__resourceCache.clear()
@@ -143,6 +149,7 @@ class AppearanceCache(IAppearanceCache):
             appearance = CompoundAppearance()
             prereqs = appearance.prerequisites(info.typeDescr, vId, info.health, info.isCrewActive, info.isTurretDetached, info.outfitCD)
             taskId = BigWorld.loadResourceListBG(prereqs, functools.partial(self.__onAppearanceLoaded, vId), loadingPriority(vId))
+            _logger.debug('loadResourceListBG vehicle = (%d), task = (%d)', vId, taskId)
             self.__loadingAssemblerQueue[vId] = _LoadInfo(appearance, taskId, info.typeDescr, onLoadedCallback)
             return appearance
 
@@ -150,7 +157,7 @@ class AppearanceCache(IAppearanceCache):
         _logger.debug('__onAppearanceLoaded(%d)', vId)
         info = self.__loadingAssemblerQueue.pop(vId, None)
         if info is None:
-            raise SoftException('appearance {} is loaded but is missing from loadingQueue!'.format(vId))
+            raise SoftException('appearance {} is loaded but is missing from loadingQueue! info = {}'.format(vId, info))
         self.__assemblerCache[vId] = _AssemblerData(info.appearance, info.typeDescr, resourceRefs)
         self.__construct(vId, info.onConstructed)
         return

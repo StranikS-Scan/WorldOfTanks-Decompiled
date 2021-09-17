@@ -7,6 +7,7 @@ from types import NoneType
 import BigWorld
 import CommandMapping
 from constants import EQUIPMENT_STAGES, SHELL_TYPES
+from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
 from items import vehicles
 from gui import GUI_SETTINGS
 from gui import TANKMEN_ROLES_ORDER_DICT
@@ -76,7 +77,7 @@ class _PythonReloadTicker(PythonTimer):
         self._viewObject.as_setCoolDownPosAsPercentS(self.__index, 100.0)
 
 
-class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelayer):
+class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelayer):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
     _PANEL_MAX_LENGTH = 12
@@ -113,7 +114,12 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             self.__reloadTicker = None
         self.delayedReload = None
         self.__delayedNextShellID = None
+        self.__isViewActive = False
         return
+
+    @property
+    def isActive(self):
+        return self.__isViewActive
 
     def onClickedToSlot(self, bwKey, idx):
         self.__handleBWKey(int(bwKey), idx)
@@ -129,6 +135,12 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self.__keys = keys
         self.__extraKeys.clear()
         self.__extraKeys = extraKeys
+
+    def onPanelShown(self):
+        self.__isViewActive = True
+
+    def onPanelHidden(self):
+        self.__isViewActive = False
 
     def handleEscKey(self, isDown):
         if isDown:
@@ -544,6 +556,9 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
 
     def __handleConsumableChoice(self, event):
         self.__handleBWKey(event.ctx['key'])
+
+    def handleAmmoKey(self, key):
+        self.__handleBWKey(key)
 
     def __handleBWKey(self, bwKey, idx=None):
         if bwKey == 0 and idx is not None:

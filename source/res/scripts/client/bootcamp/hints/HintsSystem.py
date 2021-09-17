@@ -3,19 +3,15 @@
 import time
 from collections import deque, namedtuple
 import SoundGroups
-from bootcamp.BootcampConstants import HINT_TYPE, HINT_NAMES
-from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP
+from bootcamp.BootcampConstants import HINT_TYPE
 from HintControllers import createPrimaryHintController, createSecondaryHintController, createReplayPlayHintSystem
-from soft_exception import SoftException
 from HintsBase import HINT_COMMAND
-from HintsLobby import HintLobbyRotate
 _Voiceover = namedtuple('_Voiceover', ('name', 'sound'))
 
 class HintSystem(object):
-    hintsLobbyClasses = {HINT_TYPE.HINT_ROTATE_LOBBY: HintLobbyRotate}
     highPriorityVoiceovers = ('vo_bc_weakness_in_armor',)
 
-    def __init__(self, avatar=None, hintsInfo={}):
+    def __init__(self):
         super(HintSystem, self).__init__()
         self.__secondaryHintQueue = deque()
         self.__currentSecondaryHint = None
@@ -29,32 +25,7 @@ class HintSystem(object):
         self.__currentVoiceover = None
         self.__voiceoverSchedule = []
         self.__replayPlayer = createReplayPlayHintSystem(self)
-        for hintName, hintParams in hintsInfo.iteritems():
-            try:
-                hintTypeId = HINT_NAMES.index(hintName)
-                if hintTypeId not in HINT_TYPE.BATTLE_HINTS:
-                    cls = HintSystem.hintsLobbyClasses.get(hintTypeId, None)
-                    if cls is None:
-                        raise SoftException('Hint not implemented (%s)' % HINT_NAMES[hintTypeId])
-                    hint = cls(hintParams)
-                    timeCompleted = hintParams.get('time_completed', 2.0)
-                    cooldownAfter = hintParams.get('cooldown_after', 2.0)
-                    voiceover = hintParams.get('voiceover', None)
-                    message = hintParams.get('message', 'Default Message')
-                    hint.timeCompleted = timeCompleted
-                    hint.cooldownAfter = cooldownAfter
-                    hint.message = message
-                    if voiceover is not None:
-                        hint.voiceover = voiceover
-                    self.addHint(hint)
-            except Exception:
-                LOG_CURRENT_EXCEPTION_BOOTCAMP()
-
         return
-
-    def onAction(self, actionId, actionParams):
-        for hint in self._hints:
-            hint.onAction(actionId, actionParams)
 
     def addHint(self, hint):
         hint.id = len(self._hints)

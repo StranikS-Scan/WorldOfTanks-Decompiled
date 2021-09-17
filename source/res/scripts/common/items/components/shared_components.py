@@ -39,18 +39,17 @@ class CustomizationSlotDescription(object):
 
 class ProjectionDecalSlotDescription(object):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'canBeMirroredVertically', 'showOn', 'tags', 'clipAngle', 'compatibleModels', 'itemId', 'options')
+    __slots__ = ('type', 'slotId', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'hiddenForUser', 'canBeMirroredVertically', 'showOn', 'tags', 'clipAngle', 'compatibleModels', 'itemId', 'options', 'anchorShift')
 
-    def __init__(self, slotType='', slotId=0, anchorPosition=None, anchorDirection=None, position=None, rotation=None, scale=None, scaleFactors=c11n_constants.DEFAULT_DECAL_SCALE_FACTORS, doubleSided=False, canBeMirroredVertically=False, showOn=None, tags=None, clipAngle=c11n_constants.DEFAULT_DECAL_CLIP_ANGLE, compatibleModels=(c11n_constants.SLOT_DEFAULT_ALLOWED_MODEL,), itemId=None, options=c11n_constants.Options.NONE):
+    def __init__(self, slotType='', slotId=0, position=None, rotation=None, scale=None, scaleFactors=c11n_constants.DEFAULT_DECAL_SCALE_FACTORS, doubleSided=False, hiddenForUser=False, canBeMirroredVertically=False, showOn=None, tags=None, clipAngle=c11n_constants.DEFAULT_DECAL_CLIP_ANGLE, compatibleModels=(c11n_constants.SLOT_DEFAULT_ALLOWED_MODEL,), itemId=None, options=c11n_constants.Options.NONE, anchorShift=c11n_constants.DEFAULT_DECAL_ANCHOR_SHIFT):
         self.type = slotType
         self.slotId = slotId
-        self.anchorPosition = anchorPosition
-        self.anchorDirection = anchorDirection
         self.position = position
         self.rotation = rotation
         self.scale = scale
         self.scaleFactors = scaleFactors
         self.doubleSided = doubleSided
+        self.hiddenForUser = hiddenForUser
         self.canBeMirroredVertically = canBeMirroredVertically
         self.showOn = showOn
         self.tags = tags or ()
@@ -58,6 +57,7 @@ class ProjectionDecalSlotDescription(object):
         self.compatibleModels = compatibleModels
         self.itemId = itemId
         self.options = options
+        self.anchorShift = anchorShift
 
 
 MiscSlot = reflectedNamedTuple('MiscSlot', ('type', 'slotId', 'position', 'rotation', 'attachNode'))
@@ -196,22 +196,24 @@ class I18nExposedComponent(I18nComponent):
 
 
 class DeviceHealth(object):
-    __slots__ = ('maxHealth', 'repairCost', 'maxRegenHealth', 'healthRegenPerSec', 'healthBurnPerSec', 'chanceToHit', 'hysteresisHealth', 'invulnerable')
+    __slots__ = ('maxHealth', 'repairCost', 'maxRegenHealth', 'healthRegenPerSec', 'healthBurnPerSec', 'chanceToHit', 'hysteresisHealth', 'invulnerable', 'repairSpeedLimiter', 'repairTime')
 
     def __init__(self, maxHealth, repairCost=component_constants.ZERO_FLOAT, maxRegenHealth=component_constants.ZERO_INT):
         super(DeviceHealth, self).__init__()
+        self.repairTime = None
         self.maxHealth = maxHealth
         self.repairCost = repairCost
         self.maxRegenHealth = maxRegenHealth
         self.healthRegenPerSec = component_constants.ZERO_FLOAT
+        self.hysteresisHealth = None
         self.healthBurnPerSec = component_constants.ZERO_FLOAT
         self.chanceToHit = None
-        self.hysteresisHealth = None
         self.invulnerable = False
+        self.repairSpeedLimiter = None
         return
 
     def __repr__(self):
-        return 'DeviceHealth(maxHealth={}, repairCost={}, maxRegenHealth={})'.format(self.maxHealth, self.repairCost, self.maxRegenHealth)
+        return 'DeviceHealth(maxHealth={}, repairCost={}, maxRegenHealth={}, healthRegenPerSec={}, hysteresisHealth={})'.format(self.maxHealth, self.repairCost, self.maxRegenHealth, self.healthRegenPerSec, self.hysteresisHealth)
 
     @property
     def maxRepairCost(self):

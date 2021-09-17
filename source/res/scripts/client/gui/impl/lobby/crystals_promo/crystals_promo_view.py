@@ -4,6 +4,7 @@ from constants import ARENA_BONUS_TYPE, IS_CHINA
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.app_loader.settings import APP_NAME_SPACE
+from gui.impl.auxiliary.layer_monitor import LayerMonitor
 from gui.impl.gen.view_models.views.lobby.crystals_promo.battle_type_model import BattleTypeModel
 from gui.impl.gen.view_models.views.lobby.crystals_promo.condition_model import ConditionModel
 from gui.impl.gen.view_models.views.lobby.crystals_promo.crystals_promo_view_model import CrystalsPromoViewModel
@@ -24,7 +25,7 @@ shopUrlsMap = {CrystalsPromoViewModel.TANKS_TAB: getBonsVehiclesUrl(),
  CrystalsPromoViewModel.INSTRUCTIONS_TAB: getBonsInstructionsUrl()}
 
 class CrystalsPromoView(ViewImpl):
-    __slots__ = ('__visibility', '__isMarkerDisabled')
+    __slots__ = ('__visibility', '__isMarkerDisabled', '__destroyViewObject')
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _appLoader = dependency.descriptor(IAppLoader)
 
@@ -35,6 +36,7 @@ class CrystalsPromoView(ViewImpl):
         super(CrystalsPromoView, self).__init__(settings)
         self.__visibility = visibility
         self.__isMarkerDisabled = False
+        self.__destroyViewObject = LayerMonitor()
         app = self._appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
         if app and app.containerManager:
             markerView = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW))
@@ -45,6 +47,7 @@ class CrystalsPromoView(ViewImpl):
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
 
     def _onLoading(self, *args, **kwargs):
+        self.__destroyViewObject.init(self.getParentWindow())
         isFirstOpen = not AccountSettings.getSettings(CRYSTALS_INFO_SHOWN)
         if isFirstOpen:
             AccountSettings.setSettings(CRYSTALS_INFO_SHOWN, True)
@@ -108,6 +111,7 @@ class CrystalsPromoView(ViewImpl):
             model.setSyncInitiator(not model.getSyncInitiator())
 
     def _finalize(self):
+        self.__destroyViewObject.fini()
         self.viewModel.goToShop -= self.__goToShopHandler
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': self.__isMarkerDisabled}), EVENT_BUS_SCOPE.LOBBY)

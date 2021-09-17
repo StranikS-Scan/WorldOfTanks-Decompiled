@@ -43,6 +43,9 @@
             <show-dialog>	SelectNationDialog	</show-dialog>
             <set-bootcamp-nation>	SelectedNationID	</set-bootcamp-nation>
             <set-var>	FirstVehicleSetter	</set-var>
+            <start-vse-plan>
+              <plan>	BootCamp/Lesson_1_lobby	</plan>
+            </start-vse-plan>
           </effects>
         </effects-group>
       </effects>
@@ -73,48 +76,7 @@
       <buttons>
         <submit>	SubmitButton	</submit>
       </buttons>
-      <actions>
-        <click>	SubmitButton	  <effects>
-            <start-assistant>
-              <hints>
-                <value>
-                  <item>
-                    <name>	hintRotateLobby	</name>
-                    <type>	dict	</type>
-                    <value>
-                      <item>
-                        <name>	time_completed	</name>
-                        <type>	float	</type>
-                        <value>	3.0	</value>
-                      </item>
-                      <item>
-                        <name>	timeout	</name>
-                        <type>	float	</type>
-                        <value>	1.0	</value>
-                      </item>
-                      <item>
-                        <name>	angle	</name>
-                        <type>	float	</type>
-                        <value>	180.0	</value>
-                      </item>
-                      <item>
-                        <name>	cooldown_after	</name>
-                        <type>	float	</type>
-                        <value>	0.0	</value>
-                      </item>
-                      <item>
-                        <name>	message	</name>
-                        <type>	string	</type>
-                        <value></value>
-                      </item>
-                    </value>
-                  </item>
-                </value>
-              </hints>
-            </start-assistant>
-          </effects>
-        </click>
-      </actions>
+      <actions></actions>
     </dialog>
     <game-attribute>	DefaultNationSetter	  <var-ref>	SelectedNationID	</var-ref>
       <name>	BootcampNationID	</name>

@@ -5,6 +5,7 @@ from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.fitting_types import FittingTypes
 from gui.impl.gen.view_models.views.lobby.tank_setup.dialogs.ammunition_buy_model import AmmunitionBuyModel
+from gui.impl.lobby.dialogs.auxiliary.confirmed_item_helpers import ConfirmedItemWarningTypes
 from gui.impl.lobby.dialogs.buy_and_exchange import BuyAndExchange
 from gui.impl.lobby.dialogs.contents.multiple_items_content import MultipleItemsContent
 from gui.impl.lobby.tank_setup.dialogs.bottom_content.bottom_contents import PriceBottomContent
@@ -41,7 +42,7 @@ class BuyPairModificationDialog(BuyAndExchange[AmmunitionBuyModel]):
         super(BuyPairModificationDialog, self)._onLoading(*args, **kwargs)
         self._buyContent = PriceBottomContent(viewModel=self.viewModel.dealPanel, price=self.__price)
         self._buyContent.onLoading()
-        self._mainContent = MultipleItemsContent(viewModel=self.viewModel.mainContent, items=[self.__item.getModificationByID(self.__modID)], vehicleInvID=self.__vehicle.invID, itemsType=ACTION_TYPE_TO_FITTING_TYPE.get(self.__item.actionType, ''))
+        self._mainContent = BuyPairModificationMainContent(viewModel=self.viewModel.mainContent, items=[self.__item.getModificationByID(self.__modID)], vehicleInvID=self.__vehicle.invID, itemsType=ACTION_TYPE_TO_FITTING_TYPE.get(self.__item.actionType, ''))
         self._mainContent.onLoading()
 
     def _initialize(self, *args, **kwargs):
@@ -80,9 +81,29 @@ class BuyPairModificationDialog(BuyAndExchange[AmmunitionBuyModel]):
             return False
         else:
             step = self.__vehicle.postProgression.getStep(self.__toStepID)
-            if not step.isReceived() or step.action.isPurchased():
+            if not step.isReceived() or step.action.getPurchasedID() == self.__modID:
                 _logger.error('not received or already purchased pair %s', self.__toStepID)
                 return False
             self.__item = step.action
             self.__price = self.__item.getModificationByID(self.__modID).getPrice()
             return True
+
+
+class BuyPairModificationMainContent(MultipleItemsContent):
+    __slots__ = ('_warnings',)
+
+    def __init__(self, viewModel, items, vehicleInvID=None, itemsType=None):
+        super(BuyPairModificationMainContent, self).__init__(viewModel, items, vehicleInvID, itemsType)
+        self._warnings = {}
+
+    def onLoading(self, *args, **kwargs):
+        super(BuyPairModificationMainContent, self).onLoading(*args, **kwargs)
+        self._viewModel.setDemountPairModification(ConfirmedItemWarningTypes.PAIR_MODIFICATIONS_WILL_BE_DEMOUNT in self._warnings)
+
+    def _fillItems(self, array):
+        array.clear()
+        for item in self._confirmedItemsPacker.packItems(items=self._items):
+            array.addViewModel(item.getCofirmedItemViewModel())
+            self._warnings.update(item.getWarnings())
+
+        array.invalidate()

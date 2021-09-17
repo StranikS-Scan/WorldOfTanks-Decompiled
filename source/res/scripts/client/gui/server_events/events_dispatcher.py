@@ -127,11 +127,8 @@ def showMissionsGrouped(missionID=None, groupID=None, anchor=None):
 
 def showMissionsMarathon(marathonPrefix=None):
     if not marathonPrefix:
-        marathon = dependency.instance(IMarathonEventsController).getPrimaryMarathon()
-        if marathon is not None:
-            marathonPrefix = marathon.prefix
+        marathonPrefix = dependency.instance(IMarathonEventsController).getPrimaryMarathon()
     showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, marathonPrefix=marathonPrefix)
-    return
 
 
 def showMissionsCategories(missionID=None, groupID=None, anchor=None):

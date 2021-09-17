@@ -2580,6 +2580,45 @@
       </damage>
     </armorSpalls>
   </_5inch_HESH_Mk_1>
+  <_150mm_AP_Mk_1>
+    <id>	197	</id>
+    <userString>	#gb_vehicles:_150mm_AP_Mk_1	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	152.4	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	650	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_150mm_AP_Mk_1>
+  <_150mm_HESH_L15>
+    <id>	200	</id>
+    <userString>	#gb_vehicles:_150mm_HESH_L15	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1850	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	152.4	</caliber>
+    <explosionRadius>	2.67	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	950	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.67	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	420	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_150mm_HESH_L15>
   <_5_5inch_AP_Mk_1>
     <id>	126	</id>
     <userString>	#gb_vehicles:_5_5inch_AP_Mk_1	</userString>

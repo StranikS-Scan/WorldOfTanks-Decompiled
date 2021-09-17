@@ -7,7 +7,7 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import UNIT_RESTRICTION
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.periodic_battles.models import PrimeTimeStatus
 from constants import IS_DEVELOPMENT
 
 class _BattleRoyaleVehiclesValidator(SquadVehiclesValidator):

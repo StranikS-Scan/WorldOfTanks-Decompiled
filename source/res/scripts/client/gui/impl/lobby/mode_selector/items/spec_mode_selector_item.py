@@ -38,6 +38,6 @@ class SpecModeSelectorItem(ModeSelectorLegacyItem):
     def __onListReceived(self, sessions):
         item = first(sorted(sessions, key=operator.attrgetter('startTime')))
         if item:
-            self.viewModel.setCallToAction(backport.text(R.strings.mode_selector.mode.specBattlesList.call.c_2(), date=backport.getShortDateFormat(item.startTime), time=backport.getShortTimeFormat(item.startTime)))
+            self.viewModel.setStatusActive(backport.text(R.strings.mode_selector.mode.specBattlesList.call.c_2(), date=backport.getShortDateFormat(item.startTime), time=backport.getShortTimeFormat(item.startTime)))
         else:
-            self.viewModel.setCallToAction(backport.text(R.strings.mode_selector.mode.specBattlesList.call.c_1()))
+            self.viewModel.setStatusActive(backport.text(R.strings.mode_selector.mode.specBattlesList.call.c_1()))

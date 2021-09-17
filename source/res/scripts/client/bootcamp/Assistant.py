@@ -3,7 +3,6 @@
 import BigWorld
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from hints.HintsSystem import HintSystem
 from BootCampEvents import g_bootcampEvents
 from BootcampSettings import getBattleSettings
 from BootcampConstants import UI_STATE
@@ -14,14 +13,12 @@ from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 class BaseAssistant(object):
     ASSISTANT_TICK_LENGTH = 0.2
 
-    def __init__(self, hintSystem):
+    def __init__(self):
         super(BaseAssistant, self).__init__()
-        self._hintSystem = hintSystem
         self._updateTimerId = None
         return
 
     def start(self):
-        self._hintSystem.start()
         self._updateTimerId = BigWorld.callback(BaseAssistant.ASSISTANT_TICK_LENGTH, self._update)
         self._doStart()
 
@@ -30,18 +27,9 @@ class BaseAssistant(object):
         if self._updateTimerId is not None:
             BigWorld.cancelCallback(self._updateTimerId)
             self._updateTimerId = None
-        self._hintSystem.stop()
         return
 
-    def onAction(self, actionId, actionParams):
-        self._hintSystem.onAction(actionId, actionParams)
-
     def _update(self):
-        try:
-            self._hintSystem.update()
-        except Exception:
-            LOG_CURRENT_EXCEPTION_BOOTCAMP()
-
         self._updateTimerId = BigWorld.callback(BaseAssistant.ASSISTANT_TICK_LENGTH, self._update)
 
     def _doStart(self):
@@ -63,12 +51,12 @@ class BattleAssistant(BaseAssistant):
      'ConsumablesAppear': BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL}
 
     def __init__(self, avatar, lessonId):
-        lessonSettings = getBattleSettings(lessonId)
-        super(BattleAssistant, self).__init__(HintSystem(avatar, lessonSettings.hints))
+        super(BattleAssistant, self).__init__()
         self.__idHighlight = None
         self.__lessonId = lessonId
         self.__idClosePrebattleTimer = None
         self.__highlightedElements = set()
+        lessonSettings = getBattleSettings(lessonId)
         for animationName, panelName in BattleAssistant.HIGHLIGHTED_GUI_DICT.iteritems():
             curPanels = lessonSettings.visiblePanels
             if lessonId > 0:
@@ -121,9 +109,3 @@ class BattleAssistant(BaseAssistant):
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_CLOSE_PREBATTLE)), EVENT_BUS_SCOPE.BATTLE)
         self.__idClosePrebattleTimer = None
         return
-
-
-class LobbyAssistant(BaseAssistant):
-
-    def __init__(self, hints):
-        super(LobbyAssistant, self).__init__(HintSystem(hintsInfo=hints))

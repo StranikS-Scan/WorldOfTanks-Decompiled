@@ -144,12 +144,14 @@ class BaseAmmunitionSetupView(ViewImpl):
     @async
     def _doChangeSetupLayoutIndex(self, groupID, layoutIdx):
         changeSetupLayout = True
+        self._tankSetup.setLocked(True)
         sections = self._ammunitionPanel.getSectionsByGroup(groupID)
         currentSection = self._tankSetup.getSelectedSetup()
         if sections and currentSection in sections:
             changeSetupLayout = yield await(self._tankSetup.canQuit(skipApplyAutoRenewal=True))
         if changeSetupLayout:
             yield await_callback(self._ammunitionPanel.onChangeSetupLayoutIndex)(groupID, layoutIdx)
+        self._tankSetup.setLocked(False)
         if changeSetupLayout:
             self._tankSetup.update()
         raise AsyncReturn(changeSetupLayout)

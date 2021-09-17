@@ -7,16 +7,16 @@ from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import Ful
 class ResearchStepsDialog(FullScreenDialogWindowModel):
     __slots__ = ()
 
-    def __init__(self, properties=12, commands=3):
+    def __init__(self, properties=13, commands=3):
         super(ResearchStepsDialog, self).__init__(properties=properties, commands=commands)
 
     @property
     def dealPanel(self):
-        return self._getViewModel(10)
+        return self._getViewModel(11)
 
     @property
     def mainContent(self):
-        return self._getViewModel(11)
+        return self._getViewModel(12)
 
     def _initialize(self):
         super(ResearchStepsDialog, self)._initialize()

@@ -12,7 +12,7 @@ class SetupStates(IntEnum):
 class AmmunitionSetupSelector(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=3, commands=0):
         super(AmmunitionSetupSelector, self).__init__(properties=properties, commands=commands)
 
     def getIsSwitchEnabled(self):
@@ -21,13 +21,20 @@ class AmmunitionSetupSelector(ViewModel):
     def setIsSwitchEnabled(self, value):
         self._setBool(0, value)
 
+    def getIsPrebattleSwitchDisabled(self):
+        return self._getBool(1)
+
+    def setIsPrebattleSwitchDisabled(self, value):
+        self._setBool(1, value)
+
     def getStates(self):
-        return self._getArray(1)
+        return self._getArray(2)
 
     def setStates(self, value):
-        self._setArray(1, value)
+        self._setArray(2, value)
 
     def _initialize(self):
         super(AmmunitionSetupSelector, self)._initialize()
         self._addBoolProperty('isSwitchEnabled', False)
+        self._addBoolProperty('isPrebattleSwitchDisabled', False)
         self._addArrayProperty('states', Array())

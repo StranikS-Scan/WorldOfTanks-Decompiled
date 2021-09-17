@@ -271,6 +271,7 @@ class KPI(object):
         COMPOUND_KPI = 'compoundKPI'
         VEHICLE_REPAIR_SPEED = 'vehicleRepairSpeed'
         VEHICLE_CHASSIS_REPAIR_SPEED = 'vehicleChassisRepairSpeed'
+        VEHICLE_CHASSIS_REPAIR_TIME = 'vehicleChassisRepairTime'
         VEHICLE_ENGINE_POWER = 'vehicleEnginePower'
         VEHICLE_TURRET_ROTATION_SPEED = 'vehicleTurretRotationSpeed'
         VEHICLE_CIRCULAR_VISION_RADIUS = 'vehicleCircularVisionRadius'

@@ -1,67 +1,71 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/vehicles.py
-import string
-import typing
-from items import ItemsPrices
-from items.components.supply_slot_categories import LevelsFactor
-from math_common import ceilTo
-from soft_exception import SoftException
-from collections import namedtuple
-from math import radians, cos, tan, atan, pi, isnan, degrees
-from functools import partial
-import struct
-import itertools
-import copy
-import os
-from typing import List, Optional, Tuple, Dict, Any, TYPE_CHECKING, Union, Generator
 import BigWorld
-from Math import Vector2, Vector3
+import copy
+import items
+import itertools
 import nation_change
 import nations
-import items
+import os
+import string
+import struct
+import typing
+from Math import Vector2, Vector3
+from collections import namedtuple
+from collector_vehicle import CollectorVehicleConsts
+from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL
+from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_EDITOR
+from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
+from constants import SHELL_MECHANICS_TYPE
+from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
+from functools import partial
+from items import ItemsPrices
 from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr, ITEM_TYPES
-from items.attributes_helpers import onCollectAttributes, STATIC_ATTR_PREFIX
-from items.components import component_constants, shell_components, chassis_components, skills_constants
-from items.components.shell_components import HighExplosiveImpactParams
-from items.components import shared_components
-from items.components.c11n_constants import ApplyArea, MATCHING_TAGS_SUFFIX, CamouflageTilingType, CamouflageTilingTypeNameToType
-from items.components.post_progression_components import PostProgressionCache, getActiveModifications
-from items.readers import chassis_readers
-from items.readers import gun_readers
-from items.readers import shared_readers
-from items.readers import sound_readers
-from items.readers import json_vehicle_reader
-from items.writers import shared_writers
-from items.writers import chassis_writers
-from items.writers import gun_writers
-from items.writers import sound_writers
+from items import common_extras, decodeEnum
 from items import vehicle_items
 from items._xml import cachedFloat
-from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
-from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_EDITOR
-from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL
-from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
+from items.attributes_helpers import onCollectAttributes, STATIC_ATTR_PREFIX
+from items.components import component_constants, shell_components, chassis_components, skills_constants
+from items.components import shared_components
+from items.components.c11n_constants import ApplyArea, CamouflageTilingType, CamouflageTilingTypeNameToType, ProjectionDecalMatchingTags
+from items.components.post_progression_components import PostProgressionCache, getActiveModifications
+from items.components.shell_components import HighExplosiveImpactParams
+from items.components.supply_slot_categories import LevelsFactor
+from items.readers import chassis_readers
+from items.readers import gun_readers
+from items.readers import json_vehicle_reader
+from items.readers import shared_readers
+from items.readers import sound_readers
 from items.stun import g_cfg as stunConfig
-from items import common_extras, decodeEnum
+from items.writers import chassis_writers
+from items.writers import gun_writers
+from items.writers import shared_writers
+from items.writers import sound_writers
+from material_kinds import IDS_BY_NAMES
+from math import radians, cos, tan, atan, pi, isnan, degrees
+from math_common import ceilTo
+from post_progression_common import POST_PROGRESSION_ALL_PRICES, ALLOWED_CURRENCIES_FOR_TREE_STEP, ALLOWED_CURRENCIES_FOR_BUY_MODIFICATION_STEP, ALLOWED_CURRENCIES_FOR_CUSTOM_ROLE_SLOT_CHANGE, POST_PROGRESSION_UNLOCK_MODIFICATIONS_PRICES, CUSTOM_ROLE_SLOT_CHANGE_PRICE, POST_PROGRESSION_BUY_MODIFICATIONS_PRICES
+from soft_exception import SoftException
 from string import upper
-from constants import SHELL_MECHANICS_TYPE
+from typing import List, Optional, Tuple, Dict, Any, TYPE_CHECKING, Union, Generator
+from wrapped_reflection_framework import ReflectionMetaclass
+from constants import SHELL_MECHANICS_TYPE, TrackBreakMode
 from wrapped_reflection_framework import ReflectionMetaclass
 from collector_vehicle import CollectorVehicleConsts
 from material_kinds import IDS_BY_NAMES
+from items.customization_slot_tags_validator import getDirectionAndFormFactorTags
 if IS_EDITOR:
-    import meta_objects.items.vehicles_meta as meta
     from meta_objects.items.vehicle_items_meta.utils import getEffectNameByEffect
     from combined_data_section import CombinedDataSection
     from reflection import ReflectedObject
     from wrapped_reflection_framework import reflectedNamedTuple
     import Math
-    import Editor
 if IS_CLIENT or IS_EDITOR:
     import ResMgr
 else:
     from realm_utils import ResMgr
 if IS_CELLAPP or IS_CLIENT or IS_BOT or IS_EDITOR:
-    from ModelHitTester import HitTesterManager
+    from ModelHitTester import HitTesterManager, BoundingBoxManager, createBBoxManagerForModels
 if IS_CELLAPP or IS_CLIENT or IS_EDITOR or IS_WEB:
     import material_kinds
     from material_kinds import EFFECT_MATERIALS
@@ -89,8 +93,7 @@ VEHICLE_LEVEL_EARN_CRYSTAL = 10
 MODES_WITHOUT_CRYSTAL_EARNINGS = set(('bob',
  'fallout',
  'event_battles',
- 'battle_royale',
- 'clanWarsBattles'))
+ 'battle_royale'))
 
 class VEHICLE_PHYSICS_TYPE():
     TANK = 0
@@ -117,7 +120,7 @@ VEHICLE_DEVICE_INDICES = {deviceName:index for index, deviceName in enumerate(VE
 def _makeExtraNames(tankmanNames):
     retVal = {}
     extraSuffix = 'Health'
-    edgeCases = {'track': ['leftTrack' + extraSuffix, 'rightTrack' + extraSuffix],
+    edgeCases = {'track': ['leftTrack0' + extraSuffix, 'rightTrack0' + extraSuffix],
      'radioman': ['radioman1' + extraSuffix, 'radioman2' + extraSuffix],
      'gunner': ['gunner1' + extraSuffix, 'gunner2' + extraSuffix],
      'loader': ['loader1' + extraSuffix, 'loader2' + extraSuffix]}
@@ -392,6 +395,10 @@ class VehicleDescriptor(object):
     isPitchHullAimingAvailable = property(lambda self: self.type.hullAimingParams['pitch']['isAvailable'])
     isYawHullAimingAvailable = property(lambda self: self.type.hullAimingParams['yaw']['isAvailable'])
 
+    @property
+    def isTrackWithinTrack(self):
+        return self.chassis.isTrackWithinTrack
+
     def __getIsHullAimingAvailable(self):
         hap = self.type.hullAimingParams
         return hap['yaw']['isAvailable'] or hap['pitch']['isAvailable']
@@ -409,7 +416,7 @@ class VehicleDescriptor(object):
             hullOnChassisOffsetZ = chassisDescr.hullPosition.z
             turretOnHullOffsetZ = hullDescr.turretPositions[0].z
             gunOnTurretOffsetZ = self.turret.gunPosition.z
-            chassisBbox = chassisDescr.hitTester.bbox
+            chassisBbox = chassisDescr.totalBBox
             hullBbox = hullDescr.hitTester.bbox
             bboxMin = Vector2(min(chassisBbox[0].x, hullBbox[0].x), min(chassisBbox[0].z, hullBbox[0].z + hullOnChassisOffsetZ))
             bboxMax = Vector2(max(chassisBbox[1].x, hullBbox[1].x), max(chassisBbox[1].z, hullBbox[1].z + hullOnChassisOffsetZ))
@@ -549,7 +556,7 @@ class VehicleDescriptor(object):
             turretDescr, gunDescr = self.turrets[positionIndex]
             return (gunDescr, turretDescr.guns)
 
-    def mayInstallTurret(self, turretCompactDescr, gunCompactDescr, positionIndex=0):
+    def mayInstallTurret(self, turretCompactDescr, gunCompactDescr, positionIndex=0, optDevicesLayouts=None):
         selfType = self.type
         selfTurrets = self.turrets
         itemTypeID, nationID, turretID = parseIntCompactDescr(turretCompactDescr)
@@ -586,12 +593,9 @@ class VehicleDescriptor(object):
             try:
                 prevWeight = self.__computeWeight()
                 setter()
-                for device in self.optionalDevices:
-                    if device is not None and not device.checkCompatibilityWithVehicle(self):
-                        return (False, 'not for current vehicle')
-
-                if not _isWeightAllowedToChange(self.__computeWeight(), prevWeight):
-                    return (False, 'too heavy')
+                result, reason = self.__checkCompatibilityWithOptDevices(prevWeight, optDevicesLayouts)
+                if not result:
+                    return (result, reason)
             finally:
                 restorer()
 
@@ -626,7 +630,7 @@ class VehicleDescriptor(object):
         if rebuildAttrs:
             self.__updateAttributes()
 
-    def mayInstallComponent(self, compactDescr, positionIndex=0):
+    def mayInstallComponent(self, compactDescr, positionIndex=0, optDevicesLayouts=None):
         itemTypeID, nationID, compID = parseIntCompactDescr(compactDescr)
         itemTypeName = items.ITEM_TYPE_NAMES[itemTypeID]
         selfType = self.type
@@ -674,12 +678,9 @@ class VehicleDescriptor(object):
             try:
                 prevWeight = self.__computeWeight()
                 setter()
-                for device in self.optionalDevices:
-                    if device is not None and not device.checkCompatibilityWithVehicle(self):
-                        return (False, 'not for current vehicle')
-
-                if not _isWeightAllowedToChange(self.__computeWeight(), prevWeight):
-                    return (False, 'too heavy')
+                result, reason = self.__checkCompatibilityWithOptDevices(prevWeight, optDevicesLayouts)
+                if not result:
+                    return (result, reason)
             finally:
                 restorer()
 
@@ -992,6 +993,10 @@ class VehicleDescriptor(object):
             for wheel in self.chassis.wheels.wheels:
                 hitTesters.append(wheel.hitTesterManager)
 
+        if not self.isWheeledVehicle:
+            for trackPair in self.chassis.trackPairs[1:]:
+                hitTesters.append(trackPair.hitTesterManager)
+
         return hitTesters
 
     def prerequisites(self, newPhysic=True):
@@ -1050,6 +1055,25 @@ class VehicleDescriptor(object):
             prereqs.update(self.hull['exhaust'].prerequisites())
             for extra in self.extras:
                 prereqs.update(extra.prerequisites())
+
+        def cacheListPrereqs(destructionData):
+            if destructionData is not None:
+                for _, effects, _1 in destructionData:
+                    prereqs.update(effects.prerequisites())
+
+            return
+
+        tracks = self.chassis.tracks
+        if tracks is not None:
+            for trackVisual in tracks.trackPairs.itervalues():
+                if trackVisual.tracksDebris is None:
+                    continue
+                debris = trackVisual.tracksDebris.left
+                if debris:
+                    cacheListPrereqs(debris.destructionEffectData)
+                debris = trackVisual.tracksDebris.right
+                if debris:
+                    cacheListPrereqs(debris.destructionEffectData)
 
         for elem in copy.copy(prereqs):
             if elem in g_cache.requestOncePrereqs:
@@ -1117,6 +1141,26 @@ class VehicleDescriptor(object):
         vehicleFactor = self.miscAttrs['invisibilityFactor']
         invMoving, invStill = self.type.invisibility
         return (invMoving * crewFactor * vehicleFactor + camouflageBonus, invStill * crewFactor * vehicleFactor + camouflageBonus)
+
+    def __checkCompatibilityWithOptDevices(self, prevWeight, optDevicesLayouts):
+        if optDevicesLayouts:
+            for optDevSequence in optDevicesLayouts:
+                if areOptDevicesLayoutsEqual(self.optionalDevices, optDevSequence):
+                    continue
+                installPossible, reason = self.mayInstallOptDevsSequence(optDevSequence)
+                if not installPossible:
+                    reason = 'too heavy' if reason == 'Devices are too heavy for vehicle' else reason
+                    return (False, reason)
+                optDevs = [ getItemByCompactDescr(cd) for cd in optDevSequence if cd != 0 ]
+                for device in optDevs:
+                    if device is not None and not device.checkCompatibilityWithVehicle(self):
+                        return (False, 'not for current vehicle')
+
+        for device in self.optionalDevices:
+            if device is not None and not device.checkCompatibilityWithVehicle(self):
+                return (False, 'not for current vehicle')
+
+        return (False, 'too heavy') if not _isWeightAllowedToChange(self.__computeWeight(), prevWeight) else (True, None)
 
     def __getChassisEffectNames(self, effectGroup):
         ret = []
@@ -1669,6 +1713,7 @@ class VehicleType(object):
      'crewRoles',
      'extras',
      'extrasDict',
+     'extrasProtection',
      'devices',
      'tankmen',
      'damageByStaticsChances',
@@ -1714,11 +1759,13 @@ class VehicleType(object):
      'builtins',
      'nationChangeGroupId',
      'isCollectorVehicle',
+     'isPremium',
      'hasTurboshaftEngine',
      'hasHydraulicChassis',
      'supplySlots',
      'optDevsOverrides',
      'postProgressionTree',
+     'postProgressionPricesOverrides',
      'customRoleSlotOptions',
      '__weakref__')
 
@@ -1744,6 +1791,7 @@ class VehicleType(object):
         self.builtins = {t.split('_user')[0] for t in self.tags if t.startswith('builtin')}
         self.hasBurnout = 'burnout' in self.tags
         self.isCollectorVehicle = CollectorVehicleConsts.COLLECTOR_VEHICLES_TAG in self.tags
+        self.isPremium = 'premium' in self.tags
         self.role = self.__getRoleFromTags() if self.level in ROLE_LEVELS else ROLE_TYPE.NOT_DEFINED
         self.actions = self.__getActionsFromRole(self.role)
         VehicleType.currentReadingVeh = self
@@ -1775,6 +1823,10 @@ class VehicleType(object):
             self.postProgressionTree = treeID
         else:
             self.postProgressionTree = None
+        if section.has_key('postProgressionPricesOverrides'):
+            self.postProgressionPricesOverrides = _readPostProgressionPricesOverrides(xmlCtx, section['postProgressionPricesOverrides'])
+        else:
+            self.postProgressionPricesOverrides = None
         if self.role == ROLE_TYPE.NOT_DEFINED and self.postProgressionTree is not None:
             LOG_ERROR('Vehicle {} must have role'.format(self.name))
         if section.has_key('customRoleSlotOptions'):
@@ -1846,7 +1898,7 @@ class VehicleType(object):
         self.unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs)
         defHull = _readHull((xmlCtx, 'hull'), _xml.getSubsection(xmlCtx, section, 'hull'))
         self.damageByStaticsChances = _readDamageByStaticsChances(xmlCtx, section, 'damageByStaticsChances')
-        self.chassis = _readInstallableComponents(xmlCtx, section, 'chassis', nationID, _readChassis, _readChassisLocals, g_cache.chassis(nationID), g_cache.chassisIDs(nationID), unlocksDescrs)
+        self.chassis = _readInstallableComponents(xmlCtx, section, 'chassis', nationID, _readChassis, _readChassisLocals, g_cache.chassis(nationID), g_cache.chassisIDs(nationID), unlocksDescrs, isWheeledVehicle=self.isWheeledVehicle)
         self.engines = _readInstallableComponents(xmlCtx, section, 'engines', nationID, _readEngine, _readEngineLocal, g_cache.engines(nationID), g_cache.engineIDs(nationID), unlocksDescrs)
         self.fuelTanks = _readInstallableComponents(xmlCtx, section, 'fuelTanks', nationID, _readFuelTank, _defaultLocalReader, g_cache.fuelTanks(nationID), g_cache.fuelTankIDs(nationID), unlocksDescrs)
         self.radios = _readInstallableComponents(xmlCtx, section, 'radios', nationID, _readRadio, _defaultLocalReader, g_cache.radios(nationID), g_cache.radioIDs(nationID), unlocksDescrs)
@@ -1888,6 +1940,8 @@ class VehicleType(object):
                 LOG_CURRENT_EXCEPTION()
                 self.xphysics = None
 
+            if self.xphysics:
+                _validateBrokenTrackLosses(xmlCtx, self)
         elif IS_CLIENT:
             self.xphysics = _readXPhysicsClient(xmlCtx, section, 'physics', self.isWheeledVehicle)
         elif IS_EDITOR:
@@ -1898,16 +1952,15 @@ class VehicleType(object):
             self.repaintParameters = _readRepaintParams(xmlCtx, _xml.getSubsection(xmlCtx, section, 'repaintParameters'))
         if (IS_CLIENT or IS_EDITOR or IS_CELLAPP or IS_BOT) and section.has_key('extras'):
             _readExtraLocals(self, (xmlCtx, 'extras'), section)
+        if IS_CELLAPP or IS_EDITOR:
+            self.extrasProtection = _readExtrasProtection(self, xmlCtx, section)
         if IS_CELLAPP:
             self.rollerExtras = [ extra for extra in self.devices if extra.isTrack and getattr(extra, 'isWheel', False) == self.isWheeledVehicle ]
-            self.rollerExtras.sort(key=lambda extra: extra.name)
             if self.isWheeledVehicle:
-                for chassis in self.chassis:
-                    for wheel in chassis.wheels.wheels:
-                        for matKind, matInfo in wheel.materials.items():
-                            if matInfo.multipleExtra:
-                                wheel.materials[matKind] = matInfo._replace(extra=self.extrasDict[matInfo.extra])
-
+                self.rollerExtras.sort(key=lambda extra: extra.getNumber())
+            else:
+                self.rollerExtras.sort(key=lambda extra: (not extra.isLeft) + (extra.name not in self.extrasProtection['protecting']))
+            _provideMultipleExtras(self)
         if IS_CLIENT or IS_EDITOR:
             self.__checkMatchingTags()
         VehicleType.currentReadingVeh = None
@@ -2013,7 +2066,6 @@ class VehicleType(object):
         roles = g_cache.roles()
         suitableRoles = [ tag for tag in roles if ROLE_TYPE_TO_LABEL[tag] in self.tags ]
         if not suitableRoles:
-            LOG_WARNING('All vehicles from levels %s must have role, vehicle: %s(CD:%s)' % (ROLE_LEVELS, self.name, self.compactDescr))
             return ROLE_TYPE.NOT_DEFINED
         if len(suitableRoles) > 1:
             raise SoftException("There are several roles for vehicle '%s': '%s'" % (self.name, suitableRoles))
@@ -2085,39 +2137,35 @@ class VehicleType(object):
     def __checkMatchingTags(self):
         hullsMatchingTags = set()
         for hull in self.hulls:
-            hullsMatchingTags = self.____checkPartMatchingTags(hull, hullsMatchingTags)
+            hullsMatchingTags = self.____checkPartMatchingTags(hull)
 
-        turretsMatchingTags = set()
-        gunsMatchingTags = set()
         for turrets in self.turrets:
             for turret in turrets:
-                turretsMatchingTags = self.____checkPartMatchingTags(turret, turretsMatchingTags)
-                gunMatchingTags = set()
+                turretsMatchingTags = self.____checkPartMatchingTags(turret)
                 for gun in turret.guns:
-                    gunMatchingTags = self.____checkPartMatchingTags(gun, gunMatchingTags)
+                    gunMatchingTags = self.____checkPartMatchingTags(gun)
+                    repeatingTags = hullsMatchingTags & gunMatchingTags | hullsMatchingTags & turretsMatchingTags | gunMatchingTags & turretsMatchingTags
+                    if repeatingTags:
+                        LOG_ERROR('repeating matching tags between hull, turret and gun : %s for %s' % (repeatingTags, self.name))
 
-                gunsMatchingTags |= gunMatchingTags
-
-        repeatingTags = hullsMatchingTags & gunsMatchingTags | hullsMatchingTags & turretsMatchingTags | gunsMatchingTags & turretsMatchingTags
-        if repeatingTags:
-            LOG_ERROR('repeating matching tags: {} for {}'.format(','.join(repeatingTags), self.name))
-
-    def ____checkPartMatchingTags(self, part, partTags):
+    def ____checkPartMatchingTags(self, part):
         tags = set()
         projectionDecalSlots = [ slot for slot in part.slotsAnchors if slot.type == 'projectionDecal' ]
         for slot in projectionDecalSlots:
-            matchingTags = [ tag for tag in slot.tags if tag.endswith(MATCHING_TAGS_SUFFIX) ]
+            matchingTags = [ tag for tag in slot.tags if tag in ProjectionDecalMatchingTags.ALL ]
             if len(matchingTags) > 1:
                 LOG_ERROR('several matching tags for slot ID%i' % slot.slotId)
-            for tag in matchingTags:
-                if tag not in tags:
-                    tags.add(tag)
-                LOG_ERROR('repeating matching tags: {} for {}'.format(tag, self.name))
+            for matchingTag in matchingTags:
+                addTags = getDirectionAndFormFactorTags(slot)
+                if addTags:
+                    directionTag, formfactorTag = addTags
+                    tagsSet = (matchingTag, directionTag, formfactorTag)
+                    if tagsSet not in tags:
+                        tags.add(tagsSet)
+                    else:
+                        LOG_ERROR('repeating matching tags: %s for %s' % (tagsSet, self.name))
 
-        repeatingTags = tags & partTags
-        if repeatingTags:
-            LOG_ERROR('repeating matching tags: {} for {}'.format(','.join(repeatingTags), self.name))
-        return tags | partTags
+        return tags
 
 
 class SupplySlotsStorageCache(object):
@@ -2335,7 +2383,7 @@ class Cache(object):
     def postProgression(self):
         _POST_PROGRESSION_XML_ROOT = _VEHICLE_TYPE_XML_PATH + 'common/post_progression/'
         if self.__postProgression is None:
-            self.__postProgression = PostProgressionCache(_POST_PROGRESSION_XML_ROOT + 'features.xml', _POST_PROGRESSION_XML_ROOT + 'modifications.xml', _POST_PROGRESSION_XML_ROOT + 'pairs.xml', _POST_PROGRESSION_XML_ROOT + 'trees.xml')
+            self.__postProgression = PostProgressionCache(_POST_PROGRESSION_XML_ROOT + 'features.xml', _POST_PROGRESSION_XML_ROOT + 'modifications.xml', _POST_PROGRESSION_XML_ROOT + 'pairs.xml', _POST_PROGRESSION_XML_ROOT + 'trees.xml', _POST_PROGRESSION_XML_ROOT + 'prices.xml')
         return self.__postProgression
 
     def customization(self, nationID):
@@ -3385,15 +3433,13 @@ def _writeHullVariants(hulls, section):
         return
 
 
-def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
+def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None, isWheeledVehicle=False):
     item.tags = _readTags(xmlCtx, section, 'tags', 'vehicleChassis')
     item.level = _readLevel(xmlCtx, section)
     item.hullPosition = _xml.readVector3(xmlCtx, section, 'hullPosition')
-    item.hitTesterManager = _readHitTester(xmlCtx, section, 'hitTester')
     item.topRightCarryingPoint = _xml.readPositiveVector2(xmlCtx, section, 'topRightCarryingPoint')
     item.navmeshGirth = _xml.readPositiveFloat(xmlCtx, section, 'navmeshGirth')
     item.minPlaneNormalY = cos(radians(_xml.readPositiveFloat(xmlCtx, section, 'maxClimbAngle')))
-    item.materials = _readArmor(xmlCtx, section, 'armor', optional=True)
     item.weight = _xml.readPositiveFloat(xmlCtx, section, 'weight')
     item.maxLoad = _xml.readPositiveFloat(xmlCtx, section, 'maxLoad')
     item.specificFriction = component_constants.DEFAULT_SPECIFIC_FRICTION
@@ -3410,7 +3456,21 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
     if not IS_CLIENT and not IS_BOT:
         item.armorHomogenization = component_constants.DEFAULT_ARMOR_HOMOGENIZATION
         item.bulkHealthFactor = _xml.readPositiveFloat(xmlCtx, section, 'bulkHealthFactor')
-    item.healthParams = shared_readers.readDeviceHealthParams(xmlCtx, section)
+    if not isWheeledVehicle:
+        item.trackPairs = _readTrackPairs(xmlCtx, section)
+        mainTrackPair = item.trackPairs[component_constants.MAIN_TRACK_PAIR_IDX]
+        item.hitTesterManager = mainTrackPair.hitTesterManager
+        item.materials = mainTrackPair.materials
+        item.healthParams = mainTrackPair.healthParams
+        if not (IS_BASEAPP or IS_WEB):
+            item.bboxManager = createBBoxManagerForModels([ trackPair.hitTesterManager for trackPair in item.trackPairs ])
+    else:
+        item.hitTesterManager = _readHitTester(xmlCtx, section, 'hitTester')
+        item.materials = _readArmor(xmlCtx, section, 'armor', optional=True)
+        item.healthParams = shared_readers.readDeviceHealthParams(xmlCtx, section)
+        if not (IS_BASEAPP or IS_WEB):
+            htManager = item.hitTesterManager
+            item.bboxManager = BoundingBoxManager(htManager.modelHitTester.bbox, htManager.crashedModelHitTester.bbox if htManager.crashedModelHitTester else None)
     if IS_CLIENT or IS_EDITOR or IS_BOT or IS_BASEAPP:
         if section.has_key('emblemSlots'):
             if not IS_BASEAPP:
@@ -3527,8 +3587,12 @@ def _writeChassis(item, section, *args):
         physicalTracksSection = section['physicalTracks']
     elif bool(item.physicalTracks):
         physicalTracksSection = section.createSection('physicalTracks')
-        physicalTracksSection.createSection('left')
-        physicalTracksSection.createSection('right')
+        for _ in xrange(len(item.physicalTracks['left'])):
+            physicalTracksSection.createSection('left')
+
+        for _ in xrange(len(item.physicalTracks['right'])):
+            physicalTracksSection.createSection('right')
+
     if physicalTracksSection is not None:
         if 'left' in item.physicalTracks:
             shared_writers.writeBuilders(item.physicalTracks['left'], physicalTracksSection, 'left')
@@ -3569,6 +3633,60 @@ def _readChassisLocals(xmlCtx, section, sharedItem, unlocksDescrs, _=None):
         if IS_CLIENT or IS_EDITOR:
             descr.camouflage = cam
         return descr
+
+
+def _readTrackPairs(xmlCtx, section):
+    if not section.has_key('trackPairParams'):
+        return tuple([chassis_components.TrackPair(hitTesterManager=_readHitTester(xmlCtx, section, 'hitTester'), materials=_readArmor(xmlCtx, section, 'armor', index=component_constants.MAIN_TRACK_PAIR_IDX), healthParams=shared_readers.readDeviceHealthParams(xmlCtx, section), breakMode=_readTrackBreakMode(xmlCtx, section))])
+    else:
+        needHitTesters = not (IS_BASEAPP or IS_WEB)
+        hitTesters = {}
+        trackPairsParams = {}
+        for sname, subsection in section.items():
+            if needHitTesters and sname == 'hitTester':
+                ctx = (xmlCtx, sname)
+                idx = subsection.readInt('trackPairIdx')
+                hitTesters[idx] = _readHitTester(ctx, subsection, '')
+            if sname == 'trackPairParams':
+                ctx = (xmlCtx, sname)
+                idx = subsection.readInt('trackPairIdx')
+                trackPairsParams[idx] = {'materials': _readArmor(ctx, subsection, 'armor', index=idx),
+                 'healthParams': shared_readers.readDeviceHealthParams(ctx, subsection),
+                 'breakMode': _readTrackBreakMode(ctx, subsection)}
+
+        trackPairsCount = len(trackPairsParams)
+        if needHitTesters and len(hitTesters) != trackPairsCount:
+            _xml.raiseWrongXml(xmlCtx, '', 'Hit testers are provided not for all track pairs')
+        trackPairs = [None] * trackPairsCount
+        for idx, params in trackPairsParams.items():
+            trackPairs[idx] = chassis_components.TrackPair(hitTesterManager=hitTesters[idx] if needHitTesters else None, materials=params['materials'], healthParams=params['healthParams'], breakMode=params['breakMode'])
+
+        return tuple(trackPairs)
+
+
+def _readTrackBreakMode(xmlCtx, section):
+    defaultLabel = TrackBreakMode(TrackBreakMode.STOP).name
+    breakModeLabel = intern(_xml.readStringWithDefaultValue(xmlCtx, section, 'breakMode', defaultLabel))
+    return TrackBreakMode[breakModeLabel]
+
+
+def _readExtrasProtection(vehType, xmlCtx, section):
+    res = {'protecting': {},
+     'protected': {}}
+    if not section.has_key('extrasProtection'):
+        return res
+    ctx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, 'extrasProtection')
+    vehExtrasDict = vehType.extrasDict
+    for protectingExtra, content in subsection.items():
+        protectedExtra = content.asString
+        if protectingExtra not in vehExtrasDict:
+            _xml.raiseWrongXml(ctx, '', "Non-existent extra name '{}'".format(protectingExtra))
+        if protectedExtra not in vehExtrasDict:
+            _xml.raiseWrongXml(ctx, '', "Non-existent extra name '{}'".format(protectedExtra))
+        res['protecting'][protectingExtra] = protectedExtra
+        res['protected'][protectedExtra] = protectingExtra
+
+    return res
 
 
 def _readEngine(xmlCtx, section, item, unlocksDescrs=None, _=None):
@@ -3740,6 +3858,7 @@ def _xphysicsParseChassis(ctx, sec):
     floatParamsDetailed = ('centerRotationFwdSpeed', 'rotationByLockChoker', 'fwLagRatio', 'bkLagRatio')
     res.update(_parseFloatList(ctx, sec, floatParamsDetailed))
     res['centerRotationFwdSpeed'] *= component_constants.KMH_TO_MS
+    res['brokenTrackLosses'] = _readBrokenTrackLosses(ctx, sec)
     return res
 
 
@@ -4026,8 +4145,21 @@ def _readExtraLocals(vehType, xmlCtx, section):
     vehType.extras = tuple(vehExtras)
     vehType.tankmen = _selectCrewExtras(vehType.crewRoles, vehType.extrasDict)
     if section.has_key('deviceExtras'):
-        vehDevices, _ = _readDeviceTypes(xmlCtx, section, 'deviceExtras', extrasDict)
-        vehType.devices = vehType.devices.union(frozenset((vehExtras[idx] for idx in vehDevices.iterkeys())))
+        deviceTypes = g_cache.commonConfig['deviceExtraIndexToTypeIndex'].copy()
+        newDevicesTypes, _ = _readDeviceTypes(xmlCtx, section, 'deviceExtras', extrasDict)
+        deviceTypes.update(newDevicesTypes)
+        vehType.devices = frozenset((vehExtras[idx] for idx in deviceTypes.iterkeys()))
+
+
+def _provideMultipleExtras(vehType):
+    chassisItems = tuple()
+    for chassis in vehType.chassis:
+        chassisItems += chassis.wheels.wheels if vehType.isWheeledVehicle else chassis.trackPairs
+
+    for item in chassisItems + vehType.hulls:
+        for matKind, matInfo in item.materials.items():
+            if matInfo.multipleExtra:
+                item.materials[matKind] = matInfo._replace(extra=vehType.extrasDict[matInfo.extra])
 
 
 def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
@@ -4928,7 +5060,7 @@ def _readHitTester(xmlCtx, section, subsectionName, optional=False):
     if IS_BASEAPP or IS_WEB:
         return
     else:
-        subsection = _xml.getSubsection(xmlCtx, section, subsectionName, throwIfMissing=False)
+        subsection = _xml.getSubsection(xmlCtx, section, subsectionName, throwIfMissing=False) if subsectionName else section
         if subsection is None:
             if optional:
                 return
@@ -6280,16 +6412,47 @@ def _readImpactParams(xmlCtx, section, paramName):
         return params
 
 
+def _readBrokenTrackLosses(xmlCtx, section):
+    if not section.has_key('brokenTrackLosses'):
+        return {'enginePowerLoss': None,
+         'fwMaxSpeedLoss': None,
+         'bkMaxSpeedLoss': None,
+         'rotationSpeedLoss': None}
+    else:
+        ctx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, 'brokenTrackLosses')
+
+        def readLoss(paramName):
+            return None if subsection[paramName] is None else _xml.readTupleOfFloats(ctx, subsection, paramName)
+
+        return {'enginePowerLoss': readLoss('enginePowerLoss'),
+         'fwMaxSpeedLoss': readLoss('fwMaxSpeedLoss'),
+         'bkMaxSpeedLoss': readLoss('bkMaxSpeedLoss'),
+         'rotationSpeedLoss': readLoss('rotationSpeedLoss')}
+
+
+def _validateBrokenTrackLosses(xmlCtx, vehType):
+    if vehType.isWheeledVehicle:
+        return
+    else:
+        chassisPhysics = vehType.xphysics['detailed']['chassis']
+        ctx = (xmlCtx, 'physics/detailed/chassis')
+        for chassis in vehType.chassis:
+            maxLossesCount = sum((2 for trackPair in chassis.trackPairs if trackPair.breakMode == TrackBreakMode.SLOW))
+            brokenTrackLosses = chassisPhysics[chassis.name]['brokenTrackLosses']
+            chassisCtx = (ctx, chassis.name)
+            for lossName, losses in brokenTrackLosses.iteritems():
+                if losses is None:
+                    brokenTrackLosses[lossName] = (0.0,) * maxLossesCount
+                if len(losses) != maxLossesCount:
+                    _xml.raiseWrongXml((chassisCtx, 'brokenTrackLosses'), lossName, '%d floats expected' % maxLossesCount)
+
+        return
+
+
 def _readBrokenWheelLosses(xmlCtx, section, axleIsLeading, axleCanBeRised, wheelRiseHeight):
 
     def readLoss(paramName, minCount):
-        if section[paramName] is None:
-            return (0.0,) * minCount
-        else:
-            loss = _xml.readTupleOfFloats(xmlCtx, section, paramName)
-            if len(loss) < minCount:
-                _xml.raiseWrongXml(xmlCtx, paramName, 'at least %d floats expected' % minCount)
-            return loss
+        return (0.0,) * minCount if section[paramName] is None else _xml.readTupleOfFloats(xmlCtx, section, paramName, count=minCount)
 
     leadingAxleCount = len([ v for v in axleIsLeading if v is True ])
     groundedAxleCount = len([ v for v in axleCanBeRised if v is False ]) if wheelRiseHeight > 0.0 else len(axleCanBeRised)
@@ -6307,6 +6470,23 @@ def _readOptDevsOverrides(xmlCtx, section):
                 optDevsOverrides.setdefault(optDevName, {})[factorName] = factor
 
         return optDevsOverrides
+
+
+def _readPostProgressionPricesOverrides(xmlCtx, section):
+    if section is None:
+        return {}
+    else:
+        postProgressionPricesOverrides = {}
+        for sname, _ in section.items():
+            if sname not in POST_PROGRESSION_ALL_PRICES:
+                raise SoftException('Price tag <%s> is incorrect. It should be explicitly declared in POST_PROGRESSION_ALL_PRICES' % sname)
+            postProgressionPricesOverrides[sname] = _xml.readPostProgressionPrice(xmlCtx, section, sname)
+            priceConstants = [(POST_PROGRESSION_UNLOCK_MODIFICATIONS_PRICES, ALLOWED_CURRENCIES_FOR_TREE_STEP), (POST_PROGRESSION_BUY_MODIFICATIONS_PRICES, ALLOWED_CURRENCIES_FOR_BUY_MODIFICATION_STEP), ((CUSTOM_ROLE_SLOT_CHANGE_PRICE,), ALLOWED_CURRENCIES_FOR_CUSTOM_ROLE_SLOT_CHANGE)]
+            for names, currencies in priceConstants:
+                if sname in names and not currencies.issuperset(postProgressionPricesOverrides[sname].keys()):
+                    raise SoftException('Wrong currency for subsection: {}, ctx: {}'.format(sname, xmlCtx))
+
+        return postProgressionPricesOverrides
 
 
 def _descrByID(descrList, id):

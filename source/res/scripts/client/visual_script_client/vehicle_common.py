@@ -5,7 +5,7 @@ from visual_script import ASPECT
 from visual_script.dependency import dependencyImporter
 from visual_script.tunable_event_block import TunableEventBlock
 TriggersManager = dependencyImporter('TriggersManager')
-edgeCases = {'track': ('leftTrack', 'rightTrack'),
+edgeCases = {'track': ('leftTrack0', 'rightTrack0', 'leftTrack1', 'rightTrack1'),
  'radioman': ('radioman1', 'radioman2'),
  'gunner': ('gunner1', 'gunner2'),
  'loader': ('loader1', 'loader2'),

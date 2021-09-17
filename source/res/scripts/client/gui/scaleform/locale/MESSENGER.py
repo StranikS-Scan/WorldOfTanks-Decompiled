@@ -422,7 +422,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_VEHICLESACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/vehiclesAccrued'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_VEHICLESDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/vehiclesDebited'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_VEHICLESRENTED = '#messenger:serviceChannelMessages/invoiceReceived/vehiclesRented'
-    SERVICECHANNELMESSAGES_INVOICERECEIVED_VEHICLESRENTED_BONUS = '#messenger:serviceChannelMessages/invoiceReceived/vehiclesRented/bonus'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_SLOTSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/slotsAccrued'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_SLOTSDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/slotsDebited'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_BERTHSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/berthsAccrued'
@@ -552,9 +551,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_REMOVE = '#messenger:serviceChannelMessages/sysMsg/titles/remove'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_REPAIR = '#messenger:serviceChannelMessages/sysMsg/titles/repair'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_CUSTOMIZATION = '#messenger:serviceChannelMessages/sysMsg/titles/customization'
-    SERVICECHANNELMESSAGES_SYSMSG_TITLES_PRIMETIME = '#messenger:serviceChannelMessages/sysMsg/titles/primeTime'
-    SERVICECHANNELMESSAGES_SYSMSG_TITLES_RANKEDBATTLESAVAILABLE = '#messenger:serviceChannelMessages/sysMsg/titles/rankedBattlesAvailable'
-    SERVICECHANNELMESSAGES_SYSMSG_TITLES_RANKEDBATTLESNOTSET = '#messenger:serviceChannelMessages/sysMsg/titles/rankedBattlesNotSet'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_PAYMENTMETHODLINK = '#messenger:serviceChannelMessages/sysMsg/titles/paymentMethodLink'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_PAYMENTMETHODUNLINK = '#messenger:serviceChannelMessages/sysMsg/titles/paymentMethodUnlink'
     SERVICECHANNELMESSAGES_PREBATTLE_BATTLETYPE_TOURNAMENT = '#messenger:serviceChannelMessages/prebattle/battleType/tournament'
@@ -1002,6 +998,10 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SELECTABLECREWBOOK_BROCHURE = '#messenger:serviceChannelMessages/selectableCrewbook/brochure'
     SERVICECHANNELMESSAGES_VEHICLEPOSTPROGRESSION_DISCARDALLPAIRSMODIFICATION_BODY = '#messenger:serviceChannelMessages/vehiclePostProgression/discardAllPairsModification/body'
     SERVICECHANNELMESSAGES_VEHICLEPOSTPROGRESSION_DISCARDALLPAIRSMODIFICATION_TITLE = '#messenger:serviceChannelMessages/vehiclePostProgression/discardAllPairsModification/title'
+    SERVICECHANNELMESSAGES_VEHICLEPOSTPROGRESSION_PREBATTLESWITCHTOGGLED_SHELLS_CONSUMABLES_SWITCH = '#messenger:serviceChannelMessages/vehiclePostProgression/prebattleSwitchToggled/shells_consumables_switch'
+    SERVICECHANNELMESSAGES_VEHICLEPOSTPROGRESSION_PREBATTLESWITCHTOGGLED_OPT_DEV_BOOSTERS_SWITCH = '#messenger:serviceChannelMessages/vehiclePostProgression/prebattleSwitchToggled/opt_dev_boosters_switch'
+    SERVICECHANNELMESSAGES_VEHICLEPOSTPROGRESSION_PREBATTLESWITCHTOGGLED_ENABLED = '#messenger:serviceChannelMessages/vehiclePostProgression/prebattleSwitchToggled/enabled'
+    SERVICECHANNELMESSAGES_VEHICLEPOSTPROGRESSION_PREBATTLESWITCHTOGGLED_DISABLED = '#messenger:serviceChannelMessages/vehiclePostProgression/prebattleSwitchToggled/disabled'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

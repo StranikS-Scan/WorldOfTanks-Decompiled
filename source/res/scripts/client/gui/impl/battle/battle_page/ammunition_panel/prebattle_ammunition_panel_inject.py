@@ -9,12 +9,13 @@ from gui.Scaleform.daapi.view.meta.PrebattleAmmunitionPanelViewMeta import Preba
 from gui.Scaleform.framework.entities.inject_component_adaptor import hasAliveInject
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.impl.gen.view_models.views.battle.battle_page.prebattle_ammunition_panel_view_model import State
+from gui.shared.utils.MethodsRules import MethodsRules
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 
-class PrebattleAmmunitionPanelInject(PrebattleAmmunitionPanelViewMeta, IPrebattleSetupsListener, IAmmoListener, IAbstractPeriodView):
+class PrebattleAmmunitionPanelInject(MethodsRules, PrebattleAmmunitionPanelViewMeta, IPrebattleSetupsListener, IAmmoListener, IAbstractPeriodView):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __slots__ = ('__currShellCD', '__nextShellCD', '__state', '__timeLeft')
+    __slots__ = ('__currShellCD', '__nextShellCD', '__state', '__timeLeft', '__isViewLoaded', '__isViewActive')
 
     def __init__(self):
         super(PrebattleAmmunitionPanelInject, self).__init__()
@@ -22,9 +23,16 @@ class PrebattleAmmunitionPanelInject(PrebattleAmmunitionPanelViewMeta, IPrebattl
         self.__nextShellCD = None
         self.__state = State.BATTLELOADING
         self.__timeLeft = -1
+        self.__isViewLoaded = False
+        self.__isViewActive = False
         return
 
+    @property
+    def isActive(self):
+        return self.__isViewActive and self.__isViewLoaded
+
     def onViewIsHidden(self):
+        self.__isViewActive = False
         self._destroyInjected()
 
     @hasAliveInject()
@@ -34,14 +42,17 @@ class PrebattleAmmunitionPanelInject(PrebattleAmmunitionPanelViewMeta, IPrebattl
         self._injectView.updateState(self.__state)
         self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL)
 
+    @MethodsRules.delayable('showSetupsView')
     @hasAliveInject()
     def setCurrentShellCD(self, shellCD):
         self._injectView.setCurrentShellCD(shellCD)
 
+    @MethodsRules.delayable('showSetupsView')
     @hasAliveInject()
     def setNextShellCD(self, shellCD):
         self._injectView.setNextShellCD(shellCD)
 
+    @MethodsRules.delayable()
     def showSetupsView(self, vehicle, isArenaLoaded=False):
         self.as_showS()
         self.__updateCurrentState(isArenaLoaded)
@@ -50,6 +61,7 @@ class PrebattleAmmunitionPanelInject(PrebattleAmmunitionPanelViewMeta, IPrebattl
         self._createInjectView(vehicle, self.__currShellCD, self.__nextShellCD, self.__state)
         if self.__timeLeft and self.__state == State.BATTLELOADING:
             self._injectView.setTimer(self.__timeLeft)
+        self.__isViewActive = True
 
     @hasAliveInject(deadUnexpected=True)
     def updateVehicleSetups(self, vehicle):
@@ -62,6 +74,7 @@ class PrebattleAmmunitionPanelInject(PrebattleAmmunitionPanelViewMeta, IPrebattl
 
     @hasAliveInject(deadUnexpected=True)
     def hideSetupsView(self):
+        self.__isViewActive = False
         self.as_hideS(True)
 
     def setCountdown(self, state, timeLeft):
@@ -79,6 +92,12 @@ class PrebattleAmmunitionPanelInject(PrebattleAmmunitionPanelViewMeta, IPrebattl
             self._injectView.setTimer(self.__timeLeft)
         return
 
+    def _dispose(self):
+        self._destroyInjected()
+        self.clear()
+        self.__isViewActive = False
+        super(PrebattleAmmunitionPanelInject, self)._dispose()
+
     def _onPopulate(self):
         pass
 
@@ -86,10 +105,15 @@ class PrebattleAmmunitionPanelInject(PrebattleAmmunitionPanelViewMeta, IPrebattl
         return PrebattleAmmunitionPanelView(vehicle, *args)
 
     def _addInjectContentListeners(self):
+        self._injectView.onViewLoaded += self.__onViewLoaded
         self._injectView.onSwitchLayout += self.__onSwitchLayout
 
     def _removeInjectContentListeners(self):
         self._injectView.onSwitchLayout -= self.__onSwitchLayout
+        self._injectView.onViewLoaded -= self.__onViewLoaded
+
+    def __onViewLoaded(self):
+        self.__isViewLoaded = True
 
     def __onSwitchLayout(self, groupID, layoutIdx):
         self.__sessionProvider.shared.prebattleSetups.switchLayout(groupID, layoutIdx)

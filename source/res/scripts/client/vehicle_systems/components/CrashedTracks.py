@@ -6,6 +6,8 @@ import Math
 import BigWorld
 from cgf_obsolete_script.auto_properties import AutoProperty
 from cgf_obsolete_script.py_component import Component
+from items.components.component_constants import MAIN_TRACK_PAIR_IDX
+from items.vehicle_items import CHASSIS_ITEM_TYPE
 from vehicle_systems import model_assembler
 from vehicle_systems.tankStructure import getPartModelsFromDesc, TankPartNames, ModelsSetParams
 from vehicle_systems.stricted_loading import loadingPriority, makeCallbackWeak
@@ -139,11 +141,21 @@ class CrashedTrackController(Component):
             hideRightTrack = True
         else:
             hideLeftTrack, hideRightTrack = self.__flags & 1, self.__flags & 2
+        trackIndicies = []
+        tracksPresent = self.__vehicleDesc.chassis.tracks is not None
+        if self.__vehicleDesc.chassis.chassisType == CHASSIS_ITEM_TYPE.MONOLITHIC and tracksPresent:
+            trackIndicies = list(xrange(len(self.__vehicleDesc.chassis.tracks.trackPairs)))
+        elif tracksPresent:
+            trackIndicies = [MAIN_TRACK_PAIR_IDX]
         if self.baseTracksComponent is not None and self.baseTracksComponent.valid:
-            self.baseTracksComponent.disableTrack(hideLeftTrack, hideRightTrack)
+            for i in trackIndicies:
+                self.baseTracksComponent.disableTrack(hideLeftTrack, hideRightTrack, i)
+
         if self.__fashion is not None:
-            self.__fashion.changeTrackVisibility(True, hideLeftTrack)
-            self.__fashion.changeTrackVisibility(False, hideRightTrack)
+            for i in trackIndicies:
+                self.__fashion.changeTrackVisibility(True, hideLeftTrack, i)
+                self.__fashion.changeTrackVisibility(False, hideRightTrack, i)
+
         return
 
     def __applyVisibilityMask(self):

@@ -7,7 +7,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_universal_level_8	</postProgressionTree>
+  <postProgressionTree>	role_LT_universal	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	72.4	</forward>
@@ -119,9 +119,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-0.647576 0.399119 2.02613	</anchorPosition>
-        <anchorDirection>	0.00175373 0.869476 0.493971	</anchorDirection>
         <tags>	formfactor_square	</tags>
+        <anchorShift>	-0.009481	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -132,9 +131,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-0.153605 0.350122 -2.69632	</anchorPosition>
-        <anchorDirection>	0.0584357 0.813313 -0.578885	</anchorDirection>
         <tags>	formfactor_square	</tags>
+        <anchorShift>	-0.009473	</anchorShift>
       </slot>
       <slot>
         <slotType>	fixedEmblem	</slotType>
@@ -816,6 +814,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <repairTime>	5.71428585	</repairTime>
     </Chassis_G120_M41_90_GrandFinal>
   </chassis>
   <turrets0>
@@ -951,9 +950,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.377962 0.790878 0.624485	</anchorPosition>
-          <anchorDirection>	0.00173188 0.953278 0.30209	</anchorDirection>
           <tags>	formfactor_square	</tags>
+          <anchorShift>	-0.009480	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -971,9 +969,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	-0.795404 0.58677 0.524548	</anchorPosition>
-          <anchorDirection>	-0.706847 0.565941 0.424357	</anchorDirection>
           <tags>	formfactor_square	</tags>
+          <anchorShift>	-0.009478	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -991,9 +988,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.923044 0.540012 -0.763556	</anchorPosition>
-          <anchorDirection>	0.956939 0.104259 -0.270922	</anchorDirection>
           <tags>	formfactor_square	</tags>
+          <anchorShift>	-0.009479	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1011,9 +1007,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.000430159 0.408209 -2.43787	</anchorPosition>
-          <anchorDirection>	-0.000377982 -0.0010043 -0.999999	</anchorDirection>
           <tags>	formfactor_square	</tags>
+          <anchorShift>	-0.009482	</anchorShift>
         </slot>
         <slot>
           <slotType>	fixedEmblem	</slotType>

@@ -79,6 +79,7 @@ def process(func, stepCallback=lambda stop: None):
 
 def async(func, cbname='callback', cbwrapper=lambda x: x):
 
+    @wraps(func)
     def wrapper(*args, **kwargs):
 
         def caller(callback):

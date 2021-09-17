@@ -417,8 +417,6 @@ class BootcampMarkersManager(object):
         self.__entitiesParams = None
         self.__markersParams = None
         self.__markers = {}
-        self.__arena = None
-        self.__arenaSubscribed = False
         self.__markerEvents = {}
         self.__triggerID = 0
         self.__markerSoundShow = None
@@ -428,10 +426,9 @@ class BootcampMarkersManager(object):
             self.replayCallbacks = []
         return
 
-    def init(self, entitiesParams, markers, bootcampGui):
+    def init(self, entitiesParams, bootcampGui):
         LOG_DEBUG_DEV_BOOTCAMP('BootcampMarkers.init')
         self.__entitiesParams = entitiesParams
-        self.__markersParams = markers
         self.__gui = bootcampGui
         if not BattleReplay.g_replayCtrl.isPlaying:
             TriggersManager.g_manager.addListener(self)
@@ -452,9 +449,6 @@ class BootcampMarkersManager(object):
         self.__entitiesParams = None
         if self.__markersParams is not None:
             self.__markersParams = None
-        if self.__arenaSubscribed is True and self.__arena is not None:
-            self.__arena = None
-            self.__arenaSubscribed = False
         return
 
     def start(self):

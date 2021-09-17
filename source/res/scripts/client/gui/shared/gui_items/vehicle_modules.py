@@ -76,6 +76,9 @@ class VehicleChassis(VehicleModule):
     def hasAutoSiege(self):
         return g_paramsCache.isChassisAutoSiege(self.intCD)
 
+    def isTrackWithinTrack(self):
+        return g_paramsCache.isTrackWithinTrack(self.intCD)
+
     @property
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_WHEELEDCHASSIS if self.isWheeledChassis() else RES_ICONS.MAPS_ICONS_MODULES_CHASSIS
@@ -88,10 +91,10 @@ class VehicleChassis(VehicleModule):
     def getExtraIconInfo(self, vehDescr=None):
         if self.isHydraulicChassis():
             if self.isWheeledChassis():
-                return RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICWHEELEDCHASSISICON
-            return RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON
+                return backport.image(R.images.gui.maps.icons.modules.hydraulicWheeledChassisIcon())
+            return backport.image(R.images.gui.maps.icons.modules.hydraulicChassisIcon())
         else:
-            return None
+            return backport.image(R.images.gui.maps.icons.modules.trackWithinTrack()) if self.isTrackWithinTrack() else None
 
     def getGUIEmblemID(self):
         return FITTING_TYPES.VEHICLE_WHEELED_CHASSIS if self.isWheeledChassis() else super(VehicleChassis, self).getGUIEmblemID()
@@ -113,7 +116,13 @@ class VehicleTurret(VehicleModule):
         if vehicle is None:
             return (False, 'not for current vehicle')
         else:
-            installPossible, reason = vehicle.descriptor.mayInstallTurret(self.intCD, gunCD)
+            optDevicesLayouts = None
+            if vehicle.optDevices.setupLayouts.capacity > 1:
+                optDevicesLayouts = []
+                for setup in vehicle.optDevices.setupLayouts.setups.itervalues():
+                    optDevicesLayouts.append(setup.getIntCDs())
+
+            installPossible, reason = vehicle.descriptor.mayInstallTurret(self.intCD, gunCD, optDevicesLayouts=optDevicesLayouts)
             return (False, 'need gun') if not installPossible and reason == 'not for this vehicle type' else (installPossible, reason)
 
     def getInstalledVehicles(self, vehicles):

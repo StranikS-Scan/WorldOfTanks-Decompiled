@@ -60,7 +60,7 @@ class CrewSkinsCache(object):
     def initHistoricalSettings(self):
         self.__isHistoricallyAccurate, self.__isHistoricallyAccurateNeedToSync = AccountSettings.getSettings(CREW_SKINS_HISTORICAL_VISIBLE)
         if self.__isHistoricallyAccurateNeedToSync:
-            self.__isHistoricallyAccurate = self.settingsCore.getSetting(GAME.CUSTOMIZATION_DISPLAY_TYPE) == 0
+            self.changeHistoricalAccurate(self.settingsCore.getSetting(GAME.CUSTOMIZATION_DISPLAY_TYPE) == 0)
 
     def addViewedItem(self, skinID):
         self.__viewedItems.add(int(skinID))
@@ -370,7 +370,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
 class PersonalCaseDataProvider(object):
     itemsCache = dependency.descriptor(IItemsCache)
-    lobbyContext = dependency.instance(ILobbyContext)
+    lobbyContext = dependency.descriptor(ILobbyContext)
     bootcamp = dependency.descriptor(IBootcampController)
 
     def __init__(self, tmanInvID):

@@ -69,7 +69,8 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
 
     def _addListeners(self):
         super(VehiclePostProgressionCfgView, self)._addListeners()
-        g_clientUpdateManager.addCallbacks({'stats.freeXP': self._updateData})
+        g_clientUpdateManager.addCallbacks({'stats.freeXP': self._updateData,
+         'cache.mayConsumeWalletResources': self._updateData})
         self.__cmpBasket.onChange += self.__onCmpBasketChange
         self.__cmpBasket.onSwitchChange += self._updateData
         progressionInjectView = self._progressionInject.getInjectView()
@@ -130,4 +131,4 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
 
     def __goToHeroTank(self):
         ctx = self._exitEvent.ctx
-        shared_events.goToHeroTankOnScene(vehTypeCompDescr=ctx.get('itemCD'), previewAlias=ctx.get('previewAlias'), previewBackCb=ctx.get('previewBackCb'))
+        shared_events.goToHeroTankOnScene(vehTypeCompDescr=ctx.get('itemCD'), previewAlias=ctx.get('previewAlias'), previewBackCb=ctx.get('previewBackCb'), previousBackAlias=ctx.get('previousBackAlias'), hangarVehicleCD=ctx.get('hangarVehicleCD'))

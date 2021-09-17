@@ -50,9 +50,43 @@ def writeTrackBasicParams(trackBasicParams, section, cache):
         return
     else:
         shared_writers.writeLodDist(trackBasicParams.lodDist, section, 'tracks/lodDist', cache)
-        _xml.rewriteString(section, 'tracks/leftMaterial', trackBasicParams.leftMaterial)
-        _xml.rewriteString(section, 'tracks/rightMaterial', trackBasicParams.rightMaterial)
-        _xml.rewriteFloat(section, 'tracks/textureScale', trackBasicParams.textureScale)
+        if len(trackBasicParams.trackPairs) == 1:
+            pair = trackBasicParams.trackPairs[component_constants.MAIN_TRACK_PAIR_IDX]
+            __writeTrackPairParams(pair, section['tracks'])
+        else:
+            for sname, subsection in _xml.getChildren(None, section, 'tracks'):
+                if sname != 'trackPair':
+                    continue
+                index = _xml.readIntOrNone(None, subsection, 'trackPairIdx')
+                if index is None:
+                    continue
+                __writeTrackPairParams(trackBasicParams.trackPairs[index], subsection)
+
+        return
+
+
+def __writeTrackPairParams(trackPairParams, section):
+    _xml.rewriteString(section, 'leftMaterial', trackPairParams.leftMaterial)
+    _xml.rewriteString(section, 'rightMaterial', trackPairParams.rightMaterial)
+    _xml.rewriteFloat(section, 'textureScale', trackPairParams.textureScale)
+    __writeDebris(trackPairParams.tracksDebris, section)
+
+
+def __writeDebris(tracksDebris, section):
+    if tracksDebris is None:
+        return
+    else:
+        for sname, subsection in section.items():
+            if sname != 'trackDebris':
+                continue
+            isLeft = _xml.readBool(None, subsection, 'isLeft', True)
+            tracksDebrisParams = tracksDebris.left if isLeft else tracksDebris.right
+            if tracksDebrisParams is not None:
+                _xml.rewriteString(subsection, 'destructionEffect', tracksDebrisParams.destructionEffect)
+                physicalParams = tracksDebrisParams.physicalParams
+                if physicalParams is not None and physicalParams.hingeJointStiffness is not None:
+                    _xml.rewriteFloat(subsection, 'physicalParams/hingeJointStiffness', physicalParams.hingeJointStiffness)
+
         return
 
 
@@ -137,37 +171,33 @@ def writeSplineDesc(splineDesc, section, cache):
         return
     else:
 
-        def writeOneSectionParams(item, sect):
+        def writeTrackPairParams(item, section):
             segment2ModelLeft = item.segment2ModelLeft()
             segment2ModelRight = item.segment2ModelRight()
-            _xml.rewriteString(sect, 'segmentModelLeft', item.segmentModelLeft())
-            _xml.rewriteString(sect, 'segmentModelRight', item.segmentModelRight())
+            _xml.rewriteInt(section, 'trackPairIdx', item.trackPairIdx)
+            _xml.rewriteString(section, 'segmentModelLeft', item.segmentModelLeft())
+            _xml.rewriteString(section, 'segmentModelRight', item.segmentModelRight())
             if segment2ModelLeft is not None:
-                _xml.rewriteString(sect, 'segment2ModelLeft', segment2ModelLeft)
+                _xml.rewriteString(section, 'segment2ModelLeft', segment2ModelLeft)
             if segment2ModelRight is not None:
-                _xml.rewriteString(sect, 'segment2ModelRight', segment2ModelRight)
-            _xml.rewriteString(sect, 'left', item.leftDesc[0][0])
-            _xml.rewriteString(sect, 'right', item.rightDesc[0][0])
-            _xml.rewriteFloat(sect, 'segmentLength', item.editorData.leftDesc[0][2])
-            _xml.rewriteFloat(sect, 'segmentOffset', item.editorData.leftDesc[0][3])
-            if item.editorData.leftDesc[0][4] != 0.0:
-                _xml.rewriteFloat(sect, 'segment2Offset', item.editorData.leftDesc[0][4])
-            shared_writers.writeLodDist(item.lodDist, sect, 'lodDist', cache)
-            _xml.rewriteInt(sect, 'atlas/UTiles', item.atlasUTiles)
-            _xml.rewriteInt(sect, 'atlas/VTiles', item.atlasVTiles)
+                _xml.rewriteString(section, 'segment2ModelRight', segment2ModelRight)
+            _xml.rewriteString(section, 'left', item.leftDesc)
+            _xml.rewriteString(section, 'right', item.rightDesc)
+            _xml.rewriteFloat(section, 'segmentLength', item.segmentLength)
+            _xml.rewriteFloat(section, 'segmentOffset', item.segmentOffset)
+            if item.segment2Offset != 0.0:
+                _xml.rewriteFloat(section, 'segment2Offset', item.segment2Offset)
+            _xml.rewriteInt(section, 'atlas/UTiles', item.atlasUTiles)
+            _xml.rewriteInt(section, 'atlas/VTiles', item.atlasVTiles)
             return
 
-        newSection = section['splineDesc'] if section.has_key('splineDesc') else section.createSection('splineDesc')
-        if len(splineDesc.editorData.leftDesc) == 1:
-            writeOneSectionParams(splineDesc, newSection)
-        else:
-            if newSection.has_key('multipleTracks'):
-                multipleTracks = newSection['multipleTracks']
-            else:
-                multipleTracks = newSection.createSection('multipleTracks')
-            for sname, node in multipleTracks.items():
-                writeOneSectionParams(splineDesc, node)
+        if section.has_key('splineDesc'):
+            section.deleteSection('splineDesc')
+        newSection = section.createSection('splineDesc')
+        for trackPair in splineDesc.trackPairs.values():
+            writeTrackPairParams(trackPair, newSection.createSection('trackPair'))
 
+        shared_writers.writeLodDist(splineDesc.lodDist, newSection, 'lodDist', cache)
         return
 
 

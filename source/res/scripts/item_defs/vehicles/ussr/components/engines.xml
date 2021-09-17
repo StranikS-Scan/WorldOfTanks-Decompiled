@@ -151,7 +151,8 @@
     <V_64S>	229	</V_64S>
     <V-2IS_R1_SP>	230	</V-2IS_R1_SP>
     <M_40_1200_A>	231	</M_40_1200_A>
-    <TD-12_cl>	236	</TD-12_cl>
+    <V_12_6V_1>	234	</V_12_6V_1>
+    <General_Motors_6046_ussr>	237	</General_Motors_6046_ussr>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -162,6 +163,7 @@
     <V-2K_SH>	324	</V-2K_SH>
     <V-2-54M_SH>	325	</V-2-54M_SH>
     <M-40-2V_SH>	326	</M-40-2V_SH>
+    <V_2K>	327	</V_2K>
     <V_2>	328	</V_2>
     <V-55U_FL>	501	</V-55U_FL>
     <M-80_prem_bootcamp>	64001	</M-80_prem_bootcamp>
@@ -296,6 +298,23 @@
       <rpm_min>	386	</rpm_min>
       <rpm_max>	2040	</rpm_max>
     </V_2_34E>
+    <General_Motors_6046_ussr>
+      <userString>	#ussr_vehicles:General_Motors_6046_ussr	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	13500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	420	</power>
+      <weight>	549	</weight>
+      <maxHealth>	176	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	212	</rpm_min>
+      <rpm_max>	2274	</rpm_max>
+    </General_Motors_6046_ussr>
     <M-17F>
       <userString>	#ussr_vehicles:M-17F	</userString>
       <tags>	gasoline	</tags>
@@ -721,6 +740,23 @@
       <rpm_min>	386	</rpm_min>
       <rpm_max>	2040	</rpm_max>
     </V-2K>
+    <V_2K>
+      <userString>	#ussr_vehicles:V_2K	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	23050	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	750	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
+    </V_2K>
     <V-4>
       <userString>	#ussr_vehicles:V-4	</userString>
       <tags>	diesel	</tags>
@@ -1332,6 +1368,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </V-12-6V>
+    <V_12_6V_1>
+      <userString>	#ussr_vehicles:V_12_6V_1	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	955	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
+    </V_12_6V_1>
     <V-12-5M>
       <userString>	#ussr_vehicles:V-12-5M	</userString>
       <tags>	diesel	</tags>
@@ -2483,23 +2536,6 @@
       <rpm_min>	365	</rpm_min>
       <rpm_max>	2104	</rpm_max>
     </TD-12>
-    <TD-12_cl>
-      <userString>	#ussr_vehicles:TD-12	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <notInShop>	true	</notInShop>
-      <price>	132000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	580	</power>
-      <weight>	1000	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	365	</rpm_min>
-      <rpm_max>	2104	</rpm_max>
-    </TD-12_cl>
     <_4TD>
       <userString>	#ussr_vehicles:_4TD	</userString>
       <tags>	diesel	</tags>
@@ -3086,8 +3122,8 @@
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
+      <rpm_min>	373	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
       <invulnerable>	True	</invulnerable>
       <notInShop>	True	</notInShop>
     </V-2-34_MapsTraining_Player_MT_1>
@@ -3104,8 +3140,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
       <invulnerable>	True	</invulnerable>
       <notInShop>	True	</notInShop>
     </V-54K_MapsTraining_Player_MT_2>

@@ -5,9 +5,8 @@ import typing
 from enum import unique, Enum
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.periodic_battles.models import CalendarStatusVO
-from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared.formatters import time_formatters, text_styles
+from gui.periodic_battles.models import AlertData, PrimeTimeStatus
 from helpers import dependency, i18n, time_utils, int2roman
 from items import vehicles
 from items.components.supply_slot_categories import SlotCategories
@@ -408,7 +407,7 @@ def getAlertStatusVO(epicController=None):
     status, timeLeft, _ = epicController.getPrimeTimeStatus()
     showPrimeTimeAlert = status != PrimeTimeStatus.AVAILABLE
     hasAvailableServers = epicController.hasAvailablePrimeTimeServers()
-    return CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.epic_battle.widgetAlertMessageBlock.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=_getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None, isSimpleTooltip=False)
+    return AlertData(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.epic_battle.widgetAlertMessageBlock.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=_getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None, isSimpleTooltip=False)
 
 
 @dependency.replace_none_kwargs(epicController=IEpicBattleMetaGameController, connectionMgr=IConnectionManager)

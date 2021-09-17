@@ -4,10 +4,9 @@ from gui.Scaleform.genConsts.GAME_MESSAGES_CONSTS import GAME_MESSAGES_CONSTS
 from epic_constants import EPIC_BATTLE_TEAM_ID
 
 class EPIC_TIME_WWEVENTS(object):
-    EB_BATTLE_END = 'eb_time_over'
-    EB_STOP_TICKING = 'time_countdown_stop'
     EB_RESPAWN_COUNT_DOWN_SOUND_ID = {True: 'timer',
      False: 'timer_stop'}
+    EB_TIME_OVER = 'time_over'
 
 
 class EPIC_OVERTIME_SOUND_NOTIFICATIONS(object):

@@ -92,12 +92,16 @@ def getCurrentRealm(args=None):
 
 @dependency.replace_none_kwargs(marathonCtrl=IMarathonEventsController)
 def getMarathonPackage(args=None, marathonCtrl=None):
+    from gui.marathon.marathon_constants import MarathonState
     postfix = ''
     result = ''
     marathon = marathonCtrl.getPrimaryMarathon()
     if marathon is not None:
         currentStep, _ = marathon.getMarathonProgress()
         packageTemplate = marathon.packageTemplate
+        state = marathon.getState()
+        if state == MarathonState.FINISHED:
+            postfix = marathon.finishedPostfix
         result = packageTemplate.format(currentStep, postfix)
     return result
 

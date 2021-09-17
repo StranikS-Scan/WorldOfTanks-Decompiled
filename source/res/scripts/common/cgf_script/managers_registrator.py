@@ -63,10 +63,10 @@ class Rule(CGFComponent):
                 value.wrapper(self)
 
 
-def registerManager(manager):
+def registerManager(manager, presentInEditor=False):
 
     def wrapper(func):
-        CGF.registerManager(manager, False)
+        CGF.registerManager(manager, False, presentInEditor)
 
         def wrapper_self(self):
             CGF.createManager(manager, func(self), self.spaceID)
@@ -88,10 +88,10 @@ def generateRule(cls, category):
         raise SoftException(e.message + ':\n' + rule_class_definition)
 
 
-def autoregister(presentInAllWorlds=False, category=''):
+def autoregister(presentInAllWorlds=False, category='', presentInEditor=False):
 
     def manager_registrator(cls):
-        CGF.registerManager(cls, presentInAllWorlds)
+        CGF.registerManager(cls, presentInAllWorlds, presentInEditor)
         if presentInAllWorlds is False:
             generateRule(cls, category)
         return cls

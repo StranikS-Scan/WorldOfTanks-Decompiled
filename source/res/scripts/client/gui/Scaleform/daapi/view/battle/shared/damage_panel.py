@@ -27,7 +27,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control import avatar_getter
 _logger = logging.getLogger(__name__)
-_STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
+_STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealthFromServer',
  VEHICLE_VIEW_STATE.SPEED: 'as_updateSpeedS',
  VEHICLE_VIEW_STATE.CRUISE_MODE: 'as_setCruiseModeS',
  VEHICLE_VIEW_STATE.FIRE: 'as_setFireInVehicleS',
@@ -173,6 +173,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
         self.__statusAnimPlayers = {}
         self.__initialized = False
         self.__isWheeledTech = False
+        self.__isTrackWithinVehicle = False
         self.__stunDuration = 0
         self.__debuffDuration = 0
         self.__isRepairPointActive = False
@@ -288,7 +289,8 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
             return
 
     def _updateRepairingDevice(self, value):
-        self.as_updateRepairingDeviceS(*value)
+        deviceName, progress, seconds, isLimited = value
+        self.as_updateRepairingDeviceS(deviceName, progress, seconds, isLimited)
 
     def _updateCrewDeactivated(self, _):
         self.as_setCrewDeactivatedS()
@@ -304,6 +306,11 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
             healthProgress = normalizeHealthPercent(health, self.__maxHealth)
             self.as_updateHealthS(healthStr, healthProgress)
 
+    def _updateHealthFromServer(self, health):
+        if self.sessionProvider.shared.prebattleSetups.isSelectionStarted():
+            return
+        self._updateHealth(health)
+
     def _updateRepairPoint(self, value):
         self.__isRepairPointActive = bool(value.get('isInactivation', False))
 
@@ -317,6 +324,8 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
         self.as_resetS()
         if self.__isWheeledTech:
             self.__isWheeledTech = False
+        if self.__isTrackWithinVehicle:
+            self.__isTrackWithinVehicle = False
         self.hideStatusImmediate()
 
     def _updateStun(self, stunInfo):
@@ -399,6 +408,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
                 self.__isAutoRotationOff = flag != AUTO_ROTATION_FLAG.TURN_ON
                 self.__isAutoRotationShown = True
         self.__isWheeledTech = vehicle.isWheeledTech
+        self.__isTrackWithinVehicle = vehicle.isTrackWithinTrack
         prebattleVehicle = self.sessionProvider.shared.prebattleSetups.getPrebattleSetupsVehicle()
         if prebattleVehicle is not None:
             self.__maxHealth = prebattleVehicle.descriptor.maxHealth
@@ -408,7 +418,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
             health = vehicle.health
         healthStr = formatHealthProgress(health, self.__maxHealth)
         healthProgress = normalizeHealthPercent(health, self.__maxHealth)
-        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, not self.__isAutoRotationOff)
+        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, not self.__isAutoRotationOff, self.__isTrackWithinVehicle)
         if self.__isWheeledTech:
             self.as_setupWheeledS(vTypeDesc.chassis.generalWheelsAnimatorConfig.getNonTrackWheelsCount())
         self._updatePlayerInfo(vehicle.id)

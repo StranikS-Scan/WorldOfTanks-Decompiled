@@ -192,7 +192,8 @@
       </sounds>
       <deviceUserString>	#ingame_gui:devices/radio	</deviceUserString>
     </radioHealth>
-    <leftTrackHealth>	TrackHealth : TrackHealth	  <isLeft>	true	</isLeft>
+    <leftTrack0Health>	TrackHealth : TrackHealth	  <isLeft>	true	</isLeft>
+      <trackPairIdx>	0	</trackPairIdx>
       <sounds>
         <destroyed>	track_destroyed	</destroyed>
         <critical>	track_damaged	</critical>
@@ -200,8 +201,9 @@
         <functionalCanMove>	track_functional_can_move	</functionalCanMove>
       </sounds>
       <deviceUserString>	#ingame_gui:devices/left_track	</deviceUserString>
-    </leftTrackHealth>
-    <rightTrackHealth>	TrackHealth : TrackHealth	  <isLeft>	false	</isLeft>
+    </leftTrack0Health>
+    <rightTrack0Health>	TrackHealth : TrackHealth	  <isLeft>	false	</isLeft>
+      <trackPairIdx>	0	</trackPairIdx>
       <sounds>
         <destroyed>	track_destroyed	</destroyed>
         <critical>	track_damaged	</critical>
@@ -209,7 +211,7 @@
         <functionalCanMove>	track_functional_can_move	</functionalCanMove>
       </sounds>
       <deviceUserString>	#ingame_gui:devices/right_track	</deviceUserString>
-    </rightTrackHealth>
+    </rightTrack0Health>
     <gunHealth>	DamageMarker : GunHealth	  <sounds>
         <critical>	gun_damaged	</critical>
         <destroyed>	gun_destroyed	</destroyed>
@@ -327,8 +329,8 @@
       <ammoBayHealth>	ammoBay	</ammoBayHealth>
       <fuelTankHealth>	fuelTank	</fuelTankHealth>
       <radioHealth>	radio	</radioHealth>
-      <leftTrackHealth>	track	</leftTrackHealth>
-      <rightTrackHealth>	track	</rightTrackHealth>
+      <leftTrack0Health>	track	</leftTrack0Health>
+      <rightTrack0Health>	track	</rightTrack0Health>
       <gunHealth>	gun	</gunHealth>
       <turretRotatorHealth>	turretRotator	</turretRotatorHealth>
       <surveyingDeviceHealth>	surveyingDevice	</surveyingDeviceHealth>
@@ -741,7 +743,8 @@
       <continueTraceIfNoHit>	false	</continueTraceIfNoHit>
     </radio>
     <leftTrack>
-      <extra>	leftTrackHealth	</extra>
+      <extra>	leftTrack_Health	</extra>
+      <multiple>	true	</multiple>
       <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       <useArmorHomogenization>	false	</useArmorHomogenization>
       <useHitAngle>	false	</useHitAngle>
@@ -756,7 +759,8 @@
       <continueTraceIfNoHit>	false	</continueTraceIfNoHit>
     </leftTrack>
     <rightTrack>
-      <extra>	rightTrackHealth	</extra>
+      <extra>	rightTrack_Health	</extra>
+      <multiple>	true	</multiple>
       <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       <useArmorHomogenization>	false	</useArmorHomogenization>
       <useHitAngle>	false	</useHitAngle>

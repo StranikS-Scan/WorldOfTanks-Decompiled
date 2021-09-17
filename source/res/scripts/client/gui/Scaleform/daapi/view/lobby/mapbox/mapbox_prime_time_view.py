@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.meta.RankedPrimeTimeMeta import RankedPrimeTimeMet
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IMapboxController
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.periodic_battles.models import PrimeTimeStatus
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, time_formatters

@@ -84,8 +84,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	0.518554 0.352277 2.83057	</anchorPosition>
-        <anchorDirection>	0.0656705 0.881575 0.467454	</anchorDirection>
+        <anchorShift>	0.084687	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -98,8 +97,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-0.443662 0.622201 -2.00936	</anchorPosition>
-        <anchorDirection>	-0.000014 0.995697 -0.0926738	</anchorDirection>
+        <anchorShift>	0.104691	</anchorShift>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -788,6 +786,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <repairTime>	5.71428585	</repairTime>
     </Chassis_G119_Panzer58_BF>
   </chassis>
   <turrets0>
@@ -983,8 +982,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.00229872 0.768712 0.497081	</anchorPosition>
-          <anchorDirection>	0.065512 0.955133 0.288841	</anchorDirection>
+          <anchorShift>	0.034692	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -996,8 +994,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.000026 0.76271 -0.838197	</anchorPosition>
-          <anchorDirection>	-0.000014 0.96562 -0.259958	</anchorDirection>
+          <anchorShift>	0.034687	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1010,8 +1007,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.000022 0.264165 -1.41813	</anchorPosition>
-          <anchorDirection>	0.000000 0.036293 -0.999341	</anchorDirection>
+          <anchorShift>	0.044683	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1024,8 +1020,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	-0.818053 0.344108 0.823088	</anchorPosition>
-          <anchorDirection>	-0.833772 0.438903 0.334945	</anchorDirection>
+          <anchorShift>	0.084687	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1038,8 +1033,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.818096 0.344084 0.823084	</anchorPosition>
-          <anchorDirection>	0.833804 0.438877 0.3349	</anchorDirection>
+          <anchorShift>	0.084687	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>
@@ -1056,7 +1050,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_MT_sniper_level_8	</postProgressionTree>
+  <postProgressionTree>	role_MT_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	50	</forward>

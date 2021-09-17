@@ -38,7 +38,7 @@ from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.common import UseCrewBookProcessor
 from gui.shared.gui_items.processors.goodies import BoosterBuyer
 from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor, BCBuyAndInstallItemProcessor, OptDeviceInstaller
-from gui.shared.gui_items.processors.veh_post_progression import ChangeVehicleSetupEquipments, DiscardPairsProcessor, PurchasePairProcessor, PurchaseStepsProcessor, SetEquipmentSlotTypeProcessor
+from gui.shared.gui_items.processors.veh_post_progression import ChangeVehicleSetupEquipments, DiscardPairsProcessor, PurchasePairProcessor, PurchaseStepsProcessor, SetEquipmentSlotTypeProcessor, SwitchPrebattleAmmoPanelAvailability
 from gui.shared.gui_items.processors.module import ModuleSeller
 from gui.shared.gui_items.processors.module import ModuleUpgradeProcessor
 from gui.shared.gui_items.processors.module import MultipleModulesSeller
@@ -401,9 +401,6 @@ class InstallItemAction(BuyAction):
             proc = getInstallerProcessor(vehicle, item, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm)
             result = yield proc.request()
             SystemMessages.pushMessagesFromResult(result)
-            if result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
-                vehicle = self._itemsCache.items.getItemByCD(vehicle.intCD)
-                yield tryToLoadDefaultShellsLayout(vehicle)
         RequestState.received(state)
         yield lambda callback=None: callback
         return
@@ -833,6 +830,22 @@ class ChangeSetupEquipmentsIndex(AsyncGUIItemAction):
     @process
     def _action(self, callback):
         result = yield ChangeVehicleSetupEquipments(self.__vehicle, self.__groupID, self.__layoutIdx).request()
+        callback(result)
+
+
+class SwitchPrebattleAmmoPanelAvailabilityAction(AsyncGUIItemAction):
+    __slots__ = ('__vehicle', '__groupID', '__enabled')
+
+    def __init__(self, vehicle, groupID, enabled):
+        super(SwitchPrebattleAmmoPanelAvailabilityAction, self).__init__()
+        self.__vehicle = vehicle
+        self.__groupID = groupID
+        self.__enabled = enabled
+
+    @async
+    @process
+    def _action(self, callback):
+        result = yield SwitchPrebattleAmmoPanelAvailability(self.__vehicle, self.__groupID, self.__enabled).request()
         callback(result)
 
 

@@ -851,7 +851,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             self.__setActive(entry, False)
             return
         else:
-            if self.__isSPG:
+            if self.__isSPG or self._isInStrategicMode():
                 isSpotted = entry.getLocation() == VEHICLE_LOCATION.UNDEFINED
             else:
                 isSpotted = True

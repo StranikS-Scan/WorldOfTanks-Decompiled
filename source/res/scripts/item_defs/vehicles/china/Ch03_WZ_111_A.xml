@@ -7,7 +7,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_HT_break_level_8	</postProgressionTree>
+  <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	50	</forward>
@@ -112,8 +112,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-0.276137 0.329955 2.90443	</anchorPosition>
-        <anchorDirection>	-0.000030 0.854589 0.519306	</anchorDirection>
+        <anchorShift>	0.059026	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -125,8 +124,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	1.31418 0.205867 3.43311	</anchorPosition>
-        <anchorDirection>	0.000608588 0.854589 0.519305	</anchorDirection>
+        <anchorShift>	0.059028	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -138,8 +136,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-1.31408 0.205894 3.43311	</anchorPosition>
-        <anchorDirection>	0.000608663 0.854589 0.519305	</anchorDirection>
+        <anchorShift>	0.059025	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -151,8 +148,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	0.000004 0.638702 -2.21239	</anchorPosition>
-        <anchorDirection>	-0.000012 0.991521 0.129943	</anchorDirection>
+        <anchorShift>	0.019023	</anchorShift>
       </slot>
     </customizationSlots>
     <customization>
@@ -1018,6 +1014,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <repairTime>	6.85714293	</repairTime>
     </Chassis_Ch03_WZ_111_A>
   </chassis>
   <turrets0>
@@ -1151,8 +1148,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.00309166 0.763107 0.949838	</anchorPosition>
-          <anchorDirection>	0.00039099 0.985631 0.168911	</anchorDirection>
+          <anchorShift>	0.059025	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

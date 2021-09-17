@@ -9,6 +9,7 @@ class ModeSelectorTooltipsConstants(ViewModel):
     RANKED_CALENDAR_DAY_INFO_TOOLTIP = 'rankedCalendarDayInfoExtended'
     RANKED_STEP_TOOLTIP = 'rankedStep'
     RANKED_BATTLES_RANK_TOOLTIP = 'rankedBattlesRank'
+    RANKED_BATTLES_BONUS_TOOLTIP = 'rankedBattlesBonus'
     RANKED_BATTLES_LEAGUE_TOOLTIP = 'rankedBattlesLeague'
     RANKED_BATTLES_EFFICIENCY_TOOLTIP = 'rankedBattlesEfficiency'
     RANKED_BATTLES_POSITION_TOOLTIP = 'rankedBattlesPosition'

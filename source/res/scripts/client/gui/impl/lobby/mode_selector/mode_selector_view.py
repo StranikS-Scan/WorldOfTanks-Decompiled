@@ -6,7 +6,6 @@ import adisp
 from adisp import process
 from constants import QUEUE_TYPE
 from frameworks.wulf import ViewSettings, ViewFlags, WindowLayer, WindowStatus, ViewStatus
-from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -21,14 +20,16 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_3d_style_not_chosen_tooltip
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
+from gui.impl.lobby.mode_selector.battle_session_view import BattleSessionView
+from gui.impl.lobby.mode_selector.items import saveBattlePassStateForItems
 from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelectorDataProvider
 from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBattlePopover
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
-from gui.impl.lobby.mode_selector.tooltips.mode_selector_bonus_battles_tooltip import BonusBattlesTooltipView
+from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showBrowserOverlayView
 from gui.shared.events import FullscreenModeSelectorEvent, LoadViewEvent
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
@@ -61,8 +62,7 @@ class ModeSelectorView(ViewImpl):
     __tooltipByContentID = {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS),
-     R.views.lobby.battle_pass.tooltips.BattlePass3dStyleNotChosenTooltip(): BattlePass3dStyleNotChosenTooltip,
-     R.views.lobby.mode_selector.tooltips.BonusBattlesTooltip(): BonusBattlesTooltipView}
+     R.views.lobby.battle_pass.tooltips.BattlePass3dStyleNotChosenTooltip(): BattlePass3dStyleNotChosenTooltip}
     layoutID = R.views.lobby.mode_selector.ModeSelectorView()
     _areWidgetsVisible = False
 
@@ -106,6 +106,7 @@ class ModeSelectorView(ViewImpl):
              ModeSelectorTooltipsConstants.RANKED_BATTLES_LEAGUE_TOOLTIP,
              ModeSelectorTooltipsConstants.RANKED_BATTLES_EFFICIENCY_TOOLTIP,
              ModeSelectorTooltipsConstants.RANKED_BATTLES_POSITION_TOOLTIP,
+             ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
              ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
              ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP]:
                 return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=(None,))
@@ -117,6 +118,18 @@ class ModeSelectorView(ViewImpl):
     def createToolTipContent(self, event, contentID):
         if contentID == _R_SIMPLE_TOOLTIP():
             return SimpleTooltipContent(contentID, event.getArgument('header', ''), event.getArgument('body', ''), event.getArgument('note', ''), event.getArgument('alert', ''))
+        elif contentID == R.views.lobby.mode_selector.tooltips.SimplyFormatTooltip():
+            modeName = event.getArgument('modeName', '')
+            if modeName is None:
+                return
+            tooltipLocal = R.strings.mode_selector.mode.dyn(modeName)
+            if not tooltipLocal:
+                return
+            header = backport.text(tooltipLocal.battlePassTooltip.header())
+            body = backport.text(tooltipLocal.battlePassTooltip.body())
+            if not header:
+                return
+            return SimplyFormatTooltipView(header, body)
         else:
             tooltipClass = self.__tooltipByContentID.get(contentID)
             return tooltipClass() if tooltipClass else None
@@ -167,6 +180,7 @@ class ModeSelectorView(ViewImpl):
         self.viewModel.onShowMapSelectionClicked -= self.__showMapSelectionClickHandler
         self.viewModel.onShowWidgetsClicked -= self.__showWidgetsClickHandler
         self.viewModel.onInfoClicked -= self.__infoClickHandler
+        saveBattlePassStateForItems(self.__dataProvider.itemList)
         self.__dataProvider.onListChanged -= self.__dataProviderListChangeHandler
         self.__dataProvider.dispose()
         g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL}), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -227,6 +241,9 @@ class ModeSelectorView(ViewImpl):
             self.uiLogger.log(LOG_ACTIONS.CARD_CLICKED, size=event.get('size'), details=event.get('cardMediaSize'), isNew=modeSelectorItem.viewModel.getIsNew(), mode=modeSelectorItem.modeName, isSelected=modeSelectorItem.viewModel.getIsSelected())
             modeSelectorItem.handleClick()
             if modeSelectorItem.isSelectable:
+                specView = self.__gui.windowsManager.getViewByLayoutID(BattleSessionView.layoutID)
+                if modeSelectorItem.modeName != PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST and specView is not None:
+                    specView.destroyWindow()
                 self.__dataProvider.select(modeSelectorItem.modeName)
             self.uiLogger.log(LOG_ACTIONS.CLOSED, details=LOG_CLOSE_DETAILS.CARD_CLICKED)
             self.close()
@@ -252,8 +269,7 @@ class ModeSelectorView(ViewImpl):
             return
         else:
             self.uiLogger.log(LOG_ACTIONS.INFO_PAGE_ICON_CLICKED, isNew=modeSelectorItem.viewModel.getIsNew(), mode=modeSelectorItem.modeName)
-            url = GUI_SETTINGS.lookup(modeSelectorItem.infoPageKey)
-            showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
+            modeSelectorItem.handleInfoPageClick()
             return
 
     def __windowStatusChanged(self, uniqueID, newStatus):

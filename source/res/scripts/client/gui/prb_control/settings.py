@@ -359,8 +359,9 @@ class PRE_QUEUE_RESTRICTION(object):
     LIMIT_LEVEL = 'limits/level'
     LIMIT_VEHICLE_TYPE = 'limits/vehicleType'
     LIMIT_VEHICLE_CLASS = 'limits/vehicleClass'
-    MODE_DISABLED = 'mode/disabled'
+    MODE_NO_BATTLES = 'mode/noBattles'
     MODE_NOT_SET = 'mode/notSet'
+    MODE_NOT_AVAILABLE = 'mode/notAvailable'
     VEHICLE_WILL_BE_UNLOCKED = 'vehicle/willBeUnlocked'
 
 
@@ -441,6 +442,3 @@ class PRB_INVITE_STATE(CONST_CONTAINER):
 class PREBATTLE_PLAYERS_COMPARATORS(object):
     REGULAR = 1
     OBSERVERS_TO_BOTTOM = 2
-    BY_VEHICLE = 3
-    BY_STATE = 4
-    BY_PLAYER_NAME = 5

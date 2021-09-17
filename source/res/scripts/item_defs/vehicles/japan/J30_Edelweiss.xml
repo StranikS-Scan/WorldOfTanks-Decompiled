@@ -8,7 +8,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_MT_universal_level_8	</postProgressionTree>
+  <postProgressionTree>	role_MT_universal	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	60	</forward>
@@ -115,8 +115,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-1.74865 0.157297 0.262074	</anchorPosition>
-        <anchorDirection>	-0.999308 0.0361239 0.00888556	</anchorDirection>
+        <anchorShift>	0.030001	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -135,8 +134,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-0.517127 -0.097391 2.89229	</anchorPosition>
-        <anchorDirection>	-0.000008 0.663823 0.747889	</anchorDirection>
+        <anchorShift>	-0.000001	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -148,8 +146,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	1.75005 0.156444 0.269195	</anchorPosition>
-        <anchorDirection>	0.992114 -0.02812 0.122146	</anchorDirection>
+        <anchorShift>	0.029996	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -161,8 +158,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-0.528137 0.507258 -2.39404	</anchorPosition>
-        <anchorDirection>	-0.0103284 0.99803 0.0618837	</anchorDirection>
+        <anchorShift>	0.000008	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -174,8 +170,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	0.537842 0.501098 -2.39038	</anchorPosition>
-        <anchorDirection>	-0.0103284 0.99803 0.0618837	</anchorDirection>
+        <anchorShift>	0.000008	</anchorShift>
       </slot>
       <slot>
         <slotType>	fixedEmblem	</slotType>
@@ -788,6 +783,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <repairTime>	6.85714293	</repairTime>
     </Chassis_J30_Edelweiss>
   </chassis>
   <turrets0>
@@ -943,8 +939,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.000536376 0.76681 -0.994404	</anchorPosition>
-          <anchorDirection>	-0.0124645 0.995946 -0.0890884	</anchorDirection>
+          <anchorShift>	0.000007	</anchorShift>
         </slot>
         <slot>
           <slotType>	fixedEmblem	</slotType>

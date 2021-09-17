@@ -17,7 +17,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from uilogging.veh_post_progression.loggers import VehPostProgressionPrebattleSwitchPanelLogger
 
 class PrebattleAmmunitionPanelView(ViewImpl):
-    __slots__ = ('onSwitchLayout', '__ammunitionPanel', '__vehicle', '__eventManager')
+    __slots__ = ('onSwitchLayout', 'onViewLoaded', '__ammunitionPanel', '__vehicle', '__eventManager')
     __uiLogger = VehPostProgressionPrebattleSwitchPanelLogger()
     __settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -28,6 +28,7 @@ class PrebattleAmmunitionPanelView(ViewImpl):
         self.__vehicle = vehicle
         self.__eventManager = EventManager()
         self.onSwitchLayout = Event(self.__eventManager)
+        self.onViewLoaded = Event(self.__eventManager)
         return
 
     @property
@@ -64,7 +65,6 @@ class PrebattleAmmunitionPanelView(ViewImpl):
 
     def updateState(self, state):
         self.viewModel.setState(state)
-        self.__ammunitionPanel.onStateChanged(state)
 
     def setTimer(self, timeLeft):
         self.viewModel.setTimeTillBattleStart(timeLeft)
@@ -91,6 +91,7 @@ class PrebattleAmmunitionPanelView(ViewImpl):
     def _onLoaded(self, *args, **kwargs):
         super(PrebattleAmmunitionPanelView, self)._onLoaded(*args, **kwargs)
         self.viewModel.setIsReady(True)
+        self.onViewLoaded()
 
     def __addListeners(self):
         g_eventBus.addListener(GameEvent.CHANGE_AMMUNITION_SETUP, self.__onChangeSetupByKey, scope=EVENT_BUS_SCOPE.BATTLE)

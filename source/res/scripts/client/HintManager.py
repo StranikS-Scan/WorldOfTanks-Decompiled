@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/HintManager.py
 import BigWorld
 import BattleReplay
+from PlayerEvents import g_playerEvents
 from bootcamp.Bootcamp import g_bootcamp
 from bootcamp.hints.HintCustom import HintCustom
 from bootcamp.hints.HintsSystem import HintSystem
@@ -11,18 +12,13 @@ from bootcamp.BootcampContext import Chapter
 class HintManager(object):
 
     def __init__(self):
-        self._hintSystem = HintSystem(BigWorld.player())
+        self._hintSystem = HintSystem()
         self._updateId = None
         self._hints = {}
         self._markersActive = []
         chapter = Chapter('scripts/bootcamp_docs/entities.xml')
-        avatar = BigWorld.player()
-        markers = []
-        if hasattr(avatar, 'arenaExtraData'):
-            if 'markers' in avatar.arenaExtraData:
-                markers = avatar.arenaExtraData['markers']
         self._markerManager = BootcampMarkersManager()
-        self._markerManager.init(chapter, markers, g_bootcamp.getGUI())
+        self._markerManager.init(chapter, g_bootcamp.getGUI())
         return
 
     @property
@@ -35,7 +31,10 @@ class HintManager(object):
 
     @staticmethod
     def hintManager():
-        return BigWorld.player().hintManager
+        global g_hintManager
+        if g_hintManager is None:
+            _createHintManager()
+        return g_hintManager
 
     def _updateHintSystem(self):
         self._hintSystem.update()
@@ -47,6 +46,16 @@ class HintManager(object):
         self._markerManager.start()
         self._markerManager.afterScenery()
         self._updateHintSystem()
+        g_playerEvents.onAvatarBecomePlayer += self._onAvatarBecomePlayer
+        g_playerEvents.onAvatarBecomeNonPlayer += self._onAvatarBecomeNonPlayer
+
+    @staticmethod
+    def _onAvatarBecomePlayer():
+        _clearHintManager()
+
+    @staticmethod
+    def _onAvatarBecomeNonPlayer():
+        _clearHintManager()
 
     def stop(self):
         if self._hintSystem is not None:
@@ -63,6 +72,8 @@ class HintManager(object):
             self._markerManager.stop()
             self._markerManager.clear()
             self._markerManager = None
+        g_playerEvents.onAvatarBecomePlayer -= self._onAvatarBecomePlayer
+        g_playerEvents.onAvatarBecomeNonPlayer -= self._onAvatarBecomeNonPlayer
         return
 
     def getHint(self, hintId):
@@ -97,3 +108,19 @@ class HintManager(object):
 
     def isMarkerVisible(self, marker):
         return marker.name in self._markersActive if not BattleReplay.g_replayCtrl.isPlaying else None
+
+
+g_hintManager = None
+
+def _createHintManager():
+    global g_hintManager
+    g_hintManager = HintManager()
+    g_hintManager.start()
+
+
+def _clearHintManager():
+    global g_hintManager
+    if g_hintManager:
+        g_hintManager.stop()
+        g_hintManager = None
+    return

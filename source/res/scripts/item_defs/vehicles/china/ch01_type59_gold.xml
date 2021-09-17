@@ -7,10 +7,10 @@
     <loader>	radioman	</loader>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_MT_universal_level_8	</postProgressionTree>
+  <postProgressionTree>	role_MT_universal	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	56	</forward>
+    <forward>	60	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -108,9 +108,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-1.27841 0.276924 2.8642	</anchorPosition>
-        <anchorDirection>	0.00172586 0.833431 0.552621	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	0.056955	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -122,9 +121,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	1.27862 0.276895 2.8642	</anchorPosition>
-        <anchorDirection>	0.00172578 0.833431 0.552621	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	0.056961	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -136,9 +134,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	0.313897 0.181847 2.58581	</anchorPosition>
-        <anchorDirection>	0.00172533 0.857663 0.51421	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	0.056948	</anchorShift>
       </slot>
     </customizationSlots>
     <customization>
@@ -895,6 +892,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <repairTime>	5.71428585	</repairTime>
     </Chassis_Ch01_Type59_gold>
   </chassis>
   <turrets0>
@@ -955,9 +953,9 @@
             </armor_10>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <aimingTime>	2	</aimingTime>
-          <reloadTime>	8.4	</reloadTime>
+          <reloadTime>	7.9	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1068,9 +1066,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.000045 0.716981 0.643358	</anchorPosition>
-          <anchorDirection>	0.00157095 0.995264 0.0971946	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.016954	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1082,9 +1079,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	-0.871885 0.525551 0.544636	</anchorPosition>
-          <anchorDirection>	-0.54073 0.75118 0.378602	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.016953	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1096,9 +1092,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.813198 0.529993 0.54041	</anchorPosition>
-          <anchorDirection>	0.540766 0.751171 0.378568	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	-0.013049	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1110,9 +1105,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.0369561 0.598214 -1.26887	</anchorPosition>
-          <anchorDirection>	-0.000006 0.57806 -0.815994	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.066958	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>
@@ -1141,7 +1135,7 @@
       <engines>
         <NORINCO_12150L_59>
           <smplEnginePower>	650	</smplEnginePower>
-          <smplFwMaxSpeed>	56	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </NORINCO_12150L_59>
       </engines>
       <chassis>

@@ -353,6 +353,8 @@ class EliteWindowHandler(AwardHandler):
         return self.__gui.windowsManager.getViewByLayoutID(R.views.lobby.blueprints.blueprint_screen.blueprint_screen.BlueprintScreen()) is None
 
     def _showAward(self, ctx):
+        if BigWorld.checkUnattended():
+            return
         vehTypeCompDescrs = ctx
         for vehTypeCompDescr in vehTypeCompDescrs:
             showEliteWindow(vehTypeCompDescr)

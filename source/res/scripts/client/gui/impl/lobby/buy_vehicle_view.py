@@ -9,6 +9,7 @@ import constants
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.impl import backport
 from gui.impl.pub.lobby_window import LobbyWindow
+from gui.veh_post_progression.models.progression import PostProgressionCompletion
 from items import UNDEFINED_ITEM_CD
 from rent_common import parseRentID
 from gui import SystemMessages
@@ -30,9 +31,9 @@ from gui.impl.backport import BackportTooltipWindow, TooltipData, getIntegralFor
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.views.buy_vehicle_view_model import BuyVehicleViewModel
 from gui.impl.gen.view_models.views.buy_vehicle_view.commander_slot_model import CommanderSlotModel
-from gui.shared import event_dispatcher, events
+from gui.shared import event_dispatcher, events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.events import ShopEvent
+from gui.shared.events import ShopEvent, VehicleBuyEvent, OpenLinkEvent
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.gui_items.Tankman import CrewTypes
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -46,7 +47,6 @@ from gui.shared.money import Currency, Money
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.utils import decorators
 from gui.shared.utils.vehicle_collector_helper import getCollectibleVehiclesInInventory
-from gui.shared.events import VehicleBuyEvent
 from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleTradeInProcessor, VehicleRestoreProcessor, VehiclePersonalTradeInProcessor, showVehicleReceivedResultMessages
 from helpers import i18n, dependency, int2roman, func_utils
 from shared_utils import CONST_CONTAINER
@@ -174,6 +174,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             vm.setNoCrewCheckboxLabel(noCrewLabelPath.restore.withoutCrew() if isRestore else noCrewLabelPath.buy.withoutCrew())
             vm.setTankLvl(int2roman(self.__vehicle.level))
             vm.setTankName(self.__vehicle.shortUserName)
+            vm.setNeedDisclaimer(self.__vehicle.hasDisclaimer())
             vm.setCountCrew(len(self.__vehicle.crew))
             vm.setBuyVehicleIntCD(self.__vehicle.intCD)
             vm.setIsElite(isElite)
@@ -215,6 +216,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.viewModel.onBuyBtnClick += self.__onBuyBtnClick
         self.viewModel.onCommanderLvlChange += self.__onCommanderLvlChange
         self.viewModel.onBackClick += self.__onWindowClose
+        self.viewModel.onDisclaimerClick += self.__onDisclaimerClick
         equipmentBlock = self.viewModel.equipmentBlock
         equipmentBlock.onSelectTradeOffVehicle += self.__onSelectTradeOffVehicle
         equipmentBlock.onCancelTradeOffVehicle += self.__onCancelTradeOffVehicle
@@ -230,6 +232,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.removeListener(VehicleBuyEvent.VEHICLE_SELECTED, self.__onTradeOffVehicleSelected)
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__wallet.onWalletStatusChanged -= self.__onWalletStatusChanged
+        self.viewModel.onDisclaimerClick -= self.__onDisclaimerClick
         self.viewModel.onCloseBtnClick -= self.__onWindowClose
         self.viewModel.onInHangarClick -= self.__onInHangar
         self.viewModel.onCheckboxWithoutCrewChanged -= self.__onCheckboxWithoutCrewChanged
@@ -356,6 +359,9 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.__updateSlotPrice()
         self.__updateBuyBtnLabel()
         return
+
+    def __onDisclaimerClick(self):
+        g_eventBus.handleEvent(OpenLinkEvent(OpenLinkEvent.SPECIFIED, self.__vehicle.getDisclaimerUrl()))
 
     def __onTradeInConfirmed(self, *_):
         self.__requestForMoneyObtain()
@@ -537,6 +543,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             operations.append('equipments')
         if vehicle.hasOptionalDevices:
             operations.append('optionalDevices')
+        if vehicle.postProgression.getCompletion() != PostProgressionCompletion.EMPTY:
+            operations.append('pairModifications')
         if operations:
             operationsStr = [ backport.text(R.strings.dialogs.tradeInConfirmation.message.dyn(o)()) for o in operations ]
             addition = backport.text(R.strings.dialogs.tradeInConfirmation.message.addition(), operations=', '.join(operationsStr))

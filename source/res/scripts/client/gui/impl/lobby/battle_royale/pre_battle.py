@@ -5,7 +5,6 @@ import ArenaType
 from helpers import dependency
 from async import async, await
 from frameworks.wulf import ViewFlags, ViewSettings, Array
-from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.dialogs.builders import WarningDialogBuilder
@@ -48,14 +47,14 @@ class PreBattleView(ViewImpl, LobbySubView):
         return super(PreBattleView, self).getViewModel()
 
     def _initialize(self, *args, **kwargs):
-        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         self.viewModel.onBattleClick += self.__onBattleClick
         self.viewModel.onClose += self.__onClose
         self.__battleRoyaleTournamentController.onUpdatedParticipants += self.__updateParticipants
         super(PreBattleView, self)._initialize(*args, **kwargs)
 
     def _finalize(self):
-        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         self.viewModel.onBattleClick -= self.__onBattleClick
         self.viewModel.onClose -= self.__onClose
         self.__battleRoyaleTournamentController.onUpdatedParticipants -= self.__updateParticipants

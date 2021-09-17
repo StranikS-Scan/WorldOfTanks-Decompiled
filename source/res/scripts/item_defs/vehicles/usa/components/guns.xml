@@ -120,6 +120,8 @@
     <_76mm_Gun_T94_N>	263	</_76mm_Gun_T94_N>
     <_90mm_Gun_T114>	264	</_90mm_Gun_T114>
     <_105mm_T254A>	265	</_105mm_T254A>
+    <_105mm_T140_Y_IV>	266	</_105mm_T140_Y_IV>
+    <_37mm_Browning_Semi_Automatic>	267	</_37mm_Browning_Semi_Automatic>
     <_76mm_Gun_T185E_IGR>	60001	</_76mm_Gun_T185E_IGR>
     <_90mm_Gun_T178_IGR>	60002	</_90mm_Gun_T178_IGR>
     <_120mm_Gun_T53A1_IGR>	60003	</_120mm_Gun_T53A1_IGR>
@@ -130,7 +132,6 @@
     <_76mm_Gun_M1A1_IGR>	60008	</_76mm_Gun_M1A1_IGR>
     <_105mm_Gun_M68_IGR>	60009	</_105mm_Gun_M68_IGR>
     <_120mm_Gun_M58B>	300	</_120mm_Gun_M58B>
-    <_120mm_Gun_M58_cl>	301	</_120mm_Gun_M58_cl>
     <_105mm_SPH_M4_L23_SH>	338	</_105mm_SPH_M4_L23_SH>
     <_76mm_Gun_T185_A_SH>	339	</_76mm_Gun_T185_A_SH>
     <_90mm_Gun_M3_SH>	340	</_90mm_Gun_M3_SH>
@@ -581,7 +582,7 @@
       </shotDispersionFactors>
       <shots>
         <_37mm_AP1937>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	1	</defaultPortion>
           <speed>	600	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -595,7 +596,7 @@
           <piercingPower>	45 33	</piercingPower>
         </_37mm_APCBC1935>
         <_37mm_HE1916>
-          <defaultPortion>	0.0	</defaultPortion>
+          <defaultPortion>	0	</defaultPortion>
           <speed>	600	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -682,7 +683,7 @@
       </shotDispersionFactors>
       <shots>
         <_37mm_AP_M74>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	782	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -696,7 +697,7 @@
           <piercingPower>	70 61	</piercingPower>
         </_37mm_APC_M51>
         <_37mm_HE_M63>
-          <defaultPortion>	0.0	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	782	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -797,7 +798,7 @@
       </shotDispersionFactors>
       <shots>
         <_37mm_AP_M74>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -811,7 +812,7 @@
           <piercingPower>	78 66	</piercingPower>
         </_37mm_APC_M51>
         <_37mm_HE_M63>
-          <defaultPortion>	0.0	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -970,7 +971,7 @@
       </shotDispersionFactors>
       <shots>
         <_37mm_AP_M74>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -984,7 +985,7 @@
           <piercingPower>	78 66	</piercingPower>
         </_37mm_APC_M51>
         <_37mm_HE_M63>
-          <defaultPortion>	0.0	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1027,7 +1028,7 @@
       </shotDispersionFactors>
       <shots>
         <_37mm_AP_M74>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1041,7 +1042,7 @@
           <piercingPower>	78 66	</piercingPower>
         </_37mm_APC_M51>
         <_37mm_HE_M63>
-          <defaultPortion>	0.0	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1115,6 +1116,64 @@
         </_37mm_HE1916>
       </shots>
     </_37mm_semiautomatic_gun_M1924>
+    <_37mm_Browning_Semi_Automatic>
+      <userString>	#usa_vehicles:_37mm_Browning_Semi_Automatic	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	5400	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.24	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.26	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	6.85714285714286	</reloadTime>
+      <maxAmmo>	90	</maxAmmo>
+      <aimingTime>	2.05714285714286	</aimingTime>
+      <weight>	84	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.514285714285714	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_37mm_AP_M74>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	782	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	48 36	</piercingPower>
+        </_37mm_AP_M74>
+        <_37mm_APC_M51>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	978	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	70 61	</piercingPower>
+        </_37mm_APC_M51>
+        <_37mm_HE_M63>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	782	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	19 19	</piercingPower>
+        </_37mm_HE_M63>
+      </shots>
+    </_37mm_Browning_Semi_Automatic>
     <_37mm_semiautomatic_gun_M1924_bot>
       <userString>	#usa_vehicles:_37mm_semiautomatic_gun_M1924_bot	</userString>
       <shortUserString>	#usa_vehicles:_37mm_semiautomatic_gun_M1924_bot_short	</shortUserString>
@@ -1394,7 +1453,7 @@
       </shotDispersionFactors>
       <shots>
         <_57mm_AP_M70>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	823	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1408,7 +1467,7 @@
           <piercingPower>	180 126	</piercingPower>
         </_57mm_APC_M86>
         <_57mm_HE_T18>
-          <defaultPortion>	0.0	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	823	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1501,7 +1560,7 @@
       </shotDispersionFactors>
       <shots>
         <_75mm_M61>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	619	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1515,7 +1574,7 @@
           <piercingPower>	127 97	</piercingPower>
         </_75mm_M72>
         <_75mm_M48>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	619	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1616,7 +1675,7 @@
       </shotDispersionFactors>
       <shots>
         <_75mm_M61>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	619	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1630,7 +1689,7 @@
           <piercingPower>	127 97	</piercingPower>
         </_75mm_M72>
         <_75mm_M48>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	619	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1814,7 +1873,7 @@
       </shotDispersionFactors>
       <shots>
         <_75mm_M61>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	619	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1828,7 +1887,7 @@
           <piercingPower>	127 97	</piercingPower>
         </_75mm_M72>
         <_75mm_M48>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	619	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1871,7 +1930,7 @@
       </shotDispersionFactors>
       <shots>
         <_75mm_M61>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	588	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1885,7 +1944,7 @@
           <piercingPower>	125 95	</piercingPower>
         </_75mm_M72>
         <_75mm_M48>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	588	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1928,7 +1987,7 @@
       </shotDispersionFactors>
       <shots>
         <_75mm_M61>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	588	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1942,7 +2001,7 @@
           <piercingPower>	125 95	</piercingPower>
         </_75mm_M72>
         <_75mm_M48>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	588	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1985,7 +2044,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_M62>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -1999,7 +2058,7 @@
           <piercingPower>	157 101	</piercingPower>
         </_76mm_M79>
         <_76mm_M42A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2042,7 +2101,7 @@
       </shotDispersionFactors>
       <shots>
         <_75mm_M61>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	619	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2056,7 +2115,7 @@
           <piercingPower>	143 98	</piercingPower>
         </_75mm_M72>
         <_75mm_M48>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	604	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2099,7 +2158,7 @@
       </shotDispersionFactors>
       <shots>
         <_75mm_M61>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	619	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2113,7 +2172,7 @@
           <piercingPower>	143 98	</piercingPower>
         </_75mm_M72>
         <_75mm_M48>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	604	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2156,7 +2215,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_M62>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2170,7 +2229,7 @@
           <piercingPower>	157 101	</piercingPower>
         </_76mm_M79>
         <_76mm_M42A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2213,7 +2272,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_AP_M79>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2227,7 +2286,7 @@
           <piercingPower>	177 158	</piercingPower>
         </_76mm_HVAP_M93>
         <_76mm_HE_M42A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2270,7 +2329,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_AP_M79>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2284,7 +2343,7 @@
           <piercingPower>	177 158	</piercingPower>
         </_76mm_HVAP_M93>
         <_76mm_HE_M42A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2328,7 +2387,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_AP_M79_149>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2342,7 +2401,7 @@
           <piercingPower>	190 160	</piercingPower>
         </_76mm_HVAP_T4>
         <_76mm_HE_M42A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2385,7 +2444,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_AP_M79>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2399,7 +2458,7 @@
           <piercingPower>	177 158	</piercingPower>
         </_76mm_HVAP_M93>
         <_76mm_HE_M42A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2442,7 +2501,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_AP_M79>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2456,7 +2515,7 @@
           <piercingPower>	177 158	</piercingPower>
         </_76mm_HVAP_M93>
         <_76mm_HE_M42A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2499,7 +2558,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_AP_M79>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2513,7 +2572,7 @@
           <piercingPower>	177 158	</piercingPower>
         </_76mm_HVAP_M93>
         <_76mm_HE_M42A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2557,7 +2616,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_AP_M79>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2571,7 +2630,7 @@
           <piercingPower>	177 158	</piercingPower>
         </_76mm_HVAP_M93>
         <_76mm_HE_M42A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2614,7 +2673,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_AP_M339>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2628,7 +2687,7 @@
           <piercingPower>	160 140	</piercingPower>
         </_76mm_HVAP_M319>
         <_76mm_HE_M352>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	732	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2672,7 +2731,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_AP_M79>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2686,7 +2745,7 @@
           <piercingPower>	155 120	</piercingPower>
         </_76mm_HVAP_M93>
         <_76mm_HE_M42A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2730,7 +2789,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_AP_M339>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2744,7 +2803,7 @@
           <piercingPower>	185 162	</piercingPower>
         </_76mm_HVAP_M319>
         <_76mm_HE_M352>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	732	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2787,7 +2846,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_AP_M339>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2801,7 +2860,7 @@
           <piercingPower>	160 140	</piercingPower>
         </_76mm_HVAP_M319>
         <_76mm_HE_M352>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	732	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2844,7 +2903,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_APDS_M331A3>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	1219	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2858,7 +2917,7 @@
           <piercingPower>	210 210	</piercingPower>
         </_76mm_HEAT_M496A1>
         <_76mm_HE_M352A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2901,7 +2960,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_APDS_M331A3>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	1219	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2915,7 +2974,7 @@
           <piercingPower>	210 210	</piercingPower>
         </_76mm_HEAT_M496A1>
         <_76mm_HE_M352A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2958,7 +3017,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_APDS_M331A2>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	1219	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -2972,7 +3031,7 @@
           <piercingPower>	210 210	</piercingPower>
         </_76mm_HEAT_M496>
         <_76mm_HE_M352>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -3015,7 +3074,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_APDS_M331A2>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	1219	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -3029,7 +3088,7 @@
           <piercingPower>	210 210	</piercingPower>
         </_76mm_HEAT_M496>
         <_76mm_HE_M352>
-          <defaultPortion>	0.0	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -3188,7 +3247,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_AP_M79>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -3202,7 +3261,7 @@
           <piercingPower>	177 158	</piercingPower>
         </_76mm_HVAP_M93>
         <_76mm_HE_M42A1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -3245,7 +3304,7 @@
       </shotDispersionFactors>
       <shots>
         <_76mm_M64>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -3259,7 +3318,7 @@
           <piercingPower>	100 100	</piercingPower>
         </_76mm_HEAT>
         <_76mm_HE_M42B1>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -3402,7 +3461,7 @@
       </shotDispersionFactors>
       <shots>
         <_75mm_M61>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	619	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -3416,7 +3475,7 @@
           <piercingPower>	127 97	</piercingPower>
         </_75mm_M72>
         <_75mm_M48>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	619	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -3510,7 +3569,7 @@
       </shotDispersionFactors>
       <shots>
         <_75mm_Pzgr39L>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	925	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -3524,7 +3583,7 @@
           <piercingPower>	194 174	</piercingPower>
         </_75mm_Pzgr.40L>
         <_75mm_Sprg.18L>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	925	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -3836,7 +3895,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M77>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	853	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -3850,7 +3909,7 @@
           <piercingPower>	243 221	</piercingPower>
         </_90mm_HVAP_M304>
         <_90mm_HE_M71>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	853	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4068,7 +4127,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M77_ID>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	853	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4082,7 +4141,7 @@
           <piercingPower>	221 202	</piercingPower>
         </_90mm_HVAP_M304_ID>
         <_90mm_HE_M71_ID>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	853	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4125,7 +4184,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M77>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	853	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4139,7 +4198,7 @@
           <piercingPower>	262 239	</piercingPower>
         </_90mm_HVAP_M304>
         <_90mm_HE_M71>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	853	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4183,7 +4242,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M77>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	972	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4197,7 +4256,7 @@
           <piercingPower>	263 242	</piercingPower>
         </_90mm_HVAP_M304>
         <_90mm_HE_M71>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	853	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4241,7 +4300,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M318>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	914	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4255,7 +4314,7 @@
           <piercingPower>	250 250	</piercingPower>
         </_90mm_HEAT_M348>
         <_90mm_HE_T91E3>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	732	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4299,7 +4358,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M318_L>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	914	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4313,7 +4372,7 @@
           <piercingPower>	280 280	</piercingPower>
         </_90mm_HEAT_M348_L>
         <_90mm_HE_T91E3_L>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	732	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4357,7 +4416,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M318A1>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	914	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4371,7 +4430,7 @@
           <piercingPower>	275 275	</piercingPower>
         </_90mm_HEAT_M431>
         <_90mm_HE_M71>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	732	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4414,7 +4473,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_APCR_Experimental>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	1080	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4428,7 +4487,7 @@
           <piercingPower>	250 250	</piercingPower>
         </_90mm_HEAT_T108E45>
         <_90mm_HE_T91E3>
-          <defaultPortion>	0.0	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	732	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4471,7 +4530,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M77>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	853	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4485,7 +4544,7 @@
           <piercingPower>	243 221	</piercingPower>
         </_90mm_HVAP_M304>
         <_90mm_HE_M71>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	853	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4528,7 +4587,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M318>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	1	</defaultPortion>
           <speed>	914	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4542,7 +4601,7 @@
           <piercingPower>	250 250	</piercingPower>
         </_90mm_HEAT_M348>
         <_90mm_HE_T91E3>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0	</defaultPortion>
           <speed>	914	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4586,7 +4645,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M318_L>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	814	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4600,7 +4659,7 @@
           <piercingPower>	268 245	</piercingPower>
         </_90mm_HVAP_T_M332A1>
         <_90mm_HE_T91E3_L>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	732	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4693,7 +4752,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M77>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4707,7 +4766,7 @@
           <piercingPower>	258 235	</piercingPower>
         </_90mm_HVAP_M304>
         <_90mm_HE_M71>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4750,7 +4809,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M77>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4764,7 +4823,7 @@
           <piercingPower>	268 245	</piercingPower>
         </_90mm_HVAP_M304>
         <_90mm_HE_M71>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4807,7 +4866,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M77>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4821,7 +4880,7 @@
           <piercingPower>	258 235	</piercingPower>
         </_90mm_HVAP_M304>
         <_90mm_HE_M71>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4865,7 +4924,7 @@
       </shotDispersionFactors>
       <shots>
         <_90mm_AP_M77>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4879,7 +4938,7 @@
           <piercingPower>	258 235	</piercingPower>
         </_90mm_HVAP_M304>
         <_90mm_HE_M71>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4972,7 +5031,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_AP_T32>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4986,7 +5045,7 @@
           <piercingPower>	245 219	</piercingPower>
         </_105mm_APCR_T29E3>
         <_105mm_HE_M11>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5029,7 +5088,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_AP_T32>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5043,7 +5102,7 @@
           <piercingPower>	245 219	</piercingPower>
         </_105mm_APCR_T29E3>
         <_105mm_HE_M11>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5087,7 +5146,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_AP_T32>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5101,7 +5160,7 @@
           <piercingPower>	245 219	</piercingPower>
         </_105mm_APCR_T29E3>
         <_105mm_HE_M11>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5145,7 +5204,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_AP_T32>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5159,7 +5218,7 @@
           <piercingPower>	245 219	</piercingPower>
         </_105mm_APCR_T29E3>
         <_105mm_HE_M11>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5203,7 +5262,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_AP_T32>
-          <defaultPortion>	0.95	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5217,7 +5276,7 @@
           <piercingPower>	260 232	</piercingPower>
         </_105mm_APCR_T29E3>
         <_105mm_HE_M11>
-          <defaultPortion>	0.05	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5261,7 +5320,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_AP_T32>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	872	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5275,7 +5334,7 @@
           <piercingPower>	224 200	</piercingPower>
         </_105mm_APCR_T29E3>
         <_105mm_HE_M11>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	901	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5319,7 +5378,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_AP_T32>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	1	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5333,7 +5392,7 @@
           <piercingPower>	250 225	</piercingPower>
         </_105mm_APCR_T29E3>
         <_105mm_HE_M11>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5341,6 +5400,64 @@
         </_105mm_HE_M11>
       </shots>
     </_105mm_T254A>
+    <_105mm_T140_Y_IV>
+      <userString>	#usa_vehicles:_105mm_T140_Y_IV	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.12	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	10	</rotationSpeed>
+      <reloadTime>	11	</reloadTime>
+      <maxAmmo>	46	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	2200	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.18	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_AP_T32M2E>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	218 200	</piercingPower>
+        </_105mm_AP_T32M2E>
+        <_105mm_APCR_T29E3M2E>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	247 215	</piercingPower>
+        </_105mm_APCR_T29E3M2E>
+        <_105mm_HE_M11A2E>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_HE_M11A2E>
+      </shots>
+    </_105mm_T140_Y_IV>
     <_105mm_AT_Gun_T5E1>
       <userString>	#usa_vehicles:_105mm_AT_Gun_T5E1	</userString>
       <tags></tags>
@@ -5376,7 +5493,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_AP_T32>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5390,7 +5507,7 @@
           <piercingPower>	245 219	</piercingPower>
         </_105mm_APCR_T29E3>
         <_105mm_HE_M11>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5433,7 +5550,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_AP_T32M2>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5447,7 +5564,7 @@
           <piercingPower>	265 221	</piercingPower>
         </_105mm_APCR_T29E3M2>
         <_105mm_HE_M11A2>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5491,7 +5608,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_AP_T32M2>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5505,7 +5622,7 @@
           <piercingPower>	265 221	</piercingPower>
         </_105mm_APCR_T29E3M2>
         <_105mm_HE_M11A2>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5549,7 +5666,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_AP_T32M2E>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	1080	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5563,7 +5680,7 @@
           <piercingPower>	255 240	</piercingPower>
         </_105mm_APCR_T29E3M2E>
         <_105mm_HE_M11A2E>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	1080	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5607,7 +5724,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_APCR_M68M2>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	1478	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5621,7 +5738,7 @@
           <piercingPower>	330 330	</piercingPower>
         </_105mm_HEAT-T_T384E4>
         <_105mm_HE_M68M2>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	1173	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5665,7 +5782,7 @@
       </shotDispersionFactors>
       <shots>
         <_105mm_APCR_M68M2>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	1478	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -5679,7 +5796,7 @@
           <piercingPower>	350 350	</piercingPower>
         </_105mm_HEAT-T_T384E4>
         <_105mm_HE_M68M2>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	1173	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6012,7 +6129,7 @@
       </shotDispersionFactors>
       <shots>
         <_110mm_XL1E>
-          <defaultPortion>	0.6	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	1478	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6026,7 +6143,7 @@
           <piercingPower>	310 310	</piercingPower>
         </_110mm_SAY2E>
         <_110mm_SDRN1>
-          <defaultPortion>	0.4	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	1173	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6070,7 +6187,7 @@
       </shotDispersionFactors>
       <shots>
         <_120mm_APBC_M358>
-          <defaultPortion>	0.60	</defaultPortion>
+          <defaultPortion>	1	</defaultPortion>
           <speed>	1143	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6084,7 +6201,7 @@
           <piercingPower>	299 299	</piercingPower>
         </_120mm_HEAT_M830>
         <_120mm_HE_M356>
-          <defaultPortion>	0.40	</defaultPortion>
+          <defaultPortion>	0	</defaultPortion>
           <speed>	850	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6128,7 +6245,7 @@
       </shotDispersionFactors>
       <shots>
         <_120mm_AP_T42>
-          <defaultPortion>	0.60	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6142,7 +6259,7 @@
           <piercingPower>	297 255	</piercingPower>
         </_120mm_APCR_T62>
         <_120mm_HE-T67>
-          <defaultPortion>	0.40	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6186,7 +6303,7 @@
       </shotDispersionFactors>
       <shots>
         <_120mm_AP-T_M358>
-          <defaultPortion>	0.60	</defaultPortion>
+          <defaultPortion>	1	</defaultPortion>
           <speed>	1067	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6200,7 +6317,7 @@
           <piercingPower>	340 340	</piercingPower>
         </_120mm_HEAT-T_M469>
         <_120mm_HE_Shot>
-          <defaultPortion>	0.40	</defaultPortion>
+          <defaultPortion>	0	</defaultPortion>
           <speed>	1067	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6243,7 +6360,7 @@
       </shotDispersionFactors>
       <shots>
         <_120mm_AP_Shot>
-          <defaultPortion>	0.60	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6257,7 +6374,7 @@
           <piercingPower>	340 340	</piercingPower>
         </_120mm_HEAT-T_M469>
         <_120mm_HE_Shot>
-          <defaultPortion>	0.40	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6300,7 +6417,7 @@
       </shotDispersionFactors>
       <shots>
         <_120mm_AP-T_M358>
-          <defaultPortion>	0.60	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	1067	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6314,7 +6431,7 @@
           <piercingPower>	340 340	</piercingPower>
         </_120mm_HEAT-T_M469>
         <_120mm_HE_Shot>
-          <defaultPortion>	0.40	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	1067	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6358,7 +6475,7 @@
       </shotDispersionFactors>
       <shots>
         <_120mm_AP-T_M358>
-          <defaultPortion>	0.95	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	1067	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6372,7 +6489,7 @@
           <piercingPower>	340 340	</piercingPower>
         </_120mm_HEAT-T_M469>
         <_120mm_HE_Shot>
-          <defaultPortion>	0.05	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	1067	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6416,7 +6533,7 @@
       </shotDispersionFactors>
       <shots>
         <_120mm_AP-T_M358>
-          <defaultPortion>	0.60	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	1067	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6430,7 +6547,7 @@
           <piercingPower>	340 340	</piercingPower>
         </_120mm_HEAT-T_M469>
         <_120mm_HE_Shot>
-          <defaultPortion>	0.40	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	1067	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6438,64 +6555,6 @@
         </_120mm_HE_Shot>
       </shots>
     </_120mm_Gun_M58B>
-    <_120mm_Gun_M58_cl>
-      <userString>	#usa_vehicles:_120mm_Gun_M58	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	310000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.68	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.19	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	shot_large	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
-        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	10.97142857142860	</reloadTime>
-      <maxAmmo>	22	</maxAmmo>
-      <aimingTime>	2.62857142857143	</aimingTime>
-      <weight>	3100	</weight>
-      <maxHealth>	210	</maxHealth>
-      <maxRegenHealth>	105	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.4	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_120mm_AP-T_M358>
-          <defaultPortion>	0.60	</defaultPortion>
-          <speed>	1067	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	258 238	</piercingPower>
-        </_120mm_AP-T_M358>
-        <_120mm_HEAT-T_M469>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	1067	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	340 340	</piercingPower>
-        </_120mm_HEAT-T_M469>
-        <_120mm_HE_Shot>
-          <defaultPortion>	0.40	</defaultPortion>
-          <speed>	1067	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	60 60	</piercingPower>
-        </_120mm_HE_Shot>
-      </shots>
-    </_120mm_Gun_M58_cl>
     <_120mm_AT_Gun_M58>
       <userString>	#usa_vehicles:_120mm_AT_Gun_M58	</userString>
       <tags></tags>
@@ -6532,7 +6591,7 @@
       </shotDispersionFactors>
       <shots>
         <_120mm_AP-T_M358>
-          <defaultPortion>	0.95	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	860	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6546,7 +6605,7 @@
           <piercingPower>	300 300	</piercingPower>
         </_120mm_HEAT-T_M469>
         <_120mm_HE_Shot>
-          <defaultPortion>	0.05	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	860	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6590,7 +6649,7 @@
       </shotDispersionFactors>
       <shots>
         <_120mm_AP-T_M358>
-          <defaultPortion>	0.60	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	1067	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6604,7 +6663,7 @@
           <piercingPower>	340 340	</piercingPower>
         </_120mm_HEAT-T_M469>
         <_120mm_HE_Shot>
-          <defaultPortion>	0.40	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	1067	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6647,7 +6706,7 @@
       </shotDispersionFactors>
       <shots>
         <_120mm_AP_T42>
-          <defaultPortion>	0.60	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6661,7 +6720,7 @@
           <piercingPower>	297 255	</piercingPower>
         </_120mm_APCR_T62>
         <_120mm_HE-T67>
-          <defaultPortion>	0.40	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6704,14 +6763,14 @@
       </shotDispersionFactors>
       <shots>
         <_152mm_HE_XM657E2>
-          <defaultPortion>	1.00	</defaultPortion>
+          <defaultPortion>	0.9	</defaultPortion>
           <speed>	683	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	76 76	</piercingPower>
         </_152mm_HE_XM657E2>
         <_152mm_HEAT_XM409>
-          <defaultPortion>	0.00	</defaultPortion>
+          <defaultPortion>	0.1	</defaultPortion>
           <speed>	683	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6761,7 +6820,7 @@
       </shotDispersionFactors>
       <shots>
         <_155mm_AP_M111>
-          <defaultPortion>	0.20	</defaultPortion>
+          <defaultPortion>	0.85	</defaultPortion>
           <speed>	870	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6775,7 +6834,7 @@
           <piercingPower>	320 280	</piercingPower>
         </_155mm_AP_M112>
         <_155mm_HE_M101>
-          <defaultPortion>	0.80	</defaultPortion>
+          <defaultPortion>	0.15	</defaultPortion>
           <speed>	870	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6819,7 +6878,7 @@
       </shotDispersionFactors>
       <shots>
         <_155mm_AP_M111>
-          <defaultPortion>	0.20	</defaultPortion>
+          <defaultPortion>	0.85	</defaultPortion>
           <speed>	870	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6833,7 +6892,7 @@
           <piercingPower>	320 280	</piercingPower>
         </_155mm_AP_M112>
         <_155mm_HE_M101>
-          <defaultPortion>	0.80	</defaultPortion>
+          <defaultPortion>	0.15	</defaultPortion>
           <speed>	870	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6877,7 +6936,7 @@
       </shotDispersionFactors>
       <shots>
         <_155mm_AP_M111E1>
-          <defaultPortion>	0.20	</defaultPortion>
+          <defaultPortion>	0.75	</defaultPortion>
           <speed>	870	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -6891,7 +6950,7 @@
           <piercingPower>	375 365	</piercingPower>
         </_155mm_AP_M112E1>
         <_155mm_HE_M101E1>
-          <defaultPortion>	0.80	</defaultPortion>
+          <defaultPortion>	0.25	</defaultPortion>
           <speed>	870	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>

@@ -73,9 +73,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-0.000007 0.748996 2.27976	</anchorPosition>
-        <anchorDirection>	0.000002 0.999999 -0.00119371	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	-0.000004	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -87,9 +86,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.574857	</clipAngle>
-        <anchorPosition>	-1.24963 0.315686 3.458	</anchorPosition>
-        <anchorDirection>	0.0378304 0.86 0.508889	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	-0.000004	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -101,9 +99,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.574857	</clipAngle>
-        <anchorPosition>	1.24965 0.315667 3.45801	</anchorPosition>
-        <anchorDirection>	0.0378304 0.86 0.508889	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	-0.000003	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -115,9 +112,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	1.14901	</clipAngle>
-        <anchorPosition>	-0.630737 0.438268 2.93989	</anchorPosition>
-        <anchorDirection>	0.000038 0.708381 0.705831	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	0.059997	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -129,10 +125,9 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.417073	</clipAngle>
-        <anchorPosition>	-0.000011 0.859005 -2.78613	</anchorPosition>
-        <anchorDirection>	-0.000071 0.996196 -0.0871421	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
         <verticalMirror>	true	</verticalMirror>
+        <anchorShift>	0.019991	</anchorShift>
       </slot>
     </customizationSlots>
     <customization>
@@ -881,6 +876,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <repairTime>	6.85714293	</repairTime>
     </Chassis_F74_AMX_M4_1949_Liberte>
   </chassis>
   <turrets0>
@@ -1013,10 +1009,9 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.899145	</clipAngle>
-          <anchorPosition>	-0.000033 0.998903 -1.74055	</anchorPosition>
-          <anchorDirection>	-0.000145324 0.994648 -0.103318	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
           <verticalMirror>	true	</verticalMirror>
+          <anchorShift>	0.029995	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1028,9 +1023,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	1.51128	</clipAngle>
-          <anchorPosition>	-0.000021 1.03731 0.695163	</anchorPosition>
-          <anchorDirection>	-0.000155375 0.971941 0.235225	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.049994	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>
@@ -1054,7 +1048,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_HT_break_level_8	</postProgressionTree>
+  <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	40	</forward>

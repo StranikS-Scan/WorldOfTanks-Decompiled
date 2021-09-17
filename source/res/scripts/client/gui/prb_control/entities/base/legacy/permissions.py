@@ -10,7 +10,7 @@ class ILegacyPermissions(IPrbPermissions):
     def canKick(self, team=1):
         return False
 
-    def canAssignToTeam(self, team=1, isSelfAssignment=False):
+    def canAssignToTeam(self, team=1):
         return False
 
     def canChangePlayerTeam(self):
@@ -82,14 +82,14 @@ class LegacyPermissions(ILegacyPermissions):
             result = self._roles & PREBATTLE_ROLE.KICK_2 != 0
         return result
 
-    def canAssignToTeam(self, team=1, isSelfAssignment=False):
+    def canAssignToTeam(self, team=1):
         if self._teamState.isInQueue():
             return False
         result = False
         if team == 1:
-            result = self._roles & PREBATTLE_ROLE.ASSIGNMENT_1 != 0 or isSelfAssignment and self._roles & PREBATTLE_ROLE.SELF_ASSIGNMENT_1 != 0
+            result = self._roles & PREBATTLE_ROLE.ASSIGNMENT_1 != 0
         elif team == 2:
-            result = self._roles & PREBATTLE_ROLE.ASSIGNMENT_2 != 0 or isSelfAssignment and self._roles & PREBATTLE_ROLE.SELF_ASSIGNMENT_2 != 0
+            result = self._roles & PREBATTLE_ROLE.ASSIGNMENT_2 != 0
         return result
 
     def canChangePlayerTeam(self):

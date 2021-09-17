@@ -2,13 +2,16 @@
 # Embedded file name: scripts/client/gui/impl/lobby/mode_selector/items/base_item.py
 from abc import ABCMeta, abstractmethod
 import typing
+from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_normal_card_model import ModeSelectorNormalCardModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_reward_model import ModeSelectorRewardModel
-from gui.impl.lobby.mode_selector.items.constants import CustomModeName, COLUMN_SETTINGS, DEFAULT_PRIORITY, DEFAULT_COLUMN, ModeSelectorRewardID
+from gui.impl.lobby.mode_selector.items.items_constants import CustomModeName, COLUMN_SETTINGS, DEFAULT_PRIORITY, DEFAULT_COLUMN, ModeSelectorRewardID
+from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency, i18n
 from skeletons.gui.game_control import IBootcampController
 from soft_exception import SoftException
@@ -20,9 +23,13 @@ if typing.TYPE_CHECKING:
 _rMode = R.strings.mode_selector.mode
 _INFO_PAGE_KEY_TEMPLATE = 'infoPage%s'
 
+def getInfoPageKey(modeName):
+    return _INFO_PAGE_KEY_TEMPLATE % (modeName[0].upper() + modeName[1:])
+
+
 class ModeSelectorItem(object):
     __metaclass__ = ABCMeta
-    __slots__ = ('_viewModel', '_initialized', '_infoPageKey', '_priority', '_preferredColumn')
+    __slots__ = ('_viewModel', '_initialized', '_priority', '_preferredColumn')
     _VIEW_MODEL = None
     _CARD_VISUAL_TYPE = ModeSelectorCardTypes.DEFAULT
     _bootcamp = dependency.descriptor(IBootcampController)
@@ -34,7 +41,6 @@ class ModeSelectorItem(object):
         if viewModelClass is None:
             raise SoftException('_VIEW_MODEL is missing!')
         self._viewModel = viewModelClass()
-        self._infoPageKey = None
         self._preferredColumn = DEFAULT_COLUMN
         self._priority = DEFAULT_PRIORITY
         return
@@ -93,20 +99,20 @@ class ModeSelectorItem(object):
             self._initialized = False
             return
 
-    @property
-    def infoPageKey(self):
-        return self._infoPageKey
+    def handleInfoPageClick(self):
+        url = GUI_SETTINGS.lookup(getInfoPageKey(self.modeName))
+        showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
 
     def _onInitializing(self):
         isInBootcamp = self._bootcamp.isInBootcamp()
         self.viewModel.setIsDisabled(self._getIsDisabled() or isInBootcamp)
         self.viewModel.setIsNew(self._getIsNew() and not isInBootcamp)
-        modeName = self.modeName
-        self._infoPageKey = _INFO_PAGE_KEY_TEMPLATE % (modeName[0].upper() + modeName[1:])
-        self.viewModel.setIsInfoIconVisible(GUI_SETTINGS.lookup(self._infoPageKey) is not None)
-        self.viewModel.setModeName(modeName)
+        self.viewModel.setIsInfoIconVisible(self._isInfoIconVisible())
+        self.viewModel.setModeName(self.modeName)
         self.viewModel.setType(self._CARD_VISUAL_TYPE)
-        return
+
+    def _isInfoIconVisible(self):
+        return GUI_SETTINGS.lookup(getInfoPageKey(self.modeName)) is not None
 
     def _onDisposing(self):
         pass
@@ -149,7 +155,7 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
         if modeStrings.isValid():
             self.viewModel.setConditions(backport.text(modeStrings.dyn('condition')()))
             self.viewModel.setDescription(backport.text(modeStrings.dyn('description')()))
-            self.viewModel.setCallToAction(backport.text(modeStrings.dyn('callToAction')()))
+            self.viewModel.setStatusActive(backport.text(modeStrings.dyn('callToAction')()))
 
     def _addReward(self, rewardID, locParams=None, **params):
         if locParams is None:

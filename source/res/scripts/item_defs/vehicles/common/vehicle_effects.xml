@@ -3311,4 +3311,44 @@
       </effects>
     </variant1>
   </dynamicCollision>
+  <trackDestructionL>
+    <variant1>
+      <timeline>
+        <effectEnd>	10.0	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/destruction/track_hitting.eff	</file>
+          <position>	HP_TrackUp_LFront_0	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	breakdown_treads_outer	</wwsoundPC>
+          <wwsoundNPC>	breakdown_treads_outer	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </trackDestructionL>
+  <trackDestructionR>
+    <variant1>
+      <timeline>
+        <effectEnd>	10.0	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/destruction/track_hitting.eff	</file>
+          <position>	HP_TrackUp_RFront_0	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	breakdown_treads_outer	</wwsoundPC>
+          <wwsoundNPC>	breakdown_treads_outer	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </trackDestructionR>
 </vehicle_effects.xml>

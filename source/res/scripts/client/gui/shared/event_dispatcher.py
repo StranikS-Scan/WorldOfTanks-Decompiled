@@ -17,8 +17,6 @@ from frameworks.wulf import WindowFlags, WindowStatus
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
-from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
-from gui.Scaleform.daapi.view.dialogs.rent_confirm_dialog import RentConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL, getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx
@@ -40,19 +38,11 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.account_completion.decorators import waitShowOverlay
 from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
-from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
-from gui.impl.lobby.maps_training.maps_training_result_view import MapsTrainingResultWindow
-from gui.impl.lobby.maps_training.maps_training_view import MapsTrainingView
 from gui.impl.lobby.maps_training.maps_training_queue_view import MapsTrainingQueueView
-from gui.impl.lobby.offers.offer_gift_dialog import makeOfferGiftDialog
-from gui.impl.lobby.tank_setup.dialogs.battle_abilities_confirm import BattleAbilitiesSetupConfirm
 from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDialog, TankSetupExitConfirmDialog
 from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import RefillShells, ExitFromShellsConfirm
 from gui.impl.lobby.techtree.techtree_intro_view import TechTreeIntroWindow
-from gui.impl.lobby.veh_post_progression.dialogs.buy_pair_modification import BuyPairModificationDialog
-from gui.impl.lobby.veh_post_progression.dialogs.destroy_pair_modification import DestroyPairModificationsDialog
-from gui.impl.lobby.veh_post_progression.dialogs.research_confirm import PostProgressionResearchConfirm
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
@@ -185,6 +175,7 @@ def showVehicleRentRenewDialog(intCD, rentType, num, seasonType):
 @adisp.process
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def _purchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, renew, itemsCache=None):
+    from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
     if mayObtainForMoney(price):
         _doPurchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, renew)
     elif mayObtainWithMoneyExchange(price):
@@ -201,6 +192,7 @@ def _purchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, rene
 
 @adisp.process
 def _doPurchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, renew):
+    from gui.Scaleform.daapi.view.dialogs.rent_confirm_dialog import RentConfirmDialogMeta
     requestConfirmed = yield DialogsInterface.showDialog(meta=RentConfirmDialogMeta(vehicleCD, rentType, nums, price, seasonType, renew))
     if requestConfirmed:
         if mayObtainForMoney(price):
@@ -310,6 +302,7 @@ def showDashboardView():
 @async
 def showBattleBoosterBuyDialog(battleBoosterIntCD):
     from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
     from gui.impl.lobby.instructions.booster_buy_dialog import BoosterBuyWindowView
     wrapper = FullScreenDialogWindowWrapper(BoosterBuyWindowView(battleBoosterIntCD))
     yield dialogs.showSimple(wrapper)
@@ -317,6 +310,7 @@ def showBattleBoosterBuyDialog(battleBoosterIntCD):
 
 @async
 def showBattleBoosterSellDialog(battleBoosterIntCD):
+    from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
     from gui.impl.lobby.instructions.booster_sell_dialog import BoosterSellWindowView
     from gui.impl.dialogs import dialogs
     wrapper = FullScreenDialogWindowWrapper(BoosterSellWindowView(battleBoosterIntCD))
@@ -489,24 +483,25 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
          'vehParams': vehParams}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previewBackCb=None):
+def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previewBackCb=None, previousBackAlias=None, hangarVehicleCD=None):
     import BigWorld
     from HeroTank import HeroTank
     from ClientSelectableCameraObject import ClientSelectableCameraObject
     for entity in BigWorld.entities.values():
         if entity and isinstance(entity, HeroTank):
-            showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb)
+            showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb, previousBackAlias=previousBackAlias, hangarVehicleCD=hangarVehicleCD)
             ClientSelectableCameraObject.switchCamera(entity)
             break
 
 
-def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None):
+def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.HERO_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
      'previewAlias': previewAlias,
      'previewAppearance': HeroTankPreviewAppearance(),
      'isHeroTank': True,
      'previousBackAlias': previousBackAlias,
-     'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'previewBackCb': previewBackCb,
+     'hangarVehicleCD': hangarVehicleCD}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def hideVehiclePreview(back=True, close=False):
@@ -1082,6 +1077,7 @@ def showOfferGiftsWindow(offerID, overrideSuccessCallback=None):
 
 @async
 def showOfferGiftDialog(offerID, giftID, cdnTitle='', callback=None):
+    from gui.impl.lobby.offers.offer_gift_dialog import makeOfferGiftDialog
     dialogBuilder = makeOfferGiftDialog(offerID, giftID, cdnTitle)
     app = dependency.instance(IAppLoader).getApp()
     view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
@@ -1195,6 +1191,7 @@ def showExitFromShellsDialog(price, shells, startState=None, parent=None):
 
 @async
 def showBattleAbilitiesConfirmDialog(items, withInstall=None, parent=None):
+    from gui.impl.lobby.tank_setup.dialogs.battle_abilities_confirm import BattleAbilitiesSetupConfirm
     from gui.impl.dialogs import dialogs
     result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=BattleAbilitiesSetupConfirm, items=items, withInstall=withInstall, parent=parent))
     raise AsyncReturn(result)
@@ -1314,6 +1311,7 @@ def showBuyModuleDialog(newModule, installedModule, currency, mountDisabledReaso
 
 
 def showMapsTrainingPage(ctx):
+    from gui.impl.lobby.maps_training.maps_training_view import MapsTrainingView
     guiLoader = dependency.instance(IGuiLoader)
     contentResId = R.views.lobby.maps_training.MapsTrainingPage()
     mapsTrainingView = guiLoader.windowsManager.getViewByLayoutID(contentResId)
@@ -1330,6 +1328,7 @@ def showMapsTrainingQueue():
 
 
 def showMapsTrainingResultsWindow(arenaUniqueID, isFromNotifications):
+    from gui.impl.lobby.maps_training.maps_training_result_view import MapsTrainingResultWindow
     if not isFromNotifications:
         guiLoader = dependency.instance(IGuiLoader)
         window = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.maps_training.MapsTrainingResult())
@@ -1342,6 +1341,7 @@ def showMapsTrainingResultsWindow(arenaUniqueID, isFromNotifications):
 
 @async
 def showPostProgressionPairModDialog(vehicle, stepID, modID, parent=None):
+    from gui.impl.lobby.veh_post_progression.dialogs.buy_pair_modification import BuyPairModificationDialog
     from gui.impl.dialogs import dialogs
     result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=BuyPairModificationDialog, vehicle=vehicle, stepID=stepID, modID=modID, parent=parent))
     raise AsyncReturn(result)
@@ -1349,6 +1349,7 @@ def showPostProgressionPairModDialog(vehicle, stepID, modID, parent=None):
 
 @async
 def showDestroyPairModificationsDialog(vehicle, stepIDs, parent=None):
+    from gui.impl.lobby.veh_post_progression.dialogs.destroy_pair_modification import DestroyPairModificationsDialog
     from gui.impl.dialogs import dialogs
     result = yield await(dialogs.showSingleDialogWithResultData(layoutID=DestroyPairModificationsDialog.LAYOUT_ID, wrappedViewClass=DestroyPairModificationsDialog, vehicle=vehicle, stepIDs=stepIDs, parent=parent))
     raise AsyncReturn(result)
@@ -1356,6 +1357,7 @@ def showDestroyPairModificationsDialog(vehicle, stepIDs, parent=None):
 
 @async
 def showPostProgressionResearchDialog(vehicle, stepIDs, parent=None):
+    from gui.impl.lobby.veh_post_progression.dialogs.research_confirm import PostProgressionResearchConfirm
     from gui.impl.dialogs import dialogs
     result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.veh_post_progression.PostProgressionResearchSteps(), parent=parent, wrappedViewClass=PostProgressionResearchConfirm, vehicle=vehicle, stepIDs=stepIDs))
     raise AsyncReturn(result)

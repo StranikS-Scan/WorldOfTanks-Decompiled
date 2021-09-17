@@ -10,8 +10,7 @@ from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.connection_mgr import IConnectionManager
 from gui.impl import backport
 from gui.impl.gen.resources import R
-from gui.periodic_battles.models import CalendarStatusVO
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.periodic_battles.models import PrimeTimeStatus, AlertData
 from helpers import time_utils
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles
@@ -35,21 +34,25 @@ class BattleRoyaleHangarWidget(BattleRoyaleHangarWidgetMeta):
         if currentSeason:
             cycleNumber = self.__battleRoyaleController.getCurrentOrNextActiveCycleNumber(currentSeason)
         showAlert = not self.__battleRoyaleController.isInPrimeTime() and self.__battleRoyaleController.isEnabled()
-        data = BattleRoyaleWidgetVO(calendarStatus=self.__getStatusBlock()._asdict(), isSeasonActive=isSeasonActive, episode=int2roman(cycleNumber), tooltipId=TOOLTIPS_CONSTANTS.BATTLE_ROYALE_WIDGET_INFO, showAlert=showAlert)._asdict()
+        data = BattleRoyaleWidgetVO(calendarStatus=self.__getStatusBlock().asDict(), isSeasonActive=isSeasonActive, episode=int2roman(cycleNumber), tooltipId=TOOLTIPS_CONSTANTS.BATTLE_ROYALE_WIDGET_INFO, showAlert=showAlert)._asdict()
         self.as_setDataS(data)
         return
 
     def __getStatusBlock(self):
         status, timeLeft, _ = self.__battleRoyaleController.getPrimeTimeStatus()
         showPrimeTimeAlert = status != PrimeTimeStatus.AVAILABLE
+        unsuitablePeriphery = status in (PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN)
         hasAvailableServers = self.__battleRoyaleController.hasAvailablePrimeTimeServers()
-        return CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.battle_royale.widgetAlertMessageBlock.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None, isSimpleTooltip=False)
+        return AlertData(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.battle_royale.widgetAlertMessageBlock.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, unsuitablePeriphery, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None, isSimpleTooltip=False)
 
-    def __getAlertStatusText(self, timeLeft, hasAvailableServers):
+    def __getAlertStatusText(self, timeLeft, unsuitablePeriphery, hasAvailableServers):
         rAlertMsgBlock = R.strings.battle_royale.widgetAlertMessageBlock
         alertStr = ''
         if hasAvailableServers:
-            alertStr = backport.text(rAlertMsgBlock.somePeripheriesHalt(), serverName=self.__connectionMgr.serverUserNameShort)
+            if unsuitablePeriphery:
+                alertStr = backport.text(R.strings.battle_royale.alertMessage.unsuitablePeriphery())
+            else:
+                alertStr = backport.text(rAlertMsgBlock.somePeripheriesHalt(), serverName=self.__connectionMgr.serverUserNameShort)
         else:
             currSeason = self.__battleRoyaleController.getCurrentSeason()
             currTime = time_utils.getCurrentLocalServerTimestamp()

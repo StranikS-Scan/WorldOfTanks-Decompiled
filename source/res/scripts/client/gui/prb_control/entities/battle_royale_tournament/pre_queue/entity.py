@@ -11,7 +11,7 @@ from gui.shared import events
 from gui.prb_control import prb_getters
 from gui.impl.gen import R
 from helpers import dependency
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.periodic_battles.models import PrimeTimeStatus
 from skeletons.gui.game_control import IBattleRoyaleTournamentController
 from skeletons.gui.impl import IGuiLoader
 from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams

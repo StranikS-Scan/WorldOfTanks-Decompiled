@@ -137,6 +137,7 @@ class FullScreenDialogView(FullScreenDialogBaseView, typing.Generic[TViewModel])
         model.setGolds(int(self._stats.money.getSignValue(Currency.GOLD)))
         model.setCrystals(int(self._stats.money.getSignValue(Currency.CRYSTAL)))
         model.setFreexp(self._stats.freeXP)
+        model.setIsWalletAvailable(self._stats.mayConsumeWalletResources)
 
 
 class FullScreenDialogWindowWrapper(LobbyWindow):

@@ -139,8 +139,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     UI_LOGGER_TEST_DIALOG = 'uiLoggerDialog'
     VEH_POST_PROGRESSION = 'vehPostProgression'
     VEH_POST_PROGRESSION_CMP = 'vehPostProgressionCmp'
-    BIRTHDAY_CALENDAR = 'birthdayCalendar'
-    BROWSER_OVERLAY_INTRO = 'browserOverlayIntro'
     MINIMAP_LOBBY = 'minimapLobby'
     MINIMAP_GRID = 'minimapGridLobby'
     MINIMAP_ON_BATTLE_LOADING = 'minimapOnBattleLoading'

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ResearchPanel.py
 import typing
 from CurrentVehicle import g_currentVehicle
+from gui.veh_post_progression.helpers import needToShowCounter
 from items.battle_royale import isBattleRoyale
 from constants import IGR_TYPE
 from debug_utils import LOG_ERROR
@@ -124,16 +125,15 @@ class ResearchPanel(ResearchPanelMeta):
          'btnTooltip': tooltip}
 
     def __getVehPostProgressionData(self, vehicle):
-        showCounter = False
-        isAvailable = vehicle.postProgressionAvailability(unlockOnly=True).result
         isHintEnabled = False
+        isAvailable = vehicle.postProgressionAvailability(unlockOnly=True).result
         if vehicle.xp > 0 and isAvailable:
             purchasableStep = vehicle.postProgression.getFirstPurchasableStep(ExtendedMoney(xp=vehicle.xp))
-            showCounter = purchasableStep is not None
-            isHintEnabled = showCounter and purchasableStep.stepID == vehicle.postProgression.getRawTree().rootStep
+            if purchasableStep is not None:
+                isHintEnabled = purchasableStep.stepID == vehicle.postProgression.getRawTree().rootStep
         tutorialStorage = getTutorialGlobalStorage()
         if tutorialStorage is not None:
             tutorialStorage.setValue(GLOBAL_FLAG.VEH_POST_PROGRESSION_PURCHASABLE, isHintEnabled)
-        return {'showCounter': showCounter,
+        return {'showCounter': needToShowCounter(vehicle),
          'btnEnabled': isAvailable,
          'btnVisible': vehicle.isPostProgressionExists}

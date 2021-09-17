@@ -19,7 +19,7 @@ class EpicVehiclesWatcher(BaseVehiclesWatcher):
     def _getUnsuitableVehicles(self, onClear=False):
         config = self.lobbyContext.getServerSettings().epicBattles
         vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.LEVELS(config.validVehicleLevels)).itervalues()
-        eventVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE ^ REQ_CRITERIA.VEHICLE.CLAN_WARS).itervalues()
+        eventVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE).itervalues()
         return chain(vehs, eventVehs)
 
     def _getVehiclesCustomStates(self, onClear=False):

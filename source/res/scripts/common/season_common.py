@@ -14,6 +14,9 @@ class GameSeasonCycle(namedtuple('GameSeasonCycle', 'ID, status, startDate, endD
     def __cmp__(self, other):
         return cmp(self.ID, other.ID)
 
+    def getUserName(self):
+        return str(self.ordinalNumber)
+
     def getEpicCycleNumber(self):
         return int(self.ID % 100)
 
@@ -77,9 +80,13 @@ class GameSeason(object):
 
         return None
 
+    def getFirstCycleInfo(self):
+        firstCycleID = min(self.getAllCycles().iterkeys())
+        return self.getAllCycles()[firstCycleID]
+
     def getLastCycleInfo(self):
         lastCycleID = max(self.getAllCycles().iterkeys())
-        return self.getAllCycles()[lastCycleID] if lastCycleID else None
+        return self.getAllCycles()[lastCycleID]
 
     def getLastActiveCycleInfo(self, now):
         lastCycle = None

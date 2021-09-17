@@ -431,7 +431,13 @@ class FittingItem(GUIItem):
         return False
 
     def mayInstall(self, vehicle, slotIdx=None):
-        return vehicle.descriptor.mayInstallComponent(self.intCD)
+        optDevicesLayouts = None
+        if vehicle.optDevices.setupLayouts.capacity > 1:
+            optDevicesLayouts = []
+            for setup in vehicle.optDevices.setupLayouts.setups.itervalues():
+                optDevicesLayouts.append(setup.getIntCDs())
+
+        return vehicle.descriptor.mayInstallComponent(self.intCD, optDevicesLayouts=optDevicesLayouts)
 
     def mayRemove(self, vehicle):
         return (True, '')

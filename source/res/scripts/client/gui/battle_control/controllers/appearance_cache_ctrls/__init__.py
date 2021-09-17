@@ -11,12 +11,14 @@ def getWholeVehModels(vDesc):
     index = 0
     for chassie in vType.chassis:
         prereqs.add(chassie.models.undamaged)
-        splineDesc = chassie.splineDesc
-        if splineDesc is not None:
-            prereqs.add(splineDesc.segmentModelLeft())
-            prereqs.add(splineDesc.segmentModelRight())
-            prereqs.add(splineDesc.segment2ModelLeft())
-            prereqs.add(splineDesc.segment2ModelRight())
+        splinePairs = chassie.splineDesc.trackPairs if chassie.splineDesc else {}
+        for splinePairDesc in splinePairs.itervalues():
+            if splinePairDesc is not None:
+                prereqs.add(splinePairDesc.segmentModelLeft())
+                prereqs.add(splinePairDesc.segmentModelRight())
+                prereqs.add(splinePairDesc.segment2ModelLeft())
+                prereqs.add(splinePairDesc.segment2ModelRight())
+
         bspModels.add((index, chassie.hitTester.bspModelName))
         index += 1
 

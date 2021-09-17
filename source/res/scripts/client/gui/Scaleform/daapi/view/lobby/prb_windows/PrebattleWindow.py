@@ -247,8 +247,7 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
              'isPlayerSpeaking': isPlayerSpeaking(account.dbID),
              'colors': getColors(key),
              'isExperimentalModule': bool(badgeVisibility),
-             'experimentalModuleName': moduleName,
-             'hasPermissions': False})
+             'experimentalModuleName': moduleName})
 
         return result
 

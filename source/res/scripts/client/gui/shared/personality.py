@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/personality.py
 import logging
+import time
 import weakref
+from functools import partial
 import BigWorld
 import SoundGroups
+import nations
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
-from account_helpers.account_validator import AccountValidator, ValidationCodes
-from adisp import process
+from account_helpers.account_validator import ValidationCodes, InventoryVehiclesValidator, InventoryOutfitValidator, InventoryTankmenValidator
+from adisp import process, async
 from constants import HAS_DEV_RESOURCES
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, g_guiResetters, miniclient
@@ -17,34 +20,36 @@ from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.impl import backport
+from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils import requesters
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
-from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
 from gui.wgnc import g_wgncProvider
 from helpers import isPlayerAccount, time_utils, dependency
 from helpers.blueprint_generator import g_blueprintGenerator
 from helpers.statistics import HANGAR_LOADING_STATE
+from items import vehicles
 from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.offers import IOffersDataProvider
-from skeletons.gui.shared.utils import IHangarSpace, IRaresCache
-from skeletons.gui.web import IWebController
+from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.game_control import IGameStateTracker, IBootcampController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
+from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.shared.utils import IHangarSpace, IRaresCache
 from skeletons.gui.sounds import ISoundsController
-from skeletons.gui.event_boards_controllers import IEventBoardController
+from skeletons.gui.web import IWebController
 from skeletons.helpers.statistics import IStatisticsCollector
 _logger = logging.getLogger(__name__)
 try:
@@ -93,61 +98,47 @@ class ServicesLocator(object):
         cls.clear()
 
 
-@process
+class NationVehiclesCacher(object):
+
+    def __init__(self, nation):
+        self.__nation = nation
+        self.__name__ = '%sVehiclesCacher' % nations.NAMES[nation]
+
+    @async
+    def __call__(self, ctx, callback=None):
+        itemGetter = ServicesLocator.itemsCache.items.getItem
+        counter = 0
+        for vehTypeID in vehicles.g_list.getList(self.__nation):
+            if itemGetter(GUI_ITEM_TYPE.VEHICLE, self.__nation, vehTypeID) is None:
+                _logger.error('Vehicle with nation:%s and innationID:%s doesnt exist', self.__nation, vehTypeID)
+                callback(False)
+                return
+            counter += 1
+
+        _logger.info('Vehicles in nation: %s created %s', nations.NAMES[self.__nation], counter)
+        callback(True)
+        return
+
+
 def onAccountShowGUI(ctx):
-    global onCenterIsLongDisconnected
+    Waiting.show('enter')
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
     ServicesLocator.lobbyContext.onAccountShowGUI(ctx)
-    playerRef = weakref.ref(BigWorld.player())
-    yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI, notify=False)
-    if not playerRef():
-        _logger.warn('onAccountShowGUI(): the item cache update callback has been called for an already deleted PlayerAccount object.')
-        return
-    Waiting.show('enter')
-    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
-    ServicesLocator.eventsCache.start()
-    yield ServicesLocator.eventsCache.update()
-    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
-    yield ServicesLocator.settingsCache.update()
-    if not ServicesLocator.itemsCache.isSynced():
-        ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/0')
-        return
-    eula = EULADispatcher()
-    yield eula.processLicense()
-    eula.fini()
-    g_playerEvents.onGuiCacheSyncCompleted(ctx)
-    code = AccountValidator().validate()
-    if code != ValidationCodes.OK:
-        ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/{}'.format(code))
-        return
-    ServicesLocator.itemsCache.onSyncCompleted(CACHE_SYNC_REASON.SHOW_GUI, {})
-    ServicesLocator.settingsCore.serverSettings.applySettings()
-    ServicesLocator.gameState.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
-    accDossier = ServicesLocator.itemsCache.items.getAccountDossier()
-    ServicesLocator.rareAchievesCache.request(accDossier.getBlock('rareAchievements'))
-    premium = ServicesLocator.itemsCache.items.stats.isPremium
-    if ServicesLocator.hangarSpace.inited:
-        ServicesLocator.hangarSpace.refreshSpace(premium)
-    else:
-        ServicesLocator.hangarSpace.init(premium)
-    g_currentVehicle.init()
-    g_currentPreviewVehicle.init()
-    ServicesLocator.webCtrl.start()
-    ServicesLocator.soundCtrl.start()
-    ServicesLocator.gameplay.postStateEvent(PlayerEventID.ACCOUNT_SHOW_GUI)
-    serverSettings = ServicesLocator.lobbyContext.getServerSettings()
-    g_prbLoader.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
-    g_clanCache.onAccountShowGUI()
-    g_blueprintGenerator.init()
-    SoundGroups.g_instance.enableLobbySounds(True)
-    onCenterIsLongDisconnected(True)
-    ServicesLocator.offersProvider.start()
-    guiModsSendEvent('onAccountShowGUI', ctx)
-    if serverSettings.wgcg.getLoginOnStart() and not ServicesLocator.bootcamp.isInBootcamp():
-        yield ServicesLocator.webCtrl.login()
-    if serverSettings.isElenEnabled():
-        yield ServicesLocator.eventsController.getEvents(onlySettings=True, onLogin=True, prefetchKeyArtBig=False)
-        yield ServicesLocator.eventsController.getHangarFlag(onLogin=True)
+    chain = [__runItemsCacheSync,
+     __validateInventoryVehicles,
+     __validateInventoryOutfit,
+     __validateInventoryTankmen]
+    chain.extend([ NationVehiclesCacher(nationID) for nationID in xrange(len(nations.NAMES)) ])
+    chain.extend([__runQuestSync,
+     __runSettingsSync,
+     __processEULA,
+     __notifyOnSyncComplete,
+     __requestDossier,
+     __initializeHangarSpace,
+     __initializeHangar,
+     __processWebCtrl,
+     __processElen])
+    __runChain(chain, ctx)
 
 
 def onAccountBecomeNonPlayer():
@@ -233,6 +224,7 @@ def onIGRTypeChanged(roomType, xpFactor):
 
 
 def init(loadingScreenGUI=None):
+    global onCenterIsLongDisconnected
     global onShopResyncStarted
     global onAccountShowGUI
     global onScreenShotMade
@@ -354,3 +346,153 @@ def onRecreateDevice():
             c()
         except Exception:
             LOG_CURRENT_EXCEPTION()
+
+
+@process
+def __runChain(chain, ctx, currentIdx=0):
+    if currentIdx < len(chain):
+        ts = time.time()
+        result = yield chain[currentIdx](ctx)
+        te = time.time()
+        rt = te - ts
+        _logger.info('%s elapsed time: %s sec', chain[currentIdx].__name__, rt)
+        if result:
+            currentIdx += 1
+            BigWorld.callback(0.0, partial(__runChain, chain, ctx, currentIdx))
+        else:
+            del chain[:]
+    else:
+        del chain[:]
+
+
+@async
+@process
+def __runItemsCacheSync(_, callback=None):
+    playerRef = weakref.ref(BigWorld.player())
+    yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI, notify=False)
+    if not ServicesLocator.itemsCache.isSynced():
+        ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/0')
+        callback(False)
+        return
+    if not playerRef():
+        _logger.warn('onAccountShowGUI(): the item cache update callback has been called for an already deleted PlayerAccount object.')
+        callback(False)
+        return
+    callback(True)
+
+
+@async
+@process
+def __runQuestSync(_, callback=None):
+    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
+    ServicesLocator.eventsCache.start()
+    yield ServicesLocator.eventsCache.update()
+    callback(True)
+
+
+@async
+@process
+def __runSettingsSync(_, callback=None):
+    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
+    yield ServicesLocator.settingsCache.update()
+    ServicesLocator.settingsCore.serverSettings.applySettings()
+    callback(True)
+
+
+@async
+@process
+def __processEULA(_, callback=None):
+    eula = EULADispatcher()
+    yield eula.processLicense()
+    eula.fini()
+    callback(True)
+
+
+def __processValidator(validator, callback):
+    code = validator.validate()
+    if code != ValidationCodes.OK:
+        ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/{}'.format(code))
+        callback(False)
+        return
+    callback(True)
+
+
+@async
+def __validateInventoryVehicles(_, callback=None):
+    __processValidator(InventoryVehiclesValidator(), callback)
+
+
+@async
+def __validateInventoryOutfit(_, callback=None):
+    __processValidator(InventoryOutfitValidator(), callback)
+
+
+@async
+def __validateInventoryTankmen(_, callback=None):
+    __processValidator(InventoryTankmenValidator(), callback)
+
+
+@async
+def __notifyOnSyncComplete(ctx, callback=None):
+    playerRef = weakref.ref(BigWorld.player())
+    g_playerEvents.onGuiCacheSyncCompleted(ctx)
+    ServicesLocator.itemsCache.onSyncCompleted(CACHE_SYNC_REASON.SHOW_GUI, {})
+    if not playerRef():
+        _logger.warn('onSyncCompleted(): the item cache update callback has been called for an already deleted PlayerAccount object.')
+        callback(False)
+        return
+    ServicesLocator.gameState.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
+    callback(True)
+
+
+@async
+def __requestDossier(_, callback=None):
+    accDossier = ServicesLocator.itemsCache.items.getAccountDossier()
+    ServicesLocator.rareAchievesCache.request(accDossier.getBlock('rareAchievements'))
+    callback(True)
+
+
+@async
+def __initializeHangarSpace(_, callback=None):
+    premium = ServicesLocator.itemsCache.items.stats.isPremium
+    if ServicesLocator.hangarSpace.inited:
+        ServicesLocator.hangarSpace.refreshSpace(premium)
+    else:
+        ServicesLocator.hangarSpace.init(premium)
+    g_currentVehicle.init()
+    g_currentPreviewVehicle.init()
+    callback(True)
+
+
+@async
+def __initializeHangar(ctx=None, callback=None):
+    ServicesLocator.soundCtrl.start()
+    SoundGroups.g_instance.enableLobbySounds(True)
+    ServicesLocator.gameplay.postStateEvent(PlayerEventID.ACCOUNT_SHOW_GUI)
+    g_prbLoader.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
+    g_clanCache.onAccountShowGUI()
+    g_blueprintGenerator.init()
+    onCenterIsLongDisconnected(True)
+    ServicesLocator.offersProvider.start()
+    guiModsSendEvent('onAccountShowGUI', ctx)
+    callback(True)
+
+
+@async
+@process
+def __processWebCtrl(_, callback=None):
+    serverSettings = ServicesLocator.lobbyContext.getServerSettings()
+    ServicesLocator.webCtrl.start()
+    if serverSettings.wgcg.getLoginOnStart() and not ServicesLocator.bootcamp.isInBootcamp():
+        yield ServicesLocator.webCtrl.login()
+    callback(True)
+
+
+@async
+@process
+def __processElen(_, callback=None):
+    serverSettings = ServicesLocator.lobbyContext.getServerSettings()
+    if serverSettings.isElenEnabled():
+        yield ServicesLocator.eventsController.getEvents(onlySettings=True, onLogin=True, prefetchKeyArtBig=False)
+        yield ServicesLocator.eventsController.getHangarFlag(onLogin=True)
+    callback(True)

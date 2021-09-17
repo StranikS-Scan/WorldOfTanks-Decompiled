@@ -20,7 +20,10 @@ from account_helpers.settings_core import settings_constants
 from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_WARNING
 from helpers.CallbackDelayer import CallbackDelayer
-_DistRangeSetting = namedtuple('_DistRangeSetting', ['minArenaSize', 'distRange', 'acceleration'])
+_DistRangeSetting = namedtuple('_DistRangeSetting', ['minArenaSize',
+ 'distRange',
+ 'scrollMultiplier',
+ 'acceleration'])
 _CAM_YAW_ROUND = 4
 
 def getCameraAsSettingsHolder(settingsDataSec):
@@ -177,7 +180,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__curSense = self._cfg['keySensitivity'] if updatedByKeyboard else self._cfg['sensitivity']
         standardMaxDist = self._cfg['distRange'][1]
         if self.__camDist > standardMaxDist:
-            self.__curSense *= 1.0 + (self.__camDist - self._cfg['distRange'][1]) * self.__getCameraAcceleration()
+            self.__curSense *= self.__getCameraScrollMultiplier() + (self.__camDist - self._cfg['distRange'][1]) * self.__getCameraAcceleration()
         self.__autoUpdatePosition = updatedByKeyboard
         self.__dxdydz = Vector3(dx, dy, dz)
 
@@ -430,10 +433,11 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
             return dynamicDistRanges
         else:
             value = section['dynamicDistRange']
-            minArenaSize = readFloat(dataSec, 'minArenaSize', 0.1, 2000, 2000.0)
-            distRange = readVec2(value, 'distRangeOverride', 0.1, 100, (40, 300))
-            acceleration = readFloat(dataSec, 'acceleration', 0.1, 100, 0.1)
-            dynamicDistRanges.append(_DistRangeSetting(minArenaSize, distRange, acceleration))
+            minArenaSize = readFloat(value, 'minArenaSize', 0.1, 2000, 2000.0)
+            distRange = readVec2(value, 'distRangeOverride', (1, 1), (2000, 2000), (40, 300))
+            acceleration = readFloat(value, 'acceleration', 0.0, 100.0, 0.0)
+            scrollMultiplier = readFloat(value, 'scrollMultiplier', 0.0, 100.0, 1.0)
+            dynamicDistRanges.append(_DistRangeSetting(minArenaSize, distRange, scrollMultiplier, acceleration))
             return dynamicDistRanges
 
     def __getActiveDistRangeForArena(self):
@@ -457,7 +461,10 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         return self._cfg['distRange'] if not self.__activeDistRangeSettings else self.__activeDistRangeSettings.distRange
 
     def __getCameraAcceleration(self):
-        return 0 if not self.__activeDistRangeSettings else self.__activeDistRangeSettings.acceleration
+        return 0.0 if not self.__activeDistRangeSettings else self.__activeDistRangeSettings.acceleration
+
+    def __getCameraScrollMultiplier(self):
+        return 1.0 if not self.__activeDistRangeSettings else self.__activeDistRangeSettings.scrollMultiplier
 
     def __enableSwitchers(self, updateTransitionEnabled=True):
         minDist, _ = self.__getDistRange()

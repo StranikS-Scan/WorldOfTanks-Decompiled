@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import OFFE
 from gui.Scaleform.daapi.view.meta.VehiclePreviewBrowseTabMeta import VehiclePreviewBrowseTabMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
-from gui.shared import g_eventBus
+from gui.shared import g_eventBus, events
 from gui.shared.formatters import text_styles, icons
 from gui.shared.money import Currency
 from gui.impl import backport
@@ -40,6 +40,11 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
 
     def setActiveState(self, isActive):
         pass
+
+    def onDisclaimerClick(self):
+        if g_currentPreviewVehicle.isPresent():
+            vehicle = g_currentPreviewVehicle.item
+            g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, vehicle.getDisclaimerUrl()))
 
     def setHeroTank(self, isHeroTank):
         self.__isHeroTank = isHeroTank
@@ -89,6 +94,7 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
                 description = description[:maxDescriptionLength - 3] + '...'
             icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INFO, 24, 24, -7, -4)
             self.as_setDataS({'historicReferenceTxt': text_styles.main(description),
+             'needDisclaimer': item.hasDisclaimer(),
              'showTooltip': hasTooltip,
              'vehicleType': g_currentPreviewVehicle.getVehiclePreviewType(),
              'titleInfo': '%s%s' % (_ms(VEHICLE_PREVIEW.INFOPANEL_TAB_ELITEFACTSHEET_INFO), icon),

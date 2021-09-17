@@ -9,6 +9,9 @@ from dossiers2.custom import records
 from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.custom.cache import getCache
 from dossiers2.custom.utils import isVehicleSPG, getInBattleSeriesIndex
+from arena_achievements_processing.utils import getLevel, getTags
+import arena_achievements
+_BATTLE_HERO_CONFIG = arena_achievements.ACHIEVEMENT_CONDITIONS
 _saveRecordsInAccountDescr = {BONUS_CAPS.DOSSIER_ACHIEVEMENTS_15X15: [{'block': 'achievements',
                                           'records': ('maxInvincibleSeries', 'maxDiehardSeries', 'maxSniperSeries', 'maxKillingSeries', 'maxPiercingSeries', 'maxAimerSeries')}],
  BONUS_CAPS.DOSSIER_ACHIEVEMENTS_7X7: [{'block': 'achievements7x7',
@@ -48,6 +51,10 @@ def getMaxVehResults(results):
 def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, maxVehResults, avatarResults):
     bonusType = battleResults['bonusType']
     maxValuesChanged, frags8p = __updateDossierCommonPart(DOSSIER_TYPE.ACCOUNT, dossierDescr, battleResults, dossierXP, avatarResults)
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_15X15) or BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_30X30):
+        for func in STEAM_UPDATE:
+            func(dossierDescr, battleResults, vehDossiers)
+
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_ACHIEVEMENTS):
         for vehTypeCompDescr, (_, vehDossierDescr) in vehDossiers.iteritems():
             __updateAccountRecords(BONUS_CAPS.get(bonusType), dossierDescr, vehDossierDescr)
@@ -129,6 +136,7 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
         for record in maxValuesChanged:
             dossierDescr['maxEpicBattle'][record] = maxVehResults[record]
 
+    __updateSteamMasteryMarks(dossierDescr, battleResults, vehDossiers)
     for vehTypeCompDescr, (_, vehDossierDescr) in vehDossiers.iteritems():
         __updateAccountDossierCuts(dossierDescr, battleResults, dossierXP, vehTypeCompDescr, vehDossierDescr, avatarResults)
 
@@ -162,10 +170,13 @@ def updatePotapovQuestAchievements(accDossierDescr, progress):
     achievementCounters = dict()
     completedCounters = dict()
     tileCache = potapov_quests.g_tileCache
+    completedBranches = set()
     for questID, (flags, state) in progress.iteritems():
         if state < potapov_quests.PQ_STATE.NEED_GET_MAIN_REWARD:
             continue
         pqType = potapov_quests.g_cache.questByPotapovQuestID(questID)
+        if pqType.isFinal:
+            completedBranches.add(questID)
         tileInfo = tileCache.getTileInfo(pqType.tileID)
         if state >= potapov_quests.PQ_STATE.NEED_GET_MAIN_REWARD:
             seasonID = tileInfo['seasonID']
@@ -176,11 +187,16 @@ def updatePotapovQuestAchievements(accDossierDescr, progress):
             if chainAchievement:
                 achievementCounters[chainAchievement] = achievementCounters.get(chainAchievement, 0) + 1
 
-    for seasonID, minCounter, achievementName in ((1, 1, 'firstMerit'), (2, 5, 'newMeritPM2')):
+    for seasonID, minCounter, dossierBlockName, achievementName in ((1, 1, 'singleAchievements', 'firstMerit'),
+     (1, 1, 'steamAchievements', 'steamDoPotapovQuestMedal'),
+     (2, 5, 'singleAchievements', 'newMeritPM2'),
+     (2, 1, 'steamAchievements', 'steamDoPotapovQuestMedal')):
         needToAward = completedCounters.get(seasonID, 0) >= minCounter
-        if needToAward and achievementName not in accDossierDescr['singleAchievements']:
-            accDossierDescr['singleAchievements'][achievementName] = True
+        if needToAward and not accDossierDescr[dossierBlockName][achievementName]:
+            accDossierDescr[dossierBlockName][achievementName] = True
 
+    if len(completedBranches) and not accDossierDescr['steamAchievements']['steamDoAllBranchPotapovQuestMedal']:
+        accDossierDescr['steamAchievements']['steamDoAllBranchPotapovQuestMedal'] = True
     for chainAchievement, counter in achievementCounters.iteritems():
         if chainAchievement not in RECORD_CONFIGS:
             continue
@@ -533,3 +549,249 @@ def __updateCapturePointsWithBaseCapture(dossierDescr, results):
 def __updateDefencePoints(dossierDescr, results):
     if results['winnerTeam'] == results['team']:
         dossierDescr['achievements7x7']['sentinel'] += results['droppedCapturePoints']
+
+
+def __updateSteamBasePoints(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamBasePointsMedal']:
+        return
+    if results['isEnemyBaseCaptured'] and results['winnerTeam'] == results['team']:
+        dossierDescr['steamAchievements']['steamBasePoints'] += results['capturePoints']
+    dossierDescr['steamAchievements']['steamBasePoints'] += results['droppedCapturePoints']
+
+
+def __updateSteamFighter(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamFighterMedal']:
+        return
+    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+        killerLevel = getLevel(vehTypeCompDescr)
+        break
+
+    for _, victimTypeCompDescr, _ in results['killList']:
+        victimLevel = getLevel(victimTypeCompDescr)
+        if victimLevel - killerLevel >= RECORD_CONFIGS['steamFighterMedal']:
+            dossierDescr['steamAchievements']['steamFighterMedal'] = True
+
+
+def __updateSteamHardCharacter(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamHardCharacterMedal']:
+        return
+    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+        if 'heavyTank' not in getTags(vehTypeCompDescr):
+            return
+        break
+
+    dossierDescr['steamAchievements']['steamHardCharacter'] += results['damageBlockedByArmor']
+
+
+def __updateSteamMedium(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamMediumMedal']:
+        return
+    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+        if 'mediumTank' not in getTags(vehTypeCompDescr):
+            return
+        break
+
+    dossierDescr['steamAchievements']['steamMedium'] += results['damageDealt']
+
+
+def __updateSteamATSPG(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamATSPGMedal']:
+        return
+    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+        if 'AT-SPG' not in getTags(vehTypeCompDescr):
+            return
+        break
+
+    dossierDescr['steamAchievements']['steamATSPG'] += results['damageDealt']
+
+
+def __updateSteamDieHard(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamDieHardMedal']:
+        return
+    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+        if 'heavyTank' not in getTags(vehTypeCompDescr):
+            return
+        break
+
+    value = results['damageDealt'] + results['damageBlockedByArmor'] + results['damageReceived']
+    if value >= RECORD_CONFIGS['steamDieHardMedal']:
+        dossierDescr['steamAchievements']['steamDieHardMedal'] = True
+
+
+def __updateSteamDestroyer(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamDestroyerMedal']:
+        return
+    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+        if 'AT-SPG' not in getTags(vehTypeCompDescr):
+            return
+        break
+
+    if results['damageDealt'] >= RECORD_CONFIGS['steamDestroyerMedal'] and len(results['killList']) >= 2:
+        dossierDescr['steamAchievements']['steamDestroyerMedal'] = True
+
+
+def __updateSteamMediumPerformance(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamMediumPerformanceMedal']:
+        return
+    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+        if 'mediumTank' not in getTags(vehTypeCompDescr):
+            return
+        break
+
+    if results['damageDealt'] >= RECORD_CONFIGS['steamMediumPerformanceMedal']:
+        dossierDescr['steamAchievements']['steamMediumPerformanceMedal'] = True
+
+
+def __updateSteamReconnoiter(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamReconnoiterMedal']:
+        return
+    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+        if 'lightTank' not in getTags(vehTypeCompDescr):
+            return
+        break
+
+    dossierDescr['steamAchievements']['steamReconnoiter'] += results['damageAssistedRadio']
+
+
+def __updateSteamPotentialStun(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamPotentialStunMedal']:
+        return
+    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+        if 'SPG' not in getTags(vehTypeCompDescr):
+            return
+        break
+
+    dossierDescr['steamAchievements']['steamPotentialStun'] += results['stunDuration']
+
+
+def __updateSteamMileage(dossierDescr, results, vehDossiers):
+    if not dossierDescr['steamAchievements']['steamMileageMedal'] and results['mileage']:
+        dossierDescr['steamAchievements']['steamMileage'] += int(round(results['mileage'], -1))
+
+
+def __updateSteamHorizonSupport(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamHorizonSupportMedal']:
+        return
+    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+        if 'SPG' not in getTags(vehTypeCompDescr):
+            return
+        break
+
+    value = results['damageAssistedStun'] + results['damageAssistedTrack']
+    if value >= RECORD_CONFIGS['steamHorizonSupportMedal']:
+        dossierDescr['steamAchievements']['steamHorizonSupportMedal'] = True
+
+
+def __updateSteamSmallSupport(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamSmallSupportMedal']:
+        return
+    for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+        if 'lightTank' not in getTags(vehTypeCompDescr):
+            return
+        break
+
+    value = results['damageAssistedRadio'] + results['damageAssistedTrack'] + results['damageDealt']
+    if value >= RECORD_CONFIGS['steamSmallSupportMedal']:
+        dossierDescr['steamAchievements']['steamSmallSupportMedal'] = True
+
+
+def __updateSteamMasteryMarks(dossierDescr, results, vehDossiers):
+    if results['markOfMastery'] == RECORD_CONFIGS['steamMasteryMarksMedal3'] and not dossierDescr['steamAchievements']['steamNotPerfectMedal']:
+        dossierDescr['steamAchievements']['steamNotPerfectMedal'] = True
+    if dossierDescr['steamAchievements']['steamGoldenFiveMedal']:
+        return
+    if results['markOfMastery'] == RECORD_CONFIGS['steamMasteryMarksMedal']:
+        dossierDescr['steamAchievements']['steamMasteryMarks'] += 1
+        if not dossierDescr['steamAchievements']['steamNotPerfectMedal']:
+            dossierDescr['steamAchievements']['steamNotPerfectMedal'] = True
+
+
+def __updateSteamCumulativeMedalsCounters(dossierDescr, results, vehDossiers):
+    if not dossierDescr['steamAchievements']['steamKingMidasMedal']:
+        dossierDescr['steamAchievements']['steamBattleCredits'] += results['originalCredits']
+    if not dossierDescr['steamAchievements']['steamExperienceMedal']:
+        dossierDescr['steamAchievements']['steamBattleXP'] += results['originalXP']
+    if not dossierDescr['steamAchievements']['steamPowerKnowledgeMedal']:
+        dossierDescr['steamAchievements']['steamFreeXP'] += results['originalFreeXP']
+
+
+def __updateSteamBreakThrough(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamBreakThroughMedal']:
+        return
+    dossierDescr['steamAchievements']['steamBreakThrough'] += results['piercingEnemyHits']
+
+
+def __updateSteamStop(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamStopMedal']:
+        return
+    else:
+        critsByType = results['critsByType']
+        if critsByType.get('destroyed') is not None and critsByType.get('destroyed').get('track') is not None:
+            dossierDescr['steamAchievements']['steamStop'] += critsByType['destroyed']['track']
+        return
+
+
+def __updateSteamRandomFight(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamRandomFightMedal']:
+        return
+    dossierDescr['steamAchievements']['steamRandomFightMedal'] = True
+
+
+def __updateSteamMainGun(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamMainGunMedal']:
+        return
+    team = 2 if results['team'] == 1 else 1
+    enemyTeamHealth = results['teamHealth'][team]
+    if enemyTeamHealth > 0 and results['damageDealt'] >= 0.25 * enemyTeamHealth:
+        dossierDescr['steamAchievements']['steamMainGunMedal'] = True
+
+
+def __updateSteamSpotted(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamSpottedMedal']:
+        return
+    dossierDescr['steamAchievements']['steamSpotted'] += results['spotted']
+
+
+def __updateSteamFrags(dossierDescr, results, vehDossiers):
+    if dossierDescr['steamAchievements']['steamTheBeginningMedal']:
+        return
+    dossierDescr['steamAchievements']['steamFrags'] += results['kills']
+
+
+def __updateSteamTopLeague(dossierDescr, results, vehDossiers):
+    if results['winnerTeam'] != results['team'] or dossierDescr['steamAchievements']['steamTopLeagueMedal']:
+        return
+    else:
+        originalXP = -1
+        if results['misc'].get('max') is not None:
+            originalXP = results['misc']['max']['xp']
+        for vehTypeCompDescr, (_, _) in vehDossiers.iteritems():
+            level = getLevel(vehTypeCompDescr)
+            if originalXP == 1 and level == _BATTLE_HERO_CONFIG['steamTopLeague']['level'] and results['originalXP'] >= _BATTLE_HERO_CONFIG['steamTopLeague']['minXP']:
+                dossierDescr['steamAchievements']['steamTopLeague'] += 1
+            break
+
+        return
+
+
+STEAM_UPDATE = [__updateSteamBasePoints,
+ __updateSteamFighter,
+ __updateSteamHardCharacter,
+ __updateSteamMedium,
+ __updateSteamATSPG,
+ __updateSteamDieHard,
+ __updateSteamDestroyer,
+ __updateSteamMediumPerformance,
+ __updateSteamReconnoiter,
+ __updateSteamPotentialStun,
+ __updateSteamMileage,
+ __updateSteamHorizonSupport,
+ __updateSteamSmallSupport,
+ __updateSteamCumulativeMedalsCounters,
+ __updateSteamBreakThrough,
+ __updateSteamStop,
+ __updateSteamRandomFight,
+ __updateSteamMainGun,
+ __updateSteamSpotted,
+ __updateSteamFrags,
+ __updateSteamTopLeague]

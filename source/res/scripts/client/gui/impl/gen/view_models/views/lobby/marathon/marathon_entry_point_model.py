@@ -12,7 +12,7 @@ class MarathonEntryPointModel(ViewModel):
     STATE_MARATHON_IN_PROGRESS = 1
     STATE_MARATHON_FINISHED = 3
 
-    def __init__(self, properties=16, commands=1):
+    def __init__(self, properties=14, commands=1):
         super(MarathonEntryPointModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -45,65 +45,53 @@ class MarathonEntryPointModel(ViewModel):
     def setFormattedTimeTillNextState(self, value):
         self._setString(5, value)
 
-    def getTimeTillNextQuest(self):
+    def getCurrentPhase(self):
         return self._getNumber(6)
 
-    def setTimeTillNextQuest(self, value):
+    def setCurrentPhase(self, value):
         self._setNumber(6, value)
 
-    def getFormattedTimeTillNextQuest(self):
-        return self._getString(7)
-
-    def setFormattedTimeTillNextQuest(self, value):
-        self._setString(7, value)
-
-    def getCurrentPhase(self):
-        return self._getNumber(8)
-
-    def setCurrentPhase(self, value):
-        self._setNumber(8, value)
-
     def getRewardObtained(self):
-        return self._getBool(9)
+        return self._getBool(7)
 
     def setRewardObtained(self, value):
-        self._setBool(9, value)
+        self._setBool(7, value)
 
     def getIsPremShopURL(self):
-        return self._getBool(10)
+        return self._getBool(8)
 
     def setIsPremShopURL(self, value):
-        self._setBool(10, value)
+        self._setBool(8, value)
 
     def getIsPostProgression(self):
-        return self._getBool(11)
+        return self._getBool(9)
 
     def setIsPostProgression(self, value):
-        self._setBool(11, value)
+        self._setBool(9, value)
 
     def getDiscount(self):
-        return self._getReal(12)
+        return self._getNumber(10)
 
     def setDiscount(self, value):
-        self._setReal(12, value)
+        self._setNumber(10, value)
 
     def getTokenTemplate(self):
-        return self._getString(13)
+        return self._getString(11)
 
     def setTokenTemplate(self, value):
-        self._setString(13, value)
+        self._setString(11, value)
 
     def getTokenDoneTemplate(self):
-        return self._getString(14)
+        return self._getString(12)
 
     def setTokenDoneTemplate(self, value):
-        self._setString(14, value)
+        self._setString(12, value)
 
     def getUserTokens(self):
-        return self._getArray(15)
+        return self._getArray(13)
 
     def setUserTokens(self, value):
-        self._setArray(15, value)
+        self._setArray(13, value)
 
     def _initialize(self):
         super(MarathonEntryPointModel, self)._initialize()
@@ -113,13 +101,11 @@ class MarathonEntryPointModel(ViewModel):
         self._addNumberProperty('state', -1)
         self._addNumberProperty('timeTillNextState', -1)
         self._addStringProperty('formattedTimeTillNextState', '')
-        self._addNumberProperty('timeTillNextQuest', -1)
-        self._addStringProperty('formattedTimeTillNextQuest', '')
         self._addNumberProperty('currentPhase', -1)
         self._addBoolProperty('rewardObtained', False)
         self._addBoolProperty('isPremShopURL', False)
         self._addBoolProperty('isPostProgression', False)
-        self._addRealProperty('discount', 0.0)
+        self._addNumberProperty('discount', 0)
         self._addStringProperty('tokenTemplate', '')
         self._addStringProperty('tokenDoneTemplate', '')
         self._addArrayProperty('userTokens', Array())

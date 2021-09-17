@@ -212,5 +212,5 @@ def init():
     ARENA_BONUS_TYPE_CAPS.init()
 
 
-ALLOWED_ARENA_BONUS_TYPE_CAPS = frozenset([ v for v in ARENA_BONUS_TYPE_CAPS.__dict__.itervalues() if isinstance(v, str) ])
+ALLOWED_ARENA_BONUS_TYPE_CAPS = frozenset([ v for k, v in ARENA_BONUS_TYPE_CAPS.__dict__.iteritems() if not k.startswith('__') and isinstance(v, str) ])
 init()

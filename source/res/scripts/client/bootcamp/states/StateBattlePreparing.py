@@ -157,9 +157,6 @@ class StateBattlePreparing(AbstractState):
         self.__prereqs = prereqs
         return True
 
-    def onBattleAction(self, actionId, actionArgs):
-        pass
-
     def _doDeactivate(self):
         raise SoftException('This method should not be reached in this context')
 

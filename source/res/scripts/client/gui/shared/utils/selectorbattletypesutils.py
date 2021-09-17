@@ -8,6 +8,12 @@ def setBattleTypeAsKnown(bType):
     AccountSettings.setSettings(KNOWN_SELECTOR_BATTLES, selectorKnownBattles)
 
 
+def setBattleTypeAsUnknown(bType):
+    selectorKnownBattles = set(AccountSettings.getSettings(KNOWN_SELECTOR_BATTLES))
+    selectorKnownBattles.discard(bType)
+    AccountSettings.setSettings(KNOWN_SELECTOR_BATTLES, selectorKnownBattles)
+
+
 def isKnownBattleType(bType):
     selectorKnownBattles = set(AccountSettings.getSettings(KNOWN_SELECTOR_BATTLES))
     return bType in selectorKnownBattles

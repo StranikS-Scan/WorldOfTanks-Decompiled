@@ -6,9 +6,8 @@ from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from async import async
 from frameworks.wulf import ViewStatus
-from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.ammunition_panel.base_view import BaseAmmunitionPanelView
-from gui.impl.lobby.tank_setup.intro_ammunition_setup_view import showIntroAmmunitionSetupWindow
+from gui.impl.lobby.tank_setup.intro_ammunition_setup_view import showIntro
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -17,8 +16,6 @@ from uilogging.veh_post_progression.loggers import VehPostProgressionSpecSlotLog
 _logger = logging.getLogger(__name__)
 _AMMUNITION_PANEL_HINTS = {OnceOnlyHints.AMMUNITION_PANEL_HINT: UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN,
  OnceOnlyHints.AMUNNITION_PANEL_EPIC_BATTLE_ABILITIES_HINT: UI_STORAGE_KEYS.EPIC_BATTLE_ABILITIES_INTRO_SHOWN}
-_TANK_SETUP_TO_HINT_SETTINGS = {TankSetupConstants.OPT_DEVICES: OnceOnlyHints.AMMUNITION_PANEL_HINT,
- TankSetupConstants.BATTLE_ABILITIES: OnceOnlyHints.AMUNNITION_PANEL_EPIC_BATTLE_ABILITIES_HINT}
 
 class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     _settingsCore = dependency.descriptor(ISettingsCore)
@@ -62,13 +59,7 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     @async
     def _onPanelSectionSelected(self, args):
         selectedSection = args['selectedSection']
-        showIntro = selectedSection in _TANK_SETUP_TO_HINT_SETTINGS.keys()
-        if showIntro and not self._uiSpamController.shouldBeHidden(_TANK_SETUP_TO_HINT_SETTINGS[selectedSection]):
-            self._settingsCore.serverSettings.saveInUIStorage({_AMMUNITION_PANEL_HINTS[_TANK_SETUP_TO_HINT_SETTINGS[selectedSection]]: True})
-            showIntro = False
-        if showIntro:
-            yield showIntroAmmunitionSetupWindow(selectedSection)
-            self._uiSpamController.setVisited(_TANK_SETUP_TO_HINT_SETTINGS[selectedSection])
+        yield showIntro(selectedSection, self.getParentWindow())
         if self.viewStatus != ViewStatus.LOADED:
             return
         super(HangarAmmunitionPanelView, self)._onPanelSectionSelected(args)

@@ -7,11 +7,12 @@ _SUPPORTED_FORMATS = frozenset('cbBhHiIlLqQfd')
 
 class StaticSizeBlockBuilder(object):
 
-    def __init__(self, name, recordsLayout, eventsHandlers, popUpRecords):
+    def __init__(self, name, recordsLayout, eventsHandlers, popUpRecords, logRecords=None):
         self.name = name
         self.recordsLayout = recordsLayout
         self.__eventsHandlers = eventsHandlers
         self.__popUpRecords = set(popUpRecords)
+        self.__logRecords = set(logRecords) if logRecords else popUpRecords
         self.__layout = layout = [ (record, {}) for record in recordsLayout ]
         self.__packing = dict(layout)
         self.__format = '<'
@@ -40,7 +41,7 @@ class StaticSizeBlockBuilder(object):
         return
 
     def build(self, dossierDescr, compDescr=''):
-        return StaticDossierBlockDescr(name=self.name, dossierDescr=dossierDescr, compDescr=compDescr, eventsHandlers=self.__eventsHandlers, popUpRecords=self.__popUpRecords, recordsLayout=self.__layout, packing=self.__packing, format=self.__format, blockSize=self.__blockSize, initialData=self.__initialData)
+        return StaticDossierBlockDescr(name=self.name, dossierDescr=dossierDescr, compDescr=compDescr, eventsHandlers=self.__eventsHandlers, popUpRecords=self.__popUpRecords, logRecords=self.__logRecords, recordsLayout=self.__layout, packing=self.__packing, format=self.__format, blockSize=self.__blockSize, initialData=self.__initialData)
 
 
 class DictBlockBuilder(object):
@@ -68,15 +69,16 @@ class ListBlockBuilder(object):
 
 class BinarySetDossierBlockBuilder(object):
 
-    def __init__(self, name, valueNames, eventHandlers, popUpRecords):
+    def __init__(self, name, valueNames, eventHandlers, popUpRecords, logRecords=None):
         self.name = name
         self.recordsLayout = valueNames
         self.__valueToPosition = self.__buildValueToPosition(valueNames)
         self.__eventHandlers = eventHandlers
-        self.__popUpRecords = popUpRecords
+        self.__popUpRecords = set(popUpRecords)
+        self.__logRecords = set(logRecords) if logRecords else popUpRecords
 
     def build(self, dossierDescr, compDescr=''):
-        return BinarySetDossierBlockDescr(self.name, dossierDescr, compDescr, self.__eventHandlers, self.__popUpRecords, self.recordsLayout, self.__valueToPosition)
+        return BinarySetDossierBlockDescr(self.name, dossierDescr, compDescr, self.__eventHandlers, self.__popUpRecords, self.recordsLayout, self.__valueToPosition, self.__logRecords)
 
     def __buildValueToPosition(self, valueNames):
         valToPos = {}

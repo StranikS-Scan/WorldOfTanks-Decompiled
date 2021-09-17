@@ -121,7 +121,9 @@ ACHIEVEMENT_CONDITIONS = {'warrior': {'minFrags': 6,
                 'checks': [('DestructibleEntity', 150), ('SectorBase', 50)]},
  'occupyingForce': {'minBasePoints': 100},
  'supremeGun': {'minDamageDealt': 10000},
- 'smallArmy': {'minVehiclesDestroyed': 20}}
+ 'smallArmy': {'minVehiclesDestroyed': 20},
+ 'steamTopLeague': {'level': 10,
+                    'minXP': 1}}
 ACHIEVEMENT_CONDITIONS_EXT = {'warrior': {'minFrags': 8,
              'minKills': 8},
  'heroesOfRassenay': {'minKills': 21,

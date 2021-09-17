@@ -3,7 +3,7 @@
 import logging
 from shared_utils import first
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from items.components.c11n_constants import ProjectionDecalDirectionTags, ProjectionDecalFormTags, MATCHING_TAGS_SUFFIX, HIDDEN_FOR_USER_TAG, SLOT_DEFAULT_ALLOWED_MODEL
+from items.components.c11n_constants import ProjectionDecalDirectionTags, ProjectionDecalFormTags, SLOT_DEFAULT_ALLOWED_MODEL, ProjectionDecalMatchingTags
 _logger = logging.getLogger(__name__)
 SLOT_ASPECT_RATIO = {GUI_ITEM_TYPE.EMBLEM: 1.0,
  GUI_ITEM_TYPE.INSCRIPTION: 0.5}
@@ -128,7 +128,7 @@ class ProjectionDecalSlot(BaseCustomizationSlot):
 
     @property
     def hiddenForUser(self):
-        return HIDDEN_FOR_USER_TAG in self.tags
+        return self.descriptor.hiddenForUser
 
     @property
     def position(self):
@@ -169,8 +169,11 @@ class ProjectionDecalSlot(BaseCustomizationSlot):
 
     @property
     def matchingTag(self):
-        matchingTags = (tag for tag in self.tags if tag.endswith(MATCHING_TAGS_SUFFIX))
-        return first(matchingTags, None)
+        for tag in self.tags:
+            if tag in ProjectionDecalMatchingTags.ALL:
+                return tag
+
+        return None
 
     def isFitForFormfactor(self, formfactor):
         return formfactor in self.formfactors

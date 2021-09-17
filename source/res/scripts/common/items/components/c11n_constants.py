@@ -19,6 +19,7 @@ DEFAULT_SCALE_FACTOR_ID = 3
 DEFAULT_PALETTE = 0
 DEFAULT_DECAL_CLIP_ANGLE = 0.0
 DEFAULT_DECAL_TINT_COLOR = (255, 255, 255, 255)
+DEFAULT_DECAL_ANCHOR_SHIFT = 0.0
 RENT_IS_ALMOST_OVER_VALUE = 3
 EDITABLE_STYLE_STORAGE_DEPTH = 5
 EMPTY_ITEM_ID = 22222
@@ -115,7 +116,15 @@ class ProjectionDecalDirectionTags(object):
     ANY = PREFIX + 'any'
     LEFT_TO_RIGHT = PREFIX + 'left_to_right'
     RIGHT_TO_LEFT = PREFIX + 'right_to_left'
-    ALL = (ANY, LEFT_TO_RIGHT, RIGHT_TO_LEFT)
+    LEFT = 'left'
+    RIGHT = 'right'
+    FRONT = 'front'
+    ALL = (ANY,
+     LEFT_TO_RIGHT,
+     RIGHT_TO_LEFT,
+     LEFT,
+     RIGHT,
+     FRONT)
 
 
 class ProjectionDecalFormTags(object):
@@ -146,8 +155,12 @@ class ProjectionDecalPreferredTags(object):
      RECT1X6)
 
 
-MATCHING_TAGS_SUFFIX = '_matching_tag'
-HIDDEN_FOR_USER_TAG = 'hidden_for_user'
+class ProjectionDecalMatchingTags(object):
+    MIMIC = 'mimic'
+    COVER = 'cover'
+    SAFE = 'safe'
+    ALL = (MIMIC, COVER, SAFE)
+
 
 class ApplyArea(object):
     NONE = 0

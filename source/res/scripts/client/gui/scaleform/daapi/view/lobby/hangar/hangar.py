@@ -30,13 +30,10 @@ from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.promo.hangar_teaser_widget import TeaserViewer
-from gui.ranked_battles import ranked_helpers
-from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showRankedPrimeTimeWindow, showAmmunitionSetupView, showEpicBattlesPrimeTimeWindow
+from gui.shared.event_dispatcher import showAmmunitionSetupView, showEpicBattlesPrimeTimeWindow
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -63,6 +60,7 @@ from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from gui.impl.gen import R
 from gui.impl import backport
 from PlayerEvents import g_playerEvents
+from gui.periodic_battles.models import PrimeTimeStatus
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
 _logger = logging.getLogger(__name__)
@@ -307,7 +305,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __updateAlertMessage(self, *_):
         if self.prbDispatcher is not None:
             if self.rankedController.isRankedPrbActive():
-                self.__updateRankedAlertMsg()
+                self.__updateAlertBlock(*self.rankedController.getAlertBlock())
                 return
             if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.MAPBOX):
                 self.__updateMapboxAlertMsg()
@@ -317,14 +315,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                 return
         self.as_setAlertMessageBlockVisibleS(False)
         return
-
-    def __updateRankedAlertMsg(self):
-        status, _, _ = self.rankedController.getPrimeTimeStatus()
-        hasSuitVehs = self.rankedController.hasSuitableVehicles()
-        isBlockedStatus = status in (PrimeTimeStatus.NOT_AVAILABLE, PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN)
-        buttonCallback = showRankedPrimeTimeWindow if hasSuitVehs else g_eventDispatcher.loadRankedUnreachable
-        data = ranked_helpers.getAlertStatusVO()
-        self.__updateAlertBlock(buttonCallback, data, isBlockedStatus or not hasSuitVehs)
 
     def __updateEpicBattleAlertMsg(self):
         visible = not self.epicController.isInPrimeTime() and self.epicController.isEnabled()
@@ -340,7 +330,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __updateAlertBlock(self, callback, data, visible):
         self.as_setAlertMessageBlockVisibleS(visible)
         if visible and self.alertMessage is not None:
-            self.alertMessage.update(data._asdict(), onBtnClickCallback=callback)
+            self.alertMessage.update(data.asDict(), onBtnClickCallback=callback)
         return
 
     def __onWaitingShown(self, _):

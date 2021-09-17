@@ -33,9 +33,6 @@ class StateInBattle(AbstractState):
         g_bootcamp.setBattleResults(arenaID, BOOTCAMP_BATTLE_RESULT_MESSAGE.FAILURE, reasonCode)
         g_bootcampEvents.onUIStateChanged(UI_STATE.STOP)
 
-    def onBattleAction(self, actionId, actionParams):
-        self.__assistant.onAction(actionId, actionParams)
-
     def _doActivate(self):
         weave(self.__weaver)
         g_playerEvents.onKickedFromArena += self.onKickedFromArena

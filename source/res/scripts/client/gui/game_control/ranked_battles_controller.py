@@ -9,9 +9,10 @@ import BigWorld
 import Event
 import season_common
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import RANKED_WEB_INFO, RANKED_WEB_INFO_UPDATE
+from account_helpers.AccountSettings import RANKED_WEB_INFO, RANKED_WEB_INFO_UPDATE, RANKED_LAST_CYCLE_ID
 from adisp import process
 from constants import ARENA_BONUS_TYPE, EVENT_TYPE
+from gui.shared.utils.SelectorBattleTypesUtils import setBattleTypeAsUnknown
 from ranked_common import SwitchState
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -20,17 +21,19 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.items import ValidationResult
-from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_RESTRICTION
+from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_RESTRICTION, SELECTOR_BATTLE_TYPES
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.periodic_battles.models import PrimeTimeStatus
 from gui.ranked_battles import ranked_helpers
-from gui.ranked_battles.constants import PrimeTimeStatus, ZERO_RANK_ID, YEAR_POINTS_TOKEN, YEAR_AWARDS_ORDER, FINAL_QUEST_PATTERN, STANDARD_POINTS_COUNT, YEAR_STRIPE_SERVER_TOKEN, YEAR_STRIPE_CLIENT_TOKEN, MAX_GROUPS_IN_DIVISION, ENTITLEMENT_EVENT_TOKEN, FINAL_LEADER_QUEST, NOT_IN_LEAGUES_QUEST
+from gui.ranked_battles.constants import ZERO_RANK_ID, YEAR_POINTS_TOKEN, YEAR_AWARDS_ORDER, FINAL_QUEST_PATTERN, STANDARD_POINTS_COUNT, YEAR_STRIPE_SERVER_TOKEN, YEAR_STRIPE_CLIENT_TOKEN, MAX_GROUPS_IN_DIVISION, ENTITLEMENT_EVENT_TOKEN, FINAL_LEADER_QUEST, NOT_IN_LEAGUES_QUEST
 from gui.ranked_battles.ranked_builders.postbattle_awards_vos import AwardBlock
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.ranked_battles.ranked_helpers.web_season_provider import RankedWebSeasonProvider, UNDEFINED_WEB_INFO, UNDEFINED_LEAGUE_ID
 from gui.ranked_battles.ranked_helpers.year_position_provider import RankedYearPositionProvider
 from gui.ranked_battles.ranked_helpers.sound_manager import RankedSoundManager, Sounds
 from gui.ranked_battles.ranked_helpers.stats_composer import RankedBattlesStatsComposer
-from gui.ranked_battles.ranked_models import RankChangeStates, ShieldStatus, Division, RankedSeason, Rank, RankState, RankStep, RankProgress, RankData, BattleRankInfo
+from gui.ranked_battles.ranked_models import RankChangeStates, ShieldStatus, Division, RankedSeason, Rank, RankState, RankStep, RankProgress, RankData, BattleRankInfo, RankedAlertData
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.event_items import RankedQuest
 from gui.server_events.events_helpers import EventInfoModel
@@ -40,7 +43,6 @@ from gui.shared.money import Currency
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier
 from helpers import dependency, time_utils
-from predefined_hosts import g_preDefinedHosts
 from season_provider import SeasonProvider
 from shared_utils import first, findFirst
 from skeletons.connection_mgr import IConnectionManager
@@ -83,6 +85,7 @@ class ShowRankedPageCallback(object):
 
 
 class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvider, IGlobalListener):
+    _ALERT_DATA_CLASS = RankedAlertData
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
     __battleResultsService = dependency.descriptor(IBattleResultsService)
@@ -211,6 +214,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         currentRank, _ = self.__itemsCache.items.ranked.accRank
         return currentRank == self.getMaxPossibleRank() != ZERO_RANK_ID
 
+    def isBattlesPossible(self):
+        return self.isEnabled() and self.getCurrentSeason() is not None
+
     def isEnabled(self):
         return self.__rankedSettings.isEnabled
 
@@ -264,9 +270,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def hasSpecialSeason(self):
         return self.__rankedSettings.hasSpecialSeason
 
-    def hasConfiguredPrimeTimeServers(self):
-        return self.__hasPrimeStatusServer((PrimeTimeStatus.AVAILABLE, PrimeTimeStatus.NOT_AVAILABLE))
-
     def hasPrimeTimesTotalLeft(self):
         return self.__hasPrimeTimesLeft(time_utils.getCurrentLocalServerTimestamp())
 
@@ -295,6 +298,13 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def hasVehicleRankedBonus(self, compactDescr):
         bonusUsed = compactDescr in self.__itemsCache.items.stats.multipliedRankedVehicles
         return not bonusUsed and self.getStatsComposer().bonusBattlesCount > 0
+
+    def getAlertBlock(self):
+        alertData = self._getAlertBlockData()
+        buttonCallback = event_dispatcher.showRankedPrimeTimeWindow
+        if not self.hasSuitableVehicles():
+            buttonCallback = g_eventDispatcher.loadRankedUnreachable
+        return (buttonCallback, alertData or self._ALERT_DATA_CLASS(), alertData is not None)
 
     def getAwardTypeByPoints(self, points):
         pointMap = self.getYearAwardsPointsMap()
@@ -358,8 +368,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def getCurrentRank(self):
         return RankData(*self.__itemsCache.items.ranked.accRank)
 
-    def getCurrentSeason(self):
-        now = time_utils.getCurrentLocalServerTimestamp()
+    def getCurrentSeason(self, now=None):
+        now = now or time_utils.getCurrentLocalServerTimestamp()
         isCycleActive, seasonInfo = season_common.getSeason(self.__rankedSettings.asDict(), now)
         if isCycleActive:
             _, _, seasonID, _ = seasonInfo
@@ -684,6 +694,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def _createSeason(self, cycleInfo, seasonData):
         return RankedSeason(cycleInfo, seasonData, self.hasSpecialSeason())
 
+    def _getAlertBlockData(self):
+        return self._ALERT_DATA_CLASS.constructForVehicle(self.getSuitableVehicleLevels(), self.vehicleIsAvailableForBuy(), self.vehicleIsAvailableForRestore()) if not self.hasSuitableVehicles() else super(RankedBattlesController, self)._getAlertBlockData()
+
     @process
     def __switchForcedToRankedPrb(self):
         result = yield g_prbLoader.getDispatcher().doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANKED))
@@ -705,6 +718,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             self.__serverSettings.onServerSettingsChange -= self.__onUpdateRankedSettings
         self.__serverSettings = serverSettings
         self.__rankedSettings = self.__getRankedSettings()
+        self.__storeCycle()
         self.__serverSettings.onServerSettingsChange += self.__onUpdateRankedSettings
         return
 
@@ -741,6 +755,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def __onUpdateRankedSettings(self, diff):
         if 'ranked_config' in diff:
             self.__rankedSettings = self.__getRankedSettings()
+            self.__storeCycle()
             self.__statsComposer = RankedBattlesStatsComposer(self.__rankedSettings, self.__getCurrentOrPreviousSeason())
             self.__resizeRanksCache(self.__rankedSettings)
             self.__divisions = None
@@ -781,19 +796,11 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         amountRanks = len(division.getRanksIDs())
         return matchMakerUnits != amountRanks and matchMakerUnits <= MAX_GROUPS_IN_DIVISION
 
-    def __hasPrimeStatusServer(self, states):
-        for peripheryID in self.__getPeripheryIDs():
-            primeTimeStatus, _, _ = self.getPrimeTimeStatus(peripheryID)
-            if primeTimeStatus in states:
-                return True
-
-        return False
-
     def __hasPrimeTimesLeft(self, currTime):
         season = self.getCurrentSeason()
         if season is not None and season.hasActiveCycle(currTime):
             seasonEnd = season.getEndDate()
-            peripheryIDs = self.__getPeripheryIDs()
+            peripheryIDs = self._getAllPeripheryIDs()
             for peripheryID, primeTime in self.getPrimeTimes().iteritems():
                 if peripheryID in peripheryIDs and primeTime.getPeriodsBetween(currTime, seasonEnd):
                     return True
@@ -882,11 +889,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         season = self.getCurrentSeason()
         return None if season is None else first(self.__eventsCache.getRankedQuests(lambda q: q.getRank() == rankId and q.isHidden() and q.isForRank() and q.getSeasonID() == season.getSeasonID()).values())
 
-    def __getPeripheryIDs(self):
-        if self.__connectionMgr.isStandalone():
-            return {self.__connectionMgr.peripheryID}
-        return set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
-
     def __getRank(self, currentProgress, lastProgress, maxProgress, lastShield, shield, rankID, bonusSteps=None):
         stepsToProgress = self.__rankedSettings.accSteps
         rankIdx = rankID - 1
@@ -905,16 +907,20 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def __getRankedSettings(self):
         generalSettings = self.__serverSettings.rankedBattles
-        cycleID = None
-        now = time_utils.getCurrentLocalServerTimestamp()
-        _, cycleInfo = season_common.getSeason(generalSettings.asDict(), now)
-        if cycleInfo:
-            _, _, _, cycleID = cycleInfo
+        cycleID = self.__getCurrentCycleID()
         for season in generalSettings.seasons.values():
             if cycleID in season.get('cycles', {}):
                 return generalSettings.replace(season).replace(season['cycles'][cycleID])
 
         return generalSettings
+
+    def __getCurrentCycleID(self):
+        cycleID = None
+        now = time_utils.getCurrentLocalServerTimestamp()
+        _, cycleInfo = season_common.getSeason(self.__serverSettings.rankedBattles.asDict(), now)
+        if cycleInfo:
+            _, _, _, cycleID = cycleInfo
+        return cycleID
 
     def __getTokensAmount(self, tokenName):
         tokenInfo = self.__itemsCache.items.tokens.getTokens().get(tokenName)
@@ -1106,3 +1112,13 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def __showYearlyLeaders(self):
         ctx = {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}
         self.showRankedBattlePage(ctx)
+
+    def __storeCycle(self):
+        lastCycleID = AccountSettings.getSettings(RANKED_LAST_CYCLE_ID)
+        cycleID = self.__getCurrentCycleID()
+        if not self.isEnabled() or cycleID is None:
+            AccountSettings.setSettings(RANKED_LAST_CYCLE_ID, None)
+        elif lastCycleID != cycleID:
+            AccountSettings.setSettings(RANKED_LAST_CYCLE_ID, cycleID)
+            setBattleTypeAsUnknown(SELECTOR_BATTLE_TYPES.RANKED)
+        return

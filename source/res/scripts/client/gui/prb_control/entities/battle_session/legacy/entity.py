@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/battle_session/legacy/entity.py
 from soft_exception import SoftException
-from constants import PREBATTLE_TYPE, QUEUE_TYPE, PREBATTLE_ROLE
+from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_MESSAGES
 from gui.prb_control import prb_getters
@@ -122,15 +122,6 @@ class BattleSessionEntity(LegacyEntity):
                 result[roster] = map(lambda accInfo, rosterBits=roster: prb_items.PlayerPrbInfo(accInfo[0], entity=self, roster=rosterBits, **accInfo[1]), rosters[roster].iteritems())
 
         return result
-
-    def getRoles(self, pDatabaseID=None, clanDBID=None, team=None):
-        result = super(BattleSessionEntity, self).getRoles(pDatabaseID, clanDBID, team)
-        if self._settings is None or self._settings['type'] != PREBATTLE_TYPE.CLAN:
-            return result
-        else:
-            if not result:
-                result = PREBATTLE_ROLE.SELF_ASSIGNMENT_1 if team == 1 else PREBATTLE_ROLE.SELF_ASSIGNMENT_2
-            return result
 
     def getTeamLimits(self):
         return prb_getters.getPrebattleSettings().getTeamLimits(self.getPlayerTeam())

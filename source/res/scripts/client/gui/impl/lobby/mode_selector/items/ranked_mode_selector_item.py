@@ -5,8 +5,9 @@ from gui.battle_pass.battle_pass_helpers import getFormattedTimeLeft
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
+from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
-from gui.impl.lobby.mode_selector.items.constants import ModeSelectorRewardID
+from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID
 from helpers import dependency, int2roman, time_utils
 from skeletons.gui.game_control import IRankedBattlesController
@@ -44,19 +45,20 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
         return backport.text(R.strings.menu.headerButtons.battle.types.ranked.availability.frozen()) if self.__rankedBattleController.isFrozen() else super(RankedModeSelectorItem, self)._getDisabledTooltipText()
 
     def __onGameModeUpdated(self, *_):
-        statusText = self.__getRankedStatus()
+        statusNotActive = self.__getRankedNotActiveStatus()
         timeLeft = self.__getTimeLeft()
         with self.viewModel.transaction() as vm:
             vm.setEventName(self.__getRankedName())
-            vm.setStatus(statusText)
+            vm.setStatusNotActive(statusNotActive)
             vm.setTimeLeft(str(timeLeft))
             self.__fillRankedWidget(vm.widget)
+        setBattlePassState(self.viewModel)
 
     def __getRankedName(self):
         currentSeason = self.__rankedBattleController.getCurrentSeason()
         return self.__getRankedBattlesSeasonName(currentSeason) if currentSeason else ''
 
-    def __getRankedStatus(self):
+    def __getRankedNotActiveStatus(self):
         msR = R.strings.mode_selector.event
         if self.__rankedBattleController.hasAnySeason():
             currentSeason = self.__rankedBattleController.getCurrentSeason()

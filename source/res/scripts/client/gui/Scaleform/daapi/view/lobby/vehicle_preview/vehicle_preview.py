@@ -154,9 +154,11 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         notInteractive = (VIEW_ALIAS.LOBBY_STORE, VIEW_ALIAS.RANKED_BATTLE_PAGE, VIEW_ALIAS.VEH_POST_PROGRESSION)
         self._heroInteractive = not (self._itemsPack or self.__offers or self._backAlias in notInteractive)
         self.__haveCustomCrew = any((item.type == ItemPackType.CREW_CUSTOM for item in self._itemsPack)) if self._itemsPack else False
-        if 'previewAppearance' in ctx:
+        self.__hangarVehicleCD = ctx.get('hangarVehicleCD')
+        self.__previewAppearance = ctx.get('previewAppearance')
+        if self.__previewAppearance:
             self.__vehAppearanceChanged = True
-            g_currentPreviewVehicle.resetAppearance(ctx['previewAppearance'])
+            g_currentPreviewVehicle.resetAppearance(self.__previewAppearance)
         else:
             self.__vehAppearanceChanged = False
         self.__keepVehicleSelectionEnabled = False
@@ -172,6 +174,12 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     def _populate(self):
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         self.setBottomPanel()
+        if g_currentPreviewVehicle.intCD == self._vehicleCD:
+            self.__fullUpdate()
+        if self.__hangarVehicleCD and self.__isHeroTank and self.__vehAppearanceChanged:
+            g_currentPreviewVehicle.resetAppearance()
+            g_currentPreviewVehicle.selectVehicle(self.__hangarVehicleCD, None)
+            g_currentPreviewVehicle.resetAppearance(self.__previewAppearance)
         g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD)
         super(VehiclePreview, self)._populate()
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
@@ -331,6 +339,10 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         return result
 
     def _getExitEvent(self):
+        hangarVehicleCD = None
+        hangarVehicle = self.__hangarSpace.getVehicleEntity()
+        if self.__isHeroTank and hangarVehicle.typeDescriptor.type.compactDescr != g_currentVehicle.item.compactDescr:
+            hangarVehicleCD = hangarVehicle.typeDescriptor.type.compactDescr
         return events.LoadViewEvent(SFViewLoadParams(self.alias), ctx={'itemCD': self._vehicleCD,
          'previewAlias': self._backAlias,
          'previousBackAlias': self._previousBackAlias,
@@ -345,7 +357,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
          'endTime': self.__endTime,
          'buyParams': self.__buyParams,
          'vehParams': {'styleCD': self.__customizationCD} if self.__customizationCD is not None else {},
-         'isHeroTank': self.__isHeroTank})
+         'isHeroTank': self.__isHeroTank,
+         'hangarVehicleCD': hangarVehicleCD})
 
     def __onVehicleLoading(self, ctxEvent):
         if self.__customizationCD is not None and not ctxEvent.ctx.get('started'):
@@ -401,7 +414,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
          text_styles.main(VEHICLE_PREVIEW.INFOPANEL_TAB_LISTDESC_CREWEQUIPS),
          text_styles.main(VEHICLE_PREVIEW.INFOPANEL_TAB_LISTDESC_CREWSKILLSEQUIPS))
         hasSkillBonuses = any((tMan.skills for _, tMan in vehicle.crew))
-        hasEquipBonuses = any(itertools.chain(vehicle.optDevices.installed, vehicle.battleAbilities.installed, vehicle.battleBoosters.installed, (rCons and rCons.kpi for rCons in vehicle.consumables.installed), (vehicle.hasOutfit(vehicle.getAnyOutfitSeason()),)))
+        hasEquipBonuses = any(itertools.chain(vehicle.optDevices.installed, vehicle.battleAbilities.installed, vehicle.battleBoosters.installed, (rCons and rCons.getKpi() for rCons in vehicle.consumables.installed), (vehicle.hasOutfit(vehicle.getAnyOutfitSeason()),)))
         return descriptions[hasEquipBonuses << 1 | hasSkillBonuses]
 
     def _getBackBtnLabel(self):
@@ -454,7 +467,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     def __onInventoryChanged(self, *_):
         if not BuyVehicleWindow.getInstances():
             g_currentPreviewVehicle.selectNoVehicle()
-        event_dispatcher.selectVehicleInHangar(self._vehicleCD, not BuyVehicleWindow.getInstances())
 
     def __onOfferChanged(self, event):
         self.__currentOffer = event.ctx.get('offer')

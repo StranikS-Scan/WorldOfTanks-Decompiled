@@ -13,6 +13,8 @@ from goodies.goodie_helpers import getPremiumCost, getPriceWithDiscount, GoodieD
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from items.item_price import getNextSlotPrice, getNextBerthPackPrice
+from post_progression_common import CUSTOM_ROLE_SLOT_CHANGE_PRICE
+from post_progression_prices_common import getPostProgressionPrice
 from skeletons.gui.shared.utils.requesters import IShopCommonStats, IShopRequester
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 _logger = logging.getLogger(__name__)
@@ -528,9 +530,8 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
         else:
             return None
 
-    def customRoleSlotChangeCost(self, vehLevel, isRaw=False):
-        costs = self.getValue('customRoleSlotChangeCost', {})
-        cost = costs.get(vehLevel, {Currency.CREDITS: 6000})
+    def customRoleSlotChangeCost(self, vehType, isRaw=False):
+        cost = getPostProgressionPrice(CUSTOM_ROLE_SLOT_CHANGE_PRICE, vehType, self._data)
         return cost if isRaw else Money(**cost)
 
     def __getDiscountsDescriptionsByTarget(self, targetType):

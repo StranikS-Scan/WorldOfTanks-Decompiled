@@ -9,11 +9,9 @@ from debug_utils import LOG_NOTE, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 class MemoryCriticalController(object):
     ORIGIN_DEFAULT = -1
     messages = property(lambda self: self.__messages)
-    originTexQuality = property(lambda self: self.__originTexQuality)
 
     def __init__(self):
         self.__messages = []
-        self.__originTexQuality = -1
         self.__needReboot = False
         self.__loweredSettings = []
         self.onMemCrit = Event.Event()
@@ -83,38 +81,34 @@ class MemoryCriticalController(object):
 
         if textureMinQuality < texQuality:
             textureMinQuality = texQuality
-        if texQuality < textureMinQuality:
-            if self.__originTexQuality == -1 and texQuality < textureMinQuality:
-                self.__originTexQuality = texQuality
-        else:
+        if texQuality >= textureMinQuality:
             message = (1, 'insufficient_memory_please_reboot')
             self.__messages.append(message)
             self.onMemCrit(message)
             LOG_NOTE("The free memory is too low, We can't do anything. Please, reboot the game.")
             return
-        message = (0, 'tex_was_lowered_to_min')
-        self.onMemCrit(message)
         message = (1, 'insufficient_memory_please_reboot')
         self.__messages.append(message)
         if texQuality < textureMinQuality:
-            BigWorld.setGraphicsSetting('TEXTURE_QUALITY', textureMinQuality)
-            LOG_NOTE('To save the memory the texture quality setting was force lowered to <%s>.' % textureSettings[textureMinQuality][0])
+            if BigWorld.overrideGraphicsSetting('TEXTURE_QUALITY', textureMinQuality):
+                message = (0, 'tex_was_lowered_to_min')
+                self.onMemCrit(message)
+                LOG_NOTE('To save the memory the texture quality setting was force lowered to <%s>.' % textureSettings[textureMinQuality][0])
+            else:
+                self.onMemCrit(message)
         BigWorld.commitPendingGraphicsSettings()
 
     def restore(self):
         toRestore = []
-        if self.__originTexQuality != -1:
-            toRestore.append(('TEXTURE_QUALITY', self.__originTexQuality))
         commit = False
         for label, originalIndex in toRestore:
-            if self.__setGraphicsSetting(label, self.__originTexQuality):
+            if self.__setGraphicsSetting(label, originalIndex):
                 commit = True
                 LOG_NOTE('The setting was restored to the original value.', label, self.__getLoweredOptionLabel(label, originalIndex))
             LOG_ERROR('The setting was not restored to the original value.', label, self.__getLoweredOptionLabel(label, originalIndex), BigWorld.getGraphicsSetting(label), self.__getLoweredOption(label))
 
         if commit:
             BigWorld.commitPendingGraphicsSettings()
-            self.__originTexQuality = -1
             self.__needReboot = False
             self.__messages = []
 

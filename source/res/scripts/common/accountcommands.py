@@ -222,6 +222,7 @@ CMD_VPP_SELECT_PAIR = 10077
 CMD_VPP_DISCARD_PAIRS = 10078
 CMD_VPP_UNLOCK_TREE = 10079
 CMD_SET_CUSTOM_ROLE_SLOT = 10080
+CMD_TOGGLE_SWITCH_LAYOUT = 10081
 PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
 

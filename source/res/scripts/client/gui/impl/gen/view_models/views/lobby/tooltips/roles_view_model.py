@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.tooltips.role_action_model import Role
 class RolesViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(RolesViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -27,8 +27,15 @@ class RolesViewModel(ViewModel):
     def setRoleBgImage(self, value):
         self._setResource(2, value)
 
+    def getIsRoleActionsEnabled(self):
+        return self._getBool(3)
+
+    def setIsRoleActionsEnabled(self, value):
+        self._setBool(3, value)
+
     def _initialize(self):
         super(RolesViewModel, self)._initialize()
         self._addViewModelProperty('roleActions', UserListModel())
         self._addStringProperty('roleType', '')
         self._addResourceProperty('roleBgImage', R.invalid())
+        self._addBoolProperty('isRoleActionsEnabled', True)

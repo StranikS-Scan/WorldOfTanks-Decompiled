@@ -1099,14 +1099,15 @@ class CustomizationPurchaseValidator(SyncValidator):
 
 
 class PostProgressionStateValidator(SyncValidator):
-    __slots__ = ('__vehicle',)
+    __slots__ = ('__vehicle', '__skipRentalIsOver')
 
-    def __init__(self, vehicle, isEnabled=True):
+    def __init__(self, vehicle, skipRentalIsOver, isEnabled=True):
         super(PostProgressionStateValidator, self).__init__(isEnabled)
         self.__vehicle = vehicle
+        self.__skipRentalIsOver = skipRentalIsOver
 
     def _validate(self):
-        progressionAvailability = self.__vehicle.postProgressionAvailability()
+        progressionAvailability = self.__vehicle.postProgressionAvailability(unlockOnly=self.__skipRentalIsOver)
         return makeError(progressionAvailability.reason.value) if not progressionAvailability else makeSuccess()
 
 

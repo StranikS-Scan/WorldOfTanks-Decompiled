@@ -182,7 +182,11 @@ def getDefaultChassisXPhysicsCfg():
      'damping': 0.2,
      'brake': 1000.0,
      'rotationBrake': 1000.0,
-     'roadWheelPositions': (-2.5, -1.25, 0.0, 1.25, 2.5)}
+     'roadWheelPositions': (-2.5, -1.25, 0.0, 1.25, 2.5),
+     'brokenTrackLosses': {'enginePowerLoss': (0.0,),
+                           'fwMaxSpeedLoss': (0.0,),
+                           'bkMaxSpeedLoss': (0.0,),
+                           'rotationSpeedLoss': (0.0,)}}
 
 
 def getDeafultVehicleModelXPhysicsCfg():
@@ -478,10 +482,10 @@ def configurePhysics(physics, baseCfg, typeDescr, gravityFactor, updateSiegeMode
     return cfg
 
 
-def __computeModelShape(cfg, modelShapeCfg, typeDesc, hitTesters):
-    bmin, bmax, _ = hitTesters['chassis'].bbox
+def __computeModelShape(cfg, modelShapeCfg, typeDesc, boundingBoxes):
+    bmin, bmax, _ = boundingBoxes['chassis']
     sizeX = bmax[0] - bmin[0]
-    bminHull, bmaxHull, _ = hitTesters['hull'].bbox
+    bminHull, bmaxHull, _ = boundingBoxes['hull']
     if typeDesc.type.useHullZSize:
         sizeZ = bmaxHull[2] - bminHull[2]
     else:
@@ -496,8 +500,8 @@ def __computeModelShape(cfg, modelShapeCfg, typeDesc, hitTesters):
         wheelBbMin, wheelBbMax, _ = typeDesc.chassis.wheels.wheels[0].hitTester.bbox
         wheelSize = wheelBbMax - wheelBbMin
         modelShapeCfg['wheelSize'] = wheelSize
-    turretMin, turretMax, _ = hitTesters['turret'].bbox
-    _, gunMax, _ = hitTesters['gun'].bbox
+    turretMin, turretMax, _ = boundingBoxes['turret']
+    _, gunMax, _ = boundingBoxes['gun']
     hullPos = typeDesc.chassis.hullPosition
     turretPos = typeDesc.hull.turretPositions[0]
     topPos = hullPos + turretPos
@@ -510,27 +514,24 @@ def __computeModelShape(cfg, modelShapeCfg, typeDesc, hitTesters):
 
 
 def configureModelShapePhysics(cfg, typeDesc):
-    hitTesters = {'model': {'hull': typeDesc.hull.hitTesterManager.modelHitTester,
-               'chassis': typeDesc.chassis.hitTesterManager.modelHitTester,
-               'turret': typeDesc.turret.hitTesterManager.modelHitTester,
-               'gun': typeDesc.gun.hitTesterManager.modelHitTester},
-     'crashedModel': {'hull': typeDesc.hull.hitTesterManager.crashedModelHitTester,
-                      'chassis': typeDesc.chassis.hitTesterManager.crashedModelHitTester,
-                      'turret': typeDesc.turret.hitTesterManager.crashedModelHitTester,
-                      'gun': typeDesc.gun.hitTesterManager.crashedModelHitTester}}
+    chassisDescr = typeDesc.chassis
+    normalBBoxes = {'chassis': chassisDescr.bboxManager.normalBBox}
+    crashedBBoxes = {'chassis': chassisDescr.bboxManager.crashedBBox}
+    isCrashedModelValid = crashedBBoxes['chassis'] is not None
+    htManagers = [('hull', typeDesc.hull.hitTesterManager), ('turret', typeDesc.turret.hitTesterManager), ('gun', typeDesc.gun.hitTesterManager)]
     if typeDesc.isWheeledVehicle:
-        hitTesters['model']['wheel'] = typeDesc.chassis.wheels.wheels[0].hitTesterManager.modelHitTester
-        hitTesters['crashedModel']['wheel'] = typeDesc.chassis.wheels.wheels[0].hitTesterManager.crashedModelHitTester
-    isCrashedModelValid = True
-    for _, hitTester in hitTesters['crashedModel'].iteritems():
-        if not hitTester:
-            isCrashedModelValid = False
-            break
+        htManagers.append(('wheel', chassisDescr.wheels.wheels[0].hitTesterManager))
+    for name, htManager in htManagers:
+        normalBBoxes[name] = htManager.modelHitTester.bbox
+        if htManager.crashedModelHitTester:
+            crashedBBoxes[name] = htManager.crashedModelHitTester.bbox
+        isCrashedModelValid = False
 
     cfg['hasCrashedModel'] = isCrashedModelValid
-    __computeModelShape(cfg, cfg['shape']['modelShape'], typeDesc, hitTesters['model'])
+    __computeModelShape(cfg, cfg['shape']['modelShape'], typeDesc, normalBBoxes)
     if isCrashedModelValid:
-        __computeModelShape(cfg, cfg['shape']['crashedModelShape'], typeDesc, hitTesters['crashedModel'])
+        __computeModelShape(cfg, cfg['shape']['crashedModelShape'], typeDesc, crashedBBoxes)
+    return
 
 
 def updatePhysics(physics, typeDesc, isSoftUpdate=False):
@@ -904,3 +905,7 @@ _DEFAULT_FAKE_GEARBOX_SETTINGS = {'fwdgears': {'switchSpeed': (2, 5, 15),
                'switchHysteresis': (1, 2, 3),
                'lowRpm': (0.2, 0.2, 0.2),
                'highRpm': (0.9, 0.9, 0.9)}}
+
+def setTrackBitToBitMask(bitMask, trackPairIdx, isLeft):
+    idx = trackPairIdx * 2 + (not isLeft)
+    return bitMask | 1 << idx

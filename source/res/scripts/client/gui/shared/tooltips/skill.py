@@ -95,7 +95,7 @@ class TankmanSkillTooltipData(BlocksTooltipData):
         specialStatus = ''
         if role == 'radioman':
             specialStatus = TOOLTIPS.SKILLS_STATUS_FOR2RADIOMEN
-        if self.__skillType == 'camouflage':
+        if self.__skillType in ('camouflage', 'repair'):
             specialStatus = TOOLTIPS.SKILLS_STATUS_AVGEXP
         blocks = [formatters.packImageTextBlockData(title=text_styles.main(TOOLTIPS.SKILLS_STATUS_MOMENTAL) if not isPerk else text_styles.alert(TOOLTIPS.SKILLS_STATUS_REQUIERSWHOLECREW), img=RES_ICONS.MAPS_ICONS_LIBRARY_INFO if not isPerk else RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON, imgPadding={'left': 30 if isPerk else 25,
           'top': 3}, txtGap=-4, txtOffset=60, padding={'top': 9,

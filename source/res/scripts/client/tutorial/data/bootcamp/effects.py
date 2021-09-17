@@ -12,11 +12,11 @@ class RequestExclusiveHintEffect(HasTargetEffect):
         return self.__soundID
 
 
-class StartAssistantEffect(SimpleEffect):
+class StartVSEPlanEffect(SimpleEffect):
 
-    def __init__(self, hints, conditions=None):
-        super(StartAssistantEffect, self).__init__(EFFECT_TYPE.START_ASSISTANT, conditions=conditions)
-        self.__hints = hints
+    def __init__(self, plan, conditions=None):
+        super(StartVSEPlanEffect, self).__init__(EFFECT_TYPE.START_VSE_PLAN, conditions=conditions)
+        self.__plan = plan
 
-    def getHints(self):
-        return self.__hints
+    def getPlan(self):
+        return self.__plan

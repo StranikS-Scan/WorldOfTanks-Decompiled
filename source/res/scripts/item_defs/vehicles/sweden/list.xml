@@ -273,6 +273,19 @@
     <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </S25_EMIL_51>
+  <S32_Bofors_Tornvagn>
+    <id>	213	</id>
+    <userString>	#sweden_vehicles:S32_Bofors_Tornvagn	</userString>
+    <description>	#sweden_vehicles:S32_Bofors_Tornvagn_descr	</description>
+    <shortUserString>	#sweden_vehicles:S32_Bofors_Tornvagn_short	</shortUserString>
+    <shortDescriptionSpecial>	#sweden_vehicles:S32_Bofors_Tornvagn_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#sweden_vehicles:S32_Bofors_Tornvagn_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank HD heavyTank1 role_HT_assault improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
+    <level>	8	</level>
+  </S32_Bofors_Tornvagn>
   <S26_Lansen_C>
     <id>	207	</id>
     <userString>	#sweden_vehicles:S26_Lansen_C	</userString>
@@ -294,7 +307,7 @@
     <price>	6100000	</price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank HD secret bob cannot_be_sold heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user role_HT_support	</tags>
+    <tags>	heavyTank private HD secret bob cannot_be_sold heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user role_HT_support	</tags>
     <level>	10	</level>
   </S16_Kranvagn_bob>
   <S30_UDES_03_Alt_3>
@@ -321,7 +334,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	AT-SPG HD epic_battles siegeMode hydraulicChassis mediumAT-SPG AT-SPG1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	AT-SPG private HD epic_battles siegeMode hydraulicChassis mediumAT-SPG AT-SPG1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </S22_Strv_S1_FL>
   <S31_Strv_K>
@@ -346,7 +359,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	AT-SPG HD siegeMode hydraulicChassis mediumAT-SPG AT-SPG1 epic_battles improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	AT-SPG HD siegeMode hydraulicChassis mediumAT-SPG AT-SPG1 epic_battles improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user private	</tags>
     <level>	9	</level>
   </S10_Strv_103_0_Series_FL>
 </list.xml>

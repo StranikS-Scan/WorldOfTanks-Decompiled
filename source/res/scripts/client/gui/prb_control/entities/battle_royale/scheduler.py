@@ -5,7 +5,7 @@ from gui.impl.gen import R
 from gui import SystemMessages
 from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.periodic_battles.models import PrimeTimeStatus
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 
@@ -31,5 +31,5 @@ class RoyaleScheduler(BaseScheduler):
         if isPrimeTime != self.__isPrimeTime:
             self.__isPrimeTime = isPrimeTime
             if not isPrimeTime:
-                SystemMessages.pushMessage(backport.text(R.strings.system_messages.royale.notification.primeTime()), type=SystemMessages.SM_TYPE.PrimeTime)
+                SystemMessages.pushMessage(backport.text(R.strings.system_messages.royale.notification.primeTime()), type=SystemMessages.SM_TYPE.PrimeTime, messageData={'title': backport.text(R.strings.system_messages.royale.notification.primeTime.title())})
             g_eventDispatcher.updateUI()

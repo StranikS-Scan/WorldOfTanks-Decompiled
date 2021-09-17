@@ -312,18 +312,9 @@ class HangarVehicleAppearance(ScriptGameObject):
         modelsSet = self.__outfit.modelsSet
         splineDesc = vDesc.chassis.splineDesc
         if splineDesc is not None:
-            resources.append(splineDesc.segmentModelLeft(modelsSet))
-            resources.append(splineDesc.segmentModelRight(modelsSet))
-            if splineDesc.leftDesc is not None:
-                resources.append(splineDesc.leftDesc)
-            if splineDesc.rightDesc is not None:
-                resources.append(splineDesc.rightDesc)
-            segment2ModelLeft = splineDesc.segment2ModelLeft(modelsSet)
-            if segment2ModelLeft is not None:
-                resources.append(segment2ModelLeft)
-            segment2ModelRight = splineDesc.segment2ModelRight(modelsSet)
-            if segment2ModelRight is not None:
-                resources.append(segment2ModelRight)
+            for _, trackDesc in splineDesc.trackPairs.iteritems():
+                resources += trackDesc.prerequisites(modelsSet)
+
         from vehicle_systems import model_assembler
         resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, ModelsSetParams(modelsSet, self.__vState, self.__attachments), self.__spaceId))
         g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.VEHICLE_LOADING, ctx={'started': True,
@@ -734,6 +725,11 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.__setGunMatrix(gunPitchMatrix)
             return True
 
+    def getVehicleCentralPoint(self):
+        hullAABB = self.collisions.getBoundingBox(TankPartIndexes.HULL)
+        centralPoint = Math.Vector3((hullAABB[1].x + hullAABB[0].x) / 2.0, hullAABB[1].y / 2.0, (hullAABB[1].z + hullAABB[0].z) / 2.0)
+        return centralPoint
+
     def __getAnchorHelperById(self, anchorId):
         if anchorId.slotType not in self.__anchorsHelpers:
             return None
@@ -782,7 +778,8 @@ class HangarVehicleAppearance(ScriptGameObject):
         insigniaRank = 0
         if self.__showMarksOnGun:
             insigniaRank = self._getThisVehicleDossierInsigniaRank()
-        self.__vehicleStickers = VehicleStickers.VehicleStickers(self.__vDesc, insigniaRank, outfit)
+        vId = self.__vEntity.id if self.__vEntity is not None else -1
+        self.__vehicleStickers = VehicleStickers.VehicleStickers(self.__vDesc, insigniaRank, outfit, vehicleId=vId)
         self.__vehicleStickers.alpha = self.__currentEmblemsAlpha
         self.__vehicleStickers.attach(self.__vEntity.model, self.__isVehicleDestroyed, False)
         self._requestClanDBIDForStickers(self.__onClanDBIDRetrieved)
@@ -876,22 +873,27 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def __getAnchorHelper(self, anchor):
         slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP[anchor.descriptor.type]
-        if slotType in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
-            hullAABB = self.collisions.getBoundingBox(TankPartIndexes.HULL)
-            position = Math.Vector3((hullAABB[1].x + hullAABB[0].x) / 2.0, hullAABB[1].y / 2.0, (hullAABB[1].z + hullAABB[0].z) / 2.0)
-            partIdx = TankPartIndexes.HULL
-        else:
-            position = anchor.anchorPosition
-            partIdx = anchor.areaId
-        normal = anchor.anchorDirection
-        normal.normalise()
         if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
-            ypr = anchor.descriptor.rotation
+            partIdx = TankPartIndexes.CHASSIS
+            ypr = anchor.rotation
             rotationMatrix = Math.Matrix()
             rotationMatrix.setRotateYPR((ypr.y, ypr.x, ypr.z))
+            normal = rotationMatrix.applyVector((0, -1, 0))
+            normal.normalise()
             up = rotationMatrix.applyVector((0, 0, -1))
+            up.normalise()
+            position = Math.Vector3(anchor.position) + anchor.descriptor.anchorShift * normal
         else:
+            if slotType in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
+                partIdx = TankPartIndexes.HULL
+                position = self.getVehicleCentralPoint()
+            else:
+                partIdx = anchor.areaId
+                position = anchor.anchorPosition
+            normal = anchor.anchorDirection
+            normal.normalise()
             up = normal * (Math.Vector3(0, 1, 0) * normal)
+            up.normalise()
         anchorLocation = AnchorLocation(position, normal, up)
         attachedPartIdx = self.__getAttachedPartIdx(position, normal, partIdx)
         return AnchorHelper(anchorLocation, anchor.descriptor, None, partIdx, attachedPartIdx)

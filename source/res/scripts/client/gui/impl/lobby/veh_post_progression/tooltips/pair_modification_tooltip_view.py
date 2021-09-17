@@ -5,8 +5,9 @@ from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.bonus_model import BonusModel
 from gui.impl.gen.view_models.common.bonus_value_model import BonusValueModel
-from gui.impl.gen.view_models.views.lobby.post_progression.tooltip.modification_model import ModificationModel
-from gui.impl.gen.view_models.views.lobby.post_progression.tooltip.pair_modification_tooltip_view_model import PairModificationTooltipViewModel, PairModificationState
+from gui.impl.gen.view_models.views.lobby.post_progression.modification_model import ModificationModel
+from gui.impl.gen.view_models.views.lobby.post_progression.step_model import StepState
+from gui.impl.gen.view_models.views.lobby.post_progression.tooltip.pair_modification_tooltip_view_model import PairModificationTooltipViewModel
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
 from helpers import dependency
@@ -41,28 +42,27 @@ class BasePairModificationTooltipView(ViewImpl):
         state = self._getState(step, modificationId)
         with self.viewModel.transaction() as model:
             model.setNameRes(currentModification.getLocNameRes()())
-            model.setState(state)
             model.setLevel(step.getLevel())
-            self.__fillModifications(state, model.getModifications(), pairModification, modificationId)
+            model.multiStep.setReceivedIdx(pairModification.getPurchasedIdx())
+            model.multiStep.setSelectedIdx(pairModification.getInnerIdx(modificationId))
+            model.multiStep.setStepState(state)
+            self.__fillModifications(model.multiStep.getModifications(), pairModification)
             self.__fillModifiers(vehicle, model.modifiers.getItems(), currentModification)
 
     def _getState(self, step, modificationId):
         if step.isLocked():
-            return PairModificationState.LOCKED
+            return StepState.UNAVAILABLELOCKED
         else:
             purchasedId = step.action.getPurchasedID()
             if purchasedId == modificationId:
-                return PairModificationState.BOUGHT
-            return PairModificationState.UNLOCKED if purchasedId is None else PairModificationState.ANOTHERISINSTALLED
+                return StepState.RECEIVED
+            return StepState.AVAILABLEPURCHASE if purchasedId is None else StepState.RESTRICTED
 
-    def __fillModifications(self, state, modifications, pairModification, modificationId):
+    def __fillModifications(self, modifications, pairModification):
         modifications.clear()
-        hasInstall = state in (PairModificationState.BOUGHT, PairModificationState.ANOTHERISINSTALLED)
         for modification in pairModification.modifications:
             modificationModel = ModificationModel()
-            modificationModel.setIconResName(modification.getImageName())
-            modificationModel.setIsCurrent(modification.actionID == modificationId)
-            modificationModel.setIsInstalled(hasInstall and pairModification.getPurchasedID() == modification.actionID)
+            modificationModel.setImageResName(modification.getImageName())
             modifications.addViewModel(modificationModel)
 
         modifications.invalidate()
@@ -100,7 +100,7 @@ class CmpPairModificationTooltipView(BasePairModificationTooltipView):
         super(CmpPairModificationTooltipView, self)._finalize()
 
     def _getState(self, step, modificationId):
-        return PairModificationState.UNLOCKED
+        return StepState.AVAILABLEPURCHASE
 
 
 class CmpPanelPairModificationTooltipView(CmpPairModificationTooltipView):
@@ -122,7 +122,7 @@ class CfgPairModificationTooltipView(BasePairModificationTooltipView):
 
     def _onLoading(self, vehicle, stepID, modificationId, *args, **kwargs):
         super(CfgPairModificationTooltipView, self)._onLoading(vehicle, stepID, modificationId, *args, **kwargs)
-        if self.viewModel.getState() == PairModificationState.BOUGHT:
+        if self.viewModel.multiStep.getStepState() == StepState.RECEIVED:
             return
         currentModification = vehicle.postProgression.getStep(stepID).action.getModificationByID(modificationId)
         moneyShortage = self._itemsCache.items.stats.money.getShortage(currentModification.getPrice())

@@ -56,7 +56,9 @@ __all__ = ('standard',
  'grandTitle',
  'grandTitleYellow',
  'grandTitleTK',
- 'textEpic')
+ 'textEpic',
+ 'yellowText',
+ 'greenText')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -406,6 +408,14 @@ def grandTitleTK(text):
 
 def failedStatusText(text):
     return _formatText('failedStatusText', text)
+
+
+def yellowText(text):
+    return _formatText('yellowText', text)
+
+
+def greenText(text):
+    return _formatText('greenText', text)
 
 
 def getRawStyles(names):

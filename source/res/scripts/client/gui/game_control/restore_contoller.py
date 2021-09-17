@@ -9,7 +9,6 @@ from account_helpers.AccountSettings import AccountSettings, LAST_RESTORE_NOTIFI
 from gui import SystemMessages
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import MONEY_UNDEFINED
-from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.utils.requesters.ItemsRequester import IntCDProtectionRequestCriteria
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency
@@ -159,7 +158,7 @@ class RestoreController(IRestoreController, Notifiable):
         return
 
     def __updateTankmenList(self):
-        tankmen = self.itemsCache.items.getTankmen(REQ_CRITERIA.TANKMAN.DISMISSED).values()
+        tankmen = self.itemsCache.items.getDismissedTankmen().values()
         self.__tankmenList = sorted(tankmen, key=operator.attrgetter('dismissedAt'), reverse=True)
         self.startNotification()
         self.onTankmenBufferUpdated()

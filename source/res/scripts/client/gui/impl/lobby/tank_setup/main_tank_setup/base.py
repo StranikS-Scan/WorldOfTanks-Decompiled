@@ -8,12 +8,16 @@ from gui.impl.lobby.tank_setup.tank_setup_sounds import playSectionSelectSound
 _logger = logging.getLogger(__name__)
 
 class MainTankSetupView(BaseSubModelView):
-    __slots__ = ('_subViews', '_builder')
+    __slots__ = ('_subViews', '_builder', '__isLocked')
 
     def __init__(self, viewModel, builder=None):
         super(MainTankSetupView, self).__init__(viewModel)
         self._builder = builder
         self._subViews = {}
+        self.__isLocked = False
+
+    def setLocked(self, value):
+        self.__isLocked = value
 
     def currentVehicleUpdated(self, vehicle):
         for name, subView in self._subViews.iteritems():
@@ -57,10 +61,13 @@ class MainTankSetupView(BaseSubModelView):
         return self._subViews[sectionName] if sectionName in self._subViews else None
 
     def update(self, fullUpdate=False):
-        currentSubView = self.getCurrentSubView()
-        if currentSubView is not None:
-            currentSubView.update(fullUpdate=fullUpdate)
-        return
+        if self.__isLocked:
+            return
+        else:
+            currentSubView = self.getCurrentSubView()
+            if currentSubView is not None:
+                currentSubView.update(fullUpdate=fullUpdate)
+            return
 
     @async
     def canQuit(self, skipApplyAutoRenewal=None):

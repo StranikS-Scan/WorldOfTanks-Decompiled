@@ -2,11 +2,15 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/veh_post_progression.py
 import typing
 import BigWorld
-from gui.shared.gui_items.processors import Processor, plugins
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.shared.formatters import text_styles
+from gui.shared.gui_items.processors import Processor, plugins, makeSuccess
+from gui.SystemMessages import pushMessage, SM_TYPE
 from gui.veh_post_progression.messages import makeModificationErrorMsg, makeDiscardPairsMsg, makeBuyPairMsg, makePurchaseStepsMsg, makeChangeSlotCategoryMsg, makeSetSlotCategoryMsg
 from gui.veh_post_progression.sounds import playSound
 from gui.veh_post_progression.sounds import Sounds
-from post_progression_common import ACTION_TYPES
+from post_progression_common import ACTION_TYPES, FEATURE_BY_GROUP_ID
 from gui.veh_post_progression.models.ext_money import EXT_MONEY_ZERO, getFullXPFromXPPrice
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
@@ -23,8 +27,11 @@ class PostProgressionProcessor(Processor):
     def _getVehicle(self):
         return self.itemsCache.items.getItemByCD(self._vehicleCD)
 
+    def _skipRentalIsOver(self):
+        return False
+
     def __setupPlugins(self):
-        self.addPlugin(plugins.PostProgressionStateValidator(self._getVehicle()))
+        self.addPlugin(plugins.PostProgressionStateValidator(self._getVehicle(), self._skipRentalIsOver()))
 
 
 class ChangeVehicleSetupEquipments(PostProgressionProcessor):
@@ -38,6 +45,33 @@ class ChangeVehicleSetupEquipments(PostProgressionProcessor):
 
     def _request(self, callback):
         BigWorld.player().inventory.changeVehicleSetupGroup(self._getVehicle().invID, self.__groupID, self.__layoutIdx, lambda code: self._response(code, callback))
+
+    def _skipRentalIsOver(self):
+        return True
+
+
+class SwitchPrebattleAmmoPanelAvailability(PostProgressionProcessor):
+    __slots__ = ('__groupID', '__enabled', '__vehName')
+
+    def __init__(self, vehicle, groupID, enabled):
+        super(SwitchPrebattleAmmoPanelAvailability, self).__init__(vehicle)
+        self.__groupID = groupID
+        self.__enabled = enabled
+        self.__vehName = vehicle.shortUserName
+        self.addPlugin(plugins.PostProgressionChangeSetupValidator(vehicle, groupID))
+
+    def _request(self, callback):
+        BigWorld.player().inventory.switchPrebattleAmmoPanelAvailability(self._getVehicle().invID, self.__groupID, lambda code: self._response(code, callback))
+
+    def _successHandler(self, code, ctx=None):
+        featureName = FEATURE_BY_GROUP_ID[self.__groupID]
+        resBase = R.strings.messenger.serviceChannelMessages.vehiclePostProgression.prebattleSwitchToggled
+        if self.__enabled:
+            stateStr = text_styles.greenText(backport.text(resBase.enabled()))
+        else:
+            stateStr = text_styles.yellowText(backport.text(resBase.disabled()))
+        pushMessage(backport.text(resBase.dyn(featureName)(), tankName=self.__vehName, state=stateStr), type=SM_TYPE.MediumInfo)
+        return super(SwitchPrebattleAmmoPanelAvailability, self)._successHandler(code, ctx)
 
 
 class DiscardPairsProcessor(PostProgressionProcessor):
@@ -63,23 +97,32 @@ class DiscardPairsProcessor(PostProgressionProcessor):
 
 
 class PurchasePairProcessor(PostProgressionProcessor):
-    __slots__ = ('__stepID', '__modID')
+    __slots__ = ('__stepID', '__modID', '__discardMod')
 
     def __init__(self, vehicle, stepID, modificationID):
         super(PurchasePairProcessor, self).__init__(vehicle)
         self.__stepID = stepID
         self.__modID = modificationID
         self.addPlugins([plugins.PostProgressionStepsValidator(vehicle, [stepID], {ACTION_TYPES.PAIR_MODIFICATION}), plugins.PostProgressionPurchasePairValidator(vehicle, stepID, modificationID)])
+        self.__discardMod = None
+        return
 
     def _successHandler(self, code, ctx=None):
         playSound(Sounds.MODIFICATION_MOUNT)
-        return makeBuyPairMsg(self._getVehicle(), self.__stepID, self.__modID)
+        vehicle = self._getVehicle()
+        messages = []
+        if self.__discardMod is not None:
+            messages.append(makeDiscardPairsMsg(vehicle, [self.__discardMod]))
+        messages.append(makeBuyPairMsg(self._getVehicle(), self.__stepID, self.__modID))
+        return makeSuccess(auxData=messages)
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeModificationErrorMsg()
 
     def _request(self, callback):
-        pairType = self._getVehicle().postProgression.getStep(self.__stepID).action.getInnerPairType(self.__modID)
+        step = self._getVehicle().postProgression.getStep(self.__stepID)
+        self.__discardMod = step.action.getPurchasedModification()
+        pairType = step.action.getInnerPairType(self.__modID)
         BigWorld.player().inventory.purchasePostProgressionPair(self._vehicleCD, self.__stepID, pairType, lambda code: self._response(code, callback))
 
 
@@ -126,7 +169,7 @@ class SetEquipmentSlotTypeProcessor(PostProgressionProcessor):
         vehicle = self._getVehicle()
         slot = vehicle.optDevices.getSlot(vehicle.optDevices.dynSlotTypeIdx).item
         if self.__isChange:
-            price = self.itemsCache.items.shop.customRoleSlotChangeCost(vehicle.level)
+            price = self.itemsCache.items.shop.customRoleSlotChangeCost(vehicle.descriptor.type)
             return makeChangeSlotCategoryMsg(vehicle, slot, price)
         return makeSetSlotCategoryMsg(vehicle, slot)
 

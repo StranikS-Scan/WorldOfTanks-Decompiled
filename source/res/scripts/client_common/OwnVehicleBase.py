@@ -8,6 +8,7 @@ from items import vehicles, ITEM_TYPES
 from math_common import roundToPower10
 from time_converters import time2decisec
 from wotdecorators import noexcept
+from helpers_common import unpackDeviceRepairProgress
 Cooldowns = namedtuple('Cooldows', ['id', 'leftTime', 'baseTime'])
 _DO_LOG = False
 
@@ -63,7 +64,8 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         avatar = self._avatar()
         for device in deviceList:
             timeLeft = self.__getTimeLeft(device)
-            avatar.updateDestroyedDevicesIsRepairing(self.entity.id, device.extraIndex, device.progress, timeLeft)
+            progress, isLimited = unpackDeviceRepairProgress(device.progressData)
+            avatar.updateDestroyedDevicesIsRepairing(self.entity.id, device.extraIndex, progress, timeLeft, isLimited)
 
     @noexcept
     def update_vehicleDamageInfoList(self, damageInfoList):

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/IntSettingsRequester.py
 import logging
 from functools import wraps
+from copy import copy
 from account_helpers.AccountSettings import MAPBOX_CAROUSEL_FILTER_1, MAPBOX_CAROUSEL_FILTER_2
 import BigWorld
 import constants
@@ -124,7 +125,7 @@ class IntSettingsRequester(object):
             _logger.error('[class %s] There is error while getting data from cache: %s[%d]', self.__class__.__name__, code2str(resID), resID)
             return callback(dict())
         self.__isSynced = True
-        callback(value)
+        callback(copy(value))
 
     @async
     def _requestCache(self, callback=None):

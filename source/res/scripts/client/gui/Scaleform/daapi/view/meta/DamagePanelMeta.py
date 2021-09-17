@@ -22,8 +22,8 @@ class DamagePanelMeta(BaseDAAPIComponent):
     def as_setPlayerInfoS(self, playerName, clanName, regionName, vehicleTypeName):
         return self.flashObject.as_setPlayerInfo(playerName, clanName, regionName, vehicleTypeName) if self._isDAAPIInited() else None
 
-    def as_setupS(self, healthStr, progress, indicatorType, crewLayout, yawLimits, hasTurretRotator, hasWheel, isAutoRotationOn):
-        return self.flashObject.as_setup(healthStr, progress, indicatorType, crewLayout, yawLimits, hasTurretRotator, hasWheel, isAutoRotationOn) if self._isDAAPIInited() else None
+    def as_setupS(self, healthStr, progress, indicatorType, crewLayout, yawLimits, hasTurretRotator, hasWheel, isAutoRotationOn, hasYoh):
+        return self.flashObject.as_setup(healthStr, progress, indicatorType, crewLayout, yawLimits, hasTurretRotator, hasWheel, isAutoRotationOn, hasYoh) if self._isDAAPIInited() else None
 
     def as_setupWheeledS(self, wheelsCount):
         return self.flashObject.as_setupWheeled(wheelsCount) if self._isDAAPIInited() else None
@@ -43,8 +43,8 @@ class DamagePanelMeta(BaseDAAPIComponent):
     def as_updateDeviceStateS(self, deviceName, deviceState):
         return self.flashObject.as_updateDeviceState(deviceName, deviceState) if self._isDAAPIInited() else None
 
-    def as_updateRepairingDeviceS(self, deviceName, percents, seconds):
-        return self.flashObject.as_updateRepairingDevice(deviceName, percents, seconds) if self._isDAAPIInited() else None
+    def as_updateRepairingDeviceS(self, deviceName, percents, seconds, needsHighlightText):
+        return self.flashObject.as_updateRepairingDevice(deviceName, percents, seconds, needsHighlightText) if self._isDAAPIInited() else None
 
     def as_setVehicleDestroyedS(self):
         return self.flashObject.as_setVehicleDestroyed() if self._isDAAPIInited() else None

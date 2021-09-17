@@ -4221,6 +4221,25 @@
     <userString>	#vehicle_customization:projection_decals/special	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	569	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_281.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_281	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	BTS Marathon T9	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
     <priceGroup>	projection_decals 150g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
@@ -4298,25 +4317,6 @@
       <mirror>	false	</mirror>
     </projection_decal>
     <name>	Clan Quests 2021 non-historical	</name>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:projection_decals/special	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
-    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <projection_decal>
-      <id>	569	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_281.dds	</texture>
-      <userString>	#vehicle_customization:projection_decals/special/projection_decal_281	</userString>
-      <tags>	formfactor_square	</tags>
-      <mirror>	false	</mirror>
-    </projection_decal>
-    <name>	BTS Marathon T9	</name>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/special	</userString>

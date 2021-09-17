@@ -555,8 +555,6 @@ class PREBATTLE_ROLE:
     ASSIGNMENT_1_2 = 16
     SEE_1 = 32
     SEE_2 = 64
-    SELF_ASSIGNMENT_1 = 128
-    SELF_ASSIGNMENT_2 = 256
     KICK_1 = 512
     KICK_2 = 1024
     CHANGE_ARENA = 2048
@@ -608,7 +606,6 @@ class PREBATTLE_ERRORS:
     INVALID_VEHICLE = 'INVALID_VEHICLE'
     OBSERVERS_LIMIT = 'OBSERVERS_LIMIT'
     PLAYERS_LIMIT = 'PLAYERS_LIMIT'
-    INSUFFICIENT_ROLE = 'INSUFFICIENT_ROLE'
 
 
 class PREBATTLE_UPDATE:
@@ -813,7 +810,6 @@ class Configs(enum.Enum):
     BATTLE_ROYALE_CONFIG = 'battle_royale_config'
     EPIC_CONFIG = 'epic_config'
     MAPBOX_CONFIG = 'mapbox_config'
-    BIRTHDAY_CALENDAR_CONFIG = 'bday_calendar_config'
 
 
 class RESTRICTION_TYPE:
@@ -872,38 +868,6 @@ class CLAN_MEMBER_FLAGS(object):
     MAY_REMOVE_CLAN = LEADER
     MAY_ACTIVATE_ORDER = LEADER | VICE_LEADER | STAFF | COMMANDER
     MAY_EXCHANGE_MONEY = LEADER | VICE_LEADER | STAFF | COMMANDER | DIPLOMAT | TREASURER | RECRUITER | JUNIOR | PRIVATE
-
-
-class CLAN_ROLES(object):
-    LEADER = 'commander'
-    VICE_LEADER = 'executive_officer'
-    RECRUITER = 'recruitment_officer'
-    TREASURER = 'quartermaster'
-    DIPLOMAT = 'intelligence_officer'
-    COMMANDER = 'combat_officer'
-    PRIVATE = 'private'
-    RECRUIT = 'recruit'
-    STAFF = 'personnel_officer'
-    JUNIOR = 'junior_officer'
-    RESERVIST = 'reservist'
-    FLAGS_TO_ROLES = {CLAN_MEMBER_FLAGS.LEADER: LEADER,
-     CLAN_MEMBER_FLAGS.VICE_LEADER: VICE_LEADER,
-     CLAN_MEMBER_FLAGS.RECRUITER: RECRUITER,
-     CLAN_MEMBER_FLAGS.TREASURER: TREASURER,
-     CLAN_MEMBER_FLAGS.DIPLOMAT: DIPLOMAT,
-     CLAN_MEMBER_FLAGS.COMMANDER: COMMANDER,
-     CLAN_MEMBER_FLAGS.PRIVATE: PRIVATE,
-     CLAN_MEMBER_FLAGS.RECRUIT: RECRUIT,
-     CLAN_MEMBER_FLAGS.STAFF: STAFF,
-     CLAN_MEMBER_FLAGS.JUNIOR: JUNIOR,
-     CLAN_MEMBER_FLAGS.RESERVIST: RESERVIST}
-
-    @classmethod
-    def getRole(cls, memberFlags):
-        for i in range(len(cls.FLAGS_TO_ROLES)):
-            flag = memberFlags & 1 << i
-            if flag:
-                return cls.FLAGS_TO_ROLES[flag]
 
 
 class AIMING_MODE:
@@ -2324,6 +2288,11 @@ class DISTRIBUTION_PLATFORM(enum.Enum):
     EPIC = 'epic'
 
 
+WGC_PUBLICATION_TO_DISTRIBUTION_PLATFORM = {WGC_PUBLICATION.WGC_UNKNOWN: DISTRIBUTION_PLATFORM.WG,
+ WGC_PUBLICATION.WGC_PC: DISTRIBUTION_PLATFORM.WG,
+ WGC_PUBLICATION.WGC_360: DISTRIBUTION_PLATFORM.CHINA_360,
+ WGC_PUBLICATION.WGC_STEAM: DISTRIBUTION_PLATFORM.STEAM}
+
 class TARGET_LOST_FLAGS:
     INVALID = 1
     KILLED_BY_ME = 2
@@ -2605,7 +2574,6 @@ class MarathonConfig(object):
     REWARD_VEHICLE_URL_IGB = 'rewardVehicleUrlIgb'
     REWARD_STYLE_URL_IGB = 'rewardStyleUrlIgb'
     FINISH_SALE_TIME = 'finishSaleTime'
-    VIDEO_CONTENT_URL = 'videoContentUrl'
 
 
 class ClansConfig(object):
@@ -2787,31 +2755,19 @@ class MapsTrainingParameters(enum.IntEnum):
 
 MAPS_REWARDS_INDEX = {'scenarioComplete': 0,
  'mapComplete': 1}
-BATTLE_MODE_VEHICLE_TAGS = {'event_battles',
- 'fallout',
- 'epic_battles',
- 'bob',
- 'battle_royale',
- 'clanWarsBattles'}
 
-class BATTLE_MODE_LOCK_MASKS(object):
-    _COMMON_FIRST_BIT = 0
-    _CLAN_RENTED_VEHICLE_FIRST_BIT = 4
-    _COMMON = 15 << _COMMON_FIRST_BIT
-    _CLAN_RENTED_VEHICLE = 15 << _CLAN_RENTED_VEHICLE_FIRST_BIT
+class EquipSideEffect(enum.IntEnum):
+    AMMO_AUTO_LOADED = 1
+    AMMO_AUTO_LOAD_FAILED = 2
 
-    @staticmethod
-    def getCommonVehLockMode(vehLockMode):
-        return (vehLockMode & BATTLE_MODE_LOCK_MASKS._COMMON) >> BATTLE_MODE_LOCK_MASKS._COMMON_FIRST_BIT
 
-    @staticmethod
-    def getClanRentedVehLockMode(vehLockMode):
-        return (vehLockMode & BATTLE_MODE_LOCK_MASKS._CLAN_RENTED_VEHICLE) >> BATTLE_MODE_LOCK_MASKS._CLAN_RENTED_VEHICLE_FIRST_BIT
+class TrackBreakMode(enum.Enum):
+    STOP = 0
+    SLOW = 1
 
-    @staticmethod
-    def makeCompactVehLockMode(commonVehLockMode, clanRentedVehLockMode):
-        return commonVehLockMode << BATTLE_MODE_LOCK_MASKS._COMMON_FIRST_BIT & BATTLE_MODE_LOCK_MASKS._COMMON | clanRentedVehLockMode << BATTLE_MODE_LOCK_MASKS._CLAN_RENTED_VEHICLE_FIRST_BIT & BATTLE_MODE_LOCK_MASKS._CLAN_RENTED_VEHICLE
 
-    @staticmethod
-    def getUnpackedVehLockMode(vehLockMode, vehType):
-        return BATTLE_MODE_LOCK_MASKS.getClanRentedVehLockMode(vehLockMode) if 'clanWarsBattles' in vehType.tags else BATTLE_MODE_LOCK_MASKS.getCommonVehLockMode(vehLockMode)
+class VehicleSide(enum.Enum):
+    FRONT = 0
+    BACK = 1
+    LEFT = 2
+    RIGHT = 3

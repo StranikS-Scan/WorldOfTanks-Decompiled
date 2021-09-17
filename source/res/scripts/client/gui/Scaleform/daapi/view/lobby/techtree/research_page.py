@@ -43,6 +43,8 @@ from items import getTypeOfCompactDescr
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from skeletons.gui.game_control import IBootcampController, ITradeInController
 from skeletons.gui.shared import IItemsCache
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
+from tutorial.control.context import GLOBAL_FLAG
 _logger = getLogger(__name__)
 _BENEFIT_ITEMS_LIMIT = 4
 
@@ -178,6 +180,7 @@ class Research(ResearchMeta):
         self.as_setRootDataS(self._getRootData())
         self.as_setResearchItemsS(SelectedNation.getName(), self._data.dump())
         self._vehPostProgressionEntryPoint.redraw(self.vehicle)
+        self.__checkPostProgressionHint()
 
     def request4Unlock(self, itemCD, topLevel):
         itemCD = int(itemCD)
@@ -262,6 +265,10 @@ class Research(ResearchMeta):
     def invalidateFreeXP(self):
         self.as_setFreeXPS(self._itemsCache.items.stats.actualFreeXP)
         super(Research, self).invalidateFreeXP()
+
+    def invalidateVTypeXP(self, xps):
+        self._vehPostProgressionEntryPoint.redraw(self.vehicle)
+        super(Research, self).invalidateVTypeXP(xps)
 
     def invalidateRent(self, vehicles):
         if self._data.getRootCD() in vehicles:
@@ -514,3 +521,10 @@ class Research(ResearchMeta):
             else:
                 label = text_styles.concatStylesWithSpace(icons.makeImageTag(backport.image(R.images.gui.maps.icons.blueprints.blueCheck()), width=16, height=16, vSpace=-1), text_styles.credits(backport.text(R.strings.blueprints.blueprintProgressBar.complete())))
         return label
+
+    def __checkPostProgressionHint(self):
+        isAvailable = self.vehicle.postProgressionAvailability(unlockOnly=True).result
+        tutorialStorage = getTutorialGlobalStorage()
+        if tutorialStorage is not None:
+            tutorialStorage.setValue(GLOBAL_FLAG.VEH_POST_PROGRESSION_PURCHASABLE, isAvailable)
+        return

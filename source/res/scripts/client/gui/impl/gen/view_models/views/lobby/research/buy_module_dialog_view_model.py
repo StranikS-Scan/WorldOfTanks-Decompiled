@@ -26,44 +26,44 @@ class ModuleType(Enum):
 class BuyModuleDialogViewModel(FullScreenDialogWindowModel):
     __slots__ = ()
 
-    def __init__(self, properties=16, commands=3):
+    def __init__(self, properties=17, commands=3):
         super(BuyModuleDialogViewModel, self).__init__(properties=properties, commands=commands)
 
     def getModuleType(self):
-        return ModuleType(self._getString(10))
+        return ModuleType(self._getString(11))
 
     def setModuleType(self, value):
-        self._setString(10, value.value)
+        self._setString(11, value.value)
 
     def getModulePrice(self):
-        return self._getNumber(11)
+        return self._getNumber(12)
 
     def setModulePrice(self, value):
-        self._setNumber(11, value)
+        self._setNumber(12, value)
 
     def getPreviousModuleName(self):
-        return self._getString(12)
+        return self._getString(13)
 
     def setPreviousModuleName(self, value):
-        self._setString(12, value)
+        self._setString(13, value)
 
     def getPreviousModulePrice(self):
-        return self._getNumber(13)
+        return self._getNumber(14)
 
     def setPreviousModulePrice(self, value):
-        self._setNumber(13, value)
+        self._setNumber(14, value)
 
     def getAutoSellEnabled(self):
-        return self._getBool(14)
+        return self._getBool(15)
 
     def setAutoSellEnabled(self, value):
-        self._setBool(14, value)
+        self._setBool(15, value)
 
     def getMountDisabledReason(self):
-        return MountDisabledReason(self._getString(15))
+        return MountDisabledReason(self._getString(16))
 
     def setMountDisabledReason(self, value):
-        self._setString(15, value.value)
+        self._setString(16, value.value)
 
     def _initialize(self):
         super(BuyModuleDialogViewModel, self)._initialize()

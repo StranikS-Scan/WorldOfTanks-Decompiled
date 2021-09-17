@@ -43,6 +43,7 @@ class ClientArena(object):
      ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar',
      ARENA_UPDATE.RADAR_INFO_RECEIVED: '_ClientArena__onRadarInfoReceived',
      ARENA_UPDATE.VEHICLE_DESCR: '_ClientArena__onVehicleDescrUpdate'}
+    DEFAULT_ARENA_WORLD_ID = -1
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, spaceID):
         self.__vehicles = {}
@@ -89,13 +90,15 @@ class ClientArena(object):
         self.onChatCommandTriggered = Event.Event(em)
         self.onRadarInfoReceived = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
-        self._vsePlans = makeMultiPlanProvider(ASPECT.CLIENT, CallableProviderType.ARENA)
+        self._vsePlans = makeMultiPlanProvider(ASPECT.CLIENT, CallableProviderType.ARENA, arenaBonusType)
         self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)
         self.bonusType = arenaBonusType
         self.guiType = arenaGuiType
         self.extraData = arenaExtraData
         self.__arenaBBCollider = None
         self.__spaceBBCollider = None
+        if spaceID == 0:
+            spaceID = self.DEFAULT_ARENA_WORLD_ID
         self.gameSpace = CGF.World(spaceID)
         self.componentSystem = assembler.createComponentSystem(self, self.bonusType, self.arenaType)
         return

@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/example.py
 import BigWorld
-from block import Block, Meta, InitParam, EDITOR_TYPE, buildStrKeysValue
+from block import Block, Meta, InitParam, buildStrKeysValue, makeResEditorData
 from slot_types import SLOT_TYPE, arrayOf
-from visual_script.misc import ASPECT
+from visual_script.misc import ASPECT, BLOCK_MODE, EDITOR_TYPE
 from tunable_event_block import TunableEventBlock
 from type import VScriptType, VScriptEnum
 import weakref
@@ -13,6 +13,10 @@ class Example(Meta):
     @classmethod
     def blockCategory(cls):
         pass
+
+    @classmethod
+    def mode(cls):
+        return BLOCK_MODE.DEV
 
 
 class HelloFromPython(Block, Example):
@@ -93,7 +97,7 @@ class SumArray(Block, Example):
         self._out = self._makeDataOutputSlot('res', SLOT_TYPE.FLOAT, SumArray._execute)
 
     def _execute(self):
-        res = sum(self._inArray.getValue())
+        res = sum(self._inArray.getValue(), 0.0)
         self._out.setValue(res)
 
 
@@ -136,6 +140,26 @@ class SelectProjectID(Block, Example):
         return ' : '.join((self.__class__.__name__, self._name))
 
 
+class AnimalComplexKeySelect(Block, Example):
+    animals = [('Carnivorous', ('Tiger', 'Lion', 'Cat')), ('Herbivorous', ('Moose', 'Deer', 'Cow'))]
+
+    def __init__(self, *args, **kwargs):
+        super(AnimalComplexKeySelect, self).__init__(*args, **kwargs)
+        animal, count = self._getInitParams()
+        type_, name = animal.split('.')
+        self.a = self._makeDataOutputSlot('animalType', SLOT_TYPE.STR, None)
+        self.a.setValue(type_)
+        self.b = self._makeDataOutputSlot('animalName', SLOT_TYPE.STR, None)
+        self.b.setValue(name)
+        self.c = self._makeDataOutputSlot('count', SLOT_TYPE.INT, None)
+        self.c.setValue(count)
+        return
+
+    @classmethod
+    def initParams(cls):
+        return [InitParam('Type, Name', SLOT_TYPE.STR, 'Herbivorous.Deer', EDITOR_TYPE.COMPLEX_KEY_SELECTOR, AnimalComplexKeySelect.animals), InitParam('Count', SLOT_TYPE.INT, 0)]
+
+
 class TestTunableEvent(TunableEventBlock, Example):
 
     def __init__(self, *args, **kwargs):
@@ -166,6 +190,45 @@ class TestTunableEvent(TunableEventBlock, Example):
     @classmethod
     def blockAspects(cls):
         return [ASPECT.CLIENT]
+
+
+class ModeBlock(Block, Example):
+
+    def __init__(self, *args, **kwargs):
+        super(ModeBlock, self).__init__(*args, **kwargs)
+        self._out = self._makeDataOutputSlot('mode', SLOT_TYPE.INT, None)
+        self._out.setValue(self.mode())
+        return
+
+    @classmethod
+    def mode(cls):
+        return BLOCK_MODE.UNIQUE | Example.mode()
+
+
+class ClampedBlockEx(Block, Example):
+
+    def __init__(self, *args, **kwargs):
+        super(ClampedBlockEx, self).__init__(*args, **kwargs)
+        self._int = self._makeDataInputSlot('int [0, 100]', SLOT_TYPE.INT)
+        self._int.setEditorData([0, 100])
+        self._float = self._makeDataInputSlot('float [0, 1]', SLOT_TYPE.FLOAT)
+        self._float.setEditorData([0.0, 1.0])
+        self._angle = self._makeDataInputSlot('angle [-45, 45]', SLOT_TYPE.ANGLE)
+        self._angle.setEditorData([-45.0, 45.0])
+
+
+class ClampedBlock(Block, Example):
+
+    def __init__(self, *args, **kwargs):
+        super(ClampedBlock, self).__init__(*args, **kwargs)
+        value = self._getInitParams()
+        self._int = self._makeDataOutputSlot('res', SLOT_TYPE.INT, None)
+        self._int.setValue(value)
+        return
+
+    @classmethod
+    def initParams(cls):
+        return [InitParam('value [0, 100]', SLOT_TYPE.INT, 0, None, [0, 100])]
 
 
 class TestType(VScriptType):

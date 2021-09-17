@@ -307,7 +307,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def showLobbyMenu(self):
         self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
-        self._closeFullScreenBattleSelector(LOG_CLOSE_DETAILS.OTHER)
 
     @process
     def menuItemClick(self, alias):
@@ -322,11 +321,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         shared_events.showCrystalWindow(self.__visibility)
 
     def onPayment(self):
-        promo = self.gui.windowsManager.getViewByLayoutID(R.views.lobby.crystalsPromo.CrystalsPromoView())
-        if promo is not None:
-            promo.destroyWindow()
+        self.__closeWindowsWithTopSubViewLayer()
         showShop(getBuyGoldUrl())
-        return
 
     def showExchangeWindow(self):
         shared_events.showExchangeCurrencyWindow()
@@ -335,6 +331,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         shared_events.showExchangeXPWindow()
 
     def showPremiumView(self):
+        self.__closeWindowsWithTopSubViewLayer()
         showShop(getBuyPremiumUrl())
 
     def onPremShopClick(self):
@@ -616,6 +613,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.wgnpController.onEmailConfirmed -= self.__onEmailConfirmed
         self.wgnpController.onEmailAdded -= self.__onEmailAdded
         self.wgnpController.onEmailAddNeeded -= self.__onEmailAddNeeded
+
+    def __closeWindowsWithTopSubViewLayer(self):
+        windows = self.gui.windowsManager.findWindows(lambda w: w.layer == WindowLayer.TOP_SUB_VIEW)
+        for window in windows:
+            window.destroy()
 
     def __platoonDropdown(self, event):
         if event:
@@ -944,7 +946,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if state == PRE_QUEUE_RESTRICTION.MODE_NOT_SET:
             header = backport.text(resShortCut.rankedNotSet.header())
             body = backport.text(resShortCut.rankedNotSet.body())
-        elif state == PRE_QUEUE_RESTRICTION.MODE_DISABLED:
+        elif state == PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE:
             header = backport.text(resShortCut.rankedDisabled.header())
             body = backport.text(resShortCut.rankedDisabled.body())
         elif state == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL:
@@ -966,7 +968,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def __getEpicFightBtnTooltipData(self, result):
         state = result.restriction
-        if state == PRE_QUEUE_RESTRICTION.MODE_DISABLED:
+        if state == PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE:
             header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.battleRoyaleDisabled.header())
             body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.battleRoyaleDisabled.body())
         elif state == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL:

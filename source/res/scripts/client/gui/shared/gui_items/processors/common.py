@@ -173,8 +173,9 @@ class OutfitApplier(Processor):
             if component.styleId and isEditedStyle(component):
                 intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, component.styleId)
                 style = self.itemsCache.items.getItemByCD(intCD)
-                baseComponent = style.getOutfit(season, self.vehicle.descriptor.makeCompactDescr())
-                component = component.getDiff(baseComponent.pack())
+                baseOutfit = style.getOutfit(season, self.vehicle.descriptor.makeCompactDescr())
+                baseComponent = baseOutfit.pack()
+                component = component.getDiff(baseComponent)
             self.__validateOutfitComponent(component)
             requestData.append((component.makeCompDescr(), season))
 

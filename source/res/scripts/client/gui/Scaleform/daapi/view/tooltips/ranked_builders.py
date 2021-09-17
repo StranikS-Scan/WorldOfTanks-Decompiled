@@ -3,12 +3,10 @@
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.tooltips import advanced
 from gui.shared.tooltips import contexts
-from gui.shared.tooltips.builders import DataBuilder, AdvancedDataBuilder, DefaultFormatBuilder
-from gui.shared.tooltips.ranked.ranked_prime_time import RankedServerPrimeTime
+from gui.shared.tooltips.builders import DataBuilder, AdvancedDataBuilder
 from gui.shared.tooltips.ranked.rank_tooltip import RankedTooltipData
 from gui.shared.tooltips.ranked.ranked_calendar_day_tooltip import RankedCalendarDayTooltip
 from gui.shared.tooltips.ranked.ranked_calendar_day_extended_tooltip import RankedCalendarDayExtendedTooltip
-from gui.shared.tooltips.ranked.ranked_calendar_steps_tooltip import RankedCalendarStepsTooltip
 from gui.shared.tooltips.ranked.ranked_selector_tooltip import RankedSelectorTooltip, RankedUnavailableTooltip
 from gui.shared.tooltips.ranked.ranked_step_tooltip import RankedStepTooltip
 from gui.shared.tooltips.ranked.ranked_battles_division_tooltip import RankedDivisionTooltip
@@ -29,10 +27,8 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.RANKED_STEP, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedStepTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.RANKED_CALENDAR_DAY_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedCalendarDayTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.RANKED_CALENDAR_DAY_INFO_EXTENDED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedCalendarDayExtendedTooltip(contexts.ToolTipContext(None))),
-     DataBuilder(TOOLTIPS_CONSTANTS.RANKED_CALENDAR_STEPS_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedCalendarStepsTooltip(contexts.ToolTipContext(None))),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedSelectorTooltip(contexts.ToolTipContext(None)), advanced.RankedAdvanced(contexts.ToolTipContext(None))),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.RANKED_UNAVAILABLE_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedUnavailableTooltip(contexts.ToolTipContext(None)), advanced.RankedAdvanced(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.RANKED_DIVISION_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedDivisionTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.RANKED_BATTLES_YEAR_REWARD, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedYearReward(contexts.ToolTipContext(None))),
-     DefaultFormatBuilder(TOOLTIPS_CONSTANTS.RANKED_SERVER_PRIMETIME, TOOLTIPS_CONSTANTS.COMPLEX_UI, RankedServerPrimeTime(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.RANKED_QUESTS_PREVIEW, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedQuestsPreviewTooltip(contexts.QuestsBoosterContext())))

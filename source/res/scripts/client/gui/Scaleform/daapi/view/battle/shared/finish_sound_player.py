@@ -22,8 +22,8 @@ class FinishSoundPlayer(IBattleFieldListener, ITeamBasesListener, IAbstractPerio
         super(FinishSoundPlayer, self).__init__()
         self.__isPlaying = False
         self.__vehCheckAllowed = not self.sessionProvider.arenaVisitor.isArenaFogOfWarEnabled()
-        self.__arenaPeriod = None
-        self.__arenaTotalTime = None
+        self._arenaPeriod = None
+        self._arenaTotalTime = None
         return
 
     def updateDeadVehicles(self, aliveAllies, deadAllies, aliveEnemies, deadEnemies):
@@ -31,29 +31,29 @@ class FinishSoundPlayer(IBattleFieldListener, ITeamBasesListener, IAbstractPerio
             allies = aliveAllies | deadAllies
             enemies = aliveEnemies | deadEnemies
             if allies and deadAllies == allies or enemies and deadEnemies == enemies:
-                self.__onRoundFinished(_SOUND_EVENTS.LAST_KILL)
+                self._playRoundFinished(_SOUND_EVENTS.LAST_KILL)
 
     def setTeamBaseCaptured(self, clientID, playerTeam):
-        self.__onRoundFinished(_SOUND_EVENTS.BASE_CAPTURED)
+        self._playRoundFinished(_SOUND_EVENTS.BASE_CAPTURED)
 
     def addCapturedTeamBase(self, clientID, playerTeam, timeLeft, invadersCnt):
-        self.__onRoundFinished(_SOUND_EVENTS.BASE_CAPTURED)
+        self._playRoundFinished(_SOUND_EVENTS.BASE_CAPTURED)
 
     def setPeriod(self, period):
-        self.__arenaPeriod = period
+        self._arenaPeriod = period
 
     def setTotalTime(self, totalTime):
-        self.__arenaTotalTime = totalTime
-        self.__checkTimeCondition()
+        self._arenaTotalTime = totalTime
+        self._checkTimeCondition()
 
     def _playSound(self, soundID):
         SoundGroups.g_instance.playSound2D(soundID)
 
-    def __checkTimeCondition(self):
-        if self.__arenaTotalTime == _BATTLE_END_SOUND_TIME and self.__arenaPeriod == ARENA_PERIOD.BATTLE:
-            self.__onRoundFinished(_SOUND_EVENTS.TIME_IS_OVER)
+    def _checkTimeCondition(self):
+        if self._arenaPeriod == ARENA_PERIOD.BATTLE and self._arenaTotalTime == _BATTLE_END_SOUND_TIME:
+            self._playRoundFinished(_SOUND_EVENTS.TIME_IS_OVER)
 
-    def __onRoundFinished(self, soundID):
+    def _playRoundFinished(self, soundID):
         if not self.__isPlaying:
             self._playSound(soundID)
             self.__isPlaying = True

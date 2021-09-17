@@ -131,10 +131,10 @@ def _readRequestExclusiveHintEffectSection(xmlCtx, section, _, conditions):
     return bc_effects.RequestExclusiveHintEffect(componentID, soundID, conditions=conditions)
 
 
-def _readStartAssistantEffectSection(xmlCtx, section, _, conditions):
-    item = resource_helper.readDict(resource_helper.ResourceCtx(xmlCtx[1]), _xml.getSubsection(xmlCtx, section, 'hints'))
-    hints = item.value
-    return bc_effects.StartAssistantEffect(hints, conditions=conditions)
+def _readStartPlanSection(xmlCtx, section, _, conditions):
+    item = resource_helper.readStringItem(resource_helper.ResourceCtx(xmlCtx[1]), _xml.getSubsection(xmlCtx, section, 'plan'))
+    planName = item.value
+    return bc_effects.StartVSEPlanEffect(planName, conditions=conditions)
 
 
 def _readSetBootcampNationEffectSection(xmlCtx, section, _, conditions):
@@ -145,7 +145,7 @@ def _readSetBootcampNationEffectSection(xmlCtx, section, _, conditions):
 def init():
     sub_parsers.setEffectsParsers({'request-exclusive-hint': _readRequestExclusiveHintEffectSection,
      'update-exclusive-hints': sub_parsers.makeSimpleEffectReader(_EFFECT_TYPE.UPDATE_EXCLUSIVE_HINTS),
-     'start-assistant': _readStartAssistantEffectSection,
+     'start-vse-plan': _readStartPlanSection,
      'restore-checkpoint': sub_parsers.makeSimpleEffectReader(_EFFECT_TYPE.RESTORE_CHECKPOINT),
      'save-checkpoint': sub_parsers.makeSimpleEffectReader(_EFFECT_TYPE.SAVE_CHECKPOINT),
      'set-bootcamp-nation': _readSetBootcampNationEffectSection,

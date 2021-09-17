@@ -683,7 +683,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             self.__vehicleId = makeIntCompactDescrByID('vehicle', vehicleType[0], vehicleType[1])
             self.__haveReqLevel = vTypeDesc.level >= _HINT_MIN_VEHICLE_LEVEL
             self.__isSPG = vTypeDesc.type.getVehicleClass() == VEHICLE_CLASS_NAME.SPG
-            if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine:
+            if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vehicle.isTrackWithinTrack:
                 self.__updateHintCounterOnStart(self.__vehicleId, vehicle, self.__helpHintSettings)
             if self.__needSPGHelpHintShow():
                 self.__updateHintCounterOnStart(self.__getSPGHintSection(), vehicle, self.__spgHelpHintSettings)
@@ -722,7 +722,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return
 
     def __canDisplayVehicleHelpHint(self, typeDescriptor):
-        return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
+        return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
 
     def __canDisplaySPGHelpHint(self):
         return self.__needSPGHelpHintShow() and self.__isInDisplayPeriod and self._haveHintsLeft(self.__spgHelpHintSettings[self.__getSPGHintSection()])

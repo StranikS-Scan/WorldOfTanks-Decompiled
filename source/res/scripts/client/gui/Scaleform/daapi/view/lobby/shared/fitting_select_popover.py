@@ -33,7 +33,7 @@ FITTING_MODULES = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CHASSIS],
  GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.ENGINE],
  GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.RADIO])
 _PARAMS_LISTS = {GUI_ITEM_TYPE.RADIO: ('radioDistance',),
- GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxSteeringLockAngle', 'maxLoad'),
+ GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxSteeringLockAngle', 'maxLoad', 'chassisRepairTime'),
  GUI_ITEM_TYPE.ENGINE: ('enginePower', 'fireStartingChance'),
  GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius'),
  GUI_ITEM_TYPE.GUN: ('avgDamageList', 'avgPiercingPower', 'reloadTime')}
@@ -58,7 +58,7 @@ def _extendByModuleData(targetData, vehicleModule, vehDescr, extenders):
         value = paramsData.get(paramName)
         if value is not None:
             values.append(_formatValuesString(formatParameter(paramName, value)))
-            names.append(formatModuleParamName(paramName))
+            names.append(formatModuleParamName(paramName, vehDescr))
 
     targetData['level'] = vehicleModule.level
     targetData['paramValues'] = '\n'.join(values)
@@ -182,11 +182,11 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
             if self.__vehicle.descriptor.hasTurboshaftEngine:
                 rendererName = FITTING_TYPES.ENGINE_FITTING_BIG_ITEM_RENDERER
             else:
-                rendererName = FITTING_TYPES.ENGINE_CHASSIS_FITTING_ITEM_RENDERER
+                rendererName = FITTING_TYPES.ENGINE_FITTING_ITEM_RENDERER
             width = FITTING_TYPES.MEDUIM_POPOVER_WIDTH
         elif self._slotType == FITTING_TYPES.VEHICLE_CHASSIS:
-            rendererName = FITTING_TYPES.ENGINE_CHASSIS_FITTING_ITEM_RENDERER
-            width = FITTING_TYPES.MEDUIM_POPOVER_WIDTH
+            rendererName = FITTING_TYPES.CHASSIS_FITTING_ITEM_RENDERER
+            width = FITTING_TYPES.LARGE_POPOVER_WIDTH
         elif self._slotType == FITTING_TYPES.VEHICLE_RADIO:
             rendererName = FITTING_TYPES.RADIO_FITTING_ITEM_RENDERER
             width = FITTING_TYPES.SHORT_POPOVER_WIDTH

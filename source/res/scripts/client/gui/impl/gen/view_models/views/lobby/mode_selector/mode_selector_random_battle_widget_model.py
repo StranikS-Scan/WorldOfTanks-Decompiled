@@ -8,14 +8,13 @@ class ProgressionState(Enum):
     BOUGHT_BASE = 'bought_base'
     PAUSED = 'paused'
     AWAIT_SEASON = 'await_season'
-    CHOOSE_3D_STYLE = 'choose_3d_style'
     COMPLETED = 'completed'
 
 
 class ModeSelectorRandomBattleWidgetModel(ModeSelectorBaseWidgetModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(ModeSelectorRandomBattleWidgetModel, self).__init__(properties=properties, commands=commands)
 
     def getLevel(self):
@@ -42,29 +41,35 @@ class ModeSelectorRandomBattleWidgetModel(ModeSelectorBaseWidgetModel):
     def setHasBattlePass(self, value):
         self._setBool(4, value)
 
+    def getIs3DStyleChosen(self):
+        return self._getBool(5)
+
+    def setIs3DStyleChosen(self, value):
+        self._setBool(5, value)
+
     def getProgressionState(self):
-        return ProgressionState(self._getString(5))
+        return ProgressionState(self._getString(6))
 
     def setProgressionState(self, value):
-        self._setString(5, value.value)
+        self._setString(6, value.value)
 
     def getChapter(self):
-        return self._getNumber(6)
-
-    def setChapter(self, value):
-        self._setNumber(6, value)
-
-    def getTooltipID(self):
         return self._getNumber(7)
 
-    def setTooltipID(self, value):
+    def setChapter(self, value):
         self._setNumber(7, value)
 
-    def getNotChosenRewardCount(self):
+    def getTooltipID(self):
         return self._getNumber(8)
 
-    def setNotChosenRewardCount(self, value):
+    def setTooltipID(self, value):
         self._setNumber(8, value)
+
+    def getNotChosenRewardCount(self):
+        return self._getNumber(9)
+
+    def setNotChosenRewardCount(self, value):
+        self._setNumber(9, value)
 
     def _initialize(self):
         super(ModeSelectorRandomBattleWidgetModel, self)._initialize()
@@ -72,6 +77,7 @@ class ModeSelectorRandomBattleWidgetModel(ModeSelectorBaseWidgetModel):
         self._addNumberProperty('progress', 0)
         self._addNumberProperty('points', 0)
         self._addBoolProperty('hasBattlePass', False)
+        self._addBoolProperty('is3DStyleChosen', False)
         self._addStringProperty('progressionState')
         self._addNumberProperty('chapter', 0)
         self._addNumberProperty('tooltipID', 0)

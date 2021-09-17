@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/block.py
-from typing import List, Any
-from misc import ASPECT
+from typing import List, Any, Sequence
+from misc import ASPECT, BLOCK_MODE
+from itertools import imap
 
 class EDITOR_TYPE(object):
     STR_KEY_SELECTOR = 1
@@ -12,13 +13,18 @@ def buildStrKeysValue(*args):
     return ';'.join(args)
 
 
+def makeResEditorData(path, *extensions):
+    return [path, ';;'.join(imap(lambda ext: '*.%s' % ext, extensions))]
+
+
 class InitParam(object):
 
-    def __init__(self, name, slotType, defaultValue, editorType=None):
+    def __init__(self, name, slotType, defaultValue, editorType=None, editorData=None):
         self.name = name
         self.slotType = slotType
         self.defaultValue = defaultValue
         self.editorType = editorType
+        self.editorData = editorData
 
 
 class DataInputSlot(object):
@@ -88,11 +94,16 @@ class Meta(object):
     def initParams(cls):
         return []
 
+    @classmethod
+    def mode(cls):
+        return BLOCK_MODE.NONE
+
 
 class Block(Meta):
 
     def __init__(self, agent):
         self.__agent = agent
+        super(Block, self).__init__()
 
     def captionText(self):
         pass

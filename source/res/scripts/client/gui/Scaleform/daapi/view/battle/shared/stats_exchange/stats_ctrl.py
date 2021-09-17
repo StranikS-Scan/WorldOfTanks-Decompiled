@@ -416,8 +416,12 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
                 self.invalidatePlayerStatus(0, arenaDP.getVehicleInfo(value), arenaDP)
 
     def __onVOIPChannelStateToggled(self, *args):
-        arenaDP = self._battleCtx.getArenaDP()
-        self.invalidatePlayerStatus(INVALIDATE_OP.PLAYER_STATUS, arenaDP.getVehicleInfo(), arenaDP)
+        if self._battleCtx is None:
+            return
+        else:
+            arenaDP = self._battleCtx.getArenaDP()
+            self.invalidatePlayerStatus(INVALIDATE_OP.PLAYER_STATUS, arenaDP.getVehicleInfo(), arenaDP)
+            return
 
     def __onQuestProgressUpdate(self, progressID, conditionVO):
         self.as_updateQuestProgressS(progressID, conditionVO)

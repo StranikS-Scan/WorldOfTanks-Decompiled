@@ -7,7 +7,7 @@
     <loader>	radioman	</loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_HT_break_level_10	</postProgressionTree>
+  <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	50	</forward>
@@ -117,9 +117,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-0.000014 0.641561 -2.05674	</anchorPosition>
-        <anchorDirection>	-0.000042 0.999143 -0.0413809	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	-0.082806	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -131,9 +130,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.0183122	</clipAngle>
-        <anchorPosition>	-1.13679 0.494599 2.32823	</anchorPosition>
-        <anchorDirection>	0.000014 0.904407 0.42667	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	-0.207679	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -145,9 +143,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.0183122	</clipAngle>
-        <anchorPosition>	-1.28212 0.240395 3.32546	</anchorPosition>
-        <anchorDirection>	0.017455 0.840155 0.542066	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	-0.081738	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -159,9 +156,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.0183122	</clipAngle>
-        <anchorPosition>	1.19025 0.19793 3.3941	</anchorPosition>
-        <anchorDirection>	0.0174708 0.84014 0.542088	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	-0.081742	</anchorShift>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -968,6 +964,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <repairTime>	6.85714293	</repairTime>
     </Chassis_Ch22_113_Beijing_Opera>
   </chassis>
   <turrets0>
@@ -1093,9 +1090,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.575559	</clipAngle>
-          <anchorPosition>	-0.000619158 0.750377 0.870768	</anchorPosition>
-          <anchorDirection>	-0.000207423 0.999564 0.0295156	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.005906	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1107,9 +1103,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.575559	</clipAngle>
-          <anchorPosition>	0.000106914 0.881451 -0.775526	</anchorPosition>
-          <anchorDirection>	0.000018 0.999563 0.0295512	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.088275	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

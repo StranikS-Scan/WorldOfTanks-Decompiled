@@ -21,7 +21,6 @@ _MS_IN_SEC = 1000
 _BC_MESSAGE_VIEW_TYPE = WindowLayer.TOP_WINDOW
 
 def weave(weaver, stateInGarage):
-    weaver.weave(pointcut=_PointcutBrowserControllerDisable)
     weaver.weave(pointcut=_PointcutPrbDisableEntitySelect)
     weaver.weave(pointcut=_PointcutPrbInvitationText)
     weaver.weave(pointcut=_PointcutPrbDisableAcceptButton)
@@ -47,12 +46,6 @@ class PointcutBattleSelectorHintText(aop.Pointcut):
 
     def __init__(self):
         super(PointcutBattleSelectorHintText, self).__init__('gui.Scaleform.daapi.view.lobby.header.battle_selector_items', '_BattleSelectorItems', 'update', aspects=(_AspectBattleSelectorHintText,))
-
-
-class _PointcutBrowserControllerDisable(aop.Pointcut):
-
-    def __init__(self):
-        super(_PointcutBrowserControllerDisable, self).__init__('gui.game_control.BrowserController', 'BrowserController', 'load', aspects=(common.AspectAvoidAsync(),))
 
 
 class _PointcutPrbDisableEntitySelect(aop.Pointcut):

@@ -7,8 +7,9 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_random_battle_model import ModeSelectorRandomBattleModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_random_battle_widget_model import ModeSelectorRandomBattleWidgetModel, ProgressionState
+from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
-from gui.impl.lobby.mode_selector.items.constants import ModeSelectorRewardID
+from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
 from gui.shared import g_eventBus
 from gui.shared.events import ModeSelectorPopoverEvent
 from helpers import dependency
@@ -36,6 +37,7 @@ class RandomModeSelectorItem(ModeSelectorLegacyItem):
         self.__battlePassController.onBattlePassSettingsChange += self.__onBattlePassUpdate
         self._addReward(ModeSelectorRewardID.CREDITS)
         self._addReward(ModeSelectorRewardID.EXPERIENCE)
+        setBattlePassState(self.viewModel)
 
     def randomBattlePopoverStatusChangeCallback(self, event):
         self.setPopoverState(event.ctx['active'])
@@ -77,9 +79,6 @@ class RandomModeSelectorItem(ModeSelectorLegacyItem):
         elif isOffSeasonEnable:
             currentState = ProgressionState.AWAIT_SEASON
             tooltip = R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView()
-        elif not is3DStyleChosen:
-            currentState = ProgressionState.CHOOSE_3D_STYLE
-            tooltip = R.views.lobby.battle_pass.tooltips.BattlePass3dStyleNotChosenTooltip()
         elif bpState == BattlePassState.COMPLETED:
             currentState = ProgressionState.COMPLETED
             tooltip = R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView()
@@ -88,11 +87,15 @@ class RandomModeSelectorItem(ModeSelectorLegacyItem):
                 currentState = ProgressionState.BOUGHT_BASE
             else:
                 currentState = ProgressionState.FREE_BASE
-            tooltip = R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView()
+            if not is3DStyleChosen:
+                tooltip = R.views.lobby.battle_pass.tooltips.BattlePass3dStyleNotChosenTooltip()
+            else:
+                tooltip = R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView()
         model.setLevel(currentLevel)
         model.setProgress(progression)
         model.setPoints(pointsLeft)
         model.setHasBattlePass(hasBattlePass)
+        model.setIs3DStyleChosen(is3DStyleChosen)
         model.setProgressionState(currentState)
         model.setChapter(curChapter)
         model.setNotChosenRewardCount(notChosenRewardCount)

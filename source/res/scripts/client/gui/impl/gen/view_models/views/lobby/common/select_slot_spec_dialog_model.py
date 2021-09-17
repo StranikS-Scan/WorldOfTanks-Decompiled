@@ -8,16 +8,16 @@ class SelectSlotSpecDialogModel(DialogWithExchange):
     __slots__ = ()
     BUY_NOT_REQUIRED_PANEL = 'buyNotRequiredPanel'
 
-    def __init__(self, properties=16, commands=3):
+    def __init__(self, properties=17, commands=3):
         super(SelectSlotSpecDialogModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def changePrice(self):
-        return self._getViewModel(14)
+        return self._getViewModel(15)
 
     @property
     def mainContent(self):
-        return self._getViewModel(15)
+        return self._getViewModel(16)
 
     def _initialize(self):
         super(SelectSlotSpecDialogModel, self)._initialize()

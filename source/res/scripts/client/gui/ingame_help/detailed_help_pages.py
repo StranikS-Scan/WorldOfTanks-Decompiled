@@ -40,6 +40,8 @@ def buildPagesData(ctx):
         datailedList.extend(buildBattleRoyalePages(defaultHeaderTitle, ctx['mapGeometryName']))
     if ctx.get('hasTurboshaftEngine'):
         datailedList.extend(buildTurboshaftEnginePages(defaultHeaderTitle))
+    if ctx.get('isTrackWithinTrack'):
+        datailedList.extend(buildTrackWithinTrackPages(defaultHeaderTitle))
     return datailedList
 
 
@@ -73,6 +75,12 @@ def buildWheeledPages(headerTitle):
     pages = []
     _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.stableChassis.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.stableChassis())), [], backport.image(R.images.gui.maps.icons.battleHelp.wheeledHelp.wheel_chassis()))
     _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.aboutTechnique.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.aboutTechnique())), [], backport.image(R.images.gui.maps.icons.battleHelp.wheeledHelp.wheel_details()))
+    return pages
+
+
+def buildTrackWithinTrackPages(headerTitle):
+    pages = []
+    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.trackWithinTrack.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.trackWithinTrack.description())), [], backport.image(R.images.gui.maps.icons.battleHelp.trackWithinTrack.roll_away()))
     return pages
 
 

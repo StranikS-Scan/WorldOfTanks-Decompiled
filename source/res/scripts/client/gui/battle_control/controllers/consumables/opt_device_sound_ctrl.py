@@ -86,7 +86,7 @@ class OptDeviceSoundController(object):
                     self.__schedulerToolbox.delete(deviceName)
                     SoundGroups.g_instance.playSound2D('cons_toolbox_stop')
 
-    def __updateRepairingDevice(self, deviceName, progress, secondsLeft):
+    def __updateRepairingDevice(self, deviceName, progress, secondsLeft, isLimited):
         if 'improvedConfiguration' in self.__playerOptDevices:
             if not self.__schedulerToolbox.isPlanned(deviceName):
                 self.__schedulerToolbox.playAfterSecond(deviceName, max(0.0, secondsLeft - 2.0))

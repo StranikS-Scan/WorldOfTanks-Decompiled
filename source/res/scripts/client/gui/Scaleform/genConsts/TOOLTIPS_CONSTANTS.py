@@ -209,7 +209,7 @@ class TOOLTIPS_CONSTANTS(object):
     CRYSTAL_INFO_FULL_SCREEN = 'crystalInfoFullScreen'
     CREDITS_INFO_FULL_SCREEN = 'creditsInfoFullScreen'
     GOLD_INFO_FULL_SCREEN = 'goldInfoFullScreen'
-    FREEXP_INFO_FULL_SCREEN = 'freeXpInfoFullScreen'
+    FREEXP_INFO_FULL_SCREEN = 'freeXPInfoFullScreen'
     GOLD_STATS_FULL_SCREEN = 'goldStatsFullScreen'
     CREDITS_STATS_FULL_SCREEN = 'creditsStatsFullScreen'
     CRYSTAL_INFO = 'crystalInfo'
@@ -231,10 +231,8 @@ class TOOLTIPS_CONSTANTS(object):
     RANKED_CALENDAR_DAY_INFO_EXTENDED = 'rankedCalendarDayInfoExtended'
     RANKED_SELECTOR_INFO = 'rankedSelectorInfo'
     RANKED_UNAVAILABLE_INFO = 'rankedUnavailableInfo'
-    RANKED_CALENDAR_STEPS_INFO = 'rankedCalendarStepsInfo'
     RANKED_DIVISION_INFO = 'rankedDivisionInfo'
     RANKED_BATTLES_YEAR_REWARD = 'rankedBattlesYearReward'
-    RANKED_SERVER_PRIMETIME = 'rankedServerPrimeTime'
     VEHICLE_ROLES = 'vehicleRoles'
     RANKED_QUESTS_PREVIEW = 'rankedQuestsPreview'
     EPIC_SKILL_INFO = 'epicSkillInfo'
@@ -364,8 +362,8 @@ class TOOLTIPS_CONSTANTS(object):
     SELECTABLE_CREWBOOK = 'SelectableCrewbookTooltipData'
     RANDOM_CREWBOOK = 'RandomCrewbookTooltipData'
     ACCOUNT_COMPLETION = 'AccountCompletion'
-    EPIC_RANK_UNLOCK_INFO = 'epicRankUnlockTooltip'
     VEH_POST_PROGRESSION_ENTRY_POINT = 'VehPostProgressionEntryPoint'
+    EPIC_RANK_UNLOCK_INFO = 'epicRankUnlockTooltip'
     ACHIEVEMENTS_SET = [BATTLE_STATS_ACHIEVS,
      BATTLE_STATS_MARKS_ON_GUN_ACHIEVEMENT,
      ACHIEVEMENT,
@@ -495,12 +493,10 @@ class TOOLTIPS_CONSTANTS(object):
      RANKED_STEP,
      RANKED_CALENDAR_DAY_INFO,
      RANKED_CALENDAR_DAY_INFO_EXTENDED,
-     RANKED_CALENDAR_STEPS_INFO,
      RANKED_SELECTOR_INFO,
      RANKED_UNAVAILABLE_INFO,
      RANKED_DIVISION_INFO,
      RANKED_BATTLES_YEAR_REWARD,
-     RANKED_SERVER_PRIMETIME,
      RANKED_QUESTS_PREVIEW]
     SETTINGS_SET = [SETTINGS_CONTROL,
      SETTINGS_BUTTON,

@@ -9,13 +9,16 @@ from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractV
 from gui.Scaleform.framework.entities.view_interface import ViewInterface
 from gui.doc_loaders import hints_layout
 from gui.shared.events import FocusEvent
+from ids_generators import SequenceIDGenerator
 from skeletons.tutorial import ITutorialLoader
 from soft_exception import SoftException
 from sound_gui_manager import ViewSoundExtension
-from helpers import dependency
+from helpers import dependency, uniprof
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
+_UNIPROF_REGION_COLOR = 3368601
 _logger = logging.getLogger(__name__)
+_view_id_generator = SequenceIDGenerator()
 _ViewKey = namedtuple('_ViewKey', ['alias', 'name'])
 
 class ViewKey(_ViewKey):
@@ -47,6 +50,8 @@ class View(AbstractViewMeta, ViewInterface):
         super(View, self).__init__()
         from gui.Scaleform.framework import ViewSettings
         self.__settings = ViewSettings()
+        self.__uid = _view_id_generator.next()
+        self.__viewLiveRegionName = None
         self.__key = ViewKey(None, None)
         self.__soundExtension = ViewSoundExtension(self._COMMON_SOUND_SPACE)
         self.__soundExtension.initSoundManager()
@@ -126,8 +131,10 @@ class View(AbstractViewMeta, ViewInterface):
             if self.__settings.scope != ScopeTemplates.DYNAMIC_SCOPE:
                 self.__scope = self.__settings.scope
             self.__key = ViewKey(self.__settings.alias, self.uniqueName)
+            self.__viewLiveRegionName = 'Scaleform view: {} {}'.format(self.__key.name, self.__uid)
+            uniprof.enterToRegion(self.__viewLiveRegionName, _UNIPROF_REGION_COLOR)
         else:
-            _logger.debug('settings can`t be None!')
+            _logger.error('settings can`t be None!')
         return
 
     def setUniqueName(self, name):
@@ -169,5 +176,9 @@ class View(AbstractViewMeta, ViewInterface):
     def _destroy(self):
         self.__window = None
         self.__soundExtension.destroySoundManager()
+        if self.__viewLiveRegionName:
+            uniprof.exitFromRegion(self.__viewLiveRegionName)
+        else:
+            _logger.error('__viewLiveRegionName was not defined for ' + self.__class__.__name__)
         super(View, self)._destroy()
         return

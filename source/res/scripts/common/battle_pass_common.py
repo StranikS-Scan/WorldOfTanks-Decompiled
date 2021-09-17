@@ -3,7 +3,7 @@
 import bisect
 import time
 import struct
-from battle_pass_integration import BattlePassByGameMode
+from battle_pass_integration import getBattlePassByGameMode
 from constants import MAX_VEHICLE_LEVEL, OFFER_TOKEN_PREFIX, ARENA_BONUS_TYPE
 from collections import namedtuple
 from items import vehicles, parseIntCompactDescr
@@ -368,7 +368,7 @@ class BattlePassConfig(object):
         teamPoints = self._config.get('season', {}).get('points', {}).get(gameMode, {})
         if vehTypeCompDescr in teamPoints:
             teamPoints = teamPoints[vehTypeCompDescr]
-        return teamPoints.get(teamKey, [0] * BattlePassByGameMode[gameMode]['maxRanks'])
+        return teamPoints.get(teamKey) or [0] * getBattlePassByGameMode(gameMode).getTeamSize()
 
     def getSeasonRewards(self):
         return self._config.get('rewards', {})

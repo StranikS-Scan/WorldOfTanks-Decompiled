@@ -10,7 +10,7 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared.items_parameters.functions import getVehicleFactors
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.MethodsRules import MethodsRules
-from gui.veh_post_progression.helpers import getVehicleState, getInstalledShells, updateInvInstalled
+from gui.veh_post_progression.helpers import setFeatures, setDisabledSwitches, getInstalledShells, updateInvInstalled
 from gui.veh_post_progression.sounds import playSound, Sounds
 from gui.veh_post_progression.battle_cooldown_manager import BattleCooldownManager
 from helpers import dependency
@@ -18,7 +18,7 @@ from items import vehicles
 from items.components.post_progression_components import getActiveModifications
 from items.utils import getCircularVisionRadius, getFirstReloadTime
 from PerksParametersController import PerksParametersController
-from post_progression_common import EXT_DATA_PROGRESSION_KEY, EXT_DATA_SLOT_KEY, TANK_SETUP_GROUPS, TankSetupLayouts, TankSetups
+from post_progression_common import EXT_DATA_PROGRESSION_KEY, EXT_DATA_SLOT_KEY, TANK_SETUP_GROUPS, TankSetupLayouts, TankSetups, VehicleState
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -47,12 +47,13 @@ class _States(CONST_CONTAINER):
     RESPAWN = 64
     SETUPS = 128
     SETUPS_INDEXES = 256
-    INIT_COMPLETE = 512
-    SELECTION_STARTED = 1024
-    SELECTION_STOPPED = 2048
-    SELECTION_ENDED = 4096
-    INIT_READY = VEHICLE_ID | CREW | DYN_SLOT | ENHANCEMENTS | PERKS | PROGRESSION | RESPAWN | SETUPS | SETUPS_INDEXES
-    SELECTION_AWAIT_HIDING = 8192
+    DISABLED_SWITCHES = 512
+    INIT_COMPLETE = 1024
+    SELECTION_STARTED = 2048
+    SELECTION_STOPPED = 4096
+    SELECTION_ENDED = 8192
+    INIT_READY = VEHICLE_ID | CREW | DYN_SLOT | ENHANCEMENTS | PERKS | PROGRESSION | RESPAWN | SETUPS | SETUPS_INDEXES | DISABLED_SWITCHES
+    SELECTION_AWAIT_HIDING = 16384
 
 
 class IPrebattleSetupsListener(object):
@@ -176,8 +177,19 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         if self.__playerVehicleID != vehicleID or self.__isSelectionStopped() or self.__state & _States.PROGRESSION:
             return
         self.__extData[_EXT_PROGRESSION_MODS] = getActiveModifications(itemCDs, vehicles.g_cache.postProgression())
-        self.__extData[EXT_DATA_PROGRESSION_KEY] = getVehicleState(itemCDs)
+        state = self.__extData.get(EXT_DATA_PROGRESSION_KEY, VehicleState())
+        setFeatures(state, itemCDs)
+        self.__extData[EXT_DATA_PROGRESSION_KEY] = state
         self.__onInitStepCompleted(_States.PROGRESSION)
+
+    @MethodsRules.delayable('setPlayerVehicle')
+    def setDisabledSwitches(self, vehicleID, groupIDs):
+        if self.__playerVehicleID != vehicleID or self.__isSelectionStopped() or self.__state & _States.DISABLED_SWITCHES:
+            return
+        state = self.__extData.get(EXT_DATA_PROGRESSION_KEY, VehicleState())
+        setDisabledSwitches(state, groupIDs)
+        self.__extData[EXT_DATA_PROGRESSION_KEY] = state
+        self.__onInitStepCompleted(_States.DISABLED_SWITCHES)
 
     @MethodsRules.delayable('setPlayerVehicle')
     def setRespawnReloadFactor(self, vehicleID, reloadFactor):
@@ -253,6 +265,8 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
             return
         elif not self.__vehicle.isSetupSwitchActive(groupID):
             return
+        elif self.__vehicle.postProgression.isPrebattleSwitchDisabled(groupID):
+            return
         else:
             playerVehicle = BigWorld.entities.get(self.__playerVehicleID)
             if playerVehicle is None:
@@ -266,7 +280,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         if not self.__hasValidCaps:
             return False
         for groupID in TANK_SETUP_GROUPS.iterkeys():
-            if self.__vehicle.isSetupSwitchActive(groupID):
+            if self.__vehicle.isSetupSwitchActive(groupID) and not self.__vehicle.postProgression.isPrebattleSwitchDisabled(groupID):
                 return True
 
         return False

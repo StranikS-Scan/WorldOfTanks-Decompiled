@@ -500,7 +500,7 @@ class BattleCommandFactory(IBattleCommandFactory):
                     name = 'RELOADING_CASSETE'
                     int32Arg1 = quantity
             args = messageArgs(int32Arg1=int32Arg1, floatArg1=floatArg1)
-        elif quantity == 0:
+        elif quantity <= 0:
             name = 'RELOADING_UNAVAILABLE'
         elif isCassetteClip:
             name = 'RELOADING_READY_CASSETE'

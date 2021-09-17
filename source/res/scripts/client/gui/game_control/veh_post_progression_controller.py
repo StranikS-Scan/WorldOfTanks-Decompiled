@@ -5,6 +5,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR
 from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.vehicle_equipment import SUPPORT_EXT_DATA_FEATURES
 from gui.shared.utils.requesters import getDiffID, REQ_CRITERIA
 from gui.veh_post_progression.messages import showWelcomeUnlockMsg
 from helpers import dependency
@@ -53,10 +54,10 @@ class VehiclePostProgressionController(IVehiclePostProgressionController):
     def onLobbyInited(self, _):
         self.__tryShowWelcomeUnlockMsg()
 
-    def isDisabledFor(self, veh, settings=None):
+    def isDisabledFor(self, veh, settings=None, skipRentalIsOver=False):
         settings = settings or self.__postProgressionSettings
         inEnabledRented = veh.intCD in settings.enabledRentedVehicles
-        return veh.isRented and not inEnabledRented or veh.rentalIsOver and inEnabledRented
+        return veh.isRented and not inEnabledRented or veh.rentalIsOver and inEnabledRented and not skipRentalIsOver
 
     def isEnabled(self):
         return self.__postProgressionSettings.isPostProgressionEnabled
@@ -93,6 +94,8 @@ class VehiclePostProgressionController(IVehiclePostProgressionController):
                 return
             if extData[EXT_DATA_SLOT_KEY] and not settings.isRoleSlotEnabled:
                 extData.pop(EXT_DATA_SLOT_KEY)
+            if extData[EXT_DATA_PROGRESSION_KEY]:
+                extData[SUPPORT_EXT_DATA_FEATURES] = tuple(extData[EXT_DATA_PROGRESSION_KEY].features)
             tree = vehicles.g_cache.postProgression().trees[vehType.postProgressionTree]
             extData[EXT_DATA_PROGRESSION_KEY] = extData[EXT_DATA_PROGRESSION_KEY].toActionCDs(tree)
             return

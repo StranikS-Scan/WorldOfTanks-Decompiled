@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/veh_post_progression/post_progression_cfg_component.py
 import typing
+import BigWorld
 from adisp import process
 from Event import Event
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -18,11 +19,13 @@ from gui.impl.lobby.veh_post_progression.tooltips.setup_tooltip_view import Setu
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.items_cache import CACHE_SYNC_REASON
+from gui.veh_post_progression.helpers import storeLastSeenStep
 from gui.veh_post_progression.models.ext_money import ExtendedMoney, ExtendedCurrency, EXT_MONEY_UNDEFINED
 from gui.veh_post_progression.models.progression import PostProgressionAvailability, PostProgressionCompletion
 from gui.veh_post_progression.models.progression_step import PostProgressionStepState
 from gui.veh_post_progression.models.purchase import PurchaseCheckResult, PurchaseProvider
 from helpers import dependency
+from post_progression_common import GROUP_ID_BY_FEATURE
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IWalletController
 if typing.TYPE_CHECKING:
@@ -49,18 +52,21 @@ _STEP_STATE_MAP = {PostProgressionStepState.RESTRICTED: StepState.RESTRICTED,
  PostProgressionStepState.LOCKED: StepState.UNAVAILABLELOCKED,
  PostProgressionStepState.RECEIVED: StepState.RECEIVED,
  PostProgressionStepState.UNLOCKED: StepState.AVAILABLEPURCHASE}
+_TOGGLING_COOLDOWN = 1.0
 
 class PostProgressionCfgComponentView(PostProgressionBaseComponentView):
     __itemsCache = dependency.descriptor(IItemsCache)
     __walletController = dependency.descriptor(IWalletController)
-    __slots__ = ('onGoBackAction', 'onResearchAction', '__intCD', '__balance', '__creditsRate')
+    __slots__ = ('onGoBackAction', 'onResearchAction', '__intCD', '__balance', '__creditsRate', '__togglingSteps', '__lockTogglingCallbackID')
 
     def __init__(self, layoutID=R.views.lobby.veh_post_progression.VehiclePostProgressionView(), **kwargs):
         super(PostProgressionCfgComponentView, self).__init__(layoutID, PostProgressionCfgViewModel(), **kwargs)
         self.__balance, self.__intCD = (None, None)
         self.onGoBackAction = Event(self._eventManager)
         self.onResearchAction = Event(self._eventManager)
-        return None
+        self.__togglingSteps = set()
+        self.__lockTogglingCallbackID = None
+        return
 
     @property
     def viewModel(self):
@@ -81,17 +87,33 @@ class PostProgressionCfgComponentView(PostProgressionBaseComponentView):
         else:
             return CfgProgressionLevelTooltipView(self._vehicle, stepId) if contentID == R.views.lobby.veh_post_progression.tooltip.PostProgressionLevelTooltipView() and stepId is not None else super(PostProgressionCfgComponentView, self).createToolTipContent(event, contentID)
 
+    def _finalize(self):
+        self.__cancelLockToggling()
+        self.__togglingSteps.clear()
+        super(PostProgressionCfgComponentView, self)._finalize()
+
     def _onLoading(self, intCD=None, *args, **kwargs):
         self.__intCD = intCD
         self.__balance = self.__itemsCache.items.stats.getMoneyExt(self.__intCD)
         self.__creditsRate = self.__itemsCache.items.shop.exchangeRate
         super(PostProgressionCfgComponentView, self)._onLoading(intCD, *args, **kwargs)
 
+    def _updateAll(self):
+        super(PostProgressionCfgComponentView, self)._updateAll()
+        self.__updateLastSeenModification()
+
+    def __updateLastSeenModification(self):
+        purchasableStep = self._vehicle.postProgression.getFirstPurchasableStep(ExtendedMoney(xp=self._vehicle.xp))
+        if purchasableStep is not None:
+            storeLastSeenStep(self._vehicle.intCD, purchasableStep.stepID)
+        return
+
     def _addListeners(self):
         super(PostProgressionCfgComponentView, self)._addListeners()
         self.viewModel.purchasePreview.onPurchaseClick += self.__onPurchaseClick
         self.viewModel.onGoBackAction += self.__onGoBackAction
         self.viewModel.onResearchAction += self.__onResearchAction
+        self.viewModel.grid.onPrebattleSwitchToggleClick += self._onPrebattleSwitchToggleClick
         self.__itemsCache.onSyncCompleted += self.__onSyncCompleted
         self.__walletController.onWalletStatusChanged += self._updateAll
         g_clientUpdateManager.addCallbacks({'stats.{}'.format(c):self.__updateMoney for c in ExtendedCurrency.ALL})
@@ -100,6 +122,7 @@ class PostProgressionCfgComponentView(PostProgressionBaseComponentView):
         self.viewModel.purchasePreview.onPurchaseClick -= self.__onPurchaseClick
         self.viewModel.onGoBackAction -= self.__onGoBackAction
         self.viewModel.onResearchAction -= self.__onResearchAction
+        self.viewModel.grid.onPrebattleSwitchToggleClick -= self._onPrebattleSwitchToggleClick
         self.__itemsCache.onSyncCompleted -= self.__onSyncCompleted
         self.__walletController.onWalletStatusChanged -= self._updateAll
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -110,6 +133,23 @@ class PostProgressionCfgComponentView(PostProgressionBaseComponentView):
         vehicle = self._vehicle
         action = vehicle.postProgression.getStep(int(args['stepID'])).action.getServerAction(factory, vehicle)
         yield factory.asyncDoAction(action)
+
+    @process
+    def _onPrebattleSwitchToggleClick(self, args):
+        stepID = int(args['stepID'])
+        if stepID in self.__togglingSteps:
+            return
+        elif self.__lockTogglingCallbackID is not None:
+            return
+        else:
+            self.__lockToggling()
+            self.__togglingSteps.add(stepID)
+            featureName = self._vehicle.postProgression.getStep(stepID).action.getTechName()
+            groupID = GROUP_ID_BY_FEATURE[featureName]
+            action = factory.getAction(factory.SWITCH_PREBATTLE_AMMO_PANEL_AVAILABILITY, self._vehicle, groupID, args['active'])
+            yield factory.asyncDoAction(action)
+            self.__togglingSteps.discard(stepID)
+            return
 
     @process
     def _onMultiStepActionClick(self, args):
@@ -181,6 +221,13 @@ class PostProgressionCfgComponentView(PostProgressionBaseComponentView):
     def _fillSingleStepModel(self, stepModel, step):
         super(PostProgressionCfgComponentView, self)._fillSingleStepModel(stepModel, step)
         stepModel.setStepState(_STEP_STATE_MAP[step.getState()])
+        featureName = self._vehicle.postProgression.getStep(step.stepID).action.getTechName()
+        groupID = GROUP_ID_BY_FEATURE.get(featureName)
+        if groupID is not None:
+            stepModel.setIsPrebattleSwitchEnabled(not self._vehicle.postProgression.isPrebattleSwitchDisabled(groupID))
+        else:
+            stepModel.setIsPrebattleSwitchEnabled(True)
+        return
 
     @process
     def __onPurchaseClick(self):
@@ -201,6 +248,25 @@ class PostProgressionCfgComponentView(PostProgressionBaseComponentView):
             self.__balance = self.__itemsCache.items.stats.getMoneyExt(self.__intCD)
             self.__creditsRate = self.__itemsCache.items.shop.exchangeRate
             self._updateAll()
+
+    def __lockToggling(self):
+        self.__updateTogglingLock(True)
+        self.__lockTogglingCallbackID = BigWorld.callback(_TOGGLING_COOLDOWN, self.__unlockToggling)
+
+    def __unlockToggling(self):
+        self.__updateTogglingLock(False)
+        self.__cancelLockToggling()
+
+    def __cancelLockToggling(self):
+        if self.__lockTogglingCallbackID is not None:
+            BigWorld.cancelCallback(self.__lockTogglingCallbackID)
+            self.__lockTogglingCallbackID = None
+        return
+
+    def __updateTogglingLock(self, isLocked):
+        with self.viewModel.grid.transaction() as gridModel:
+            for singleStep in gridModel.getMainSteps():
+                singleStep.setIsPrebattleSwitchLocked(isLocked)
 
     def __fillPriceModel(self, priceModel, price, checkResult):
         prices = priceModel.getPrice()

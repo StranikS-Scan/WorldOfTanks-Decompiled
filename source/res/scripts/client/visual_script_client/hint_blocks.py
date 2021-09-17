@@ -30,7 +30,7 @@ class HintMeta(Meta):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT]
+        return [ASPECT.CLIENT, ASPECT.HANGAR]
 
 
 class InitHint(Block, HintMeta):
@@ -47,7 +47,7 @@ class InitHint(Block, HintMeta):
         self._timeCooldownAfter = self._makeDataInputSlot('cooldownAfter', SLOT_TYPE.FLOAT)
         self._timeCompleteDuration = self._makeDataInputSlot('completeDuration', SLOT_TYPE.FLOAT)
         self._out = self._makeEventOutputSlot('out')
-        self._id = self._makeDataOutputSlot('id', SLOT_TYPE.INT, None)
+        self._id = self._makeDataOutputSlot('id', SLOT_TYPE.ID, None)
         return
 
     def _onInit(self):
@@ -84,7 +84,7 @@ class InitSecondaryHint(Block, HintMeta):
         self._text = self._makeDataInputSlot('text', SLOT_TYPE.STR)
         self._text.setDefaultValue('')
         self._out = self._makeEventOutputSlot('out')
-        self._id = self._makeDataOutputSlot('id', SLOT_TYPE.INT, None)
+        self._id = self._makeDataOutputSlot('id', SLOT_TYPE.ID, None)
         return
 
     def _onInit(self):
@@ -131,7 +131,7 @@ class IsHintVisible(Block, HintMeta):
 
     def __init__(self, *args, **kwargs):
         super(IsHintVisible, self).__init__(*args, **kwargs)
-        self._id = self._makeDataInputSlot('id', SLOT_TYPE.INT)
+        self._id = self._makeDataInputSlot('id', SLOT_TYPE.ID)
         self._visible = self._makeDataOutputSlot('visible', SLOT_TYPE.BOOL, self._isVisible)
 
     def _isVisible(self):
@@ -143,10 +143,6 @@ class IsHintVisible(Block, HintMeta):
         else:
             errorVScript(self, 'Unknown hint id')
         return
-
-    @classmethod
-    def blockAspects(cls):
-        return [ASPECT.CLIENT]
 
 
 class HideAllHints(Block, HintMeta):

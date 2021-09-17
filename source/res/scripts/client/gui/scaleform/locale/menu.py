@@ -565,6 +565,8 @@ class MENU(object):
     TANK_PARAMS_INVISIBILITYSTILLFACTOR = '#menu:tank_params/invisibilityStillFactor'
     TANK_PARAMS_INVISIBILITYMOVINGFACTOR = '#menu:tank_params/invisibilityMovingFactor'
     TANK_PARAMS_EXTRAREPAIRSPEED = '#menu:tank_params/extraRepairSpeed'
+    TANK_PARAMS_CHASSISREPAIRTIME = '#menu:tank_params/chassisRepairTime'
+    TANK_PARAMS_CHASSISREPAIRTIMEYOH = '#menu:tank_params/chassisRepairTimeYoh'
     TANK_PARAMS_TURBOSHAFTINVISIBILITYSTILLFACTOR = '#menu:tank_params/turboshaftInvisibilityStillFactor'
     TANK_PARAMS_TURBOSHAFTINVISIBILITYMOVINGFACTOR = '#menu:tank_params/turboshaftInvisibilityMovingFactor'
     TANK_PARAMS_VALUES_PARAM12_VALUE0 = '#menu:tank_params/values/param12/value0'
@@ -587,7 +589,7 @@ class MENU(object):
     TANK_PARAMS_GPS = '#menu:tank_params/gps'
     TANK_PARAMS_SPM = '#menu:tank_params/spm'
     TANK_PARAMS_S = '#menu:tank_params/s'
-    TANK_PARAMS_S_S = '#menu:tank_params/s_s'
+    TANK_PARAMS_YOH_S_S = '#menu:tank_params/yoh_s_s'
     TANK_PARAMS_MM = '#menu:tank_params/mm'
     TANK_PARAMS_VAL = '#menu:tank_params/val'
     TANK_PARAMS_VPM = '#menu:tank_params/vpm'
@@ -1048,11 +1050,14 @@ class MENU(object):
     MODULEINFO_AUTORELOADGUNLABEL = '#menu:moduleInfo/autoReloadGunLabel'
     MODULEINFO_AUTORELOADGUNLABEL_BOOST = '#menu:moduleInfo/autoReloadGunLabel/boost'
     MODULEINFO_DUALGUNLABEL = '#menu:moduleInfo/dualGunLabel'
+    MODULEINFO_TRACKWITHINTRACKCHASSISLABEL = '#menu:moduleInfo/trackWithinTrackChassisLabel'
     MODULEINFO_HYDRAULICCHASSISLABEL = '#menu:moduleInfo/hydraulicChassisLabel'
     MODULEINFO_HYDRAULICAUTOSIEGECHASSISLABEL = '#menu:moduleInfo/hydraulicAutoSiegeChassisLabel'
     MODULEINFO_HYDRAULICWHEELEDCHASSISLABEL = '#menu:moduleInfo/hydraulicWheeledChassisLabel'
     MODULEINFO_PARAMS_SHOTSPEED = '#menu:moduleInfo/params/shotSpeed'
     MODULEINFO_TURBOSHAFTENGINE = '#menu:moduleInfo/turboshaftEngine'
+    MODULEINFO_PARAMS_CHASSISREPAIRTIME = '#menu:moduleInfo/params/chassisRepairTime'
+    MODULEINFO_PARAMS_CHASSISREPAIRTIMEYOH = '#menu:moduleInfo/params/chassisRepairTimeYoh'
     MODULEINFO_PARAMS_MAXLOAD = '#menu:moduleInfo/params/maxLoad'
     MODULEINFO_PARAMS_MAXSTEERINGLOCKANGLE = '#menu:moduleInfo/params/maxSteeringLockAngle'
     MODULEINFO_PARAMS_BOMBSNUMBERRANGE = '#menu:moduleInfo/params/bombsNumberRange'
@@ -1170,6 +1175,8 @@ class MENU(object):
     VEHICLEINFO_PARAMS_TURBOSHAFTENGINEPOWER = '#menu:vehicleInfo/params/turboshaftEnginePower'
     VEHICLEINFO_PARAMS_STUNMAXDURATION = '#menu:vehicleInfo/params/stunMaxDuration'
     VEHICLEINFO_PARAMS_STUNMINDURATION = '#menu:vehicleInfo/params/stunMinDuration'
+    VEHICLEINFO_PARAMS_CHASSISREPAIRTIME = '#menu:vehicleInfo/params/chassisRepairTime'
+    VEHICLEINFO_PARAMS_CHASSISREPAIRTIMEYOH = '#menu:vehicleInfo/params/chassisRepairTimeYoh'
     VEHICLEINFO_TABS_PROPERTIES = '#menu:vehicleInfo/tabs/properties'
     VEHICLEINFO_TABS_BASE = '#menu:vehicleInfo/tabs/base'
     VEHICLEINFO_TABS_STATISTIC = '#menu:vehicleInfo/tabs/statistic'
@@ -2579,6 +2586,8 @@ class MENU(object):
      TANK_PARAMS_INVISIBILITYSTILLFACTOR,
      TANK_PARAMS_INVISIBILITYMOVINGFACTOR,
      TANK_PARAMS_EXTRAREPAIRSPEED,
+     TANK_PARAMS_CHASSISREPAIRTIME,
+     TANK_PARAMS_CHASSISREPAIRTIMEYOH,
      TANK_PARAMS_TURBOSHAFTINVISIBILITYSTILLFACTOR,
      TANK_PARAMS_TURBOSHAFTINVISIBILITYMOVINGFACTOR,
      TANK_PARAMS_VALUES_PARAM12_VALUE0,
@@ -2601,7 +2610,7 @@ class MENU(object):
      TANK_PARAMS_GPS,
      TANK_PARAMS_SPM,
      TANK_PARAMS_S,
-     TANK_PARAMS_S_S,
+     TANK_PARAMS_YOH_S_S,
      TANK_PARAMS_MM,
      TANK_PARAMS_VAL,
      TANK_PARAMS_VPM,

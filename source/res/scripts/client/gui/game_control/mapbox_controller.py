@@ -25,6 +25,7 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events import caches
 from gui.shared.event_dispatcher import showMapboxIntro, showBrowserOverlayView
 from gui.shared.utils import SelectorBattleTypesUtils
+from gui.shared.utils.SelectorBattleTypesUtils import setBattleTypeAsUnknown
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.wgcg.mapbox.contexts import MapboxProgressionCtx, MapboxRequestCrewbookCtx, MapboxCompleteSurveyCtx, MapboxRequestAuthorizedURLCtx
 from helpers import dependency, server_settings, time_utils
@@ -90,6 +91,7 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
             unitMgr.onUnitJoined += self.__onUnitJoined
         self.__progressionDataProvider.start()
         self.__settingsManager.start()
+        self.storeCycle()
         self.startNotification()
         self.startGlobalListening()
         return
@@ -203,6 +205,9 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
     def isMapVisited(self, mapName):
         return self.__settingsManager.isMapVisited(mapName)
 
+    def storeCycle(self):
+        self.__settingsManager.storeCycle(self.isActive(), self.getCurrentCycleID())
+
     @async
     def forceUpdateProgressData(self):
         result = yield await(self.__progressionDataProvider.forceUpdateProgressData())
@@ -265,6 +270,7 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
         self.startNotification()
         self.onUpdated()
         self.__timerUpdate()
+        self.storeCycle()
 
 
 class MapboxProgressionDataProvider(Notifiable):
@@ -395,3 +401,11 @@ class MapboxSettingsManager(object):
 
     def getPrevBattlesPlayed(self):
         return self.__settings.get('previous_battles_played', 0)
+
+    def storeCycle(self, isActive, cycleId):
+        if not isActive or cycleId is None:
+            self.__settings['lastCycleId'] = None
+        elif self.__settings['lastCycleId'] != cycleId:
+            self.__settings['lastCycleId'] = cycleId
+            setBattleTypeAsUnknown(SELECTOR_BATTLE_TYPES.MAPBOX)
+        return

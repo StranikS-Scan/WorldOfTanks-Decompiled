@@ -1012,19 +1012,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         return '<br>'.join(blueprintsString)
 
     @classmethod
-    def hasRenewBonus(cls, vehicles):
-        for vehicleDict in vehicles:
-            for vehInfo in vehicleDict.itervalues():
-                rent = vehInfo.get('rent')
-                if rent:
-                    cycles = rent.get('cycle')
-                    renew = rent.get('renew')
-                    if cycles and not renew:
-                        return True
-
-        return False
-
-    @classmethod
     def getVehiclesString(cls, vehicles, htmlTplPostfix='InvoiceReceived'):
         addVehNames, removeVehNames, rentedVehNames = cls._getVehicleNames(vehicles)
         result = []
@@ -1034,8 +1021,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             result.append(g_settings.htmlTemplates.format('vehiclesDebited' + htmlTplPostfix, ctx={'vehicles': ', '.join(removeVehNames)}))
         if rentedVehNames:
             result.append(g_settings.htmlTemplates.format('vehiclesRented' + htmlTplPostfix, ctx={'vehicles': ', '.join(rentedVehNames)}))
-            if cls.hasRenewBonus(vehicles):
-                result.append(backport.text(R.strings.messenger.serviceChannelMessages.invoiceReceived.vehiclesRented.bonus()))
         return '<br/>'.join(result)
 
     @classmethod
@@ -4228,62 +4213,3 @@ class MapboxRewardReceivedFormatter(ServiceChannelFormatter):
              'text': '<br>'.join(textItems)}, data={'savedData': {'rewards': rewards,
                            'battles': battles}})
             return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, messageType=message.get('msgType')))]
-
-
-class BirthdayQuestAchievesFormatter(object):
-
-    @classmethod
-    def formatQuestAchieves(cls, data):
-        result = []
-        vehiclesList = data.get('vehicles', [])
-        if len(vehiclesList) == 1:
-            for vehicleDict in vehiclesList:
-                for vehCompDescr, vehData in vehicleDict.iteritems():
-                    vehicleName = cls.__getVehicleName(vehCompDescr)
-                    result.append(cls.__makeQuestsAchieve('birthdayCalendarVehicle', vehicle=vehicleName))
-                    crewLevel = VehiclesBonus.getTmanRoleLevel(vehData)
-                    if crewLevel is not None and crewLevel > DEFAULT_CREW_LVL:
-                        crewWithLevelString = backport.text(R.strings.eleventh_birthday_calendar.message.crew(), crewLevel)
-                        result.append(cls.__makeQuestsAchieve('birthdayCalendarCrew', text=crewWithLevelString))
-
-        else:
-            msg = InvoiceReceivedFormatter.getVehiclesString(vehiclesList, htmlTplPostfix='QuestsReceived')
-            if msg:
-                result.append(msg)
-        comptnStr = InvoiceReceivedFormatter.getVehiclesCompensationString(vehiclesList, htmlTplPostfix='QuestsReceived')
-        if comptnStr:
-            result.append('<br/>' + comptnStr)
-        slots = data.get('slots', 0)
-        if slots == 1:
-            result.append(cls.__makeQuestsAchieve('birthdayCalendarSlot'))
-        elif slots:
-            result.append(cls.__makeQuestsAchieve('battleQuestsSlots', slots=backport.getIntegralFormat(slots)))
-        eventCoin = data.get(Currency.EVENT_COIN, 0)
-        if eventCoin == 1:
-            result.append(cls.__makeQuestsAchieve('birthdayCalendarEventCoin'))
-        elif eventCoin:
-            fomatter = getBWFormatter(Currency.EVENT_COIN)
-            result.append(cls.__makeQuestsAchieve('battleQuestsEventCoin', eventCoin=fomatter(eventCoin)))
-        premiumPlus = data.get(PREMIUM_ENTITLEMENTS.PLUS, 0)
-        if premiumPlus == 1:
-            result.append(cls.__makeQuestsAchieve('birthdayCalendarPremiumPlus'))
-        elif premiumPlus:
-            result.append(cls.__makeQuestsAchieve(_PREMIUM_TEMPLATES[PREMIUM_ENTITLEMENTS.PLUS], days=premiumPlus))
-        return '<br/>'.join(result) if result else None
-
-    @classmethod
-    def __makeQuestsAchieve(cls, key, **kwargs):
-        return g_settings.htmlTemplates.format(key, kwargs)
-
-    @classmethod
-    def __getVehicleName(cls, vehCompDescr):
-        vehicleName = None
-        try:
-            if vehCompDescr < 0:
-                vehCompDescr = abs(vehCompDescr)
-            vehicleName = getUserName(vehicles_core.getVehicleType(vehCompDescr))
-        except Exception:
-            _logger.error('Wrong vehicle compact descriptor: %s', vehCompDescr)
-            _logger.exception('getVehicleName catch exception')
-
-        return vehicleName

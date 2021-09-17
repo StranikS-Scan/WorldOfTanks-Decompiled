@@ -8,7 +8,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_HT_break_level_8	</postProgressionTree>
+  <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	40.2	</forward>
@@ -117,9 +117,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	0.00571886 0.0997886 2.42741	</anchorPosition>
-        <anchorDirection>	0.0280455 0.678157 0.734381	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	0.107387	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -131,9 +130,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	1.11601	</clipAngle>
-        <anchorPosition>	1.42486 0.174855 2.90652	</anchorPosition>
-        <anchorDirection>	0.0164736 0.72464 0.688931	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	0.044982	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -145,10 +143,9 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	1.43711	</clipAngle>
-        <anchorPosition>	-0.00343582 0.568514 -1.88364	</anchorPosition>
-        <anchorDirection>	-0.00743129 0.991662 -0.128653	</anchorDirection>
         <verticalMirror>	true	</verticalMirror>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	-0.053301	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -160,9 +157,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.808793	</clipAngle>
-        <anchorPosition>	-1.42353 0.16764 2.89964	</anchorPosition>
-        <anchorDirection>	0.0164673 0.724639 0.688931	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	0.034996	</anchorShift>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -966,6 +962,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <repairTime>	5.71428585	</repairTime>
     </Chassis_A117_T26E5_Patriot>
   </chassis>
   <turrets0>
@@ -1103,9 +1100,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	1.19931	</clipAngle>
-          <anchorPosition>	-0.704367 0.993755 0.223693	</anchorPosition>
-          <anchorDirection>	0.00112863 0.999919 0.0126563	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	-0.096504	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1117,10 +1113,9 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	1.30394	</clipAngle>
-          <anchorPosition>	0.36573 0.984949 -1.09589	</anchorPosition>
-          <anchorDirection>	-0.000056 0.997382 -0.0723094	</anchorDirection>
           <verticalMirror>	true	</verticalMirror>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.034217	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1132,9 +1127,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.935067	</clipAngle>
-          <anchorPosition>	0.916078 0.623703 0.583954	</anchorPosition>
-          <anchorDirection>	0.804062 0.00243181 0.59454	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.043413	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1146,9 +1140,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.981038	</clipAngle>
-          <anchorPosition>	-0.797404 0.711847 0.672092	</anchorPosition>
-          <anchorDirection>	-0.629464 0.20888 0.748428	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	-0.057810	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

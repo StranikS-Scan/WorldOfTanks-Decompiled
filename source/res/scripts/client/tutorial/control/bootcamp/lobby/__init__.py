@@ -26,7 +26,7 @@ class BootcampLobbyControlsFactory(ControlsFactory):
          EFFECT_TYPE.INVOKE_GUI_CMD: core_func.FunctionalGuiCommandEffect,
          EFFECT_TYPE.REQUEST_EXCLUSIVE_HINT: functional.FunctionalRequestExclusiveHintEffect,
          EFFECT_TYPE.UPDATE_EXCLUSIVE_HINTS: functional.FunctionalUpdateExclusiveHintsEffect,
-         EFFECT_TYPE.START_ASSISTANT: functional.FunctionalStartAssistant,
+         EFFECT_TYPE.START_VSE_PLAN: functional.FunctionalStartVSEPlan,
          EFFECT_TYPE.SET_ALLOWED_TO_FIGHT: core_func.FunctionalSetAllowedToFightEffect,
          EFFECT_TYPE.RESTORE_CHECKPOINT: functional.FunctionalRestoreCheckpointEffect,
          EFFECT_TYPE.SAVE_CHECKPOINT: functional.FunctionalSaveCheckpointEffect,

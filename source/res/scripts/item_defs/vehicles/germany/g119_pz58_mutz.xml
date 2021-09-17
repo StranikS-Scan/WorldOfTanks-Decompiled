@@ -7,7 +7,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_MT_sniper_level_8	</postProgressionTree>
+  <postProgressionTree>	role_MT_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	50	</forward>
@@ -119,8 +119,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	0.640506 0.404275 2.69505	</anchorPosition>
-        <anchorDirection>	0.00140278 0.947035 0.321125	</anchorDirection>
+        <anchorShift>	0.088913	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -132,8 +131,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-0.438064 0.622544 -2.00742	</anchorPosition>
-        <anchorDirection>	-0.000014 0.993735 -0.111763	</anchorDirection>
+        <anchorShift>	0.088921	</anchorShift>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -822,6 +820,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <repairTime>	5.71428585	</repairTime>
     </Chassis_G119_Pz58_Mutz>
   </chassis>
   <turrets0>
@@ -975,8 +974,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	-0.596784 0.609233 0.791212	</anchorPosition>
-          <anchorDirection>	-0.573289 0.778155 0.256541	</anchorDirection>
+          <anchorShift>	0.038911	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -988,8 +986,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.682559 0.522533 0.862546	</anchorPosition>
-          <anchorDirection>	0.573303 0.778141 0.256554	</anchorDirection>
+          <anchorShift>	0.038910	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1001,8 +998,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.000022 0.256984 -1.41638	</anchorPosition>
-          <anchorDirection>	-0.000000 0.00737297 -0.999973	</anchorDirection>
+          <anchorShift>	0.058920	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1014,8 +1010,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.000301169 0.771736 0.498017	</anchorPosition>
-          <anchorDirection>	0.00175918 0.969008 0.247022	</anchorDirection>
+          <anchorShift>	0.058916	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1027,8 +1022,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.000197277 0.76361 -0.836814	</anchorPosition>
-          <anchorDirection>	-0.000014 0.960925 -0.276809	</anchorDirection>
+          <anchorShift>	0.038915	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

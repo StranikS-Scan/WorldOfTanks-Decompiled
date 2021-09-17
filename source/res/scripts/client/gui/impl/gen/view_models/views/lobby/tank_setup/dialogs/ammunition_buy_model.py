@@ -7,22 +7,22 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.dialogs.main_content.ammuni
 class AmmunitionBuyModel(DialogWithExchange):
     __slots__ = ()
 
-    def __init__(self, properties=17, commands=3):
+    def __init__(self, properties=18, commands=3):
         super(AmmunitionBuyModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def mainContent(self):
-        return self._getViewModel(14)
+        return self._getViewModel(15)
 
     @property
     def dealPanel(self):
-        return self._getViewModel(15)
+        return self._getViewModel(16)
 
     def getWithRollback(self):
-        return self._getBool(16)
+        return self._getBool(17)
 
     def setWithRollback(self, value):
-        self._setBool(16, value)
+        self._setBool(17, value)
 
     def _initialize(self):
         super(AmmunitionBuyModel, self)._initialize()

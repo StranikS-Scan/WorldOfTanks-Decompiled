@@ -250,6 +250,18 @@ class Inventory(object):
             self.__commandsProxy.perform(AccountCommands.CMD_SWITCH_LAYOUT, vehInvID, groupID, layoutIdx, proxy)
             return
 
+    def switchPrebattleAmmoPanelAvailability(self, vehInvID, groupID, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            proxy = None
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            self.__commandsProxy.perform(AccountCommands.CMD_TOGGLE_SWITCH_LAYOUT, vehInvID, groupID, proxy)
+            return
+
     def discardPostProgressionPairs(self, vehIntCD, stepIDs, callback=None):
         if self.__ignore:
             if callback is not None:

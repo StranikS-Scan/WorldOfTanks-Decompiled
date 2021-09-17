@@ -26,4 +26,4 @@ class StrongholdsModeSelectorItem(ModeSelectorLegacyItem):
             dynAcc = R.strings.mode_selector.mode.strongholdsBattlesList.call.c_2()
         else:
             dynAcc = R.strings.mode_selector.mode.strongholdsBattlesList.call.c_1()
-        self.viewModel.setCallToAction(backport.text(dynAcc))
+        self.viewModel.setStatusActive(backport.text(dynAcc))

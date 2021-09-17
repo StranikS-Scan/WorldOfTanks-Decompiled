@@ -21,7 +21,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.prb_getters import areSpecBattlesHidden
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.periodic_battles.models import PrimeTimeStatus
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
@@ -869,7 +869,7 @@ def _createItems(lobbyContext=None):
     _addRankedBattleType(items, settings)
     _addCommandBattleType(items, settings)
     _addStrongholdsBattleType(items, isInRoaming)
-    _addTrainingBattleType(items)
+    _addTrainingBattleType(items, settings)
     _addEpicTrainingBattleType(items, settings)
     _addRoyaleBattleType(items)
     _addMapboxBattleType(items)
@@ -932,8 +932,10 @@ def _addSpecialBattleType(items):
     items.append(_SpecBattleItem(backport.text(_R_BATTLE_TYPES.spec()), PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 6))
 
 
-def _addTrainingBattleType(items):
-    items.append(_TrainingItem(backport.text(_R_BATTLE_TYPES.training()), PREBATTLE_ACTION_NAME.TRAININGS_LIST, 7))
+def _addTrainingBattleType(items, settings):
+    visible = settings is not None and settings.isTrainingBattleEnabled()
+    items.append(_TrainingItem(backport.text(_R_BATTLE_TYPES.training()), PREBATTLE_ACTION_NAME.TRAININGS_LIST, 7, isVisible=visible))
+    return
 
 
 def _addTutorialBattleType(items, isInRoaming):

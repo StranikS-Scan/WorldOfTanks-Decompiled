@@ -7,7 +7,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_MT_sniper_level_8	</postProgressionTree>
+  <postProgressionTree>	role_MT_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	50	</forward>
@@ -121,9 +121,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	1.36895	</clipAngle>
-        <anchorPosition>	-0.848949 0.476503 2.73353	</anchorPosition>
-        <anchorDirection>	0.000875258 0.996684 0.0813676	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	-0.058128	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -135,9 +134,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	1.36895	</clipAngle>
-        <anchorPosition>	1.2384 0.564134 1.90143	</anchorPosition>
-        <anchorDirection>	0.000875314 0.996684 0.0813673	</anchorDirection>
         <compatibleModels>	default	</compatibleModels>
+        <anchorShift>	-0.038120	</anchorShift>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -875,6 +873,7 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <repairTime>	5.71428585	</repairTime>
     </Chassis_R146_STG_Tday>
   </chassis>
   <turrets0>
@@ -1029,9 +1028,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	1.15969	</clipAngle>
-          <anchorPosition>	-0.000444767 0.802599 0.861241	</anchorPosition>
-          <anchorDirection>	-0.00155915 0.989256 0.146187	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.203993	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1043,9 +1041,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	1.15969	</clipAngle>
-          <anchorPosition>	0.086218 0.801814 -0.445631	</anchorPosition>
-          <anchorDirection>	-0.000065 0.999736 -0.0229649	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.203990	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1057,9 +1054,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	1.34307	</clipAngle>
-          <anchorPosition>	1.01473 0.342102 1.13314	</anchorPosition>
-          <anchorDirection>	0.42211 0.583046 0.694176	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	0.107083	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1071,9 +1067,8 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.647504	</clipAngle>
-          <anchorPosition>	-0.731792 0.672949 0.712016	</anchorPosition>
-          <anchorDirection>	-0.201133 0.946245 0.253308	</anchorDirection>
           <compatibleModels>	default	</compatibleModels>
+          <anchorShift>	-0.051138	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

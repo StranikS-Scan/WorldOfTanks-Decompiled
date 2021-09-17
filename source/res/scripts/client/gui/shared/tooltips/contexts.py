@@ -15,6 +15,7 @@ from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
+from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_vehicle import g_cmpConfiguratorVehicle
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
 from gui.server_events import recruit_helper
@@ -481,7 +482,7 @@ class BaseHangarParamContext(ToolTipContext):
         return params_helper.idealCrewComparator(g_currentVehicle.item)
 
     def buildItem(self, *args, **kwargs):
-        return g_currentVehicle.item
+        return None
 
     def getBonusExtractor(self, vehicle, bonuses, paramName):
         return bonus_helper.BonusExtractor(vehicle, bonuses, paramName)
@@ -492,6 +493,9 @@ class HangarParamContext(BaseHangarParamContext):
     def __init__(self):
         super(HangarParamContext, self).__init__(True)
         self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
+
+    def buildItem(self, *args, **kwargs):
+        return g_currentVehicle.item
 
 
 class PreviewParamContext(HangarParamContext):
@@ -512,6 +516,9 @@ class CmpParamContext(HangarParamContext):
     def __init__(self):
         super(CmpParamContext, self).__init__()
         self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
+
+    def buildItem(self, *args, **kwargs):
+        return g_cmpConfiguratorVehicle.item
 
     def getComparator(self):
         return params_helper.vehiclesComparator(_getCmpVehicle(), _getCmpInitialVehicle()[0])

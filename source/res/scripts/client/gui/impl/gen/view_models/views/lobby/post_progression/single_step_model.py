@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.post_progression.step_model import Ste
 class SingleStepModel(StepModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(SingleStepModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -20,7 +20,21 @@ class SingleStepModel(StepModel):
     def setChildrenIds(self, value):
         self._setArray(7, value)
 
+    def getIsPrebattleSwitchEnabled(self):
+        return self._getBool(8)
+
+    def setIsPrebattleSwitchEnabled(self, value):
+        self._setBool(8, value)
+
+    def getIsPrebattleSwitchLocked(self):
+        return self._getBool(9)
+
+    def setIsPrebattleSwitchLocked(self, value):
+        self._setBool(9, value)
+
     def _initialize(self):
         super(SingleStepModel, self)._initialize()
         self._addViewModelProperty('modification', ModificationModel())
         self._addArrayProperty('childrenIds', Array())
+        self._addBoolProperty('isPrebattleSwitchEnabled', True)
+        self._addBoolProperty('isPrebattleSwitchLocked', False)

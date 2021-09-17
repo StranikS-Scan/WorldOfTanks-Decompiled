@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/maps_training/prebattle_timer.py
 import BigWorld
-import SoundGroups
 from gui.Scaleform.daapi.view.meta.MapsTrainingPrebattleTimerMeta import MapsTrainingPrebattleTimerMeta
 from gui.impl import backport
 from gui.impl.gen import R
@@ -14,6 +13,7 @@ from vehicle_systems.stricted_loading import makeCallbackWeak
 from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from maps_training_common.maps_training_constants import SCENARIO_INDEXES
+from PlayerEvents import g_playerEvents
 _VOICEOVERS = ('vo_mt_loading_first_battle', 'vo_mt_loading_next_battle')
 
 class MapsTrainingPreBattleTimer(MapsTrainingPrebattleTimerMeta):
@@ -47,5 +47,20 @@ class MapsTrainingPreBattleTimer(MapsTrainingPrebattleTimerMeta):
         text = backport.text(R.strings.maps_training.prebattle.targets(), count=sum(goals.values()))
         self.as_updateS([ {'vehClass': vehCls,
          'total': goals[vehCls]} for vehCls in VEHICLE_CLASSES_ORDER ], text)
+        player = BigWorld.player()
+        if not player.userSeesWorld():
+            g_playerEvents.onAvatarReady += self.__onAvatarReady
+        else:
+            self.__playSoundNotification()
+
+    def __onAvatarReady(self):
+        g_playerEvents.onAvatarReady -= self.__onAvatarReady
+        self.__playSoundNotification()
+
+    def __playSoundNotification(self):
+        player = BigWorld.player()
         settings = self.settingsCore.serverSettings
-        SoundGroups.g_instance.playSound2D(_VOICEOVERS[int(settings.getOnceOnlyHintsSetting(OnceOnlyHints.MAPS_TRAINING_NEWBIE_HINT, default=False))])
+        if hasattr(player, 'soundNotifications'):
+            if player.soundNotifications is not None:
+                player.soundNotifications.play(_VOICEOVERS[int(settings.getOnceOnlyHintsSetting(OnceOnlyHints.MAPS_TRAINING_NEWBIE_HINT, default=False))])
+        return

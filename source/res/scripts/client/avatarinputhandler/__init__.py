@@ -47,6 +47,7 @@ from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
 from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
@@ -67,6 +68,7 @@ _BINDING_ID = aih_global_binding.BINDING_ID
 _CTRL_MODES = aih_constants.CTRL_MODES
 _CTRLS_FIRST = _CTRL_MODE.DEFAULT
 _CONTROL_MODE_SWITCH_COOLDOWN = 1.0
+_MAPCASE_MODE_SWITCH_COOLDOWN = 0.5
 _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.STRATEGIC: (control_modes.StrategicControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.ARTY: (control_modes.ArtyControlMode, 'artyMode', _ARTY_CTRL_TYPE),
@@ -161,6 +163,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     _DYNAMIC_CAMERAS_ENABLED_KEY = 'global/dynamicCameraEnabled'
     settingsCore = dependency.descriptor(ISettingsCore)
     appLoader = dependency.descriptor(IAppLoader)
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     @staticmethod
     def enableDynamicCamera(enable, useHorizontalStabilizer=True):
@@ -197,9 +200,12 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     dualGunControl = ComponentDescriptor()
     siegeModeSoundNotifications = ComponentDescriptor()
     steadyVehicleMatrixCalculator = ComponentDescriptor()
+    DEFAULT_AIH_WORLD_ID = -1
 
     def __init__(self, spaceID):
         CallbackDelayer.__init__(self)
+        if spaceID == 0:
+            spaceID = self.DEFAULT_AIH_WORLD_ID
         ScriptGameObject.__init__(self, spaceID, 'AvatarInputHandler')
         self.__alwaysShowAimKey = None
         self.__showMarkersKey = None
@@ -310,6 +316,12 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                         return True
 
                 return player.handleKey(isDown, key, mods)
+            if not self.__isStarted and isDown and mods == 0:
+                if CommandMapping.g_instance.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_3 + 1), key):
+                    ammoCtrl = self.guiSessionProvider.shared.ammo
+                    if ammoCtrl:
+                        ammoCtrl.handleAmmoChoice(key)
+                    return True
             if not self.__isStarted or self.__isDetached:
                 return False
             for command in self.__commands:
@@ -868,6 +880,12 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         if player is not None:
             player.showVehicleError('cantSwitchEngineDestroyed')
         return
+
+    def isAllowSwitchMapCaseMode(self):
+        if BigWorld.time() - self.__lastSwitchTime < _MAPCASE_MODE_SWITCH_COOLDOWN:
+            return False
+        self.__lastSwitchTime = BigWorld.time()
+        return True
 
     def isControlModeChangeAllowed(self):
         player = BigWorld.player()

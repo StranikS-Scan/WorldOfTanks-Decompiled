@@ -9,10 +9,10 @@ import ResMgr
 import Math
 from collections import namedtuple, OrderedDict, defaultdict
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, MAX_USERS_PROJECTION_DECALS, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, DEFAULT_SCALE_FACTOR_ID, EMPTY_ITEM_ID, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION, DEFAULT_DECAL_TINT_COLOR
+from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, MAX_USERS_PROJECTION_DECALS, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, DEFAULT_SCALE_FACTOR_ID, EMPTY_ITEM_ID, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION, DEFAULT_DECAL_TINT_COLOR, ProjectionDecalMatchingTags
 from items.components import c11n_components as cn
 from constants import IS_CELLAPP, IS_BASEAPP, IS_EDITOR
-from items import decodeEnum, makeIntCompactDescrByID
+from items import decodeEnum
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 import enum
 from typing import List, Dict, Type, Tuple, Any, TypeVar, Optional, MutableMapping, TYPE_CHECKING
@@ -477,7 +477,7 @@ class ProjectionDecalComponent(SerializableComponent):
      ('tags', xmlOnlyTagsField(())),
      ('preview', xmlOnlyIntField(0)),
      ('progressionLevel', intField(0))))
-    __slots__ = ('id', 'options', 'slotId', 'scaleFactorId', 'showOn', 'scale', 'rotation', 'position', 'tintColor', 'doubleSided', 'tags', 'preview', 'progressionLevel')
+    __slots__ = ('id', 'options', 'slotId', 'scaleFactorId', 'showOn', 'scale', 'rotation', 'position', 'tintColor', 'doubleSided', 'hiddenForUser', 'tags', 'preview', 'progressionLevel')
 
     def __init__(self, id=0, options=Options.NONE, slotId=0, scaleFactorId=DEFAULT_SCALE_FACTOR_ID, showOn=ApplyArea.NONE, scale=DEFAULT_SCALE, rotation=DEFAULT_ROTATION, position=DEFAULT_POSITION, tintColor=DEFAULT_DECAL_TINT_COLOR, doubleSided=0, tags=None, preview=False, progressionLevel=0):
         self.id = id
@@ -496,7 +496,7 @@ class ProjectionDecalComponent(SerializableComponent):
         super(ProjectionDecalComponent, self).__init__()
 
     def __str__(self):
-        return 'ProjectionDecalComponent(id={0}, options={1}, slotId={2}, scaleFactorId={3}, showOn={4}, scale={5}, rotation={6}, position={7}, tintColor={8}, doubleSided={9}, preview={10}, progressionLevel={11})'.format(self.id, self.options, self.slotId, self.scaleFactorId, self.showOn, self.scale, self.rotation, self.position, self.tintColor, self.doubleSided, self.preview, self.progressionLevel)
+        return 'ProjectionDecalComponent(id={0}, options={1}, slotId={2}, scaleFactorId={3}, showOn={4}, scale={5}, rotation={6}, position={7}, tintColor={8}, doubleSided={9}, hiddenForUser={10}, preview={11}, progressionLevel={12})'.format(self.id, self.options, self.slotId, self.scaleFactorId, self.showOn, self.scale, self.rotation, self.position, self.tintColor, self.doubleSided, self.hiddenForUser, self.preview, self.progressionLevel)
 
     def isMirroredHorizontally(self):
         return self.options & Options.MIRRORED_HORIZONTALLY
@@ -506,6 +506,15 @@ class ProjectionDecalComponent(SerializableComponent):
 
     def isFilled(self):
         return (any(self.position) or bool(self.slotId)) and not self.preview
+
+    @property
+    def matchingTag(self):
+        if self.tags:
+            for tag in self.tags:
+                if tag in ProjectionDecalMatchingTags.ALL:
+                    return tag
+
+        return None
 
 
 class PersonalNumberComponent(SerializableComponent):
@@ -733,17 +742,23 @@ class CustomizationOutfit(SerializableComponent):
                 baseRegions = set(baseComponents)
                 for region in baseRegions - modifiedRegions:
                     component = baseComponents[region][0].copy()
+                    if itemType == CustomizationType.PROJECTION_DECAL and component.matchingTag:
+                        continue
                     component.id = EMPTY_ITEM_ID
                     _setComponentsRegion(component, region)
                     components.append(component)
 
             for region in modifiedRegions - baseRegions:
                 component = modifiedComponents[region][0].copy()
+                if itemType == CustomizationType.PROJECTION_DECAL and component.matchingTag:
+                    continue
                 _setComponentsRegion(component, region)
                 components.append(component)
 
             for region in modifiedRegions & baseRegions:
                 component = modifiedComponents[region][0].copy()
+                if itemType == CustomizationType.PROJECTION_DECAL and component.matchingTag:
+                    continue
                 if component != baseComponents[region][0]:
                     _setComponentsRegion(component, region)
                     components.append(component)

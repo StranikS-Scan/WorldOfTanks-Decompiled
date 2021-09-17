@@ -40,9 +40,11 @@
     <harm_receiveRamming>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	ARRAY	  <of>	FLOAT32	</of>
+      </Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
+      <Arg>	ARRAY	  <of>	UINT8	</of>
+      </Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>

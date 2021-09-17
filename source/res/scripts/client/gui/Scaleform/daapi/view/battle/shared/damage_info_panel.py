@@ -17,8 +17,8 @@ _DEVICE_NAME_TO_ID = {'gunHealth': DAMAGE_INFO_PANEL_CONSTS.GUN,
  'fuelTankHealth': DAMAGE_INFO_PANEL_CONSTS.FUEL_TANK,
  'radioHealth': DAMAGE_INFO_PANEL_CONSTS.RADIO,
  'ammoBayHealth': DAMAGE_INFO_PANEL_CONSTS.AMMO_BAY,
- 'leftTrackHealth': DAMAGE_INFO_PANEL_CONSTS.LEFT_TRACK,
- 'rightTrackHealth': DAMAGE_INFO_PANEL_CONSTS.RIGHT_TRACK,
+ 'leftTrack0Health': DAMAGE_INFO_PANEL_CONSTS.LEFT_TRACK,
+ 'rightTrack0Health': DAMAGE_INFO_PANEL_CONSTS.RIGHT_TRACK,
  'commanderHealth': DAMAGE_INFO_PANEL_CONSTS.COMMANDER,
  'gunner1Health': DAMAGE_INFO_PANEL_CONSTS.FIRST_GUNNER,
  'gunner2Health': DAMAGE_INFO_PANEL_CONSTS.SECOND_GUNNER,
@@ -72,21 +72,54 @@ _DEVICE_UPDATE_METHODS = {DAMAGE_INFO_PANEL_CONSTS.GUN: 'as_updateGunS',
  DAMAGE_INFO_PANEL_CONSTS.FIRST_LOADER: 'as_updateFirstLoaderS',
  DAMAGE_INFO_PANEL_CONSTS.SECOND_LOADER: 'as_updateSecondLoaderS'}
 
-def _getDevicesIterator(fetcher):
-    for deviceName, state in fetcher.getDamagedDevices():
-        if deviceName not in _DEVICE_NAME_TO_ID:
-            LOG_ERROR('Device ID is not found', deviceName)
-            continue
+def _deviceDataConverter(deviceName, state):
+    if deviceName not in _DEVICE_NAME_TO_ID:
+        LOG_ERROR('Device ID is not found', deviceName)
+        return None
+    else:
         if state == 'destroyed':
             stateID = DAMAGE_INFO_PANEL_CONSTS.DESTROYED
         else:
             stateID = DAMAGE_INFO_PANEL_CONSTS.DAMAGED
-        yield (_DEVICE_NAME_TO_ID[deviceName], stateID)
+        return (_DEVICE_NAME_TO_ID[deviceName], stateID)
 
 
-def _getDevicesSnapshot(fetcher):
+def _defaultIterator(fetcher):
+    for deviceName, state in fetcher.getDamagedDevices():
+        value = _deviceDataConverter(deviceName, state)
+        if value is not None:
+            yield value
+
+    return
+
+
+def _yohIterator(fetcher):
+    damagedDevices = dict(fetcher.getDamagedDevices())
+    for mainTrack, protectingTrack in (('leftTrack0Health', 'leftTrack1Health'), ('rightTrack0Health', 'rightTrack1Health')):
+        isMainDestroyed = damagedDevices.get(mainTrack) == 'destroyed'
+        isProtectingDestroyed = damagedDevices.get(protectingTrack) == 'destroyed'
+        damagedDevices.pop(protectingTrack, None)
+        if isMainDestroyed or isProtectingDestroyed:
+            damagedDevices[mainTrack] = 'destroyed' if isMainDestroyed else 'damaged'
+        damagedDevices.pop(mainTrack, None)
+
+    for deviceName, state in damagedDevices.iteritems():
+        value = _deviceDataConverter(deviceName, state)
+        if value is not None:
+            yield value
+
+    return
+
+
+def _getDevicesIterator(fetcher, isYoh):
+    iterator = _yohIterator if isYoh else _defaultIterator
+    for value in iterator(fetcher):
+        yield value
+
+
+def _getDevicesSnapshot(fetcher, isYoh):
     snap = set()
-    for deviceID, stateID in _getDevicesIterator(fetcher):
+    for deviceID, stateID in _getDevicesIterator(fetcher, isYoh):
         snap.add((deviceID, stateID))
 
     return snap
@@ -101,6 +134,7 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         self.__vehicleID = 0
         self.__devicesSnap = set()
         self.__isInFire = False
+        self.__isTrackWithinTrack = False
 
     def _populate(self):
         super(DamageInfoPanel, self)._populate()
@@ -135,11 +169,15 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         return
 
     def __show(self, vehicleID, fetcher):
+        vehicleType = self.sessionProvider.arenaVisitor.vehicles.getVehicleInfo(vehicleID).get('vehicleType')
+        if vehicleType is not None:
+            self.__isTrackWithinTrack = vehicleType.isTrackWithinTrack
         if not self.__isShown:
             self.__setDevicesStates(fetcher)
         else:
             self.__updateDevicesStates(vehicleID, fetcher)
         self.__vehicleID = vehicleID
+        return
 
     def __hide(self):
         if not self.__isShown:
@@ -149,11 +187,12 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         self.__vehicleID = 0
         self.__devicesSnap.clear()
         self.__isShown = False
+        self.__isTrackWithinTrack = False
 
     def __setDevicesStates(self, fetcher):
         self.__isShown = True
         items = []
-        for deviceID, stateID in _getDevicesIterator(fetcher):
+        for deviceID, stateID in _getDevicesIterator(fetcher, self.__isTrackWithinTrack):
             items.append((deviceID, stateID))
             self.__devicesSnap.add((deviceID, stateID))
 
@@ -166,7 +205,7 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         self.as_showS(items, fireID)
 
     def __updateDevicesStates(self, vehicleID, fetcher):
-        newDevicesSnap = _getDevicesSnapshot(fetcher)
+        newDevicesSnap = _getDevicesSnapshot(fetcher, self.__isTrackWithinTrack)
         toHide = self.__devicesSnap.difference(newDevicesSnap)
         toUpdate = dict(newDevicesSnap.difference(self.__devicesSnap))
         for deviceID, _ in toHide:

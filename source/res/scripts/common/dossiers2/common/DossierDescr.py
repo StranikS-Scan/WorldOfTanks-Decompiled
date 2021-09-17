@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/dossiers2/common/DossierDescr.py
 import struct
 from array import array
+from dossiers2.custom.records import PLATFORM_ACHIEVEMENTS
 
 class DossierDescr(object):
 
@@ -15,6 +16,7 @@ class DossierDescr(object):
         self.__blocks = {}
         self._dependentUpdates = 0
         self.__popUps = {}
+        self.__logRecords = {}
         self.__blockRemoved = False
         values = struct.unpack_from(headerFormat, compDescr)
         self.__version = values[0]
@@ -56,13 +58,57 @@ class DossierDescr(object):
     def expand(self, name):
         return self[name].expand()
 
-    def addPopUp(self, block, record, value):
+    def addPopUp(self, block, record, value, addLogRecord=True):
         self.__popUps[block, record] = value
+        if addLogRecord:
+            self.addLogRecord(block, record, value)
+
+    def addLogRecord(self, block, record, value):
+        self.__logRecords[block, record] = value
 
     def popPopUps(self):
         popUps = self.__popUps
         self.__popUps = {}
         return popUps
+
+    def popLogRecords(self):
+        logRecords = self.__logRecords
+        self.__logRecords = {}
+        return logRecords
+
+    def getChanges(self):
+        changes = dict()
+        for key, block in self.__blocks.iteritems():
+            blockChanges = block.getChanges()
+            if blockChanges:
+                changes[key] = blockChanges
+
+        return changes
+
+    def checkPlatformAchievements(self, disabledAchievements, oldDossierDescr, revertAchievements):
+        platformAchievements = []
+        changes = self.getChanges()
+        for name, (medal, stat) in PLATFORM_ACHIEVEMENTS.iteritems():
+            medalBlock, medalName = medal
+            isMedalAchived = medalBlock in changes and medalName in changes[medalBlock]
+            isStatsChanges = stat and stat[0] in changes and stat[1] in changes[stat[0]]
+            if isMedalAchived or isStatsChanges:
+                if name in disabledAchievements or revertAchievements:
+                    self[medalBlock][medalName] = oldDossierDescr[medalBlock][medalName]
+                    if stat:
+                        self[stat[0]][stat[1]] = oldDossierDescr[stat[0]][stat[1]]
+                else:
+                    operation = {'code': name}
+                    if isMedalAchived:
+                        operation['unlocked'] = True
+                    if stat and (isMedalAchived or not self[medalBlock][medalName]):
+                        statValue = int(self[stat[0]].get(stat[1], 0))
+                        if statValue:
+                            operation['progress_amount'] = statValue
+                    if len(operation) > 1:
+                        platformAchievements.append(operation)
+
+        return platformAchievements
 
     def makeCompDescr(self):
         if self.__blocks or self.__blockRemoved:

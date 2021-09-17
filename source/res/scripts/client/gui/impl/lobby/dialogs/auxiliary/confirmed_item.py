@@ -5,7 +5,7 @@ from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
-from gui.impl.lobby.dialogs.auxiliary.confirmed_item_helpers import getHighlightsTypeByItem, getOverlayTypeByItem, ConfirmedItemWarningTypes, DependsOnDevicesWarning
+from gui.impl.lobby.dialogs.auxiliary.confirmed_item_helpers import getHighlightsTypeByItem, getOverlayTypeByItem, ConfirmedItemWarningTypes, DependsOnDevicesWarning, PairModificationsWillBeDemount
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -226,6 +226,7 @@ class ConfirmedPostProgressionActionItem(ConfirmedItem):
 
 
 class ConfirmedPostProgressionPairModification(ConfirmedPostProgressionActionItem):
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def getImageSource(self):
         rPath = R.images.gui.maps.icons.vehPostProgression.actionItems.pairModifications.c_120x120
@@ -237,3 +238,13 @@ class ConfirmedPostProgressionPairModification(ConfirmedPostProgressionActionIte
     @classmethod
     def createFromGUIItem(cls, item, ctx=None):
         return ConfirmedPostProgressionPairModification(item, ctx)
+
+    def _setWarnings(self):
+        res = {}
+        vehInvID = self._ctx.get(CTX_VEHICLE_INV_ID, None)
+        if vehInvID is not None:
+            vehicle = self.__itemsCache.items.getVehicle(vehInvID)
+            step = vehicle.postProgression.getStep(self._item.parentStepID)
+            if step.action.actionType == ACTION_TYPES.PAIR_MODIFICATION and step.action.getPurchasedID() is not None and step.action.getPurchasedID() != self._item.actionID:
+                res[ConfirmedItemWarningTypes.PAIR_MODIFICATIONS_WILL_BE_DEMOUNT] = PairModificationsWillBeDemount()
+        return res

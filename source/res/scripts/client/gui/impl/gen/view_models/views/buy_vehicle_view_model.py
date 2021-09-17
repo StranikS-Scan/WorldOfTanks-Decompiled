@@ -7,9 +7,9 @@ from gui.impl.gen.view_models.views.buy_vehicle_view.equipment_block_model impor
 from gui.impl.gen.view_models.views.buy_vehicle_view.vehicle_congratulation_model import VehicleCongratulationModel
 
 class BuyVehicleViewModel(ViewModel):
-    __slots__ = ('onCloseBtnClick', 'onBuyBtnClick', 'onInHangarClick', 'onBackClick', 'onCommanderLvlChange', 'onCheckboxWithoutCrewChanged')
+    __slots__ = ('onCloseBtnClick', 'onBuyBtnClick', 'onInHangarClick', 'onBackClick', 'onCommanderLvlChange', 'onCheckboxWithoutCrewChanged', 'onDisclaimerClick')
 
-    def __init__(self, properties=21, commands=6):
+    def __init__(self, properties=22, commands=7):
         super(BuyVehicleViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -132,6 +132,12 @@ class BuyVehicleViewModel(ViewModel):
     def setBgSource(self, value):
         self._setResource(20, value)
 
+    def getNeedDisclaimer(self):
+        return self._getBool(21)
+
+    def setNeedDisclaimer(self, value):
+        self._setBool(21, value)
+
     def _initialize(self):
         super(BuyVehicleViewModel, self)._initialize()
         self._addViewModelProperty('commanderLvlCards', ListModel())
@@ -155,9 +161,11 @@ class BuyVehicleViewModel(ViewModel):
         self._addResourceProperty('noCrewCheckboxLabel', R.invalid())
         self._addBoolProperty('isContentHidden', False)
         self._addResourceProperty('bgSource', R.invalid())
+        self._addBoolProperty('needDisclaimer', False)
         self.onCloseBtnClick = self._addCommand('onCloseBtnClick')
         self.onBuyBtnClick = self._addCommand('onBuyBtnClick')
         self.onInHangarClick = self._addCommand('onInHangarClick')
         self.onBackClick = self._addCommand('onBackClick')
         self.onCommanderLvlChange = self._addCommand('onCommanderLvlChange')
         self.onCheckboxWithoutCrewChanged = self._addCommand('onCheckboxWithoutCrewChanged')
+        self.onDisclaimerClick = self._addCommand('onDisclaimerClick')

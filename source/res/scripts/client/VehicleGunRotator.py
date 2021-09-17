@@ -701,8 +701,8 @@ class VehicleGunRotator(object):
             deviceStates = self._avatar.deviceStates
             useStaticTurretYaw = False
             useStaticTurretYaw |= deviceStates.get('engine') == 'destroyed'
-            useStaticTurretYaw |= deviceStates.get('leftTrack') == 'destroyed'
-            useStaticTurretYaw |= deviceStates.get('rightTrack') == 'destroyed'
+            useStaticTurretYaw |= deviceStates.get('leftTrack0') == 'destroyed'
+            useStaticTurretYaw |= deviceStates.get('rightTrack0') == 'destroyed'
             useStaticTurretYaw |= self._avatar.isVehicleOverturned
             if playerVehicle is not None:
                 useStaticTurretYaw |= playerVehicle.hasMovingFlags

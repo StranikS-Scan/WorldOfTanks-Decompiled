@@ -223,7 +223,7 @@
     <shortUserString>	#gb_vehicles:GB70_FV4202_105_short	</shortUserString>
     <price>	6100000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal secret unrecoverable improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <tags>	mediumTank role_MT_universal private secret unrecoverable improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </GB70_FV4202_105>
   <GB59_Cruiser_Mk_IV>
@@ -467,6 +467,19 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </GB86_Centurion_Action_X>
+  <GB112_Caliban>
+    <id>	201	</id>
+    <userString>	#gb_vehicles:GB112_Caliban	</userString>
+    <description>	#gb_vehicles:GB112_Caliban_descr	</description>
+    <shortUserString>	#gb_vehicles:GB112_Caliban_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB112_Caliban_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB112_Caliban_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user testTank secret	</tags>
+    <level>	8	</level>
+  </GB112_Caliban>
   <GB111_Charlemagne>
     <id>	203	</id>
     <userString>	#gb_vehicles:GB111_Charlemagne	</userString>
@@ -574,7 +587,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD secret special improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <tags>	heavyTank role_HT_universal private HD secret special improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </GB84_Chieftain_Mk6>
   <GB87_Chieftain_T95_turret>
@@ -722,7 +735,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank HD inGame epic_battles mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank private HD inGame epic_battles mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </GB70_N_FV4202_105_FL>
   <GB85_Cromwell_Berlin>
@@ -760,7 +773,7 @@
     <price>	5	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD secret special improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <tags>	heavyTank role_HT_universal private HD secret special improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </GB88_T95_Chieftain_turret>
   <GB93_Caernarvon_AX>
@@ -910,7 +923,7 @@
     <description>	#igr_vehicles:GB23_Centurion_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:GB23_Centurion_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	mediumTank HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank private HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </GB23_Centurion_IGR>
   <GB11_Caernarvon_IGR>
@@ -919,7 +932,7 @@
     <description>	#igr_vehicles:GB11_Caernarvon_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:GB11_Caernarvon_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	heavyTank HD secret premiumIGR improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank private HD secret premiumIGR improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </GB11_Caernarvon_IGR>
   <GB21_Cromwell_IGR>
@@ -928,7 +941,7 @@
     <description>	#igr_vehicles:GB21_Cromwell_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:GB21_Cromwell_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	mediumTank HD secret premiumIGR mediumTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank private HD secret premiumIGR mediumTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
   </GB21_Cromwell_IGR>
   <GB77_FV304_IGR>
@@ -937,7 +950,7 @@
     <description>	#igr_vehicles:GB77_FV304_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:GB77_FV304_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	SPG HD secret premiumIGR lightSPG improvedVentilation_class3_user tankRammer_class2_user antifragmentationLining_light_user	</tags>
+    <tags>	SPG private HD secret premiumIGR lightSPG improvedVentilation_class3_user tankRammer_class2_user antifragmentationLining_light_user	</tags>
     <level>	6	</level>
   </GB77_FV304_IGR>
   <GB72_AT15_IGR>
@@ -945,7 +958,7 @@
     <userString>	#igr_vehicles:GB72_AT15_IGR	</userString>
     <description>	#igr_vehicles:GB72_AT15_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	AT-SPG HD secret premiumIGR heavyAT-SPG improvedVentilation_class1_user tankRammer_class2_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	AT-SPG private HD secret premiumIGR heavyAT-SPG improvedVentilation_class1_user tankRammer_class2_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </GB72_AT15_IGR>
   <GB08_Churchill_I_IGR>
@@ -954,7 +967,7 @@
     <description>	#igr_vehicles:GB08_Churchill_I_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:GB08_Churchill_I_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	heavyTank HD secret premiumIGR heavyTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	heavyTank private HD secret premiumIGR heavyTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
   </GB08_Churchill_I_IGR>
   <GB13_FV215b_IGR>
@@ -962,7 +975,7 @@
     <userString>	#igr_vehicles:GB13_FV215b_IGR	</userString>
     <description>	#igr_vehicles:GB13_FV215b_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	heavyTank role_HT_support secret premiumIGR improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <tags>	heavyTank role_HT_support private secret premiumIGR improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
   </GB13_FV215b_IGR>
   <GB01_Medium_Mark_I_bot>
@@ -972,7 +985,7 @@
     <shortUserString>	#gb_vehicles:GB01_Medium_Mark_I_bot_short	</shortUserString>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD secret unrecoverable	</tags>
+    <tags>	mediumTank private HD secret unrecoverable	</tags>
     <level>	1	</level>
   </GB01_Medium_Mark_I_bot>
   <GB05_Vickers_Medium_Mk_II_bot>
@@ -982,7 +995,7 @@
     <shortUserString>	#gb_vehicles:GB05_Vickers_Medium_Mk_II_bot_short	</shortUserString>
     <price>	3500	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD secret unrecoverable improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <tags>	mediumTank private HD secret unrecoverable improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </GB05_Vickers_Medium_Mk_II_bot>
   <GB107_Cavalier_SH>
@@ -991,7 +1004,7 @@
     <description>	#gb_vehicles:Cavalier_SH_descr	</description>
     <price>	1	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD battle_royale lockOutfit lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret	</tags>
+    <tags>	mediumTank private HD battle_royale lockOutfit lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret	</tags>
     <level>	1	</level>
   </GB107_Cavalier_SH>
   <GB19_Sherman_Firefly_MapsTraining_Dummy_MT_2>
@@ -999,7 +1012,7 @@
     <userString>	#maps_training:botVehicleType/mediumTank	</userString>
     <description>	#maps_training:botVehicleDescription	</description>
     <price>	945000	</price>
-    <tags>	mediumTank HD collectorVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret maps_training	</tags>
+    <tags>	mediumTank HD collectorVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret maps_training private	</tags>
     <level>	6	</level>
     <clone_tags>	cloned	</clone_tags>
     <notInShop>	True	</notInShop>
@@ -1013,7 +1026,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user private	</tags>
     <level>	9	</level>
   </GB12_Conqueror_FL>
 </list.xml>

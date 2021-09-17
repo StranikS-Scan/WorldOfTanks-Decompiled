@@ -22,6 +22,12 @@ class VEHICLE_ITEM_STATUS(object):
     LOCAL = 3
 
 
+class CHASSIS_ITEM_TYPE(object):
+    MONOLITHIC = 0
+    SEPARATE = 1
+    TRACK_WITHIN_TRACK = 2
+
+
 class _ShallowCopyWrapper(object):
     __slots__ = ('__exclude',)
 
@@ -126,11 +132,19 @@ class InstallableItem(VehicleItem):
     def maxRepairCost(self):
         return self.healthParams.maxRepairCost
 
+    @property
+    def repairSpeedLimiter(self):
+        return self.healthParams.repairSpeedLimiter
+
+    @property
+    def repairTime(self):
+        return self.healthParams.repairTime
+
 
 @add_shallow_copy()
 class Chassis(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('hullPosition', 'topRightCarryingPoint', 'navmeshGirth', 'minPlaneNormalY', 'maxLoad', 'specificFriction', 'rotationSpeed', 'rotationSpeedLimit', 'rotationIsAroundCenter', 'shotDispersionFactors', 'terrainResistance', 'bulkHealthFactor', 'carryingTriangles', 'drivingWheelsSizes', 'chassisLodDistance', 'traces', 'tracks', 'wheels', 'groundNodes', 'trackNodes', 'trackSplineParams', 'splineDesc', 'leveredSuspension', 'suspensionSpringsLength', 'hullAimingSound', 'effects', 'customEffects', 'AODecals', 'brakeForce', 'physicalTracks', 'customizableVehicleAreas', 'generalWheelsAnimatorConfig', 'wheelHealthParams', 'wheelsArmor')
+    __slots__ = ('hullPosition', 'topRightCarryingPoint', 'navmeshGirth', 'minPlaneNormalY', 'maxLoad', 'specificFriction', 'rotationSpeed', 'rotationSpeedLimit', 'rotationIsAroundCenter', 'shotDispersionFactors', 'terrainResistance', 'bulkHealthFactor', 'carryingTriangles', 'drivingWheelsSizes', 'chassisLodDistance', 'traces', 'tracks', 'wheels', 'trackPairs', 'bboxManager', 'groundNodes', 'trackNodes', 'trackSplineParams', 'splineDesc', 'leveredSuspension', 'suspensionSpringsLength', 'hullAimingSound', 'effects', 'customEffects', 'AODecals', 'brakeForce', 'physicalTracks', 'customizableVehicleAreas', 'generalWheelsAnimatorConfig', 'wheelHealthParams', 'wheelsArmor', '_chassisType')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Chassis, self).__init__(typeID, componentID, componentName, compactDescr, level=level)
@@ -152,6 +166,8 @@ class Chassis(InstallableItem):
         self.traces = None
         self.tracks = None
         self.wheels = None
+        self.trackPairs = component_constants.EMPTY_TUPLE
+        self.bboxManager = None
         self.chassisLodDistance = None
         self.generalWheelsAnimatorConfig = None
         self.groundNodes = None
@@ -168,7 +184,35 @@ class Chassis(InstallableItem):
         self.customizableVehicleAreas = None
         self.wheelHealthParams = {}
         self.wheelsArmor = {}
+        self._chassisType = None
         return
+
+    @property
+    def chassisType(self):
+        if self._chassisType is not None:
+            return self._chassisType
+        else:
+            if self.generalWheelsAnimatorConfig is not None and self.generalWheelsAnimatorConfig.getHasTrackWithinTrack():
+                self._chassisType = CHASSIS_ITEM_TYPE.TRACK_WITHIN_TRACK
+            else:
+                prevLeftMatParam = ''
+                if self.tracks is not None:
+                    for trackPair in self.tracks.trackPairs.itervalues():
+                        if prevLeftMatParam and trackPair.leftMaterial != prevLeftMatParam:
+                            self._chassisType = CHASSIS_ITEM_TYPE.SEPARATE
+                            return self._chassisType
+                        prevLeftMatParam = trackPair.leftMaterial
+
+                self._chassisType = CHASSIS_ITEM_TYPE.MONOLITHIC
+            return self._chassisType
+
+    @property
+    def isTrackWithinTrack(self):
+        return self.chassisType == CHASSIS_ITEM_TYPE.TRACK_WITHIN_TRACK
+
+    @property
+    def totalBBox(self):
+        return self.bboxManager.activeBBox
 
 
 @add_shallow_copy()

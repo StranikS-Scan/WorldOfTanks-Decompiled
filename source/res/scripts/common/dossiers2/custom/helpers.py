@@ -94,6 +94,16 @@ def updateVehicleCollector(dossierDescr, inventoryVehicles, nationID):
                 dossierDescr.addPopUp('achievements', record, True)
 
 
+def updateVehicleBoughtListAchievements(dossierDescr, vehDescr):
+    if vehDescr.type.isCollectorVehicle or vehDescr.type.isPremium:
+        return
+    level = vehDescr.level
+    if 5 <= level <= 10:
+        medalName = 'steamGetTankLevel{0}Medal'.format(level)
+        if not dossierDescr['steamAchievements'][medalName]:
+            dossierDescr['steamAchievements'][medalName] = True
+
+
 def updateRareAchievements(dossierDescr, achievements):
     block = dossierDescr['rareAchievements']
     for achievement in achievements:

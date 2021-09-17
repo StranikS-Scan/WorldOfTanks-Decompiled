@@ -59,6 +59,7 @@ def getOverlayTypeByItem(item, typeToCriteria=None):
 
 class ConfirmedItemWarningTypes(IntEnum):
     DEPENDS_ON_DEVICES = 1
+    PAIR_MODIFICATIONS_WILL_BE_DEMOUNT = 2
 
 
 class BaseConfirmedItemWarning(object):
@@ -79,3 +80,9 @@ class DependsOnDevicesWarning(BaseConfirmedItemWarning):
 
     def getDevicesName(self):
         return self.__devicesName
+
+
+class PairModificationsWillBeDemount(BaseConfirmedItemWarning):
+
+    def getType(self):
+        return ConfirmedItemWarningTypes.PAIR_MODIFICATIONS_WILL_BE_DEMOUNT

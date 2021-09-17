@@ -33,7 +33,7 @@ class SelectSlotSpecDialog(BuyAndExchange[SelectSlotSpecDialogModel]):
 
     def __init__(self, vehicle, slotIdx=None):
         settings = ViewSettings(R.views.lobby.common.SelectSlotSpecDialog(), model=SelectSlotSpecDialogModel())
-        self._price = self.__itemsCache.items.shop.customRoleSlotChangeCost(vehicle.level)
+        self._price = self.__itemsCache.items.shop.customRoleSlotChangeCost(vehicle.descriptor.type)
         self._vehicle = vehicle
         self._slotIdx = slotIdx
         if self._slotIdx is None:
@@ -78,7 +78,7 @@ class SelectSlotSpecDialog(BuyAndExchange[SelectSlotSpecDialogModel]):
             vehicle = self.__itemsCache.items.getItemByCD(self._vehicle.intCD)
             if not vehicle.postProgressionAvailability() or not vehicle.isRoleSlotActive:
                 self._onCancel()
-            price = self.__itemsCache.items.shop.customRoleSlotChangeCost(self._vehicle.level)
+            price = self.__itemsCache.items.shop.customRoleSlotChangeCost(self._vehicle.descriptor.type)
             if not self._freeChange and price != self._price:
                 self._price = price
                 self._updatePrice(self._price)

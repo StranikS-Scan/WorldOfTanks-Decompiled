@@ -356,6 +356,7 @@ class Source(object):
          'bonusLimit': self.__readCondition_int,
          'isTutorialCompleted': self.__readCondition_bool,
          'isLinkedSetEnabled': self.__readCondition_bool,
+         'isSteamAllowed': self.__readCondition_bool,
          'totalBattles': self.__readBattleResultsConditionList,
          'accountPrimaryTypes': self.__readListOfInts,
          'accountSecondaryTypes': self.__readListOfInts}

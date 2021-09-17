@@ -13,13 +13,21 @@ class DeferredQueue(object):
 class ASPECT(object):
     SERVER = 'SERVER'
     CLIENT = 'CLIENT'
-    ALL = [CLIENT, SERVER]
+    HANGAR = 'HANGAR'
+    ALL = [CLIENT, SERVER, HANGAR]
 
 
 class EDITOR_TYPE(object):
     NONE = 0
     STR_KEY_SELECTOR = 1
     ENUM_SELECTOR = 2
+    COMPLEX_KEY_SELECTOR = 3
+
+
+class BLOCK_MODE(object):
+    NONE = 0
+    UNIQUE = 32
+    DEV = 64
 
 
 def makePlanPath(planName):

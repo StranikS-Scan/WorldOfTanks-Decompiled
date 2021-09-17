@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client_common/vehicle_outfit/containers.py
 import logging
 import typing
+from items.components.c11n_constants import ProjectionDecalMatchingTags
 from shared_utils import first
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items.components.c11n_components import CustomizationType, DecalType
@@ -371,3 +372,27 @@ class ProjectionDecalsMultiSlot(MultiSlot):
 
     def _cloneEmpty(self):
         return ProjectionDecalsMultiSlot(self.getTypes(), self.getRegions(), limit=self._limit)
+
+    def sortByTags(self, slotsDescriptionsMap):
+        safeIdxs = []
+        mimicIdxs = []
+        coverIdxs = []
+        for idx in list(self._order):
+            component = self.getComponent(idx)
+            slotsDescription = slotsDescriptionsMap.get(component.slotId)
+            tags = component.tags or (slotsDescription.tags if slotsDescription else None)
+            if tags and ProjectionDecalMatchingTags.SAFE in tags:
+                self._order.remove(idx)
+                safeIdxs.append(idx)
+            if tags and ProjectionDecalMatchingTags.MIMIC in tags:
+                self._order.remove(idx)
+                mimicIdxs.append(idx)
+            if tags and ProjectionDecalMatchingTags.COVER in tags:
+                self._order.remove(idx)
+                coverIdxs.append(idx)
+
+        coverIdxs.extend(mimicIdxs)
+        coverIdxs.extend(self._order)
+        coverIdxs.extend(safeIdxs)
+        self._order = coverIdxs
+        return

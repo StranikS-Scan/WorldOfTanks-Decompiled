@@ -274,7 +274,6 @@ class REQ_CRITERIA(object):
         EPIC_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEpicBattles))
         BATTLE_ROYALE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBattleRoyaleBattles))
         MAPS_TRAINING = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForMapsTrainingBattles))
-        CLAN_WARS = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForClanWarsBattles))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
@@ -813,6 +812,11 @@ class ItemsRequester(IItemsRequester):
             if criteria(item):
                 result[invID] = item
 
+        result.update(self.getDismissedTankmen(criteria))
+        return result
+
+    def getDismissedTankmen(self, criteria=REQ_CRITERIA.TANKMAN.DISMISSED):
+        result = ItemsCollection()
         duration = self.__shop.tankmenRestoreConfig.billableDuration
         dismissedTankmenData = self.__recycleBin.getTankmen(duration)
         for invID, tankmanData in dismissedTankmenData.iteritems():

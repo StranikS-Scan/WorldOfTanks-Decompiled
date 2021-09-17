@@ -6,7 +6,6 @@ from itertools import groupby
 import typing
 import constants
 from Event import Event, EventManager
-from battle_pass_integration import BattlePassByGameMode
 from battle_pass_common import BattlePassConsts, getBattlePassPassTokenName, getLevel, BATTLE_PASS_CONFIG_NAME, BattlePassConfig, BattlePassStatsCommon, BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER_2020, BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER_2020, BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, getMaxAvalable3DStyleProgressInChapter, BATTLE_PASS_OFFER_TOKEN_PREFIX
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.battle_pass.battle_pass_award import awardsFactory, BattlePassAwardsManager
@@ -556,12 +555,12 @@ class BattlePassController(IBattlePassController):
 
     @staticmethod
     def __bonusPointsDiffList(vehTypeCompDescr, config, gameMode):
-        defaultDiff = [0] * BattlePassByGameMode[gameMode]['maxRanks']
         defaultPoints = config.points.get(gameMode, {})
-        if vehTypeCompDescr in defaultPoints:
+        defaultDiff = [0] * len(defaultPoints.get('win', []))
+        if vehTypeCompDescr in defaultPoints and 'win' in defaultPoints:
             specialPoints = defaultPoints[vehTypeCompDescr]
-            defaultPoints = defaultPoints.get('win', defaultDiff)
-            specialPoints = specialPoints.get('win', defaultDiff)
+            defaultPoints = defaultPoints['win']
+            specialPoints = specialPoints['win']
             return [ a - b for a, b in zip(specialPoints, defaultPoints) ]
         return defaultDiff
 

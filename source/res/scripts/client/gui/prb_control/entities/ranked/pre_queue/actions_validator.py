@@ -3,21 +3,12 @@
 from CurrentVehicle import g_currentVehicle
 from gui.prb_control.entities.base.actions_validator import BaseActionsValidator, ActionsValidatorComposite
 from gui.prb_control.entities.base.pre_queue.actions_validator import PreQueueActionsValidator
-from gui.prb_control.items import ValidationResult
-from gui.prb_control.settings import PRE_QUEUE_RESTRICTION
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.periodic_battles.prb_control.actions_validator import PrimeTimeValidator
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 
-class RankedPrimeTimeValidator(BaseActionsValidator):
-    __rankedController = dependency.descriptor(IRankedBattlesController)
-
-    def _validate(self):
-        status, _, _ = self.__rankedController.getPrimeTimeStatus()
-        if status == PrimeTimeStatus.NOT_SET:
-            return ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_NOT_SET, None)
-        else:
-            return ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_DISABLED, None) if status != PrimeTimeStatus.AVAILABLE else super(RankedPrimeTimeValidator, self)._validate()
+class RankedPrimeTimeValidator(PrimeTimeValidator):
+    _controller = dependency.descriptor(IRankedBattlesController)
 
 
 class RankedVehicleValidator(BaseActionsValidator):

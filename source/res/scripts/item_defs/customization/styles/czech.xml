@@ -282,6 +282,12 @@
               <palette>	0	</palette>
             </item>
           </camouflages>
+          <paints>
+            <item>
+              <id>	309	</id>
+              <appliedTo>	61440	</appliedTo>
+            </item>
+          </paints>
           <decals>
             <item>
               <id>	629	</id>
@@ -304,53 +310,13 @@
               </position>
               <rotation>
                 <r0>	0.000022	</r0>
-                <r1>	1.5708	</r1>
+                <r1>	-1.5708	</r1>
                 <r2>	3.14157	</r2>
               </rotation>
               <scale>
                 <s0>	8	</s0>
                 <s1>	8	</s1>
                 <s2>	8	</s2>
-              </scale>
-            </item>
-            <item>
-              <id>	9	</id>
-              <showOn>	GUN	</showOn>
-              <doubleSided>	1	</doubleSided>
-              <position>
-                <p0>	0.000000	</p0>
-                <p1>	-0.379	</p1>
-                <p2>	0.8	</p2>
-              </position>
-              <rotation>
-                <r0>	0.000022	</r0>
-                <r1>	1.5708	</r1>
-                <r2>	3.14157	</r2>
-              </rotation>
-              <scale>
-                <s0>	7.2	</s0>
-                <s1>	7	</s1>
-                <s2>	7	</s2>
-              </scale>
-            </item>
-            <item>
-              <id>	9	</id>
-              <showOn>	GUN	</showOn>
-              <doubleSided>	1	</doubleSided>
-              <position>
-                <p0>	0.000000	</p0>
-                <p1>	-0.379	</p1>
-                <p2>	9.2	</p2>
-              </position>
-              <rotation>
-                <r0>	-0.000022	</r0>
-                <r1>	-1.57079	</r1>
-                <r2>	-3.14157	</r2>
-              </rotation>
-              <scale>
-                <s0>	10	</s0>
-                <s1>	7	</s1>
-                <s2>	-8	</s2>
               </scale>
             </item>
           </projection_decals>

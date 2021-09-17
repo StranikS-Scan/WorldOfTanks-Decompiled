@@ -77,7 +77,7 @@
     <description>	#usa_vehicles:T57_descr	</description>
     <price>	3300	</price>
     <notInShop>	true	</notInShop>
-    <tags>	SPG secret unrecoverable lightSPG	</tags>
+    <tags>	SPG private secret unrecoverable lightSPG	</tags>
     <level>	2	</level>
   </A15_T57>
   <A08_T23>
@@ -86,7 +86,7 @@
     <description>	#usa_vehicles:T23_descr	</description>
     <price>	2103000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank secret unrecoverable improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank private secret unrecoverable improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </A08_T23>
   <A14_T30>
@@ -120,7 +120,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank private HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A13_T34_hvy_FL>
   <A04_M3_Grant>
@@ -231,7 +231,7 @@
     <description>	#usa_vehicles:T18_descr	</description>
     <price>	3000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG secret unrecoverable lightAT-SPG improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <tags>	AT-SPG private secret unrecoverable lightAT-SPG improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </A26_T18>
   <A30_M10_Wolverine>
@@ -454,7 +454,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank HD epic_battles mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank private HD epic_battles mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </A80_T26_E4_SuperPershing_FL>
   <A85_T110E3>
@@ -651,6 +651,19 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </A136_T42>
+  <A148_Convertible_Medium_Tank_T3>
+    <id>	135	</id>
+    <userString>	#usa_vehicles:A148_Convertible_Medium_Tank_T3	</userString>
+    <description>	#usa_vehicles:A148_Convertible_Medium_Tank_T3_descr	</description>
+    <shortUserString>	#usa_vehicles:A148_Convertible_Medium_Tank_T3_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A148_Convertible_Medium_Tank_T3_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A148_Convertible_Medium_Tank_T3_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user secret testTank	</tags>
+    <level>	3	</level>
+  </A148_Convertible_Medium_Tank_T3>
   <A140_ASTRON_REX_105mm>
     <id>	137	</id>
     <userString>	#usa_vehicles:A140_ASTRON_REX_105mm	</userString>
@@ -795,7 +808,7 @@
     <shortUserString>	#usa_vehicles:M4A3E8_Sherman_short	</shortUserString>
     <price>	930500	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD secret unrecoverable	</tags>
+    <tags>	mediumTank private HD secret unrecoverable	</tags>
     <level>	1	</level>
   </A06_M4A3E8_Sherman_training>
   <A93_T7_Combat_Car>
@@ -871,7 +884,7 @@
     <price>	5	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD secret special patton inGame improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <tags>	mediumTank role_MT_sniper private HD secret special patton inGame improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </A106_M48A2_120>
   <A63_M46_Patton_KR>
@@ -910,7 +923,7 @@
     <price>	5100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank role_LT_universal HD unrecoverable scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <tags>	lightTank role_LT_universal private HD unrecoverable scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	7	</level>
   </A112_T71E2>
   <A99_T92_LT>
@@ -1116,6 +1129,19 @@
     <tags>	heavyTank role_HT_break HD special improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	9	</level>
   </A128_concept_1b>
+  <A141_M_IV_Y>
+    <id>	170	</id>
+    <userString>	#usa_vehicles:A141_M_IV_Y	</userString>
+    <description>	#usa_vehicles:A141_M_IV_Y_descr	</description>
+    <shortUserString>	#usa_vehicles:A141_M_IV_Y_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A141_M_IV_Y_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A141_M_IV_Y_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </A141_M_IV_Y>
   <A117_T26E5_FL>
     <id>	246	</id>
     <userString>	#usa_vehicles:A117_T26E5_FL	</userString>
@@ -1127,7 +1153,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank HD epic_battles improvedVentilation_class1_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank private HD epic_battles improvedVentilation_class1_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A117_T26E5_FL>
   <A12_T32_FL>
@@ -1141,7 +1167,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank private HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A12_T32_FL>
   <A103_T71E1_IGR>
@@ -1149,7 +1175,7 @@
     <userString>	#igr_vehicles:T71_IGR	</userString>
     <description>	#igr_vehicles:T71_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	lightTank HD secret premiumIGR scout improvedVentilation_class3_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <tags>	lightTank private HD secret premiumIGR scout improvedVentilation_class3_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	7	</level>
   </A103_T71E1_IGR>
   <A90_T69_IGR>
@@ -1158,7 +1184,7 @@
     <description>	#igr_vehicles:T69_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:T69_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	mediumTank HD secret premiumIGR improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank private HD secret premiumIGR improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </A90_T69_IGR>
   <A13_T34_hvy_IGR>
@@ -1167,7 +1193,7 @@
     <description>	#igr_vehicles:T34_hvy_IGR_descr	</description>
     <price>	1	  <gold></gold>
     </price>
-    <tags>	heavyTank HD secret premiumIGR improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank private HD secret premiumIGR improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A13_T34_hvy_IGR>
   <A36_Sherman_Jumbo_IGR>
@@ -1176,7 +1202,7 @@
     <description>	#igr_vehicles:Sherman_Jumbo_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:Sherman_Jumbo_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	mediumTank HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank private HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
   </A36_Sherman_Jumbo_IGR>
   <A58_T67_IGR>
@@ -1184,7 +1210,7 @@
     <userString>	#igr_vehicles:T67_IGR	</userString>
     <description>	#igr_vehicles:T67_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	AT-SPG HD secret premiumIGR lightAT-SPG AT-SPG1 tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <tags>	AT-SPG private HD secret premiumIGR lightAT-SPG AT-SPG1 tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	5	</level>
   </A58_T67_IGR>
   <A35_Pershing_IGR>
@@ -1193,7 +1219,7 @@
     <description>	#igr_vehicles:Pershing_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:Pershing_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	mediumTank HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank private HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </A35_Pershing_IGR>
   <A05_M4_Sherman_IGR>
@@ -1202,7 +1228,7 @@
     <description>	#igr_vehicles:M4_Sherman_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:M4_Sherman_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	mediumTank HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank private HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
   </A05_M4_Sherman_IGR>
   <A11_T29_IGR>
@@ -1210,7 +1236,7 @@
     <userString>	#igr_vehicles:T29_IGR	</userString>
     <description>	#igr_vehicles:T29_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	heavyTank HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	heavyTank private HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	7	</level>
   </A11_T29_IGR>
   <A120_M48A5_IGR>
@@ -1219,7 +1245,7 @@
     <description>	#igr_vehicles:A120_M48A5_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:A120_M48A5_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	mediumTank role_MT_universal HD secret premiumIGR patton improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <tags>	mediumTank role_MT_universal private HD secret premiumIGR patton improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </A120_M48A5_IGR>
   <A01_T1_Cunningham_bot>
@@ -1229,7 +1255,7 @@
     <shortUserString>	#usa_vehicles:T1_Cunningham_bot_short	</shortUserString>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank HD secret unrecoverable	</tags>
+    <tags>	lightTank private HD secret unrecoverable	</tags>
     <level>	1	</level>
   </A01_T1_Cunningham_bot>
   <A24_T2_med_bot>
@@ -1239,7 +1265,7 @@
     <shortUserString>	#usa_vehicles:T2_med_bot_short	</shortUserString>
     <price>	3500	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD secret unrecoverable improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <tags>	mediumTank private HD secret unrecoverable improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </A24_T2_med_bot>
   <A03_M3_Stuart_bootcamp>
@@ -1248,7 +1274,7 @@
     <description>	#usa_vehicles:M3_Stuart_descr	</description>
     <price>	37500	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank HD secret extraHealthReserve_class3_user	</tags>
+    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </A03_M3_Stuart_bootcamp>
   <A22_M5_Stuart_bootcamp>
@@ -1258,7 +1284,7 @@
     <shortUserString>	#usa_vehicles:M5_Stuart_short	</shortUserString>
     <price>	143000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank HD secret extraHealthReserve_class3_user	</tags>
+    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </A22_M5_Stuart_bootcamp>
   <A25_M2_med_bootcamp>
@@ -1268,7 +1294,7 @@
     <shortUserString>	#usa_vehicles:M2_med_short	</shortUserString>
     <price>	31000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD secret extraHealthReserve_class3_user	</tags>
+    <tags>	mediumTank private HD secret extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </A25_M2_med_bootcamp>
   <A36_Sherman_Jumbo_bootcamp>
@@ -1278,7 +1304,7 @@
     <shortUserString>	#usa_vehicles:Sherman_Jumbo_short	</shortUserString>
     <price>	975000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD secret extraHealthReserve_class3_user	</tags>
+    <tags>	mediumTank private HD secret extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </A36_Sherman_Jumbo_bootcamp>
   <A72_T25_2_SH>
@@ -1287,7 +1313,7 @@
     <description>	#usa_vehicles:T25_2_SH_descr	</description>
     <price>	1	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank lockOutfit HD battle_royale lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret	</tags>
+    <tags>	mediumTank private lockOutfit HD battle_royale lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret	</tags>
     <level>	1	</level>
   </A72_T25_2_SH>
   <A69_T110E5_bob>
@@ -1297,26 +1323,15 @@
     <price>	6100000	</price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank role_HT_universal HD secret bob cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank role_HT_universal private HD secret bob cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	10	</level>
   </A69_T110E5_bob>
-  <A69_T110E5_cl>
-    <id>	138	</id>
-    <userString>	#usa_vehicles:T110_cl	</userString>
-    <description>	#usa_vehicles:T110_descr	</description>
-    <price>	1	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank HD clanWarsBattles special cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user role_HT_universal	</tags>
-    <level>	10	</level>
-  </A69_T110E5_cl>
   <A129_T6_medium_MapsTraining_Dummy_MT_1>
     <id>	110	</id>
     <userString>	#maps_training:botVehicleType/mediumTank	</userString>
     <description>	#maps_training:botVehicleDescription	</description>
     <price>	126000	</price>
-    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user secret maps_training	</tags>
+    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user secret maps_training private	</tags>
     <level>	4	</level>
     <clone_tags>	cloned	</clone_tags>
     <notInShop>	True	</notInShop>
@@ -1326,7 +1341,7 @@
     <userString>	#usa_vehicles:T14_MapsTraining_Player_HT_1	</userString>
     <description>	#usa_vehicles:T14_descr_MapsTraining_Player_HT_1	</description>
     <price>	1000	</price>
-    <tags>	heavyTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret maps_training	</tags>
+    <tags>	heavyTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret maps_training private	</tags>
     <level>	5	</level>
     <clone_tags>	cloned cloned_localization	</clone_tags>
     <notInShop>	True	</notInShop>
@@ -1336,7 +1351,7 @@
     <userString>	#maps_training:botVehicleType/lightTank	</userString>
     <description>	#maps_training:botVehicleDescription	</description>
     <price>	900000	</price>
-    <tags>	lightTank HD collectorVehicle scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user secret maps_training	</tags>
+    <tags>	lightTank HD collectorVehicle scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user secret maps_training private	</tags>
     <level>	6	</level>
     <clone_tags>	cloned	</clone_tags>
     <notInShop>	True	</notInShop>
@@ -1349,7 +1364,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	AT-SPG HD heavyAT-SPG epic_battles improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	AT-SPG HD heavyAT-SPG epic_battles improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user private	</tags>
     <level>	9	</level>
   </A14_T30_FL>
   <A63_M46_Patton_FL>
@@ -1361,7 +1376,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank HD patton epic_battles improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank HD patton epic_battles improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user private	</tags>
     <level>	9	</level>
   </A63_M46_Patton_FL>
 </list.xml>

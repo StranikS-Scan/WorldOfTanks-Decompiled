@@ -8,7 +8,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_HT_break_level_8	</postProgressionTree>
+  <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	50	</forward>
@@ -113,8 +113,7 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	-0.465715 0.42104 2.64645	</anchorPosition>
-        <anchorDirection>	-0.000004 0.80601 0.591902	</anchorDirection>
+        <anchorShift>	0.000000	</anchorShift>
       </slot>
     </customizationSlots>
     <customization>
@@ -725,6 +724,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <repairTime>	6.85714293	</repairTime>
     </Chassis_J29_Nameless>
   </chassis>
   <turrets0>
@@ -862,8 +862,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.166186 0.795717 0.66293	</anchorPosition>
-          <anchorDirection>	-0.000316447 0.976017 0.217696	</anchorDirection>
+          <anchorShift>	0.000004	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -882,8 +881,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	0.947153 0.303871 0.613423	</anchorPosition>
-          <anchorDirection>	0.837882 0.427119 0.339886	</anchorDirection>
+          <anchorShift>	-0.000002	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -895,8 +893,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	-0.937095 0.277308 0.608066	</anchorPosition>
-          <anchorDirection>	-0.851586 0.427138 0.303899	</anchorDirection>
+          <anchorShift>	0.000005	</anchorShift>
         </slot>
         <slot>
           <slotType>	fixedEmblem	</slotType>

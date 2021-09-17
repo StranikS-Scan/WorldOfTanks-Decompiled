@@ -4,16 +4,18 @@ import operator
 from collections import defaultdict
 import BigWorld
 import personal_missions
-from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
-from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
-from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from adisp import async, process
+from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from gui.server_events import event_items
+from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
-from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from gui.shared.gui_items import checkForTags
+from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.utils.requesters.QuestsProgressRequester import PersonalMissionsProgressRequester
 from helpers import dependency
 from items import tankmen
+from items import vehicles
+from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -22,12 +24,15 @@ _SETTINGS_SYNCED = 1
 _EVENTS_CACHE_UPDATED = 2
 _ALL_SYNCED = _SETTINGS_SYNCED | _EVENTS_CACHE_UPDATED
 
-def vehicleRequirementsCheck(quest, invVehicles):
+def vehicleRequirementsCheck(quest, invVehicles, vehGetter):
     level = quest.getVehMinLevel()
     classifier = quest.getQuestClassifier()
-    for veh in invVehicles:
-        if veh.level >= level and classifier.matchVehicle(veh.descriptor.type) and not veh.isOnlyForEventBattles:
-            return True
+    for vehCD in invVehicles:
+        _, nationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehCD)
+        vehType = vehicles.g_cache.vehicle(nationID, vehicleTypeID)
+        if vehType.level >= level and classifier.matchVehicle(vehType):
+            if not checkForTags(vehType.tags, VEHICLE_TAGS.EVENT):
+                return vehGetter(vehCD).activeInNationGroup and True
 
     return False
 
@@ -81,7 +86,7 @@ class PersonalMissionsCache(object):
     def init(self):
         self.itemsCache.onSyncCompleted += self.__updateVehRequirementsCache
         self.__settingsCache.onSyncCompleted += self.__onSettingsCacheSynced
-        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP).values()
+        invVehicles = self.itemsCache.items.inventory.getIventoryVehiclesCDs()
         for _, personalMissionID in personal_missions.g_cache:
             branch = personal_missions.g_cache.questByPotapovQuestID(personalMissionID).branch
             if branch in PM_BRANCH.ACTIVE_BRANCHES:
@@ -329,20 +334,23 @@ class PersonalMissionsCache(object):
         chainID = q.getChainID()
         key = (operationID, chainID)
         if key not in qd.vehRequirementsCache:
-            hasRequiredVehicle = vehicleRequirementsCheck(q, invVehicles)
+            vehGetter = self.itemsCache.items.getItemByCD
+            hasRequiredVehicle = vehicleRequirementsCheck(q, invVehicles, vehGetter)
             qd.vehRequirementsCache[key] = hasRequiredVehicle
         else:
             hasRequiredVehicle = qd.vehRequirementsCache[key]
         q.setRequiredVehiclesPresence(hasRequiredVehicle)
 
     def __updateVehRequirementsCache(self, *_):
-        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP).values()
+        invVehicles = self.itemsCache.items.inventory.getIventoryVehiclesCDs()
+        vehGetter = self.itemsCache.items.getItemByCD
         for qd in self.__questsData.itervalues():
-            for key, value in qd.vehRequirementsCache.iteritems():
+            items = qd.vehRequirementsCache.items()
+            for key, value in items:
                 operationID, chainID = key
                 quests = qd.operations[operationID].getQuests()[chainID]
                 firstQuest = first(quests.itervalues())
-                newValue = vehicleRequirementsCheck(firstQuest, invVehicles)
+                newValue = vehicleRequirementsCheck(firstQuest, invVehicles, vehGetter)
                 if value != newValue:
                     qd.vehRequirementsCache[key] = newValue
                     for q in quests.itervalues():

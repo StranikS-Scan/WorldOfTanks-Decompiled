@@ -4,7 +4,6 @@ import logging
 from operator import itemgetter
 import typing
 import SoundGroups
-from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, LAST_BATTLE_PASS_POINTS_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from battle_pass_common import BattlePassConsts, BattlePassState
@@ -181,10 +180,6 @@ class BattlePassProgressionsView(ViewImpl):
             with self.viewModel.transaction() as model:
                 model.setIsPaused(False)
         return
-
-    @staticmethod
-    def __onDisconnected():
-        SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.bp_progress_bar_stop()))
 
     def __onBuyClick(self):
         self.__setBuyButtonHintShown()
@@ -564,7 +559,6 @@ class BattlePassProgressionsView(ViewImpl):
         self.__battlePassController.onOffersUpdated += self.__onOffersUpdated
         self.__battlePassController.onSeasonStateChange += self.__updateProgressData
         self.__wallet.onWalletStatusChanged += self.__updateWalletAvailability
-        g_playerEvents.onDisconnected += self.__onDisconnected
         g_clientUpdateManager.addCurrencyCallback(Currency.BPCOIN, self.__updateBalance)
         g_eventBus.addListener(events.MissionsEvent.ON_TAB_CHANGED, self.__onMissionsTabChanged, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.FocusEvent.COMPONENT_FOCUSED, self.__onFocus)
@@ -587,7 +581,6 @@ class BattlePassProgressionsView(ViewImpl):
         model.onPointsInfoClick -= self.__onPointsInfoClick
         model.onFinishedAnimation -= self.__resetReplaceRewardAnimations
         model.onLevelsAnimationFinished -= self.__resetLevelAnimations
-        g_playerEvents.onDisconnected -= self.__onDisconnected
         self.__battlePassController.onPointsUpdated -= self.__onPointsUpdated
         self.__battlePassController.onBattlePassIsBought -= self.__onBattlePassBought
         self.__battlePassController.onBattlePassSettingsChange -= self.__onBattlePassSettingsChange

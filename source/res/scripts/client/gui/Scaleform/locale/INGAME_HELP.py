@@ -143,3 +143,5 @@ class INGAME_HELP(object):
     DETAILSHELP_SPGREWORK_SHOTSRESULTINDICATOR_TITLE = '#ingame_help:detailsHelp/spgRework/shotsResultIndicator/title'
     DETAILSHELP_SPGREWORK_SHOTSRESULTINDICATOR_DESCRIPTION = '#ingame_help:detailsHelp/spgRework/shotsResultIndicator/description'
     DETAILSHELP_SPGREWORKTITLE = '#ingame_help:detailsHelp/spgReworkTitle'
+    DETAILSHELP_TRACKWITHINTRACK_TITLE = '#ingame_help:detailsHelp/trackWithinTrack/title'
+    DETAILSHELP_TRACKWITHINTRACK_DESCRIPTION = '#ingame_help:detailsHelp/trackWithinTrack/description'

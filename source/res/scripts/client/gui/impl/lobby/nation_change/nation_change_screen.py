@@ -30,7 +30,7 @@ from helpers.server_settings import serverSettingsChangeListener
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.tankmen import getSkillsConfig
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
-from post_progression_common import MAX_LAYOUTS_NUMBER_ON_VEHICLE, SERVER_SETTINGS_KEY
+from post_progression_common import SERVER_SETTINGS_KEY, SWITCH_LAYOUT_CAPACITY
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -131,18 +131,17 @@ class NationChangeScreen(ViewImpl):
               vehicle.optDevices.setupLayouts.layoutIndex,
               vehicle.shells.setupLayouts.layoutIndex)]
         else:
-            setupsIndexes = [ [layoutID] * self.__LAYOUTS_IN_SETUP for layoutID in range(max(MAX_LAYOUTS_NUMBER_ON_VEHICLE.values())) ]
-        hasEquipment = False
+            setupsIndexes = [ [layoutID] * self.__LAYOUTS_IN_SETUP for layoutID in range(SWITCH_LAYOUT_CAPACITY) ]
         numSetups = 0
         for setupIndexes in setupsIndexes:
             setupModel = NationChangeTankSetupModel()
-            hasEquipment = self.__setSetupData(setupModel, vehicle, setupIndexes) or hasEquipment
-            tankSetups.addViewModel(setupModel)
+            hasEquipment = self.__setSetupData(setupModel, vehicle, setupIndexes)
             if hasEquipment:
+                tankSetups.addViewModel(setupModel)
                 numSetups += 1
 
         tankSetups.invalidate()
-        tankSlotVM.setNoEquipment(not hasEquipment)
+        tankSlotVM.setNoEquipment(numSetups == 0)
         return numSetups
 
     def __setSetupData(self, setupModel, guiVh, layoutIndexes):
@@ -192,7 +191,8 @@ class NationChangeScreen(ViewImpl):
         return
 
     def __setEquipmentViewModelData(self, slotVM, guiVh, layoutIdx):
-        installedEquipment = guiVh.consumables.setupLayouts.setups[layoutIdx].getItems()
+        setup = guiVh.consumables.setupLayouts.setupByIndex(layoutIdx)
+        installedEquipment = setup.getItems() if setup is not None else ()
         hasEquipment = False
         for equipment in installedEquipment:
             if equipment is not None:
@@ -206,8 +206,10 @@ class NationChangeScreen(ViewImpl):
         return hasEquipment
 
     def __setDevicesViewModelData(self, slotVM, guiVh, layoutIdx):
+        setup = guiVh.optDevices.setupLayouts.setupByIndex(layoutIdx)
+        installedOptDevices = setup.getItems() if setup is not None else ()
         hasDevices = False
-        for device in guiVh.optDevices.setupLayouts.setups[layoutIdx].getItems():
+        for device in installedOptDevices:
             deviceModel = NationChangeDeviceModel()
             deviceModel.setImage(self.__icons.artefact.dyn(getIconResourceName(device.descriptor.iconName))())
             deviceModel.setIsImproved(device.isDeluxe)
@@ -221,8 +223,10 @@ class NationChangeScreen(ViewImpl):
         return hasDevices
 
     def __setShellsViewModelData(self, slotVM, guiVh, layoutIdx):
+        setup = guiVh.shells.setupLayouts.setupByIndex(layoutIdx)
+        installedShells = setup.getItems() if setup is not None else ()
         hasShells = False
-        for shell in guiVh.shells.setupLayouts.setups[layoutIdx].getItems():
+        for shell in installedShells:
             if shell.count > 0:
                 shellModel = NationChangeShellModel()
                 shellModel.setImage(self.__icons.shell.small.dyn(getIconResourceName(shell.descriptor.iconName))())
@@ -234,7 +238,8 @@ class NationChangeScreen(ViewImpl):
         return hasShells
 
     def __setInstructionViewModelData(self, slotVM, guiVh, layoutIdx):
-        booster = guiVh.battleBoosters.setupLayouts.setups[layoutIdx].getItems()
+        setup = guiVh.battleBoosters.setupLayouts.setupByIndex(layoutIdx)
+        booster = setup.getItems() if setup is not None else ()
         instruction = next(iter(booster or []), None)
         if instruction is not None:
             slotVM.setImage(self.__icons.artefact.dyn(getIconResourceName(instruction.descriptor.iconName))())

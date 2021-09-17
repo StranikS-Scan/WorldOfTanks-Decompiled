@@ -2529,7 +2529,7 @@
   </itemGroup>
   <itemGroup>
     <name>	Maps_training_color1	</name>
-    <userString>	#vehicle_customization:Maps_training_color1	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
     <priceGroup>	paints 20g notInShop	</priceGroup>
@@ -2539,7 +2539,7 @@
       <color>	12 8 6 255	</color>
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:	</userString>
+      <userString>	#vehicle_customization:Maps_training_color1	</userString>
     </paint>
     <usages>
       <item>
@@ -2558,7 +2558,7 @@
   </itemGroup>
   <itemGroup>
     <name>	Maps_training_color2	</name>
-    <userString>	#vehicle_customization:Maps_training_color2	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
     <priceGroup>	paints 20g notInShop	</priceGroup>
@@ -2568,7 +2568,7 @@
       <color>	186 64 3 255	</color>
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:	</userString>
+      <userString>	#vehicle_customization:Maps_training_color2	</userString>
     </paint>
     <usages>
       <item>
@@ -2584,6 +2584,32 @@
     <gloss>	0.509000	</gloss>
     <metallic>	0.230000	</metallic>
     <color>	0.000000 0.000000 0.000000 255.000000	</color>
+  </itemGroup>
+  <itemGroup>
+    <name>	BTS Marathon T9	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	195	</id>
+      <texture>	gui/maps/vehicles/repaints/usa_color_06.png	</texture>
+      <color>	32 36 38 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/bts_marathon_t9	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
     <name>	R88_Object268_3DSt_BVI	</name>
@@ -2692,32 +2718,6 @@
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/brazilian_independence	</userString>
       <tags>	hiddenInUI	</tags>
-    </paint>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-  </itemGroup>
-  <itemGroup>
-    <name>	BTS Marathon T9	</name>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
-    <priceGroup>	paints 20g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <paint>
-      <id>	195	</id>
-      <texture>	gui/maps/vehicles/repaints/usa_color_06.png	</texture>
-      <color>	32 36 38 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:repaint/bts_marathon_t9	</userString>
     </paint>
     <usages>
       <item>

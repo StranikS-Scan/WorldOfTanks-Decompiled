@@ -21,16 +21,6 @@ YEAR_AWARDS_ORDER = (YearAwardsNames.SMALL,
  YearAwardsNames.MEDIUM,
  YearAwardsNames.BIG,
  YearAwardsNames.LARGE)
-
-class PrimeTimeStatus(CONST_CONTAINER):
-    DISABLED = 0
-    NOT_SET = 1
-    FROZEN = 2
-    NO_SEASON = 3
-    NOT_AVAILABLE = 4
-    AVAILABLE = 5
-
-
 ZERO_RANK_ID = 0
 ZERO_DIVISION_ID = 0
 MAX_GROUPS_IN_DIVISION = 3

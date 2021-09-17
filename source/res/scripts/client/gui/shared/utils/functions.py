@@ -15,6 +15,7 @@ from gui.shared.money import Currency
 from helpers.i18n import makeString
 from ids_generators import SequenceIDGenerator
 from items import ITEM_TYPE_INDICES, vehicles as vehs_core
+from post_progression_common import TankSetupGroupsId
 if typing.TYPE_CHECKING:
     from gui.impl.gen_utils import DynAccessor
 
@@ -99,6 +100,8 @@ def checkAmmoLevel(vehicles, callback):
         if vehicle.isReadyToFight:
             if vehicle.isAmmoCanSwitch:
                 isNotFull, _ = vehicle.isAmmoNotFullInSetups
+                isPrebattleSwitchDisabled = vehicle.postProgression.isPrebattleSwitchDisabled(TankSetupGroupsId.EQUIPMENT_AND_SHELLS)
+                isNotFull = isNotFull and (not isPrebattleSwitchDisabled or not vehicle.isAmmoFullInSetups(vehicle.shells.setupLayouts.layoutIndex))
             else:
                 isNotFull = not vehicle.isAmmoFull
             showAmmoWarning = showAmmoWarning or isNotFull

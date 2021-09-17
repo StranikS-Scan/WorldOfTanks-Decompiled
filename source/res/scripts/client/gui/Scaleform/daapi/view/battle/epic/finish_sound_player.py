@@ -5,9 +5,10 @@ import BigWorld
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi.view.battle.shared.finish_sound_player import FinishSoundPlayer
 from gui.battle_control.view_components import IViewComponentsCtrlListener
-from constants import FINISH_REASON
+from constants import FINISH_REASON, ARENA_PERIOD
 from gui.battle_control import avatar_getter
-from gui.sounds.epic_sound_constants import EPIC_SOUND
+from gui.sounds.epic_sound_constants import EPIC_SOUND, EPIC_TIME_WWEVENTS
+_BATTLE_END_SOUND_TIME = 2
 _EPIC_SOUND_EVENTS = {FINISH_REASON.DESTROYED_OBJECTS: 'end_battle_last_kill',
  FINISH_REASON.EXTERMINATION: 'end_battle_last_kill'}
 _EPIC_SOUND_NOTIFICATIONS = {FINISH_REASON.EXTERMINATION: EPIC_SOUND.BF_EB_ALL_ENEMIES_DESTROYED,
@@ -22,6 +23,7 @@ class EpicFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener):
         self.__soundID = None
         self.__notificationDelayCB = None
         self.__playEndSoundDelayCB = None
+        self.__timeIsOver = False
         g_playerEvents.onRoundFinished += self.__onEpicRoundFinished
         return
 
@@ -50,9 +52,15 @@ class EpicFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener):
             EPIC_SOUND.EPIC_MSG_SOUNDS_ENABLED = False
             return
 
+    def _checkTimeCondition(self):
+        if self._arenaPeriod == ARENA_PERIOD.BATTLE and self._arenaTotalTime == _BATTLE_END_SOUND_TIME:
+            self.__timeIsOver = True
+
     def __onEpicRoundFinished(self, winnerTeam, reason):
         delay = _EPIC_SOUND_NOTIFICATION_DELAY.get(reason, 0)
         self.__notificationDelayCB = BigWorld.callback(delay, partial(self._playSoundNotification, winnerTeam, reason))
+        if reason == FINISH_REASON.TIMEOUT or self.__timeIsOver:
+            self._playRoundFinished(EPIC_TIME_WWEVENTS.EB_TIME_OVER)
         self.__soundID = _EPIC_SOUND_EVENTS.get(reason, None)
         if self.__soundID is not None:
             self._playSound(self.__soundID)

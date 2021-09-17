@@ -227,6 +227,14 @@ class CustomEffectManager(Component):
             self.__prevWaterHeight = waterHeight
         return
 
+    def remapNode(self, fromNode, toNode=''):
+        for effectSelector in self.__selectors:
+            for node in effectSelector.effectNodes:
+                if node is not None:
+                    node.remapNode(fromNode, toNode, self.__appearance.compoundModel)
+
+        return
+
 
 def getCorrectedMatKinds(vehicleAppearance):
     correctedMatKinds = vehicleAppearance.terrainMatKind

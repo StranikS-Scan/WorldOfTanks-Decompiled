@@ -6,24 +6,21 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
-from gui import SystemMessages
 from gui.impl.gen import R
-from gui.impl import backport
 from gui.prb_control import prb_getters
-from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.ranked.pre_queue.actions_validator import RankedActionsValidator
 from gui.prb_control.entities.ranked.pre_queue.ctx import RankedQueueCtx
 from gui.prb_control.entities.ranked.pre_queue.permissions import RankedPermissions
-from gui.prb_control.entities.ranked.pre_queue.scheduler import RankedScheduler
 from gui.prb_control.entities.ranked.pre_queue.vehicles_watcher import RankedVehiclesWatcher
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base import vehicleAmmoCheck
-from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
+from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntity
+from gui.prb_control.entities.ranked.pre_queue.scheduler import RankedScheduler
 from gui.prb_control.items import SelectResult
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, PRE_QUEUE_JOIN_ERRORS
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
 from gui.prb_control.storages import prequeue_storage_getter
-from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.periodic_battles.prb_control.entity import PeriodicEntryPoint
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
@@ -51,23 +48,12 @@ class RankedSubscriber(PreQueueSubscriber):
         g_playerEvents.onArenaJoinFailure -= entity.onArenaJoinFailure
 
 
-class RankedEntryPoint(PreQueueEntryPoint):
-    __rankedController = dependency.descriptor(IRankedBattlesController)
+class RankedEntryPoint(PeriodicEntryPoint):
+    _RES_ROOT = R.strings.system_messages.ranked
+    _controller = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self):
         super(RankedEntryPoint, self).__init__(FUNCTIONAL_FLAG.RANKED, QUEUE_TYPE.RANKED)
-
-    def select(self, ctx, callback=None):
-        status, _, _ = self.__rankedController.getPrimeTimeStatus()
-        if status == PrimeTimeStatus.FROZEN:
-            SystemMessages.pushMessage(backport.text(R.strings.system_messages.ranked.notification.notAvailable()), type=SystemMessages.SM_TYPE.Error)
-            if callback is not None:
-                callback(False)
-            g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.DISABLED)
-            return
-        else:
-            super(RankedEntryPoint, self).select(ctx, callback)
-            return
 
 
 class RankedEntity(PreQueueEntity):

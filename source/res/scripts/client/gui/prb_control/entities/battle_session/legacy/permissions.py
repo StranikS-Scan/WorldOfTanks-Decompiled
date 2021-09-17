@@ -16,8 +16,8 @@ class BattleSessionPermissions(LegacyPermissions):
     def isCreator(cls, roles):
         return False
 
-    def canAssignToTeam(self, team=1, isSelfAssignment=False):
-        result = super(BattleSessionPermissions, self).canAssignToTeam(team, isSelfAssignment)
+    def canAssignToTeam(self, team=1):
+        result = super(BattleSessionPermissions, self).canAssignToTeam(team)
         if not result:
             return False
         else:

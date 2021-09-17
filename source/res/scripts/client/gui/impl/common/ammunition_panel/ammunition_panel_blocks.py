@@ -160,7 +160,7 @@ class OptDeviceBlock(BaseBlock):
         slotModel.specializations.setIsDynamic(isDynamic)
         itemCategories = set() if slotItem is None else slotItem.descriptor.categories
         slotModel.setActiveSpecsMask(getCategoriesMask(itemCategories & optDeviceItem.categories))
-        isSpecializationClickable = isDynamic and optDeviceItem.categories and self._isSpecializationClickable
+        isSpecializationClickable = isDynamic and optDeviceItem.categories and self._isSpecializationClickable and self._vehicle.isRoleSlotActive
         specializations = slotModel.specializations.getSpecializations()
         specializations.clear()
         for category in optDeviceItem.categories:

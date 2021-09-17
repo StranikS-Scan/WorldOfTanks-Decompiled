@@ -24,6 +24,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 PARAMS_AFFECTED_TANKMEN_SKILLS = ('camouflage',
  'brotherhood',
+ 'repair',
  'commander_eagleEye',
  'driver_virtuoso',
  'driver_badRoadsKing',

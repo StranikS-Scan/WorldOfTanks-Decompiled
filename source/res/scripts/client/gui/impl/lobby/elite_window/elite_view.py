@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/elite_window/elite_view.py
+import SoundGroups
 from frameworks.wulf import ViewSettings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
@@ -11,16 +12,18 @@ from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showVehPostProgressionView
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.veh_post_progression.sounds import PP_ELITE_VIEW_SOUND_SPACE
+from gui.veh_post_progression.sounds import Sounds
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
+from skeletons.account_helpers.settings_core import ISettingsCore
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
 
 class EliteView(ViewImpl):
-    _COMMON_SOUND_SPACE = PP_ELITE_VIEW_SOUND_SPACE
     __itemsCache = dependency.descriptor(IItemsCache)
     __guiLoader = dependency.descriptor(IGuiLoader)
+    __settingsCore = dependency.descriptor(ISettingsCore)
     __slots__ = ('__vehicle',)
 
     def __init__(self, *args, **kwargs):
@@ -39,6 +42,10 @@ class EliteView(ViewImpl):
             self.__vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
             fillVehicleInfo(model.vehicleInfo, self.__vehicle)
             self.__updateVehPostProgression(model=model)
+
+    def _onLoaded(self, *args, **kwargs):
+        super(EliteView, self)._onLoaded(*args, **kwargs)
+        SoundGroups.g_instance.playSound2D(Sounds.ENTER_ELITE_VIEW)
 
     def _initialize(self, *args, **kwargs):
         super(EliteView, self)._initialize(*args, **kwargs)
@@ -73,7 +80,11 @@ class EliteView(ViewImpl):
         else:
             g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.VEH_POST_PROGRESSION), scope=EVENT_BUS_SCOPE.LOBBY)
             showVehPostProgressionView(self.__vehicle.intCD)
+        self.__markAsVisitedHintInResearch()
         return
+
+    def __markAsVisitedHintInResearch(self):
+        self.__settingsCore.serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.RESEARCH_POST_PROGRESSION_ENTRY_POINT_HINT: 1})
 
     def __onSyncCompleted(self, reason, diff):
         if GUI_ITEM_TYPE.VEH_POST_PROGRESSION in diff:

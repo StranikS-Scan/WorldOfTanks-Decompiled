@@ -371,6 +371,19 @@ def readPrice(xmlCtx, section, subsectionName):
     return {key: readInt(xmlCtx, section, subsectionName, 0)}
 
 
+def readPostProgressionPrice(xmlCtx, section, subsectionName):
+    key = None
+    for currency in ('gold', 'crystal', 'xp', 'freeXP', 'credits'):
+        if section[subsectionName + '/' + currency] is not None:
+            if key is not None:
+                raiseWrongXml(xmlCtx, subsectionName, 'Multiple price not allowed')
+            key = currency
+
+    if key is None:
+        raiseWrongXml(xmlCtx, subsectionName, 'There are no correct currency')
+    return {key: readInt(xmlCtx, section, subsectionName, 0)}
+
+
 def readRentPrice(xmlCtx, section, subsectionName):
     rentPrices = {}
     previousRentDays = []

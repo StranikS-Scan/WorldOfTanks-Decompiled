@@ -1400,6 +1400,59 @@
       </damage>
     </armorSpalls>
   </_105mm_sgr_L_53>
+  <_120mm_slpprj_b>
+    <id>	86	</id>
+    <userString>	#sweden_vehicles:_120mm_slpprj_b	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1015	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_slpprj_b>
+  <_120mm_slpprj_b71>
+    <id>	87	</id>
+    <userString>	#sweden_vehicles:_120mm_slpprj_b71	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_slpprj_b71>
+  <_120mm_sgr_b_51>
+    <id>	88	</id>
+    <userString>	#sweden_vehicles:_120mm_sgr_b_51	</userString>
+    <icon>	he_modern	</icon>
+    <price>	870	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_sgr_b_51>
   <Development_Shell>
     <id>	65000	</id>
     <userString>	Development_Shell	</userString>

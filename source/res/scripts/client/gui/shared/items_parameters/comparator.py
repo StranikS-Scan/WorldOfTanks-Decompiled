@@ -4,7 +4,7 @@ import collections
 import sys
 from constants import BonusTypes
 from gui.shared.items_parameters import params_cache
-from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR
+from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, CHASSIS_REPAIR_TIME
 BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  'shotDispersionAngle',
  'weight',
@@ -32,14 +32,15 @@ BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  'demaskMovingFactor',
  'vehicleRamOrExplosionDamageResistance',
  'vehicleFireChance',
- 'vehicleGunReloadTime',
+ CHASSIS_REPAIR_TIME,
  'vehicleGunShotFullDispersion',
  'vehicleGunShotDispersionAfterShot',
  'vehicleGunShotDispersionChassisMovement',
  'vehicleGunShotDispersionChassisRotation',
  'vehicleGunShotDispersionTurretRotation',
  'vehicleGunShotDispersionWhileGunDamaged',
- 'vehicleRamDamageResistance'])
+ 'vehicleRamDamageResistance',
+ 'vehicleGunReloadTime'])
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
 _CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
  'clipFireRate': (True, True, False),
@@ -164,12 +165,31 @@ CONDITIONAL_BONUSES = {('invisibilityMovingFactor',
                                                                                                                                             ('ration_uk', BonusTypes.EQUIPMENT),
                                                                                                                                             ('ration_japan', BonusTypes.EQUIPMENT),
                                                                                                                                             ('ration_czech', BonusTypes.EQUIPMENT),
+                                                                                                                                            ('ration_sweden', BonusTypes.EQUIPMENT),
                                                                                                                                             ('ration_poland', BonusTypes.EQUIPMENT),
                                                                                                                                             ('ration_italy', BonusTypes.EQUIPMENT),
                                                                                                                                             ('improvedVentilation_tier1', BonusTypes.OPTIONAL_DEVICE),
                                                                                                                                             ('improvedVentilation_tier2', BonusTypes.OPTIONAL_DEVICE),
                                                                                                                                             ('improvedVentilation_tier3', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                                            ('deluxImprovedVentilation', BonusTypes.OPTIONAL_DEVICE)])}
+                                                                                                                                            ('deluxImprovedVentilation', BonusTypes.OPTIONAL_DEVICE)]),
+ (CHASSIS_REPAIR_TIME,): (('repair', BonusTypes.SKILL), [('brotherhood', BonusTypes.SKILL),
+                           ('chocolate', BonusTypes.EQUIPMENT),
+                           ('cocacola', BonusTypes.EQUIPMENT),
+                           ('ration', BonusTypes.EQUIPMENT),
+                           ('hotCoffee', BonusTypes.EQUIPMENT),
+                           ('ration_china', BonusTypes.EQUIPMENT),
+                           ('ration_uk', BonusTypes.EQUIPMENT),
+                           ('ration_japan', BonusTypes.EQUIPMENT),
+                           ('ration_czech', BonusTypes.EQUIPMENT),
+                           ('ration_sweden', BonusTypes.EQUIPMENT),
+                           ('ration_poland', BonusTypes.EQUIPMENT),
+                           ('ration_italy', BonusTypes.EQUIPMENT),
+                           ('improvedVentilation_tier1', BonusTypes.OPTIONAL_DEVICE),
+                           ('improvedVentilation_tier2', BonusTypes.OPTIONAL_DEVICE),
+                           ('improvedVentilation_tier3', BonusTypes.OPTIONAL_DEVICE),
+                           ('deluxImprovedVentilation', BonusTypes.OPTIONAL_DEVICE),
+                           ('trophyBasicImprovedVentilation', BonusTypes.OPTIONAL_DEVICE),
+                           ('trophyUpgradedImprovedVentilation', BonusTypes.OPTIONAL_DEVICE)])}
 CONDITIONAL_BONUSES = {k:v for keys, v in CONDITIONAL_BONUSES.items() for k in keys}
 
 def _getComparableValue(currentValue, comparableList, idx):

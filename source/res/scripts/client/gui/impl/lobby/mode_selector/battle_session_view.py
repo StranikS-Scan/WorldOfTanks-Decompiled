@@ -10,7 +10,6 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.battle_session_model imp
 from gui.impl.pub import ViewImpl
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.event_dispatcher import showHangar
 from gui.shared.view_helpers.emblems import getClanEmblemURL, EmblemSize
 from helpers import dependency
 from skeletons.gui.game_control import IExternalLinksController
@@ -23,7 +22,7 @@ class BattleSessionView(ViewImpl):
     __externalLinks = dependency.descriptor(IExternalLinksController)
 
     def __init__(self, layoutID):
-        super(BattleSessionView, self).__init__(ViewSettings(layoutID, ViewFlags.LOBBY_SUB_VIEW, BattleSessionModel()))
+        super(BattleSessionView, self).__init__(ViewSettings(layoutID, ViewFlags.LOBBY_TOP_SUB_VIEW, BattleSessionModel()))
 
     def _onLoading(self):
         viewModel = self.getViewModel()
@@ -55,9 +54,8 @@ class BattleSessionView(ViewImpl):
         event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STRONGHOLD))
         g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
-    @staticmethod
-    def __closeClickedHandler():
-        showHangar()
+    def __closeClickedHandler(self):
+        self.destroyWindow()
 
     @process
     def __openUrl(self, name):

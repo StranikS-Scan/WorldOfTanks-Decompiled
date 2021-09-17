@@ -425,6 +425,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
     def __getNationGroupVehicles(self, vehicleCD):
         result = [ self.__itemsCache.items.getItemByCD(cd) for cd in iterVehTypeCDsInNationGroup(vehicleCD) ]
         result.append(self.__vehicle)
+        result.sort(reverse=True, key=lambda v: v.activeInNationGroup)
         return result
 
     @property

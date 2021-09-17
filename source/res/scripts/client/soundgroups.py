@@ -364,9 +364,6 @@ class SoundGroups(object):
             volume = 0.0 if not enable else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
 
-        volume = 0.0 if not enable else self.__volumeByCategory['gui']
-        self.setVolume('gui', volume, False)
-
     def enableAmbientAndMusic(self, enable):
         for categoryName in ('ambient', 'music'):
             enable = enable and not self.__muffledByReplay

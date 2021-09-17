@@ -37,6 +37,8 @@ class TANK_CAROUSEL_FILTER(object):
     TOOLTIP_PREMIUM_BODY = '#tank_carousel_filter:tooltip/premium/body'
     TOOLTIP_CRYSTALS_HEADER = '#tank_carousel_filter:tooltip/crystals/header'
     TOOLTIP_CRYSTALS_BODY = '#tank_carousel_filter:tooltip/crystals/body'
+    TOOLTIP_CLANRENTED_HEADER = '#tank_carousel_filter:tooltip/clanRented/header'
+    TOOLTIP_CLANRENTED_BODY = '#tank_carousel_filter:tooltip/clanRented/body'
     TOOLTIP_ELITE_HEADER = '#tank_carousel_filter:tooltip/elite/header'
     TOOLTIP_ELITE_BODY = '#tank_carousel_filter:tooltip/elite/body'
     TOOLTIP_FAVORITE_HEADER = '#tank_carousel_filter:tooltip/favorite/header'

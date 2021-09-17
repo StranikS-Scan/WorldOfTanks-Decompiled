@@ -106,6 +106,7 @@ class EpicMissionsController(IViewComponentsController):
         self.__retreatMissionResults = {}
         self.__activeMessages = [0] * (max(EPIC_NOTIFICATION.ALL()) + 1)
         self.__eManager = Event.EventManager()
+        self.__capturedBases = set()
         self.onPlayerMissionUpdated = Event.Event(self.__eManager)
         self.onPlayerMissionReset = Event.Event(self.__eManager)
         self.onPlayerMissionTimerSet = Event.Event(self.__eManager)
@@ -187,6 +188,7 @@ class EpicMissionsController(IViewComponentsController):
             if BattleReplay.g_replayCtrl.isPlaying:
                 g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarpStart
                 g_replayEvents.onTimeWarpFinish += self.__onReplayTimeWarpFinished
+            self.__capturedBases.clear()
             return
 
     def getUI(self):
@@ -314,7 +316,7 @@ class EpicMissionsController(IViewComponentsController):
             validBase = sectorBaseComp.getBaseBySectorId(sectorIdToCapture)
             onPlayerLane = baseLaneIdx == self.__currentLane - 1
             time = BigWorld.serverTime()
-            if validBase and baseId == validBase.baseID and points:
+            if validBase and baseId == validBase.baseID and points and baseId not in self.__capturedBases:
                 if self.__isLaneContested[baseLaneIdx]:
                     endTime = self.__contestedEndTime[baseLaneIdx]
                     if endTime < time:
@@ -514,11 +516,14 @@ class EpicMissionsController(IViewComponentsController):
             if epicPlayerDataComp is None:
                 LOG_ERROR('Expected EpicPlayerDataComponent not present!')
                 return
+            self.__capturedBases.add(baseId)
             sectorBase = sectorBaseComp.getSectorBaseById(baseId)
             baseSectorId = sectorBase.sectorID
             sector = sectorComp.getSectorById(baseSectorId)
             baseLane = sector.playerGroup
             onPlayerLane = baseLane == self.__currentLane
+            capturedBasesInCompanentSystem = sectorBaseComp.getCapturedBaseIDs()
+            self.__capturedBases.update(capturedBasesInCompanentSystem)
             seconds = epicPlayerDataComp.getGameTimeToAddPerCapture(sector.IDInPlayerGroup)
             if sectorBaseComp.getNumCapturedBases() == len(sectorBaseComp.sectorBases):
                 seconds += epicPlayerDataComp.getGameTimeToAddWhenAllCaptured()

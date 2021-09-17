@@ -71,6 +71,9 @@ class SectorBaseArenaComponent(ClientArenaComponent):
 
         return None
 
+    def getCapturedBaseIDs(self):
+        return frozenset((base.baseID for base in self.__sectorBases if base.isCaptured))
+
     def getNumCapturedBases(self):
         captured = 0
         for base in self.__sectorBases:

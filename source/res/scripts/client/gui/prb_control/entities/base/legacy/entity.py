@@ -63,6 +63,9 @@ class BaseLegacyEntity(BasePrbEntity):
     def getRoles(self, pDatabaseID=None, clanDBID=None, team=None):
         pass
 
+    def _getRoleByDatabaseID(self, dbID=None, team=None):
+        pass
+
     def getPermissions(self, pID=None):
         return ILegacyPermissions()
 
@@ -386,24 +389,20 @@ class LegacyEntity(_LegacyEntity):
         return result
 
     def getRoles(self, pDatabaseID=None, clanDBID=None, team=None):
-        result = 0
-        if self._settings is None:
-            return result
-        else:
-            if pDatabaseID is None:
-                pDatabaseID = account_helpers.getAccountDatabaseID()
-            roles = self._settings['roles']
-            if pDatabaseID in roles:
-                result = roles[pDatabaseID]
-            if not result and clanDBID:
-                roles = self._settings['clanRoles']
-                if clanDBID in roles:
-                    result = roles[clanDBID]
-            if not result and team:
-                roles = self._settings['teamRoles']
-                if team in roles:
-                    result = roles[team]
-            return result
+        return self._getRoleByDatabaseID(pDatabaseID, team)
+
+    def _getRoleByDatabaseID(self, dbID=None, team=None):
+        if dbID is None:
+            dbID = account_helpers.getAccountDatabaseID()
+        rosters = prb_getters.getPrebattleRosters()
+        possibleRosters = PREBATTLE_ROSTER.getRange(self.getEntityType(), team)
+        for roster in possibleRosters:
+            if roster in rosters:
+                for data in rosters[roster].itervalues():
+                    if data['dbID'] == dbID:
+                        return data.get('role', 0)
+
+        return 0
 
     def getProps(self):
         return prb_items.PrbPropsInfo(**prb_getters.getPrebattleProps())
@@ -427,11 +426,12 @@ class LegacyEntity(_LegacyEntity):
                 setNotReady(0)
 
     def assign(self, ctx, callback=None):
-        prevTeam, _ = decodeRoster(self.getRosterKey(pID=ctx.getPlayerID()))
+        pID = ctx.getPlayerID()
+        prevTeam, _ = decodeRoster(self.getRosterKey(pID=pID))
         nextTeam, assigned = decodeRoster(ctx.getRoster())
         pPermissions = self.getPermissions()
         if prevTeam is nextTeam:
-            if not pPermissions.canAssignToTeam(team=nextTeam):
+            if not pPermissions.canAssignToTeam(team=nextTeam, isSelfAssignment=pID == account_helpers.getPlayerID()):
                 LOG_ERROR('Player can not change roster', nextTeam, assigned)
                 if callback:
                     callback(False)

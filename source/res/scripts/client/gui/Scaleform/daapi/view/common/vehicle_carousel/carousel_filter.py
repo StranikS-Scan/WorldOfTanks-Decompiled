@@ -139,7 +139,7 @@ class CarouselFilter(_CarouselFilter):
 
         self._filters = defaultFilters
         for key, value in defaultFilters.iteritems():
-            savedFilters[key] = type(value)(savedFilters[key])
+            savedFilters[key] = type(value)(savedFilters.get(key, value))
 
         self.update(savedFilters, save=False)
 
@@ -246,8 +246,12 @@ class BasicCriteriesGroup(CriteriesGroup):
             self._criteria |= REQ_CRITERIA.VEHICLE.PREMIUM
         if filters['igr'] and constants.IS_KOREA:
             self._criteria |= REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
-        if not filters['rented']:
-            self._criteria |= ~REQ_CRITERIA.VEHICLE.RENT
+        if filters['rented'] and filters['clanRented']:
+            self._criteria |= REQ_CRITERIA.VEHICLE.RENT
+        elif filters['clanRented']:
+            self._criteria |= REQ_CRITERIA.VEHICLE.CLAN_WARS
+        elif not filters['rented']:
+            self._criteria |= ~REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.CLAN_WARS
         if filters['bonus']:
             self._criteria |= REQ_CRITERIA.VEHICLE.HAS_XP_FACTOR
         if filters['favorite']:

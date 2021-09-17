@@ -281,6 +281,7 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_NOPENALTY = '#battle_results:details/calculations/noPenalty'
     DETAILS_CALCULATIONS_EVENT = '#battle_results:details/calculations/event'
     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_DESERTER = '#battle_results:details/calculations/fairPlayViolation/deserter'
+    DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_EPIC_DESERTER = '#battle_results:details/calculations/fairPlayViolation/epic_deserter'
     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_AFK = '#battle_results:details/calculations/fairPlayViolation/afk'
     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_SUICIDE = '#battle_results:details/calculations/fairPlayViolation/suicide'
     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_EVENT_DESERTER = '#battle_results:details/calculations/fairPlayViolation/event_deserter'
@@ -362,6 +363,7 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_NOPENALTY,
      DETAILS_CALCULATIONS_EVENT,
      DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_DESERTER,
+     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_EPIC_DESERTER,
      DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_AFK,
      DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_SUICIDE,
      DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_EVENT_DESERTER,

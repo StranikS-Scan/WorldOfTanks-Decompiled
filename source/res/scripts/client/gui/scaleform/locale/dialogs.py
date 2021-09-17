@@ -591,6 +591,7 @@ class DIALOGS(object):
     PUNISHMENTWINDOW_MESSAGE_EXTRA_PENALTY = '#dialogs:punishmentWindow/message/extra/penalty'
     PUNISHMENTWINDOW_CANCEL = '#dialogs:punishmentWindow/cancel'
     PUNISHMENTWINDOW_REASON_DESERTER = '#dialogs:punishmentWindow/reason/deserter'
+    PUNISHMENTWINDOW_REASON_EPIC_DESERTER = '#dialogs:punishmentWindow/reason/epic_deserter'
     PUNISHMENTWINDOW_REASON_SUICIDE = '#dialogs:punishmentWindow/reason/suicide'
     PUNISHMENTWINDOW_REASON_AFK = '#dialogs:punishmentWindow/reason/afk'
     SKILLDROPWINDOW_TITLE = '#dialogs:skillDropWindow/title'
@@ -1649,6 +1650,7 @@ class DIALOGS(object):
      PUNISHMENTWINDOW_MESSAGE_EXTRA_PENALTY,
      PUNISHMENTWINDOW_CANCEL,
      PUNISHMENTWINDOW_REASON_DESERTER,
+     PUNISHMENTWINDOW_REASON_EPIC_DESERTER,
      PUNISHMENTWINDOW_REASON_SUICIDE,
      PUNISHMENTWINDOW_REASON_AFK,
      SKILLDROPWINDOW_TITLE,

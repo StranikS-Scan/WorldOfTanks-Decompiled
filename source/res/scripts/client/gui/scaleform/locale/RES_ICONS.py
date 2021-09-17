@@ -4678,6 +4678,7 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_CLANBATTLERESULTICON_1 = '../maps/icons/library/ClanBattleResultIcon-1.png'
     MAPS_ICONS_LIBRARY_CLANINVITEICON_1 = '../maps/icons/library/clanInviteIcon-1.png'
     MAPS_ICONS_LIBRARY_CLANQUESTNOTIFICATION_1 = '../maps/icons/library/ClanQuestNotification-1.png'
+    MAPS_ICONS_LIBRARY_CLAN_WARS = '../maps/icons/library/clan_wars.png'
     MAPS_ICONS_LIBRARY_CLASS_ICON = '../maps/icons/library/class_icon.png'
     MAPS_ICONS_LIBRARY_CLOCK = '../maps/icons/library/clock.png'
     MAPS_ICONS_LIBRARY_CLOCKICON_1 = '../maps/icons/library/ClockIcon-1.png'

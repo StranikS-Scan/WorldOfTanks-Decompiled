@@ -735,6 +735,7 @@ class SETTINGS(object):
     GAME_SHOWVEHICLEHPINMINIMAP_NEVER = '#settings:game/showVehicleHPinMinimap/never'
     GAME_SHOWVEHICLEHPINMINIMAP_ALT = '#settings:game/showVehicleHPinMinimap/alt'
     GAME_SHOWVEHICLEHPINMINIMAP_ALWAYS = '#settings:game/showVehicleHPinMinimap/always'
+    EVENTSETTINGDISABLED = '#settings:eventSettingDisabled'
     SOUNDS_ACOUSTICTYPE_ENUM = (SOUNDS_ACOUSTICTYPE_ACOUSTICS20,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS51,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS71,

@@ -100,16 +100,19 @@ class MarkerBase(object):
         for component in self._components.itervalues():
             component.setMarkerMatrix(matrix)
 
+    def setEntity(self, entity):
+        for component in self._components.itervalues():
+            component.setMarkerEntity(entity)
+
     def __initComponents(self, markerData, markerBitMask):
         for flag in ComponentBitMask.LIST:
-            clazz = self.COMPONENT_CLASS.get(flag) if flag & markerBitMask else None
-            if clazz is None:
+            if not flag & markerBitMask:
                 continue
-            listComponent = markerData.get(flag, [])
-            for idx, _ in enumerate(listComponent):
-                self.addComponent(clazz(idx, markerData))
-
-        return
+            componentConfigs = markerData.get(flag, [])
+            for componentConfig in componentConfigs:
+                clazz = componentConfig.get('clazz') or self.COMPONENT_CLASS.get(flag)
+                if clazz:
+                    self.addComponent(clazz(componentConfig, markerData.get('matrixProduct'), self.isVisible))
 
 
 class AreaMarker(MarkerBase):

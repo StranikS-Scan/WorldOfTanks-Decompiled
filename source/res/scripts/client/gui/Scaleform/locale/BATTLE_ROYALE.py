@@ -103,7 +103,6 @@ class BATTLE_ROYALE(object):
     HANGARVEHICLEINFO_TOOLTIPS_BATTLEPROGRESSION_TUTORIALHIGHLIGHT = '#battle_royale:hangarVehicleInfo/tooltips/battleProgression/tutorialHighlight'
     HANGARVEHICLEINFO_TOOLTIPS_WEAKZONES_HEADER = '#battle_royale:hangarVehicleInfo/tooltips/weakZones/header'
     HANGARVEHICLEINFO_TOOLTIPS_WEAKZONES_BODY = '#battle_royale:hangarVehicleInfo/tooltips/weakZones/body'
-    HANGAR_CLOSEBTN = '#battle_royale:hangar/closeBtn'
     TOOLTIPS_AWARDS_PATTERN = '#battle_royale:tooltips/awards/pattern'
     TOOLTIPS_AWARDS_BADGE = '#battle_royale:tooltips/awards/badge'
     TOOLTIPS_AWARDS_ACHIEVEMENT = '#battle_royale:tooltips/awards/achievement'

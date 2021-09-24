@@ -6,14 +6,14 @@ from debug_utils import LOG_ERROR
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.locale.INVITES import INVITES
-from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsSteelHunter
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import battleRoyaleHangarIsActive
 from gui.clans.formatters import ClanSingleNotificationHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanAppActionHtmlTextFormatter
 from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ViewEventType, HangarSpacesSwitcherEvent
+from gui.shared.events import ViewEventType, HangarSimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
@@ -29,6 +29,7 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.settings import makePathToIcon
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
+from skeletons.gui.game_control import IGameEventController
 if typing.TYPE_CHECKING:
     from gui.shared.events import LoadViewEvent
 
@@ -302,21 +303,25 @@ class LockButtonMessageDecorator(MessageDecorator):
 
 class C11nMessageDecorator(LockButtonMessageDecorator):
     itemsCache = dependency.descriptor(IItemsCache)
+    __gameEventCtrl = dependency.descriptor(IGameEventController)
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(C11nMessageDecorator, self).__init__(entityID, entity, settings, model)
         g_clientUpdateManager.addCallbacks({'inventory': self._updateButtons})
         g_clientUpdateManager.addCallbacks({'cache.vehsLock': self._updateButtons})
-        g_eventBus.addListener(HangarSpacesSwitcherEvent.SWITCH_TO_HANGAR_SPACE, self._updateButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(HangarSimpleEvent.DISPATCHER_ENTITY_WAS_UPDATED, self._updateButtons, EVENT_BUS_SCOPE.LOBBY)
 
     def clear(self):
         super(C11nMessageDecorator, self).clear()
         g_clientUpdateManager.removeObjectCallbacks(self)
-        g_eventBus.removeListener(HangarSpacesSwitcherEvent.SWITCH_TO_HANGAR_SPACE, self._updateButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(HangarSimpleEvent.DISPATCHER_ENTITY_WAS_UPDATED, self._updateButtons, EVENT_BUS_SCOPE.LOBBY)
 
     def _updateButtons(self, _):
         isLocked = True
-        if not currentHangarIsSteelHunter() and self.__vehicle is not None and self.__vehicle.isCustomizationEnabled():
+        isBRHangar = battleRoyaleHangarIsActive()
+        isEventHangar = self.__gameEventCtrl.isEventPrbActive()
+        vehCustomizationIsEnabled = self.__vehicle is not None and self.__vehicle.isCustomizationEnabled()
+        if not isBRHangar and not isEventHangar and vehCustomizationIsEnabled:
             isLocked = self._entity.get('savedData', {}).get('toStyle', False) and not isVehicleCanBeCustomized(self.__vehicle, GUI_ITEM_TYPE.STYLE)
         self._updateButtonsState(lock=isLocked)
         return

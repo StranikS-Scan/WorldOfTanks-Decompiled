@@ -37,6 +37,7 @@ from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.prb_control import IPrbControlLoader
 from skeletons.gui.server_events import IEventsCache
+from skeletons.prebattle_vehicle import IPrebattleVehicle
 _logger = logging.getLogger(__name__)
 
 class _PreBattleDispatcher(ListenersCollection):
@@ -44,6 +45,7 @@ class _PreBattleDispatcher(ListenersCollection):
     rentals = dependency.descriptor(IRentalsController)
     igrCtrl = dependency.descriptor(IIGRController)
     eventsCache = dependency.descriptor(IEventsCache)
+    prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
 
     def __init__(self):
         super(_PreBattleDispatcher, self).__init__()
@@ -263,7 +265,7 @@ class _PreBattleDispatcher(ListenersCollection):
         return factory.createPlayerInfo(self.__entity) if factory is not None else PlayerDecorator()
 
     def doAction(self, action=None):
-        if not g_currentVehicle.isPresent():
+        if not g_currentVehicle.isPresent() and not self.prebattleVehicle.isPresent():
             SystemMessages.pushMessage(messages.getInvalidVehicleMessage(PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT), type=SystemMessages.SM_TYPE.Error)
             return False
         LOG_DEBUG('Do GUI action', action)
@@ -637,6 +639,7 @@ class _PreBattleDispatcher(ListenersCollection):
         self.__requestCtx = PrbCtrlRequestCtx()
         currentCtx.stopProcessing(result=True)
         g_eventDispatcher.updateUI()
+        g_eventDispatcher.entityWasUpdated()
         return ctx.getFlags()
 
     @process

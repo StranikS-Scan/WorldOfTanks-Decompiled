@@ -1,0 +1,16 @@
+<PublicCounter.def>
+  <Properties>
+    <counter>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </counter>
+    <max>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </max>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	publicCounter	</DefaultKeyName>
+</PublicCounter.def>

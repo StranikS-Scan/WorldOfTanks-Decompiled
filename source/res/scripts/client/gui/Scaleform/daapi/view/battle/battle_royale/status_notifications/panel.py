@@ -52,19 +52,8 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
         else:
             containerClass = components.StatusNotificationContainer
         g_replayEvents.onPause += self.__onReplayPaused
-        self.__container = containerClass([_BattleRoyaleHighPriorityGroup,
-         sn_items.StunSN,
-         sn_items.DeathZoneWarningSN,
-         sn_items.InspireSN,
-         sn_items.InspireCooldownSN,
-         sn_items.LootPickUpSN,
-         sn_items.BerserkerSN,
-         sn_items.DamagingSmokeSN,
-         sn_items.HealingSN,
-         sn_items.HealingCooldownSN,
-         sn_items.RepairingSN,
-         sn_items.RepairingCooldownSN,
-         sn_items.SmokeSN], self.__onCollectionUpdated)
+        snItems = self._generateItems()
+        self.__container = containerClass(snItems, self.__onCollectionUpdated)
         crosshairCtrl = self._sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
@@ -83,6 +72,21 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
             crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
         super(StatusNotificationTimerPanel, self)._dispose()
         return
+
+    def _generateItems(self):
+        return [_BattleRoyaleHighPriorityGroup,
+         sn_items.StunSN,
+         sn_items.DeathZoneWarningSN,
+         sn_items.InspireSN,
+         sn_items.InspireCooldownSN,
+         sn_items.LootPickUpSN,
+         sn_items.BerserkerSN,
+         sn_items.DamagingSmokeSN,
+         sn_items.HealingSN,
+         sn_items.HealingCooldownSN,
+         sn_items.RepairingSN,
+         sn_items.RepairingCooldownSN,
+         sn_items.SmokeSN]
 
     def _generateNotificationTimerSettings(self):
         data = []

@@ -1055,7 +1055,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             elif self.configuration.isAwardWindow:
                 result = None
             else:
-                result = self.__getVehicleStatus(self.configuration.showCustomStates, self.vehicle)
+                result = self.__getVehicleStatus(self.configuration.showCustomStates, self.vehicle, self.configuration.isSpecialWindow)
             if result is not None:
                 statusLevel = result['level']
                 if statusLevel == Vehicle.VEHICLE_STATE_LEVEL.INFO:
@@ -1108,7 +1108,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
          'text': text,
          'level': level}
 
-    def __getVehicleStatus(self, showCustomStates, vehicle):
+    def __getVehicleStatus(self, showCustomStates, vehicle, isSpecial=False):
         if showCustomStates:
             isInInventory = vehicle.isInInventory
             level = Vehicle.VEHICLE_STATE_LEVEL.WARNING
@@ -1125,7 +1125,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                 msg = 'notUnlocked'
             elif isInInventory:
                 msg = 'inHangar'
-            elif not mayObtain:
+            elif not mayObtain and not isSpecial:
                 level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
                 if reason == GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_GOLD:
                     msg = 'notEnoughGold'
@@ -1135,6 +1135,8 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                     msg = 'operationError'
                     operationError = True
             if msg:
+                if isSpecial:
+                    level = Vehicle.VEHICLE_STATE_LEVEL.INFO
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % msg)
                 return {'header': header,
                  'text': text,

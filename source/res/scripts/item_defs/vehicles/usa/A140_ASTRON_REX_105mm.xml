@@ -7,6 +7,8 @@
     <driver></driver>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
+  <postProgressionTree>	role_MT_support_level_8	</postProgressionTree>
+  <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	52	</forward>
     <backward>	30	</backward>
@@ -15,7 +17,7 @@
     <moving>	0.187	</moving>
     <still>	0.249	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <firePenalty>	0.323	</firePenalty>
+    <firePenalty>	0.374	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -62,7 +64,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12225	</weight>
-    <maxHealth>	1000	</maxHealth>
+    <maxHealth>	1040	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -1388,14 +1390,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8700	</weight>
-      <maxHealth>	250	</maxHealth>
+      <maxHealth>	260	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -1441,10 +1443,10 @@
           </pitchLimits>
           <clip>
             <count>	5	</count>
-            <rate>	13.33	</rate>
+            <rate>	15	</rate>
           </clip>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <reloadTime>	37	</reloadTime>
+          <reloadTime>	34	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>

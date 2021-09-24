@@ -172,6 +172,10 @@ def previewUrl(texture, width, height, innerWidth, innerHeight):
     return _PREVIEW_ICON_URL.format(texture=texture, params=urllib.urlencode(params))
 
 
+def isStyle3D(customizationItem):
+    return customizationItem.itemTypeName == 'style' and customizationItem.modelsSet
+
+
 class ConcealmentBonus(object):
     __slots__ = ('_camouflageId', '_season')
 

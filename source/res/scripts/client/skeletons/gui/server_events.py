@@ -96,15 +96,6 @@ class IEventsCache(object):
     def getAnnouncedActions(self):
         raise NotImplementedError
 
-    def getEventBattles(self):
-        raise NotImplementedError
-
-    def isEventEnabled(self):
-        raise NotImplementedError
-
-    def getEventVehicles(self, itemsCache=None):
-        raise NotImplementedError
-
     def getEvents(self, filterFunc=None):
         raise NotImplementedError
 

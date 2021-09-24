@@ -186,6 +186,10 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     @property
+    def spaceID(self):
+        raise NotImplementedError
+
+    @property
     def inited(self):
         raise NotImplementedError
 

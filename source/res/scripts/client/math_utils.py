@@ -3,7 +3,7 @@
 import random
 import math
 import Math
-from Math import Vector2, Vector3, Matrix
+from Math import Vector2, Vector3, Matrix, MatrixProduct
 
 def createIdentityMatrix():
     result = Matrix()
@@ -38,6 +38,13 @@ def createSRTMatrix(scale, rotation, translation):
     result.translation = translation
     result.preMultiply(scaleMatrix)
     return result
+
+
+def createMatrixProduct(provider1, provider2):
+    product = MatrixProduct()
+    product.a = provider1
+    product.b = provider2
+    return product
 
 
 def setTranslation(matrix, translation):

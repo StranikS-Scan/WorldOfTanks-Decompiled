@@ -3,8 +3,13 @@
 import logging
 import random
 from math import ceil
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import DEATH_REASON_ALIVE, PREMIUM_TYPE, ARENA_BONUS_TYPE, ARENA_GUI_TYPE
+from gui.battle_results.components import base, shared, style
+from gui.battle_results.br_constants import PersonalEfficiency, EfficiencyItems, EfficiencyKeys
+from gui.battle_results.br_helper import getDamageBlockDetails, getArmorUsingDetails, getStunBlockDetails, getAssistBlockDetails, getCaptureBlockDetails, getDefenceBlockDetails, getCriticalDevicesBlock, getDestroyedDevicesBlock, getDestroyedTankmenBlock, convertToDict
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.lobby.premacc import premacc_helpers
 import BigWorld
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS_PREMIUM_STATES
@@ -12,18 +17,12 @@ from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.battle_results.components import base
-from gui.battle_results.components import shared
-from gui.battle_results.components import style
-from gui.impl import backport
-from gui.impl.gen import R
-from gui.impl.lobby.premacc import premacc_helpers
 from gui.shared.crits_mask_parser import CRIT_MASK_SUB_TYPES
 from gui.shared.formatters import numbers, icons
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getTypeBigIconPath, getNationLessName, getIconShopPath
 from gui.shared.utils.functions import makeTooltip
-from helpers import i18n, dependency, time_utils
+from helpers import dependency, time_utils
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -35,21 +34,20 @@ class PremiumAccountFlag(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, value, reusable):
-        return reusable.isPostBattlePremium
+        return reusable.economics.isPostBattlePremium
 
 
 class PremiumPlusFlag(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, value, reusable):
-        return reusable.isPostBattlePremiumPlus
+        return reusable.economics.isPostBattlePremiumPlus
 
 
 class DynamicPremiumState(base.StatsItem):
     __slots__ = ('__arenaBonusType', '__arenaUniqueID', '__postBattlePremium', '__postBattlePremiumPlus', '__xpDiff', '__creditsDiff')
     __itemsCache = dependency.descriptor(IItemsCache)
     __battleResults = dependency.descriptor(IBattleResultsService)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
     __UNPROFITABLE_ARENA_TYPES = (ARENA_BONUS_TYPE.TRAINING, ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING, ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING)
 
     def __init__(self, field, *path):
@@ -65,10 +63,10 @@ class DynamicPremiumState(base.StatsItem):
     def setRecord(self, record, reusable):
         self.__arenaBonusType = reusable.common.arenaBonusType
         self.__arenaUniqueID = reusable.arenaUniqueID
-        self.__postBattlePremium = reusable.isPostBattlePremium
-        self.__postBattlePremiumPlus = reusable.isPostBattlePremiumPlus
-        self.__xpDiff = reusable.personal.getXPDiff()
-        self.__creditsDiff = reusable.personal.getCreditsDiff()
+        self.__postBattlePremium = reusable.economics.isPostBattlePremium
+        self.__postBattlePremiumPlus = reusable.economics.isPostBattlePremiumPlus
+        self.__xpDiff = reusable.economics.getXPDiff()
+        self.__creditsDiff = reusable.economics.getCreditsDiff()
 
     def getVO(self):
         hasPremiumPlus = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
@@ -92,13 +90,7 @@ class DynamicPremiumState(base.StatsItem):
         return super(DynamicPremiumState, self).getVO()
 
     def __isDailyBonusVisible(self):
-        if self.__getIsApplied():
-            return True
-        isBonusEnabled = self.__lobbyContext.getServerSettings().getAdditionalBonusConfig().get('enabled', False)
-        bonusLeft = self.__itemsCache.items.stats.applyAdditionalXPCount
-        hasPremium = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
-        isProperArena = ARENA_BONUS_TYPE_CAPS.checkAny(self.__arenaBonusType, ARENA_BONUS_TYPE_CAPS.ADDITIONAL_XP_POSTBATTLE)
-        return hasPremium and isBonusEnabled and isProperArena and bonusLeft > 0
+        return True if self.__getIsApplied() else self.__battleResults.canApplyAdditionalXPBonus(self.__arenaBonusType)
 
     def __getIsApplied(self):
         return self.__battleResults.isAddXPBonusApplied(self.__arenaUniqueID)
@@ -130,10 +122,11 @@ class PremiumInfoBlock(base.StatsBlock):
         self.__adsCase = 'premium'
 
     def setRecord(self, result, reusable):
-        self.__xpDiff = reusable.personal.getXPDiff()
-        self.__creditsDiff = reusable.personal.getCreditsDiff()
-        self.__canUpgradeToBasic = reusable.canUpgradeToPremium
-        self.__canUpgradeToPlus = reusable.canUpgradeToPremiumPlus
+        self.__xpDiff = reusable.economics.getXPDiff()
+        self.__creditsDiff = reusable.economics.getCreditsDiff()
+        arenaBonusType = reusable.common.arenaBonusType
+        self.__canUpgradeToBasic = reusable.economics.canUpgradeToPremium(arenaBonusType)
+        self.__canUpgradeToPlus = reusable.economics.canUpgradeToPremiumPlus(arenaBonusType)
         isEpic = reusable.common.arenaGuiType in ARENA_GUI_TYPE.EPIC_RANGE
         cases = PremiumInfoBlock.availableEpicCases if isEpic else PremiumInfoBlock.availableCases
         self.__adsCase = random.choice(cases)
@@ -248,7 +241,7 @@ class EpicVehicleNamesBlock(PersonalVehicleNamesBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        self.addNextComponent(base.DirectStatsItem('', i18n.makeString(BATTLE_RESULTS.ALLVEHICLES)))
+        self.addNextComponent(base.DirectStatsItem('', backport.text(R.strings.battle_results.allVehicles())))
         super(EpicVehicleNamesBlock, self).setRecord(result, reusable)
 
 
@@ -271,12 +264,12 @@ class PersonalVehicleBlock(base.StatsBlock):
         self.killerID = killerID
         if reusable.personal.avatar.isPrematureLeave:
             self.isPrematureLeave = True
-            self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_PREMATURELEAVE)
+            self.vehicleState = backport.text(R.strings.battle_results.common.vehicleState.prematureLeave())
         elif deathReason > DEATH_REASON_ALIVE:
             if self.isVehicleStatusDefined and killerID:
                 fillKillerInfoBlock(self, deathReason, killerID, reusable)
         else:
-            self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_ALIVE)
+            self.vehicleState = backport.text(R.strings.battle_results.common.vehicleState.alive())
 
     def _getVehicleIcon(self, item):
         return getNationLessName(item.name)
@@ -326,6 +319,9 @@ class _DetailsBlock(base.StatsBlock):
     def isEmpty(self):
         return self._isEmpty
 
+    def setEmpty(self, value):
+        self._isEmpty = value
+
 
 class DamageDetailsBlock(_DetailsBlock):
     __slots__ = ('piercings', 'damageDealtValues', 'damageDealtNames', '_isEmpty')
@@ -344,8 +340,8 @@ class DamageDetailsBlock(_DetailsBlock):
         self._isEmpty = piercings <= 0
         if damageDealt > 0:
             self._isEmpty = False
-            self.damageDealtValues = [backport.getIntegralFormat(damageDealt), backport.getIntegralFormat(piercings)]
-            self.damageDealtNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_PART1, vals=style.getTooltipParamsStyle()), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_PART2)]
+            labels = (R.strings.battle_results.common.tooltip.damage.part1(), R.strings.battle_results.common.tooltip.damage.part2())
+            self.damageDealtValues, self.damageDealtNames = getDamageBlockDetails(damageDealt, piercings, labels)
 
 
 class ArmorUsingDetailsBlock(_DetailsBlock):
@@ -365,8 +361,8 @@ class ArmorUsingDetailsBlock(_DetailsBlock):
         if noDamage > 0 or damageBlocked > 0:
             self._isEmpty = False
             rickochets = result.rickochetsReceived
-            self.armorValues = [backport.getIntegralFormat(rickochets), backport.getIntegralFormat(noDamage), backport.getIntegralFormat(damageBlocked)]
-            self.armorNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART1), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART2), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART3, vals=style.getTooltipParamsStyle())]
+            labels = (R.strings.battle_results.common.tooltip.armor.part1(), R.strings.battle_results.common.tooltip.armor.part2(), R.strings.battle_results.common.tooltip.armor.part3())
+            self.armorValues, self.armorNames = getArmorUsingDetails(rickochets, noDamage, damageBlocked, labels)
 
 
 class AssistDetailsBlock(_DetailsBlock):
@@ -386,9 +382,7 @@ class AssistDetailsBlock(_DetailsBlock):
         self.damageAssisted = damageAssisted
         if damageAssisted > 0:
             self._isEmpty = False
-            self.damageAssistedValues = [backport.getIntegralFormat(damageAssistedRadio), backport.getIntegralFormat(damageAssistedTrack), backport.getIntegralFormat(damageAssisted)]
-            tooltipStyle = style.getTooltipParamsStyle()
-            self.damageAssistedNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART1, vals=tooltipStyle), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART2, vals=tooltipStyle), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_TOTAL, vals=tooltipStyle)]
+            self.damageAssistedValues, self.damageAssistedNames = getAssistBlockDetails(damageAssistedRadio, damageAssistedTrack, damageAssisted, (R.strings.battle_results.common.tooltip.assist.part1(), R.strings.battle_results.common.tooltip.assist.part2(), R.strings.battle_results.common.tooltip.assist.total()))
 
 
 class StunDetailsBlock(_DetailsBlock):
@@ -410,8 +404,7 @@ class StunDetailsBlock(_DetailsBlock):
         self.stunDuration = duration
         if count > 0 or assisted > 0 or duration > 0:
             self._isEmpty = False
-            self.stunValues = [backport.getIntegralFormat(assisted), backport.getIntegralFormat(count), backport.getFractionalFormat(duration)]
-            self.stunNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART1, vals=style.getTooltipParamsStyle()), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART2), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART3, vals=style.getTooltipParamsStyle(BATTLE_RESULTS.COMMON_TOOLTIP_PARAMS_VAL_SECONDS))]
+            self.stunValues, self.stunNames = getStunBlockDetails(assisted, count, duration, (R.strings.battle_results.common.tooltip.stun.part1(), R.strings.battle_results.common.tooltip.stun.part2(), R.strings.battle_results.common.tooltip.stun.part3()))
 
 
 class CritsDetailsBlock(_DetailsBlock):
@@ -427,25 +420,13 @@ class CritsDetailsBlock(_DetailsBlock):
 
     def setRecord(self, result, reusable):
         crits = result.critsInfo
-        criticalDevices = []
-        destroyedDevices = []
-        destroyedTankmen = []
-        for device in crits[CRIT_MASK_SUB_TYPES.CRITICAL_DEVICES]:
-            self._isEmpty = False
-            criticalDevices.append(style.makeCriticalModuleTooltipLabel(device))
-
-        for device in crits[CRIT_MASK_SUB_TYPES.DESTROYED_DEVICES]:
-            self._isEmpty = False
-            destroyedDevices.append(style.makeDestroyedModuleTooltipLabel(device))
-
-        for tankman in crits[CRIT_MASK_SUB_TYPES.DESTROYED_TANKMENS]:
-            self._isEmpty = False
-            destroyedTankmen.append(style.makeTankmenTooltipLabel(tankman))
-
+        criticalDevices = getCriticalDevicesBlock(convertToDict(crits[CRIT_MASK_SUB_TYPES.CRITICAL_DEVICES]), self)
+        destroyedDevices = getDestroyedDevicesBlock(convertToDict(crits[CRIT_MASK_SUB_TYPES.DESTROYED_DEVICES]), self)
+        destroyedTankmen = getDestroyedTankmenBlock(convertToDict(crits[CRIT_MASK_SUB_TYPES.DESTROYED_TANKMENS]), self)
         self.critsCount = backport.getIntegralFormat(crits['critsCount'])
-        self.criticalDevices = style.makeMultiLineHtmlString(criticalDevices)
-        self.destroyedDevices = style.makeMultiLineHtmlString(destroyedDevices)
-        self.destroyedTankmen = style.makeMultiLineHtmlString(destroyedTankmen)
+        self.criticalDevices = criticalDevices
+        self.destroyedDevices = destroyedDevices
+        self.destroyedTankmen = destroyedTankmen
 
 
 class TeamBaseDetailsBlock(base.StatsBlock):
@@ -471,11 +452,9 @@ class TeamBaseDetailsBlock(base.StatsBlock):
         self.captureTotalItems = capturePoints
         self.defenceTotalItems = defencePoints
         if self._showCapturePoints and capturePoints > 0:
-            self.captureValues = (backport.getIntegralFormat(capturePoints),)
-            self.captureNames = (i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_CAPTURE_TOTALPOINTS),)
+            self.captureValues, self.captureNames = getCaptureBlockDetails(capturePoints)
         if self._showDefencePoints and defencePoints > 0:
-            self.defenceValues = (backport.getIntegralFormat(defencePoints),)
-            self.defenceNames = (i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DEFENCE_TOTALPOINTS),)
+            self.defenceValues, self.defenceNames = getDefenceBlockDetails(defencePoints)
 
 
 class EnemyTeamBaseDetailBlock(TeamBaseDetailsBlock):
@@ -484,7 +463,7 @@ class EnemyTeamBaseDetailBlock(TeamBaseDetailsBlock):
     def __init__(self, meta=None, field='', *path):
         super(EnemyTeamBaseDetailBlock, self).__init__(meta, field, *path)
         self._showCapturePoints = True
-        self.label = text_styles.standard(i18n.makeString(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_ENEMYBASE))
+        self.label = text_styles.standard(backport.text(R.strings.battle_results.common.battleEfficiency.enemyBase()))
         self.isEnemyBase = True
 
 
@@ -494,7 +473,7 @@ class AllyTeamBaseDetailBlock(TeamBaseDetailsBlock):
     def __init__(self, meta=None, field='', *path):
         super(AllyTeamBaseDetailBlock, self).__init__(meta, field, *path)
         self._showDefencePoints = True
-        self.label = text_styles.standard(i18n.makeString(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_ALLYBASE))
+        self.label = text_styles.standard(backport.text(R.strings.battle_results.common.battleEfficiency.allyBase()))
         self.isEnemyBase = False
 
 
@@ -567,27 +546,27 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
             LOG_ERROR('ERROR: TotalEfficiencyDetailsHeader:setRecord: getPersonalVehiclesInfo returned NONE!')
             return
         else:
-            value = info.kills
+            value = info.targetKills
             self.kills = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
-            self.killsTooltip = self.__makeEfficiencyHeaderTooltip('summKill', value)
+            self.killsTooltip = self.__makeEfficiencyHeaderTooltip(EfficiencyItems[PersonalEfficiency.KILLS][EfficiencyKeys.TOTAL], value)
             value = info.damageDealt
             self.damageDealt = numbers.makeStringWithThousandSymbol(value, formatter=self.__formatter)
-            self.damageDealtTooltip = self.__makeEfficiencyHeaderTooltip('summDamage', value)
+            self.damageDealtTooltip = self.__makeEfficiencyHeaderTooltip(EfficiencyItems[PersonalEfficiency.DAMAGE][EfficiencyKeys.TOTAL], value)
             value = info.critsCount
             self.criticalDamages = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
-            self.criticalDamagesTooltip = self.__makeEfficiencyHeaderTooltip('summCrits', value)
+            self.criticalDamagesTooltip = self.__makeEfficiencyHeaderTooltip(EfficiencyItems[PersonalEfficiency.CRITS][EfficiencyKeys.TOTAL], value)
             value = info.damageBlockedByArmor
             self.damageBlockedByArmor = numbers.makeStringWithThousandSymbol(value, formatter=self.__formatter)
-            self.damageBlockedTooltip = self.__makeEfficiencyHeaderTooltip('summArmor', value)
+            self.damageBlockedTooltip = self.__makeEfficiencyHeaderTooltip(EfficiencyItems[PersonalEfficiency.ARMOR][EfficiencyKeys.TOTAL], value)
             value = info.damageAssisted
             self.damageAssisted = numbers.makeStringWithThousandSymbol(value, formatter=self.__formatter)
-            self.damageAssistedTooltip = self.__makeEfficiencyHeaderTooltip('summAssist', value)
+            self.damageAssistedTooltip = self.__makeEfficiencyHeaderTooltip(EfficiencyItems[PersonalEfficiency.ASSIST][EfficiencyKeys.TOTAL], value)
             value = info.damageAssistedStun
             self.damageAssistedStun = numbers.makeStringWithThousandSymbol(value, formatter=self.__formatter)
-            self.damageAssistedStunTooltip = self.__makeEfficiencyHeaderTooltip('summStun', value)
+            self.damageAssistedStunTooltip = self.__makeEfficiencyHeaderTooltip(EfficiencyItems[PersonalEfficiency.STUN][EfficiencyKeys.TOTAL], value)
             value = info.spotted
             self.spotted = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
-            self.spottedTooltip = self.__makeEfficiencyHeaderTooltip('summSpotted', value)
+            self.spottedTooltip = self.__makeEfficiencyHeaderTooltip(EfficiencyItems[PersonalEfficiency.SPOTTED][EfficiencyKeys.TOTAL], value)
             self.hasEfficencyStats = info.kills + info.damageDealt + info.critsCount + info.damageBlockedByArmor + info.damageAssisted + info.damageAssistedStun + info.spotted > 0
             return
 

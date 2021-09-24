@@ -7,6 +7,7 @@ import BigWorld
 import Math
 from ids_generators import SequenceIDGenerator
 from account_helpers.settings_core import ISettingsCore
+from gui.Scaleform.daapi.view.battle.shared.markers2d.settings import MARKER_SYMBOL_NAME
 from helpers import dependency
 from shared_utils import BitmaskHelper
 from vehicle_systems.stricted_loading import makeCallbackWeak
@@ -46,12 +47,14 @@ class ComponentBitMask(BitmaskHelper):
 class _IMarkerComponentBase(object):
     _idGen = SequenceIDGenerator()
 
-    def __init__(self, data):
+    def __init__(self, config, matrixProduct, isVisible=True):
         super(_IMarkerComponentBase, self).__init__()
         self._componentID = self._idGen.next()
-        self._initData = data
-        self._matrixProduct = data.get('matrixProduct')
-        self._isVisible = data.get('visible', True)
+        self._config = config
+        self._matrixProduct = matrixProduct
+        self._isVisible = isVisible
+        self._entity = None
+        return
 
     @property
     def isVisible(self):
@@ -91,6 +94,9 @@ class _IMarkerComponentBase(object):
     def setMarkerMatrix(self, matrix):
         self._matrixProduct.a = matrix
 
+    def setMarkerEntity(self, entity):
+        self._entity = weakref.proxy(entity)
+
     def setMarkerPosition(self, position):
         matrix = Math.Matrix()
         matrix.setTranslate(position)
@@ -99,22 +105,24 @@ class _IMarkerComponentBase(object):
 
 class World2DMarkerComponent(_IMarkerComponentBase):
 
-    def __init__(self, idx, data):
-        super(World2DMarkerComponent, self).__init__(data)
-        self.__marker2DData = data.get(self.maskType)[idx]
+    def __init__(self, config, matrixProduct, isVisible=True):
+        super(World2DMarkerComponent, self).__init__(config, matrixProduct, isVisible)
         self._gui = lambda : None
         self._isMarkerExists = False
-        self.__distance = self.__marker2DData.get('distance', 0)
+        self._distance = self._config.get('distance', 0)
 
     @property
     def maskType(self):
         return ComponentBitMask.MARKER_2D
 
+    @property
+    def _symbol(self):
+        return MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER
+
     def attachGUI(self, guiProvider):
         self._gui = weakref.ref(guiProvider.getMarkers2DPlugin())
         if self._isVisible:
             self._createMarker()
-        return self._isMarkerExists
 
     def detachGUI(self):
         self.clear()
@@ -137,7 +145,7 @@ class World2DMarkerComponent(_IMarkerComponentBase):
             return
 
     def update(self, distance, *args, **kwargs):
-        self.__distance = distance
+        self._distance = distance
         gui = self._gui()
         if self._isVisible and self._isMarkerExists and gui:
             gui.markerSetDistance(self._componentID, distance)
@@ -151,7 +159,9 @@ class World2DMarkerComponent(_IMarkerComponentBase):
     def _createMarker(self):
         gui = self._gui()
         if gui and not self._isMarkerExists:
-            self._isMarkerExists = self.__createMarkerAndSetup(gui, self._componentID)
+            self._isMarkerExists = gui.createMarker(self._componentID, self._symbol, self._matrixProduct, self._isVisible)
+            if self._isMarkerExists:
+                self._setupMarker(gui)
 
     def _deleteMarker(self):
         gui = self._gui()
@@ -160,21 +170,17 @@ class World2DMarkerComponent(_IMarkerComponentBase):
         self._isMarkerExists = False
         self._isVisible = False
 
-    def __createMarkerAndSetup(self, gui, objectID):
-        if not gui.createMarker(objectID, self._matrixProduct, active=self._isVisible):
-            return False
-        gui.setupMarker(objectID, self.__marker2DData.get('shape', 'arrow'), self.__marker2DData.get('min-distance', 0), self.__marker2DData.get('max-distance', 0), self.__distance, self.__marker2DData.get('distanceFieldColor', 'yellow'))
-        return True
+    def _setupMarker(self, gui):
+        gui.setupMarker(self._componentID, self._config.get('shape', 'arrow'), self._config.get('min-distance', 0), self._config.get('max-distance', 0), self._distance, self._config.get('distanceFieldColor', 'yellow'))
 
 
 class MinimapMarkerComponent(_IMarkerComponentBase):
 
-    def __init__(self, idx, data):
-        super(MinimapMarkerComponent, self).__init__(data)
-        self.__minimapData = data.get(self.maskType)[idx]
+    def __init__(self, config, matrixProduct, isVisible=True):
+        super(MinimapMarkerComponent, self).__init__(config, matrixProduct, isVisible)
         self._gui = lambda : None
         self._isMarkerExists = False
-        self._onlyTranslation = self.__minimapData.get('onlyTranslation', False)
+        self._onlyTranslation = self._config.get('onlyTranslation', False)
         self._translationOnlyMP = Math.WGTranslationOnlyMP()
         self._translationOnlyMP.source = self._matrixProduct.a
 
@@ -186,7 +192,6 @@ class MinimapMarkerComponent(_IMarkerComponentBase):
         self._gui = weakref.ref(guiProvider.getMinimapPlugin())
         if self._isVisible:
             self._createMarker()
-        return self._isMarkerExists
 
     def detachGUI(self):
         self.clear()
@@ -212,7 +217,9 @@ class MinimapMarkerComponent(_IMarkerComponentBase):
         gui = self._gui()
         if gui and not self._isMarkerExists:
             matrix = self._translationOnlyMP if self._onlyTranslation else self._matrixProduct.a
-            self._isMarkerExists = gui.createMarker(self._componentID, self.__minimapData.get('symbol', ''), self.__minimapData.get('container', ''), matrix=matrix, active=self._isVisible)
+            self._isMarkerExists = gui.createMarker(self._componentID, self._config.get('symbol', ''), self._config.get('container', ''), matrix=matrix, active=self._isVisible)
+            if self._isMarkerExists:
+                self._setupMarker(gui)
 
     def _deleteMarker(self):
         gui = self._gui()
@@ -234,14 +241,16 @@ class MinimapMarkerComponent(_IMarkerComponentBase):
             mtx = self._translationOnlyMP if self._onlyTranslation else self._matrixProduct.a
             gui.setMatrix(self._componentID, mtx)
 
+    def _setupMarker(self, gui):
+        pass
+
 
 class DirectionIndicatorMarkerComponent(_IMarkerComponentBase):
     settingsCore = dependency.descriptor(ISettingsCore)
 
-    def __init__(self, idx, data):
-        super(DirectionIndicatorMarkerComponent, self).__init__(data)
-        dIndicatorData = data.get(self.maskType)[idx]
-        self.__shapes = dIndicatorData.get('dIndicatorShapes', ('green', 'green'))
+    def __init__(self, config, matrixProduct, isVisible=True):
+        super(DirectionIndicatorMarkerComponent, self).__init__(config, matrixProduct, isVisible)
+        self.__shapes = self._config.get('dIndicatorShapes', ('green', 'green'))
         self.__indicator = None
         self.__prevPosition = self.positionWithOffset
         return
@@ -261,7 +270,7 @@ class DirectionIndicatorMarkerComponent(_IMarkerComponentBase):
             self.settingsCore.onSettingsChanged += self.__onSettingsChanged
             self.__indicator.setPosition(self.positionWithOffset)
             self.__indicator.setVisibility(self._isVisible)
-            return True
+            return
 
     def detachGUI(self):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
@@ -330,10 +339,9 @@ class DirectionIndicatorMarkerComponent(_IMarkerComponentBase):
 
 class AnimationSequenceMarkerComponent(_IMarkerComponentBase):
 
-    def __init__(self, idx, data):
-        super(AnimationSequenceMarkerComponent, self).__init__(data)
-        animSeqData = data.get(self.maskType)[idx]
-        self.__path = animSeqData.get('path', None)
+    def __init__(self, config, matrixProduct, isVisible=True):
+        super(AnimationSequenceMarkerComponent, self).__init__(config, matrixProduct, isVisible)
+        self.__path = self._config.get('path', None)
         self.__animator = None
         self.__spaceID = BigWorld.player().spaceID
         if self.__path is not None:
@@ -381,15 +389,14 @@ class TerrainMarkerComponent(_IMarkerComponentBase):
     DEF_SIZE = (10, 10)
     DEF_DIRECTION = Math.Vector3(1.0, 0.0, 0.0)
 
-    def __init__(self, idx, data):
-        super(TerrainMarkerComponent, self).__init__(data)
-        terrainData = data.get(self.maskType)[idx]
+    def __init__(self, config, matrixProduct, isVisible=True):
+        super(TerrainMarkerComponent, self).__init__(config, matrixProduct, isVisible)
         self.__area = CombatSelectedArea.CombatSelectedArea()
-        self.__direction = terrainData.get('direction', self.DEF_DIRECTION)
-        self.__objDirection = terrainData.get('objDirection', True)
-        path = terrainData.get('path', '')
-        size = terrainData.get('size', self.DEF_SIZE)
-        color = terrainData.get('color', CombatSelectedArea.COLOR_WHITE)
+        self.__direction = self._config.get('direction', self.DEF_DIRECTION)
+        self.__objDirection = self._config.get('objDirection', True)
+        path = self._config.get('path', '')
+        size = self._config.get('size', self.DEF_SIZE)
+        color = self._config.get('color', CombatSelectedArea.COLOR_WHITE)
         direction = Math.Matrix(self._matrixProduct.a).applyToAxis(2) if self.__objDirection else self.__direction
         self.__area.setup(self.position, direction, size, path, color, None)
         self.__area.setGUIVisible(self._isVisible)

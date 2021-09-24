@@ -22,6 +22,9 @@ class BCHangar(Hangar):
     def _updateBattleRoyaleMode(self):
         pass
 
+    def _updateEventMode(self):
+        pass
+
     def __isViewOpenOrLoading(self, container, viewAlias):
         openView = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
         if openView is not None:

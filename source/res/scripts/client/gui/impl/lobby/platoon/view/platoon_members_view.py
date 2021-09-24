@@ -46,6 +46,7 @@ from skeletons.gui.game_control import IPlatoonController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.prebattle_vehicle import IPrebattleVehicle
 from messenger.m_constants import USER_TAG
 from gui.impl.lobby.platoon.platoon_helpers import PreloadableWindow
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
@@ -104,7 +105,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         return None
 
     def _onLoading(self, *args, **kwargs):
-        self.__addListeners()
+        self._addListeners()
         self._addSubviews()
         with self.viewModel.transaction() as model:
             model.setCanMinimize(True)
@@ -116,7 +117,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         self.__setPreBattleCarouselFocus(True)
 
     def _finalize(self):
-        self.__removeListeners()
+        self._removeListeners()
         self.__setPreBattleCarouselOpened(False)
         self.__setPreBattleCarouselFocus(False)
         self.clearCallbacks()
@@ -167,7 +168,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         if windowStatus == WindowStatus.DESTROYED and self.__platoonCtrl.isInPlatoon():
             self._updateMembers()
 
-    def __addListeners(self):
+    def _addListeners(self):
         with self.viewModel.transaction() as model:
             model.btnInviteFriends.onClick += self._onInviteFriends
             model.btnSwitchReady.onClick += self._onSwitchReady
@@ -183,7 +184,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         g_messengerEvents.voip.onChannelLeft += self.__updateVoiceChatToggleState
         g_messengerEvents.voip.onChannelAvailable += self.__updateVoiceChatToggleState
         g_messengerEvents.voip.onChannelLost += self.__updateVoiceChatToggleState
-        g_currentVehicle.onChanged += self.__updateReadyButton
+        g_currentVehicle.onChanged += self._updateReadyButton
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived += self.__onUsersReceived
         usersEvents.onUserActionReceived += self.__onUserActionReceived
@@ -191,12 +192,12 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         if unitMgr and unitMgr.unit:
             unitMgr.unit.onUnitEstimateInQueueChanged += self._updateMembers
         g_eventBus.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updateReadyButton, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self._updateReadyButton, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         self.__platoonCtrl.onAvailableTiersForSearchChanged += self.__onAvailableTiersForSearchChanged
         self.__platoonCtrl.onAutoSearchCooldownChanged += self._updateFindPlayersButton
 
-    def __removeListeners(self):
+    def _removeListeners(self):
         with self.viewModel.transaction() as model:
             model.btnInviteFriends.onClick -= self._onInviteFriends
             model.btnSwitchReady.onClick -= self._onSwitchReady
@@ -212,7 +213,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         g_messengerEvents.voip.onChannelLeft -= self.__updateVoiceChatToggleState
         g_messengerEvents.voip.onChannelAvailable -= self.__updateVoiceChatToggleState
         g_messengerEvents.voip.onChannelLost -= self.__updateVoiceChatToggleState
-        g_currentVehicle.onChanged -= self.__updateReadyButton
+        g_currentVehicle.onChanged -= self._updateReadyButton
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived -= self.__onUsersReceived
         usersEvents.onUserActionReceived -= self.__onUserActionReceived
@@ -220,7 +221,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         if unitMgr and unitMgr.unit:
             unitMgr.unit.onUnitEstimateInQueueChanged -= self._updateMembers
         g_eventBus.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updateReadyButton, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self._updateReadyButton, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         self.__platoonCtrl.onAvailableTiersForSearchChanged -= self.__onAvailableTiersForSearchChanged
         self.__platoonCtrl.onAutoSearchCooldownChanged -= self._updateFindPlayersButton
@@ -252,6 +253,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         isWTREnabled = self.__lobbyContext.getServerSettings().isWTREnabled()
         accID = BigWorld.player().id
         estimatedTime = self.__getEstimatedTimeInQueue()
+        isEvent = self.__platoonCtrl.getPrbEntityType() == PREBATTLE_TYPE.EVENT
         with self.viewModel.transaction() as model:
             slotModelArray = model.getSlots()
             slotModelArray.clear()
@@ -260,6 +262,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
                 playerData = it.get('player', {})
                 slot = SlotModel()
                 slot.setIsEmpty(not bool(playerData))
+                slot.setIsEvent(isEvent)
                 if playerData:
                     slot.player.commonData.setName(playerData.get('userName', ''))
                     slot.player.commonData.setColor('#DE1E7E')
@@ -277,7 +280,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
                     if playerStatus == PLAYER_GUI_STATUS.BATTLE:
                         slot.setInfoText(backport.text(R.strings.platoon.members.card.inBattle()))
                     elif playerStatus != PLAYER_GUI_STATUS.READY:
-                        slot.setInfoText(backport.text(R.strings.platoon.members.card.notReady()))
+                        slot.setInfoText(backport.text(self._getNotReadyStatus()))
                     isAdditionalMsgVisible = it.get('isVisibleAdtMsg', False)
                     if isAdditionalMsgVisible:
                         additionalMsg = it.get('additionalMsg', '')
@@ -329,6 +332,9 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         tooltipHeader = backport.text(R.strings.platoon.members.header.tooltip.standard.header())
         tooltipBody = backport.text(R.strings.platoon.members.header.tooltip.standard.body())
         return (tooltipHeader, tooltipBody)
+
+    def _getNotReadyStatus(self):
+        return R.strings.platoon.members.card.notReady()
 
     def _getBonusState(self):
         if self.__isPremiumBonusEnabled():
@@ -425,7 +431,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
             model.btnInviteFriends.setDescription(backport.text(_strButtons.invite.description()))
             model.btnInviteFriends.setIsEnabled(platoonCtrl.hasFreeSlot() and isCommander and canSendInvite and not isInQueue and not isInSearch)
         self._updateFindPlayersButton()
-        self.__updateReadyButton()
+        self._updateReadyButton()
 
     def _updateFindPlayersButton(self, *args):
         platoonCtrl = self.__platoonCtrl
@@ -471,7 +477,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
             with self.viewModel.transaction() as model:
                 model.btnSwitchReady.setIsEnabled(False)
 
-    def __updateReadyButton(self, *args):
+    def _updateReadyButton(self, *args):
         if not self.__platoonCtrl.isInPlatoon():
             return
         isInQueue = self.__platoonCtrl.isInQueue()
@@ -555,7 +561,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         if event.requestID is REQUEST_TYPE.SET_PLAYER_STATE:
             with self.viewModel.transaction() as model:
                 model.btnSwitchReady.setIsEnabled(False)
-            self.delayCallback(event.coolDown, self.__updateReadyButton)
+            self.delayCallback(event.coolDown, self._updateReadyButton)
 
     def __onUserActionReceived(self, _, user, shadowMode):
         if self.__platoonCtrl.getPrbEntity() is not None:
@@ -583,6 +589,15 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
 
 class EventMembersView(SquadMembersView):
     _battleType = 'event'
+    __prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
+
+    def _addListeners(self):
+        super(EventMembersView, self)._addListeners()
+        self.__prebattleVehicle.onChanged += self._updateReadyButton
+
+    def _removeListeners(self):
+        super(EventMembersView, self)._removeListeners()
+        self.__prebattleVehicle.onChanged -= self._updateReadyButton
 
     def _addSubviews(self):
         self._addSubviewToLayout(ChatSubview())
@@ -591,7 +606,7 @@ class EventMembersView(SquadMembersView):
         pass
 
     def _getTitle(self):
-        title = ''.join((i18n.makeString(backport.text(R.strings.platoon.squad())), i18n.makeString(backport.text(R.strings.platoon.members.header.event()))))
+        title = ''.join((i18n.makeString(backport.text(R.strings.platoon.event_squad())), i18n.makeString(backport.text(R.strings.platoon.members.header.event()))))
         return title
 
     def _getWindowInfoTooltipHeaderAndBody(self):
@@ -599,23 +614,15 @@ class EventMembersView(SquadMembersView):
         tooltipBody = backport.text(R.strings.platoon.members.header.tooltip.event.body())
         return (tooltipHeader, tooltipBody)
 
+    def _getNotReadyStatus(self):
+        return R.strings.event.window.unit.message.vehicleNotSelected()
+
     def _setBonusInformation(self, bonusState):
-        with self.viewModel.header.transaction() as model:
-            model.setShowInfoIcon(True)
-            model.setShowNoBonusPlaceholder(True)
-            infoText = R.strings.messenger.dialogs.squadChannel.headerMsg.eventFormationRestriction()
-            model.noBonusPlaceholder.setText(infoText)
-            model.noBonusPlaceholder.setIcon(R.images.gui.maps.icons.battleTypes.c_64x64.event())
-            self._currentBonusState = bonusState
+        pass
 
-    def _getBonusState(self):
-        return _BonusState.NO_BONUS
-
-    def _createHeaderInfoTooltip(self):
-        tooltip = R.strings.platoon.members.header.noBonusPlaceholder.tooltip
-        header = backport.text(tooltip.header())
-        body = backport.text(tooltip.body())
-        return self._createSimpleTooltipContent(header=header, body=body)
+    def _updateFindPlayersButton(self, *args):
+        with self.viewModel.transaction() as model:
+            model.setShouldShowFindPlayersButton(value=False)
 
 
 class EpicMembersView(SquadMembersView):

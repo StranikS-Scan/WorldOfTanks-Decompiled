@@ -25,6 +25,8 @@ from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelecto
 from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBattlePopover
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
 from gui.impl.lobby.mode_selector.tooltips.mode_selector_bonus_battles_tooltip import BonusBattlesTooltipView
+from gui.impl.lobby.wt_event.tooltips.wt_event_header_widget_tooltip_view import WtEventHeaderWidgetTooltipView
+from gui.impl.lobby.wt_event.tooltips.wt_event_ticket_tooltip_view import WtEventTicketTooltipView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
@@ -62,7 +64,9 @@ class ModeSelectorView(ViewImpl):
      R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS),
      R.views.lobby.battle_pass.tooltips.BattlePass3dStyleNotChosenTooltip(): BattlePass3dStyleNotChosenTooltip,
-     R.views.lobby.mode_selector.tooltips.BonusBattlesTooltip(): BonusBattlesTooltipView}
+     R.views.lobby.mode_selector.tooltips.BonusBattlesTooltip(): BonusBattlesTooltipView,
+     R.views.lobby.wt_event.tooltips.WtEventHeaderWidgetTooltipView(): WtEventHeaderWidgetTooltipView,
+     R.views.lobby.wt_event.tooltips.WtEventTicketTooltipView(): WtEventTicketTooltipView}
     layoutID = R.views.lobby.mode_selector.ModeSelectorView()
     _areWidgetsVisible = False
 
@@ -107,7 +111,8 @@ class ModeSelectorView(ViewImpl):
              ModeSelectorTooltipsConstants.RANKED_BATTLES_EFFICIENCY_TOOLTIP,
              ModeSelectorTooltipsConstants.RANKED_BATTLES_POSITION_TOOLTIP,
              ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
-             ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP]:
+             ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
+             ModeSelectorTooltipsConstants.EVENT_BATTLES_CALENDAR_TOOLTIP]:
                 return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=(None,))
             if tooltipId == ModeSelectorTooltipsConstants.RANKED_BATTLES_RANK_TOOLTIP:
                 rankID = int(event.getArgument('rankID'))

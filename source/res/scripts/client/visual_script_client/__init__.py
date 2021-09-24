@@ -13,8 +13,11 @@ import marker_blocks
 import player_blocks
 import sound_blocks
 import game_settings_blocks
+import CGF_blocks
 from visual_script_client import battle_hud_block
 from contexts.sound_notifications_context import SoundNotificationsContext
+from contexts.ability_context import AbilityContextClient
+from contexts.vehicle_context import VehicleContextClient
 g_blockRegistrar = VSBlockRegistrar(ASPECT.CLIENT)
 if not IS_EDITOR:
     from visual_script_client import client_perk_blocks
@@ -30,4 +33,7 @@ g_blockRegistrar.regBlocksFromModule(player_blocks)
 g_blockRegistrar.regBlocksFromModule(sound_blocks)
 g_blockRegistrar.regBlocksFromModule(game_settings_blocks)
 g_blockRegistrar.regBlocksFromModule(battle_hud_block)
+g_blockRegistrar.regBlocksFromModule(CGF_blocks)
 g_blockRegistrar.regContext(SoundNotificationsContext)
+g_blockRegistrar.regContext(AbilityContextClient)
+g_blockRegistrar.regContext(VehicleContextClient)

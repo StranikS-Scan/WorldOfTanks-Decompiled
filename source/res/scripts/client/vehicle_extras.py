@@ -6,8 +6,11 @@ from functools import partial
 from vehicle_systems.stricted_loading import makeCallbackWeak
 import BigWorld
 import Math
+import ResMgr
 import material_kinds
 import AnimationSequence
+import Projectiles
+import Health
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 from items import vehicles
 from common_tank_appearance import MAX_DISTANCE
@@ -16,8 +19,6 @@ from helpers.EffectsList import EffectsListPlayer
 from helpers.EntityExtra import EntityExtra
 from helpers.laser_sight_matrix_provider import LaserSightMatrixProvider
 from constants import IS_EDITOR, CollisionFlags
-import Projectiles
-import Health
 if not IS_EDITOR:
     from vehicle_extras_battle_royale import AfterburningBattleRoyale
 

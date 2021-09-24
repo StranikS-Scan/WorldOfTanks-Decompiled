@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.14.0.3</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.14.0.3</Path>
+    <Path cacheSubdirs="true">./res_mods/1.14.0.4</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.14.0.4</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
@@ -45,6 +45,7 @@
       <Package type="sd,hd">./res/packages/119_turning_point_if.pkg</Package>
       <Package type="sd,hd">./res/packages/11_murovanka.pkg</Package>
       <Package type="hd">./res/packages/11_murovanka_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/11_murovanka_wt.pkg</Package>
       <Package type="sd,hd">./res/packages/120_graf_zeppelin_ish.pkg</Package>
       <Package type="hd">./res/packages/120_graf_zeppelin_ish_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/121_lost_paradise_v.pkg</Package>
@@ -63,6 +64,7 @@
       <Package type="hd">./res/packages/13_erlenberg_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line.pkg</Package>
       <Package type="hd">./res/packages/14_siegfried_line_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/14_siegfried_line_wt.pkg</Package>
       <Package type="sd,hd">./res/packages/17_munchen.pkg</Package>
       <Package type="hd">./res/packages/17_munchen_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/18_cliff.pkg</Package>
@@ -97,6 +99,7 @@
       <Package type="hd">./res/packages/34_redshire_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/35_steppes.pkg</Package>
       <Package type="hd">./res/packages/35_steppes_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/35_steppes_wt.pkg</Package>
       <Package type="sd,hd">./res/packages/36_fishing_bay.pkg</Package>
       <Package type="hd">./res/packages/36_fishing_bay_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/37_caucasus.pkg</Package>
@@ -129,6 +132,8 @@
       <Package type="hd">./res/packages/h20_wot_bday_2021_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h31_battle_royale_2020.pkg</Package>
       <Package type="hd">./res/packages/h31_battle_royale_2020_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h33_hangar_v3_wt_2021.pkg</Package>
+      <Package type="hd">./res/packages/h33_hangar_v3_wt_2021_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/hangar_v3_marathon_2021.pkg</Package>
@@ -178,6 +183,7 @@
       <Package type="sd,hd">./res/packages/vehicles_level_10-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_10_hd-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_10_hd-part2.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/wt.pkg</Package>
     </Packages>
     <Path>./res</Path>
   </Paths>

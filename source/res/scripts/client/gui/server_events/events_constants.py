@@ -13,3 +13,7 @@ RANKED_PLATFORM_GROUP_ID = 'ranked_platform'
 DAILY_QUEST_ID_PREFIX = DailyQuestsTokensPrefixes.QUEST_TOKEN
 DAILY_QUEST_TOKEN_PREFIX = DailyQuestsTokensPrefixes.QUEST_TICKET
 TECH_TREE_ACTION_POSTFIX = '_techtree'
+EVENT_GROUP_PREFIX = 'wt_group'
+WT_QUEST_PREFIX = 'wtevent'
+WT_BOSS_GROUP_ID = 'wt_group_boss'
+WT_QUEST_UNAVAILABLE_NOT_ENOUGH_TICKETS_REASON = 'notEnoughTickets'

@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/factories.py
 import nations
-from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, WHITE_TIGER_RECORD, RARE_STORAGE_RECORD, HONORED_RANK_RECORD
+from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, WHITE_TIGER_RECORD, RARE_STORAGE_RECORD, HONORED_RANK_RECORD, MARK_OF_MASTERY, MARK_ON_GUN
 from gui.shared.gui_items.dossier import achievements as _as
 from gui.shared.gui_items.dossier.achievements import abstract as _abstract_achievements
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.gui_items.dossier.achievements.loyal_service import LoyalServiceAchievement
 
 class _AchieveFactory(object):
@@ -319,6 +320,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'june21'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'july21'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'august21'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'september21'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'NY20A1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'NY20A2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'NY20A3'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
@@ -380,7 +382,10 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'bob2021MasterTortoise_apac'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'bob2021SummerTiger_apac'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'bob2021Maharlika_apac'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'gagarin21'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
+ (_AB.SINGLE, 'gagarin21'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.UNIQUE, 'wtxHunterWins'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.UNIQUE, 'wtxBossWins'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.TOTAL, 'wtxSpecBossDefeat'): _AchieveFactory.get(_abstract_achievements.QuestAchievement)}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.MechEngineerAchievement, _nID)
@@ -397,3 +402,9 @@ def getAchievementFactory(record, dossier=None):
     else:
         factoryMaker = _AchieveFactory.get(_abstract_achievements.RegularAchievement)
     return factoryMaker(record[1], record[0], dossier)
+
+
+def getAchievementTooltipType(achievementName):
+    if achievementName == MARK_OF_MASTERY:
+        return TOOLTIPS_CONSTANTS.MARK_OF_MASTERY
+    return TOOLTIPS_CONSTANTS.BATTLE_STATS_MARKS_ON_GUN_ACHIEVEMENT if achievementName == MARK_ON_GUN else TOOLTIPS_CONSTANTS.BATTLE_STATS_ACHIEVS

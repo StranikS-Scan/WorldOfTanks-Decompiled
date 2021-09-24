@@ -270,7 +270,7 @@ class BattleRoyaleRewardsBlock(base.StatsBlock):
         self.completedQuests = {}
 
     def setRecord(self, result, reusable):
-        questProgress = reusable.personal.getQuestsProgress()
+        questProgress = reusable.progress.getQuestsProgress()
         allQuests = self.__eventsCache.getAllQuests()
         self.achievements = self.__getAchievements(questProgress, allQuests)
         self.completedQuests = self.__getCompletedQuests(questProgress, self.__getDailyQuestsCondition, allQuests)

@@ -1,0 +1,363 @@
+<event_equipments.xml>
+  <builtinAfterburning_wt>
+    <id>	900	</id>
+    <userString>	#artefacts:builtinAfterburning_wt/name	</userString>
+    <description>	#artefacts:builtinAfterburning_wt/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:builtinAfterburning_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:builtinAfterburning_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_nitro 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin eventItem	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinAfterburning_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	VisualScriptEquipment	  <cooldownSeconds>	30	</cooldownSeconds>
+      <consumeSeconds>	15	</consumeSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <server>
+          <plan>	wtAbilities/afterburning	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinAfterburning_wt>
+  <builtinInstantStunShoot_wt>
+    <id>	901	</id>
+    <userString>	#artefacts:builtinInstantStunShoot_wt/name	</userString>
+    <description>	#artefacts:builtinInstantStunShoot_wt/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:builtinInstantStunShoot_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:builtinInstantStunShoot_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_stan 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin eventItem	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinInstantStunShoot_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	VisualScriptEquipment	  <cooldownSeconds>	15	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <server>
+          <plan>	wtAbilities/instant_stun_shoot	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinInstantStunShoot_wt>
+  <builtinImpulse_wt>
+    <id>	902	</id>
+    <userString>	#artefacts:builtinImpulse_wt/name	</userString>
+    <description>	#artefacts:builtinImpulse_wt/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:builtinImpulse_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:builtinImpulse_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_emi 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin eventItem	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinImpulse_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	VisualScriptEquipment	  <cooldownSeconds>	25	</cooldownSeconds>
+      <consumeSeconds>	3	</consumeSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <server>
+          <plan>	wtAbilities/impulse	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinImpulse_wt>
+  <builtinShield_wt>
+    <id>	903	</id>
+    <userString>	#artefacts:builtinShield_wt/name	</userString>
+    <description>	#artefacts:builtinShield_wt/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:builtinShield_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:builtinShield_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_shield 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin eventItem	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinShield_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	VisualScriptEquipment	  <cooldownSeconds>	40	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <client>
+          <plan>	wtAbilities/shield_client	</plan>
+        </client>
+        <server>
+          <plan>	wtAbilities/shield	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinShield_wt>
+  <builtinStronghold_wt>
+    <id>	904	</id>
+    <userString>	#artefacts:builtinStronghold_wt/name	</userString>
+    <description>	#artefacts:builtinStronghold_wt/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:builtinStronghold_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:builtinStronghold_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_stronghold 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin eventItem	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinStronghold_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	VisualScriptEquipment	  <cooldownSeconds>	40	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <client>
+          <plan>	wtAbilities/stronghold_client	</plan>
+        </client>
+        <server>
+          <plan>	wtAbilities/stronghold	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinStronghold_wt>
+  <builtinTeleport_wt>
+    <id>	905	</id>
+    <userString>	#artefacts:builtinTeleport_wt/name	</userString>
+    <description>	#artefacts:builtinTeleport_wt/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:builtinTeleport_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:builtinTeleport_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_teleport 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin eventItem	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinTeleport_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	VisualScriptEquipment	  <deploySeconds>	60	</deploySeconds>
+      <cooldownSeconds>	180	</cooldownSeconds>
+      <consumeSeconds>	7	</consumeSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <server>
+          <plan>	wtAbilities/teleport	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinTeleport_wt>
+  <builtinChargedShot_wt>
+    <id>	906	</id>
+    <userString>	#artefacts:builtinChargedShot_wt/name	</userString>
+    <description>	#artefacts:builtinChargedShot_wt/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:builtinChargedShot_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:builtinChargedShot_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_charged_shot 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin eventItem	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinChargedShot_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	VisualScriptEquipment	  <cooldownSeconds>	25	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <client>
+          <plan>	wtAbilities/charged_shot_client	</plan>
+        </client>
+        <server>
+          <plan>	wtAbilities/charged_shot	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinChargedShot_wt>
+  <builtinRepairkit_wt>
+    <id>	907	</id>
+    <userString>	#artefacts:builtinRepairkit_wt/name	</userString>
+    <description>	#artefacts:builtinRepairkit_wt/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:largeRepairkit_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:builtinRepairkit_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_largeRepairkit 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin repairkit hideBuiltinInfo	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinRepairkit_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	Repairkit	  <repairAll>	true	</repairAll>
+      <bonusValue>	0.15	</bonusValue>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleRepairSpeed	</name>
+        <value>	1.15	</value>
+      </mul>
+    </kpi>
+  </builtinRepairkit_wt>
+  <builtinLargeMedkit_wt>
+    <id>	908	</id>
+    <userString>	#artefacts:builtinLargeMedkit_wt/name	</userString>
+    <description>	#artefacts:builtinLargeMedkit_wt/stunDisabled/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:builtinLargeMedkit_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:builtinLargeMedkit_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_largeMedkit 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin medkit hideBuiltinInfo	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinLargeMedkit_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	Repairkit	  <repairAll>	true	</repairAll>
+      <bonusValue>	0.0	</bonusValue>
+      <stunResistanceEffect>	0.0	</stunResistanceEffect>
+      <stunResistanceDuration>	0.0	</stunResistanceDuration>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.15	</value>
+      </mul>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	0.95	</value>
+      </mul>
+    </kpi>
+  </builtinLargeMedkit_wt>
+  <builtinAbsorb_wt>
+    <id>	909	</id>
+    <userString>	#artefacts:builtinAbsorb_wt/name	</userString>
+    <description>	#artefacts:builtinAbsorb_wt/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:builtinAbsorb_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:builtinAbsorb_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_absorb 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin eventPassiveItem	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinAbsorb_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	VisualScriptEquipment	  <visualScript></visualScript>
+    </script>
+  </builtinAbsorb_wt>
+  <builtinOverload_wt>
+    <id>	910	</id>
+    <userString>	#artefacts:builtinOverload_wt/name	</userString>
+    <description>	#artefacts:builtinOverload_wt/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:builtinOverload_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:builtinOverload_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_overload 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin eventPassiveItem	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinOverload_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	VisualScriptEquipment	  <visualScript></visualScript>
+    </script>
+  </builtinOverload_wt>
+  <builtinDrop_wt>
+    <id>	911	</id>
+    <userString>	#artefacts:builtinDrop_wt/name	</userString>
+    <description>	#artefacts:builtinDrop_wt/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:builtinDrop_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:builtinDrop_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_drop 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin hidden	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinDrop_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	VisualScriptEquipment	  <cooldownSeconds>	5	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <server>
+          <plan>	wtAbilities/drop	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinDrop_wt>
+</event_equipments.xml>

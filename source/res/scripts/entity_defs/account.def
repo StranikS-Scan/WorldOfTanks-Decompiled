@@ -31,12 +31,13 @@
     <Interface>	AccountDebugger	</Interface>
     <Interface>	QuestProcessor	</Interface>
     <Interface>	AvatarCreator	</Interface>
+    <Interface>	EventTokensController	</Interface>
   </Implements>
   <Properties>
     <requiredVersion_11400>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.14.0_6	</Default>
+      <Default>	ru_1.14.0_7	</Default>
     </requiredVersion_11400>
     <name>
       <Type>	STRING	</Type>

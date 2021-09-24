@@ -1,0 +1,16 @@
+<EntityStressTimer.def>
+  <Properties>
+    <lifetime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lifetime>
+    <timerInfo>
+      <Type>	TIMER_INFO	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </timerInfo>
+  </Properties>
+  <ofEntity>
+    <Entity></Entity>
+  </ofEntity>
+  <DefaultKeyName>	entityStressTimer	</DefaultKeyName>
+</EntityStressTimer.def>

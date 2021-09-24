@@ -89,7 +89,11 @@ class SharedPage(BattlePageMeta):
         if components is None:
             components = _SHARED_COMPONENTS_CONFIG
         else:
-            components += _SHARED_COMPONENTS_CONFIG
+            config = _SHARED_COMPONENTS_CONFIG.getConfig()
+            overridedViewAliases = tuple((alias for alias, _ in components.getViewsConfig()))
+            viewConfig = tuple(((alias, obj) for alias, obj in _SHARED_COMPONENTS_CONFIG.getViewsConfig() if alias not in overridedViewAliases))
+            sharedComponents = ComponentsConfig(config, viewConfig)
+            components += sharedComponents
         self.__componentsConfig = components
         return
 
@@ -280,7 +284,7 @@ class SharedPage(BattlePageMeta):
         self._isDestroyTimerShown = False
 
     def _changeCtrlMode(self, ctrlMode):
-        if ctrlMode == ctrlMode == aih_constants.CTRL_MODE_NAME.VIDEO:
+        if ctrlMode == aih_constants.CTRL_MODE_NAME.VIDEO:
             self._setComponentsVisibility(hidden={_ALIASES.DAMAGE_PANEL})
         else:
             self._setComponentsVisibility(visible={_ALIASES.DAMAGE_PANEL})

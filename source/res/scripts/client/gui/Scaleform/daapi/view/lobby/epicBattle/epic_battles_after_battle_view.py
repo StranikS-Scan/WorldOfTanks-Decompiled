@@ -107,7 +107,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         return
 
     def __getBonuses(self, prevLevel, currentLevel):
-        questsProgressData = self.__ctx['reusableInfo'].personal.getQuestsProgress()
+        questsProgressData = self.__ctx['reusableInfo'].progress.getQuestsProgress()
         bonuses = getQuestBonuses(questsProgressData, (self.__epicController.TOKEN_QUEST_ID,), self.__epicController.TOKEN_QUEST_ID + str(currentLevel))
         if self.__battlePass.getCurrentLevel() == self.__battlePass.getMaxLevel():
             excluded = [BattleRewardItemModel.BATTLE_PASS_POINTS]

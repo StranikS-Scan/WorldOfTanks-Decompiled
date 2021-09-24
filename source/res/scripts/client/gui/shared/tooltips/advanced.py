@@ -292,7 +292,9 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'ration_sweden': 'consumablesCoffeeWithCinnamonBuns',
  'ration_poland': 'consumablesBreadWithSchmaltz',
  'ration_italy': 'consumablesSpaghetti',
- 'grousers': 'equipmentAdditionalGrousers'}
+ 'grousers': 'equipmentAdditionalGrousers',
+ 'wt_largeMedkit': 'consumablesFirstAidWt',
+ 'wt_largeRepairkit': 'consumablesRepairKitBig'}
 _TANKMAN_MOVIES = {'commander': 'crewCommander',
  'driver': 'crewDriver',
  'gunner': 'crewGunner',

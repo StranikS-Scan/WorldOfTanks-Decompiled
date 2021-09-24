@@ -478,3 +478,12 @@ class ScorePanelStorageKeys(CONST_CONTAINER):
     SHOW_HP_VALUES = 'showHPValues'
     SHOW_HP_DIFFERENCE = 'showHPDifference'
     ENABLE_TIER_GROUPING = 'enableTierGrouping'
+
+
+class WTEventStorageKeys(CONST_CONTAINER):
+    WT_INTRO_SHOWN = 'wtIntroShown'
+
+
+class WTLootBoxesViewedKeys(CONST_CONTAINER):
+    HUNTER_LAST_VIEWED = 'hunterLastViewed'
+    BOSS_LAST_VIEWED = 'bossLastViewed'

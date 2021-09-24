@@ -166,9 +166,32 @@
         <visionRadius>	0.5	</visionRadius>
       </gameplayFactors>
     </overturn>
+    <anti_overturn>	NoneExtra : AntiOverturn	  <recoverDelay>	8.0	</recoverDelay>
+      <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
+      <gameplayFactors>
+        <reloadTime>	2.0	</reloadTime>
+        <turretRotationSpeed>	0.5	</turretRotationSpeed>
+        <gunRotationSpeed>	0.5	</gunRotationSpeed>
+        <aimingTime>	2.0	</aimingTime>
+        <shotDispersion>	2.0	</shotDispersion>
+        <visionRadius>	0.5	</visionRadius>
+      </gameplayFactors>
+    </anti_overturn>
     <drowning>	NoneExtra : Drowning	</drowning>
     <burnout>	NoneExtra : Burnout	</burnout>
     <afterburning>	NoneExtra : Afterburning	</afterburning>
+    <builtinAfterburning_wt>	NoneExtra : VisualScriptEquipment	</builtinAfterburning_wt>
+    <builtinImpulse_wt>	NoneExtra : VisualScriptEquipment	</builtinImpulse_wt>
+    <builtinLargeMedkit_wt>	NoneExtra : Repairkit	</builtinLargeMedkit_wt>
+    <builtinRepairkit_wt>	NoneExtra : Repairkit	</builtinRepairkit_wt>
+    <builtinInstantStunShoot_wt>	NoneExtra : VisualScriptEquipment	</builtinInstantStunShoot_wt>
+    <builtinShield_wt>	NoneExtra : EventExtra	</builtinShield_wt>
+    <builtinStronghold_wt>	NoneExtra : EventExtra	</builtinStronghold_wt>
+    <builtinChargedShot_wt>	NoneExtra : EventExtra	</builtinChargedShot_wt>
+    <builtinDrop_wt>	NoneExtra : VisualScriptEquipment	</builtinDrop_wt>
+    <builtinTeleport_wt>	NoneExtra : VisualScriptEquipment	</builtinTeleport_wt>
+    <builtinOverload_wt>	NoneExtra : VisualScriptEquipment	</builtinOverload_wt>
+    <builtinAbsorb_wt>	NoneExtra : VisualScriptEquipment	</builtinAbsorb_wt>
     <engineHealth>	DamageMarker : EngineHealth	  <sounds>
         <critical>	engine_damaged	</critical>
         <destroyed>	engine_destroyed	</destroyed>
@@ -307,7 +330,7 @@
       <bindNode>	HP_gunFire	</bindNode>
     </laserSight>
     <large_repairkit_battle_royale>	NoneExtra : RepairkitBattleRoyale	</large_repairkit_battle_royale>
-    <overturn_battle_royale>	NoneExtra : OverturnBattleRoyale	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
+    <overturn_battle_royale>	NoneExtra : AntiOverturn	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
       <gameplayFactors>
         <reloadTime>	2.0	</reloadTime>
         <turretRotationSpeed>	0.5	</turretRotationSpeed>

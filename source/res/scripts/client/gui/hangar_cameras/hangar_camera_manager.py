@@ -166,7 +166,7 @@ class HangarCameraManager(object):
         return
 
     def __onSpaceCreated(self):
-        self.__cam.isMovementEnabled = True
+        self.__switchCameraMovement(True)
         g_mouseEventHandlers.add(self.__handleMouseEvent)
         g_keyEventHandlers.add(self.__handleKeyEvent)
         g_eventBus.addListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
@@ -260,6 +260,9 @@ class HangarCameraManager(object):
 
     def updateDynamicFov(self, dist, rampTime):
         self.__updateDynamicFov(dist, rampTime)
+
+    def isCameraMovementEnabled(self):
+        return self.__cam.isMovementEnabled if self.__cam is not None else False
 
     def __updateProjection(self):
         self.__cam.updateProjection()
@@ -367,11 +370,19 @@ class HangarCameraManager(object):
         if self.__currentEntityId != ctx['vEntityId']:
             return
         isDone = not ctx['started']
-        self.__cam.isMovementEnabled = isDone
+        self.__switchCameraMovement(isDone)
         if isDone:
             self.__updateCameraDistanceLimits()
             self.__cam.pivotMaxDist = self.__getCameraPivotDistance()
             self.__cam.forceUpdate()
+
+    def __switchCameraMovement(self, enabled):
+        if self.__cam is None:
+            return
+        else:
+            self.__cam.isMovementEnabled = enabled
+            g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.CAMERA_MOVEMENT_SWITCHED, ctx={'enabled': enabled}), scope=EVENT_BUS_SCOPE.DEFAULT)
+            return
 
     def __handleSettingsChange(self, diff):
         if 'fov' in diff:

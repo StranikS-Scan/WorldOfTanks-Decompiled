@@ -31,6 +31,7 @@ from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.MAPBOX_ALIASES import MAPBOX_ALIASES
+from gui.Scaleform.genConsts.EVENT_BATTLES_ALIASES import EVENT_BATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
@@ -78,6 +79,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IClanNotificationController, IBrowserController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
+from skeletons.gui.game_control import IGameEventController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
@@ -96,10 +98,35 @@ class SettingsTabIndex(object):
     FEEDBACK = 6
 
 
-def showBattleResultsWindow(arenaUniqueID):
-    window = SFWindow(SFViewLoadParams(VIEW_ALIAS.BATTLE_RESULTS, getViewName(VIEW_ALIAS.BATTLE_RESULTS, str(arenaUniqueID))), EVENT_BUS_SCOPE.LOBBY, ctx={'arenaUniqueID': arenaUniqueID})
-    window.load()
-    return window
+def closePostbattleWindow():
+
+    def filterFunc(window):
+        if window.content is None:
+            return False
+        else:
+            return True if window.content.layoutID == R.views.lobby.postbattle.PostbattleScreen() else None
+
+    uiLoader = dependency.instance(IGuiLoader)
+    for window in uiLoader.windowsManager.findWindows(filterFunc):
+        window.destroy()
+
+
+def showBattleResultsWindow(arenaUniqueID, isPostbattle20Enabled=False):
+    if isPostbattle20Enabled:
+        uiLoader = dependency.instance(IGuiLoader)
+        contentResId = R.views.lobby.postbattle.PostbattleScreen()
+        postbattleView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+        if postbattleView is not None:
+            if arenaUniqueID == postbattleView.arenaUniqueID:
+                return
+            postbattleView.destroyWindow()
+        from gui.impl.lobby.postbattle.postbattle_screen_view import PostbattleScreenView
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, PostbattleScreenView, ScopeTemplates.LOBBY_SUB_SCOPE), ctx={'arenaUniqueID': arenaUniqueID}), scope=EVENT_BUS_SCOPE.LOBBY)
+    else:
+        window = SFWindow(SFViewLoadParams(VIEW_ALIAS.BATTLE_RESULTS, getViewName(VIEW_ALIAS.BATTLE_RESULTS, str(arenaUniqueID))), EVENT_BUS_SCOPE.LOBBY, ctx={'arenaUniqueID': arenaUniqueID})
+        window.load()
+        return window
+    return
 
 
 def notifyBattleResultsPosted(arenaUniqueID):
@@ -126,6 +153,10 @@ def showRankedPrimeTimeWindow():
 
 def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showEventBattlesPrimeTimeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EVENT_BATTLES_ALIASES.EVENT_PRIME_TIME_VIEW), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesAfterBattleWindow(reusableInfo, parent=None):
@@ -460,6 +491,13 @@ def showConfigurableVehiclePreview(vehTypeCompDescr, previewAlias, previewBackCb
      'itemsPack': itemPack}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def showWtEventVehiclePreview(vehTypeCompDescr):
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.configurable_vehicle_preview import OptionalBlocks
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.WT_EVENT_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
+     'hiddenBlocks': {OptionalBlocks.BUYING_PANEL: True,
+                      OptionalBlocks.CLOSE_BUTTON: True}}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None):
     heroTankController = dependency.instance(IHeroTankController)
     heroTankCD = heroTankController.getCurrentTankCD()
@@ -594,11 +632,14 @@ def showClanSendInviteWindow(clanDbID):
 def selectVehicleInHangar(itemCD, loadHangar=True):
     from CurrentVehicle import g_currentVehicle
     itemsCache = dependency.instance(IItemsCache)
+    gameEventCtrl = dependency.instance(IGameEventController)
     veh = itemsCache.items.getItemByCD(int(itemCD))
     if not veh.isInInventory:
         raise SoftException('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
     g_currentVehicle.selectVehicle(veh.invID)
     if loadHangar:
+        if gameEventCtrl.isEventPrbActive():
+            gameEventCtrl.doLeaveEventPrb()
         showHangar()
 
 
@@ -827,6 +868,87 @@ def showDedicationRewardWindow(bonuses, data, closeCallback=None):
     window.load()
 
 
+def showEventPortalAwardsWindow(lootBoxType, awards, count=1, openedCount=1, parent=None):
+    from gui.impl.lobby.wt_event.wt_event_portal_awards import WtEventPortalAwardsWindow
+    lobbyContext = dependency.instance(ILobbyContext)
+    isLootBoxesEnabled = lobbyContext.getServerSettings().isLootBoxesEnabled()
+    if not isLootBoxesEnabled:
+        return
+    else:
+        uiLoader = dependency.instance(IGuiLoader)
+        lootBoxOpenView = uiLoader.windowsManager.getViewByLayoutID(R.views.lobby.wt_event.WtEventPortalAwards())
+        if lootBoxOpenView is not None:
+            lootBoxOpenView.destroy()
+        window = WtEventPortalAwardsWindow(lootBoxType, awards, count, openedCount, parent=parent)
+        window.load()
+        return
+
+
+def showEventStorageWindow(parent=None):
+    from gui.impl.lobby.wt_event.wt_event_storage import WtEventStorageWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.wt_event.WtEventPortal()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        window = WtEventStorageWindow(parent=parent)
+        window.load()
+    return
+
+
+def showEventPortalWindow(portalType, defaultRunPortalTimes=1, parent=None):
+    from gui.impl.lobby.wt_event.wt_event_portal import WtEventPortalWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.wt_event.WtEventInsidePortal()
+    portalView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+    if portalView is not None and portalView.portalType == portalType:
+        return
+    else:
+        window = WtEventPortalWindow(portalType, defaultRunPortalTimes, parent)
+        window.load()
+        return
+
+
+def showVehicleAwardWindow(awards=None, vehicleSource=None, parent=None):
+    from gui.impl.lobby.wt_event.wt_event_vehicle_portal import WtEventVehiclePortalWindow
+    window = WtEventVehiclePortalWindow(awards, vehicleSource, parent)
+    window.load()
+
+
+def showEventCollectionWindow(fromWelcome=False):
+    from gui.impl.lobby.wt_event.wt_event_collection_view import WTEventCollectionView
+    layoutID = R.views.lobby.wt_event.WTEventCollections()
+    uiLoader = dependency.instance(IGuiLoader)
+    if uiLoader.windowsManager.getViewByLayoutID(layoutID) is not None:
+        return
+    else:
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, WTEventCollectionView, ScopeTemplates.LOBBY_SUB_SCOPE), fromWelcome=fromWelcome), scope=EVENT_BUS_SCOPE.LOBBY)
+        return
+
+
+def isWTMetaViewExist():
+    uiLoader = dependency.instance(IGuiLoader)
+    collectionLayoutID = R.views.lobby.wt_event.WTEventCollections()
+    welcomeLayoutID = R.views.lobby.wt_event.WTEventWelcome()
+    return False if not uiLoader or not uiLoader.windowsManager else not (uiLoader.windowsManager.getViewByLayoutID(collectionLayoutID) is None and uiLoader.windowsManager.getViewByLayoutID(welcomeLayoutID) is None)
+
+
+def showWTWelcomeScreen():
+    from gui.impl.lobby.wt_event.wt_event_welcome import WTEventWelcomeView
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.wt_event.WTEventWelcome(), WTEventWelcomeView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showWtEventAwardWindow(questId, parent=None, notificationMgr=None):
+    from gui.impl.lobby.wt_event.wt_event_award_view import WTEventAwardWindow
+    window = WTEventAwardWindow(questId, parent=parent)
+    notificationMgr.append(WindowNotificationCommand(window))
+
+
+def showWtEventSpecialAwardWindow(questId, parent=None):
+    from gui.impl.lobby.wt_event.wt_event_award_view import WTEventSpecialAwardWindow
+    window = WTEventSpecialAwardWindow(questId, parent=parent)
+    window.load()
+
+
 def isViewLoaded(layoutID):
     uiLoader = dependency.instance(IGuiLoader)
     if not uiLoader or not uiLoader.windowsManager:
@@ -925,7 +1047,9 @@ def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage):
     builder.setMessagesAndButtons(resources, resources)
     builder.setIcon(icon)
     builder.setFormattedMessage(formattedMessage)
+    g_eventBus.handleEvent(events.LobbySimpleEvent(events.HangarSimpleEvent.SHOW_CONFIRM_DIALOG), scope=EVENT_BUS_SCOPE.LOBBY)
     result = yield await(dialogs.showSimple(builder.build()))
+    g_eventBus.handleEvent(events.LobbySimpleEvent(events.HangarSimpleEvent.CLOSE_CONFIRM_DIALOG), scope=EVENT_BUS_SCOPE.LOBBY)
     raise AsyncReturn(result)
 
 

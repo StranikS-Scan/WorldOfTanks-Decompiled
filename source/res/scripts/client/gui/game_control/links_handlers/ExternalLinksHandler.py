@@ -180,5 +180,6 @@ class ExternalLinksHandler(IExternalLinksController):
                 self.__linksHandlers.append(external.AddPlatformTagLinksHandler())
                 self.__linksHandlers.append(external.PremShopLinksForArgsUrlHandler())
                 self.__linksHandlers.append(external.AddPlatformTagLinksToArgsUrlHandler())
+            self.__linksHandlers.append(external.WtGoToLinksHandler())
             self.__linksHandlers.append(external.OpenBrowserHandler())
         return self.__linksHandlers

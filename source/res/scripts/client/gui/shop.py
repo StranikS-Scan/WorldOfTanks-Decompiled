@@ -242,6 +242,14 @@ def showBuyVehicleOverlay(params=None):
          'browserParams': makeBrowserParams(R.strings.waiting.buyItem(), True, True, 0.5)}), EVENT_BUS_SCOPE.LOBBY)
 
 
+@process
+def showBuyLootboxOverlay(parent=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
+    url = helpers.getBuyLootboxesUrl()
+    if url:
+        url = yield URLMacros().parse(url)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, parent=parent), ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
+
+
 @async
 @decorators.process('loadingData')
 @dependency.replace_none_kwargs(webCtrl=IWebController)

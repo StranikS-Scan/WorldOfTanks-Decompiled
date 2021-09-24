@@ -10,6 +10,7 @@ from gui.Scaleform.daapi.view.meta.BrowserScreenMeta import BrowserScreenMeta
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController
 from gui.sounds.ambients import HangarOverlayEnv
 if typing.TYPE_CHECKING:
@@ -20,6 +21,7 @@ BROWSER_LOAD_CALLBACK_DELAY = 0.01
 
 class WebView(BrowserScreenMeta):
     browserCtrl = dependency.descriptor(IBrowserController)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, ctx=None):
         super(WebView, self).__init__(ctx)
@@ -33,6 +35,11 @@ class WebView(BrowserScreenMeta):
         self._browserParams = (ctx or {}).get('browserParams', makeBrowserParams())
         self.__callbackOnLoad = ctx.get('callbackOnLoad', None) if ctx else None
         return
+
+    def destroy(self):
+        tooltipManager = self.appLoader.getApp().getToolTipMgr()
+        tooltipManager.hide()
+        super(WebView, self).destroy()
 
     def onEscapePress(self):
         if not self._browserParams.get('isHidden'):

@@ -315,6 +315,7 @@ class ARENA_BONUS_TYPE:
      BATTLE_ROYALE_TRN_SQUAD)
     BATTLE_ROYALE_REGULAR_RANGE = (BATTLE_ROYALE_SOLO, BATTLE_ROYALE_SQUAD)
     BATTLE_ROYALE_SQUAD_RANGE = (BATTLE_ROYALE_SQUAD, BATTLE_ROYALE_TRN_SQUAD)
+    EVENT_BATTLES_RANGE = (EVENT_BATTLES, EVENT_BATTLES_2)
     EXTERNAL_RANGE = (SORTIE_2,
      FORT_BATTLE_2,
      GLOBAL_MAP,
@@ -797,6 +798,7 @@ class PremiumConfigs(object):
     PREM_SQUAD = 'premSquad_config'
 
 
+POSTBATTLE20_CONFIG = 'postbattle20_config'
 DAILY_QUESTS_CONFIG = 'daily_quests_config'
 DOG_TAGS_CONFIG = 'dog_tags_config'
 IS_LOOT_BOXES_ENABLED = 'isLootBoxesEnabled'
@@ -814,6 +816,8 @@ class Configs(enum.Enum):
     EPIC_CONFIG = 'epic_config'
     MAPBOX_CONFIG = 'mapbox_config'
     BIRTHDAY_CALENDAR_CONFIG = 'bday_calendar_config'
+    EVENT_BATTLES_CONFIG = 'event_battles_config'
+    LOOTBOX_CONFIG = 'lootBoxes_config'
 
 
 class RESTRICTION_TYPE:
@@ -1437,12 +1441,14 @@ class GameSeasonType(object):
     EPIC = 2
     BATTLE_ROYALE = 3
     MAPBOX = 4
+    EVENT_BATTLES = 5
 
 
 SEASON_TYPE_BY_NAME = {'ranked': GameSeasonType.RANKED,
  'epic': GameSeasonType.EPIC,
  'battle_royale': GameSeasonType.BATTLE_ROYALE,
- 'mapbox': GameSeasonType.MAPBOX}
+ 'mapbox': GameSeasonType.MAPBOX,
+ 'event_battles': GameSeasonType.EVENT_BATTLES}
 SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.iteritems()}
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
 USER_SEARCH_RESULTS_LIMIT = 50
@@ -1530,6 +1536,7 @@ class REQUEST_COOLDOWN:
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
     LOOTBOX = 1.0
+    LOOTBOX_RECORDS = 1.0
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
@@ -1892,7 +1899,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  101: 'Battle Royale carousel filter 2',
  USER_SERVER_SETTINGS.GAME_EXTENDED_2: 'Game extended section settings 2',
  103: 'Mapbox carousel filter 1',
- 104: 'Mapbox carousel filter 2'}
+ 104: 'Mapbox carousel filter 2',
+ 105: 'Event Storage'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2223,8 +2231,9 @@ class VISIBILITY:
     MIN_RADIUS = 50.0
 
 
-VEHICLE_ATTRS_TO_SYNC = frozenset(['circularVisionRadius', 'gun/piercing'])
-VEHICLE_ATTRS_TO_SYNC_ALIASES = {'gun/piercing': 'gunPiercing'}
+VEHICLE_ATTRS_TO_SYNC = frozenset(['circularVisionRadius', 'gun/piercing', 'gun/canShoot'])
+VEHICLE_ATTRS_TO_SYNC_ALIASES = {'gun/piercing': 'gunPiercing',
+ 'gun/canShoot': 'gunCanShoot'}
 
 class OBSTACLE_KIND:
     CHUNK_DESTRUCTIBLE = 1
@@ -2434,10 +2443,12 @@ class BotNamingType(object):
     CREW_MEMBER = 1
     VEHICLE_MODEL = 2
     CUSTOM = 3
+    LABEL = 4
     DEFAULT = CREW_MEMBER
     _parseDict = {'crew': CREW_MEMBER,
      'vehicle': VEHICLE_MODEL,
      'custom': CUSTOM,
+     'label': LABEL,
      'default': DEFAULT}
 
     @classmethod
@@ -2815,3 +2826,34 @@ class BATTLE_MODE_LOCK_MASKS(object):
     @staticmethod
     def getUnpackedVehLockMode(vehLockMode, vehType):
         return BATTLE_MODE_LOCK_MASKS.getClanRentedVehLockMode(vehLockMode) if 'clanWarsBattles' in vehType.tags else BATTLE_MODE_LOCK_MASKS.getCommonVehLockMode(vehLockMode)
+
+
+class Progress(object):
+    DEFAULT = 0
+    START = 1
+    STOP = 2
+    FAILED = 3
+    SUCCEED = 4
+
+
+class WT_BATTLE_STAGE(object):
+    INVINCIBLE = 0
+    DEBUFF = 1
+    END_GAME = 2
+
+    @staticmethod
+    def getCurrent(arenaInfo):
+        if 'wtShieldDebuffDuration' in arenaInfo.dynamicComponents:
+            return WT_BATTLE_STAGE.DEBUFF
+        return WT_BATTLE_STAGE.END_GAME if arenaInfo.publicCounter.counter == 0 else WT_BATTLE_STAGE.INVINCIBLE
+
+
+class WT_TEAMS(object):
+    BOSS_TEAM = 1
+    HUNTERS_TEAM = 2
+
+
+class WT_TAGS(object):
+    BOSS = 'event_boss'
+    HUNTER = 'event_hunter'
+    PRIORITY_BOSS = 'special_event_boss'

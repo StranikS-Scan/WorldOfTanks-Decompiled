@@ -4,6 +4,7 @@
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
+    <ap_wt>	WT_ARMOR_PIERCING.png 0 0	</ap_wt>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
@@ -4117,6 +4118,39 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
+  <_100mm_UBR-412PB_WT>
+    <id>	1001	</id>
+    <userString>	#ussr_vehicles:_100mm_UBR-412PB_WT	</userString>
+    <description>	#ussr_vehicles:_100mm_UBR-412PB_WT_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:_100mm_UBR-412PB_WT_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:_100mm_UBR-412PB_WT_long_special	</longDescriptionSpecial>
+    <icon>	ap_wt	</icon>
+    <price>	1100	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	260	</armor>
+      <devices>	130	</devices>
+    </damage>
+  </_100mm_UBR-412PB_WT>
+  <_100mm_UBR-412PB_charged_shot_WT>
+    <id>	1002	</id>
+    <userString>	#ussr_vehicles:_100mm_UBR-412PB_charged_shot_WT	</userString>
+    <icon>	ap_wt	</icon>
+    <price>	1100	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	650	</armor>
+      <devices>	325	</devices>
+    </damage>
+  </_100mm_UBR-412PB_charged_shot_WT>
   <_122mm_BP450SO_SH>
     <id>	277	</id>
     <userString>	#ussr_vehicles:_122mm_BP450SO_SH	</userString>

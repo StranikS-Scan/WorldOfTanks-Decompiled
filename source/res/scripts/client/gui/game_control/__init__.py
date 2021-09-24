@@ -67,6 +67,12 @@ def getGameControllersConfig(manager):
     from gui.game_control.overlay import SteamRegistrationOverlay as _SteamRegistrationOverlay
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
     from gui.game_control.birthday_calendar_controller import BirthdayCalendarController as BirthdayCalendar
+    from gui.game_control.game_event_controller import GameEventController
+    from gui.game_control.loot_boxes_controller import LootBoxesController
+    from event_settings.event_settings_controller import EventSettingsController as _EventSettingsController
+    from gui.entitlements.entitlements_controller import EntitlementsController
+    from gui.wt_event.wt_event_notifications import WTEventNotifications
+    from skeletons.gui.wt_event import IWTEventNotifications
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -120,6 +126,8 @@ def getGameControllersConfig(manager):
     else:
         _config(_interface.IChinaController, _NoChina())
     _config(_interface.IMapboxController, MapboxController())
+    _config(_interface.IGameEventController, GameEventController())
+    _config(_interface.ILootBoxesController, LootBoxesController())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
@@ -132,3 +140,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IVehiclePostProgressionController, VehiclePostProgressionController())
     _config(_interface.ISteamRegistrationOverlay, _SteamRegistrationOverlay())
     _config(_interface.IBirthdayCalendarController, BirthdayCalendar())
+    _config(_interface.IEventSettingsController, _EventSettingsController())
+    _config(_interface.IEntitlementsController, EntitlementsController())
+    _config(IWTEventNotifications, WTEventNotifications())

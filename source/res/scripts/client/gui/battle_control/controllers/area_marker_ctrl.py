@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/area_marker_ctrl.py
 import logging
-import math
 from functools import partial
 import Math
 import math_utils
@@ -26,6 +25,7 @@ class AreaMarkersController(BaseMarkerController):
         self._battleCtx = None
         self._arenaVisitor = None
         self._vehiclesAreaMarkerHandler = VehiclesAreaMarkerHandler(self)
+        self._prevGlobalVisibility = None
         return
 
     def startControl(self, battleCtx, arenaVisitor):
@@ -69,8 +69,11 @@ class AreaMarkersController(BaseMarkerController):
                 if hide:
                     marker.setVisible(False)
                     continue
-                marker.setVisible(self._globalVisibility)
-                marker.update(int(math.ceil(max(0, distanceToArea))))
+                if self._prevGlobalVisibility != self._globalVisibility:
+                    self._prevGlobalVisibility = self._globalVisibility
+                    marker.setVisible(self._globalVisibility)
+                if marker.isVisible:
+                    marker.update(int(round(distanceToArea)))
 
             return
 

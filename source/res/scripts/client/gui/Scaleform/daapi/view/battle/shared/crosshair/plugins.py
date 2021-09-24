@@ -10,6 +10,7 @@ from AvatarInputHandler import gun_marker_ctrl, aih_global_binding
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import SPGShotResultEnum
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME, SPGAim
 from aih_constants import CHARGE_MARKER_STATE, CTRL_MODE_NAME
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH
@@ -444,6 +445,7 @@ class AmmoPlugin(CrosshairPlugin):
         self.__setup(ctrl, self.sessionProvider.isReplayPlaying)
         ctrl.onGunSettingsSet += self.__onGunSettingsSet
         ctrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
+        ctrl.onShellsCleared += self.__onGunReloadCleared
         ctrl.onGunAutoReloadTimeSet += self.__onGunAutoReloadTimeSet
         ctrl.onGunAutoReloadBoostUpdated += self.__onGunAutoReloadBoostUpd
         ctrl.onShellsUpdated += self.__onShellsUpdated
@@ -467,10 +469,11 @@ class AmmoPlugin(CrosshairPlugin):
             ctrl.onGunAutoReloadTimeSet -= self.__onGunAutoReloadTimeSet
             ctrl.onGunAutoReloadBoostUpdated -= self.__onGunAutoReloadBoostUpd
             ctrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
+            ctrl.onShellsCleared -= self.__onGunReloadCleared
             ctrl.onShellsUpdated -= self.__onShellsUpdated
             ctrl.onCurrentShellChanged -= self.__onCurrentShellChanged
             ctrl.onCurrentShellReset -= self.__onCurrentShellReset
-            g_replayEvents.onPause -= self.__onReplayPaused
+        g_replayEvents.onPause -= self.__onReplayPaused
         if vehStateCtrl is not None:
             vehStateCtrl.onVehicleControlling -= self.__onVehicleControlling
         return
@@ -491,7 +494,7 @@ class AmmoPlugin(CrosshairPlugin):
         quantity, quantityInClip = ctrl.getCurrentShells()
         if (quantity, quantityInClip) != (SHELL_QUANTITY_UNKNOWN,) * 2:
             isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
-            self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
+            self.__setAmmoStocks(quantity, quantityInClip, isLow, state, False)
         reloadingState = ctrl.getGunReloadingState()
         self.__setReloadingState(reloadingState)
         if self.__guiSettings.hasAutoReload:
@@ -510,6 +513,9 @@ class AmmoPlugin(CrosshairPlugin):
         guiSettings = _createAmmoSettings(gunSettings)
         self.__guiSettings = guiSettings
         self._parentObj.as_setClipParamsS(guiSettings.getClipCapacity(), guiSettings.getBurstSize(), guiSettings.hasAutoReload)
+
+    def __onGunReloadCleared(self, state):
+        self.__setReloadingState(state)
 
     def __onGunReloadTimeSet(self, _, state, skipAutoLoader):
         self.__setReloadingState(state)
@@ -590,7 +596,7 @@ class AmmoPlugin(CrosshairPlugin):
             return
         self.__shellsInClip = quantityInClip
         isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
-        self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, result & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
+        self.__setAmmoStocks(quantity, quantityInClip, isLow, state, result & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
         if quantity + quantityInClip == 0:
             self.__reloadAnimator.setClipAutoLoading(0, 0, isRedText=True)
 
@@ -599,14 +605,24 @@ class AmmoPlugin(CrosshairPlugin):
         if ctrl is not None:
             quantity, quantityInClip = ctrl.getCurrentShells()
             isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
-            self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
+            self.__setAmmoStocks(quantity, quantityInClip, isLow, state, False)
         return
 
     def __onCurrentShellReset(self):
-        self._parentObj.as_setAmmoStockS(0, 0, False, 'normal', False)
+        self.__setAmmoStocks(0, 0, False, 'normal', False)
 
     def __onQuickShellChangerUpdated(self, isActive, time):
         self._parentObj.as_setShellChangeTimeS(isActive, time)
+
+    def __setAmmoStocks(self, quantity, quantityInClip, isLow, clipState, clipReloaded=False):
+        if self.__isHideShellCount():
+            quantity = -1
+        self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, clipState, clipReloaded)
+
+    def __isHideShellCount(self):
+        wtBonusCaps = ARENA_BONUS_TYPE_CAPS.WHITE_TIGER
+        isHide = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arena.bonusType, wtBonusCaps)
+        return isHide
 
 
 class VehicleStatePlugin(CrosshairPlugin):

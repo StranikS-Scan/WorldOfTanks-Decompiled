@@ -1,0 +1,20 @@
+<VehicleFireRing.def>
+  <Properties>
+    <safeZoneRadius>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </safeZoneRadius>
+    <abilityRadius>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </abilityRadius>
+    <center>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </center>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	vehicleFireRing	</DefaultKeyName>
+</VehicleFireRing.def>

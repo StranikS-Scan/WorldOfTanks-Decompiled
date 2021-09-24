@@ -15,7 +15,10 @@ def createAmmoCtrl(setup):
 def createEquipmentCtrl(setup):
     isBattleRoyale = ARENA_BONUS_TYPE_CAPS.checkAny(setup.arenaEntity.bonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
     if setup.isReplayPlaying:
-        clazz = br_equipment_ctrl.SteelHunterReplayEquipmentController if isBattleRoyale else equipment_ctrl.EquipmentsReplayPlayer
+        if isBattleRoyale:
+            clazz = br_equipment_ctrl.SteelHunterReplayEquipmentController
+        else:
+            clazz = equipment_ctrl.EquipmentsReplayPlayer
     elif isBattleRoyale:
         clazz = br_equipment_ctrl.SteelHunterEquipmentController
     else:

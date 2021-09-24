@@ -9,3 +9,6 @@ class BattleRoyalePostmortemPanelMeta(BasePostmortemPanelMeta):
 
     def as_setPlayerInfoS(self, playerInfo):
         return self.flashObject.as_setPlayerInfo(playerInfo) if self._isDAAPIInited() else None
+
+    def as_setSpectatorPanelVisibleS(self, value):
+        return self.flashObject.as_setSpectatorPanelVisible(value) if self._isDAAPIInited() else None

@@ -17,7 +17,8 @@ from gui.impl.gen import R
 from gui.server_events import finders
 from gui.server_events.bonuses import getBonuses, compareBonuses
 from gui.server_events import events_helpers
-from gui.server_events.events_helpers import isPremium, isDailyQuest
+from gui.server_events.events_constants import WT_BOSS_GROUP_ID, WT_QUEST_UNAVAILABLE_NOT_ENOUGH_TICKETS_REASON
+from gui.server_events.events_helpers import isPremium, isDailyQuest, isWtQuest
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import getModifierObj, compareModifiers
 from gui.server_events.parsers import AccountRequirements, VehicleRequirements, TokenQuestAccountRequirements, PreBattleConditions, PostBattleConditions, BonusConditions
@@ -32,13 +33,10 @@ from personal_missions_config import getQuestConfig
 from personal_missions_constants import DISPLAY_TYPE
 from shared_utils import first, findFirst
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.game_control import IGameEventController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-EventBattles = namedtuple('EventBattles', ['vehicleTags',
- 'vehicles',
- 'enabled',
- 'arenaTypeID'])
 
 class DEFAULTS_GROUPS(object):
     FOR_CURRENT_VEHICLE = 'currentlyAvailable'
@@ -308,6 +306,23 @@ class Quest(ServerEventAbstract):
         self.postBattleCond = PostBattleConditions(conds['postBattle'], self.preBattleCond)
         self._groupID = DEFAULTS_GROUPS.UNGROUPED_QUESTS
         self.__linkedActions = []
+
+    def getArenaTypes(self):
+        arenaTypes = None
+        battleCond = self.preBattleCond.getConditions()
+        if battleCond:
+            bonusTypes = battleCond.find('bonusTypes')
+            if bonusTypes:
+                arenaTypes = bonusTypes.getValue()
+        return arenaTypes
+
+    def isEventBattlesQuest(self):
+        arenaTypes = self.getArenaTypes()
+        return set(arenaTypes) == set(constants.ARENA_BONUS_TYPE.EVENT_BATTLES_RANGE) if arenaTypes else False
+
+    def isQuestForBattleRoyale(self):
+        arenaTypes = self.getArenaTypes()
+        return set(arenaTypes) == set(constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_REGULAR_RANGE) if arenaTypes else False
 
     def isCompensationPossible(self):
         return events_helpers.isMarathon(self.getGroupID()) and bool(self.getBonuses('tokens'))
@@ -1250,6 +1265,17 @@ class MotiveQuest(Quest):
         return getLocalizedData(self._data, 'requirements')
 
 
+class WtQuest(Quest):
+    gameEventController = dependency.descriptor(IGameEventController)
+
+    @property
+    def isBossQuest(self):
+        return self.getGroupID().startswith(WT_BOSS_GROUP_ID)
+
+    def isAvailable(self):
+        return ValidationResult(False, WT_QUEST_UNAVAILABLE_NOT_ENOUGH_TICKETS_REASON) if self.isBossQuest and not self.gameEventController.hasEnoughTickets() and not self.gameEventController.hasSpecialBoss() else super(WtQuest, self).isAvailable()
+
+
 def _getTileIconPath(tileIconID, prefix, state):
     return '../maps/icons/quests/tiles/%s_%s_%s.png' % (tileIconID, prefix, state)
 
@@ -1294,6 +1320,8 @@ def createQuest(questType, qID, data, progress=None, expiryTime=None):
         questClass = PremiumQuest
     elif isDailyQuest(qID):
         questClass = DailyQuest
+    elif isWtQuest(qID):
+        questClass = WtQuest
     return questClass(qID, data, progress)
 
 

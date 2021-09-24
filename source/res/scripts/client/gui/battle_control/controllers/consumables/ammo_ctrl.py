@@ -425,15 +425,15 @@ class AmmoController(MethodsRules, ViewComponentsController):
         if reloadEffect is not None:
             reloadEffect.stop()
         self.__gunSettings = _GunSettings.default()
+        self._reloadingState.clear()
         if leave:
-            self._reloadingState.clear()
             self.__autoShoots.destroy()
             self._autoReloadingBoostState.destroy()
             self.__dualGunQuickChangeReady = False
             self.__quickChangerInProcess = False
             self.__quickChangerActive = False
         else:
-            self.onShellsCleared()
+            self.onShellsCleared(self._reloadingState.getSnapshot())
         return
 
     def setViewComponents(self, *components):

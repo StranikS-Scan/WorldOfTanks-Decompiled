@@ -333,22 +333,20 @@ def getObjectReferrers(obj, ignore):
     return result
 
 
-def getOptimizedGarbage():
+def saveOptimizedGarbage(path):
     import gc
     import sys
     import inspect
+    delimiter = '=-=' * 100 + '\n'
+    logPattern = '{}Representation str(garbageObject):\n{}\nObject type: {}\nRef count: {}\nModule of object: {}\n'
     gc.collect()
     gcGarbageCopy = gc.garbage[:]
     del gc.garbage[:]
-    garbageObjects = []
-    for garbageObject in gcGarbageCopy:
-        try:
-            garbageObjects.append((str(garbageObject),
-             type(garbageObject),
-             sys.getrefcount(garbageObject),
-             inspect.getmodule(garbageObject)))
-        except:
-            pass
+    with open(path, 'w') as f:
+        for garbageObject in gcGarbageCopy:
+            try:
+                f.write(logPattern.format(delimiter, str(garbageObject), type(garbageObject), sys.getrefcount(garbageObject), inspect.getmodule(garbageObject)))
+            except:
+                continue
 
     del gcGarbageCopy[:]
-    return garbageObjects

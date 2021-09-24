@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 import BigWorld
 import Keys
 import Math
+import Projectiles
 import ResMgr
 import WWISE
 import WoT
@@ -72,7 +73,7 @@ from gui.battle_control import BattleSessionSetup
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CANT_SHOOT_ERROR, DestroyTimerViewState, DeathZoneTimerViewState, TIMER_VIEW_STATE, ENTITY_IN_FOCUS_TYPE
 from gui.prb_control.formatters import messages
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME, VEHICLE_TAGS
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from gui.wgnc import g_wgncProvider
 from gun_rotation_shared import decodeGunAngles
@@ -263,6 +264,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__magneticAutoAimTags = self.lobbyContext.getServerSettings().getMagneticAutoAimConfig().get('enableForTags', set())
         self.__isAimingEnded = False
         self.hintManager = None
+        self.__hasGeneratorActivationComponent = False
         return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -1107,6 +1109,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def updateVehicleHealth(self, vehicleID, health, deathReasonID, isCrewActive, isRespawn):
         if vehicleID != self.playerVehicleID:
             return
+        elif not self.userSeesWorld():
+            return
         else:
             rawHealth = health
             health = max(0, health)
@@ -1159,20 +1163,29 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if not self.__isVehicleAlive and vehicleID == self.inputHandler.ctrl.curVehicleID:
                 self.guiSessionProvider.shared.feedback.setVehicleHasAmmo(vehicleID, timeLeft != -2)
             return
-        self.__gunReloadCommandWaitEndTime = 0.0
-        self.__prevGunReloadTimeLeft = timeLeft
-        shellsLeft = self.guiSessionProvider.shared.ammo.getShellsQuantityLeft()
-        if shellsLeft <= 1 and timeLeft <= 0.0:
-            shellsLayout = self.guiSessionProvider.shared.ammo.getOrderedShellsLayout()
-            allShells = 0
-            for layout in shellsLayout:
-                allShells += layout[2]
+        else:
+            if timeLeft == baseTime:
+                self.__gunReloadCommandWaitEndTime = 0.0
+            self.__prevGunReloadTimeLeft = timeLeft
+            shellsLeft = self.guiSessionProvider.shared.ammo.getShellsQuantityLeft()
+            if shellsLeft <= 1 and timeLeft <= 0.0:
+                shellsLayout = self.guiSessionProvider.shared.ammo.getOrderedShellsLayout()
+                allShells = 0
+                for layout in shellsLayout:
+                    allShells += layout[2]
 
-            if allShells == 1:
-                baseTime = -1
-        if timeLeft < 0.0:
-            timeLeft = -1
-        self.guiSessionProvider.shared.ammo.setGunReloadTime(timeLeft, baseTime)
+                if allShells == 1:
+                    baseTime = -1
+            if timeLeft < 0.0:
+                timeLeft = -1
+            vehicle = self.getVehicleAttached()
+            if vehicle is not None and vehicle.appearance is not None:
+                if timeLeft > 0.0:
+                    vehicle.appearance.removeComponentByType(Projectiles.GunReloadedComponent)
+                elif vehicle.appearance.findComponentByType(Projectiles.GunReloadedComponent) is None:
+                    vehicle.appearance.createComponent(Projectiles.GunReloadedComponent)
+            self.guiSessionProvider.shared.ammo.setGunReloadTime(timeLeft, baseTime)
+            return
 
     def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, firstTime, stunned, isBoostApplicable):
         self.guiSessionProvider.shared.ammo.setGunAutoReloadTime(timeLeft, baseTime, firstTime, stunned, isBoostApplicable)
@@ -1378,8 +1391,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             LOG_CODEPOINT_WARNING(code, value)
             return
 
-    def updateTargetingInfo(self, turretYaw, gunPitch, maxTurretRotationSpeed, maxGunRotationSpeed, shotDispMultiplierFactor, gunShotDispersionFactorsTurretRotation, chassisShotDispersionFactorsMovement, chassisShotDispersionFactorsRotation, aimingTime):
-        LOG_DEBUG_DEV('updateTargetingInfo', turretYaw, gunPitch, maxTurretRotationSpeed, maxGunRotationSpeed, shotDispMultiplierFactor, gunShotDispersionFactorsTurretRotation, chassisShotDispersionFactorsMovement, chassisShotDispersionFactorsRotation, aimingTime)
+    def updateTargetingInfo(self, entityId, turretYaw, gunPitch, maxTurretRotationSpeed, maxGunRotationSpeed, shotDispMultiplierFactor, gunShotDispersionFactorsTurretRotation, chassisShotDispersionFactorsMovement, chassisShotDispersionFactorsRotation, aimingTime):
+        LOG_DEBUG_DEV('updateTargetingInfo', entityId, turretYaw, gunPitch, maxTurretRotationSpeed, maxGunRotationSpeed, shotDispMultiplierFactor, gunShotDispersionFactorsTurretRotation, chassisShotDispersionFactorsMovement, chassisShotDispersionFactorsRotation, aimingTime)
+        if entityId != self.playerVehicleID and entityId != self.observedVehicleID:
+            return
         aimingInfo = self.__aimingInfo
         aimingInfo[2] = shotDispMultiplierFactor
         aimingInfo[3] = gunShotDispersionFactorsTurretRotation
@@ -1539,7 +1554,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         sound = 'enemy_no_hp_damage_at_no_attempt_by_player'
                     if len(enemies) == 1:
                         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, targetId=enemyVehID)
-                if sound is not None:
+                if sound is not None and not _isSkippedSound(sound, arenaVehicles.get(enemyVehID, {})):
                     bestSound = _getBestShotResultSound(bestSound, sound, enemyVehID)
 
             if bestSound is not None:
@@ -1974,6 +1989,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     self.showVehicleError(self.__cantShootCriticals['gun_locked'])
                 return
             if self.__isOwnVehicleSwitchingSiegeMode():
+                return
+            if not self.guiSessionProvider.shared.feedback.getVehicleAttrs().get('gunCanShoot', True):
+                self.showVehicleError(self.__cantShootCriticals['gun_locked'])
                 return
             self.cell.vehicle_shoot()
             shotArgs = None
@@ -3020,6 +3038,11 @@ def _getBestShotResultSound(currBest, newSoundName, otherData):
         return (newSoundName, otherData, newSoundPriority) if newSoundPriority > currBest[2] else currBest
 
 
+def _isSkippedSound(sound, enemyVehInfo):
+    vehDescr = enemyVehInfo.get('vehicleType')
+    return VEHICLE_TAGS.EVENT_BOT in vehDescr.type.tags and sound in _SKIPPED_EVENT_BOTS_SOUNDS if vehDescr is not None else False
+
+
 _shotResultSoundPriorities = {'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player': 12,
  'enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player': 11,
  'enemy_hp_damaged_by_projectile_by_player': 10,
@@ -3034,6 +3057,13 @@ _shotResultSoundPriorities = {'enemy_hp_damaged_by_projectile_and_gun_damaged_by
  'enemy_no_hp_damage_at_no_attempt_by_player': 2,
  'enemy_no_hp_damage_by_near_explosion_by_player': 1,
  'enemy_ricochet_by_player': 0}
+_SKIPPED_EVENT_BOTS_SOUNDS = frozenset(['enemy_ricochet_by_player',
+ 'enemy_no_hp_damage_at_attempt_by_player',
+ 'enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player',
+ 'enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player',
+ 'enemy_hp_damaged_by_projectile_by_player',
+ 'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player',
+ 'enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player'])
 
 class FilterLagEmulator(object):
 

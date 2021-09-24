@@ -43,11 +43,11 @@ def getBattlePassBonusPacker():
     return BonusUIPacker(mapping)
 
 
-def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None):
+def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packerGetter=getBattlePassBonusPacker):
     bonusIndexTotal = 0
     if tooltipData is not None:
         bonusIndexTotal = len(tooltipData)
-    packer = getBattlePassBonusPacker()
+    packer = packerGetter()
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = packer.pack(bonus)
@@ -118,11 +118,20 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
                 bonusImageName = 'tankman'
             model = RewardItemModel()
             cls._packCommon(bonus, model)
-            model.setIcon(bonusImageName)
+            model.setIcon(cls._getIcon(recruitInfo, bonusImageName))
             model.setUserName(recruitInfo.getFullUserName())
             model.setBigIcon('_'.join([bonusImageName, recruitInfo.getGroupName()]))
+            model.setLabel(cls._getLabel(bonus, recruitInfo))
             cls._injectAwardID(model, recruitInfo.getGroupName())
             return model
+
+    @classmethod
+    def _getLabel(cls, bonus, recruitInfo):
+        pass
+
+    @classmethod
+    def _getIcon(cls, recruitInfo, bonusImageName):
+        return bonusImageName
 
     @classmethod
     def _getToolTip(cls, bonus):

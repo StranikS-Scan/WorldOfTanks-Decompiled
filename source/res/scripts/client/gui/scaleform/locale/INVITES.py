@@ -62,6 +62,7 @@ class INVITES(object):
     INVITES_NOTE_CHANGE_AND_LEAVE_QUEUE_EVENT_BATTLES = '#invites:invites/note/change_and_leave/QUEUE_EVENT_BATTLES'
     INVITES_NOTE_LEAVE_QUEUE_EVENT_BATTLES = '#invites:invites/note/leave/QUEUE_EVENT_BATTLES'
     INVITES_NOTE_CHANGE_AND_LEAVE_PREBATTLE_EVENT = '#invites:invites/note/change_and_leave/PREBATTLE_EVENT'
+    INVITES_NOTE_LEAVE_SQUAD_EVENT = '#invites:invites/note/leave/SQUAD_EVENT'
     INVITES_NOTE_LEAVE_PREBATTLE_EVENT = '#invites:invites/note/leave/PREBATTLE_EVENT'
     INVITES_NOTE_LEAVE_PREBATTLE_SQUAD = '#invites:invites/note/leave/PREBATTLE_SQUAD'
     INVITES_NOTE_CHANGE_AND_LEAVE_PREBATTLE_SQUAD = '#invites:invites/note/change_and_leave/PREBATTLE_SQUAD'

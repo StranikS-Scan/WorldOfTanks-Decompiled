@@ -51,6 +51,7 @@ def writeEmblemSlots(slotDS, slot):
     slotDS.write('rayUp', slot.rayUp)
     if slot.type == 'insigniaOnGun':
         _xml.rewriteBool(slotDS, 'applyToFabric', slot.applyToFabric, True)
+        _xml.rewriteString(slotDS, 'compatibleModels', ' '.join(slot.compatibleModels), '')
     else:
         _xml.rewriteBool(slotDS, 'isMirrored', slot.isMirrored, False)
     if slot.type in ('fixedEmblem', 'fixedInscription'):

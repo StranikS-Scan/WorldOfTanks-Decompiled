@@ -175,6 +175,7 @@ class ZoomStateSwitcher(object):
 class CollideAnimatorEasing(object):
 
     def __init__(self):
+        super(CollideAnimatorEasing, self).__init__()
         self.__easing = None
         return
 

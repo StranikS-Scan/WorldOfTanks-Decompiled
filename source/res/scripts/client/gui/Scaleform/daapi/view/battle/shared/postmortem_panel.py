@@ -291,11 +291,16 @@ class PostmortemPanel(_SummaryPostmortemPanel):
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__isInPostmortem = True
         self._updateVehicleInfo()
+        if not noRespawnPossible and respawnAvailable:
+            self.as_setSpectatorPanelVisibleS(False)
+        else:
+            self.as_setSpectatorPanelVisibleS(True)
 
     def __onRespawnBaseMoving(self):
-        self.__isInPostmortem = False
-        self.__deathAlreadySet = False
+        self._deathAlreadySet = False
         self.resetDeathInfo()
+        self._updateVehicleInfo()
+        self.__isInPostmortem = False
 
     def _updateVehicleInfo(self):
         if not self.__isInPostmortem:

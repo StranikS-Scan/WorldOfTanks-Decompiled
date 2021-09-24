@@ -58,6 +58,7 @@ class TOOLTIPS_CONSTANTS(object):
     AWARD_VEHICLE = 'awardVehicle'
     EXTENDED_AWARD_VEHICLE = 'extendedAwardVehicle'
     SENIORITY_AWARD_VEHICLE = 'seniorityAwardVehicle'
+    WT_PORTAL_VEHICLE = 'portalVehicle'
     DEFAULT_SHELL = 'defaultShell'
     HANGAR_SHELL = 'hangarShell'
     NATION_CHANGE_HANGAR_SHELL = 'nationChangeHangarShell'
@@ -82,6 +83,7 @@ class TOOLTIPS_CONSTANTS(object):
     TANKMAN_NEW_SKILL = 'tankmanNewSkill'
     PREVIEW_CREW_SKILL = 'previewCrewSkill'
     EFFICIENCY_PARAM = 'efficiencyParam'
+    TOTAL_EFFICIENCY_PARAM = 'totalEfficiencyParam'
     MAP = 'map'
     SETTINGS_CONTROL = 'control'
     SETTINGS_BUTTON = 'settingsButton'
@@ -115,6 +117,7 @@ class TOOLTIPS_CONSTANTS(object):
     QUESTS_PREVIEW = 'questsPreview'
     EVENT_QUESTS_PREVIEW = 'EventQuestsPreview'
     PERSONAL_QUESTS_PREVIEW = 'presonalQuestsPreview'
+    EVENT_BATTLES_QUESTS_PREVIEW = 'eventBattlesQuestsReview'
     SHEDULE_QUEST = 'scheduleQuest'
     MISSION_VEHICLE = 'missionVehicle'
     MISSION_VEHICLE_TYPE = 'missionVehicleType'
@@ -255,6 +258,14 @@ class TOOLTIPS_CONSTANTS(object):
     BATTLE_ROYALE_PERF_ADVANCED = 'battleRoyalePerfAdvanced'
     BATTLE_ROYALE_SELECTOR_INFO = 'battleRoyaleSelectorInfo'
     BATTLE_ROYALE_WIDGET_INFO = 'battleRoyaleWidgetInfo'
+    EVENT_BATTLES_SELECTOR_INFO = 'eventBattlesSelectorInfo'
+    EVENT_BATTLES_SERVER_PRIMETIME = 'eventBattlesServerPrimeTime'
+    EVENT_BATTLES_CALENDAR = 'eventBattlesCalendar'
+    EVENT_BATTLES_TICKET = 'eventBattlesTicket'
+    EVENT_CAROUSEL_VEHICLE = 'eventCarouselVehicle'
+    EVENT_LOOTBOX = 'eventLootbox'
+    EVENT_BUY_LOOTBOX = 'eventBuyLootbox'
+    EVENT_VEHICLE_COMPENSATION = 'eventVehicleCompensation'
     BLUEPRINT_INFO = 'blueprintInfo'
     BLUEPRINT_CONVERT_INFO = 'blueprintConvertInfo'
     BLUEPRINT_FRAGMENT_INFO = 'blueprintFragmentInfo'
@@ -389,8 +400,7 @@ class TOOLTIPS_CONSTANTS(object):
      SHOP_BOOSTER,
      BOOSTERS_QUESTS,
      NATION_CHANGE_BATTLE_BOOSTER]
-    COMMON_SET = [EFFICIENCY_PARAM,
-     IGR_INFO,
+    COMMON_SET = [IGR_INFO,
      CONTACT,
      SORTIE_DIVISION,
      MAP,
@@ -543,7 +553,8 @@ class TOOLTIPS_CONSTANTS(object):
      TECHTREE_VEHICLE_STATUS,
      VEHICLE_TANK_SETUP_PARAMETERS,
      VEHICLE_POST_PROGRESSION_PARAMETERS,
-     VEHICLE_ROLES]
+     VEHICLE_ROLES,
+     WT_PORTAL_VEHICLE]
     BLUEPRINTS_SET = [BLUEPRINT_INFO,
      BLUEPRINT_FRAGMENT_INFO,
      BLUEPRINT_EMPTY_SLOT_INFO,
@@ -620,4 +631,13 @@ class TOOLTIPS_CONSTANTS(object):
      RANDOM_CREWBOOK,
      MAPBOX_CALENDAR]
     ACCOUNT_COMPLETION_SET = [ACCOUNT_COMPLETION]
+    EFFICIENCY_SET = [EFFICIENCY_PARAM, TOTAL_EFFICIENCY_PARAM]
     REFERRAL_PROGRAM_SET = [REFERRAL_AWARDS]
+    EVENT_BATTLES_SET = [EVENT_BATTLES_SELECTOR_INFO,
+     EVENT_BATTLES_SERVER_PRIMETIME,
+     EVENT_BATTLES_CALENDAR,
+     EVENT_LOOTBOX,
+     EVENT_BATTLES_QUESTS_PREVIEW,
+     EVENT_BATTLES_TICKET,
+     EVENT_CAROUSEL_VEHICLE,
+     EVENT_BUY_LOOTBOX]

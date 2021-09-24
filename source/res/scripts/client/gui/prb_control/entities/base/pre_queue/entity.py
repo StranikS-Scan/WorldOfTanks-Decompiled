@@ -12,7 +12,6 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.formatters import messages
 from gui.prb_control.entities.base.entity import BasePrbEntity, BasePrbEntryPoint
 from gui.prb_control.entities.base.pre_queue.ctx import JoinPreQueueModeCtx, PrbCtrlRequestCtx, DequeueCtx
-from gui.prb_control.entities.base.pre_queue.event_vehicle_extension import EventVehicleMeta
 from gui.prb_control.entities.base.pre_queue.listener import IPreQueueListener
 from gui.prb_control.entities.base.pre_queue.permissions import PreQueuePermissions
 from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
@@ -72,7 +71,6 @@ class PreQueueEntryPoint(BasePrbEntryPoint):
 
 
 class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
-    __metaclass__ = EventVehicleMeta
     _QUEUE_TIMEOUT_MSG_KEY = '#system_messages:arena_start_errors/prb/kick/timeout'
 
     def __init__(self, modeFlags, queueType, subscriber):

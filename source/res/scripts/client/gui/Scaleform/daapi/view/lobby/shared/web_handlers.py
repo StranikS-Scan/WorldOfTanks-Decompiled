@@ -15,6 +15,7 @@ from web.web_client_api.ui import CloseWindowWebApi, UtilWebApi, OpenWindowWebAp
 from web.web_client_api.vehicles import VehiclesWebApi
 from web.web_client_api.blueprints_convert_sale import BlueprintsConvertSaleWebApi
 from web.web_client_api.birthday_calendar import BirthdayCalendarWebApi
+from web.web_client_api.wt import WtWebApi
 _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
  OpenWindowWebApi,
  NotificationWebApi,
@@ -34,7 +35,8 @@ _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
  MapboxWebApi,
  FrontLineWebApi,
  BirthdayCalendarWebApi,
- MarathonWebApi)
+ MarathonWebApi,
+ WtWebApi)
 
 def createBrowserOverlayWebHandlers():
     return webApiCollection(*_DEFAULT_WEB_API_COLLECTION)

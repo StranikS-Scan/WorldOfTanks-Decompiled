@@ -87,5 +87,5 @@ def canVehicleSpawnBot(vehicleName, brCtrl=None):
 
 
 @dependency.replace_none_kwargs(hangarSwitcher=IHangarSpacesSwitcher)
-def currentHangarIsSteelHunter(hangarSwitcher=None):
+def battleRoyaleHangarIsActive(hangarSwitcher=None):
     return hangarSwitcher.currentItem == hangarSwitcher.itemsToSwitch.BATTLE_ROYALE

@@ -9,7 +9,7 @@ from visual_script.misc import errorVScript
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.tunable_event_block import TunableEventBlock
 from visual_script_client.vehicle_common import TunablePlayerVehicleEventBlock, getPartState, getPartNames, getPartName, TriggerListener
-vehicles, helpers, TriggersManager, gun_marker_ctrl, Avatar = dependencyImporter('items.vehicles', 'helpers', 'TriggersManager', 'AvatarInputHandler.gun_marker_ctrl', 'Avatar')
+vehicles, helpers, TriggersManager, gun_marker_ctrl, Avatar, session = dependencyImporter('items.vehicles', 'helpers', 'TriggersManager', 'AvatarInputHandler.gun_marker_ctrl', 'Avatar', 'skeletons.gui.battle_session')
 
 class PlayerMeta(Meta):
 
@@ -47,8 +47,16 @@ class GetPlayerVehicleGun(Block, PlayerMeta):
 
     def __init__(self, *args, **kwargs):
         super(GetPlayerVehicleGun, self).__init__(*args, **kwargs)
+        self._gunCanShoot = self._makeDataOutputSlot('gunCanShoot', SLOT_TYPE.BOOL, self._getGunCanShoot)
         self._gunPosition = self._makeDataOutputSlot('gunPosition', SLOT_TYPE.VECTOR3, self._getGunPosition)
         self._gunDirection = self._makeDataOutputSlot('gunDirection', SLOT_TYPE.VECTOR3, self._getGunDirection)
+
+    @helpers.dependency.replace_none_kwargs(sessionProvider=session.IBattleSessionProvider)
+    def _getGunCanShoot(self, sessionProvider):
+        if sessionProvider is not None:
+            canShoot, _ = sessionProvider.shared.ammo.canShoot()
+            self._gunCanShoot.setValue(canShoot)
+        return
 
     def _getGunPosition(self):
         avatar = self._avatar

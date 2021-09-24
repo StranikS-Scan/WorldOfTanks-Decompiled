@@ -57,6 +57,14 @@ def readUTC(section, field, default=None):
         raise SoftException('Invalid field %s: %s' % (field, e))
 
 
+def isFloat(string):
+    try:
+        float(string)
+        return True
+    except ValueError:
+        return False
+
+
 def __readBonus_bool(bonus, name, section, eventType, checkLimit):
     bonus[name] = section.asBool
 
@@ -805,6 +813,16 @@ def __readBonus_optionalData(config, bonusReaders, section, eventType):
         properties['compensation'] = section['compensation'].asBool
     if section.has_key('shouldCompensated'):
         properties['shouldCompensated'] = section['shouldCompensated'].asBool
+    if section.has_key('userProbability'):
+        userProbability = section['userProbability'].asString.split()
+        if len(userProbability) != len(probabilitiesList):
+            raise SoftException('User probabilities must be the same length as probabilities')
+        for userProb in userProbability:
+            if userProb not in USER_PROBABILITIES:
+                if not isFloat(userProb) or not 0.0 <= float(userProb) <= 100.0:
+                    raise SoftException('Invalid userProbability value: {}'.format(userProb))
+
+        properties['userProbability'] = userProbability
     if IS_DEVELOPMENT:
         if section.has_key('name'):
             properties['name'] = section['name'].asString
@@ -1008,10 +1026,12 @@ _RESERVED_NAMES = frozenset(['config',
  'name',
  'shouldCompensated',
  'probabilityStageDependence',
- 'bonusProbability'])
+ 'bonusProbability',
+ 'userProbability'])
 SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
 SUPPORTED_BONUSES_IDS = dict(((n, i) for i, n in enumerate(SUPPORTED_BONUSES)))
 SUPPORTED_BONUSES_NAMES = {i:n for i, n in enumerate(SUPPORTED_BONUSES)}
+USER_PROBABILITIES = frozenset(['high', 'medium', 'low'])
 
 def __readBonusLimit(section):
     properties = {}

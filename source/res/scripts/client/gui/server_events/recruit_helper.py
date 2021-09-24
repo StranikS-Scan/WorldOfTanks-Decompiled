@@ -48,6 +48,7 @@ class RecruitSourceID(object):
     TWITCH_23 = 'twitch23'
     TWITCH_24 = 'twitch24'
     TWITCH_25 = 'twitch25'
+    TWITCH_26 = 'twitch26'
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
     COMMANDER_MARINA = 'commander_marina'
@@ -79,7 +80,8 @@ class RecruitSourceID(object):
      TWITCH_22,
      TWITCH_23,
      TWITCH_24,
-     TWITCH_25)
+     TWITCH_25,
+     TWITCH_26)
 
 
 _NEW_SKILL = 'new_skill'

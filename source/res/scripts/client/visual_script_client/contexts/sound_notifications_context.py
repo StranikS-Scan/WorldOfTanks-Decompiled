@@ -4,7 +4,11 @@ import weakref
 import BigWorld
 from visual_script.misc import ASPECT
 from visual_script.slot_types import SLOT_TYPE, arrayOf
-from visual_script.context import VScriptContext, vse_event_out, vse_func_call
+from visual_script.context import VScriptContext, vse_event_out, vse_func_call, vse_get_property
+from cgf_components import wt_helpers
+from constants import IS_CLIENT
+if IS_CLIENT:
+    from cgf_components.wt_sounds_manager import getAllSwitches as getWtSwitches
 
 class SoundNotificationsContext(VScriptContext):
 
@@ -171,3 +175,55 @@ class SoundNotificationsContext(VScriptContext):
     def setCircumstanceGroupWeight(self, groupName, weight, hold):
         if self.__soundNotifications:
             self.__soundNotifications.setCircumstanceGroupWeight(groupName, weight, hold)
+
+    @vse_get_property(SLOT_TYPE.INT, display_name='GetHuntersCount', description='Returns amount of alive hunters', aspects=[ASPECT.CLIENT])
+    def getHuntersCount(self):
+        return wt_helpers.getHuntersCount()
+
+    @vse_get_property(SLOT_TYPE.FLOAT, display_name='GetPlayerVehicleHealthPercent', description='Returns player vehicle health percent', aspects=[ASPECT.CLIENT])
+    def getPlayerVehicleHealthPercent(self):
+        return wt_helpers.getPlayerVehicleHealthPercent()
+
+    @vse_get_property(SLOT_TYPE.INT, display_name='GetPlayerLives', description='Returns player lives', aspects=[ASPECT.CLIENT])
+    def getPlayerLives(self):
+        return wt_helpers.getPlayerLives()
+
+    @vse_get_property(SLOT_TYPE.FLOAT, display_name='GetBossVehicleHealthPercent', description='Returns boss vehicle health percent', aspects=[ASPECT.CLIENT])
+    def getBossVehicleHealthPercent(self):
+        return wt_helpers.getBossVehicleHealthPercent()
+
+    @vse_get_property(SLOT_TYPE.FLOAT, display_name='GetBattleTimeLeft', description='Returns battle left time', aspects=[ASPECT.CLIENT])
+    def getBattleTimeLeft(self):
+        return wt_helpers.getBattleTimeLeft()
+
+    @vse_get_property(SLOT_TYPE.INT, display_name='GetDestroyedGeneratorsCount', description='Returns destroyed generator count', aspects=[ASPECT.CLIENT])
+    def getDestroyedGeneratorsCount(self):
+        return wt_helpers.getDestroyedGeneratorsCount()
+
+    @vse_get_property(SLOT_TYPE.INT, display_name='GetCampCount', description='Returns max camp index', aspects=[ASPECT.CLIENT])
+    def getCampCount(self):
+        return wt_helpers.getCampCount()
+
+    @vse_get_property(SLOT_TYPE.BOOL, display_name='GetKilledByBoss', description='For destroyed vehicle returns True if killer is boss', aspects=[ASPECT.CLIENT])
+    def getKilledByBoss(self):
+        return wt_helpers.getKilledByBoss()
+
+    @vse_get_property(SLOT_TYPE.BOOL, display_name='GetIsBoss', description='Returns True if player is boss', aspects=[ASPECT.CLIENT])
+    def isBoss(self):
+        return wt_helpers.isBoss()
+
+    @vse_get_property(SLOT_TYPE.BOOL, display_name='GetHasDebuff', description='Returns True if hunters have debuff', aspects=[ASPECT.CLIENT])
+    def getHasDebuff(self):
+        return wt_helpers.getHasDebuff()
+
+    @vse_get_property(SLOT_TYPE.INT, display_name='GetTotalPlayerDamage', description='Returns damage caused by player', aspects=[ASPECT.CLIENT])
+    def getTotalPlayerDamage(self):
+        return wt_helpers.getTotalPlayerDamage()
+
+    @vse_func_call(SLOT_TYPE.SOUND, (SLOT_TYPE.SOUND,), display_name='SetEventSwitches', description='Sets event switches if needed', aspects=[ASPECT.CLIENT])
+    def setEventSwitches(self, sound):
+        if wt_helpers.isEventBattle():
+            for name, value in getWtSwitches().iteritems():
+                sound.setSwitch(name, value)
+
+        return sound

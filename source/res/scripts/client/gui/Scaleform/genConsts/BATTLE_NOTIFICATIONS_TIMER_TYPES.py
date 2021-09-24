@@ -34,3 +34,7 @@ class BATTLE_NOTIFICATIONS_TIMER_TYPES(object):
     STEALTH_RADAR_INACTIVE = 'stealthRadarInactive'
     WARNING_VIEW = 'warningView'
     CRITICAL_VIEW = 'criticalView'
+    WT_BOMB_CAPTURE = 'wtBombCapture'
+    WT_BOMB_DEPLOY = 'wtBombDeploy'
+    WT_BOMB_ABSORB = 'wtBombAbsorb'
+    WT_BOMB_CARRY = 'wtBombCarry'

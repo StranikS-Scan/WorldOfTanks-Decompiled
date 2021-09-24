@@ -214,6 +214,8 @@ def fini():
         ServiceLocator.connectionMgr.onConnected -= onConnected
         ServiceLocator.connectionMgr.onDisconnected -= onDisconnected
         MessengerEntry.g_instance.fini()
+        from helpers import ValueTracker
+        ValueTracker.ValueTracker.fini()
         from helpers import EdgeDetectColorController
         if EdgeDetectColorController.g_instance is not None:
             EdgeDetectColorController.g_instance.destroy()

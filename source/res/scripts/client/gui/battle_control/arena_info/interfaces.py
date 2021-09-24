@@ -305,7 +305,7 @@ class IRadarController(object):
 
 class ISpawnController(object):
 
-    def showSpawnPoints(self, points):
+    def showSpawnPoints(self, points, pointGuid=None):
         raise NotImplementedError
 
 
@@ -369,4 +369,19 @@ class IPrebattleSetupsController(IArenaPeriodController, IArenaLoadController, V
         raise NotImplementedError
 
     def switchLayout(self, groupID, layoutIdx):
+        raise NotImplementedError
+
+
+class IPlayersPanelController(IArenaVehiclesController, ViewComponentsController):
+
+    def show(self, params):
+        raise NotImplementedError
+
+    def hide(self, params):
+        raise NotImplementedError
+
+    def processReplay(self, params):
+        raise NotImplementedError
+
+    def updateStressTimer(self, timerID):
         raise NotImplementedError

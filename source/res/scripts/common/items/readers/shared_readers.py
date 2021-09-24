@@ -17,7 +17,7 @@ _ALLOWED_PROJECTION_DECALS_ANCHORS = component_constants.ALLOWED_PROJECTION_DECA
 _CUSTOMIZATION_CONSTANTS_PATH = ITEM_DEFS_PATH + '/customization/constants.xml'
 
 def _readEmblemSlot(ctx, subsection, slotType):
-    descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), slotType, subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'), _xml.readInt(ctx, subsection, 'slotId'), subsection.readBool('applyToFabric', True))
+    descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), slotType, subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'), _xml.readInt(ctx, subsection, 'slotId'), subsection.readBool('applyToFabric', True), _readCompatibleModels(subsection, ctx))
     _verifySlotId(ctx, slotType, descr.slotId)
     return descr
 
@@ -54,6 +54,14 @@ def _readProjectionDecalSlot(ctx, subsection, slotType):
     if subsection.has_key('options'):
         descr.options = _xml.readNonNegativeInt(ctx, subsection, 'options')
     return descr
+
+
+def _readCompatibleModels(subsection, ctx):
+    compatibleModels = component_constants.EMPTY_TUPLE
+    if IS_CLIENT or IS_EDITOR:
+        if subsection.has_key('compatibleModels'):
+            compatibleModels = _xml.readTupleOfStrings(ctx, subsection, 'compatibleModels')
+    return compatibleModels
 
 
 __customizationSlotIdRanges = None
@@ -190,7 +198,7 @@ def readEmblemSlots(xmlCtx, section, subsectionName):
         if sname not in component_constants.ALLOWED_EMBLEM_SLOTS:
             _xml.raiseWrongXml(xmlCtx, 'emblemSlots/{}'.format(sname), 'expected {}'.format(_ALLOWED_EMBLEM_SLOTS))
         ctx = (xmlCtx, 'emblemSlots/{}'.format(sname))
-        descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), _ALLOWED_EMBLEM_SLOTS[_ALLOWED_EMBLEM_SLOTS.index(sname)], subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'))
+        descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), _ALLOWED_EMBLEM_SLOTS[_ALLOWED_EMBLEM_SLOTS.index(sname)], subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'), _readCompatibleModels(subsection, ctx))
         slots.append(descr)
 
     return (tuple(slots), tuple())

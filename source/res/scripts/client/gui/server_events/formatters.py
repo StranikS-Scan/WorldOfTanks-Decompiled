@@ -472,8 +472,8 @@ def minimizedTitleCumulativeFormat(current, total):
         current = text_styles.bonusAppliedText(backport.getNiceNumberFormat(int(current)))
     else:
         current = text_styles.stats(backport.getNiceNumberFormat(int(current)))
-    total = text_styles.standard(int(total))
-    return text_styles.disabled('%s / %s' % (current, total))
+    total = text_styles.standard('/ %s' % int(total))
+    return text_styles.disabled('%s %s' % (current, total))
 
 
 def titleComplexFormat(current, total):

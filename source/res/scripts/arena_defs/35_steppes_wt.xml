@@ -1,0 +1,432 @@
+<35_steppes_wt.xml>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <name>	#arenas:35_steppes_wt/name	</name>
+  <description>	#arenas:35_steppes_wt/description	</description>
+  <geometry>	spaces/35_steppes_wt	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <roundLength>	360	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/35_steppes_wt/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	7	</maxPlayersInTeam>
+  <umbraEnabled>	1	</umbraEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	ev_white_tiger_music	</wwmusicLoading>
+    <wwmusicIntensive>	ev_white_tiger_gameplay_music_start	</wwmusicIntensive>
+    <wwmusicRelaxed>	ev_white_tiger_gameplay_music_start	</wwmusicRelaxed>
+    <wwmusicStop></wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	ev_white_tiger_music_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	ev_white_tiger_music_defeat	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	ev_white_tiger_music_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwmusicDroneSetup>
+    <timeRemained>
+      <value>	120	</value>
+    </timeRemained>
+    <numberHunterLives>
+      <value>	5	</value>
+    </numberHunterLives>
+    <bossGeneratorCount>
+      <value>	1	</value>
+    </bossGeneratorCount>
+  </wwmusicDroneSetup>
+  <wwambientSound>	amb_map_35_steppes_wind_summer	</wwambientSound>
+  <wwbattleCountdownTimerSound>	ev_white_tiger_timer_oneshot	</wwbattleCountdownTimerSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	ev_white_tiger_2021_gameplay.bnk	</name>
+      </bank>
+      <bank>
+        <name>	ev_white_tiger_2021_gameplay.pck	</name>
+      </bank>
+      <bank>
+        <name>	ev_white_tiger_2021_voiceover.bnk	</name>
+      </bank>
+      <bank>
+        <name>	ev_white_tiger_2021_voiceover.pck	</name>
+      </bank>
+    </loadBanks>
+    <events>
+      <event>
+        <name>	wpn_large_extra_PC	</name>
+        <mod>	wpn_large_extra_PC	</mod>
+        <modAUX>	ev_white_tiger_wpn_waffentrager_pc	</modAUX>
+      </event>
+      <event>
+        <name>	amb_map_35_steppes_wind_summer	</name>
+        <mod>	ev_wt_amb_map_35_steppes_rain	</mod>
+        <modAUX>	amb_map_35_steppes_wind_summer	</modAUX>
+      </event>
+      <event>
+        <name>	expl_ammo_PC	</name>
+        <mod>	expl_ammo_PC	</mod>
+        <modAUX>	ev_white_tiger_expl_hunters	</modAUX>
+      </event>
+      <event>
+        <name>	expl_fuel_PC	</name>
+        <mod>	expl_fuel_PC	</mod>
+        <modAUX>	ev_white_tiger_expl_hunters	</modAUX>
+      </event>
+      <event>
+        <name>	expl_ram_death_PC	</name>
+        <mod>	expl_ram_death_PC	</mod>
+        <modAUX>	ev_white_tiger_expl_hunters	</modAUX>
+      </event>
+      <event>
+        <name>	expl_submersion_death	</name>
+        <mod>	expl_submersion_death	</mod>
+        <modAUX>	ev_white_tiger_expl_hunters	</modAUX>
+      </event>
+      <event>
+        <name>	eng_v55_pc	</name>
+        <mod>	eng_v55_pc	</mod>
+        <modAUX>	ev_white_tiger_gameplay_substance_hunters_01	</modAUX>
+      </event>
+      <event>
+        <name>	eng_Ford_GAA_pc	</name>
+        <mod>	eng_Ford_GAA_pc	</mod>
+        <modAUX>	ev_white_tiger_gameplay_substance_hunters_02	</modAUX>
+      </event>
+      <event>
+        <name>	ev_white_tiger_gameplay_engine_pc	</name>
+        <mod>	ev_white_tiger_gameplay_engine_pc	</mod>
+        <modAUX>	ev_white_tiger_gameplay_substance_wt	</modAUX>
+      </event>
+      <event>
+        <name>	wpn_main_extra_PC	</name>
+        <mod>	wpn_main_extra_PC	</mod>
+        <modAUX>	ev_white_tiger_wpn_hunters_01_pc	</modAUX>
+      </event>
+      <event>
+        <name>	wpn_large_PC	</name>
+        <mod>	wpn_large_PC	</mod>
+        <modAUX>	ev_white_tiger_wpn_hunters_02_pc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_medium_pierce_AP_NPC_PC	</name>
+        <mod>	imp_medium_pierce_AP_NPC_PC	</mod>
+        <modAUX>	ev_white_tiger_gameplay_impact	</modAUX>
+      </event>
+      <event>
+        <name>	imp_medium_critical_AP_NPC_PC	</name>
+        <mod>	imp_medium_critical_AP_NPC_PC	</mod>
+        <modAUX>	ev_white_tiger_gameplay_impact	</modAUX>
+      </event>
+      <event>
+        <name>	imp_main_pierce_AP_NPC_PC	</name>
+        <mod>	imp_main_pierce_AP_NPC_PC	</mod>
+        <modAUX>	ev_white_tiger_gameplay_impact	</modAUX>
+      </event>
+      <event>
+        <name>	imp_main_critical_AP_NPC_PC	</name>
+        <mod>	imp_main_critical_AP_NPC_PC	</mod>
+        <modAUX>	ev_white_tiger_gameplay_impact	</modAUX>
+      </event>
+      <event>
+        <name>	imp_large_pierce_AP_NPC_PC	</name>
+        <mod>	imp_large_pierce_AP_NPC_PC	</mod>
+        <modAUX>	ev_white_tiger_gameplay_impact	</modAUX>
+      </event>
+      <event>
+        <name>	imp_large_critical_AP_NPC_PC	</name>
+        <mod>	imp_large_critical_AP_NPC_PC	</mod>
+        <modAUX>	ev_white_tiger_gameplay_impact	</modAUX>
+      </event>
+      <event>
+        <name>	imp_large_pierce_HE_NPC_PC	</name>
+        <mod>	imp_large_pierce_HE_NPC_PC	</mod>
+        <modAUX>	ev_white_tiger_gameplay_impact	</modAUX>
+      </event>
+      <event>
+        <name>	imp_large_critical_HE_NPC_PC	</name>
+        <mod>	imp_large_critical_HE_NPC_PC	</mod>
+        <modAUX>	ev_white_tiger_gameplay_impact	</modAUX>
+      </event>
+      <event>
+        <name>	vo_ally_killed_by_player	</name>
+        <mod>	ev_wt_vo_enemy_killed	</mod>
+      </event>
+      <event>
+        <name>	vo_crew_deactivated	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_damage_by_near_explosion_by_enemy	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_damage_by_near_explosion_by_player	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_crit_damaged	</name>
+        <mod>	ev_wt_vo_surveying_devices_crit_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_target_captured	</name>
+        <mod>	ev_wt_vo_target_captured	</mod>
+      </event>
+      <event>
+        <name>	vo_target_lost	</name>
+        <mod>	ev_wt_vo_target_lost	</mod>
+      </event>
+      <event>
+        <name>	vo_target_unlocked	</name>
+        <mod>	ev_wt_vo_target_unlocked	</mod>
+      </event>
+      <event>
+        <name>	vo_track_damaged	</name>
+        <mod>	ev_wt_vo_track_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_track_functional	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_vehicle_destroyed	</name>
+        <mod>	ev_wt_vo_vehicle_destroyed	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
+        <mod>	ev_wt_vo_pierced_crit_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
+        <mod>	ev_wt_vo_enemy_pierced_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
+        <mod>	ev_wt_vo_enemy_pierced_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_projectile_by_player	</name>
+        <mod>	ev_wt_vo_enemy_pierced_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_fire_started	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_fire_stopped	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_fire_started_by_player	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+        <mod>	ev_wt_vo_armor_not_pierced_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+        <mod>	ev_wt_vo_armor_not_pierced_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
+        <mod>	ev_wt_vo_pierced_crit_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
+        <mod>	ev_wt_vo_pierced_crit_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_no_attempt_by_player	</name>
+        <mod>	ev_wt_vo_pierced_crit_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_ammo_bay_damaged	</name>
+        <mod>	ev_wt_vo_ammo_bay_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_armor_not_pierced_by_player	</name>
+        <mod>	ev_wt_vo_armor_not_pierced_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_armor_ricochet_by_player	</name>
+        <mod>	ev_wt_vo_armor_ricochet_by_player	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_killed	</name>
+        <mod>	ev_wt_vo_enemy_killed	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_killed_by_player	</name>
+        <mod>	ev_wt_vo_enemy_killed	</mod>
+      </event>
+      <event>
+        <name>	vo_engine_damaged	</name>
+        <mod>	ev_wt_vo_engine_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_engine_destroyed	</name>
+        <mod>	ev_wt_vo_engine_destroyed	</mod>
+      </event>
+      <event>
+        <name>	vo_engine_functional	</name>
+        <mod>	ev_wt_vo_engine_functional	</mod>
+      </event>
+      <event>
+        <name>	vo_fire_stopped	</name>
+        <mod>	ev_wt_vo_fire_stopped	</mod>
+      </event>
+      <event>
+        <name>	vo_fuel_tank_damaged	</name>
+        <mod>	ev_wt_vo_fuel_tank_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_gun_damaged	</name>
+        <mod>	ev_wt_vo_gun_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_gun_destroyed	</name>
+        <mod>	ev_wt_vo_gun_destroyed	</mod>
+      </event>
+      <event>
+        <name>	vo_gun_functional	</name>
+        <mod>	ev_wt_vo_gun_functional	</mod>
+      </event>
+      <event>
+        <name>	vo_radio_damaged	</name>
+        <mod>	ev_wt_vo_radio_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_radioman_killed	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_start_battle	</name>
+        <mod>	ev_wt_vo_start_battle	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_destroyed	</name>
+        <mod>	ev_wt_vo_surveying_devices_destroyed	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_functional	</name>
+        <mod>	ev_wt_vo_surveying_devices_functional	</mod>
+      </event>
+      <event>
+        <name>	vo_track_destroyed	</name>
+        <mod>	ev_wt_vo_track_destroyed	</mod>
+      </event>
+      <event>
+        <name>	vo_track_functional_can_move	</name>
+        <mod>	ev_wt_vo_track_functional_can_move	</mod>
+      </event>
+      <event>
+        <name>	vo_turret_rotator_damaged	</name>
+        <mod>	ev_wt_vo_turret_rotator_damaged	</mod>
+      </event>
+      <event>
+        <name>	vo_turret_rotator_destroyed	</name>
+        <mod>	ev_wt_vo_turret_rotator_destroyed	</mod>
+      </event>
+      <event>
+        <name>	vo_turret_rotator_functional	</name>
+        <mod>	ev_wt_vo_turret_rotator_functional	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_air_scout	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_inspire	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_general	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_smoke_screen	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_airstrike	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_artillery	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_airstrike	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_smoke_screen	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_eb_support_inspire	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_flt_combat_reserve	</name>
+        <mod>	ev_wt_vo_silence	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <gameplayTypes>
+    <ctf>
+      <visualScript>
+        <server>
+          <plan>	wt	</plan>
+        </server>
+      </visualScript>
+      <notificationsRemapping>
+        <notification>
+          <name>	start_battle	</name>
+          <mod>	start_battle_wt	</mod>
+        </notification>
+        <notification>
+          <name>	vehicle_destroyed	</name>
+          <mod>	wt_vo_vehicle_destroyed	</mod>
+        </notification>
+        <notification>
+          <name>	crew_deactivated	</name>
+          <mod>	wt_vo_vehicle_destroyed	</mod>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_by_player	</name>
+          <mod>	enemy_hp_damaged_by_projectile_by_player_wt	</mod>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
+          <mod>	enemy_hp_damaged_by_projectile_by_player_wt	</mod>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
+          <mod>	enemy_hp_damaged_by_projectile_by_player_wt	</mod>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_by_player	</name>
+          <mod>	enemy_no_hp_damage_at_attempt_by_player_wt	</mod>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+          <mod>	enemy_no_hp_damage_at_attempt_by_player_wt	</mod>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+          <mod>	enemy_no_hp_damage_at_attempt_by_player_wt	</mod>
+        </notification>
+        <notification>
+          <name>	enemy_ricochet_by_player	</name>
+          <mod>	enemy_ricochet_by_player_wt	</mod>
+        </notification>
+        <notification>
+          <name>	fire_stopped	</name>
+          <mod>	fire_stopped_wt	</mod>
+        </notification>
+      </notificationsRemapping>
+    </ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</35_steppes_wt.xml>

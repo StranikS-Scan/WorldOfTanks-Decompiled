@@ -10,7 +10,7 @@ from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from AvatarInputHandler import cameras
 from gui.Scaleform.Waiting import Waiting
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents, CameraDistanceModes
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from skeletons.account_helpers.settings_core import ISettingsCore
 from helpers import dependency
 from AvatarInputHandler.cameras import FovExtended
@@ -65,7 +65,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
     settingsCore = dependency.descriptor(ISettingsCore)
     hangarSpace = dependency.descriptor(IHangarSpace)
     allCameraObjects = set()
-    P1_DELTA_X_Z = 10.0
+    P1_DELTA_X_Z = 1.0
 
     def __init__(self):
         ClientSelectableObject.__init__(self)
@@ -96,13 +96,18 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.__p2 = Math.Vector3(0.0, 0.0, 0.0)
         self.__wasPreviousUpdateSkipped = False
         self.camDistState = CameraDistanceModes.DEFAULT
+        self.__confirmDialogInProcessing = False
         return
 
     def onEnterWorld(self, prereqs):
         ClientSelectableCameraObject.allCameraObjects.add(self)
         ClientSelectableObject.onEnterWorld(self, prereqs)
+        g_eventBus.addListener(events.HangarSimpleEvent.SHOW_CONFIRM_DIALOG, self.__onShowConfirmDialog, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.HangarSimpleEvent.CLOSE_CONFIRM_DIALOG, self.__onCloseConfirmDialog, EVENT_BUS_SCOPE.LOBBY)
 
     def onLeaveWorld(self):
+        g_eventBus.removeListener(events.HangarSimpleEvent.SHOW_CONFIRM_DIALOG, self.__onShowConfirmDialog, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.HangarSimpleEvent.CLOSE_CONFIRM_DIALOG, self.__onCloseConfirmDialog, EVENT_BUS_SCOPE.LOBBY)
         if self in ClientSelectableCameraObject.allCameraObjects:
             ClientSelectableCameraObject.allCameraObjects.remove(self)
         self.stopCallback(self.__update)
@@ -114,7 +119,15 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         CallbackDelayer.destroy(self)
         return
 
+    def __onShowConfirmDialog(self, _):
+        self.__confirmDialogInProcessing = True
+
+    def __onCloseConfirmDialog(self, _):
+        self.__confirmDialogInProcessing = False
+
     def onMouseClick(self):
+        if self.__confirmDialogInProcessing:
+            return True
         ClientSelectableCameraObject.switchCamera(self)
         return self.state != CameraMovementStates.FROM_OBJECT
 

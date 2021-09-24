@@ -49,6 +49,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
     def _setBaseCriteria(self):
         self._baseCriteria = REQ_CRITERIA.INVENTORY
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
 
     def _buildRentPromitionVehicleItems(self):
         rentPromotionCriteria = REQ_CRITERIA.VEHICLE.RENT_PROMOTION | ~self._baseCriteria

@@ -69,6 +69,7 @@ class IntSettingsRequester(object):
      'LINKEDSET_QUESTS': constants.USER_SERVER_SETTINGS.LINKEDSET_QUESTS,
      'QUESTS_PROGRESS': constants.USER_SERVER_SETTINGS.QUESTS_PROGRESS,
      'SESSION_STATS': constants.USER_SERVER_SETTINGS.SESSION_STATS,
+     'LOOT_BOX_VIEWED': 91,
      'BATTLEPASS_CAROUSEL_FILTER_1': 97,
      'BATTLE_PASS_STORAGE': 98,
      'ONCE_ONLY_HINTS_2': 99,
@@ -77,7 +78,8 @@ class IntSettingsRequester(object):
      'GAME_EXTENDED_2': constants.USER_SERVER_SETTINGS.GAME_EXTENDED_2,
      'SPG_AIM': constants.USER_SERVER_SETTINGS.SPG_AIM,
      MAPBOX_CAROUSEL_FILTER_1: 103,
-     MAPBOX_CAROUSEL_FILTER_2: 104}
+     MAPBOX_CAROUSEL_FILTER_2: 104,
+     'EVENT_STORAGE': 105}
 
     def __init__(self):
         self.__isSynced = False

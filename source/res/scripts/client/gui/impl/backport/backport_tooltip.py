@@ -8,12 +8,17 @@ from gui.impl.pub.window_view import WindowView
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 _STATE_TYPE_INFO = 'INFO'
-TooltipData = namedtuple('TooltipData', ('tooltip', 'isSpecial', 'specialAlias', 'specialArgs'))
+TooltipData = namedtuple('TooltipData', ('tooltip', 'isSpecial', 'specialAlias', 'specialArgs', 'isWulfTooltip'))
+TooltipData.__new__.__defaults__ = (None,
+ False,
+ None,
+ None,
+ False)
 
-def createTooltipData(tooltip=None, isSpecial=False, specialAlias=None, specialArgs=None):
+def createTooltipData(tooltip=None, isSpecial=False, specialAlias=None, specialArgs=None, isWulfTooltip=False):
     if specialArgs is None:
         specialArgs = ()
-    return TooltipData(tooltip, isSpecial, specialAlias, specialArgs)
+    return TooltipData(tooltip, isSpecial, specialAlias, specialArgs, isWulfTooltip)
 
 
 def createAndLoadBackportTooltipWindow(parentWindow, tooltip=None, isSpecial=False, tooltipId=None, specialArgs=None):
@@ -31,17 +36,20 @@ class _BackportTooltipContent(ViewImpl):
     appLoader = dependency.descriptor(IAppLoader)
     __slots__ = ()
 
-    def __init__(self, tooltipData):
+    def __init__(self, tooltipData, event=None):
         settings = ViewSettings(R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent())
         settings.model = ViewModel()
-        settings.args = (tooltipData,)
+        settings.args = (tooltipData, event)
         super(_BackportTooltipContent, self).__init__(settings)
 
-    def _initialize(self, tooltipData):
+    def _initialize(self, tooltipData, event=None):
         super(_BackportTooltipContent, self)._initialize()
         toolTipMgr = self.appLoader.getApp().getToolTipMgr()
         if toolTipMgr is not None:
-            if tooltipData.isSpecial:
+            if tooltipData.isWulfTooltip:
+                posX, posY = (0, 0) if not event else event.mouse.positionX, event.mouse.positionY
+                toolTipMgr.onCreateWulfTooltip(tooltipData.specialAlias, tooltipData.specialArgs, posX, posY, parent=self.getParentWindow())
+            elif tooltipData.isSpecial:
                 toolTipMgr.onCreateTypedTooltip(tooltipData.specialAlias, tooltipData.specialArgs, _STATE_TYPE_INFO)
             else:
                 toolTipMgr.onCreateComplexTooltip(tooltipData.tooltip, _STATE_TYPE_INFO)
@@ -57,10 +65,10 @@ class _BackportTooltipContent(ViewImpl):
 class BackportTooltipWindow(Window):
     __slots__ = ()
 
-    def __init__(self, tooltipData, parent):
+    def __init__(self, tooltipData, parent, event=None):
         settings = WindowSettings()
         settings.flags = WindowFlags.TOOLTIP
-        settings.content = _BackportTooltipContent(tooltipData)
+        settings.content = _BackportTooltipContent(tooltipData, event)
         settings.parent = parent
         super(BackportTooltipWindow, self).__init__(settings)
 

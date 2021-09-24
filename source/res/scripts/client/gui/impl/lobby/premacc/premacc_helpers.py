@@ -28,10 +28,6 @@ def isCorrectArenaGUIType(guiType):
     return guiType in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.EPIC_RANDOM)
 
 
-def toPercents(value):
-    return int(value * 100)
-
-
 def getDeltaTimeHelper(config, data):
     if not config or not data:
         _logger.error('Incorrect config or data given')

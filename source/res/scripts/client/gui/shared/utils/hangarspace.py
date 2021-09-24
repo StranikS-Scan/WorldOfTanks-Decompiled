@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/HangarSpace.py
-from Queue import Queue
-from functools import wraps
 import BigWorld
 import Math
 import Event
@@ -12,6 +10,7 @@ from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 from gui import g_mouseEventHandlers, InputHandler
 from gui.ClientHangarSpace import ClientHangarSpace, _getHangarPath
 from gui.Scaleform.Waiting import Waiting
+from gui.shared.utils.decorators import ExecuteAfterCondition
 from helpers import dependency, uniprof
 from helpers.statistics import HANGAR_LOADING_STATE
 from shared_utils import BoundMethodWeakref
@@ -30,38 +29,15 @@ from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 _Q_CHECK_DELAY = 0.0
 
-class _execute_after_hangar_space_inited(object):
-    hangarSpace = dependency.descriptor(IHangarSpace)
-    __slots__ = ('__queue',)
+class _ExecuteAfterHangarSpaceInited(ExecuteAfterCondition):
+    __hangarsSpace = dependency.descriptor(IHangarSpace)
 
-    def __init__(self):
-        self.__queue = Queue()
-
-    def __call__(self, func):
-
-        @wraps(func)
-        def wrapped(*args, **kwargs):
-            self.storeData(func, *args, **kwargs)
-            self.checkConditionForExit()
-
-        return wrapped
-
-    def checkConditionForExit(self):
-        if not self.hangarSpace.spaceInited:
-            BigWorld.callback(_Q_CHECK_DELAY, self.checkConditionForExit)
-            return
-        self.delayCall()
-
-    def storeData(self, func, *args, **kwargs):
-        self.__queue.put((func, args, kwargs))
-
-    def delayCall(self):
-        while not self.__queue.empty():
-            f, f_args, f_kwargs = self.__queue.get()
-            f(*f_args, **f_kwargs)
+    @property
+    def condition(self):
+        return self.__hangarsSpace.spaceInited
 
 
-g_execute_after_hangar_space_inited = _execute_after_hangar_space_inited()
+g_execute_after_hangar_space_inited = _ExecuteAfterHangarSpaceInited()
 
 class HangarVideoCameraController(object):
     hangarSpace = dependency.descriptor(IHangarSpace)

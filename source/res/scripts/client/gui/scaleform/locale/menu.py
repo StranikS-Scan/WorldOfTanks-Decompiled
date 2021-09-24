@@ -303,6 +303,7 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_TOOHEAVY = '#menu:tankCarousel/vehicleStates/tooHeavy'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED = '#menu:tankCarousel/vehicleStates/xpMultReceived'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT = '#menu:tankCarousel/vehicleStates/xpMultReceived/not'
+    TANKCAROUSEL_VEHICLESTATES_TICKETSSHORTAGE = '#menu:tankCarousel/vehicleStates/ticketsShortage'
     STORE_VEHICLESTATES_BATTLE = '#menu:store/vehicleStates/battle'
     STORE_VEHICLESTATES_LOCKED = '#menu:store/vehicleStates/locked'
     STORE_VEHICLESTATES_CLANLOCKED = '#menu:store/vehicleStates/clanLocked'
@@ -377,6 +378,7 @@ class MENU(object):
     CURRENTVEHICLESTATUS_ROTATIONGROUPUNLOCKED = '#menu:currentVehicleStatus/rotationGroupUnlocked'
     CURRENTVEHICLESTATUS_ROTATIONGROUPLOCKED = '#menu:currentVehicleStatus/rotationGroupLocked'
     CURRENTVEHICLESTATUS_WILLBEUNLOCKEDINBATTLE = '#menu:currentVehicleStatus/willBeUnlockedInBattle'
+    CURRENTVEHICLESTATUS_TICKETSSHORTAGE = '#menu:currentVehicleStatus/ticketsShortage'
     REPAIR_REPAIRSTATUS = '#menu:repair/repairstatus'
     REPAIR_CURIENCY = '#menu:repair/curiency'
     REPAIR_BUTTON = '#menu:repair/button'
@@ -1487,6 +1489,7 @@ class MENU(object):
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_CLOSE = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/close'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_LABELTOTAL = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/labelTotal'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_EQUIPMENTDISABLED = '#menu:hangar/ammunitionPanel/technicalMaitenance/equipmentDisabled'
+    HANGAR_CLOSEBTN = '#menu:hangar/closeBtn'
     FITTINGLISTITEMRENDERER_UNLOAD = '#menu:fittingListItemRenderer/unload'
     FITTINGLISTITEMRENDERER_REPLACE = '#menu:fittingListItemRenderer/replace'
     CUSTOMIZATION_TITLE = '#menu:customization/title'
@@ -2360,6 +2363,7 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_TOOHEAVY,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT,
+     TANKCAROUSEL_VEHICLESTATES_TICKETSSHORTAGE,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPUNLOCKED,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPLOCKED)
     DATETIME_WEEKDAYS_FULL_ENUM = (DATETIME_WEEKDAYS_FULL_1,

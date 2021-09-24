@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.view.lobby.missions import missions_helper
 from gui.Scaleform.daapi.view.lobby.missions.regular.group_packers import getGroupPackerByContextID
 from gui.Scaleform.daapi.view.meta.MissionDetailsContainerViewMeta import MissionDetailsContainerViewMeta
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.server_events.conditions import WtTicketRequired
 from gui.server_events.events_helpers import isDailyQuest, isPremium
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
@@ -45,10 +46,12 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         else:
             quest = self.__quests.get(eventID)
             detailedData = missions_helper.getDetailedMissionData(quest)
-            criteria, extraConditions, isForBattleRoyale = detailedData.getVehicleRequirementsCriteria()
+            criteria, extraConditions = detailedData.getVehicleRequirementsCriteria()
+            if quest.isEventBattlesQuest():
+                extraConditions.append(WtTicketRequired(None, {}))
             vehicleSelector.as_closeS()
             if criteria and not quest.isCompleted():
-                vehicleSelector.setCriteria(criteria, extraConditions, isForBattleRoyale)
+                vehicleSelector.setCriteria(quest, criteria, extraConditions)
             else:
                 vehicleSelector.as_hideSelectedVehicleS()
             return

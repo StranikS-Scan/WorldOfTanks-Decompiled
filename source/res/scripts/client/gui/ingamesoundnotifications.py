@@ -216,6 +216,9 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
             self.__eventsPriorities[eventName] = {'priority': priority,
              'time': hold}
 
+    def hasEvent(self, eventName):
+        return eventName in self.__events
+
     def setCircumstanceWeight(self, circIndex, weight, hold):
         if circIndex in self.__circumstances:
             self.__circumstancesWeights[circIndex] = {'weight': weight,

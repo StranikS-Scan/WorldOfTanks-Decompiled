@@ -282,7 +282,9 @@ class C11nHangarCameraManager(TimeDeltaMeter):
     def __onProjectionChanged(self):
         if self.__currentMode == C11nCameraModes.STYLE_INFO:
             self.locateCameraToStyleInfoPreview(forceLocate=True)
-        self.__c11nCamera.updateProjection()
+        if self.__c11nCamera is not None:
+            self.__c11nCamera.updateProjection()
+        return
 
     def __updateScreenSpaceOffset(self, val):
         if self.__screenSpaceOffset != val:

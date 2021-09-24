@@ -59,6 +59,8 @@ ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
 ROYALE_VEHICLE = 'ROYALE_VEHICLE'
 BOOTCAMP_VEHICLE = 'BOOTCAMP_VEHICLE'
+EVENT_VEHICLE = 'EVENT_VEHICLE'
+EVENT_SAVED_VEHICLE = 'EVENT_SAVED_VEHICLE'
 LOBBY_MENU_TRIGGER_SHOWN = 'lobby_menu_trigger_shown'
 MANUAL_NEW_CONTENT = 'manual_new_content'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
@@ -186,6 +188,9 @@ MAPBOX_PROGRESSION = 'mapbox_progression'
 UNLOCK_VEHICLES_IN_BATTLE_HINTS = 'unlockVehiclesInBattleHints'
 BECOME_ELITE_VEHICLES_WATCHED = 'becomeEliteWatched'
 CLAN_PREBATTLE_SORTING_KEY = 'ClanPrebattleSortingKey'
+EVENT_LAST_COLLECTION_SEEN = 'eventLastCollectionSeen'
+LOOTBOXES_SEEN = 'lootboxesSeen'
+EVENT_LAST_ITEMS_SEEN = 'wtEventLastItemsSeen'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -559,6 +564,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_FAVORITES: {BOOTCAMP_VEHICLE: 0,
                  CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
+                 EVENT_VEHICLE: 0,
+                 EVENT_SAVED_VEHICLE: None,
                  FALLOUT_VEHICLES: {}},
  KEY_MANUAL: {LOBBY_MENU_TRIGGER_SHOWN: False,
               MANUAL_NEW_CONTENT: {}},
@@ -861,6 +868,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
                 BECOME_ELITE_VEHICLES_WATCHED: set(),
+                EVENT_LAST_COLLECTION_SEEN: 0,
+                EVENT_LAST_ITEMS_SEEN: 0,
+                LOOTBOXES_SEEN: 0,
                 GAME.GAMEPLAY_ONLY_10_MODE: False,
                 MAPBOX_PROGRESSION: {'previous_battles_played': 0,
                                      'visited_maps': [],
@@ -1019,7 +1029,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 47
+    version = 48
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1515,6 +1525,11 @@ class AccountSettings(object):
                         defaults = AccountSettings.getFilterDefault(filterSection)
                         updatedFilters = {key:savedFilters.get(key, defaults[key]) for key in defaults}
                         filtersSection.write(filterSection, _pack(updatedFilters))
+
+            if currVersion < 48:
+                for key, section in _filterAccountSection(ads):
+                    AccountSettings._readSection(section, KEY_SETTINGS).deleteSection(EVENT_LAST_COLLECTION_SEEN)
+                    AccountSettings._readSection(section, KEY_SETTINGS).deleteSection(EVENT_LAST_ITEMS_SEEN)
 
         return
 

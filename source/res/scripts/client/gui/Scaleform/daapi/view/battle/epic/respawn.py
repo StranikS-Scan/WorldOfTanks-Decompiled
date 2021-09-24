@@ -145,7 +145,6 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
 
     def show(self, selectedID, vehs, cooldowns, limits=0):
         self.__ammunitionPanel.show(selectedID, vehs, cooldowns, limits=0)
-        self.__carousel.resetFilters()
         self.__updateSlotData(vehs, cooldowns, limits)
         self.__carousel.show()
         BigWorld.wg_enableGUIBackground(True, False)

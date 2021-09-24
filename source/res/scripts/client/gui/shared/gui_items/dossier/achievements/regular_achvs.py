@@ -57,26 +57,3 @@ class ReferralProgramSingleAchievement(RegularAchievement):
     @classmethod
     def checkIsValid(cls, block, name, dossier):
         return validators.requiresReferralProgram() or validators.alreadyAchieved(cls, name, block, dossier)
-
-
-class WhiteTigerAchievement(RegularAchievement):
-    __slots__ = ()
-    WHITE_TIGER_COMP_DESCR = 56337
-
-    def __init__(self, dossier, value=None):
-        super(WhiteTigerAchievement, self).__init__('whiteTiger', _AB.CLIENT, dossier, value)
-
-    @classmethod
-    def checkIsInDossier(cls, block, name, dossier):
-        return bool(cls.__getWhiteTigerKillings(dossier)) if dossier is not None else False
-
-    @classmethod
-    def checkIsValid(cls, block, name, dossier):
-        return validators.alreadyAchieved(cls, name, block, dossier) and not validators.accountIsRoaming(dossier)
-
-    def _readValue(self, dossier):
-        return self.__getWhiteTigerKillings(dossier)
-
-    @classmethod
-    def __getWhiteTigerKillings(cls, dossier):
-        pass

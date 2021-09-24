@@ -627,17 +627,35 @@ class CancelFriendshipHandler(_ActionHandler):
 
 class WGNCActionsHandler(_ActionHandler):
 
+    @prbDispatcherProperty
+    def prbDispatcher(self):
+        pass
+
     @classmethod
     def getNotType(cls):
         return NOTIFICATION_TYPE.WGNC_POP_UP
 
     def handleAction(self, model, entityID, action):
+        if not self._canNavigate():
+            return
         notification = model.collection.getItem(NOTIFICATION_TYPE.WGNC_POP_UP, entityID)
         if notification:
             actorName = notification.getSavedData()
         else:
             actorName = ''
         g_wgncProvider.doAction(entityID, action, actorName)
+
+    def _canNavigate(self):
+        prbDispatcher = self.prbDispatcher
+        if prbDispatcher is not None and prbDispatcher.getFunctionalState().isNavigationDisabled():
+            BigWorld.callback(0.0, self.__showMessage)
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def __showMessage():
+        SystemMessages.pushI18nMessage('#system_messages:queue/isInQueue', type=SystemMessages.SM_TYPE.Error, priority='high')
 
 
 class SecurityLinkHandler(_ActionHandler):

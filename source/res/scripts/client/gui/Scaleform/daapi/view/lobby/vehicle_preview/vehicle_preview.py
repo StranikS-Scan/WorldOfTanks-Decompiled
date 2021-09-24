@@ -40,7 +40,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IHeroTankController, IVehicleComparisonBasket
+from skeletons.gui.game_control import IHeroTankController, IVehicleComparisonBasket, IMapsTrainingController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import SHOP_PREVIEW_SOUND_SPACE
@@ -124,6 +124,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     __heroTanksControl = dependency.descriptor(IHeroTankController)
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __mapsTrainingController = dependency.descriptor(IMapsTrainingController)
 
     def __init__(self, ctx=None):
         self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
@@ -214,6 +215,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
         self.__hangarSpace.setVehicleSelectable(self.__keepVehicleSelectionEnabled)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
+        if self.__mapsTrainingController.isMapsTrainingPrbActive:
+            self._needToResetAppearance = self._needToResetAppearance and self.__mapsTrainingController.getSelectedVehicle() <= 0
         if self._needToResetAppearance:
             g_currentPreviewVehicle.selectNoVehicle()
             g_currentPreviewVehicle.resetAppearance()

@@ -213,8 +213,11 @@ class EntityCollisionData(object):
         self.__isVehicle = isVehicle
         if isVehicle:
             self.entity = BigWorld.entity(entityID)
-            matInfo = self.entity.getMatinfo(partIndex, matKind)
-            self.armor = matInfo.armor if matInfo is not None and matInfo.armor is not None else 0.0
+            if self.entity is None:
+                self.__isVehicle = False
+            else:
+                matInfo = self.entity.getMatinfo(partIndex, matKind)
+                self.armor = matInfo.armor if matInfo is not None and matInfo.armor is not None else 0.0
         else:
             self.entity = None
         return

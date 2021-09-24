@@ -17,7 +17,7 @@ class SpectatorViewController(IViewComponentsController):
         super(SpectatorViewController, self).__init__()
         self.__plugins = {}
         self.__eManager = Event.EventManager()
-        self.__mode = EPIC_CONSTS.SPECTATOR_MODE_FREECAM
+        self.__mode = EPIC_CONSTS.SPECTATOR_MODE_DEATHCAM
         self.__vehicleID = None
         self.onSpectatorViewModeChanged = Event.Event(self.__eManager)
         self.onSpectatedVehicleChanged = Event.Event(self.__eManager)

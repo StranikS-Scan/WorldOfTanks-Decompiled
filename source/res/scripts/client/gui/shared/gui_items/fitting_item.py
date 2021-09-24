@@ -12,7 +12,6 @@ from gui.shared.gui_items.gui_item import GUIItem, HasIntCD
 from gui.shared.items_parameters import params_helper, formatters
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import getShortDescr, stripColorTagDescrTags
-from helpers.time_utils import getCurrentLocalServerTimestamp
 from shared_utils import first
 from skeletons.gui.game_control import ISeasonsController
 from helpers import i18n, time_utils, dependency
@@ -58,25 +57,6 @@ class RentalInfoProvider(_RentalInfoProvider):
     def canRentRenewForSeason(self, seasonType):
         currentSeason = self.seasonsController.getCurrentSeason(seasonType)
         return currentSeason and currentSeason.getCycleInfo()
-
-    def canCycleRentRenewForSeason(self, seasonType):
-        availableRenewCycleInfo = self.getAvailableRentRenewCycleInfoForSeason(seasonType)
-        return availableRenewCycleInfo is not None and availableRenewCycleInfo.endDate > getCurrentLocalServerTimestamp()
-
-    def getAvailableRentRenewCycleInfoForSeason(self, seasonType):
-        now = time_utils.getCurrentLocalServerTimestamp()
-        currentSeason = self.seasonsController.getCurrentSeason(seasonType)
-        if currentSeason is not None:
-            lastRentedCycle = self.getLastCycleRentInfo(seasonType)
-            if lastRentedCycle:
-                currentCycle = currentSeason.getCycleInfo()
-                if currentCycle and currentCycle.ID > lastRentedCycle.ID:
-                    return currentCycle
-                nextCycle = currentSeason.getNextCycleInfo(now)
-                if nextCycle and nextCycle.ID > lastRentedCycle.ID:
-                    return nextCycle
-                return currentSeason.getNextCycleInfo(now, lastRentedCycle.ID)
-        return
 
     def getLastCycleRentInfo(self, seasonType):
         currentSeason = self.seasonsController.getCurrentSeason(seasonType)

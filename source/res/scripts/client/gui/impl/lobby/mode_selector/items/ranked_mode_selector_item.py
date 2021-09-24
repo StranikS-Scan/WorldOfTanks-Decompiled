@@ -22,7 +22,7 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
     __slots__ = ()
     _VIEW_MODEL = ModeSelectorRankedModel
     _CARD_VISUAL_TYPE = ModeSelectorCardTypes.RANKED
-    __rankedBattleController = dependency.instance(IRankedBattlesController)
+    __rankedBattleController = dependency.descriptor(IRankedBattlesController)
 
     @property
     def viewModel(self):
@@ -79,19 +79,21 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
         return getFormattedTimeLeft(max(0, currentSeason.getEndDate() - time_utils.getServerUTCTime())) if currentSeason else ''
 
     def __fillRankedWidget(self, model):
-        rankedController = dependency.instance(IRankedBattlesController)
-        isEnabled = rankedController.isEnabled() and rankedController.getCurrentSeason() is not None
+        season = self.__rankedBattleController.getCurrentSeason()
+        if season is None:
+            season = self.__rankedBattleController.getPreviousSeason()
+        isEnabled = self.__rankedBattleController.isEnabled() and season is not None
         model.setIsEnabled(isEnabled)
         if not isEnabled:
             return
         else:
-            currentRankID = rankedController.getCurrentRank()[0]
-            currentRank = rankedController.getRank(currentRankID)
+            currentRankID = self.__rankedBattleController.getCurrentRank()[0]
+            currentRank = self.__rankedBattleController.getRank(currentRankID)
             model.setIsFinal(currentRank.isFinal())
             if currentRank.isFinal():
-                statsComposer = rankedController.getStatsComposer()
-                prevWebSeasonInfo = rankedController.getClientSeasonInfo()
-                currWebSeasonInfo = rankedController.getWebSeasonProvider().seasonInfo
+                statsComposer = self.__rankedBattleController.getStatsComposer()
+                prevWebSeasonInfo = self.__rankedBattleController.getClientSeasonInfo()
+                currWebSeasonInfo = self.__rankedBattleController.getWebSeasonProvider().seasonInfo
                 if currWebSeasonInfo.league == UNDEFINED_LEAGUE_ID:
                     currWebSeasonInfo = prevWebSeasonInfo
                 currLeagueID = currWebSeasonInfo.league
@@ -109,7 +111,7 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
                 model.setIsPositionUnavailable(not currPosition)
                 self.__fillRankData(model.rankRight, currentRank)
             else:
-                nextRank = rankedController.getRank(currentRankID + 1)
+                nextRank = self.__rankedBattleController.getRank(currentRankID + 1)
                 model.setHasLeftRank(not currentRank.isInitialForNextDivision())
                 if not currentRank.isInitialForNextDivision():
                     self.__fillRankData(model.rankLeft, currentRank)
@@ -122,13 +124,13 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
                     stepsCurrent = sum([ 1 for step in steps if step.isAcquired() ])
                 model.setSteps(stepsCurrent)
                 model.setStepsTotal(stepsTotal)
-                battlesInQualification = rankedController.getStatsComposer().amountBattles
-                totalQualificationBattles = rankedController.getTotalQualificationBattles()
+                battlesInQualification = self.__rankedBattleController.getStatsComposer().amountBattles
+                totalQualificationBattles = self.__rankedBattleController.getTotalQualificationBattles()
                 model.setQualBattles(battlesInQualification)
                 model.setQualTotalBattles(totalQualificationBattles)
             bonusBattles = 0
             if self.__rankedBattleController.getCurrentSeason():
-                bonusBattles = rankedController.getClientBonusBattlesCount()
+                bonusBattles = self.__rankedBattleController.getClientBonusBattlesCount()
             model.setBonusBattles(bonusBattles)
             return
 

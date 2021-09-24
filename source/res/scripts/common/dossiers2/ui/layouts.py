@@ -70,7 +70,7 @@ for record in records.RECORD_DB_IDS:
 
 _COMMON_DOSSIERS_TYPE = 0
 _EXCLUDED_ACHIEVES = defaultdict(tuple, {})
-_CUSTOM_ACHIEVES = defaultdict(tuple, {DOSSIER_TYPE.ACCOUNT: (achievements.WHITE_TIGER_RECORD, achievements.RARE_STORAGE_RECORD)})
+_CUSTOM_ACHIEVES = defaultdict(tuple, {})
 
 def _getComLayoutRecordID(record):
     if record in TANK_EXPERT_GROUP:

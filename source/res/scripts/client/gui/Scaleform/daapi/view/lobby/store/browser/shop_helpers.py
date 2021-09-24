@@ -14,27 +14,9 @@ def _getUrl(urlName=None, lobbyContext=None):
     return hostUrl + ('' if urlName is None else GUI_SETTINGS.shop.get(urlName))
 
 
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def _getBackendUrl(urlName=None, lobbyContext=None):
-    backendHostUrl = lobbyContext.getServerSettings().shop.backendHostUrl
-    return backendHostUrl + ('' if urlName is None else GUI_SETTINGS.shopBackend.get(urlName))
-
-
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def isSubscriptionEnabled(itemsCache=None):
     return itemsCache.items.stats.isSubscriptionEnabled
-
-
-def getShopBackendURL():
-    return _getBackendUrl()
-
-
-def getLoginUrl():
-    return _getBackendUrl('loginUrl')
-
-
-def getProductsUrl(productID):
-    return '{}/{}'.format(_getBackendUrl('productsUrl'), productID)
 
 
 def getShopURL():

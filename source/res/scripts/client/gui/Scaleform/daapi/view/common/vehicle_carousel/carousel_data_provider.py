@@ -139,7 +139,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         return
 
     def hasRentedVehicles(self):
-        return bool(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.RENT))
+        return bool(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.RENT | ~REQ_CRITERIA.VEHICLE.CLAN_WARS))
 
     def hasEventVehicles(self):
         return bool(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.EVENT))
@@ -362,6 +362,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):
         return (not vehicle.isInInventory,
+         vehicle.isOnlyForClanWarsBattles,
          not vehicle.isEvent,
          not vehicle.isOnlyForBattleRoyaleBattles,
          not vehicle.isFavorite,

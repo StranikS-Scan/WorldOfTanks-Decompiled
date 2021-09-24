@@ -2972,6 +2972,8 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_CH_COMPENSATION_DESC = '#tooltips:notrecruitedtankman/ch_compensation/desc'
     NOTRECRUITEDTANKMAN_COMMANDER_TWITCH_MOCHIZUKI_LABEL = '#tooltips:notrecruitedtankman/commander_twitch_mochizuki/label'
     NOTRECRUITEDTANKMAN_COMMANDER_TWITCH_MOCHIZUKI_DESC = '#tooltips:notrecruitedtankman/commander_twitch_mochizuki/desc'
+    NOTRECRUITEDTANKMAN_COMMANDER_TWITCH_ERMELINDA_LABEL = '#tooltips:notrecruitedtankman/commander_twitch_ermelinda/label'
+    NOTRECRUITEDTANKMAN_COMMANDER_TWITCH_ERMELINDA_DESC = '#tooltips:notrecruitedtankman/commander_twitch_ermelinda/desc'
     QUESTS_AWARDS_VEHICLERENT_HEADER = '#tooltips:quests/awards/vehicleRent/header'
     QUESTS_AWARDS_VEHICLERENT_EXPIRE = '#tooltips:quests/awards/vehicleRent/expire'
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS = '#tooltips:quests/awards/vehicleRent/rentLeft/rentDays'
@@ -3253,6 +3255,16 @@ class TOOLTIPS(object):
     VEHPOSTPROGRESSIONVIEW_BUTTON_COMPARE_DISABLED_BODY = '#tooltips:vehPostProgressionView/button/compare/disabled/body'
     VEHPOSTPROGRESSIONVIEW_UNLOCKLEVEL_HEADER = '#tooltips:vehPostProgressionView/unlockLevel/header'
     VEHPOSTPROGRESSIONVIEW_UNLOCKLEVEL_BODY = '#tooltips:vehPostProgressionView/unlockLevel/body'
+    PREBATTLE_UPBUTTON_ACTIVE = '#tooltips:prebattle/upButton/active'
+    PREBATTLE_UPBUTTON_NOITEMS = '#tooltips:prebattle/upButton/noItems'
+    PREBATTLE_UPBUTTON_NOTSELECTED = '#tooltips:prebattle/upButton/notSelected'
+    PREBATTLE_UPBUTTON_UNAVAILABLE = '#tooltips:prebattle/upButton/unavailable'
+    PREBATTLE_UPBUTTON_MAXITEMS = '#tooltips:prebattle/upButton/maxItems'
+    PREBATTLE_DOWNBUTTON_ACTIVE = '#tooltips:prebattle/downButton/active'
+    PREBATTLE_DOWNBUTTON_NOITEMS = '#tooltips:prebattle/downButton/noItems'
+    PREBATTLE_DOWNBUTTON_NOTSELECTED = '#tooltips:prebattle/downButton/notSelected'
+    PREBATTLE_DOWNBUTTON_UNAVAILABLE = '#tooltips:prebattle/downButton/unavailable'
+    PREBATTLE_HASPERMISSIONS = '#tooltips:prebattle/hasPermissions'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -3849,6 +3861,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_LABEL,
      NOTRECRUITEDTANKMAN_CH_COMPENSATION_LABEL,
      NOTRECRUITEDTANKMAN_COMMANDER_TWITCH_MOCHIZUKI_LABEL,
+     NOTRECRUITEDTANKMAN_COMMANDER_TWITCH_ERMELINDA_LABEL,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU1_YUSHA_LABEL,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU1_VSPISHKA_LABEL,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU2_AMWAY921_LABEL,
@@ -3933,6 +3946,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP2_2_DESC,
      NOTRECRUITEDTANKMAN_CH_COMPENSATION_DESC,
      NOTRECRUITEDTANKMAN_COMMANDER_TWITCH_MOCHIZUKI_DESC,
+     NOTRECRUITEDTANKMAN_COMMANDER_TWITCH_ERMELINDA_DESC,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU1_YUSHA_DESC,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU1_VSPISHKA_DESC,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU2_AMWAY921_DESC,

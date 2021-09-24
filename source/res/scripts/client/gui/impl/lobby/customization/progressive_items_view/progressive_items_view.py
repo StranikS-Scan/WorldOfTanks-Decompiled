@@ -24,6 +24,7 @@ from items import vehicles
 from items.components.c11n_constants import ProjectionDecalFormTags
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -47,6 +48,7 @@ class ProgressiveItemsView(ViewImpl):
     __customizationService = dependency.descriptor(ICustomizationService)
     __appLoader = dependency.descriptor(IAppLoader)
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __guiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self, layoutID, c11nView, *args, **kwargs):
         settings = ViewSettings(layoutID)
@@ -80,6 +82,10 @@ class ProgressiveItemsView(ViewImpl):
 
     def _initialize(self, *args, **kwargs):
         super(ProgressiveItemsView, self)._initialize(*args, **kwargs)
+        layoutID = R.views.lobby.customization.CustomizationCart()
+        customizationCartView = self.__guiLoader.windowsManager.getViewByLayoutID(layoutID)
+        if customizationCartView is not None:
+            customizationCartView.destroyWindow()
         if self.__c11nView is not None:
             self.__c11nView.changeVisible(False)
         self.viewModel.onSelectItem += self._onSelectItem

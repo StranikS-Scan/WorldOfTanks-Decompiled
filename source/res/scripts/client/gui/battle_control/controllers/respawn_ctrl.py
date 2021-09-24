@@ -147,6 +147,9 @@ class RespawnsController(ViewComponentsController):
             self.__vehicles[descr.compactDescr] = _Vehicle(descr.compactDescr, v['compDescr'], battleAbilities.get(descr.compactDescr, ()), v['crewCompactDescrs'], v['customRoleSlotTypeId'], v['settings'], v['vehPostProgression'], v['vehSetups'], unpackVehSetupsIndexes(list(v['vehSetupsIndexes'])), v['vehDisabledSetupSwitches'])
 
         self.onRespawnVehiclesUpdated(self.__vehicles)
+        if self.__respawnInfo is not None and self.__respawnInfo.vehicleID in self.__vehicles:
+            self.__updateRespawnInfoExt(self.__respawnInfo.vehicleID)
+        return
 
     def updateRespawnCooldowns(self, cooldowns):
         self.__cooldowns = cooldowns
@@ -157,7 +160,9 @@ class RespawnsController(ViewComponentsController):
         self.__setupsIndexes[intCD].update(self.__respawnInfo.vehSetupsIndexes)
         self.__refresh()
         self.onRespawnInfoUpdated(self.__respawnInfo)
-        self.__updateRespawnInfoExt(intCD)
+        if self.__vehicles is not None and intCD in self.__vehicles:
+            self.__updateRespawnInfoExt(intCD)
+        return
 
     def updateVehicleLimits(self, respawnLimits):
         self.__limits = respawnLimits

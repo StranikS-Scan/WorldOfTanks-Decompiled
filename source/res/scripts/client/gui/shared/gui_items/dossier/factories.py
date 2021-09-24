@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/factories.py
 import nations
-from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, WHITE_TIGER_RECORD, RARE_STORAGE_RECORD, HONORED_RANK_RECORD
+from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, RARE_STORAGE_RECORD, HONORED_RANK_RECORD
 from gui.shared.gui_items.dossier import achievements as _as
 from gui.shared.gui_items.dossier.achievements import abstract as _abstract_achievements
 from gui.shared.gui_items.dossier.achievements.loyal_service import LoyalServiceAchievement
@@ -319,6 +319,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'june21'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'july21'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'august21'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'september21'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'NY20A1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'NY20A2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'NY20A3'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
@@ -349,7 +350,6 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'TenYearsCountdownSPGEventMedal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'TenYearsCountdownBrawlMedal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BigAnniversaryMedal_CN'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- WHITE_TIGER_RECORD: _CustomAchieveFactory.get(_as.regular.WhiteTigerAchievement),
  HONORED_RANK_RECORD: _CustomAchieveFactory.get(_as.regular.HonoredRankAchievement),
  (_AB.SINGLE, 'se2020Medal'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.SINGLE, 'hw2019Medal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
@@ -380,7 +380,8 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'bob2021MasterTortoise_apac'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'bob2021SummerTiger_apac'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'bob2021Maharlika_apac'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'gagarin21'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
+ (_AB.SINGLE, 'gagarin21'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TOTAL, 'whiteTiger2012'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.MechEngineerAchievement, _nID)

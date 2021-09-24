@@ -15,7 +15,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.shared.web_view import WebViewTransparent
     from gui.Scaleform.framework import ViewSettings, ScopeTemplates
     return (ViewSettings(VIEW_ALIAS.LOBBY_STORE, ShopView, 'browserScreen.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_STORE, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.OVERLAY_WEB_STORE, ShopOverlay, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.OVERLAY_WEB_STORE, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.OVERLAY_WEB_STORE, ShopOverlay, 'browserScreen.swf', WindowLayer.TOP_WINDOW, VIEW_ALIAS.OVERLAY_WEB_STORE, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.WEB_VIEW_TRANSPARENT, WebViewTransparent, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW, PremContentPageOverlay, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE))
 

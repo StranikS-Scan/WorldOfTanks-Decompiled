@@ -93,7 +93,8 @@ VEHICLE_LEVEL_EARN_CRYSTAL = 10
 MODES_WITHOUT_CRYSTAL_EARNINGS = set(('bob',
  'fallout',
  'event_battles',
- 'battle_royale'))
+ 'battle_royale',
+ 'clanWarsBattles'))
 
 class VEHICLE_PHYSICS_TYPE():
     TANK = 0

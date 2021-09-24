@@ -252,7 +252,8 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'wtHunterWins',
  'wtBossWins',
  'wtSpecBossDefeat',
- 'RP2018sergeantCounter']
+ 'RP2018sergeantCounter',
+ 'whiteTiger2012']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -763,7 +764,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'mapboxSeason3',
  'july21',
  'august21',
- 'BattlePassCommonPr_6']
+ 'BattlePassCommonPr_6',
+ 'september21']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -917,7 +919,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'mapboxSeason3',
  'july21',
  'august21',
- 'BattlePassCommonPr_6']
+ 'BattlePassCommonPr_6',
+ 'september21']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, SINGLE_ACHIEVEMENTS_DEPENDENCIES, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

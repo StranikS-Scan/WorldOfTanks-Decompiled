@@ -384,7 +384,7 @@ class _ASAutoReloadProxy(_ReloadingAnimationsProxy):
         self._panel.as_autoloaderUpdateS(timeLeft, baseTime, isStun=isStun, isTimerOn=isTimerOn, isRedText=isRedText)
 
     def setReloading(self, state):
-        self._panel.as_setReloadingS(state.getActualValue(), round(state.getBaseValue(), 1), state.getTimePassed(), state.isReloading())
+        self._panel.as_setReloadingS(state.getActualValue(), round(state.getBaseValue(), 2), state.getTimePassed(), state.isReloading())
 
     def showAutoLoadingBoost(self, timeLeft, stateTotalTime):
         self._panel.as_showBoostS(timeLeft, stateTotalTime)

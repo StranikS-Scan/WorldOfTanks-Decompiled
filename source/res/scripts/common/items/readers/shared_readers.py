@@ -5,7 +5,7 @@ import logging
 from collections import defaultdict
 import typing
 import ResMgr
-from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH, IS_EDITOR
+from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH, IS_EDITOR, DeviceRepairMode
 from items import _xml, getTypeInfoByName
 from items.components import component_constants
 from items.components import shared_components
@@ -287,9 +287,11 @@ def _readRepairSpeedLimiter(xmlCtx, section):
         return None
     else:
         ctx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, 'repairSpeedLimiter')
-        return {'repairSpeedModifier': _xml.readNonNegativeFloat(ctx, subsection, 'repairSpeedModifier'),
+        repairSpeedModifier = _xml.readNonNegativeFloat(ctx, subsection, 'repairSpeedModifier')
+        return {'repairSpeedModifier': repairSpeedModifier,
          'speedToStartLimitedRepair': component_constants.KMH_TO_MS * _xml.readNonNegativeFloat(ctx, subsection, 'speedToStartLimitedRepair'),
-         'speedToStopLimitedRepair': component_constants.KMH_TO_MS * _xml.readNonNegativeFloat(ctx, subsection, 'speedToStopLimitedRepair')}
+         'speedToStopLimitedRepair': component_constants.KMH_TO_MS * _xml.readNonNegativeFloat(ctx, subsection, 'speedToStopLimitedRepair'),
+         'repairMode': DeviceRepairMode.SLOWED if repairSpeedModifier > 0.0 else DeviceRepairMode.SUSPENDED}
 
 
 def readCamouflage(xmlCtx, section, sectionName, default=None):

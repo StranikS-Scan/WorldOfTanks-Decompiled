@@ -54,7 +54,7 @@ class BCHighlights(BCHighlightsMeta):
         soundID, snd = self.__soundsByComponentID.pop(componentID, (None, None))
         if snd is not None:
             LOG_DEBUG_DEV_BOOTCAMP('BCHighlights_hideHint', componentID, shouldStop)
-            activeSoundComponentID, activeSound = self.__soundsBySoundID.get(soundID, None)
+            activeSoundComponentID, activeSound = self.__soundsBySoundID.get(soundID, (None, None))
             if activeSound is snd:
                 if shouldStop:
                     LOG_DEBUG_DEV_BOOTCAMP('BCHighlights_hideHint - stopping', soundID)

@@ -29,6 +29,7 @@ class LobbyContext(ILobbyContext):
         self.__clientArenaIDGenerator = Int32IDGenerator()
         self.__headerNavigationConfirmators = set()
         self.__fightButtonConfirmators = set()
+        self.__platoonCreationConfirmators = set()
         self.__changeListener = LobbyContextChangeListener(self)
         self.__isAccountComplete = True
         self.__em = EventManager()
@@ -46,6 +47,7 @@ class LobbyContext(ILobbyContext):
     def clear(self):
         self.__headerNavigationConfirmators.clear()
         self.__fightButtonConfirmators.clear()
+        self.__platoonCreationConfirmators.clear()
         self.__credentials = None
         self.__battlesCount = None
         self.__guiCtx.clear()
@@ -208,6 +210,23 @@ class LobbyContext(ILobbyContext):
     @process
     def isFightButtonPressPossible(self, callback=None):
         for confirmator in self.__fightButtonConfirmators:
+            confirmed = yield confirmator()
+            if not confirmed:
+                callback(False)
+
+        callback(True)
+
+    def addPlatoonCreationConfirmator(self, confirmator):
+        self.__platoonCreationConfirmators.add(confirmator)
+
+    def deletePlatoonCreationConfirmator(self, confirmator):
+        if confirmator in self.__platoonCreationConfirmators:
+            self.__platoonCreationConfirmators.remove(confirmator)
+
+    @async
+    @process
+    def isPlatoonCreationPossible(self, callback=None):
+        for confirmator in self.__platoonCreationConfirmators:
             confirmed = yield confirmator()
             if not confirmed:
                 callback(False)

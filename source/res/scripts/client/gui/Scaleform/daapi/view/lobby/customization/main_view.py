@@ -162,6 +162,22 @@ class _VehicleSlotSelector(object):
         self.__ctx.mode.unselectSlot()
 
 
+class _CustomizationCloseConfirmatorsHelper(CloseConfirmatorsHelper):
+
+    def getRestrictedSfViews(self):
+        result = super(_CustomizationCloseConfirmatorsHelper, self).getRestrictedSfViews()
+        result.append(VIEW_ALIAS.LOBBY_HANGAR)
+        return result
+
+    def start(self, closeConfirmator):
+        super(_CustomizationCloseConfirmatorsHelper, self).start(closeConfirmator)
+        self._addPlatoonCreationConfirmator()
+
+    def stop(self):
+        self._deletePlatoonCreationConfirmator()
+        super(_CustomizationCloseConfirmatorsHelper, self).stop()
+
+
 class MainView(LobbySubView, CustomizationMainViewMeta):
     __background_alpha__ = 0.0
     _COMMON_SOUND_SPACE = C11N_SOUND_SPACE
@@ -193,7 +209,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__dontPlayTabChangeSound = False
         self.__itemsGrabMode = False
         self.__finishGrabModeCallback = None
-        self.__closeConfirmatorHelper = CloseConfirmatorsHelper()
+        self.__closeConfirmatorHelper = _CustomizationCloseConfirmatorsHelper()
         self.__closed = False
         return
 

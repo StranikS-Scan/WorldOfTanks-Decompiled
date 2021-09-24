@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_battles_after_battle_view.py
 import SoundGroups
 from constants import EPIC_ABILITY_PTS_NAME
-from gui.Scaleform.daapi.view.lobby.epicBattle.after_battle_reward_view_helpers import getProgressionIconVODict, getQuestBonuses
+from gui.Scaleform.daapi.view.lobby.epicBattle.after_battle_reward_view_helpers import getProgressionIconVODict, getQuestBonuses, getFinishBadgeBonuses
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import EpicCurtailingAwardsComposer
 from gui.Scaleform.daapi.view.meta.EpicBattlesAfterBattleViewMeta import EpicBattlesAfterBattleViewMeta
 from gui.impl.gen.view_models.views.battle_royale.battle_results.personal.battle_reward_item_model import BattleRewardItemModel
@@ -108,7 +108,11 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
 
     def __getBonuses(self, prevLevel, currentLevel):
         questsProgressData = self.__ctx['reusableInfo'].personal.getQuestsProgress()
-        bonuses = getQuestBonuses(questsProgressData, (self.__epicController.TOKEN_QUEST_ID,), self.__epicController.TOKEN_QUEST_ID + str(currentLevel))
+        if currentLevel == self.__epicController.getMaxPlayerLevel():
+            bonuses = getFinishBadgeBonuses(questsProgressData, self.__epicController.FINAL_BADGE_QUEST_ID)
+        else:
+            bonuses = []
+        bonuses.extend(getQuestBonuses(questsProgressData, (self.__epicController.TOKEN_QUEST_ID,), self.__epicController.TOKEN_QUEST_ID + str(currentLevel)))
         if self.__battlePass.getCurrentLevel() == self.__battlePass.getMaxLevel():
             excluded = [BattleRewardItemModel.BATTLE_PASS_POINTS]
             bonuses = [ b for b in bonuses if b.getName() not in excluded ]

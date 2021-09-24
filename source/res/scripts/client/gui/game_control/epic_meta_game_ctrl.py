@@ -118,6 +118,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     MAX_STORED_ARENAS_RESULTS = 20
     TOKEN_QUEST_ID = 'epicmetagame:levelup:'
     DAILY_QUEST_ID = 'front_line'
+    FINAL_BADGE_QUEST_ID = 'epicmetagame:progression_finish'
 
     def __init__(self):
         super(EpicBattleMetaGameController, self).__init__()

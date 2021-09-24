@@ -80,6 +80,7 @@
     <Meteorite_M120>	101	</Meteorite_M120>
     <Leyland_L60_No_4_A>	103	</Leyland_L60_No_4_A>
     <Meteorite_Mk_202>	104	</Meteorite_Mk_202>
+    <Leyland_1A>	105	</Leyland_1A>
     <Rolls_Royce_Griffon_FL>	501	</Rolls_Royce_Griffon_FL>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
@@ -489,6 +490,23 @@
       <rpm_min>	315	</rpm_min>
       <rpm_max>	2069	</rpm_max>
     </Leyland>
+    <Leyland_1A>
+      <userString>	#gb_vehicles:Leyland_1A	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	4000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	190	</power>
+      <weight>	331	</weight>
+      <maxHealth>	65	</maxHealth>
+      <maxRegenHealth>	32	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	315	</rpm_min>
+      <rpm_max>	2069	</rpm_max>
+    </Leyland_1A>
     <Leyland_V6>
       <userString>	#gb_vehicles:Leyland_V6	</userString>
       <tags>	diesel	</tags>

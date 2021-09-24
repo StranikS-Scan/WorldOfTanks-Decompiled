@@ -415,8 +415,7 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
         self.__equipmentCtrl = self.sessionProvider.shared.equipments
-        self.as_setInitDataS({'mainTimers': self._generateMainTimersData(),
-         'secondaryTimers': self._generateSecondaryTimersData()})
+        self.__initData()
         return
 
     def _generateMainTimersData(self):
@@ -639,6 +638,12 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self._hideTimer(_TIMER_STATES.DEATH_ZONE)
         return
 
+    @MethodsRules.delayable()
+    def __initData(self):
+        self.as_setInitDataS({'mainTimers': self._generateMainTimersData(),
+         'secondaryTimers': self._generateSecondaryTimersData()})
+
+    @MethodsRules.delayable('__initData')
     @MethodsRules.delayable()
     def __onVehicleControlling(self, vehicle):
         ctrl = self.sessionProvider.shared.vehicleState

@@ -270,6 +270,7 @@ class SYSTEM_MESSAGES(object):
     BATTLESESSION_ERROR_ADDPLAYER = '#system_messages:battlesession/error/AddPlayer'
     BATTLESESSION_ERROR_ADDOBSERVER = '#system_messages:battlesession/error/AddObserver'
     BATTLESESSION_ERROR_LIMITS = '#system_messages:battlesession/error/Limits'
+    BATTLESESSION_ERROR_INSUFFICIENTROLE = '#system_messages:battlesession/error/InsufficientRole'
     GAMESESSIONCONTROL_KOREA_SESSIONTIME = '#system_messages:gameSessionControl/korea/sessionTime'
     GAMESESSIONCONTROL_KOREA_TIMETILLMIDNIGHT = '#system_messages:gameSessionControl/korea/timeTillMidnight'
     GAMESESSIONCONTROL_KOREA_PLAYTIMELEFT = '#system_messages:gameSessionControl/korea/playTimeLeft'
@@ -1636,6 +1637,7 @@ class SYSTEM_MESSAGES(object):
      BATTLESESSION_ERROR_ADDPLAYER,
      BATTLESESSION_ERROR_ADDOBSERVER,
      BATTLESESSION_ERROR_LIMITS,
+     BATTLESESSION_ERROR_INSUFFICIENTROLE,
      GAMESESSIONCONTROL_KOREA_SESSIONTIME,
      GAMESESSIONCONTROL_KOREA_TIMETILLMIDNIGHT,
      GAMESESSIONCONTROL_KOREA_PLAYTIMELEFT,

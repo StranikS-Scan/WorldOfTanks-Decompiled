@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/game_messages_panel.py
+import BattleReplay
 from gui.Scaleform.daapi.view.meta.GameMessagesPanelMeta import GameMessagesPanelMeta
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -72,10 +73,14 @@ class EpicMessagePanel(GameMessagesPanelMeta):
         ctrl = self.sessionProvider.dynamic.missions
         if ctrl is not None:
             ctrl.onIngameMessageReady += self.__onIngameMessageReady
+        if BattleReplay.g_replayEvents.isPlaying:
+            BattleReplay.g_replayEvents.onTimeWarpStart += self.as_clearMessagesS
         return
 
     def _dispose(self):
         super(EpicMessagePanel, self)._dispose()
+        if BattleReplay.g_replayEvents.isPlaying:
+            BattleReplay.g_replayEvents.onTimeWarpStart -= self.as_clearMessagesS
         ctrl = self.sessionProvider.dynamic.missions
         if ctrl is not None:
             ctrl.onIngameMessageReady -= self.__onIngameMessageReady

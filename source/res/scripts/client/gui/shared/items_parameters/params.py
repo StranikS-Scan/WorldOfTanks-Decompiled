@@ -256,6 +256,7 @@ class ChassisParams(WeightedParam):
             for track in chassis.trackPairs:
                 repairTime.append(track.healthParams.repairTime)
 
+            repairTime.reverse()
         else:
             repairTime.append(chassis.repairTime)
         return repairTime
@@ -636,6 +637,7 @@ class VehicleParams(_ParameterBase):
                     break
                 repairTime.append(self.__calcRealChassisRepairTime(track.healthParams.repairTime))
 
+            repairTime.reverse()
         elif chassis.repairTime is not None:
             repairTime.append(self.__calcRealChassisRepairTime(chassis.repairTime))
         return repairTime

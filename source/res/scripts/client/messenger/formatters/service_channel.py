@@ -2351,11 +2351,18 @@ class BootcampResultsFormatter(WaitItemsSyncFormatter):
         tankPremiumDays = results.get(PREMIUM_ENTITLEMENTS.PLUS, 0)
         if tankPremiumDays:
             awards += '<br/>' + g_settings.htmlTemplates.format('tankPremiumAccruedInvoiceReceived', {'amount': backport.getIntegralFormat(abs(tankPremiumDays))})
+
+        def sortVehsByLvl(vehCD):
+            veh = self._itemsCache.items.getItemByCD(vehCD)
+            return veh.level
+
         vehicles = results.get('vehicles', {})
+        vehicleCDs = sorted(vehicles.keys(), key=sortVehsByLvl)
         vehiclesNames = []
         devicesAndCrew = ''
-        for vehID, vehData in vehicles.iteritems():
-            vehicle = self._itemsCache.items.getItemByCD(vehID)
+        for vehCD in vehicleCDs:
+            vehData = vehicles[vehCD]
+            vehicle = self._itemsCache.items.getItemByCD(vehCD)
             if vehicle:
                 if vehData.get('devices', None):
                     devicesAndCrew += self.__formatDevicesAndCrew(vehicle.userName, vehData)

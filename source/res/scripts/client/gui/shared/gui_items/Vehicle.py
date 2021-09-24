@@ -159,6 +159,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     EARN_CRYSTALS = 'earn_crystals'
     MAPS_TRAINING = 'maps_training'
     T34_DISCLAIMER = 't34_disclaimer'
+    CLAN_WARS_BATTLES = 'clanWarsBattles'
 
 
 DISCLAIMER_TAGS = frozenset((VEHICLE_TAGS.T34_DISCLAIMER,))
@@ -1335,6 +1336,10 @@ class Vehicle(FittingItem):
     @property
     def isOnlyForMapsTrainingBattles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.MAPS_TRAINING)
+
+    @property
+    def isOnlyForClanWarsBattles(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.CLAN_WARS_BATTLES)
 
     @property
     def isTelecom(self):

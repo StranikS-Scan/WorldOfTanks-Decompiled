@@ -285,8 +285,9 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def createPlatoon(self, startAutoSearchOnUnitJoin=False):
         queueType = self.getQueueType()
         if queueType in _QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME:
-            navigationPossible = startAutoSearchOnUnitJoin
-            if not navigationPossible:
+            if startAutoSearchOnUnitJoin:
+                navigationPossible = yield self.__lobbyContext.isPlatoonCreationPossible()
+            else:
                 navigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
             if navigationPossible:
                 if self.prbDispatcher:

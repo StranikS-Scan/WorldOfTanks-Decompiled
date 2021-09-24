@@ -18,8 +18,15 @@ class PlayerMessageData(namedtuple('playerMessageData', ('messageType', 'length'
 
 class GameMessagesPanel(GameMessagesPanelMeta):
 
+    def _populate(self):
+        super(GameMessagesPanel, self)._populate()
+        if BattleReplay.g_replayEvents.isPlaying:
+            BattleReplay.g_replayEvents.onTimeWarpStart += self.as_clearMessagesS
+
     def _dispose(self):
         self.as_clearMessagesS()
+        if BattleReplay.g_replayEvents.isPlaying:
+            BattleReplay.g_replayEvents.onTimeWarpStart -= self.as_clearMessagesS
         super(GameMessagesPanel, self)._dispose()
 
     def _addMessage(self, msg):

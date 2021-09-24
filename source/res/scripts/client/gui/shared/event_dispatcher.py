@@ -5,7 +5,6 @@ from operator import attrgetter
 import typing
 from BWUtil import AsyncReturn
 from helpers.aop import pointcutable
-from helpers.i18n import makeString as _ms
 import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
 from async import async, await
@@ -32,7 +31,6 @@ from gui.Scaleform.genConsts.MAPBOX_ALIASES import MAPBOX_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
@@ -56,9 +54,7 @@ from gui.shared.money import Currency
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay, showBluprintsExchangeOverlay
-from gui.shop import getShopProductInfo
-from gui.shop import makeBuyParamsByProductInfo
+from gui.shop import showBuyGoldForRentWebOverlay, showBluprintsExchangeOverlay
 from gui.shop import showBuyVehicleOverlay
 from helpers import dependency
 from items import vehicles as vehicles_core, parseIntCompactDescr, ITEM_TYPES
@@ -156,20 +152,6 @@ def showVehicleRentDialog(intCD, rentType, nums, seasonType, price, buyParams):
         _logger.debug('GameSeasonType %s with RentType %s is not supported', seasonType, rentType)
         return
     _purchaseOffer(intCD, rentType, nums, price, seasonType, buyParams, renew=False)
-
-
-@adisp.process
-def showVehicleRentRenewDialog(intCD, rentType, num, seasonType):
-    if not (seasonType == GameSeasonType.EPIC and rentType == RentType.SEASON_CYCLE_RENT):
-        _logger.debug('GameSeasonType %s with RentType %s is not supported', seasonType, rentType)
-        return
-    productID = generateShopRentRenewProductID(intCD, rentType, num, seasonType)
-    productInfo = yield getShopProductInfo(productID)
-    if not productInfo:
-        SystemMessages.pushMessage(_ms(MESSENGER.SERVER_ERRORS_INTERNALERROR_MESSAGE), type=SystemMessages.SM_TYPE.Error)
-        return
-    buyParams = makeBuyParamsByProductInfo(productInfo)
-    _purchaseOffer(intCD, rentType, [num], productInfo.price, seasonType, buyParams, renew=True)
 
 
 @adisp.process

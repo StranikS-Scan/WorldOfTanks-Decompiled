@@ -144,6 +144,8 @@
     <Engine_VK4502P>	254	</Engine_VK4502P>
     <Engine_Auf_Panther>	255	</Engine_Auf_Panther>
     <Maybach_HL_210_TRM_P30L_1>	256	</Maybach_HL_210_TRM_P30L_1>
+    <Renault_V4_german>	257	</Renault_V4_german>
+    <SPA_19TB_mod_43_german>	258	</SPA_19TB_mod_43_german>
     <Maybach_HL_210_TRM_P30_SH>	324	</Maybach_HL_210_TRM_P30_SH>
     <Maybach_HL_230_TRM_P30_SH>	325	</Maybach_HL_230_TRM_P30_SH>
     <Maybach_HL_230_TRM_P35_SH>	326	</Maybach_HL_230_TRM_P35_SH>
@@ -171,6 +173,23 @@
     <Maybach_HL_120_TRM_R_MapsTraining_Dummy_ATSPG_2>	53	</Maybach_HL_120_TRM_R_MapsTraining_Dummy_ATSPG_2>
   </ids>
   <shared>
+    <SPA_19TB_mod_43_german>
+      <userString>	#germany_vehicles:SPA_19TB_mod_43_german	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	7500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	250	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	468	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
+    </SPA_19TB_mod_43_german>
     <Maybach_HL_120_TR>
       <userString>	#germany_vehicles:Maybach_HL_120_TR	</userString>
       <tags>	gasoline	</tags>
@@ -669,6 +688,23 @@
       <rpm_min>	487	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </Skoda_T-15>
+    <Renault_V4_german>
+      <userString>	#germany_vehicles:Renault_V4_german	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	840	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	82	</power>
+      <weight>	266	</weight>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	19	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	396	</rpm_min>
+      <rpm_max>	2329	</rpm_max>
+    </Renault_V4_german>
     <Praga_TNPS>
       <userString>	#germany_vehicles:Praga_TNPS	</userString>
       <tags>	gasoline	</tags>

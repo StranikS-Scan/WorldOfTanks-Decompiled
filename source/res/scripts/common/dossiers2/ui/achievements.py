@@ -95,7 +95,6 @@ def makeAchievesStorageName(block):
     return (block, '')
 
 
-WHITE_TIGER_RECORD = (_AB.CLIENT, 'whiteTiger')
 RARE_STORAGE_RECORD = makeAchievesStorageName(_AB.RARE)
 MARK_OF_MASTERY_RECORD = (_AB.TOTAL, 'markOfMastery')
 MARK_ON_GUN_RECORD = (_AB.TOTAL, 'marksOnGun')

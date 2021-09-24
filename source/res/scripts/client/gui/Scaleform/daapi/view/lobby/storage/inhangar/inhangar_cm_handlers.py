@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inhangar/inhangar_cm_handlers.py
-from constants import GameSeasonType, RentType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import ContextMenu, option, CMLabel
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import enoughCreditsForRestore, getVehicleRestoreInfo
@@ -8,7 +7,7 @@ from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeIn
 from gui.Scaleform.framework.managers.context_menu import CM_BUY_COLOR
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.shared import event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showVehicleRentRenewDialog, showShop
+from gui.shared.event_dispatcher import showShop
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
@@ -188,12 +187,6 @@ class VehiclesRentedCMHandler(ContextMenu):
     def buy(self):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self._id)
 
-    @option(__sqGen.next(), CMLabel.RENEW_RENT)
-    def renewRent(self):
-        vehicle = self.__itemsCache.items.getItemByCD(self._id)
-        rentRenewCycle = vehicle.rentInfo.getAvailableRentRenewCycleInfoForSeason(GameSeasonType.EPIC)
-        showVehicleRentRenewDialog(self._id, RentType.SEASON_CYCLE_RENT, rentRenewCycle.ID, GameSeasonType.EPIC)
-
     @option(__sqGen.next(), CMLabel.REMOVE)
     def remove(self):
         shared_events.showVehicleSellDialog(self.__itemsCache.items.getItemByCD(self._id).invID)
@@ -214,8 +207,6 @@ class VehiclesRentedCMHandler(ContextMenu):
             optionData.enabled = _canAddToComparisonBasket(self._id)
         elif label == CMLabel.BUY:
             optionData.enabled = self.__canBuy()
-        elif label == CMLabel.RENEW_RENT:
-            optionData.enabled = self.__canRenewRent()
         elif label == CMLabel.REMOVE:
             optionData.enabled = self.__canRemove()
         return optionData
@@ -224,10 +215,6 @@ class VehiclesRentedCMHandler(ContextMenu):
         items = self.__itemsCache.items
         vehicle = self.__itemsCache.items.getItemByCD(self._id)
         return vehicle is not None and vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
-
-    def __canRenewRent(self):
-        vehicle = self.__itemsCache.items.getItemByCD(self._id)
-        return vehicle is not None and vehicle.isOnlyForEpicBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC)
 
     def __canRemove(self):
         vehicle = self.__itemsCache.items.getItemByCD(self._id)

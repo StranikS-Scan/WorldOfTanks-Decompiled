@@ -1109,7 +1109,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             gui_event_dispatcher.hideAutoAimMarker()
 
     def updateVehicleHealth(self, vehicleID, health, deathReasonID, isCrewActive, isRespawn):
-        if vehicleID != self.playerVehicleID:
+        if vehicleID != self.playerVehicleID or not self.userSeesWorld():
             return
         else:
             rawHealth = health
@@ -1451,24 +1451,27 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.guiSessionProvider.addHitDirection(hitDirYaw, attackerID, damage, isBlocked, crits, isShellHE, damagedID, attackReasonID)
 
     def showVehicleDamageInfo(self, vehicleID, damageIndex, extraIndex, entityID, equipmentID):
-        damageCode = constants.DAMAGE_INFO_CODES[damageIndex]
-        LOG_DEBUG_DEV('[showVehicleDamageInfo] Vehicle', vehicleID, damageCode, damageIndex, extraIndex, entityID, equipmentID)
-        typeDescr = self.vehicleTypeDescriptor
-        observedVehID = self.guiSessionProvider.shared.vehicleState.getControllingVehicleID()
-        if self.isObserver() or observedVehID == vehicleID:
-            observedVehicleData = self.arena.vehicles.get(observedVehID)
-            if observedVehicleData:
-                typeDescr = observedVehicleData['vehicleType']
-            else:
-                LOG_DEBUG_DEV('[showVehicleDamageInfo] Vehicle #{} is not in arena vehicles'.format(observedVehID))
-                return
-        extra = typeDescr.extras[extraIndex] if extraIndex != 0 else None
-        if vehicleID == self.playerVehicleID or vehicleID == observedVehID or not self.__isVehicleAlive and vehicleID == self.inputHandler.ctrl.curVehicleID:
-            self.__showDamageIconAndPlaySound(damageCode, extra, vehicleID)
-        if damageCode not in self.__damageInfoNoNotification:
-            self.guiSessionProvider.shared.messages.showVehicleDamageInfo(self, damageCode, vehicleID, entityID, extra, equipmentID)
-        TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_RECEIVE_DAMAGE, attackerId=entityID)
-        return
+        if not self.userSeesWorld():
+            return
+        else:
+            damageCode = constants.DAMAGE_INFO_CODES[damageIndex]
+            LOG_DEBUG_DEV('[showVehicleDamageInfo] Vehicle', vehicleID, damageCode, damageIndex, extraIndex, entityID, equipmentID)
+            typeDescr = self.vehicleTypeDescriptor
+            observedVehID = self.guiSessionProvider.shared.vehicleState.getControllingVehicleID()
+            if self.isObserver() or observedVehID == vehicleID:
+                observedVehicleData = self.arena.vehicles.get(observedVehID)
+                if observedVehicleData:
+                    typeDescr = observedVehicleData['vehicleType']
+                else:
+                    LOG_DEBUG_DEV('[showVehicleDamageInfo] Vehicle #{} is not in arena vehicles'.format(observedVehID))
+                    return
+            extra = typeDescr.extras[extraIndex] if extraIndex != 0 else None
+            if vehicleID == self.playerVehicleID or vehicleID == observedVehID or not self.__isVehicleAlive and vehicleID == self.inputHandler.ctrl.curVehicleID:
+                self.__showDamageIconAndPlaySound(damageCode, extra, vehicleID)
+            if damageCode not in self.__damageInfoNoNotification:
+                self.guiSessionProvider.shared.messages.showVehicleDamageInfo(self, damageCode, vehicleID, entityID, extra, equipmentID)
+            TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_RECEIVE_DAMAGE, attackerId=entityID)
+            return
 
     def showShotResults(self, results):
         arenaVehicles = self.arena.vehicles

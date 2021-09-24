@@ -192,7 +192,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         if statsBlockConstructor is not None:
             items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
         priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
-        shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles
+        shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles or vehicle.isOnlyForClanWarsBattles
         if priceBlock and not shouldBeCut:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=5, padding=formatters.packPadding(left=98), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
@@ -233,8 +233,9 @@ class VehicleInfoTooltipData(BlocksTooltipData):
                 rentInfo = vehicle.rentInfo
             descrStr = RentLeftFormatter(rentInfo).getRentLeftStr(rentLeftKey)
             leftStr = ''
-            if rentInfo.rentExpiryTime:
-                _, formattedTime = getTimeLeftInfo(rentInfo.getTimeLeft())
+            rentTimeLeft = rentInfo.getTimeLeft()
+            if rentTimeLeft:
+                _, formattedTime = getTimeLeftInfo(rentTimeLeft)
                 leftStr = str(formattedTime)
             elif rentInfo.battlesLeft:
                 leftStr = str(rentInfo.battlesLeft)

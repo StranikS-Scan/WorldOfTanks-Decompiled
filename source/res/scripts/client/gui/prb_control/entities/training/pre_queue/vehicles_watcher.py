@@ -10,5 +10,6 @@ class TrainingVehiclesWatcher(BaseVehiclesWatcher):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def _getUnsuitableVehicles(self, onClear=False):
-        unsuitableVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EPIC_BATTLE ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE).itervalues()
+        unsitableVehsCriteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EPIC_BATTLE ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE ^ REQ_CRITERIA.VEHICLE.CLAN_WARS
+        unsuitableVehicles = self.itemsCache.items.getVehicles(unsitableVehsCriteria).itervalues()
         return unsuitableVehicles

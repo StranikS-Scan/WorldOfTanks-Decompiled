@@ -25,11 +25,11 @@ class RentConfirmDialogMeta(I18nConfirmDialogMeta):
         if rentType == RentType.SEASON_CYCLE_RENT:
             if len(nums) > 1:
                 key = 'cycles'
-                indexes = [ self.epicController.getCycleOrdinalNumber(n) for n in nums ]
+                indexes = [ self.epicController.getCycleOrdinalNumber(int(n)) for n in nums ]
                 indexes = '{}-{}'.format(min(indexes), max(indexes))
             else:
                 key = 'cycle'
-                indexes = str(self.epicController.getCycleOrdinalNumber(nums[0]))
+                indexes = str(self.epicController.getCycleOrdinalNumber(int(nums[0])))
         elif RentType.SEASON_RENT:
             key = 'season'
             _, endTimestamp = self.epicController.getSeasonTimeRange()

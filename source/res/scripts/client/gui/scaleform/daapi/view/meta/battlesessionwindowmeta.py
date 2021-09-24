@@ -10,11 +10,17 @@ class BattleSessionWindowMeta(PrebattleWindow):
     def requestToUnassignMember(self, accId):
         self._printOverrideError('requestToUnassignMember')
 
-    def canMoveToAssigned(self):
+    def canMoveToAssigned(self, accId):
         self._printOverrideError('canMoveToAssigned')
 
-    def canMoveToUnassigned(self):
+    def canMoveToUnassigned(self, accId):
         self._printOverrideError('canMoveToUnassigned')
+
+    def setSelectedFilter(self, value):
+        self._printOverrideError('setSelectedFilter')
+
+    def onCantMoveS(self, accId):
+        self._printOverrideError('onCantMoveS')
 
     def as_setStartTimeS(self, value):
         return self.flashObject.as_setStartTime(value) if self._isDAAPIInited() else None
@@ -39,3 +45,6 @@ class BattleSessionWindowMeta(PrebattleWindow):
 
     def as_setPlayersCountTextS(self, playersCountText):
         return self.flashObject.as_setPlayersCountText(playersCountText) if self._isDAAPIInited() else None
+
+    def as_setFiltersS(self, data, selectedIndex):
+        return self.flashObject.as_setFilters(data, selectedIndex) if self._isDAAPIInited() else None

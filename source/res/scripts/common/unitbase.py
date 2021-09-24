@@ -482,6 +482,19 @@ def _unitAssemblerTypeFromFlags(flags):
     return PREBATTLE_TYPE_TO_UNIT_ASSEMBLER.get(_prebattleTypeFromFlags(flags), None)
 
 
+def _queueTypeFromFlags(flags):
+    if flags & UNIT_MGR_FLAGS.EPIC:
+        return QUEUE_TYPE.EPIC
+    elif flags & UNIT_MGR_FLAGS.EVENT:
+        return QUEUE_TYPE.EVENT_BATTLES
+    elif flags & UNIT_MGR_FLAGS.BATTLE_ROYALE:
+        return QUEUE_TYPE.BATTLE_ROYALE
+    elif flags & UNIT_MGR_FLAGS.MAPBOX:
+        return QUEUE_TYPE.MAPBOX
+    else:
+        return QUEUE_TYPE.RANDOMS if flags & UNIT_MGR_FLAGS.SQUAD else None
+
+
 def extendTiersFilter(filterFlags):
     return (filterFlags << 1 | filterFlags | filterFlags >> 1) & UnitAssemblerSearchFlags.ALL_VEH_TIERS
 

@@ -118,8 +118,6 @@ def _criticalHitRibbonFormatter(ribbon, arenaDP, updater):
 def _receivedCriticalHitRibbonFormatter(ribbon, arenaDP, updater):
     if ribbon.getDamageSource() == DAMAGE_SOURCE.PLAYER:
         vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
-        if arenaDP.getPlayerVehicleID() == ribbon.getVehicleID():
-            vehicleName = ''
     else:
         vehicleName, vehicleClassTag = '', ribbon.getDamageSource()
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=_formatCounter(ribbon.getExtraValue()))

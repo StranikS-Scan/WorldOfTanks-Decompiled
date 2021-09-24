@@ -5,7 +5,7 @@ import BigWorld
 from helpers import dependency
 from helpers import i18n
 import BattleReplay
-from constants import CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE
+from constants import CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE, ARENA_BONUS_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_UNEXPECTED
 from gui import makeHtmlString
 from avatar_helpers import getAvatarSessionID
@@ -40,6 +40,8 @@ def _getToolTipText(arenaVisitor):
     if arenaVisitor is not None:
         if arenaVisitor.gui.isTrainingBattle():
             result = settings.toolTipText
+        elif arenaVisitor.getArenaBonusType() == ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD:
+            result = settings.battleRoyaleTooltip
         elif arenaVisitor.gui.isRandomBattle() and g_settings.userPrefs.disableBattleChat:
             result = settings.chatIsLockedToolTipText
         else:

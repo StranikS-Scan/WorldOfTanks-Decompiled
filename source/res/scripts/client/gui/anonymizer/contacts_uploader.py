@@ -88,7 +88,7 @@ class ContactsUploader(object):
                 else:
                     del self.__idToActions[dbID]
                     del self.__idToNames[dbID]
-                    self.__tryUploadContact()
+                    BigWorld.callback(0.0, self.__tryUploadContact)
                 return
         _logger.warning('Contacts Uploader: got feedback on action which is not setted up by me')
 

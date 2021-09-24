@@ -77,10 +77,10 @@ class BaseAdvancedTooltip(BlocksTooltipData):
 
     def _packAdvancedBlocks(self, movie, header, description):
         descrTextR = R.strings.tooltips.advanced.dyn(description)
-        if descrTextR is None:
-            descrText = '#advanced/' + description
-        else:
+        if descrTextR and descrTextR.isValid():
             descrText = backport.text(descrTextR())
+        else:
+            descrText = '#tooltips:advanced/' + description
         if movie is None:
             items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20))]
         else:

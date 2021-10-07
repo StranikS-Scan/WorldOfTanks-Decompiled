@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/Avatar.py
 import cPickle
 import math
+import weakref
 import zlib
 from functools import partial
 from typing import TYPE_CHECKING
@@ -260,6 +261,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__canMakeDualShot = False
         self.__magneticAutoAimTags = self.lobbyContext.getServerSettings().getMagneticAutoAimConfig().get('enableForTags', set())
         self.__isAimingEnded = False
+        self.__vehiclesWaitedInfo = {}
         return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -502,6 +504,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__initProgress = 0
         self.__vehicles = set()
         self.__gunDamagedShootSound = None
+        if self.__vehiclesWaitedInfo:
+            self.__vehiclesWaitedInfo.clear()
+        self.__vehiclesWaitedInfo = None
         uniprof.exitFromRegion('avatar.exiting')
         return
 
@@ -999,38 +1004,54 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def enemySPGShotSound(self, shooterPosition, targetPosition):
         self.complexSoundNotifications.notifyEnemySPGShotSound((self.getOwnVehiclePosition() - targetPosition).length, shooterPosition)
 
-    def __startVehicleVisual(self, vehicle, resetControllers=False):
-        vehicle.startVisual()
-        self.onVehicleEnterWorld(vehicle)
-        self.consistentMatrices.notifyVehicleLoaded(self, vehicle)
-        if vehicle.id == self.playerVehicleID:
-            if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
-                self.__onSetOwnVehicleAuxPhysicsData(self.ownVehicleAuxPhysicsData)
-                self.__ownVehicleStabMProv.target = vehicle.filter.stabilisedMatrix
-            else:
-                self.__ownVehicleStabMProv.target = vehicle.matrix
-            if self.__disableRespawnMode:
-                self.__disableRespawnMode = False
-                self.clearObservedVehicleID()
-                self.inputHandler.deactivatePostmortem()
-                self.__deviceStates = {}
-                self.gunRotator.stop()
-                self.gunRotator.start()
-                self.gunRotator.reset()
-                self.enableServerAim(self.gunRotator.showServerMarker)
-            if self.__pendingSiegeSettings:
-                vehicleID, newState, timeToNextState = self.__pendingSiegeSettings
-                if vehicle.id == vehicleID:
-                    vehicle.onSiegeStateUpdated(newState, timeToNextState)
-                    self.__pendingSiegeSettings = None
-            if resetControllers:
-                repo = self.guiSessionProvider.shared
-                for ctrl in (repo.ammo, repo.equipments, repo.optionalDevices):
-                    if ctrl is not None:
-                        ctrl.clear(False)
+    def __waitVehilceInfoForStartVisual(self, vehicle, resetControllers):
+        if vehicle.id in self.arena.vehicles:
+            if vehicle.id in self.__vehiclesWaitedInfo:
+                del self.__vehiclesWaitedInfo[vehicle.id]
+            return False
+        self.__vehiclesWaitedInfo[vehicle.id] = (weakref.proxy(vehicle), resetControllers)
+        return True
 
-            self.guiSessionProvider.setPlayerVehicle(self.playerVehicleID, self.vehicleTypeDescriptor)
-        return
+    def __onVehicleInfoAddedForStartVisual(self, vehID):
+        if vehID in self.__vehiclesWaitedInfo:
+            params = self.__vehiclesWaitedInfo.pop(vehID)
+            self.__startVehicleVisual(*params)
+
+    def __startVehicleVisual(self, vehicle, resetControllers=False):
+        if self.__waitVehilceInfoForStartVisual(vehicle, resetControllers):
+            return
+        else:
+            vehicle.startVisual()
+            self.onVehicleEnterWorld(vehicle)
+            self.consistentMatrices.notifyVehicleLoaded(self, vehicle)
+            if vehicle.id == self.playerVehicleID:
+                if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
+                    self.__onSetOwnVehicleAuxPhysicsData(self.ownVehicleAuxPhysicsData)
+                    self.__ownVehicleStabMProv.target = vehicle.filter.stabilisedMatrix
+                else:
+                    self.__ownVehicleStabMProv.target = vehicle.matrix
+                if self.__disableRespawnMode:
+                    self.__disableRespawnMode = False
+                    self.clearObservedVehicleID()
+                    self.inputHandler.deactivatePostmortem()
+                    self.__deviceStates = {}
+                    self.gunRotator.stop()
+                    self.gunRotator.start()
+                    self.gunRotator.reset()
+                    self.enableServerAim(self.gunRotator.showServerMarker)
+                if self.__pendingSiegeSettings:
+                    vehicleID, newState, timeToNextState = self.__pendingSiegeSettings
+                    if vehicle.id == vehicleID:
+                        vehicle.onSiegeStateUpdated(newState, timeToNextState)
+                        self.__pendingSiegeSettings = None
+                if resetControllers:
+                    repo = self.guiSessionProvider.shared
+                    for ctrl in (repo.ammo, repo.equipments, repo.optionalDevices):
+                        if ctrl is not None:
+                            ctrl.clear(False)
+
+                self.guiSessionProvider.setPlayerVehicle(self.playerVehicleID, self.vehicleTypeDescriptor)
+            return
 
     def vehicle_onLeaveWorld(self, vehicle):
         if vehicle.id == self.playerVehicleID:
@@ -2437,11 +2458,13 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def __startGUI(self):
         self.inputHandler.start()
         self.arena.onVehicleKilled += self.__onArenaVehicleKilled
+        self.arena.onVehicleAdded += self.__onVehicleInfoAddedForStartVisual
         MessengerEntry.g_instance.onAvatarInitGUI()
         self.soundNotifications.start()
 
     def __destroyGUI(self):
         self.arena.onVehicleKilled -= self.__onArenaVehicleKilled
+        self.arena.onVehicleAdded -= self.__onVehicleInfoAddedForStartVisual
         self.soundNotifications.destroy()
         self.soundNotifications = None
         self.complexSoundNotifications.destroy()

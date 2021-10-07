@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PersonalCase.py
 import operator
+import BigWorld
 import SoundGroups
 import constants
 from CurrentVehicle import g_currentVehicle
@@ -20,6 +21,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.CREW_SKINS import CREW_SKINS
 from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shop import showBuyGoldForCrew
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
@@ -29,7 +31,7 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.dossier import dumpDossier
+from gui.shared.gui_items.dossier import dumpDossier, TankmanDossier
 from gui.shared.gui_items.crew_skin import localizedFullName, GenderRestrictionsLocales
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRetraining, TankmanAddSkill, TankmanChangePassport, CrewSkinEquip, CrewSkinUnequip
 from gui.shared.gui_items.serializers import packTankman, packVehicle, packTraining, repackTankmanWithSkinData
@@ -102,6 +104,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         self._tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         self.vehicle = self.itemsCache.items.getItemByCD(self._tankman.vehicleNativeDescr.type.compactDescr)
         self.__previewSound = None
+        self._renewableSubscription = BigWorld.player().renewableSubscription
         return
 
     def onPrbEntitySwitched(self):
@@ -110,6 +113,9 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     def onPlayerStateChanged(self, entity, roster, accountInfo):
         if accountInfo.isCurrentPlayer():
             self.__setCommonData()
+
+    def onWotPlusChanged(self, itemDiff):
+        self.__setDossierData()
 
     def onUnitPlayerStateChanged(self, pInfo):
         if pInfo.isCurrentPlayer():
@@ -242,6 +248,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         super(PersonalCase, self)._populate()
         g_clientUpdateManager.addCallbacks({'': self.__onClientChanged})
         self.itemsCache.onSyncCompleted += self.__refreshData
+        self._renewableSubscription.onRenewableSubscriptionDataChanged += self.onWotPlusChanged
         self.startGlobalListening()
         self.setupContextHints(TUTORIAL.PERSONAL_CASE)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updatePrbState, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -249,6 +256,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     def _dispose(self):
         self.stopGlobalListening()
         self.itemsCache.onSyncCompleted -= self.__refreshData
+        self._renewableSubscription.onRenewableSubscriptionDataChanged -= self.onWotPlusChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updatePrbState, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__stopSoundPreview()
@@ -471,10 +479,20 @@ class PersonalCaseDataProvider(object):
                 for achievement in section:
                     packedAchieves[sectionIdx].append(self.__packAchievement(achievement, pickledDossierCompDescr))
 
-            callback({'achievements': packedAchieves,
+            serverSettings = self.lobbyContext.getServerSettings()
+            isWotPlusEnabled = serverSettings.isRenewableSubEnabled()
+            isNewSubscriptionsEnabled = serverSettings.isWotPlusNewSubscriptionEnabled()
+            hasWotPlus = BigWorld.player().renewableSubscription.isEnabled()
+            secondIcon = RES_ICONS.MAPS_ICONS_CREWHEADER_ACCELERATED_CREW_TRAINING if isWotPlusEnabled else RES_ICONS.MAPS_ICONS_LIBRARY_PREM_CHECKBOX
+            callbackInfo = {'achievements': packedAchieves,
              'stats': tmanDossier.getStats(self.itemsCache.items.getTankman(self.tmanInvID)),
              'firstMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO),
-             'secondMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO)})
+             'secondMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO),
+             'secondIcon': secondIcon}
+            if isWotPlusEnabled and (isNewSubscriptionsEnabled or hasWotPlus):
+                callbackInfo['wotPlusIcon'] = RES_ICONS.MAPS_ICONS_LIBRARY_WOT_PLUS
+                callbackInfo['wotPlusMsg'] = self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_WOTPLUS)
+            callback(callbackInfo)
             return
 
     def __makeStandardText(self, locale):

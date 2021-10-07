@@ -90,9 +90,11 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_SPG_AIM_AREA = '#ingame_gui:chat_shortcuts/spg_aim_area'
     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading_gridInfo'
     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading'
+    CHAT_SHORTCUTS_SPG_AIM_AREA_EMPTY_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_empty_gridInfo'
     CHAT_SHORTCUTS_ATTACK_ENEMY = '#ingame_gui:chat_shortcuts/attack_enemy'
     CHAT_SHORTCUTS_ATTACKING_ENEMY = '#ingame_gui:chat_shortcuts/attacking_enemy'
     CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG = '#ingame_gui:chat_shortcuts/attack_enemy_with_SPG'
+    CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG_EMPTY = '#ingame_gui:chat_shortcuts/attack_enemy_with_SPG_empty'
     CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG_RELOADING = '#ingame_gui:chat_shortcuts/attack_enemy_with_SPG_reloading'
     CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK = '#ingame_gui:chat_shortcuts/attention_to_base_atk'
     CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK_NUMBERED = '#ingame_gui:chat_shortcuts/attention_to_base_atk_numbered'
@@ -904,9 +906,11 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_SPG_AIM_AREA,
      CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING_GRIDINFO,
      CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING,
+     CHAT_SHORTCUTS_SPG_AIM_AREA_EMPTY_GRIDINFO,
      CHAT_SHORTCUTS_ATTACK_ENEMY,
      CHAT_SHORTCUTS_ATTACKING_ENEMY,
      CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG,
+     CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG_EMPTY,
      CHAT_SHORTCUTS_ATTACK_ENEMY_WITH_SPG_RELOADING,
      CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK,
      CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK_NUMBERED,

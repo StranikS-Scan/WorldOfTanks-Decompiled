@@ -8,6 +8,7 @@ import items
 from account_helpers.premium_info import PremiumInfo
 from debug_utils import LOG_DEBUG_DEV, LOG_WARNING, LOG_ERROR
 from helpers import time_utils
+from piggy_bank_common.settings_constants import PIGGY_BANK_PDATA_KEY
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from items import vehicles
 from gui.shared.money import Currency
@@ -129,9 +130,9 @@ class Stats(object):
             spaDiff = cacheDiff.get('SPA', None)
             if spaDiff:
                 synchronizeDicts(spaDiff, cache.setdefault('SPA', dict()))
-        piggyBankDiff = diff.get('piggyBank', None)
+        piggyBankDiff = diff.get(PIGGY_BANK_PDATA_KEY, None)
         if piggyBankDiff is not None:
-            synchronizeDicts(piggyBankDiff, cache.setdefault('piggyBank', dict()))
+            synchronizeDicts(piggyBankDiff, cache.setdefault(PIGGY_BANK_PDATA_KEY, dict()))
         if _PREFERRED_MAPS_KEY in diff:
             synchronizeDicts(diff[_PREFERRED_MAPS_KEY], cache.setdefault(_PREFERRED_MAPS_KEY, {}))
         return

@@ -409,6 +409,7 @@ class JOIN_FAILURE:
     WRONG_PERIPHERY_ID = 15
     WRONG_VEHICLE_LVL = 16
     QUEUE_FULL = 17
+    QUEUE_FAILURE = 18
 
 
 JOIN_FAILURE_NAMES = dict([ (v, k) for k, v in JOIN_FAILURE.__dict__.iteritems() if not k.startswith('_') ])
@@ -777,6 +778,7 @@ class PREMIUM_ENTITLEMENTS:
     ALL_TYPES = (BASIC, PLUS, VIP)
 
 
+SUBSCRIPTION_ENTITLEMENT = 'premium_subs'
 ENTITLEMENT_TO_PREM_TYPE = {PREMIUM_ENTITLEMENTS.BASIC: PREMIUM_TYPE.BASIC,
  PREMIUM_ENTITLEMENTS.PLUS: PREMIUM_TYPE.PLUS,
  PREMIUM_ENTITLEMENTS.VIP: PREMIUM_TYPE.VIP}
@@ -799,6 +801,7 @@ class PremiumConfigs(object):
 
 DAILY_QUESTS_CONFIG = 'daily_quests_config'
 DOG_TAGS_CONFIG = 'dog_tags_config'
+RENEWABLE_SUBSCRIPTION_CONFIG = 'renewable_subscription_config'
 IS_LOOT_BOXES_ENABLED = 'isLootBoxesEnabled'
 SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
 MAGNETIC_AUTO_AIM_CONFIG = 'magnetic_auto_aim_config'
@@ -1428,6 +1431,7 @@ class RentType(object):
     WINS_RENT = 3
     SEASON_RENT = 4
     SEASON_CYCLE_RENT = 5
+    WOTPLUS_RENT = 6
 
 
 class GameSeasonType(object):

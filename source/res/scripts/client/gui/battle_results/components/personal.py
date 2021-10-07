@@ -166,7 +166,7 @@ class PremiumInfoBlock(base.StatsBlock):
         value = ''
         icon = backport.image(R.images.gui.maps.icons.premacc.battleResult.premium())
         piggyBankConfig = self.__lobbyContext.getServerSettings().getPiggyBankConfig()
-        piggyBankMaxAmount = piggyBankConfig.get('threshold', 0)
+        piggyBankMaxAmount = piggyBankConfig.get('creditsThreshold', 0)
         period = piggyBankConfig.get('cycleLength', time_utils.ONE_DAY)
         periodInDays = ceil(period / time_utils.ONE_DAY)
         bonusConfig = self.__lobbyContext.getServerSettings().getAdditionalBonusConfig()

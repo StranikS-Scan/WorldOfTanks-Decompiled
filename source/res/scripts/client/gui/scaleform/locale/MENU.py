@@ -301,6 +301,7 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOUNIT = '#menu:tankCarousel/vehicleStates/unsuitableToUnit'
     TANKCAROUSEL_VEHICLESTATES_DISABLED = '#menu:tankCarousel/vehicleStates/disabled'
     TANKCAROUSEL_VEHICLESTATES_TOOHEAVY = '#menu:tankCarousel/vehicleStates/tooHeavy'
+    TANKCAROUSEL_WOTPLUSSELECTIONAVAILABLE = '#menu:tankCarousel/wotPlusSelectionAvailable'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED = '#menu:tankCarousel/vehicleStates/xpMultReceived'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT = '#menu:tankCarousel/vehicleStates/xpMultReceived/not'
     STORE_VEHICLESTATES_BATTLE = '#menu:store/vehicleStates/battle'
@@ -961,6 +962,7 @@ class MENU(object):
     PROFILE_STATS_ITEMS_READYTOLEARN = '#menu:profile/stats/items/readyToLearn'
     PROFILE_STATS_ITEMS_NEXTSKILLXPLEFT = '#menu:profile/stats/items/nextSkillXPLeft'
     PROFILE_STATS_ITEMS_NEXTSKILLBATTLESLEFT = '#menu:profile/stats/items/nextSkillBattlesLeft'
+    PROFILE_STATS_ITEMS_TIMEUNTILNEXTLEVEL = '#menu:profile/stats/items/timeUntilNextLevel'
     PROFILE_STATS_ITEMS_XP = '#menu:profile/stats/items/xp'
     PROFILE_STATS_ITEMS_FRAGS = '#menu:profile/stats/items/frags'
     PROFILE_STATS_ITEMS_UNKNOWN = '#menu:profile/stats/items/unknown'
@@ -1567,6 +1569,7 @@ class MENU(object):
     CONTEXTMENU_PERSONALCASE_STATSBLOCKTITLE = '#menu:contextMenu/personalCase/statsBlockTitle'
     CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO = '#menu:contextMenu/personalCase/stats/firstInfo'
     CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO = '#menu:contextMenu/personalCase/stats/secondInfo'
+    CONTEXTMENU_PERSONALCASE_STATS_WOTPLUS = '#menu:contextMenu/personalCase/stats/wotPlus'
     CONTEXTMENU_TANKMANUNLOAD = '#menu:contextMenu/tankmanUnload'
     CONTEXTMENU_TANKMANUNLOADALL = '#menu:contextMenu/tankmanUnloadAll'
     CONTEXTMENU_DISMISS = '#menu:contextMenu/dismiss'
@@ -1960,6 +1963,7 @@ class MENU(object):
     DISCOUNT_DESCRIPTION_VEHICLE = '#menu:discount/description/vehicle'
     CONTEXTMENU_VIEWCLANPROFILE = '#menu:contextMenu/viewClanProfile'
     CONTEXTMENU_COPYCLANNAME = '#menu:contextMenu/copyClanName'
+    CONTEXTMENU_WOTPLUSRENT = '#menu:contextMenu/wotPlusRent'
     INFINITYSYMBOL = '#menu:infinitySymbol'
     HEADERBUTTONS_BATTLE_TYPES_EPICBATTLE = '#menu:headerButtons/battle/types/epicBattle'
     HEADERBUTTONS_BATTLE_TYPES_EPICBATTLE_DESCR = '#menu:headerButtons/battle/types/epicBattle/descr'
@@ -2275,6 +2279,7 @@ class MENU(object):
      CONTEXTMENU_PERSONALCASE_STATSBLOCKTITLE,
      CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO,
      CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO,
+     CONTEXTMENU_PERSONALCASE_STATS_WOTPLUS,
      CONTEXTMENU_TANKMANUNLOAD,
      CONTEXTMENU_TANKMANUNLOADALL,
      CONTEXTMENU_DISMISS,
@@ -2300,7 +2305,8 @@ class MENU(object):
      CONTEXTMENU_REJECTINVITATIONTOSQUAD,
      CONTEXTMENU_GOTOBLUEPRINT,
      CONTEXTMENU_VIEWCLANPROFILE,
-     CONTEXTMENU_COPYCLANNAME)
+     CONTEXTMENU_COPYCLANNAME,
+     CONTEXTMENU_WOTPLUSRENT)
     NATIONS_ENUM = (NATIONS_TITLE,
      NATIONS_USSR,
      NATIONS_GERMANY,

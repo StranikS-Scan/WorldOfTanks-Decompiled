@@ -406,7 +406,7 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, personal):
@@ -428,6 +428,7 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__c11nProgress = {}
         self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, 0, 0, {}, {}, False, 0, 0)
         self.__dogTags = {}
+        self.__goldBankGain = 0
         if not self.hasUnpackedItems():
             self.__collectRequiredData(personal)
         return
@@ -507,6 +508,9 @@ class PersonalInfo(shared.UnpackedInfo):
     def getDogTagsProgress(self):
         return self.__dogTags
 
+    def getGoldBankGain(self):
+        return self.__goldBankGain
+
     def getPM2Progress(self):
         return self.__PM2Progress
 
@@ -564,6 +568,7 @@ class PersonalInfo(shared.UnpackedInfo):
             self.__rankInfo = PostBattleRankInfo.fromDict(infoAvatar)
             self.__progressiveReward = infoAvatar.get('progressiveReward')
             self.__dogTags.update(infoAvatar.get('dogTags', {}))
+            self.__goldBankGain = infoAvatar.get('goldBankGain', 0)
         for item in items:
             intCD = item.intCD
             data = info[intCD]

@@ -36,6 +36,7 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view im
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
+from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
 from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
@@ -1546,3 +1547,12 @@ class VehPostProgressionEntryPointTooltipContentWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, intCD, parentScreen, *args, **kwargs):
         return DecoratedTooltipWindow(VehPostProgressionEntryPointTooltip(intCD, parentScreen), useDecorator=False)
+
+
+class WotPlusTooltipContentWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(WotPlusTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.WOT_PLUS)
+
+    def getDisplayableData(self, perkID, *args, **kwargs):
+        return DecoratedTooltipWindow(WotPlusTooltip(), useDecorator=False)

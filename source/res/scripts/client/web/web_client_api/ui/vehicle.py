@@ -248,7 +248,13 @@ def _parseRent(offer):
 
 
 def _getOfferCrew(offer):
-    return ItemPackEntry(type=ItemPackType.CREW_100 if Money(**offer.get('buy_price', MONEY_UNDEFINED)).gold else ItemPackType.CREW_75, groupID=1)
+    if offer.get('event_type', '') == 'subscription':
+        crew = ItemPackType.CREW_CUSTOM
+    elif Money(**offer.get('buy_price', MONEY_UNDEFINED)).gold:
+        crew = ItemPackType.CREW_100
+    else:
+        crew = ItemPackType.CREW_75
+    return ItemPackEntry(type=crew, groupID=1)
 
 
 def _parseBuyPrice(buyPrice):
@@ -393,7 +399,8 @@ class VehiclePreviewWebApiMixin(object):
 
     @w2c(_VehicleOffersPreviewSchema, 'vehicle_offers_preview')
     def openVehicleOffersPreview(self, cmd):
-        event_dispatcher.showVehiclePreview(vehTypeCompDescr=int(cmd.vehicle_id), offers=_parseOffers(cmd.offers), price=MONEY_UNDEFINED, oldPrice=MONEY_UNDEFINED, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
+        offers = _parseOffers(cmd.offers)
+        event_dispatcher.showVehiclePreview(vehTypeCompDescr=int(cmd.vehicle_id), offers=offers, title=getattr(cmd, 'title', ''), price=MONEY_UNDEFINED, oldPrice=MONEY_UNDEFINED, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
 
     @w2c(_MarathonVehiclePackPreviewSchema, 'marathon_vehicle_pack_preview')
     def openMarathonVehiclePackPreview(self, cmd):

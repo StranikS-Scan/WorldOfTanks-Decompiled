@@ -576,8 +576,11 @@ class VehicleSettingsProcessor(ItemProcessor):
 
 class VehicleTmenXPAccelerator(VehicleSettingsProcessor):
 
-    def __init__(self, vehicle, value):
-        super(VehicleTmenXPAccelerator, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.XP_TO_TMAN, value, (proc_plugs.MessageConfirmator('xpToTmenCheckbox', isEnabled=value),))
+    def __init__(self, vehicle, value, confirmationEnabled=True):
+        plugins = []
+        if confirmationEnabled:
+            plugins.append(proc_plugs.MessageConfirmator('xpToTmenCheckbox', isEnabled=value))
+        super(VehicleTmenXPAccelerator, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.XP_TO_TMAN, value, plugins)
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='vehicle_tmenxp_accelerator/{}'.format(errStr), defaultSysMsgKey='vehicle_tmenxp_accelerator/server_error', vehName=self.item.userName)

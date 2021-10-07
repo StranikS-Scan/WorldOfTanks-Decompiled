@@ -634,8 +634,6 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
                 return True
             self.turnOff()
             return True
-        elif cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_4, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown and mods == 0:
-            return not self.__aih.isAllowSwitchMapCaseMode()
         elif cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
          CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
          CommandMapping.CMD_CM_CAMERA_ROTATE_UP,

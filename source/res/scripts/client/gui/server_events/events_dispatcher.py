@@ -8,6 +8,7 @@ from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionIn
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import awards, events_helpers, recruit_helper, anniversary_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses
@@ -17,6 +18,7 @@ from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IMarathonEventsController
+from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow
@@ -307,6 +309,18 @@ def showPiggyBankRewardWindow(creditsValue, isPremActive):
      'isPremActive': isPremActive}
     rewardWindow = PiggyBankRewardWindow(ctx)
     rewardWindow.load()
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showCurrencyReserveAwardWindow(creditsValue, goldValue, notificationMgr=None):
+    from gui.impl.lobby.currency_reserves.reserves_award_view import ReservesAwardWindow
+    notificationMgr.append(WindowNotificationCommand(ReservesAwardWindow(creditsValue, goldValue)))
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showSubscriptionAwardWindow(notificationMgr=None):
+    from gui.impl.lobby.subscription.subscription_award_view import SubscriptionAwardWindow
+    notificationMgr.append(WindowNotificationCommand(SubscriptionAwardWindow()))
 
 
 def showPersonalMissionAward(quest, ctx):

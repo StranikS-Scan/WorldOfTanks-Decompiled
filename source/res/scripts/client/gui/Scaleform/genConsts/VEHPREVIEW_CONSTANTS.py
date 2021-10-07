@@ -8,6 +8,7 @@ class VEHPREVIEW_CONSTANTS(object):
     PROGRESSION_STYLES_BUYING_PANEL_LINKAGE = 'VehiclePreviewProgressionStylesBuyingPanelUI'
     TRADE_IN_BUYING_PANEL_LINKAGE = 'VehiclePreviewTradeInBuyingPanelUI'
     PERSONAL_TRADE_IN_BUYING_PANEL_LINKAGE = 'VehiclePreviewPersonalTradeInBuyingPanelUI'
+    WOT_PLUS_PANEL_LINKAGE = 'VPWotPlusPanelUI'
     OFFER_GIFT_BUYING_PANEL_LINKAGE = 'VehiclePreviewOfferGiftBuyingPanelUI'
     FACT_SHEET_LINKAGE = 'VehPreviewFactSheetUI'
     ELITE_FACT_SHEET_LINKAGE = 'VehPreviewEliteFactSheetUI'

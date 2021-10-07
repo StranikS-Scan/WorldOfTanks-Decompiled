@@ -231,6 +231,15 @@ def showBuyVehicleOverlay(params=None):
          'browserParams': makeBrowserParams(R.strings.waiting.buyItem(), True, True, 0.5)}), EVENT_BUS_SCOPE.LOBBY)
 
 
+@process
+def showRentVehicleOverlay(params=None):
+    url = helpers.getVehicleUrl()
+    if url:
+        url = yield URLMacros().parse(url, params=params)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.OVERLAY_WEB_STORE), ctx={'url': url,
+         'browserParams': makeBrowserParams(R.strings.waiting.updating(), True, True, 0.5)}), EVENT_BUS_SCOPE.LOBBY)
+
+
 @async
 def _fetchUrl(url, headers, timeout, method, callback):
     BigWorld.fetchURL(url, callback, headers, timeout, method)

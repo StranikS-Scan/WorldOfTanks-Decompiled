@@ -5,11 +5,12 @@ from frameworks.wulf import ViewModel
 from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.common.user_name_model import UserNameModel
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_header_clan_info_model import PremDashboardHeaderClanInfoModel
+from gui.impl.gen.view_models.views.lobby.subscription.subscription_card_model import SubscriptionCardModel
 
 class PremDashboardHeaderModel(ViewModel):
     __slots__ = ('onShowBadges', 'onEmailButtonClicked')
 
-    def __init__(self, properties=13, commands=2):
+    def __init__(self, properties=15, commands=2):
         super(PremDashboardHeaderModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -17,74 +18,85 @@ class PremDashboardHeaderModel(ViewModel):
         return self._getViewModel(0)
 
     @property
-    def clanInfo(self):
+    def subscriptionCard(self):
         return self._getViewModel(1)
 
     @property
-    def personalReserves(self):
+    def clanInfo(self):
         return self._getViewModel(2)
 
     @property
-    def clanReserves(self):
+    def personalReserves(self):
         return self._getViewModel(3)
 
+    @property
+    def clanReserves(self):
+        return self._getViewModel(4)
+
     def getPrefixBadgeId(self):
-        return self._getString(4)
-
-    def setPrefixBadgeId(self, value):
-        self._setString(4, value)
-
-    def getSuffixBadgeId(self):
         return self._getString(5)
 
-    def setSuffixBadgeId(self, value):
+    def setPrefixBadgeId(self, value):
         self._setString(5, value)
 
-    def getBadgeContent(self):
+    def getSuffixBadgeId(self):
         return self._getString(6)
 
-    def setBadgeContent(self, value):
+    def setSuffixBadgeId(self, value):
         self._setString(6, value)
 
+    def getBadgeContent(self):
+        return self._getString(7)
+
+    def setBadgeContent(self, value):
+        self._setString(7, value)
+
     def getIsDynamicBadge(self):
-        return self._getBool(7)
-
-    def setIsDynamicBadge(self, value):
-        self._setBool(7, value)
-
-    def getIsInClan(self):
         return self._getBool(8)
 
-    def setIsInClan(self, value):
+    def setIsDynamicBadge(self, value):
         self._setBool(8, value)
 
-    def getHasClanReserves(self):
+    def getIsInClan(self):
         return self._getBool(9)
 
-    def setHasClanReserves(self, value):
+    def setIsInClan(self, value):
         self._setBool(9, value)
 
-    def getIsWarningIconVisible(self):
+    def getHasClanReserves(self):
         return self._getBool(10)
 
-    def setIsWarningIconVisible(self, value):
+    def setHasClanReserves(self, value):
         self._setBool(10, value)
 
+    def getIsWarningIconVisible(self):
+        return self._getBool(11)
+
+    def setIsWarningIconVisible(self, value):
+        self._setBool(11, value)
+
     def getEmailButtonLabel(self):
-        return self._getResource(11)
+        return self._getResource(12)
 
     def setEmailButtonLabel(self, value):
-        self._setResource(11, value)
+        self._setResource(12, value)
 
     def getShowEmailActionTooltip(self):
-        return self._getBool(12)
+        return self._getBool(13)
 
     def setShowEmailActionTooltip(self, value):
-        self._setBool(12, value)
+        self._setBool(13, value)
+
+    def getIsSubscriptionEnable(self):
+        return self._getBool(14)
+
+    def setIsSubscriptionEnable(self, value):
+        self._setBool(14, value)
 
     def _initialize(self):
         super(PremDashboardHeaderModel, self)._initialize()
         self._addViewModelProperty('userName', UserNameModel())
+        self._addViewModelProperty('subscriptionCard', SubscriptionCardModel())
         self._addViewModelProperty('clanInfo', PremDashboardHeaderClanInfoModel())
         self._addViewModelProperty('personalReserves', UserListModel())
         self._addViewModelProperty('clanReserves', UserListModel())
@@ -97,5 +109,6 @@ class PremDashboardHeaderModel(ViewModel):
         self._addBoolProperty('isWarningIconVisible', False)
         self._addResourceProperty('emailButtonLabel', R.invalid())
         self._addBoolProperty('showEmailActionTooltip', False)
+        self._addBoolProperty('isSubscriptionEnable', False)
         self.onShowBadges = self._addCommand('onShowBadges')
         self.onEmailButtonClicked = self._addCommand('onEmailButtonClicked')

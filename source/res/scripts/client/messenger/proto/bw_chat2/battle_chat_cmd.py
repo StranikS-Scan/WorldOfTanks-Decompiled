@@ -269,6 +269,8 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
                         if reloadTime > 0:
                             i18nArguments['reloadTime'] = reloadTime
                             i18nKey += '_reloading'
+                        elif reloadTime < 0:
+                            i18nKey += '_empty'
                 elif self.isBaseRelatedCommand():
                     strArg = self._protoData['strArg1']
                     if strArg != '':
@@ -280,6 +282,8 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
                         if reloadTime > 0:
                             i18nArguments['reloadTime'] = reloadTime
                             i18nKey += '_reloading'
+                        elif reloadTime < 0:
+                            i18nKey += '_empty'
                     mapsCtrl = self.sessionProvider.dynamic.maps
                     if mapsCtrl and mapsCtrl.hasMinimapGrid():
                         cellId = mapsCtrl.getMinimapCellIdByPosition(self.getMarkedPosition())
@@ -472,7 +476,7 @@ class BattleCommandFactory(IBattleCommandFactory):
         if name in BATTLE_CHAT_COMMANDS_BY_NAMES:
             record = struct.pack('<fff', position.x, position.y, position.z)
             msgArgs = messageArgs(strArg2=record)
-            if reloadTime > 0.0:
+            if reloadTime != 0.0:
                 msgArgs = messageArgs(floatArg1=reloadTime, strArg2=record)
             decorator = _OutCmdDecorator(name, msgArgs)
         return decorator

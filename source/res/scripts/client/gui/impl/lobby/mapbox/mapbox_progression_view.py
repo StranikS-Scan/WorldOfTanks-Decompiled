@@ -16,7 +16,6 @@ from gui.mapbox.mapbox_bonus_packers import getMapboxBonusPacker
 from gui.mapbox.mapbox_helpers import packMapboxRewardModelAndTooltip, getMapboxRewardTooltip
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.MissionsMapboxViewMeta import MissionsMapboxViewMeta
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
@@ -30,7 +29,7 @@ from skeletons.gui.impl import IGuiLoader
 from gui.server_events import IEventsCache
 _logger = logging.getLogger(__name__)
 
-class MapboxProgressionsComponent(InjectComponentAdaptor, MissionsMapboxViewMeta, LobbySubView):
+class MapboxProgressionsComponent(InjectComponentAdaptor, MissionsMapboxViewMeta):
     __slots__ = ()
 
     def markVisited(self):

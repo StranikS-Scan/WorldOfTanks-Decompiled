@@ -86,7 +86,7 @@ class PiggyBankBaseView(ViewImpl, SoundViewMixin):
 
     @replaceNoneKwargsModel
     def _updateMaxAmount(self, model=None):
-        maxAmount = self._config.get('threshold', PiggyBankConstants.MAX_AMOUNT)
+        maxAmount = self._config.get('creditsThreshold', PiggyBankConstants.MAX_AMOUNT)
         maxAmountStr = self.gui.systemLocale.getNumberFormat(maxAmount)
         model.setMaxAmount(maxAmount)
         model.setMaxAmountStr(maxAmountStr)
@@ -131,7 +131,7 @@ class PiggyBankBaseView(ViewImpl, SoundViewMixin):
             return
         self._config = self._lobbyContext.getServerSettings().getPiggyBankConfig()
         diffConfig = diff.get(PremiumConfigs.PIGGYBANK)
-        if 'threshold' in diffConfig:
+        if 'creditsThreshold' in diffConfig:
             self._updateMaxAmount()
         elif 'cycleLength' in diffConfig or 'cycleStartTime' in diffConfig:
             self._updateTimerStatus()
@@ -139,7 +139,7 @@ class PiggyBankBaseView(ViewImpl, SoundViewMixin):
     def _addListeners(self):
         g_clientUpdateManager.addCallbacks({PiggyBankConstants.PIGGY_BANK: self._onPiggyBankChanged,
          PiggyBankConstants.PIGGY_BANK_CREDITS: self._updateCredits,
-         PiggyBankConstants.PIGGY_BANK_SMASH_TIMESTAMP: self._updateLastSmashTimestamp})
+         PiggyBankConstants.PIGGY_BANK_SMASH_TIMESTAMP_CREDITS: self._updateLastSmashTimestamp})
         self._gameSession.onPremiumNotify += self._updatePrem
         self._lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
 

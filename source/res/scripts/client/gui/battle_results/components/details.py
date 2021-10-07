@@ -268,8 +268,8 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         self._addEmptyRow()
         self.__addTotalResults(baseCredits, premiumCredits, goldRecords, additionalRecords)
         self._addEmptyRow()
-        if self.__isProperBonusType(reusable):
-            self.__addPiggyBankInfo(premiumCredits, additionalRecords)
+        if self.__isProperBonusType(reusable) or self.__isGoldPiggyBankAvailable(reusable):
+            self.__addPiggyBankInfo(premiumCredits, additionalRecords, reusable)
         return
 
     def __addStatsItem(self, label, baseRecords, premiumRecords, *names):
@@ -306,15 +306,25 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         if not self.hasAnyPremium and baseCredits or self.hasAnyPremium and premiumCredits:
             self._addStatsRow('squadBonus', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium), column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium))
 
-    def __addPiggyBankInfo(self, premiumRecords, additionalRecords):
+    def __addPiggyBankInfo(self, premiumRecords, additionalRecords, reusable):
         baseCredits = 0
+        baseGold = 0
+        premiumGold = 0
+        goldGain = reusable.personal.getGoldBankGain()
         if self.hasAnyPremium:
             premiumCredits = additionalRecords.getRecord('piggyBank')
+            premiumGold = goldGain
         else:
             piggyBankMultiplier = self.__lobbyContext.getServerSettings().getPiggyBankConfig().get('multiplier')
             premiumCredits = premiumRecords.getRecord('credits') * piggyBankMultiplier
-        if baseCredits or premiumCredits:
-            self._addStatsRow('piggyBankInfo', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium, isDiff=baseCredits > 0), column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium, isDiff=premiumCredits > 0))
+            baseGold = goldGain
+        column2 = None
+        column4 = None
+        if self.__lobbyContext.getServerSettings().isRenewableSubGoldReserveEnabled():
+            column2 = style.makeGoldLabel(baseGold, canBeFaded=True)
+            column4 = style.makeGoldLabel(premiumGold, canBeFaded=True)
+        self._addStatsRow('piggyBankInfo', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium, isDiff=baseCredits > 0), column2=column2, column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium, isDiff=premiumCredits > 0), column4=column4)
+        return
 
     def __addReferralSystemFactor(self, baseCredits, premiumCredits):
         referralFactor = baseCredits.getFactor('referral20CreditsFactor100')
@@ -391,6 +401,10 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
 
     def __isProperBonusType(self, reusable):
         arenaTypes = self.__lobbyContext.getServerSettings().getPiggyBankConfig().get('arena', tuple())
+        return reusable.common.arenaBonusType in arenaTypes
+
+    def __isGoldPiggyBankAvailable(self, reusable):
+        arenaTypes = self.__lobbyContext.getServerSettings().getArenaTypesWithGoldReserve()
         return reusable.common.arenaBonusType in arenaTypes
 
 

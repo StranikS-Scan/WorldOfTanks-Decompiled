@@ -62,7 +62,8 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.RANKED_BATTLE_PAGE: 'ranked',
  VIEW_ALIAS.ADVENT_CALENDAR: 'adventCalendar',
  VIEW_ALIAS.VEH_POST_PROGRESSION: 'vehPostProgression',
- PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards'}
+ PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards',
+ VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW: None}
 _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_BROWSE_NAME,
   'linkage': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE}, {'id': VEHPREVIEW_CONSTANTS.MODULES_LINKAGE,
@@ -313,6 +314,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             if self.__offers:
                 offer = self.__currentOffer if self.__currentOffer is not None else getActiveOffer(self.__offers)
                 viewPy.setActiveOffer(offer)
+        elif alias == VEHPREVIEW_CONSTANTS.WOT_PLUS_PANEL_LINKAGE:
+            viewPy.setOffers(self.__offers)
         return
 
     def _getData(self):
@@ -421,7 +424,13 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         return descriptions[hasEquipBonuses << 1 | hasSkillBonuses]
 
     def _getBackBtnLabel(self):
-        return VEHICLE_PREVIEW.getBackBtnLabel(_BACK_BTN_LABELS[self._backAlias]) if self._backAlias and self._backAlias in _BACK_BTN_LABELS else VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_HANGAR
+        if self._backAlias and self._backAlias in _BACK_BTN_LABELS:
+            backBtnLabel = _BACK_BTN_LABELS[self._backAlias]
+            if not backBtnLabel:
+                return None
+            return VEHICLE_PREVIEW.getBackBtnLabel(_BACK_BTN_LABELS[self._backAlias])
+        else:
+            return VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_HANGAR
 
     def _getPrbEntityType(self):
         prbDispatcher = g_prbLoader.getDispatcher()

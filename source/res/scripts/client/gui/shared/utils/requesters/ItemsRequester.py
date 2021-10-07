@@ -262,6 +262,7 @@ class REQ_CRITERIA(object):
         IS_OUTFIT_LOCKED = RequestCriteria(PredicateCondition(lambda item: item.isOutfitLocked))
         EXPIRED_IGR_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver and item.isPremiumIGR))
         RENT_PROMOTION = RequestCriteria(PredicateCondition(lambda item: item.isRentPromotion))
+        WOTPLUS_RENT = RequestCriteria(PredicateCondition(lambda item: item.isWotPlusRent))
         SEASON_RENT = RequestCriteria(PredicateCondition(lambda item: item.isSeasonRent))
         DISABLED_IN_PREM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isDisabledInPremIGR))
         IS_PREMIUM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isPremiumIGR))

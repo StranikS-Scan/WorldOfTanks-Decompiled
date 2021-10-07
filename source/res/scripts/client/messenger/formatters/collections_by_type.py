@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/messenger/formatters/collections_by_type.py
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 from messenger.formatters import service_channel as _sc
+from messenger.formatters import wot_plus as _wotPlusFormatters
 from messenger.formatters import token_quest_subformatters
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 _TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.LootBoxTokenQuestFormatter(),
@@ -11,7 +12,8 @@ _TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.LootBoxTokenQuestFormat
  token_quest_subformatters.RankedYearLeaderFormatter(),
  token_quest_subformatters.SeniorityAwardsFormatter(),
  token_quest_subformatters.PersonalMissionsTokenQuestsFormatter(),
- token_quest_subformatters.BattlePassDefaultAwardsFormatter())
+ token_quest_subformatters.BattlePassDefaultAwardsFormatter(),
+ token_quest_subformatters.WotPlusDirectivesFormatter())
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),
@@ -79,7 +81,15 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.enhancementsWipedOnVehicles.index(): _sc.EnhancementsWipedOnVehiclesFormatter(),
  _SM_TYPE.prbWrongEnqueueDataKick.index(): _sc.PrbEventEnqueueDataFormatter(),
  _SM_TYPE.dedicationReward.index(): _sc.DedicationRewardFormatter(),
- _SM_TYPE.customizationProgressionChanged.index(): _sc.CustomizationProgressionChangedFormatter()}
+ _SM_TYPE.customizationProgressionChanged.index(): _sc.CustomizationProgressionChangedFormatter(),
+ _SM_TYPE.wotPlusUnlocked.index(): _wotPlusFormatters.WotPlusUnlockedFormatter(),
+ _SM_TYPE.wotPlusRenewed.index(): _wotPlusFormatters.WotPlusRenewedFormatter(),
+ _SM_TYPE.wotPlusExpired.index(): _wotPlusFormatters.WotPlusExpiredFormatter(),
+ _SM_TYPE.goldReserveIsFull.index(): _wotPlusFormatters.SimpleFormatter('GoldReserveFullMessage'),
+ _SM_TYPE.passiveXPNoTank.index(): _wotPlusFormatters.SimpleFormatter('PassiveXPNoTankMessage'),
+ _SM_TYPE.passiveXPIncompatibleCrew.index(): _wotPlusFormatters.SimpleFormatter('PassiveXPIncompatibleCrewMessage'),
+ _SM_TYPE.wotPlusRentEnd.index(): _wotPlusFormatters.RentEnd(),
+ _SM_TYPE.wotPlusNoRentSelected.index(): _wotPlusFormatters.SimpleFormatter('WotPlusRentNoRentSelectedMessage')}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),
@@ -91,4 +101,12 @@ CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageForma
  SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD: _sc.MapboxRewardReceivedFormatter(),
  SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_ENDED: _sc.MapboxEndedFormatter(),
  SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_STARTED: _sc.MapboxStartedFormatter(),
- SCH_CLIENT_MSG_TYPE.MAPBOX_SURVEY_AVAILABLE: _sc.MapboxSurveyAvailableFormatter()}
+ SCH_CLIENT_MSG_TYPE.MAPBOX_SURVEY_AVAILABLE: _sc.MapboxSurveyAvailableFormatter(),
+ SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_ENABLED: _wotPlusFormatters.SimpleFormatter('GoldReserveEnabledMessage'),
+ SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_DISABLED: _wotPlusFormatters.SimpleFormatter('GoldReserveDisabledMessage'),
+ SCH_CLIENT_MSG_TYPE.WOTPLUS_PASSIVEXP_ENABLED: _wotPlusFormatters.SimpleFormatter('PassiveXpEnabledMessage'),
+ SCH_CLIENT_MSG_TYPE.WOTPLUS_PASSIVEXP_DISABLED: _wotPlusFormatters.SimpleFormatter('PassiveXpDisabledMessage'),
+ SCH_CLIENT_MSG_TYPE.WOTPLUS_TANKRENTAL_ENABLED: _wotPlusFormatters.SimpleFormatter('TankRentalEnabledMessage'),
+ SCH_CLIENT_MSG_TYPE.WOTPLUS_TANKRENTAL_DISABLED: _wotPlusFormatters.SimpleFormatter('TankRentalDisabledMessage'),
+ SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_ENABLED: _wotPlusFormatters.SimpleFormatter('FreeDirectivesEnabledMessage'),
+ SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_DISABLED: _wotPlusFormatters.SimpleFormatter('FreeDirectivesDisabledMessage')}

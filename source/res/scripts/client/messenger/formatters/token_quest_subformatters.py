@@ -661,3 +661,34 @@ class RankedYearLeaderFormatter(RankedTokenQuestFormatter):
     def __formatShortMessage(self):
         return g_settings.msgTemplates.format('rankedLeaderNegativeQuest', ctx={'title': backport.text(R.strings.system_messages.ranked.notification.yearLB.negative.title()),
          'body': backport.text(R.strings.system_messages.ranked.notification.yearLB.negative.body())}, data={'savedData': {'ctx': {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}}})
+
+
+class WotPlusDirectivesFormatter(AsyncTokenQuestsSubFormatter):
+    __RENEWABLE_SUB_TOKEN_QUEST_PATTERN = 'wotplus:'
+    __MESSAGE_TEMPLATE = 'WotPlusRenewMessage'
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messageDataList = []
+        if isSynced:
+            data = message.data or {}
+            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
+            rewards = getRewardsForQuests(message, completedQuestIDs)
+            fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processCustomizations=True)
+            if fmt is not None:
+                templateParams = {'title': backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.freeDirectives.received.title()),
+                 'text': fmt}
+                settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+                formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, templateParams)
+                messageDataList.append(MessageData(formatted, settings))
+        if messageDataList:
+            callback(messageDataList)
+        callback([MessageData(None, None)])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        tmp = cls.__RENEWABLE_SUB_TOKEN_QUEST_PATTERN in questID
+        return tmp

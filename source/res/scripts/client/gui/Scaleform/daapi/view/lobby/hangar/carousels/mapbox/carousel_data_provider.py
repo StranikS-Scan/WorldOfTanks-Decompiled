@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/mapbox/carousel_data_provider.py
+from gui import GUI_NATIONS_ORDER_INDEX
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.entities.mapbox.pre_queue.actions_validator import MapboxVehicleValidator
@@ -7,16 +8,23 @@ from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass.carousel_data_p
 from gui.prb_control.settings import PRE_QUEUE_RESTRICTION
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
-from gui.shared.gui_items.Vehicle import Vehicle, getTypeUserName
+from gui.shared.gui_items.Vehicle import Vehicle, getTypeUserName, VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils.functions import makeTooltip
 
 class MapboxCarouselDataProvider(BattlePassCarouselDataProvider):
 
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):
-        result = [cls._isSuitableForQueue(vehicle)]
-        result.extend(super(MapboxCarouselDataProvider, cls)._vehicleComparisonKey(vehicle))
-        return result
+        return (cls._isSuitableForQueue(vehicle),
+         not vehicle.isInInventory,
+         not vehicle.isEvent,
+         not vehicle.isOnlyForBattleRoyaleBattles,
+         not vehicle.isFavorite,
+         GUI_NATIONS_ORDER_INDEX[vehicle.nationName],
+         VEHICLE_TYPES_ORDER_INDICES[vehicle.type],
+         vehicle.level,
+         tuple(vehicle.buyPrices.itemPrice.price.iterallitems(byWeight=True)),
+         vehicle.userName)
 
     def _buildVehicle(self, vehicle):
         result = super(MapboxCarouselDataProvider, self)._buildVehicle(vehicle)

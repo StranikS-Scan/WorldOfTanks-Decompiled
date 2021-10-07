@@ -5,7 +5,7 @@ from account_helpers.AccountSettings import UNLOCK_VEHICLES_IN_BATTLE_HINTS
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import isVehLevelUnlockableInBattle
-from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider, _SUPPLY_ITEMS
+from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider, _SUPPLY_ITEMS, _FRONT_SUPPLY_ITEMS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
@@ -23,9 +23,13 @@ class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
         self.__filteredSeparators = []
         self.__indexToScroll = -1
 
+    def _getFrontIndices(self):
+        previousItemsCount = len(self._vehicles) + len(_SUPPLY_ITEMS.ALL) + len(self.__separatorItems)
+        return [ previousItemsCount + idx for idx in _FRONT_SUPPLY_ITEMS.ALL ]
+
     @property
     def collection(self):
-        return self._vehicleItems + self.__separatorItems + self._supplyItems
+        return self._vehicleItems + self.__separatorItems + self._supplyItems + self._frontSupplyItems
 
     def getCurrentVehiclesCount(self):
         result = super(EpicBattleCarouselDataProvider, self).getCurrentVehiclesCount()
@@ -58,6 +62,7 @@ class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
         visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
         sortedVehicleIndices = self._getSortedIndices()
         self.__filteredSeparators = []
+        frontAdded = False
         for idx in sortedVehicleIndices:
             vehicle = self._vehicles[idx]
             if vehicle.intCD in visibleVehiclesIntCDs:
@@ -67,6 +72,9 @@ class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
                         self.__indexToScroll = len(self._filteredIndices)
                     self._filteredIndices.append(separatorIdx)
                     self.__filteredSeparators.append(vehicle.level)
+                    if not frontAdded:
+                        self._filteredIndices += self._getFrontAdditionalItemsIndexes()
+                        frontAdded = True
                 self._filteredIndices.append(idx)
                 if currentVehicleInvID == vehicle.invID:
                     self._selectedIdx = len(self._filteredIndices) - 1

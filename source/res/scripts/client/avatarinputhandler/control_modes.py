@@ -593,7 +593,7 @@ class ArcadeControlMode(_GunControlMode):
             self.__activateAlternateMode()
             return True
         else:
-            return not self._aih.isAllowSwitchMapCaseMode() if cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_4, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown and mods == 0 else False
+            return False
 
     def handleMouseEvent(self, dx, dy, dz):
         GUI.mcursor().position = self._aimOffset
@@ -1083,8 +1083,6 @@ class SniperControlMode(_GunControlMode):
         elif cmdMap.isFired(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, key) and isDown:
             self._aih.switchAutorotation(True)
             return True
-        elif cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_4, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown and mods == 0:
-            return not self._aih.isAllowSwitchMapCaseMode()
         elif cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
          CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
          CommandMapping.CMD_CM_CAMERA_ROTATE_UP,

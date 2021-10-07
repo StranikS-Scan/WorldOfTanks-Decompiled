@@ -68,7 +68,6 @@ _BINDING_ID = aih_global_binding.BINDING_ID
 _CTRL_MODES = aih_constants.CTRL_MODES
 _CTRLS_FIRST = _CTRL_MODE.DEFAULT
 _CONTROL_MODE_SWITCH_COOLDOWN = 1.0
-_MAPCASE_MODE_SWITCH_COOLDOWN = 0.5
 _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.STRATEGIC: (control_modes.StrategicControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.ARTY: (control_modes.ArtyControlMode, 'artyMode', _ARTY_CTRL_TYPE),
@@ -880,12 +879,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         if player is not None:
             player.showVehicleError('cantSwitchEngineDestroyed')
         return
-
-    def isAllowSwitchMapCaseMode(self):
-        if BigWorld.time() - self.__lastSwitchTime < _MAPCASE_MODE_SWITCH_COOLDOWN:
-            return False
-        self.__lastSwitchTime = BigWorld.time()
-        return True
 
     def isControlModeChangeAllowed(self):
         player = BigWorld.player()

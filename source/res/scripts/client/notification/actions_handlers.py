@@ -43,7 +43,7 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IMapboxController
+from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, IBattlePassController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
@@ -939,6 +939,7 @@ class _OpentBlueprintsConvertSale(_NavigationDisabledActionHandler):
 
 class _OpenBattlePassStyleChoiceView(_NavigationDisabledActionHandler):
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __battlePassController = dependency.descriptor(IBattlePassController)
 
     @classmethod
     def getNotType(cls):
@@ -949,7 +950,8 @@ class _OpenBattlePassStyleChoiceView(_NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        if self.__settingsCore.serverSettings.getBPStorage().get(BattlePassStorageKeys.INTRO_SHOWN):
+        isPaused = self.__battlePassController.isPaused()
+        if self.__settingsCore.serverSettings.getBPStorage().get(BattlePassStorageKeys.INTRO_SHOWN) and not isPaused:
             showBattlePass3dStyleChoiceWindow()
         else:
             showMissionsBattlePassCommonProgression()

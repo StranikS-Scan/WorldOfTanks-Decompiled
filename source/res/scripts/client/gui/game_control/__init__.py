@@ -66,6 +66,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.mapbox_controller import MapboxController
     from gui.game_control.overlay import SteamRegistrationOverlay as _SteamRegistrationOverlay
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
+    from gui.game_control.wot_plus_controller import WotPlusNotificationController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -130,3 +131,4 @@ def getGameControllersConfig(manager):
     _config(_interface.IBlueprintsConvertSaleController, BlueprintsConvertSaleController())
     _config(_interface.IVehiclePostProgressionController, VehiclePostProgressionController())
     _config(_interface.ISteamRegistrationOverlay, _SteamRegistrationOverlay())
+    _config(_interface.IWotPlusNotificationController, WotPlusNotificationController())

@@ -625,6 +625,7 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
             notFittedReasons = []
             oldGunIntCD = self.__vehicle.gun.intCD
             vehicle_adjusters.installModulesSet(self.__vehicle, list(modules[:]), notFittedReasons)
+            self.__checkAndRemoveIncompatibleEquipments()
             if notFittedReasons:
                 for notFitReason in notFittedReasons:
                     LOG_DEBUG('Module has not been installed properly, reason: {}'.format(notFitReason))
@@ -868,3 +869,13 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
                     notifier(*args, **kwargs)
 
             return
+
+    def __checkAndRemoveIncompatibleEquipments(self):
+        for i, equipmentIntCD in enumerate(self.__vehicle.consumables.installed.getIntCDs(default=None)):
+            if equipmentIntCD:
+                equipment = self.itemsCache.items.getItemByCD(int(equipmentIntCD))
+                success, _ = equipment.mayInstall(self.__vehicle, i)
+                if not success:
+                    self.removeEquipment(i)
+
+        return

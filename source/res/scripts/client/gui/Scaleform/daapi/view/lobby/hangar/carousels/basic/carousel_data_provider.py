@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/carousel_data_provider.py
+import BigWorld
+from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import getStatusStrings
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -13,6 +15,11 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 
+class _FRONT_SUPPLY_ITEMS(object):
+    RENT_TANK = 0
+    ALL = (RENT_TANK,)
+
+
 class _SUPPLY_ITEMS(object):
     BUY_TANK = 0
     RESTORE_TANK = 1
@@ -21,20 +28,50 @@ class _SUPPLY_ITEMS(object):
 
 
 class HangarCarouselDataProvider(CarouselDataProvider):
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(HangarCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
+        self._serverSettings = self._lobbyContext.getServerSettings()
         self._setBaseCriteria()
+        self._frontSupplyItems = []
+        self._wotPlusVehicles = []
         self._supplyItems = []
         self._emptySlotsCount = 0
         self._restorableVehiclesCount = 0
+        self._wotPlusInfo = BigWorld.player().renewableSubscription
+        self._wotPlusInfo.onRenewableSubscriptionDataChanged += self._onWotPlusDataChanged
+
+    def _dispose(self):
+        self._wotPlusInfo.onRenewableSubscriptionDataChanged -= self._onWotPlusDataChanged
+        super(HangarCarouselDataProvider, self)._dispose()
+
+    def _onWotPlusDataChanged(self, diff):
+        if 'isEnabled' in diff:
+            self.buildList()
 
     @property
     def collection(self):
-        return self._vehicleItems + self._supplyItems
+        return self._vehicleItems + self._supplyItems + self._frontSupplyItems
 
     def getCurrentVehiclesCount(self):
-        return len(self._filteredIndices) - len(self._getAdditionalItemsIndexes())
+        frontItems = len(self._getFrontAdditionalItemsIndexes())
+        backItems = len(self._getAdditionalItemsIndexes())
+        return len(self._filteredIndices) - backItems - frontItems
+
+    def updateVehicles(self, vehiclesCDs=None, filterCriteria=None, forceUpdate=False):
+        changeInWotPlus = set(vehiclesCDs or ()).issubset(self._wotPlusVehicles)
+        filterCriteria = filterCriteria or REQ_CRITERIA.EMPTY
+        if vehiclesCDs:
+            filterCriteria |= REQ_CRITERIA.IN_CD_LIST(vehiclesCDs)
+        criteria = self._baseCriteria | filterCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | REQ_CRITERIA.VEHICLE.WOTPLUS_RENT
+        newWotPlusVehicles = self._itemsCache.items.getVehicles(criteria)
+        isVehicleRemoved = not set(vehiclesCDs or ()).issubset(newWotPlusVehicles.viewkeys())
+        isVehicleAdded = not set(vehiclesCDs or ()).issubset(self._wotPlusVehicles)
+        if changeInWotPlus or isVehicleRemoved or isVehicleAdded:
+            self.buildList()
+            return
+        super(HangarCarouselDataProvider, self).updateVehicles(vehiclesCDs, filterCriteria, forceUpdate)
 
     def updateSupplies(self):
         self._supplyItems = []
@@ -45,10 +82,21 @@ class HangarCarouselDataProvider(CarouselDataProvider):
     def clear(self):
         super(HangarCarouselDataProvider, self).clear()
         self._supplyItems = []
+        self._frontSupplyItems = []
 
     def _setBaseCriteria(self):
         self._baseCriteria = REQ_CRITERIA.INVENTORY
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+
+    def _buildWotPlusVehicleItems(self):
+        self._wotPlusVehicles = []
+        if self._wotPlusInfo.isEnabled():
+            rentPromotionCriteria = REQ_CRITERIA.VEHICLE.WOTPLUS_RENT | self._baseCriteria
+            oldVehLen = len(self._vehicles)
+            self._addVehicleItemsByCriteria(rentPromotionCriteria)
+            totalWotPlusVehicles = len(self._vehicles) - oldVehLen
+            if totalWotPlusVehicles > 0:
+                self._wotPlusVehicles = [ veh.intCD for veh in self._vehicles[-totalWotPlusVehicles:] ]
 
     def _buildRentPromitionVehicleItems(self):
         rentPromotionCriteria = REQ_CRITERIA.VEHICLE.RENT_PROMOTION | ~self._baseCriteria
@@ -56,14 +104,22 @@ class HangarCarouselDataProvider(CarouselDataProvider):
 
     def _buildVehicleItems(self):
         super(HangarCarouselDataProvider, self)._buildVehicleItems()
+        self._buildWotPlusVehicleItems()
         self._buildRentPromitionVehicleItems()
         self._buildSupplyItems()
+        self._buildFrontSupplyItems()
+
+    def _getFrontAdditionalItemsIndexes(self):
+        frontIndices = self._getFrontIndices()
+        pruneIndices = set()
+        if not self._isWotPlusRentEnabled() or self._wotPlusVehicles:
+            pruneIndices.add(_FRONT_SUPPLY_ITEMS.RENT_TANK)
+        return [ suppIdx for suppIdx in frontIndices if frontIndices.index(suppIdx) not in pruneIndices ]
 
     def _getAdditionalItemsIndexes(self):
         supplyIndices = self._getSupplyIndices()
-        serverSettings = dependency.instance(ILobbyContext).getServerSettings()
-        restoreEnabled = serverSettings.isVehicleRestoreEnabled()
-        storageEnabled = serverSettings.isStorageEnabled()
+        restoreEnabled = self._serverSettings.isVehicleRestoreEnabled()
+        storageEnabled = self._serverSettings.isStorageEnabled()
         pruneIndices = set()
         if not self._emptySlotsCount:
             pruneIndices.add(_SUPPLY_ITEMS.BUY_TANK)
@@ -112,12 +168,32 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self._supplyItems.append(buySlotVO)
         return
 
+    def _buildFrontSupplyItems(self):
+        self._frontSupplyItems = []
+        if not self._wotPlusVehicles and self._isWotPlusRentEnabled():
+            self._frontSupplyItems.append({'isWotPlusSlot': True,
+             'infoText': text_styles.vehicleStatusInfoText(MENU.TANKCAROUSEL_WOTPLUSSELECTIONAVAILABLE),
+             'infoHoverText': text_styles.vehicleStatusInfoText(MENU.TANKCAROUSEL_WOTPLUSSELECTIONAVAILABLE),
+             'smallInfoText': text_styles.vehicleStatusSimpleText(MENU.TANKCAROUSEL_WOTPLUSSELECTIONAVAILABLE),
+             'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK,
+             'extraImage': RES_ICONS.MAPS_ICONS_LIBRARY_RENT_ICO_BIG,
+             'tooltip': TOOLTIPS.TANKS_CAROUSEL_WOT_PLUS_SLOT})
+
     @staticmethod
     def _isSuitableForQueue(vehicle):
         return vehicle.getCustomState() != Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
 
+    def _getFrontIndices(self):
+        previousItemsCount = len(self._vehicles) + len(_SUPPLY_ITEMS.ALL)
+        return [ previousItemsCount + idx for idx in _FRONT_SUPPLY_ITEMS.ALL ]
+
     def _getSupplyIndices(self):
         return [ len(self._vehicles) + idx for idx in _SUPPLY_ITEMS.ALL ]
+
+    def _isWotPlusRentEnabled(self):
+        hasWotPlusActive = self._wotPlusInfo.isEnabled()
+        isRentalEnabled = self._serverSettings.isWotPlusTankRentalEnabled()
+        return hasWotPlusActive and isRentalEnabled
 
 
 class BCCarouselDataProvider(CarouselDataProvider):

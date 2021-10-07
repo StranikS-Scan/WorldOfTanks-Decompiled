@@ -14,6 +14,7 @@ from account_helpers import account_completion
 from account_helpers.AccountSettings import AccountSettings, QUESTS, QUEST_DELTAS, QUEST_DELTAS_COMPLETION, ACTIVE_TEST_PARTICIPATION_CONFIRMED
 from account_helpers.AccountSettings import KNOWN_SELECTOR_BATTLES
 from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS, NEW_SHOP_TABS, LAST_SHOP_ACTION_COUNTER_MODIFICATION, OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES
+from account_helpers.renewable_subscription import RenewableSubscription
 from adisp import process, async
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from constants import PREMIUM_TYPE, EPlatoonButtonState
@@ -26,7 +27,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getAchievementsTabCounter
 from gui.Scaleform.daapi.view.lobby.mapbox.mapbox_helpers import getMapboxFightBtnTooltipData
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyGoldUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyGoldUrl, getBuyRenewableSubscriptionUrl
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import isSubscriptionEnabled
 from gui.Scaleform.daapi.view.meta.LobbyHeaderMeta import LobbyHeaderMeta
@@ -181,6 +182,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     class BUTTONS(CONST_CONTAINER):
         SETTINGS = 'settings'
         ACCOUNT = 'account'
+        WOT_PLUS = 'wotPlus'
         PREM = 'prem'
         PREMSHOP = 'premShop'
         SQUAD = 'squad'
@@ -196,7 +198,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
      BUTTONS.CRYSTAL,
      BUTTONS.FREE_XP,
      BUTTONS.ACCOUNT,
-     BUTTONS.PREMSHOP)
+     BUTTONS.PREMSHOP,
+     BUTTONS.WOT_PLUS)
     RANKED_WELCOME_VIEW_DISABLE_CONTROLS = BUTTONS.ALL()
 
     class TABS(CONST_CONTAINER):
@@ -261,6 +264,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__clanIconID = None
         self.__visibility = HeaderMenuVisibilityState.ALL
         self.__menuVisibilityHelper = _LobbyHeaderVisibilityHelper()
+        self._renewableSubInfo = BigWorld.player().renewableSubscription
         return
 
     @property
@@ -293,6 +297,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.updateMoneyStats()
         self.updateXPInfo()
         self.__updatePlayerInfoPanel(g_clanCache.clanInfo)
+        self.__updateWotPlusAttrs()
         self.__updateAccountAttrs()
         self.__updateBadge()
 
@@ -330,12 +335,24 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def showExchangeXPWindow(self):
         shared_events.showExchangeXPWindow()
 
+    def showWotPlusView(self):
+        showShop(getBuyRenewableSubscriptionUrl())
+
     def showPremiumView(self):
         self.__closeWindowsWithTopSubViewLayer()
         showShop(getBuyPremiumUrl())
 
     def onPremShopClick(self):
         self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.PREM_SHOP))
+
+    def _onRenewableSubscriptionDataChanged(self, itemDiff):
+        self.updateAccountInfo()
+        self._populateButtons()
+
+    def _onServerSettingsChange(self, diff):
+        if constants.RENEWABLE_SUBSCRIPTION_CONFIG in diff:
+            self.updateAccountInfo()
+            self._populateButtons()
 
     @process
     def showDashboard(self):
@@ -402,6 +419,20 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def _onPopulateEnd(self):
         pass
 
+    def _populateButtons(self):
+        if self.__tutorialLoader.gui.lastHeaderMenuButtonsOverride is not None:
+            self.__onOverrideHeaderMenuButtons()
+            return
+        else:
+            buttonsToExclude = []
+            if self.__loginManager.isWgcSteam:
+                buttonsToExclude.append(self.BUTTONS.PREMSHOP)
+            if not self._canShowWotPlus():
+                buttonsToExclude.append(self.BUTTONS.WOT_PLUS)
+            availableButtons = [ button for button in self.BUTTONS.ALL() if button not in buttonsToExclude ]
+            self.as_setHeaderButtonsS(availableButtons)
+            return
+
     def _populate(self):
         self._cleanupVisitedSettings()
         self._updateHangarMenuData()
@@ -412,13 +443,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             tooltipMgr.onHide += self.__onHideTooltip
         self.uiModeSelectorButtonLogger.initialize()
         super(LobbyHeader, self)._populate()
-        if self.__tutorialLoader.gui.lastHeaderMenuButtonsOverride is not None:
-            self.__onOverrideHeaderMenuButtons()
-        elif self.__loginManager.isWgcSteam:
-            steamButtons = tuple((v for v in self.BUTTONS.ALL() if v != self.BUTTONS.PREMSHOP))
-            self.as_setHeaderButtonsS(steamButtons)
-        else:
-            self.as_setHeaderButtonsS(self.BUTTONS.ALL())
+        self._populateButtons()
         self._addListeners()
         Waiting.hide('enter')
         self._isLobbyHeaderControlsDisabled = False
@@ -426,7 +451,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if self.bootcampController.isInBootcamp():
             self.as_disableFightButtonS(self.__isFightBtnDisabled)
         self._onPopulateEnd()
-        return
 
     def _invalidate(self, *args, **kwargs):
         super(LobbyHeader, self)._invalidate(*args, **kwargs)
@@ -445,11 +469,20 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.uiModeSelectorButtonLogger.reset()
         super(LobbyHeader, self)._dispose()
 
+    def _canShowWotPlus(self):
+        isWotPlusEnabled = self.lobbyContext.getServerSettings().isRenewableSubEnabled()
+        isWotPlusNSEnabled = self.lobbyContext.getServerSettings().isWotPlusNewSubscriptionEnabled()
+        hasWotPlusActive = self._renewableSubInfo.isEnabled()
+        return isWotPlusEnabled and (hasWotPlusActive or isWotPlusNSEnabled)
+
     def _getPremiumLabelText(self, premiumState):
+        isWotPlusEnabled = self.lobbyContext.getServerSettings().isRenewableSubEnabled()
         if self.__isSubscriptionEnabled:
             return ''
         if premiumState & PREMIUM_TYPE.PLUS:
-            return text_styles.main(backport.text(R.strings.menu.headerButtons.doLabel.premium()))
+            if not isWotPlusEnabled:
+                return text_styles.main(backport.text(R.strings.menu.headerButtons.doLabel.premium()))
+            return text_styles.gold(backport.text(R.strings.menu.headerButtons.doLabel.premium()))
         return text_styles.main(backport.text(R.strings.menu.common.premiumBuy())) if premiumState & PREMIUM_TYPE.BASIC else text_styles.gold(backport.text(R.strings.menu.common.premiumBuy()))
 
     def _getPremiumTooltipText(self, premiumState):
@@ -494,6 +527,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         g_playerEvents.onDequeued += self._updatePrebattleControls
         g_playerEvents.onArenaCreated += self._updatePrebattleControls
         self.techTreeEventsListener.onSettingsChanged += self._updateHangarMenuData
+        self._renewableSubInfo.onRenewableSubscriptionDataChanged += self._onRenewableSubscriptionDataChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -590,6 +625,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         g_preDefinedHosts.onPingPerformed -= self.__onPingPerformed
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.techTreeEventsListener.onSettingsChanged -= self._updateHangarMenuData
+        self._renewableSubInfo.onRenewableSubscriptionDataChanged -= self._onRenewableSubscriptionDataChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
         self.removeListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityMenu, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -672,7 +709,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
          'tooltip': tooltip,
          'tooltipType': tooltipType,
          'tooltipArgs': tooltipArgs,
-         'isWarningIconVisible': warningIcon}
+         'isWarningIconVisible': warningIcon,
+         'isWotPlusEnabled': self.lobbyContext.getServerSettings().isRenewableSubEnabled()}
         if userVO:
             data['userVO'] = userVO
         self.as_nameResponseS(data)
@@ -783,18 +821,49 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             return i18n.makeString(_SHORT_VALUE_FMT_PATTERN, value=formattedValue)
         return defFormatter(value)
 
+    def __updateWotPlusAttrs(self):
+        hasWotPlus = self._renewableSubInfo.isEnabled()
+        locale = R.strings.subscription.headerButton
+        if hasWotPlus:
+            icon = backport.image(R.images.gui.maps.icons.premacc.lobbyHeader.wotPlus_active())
+            label = text_styles.main(backport.text(locale.label()))
+            state = text_styles.standard(backport.text(locale.state.active()))
+        else:
+            icon = backport.image(R.images.gui.maps.icons.premacc.lobbyHeader.wotPlus_available())
+            label = text_styles.main(backport.text(locale.label()))
+            state = text_styles.gold(backport.text(locale.state.available()))
+        self.as_setWotPlusDataS({'wotPlusIcon': icon,
+         'label': label,
+         'state': state,
+         'tooltip': TOOLTIPS_CONSTANTS.WOT_PLUS,
+         'tooltipType': TOOLTIP_TYPES.WULF})
+        self.as_doSoftDisableHeaderButtonS(self.BUTTONS.WOT_PLUS, hasWotPlus)
+
     def __setAccountsAttrs(self):
+
+        def _getPremiumBtnLabels():
+            if not isPremiumAccount:
+                btnLbl = text_styles.main(backport.text(R.strings.menu.accountTypes.base()))
+                btnLblShort = text_styles.main(backport.text(R.strings.menu.accountTypes.base()))
+            elif not self.itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS):
+                btnLbl = text_styles.neutral(backport.text(R.strings.menu.accountTypes.premium()))
+                btnLblShort = text_styles.neutral(backport.text(R.strings.menu.accountTypes.premiumShort()))
+            elif isWotPlusEnabled:
+                btnLbl = text_styles.main(backport.text(R.strings.menu.accountTypes.premiumPlus()))
+                btnLblShort = text_styles.main(backport.text(R.strings.menu.accountTypes.premiumPlusShort()))
+            else:
+                btnLbl = text_styles.gold(backport.text(R.strings.menu.accountTypes.premiumPlus()))
+                btnLblShort = text_styles.gold(backport.text(R.strings.menu.accountTypes.premiumPlusShort()))
+            return (btnLbl, btnLblShort)
+
+        isWotPlusEnabled = self.lobbyContext.getServerSettings().isRenewableSubEnabled()
         premiumExpiryTime = self.itemsCache.items.stats.activePremiumExpiryTime
         isPremiumAccount = self.itemsCache.items.stats.isPremium
+        premiumBtnLbl, premiumBtnLblShort = _getPremiumBtnLabels()
         if isPremiumAccount:
             iconName = 'premiumPlus'
             deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(premiumExpiryTime)))
-            if self.itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS):
-                premiumBtnLbl = text_styles.gold(backport.text(R.strings.menu.accountTypes.premiumPlus()))
-                premiumBtnLblShort = text_styles.gold(backport.text(R.strings.menu.accountTypes.premiumPlusShort()))
-            else:
-                premiumBtnLbl = text_styles.neutral(backport.text(R.strings.menu.accountTypes.premium()))
-                premiumBtnLblShort = text_styles.neutral(backport.text(R.strings.menu.accountTypes.premiumShort()))
+            if not self.itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS):
                 if deltaInSeconds > self.__PREM_WARNING_LIMIT:
                     iconName = 'premium'
             if deltaInSeconds <= self.__PREM_WARNING_LIMIT:
@@ -808,10 +877,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
              'metric': timeMetric})
             premiumIcon = backport.image(R.images.gui.maps.icons.premacc.lobbyHeader.dyn(iconName)())
         else:
-            premiumBtnLbl = text_styles.main(backport.text(R.strings.menu.accountTypes.base()))
-            premiumBtnLblShort = premiumBtnLbl
             timeLabel = ''
-            premiumIcon = None
+            premiumIcon = backport.image(R.images.gui.maps.icons.premacc.lobbyHeader.noPremium()) if isWotPlusEnabled else None
         premiumState = self.itemsCache.items.stats.activePremiumType
         self.as_setPremiumParamsS({'btnLabel': premiumBtnLbl,
          'btnLabelShort': premiumBtnLblShort,
@@ -820,6 +887,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
          'isHasAction': self.__hasPremiumPacketDiscount(),
          'isPremium': isPremiumAccount,
          'isSubscription': self.__isSubscriptionEnabled and isPremiumAccount,
+         'isWotPlusEnabled': isWotPlusEnabled,
          'premiumIcon': premiumIcon,
          'tooltip': self._getPremiumTooltipText(premiumState),
          'tooltipType': TOOLTIP_TYPES.COMPLEX})

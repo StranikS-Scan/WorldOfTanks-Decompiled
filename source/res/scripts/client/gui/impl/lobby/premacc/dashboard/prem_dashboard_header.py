@@ -1,17 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/dashboard/prem_dashboard_header.py
+import time
 import typing
 import logging
 import BigWorld
 from async import async, await
 from account_helpers import account_completion
+from constants import RENEWABLE_SUBSCRIPTION_CONFIG
 from frameworks.wulf import ViewSettings, ViewStatus
+from gui import GUI_SETTINGS
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.clans.clan_helpers import getStrongholdClanCardUrl
 from gui.clans.settings import getClanRoleName
 from gui.goodies.goodie_items import MAX_ACTIVE_BOOSTERS_COUNT
+from gui.impl.gen.view_models.views.lobby.subscription.subscription_card_model import SubscriptionCardState
+from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
 from gui.platform.wgnp.controller import isEmailConfirmationNeeded, getEmail, isEmailAddingNeeded
 from gui.impl import backport
 from gui.impl.gen import R
@@ -23,11 +28,12 @@ from gui.impl.lobby.tooltips.clans import ClanShortInfoTooltipContent
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showStrongholds, showAddEmailOverlay, showConfirmEmailOverlay
+from gui.shared.event_dispatcher import showStrongholds, showAddEmailOverlay, showConfirmEmailOverlay, showWotPlusInfoPage
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
-from skeletons.gui.game_control import IBadgesController, IBoostersController
+from skeletons.gui.game_control import IBadgesController, IBoostersController, IExternalLinksController
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
 from skeletons.gui.platform.wgnp_controller import IWGNPRequestController
@@ -36,12 +42,14 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class PremDashboardHeader(ViewImpl):
-    __slots__ = ('__notConfirmedEmail',)
+    __slots__ = ('__notConfirmedEmail', '_renewableSub')
+    __lobbyContext = dependency.descriptor(ILobbyContext)
     __webCtrl = dependency.descriptor(IWebController)
     __badgesController = dependency.descriptor(IBadgesController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __goodiesCache = dependency.descriptor(IGoodiesCache)
     __boosters = dependency.descriptor(IBoostersController)
+    __externalLinks = dependency.descriptor(IExternalLinksController)
     wgnpController = dependency.descriptor(IWGNPRequestController)
     __MAX_VIEWABLE_CLAN_RESERVES_COUNT = 2
     __TOOLTIPS_MAPPING = {PremDashboardHeaderTooltips.TOOLTIP_PERSONAL_RESERVE: TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,
@@ -52,6 +60,7 @@ class PremDashboardHeader(ViewImpl):
         settings.model = PremDashboardHeaderModel()
         super(PremDashboardHeader, self).__init__(settings)
         self.__notConfirmedEmail = ''
+        self._renewableSub = BigWorld.player().renewableSubscription
 
     @property
     def viewModel(self):
@@ -74,7 +83,7 @@ class PremDashboardHeader(ViewImpl):
         if contentID == R.views.lobby.account_completion.tooltips.HangarTooltip():
             _logger.debug('Show not confirmed email: %s tooltip.', self.__notConfirmedEmail)
             return HangarTooltipView(self.__notConfirmedEmail)
-        return super(PremDashboardHeader, self).createToolTipContent(event=event, contentID=contentID)
+        return WotPlusTooltip() if event.contentID == R.views.lobby.subscription.WotPlusTooltip() else super(PremDashboardHeader, self).createToolTipContent(event=event, contentID=contentID)
 
     def _initialize(self, *args, **kwargs):
         super(PremDashboardHeader, self)._initialize(*args, **kwargs)
@@ -83,11 +92,16 @@ class PremDashboardHeader(ViewImpl):
         self.viewModel.personalReserves.onUserItemClicked += self.__onPersonalReserveClick
         self.viewModel.clanReserves.onUserItemClicked += self.__onClanReserveClick
         self.viewModel.onEmailButtonClicked += self.__onEmailButtonClicked
+        self.viewModel.subscriptionCard.onCardClick += self.__onSubscriptionClick
+        self.viewModel.subscriptionCard.onInfoButtonClik += self.__onSubscriptionInfoClick
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        self._renewableSub.onRenewableSubscriptionDataChanged += self._onWotPlusDataChanged
         with self.viewModel.transaction() as model:
             userNameModel = model.userName
             userNameModel.setUserName(BigWorld.player().name)
             userNameModel.setIsTeamKiller(self.__itemsCache.items.stats.isTeamKiller)
             self.__updateClanInfo(model)
+            self.__updateSubscriptionCard(model)
             self.__buildPersonalReservesList(model=model)
             self.__updateBadges(model=model)
             self.__askEmailStatus()
@@ -98,7 +112,15 @@ class PremDashboardHeader(ViewImpl):
         self.viewModel.personalReserves.onUserItemClicked -= self.__onPersonalReserveClick
         self.viewModel.clanReserves.onUserItemClicked -= self.__onClanReserveClick
         self.viewModel.onEmailButtonClicked -= self.__onEmailButtonClicked
+        self.viewModel.subscriptionCard.onCardClick -= self.__onSubscriptionClick
+        self.viewModel.subscriptionCard.onInfoButtonClik -= self.__onSubscriptionInfoClick
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        self._renewableSub.onRenewableSubscriptionDataChanged -= self._onWotPlusDataChanged
         self.__clearListeners()
+
+    def _onWotPlusDataChanged(self, diff):
+        with self.viewModel.transaction() as model:
+            self.__updateSubscriptionCard(model)
 
     def __initListeners(self):
         g_clientUpdateManager.addCallbacks({'stats.clanInfo': self.__onClanInfoChanged,
@@ -120,6 +142,11 @@ class PremDashboardHeader(ViewImpl):
         self.wgnpController.onEmailAdded -= self.__setEmailActionNeeded
         self.wgnpController.onEmailAddNeeded -= self.__setEmailActionNeeded
 
+    def __onServerSettingsChange(self, diff):
+        if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
+            with self.viewModel.transaction() as model:
+                self.__updateSubscriptionCard(model)
+
     def __onClanInfoChanged(self, _):
         self.__updateClanInfo(self.viewModel)
 
@@ -129,6 +156,20 @@ class PremDashboardHeader(ViewImpl):
 
     def __onBoosterChangeNotify(self, *_):
         self.__buildPersonalReservesList()
+
+    def __updateSubscriptionCard(self, model):
+        isWotPlusEnabled = self.__lobbyContext.getServerSettings().isRenewableSubEnabled()
+        isWotPlusNSEnabled = self.__lobbyContext.getServerSettings().isWotPlusNewSubscriptionEnabled()
+        hasWotPlusActive = self._renewableSub.isEnabled()
+        showSubscriptionCard = isWotPlusEnabled and (hasWotPlusActive or isWotPlusNSEnabled)
+        model.setIsSubscriptionEnable(showSubscriptionCard)
+        if showSubscriptionCard:
+            state = SubscriptionCardState.AVAILABLE
+            if hasWotPlusActive:
+                state = SubscriptionCardState.ACTIVE
+                expirationTime = self._renewableSub.getExpiryTime()
+                model.subscriptionCard.setNextCharge(time.strftime('%d.%m', time.localtime(expirationTime)))
+            model.subscriptionCard.setState(state)
 
     def __updateClanInfo(self, model):
         clanProfile = self.__getAccountProfile()
@@ -276,3 +317,10 @@ class PremDashboardHeader(ViewImpl):
             itemModel.setTimeleft(booster.getUsageLeftTime())
             itemModel.setIconId(booster.boosterGuiType)
         return itemModel
+
+    def __onSubscriptionClick(self):
+        url = GUI_SETTINGS.wotPlusManageSubscriptionUrl
+        self.__externalLinks.open(url)
+
+    def __onSubscriptionInfoClick(self):
+        showWotPlusInfoPage()

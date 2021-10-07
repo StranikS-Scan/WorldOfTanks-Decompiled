@@ -224,7 +224,12 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_TRADE), value='', icon=ICON_TEXT_FRAMES.TRADE, valueWidth=valueWidth, padding=formatters.packPadding(left=-5, top=0, bottom=-10)))
         if not vehicle.isPremiumIGR and not frontlineBlock and vehicle.getRentPackage() and (vehicle.rentalIsOver or not vehicle.isRented):
             items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main('#tooltips:vehicle/rentAvailable'), value='', icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, valueWidth=valueWidth, padding=formatters.packPadding(left=-5, top=0, bottom=-10)))
-        if statsConfig.rentals and not vehicle.isPremiumIGR and not frontlineBlock:
+        if statsConfig.rentals and not vehicle.isPremiumIGR and not frontlineBlock and vehicle.isWotPlusRent:
+            rentInfo = vehicle.rentInfo
+            timeKey, formattedTime = getTimeLeftInfo(rentInfo.getTimeLeft())
+            items.append(formatters.packTextParameterBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.wotPlusRenting())), value='', valueWidth=valueWidth + 18))
+            items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.gold(backport.text(R.strings.tooltips.vehicle.wotPlusRenting.remainingTime.dyn(timeKey)()) % {'time': formattedTime}), value='', icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=-10)))
+        if statsConfig.rentals and not vehicle.isPremiumIGR and not frontlineBlock and not vehicle.isWotPlusRent:
             if statsConfig.futureRentals:
                 rentLeftKey = '#tooltips:vehicle/rentLeftFuture/%s'
                 rentInfo = RentalInfoProvider(time=ctxParams.get('rentExpiryTime'), battles=ctxParams.get('rentBattlesLeft'), wins=ctxParams.get('rentWinsLeft'), seasonRent=ctxParams.get('rentSeason'), isRented=True)
@@ -891,7 +896,7 @@ class FrontlineRentBlockConstructor(VehicleTooltipBlockConstructor):
                 if rentInfo.getActiveSeasonRent() is not None:
                     rentFormatter = RentLeftFormatter(rentInfo)
                     rentLeftInfo = rentFormatter.getRentLeftStr(rentLeftKey)
-                    if rentLeftInfo:
+                    if rentLeftInfo and not rentInfo.isWotPlus:
                         block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.neutral(rentLeftInfo), value='', icon=ICON_TEXT_FRAMES.RENTALS, valueWidth=self._valueWidth, padding=paddings))
                 return block
         return

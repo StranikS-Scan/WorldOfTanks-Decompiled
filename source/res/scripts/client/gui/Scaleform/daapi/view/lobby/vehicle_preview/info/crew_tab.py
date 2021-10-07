@@ -208,7 +208,7 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
                 crewItems = sorted([ item for item in self.__crewItems if item.groupID == gID ], key=lambda i: ItemPackTypeGroup.CREW.index(i.type), reverse=True)
                 topCrewItem = crewItems[0] if crewItems else None
                 if topCrewItem and topCrewItem.type == ItemPackType.CREW_CUSTOM:
-                    isLockedCrew = topCrewItem.extra.get('isLockedCrew', False)
+                    isLockedCrew = (topCrewItem.extra or False) and topCrewItem.extra.get('isLockedCrew', False)
                 self.__setCustomCrew(topCrewItem, currentVehicle)
                 vehicleCrewComment, skillIcon, skillName = self.__getCrewCommentAndIcon(topCrewItem)
                 regularCrewList, uniqueCrewList = self.__getCrewData(currentVehicle, not bool(skillIcon))
@@ -250,7 +250,7 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
         self.setVehicleCrews(ctx.get('vehicleItems'), ctx.get('crewItems'))
 
     def __setCustomCrew(self, topCrewItem, vehicle):
-        if topCrewItem and topCrewItem.type == ItemPackType.CREW_CUSTOM:
+        if topCrewItem and topCrewItem.extra and topCrewItem.type == ItemPackType.CREW_CUSTOM:
             roles = vehicle.descriptor.type.crewRoles
             tmenItems = topCrewItem.extra.get('tankmen', [])
             if not isValidCrewForVehicle(tmenItems, roles):

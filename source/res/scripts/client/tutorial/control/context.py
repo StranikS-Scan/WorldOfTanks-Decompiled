@@ -154,6 +154,7 @@ class GLOBAL_FLAG(object):
     DOGTAGS_ENABLED = '_DogTagsEnabled'
     VEH_POST_PROGRESSION_ENABLED = '_VehPostProgressionEnabled'
     VEH_POST_PROGRESSION_PURCHASABLE = '_VehPostProgressionPurchasable'
+    WOTPLUS_ENABLED = '_WotPlusEnabled'
     ALL = (IS_FLAGS_RESET,
      SHOW_HISTORY,
      HISTORY_NOT_AVAILABLE,
@@ -165,7 +166,8 @@ class GLOBAL_FLAG(object):
      BADGE_PAGE_HAS_NEW_SUFFIX_BADGE,
      CREW_BOOKS_ENABLED,
      COLLECTIBLE_VEHICLE_PREVIEW_ENABLED,
-     DOGTAGS_ENABLED)
+     DOGTAGS_ENABLED,
+     WOTPLUS_ENABLED)
 
 
 class GlobalStorage(object):

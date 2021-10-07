@@ -18,7 +18,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL, getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL, getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx, getRentVehicleUrl
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.entities.sf_window import SFWindow
@@ -70,6 +70,7 @@ from soft_exception import SoftException
 from uilogging.veh_post_progression.loggers import VehPostProgressionEntryPointLogger
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers import ContainerManager
+    from typing import Callable, Generator
 _logger = logging.getLogger(__name__)
 
 class SettingsTabIndex(object):
@@ -261,8 +262,28 @@ def showChangeVehicleNationDialog(vehicleCD):
 
 
 def showPiggyBankView():
-    from gui.impl.lobby.premacc.piggybank import PiggyBankView
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.premacc.piggybank.Piggybank(), PiggyBankView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
+    import BigWorld
+    lobbyContext = dependency.instance(ILobbyContext)
+    isWotPlusEnabled = lobbyContext.getServerSettings().isRenewableSubEnabled()
+    isWotPlusNSEnabled = lobbyContext.getServerSettings().isWotPlusNewSubscriptionEnabled()
+    hasWotPlusActive = BigWorld.player().renewableSubscription.isEnabled()
+    hasGold = BigWorld.player().renewableSubscription.getGoldReserve()
+    showNewPiggyBank = isWotPlusEnabled and (hasWotPlusActive or isWotPlusNSEnabled or hasGold)
+    if showNewPiggyBank:
+        from gui.impl.lobby.currency_reserves.currency_reserves_view import CurrencyReservesView
+        viewId = R.views.lobby.currency_reserves.CurrencyReserves()
+        params = GuiImplViewLoadParams(viewId, CurrencyReservesView, ScopeTemplates.LOBBY_SUB_SCOPE)
+    else:
+        from gui.impl.lobby.premacc.piggybank import PiggyBankView
+        viewId = R.views.lobby.premacc.piggybank.Piggybank()
+        params = GuiImplViewLoadParams(viewId, PiggyBankView, ScopeTemplates.LOBBY_SUB_SCOPE)
+    uiLoader = dependency.instance(IGuiLoader)
+    dtView = uiLoader.windowsManager.getViewByLayoutID(viewId)
+    if dtView is not None:
+        return
+    else:
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(params), scope=EVENT_BUS_SCOPE.LOBBY)
+        return
 
 
 def showMapsBlacklistView():
@@ -448,6 +469,8 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
             viewAlias = VIEW_ALIAS.PERSONAL_TRADE_IN_VEHICLE_PREVIEW
         elif not (itemsPack or offers or vehParams) and vehicle.canTradeIn:
             viewAlias = VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW
+        elif offers and offers[0].eventType == 'subscription':
+            viewAlias = VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW
         else:
             viewAlias = VIEW_ALIAS.VEHICLE_PREVIEW
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(viewAlias), ctx={'itemCD': vehTypeCompDescr,
@@ -1322,6 +1345,62 @@ def showMapsTrainingResultsWindow(arenaUniqueID, isFromNotifications):
 
 
 @async
+def showAccelerateCrewTrainingDialog(successCallback):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.pub.dialog_window import DialogButtons
+    from gui.impl.dialogs.gf_builders import InfoDialogBuilder
+    builder = InfoDialogBuilder()
+    stringRoot = R.strings.dialogs.xpToTmenCheckbox
+    builder.setTitle(stringRoot.title())
+    builder.setDescription(stringRoot.message())
+    builder.setConfirmButtonLabel(stringRoot.submit())
+    builder.setCancelButtonLabel(stringRoot.cancel())
+    result = yield await(dialogs.show(builder.build()))
+    if result.result == DialogButtons.SUBMIT:
+        successCallback()
+
+
+@async
+def showIdleCrewBonusDialog(description, successCallback):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.pub.dialog_window import DialogButtons
+    from gui.impl.dialogs.gf_builders import InfoDialogBuilder
+    builder = InfoDialogBuilder()
+    stringRoot = R.strings.dialogs.idleCrewBonus
+    builder.setTitle(stringRoot.title())
+    builder.setDescription(description)
+    builder.setConfirmButtonLabel(stringRoot.submit())
+    builder.setCancelButtonLabel(stringRoot.cancel())
+    result = yield await(dialogs.show(builder.build()))
+    if result.result == DialogButtons.SUBMIT:
+        successCallback()
+
+
+@async
+def showWotPlusRentDialog(title, description, icon, successCallback):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.pub.dialog_window import DialogButtons
+    from gui.impl.dialogs.gf_builders import InfoDialogBuilder
+    viewId = R.views.dialogs.DefaultDialog()
+    uiLoader = dependency.instance(IGuiLoader)
+    dtView = uiLoader.windowsManager.getViewByLayoutID(viewId)
+    if dtView is not None:
+        return
+    else:
+        builder = InfoDialogBuilder()
+        stringRoot = R.strings.dialogs.wotPlusRental
+        builder.setIcon(icon)
+        builder.setTitle(title)
+        builder.setDescription(description)
+        builder.setConfirmButtonLabel(stringRoot.submit())
+        builder.setCancelButtonLabel(stringRoot.cancel())
+        result = yield await(dialogs.show(builder.build()))
+        if result.result == DialogButtons.SUBMIT:
+            successCallback()
+        return
+
+
+@async
 def showPostProgressionPairModDialog(vehicle, stepID, modID, parent=None):
     from gui.impl.lobby.veh_post_progression.dialogs.buy_pair_modification import BuyPairModificationDialog
     from gui.impl.dialogs import dialogs
@@ -1350,3 +1429,13 @@ def showEliteWindow(vehicleCD, notificationMgr=None):
     from gui.impl.lobby.elite_window.elite_view import EliteWindow
     window = EliteWindow(vehicleCD)
     notificationMgr.append(WindowNotificationCommand(window))
+
+
+def showWotPlusInfoPage():
+    url = GUI_SETTINGS.renewableSubscriptionInfoPage
+    showBrowserOverlayView(url, VIEW_ALIAS.WOT_PLUS_INFO_VIEW)
+
+
+def showVehicleRentalPage():
+    url = getRentVehicleUrl()
+    showBrowserOverlayView(url, VIEW_ALIAS.VEHICLE_RENTAL_VIEW)

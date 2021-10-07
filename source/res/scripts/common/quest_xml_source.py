@@ -351,6 +351,8 @@ class Source(object):
          'premiumPlus': self.__readCondition_bool,
          'premiumVip': self.__readCondition_bool,
          'isPremiumQuestsEnabled': self.__readCondition_bool,
+         'wotPlus': self.__readCondition_bool,
+         'isFreeDirectivesEnabled': self.__readCondition_bool,
          'daily': self.__readCondition_true,
          'weekly': self.__readCondition_true,
          'bonusLimit': self.__readCondition_int,

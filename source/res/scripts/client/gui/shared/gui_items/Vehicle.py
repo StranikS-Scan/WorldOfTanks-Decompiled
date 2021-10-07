@@ -762,6 +762,10 @@ class Vehicle(FittingItem):
     def health(self):
         return self._health
 
+    @health.setter
+    def health(self, value):
+        self._health = value
+
     @property
     def gun(self):
         return self._gun
@@ -937,6 +941,10 @@ class Vehicle(FittingItem):
     @property
     def rentExpiryState(self):
         return self.rentInfo.getExpiryState()
+
+    @property
+    def isWotPlusRent(self):
+        return self._rentInfo.isWotPlus
 
     @property
     def type(self):

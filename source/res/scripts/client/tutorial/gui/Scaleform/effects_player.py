@@ -234,7 +234,6 @@ class ShowChainHint(ApplicationEffect):
         else:
             layout = self._getTutorialLayout()
             if layout is not None:
-                self._hintsDict.update({hintProps.hintID: hintProps.itemID})
                 content = {'uniqueID': hintProps.uniqueID,
                  'hintText': hintProps.text,
                  'hasBox': hintProps.hasBox,
@@ -256,7 +255,10 @@ class ShowChainHint(ApplicationEffect):
                     content['padding'] = padding._asdict()
                 triggers = [ _GUI_EVENT_TO_TRIGGER_TYPE[item] for item in triggers ]
                 _logger.debug('layout %r showInteractiveHint with id %r, content %r, triggers %r', layout, hintProps.itemID, content, triggers)
-                return layout.showInteractiveHint(hintProps.itemID, content, triggers, silent)
+                result = layout.showInteractiveHint(hintProps.itemID, content, triggers, silent)
+                if result:
+                    self._hintsDict.update({hintProps.hintID: hintProps.itemID})
+                return result
             return False
 
     def stop(self, effectID=None, effectSubType=None):

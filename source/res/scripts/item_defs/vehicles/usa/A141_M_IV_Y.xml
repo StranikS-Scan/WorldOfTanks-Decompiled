@@ -1264,10 +1264,10 @@
       <terrainResistance>	1.4 1.7 3.4	</terrainResistance>
       <brakeForce>	47000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	41	</rotationSpeed>
+      <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.17	</vehicleMovement>
-        <vehicleRotation>	0.17	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <trackPairParams>
@@ -1279,7 +1279,7 @@
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	7.5	</repairCost>
-        <repairTime>	3.42857146	</repairTime>
+        <repairTime>	5.33333349	</repairTime>
       </trackPairParams>
       <trackPairParams>
         <trackPairIdx>	1	</trackPairIdx>
@@ -1291,9 +1291,9 @@
         <maxRegenHealth>	150	</maxRegenHealth>
         <repairCost>	7.5	</repairCost>
         <repairSpeedLimiter>
-          <repairSpeedModifier>	0.5	</repairSpeedModifier>
-          <speedToStartLimitedRepair>	12	</speedToStartLimitedRepair>
-          <speedToStopLimitedRepair>	5	</speedToStopLimitedRepair>
+          <repairSpeedModifier>	0.33	</repairSpeedModifier>
+          <speedToStartLimitedRepair>	5	</speedToStartLimitedRepair>
+          <speedToStopLimitedRepair>	3	</speedToStopLimitedRepair>
         </repairSpeedLimiter>
         <breakMode>	SLOW	</breakMode>
         <repairTime>	6.85714293	</repairTime>
@@ -2683,7 +2683,7 @@
       <tags></tags>
       <level>	8	</level>
       <notInShop>	true	</notInShop>
-      <price>	50000	</price>
+      <price>	30000	</price>
       <armor>
         <armor_1>	279.4	</armor_1>
         <armor_2>	266.7	</armor_2>
@@ -2748,7 +2748,7 @@
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	11.3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

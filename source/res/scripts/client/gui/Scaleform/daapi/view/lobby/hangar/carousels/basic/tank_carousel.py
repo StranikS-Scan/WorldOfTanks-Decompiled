@@ -13,7 +13,7 @@ from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
 from gui.shop import showBuyGoldForSlot
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showStorage
+from gui.shared.event_dispatcher import showStorage, showVehicleRentalPage
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
@@ -45,6 +45,9 @@ class TankCarousel(TankCarouselMeta):
 
     def buyRentPromotion(self, intCD):
         ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE, intCD)
+
+    def selectWotPlusVehicle(self, intCD):
+        showVehicleRentalPage()
 
     def updateHotFilters(self):
         self.as_setCarouselFilterS({'hotFilters': [ self.filter.get(key) for key in self._usedFilters ]})

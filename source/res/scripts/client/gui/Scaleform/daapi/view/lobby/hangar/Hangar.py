@@ -8,7 +8,7 @@ from shared_utils import nextTick
 from CurrentVehicle import g_currentVehicle
 from HeroTank import HeroTank
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-from constants import QUEUE_TYPE, PREBATTLE_TYPE, Configs, DOG_TAGS_CONFIG
+from constants import QUEUE_TYPE, PREBATTLE_TYPE, Configs, DOG_TAGS_CONFIG, RENEWABLE_SUBSCRIPTION_CONFIG
 from frameworks.wulf import WindowFlags, WindowLayer, WindowStatus
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
@@ -108,7 +108,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__urlMacros = URLMacros()
         self.__teaser = None
         self.__timer = None
+        self.__wotPlusInfo = BigWorld.player().renewableSubscription
         self.__updateDogTagsState()
+        self.__updateWotPlusState()
         return
 
     def onEscape(self):
@@ -168,6 +170,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         g_clientUpdateManager.addCallbacks({'inventory': self.__updateAlertMessage})
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self._settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.__wotPlusInfo.onRenewableSubscriptionDataChanged += self.__onWotPlusDataChanged
         self.battlePassController.onSeasonStateChange += self.__switchCarousels
         self.startGlobalListening()
         self.__updateAll()
@@ -218,6 +221,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self._settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self.__wotPlusInfo.onRenewableSubscriptionDataChanged -= self.__onWotPlusDataChanged
         self.battlePassController.onSeasonStateChange -= self.__switchCarousels
         self.__timer.clearCallbacks()
         self.__timer = None
@@ -227,12 +231,22 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         LobbySelectableView._dispose(self)
         return
 
+    def _updateCnSubscriptionMode(self):
+        toggleGFPanel = self.lobbyContext.getServerSettings().isRenewableSubEnabled()
+        self.as_toggleCnSubscriptionS(toggleGFPanel)
+
     def _updateBattleRoyaleMode(self):
         self.as_toggleBattleRoyaleS(g_currentVehicle.isOnlyForBattleRoyaleBattles())
 
     def __updateDogTagsState(self):
         isDogTagsEnabled = self.lobbyContext.getServerSettings().isDogTagEnabled()
         getTutorialGlobalStorage().setValue(GLOBAL_FLAG.DOGTAGS_ENABLED, isDogTagsEnabled)
+
+    def __updateWotPlusState(self):
+        isWotPlusGoldEnabled = self.lobbyContext.getServerSettings().isRenewableSubGoldReserveEnabled()
+        hasWotPlusActive = BigWorld.player().renewableSubscription.isEnabled()
+        getTutorialGlobalStorage().setValue(GLOBAL_FLAG.WOTPLUS_ENABLED, hasWotPlusActive and isWotPlusGoldEnabled)
+        self._updateCnSubscriptionMode()
 
     def __onWindowLoaded(self, uniqueID, newStatus):
         window = self.gui.windowsManager.getWindow(uniqueID)
@@ -471,6 +485,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateCrew()
         self.__updateAlertMessage()
         self.__updateBattleRoyaleComponents()
+        self._updateCnSubscriptionMode()
         self._updateBattleRoyaleMode()
         Waiting.hide('updateVehicle')
 
@@ -484,6 +499,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderEpicWidget()
         self.__updateCrew()
         self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
+        self._updateCnSubscriptionMode()
         self._updateBattleRoyaleMode()
         Waiting.hide('updateVehicle')
 
@@ -593,11 +609,17 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__switchCarousels(force=True)
         if DOG_TAGS_CONFIG in diff:
             self.__updateDogTagsState()
+        if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
+            self.__updateWotPlusState()
 
     def __onSettingsChanged(self, diff):
         if SETTINGS_SECTIONS.UI_STORAGE in diff:
             if self.ammoPanel:
                 self.ammoPanel.update()
+
+    def __onWotPlusDataChanged(self, diff):
+        if 'isEnabled' in diff:
+            self.__updateWotPlusState()
 
     def __checkVehicleCameraState(self):
         vehicleEntity = self.hangarSpace.getVehicleEntity()

@@ -153,9 +153,12 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
         self._preferredColumn, self._priority = self._getPositionByModeName()
         modeStrings = _rMode.dyn(modeName)
         if modeStrings.isValid():
-            self.viewModel.setConditions(backport.text(modeStrings.dyn('condition')()))
-            self.viewModel.setDescription(backport.text(modeStrings.dyn('description')()))
-            self.viewModel.setStatusActive(backport.text(modeStrings.dyn('callToAction')()))
+            condition = modeStrings.dyn('condition')
+            self.viewModel.setConditions(backport.text(condition()) if condition.exists() else '')
+            description = modeStrings.dyn('description')
+            self.viewModel.setDescription(backport.text(description()) if description.exists() else '')
+            callToAction = modeStrings.dyn('callToAction')
+            self.viewModel.setStatusActive(backport.text(callToAction()) if callToAction.exists() else '')
 
     def _addReward(self, rewardID, locParams=None, **params):
         if locParams is None:

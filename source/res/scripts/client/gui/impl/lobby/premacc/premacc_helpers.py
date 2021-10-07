@@ -16,8 +16,10 @@ class PiggyBankConstants(object):
     MAX_AMOUNT = 750000
     SMASH_MAX_DELAY = 300
     PIGGY_BANK_CREDITS = 'piggyBank.credits'
+    PIGGY_BANK_GOLD = 'piggyBank.gold'
     PIGGY_BANK = 'piggyBank'
-    PIGGY_BANK_SMASH_TIMESTAMP = 'piggyBank.lastSmashTimestamp'
+    PIGGY_BANK_SMASH_TIMESTAMP_CREDITS = 'piggyBank.lastSmashTimestamp'
+    PIGGY_BANK_SMASH_TIMESTAMP_GOLD = 'piggyBank.lastSmashTimestampGold'
 
 
 def validateAdditionalBonusMultiplier(multiplier):

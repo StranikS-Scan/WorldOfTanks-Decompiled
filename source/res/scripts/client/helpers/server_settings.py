@@ -9,7 +9,7 @@ import logging
 import constants
 import post_progression_common
 from Event import Event
-from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs, DOG_TAGS_CONFIG, BATTLE_NOTIFIER_CONFIG, MISC_GUI_SETTINGS
+from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs, DOG_TAGS_CONFIG, BATTLE_NOTIFIER_CONFIG, MISC_GUI_SETTINGS, RENEWABLE_SUBSCRIPTION_CONFIG
 from helpers import time_utils
 from ranked_common import SwitchState
 from collector_vehicle import CollectorVehicleConsts
@@ -20,6 +20,7 @@ from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.utils.decorators import ReprInjector
 from personal_missions import PM_BRANCH
+from renewable_subscription_common.settings_constants import GOLD_RESERVE_GAINS_SECTION
 from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
 from shared_utils import makeTupleByDict, updateDict
 from UnitBase import PREBATTLE_TYPE_TO_UNIT_ASSEMBLER, UNIT_ASSEMBLER_IMPL_TO_CONFIG
@@ -1180,6 +1181,33 @@ class ServerSettings(object):
 
     def isDogTagComponentUnlockingEnabled(self):
         return self.isDogTagEnabled() and self.__getGlobalSetting(DOG_TAGS_CONFIG, {}).get('enableComponentUnlocking', True)
+
+    def isRenewableSubEnabled(self):
+        return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enabled', True)
+
+    def isWotPlusTankRentalEnabled(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableTankRental', True)
+
+    def isRenewableSubGoldReserveEnabled(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableGoldReserve', True)
+
+    def isRenewableSubFreeDirectivesEnabled(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableFreeDirectives', True)
+
+    def isRenewableSubPassiveCrewXPEnabled(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enablePassiveCrewXP', True)
+
+    def isWotPlusNewSubscriptionEnabled(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableNewSubscriptions', True)
+
+    def getRenewableSubCrewXPPerMinute(self):
+        return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('crewXPPerMinute', 0)
+
+    def getRenewableSubMaxGoldReserveCapacity(self):
+        return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('maxGoldReserveCapacity', 0)
+
+    def getArenaTypesWithGoldReserve(self):
+        return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get(GOLD_RESERVE_GAINS_SECTION, {}).keys()
 
     def isBattleNotifierEnabled(self):
         return self.__getGlobalSetting(BATTLE_NOTIFIER_CONFIG, {}).get('enabled', False)

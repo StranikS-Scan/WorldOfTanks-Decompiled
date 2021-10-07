@@ -120,6 +120,14 @@ def getSplitPageUrl(params):
     return addParamsToUrlQuery(url, params, True)
 
 
+def getRentVehicleUrl():
+    return _getUrl('rentVehicle')
+
+
+def getBuyRenewableSubscriptionUrl():
+    return _getUrl('buyRenewableSubscription')
+
+
 def getClientControlledCloseCtx():
     return {'browserParams': makeBrowserParams(isCloseBtnVisible=True),
      'forcedSkipEscape': True}

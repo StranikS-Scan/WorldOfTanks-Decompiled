@@ -103,10 +103,17 @@ def _formatVehicleOwnership(item):
             def _formatTime(rawTime):
                 return rawTime if rawTime < float('inf') else -1
 
+            if event:
+                rentType = 'event'
+            elif item.isWotPlusRent:
+                rentType = 'wotPlus'
+            else:
+                rentType = None
             result['info'] = {'event': {'type': SHOP_RENT_SEASON_TYPE_MAP.get(event.seasonType, 'unknown'),
                        'id': event.seasonID,
                        'duration': _RENT_DURATION_MAP.get(event.duration, 'undefined'),
                        'expire': event.expiryTime} if event else None,
+             'rentType': rentType,
              'time': _formatTime(info.getTimeLeft()),
              'battles': info.battlesLeft,
              'wins': info.winsLeft}

@@ -58,6 +58,7 @@ class SYSTEM_MESSAGES(object):
     ARENA_START_ERRORS_JOIN_WRONG_BATTLE_ID = '#system_messages:arena_start_errors/join/WRONG_BATTLE_ID'
     ARENA_START_ERRORS_JOIN_EVENT_DISABLED = '#system_messages:arena_start_errors/join/EVENT_DISABLED'
     ARENA_START_ERRORS_JOIN_QUEUE_FULL = '#system_messages:arena_start_errors/join/QUEUE_FULL'
+    ARENA_START_ERRORS_JOIN_QUEUE_FAILURE = '#system_messages:arena_start_errors/join/QUEUE_FAILURE'
     PREBATTLE_KICK_TYPE_SQUAD = '#system_messages:prebattle/kick/type/squad'
     PREBATTLE_KICK_TYPE_UNKNOWN = '#system_messages:prebattle/kick/type/unknown'
     PREBATTLE_KICK_REASON_ARENA_CREATION_FAILURE = '#system_messages:prebattle/kick/reason/ARENA_CREATION_FAILURE'
@@ -1425,6 +1426,7 @@ class SYSTEM_MESSAGES(object):
      ARENA_START_ERRORS_JOIN_WRONG_BATTLE_ID,
      ARENA_START_ERRORS_JOIN_EVENT_DISABLED,
      ARENA_START_ERRORS_JOIN_QUEUE_FULL,
+     ARENA_START_ERRORS_JOIN_QUEUE_FAILURE,
      PREBATTLE_KICK_TYPE_SQUAD,
      PREBATTLE_KICK_TYPE_UNKNOWN,
      PREBATTLE_KICK_REASON_ARENA_CREATION_FAILURE,

@@ -84,7 +84,7 @@ class PiggyBankView(PiggyBankBaseView):
     @replaceNoneKwargsModel
     def _updatePiggyIsFull(self, credits_=None, model=None):
         creditsValue = credits_ or self._data.get('credits', 0)
-        maxAmount = self._config.get('threshold', PiggyBankConstants.MAX_AMOUNT)
+        maxAmount = self._config.get('creditsThreshold', PiggyBankConstants.MAX_AMOUNT)
         model.setPiggyIsFull(creditsValue >= maxAmount)
 
     def _updateCredits(self, credits_=None):
@@ -101,7 +101,7 @@ class PiggyBankView(PiggyBankBaseView):
         if PremiumConfigs.PIGGYBANK not in diff:
             return
         diffConfig = diff.get(PremiumConfigs.PIGGYBANK)
-        if 'threshold' in diffConfig:
+        if 'creditsThreshold' in diffConfig:
             self._updatePiggyIsFull()
         if 'cycleLength' in diffConfig:
             self._updatePeriodInDays()

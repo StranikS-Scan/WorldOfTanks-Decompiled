@@ -2,16 +2,20 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/__init__.py
 import math
 import cPickle
+import BigWorld
 import dossiers2
 from constants import DOSSIER_TYPE
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
-from helpers import dependency
+from gui.shared.gui_items.Tankman import Tankman
+from helpers import dependency, time_utils
 from items import tankmen
 from helpers import i18n
 from gui.shared.gui_items.gui_item import GUIItem
 from gui.shared.gui_items.dossier import stats
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
+from account_helpers.renewable_subscription import RenewableSubscription
+from renewable_subscription_common.passive_xp import CrewValidator
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -23,6 +27,8 @@ def loadDossier(dumpData):
 def dumpDossier(dossierItem):
     return cPickle.dumps(dossierItem.pack())
 
+
+_SECONDS_IN_MINUTE = 60
 
 class _Dossier(GUIItem):
     __slots__ = ('_dossier', '_dossierType', '_playerDBID')
@@ -128,6 +134,7 @@ class AccountDossier(_Dossier, stats.AccountDossierStats):
 
 
 class TankmanDossier(_Dossier, stats.TankmanDossierStats):
+    _lobbyContext = dependency.descriptor(ILobbyContext)
     PREMIUM_TANK_DEFAULT_CREW_XP_FACTOR = 1.5
 
     def __init__(self, tmanDescr, tankmanDossierDescr, extDossier, playerDBID=None, currentVehicleItem=None):
@@ -140,6 +147,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
         self.__extDossierDump = dumpDossier(extDossier)
         self.__currentVehicleIsPremium = currentVehicleItem and currentVehicleItem.isPremium
         self.__currentVehicleCrewXpFactor = currentVehicleType.crewXpFactor if currentVehicleType else 1.0
+        self._renewableSubInfo = BigWorld.player().renewableSubscription
         return
 
     def pack(self):
@@ -162,11 +170,19 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
 
     def getStats(self, tankman):
         imageType, image = self.__getCurrentSkillIcon(tankman)
-        return ({'label': 'common',
-          'stats': (self.__packStat('battlesCount', self.getBattlesCount()), self.__packStat('avgExperience', self.getAvgXP()))}, {'label': 'studying',
-          'secondLabel': i18n.makeString(MENU.CONTEXTMENU_PERSONALCASE_STATSBLOCKTITLE),
-          'isPremium': self.__currentVehicleIsPremium,
-          'stats': (self.__packStat('nextSkillXPLeft', tankman.getNextLevelXpCost(), imageType=imageType, image=image), self.__packStat('nextSkillBattlesLeft', self.__getNextSkillBattlesLeft(tankman), usePremiumXpFactor=True))})
+        result = [{'label': 'common',
+          'stats': (self.__packStat('battlesCount', self.getBattlesCount()), self.__packStat('avgExperience', self.getAvgXP()))}]
+        studyingBlock = {'label': 'studying',
+         'secondLabel': i18n.makeString(MENU.CONTEXTMENU_PERSONALCASE_STATSBLOCKTITLE),
+         'isRowSeparator': True,
+         'isPremium': self.__currentVehicleIsPremium,
+         'stats': [self.__packStat('nextSkillXPLeft', tankman.getNextLevelXpCost(), imageType=imageType, image=image, isSecondActive=self.__currentVehicleIsPremium), self.__packStat('nextSkillBattlesLeft', self.__getNextSkillBattlesLeft(tankman), usePremiumXpFactor=True, isSecondActive=self.__currentVehicleIsPremium)]}
+        showPassiveCrewXpInfo = self._renewableSubInfo.isEnabled() and self.lobbyContext.getServerSettings().isRenewableSubPassiveCrewXPEnabled()
+        if showPassiveCrewXpInfo:
+            statsBlock = studyingBlock.get('stats', [])
+            statsBlock.append(self.__packWotPlus(tankman))
+        result.append(studyingBlock)
+        return result
 
     def _getDossierItem(self):
         return self
@@ -205,16 +221,37 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
         else:
             return
 
-    def __packStat(self, name, value, imageType=None, image=None, usePremiumXpFactor=False):
+    def __packWotPlus(self, tankman):
+        tankManIsEligible = False
+        tankHasPassiveXp = False
+        if tankman.vehicleDescr:
+            validator = CrewValidator(tankman.vehicleDescr.type)
+            result = validator.validateCrewSlot(tankman.strCD)
+            tankManIsEligible = not result.isEmpty and result.tManValidRes.isValid
+            tankHasPassiveXp = self._renewableSubInfo.vehicleCrewHasIdleXP(tankman.vehicleInvID)
+        xpPerMinute = self._lobbyContext.getServerSettings().getRenewableSubCrewXPPerMinute()
+        xpPerSecond = float(xpPerMinute) / _SECONDS_IN_MINUTE
+        secUntilNextLevel = tankman.getNextLevelXpCost() / xpPerSecond
+        timeStr = time_utils.getTillTimeString(secUntilNextLevel, MENU.TIME_TIMEVALUE, removeLeadingZeros=True) if tankManIsEligible and secUntilNextLevel else '--'
+        return {'name': 'timeUntilNextLevel',
+         'value': timeStr,
+         'secondValue': timeStr,
+         'isLabelActive': tankHasPassiveXp and tankManIsEligible,
+         'isValueActive': tankHasPassiveXp and tankManIsEligible and not self.__currentVehicleIsPremium,
+         'isSecondValueActive': tankHasPassiveXp and tankManIsEligible and self.__currentVehicleIsPremium}
+
+    def __packStat(self, name, value, imageType=None, image=None, usePremiumXpFactor=False, isSecondActive=False):
         if usePremiumXpFactor:
-            premiumValue = self.__getBattlesLeftOnPremiumVehicle(value)
+            secondValue = self.__getBattlesLeftOnPremiumVehicle(value)
         else:
-            premiumValue = value
+            secondValue = value
         value = self.__formatValueForUI(value)
-        premiumValue = self.__formatValueForUI(premiumValue)
+        secondValue = self.__formatValueForUI(secondValue)
         return {'name': name,
          'value': value,
-         'premiumValue': premiumValue,
+         'secondValue': secondValue,
+         'isValueActive': not isSecondActive,
+         'isSecondValueActive': isSecondActive,
          'imageType': imageType,
          'image': image}
 

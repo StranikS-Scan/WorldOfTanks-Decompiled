@@ -179,6 +179,7 @@ QUEST_DELTAS_PROGRESS = 'questProgress'
 QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
 TOP_OF_TREE_CONFIG = 'topOfTree'
 DOG_TAGS = 'dogTags'
+WOT_PLUS = 'wotPlus'
 LAST_ARTY_CTRL_MODE = 'lastArtyCtrlMode'
 ACTIVE_TEST_PARTICIPATION_CONFIRMED = 'activeTestParticipateConfirmed'
 MAPBOX_PROGRESSION = 'mapbox_progression'
@@ -717,6 +718,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 DOG_TAGS: {'lastVisitedDogTagsTabIdx': None,
                            'onboardingEnabled': True,
                            'seenComps': set()},
+                WOT_PLUS: {'isWotPlusEnabled': False,
+                           'isEntryPointsEnabled': False,
+                           'isGoldReserveEnabled': True,
+                           'isPassiveXpEnabled': True,
+                           'isTankRentalEnabled': True,
+                           'isFreeDirectivesEnabled': True},
                 CUSTOMIZATION_SECTION: {CAROUSEL_ARROWS_HINT_SHOWN_FIELD: False,
                                         PROJECTION_DECAL_HINT_SHOWN_FIELD: False},
                 SESSION_STATS_SECTION: {BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD: False},

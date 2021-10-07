@@ -594,7 +594,6 @@ class VehicleStickers(object):
     __INSIGNIA_NODE_NAME = 'G'
 
     def __init__(self, vehicleDesc, insigniaRank=0, outfit=None, vehicleId=-1):
-        self.__showEmblemsOnGun = vehicleDesc.turret.showEmblemsOnGun
         self.__defaultAlpha = vehicleDesc.type.emblemsAlpha
         self.__show = True
         self.__animateGunInsignia = vehicleDesc.gun.animateEmblemSlots
@@ -603,7 +602,7 @@ class VehicleStickers(object):
         self.__componentNames = [(TankPartNames.HULL, TankPartNames.HULL), (TankPartNames.TURRET, TankPartNames.TURRET), (TankPartNames.GUN, TankNodeNames.GUN_INCLINATION)]
         if outfit is None:
             outfit = Outfit(vehicleCD=vehicleDesc.makeCompactDescr())
-        componentSlots = self._createComponentSlots(vehicleDesc, self.__showEmblemsOnGun)
+        componentSlots = self._createComponentSlots(vehicleDesc, vehicleDesc.turret.showEmblemsOnGun, outfit)
         if not isUseDebugStickers():
             self.__stickerPacks = self._createStickerPacks(vehicleDesc, outfit, insigniaRank)
         else:
@@ -693,14 +692,45 @@ class VehicleStickers(object):
 
         return
 
-    @staticmethod
-    def _createComponentSlots(vehicleDesc, showEmblemsOnGun):
+    @classmethod
+    def _createComponentSlots(cls, vehicleDesc, showEmblemsOnGun, outfit):
+        showEmblemsOnGun = vehicleDesc.turret.showEmblemsOnGun
         componentSlots = ((TankPartNames.HULL, vehicleDesc.hull.emblemSlots), (TankPartNames.GUN if showEmblemsOnGun else TankPartNames.TURRET, vehicleDesc.turret.emblemSlots), (TankPartNames.TURRET if showEmblemsOnGun else TankPartNames.GUN, []))
-        if len(vehicleDesc.gun.emblemSlots) > 1:
-            componentSlots += ((Insignia.Types.DUAL_LEFT, (vehicleDesc.gun.emblemSlots[0],)), (Insignia.Types.DUAL_RIGHT, (vehicleDesc.gun.emblemSlots[1],)))
-        else:
-            componentSlots += ((Insignia.Types.SINGLE, vehicleDesc.gun.emblemSlots),)
+        gunSlots = cls._createGunSlots(vehicleDesc, outfit)
+        if gunSlots:
+            componentSlots += gunSlots
         return componentSlots
+
+    @classmethod
+    def _createGunSlots(cls, vehicleDesc, outfit):
+        gunEmblemSlots = vehicleDesc.gun.emblemSlots
+        outfitModelSet = outfit.modelsSet
+        compatibleGunSlots = []
+        if outfitModelSet:
+            for gSlot in gunEmblemSlots:
+                if outfitModelSet in gSlot.compatibleModels:
+                    compatibleGunSlots.append(gSlot)
+
+        if not compatibleGunSlots:
+            for gSlot in gunEmblemSlots:
+                if not gSlot.compatibleModels:
+                    compatibleGunSlots.append(gSlot)
+
+        if vehicleDesc.isDualgunVehicle:
+            slotsCount = len(compatibleGunSlots)
+            if slotsCount >= 2:
+                midIndex = slotsCount / 2
+                i = slotsCount - 1
+                secondHalf = []
+                while i >= midIndex:
+                    secondHalf.append(compatibleGunSlots.pop())
+                    i = i - 1
+
+                return ((Insignia.Types.DUAL_LEFT, compatibleGunSlots), (Insignia.Types.DUAL_RIGHT, secondHalf))
+            _logger.warning('Dual gun vehicle has less then two slots for marks on gun!')
+        else:
+            return ((Insignia.Types.SINGLE, compatibleGunSlots),)
+        return None
 
     def _createStickerPacks(self, vehicleDesc, outfit, insigniaRank):
         insignias = InsigniaStickerPack(vehicleDesc, outfit, insigniaRank)

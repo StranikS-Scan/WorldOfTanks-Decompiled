@@ -140,6 +140,17 @@ class DIALOGS(object):
     XPTOTMENCHECKBOX_MESSAGE = '#dialogs:xpToTmenCheckbox/message'
     XPTOTMENCHECKBOX_SUBMIT = '#dialogs:xpToTmenCheckbox/submit'
     XPTOTMENCHECKBOX_CANCEL = '#dialogs:xpToTmenCheckbox/cancel'
+    IDLECREWBONUS_TITLE = '#dialogs:idleCrewBonus/title'
+    IDLECREWBONUS_MESSAGE_REMOVE = '#dialogs:idleCrewBonus/message/remove'
+    IDLECREWBONUS_MESSAGE_CREWWARNING = '#dialogs:idleCrewBonus/message/crewWarning'
+    IDLECREWBONUS_MESSAGE_CREWINCOMPLETE = '#dialogs:idleCrewBonus/message/crewIncomplete'
+    IDLECREWBONUS_MESSAGE_CREWUNSUITABLE = '#dialogs:idleCrewBonus/message/crewUnsuitable'
+    IDLECREWBONUS_SUBMIT = '#dialogs:idleCrewBonus/submit'
+    IDLECREWBONUS_CANCEL = '#dialogs:idleCrewBonus/cancel'
+    WOTPLUSRENTAL_TITLE = '#dialogs:wotPlusRental/title'
+    WOTPLUSRENTAL_DESCRIPTION = '#dialogs:wotPlusRental/description'
+    WOTPLUSRENTAL_SUBMIT = '#dialogs:wotPlusRental/submit'
+    WOTPLUSRENTAL_CANCEL = '#dialogs:wotPlusRental/cancel'
     DISCONNECTED_TITLE = '#dialogs:disconnected/title'
     DISCONNECTED_MESSAGE = '#dialogs:disconnected/message'
     DISCONNECTED_MESSAGEKICK = '#dialogs:disconnected/messageKick'
@@ -1196,6 +1207,17 @@ class DIALOGS(object):
      XPTOTMENCHECKBOX_MESSAGE,
      XPTOTMENCHECKBOX_SUBMIT,
      XPTOTMENCHECKBOX_CANCEL,
+     IDLECREWBONUS_TITLE,
+     IDLECREWBONUS_MESSAGE_REMOVE,
+     IDLECREWBONUS_MESSAGE_CREWWARNING,
+     IDLECREWBONUS_MESSAGE_CREWINCOMPLETE,
+     IDLECREWBONUS_MESSAGE_CREWUNSUITABLE,
+     IDLECREWBONUS_SUBMIT,
+     IDLECREWBONUS_CANCEL,
+     WOTPLUSRENTAL_TITLE,
+     WOTPLUSRENTAL_DESCRIPTION,
+     WOTPLUSRENTAL_SUBMIT,
+     WOTPLUSRENTAL_CANCEL,
      DISCONNECTED_TITLE,
      DISCONNECTED_MESSAGE,
      DISCONNECTED_MESSAGEKICK,

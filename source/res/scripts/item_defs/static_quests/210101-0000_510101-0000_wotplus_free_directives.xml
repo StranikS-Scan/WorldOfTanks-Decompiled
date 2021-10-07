@@ -1,0 +1,31 @@
+<210101-0000_510101-0000_wotplus_free_directives.xml>
+  <quests>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	wotplus:free_directives	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <wotPlus>	true	</wotPlus>
+              <isFreeDirectivesEnabled>	true	</isFreeDirectivesEnabled>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <daily></daily>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <equipment>	improvedVentilationBattleBooster	  <count>	1	</count>
+        </equipment>
+        <equipment>	rammerBattleBooster	  <count>	1	</count>
+        </equipment>
+        <equipment>	aimingStabilizerBattleBooster	  <count>	1	</count>
+        </equipment>
+      </bonus>
+    </tokenQuest>
+  </quests>
+</210101-0000_510101-0000_wotplus_free_directives.xml>

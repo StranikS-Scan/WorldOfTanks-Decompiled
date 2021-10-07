@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/battle_royale_controller.py
 import logging
-from operator import itemgetter
 import typing
 import json
 import BigWorld
@@ -321,10 +320,13 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def isDailyQuestsRefreshAvailable(self):
         if self.hasPrimeTimesLeftForCurrentCycle():
             return True
-        primeTimePeriodsForDay = self.getPrimeTimesForDay(time_utils.getCurrentLocalServerTimestamp())
-        if primeTimePeriodsForDay:
-            _, periodTimeEnd = max(primeTimePeriodsForDay.values(), key=itemgetter(1))
-            periodTimeLeft = periodTimeEnd - time_utils.getCurrentLocalServerTimestamp()
+        serversPeriodsMapping = self.getPrimeTimesForDay(time_utils.getCurrentLocalServerTimestamp())
+        periods = []
+        for _, dayPeriods in serversPeriodsMapping.items():
+            periods.append(max([ periodEnd for _, periodEnd in dayPeriods ]))
+
+        if periods:
+            periodTimeLeft = max(periods) - time_utils.getCurrentLocalServerTimestamp()
             return periodTimeLeft > time_utils.getDayTimeLeft()
         return False
 

@@ -266,7 +266,8 @@ class ChatCommandsController(IBattleController):
             return
         positionVec = Math.Vector3(position[0], position[1], position[2])
         if name == BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA and self.__isSPG():
-            command = self.proto.battleCmd.createByPosition(positionVec, name, self.__getReloadTime())
+            time = self.__getReloadTime() if self.__ammo.getShellsQuantityLeft() > 0 else -1
+            command = self.proto.battleCmd.createByPosition(positionVec, name, time)
         else:
             command = self.proto.battleCmd.createByPosition(positionVec, name)
         if command:
@@ -322,7 +323,8 @@ class ChatCommandsController(IBattleController):
         if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False or not self.__arenaDP.getVehicleInfo(targetID).isAlive():
             return
         if self.__isSPG() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY or self.__isSPGAndInStrategicOrArtyMode() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY and isInRadialMenu is False:
-            command = self.proto.battleCmd.createSPGAimTargetCommand(targetID, self.__getReloadTime())
+            time = self.__getReloadTime() if self.__ammo.getShellsQuantityLeft() > 0 else -1
+            command = self.proto.battleCmd.createSPGAimTargetCommand(targetID, time)
         else:
             command = self.proto.battleCmd.createByNameTarget(cmdName, targetID)
         if command:

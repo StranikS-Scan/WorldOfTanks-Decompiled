@@ -935,7 +935,7 @@ class TankPremiumListener(_NotificationListener):
 
     def __onPiggyBankCreditsChanged(self, credits_=None):
         config = self.__lobbyContext.getServerSettings().getPiggyBankConfig()
-        maxAmount = config.get('threshold', PiggyBankConstants.MAX_AMOUNT)
+        maxAmount = config.get('creditsThreshold', PiggyBankConstants.MAX_AMOUNT)
         data = self.__itemsCache.items.stats.piggyBank
         if credits_ >= maxAmount:
             timeLeft = time_formatters.getTillTimeByResource(getDeltaTimeHelper(config, data), R.strings.premacc.piggyBankCard.timeLeft)

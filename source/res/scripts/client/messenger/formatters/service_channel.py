@@ -83,6 +83,7 @@ from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from account_helpers.offers.events_data import OfferEventData, OfferGift
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
+    from messenger.proto.bw.wrappers import ServiceChannelMessage
 _logger = logging.getLogger(__name__)
 _TEMPLATE = 'template'
 _RENT_TYPE_NAMES = {RentDurationKeys.DAYS: 'rentDays',
@@ -981,6 +982,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 if formatted is not None:
                     settings = self._getGuiSettings(message, self._getMessageTemplateKey(assetType))
             else:
+                assetType = self.__INVALID_TYPE_ASSET
                 _logger.debug('Message will not be shown!')
             mainMassage = MessageData(formatted, settings)
             auxMessagesHandler = self.__auxMessagesHandlers.get(assetType, None)
@@ -3554,15 +3556,24 @@ class ProgressiveRewardFormatter(WaitItemsSyncFormatter):
 
 
 class PiggyBankSmashedFormatter(ServiceChannelFormatter):
-    _template = 'PiggyBankSmashedMessage'
+    _piggyBankTemplate = 'PiggyBankSmashedMessage'
+    _goldReserveTemplate = 'GoldReserveSmashedMessage'
 
     def format(self, message, *args):
-        if message.data:
-            data = message.data
-            credits_ = data.get('credits')
-            if credits_:
-                formatted = g_settings.msgTemplates.format(self._template, {'credits': backport.getIntegralFormat(credits_)})
-                return [MessageData(formatted, self._getGuiSettings(message, self._template))]
+        if not message.data:
+            return []
+        sysNotifications = []
+        credits_ = message.data.get('credits')
+        gold = message.data.get('gold')
+        if credits_:
+            ctx = {'credits': backport.getIntegralFormat(credits_)}
+            formatted = g_settings.msgTemplates.format(self._piggyBankTemplate, ctx)
+            sysNotifications.append(MessageData(formatted, self._getGuiSettings(message, self._piggyBankTemplate)))
+        if gold:
+            ctx = {'gold': backport.getGoldFormat(gold)}
+            formatted = g_settings.msgTemplates.format(self._goldReserveTemplate, ctx)
+            sysNotifications.append(MessageData(formatted, self._getGuiSettings(message, self._goldReserveTemplate)))
+        return sysNotifications
 
 
 class BlackMapRemovedFormatter(ServiceChannelFormatter):

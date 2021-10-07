@@ -54,7 +54,7 @@ from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_dispatcher as quests_events, recruit_helper, awards
 from gui.server_events.bonuses import getServiceBonuses
-from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBankRewardWindow, showMissionsBattlePassCommonProgression
+from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBankRewardWindow, showMissionsBattlePassCommonProgression, showCurrencyReserveAwardWindow, showSubscriptionAwardWindow
 from gui.server_events.events_helpers import isDailyQuest, isACEmailConfirmationQuest
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
@@ -78,6 +78,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController, IBattlePassController, IMapboxController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
@@ -187,7 +188,8 @@ class AwardController(IAwardController, IGlobalListener):
          DedicationReward(self),
          BadgesInvoiceHandler(self),
          MapboxProgressionRewardHandler(self),
-         PurchaseHandler(self)]
+         PurchaseHandler(self),
+         RenewableSubscriptionHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -586,16 +588,40 @@ class PiggyBankOpenHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         if ctx[1].data:
             data = ctx[1].data
-            credits_ = data.get('credits')
-            if credits_ and credits_ > 0:
-                self._showWindow(credits_, self.__isPremiumEnable())
+            creditsEarned = data.get('credits', 0)
+            goldEarned = data.get('gold', 0)
+            if creditsEarned or goldEarned:
+                self._showWindow(creditsEarned, goldEarned, self.__isPremiumEnable())
 
     @staticmethod
-    def _showWindow(credits_, isPremium):
-        showPiggyBankRewardWindow(credits_, isPremium)
+    def _showWindow(creditsEarned, goldEarned, isPremium):
+        showNewWindow = PiggyBankOpenHandler._canShowWotPlusWindow(goldEarned)
+        if not showNewWindow and goldEarned:
+            _logger.info('There is hidden gold in piggy bank award screen.')
+        if showNewWindow:
+            showCurrencyReserveAwardWindow(creditsEarned, goldEarned)
+        else:
+            showPiggyBankRewardWindow(creditsEarned, isPremium)
+
+    @staticmethod
+    def _canShowWotPlusWindow(goldEarned):
+        lobbyContext = dependency.instance(ILobbyContext)
+        isWotPlusEnabled = lobbyContext.getServerSettings().isRenewableSubEnabled()
+        isWotPlusNSEnabled = lobbyContext.getServerSettings().isWotPlusNewSubscriptionEnabled()
+        hasWotPlusActive = BigWorld.player().renewableSubscription.isEnabled()
+        return isWotPlusEnabled and (hasWotPlusActive or isWotPlusNSEnabled or goldEarned)
 
     def __isPremiumEnable(self):
         return self.itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
+
+
+class RenewableSubscriptionHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(RenewableSubscriptionHandler, self).__init__(SYS_MESSAGE_TYPE.wotPlusUnlocked.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        showSubscriptionAwardWindow()
 
 
 class MarkByInvoiceHandler(ServiceChannelHandler):

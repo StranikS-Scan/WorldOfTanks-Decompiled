@@ -70,6 +70,11 @@
           <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/NYst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/NYst/crash/lod0/Hull.model	</exploded>
         </NYst>
+        <F18_Bat_Chatillon25t_3DSt_TLXXL>
+          <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Hull.model	</exploded>
+        </F18_Bat_Chatillon25t_3DSt_TLXXL>
       </sets>
     </models>
     <swinging>
@@ -93,8 +98,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.753941 0.537607 1.75406	</rayStart>
-        <rayEnd>	-0.754004 0.352265 1.67891	</rayEnd>
+        <rayStart>	-0.542348 0.660679 1.03164	</rayStart>
+        <rayEnd>	-0.542348 0.465762 1.07644	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -750,6 +755,58 @@
         <clipAngle>	0.999026	</clipAngle>
         <anchorShift>	0.286291	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15051	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+        <position>	0.370935 1.30586 2.25575	</position>
+        <rotation>	0.414721 -0.00207556 3.14073	</rotation>
+        <scale>	0.6661 0.38326 0.666108	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.992644	</clipAngle>
+        <anchorShift>	-0.123600	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15052	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+        <position>	-1.29652 1.45159 1.75336	</position>
+        <rotation>	0.448045 -0.604576 3.13383	</rotation>
+        <scale>	0.548947 0.486536 0.548956	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.713954	</clipAngle>
+        <anchorShift>	-0.144957	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15053	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+        <position>	1.29654 1.45155 1.75336	</position>
+        <rotation>	0.448059 0.604577 3.13392	</rotation>
+        <scale>	0.548948 0.486537 0.548956	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.38674	</clipAngle>
+        <anchorShift>	-0.144957	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15054	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+        <position>	0.000009 1.17667 -2.24162	</position>
+        <rotation>	2.49724 -0.000549793 -0.00110292	</rotation>
+        <scale>	0.585255 0.132254 0.585249	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.335114	</clipAngle>
+        <anchorShift>	0.024179	</anchorShift>
+      </slot>
     </customizationSlots>
     <hangarShadowTexture>	vehicles/french/F18_Bat_Chatillon25t/Bat_Chatillon25t_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
@@ -798,6 +855,11 @@
             <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/NYst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/NYst/crash/lod0/Chassis.model	</exploded>
           </NYst>
+          <F18_Bat_Chatillon25t_3DSt_TLXXL>
+            <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Chassis.model	</exploded>
+          </F18_Bat_Chatillon25t_3DSt_TLXXL>
         </sets>
       </models>
       <traces>
@@ -1587,6 +1649,11 @@
                 <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/NYst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/NYst/crash/lod0/Gun_01.model	</exploded>
               </NYst>
+              <F18_Bat_Chatillon25t_3DSt_TLXXL>
+                <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Gun_01.model	</exploded>
+              </F18_Bat_Chatillon25t_3DSt_TLXXL>
             </sets>
           </models>
           <hitTester>
@@ -1595,6 +1662,14 @@
           </hitTester>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <customizationSlots>
+            <slot>
+              <slotType>	sequence	</slotType>
+              <slotId>	48000	</slotId>
+              <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+              <position>	0 0 0	</position>
+              <rotation>	0 0 0	</rotation>
+              <attachNode>	HP_FX_1	</attachNode>
+            </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
@@ -1996,6 +2071,11 @@
                 <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/NYst/crash/lod0/Gun_02.model	</destroyed>
                 <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/NYst/crash/lod0/Gun_02.model	</exploded>
               </NYst>
+              <F18_Bat_Chatillon25t_3DSt_TLXXL>
+                <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Gun_02.model	</exploded>
+              </F18_Bat_Chatillon25t_3DSt_TLXXL>
             </sets>
           </models>
           <hitTester>
@@ -2004,6 +2084,14 @@
           </hitTester>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <customizationSlots>
+            <slot>
+              <slotType>	sequence	</slotType>
+              <slotId>	48000	</slotId>
+              <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+              <position>	0 0 0	</position>
+              <rotation>	0 0 0	</rotation>
+              <attachNode>	HP_FX_1	</attachNode>
+            </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
@@ -2401,6 +2489,11 @@
                 <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/NYst/crash/lod0/Gun_03.model	</destroyed>
                 <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/NYst/crash/lod0/Gun_03.model	</exploded>
               </NYst>
+              <F18_Bat_Chatillon25t_3DSt_TLXXL>
+                <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Gun_03.model	</exploded>
+              </F18_Bat_Chatillon25t_3DSt_TLXXL>
             </sets>
           </models>
           <hitTester>
@@ -2408,6 +2501,14 @@
             <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <customizationSlots>
+            <slot>
+              <slotType>	sequence	</slotType>
+              <slotId>	48000	</slotId>
+              <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+              <position>	0 0 0	</position>
+              <rotation>	0 0 0	</rotation>
+              <attachNode>	HP_FX_1	</attachNode>
+            </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
@@ -2774,6 +2875,11 @@
             <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/NYst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/NYst/crash/lod0/Turret_01.model	</exploded>
           </NYst>
+          <F18_Bat_Chatillon25t_3DSt_TLXXL>
+            <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Turret_01.model	</exploded>
+          </F18_Bat_Chatillon25t_3DSt_TLXXL>
         </sets>
       </models>
       <hitTester>
@@ -3046,6 +3152,32 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
           <anchorShift>	0.051772	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35018	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+          <position>	-1.20358 1.67643 -0.520662	</position>
+          <rotation>	1.31483 -1.52326 3.13684	</rotation>
+          <scale>	0.36442 0.1 0.364425	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorShift>	0.061770	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35019	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+          <position>	1.20947 1.678 -0.515026	</position>
+          <rotation>	1.31486 1.52332 3.13688	</rotation>
+          <scale>	0.36442 0.0999999 0.364425	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorShift>	0.061770	</anchorShift>
         </slot>
       </customizationSlots>
       <showEmblemsOnGun>	true	</showEmblemsOnGun>

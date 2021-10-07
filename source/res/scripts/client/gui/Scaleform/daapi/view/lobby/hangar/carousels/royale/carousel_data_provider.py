@@ -29,6 +29,9 @@ class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
          tuple(vehicle.buyPrices.itemPrice.price.iterallitems(byWeight=True)),
          vehicle.userName)
 
+    def _isWotPlusRentEnabled(self):
+        return False
+
     def _buildVehicle(self, vehicle):
         result = super(RoyaleCarouselDataProvider, self)._buildVehicle(vehicle)
         state, _ = vehicle.getState()

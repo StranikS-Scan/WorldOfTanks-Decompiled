@@ -21,6 +21,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared import event_dispatcher
 from gui.shared.view_helpers.blur_manager import CachedBlur
+from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
@@ -111,7 +112,10 @@ class MultipleAwardsView(ViewImpl):
                 for vR in rewards:
                     model.rewards.addViewModel(vR)
 
+        switchHangarOverlaySoundFilter(on=True)
+
     def _finalize(self):
+        switchHangarOverlaySoundFilter(on=False)
         self.viewModel.onClose -= self.__onClose
         self.viewModel.showHangar -= self.__handleShowHangar
         self.viewModel.makeChoice -= self.__handleMakeChoice

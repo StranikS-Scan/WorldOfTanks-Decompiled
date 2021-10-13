@@ -350,6 +350,12 @@ class MapboxAccessor(BaseAccessor):
         return self._data_source.request_authorized_survey_url(callback, mapURL)
 
 
+class YearHareAffairAccessor(BaseAccessor):
+
+    def get_yha_video(self, callback):
+        return self._data_source.get_yha_video(callback)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -369,6 +375,7 @@ class Requester(object):
     freya = RequestDescriptor(FreyaAccessor)
     craftmachine = RequestDescriptor(CrafmachineAccessor)
     mapbox = RequestDescriptor(MapboxAccessor)
+    yha = RequestDescriptor(YearHareAffairAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

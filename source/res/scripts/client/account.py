@@ -365,9 +365,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         except Exception:
             LOG_ERROR('Error while unpickling igr data information', data)
 
-    def onKickedFromServer(self, reason, isBan, expiryTime):
-        LOG_DEBUG('onKickedFromServer', reason, isBan, expiryTime)
-        self.connectionMgr.setKickedFromServer(reason, isBan, expiryTime)
+    def onKickedFromServer(self, reason, kickReasonType, expiryTime):
+        LOG_DEBUG('onKickedFromServer', reason, kickReasonType, expiryTime)
+        self.connectionMgr.setKickedFromServer(reason, kickReasonType, expiryTime)
 
     def getUnpackedEventsData(self, typeID):
         eventsData = {}

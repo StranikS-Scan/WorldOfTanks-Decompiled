@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/app_loader/observers.py
 import weakref
 import typing
-from constants import ARENA_GUI_TYPE
+from constants import ARENA_GUI_TYPE, ACCOUNT_KICK_REASONS
 from frameworks.state_machine import SingleStateObserver
 from frameworks.state_machine import BaseStateObserver
 from frameworks.state_machine import StateEvent
@@ -58,7 +58,7 @@ class LoginObserver(AppLoaderObserver):
         if event is not None:
             disconnectReason = event.getArgument('disconnectReason', DisconnectReason.REQUEST)
             if disconnectReason in (DisconnectReason.EVENT, DisconnectReason.KICK, DisconnectReason.ERROR):
-                action = spaces.DisconnectDialogAction(event.getArgument('kickReason', ''), event.getArgument('isBan', False), event.getArgument('expiryTime'))
+                action = spaces.DisconnectDialogAction(event.getArgument('kickReason', ''), event.getArgument('kickReasonType', ACCOUNT_KICK_REASONS.UNKNOWN), event.getArgument('expiryTime'))
         if self._proxy.getSpaceID() == GuiGlobalSpaceID.LOGIN:
             self._proxy.setupSpace(action=action)
         self._proxy.changeSpace(spaces.LoginSpace(action=action))

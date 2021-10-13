@@ -475,6 +475,9 @@ class BattleTokensBonus(TokensBonus):
         webCache = self.eventsCache.prefetcher
         return i18n.makeString(webCache.getTokenInfo(styleID))
 
+    def getWrappedEpicBonusList(self):
+        return []
+
 
 class BattlePassTokensBonus(TokensBonus):
 

@@ -1662,6 +1662,9 @@ class Vehicle(FittingItem):
     def getOutfitComponent(self, season):
         return self._outfitComponents.get(season)
 
+    def removeOutfitForSeason(self, season):
+        self._outfitComponents[season] = self.__getEmptyOutfitComponent()
+
     def setCustomOutfit(self, season, outfit):
         for s in SeasonType.REGULAR:
             if s == season:

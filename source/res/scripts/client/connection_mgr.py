@@ -255,9 +255,9 @@ class ConnectionManager(IConnectionManager):
     def disconnect(self):
         BigWorld.disconnect()
 
-    def setKickedFromServer(self, reason, isBan, expiryTime):
+    def setKickedFromServer(self, reason, kickReasonType, expiryTime):
         self.disconnect()
-        self.onKickedFromServer(reason, isBan, expiryTime)
+        self.onKickedFromServer(reason, kickReasonType, expiryTime)
 
     def isDisconnected(self):
         return self.__connectionStatus != LOGIN_STATUS.LOGGED_ON

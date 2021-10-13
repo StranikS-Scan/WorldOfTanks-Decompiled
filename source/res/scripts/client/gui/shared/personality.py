@@ -326,8 +326,8 @@ def onDisconnected():
     BigWorld.purgeUrlRequestCache()
 
 
-def onKickedFromServer(reason, isBan, expiryTime):
-    ServicesLocator.gameplay.goToLoginByKick(reason, isBan, expiryTime)
+def onKickedFromServer(reason, kickReasonType, expiryTime):
+    ServicesLocator.gameplay.goToLoginByKick(reason, kickReasonType, expiryTime)
 
 
 def onScreenShotMade(path):

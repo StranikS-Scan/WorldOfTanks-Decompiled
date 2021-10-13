@@ -72,6 +72,7 @@ class ITEM_TYPES(object):
     TANKMAN_SKILLS_BROTHERHOOD_FEMALE_DESCR = '#item_types:tankman/skills/brotherhood_female_descr'
     TANKMAN_SKILLS_BROTHERHOOD_SABATON = '#item_types:tankman/skills/brotherhood_sabaton'
     TANKMAN_SKILLS_BROTHERHOOD_OFFSPRING = '#item_types:tankman/skills/brotherhood_offspring'
+    TANKMAN_SKILLS_BROTHERHOOD_YHA = '#item_types:tankman/skills/brotherhood_yha'
     TANKMAN_SKILLS_COMMANDER_TUTOR = '#item_types:tankman/skills/commander_tutor'
     TANKMAN_SKILLS_COMMANDER_TUTOR_DESCR = '#item_types:tankman/skills/commander_tutor_descr'
     TANKMAN_SKILLS_COMMANDER_EXPERT = '#item_types:tankman/skills/commander_expert'
@@ -184,6 +185,7 @@ class ITEM_TYPES(object):
      TANKMAN_SKILLS_BROTHERHOOD_FEMALE_DESCR,
      TANKMAN_SKILLS_BROTHERHOOD_SABATON,
      TANKMAN_SKILLS_BROTHERHOOD_OFFSPRING,
+     TANKMAN_SKILLS_BROTHERHOOD_YHA,
      TANKMAN_SKILLS_COMMANDER_TUTOR,
      TANKMAN_SKILLS_COMMANDER_TUTOR_DESCR,
      TANKMAN_SKILLS_COMMANDER_EXPERT,

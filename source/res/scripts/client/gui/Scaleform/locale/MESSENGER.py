@@ -1019,6 +1019,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_WOTPLUS_TANKRENTAL_ISDISABLED_TITLE = '#messenger:serviceChannelMessages/wotPlus/tankRental/isDisabled/title'
     SERVICECHANNELMESSAGES_WOTPLUS_TANKRENTAL_ISDISABLED_TEXT = '#messenger:serviceChannelMessages/wotPlus/tankRental/isDisabled/text'
     SERVICECHANNELMESSAGES_WOTPLUS_TANKRENTAL_ISENABLED_TITLE = '#messenger:serviceChannelMessages/wotPlus/tankRental/isEnabled/title'
+    SERVICECHANNELMESSAGES_WOTPLUS_TANKRENTAL_ISPENDING_TITLE = '#messenger:serviceChannelMessages/wotPlus/tankRental/isPending/title'
+    SERVICECHANNELMESSAGES_WOTPLUS_TANKRENTAL_ISPENDING_TEXT = '#messenger:serviceChannelMessages/wotPlus/tankRental/isPending/text'
     SERVICECHANNELMESSAGES_WOTPLUS_FREEDIRECTIVES_RECEIVED_TITLE = '#messenger:serviceChannelMessages/wotPlus/freeDirectives/received/title'
     SERVICECHANNELMESSAGES_WOTPLUS_FREEDIRECTIVES_ISDISABLED_TITLE = '#messenger:serviceChannelMessages/wotPlus/freeDirectives/isDisabled/title'
     SERVICECHANNELMESSAGES_WOTPLUS_FREEDIRECTIVES_ISENABLED_TITLE = '#messenger:serviceChannelMessages/wotPlus/freeDirectives/isEnabled/title'

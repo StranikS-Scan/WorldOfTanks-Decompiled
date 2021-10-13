@@ -11,7 +11,7 @@
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	52	</forward>
-    <backward>	25	</backward>
+    <backward>	20	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.217	</moving>
@@ -1034,8 +1034,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.23	</vehicleMovement>
-        <vehicleRotation>	0.23	</vehicleRotation>
+        <vehicleMovement>	0.27	</vehicleMovement>
+        <vehicleRotation>	0.27	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1845,22 +1845,22 @@
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <invisibilityFactorAtShot>	0.154	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
           <reloadTime>	9.5	</reloadTime>
           <clip>
             <count>	3	</count>
-            <rate>	17.1	</rate>
+            <rate>	13.95	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	16 13 10	</reloadTime>
+            <reloadTime>	19 15 10	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
+            <turretRotation>	0.25	</turretRotation>
             <afterShot>	4.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3	</aimingTime>
+          <aimingTime>	3.3	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R187_Object_590/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R187_Object_590/crash/lod0/Gun_01.model	</destroyed>
@@ -2639,7 +2639,7 @@
     <detailed>
       <engines>
         <V_12_6V_1>
-          <smplEnginePower>	800	</smplEnginePower>
+          <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	52	</smplFwMaxSpeed>
         </V_12_6V_1>
       </engines>

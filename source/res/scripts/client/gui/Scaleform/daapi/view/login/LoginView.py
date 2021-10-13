@@ -314,11 +314,15 @@ class LoginView(LoginPageMeta):
         if reason.startswith('#'):
             reason = _ms(reason)
         if expiryTime > 0:
-            expiryTime = makeLocalServerTime(expiryTime)
-            expiryTime = backport.getLongDateFormat(expiryTime) + ' ' + backport.getLongTimeFormat(expiryTime)
-            self.as_setErrorMessageS(backport.text(R.strings.menu.login.status.LOGIN_REJECTED_BAN(), time=expiryTime, reason=reason), INVALID_FIELDS.ALL_VALID)
+            if bans.get('curfew') is not None and bans.get('reason', '') != '#ban_reason:curfew_ban':
+                self.as_setErrorMessageS(reason, INVALID_FIELDS.ALL_VALID)
+            else:
+                expiryTime = makeLocalServerTime(expiryTime)
+                expiryTime = backport.getLongDateFormat(expiryTime) + ' ' + backport.getLongTimeFormat(expiryTime)
+                self.as_setErrorMessageS(backport.text(R.strings.menu.login.status.LOGIN_REJECTED_BAN(), time=expiryTime, reason=reason), INVALID_FIELDS.ALL_VALID)
         else:
             self.as_setErrorMessageS(backport.text(R.strings.menu.login.status.LOGIN_REJECTED_BAN_UNLIMITED(), reason=reason), INVALID_FIELDS.ALL_VALID)
+        return
 
     def __loginRejectedRateLimited(self):
         backport.text(R.strings.menu.login.status.LOGIN_REJECTED_RATE_LIMITED())

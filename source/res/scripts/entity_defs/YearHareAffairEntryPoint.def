@@ -1,0 +1,32 @@
+<YearHareAffairEntryPoint.def>
+  <Parent>	ClientSelectableObject	</Parent>
+  <Properties>
+    <outlineModelName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Editor>
+        <Title>	Outline Model	</Title>
+        <ResourceType>	MODEL	</ResourceType>
+      </Editor>
+    </outlineModelName>
+    <activePrefab>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Editor>
+        <Title>	Active State Prefab	</Title>
+        <ResourceType>	PREFAB	</ResourceType>
+      </Editor>
+    </activePrefab>
+    <inactivePrefab>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Editor>
+        <Title>	Inactive State Prefab	</Title>
+        <ResourceType>	PREFAB	</ResourceType>
+      </Editor>
+    </inactivePrefab>
+  </Properties>
+</YearHareAffairEntryPoint.def>

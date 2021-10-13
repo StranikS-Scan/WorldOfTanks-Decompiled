@@ -1439,3 +1439,10 @@ def showWotPlusInfoPage():
 def showVehicleRentalPage():
     url = getRentVehicleUrl()
     showBrowserOverlayView(url, VIEW_ALIAS.VEHICLE_RENTAL_VIEW)
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showYearHareAffairAwardsWindow(rewards, notificationMgr=None):
+    from gui.impl.lobby.yha.yha_awards_view import YhaAwardsWindow
+    window = YhaAwardsWindow(rewards)
+    notificationMgr.append(WindowNotificationCommand(window))

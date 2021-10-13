@@ -31,7 +31,8 @@ class SoundWebApi(object):
      'clans_battles_global_map_enter': 'clans_battles_global_map_exit',
      'clans_winner_reward_enter': 'clans_winner_reward_exit',
      'gui_cq_progress_bar_start': 'gui_cq_progress_bar_stop',
-     'gui_cq_progression_start': 'gui_cq_progression_stop'}
+     'gui_cq_progression_start': 'gui_cq_progression_stop',
+     'cn_yha_enter': 'cn_yha_exit'}
 
     def __init__(self):
         super(SoundWebApi, self).__init__()

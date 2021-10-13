@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 import logging
 import constants
 import post_progression_common
+import year_hare_affair_common
 from Event import Event
 from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig, MAGNETIC_AUTO_AIM_CONFIG, Configs, DOG_TAGS_CONFIG, BATTLE_NOTIFIER_CONFIG, MISC_GUI_SETTINGS, RENEWABLE_SUBSCRIPTION_CONFIG
 from helpers import time_utils
@@ -757,6 +758,24 @@ class VehiclePostProgressionConfig(namedtuple('_VehiclePostProgression', ('isPos
         return self._replace(**dataToUpdate)
 
 
+class YearHareAffairConfig(namedtuple('_YearHareAffair', ('isEnabled', 'url'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, url=None)
+        defaults.update(kwargs)
+        return super(YearHareAffairConfig, cls).__new__(cls, **defaults)
+
+    @classmethod
+    def defaults(cls):
+        return cls(False, None)
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -788,6 +807,7 @@ class ServerSettings(object):
         self.__blueprintsConvertSaleConfig = _BlueprintsConvertSaleConfig()
         self.__bwProductCatalog = _BwProductCatalog()
         self.__vehiclePostProgressionConfig = VehiclePostProgressionConfig()
+        self.__yearHareAffairConfig = YearHareAffairConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -880,6 +900,8 @@ class ServerSettings(object):
             self.__bwProductCatalog = makeTupleByDict(_BwProductCatalog, self.__serverSettings['productsCatalog'])
         if post_progression_common.SERVER_SETTINGS_KEY in self.__serverSettings:
             self.__vehiclePostProgressionConfig = makeTupleByDict(VehiclePostProgressionConfig, self.__serverSettings[post_progression_common.SERVER_SETTINGS_KEY])
+        if year_hare_affair_common.SERVER_SETTINGS_KEY in self.__serverSettings:
+            self.__yearHareAffairConfig = makeTupleByDict(YearHareAffairConfig, self.__serverSettings[year_hare_affair_common.SERVER_SETTINGS_KEY])
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -946,6 +968,8 @@ class ServerSettings(object):
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
         if post_progression_common.SERVER_SETTINGS_KEY in serverSettingsDiff:
             self.__updateVehiclePostProgressionConfig(serverSettingsDiff)
+        if year_hare_affair_common.SERVER_SETTINGS_KEY in serverSettingsDiff:
+            self.__updateYearHareAffairConfig(serverSettingsDiff)
         self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
@@ -1047,6 +1071,10 @@ class ServerSettings(object):
     @property
     def vehiclePostProgression(self):
         return self.__vehiclePostProgressionConfig
+
+    @property
+    def yearHareAffair(self):
+        return self.__yearHareAffairConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -1422,6 +1450,9 @@ class ServerSettings(object):
 
     def __updateVehiclePostProgressionConfig(self, serverSettingsDiff):
         self.__vehiclePostProgressionConfig = self.__vehiclePostProgressionConfig.replace(serverSettingsDiff[post_progression_common.SERVER_SETTINGS_KEY])
+
+    def __updateYearHareAffairConfig(self, serverSettingsDiff):
+        self.__yearHareAffairConfig = self.__yearHareAffairConfig.replace(serverSettingsDiff[year_hare_affair_common.SERVER_SETTINGS_KEY])
 
 
 def serverSettingsChangeListener(*configKeys):

@@ -1919,3 +1919,17 @@ class IWotPlusNotificationController(IGameController):
 
     def processSwitchNotifications(self):
         raise NotImplementedError
+
+
+class IYearHareAffairController(IGameWindowController):
+    onStateChanged = None
+
+    @property
+    def isVideoAvailable(self):
+        raise NotImplementedError
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def getFinishTime(self):
+        raise NotImplementedError

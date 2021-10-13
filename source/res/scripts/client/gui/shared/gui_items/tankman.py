@@ -517,14 +517,14 @@ class TankmanSkill(GUIItem):
 
     @property
     def userName(self):
-        if self.name == 'brotherhood':
+        if self.name == BROTHERHOOD_SKILL_NAME:
             if self.isPermanent:
                 return i18n.makeString('#item_types:tankman/skills/brotherhood_permanent')
         return getSkillUserName(self.name)
 
     @property
     def description(self):
-        if self.name == 'brotherhood':
+        if self.name == BROTHERHOOD_SKILL_NAME:
             if self.isFemale:
                 return i18n.makeString('#item_types:tankman/skills/brotherhood_female_descr')
             if self.isPermanent:
@@ -554,7 +554,7 @@ class TankmanSkill(GUIItem):
         return '../maps/icons/tankmen/skills/small/%s' % self.icon
 
     def __repr__(self):
-        return 'TankmanSkill<name:%s, level:%d, isActive:%s>' % (self.name, self.level, str(self.isActive))
+        return '{cls}<name:{name}, level:{level}, isActive:{isActive}>'.format(cls=self.__class__.__name__, name=self.name, level=self.level, isActive=str(self.isActive))
 
 
 class SabatonTankmanSkill(TankmanSkill):
@@ -562,52 +562,67 @@ class SabatonTankmanSkill(TankmanSkill):
 
     def __init__(self, skillName, tankman=None, proxy=None):
         super(SabatonTankmanSkill, self).__init__(skillName, tankman, proxy)
-        if skillName == 'brotherhood':
+        if skillName == BROTHERHOOD_SKILL_NAME:
             self._isPermanent = True
-
-    def getSkillIconName(self, skillName):
-        return 'sabaton_brotherhood.png' if skillName == 'brotherhood' else i18n.convert(tankmen.getSkillsConfig().getSkill(skillName).icon)
-
-    def getSkillUserName(self, skillName):
-        return backport.text(R.strings.item_types.tankman.skills.brotherhood_sabaton()) if skillName == 'brotherhood' else tankmen.getSkillsConfig().getSkill(skillName).userString
 
     @property
     def userName(self):
-        return self.getSkillUserName(self._name)
+        return backport.text(R.strings.item_types.tankman.skills.brotherhood_sabaton()) if self._name == BROTHERHOOD_SKILL_NAME else super(SabatonTankmanSkill, self).userName
 
     @property
     def icon(self):
-        return self.getSkillIconName(self._name)
+        icon = super(SabatonTankmanSkill, self).icon
+        if self._name == BROTHERHOOD_SKILL_NAME:
+            icon = 'sabaton_{}'.format(icon)
+        return icon
 
 
 class OffspringTankmanSkill(TankmanSkill):
 
     def __init__(self, skillName, tankman=None, proxy=None):
         super(OffspringTankmanSkill, self).__init__(skillName, tankman, proxy)
-        if skillName == 'brotherhood':
+        if skillName == BROTHERHOOD_SKILL_NAME:
             self._isPermanent = True
-
-    def getSkillIconName(self, skillName):
-        return 'offspring_brotherhood.png' if skillName == 'brotherhood' else i18n.convert(tankmen.getSkillsConfig().getSkill(skillName).icon)
-
-    def getSkillUserName(self, skillName):
-        return backport.text(R.strings.item_types.tankman.skills.brotherhood_offspring()) if skillName == 'brotherhood' else tankmen.getSkillsConfig().getSkill(skillName).userString
 
     @property
     def userName(self):
-        return self.getSkillUserName(self._name)
+        return backport.text(R.strings.item_types.tankman.skills.brotherhood_offspring()) if self._name == BROTHERHOOD_SKILL_NAME else super(OffspringTankmanSkill, self).userName
 
     @property
     def icon(self):
-        return self.getSkillIconName(self._name)
+        icon = super(OffspringTankmanSkill, self).icon
+        if self._name == BROTHERHOOD_SKILL_NAME:
+            icon = 'offspring_{}'.format(icon)
+        return icon
+
+
+class YhaTankmanSkill(TankmanSkill):
+
+    def __init__(self, skillName, tankman=None, proxy=None):
+        super(YhaTankmanSkill, self).__init__(skillName, tankman, proxy)
+        if skillName == BROTHERHOOD_SKILL_NAME:
+            self._isPermanent = True
+
+    @property
+    def userName(self):
+        return backport.text(R.strings.item_types.tankman.skills.brotherhood_yha()) if self._name == BROTHERHOOD_SKILL_NAME else super(YhaTankmanSkill, self).userName
+
+    @property
+    def icon(self):
+        icon = super(YhaTankmanSkill, self).icon
+        if self._name == BROTHERHOOD_SKILL_NAME:
+            icon = 'yha_{}'.format(icon)
+        return icon
 
 
 def getTankmanSkill(skillName, tankman=None, proxy=None):
-    if tankman:
+    if tankman is not None:
         if special_crew.isSabatonCrew(tankman.descriptor):
             return SabatonTankmanSkill(skillName, tankman, proxy)
         if special_crew.isOffspringCrew(tankman.descriptor):
             return OffspringTankmanSkill(skillName, tankman, proxy)
+        if special_crew.isYhaCrew(tankman.descriptor):
+            return YhaTankmanSkill(skillName, tankman, proxy)
     return TankmanSkill(skillName, tankman, proxy)
 
 

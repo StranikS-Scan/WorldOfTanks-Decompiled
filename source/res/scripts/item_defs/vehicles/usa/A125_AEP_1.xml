@@ -1107,7 +1107,6 @@
           <rightMaterial>	track_mat_R_skinned	</rightMaterial>
           <textureScale>	2	</textureScale>
         </trackPair>
-        <pairsCount>	2	</pairsCount>
       </tracks>
       <AODecals>
         <decal>
@@ -1338,36 +1337,6 @@
           </atlas>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
-        <multipleTracks>
-          <left>
-            <desc>	vehicles/american/A125_AEP_1/track/left.track	</desc>
-            <trackPairIdx>	0	</trackPairIdx>
-            <segmentLength>	0.145	</segmentLength>
-            <segmentOffset>	0.271	</segmentOffset>
-            <segment2Offset>	0.075	</segment2Offset>
-          </left>
-          <left>
-            <desc>	vehicles/american/A125_AEP_1/track/left2.track	</desc>
-            <trackPairIdx>	1	</trackPairIdx>
-            <segmentLength>	0.145	</segmentLength>
-            <segmentOffset>	0.311	</segmentOffset>
-            <segment2Offset>	0.075	</segment2Offset>
-          </left>
-          <right>
-            <desc>	vehicles/american/A125_AEP_1/track/right.track	</desc>
-            <trackPairIdx>	0	</trackPairIdx>
-            <segmentLength>	0.145	</segmentLength>
-            <segmentOffset>	0.271	</segmentOffset>
-            <segment2Offset>	0.075	</segment2Offset>
-          </right>
-          <right>
-            <desc>	vehicles/american/A125_AEP_1/track/right2.track	</desc>
-            <trackPairIdx>	1	</trackPairIdx>
-            <segmentLength>	0.145	</segmentLength>
-            <segmentOffset>	0.311	</segmentOffset>
-            <segment2Offset>	0.075	</segment2Offset>
-          </right>
-        </multipleTracks>
       </splineDesc>
       <trackThickness>	-0.00791367	</trackThickness>
       <trackNodes>

@@ -3,6 +3,7 @@
 import math
 import random
 import logging
+import ArenaComponents
 import BigWorld
 import CGF
 import GenericComponents
@@ -762,6 +763,9 @@ class CommonTankAppearance(ScriptGameObject):
         isEnabled = not cameraName == 'sniper'
         for modelAnimator in self.__modelAnimators:
             modelAnimator.animator.setEnabled(isEnabled)
+
+        self.removeComponentByType(ArenaComponents.TriggerComponent)
+        self.createComponent(ArenaComponents.TriggerComponent, cameraName)
 
     def __onEngineStateGearUp(self):
         if self.customEffectManager is not None:

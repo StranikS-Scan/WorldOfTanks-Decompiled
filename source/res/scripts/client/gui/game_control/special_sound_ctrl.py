@@ -12,7 +12,7 @@ from SoundGroups import CREW_GENDER_SWITCHES
 from items import tankmen
 from items.components.tankmen_components import SPECIAL_VOICE_TAG
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET
-from items.special_crew import isMihoCrewCompleted
+from items.special_crew import isMihoCrewCompleted, isYhaCrewCompleted
 from items.vehicles import VehicleDescr
 from constants import ITEM_DEFS_PATH, CURRENT_REALM
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -28,7 +28,8 @@ _FULL_CREW_CONDITION = 'isFullCrew'
 _VoiceoverParams = namedtuple('_VoiceoverParams', ['languageMode', 'genderSwitch', 'onlyInNational'])
 _genderStrToSwitch = {'male': CREW_GENDER_SWITCHES.MALE,
  'female': CREW_GENDER_SWITCHES.FEMALE}
-_isFullCrewCheckers = {SPECIAL_VOICE_TAG.MIHO: isMihoCrewCompleted}
+_isFullCrewCheckers = {SPECIAL_VOICE_TAG.MIHO: isMihoCrewCompleted,
+ SPECIAL_VOICE_TAG.YHA: isYhaCrewCompleted}
 
 class SpecialSoundCtrl(ISpecialSoundCtrl):
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -38,7 +39,7 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
     def __init__(self):
         self.__voiceoverByVehicle = {}
         self.__voiceoverByTankman = {}
-        self.__voiceoverAdditionalModes = {}
+        self.__voiceoverSpecialModes = {}
         self.__arenaMusicByStyle = {}
         self.__currentMode = None
         self.__arenaMusicSetup = None
@@ -63,7 +64,7 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
     def fini(self):
         self.__voiceoverByVehicle = None
         self.__voiceoverByTankman = None
-        self.__voiceoverAdditionalModes = None
+        self.__voiceoverSpecialModes = None
         self.__arenaMusicByStyle = None
         self.__arenaMusicSetup = None
         self.__currentMode = None
@@ -134,22 +135,21 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
             if voiceoverSection is not None:
                 for source, paramSection in voiceoverSection.items():
                     tag = paramSection.readString('tag')
-                    languageMode = paramSection['languageMode']
-                    mode = languageMode.readString(CURRENT_REALM) or languageMode.asString
                     onlyInNational = paramSection.readBool('onlyInNational')
                     genderStr = paramSection.readString('gender')
                     gender = _genderStrToSwitch.get(genderStr, CREW_GENDER_SWITCHES.DEFAULT)
-                    additionalModeSection = paramSection['additionalModes']
-                    if additionalModeSection is not None:
-                        modes = {}
-                        for condition, addMode in additionalModeSection.items():
-                            modes[condition] = _VoiceoverParams(addMode.asString, gender, onlyInNational)
-
-                        self.__voiceoverAdditionalModes[tag] = modes
-                    if source == 'tankman':
-                        self.__voiceoverByTankman[tag] = _VoiceoverParams(mode, gender, onlyInNational)
-                    if source == 'vehicle':
-                        self.__voiceoverByVehicle[tag] = _VoiceoverParams(mode, gender, onlyInNational)
+                    languageMode = paramSection['languageMode']
+                    if languageMode is not None:
+                        mode = languageMode.readString(CURRENT_REALM) or languageMode.asString
+                        if source == 'tankman':
+                            self.__voiceoverByTankman[tag] = _VoiceoverParams(mode, gender, onlyInNational)
+                        elif source == 'vehicle':
+                            self.__voiceoverByVehicle[tag] = _VoiceoverParams(mode, gender, onlyInNational)
+                    specialModesSection = paramSection['specialModes']
+                    if specialModesSection is not None:
+                        self.__voiceoverSpecialModes[tag] = sModes = {}
+                        for condition, sMode in specialModesSection.items():
+                            sModes[condition] = _VoiceoverParams(sMode.asString, gender, onlyInNational)
 
             arenaMusicSection = rootSection['arenaMusic']
             if arenaMusicSection is not None:
@@ -176,14 +176,22 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
         return False
 
     def __setSpecialVoiceByTankmen(self, nationID, groupID, isPremium, crewGroups):
-        for tag, params in self.__voiceoverByTankman.iteritems():
+        specialVoiceParams = None
+        for tag in self.__voiceoverSpecialModes:
             if tankmen.hasTagInTankmenGroup(nationID, groupID, isPremium, tag):
-                crewParams = self.__getSpecialModeForCrew(tag, nationID, isPremium, crewGroups)
-                resParams = crewParams if crewParams is not None else params
-                self.__setSpecialVoice(resParams)
-                return True
+                specialVoiceParams = self.__getSpecialModeForCrew(tag, nationID, isPremium, crewGroups)
+                if specialVoiceParams is not None:
+                    break
+        else:
+            for tag, params in self.__voiceoverByTankman.iteritems():
+                if tankmen.hasTagInTankmenGroup(nationID, groupID, isPremium, tag):
+                    specialVoiceParams = params
+                    break
 
-        return False
+            if specialVoiceParams is not None:
+                self.__setSpecialVoice(specialVoiceParams)
+                return True
+            return False
 
     def __setSpecialVoiceByCommanderSkinID(self, isFemale, commanderSkinID):
         if commanderSkinID != NO_CREW_SKIN_ID and self.__lobbyContext.getServerSettings().isCrewSkinsEnabled():
@@ -206,8 +214,8 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
         SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, params.genderSwitch)
 
     def __getSpecialModeForCrew(self, tag, nationID, isPremium, crewGroups):
-        if tag not in self.__voiceoverAdditionalModes:
+        if tag not in self.__voiceoverSpecialModes:
             return None
         else:
             crewChecker = _isFullCrewCheckers.get(tag)
-            return self.__voiceoverAdditionalModes[tag].get(_FULL_CREW_CONDITION) if crewChecker is not None and crewChecker(nationID, isPremium, crewGroups) else None
+            return self.__voiceoverSpecialModes[tag].get(_FULL_CREW_CONDITION) if crewChecker is not None and crewChecker(nationID, isPremium, crewGroups) else None

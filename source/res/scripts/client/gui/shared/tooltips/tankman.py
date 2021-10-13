@@ -9,7 +9,6 @@ from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.gui_items import Tankman
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE, formatters
 from gui.shared.formatters import text_styles, moneyWithIcon
@@ -241,8 +240,9 @@ class NotRecruitedTooltipData(BlocksTooltipData):
             blocks.append(formatters.packTextBlockData(text_styles.main(howToGetStr), useHtml=True, padding=formatters.packPadding()))
         skills = item.getLearntSkills(multiplyNew=True)
         if skills:
+            tankmanSkill = item.getTankmanSkill()
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_SKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17 if hasDescr else 18, bottom=10)))
-            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(Tankman.getSkillIconPath(skillName=skillName, size='big')) for skillName in skills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
+            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(tankmanSkill(skillName=skillName).bigIconPath) for skillName in skills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
         expiryTime = item.getExpiryTime()
         if expiryTime:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_EXPIRETITLE), useHtml=True, padding=formatters.packPadding(top=20 if skills else (17 if hasDescr else 16), bottom=2)))

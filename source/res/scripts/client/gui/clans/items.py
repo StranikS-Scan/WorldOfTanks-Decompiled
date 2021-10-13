@@ -1473,3 +1473,17 @@ class HofAttrs(_HofAttrs, FieldsCheckerMixin):
     @fmtUnavailableValue(fields=('errors',))
     def getErrors(self):
         return self.errors.keys()
+
+
+_YhaVideoData = namedtuple('_YhaVideoAttrs', ('available_at', 'video'))
+_YhaVideoData.__new__.__defaults__ = (0, '')
+
+class YhaVideoData(_YhaVideoData, FieldsCheckerMixin):
+
+    @fmtUnavailableValue(fields=('available_at',), dummy=0)
+    def getAvailableAt(self):
+        return self.available_at
+
+    @fmtUnavailableValue(fields=('video',), dummy='')
+    def getVideo(self):
+        return self.video

@@ -600,5 +600,9 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def request_authorized_survey_url(self, callback, mapURL):
         return self._request_data(callback, mapURL, method='GET')
 
+    def get_yha_video(self, callback):
+        url = '/webbrg/year_hare_affair/api/video/'
+        return self._request_data(callback, url, method='GET')
+
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

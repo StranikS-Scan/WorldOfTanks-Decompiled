@@ -710,6 +710,13 @@
         <clipAngle>	0.000000	</clipAngle>
         <anchorShift>	-0.000007	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	A120_M48A5_3DSt_TLXXL	</compatibleModels>
+      </slot>
     </customizationSlots>
     <hangarShadowTexture>	vehicles/american/A120_M48A5/M48A5_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
@@ -1991,6 +1998,18 @@
               <rayStart>	0.000002 -0.0965396 2.05518	</rayStart>
               <rayEnd>	-0.0187218 -0.173012 2.05518	</rayEnd>
               <rayUp>	0.133 0.000000 0.000000	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <size>	0.492	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <compatibleModels>	A120_M48A5_3DSt_TLXXL	</compatibleModels>
+              <rayStart>	0.000002 -0.10954 3.49305	</rayStart>
+              <rayEnd>	-0.0187218 -0.173012 2.05518	</rayEnd>
+              <rayUp>	0.093799 0.000000 0.000000	</rayUp>
               <applyToFabric>	false	</applyToFabric>
               <size>	0.492	</size>
               <hideIfDamaged>	false	</hideIfDamaged>

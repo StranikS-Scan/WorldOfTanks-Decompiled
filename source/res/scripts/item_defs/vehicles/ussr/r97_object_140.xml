@@ -705,6 +705,13 @@
         <clipAngle>	0.997047	</clipAngle>
         <anchorShift>	0.055181	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	R97_Object_140_3Dst_TLXXL	</compatibleModels>
+      </slot>
     </customizationSlots>
     <hangarShadowTexture>	vehicles/russian/R97_Object_140/Object_140_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
@@ -1526,6 +1533,18 @@
               <rayUp>	0.104 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.733	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <compatibleModels>	R97_Object_140_3Dst_TLXXL	</compatibleModels>
+              <rayStart>	-0.000006 0.00197387 3.48168	</rayStart>
+              <rayEnd>	0.331533 -0.0755199 1.27318	</rayEnd>
+              <rayUp>	0.119533 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.552527	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>

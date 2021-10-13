@@ -253,6 +253,9 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'wtBossWins',
  'wtSpecBossDefeat',
  'RP2018sergeantCounter',
+ 'wtxHunterWins',
+ 'wtxBossWins',
+ 'wtxSpecBossDefeat',
  'whiteTiger2012']
 _achievements15x15PopUps = ['warrior',
  'invader',
@@ -399,7 +402,10 @@ _achievements15x15PopUps = ['warrior',
  'TenYearsCountdownStageMedal',
  'wtHunterWins',
  'wtBossWins',
- 'wtSpecBossDefeat']
+ 'wtSpecBossDefeat',
+ 'wtxHunterWins',
+ 'wtxBossWins',
+ 'wtxSpecBossDefeat']
 _achievements15x15BlockBuilder = StaticSizeBlockBuilder('achievements', _ACHIEVEMENTS15X15_BLOCK_LAYOUT, ACHIEVEMENT15X15_DEPENDENCIES, _achievements15x15PopUps)
 _STEAM_BLOCK_LAYOUT = ['steamBattleCredits',
  'steamLittleSavingsMedal',

@@ -7,6 +7,7 @@ import weakref
 from collections import namedtuple
 import BigWorld
 import Math
+import Health
 import WoT
 import AreaDestructibles
 import ArenaType
@@ -662,7 +663,12 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
 
     def set_stunInfo(self, prev=None):
         _logger.debug('Set stun info(curr,~ prev): %s, %s', self.stunInfo, prev)
+        if self.stunInfo > 0.0 and self.appearance.findComponentByType(Health.StunComponent) is None:
+            self.appearance.createComponent(Health.StunComponent)
+        if self.stunInfo < 0.01:
+            self.appearance.removeComponentByType(Health.StunComponent)
         self.updateStunInfo()
+        return
 
     def __updateCachedStunInfo(self, endTime):
         if endTime:

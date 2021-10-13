@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/GameSessionController.py
-import operator
 import sys
 import time
 import BigWorld
 import Event
 import account_shared
 import constants
+from constants import SECONDS_IN_DAY
 from debug_utils import LOG_DEBUG
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier, SimpleNotifier
 from gui.prb_control import prbEntityProperty
+from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier, SimpleNotifier
 from helpers import dependency
 from helpers import time_utils
 from skeletons.gui.game_control import IGameSessionController
@@ -302,7 +302,25 @@ class GameSessionController(IGameSessionController, Notifiable):
     @classmethod
     def __getCurfewBlockTime(cls, restrictions):
         if _BAN_RESTR in restrictions and restrictions[_BAN_RESTR]:
-            _, ban = max(restrictions[_BAN_RESTR].items(), key=operator.itemgetter(0))
-            if ban.get('reason') == '#ban_reason:curfew_ban' and 'curfew' in ban:
+            ban = cls.__getNearestCurfew(restrictions[_BAN_RESTR])
+            if ban is not None and ban.get('reason') is not None:
                 return (ban['curfew'].get('from', time_utils.ONE_DAY) + cls.TIME_RESERVE, ban['curfew'].get('to', time_utils.ONE_DAY))
         return (None, None)
+
+    @classmethod
+    def __getNearestCurfew(cls, restrictions):
+        curfewNearest = None
+        curTime = int(time_utils.getCurrentLocalServerTimestamp())
+        elapsedSecondsOfCurDay = curTime % SECONDS_IN_DAY
+        curfewStarts = lambda cFrom, curDay: cFrom - curDay if cFrom > curDay else cFrom - curDay + SECONDS_IN_DAY
+        for _, restr in restrictions.items():
+            if 'curfew' not in restr:
+                continue
+            if restr is None:
+                continue
+            curfew = restr['curfew']
+            curfewFrom = curfew['from']
+            if curfewNearest is None or curfewStarts(curfewFrom, elapsedSecondsOfCurDay) < curfewStarts(curfewNearest['curfew']['from'], elapsedSecondsOfCurDay):
+                curfewNearest = restr
+
+        return curfewNearest

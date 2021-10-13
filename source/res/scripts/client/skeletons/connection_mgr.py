@@ -64,7 +64,7 @@ class IConnectionManager(object):
     def disconnect(self):
         raise NotImplementedError
 
-    def setKickedFromServer(self, reason, isBan, expiryTime):
+    def setKickedFromServer(self, reason, kickReasonType, expiryTime):
         raise NotImplementedError
 
     def isDisconnected(self):

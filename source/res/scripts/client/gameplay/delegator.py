@@ -52,8 +52,8 @@ class GameplayLogic(IGameplayLogic):
     def goToLoginByEvent(self):
         self.postStateEvent(PlayerEventID.NON_PLAYER_BECOME_PLAYER, disconnectReason=DisconnectReason.EVENT)
 
-    def goToLoginByKick(self, reason, isBan, expiryTime):
-        self.postStateEvent(PlayerEventID.NON_PLAYER_BECOME_PLAYER, disconnectReason=DisconnectReason.KICK, kickReason=reason, isBan=isBan, expiryTime=expiryTime)
+    def goToLoginByKick(self, reason, kickReasonType, expiryTime):
+        self.postStateEvent(PlayerEventID.NON_PLAYER_BECOME_PLAYER, disconnectReason=DisconnectReason.KICK, kickReason=reason, kickReasonType=kickReasonType, expiryTime=expiryTime)
 
     def goToLoginByError(self, reason):
         self.connectionMgr.disconnect()

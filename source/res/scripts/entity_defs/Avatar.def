@@ -242,7 +242,7 @@
     </update>
     <onKickedFromServer>
       <Arg>	STRING	</Arg>
-      <Arg>	BOOL	</Arg>
+      <Arg>	UINT8	</Arg>
       <Arg>	UINT32	</Arg>
     </onKickedFromServer>
     <onIGRTypeChanged>
@@ -608,7 +608,7 @@
     <onCreateCellSuccess></onCreateCellSuccess>
     <kickSelf>
       <Arg>	STRING	</Arg>
-      <Arg>	BOOL	</Arg>
+      <Arg>	UINT8	</Arg>
       <Arg>	FLOAT32	</Arg>
     </kickSelf>
     <setClientReady>

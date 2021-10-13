@@ -669,6 +669,10 @@ def _migrateTo79(core, data, initialized):
     data['guiStartBehavior']['birthdayCalendarIntroShowed'] = False
 
 
+def _migrateTo80(core, data, initialized):
+    pass
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -979,6 +983,10 @@ _versions = ((1,
   False),
  (79,
   _migrateTo79,
+  False,
+  False),
+ (80,
+  _migrateTo80,
   False,
   False))
 

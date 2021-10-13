@@ -132,7 +132,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
 
     @noexcept
     def update_drownLevel(self, drownLevel):
-        self._avatar().updateDrownLevel(self.entity.id, drownLevel.level, drownLevel.times)
+        self._avatar().updateDrownLevel(self.entity.id, drownLevel.level, self.__getDestroyTimes(drownLevel.times))
 
     @noexcept
     def update_isOtherVehicleDamagedDevicesVisible(self, isOtherVehicleDamagedDevicesVisible):
@@ -140,7 +140,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
 
     @noexcept
     def update_overturnLevel(self, overturnLevel):
-        self._avatar().updateOverturnLevel(self.entity.id, overturnLevel.level, overturnLevel.times)
+        self._avatar().updateOverturnLevel(self.entity.id, overturnLevel.level, self.__getDestroyTimes(overturnLevel.times))
 
     @noexcept
     def update_smoke(self, smoke):
@@ -202,6 +202,10 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             self._avatar().resetVehicleAmmo(prev.compactDescr, changedAmmo.compactDescr, changedAmmo.quantity, changedAmmo.previousStage, changedAmmo.endTime, changedAmmo.totalTime)
         else:
             self.__setNested(self.update_vehicleAmmoList, 'vehicleAmmoList', path, prev)
+
+    def __getDestroyTimes(self, times):
+        startTime = BigWorld.serverTime() if self.__isAttachingToVehicle else times[0]
+        return (startTime, max(times[1] - startTime, 0.0))
 
     def __getTimeLeft(self, data, useEndTime=None):
         if useEndTime is None:

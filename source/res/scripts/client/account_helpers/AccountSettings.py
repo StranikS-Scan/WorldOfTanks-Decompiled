@@ -723,7 +723,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'isGoldReserveEnabled': True,
                            'isPassiveXpEnabled': True,
                            'isTankRentalEnabled': True,
-                           'isFreeDirectivesEnabled': True},
+                           'isFreeDirectivesEnabled': True,
+                           'rentPendingVehCD': None},
                 CUSTOMIZATION_SECTION: {CAROUSEL_ARROWS_HINT_SHOWN_FIELD: False,
                                         PROJECTION_DECAL_HINT_SHOWN_FIELD: False},
                 SESSION_STATS_SECTION: {BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD: False},
@@ -1031,7 +1032,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 47
+    version = 48
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1528,6 +1529,8 @@ class AccountSettings(object):
                         updatedFilters = {key:savedFilters.get(key, defaults[key]) for key in defaults}
                         filtersSection.write(filterSection, _pack(updatedFilters))
 
+            if currVersion < 48:
+                pass
         return
 
     @staticmethod

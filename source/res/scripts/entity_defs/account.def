@@ -36,7 +36,7 @@
     <requiredVersion_11410>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ct_1.14.1_2	</Default>
+      <Default>	ru_1.14.1_1	</Default>
     </requiredVersion_11410>
     <name>
       <Type>	STRING	</Type>
@@ -190,7 +190,7 @@
   <ClientMethods>
     <onKickedFromServer>
       <Arg>	STRING	</Arg>
-      <Arg>	BOOL	</Arg>
+      <Arg>	UINT8	</Arg>
       <Arg>	UINT32	</Arg>
     </onKickedFromServer>
     <onEnqueued>
@@ -429,7 +429,7 @@
     </stopKeepingAlive>
     <kickSelf>
       <Arg>	STRING	</Arg>
-      <Arg>	BOOL	</Arg>
+      <Arg>	UINT8	</Arg>
       <Arg>	UINT32	</Arg>
     </kickSelf>
     <destroyIfNoKeepers></destroyIfNoKeepers>

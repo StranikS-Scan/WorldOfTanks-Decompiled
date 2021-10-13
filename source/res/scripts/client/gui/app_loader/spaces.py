@@ -4,7 +4,7 @@ import BigWorld
 import BattleReplay
 from PlayerEvents import g_playerEvents
 from adisp import process
-from constants import ARENA_GUI_TYPE
+from constants import ARENA_GUI_TYPE, ACCOUNT_KICK_REASONS
 from gui import DialogsInterface
 from gui.impl.gen import R
 from gui.shared.utils.decorators import ReprInjector
@@ -54,16 +54,16 @@ class ShowDialogAction(object):
 
 
 class DisconnectDialogAction(ShowDialogAction):
-    __slots__ = ('__reason', '__isBan', '__expiryTime')
+    __slots__ = ('__reason', '__kickReasonType', '__expiryTime')
 
-    def __init__(self, reason, isBan=False, expiryTime=None):
+    def __init__(self, reason, kickReasonType=ACCOUNT_KICK_REASONS.UNKNOWN, expiryTime=None):
         super(DisconnectDialogAction, self).__init__()
         self.__reason = reason
-        self.__isBan = isBan
+        self.__kickReasonType = kickReasonType
         self.__expiryTime = expiryTime
 
     def doAction(self):
-        DialogsInterface.showDisconnect(self.__reason, self.__isBan, self.__expiryTime)
+        DialogsInterface.showDisconnect(self.__reason, self.__kickReasonType, self.__expiryTime)
 
 
 class ReplayVersionDiffersDialogAction(ShowDialogAction):

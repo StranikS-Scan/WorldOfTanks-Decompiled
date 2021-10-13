@@ -80,7 +80,7 @@ class IGameplayLogic(object):
     def goToLoginByEvent(self):
         raise NotImplementedError
 
-    def goToLoginByKick(self, reason, isBan, expiryTime):
+    def goToLoginByKick(self, reason, kickReasonType, expiryTime):
         raise NotImplementedError
 
     def goToLoginByError(self, reason):

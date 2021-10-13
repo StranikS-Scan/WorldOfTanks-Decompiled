@@ -1102,11 +1102,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             Account.g_accountRepository.onTokenReceived(requestID, tokenType, data)
         return
 
-    def onKickedFromServer(self, reason, isBan, expiryTime):
-        LOG_DEBUG('onKickedFromServer', reason, isBan, expiryTime)
+    def onKickedFromServer(self, reason, kickReasonType, expiryTime):
+        LOG_DEBUG('onKickedFromServer', reason, kickReasonType, expiryTime)
         self.statsCollector.reset()
         if not BattleReplay.isPlaying():
-            self.connectionMgr.setKickedFromServer(reason, isBan, expiryTime)
+            self.connectionMgr.setKickedFromServer(reason, kickReasonType, expiryTime)
 
     def onSwitchViewpoint(self, vehicleID, position):
         LOG_DEBUG('onSwitchViewpoint', vehicleID, position)
@@ -1350,7 +1350,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return
         else:
             self.__isVehicleDrowning = constants.DROWN_WARNING_LEVEL.isDrowning(level)
-            times = (times[0], self.__getLeftTime(times[1]))
             self.updateVehicleDestroyTimer(VEHICLE_MISC_STATUS.VEHICLE_DROWN_WARNING, times, level)
             ctrl = self.guiSessionProvider.dynamic.progression
             if ctrl is not None:
@@ -1370,7 +1369,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if not self.__updateVehicleStatus(vehicleID):
             return
         else:
-            times = (times[0], self.__getLeftTime(times[1]))
             self.__isVehicleOverturned = constants.OVERTURN_WARNING_LEVEL.isOverturned(level)
             self.updateVehicleDestroyTimer(VEHICLE_MISC_STATUS.VEHICLE_IS_OVERTURNED, times, level)
             ctrl = self.guiSessionProvider.dynamic.progression

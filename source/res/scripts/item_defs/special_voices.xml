@@ -174,9 +174,9 @@
     <tankman>
       <tag>	mihoSpecialVoice	</tag>
       <languageMode>	gup_jp_commander	</languageMode>
-      <additionalModes>
+      <specialModes>
         <isFullCrew>	gup_jp_crew	</isFullCrew>
-      </additionalModes>
+      </specialModes>
     </tankman>
     <tankman>
       <tag>	duke_specialVoice	</tag>
@@ -225,6 +225,12 @@
       <languageMode>	krieger21	  <RU>	krieger21_ru	</RU>
         <CN>	krieger21_cn	</CN>
       </languageMode>
+    </tankman>
+    <tankman>
+      <tag>	yhaSpecialVoice	</tag>
+      <specialModes>
+        <isFullCrew>	yha_crew	</isFullCrew>
+      </specialModes>
     </tankman>
   </voiceover>
   <arenaMusic>

@@ -49,8 +49,8 @@ class _DogTagsRootSettings(utils.SettingRootRecord):
 
 class _WotPlusSettings(utils.SettingRootRecord):
 
-    def __init__(self, isWotPlusEnabled=False, isEntryPointsEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isTankRentalEnabled=False, isFreeDirectivesEnabled=False):
-        super(_WotPlusSettings, self).__init__(isWotPlusEnabled=isWotPlusEnabled, isEntryPointsEnabled=isEntryPointsEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isTankRentalEnabled=isTankRentalEnabled, isFreeDirectivesEnabled=isFreeDirectivesEnabled)
+    def __init__(self, isWotPlusEnabled=False, isEntryPointsEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isTankRentalEnabled=False, isFreeDirectivesEnabled=False, rentPendingVehCD=None):
+        super(_WotPlusSettings, self).__init__(isWotPlusEnabled=isWotPlusEnabled, isEntryPointsEnabled=isEntryPointsEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isTankRentalEnabled=isTankRentalEnabled, isFreeDirectivesEnabled=isFreeDirectivesEnabled, rentPendingVehCD=rentPendingVehCD)
 
     def setWotPlusEnabledState(self, isEnabled):
         self.update(isWotPlusEnabled=isEnabled)
@@ -69,6 +69,9 @@ class _WotPlusSettings(utils.SettingRootRecord):
 
     def setFreeDirectivesState(self, isEnabled):
         self.update(isFreeDirectivesEnabled=isEnabled)
+
+    def setRentPending(self, vehCD):
+        self.update(rentPendingVehCD=vehCD)
 
     @classmethod
     def _getSettingName(cls):

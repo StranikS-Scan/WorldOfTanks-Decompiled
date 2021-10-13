@@ -807,6 +807,13 @@
         <clipAngle>	0.335114	</clipAngle>
         <anchorShift>	0.024179	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+      </slot>
     </customizationSlots>
     <hangarShadowTexture>	vehicles/french/F18_Bat_Chatillon25t/Bat_Chatillon25t_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
@@ -1983,6 +1990,18 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+              <rayStart>	-0.00210497 0.0171946 3.67509	</rayStart>
+              <rayEnd>	-0.293814 -0.293385 2.91638	</rayEnd>
+              <rayUp>	0.076 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.492	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
           </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
@@ -2405,6 +2424,18 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+              <rayStart>	-0.00421142 0.0163037 5.01254	</rayStart>
+              <rayEnd>	-0.0603312 0.0267817 2.97924	</rayEnd>
+              <rayUp>	0.087 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.705	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
           </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
@@ -2815,6 +2846,18 @@
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.00421142 0.0165037 3.5	</rayStart>
+              <rayEnd>	0.00793971 -0.0284059 3.18401	</rayEnd>
+              <rayUp>	0.094 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.438	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
+              <rayStart>	-0.00421142 0.0165037 4.21111	</rayStart>
               <rayEnd>	0.00793971 -0.0284059 3.18401	</rayEnd>
               <rayUp>	0.094 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>

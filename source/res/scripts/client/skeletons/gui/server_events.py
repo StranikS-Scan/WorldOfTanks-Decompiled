@@ -135,6 +135,9 @@ class IEventsCache(object):
     def getTradeInActions(self):
         raise NotImplementedError
 
+    def getYearHareAffairAction(self):
+        raise NotImplementedError
+
     def isBalancedSquadEnabled(self):
         raise NotImplementedError
 

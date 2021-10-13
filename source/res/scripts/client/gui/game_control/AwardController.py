@@ -58,7 +58,7 @@ from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBan
 from gui.server_events.events_helpers import isDailyQuest, isACEmailConfirmationQuest
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
-from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showBadgeInvoiceAwardWindow, showMultiAwardWindow, showEliteWindow
+from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showBadgeInvoiceAwardWindow, showMultiAwardWindow, showEliteWindow, showYearHareAffairAwardsWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -73,9 +73,10 @@ from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.events import g_messengerEvents
 from nations import NAMES
+from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController, IBattlePassController, IMapboxController
+from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController, IBattlePassController, IMapboxController, IYearHareAffairController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -84,6 +85,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
+from year_hare_affair_common import isYearHareAffairFinalTokenQuest
 if typing.TYPE_CHECKING:
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
 _logger = logging.getLogger(__name__)
@@ -189,7 +191,8 @@ class AwardController(IAwardController, IGlobalListener):
          BadgesInvoiceHandler(self),
          MapboxProgressionRewardHandler(self),
          PurchaseHandler(self),
-         RenewableSubscriptionHandler(self)]
+         RenewableSubscriptionHandler(self),
+         YearHareAffairRewardHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -1678,3 +1681,33 @@ class PurchaseHandler(ServiceChannelHandler):
                         _logger.info('Reward list is empty, multiple awards window will not be shown for purchase %s', productCode)
             else:
                 _logger.debug('Product code is empty! Awards Window will not be shown!')
+
+
+class YearHareAffairRewardHandler(MultiTypeServiceChannelHandler):
+    __yhaController = dependency.descriptor(IYearHareAffairController)
+
+    def __init__(self, awardCtrl):
+        super(YearHareAffairRewardHandler, self).__init__(handledTypes=(SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.battleResults.index()), awardCtrl=awardCtrl)
+        self._qId = None
+        return
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        if not super(YearHareAffairRewardHandler, self)._needToShowAward(ctx):
+            return False
+        else:
+            _, message = ctx
+            questIDs = message.data.get('completedQuestIDs', set())
+            self._qId = findFirst(isYearHareAffairFinalTokenQuest, questIDs)
+            return self._qId is not None
+
+    def _showAward(self, ctx):
+        if self._qId is None:
+            return
+        else:
+            _, message = ctx
+            rewards = message.data.get('detailedRewards', {}).get(self._qId, {})
+            self._qId = None
+            if rewards:
+                showYearHareAffairAwardsWindow(rewards)
+            return

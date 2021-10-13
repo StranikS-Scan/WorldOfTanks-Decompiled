@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/renewable_subscription.py
-from functools import partial
 import logging
+from functools import partial
 import typing
 import AccountCommands
 from Event import Event
@@ -9,6 +9,7 @@ from account_helpers import AccountSyncData
 from gui import SystemMessages
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.server_events import settings
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from piggy_bank_common.settings_constants import PIGGY_BANK_PDATA_KEY
@@ -16,7 +17,7 @@ from renewable_subscription_common.settings_constants import RS_PDATA_KEY, IDLE_
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import Callable, Optional
+    from typing import Callable, Optional, Union
     from Account import PlayerAccount
     from gui.shared.gui_items import ItemsCollection
 _logger = logging.getLogger(__name__)
@@ -30,6 +31,7 @@ class RenewableSubscription(object):
         self._syncData = syncData
         self._cache = {}
         self.onRenewableSubscriptionDataChanged = Event()
+        self.onPendingRentChanged = Event()
         self._ignore = True
         return
 
@@ -117,6 +119,20 @@ class RenewableSubscription(object):
 
     def getRentVehicle(self):
         return self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.WOTPLUS_RENT)
+
+    def setRentPending(self, vehCD):
+        with settings.wotPlusSettings() as dt:
+            dt.setRentPending(vehCD)
+        self.onPendingRentChanged(vehCD)
+
+    def getRentPending(self):
+        return settings.getWotPlusSettings().rentPendingVehCD
+
+    def resetRentPending(self):
+        with settings.wotPlusSettings() as dt:
+            dt.setRentPending(None)
+        self.onPendingRentChanged(None)
+        return
 
     def _onGetCacheResponse(self, callback, resultID):
         if self._ignore:

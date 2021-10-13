@@ -9,7 +9,7 @@ import ResMgr
 import Math
 from collections import namedtuple, OrderedDict, defaultdict
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, MAX_USERS_PROJECTION_DECALS, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, DEFAULT_SCALE_FACTOR_ID, EMPTY_ITEM_ID, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION, DEFAULT_DECAL_TINT_COLOR, ProjectionDecalMatchingTags
+from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, MAX_USERS_PROJECTION_DECALS, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, DEFAULT_SCALE_FACTOR_ID, EMPTY_ITEM_ID, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION, DEFAULT_DECAL_TINT_COLOR, ProjectionDecalMatchingTags
 from items.components import c11n_components as cn
 from constants import IS_CELLAPP, IS_BASEAPP, IS_EDITOR
 from items import decodeEnum
@@ -1190,24 +1190,11 @@ def getVehicleOutfit(outfits, vehTypeDescr, outfitType):
 
 
 def createNationalEmblemComponents(vehDescr):
-    nationalEmblemId = vehDescr.type.defaultPlayerEmblemID
-    showTurretEmblemsOnGun = vehDescr.turret.showEmblemsOnGun
     decals = []
-    for partName in CUSTOMIZATION_SLOTS_VEHICLE_PARTS:
-        part = getattr(vehDescr, partName)
-        regions = iter(getattr(ApplyArea, '{}_EMBLEM_REGIONS'.format(partName.upper()), ()))
-        for slot in part.emblemSlots:
-            if slot.type != 'player':
-                continue
-            try:
-                appliedTo = next(regions)
-            except StopIteration:
-                raise SoftException('ApplyArea mismatch. Wrong slot {} for vehicle {}'.format(slot, vehDescr))
-
-            if showTurretEmblemsOnGun and appliedTo in ApplyArea.TURRET_EMBLEM_REGIONS:
-                appliedTo <<= 4
-            decals.append(DecalComponent(id=nationalEmblemId, appliedTo=appliedTo))
-
+    nationalEmblemId = vehDescr.type.defaultPlayerEmblemID
+    emblemRegions, _ = cn.getAvailableDecalRegions(vehDescr)
+    if emblemRegions:
+        decals.append(DecalComponent(id=nationalEmblemId, appliedTo=emblemRegions))
     return decals
 
 

@@ -475,6 +475,13 @@ class EventsCache(IEventsCache):
 
         return self.getActions(containsTradeIn).values()
 
+    def getYearHareAffairAction(self):
+
+        def containsYearHareAffair(a):
+            return any((step.get('name') == 'set_YearHareAffair' for step in a.getData().get('steps', [])))
+
+        return first(self.getActions(containsYearHareAffair).values())
+
     def isBalancedSquadEnabled(self):
         return bool(self.__getUnitRestrictions().get('enabled', False))
 

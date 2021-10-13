@@ -1134,63 +1134,73 @@ def _validateEditableStyle(componentId, typeName, itemType, component, item, bas
 
 
 def _validateDependencies(outfit, usedStyle, vehDescr, season):
-    outfitToCheckDependencies = {}
     dependenciesSeason = season if season != SeasonType.ALL else SeasonType.SUMMER
     baseSeasonOutfit = usedStyle.outfits.get(dependenciesSeason)
-    camouflages = getattr(outfit, 'camouflages')
-    if baseSeasonOutfit:
-        camouflageID = camouflages[0].id if len(camouflages) != 0 else baseSeasonOutfit.camouflages[0].id
-        availableEmblemRegions = set()
-        availableInscriptionRegions = set()
-        for partName in CUSTOMIZATION_SLOTS_VEHICLE_PARTS:
-            availableEmblemRegions |= getAvailableRegions(vehDescr, partName, 'emblem')
-            availableInscriptionRegions |= getAvailableRegions(vehDescr, partName, 'inscription')
-
-        availableEmblemRegions = reduce(int.__or__, availableEmblemRegions, 0)
-        availableInscriptionRegions = reduce(int.__or__, availableInscriptionRegions, 0)
-        if vehDescr.turret.showEmblemsOnGun:
-            TURRET_EMBLEM_REGIONS_VALUE = reduce(int.__or__, ApplyArea.TURRET_EMBLEM_REGIONS)
-            TURRET_INSCRIPTION_REGIONS_VALUE = reduce(int.__or__, ApplyArea.TURRET_INSCRIPTION_REGIONS)
-            availableTurretEmblemRegions = availableEmblemRegions & TURRET_EMBLEM_REGIONS_VALUE
-            availableTurretInscriptionRegions = availableInscriptionRegions & TURRET_INSCRIPTION_REGIONS_VALUE
-            if availableTurretEmblemRegions:
-                availableEmblemRegions &= ~availableTurretEmblemRegions
-                availableEmblemRegions |= availableTurretEmblemRegions << 4
-            if availableTurretInscriptionRegions:
-                availableInscriptionRegions &= ~availableTurretInscriptionRegions
-                availableInscriptionRegions |= availableTurretInscriptionRegions << 4
-        modifiedOutfit = baseSeasonOutfit.applyDiff(outfit)
-        outfitToCheckDependencies[CustomizationType.MODIFICATION] = modifiedOutfit.modifications
-        for paint in modifiedOutfit.paints:
-            if paint.appliedTo & ApplyArea.PAINT_REGIONS_VALUE:
-                outfitToCheckDependencies.setdefault(CustomizationType.PAINT, set()).add(paint.id)
-
-        for decal in modifiedOutfit.decals:
-            if decal.appliedTo & availableEmblemRegions or decal.appliedTo & availableInscriptionRegions:
-                outfitToCheckDependencies.setdefault(CustomizationType.DECAL, set()).add(decal.id)
-
-        for number in modifiedOutfit.personal_numbers:
-            if number.appliedTo & availableInscriptionRegions:
-                outfitToCheckDependencies.setdefault(CustomizationType.PERSONAL_NUMBER, set()).add(number.id)
-
-        for projectionDecal in modifiedOutfit.projection_decals:
-            outfitToCheckDependencies.setdefault(CustomizationType.PROJECTION_DECAL, set()).add(projectionDecal.id)
-
-        for itemType, itemIDs in outfitToCheckDependencies.iteritems():
-            camouflageItemTypeDependencies = usedStyle.dependencies.get(camouflageID, {}).get(itemType, {})
-            for itemID in itemIDs:
-                if itemID in usedStyle.alternateItems.get(itemType, ()):
-                    ancestors = usedStyle.dependenciesAncestors.get(itemType, {}).get(itemID, ())
-                    if camouflageItemTypeDependencies and ancestors and itemID not in camouflageItemTypeDependencies:
-                        raise SoftException('Incorrect dependent item {} for camouflage {}'.format(itemID, camouflageID))
+    if not baseSeasonOutfit:
+        return
+    camouflages = outfit.camouflages or baseSeasonOutfit.camouflages
+    camouflageID = camouflages[0].id
+    paintRegions = getAvailablePaintRegions(vehDescr)
+    emblemRegions, inscriptionRegions = getAvailableDecalRegions(vehDescr)
+    decalRegions = emblemRegions | inscriptionRegions
+    modifiedOutfit = baseSeasonOutfit.applyDiff(outfit)
+    outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications),
+     CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions},
+     CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions},
+     CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions},
+     CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}}
+    for itemType, itemIDs in outfitToCheckDependencies.iteritems():
+        camouflageItemTypeDependencies = usedStyle.dependencies.get(camouflageID, {}).get(itemType, {})
+        alternateItems = usedStyle.alternateItems.get(itemType, ())
+        ancestors = usedStyle.dependenciesAncestors.get(itemType, {})
+        if not camouflageItemTypeDependencies or not alternateItems or not ancestors:
+            continue
+        for itemID in itemIDs:
+            if itemID not in alternateItems or itemID not in ancestors:
+                continue
+            if itemID not in camouflageItemTypeDependencies:
+                raise SoftException('Incorrect dependent item {} for camouflage {}'.format(itemID, camouflageID))
 
 
-def getAvailableRegions(vehDescr, partName, slotType):
-    part = getattr(vehDescr, partName)
-    availableRegions = set()
-    regions = iter(getattr(ApplyArea, '{}_{}_REGIONS'.format(partName.upper(), slotType.upper()), ()))
-    availableRegions |= set((next(regions) for slot in part.emblemSlots if slot.type == getattr(SLOT_TYPE_NAMES, slotType.upper())))
-    return availableRegions
+def getAvailablePaintRegions(vehDescr):
+    regions = 0
+    for partName in CUSTOMIZATION_SLOTS_VEHICLE_PARTS:
+        part = getattr(vehDescr, partName)
+        applyAreaMask, _ = part.customizableVehicleAreas['paint']
+        regions |= applyAreaMask
+
+    return regions
+
+
+def getAvailableDecalRegions(vehDescr):
+    showTurretEmblemsOnGun = vehDescr.turret.showEmblemsOnGun
+    emblemRegions = set()
+    inscriptionRegions = set()
+    for partName in CUSTOMIZATION_SLOTS_VEHICLE_PARTS:
+        part = getattr(vehDescr, partName)
+        emblemRegionsIt = iter(getattr(ApplyArea, '{}_EMBLEM_REGIONS'.format(partName.upper()), ()))
+        inscriptionRegionsIt = iter(getattr(ApplyArea, '{}_INSCRIPTION_REGIONS'.format(partName.upper()), ()))
+        for slot in part.emblemSlots:
+            if slot.type == 'player':
+                regions = emblemRegions
+                regionsIt = emblemRegionsIt
+            elif slot.type == 'inscription':
+                regions = inscriptionRegions
+                regionsIt = inscriptionRegionsIt
+            else:
+                continue
+            try:
+                appliedTo = next(regionsIt)
+            except StopIteration:
+                raise SoftException('ApplyArea mismatch. Wrong slot {} for vehicle {}'.format(slot, vehDescr))
+
+            if showTurretEmblemsOnGun and appliedTo in ApplyArea.TURRET_DECAL_REGIONS:
+                appliedTo <<= 4
+            regions.add(appliedTo)
+
+    emblemRegions = reduce(int.__or__, emblemRegions, 0)
+    inscriptionRegions = reduce(int.__or__, inscriptionRegions, 0)
+    return (emblemRegions, inscriptionRegions)
 
 
 def splitIntDescr(intDescr):

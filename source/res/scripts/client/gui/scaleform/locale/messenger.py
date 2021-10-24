@@ -587,6 +587,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_PLAYEREMBLEMS = '#messenger:serviceChannelMessages/serverDowntimeCompensation/playerEmblems'
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_PLAYERINSCRIPTIONS = '#messenger:serviceChannelMessages/serverDowntimeCompensation/playerInscriptions'
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_RENTALS = '#messenger:serviceChannelMessages/serverDowntimeCompensation/rentals'
+    SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_PREMIUM_SUBS = '#messenger:serviceChannelMessages/serverDowntimeCompensation/premium_subs'
     SERVICECHANNELMESSAGES_ACTIONBEGIN = '#messenger:serviceChannelMessages/actionBegin'
     SERVICECHANNELMESSAGES_ACTIONEND = '#messenger:serviceChannelMessages/actionEnd'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_TITLE = '#messenger:serviceChannelMessages/sysMsg/converter/title'

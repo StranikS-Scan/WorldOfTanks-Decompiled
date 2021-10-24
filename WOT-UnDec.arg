@@ -8,6 +8,12 @@ threads_min_count = 10
 files_in_group_min_count = 10
 
 decompiler_default = "uncompyle6"
-decompiler_extra = ["client\gui\Scaleform\locale\RES_ICONS.pyc":"fupy","client\gui\Scaleform\locale\VEHICLE_CUSTOMIZATION.pyc":"fupy"]
+decompiler_extra = ["client\gui\Scaleform\locale\RES_ICONS.pyc":                  "fupy",
+                    "client\gui\Scaleform\locale\VEHICLE_CUSTOMIZATION.pyc":      "fupy",
+                    "client\AvatarInputHandler\DynamicCameras\ArcadeCamera.pyc":  "fupy",
+                    "client\gui\Scaleform\daapi\view\battle\classic\minimap.pyc": "fupy",
+                    "client\messenger\proto\search_processor.pyc":                "fupy",
+                    "common\items\components\c11n_components.pyc":                "fupy"]
 
-unpacker_separately = ["scripts\item_defs\customization\camouflages\list.xml","scripts\item_defs\customization\camouflages\unified.xml"]
+unpacker_separately = ["scripts\item_defs\customization\camouflages\list.xml",
+                       "scripts\item_defs\customization\camouflages\unified.xml"]

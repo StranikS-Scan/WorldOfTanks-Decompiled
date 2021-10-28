@@ -9,12 +9,12 @@ from gui.impl.gen import R
 _logger = logging.getLogger(__name__)
 _CONFIG_FILE = 'gui/battle_hints.xml'
 
-class BattleHintData(namedtuple('_HintData', ('name', 'componentAlias', 'iconPath', 'duration', 'maxWaitTime', 'priority', 'soundFx', 'soundNotification', 'htmlTemplate', 'rawMessage'))):
+class BattleHintData(namedtuple('_HintData', ('name', 'componentAlias', 'iconPath', 'duration', 'maxWaitTime', 'dynamicFields', 'priority', 'soundFx', 'soundNotification', 'htmlTemplate'))):
 
     def makeVO(self, data=None):
-        if data is None:
+        if not data:
             data = {}
-        message = self.rawMessage or makeHtmlString('html_templates:battleHints', self.htmlTemplate)
+        message = makeHtmlString('html_templates:battleHints', self.htmlTemplate)
         message = self._applyDataParams(message, data)
         hasIcon = self.iconPath and 'battleHints' in R.images.gui.maps.icons.keys()
         return {'message': message,
@@ -33,7 +33,7 @@ def makeHintsData():
     hints = []
     if battleHintsConfig:
         for hint in battleHintsConfig.values():
-            hints.append(BattleHintData(name=hint['name'].asString, componentAlias=hint['component'].asString, htmlTemplate=hint['htmlTemplate'].asString, iconPath=hint['iconPath'].asString if hint.has_key('iconPath') else None, duration=hint['duration'].asFloat if hint.has_key('duration') else None, maxWaitTime=hint['maxWaitTime'].asFloat if hint.has_key('maxWaitTime') else 10, priority=hint['priority'].asInt if hint.has_key('priority') else 0, soundFx=hint['soundFx'].asString if hint.has_key('soundFx') else None, soundNotification=hint['soundNotification'].asString if hint.has_key('soundNotification') else None, rawMessage=None))
+            hints.append(BattleHintData(name=hint['name'].asString, componentAlias=hint['component'].asString, htmlTemplate=hint['htmlTemplate'].asString, iconPath=hint['iconPath'].asString if hint.has_key('iconPath') else None, duration=hint['duration'].asFloat if hint.has_key('duration') else None, maxWaitTime=hint['maxWaitTime'].asFloat if hint.has_key('maxWaitTime') else 10, dynamicFields=hint['dynamicData'].asString.split() if hint.has_key('dynamicData') else [], priority=hint['priority'].asInt if hint.has_key('priority') else 0, soundFx=hint['soundFx'].asString if hint.has_key('soundFx') else None, soundNotification=hint['soundNotification'].asString if hint.has_key('soundNotification') else None))
 
     else:
         _logger.error('Failed to open: %s', _CONFIG_FILE)

@@ -257,6 +257,14 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     def battleNotifier(self):
         return self._repository.getController(BATTLE_CTRL_ID.BATTLE_NOTIFIER)
 
+    @property
+    def battleGoals(self):
+        return self._repository.getController(BATTLE_CTRL_ID.BATTLE_GOALS)
+
+    @property
+    def vehiclesPositionCtrl(self):
+        return self._repository.getController(BATTLE_CTRL_ID.VEHICLES_POSITION)
+
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
     __slots__ = ()
@@ -441,12 +449,13 @@ class BattleRoyaleControllersRepository(_ControllersRepository):
         return repository
 
 
-class EventControllerRepository(_ControllersRepositoryByBonuses):
+class EventControllersRepository(_ControllersRepositoryByBonuses):
     __slots__ = ()
 
     @classmethod
     def create(cls, setup):
-        repository = super(EventControllerRepository, cls).create(setup)
+        from gui.battle_control.controllers import battle_goals_ctrl, vehicles_position_ctrl
+        repository = super(EventControllersRepository, cls).create(setup)
         repository.addArenaViewController(team_bases_ctrl.createTeamsBasesCtrl(setup), setup)
         repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
@@ -454,6 +463,10 @@ class EventControllerRepository(_ControllersRepositoryByBonuses):
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
         repository.addArenaController(EventAppearanceCacheController(setup), setup)
+        repository.addViewController(radar_ctrl.RadarController(), setup)
+        repository.addViewController(game_messages_ctrl.createGameMessagesController(setup), setup)
+        repository.addArenaController(battle_goals_ctrl.BattleGoalsController(), setup)
+        repository.addArenaController(vehicles_position_ctrl.VehiclePositionController(), setup)
         return repository
 
 

@@ -7,6 +7,8 @@ class ICustomizationService(object):
     onOutfitChanged = None
     onCustomizationHelperRecreated = None
     onVisibilityChanged = None
+    onCustomizationOpened = None
+    onCustomizationClosed = None
 
     @property
     def isOver3dScene(self):

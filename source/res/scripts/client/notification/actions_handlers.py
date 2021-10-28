@@ -32,6 +32,7 @@ from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.afk_controller import IAFKController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.platform.wgnp_controller import IWGNPRequestController
 from web.web_client_api import webApiCollection
@@ -987,6 +988,51 @@ class _OpenMapboxSurvey(_NavigationDisabledActionHandler):
         self.__mapboxCtrl.showSurvey(notification.getSavedData())
 
 
+class _ShowEventWarningWindowHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_ShowEventWarningWindowHandler, self).handleAction(model, entityID, action)
+        dependency.instance(IAFKController).showWarningWindow()
+
+
+class _ShowEventBanWindowHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_ShowEventBanWindowHandler, self).handleAction(model, entityID, action)
+        dependency.instance(IAFKController).showBanWindow()
+
+
+class _GotoEventRedeemQuestHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_GotoEventRedeemQuestHandler, self).handleAction(model, entityID, action)
+        dependency.instance(IAFKController).showQuest()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -1029,7 +1075,11 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpentBlueprintsConvertSale,
  _OpenConfirmEmailHandler,
  _OpenMapboxProgression,
- _OpenMapboxSurvey)
+ _OpenMapboxSurvey,
+ _ShowEventBanWindowHandler,
+ _ShowEventWarningWindowHandler,
+ _GotoEventRedeemQuestHandler,
+ _OpenMissingEventsHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

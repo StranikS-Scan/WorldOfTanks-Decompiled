@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_panel/base_view.py
 import logging
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from Event import Event
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -9,12 +9,14 @@ from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.ammunition_panel_view_model import AmmunitionPanelViewModel
+from gui.impl.lobby.halloween.tooltips.nitro_tooltip import NitroTooltip
 from gui.impl.lobby.tank_setup.ammunition_panel.hangar import HangarAmmunitionPanel
 from gui.impl.lobby.tank_setup.backports.context_menu import getHangarContextMenuData
 from gui.impl.lobby.tank_setup.backports.tooltips import getSlotTooltipData, getSlotSpecTooltipData
 from gui.impl.lobby.tank_setup.tank_setup_helper import setLastSlotAction, clearLastSlotAction
 from gui.impl.pub import ViewImpl
 from helpers import dependency
+from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 _logger = logging.getLogger(__name__)
@@ -22,10 +24,11 @@ _logger = logging.getLogger(__name__)
 class BaseAmmunitionPanelView(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
     _hangarSpace = dependency.descriptor(IHangarSpace)
+    _gameEventController = dependency.descriptor(IGameEventController)
     __slots__ = ('_ammunitionPanel', 'onSizeChanged', 'onPanelSectionSelected', 'onPanelSectionResized', 'onVehicleChanged', 'onEscKeyDown')
 
-    def __init__(self, flags=ViewFlags.VIEW):
-        settings = ViewSettings(R.views.lobby.tanksetup.AmmunitionPanel())
+    def __init__(self, layoutId=R.views.lobby.tanksetup.AmmunitionPanel(), flags=ViewFlags.VIEW):
+        settings = ViewSettings(layoutId)
         settings.flags = flags
         settings.model = AmmunitionPanelViewModel()
         super(BaseAmmunitionPanelView, self).__init__(settings)
@@ -42,16 +45,15 @@ class BaseAmmunitionPanelView(ViewImpl):
             if self._hangarSpace.spaceLoading():
                 _logger.warning('Failed to get slotData. HangarSpace is currently loading.')
                 return
-            tooltipId = event.getArgument('tooltip')
-            if tooltipId == TOOLTIPS_CONSTANTS.HANGAR_SLOT_SPEC:
-                tooltipData = getSlotSpecTooltipData(event, tooltipId)
-            else:
-                tooltipData = getSlotTooltipData(event, self.vehItem, self.viewModel.ammunitionPanel.getSelectedSlot())
+            tooltipData = self._createToolTipData(event)
             if tooltipData is not None:
                 window = BackportTooltipWindow(tooltipData, self.getParentWindow())
                 window.load()
                 return window
         return super(BaseAmmunitionPanelView, self).createToolTip(event)
+
+    def createToolTipContent(self, event, contentID):
+        return NitroTooltip() if contentID == R.views.lobby.halloween.tooltips.NitroTooltip() else None
 
     def createContextMenu(self, event):
         if event.contentID == R.views.common.BackportContextMenu():
@@ -63,10 +65,15 @@ class BaseAmmunitionPanelView(ViewImpl):
         return super(BaseAmmunitionPanelView, self).createContextMenu(event)
 
     def setHangarSwitchAnimState(self, isComplete):
-        self.viewModel.setIsReady(isComplete)
+        self.viewModel.setIsReady(True)
 
     def setPrbSwitching(self, value):
         self.viewModel.setIsDisabled(value)
+
+    @property
+    def isEvent(self):
+        currentVehicle = g_currentVehicle.item or g_currentPreviewVehicle.item
+        return currentVehicle is not None and currentVehicle.isOnlyForEventBattles
 
     @property
     def viewModel(self):
@@ -82,6 +89,7 @@ class BaseAmmunitionPanelView(ViewImpl):
     def update(self, fullUpdate=True):
         if fullUpdate:
             clearLastSlotAction(self.viewModel)
+        self.viewModel.setIsEvent(self.isEvent)
         self.viewModel.setIsMaintenanceEnabled(not g_currentVehicle.isLocked())
         self.viewModel.setIsDisabled(self._getIsDisabled())
         self._ammunitionPanel.update(self.vehItem, fullUpdate=fullUpdate)
@@ -91,6 +99,14 @@ class BaseAmmunitionPanelView(ViewImpl):
         self.onPanelSectionSelected.clear()
         self.onPanelSectionResized.clear()
         super(BaseAmmunitionPanelView, self).destroy()
+
+    def _createToolTipData(self, event, tooltipsMap=None):
+        tooltipId = event.getArgument('tooltip')
+        if tooltipId == TOOLTIPS_CONSTANTS.HANGAR_SLOT_SPEC:
+            tooltipData = getSlotSpecTooltipData(event, tooltipId)
+        else:
+            tooltipData = getSlotTooltipData(event, g_currentVehicle.item, self.viewModel.ammunitionPanel.getSelectedSlot(), tooltipsMap=tooltipsMap)
+        return tooltipData
 
     def _onLoading(self, *args, **kwargs):
         super(BaseAmmunitionPanelView, self)._onLoading(*args, **kwargs)
@@ -109,7 +125,8 @@ class BaseAmmunitionPanelView(ViewImpl):
 
     def _finalize(self):
         self._removeListeners()
-        self._ammunitionPanel.finalize()
+        if self._ammunitionPanel:
+            self._ammunitionPanel.finalize()
         super(BaseAmmunitionPanelView, self)._finalize()
 
     def _createAmmunitionPanel(self):
@@ -152,8 +169,7 @@ class BaseAmmunitionPanelView(ViewImpl):
     def __itemCacheChanged(self, *_):
         self.update(fullUpdate=False)
 
-    @staticmethod
-    def _getIsDisabled():
+    def _getIsDisabled(self):
         return not g_currentVehicle.isInHangar() or g_currentVehicle.isLocked() or g_currentVehicle.isBroken()
 
     def _getIsReady(self):

@@ -78,7 +78,7 @@ class BaseArrayProvider(object):
         raise NotImplementedError
 
     def _getItemSortKey(self, item, ctx):
-        return None
+        return item.userName
 
 
 class VehicleBaseArrayProvider(BaseArrayProvider):

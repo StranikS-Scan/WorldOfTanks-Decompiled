@@ -241,6 +241,9 @@ class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
         if entryID:
             self._invoke(entryID, BATTLE_MINIMAP_CONSTS.SET_POINT_NUMBER, number)
             self._TeamsOrControlsPointsPlugin__entries.append(entryID)
+            return entryID
+        else:
+            return
 
     def __addTeamSpawnPoints(self):
         points = self._arenaVisitor.getTeamSpawnPointsIterator(self._TeamsOrControlsPointsPlugin__personalTeam)

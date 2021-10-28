@@ -74,10 +74,14 @@ class ShellBlockToolTipData(BlocksTooltipData):
             compatibleBlocks.append(formatters.packTextBlockData(text=text_styles.stats(_ms(MENU.MODULEINFO_ADDITIONALINFO))))
             if compatibleBlocks:
                 items.append(formatters.packBuildUpBlockData(compatibleBlocks, padding=formatters.packPadding(left=leftPadding, bottom=8)))
+        self._addBottomHint(items, showBasicData, leftPadding, rightPadding)
+        return items
+
+    def _addBottomHint(self, items, showBasicData, leftPadding, rightPadding):
         if showBasicData:
+            lrPaddings = formatters.packPadding(left=leftPadding, right=rightPadding)
             boldText = text_styles.neutral(TOOLTIPS.SHELL_BASIC_DESCRIPTION_BOLD)
             items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.standard(_ms(TOOLTIPS.SHELL_BASIC_DESCRIPTION, bold=boldText)), padding=lrPaddings)], padding=formatters.packPadding(right=rightPadding)))
-        return items
 
 
 class ShellBlockToolTipDataWithBasic(ShellBlockToolTipData):

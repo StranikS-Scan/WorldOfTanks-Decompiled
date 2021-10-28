@@ -266,6 +266,14 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         battlePassConfig = self.__lobbyContext.getServerSettings().getBattlePassConfig()
         return battlePassConfig.isEnabled() and battlePassConfig.isGameModeEnabled(bonusType)
 
+    def isEventMode(self):
+        dispatcher = self.prbDispatcher
+        if dispatcher is not None:
+            state = dispatcher.getFunctionalState()
+            return state.isInPreQueue(queueType=QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(PREBATTLE_TYPE.EVENT)
+        else:
+            return False
+
     def isInBattleRoyaleSquad(self):
         dispatcher = self.prbDispatcher
         if dispatcher is not None:
@@ -428,16 +436,17 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         return
 
     def __disableRoyaleMode(self):
-        storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE)
-        if not storedVehInvID:
-            criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.BATTLE_ROYALE])
-            vehicle = first(self.__itemsCache.items.getVehicles(criteria=criteria).values())
-            if vehicle:
-                storedVehInvID = vehicle.invID
-        if storedVehInvID:
-            g_currentVehicle.selectVehicle(storedVehInvID)
-        else:
-            g_currentVehicle.selectNoVehicle()
+        if not self.isEventMode():
+            storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE)
+            if not storedVehInvID:
+                criteria = REQ_CRITERIA.INVENTORY | ~(REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.BATTLE_ROYALE]) ^ REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.EVENT]))
+                vehicle = first(self.__itemsCache.items.getVehicles(criteria=criteria).values())
+                if vehicle:
+                    storedVehInvID = vehicle.invID
+            if storedVehInvID:
+                g_currentVehicle.selectVehicle(storedVehInvID)
+            else:
+                g_currentVehicle.selectNoVehicle()
         self.__voControl.deactivate()
 
     @process

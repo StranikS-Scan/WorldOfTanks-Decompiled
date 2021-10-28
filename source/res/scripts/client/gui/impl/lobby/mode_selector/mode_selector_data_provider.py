@@ -9,6 +9,7 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_columns im
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.bootcamp_mode_selector_item import BootcampModeSelectorItem
 from gui.impl.lobby.mode_selector.items.epic_mode_selector_item import EpicModeSelectorItem
+from gui.impl.lobby.mode_selector.items.event_battle_mode_selector_item import EventModeSelectorItem
 from gui.impl.lobby.mode_selector.items.mapbox_mode_selector_item import MapboxModeSelectorItem
 from gui.impl.lobby.mode_selector.items.random_mode_selector_item import RandomModeSelectorItem
 from gui.impl.lobby.mode_selector.items.ranked_mode_selector_item import RankedModeSelectorItem
@@ -29,7 +30,8 @@ _modeSelectorLegacyItemByModeName = {PREBATTLE_ACTION_NAME.RANDOM: RandomModeSel
  PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST: SpecModeSelectorItem,
  PREBATTLE_ACTION_NAME.TRAININGS_LIST: TrainingsModeSelectorItem,
  PREBATTLE_ACTION_NAME.MAPBOX: MapboxModeSelectorItem,
- PREBATTLE_ACTION_NAME.EPIC: EpicModeSelectorItem}
+ PREBATTLE_ACTION_NAME.EPIC: EpicModeSelectorItem,
+ PREBATTLE_ACTION_NAME.EVENT_BATTLE: EventModeSelectorItem}
 
 def _getModeSelectorLegacyItem(selectorItem):
     modeName = selectorItem.getData()
@@ -81,6 +83,9 @@ class ModeSelectorDataProvider(IGlobalListener):
     def dispose(self):
         self.stopGlobalListening()
         self.updateItems([])
+
+    def refreshItems(self):
+        self.updateItems(_getModeSelectorItems())
 
     def updateItems(self, newList):
         self._setItems(newList)

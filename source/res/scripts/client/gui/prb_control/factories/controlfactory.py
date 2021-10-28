@@ -33,6 +33,7 @@ class ControlFactory(object):
             clazz = available[action.actionName]
             result = clazz()
             result.setAccountsToInvite(action.accountsToInvite)
+            result.setKeepCurrentView(action.keepCurrentView)
             return result
         else:
             return None

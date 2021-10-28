@@ -4671,6 +4671,17 @@
       <mirror>	false	</mirror>
     </decal>
     <decal>
+      <id>	9350	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_517.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_517	</userString>
+      <vehicleFilter>
+        <include>
+          <vehicles>	france:F17_AMX_13_90_Halloween_event uk:GB24_Centurion_Mk3_Halloween_event usa:A100_T49_Halloween_event usa:A66_M103_Halloween_event ussr:R40_T-54_Halloween_event	</vehicles>
+        </include>
+      </vehicleFilter>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
       <id>	60	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_518.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_518	</userString>
@@ -11839,6 +11850,20 @@
       <tags>	hiddenInUI	</tags>
     </decal>
     <name>	twitch_august_2021	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	838	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_570.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_570	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	EU Armistice Veteran's Day	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>

@@ -12,6 +12,8 @@
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
+    <he_2021_hep>	HIGH_EXPLOSIVE_PREMIUM_HW.png 0 0	</he_2021_hep>
+    <he_2021_hcp>	HOLLOW_CHARGE_PREMIUM_HW.png 0 0	</he_2021_hcp>
   </icons>
   <_12.7mm_AP_M2>
     <id>	0	</id>
@@ -1914,6 +1916,86 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_120mm_HEAT-T_M469>
+  <_120mm_HE_Shot_Halloween_event>
+    <id>	145	</id>
+    <userString>	#usa_vehicles:_120mm_HE_Shot_Halloween_event	</userString>
+    <icon>	he	</icon>
+    <price>	900	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_HE_Shot_Halloween_event>
+  <_120mm_AP-T_M358_Halloween_event_1>
+    <id>	146	</id>
+    <userString>	#usa_vehicles:_120mm_AP-T_M358_Halloween_event	</userString>
+    <icon>	ap	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_AP-T_M358_Halloween_event_1>
+  <_120mm_AP-T_M358_Halloween_event_2>
+    <id>	180	</id>
+    <userString>	#usa_vehicles:_120mm_AP-T_M358_Halloween_event	</userString>
+    <icon>	ap	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <tags>	pick-up	</tags>
+  </_120mm_AP-T_M358_Halloween_event_2>
+  <_120mm_AP-T_M358_Halloween_event_3>
+    <id>	181	</id>
+    <userString>	#usa_vehicles:_120mm_AP-T_M358_Halloween_event	</userString>
+    <icon>	ap	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <tags>	pick-up	</tags>
+  </_120mm_AP-T_M358_Halloween_event_3>
+  <_120mm_HEAT-T_M469_Halloween_event>
+    <id>	147	</id>
+    <userString>	#usa_vehicles:_120mm_HEAT-T_M469_Halloween_event	</userString>
+    <icon>	hc	</icon>
+    <price>	4400	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HEAT-T_M469_Halloween_event>
   <_120mm_HEAT-T_M469_fallout>
     <id>	116	</id>
     <userString>	#usa_vehicles:_120mm_HEAT-T_M469_fallout	</userString>
@@ -1995,6 +2077,48 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_152mm_HEAT_XM409>
+  <_152mm_HE_XM657E2_Halloween_event_1>
+    <id>	167	</id>
+    <userString>	#usa_vehicles:_152mm_HE_XM657E2_Halloween_event	</userString>
+    <icon>	he_2021_hep	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	152	</caliber>
+    <explosionRadius>	3.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeHighExplosive	</effects>
+    <damage>
+      <armor>	910	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	455	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_152mm_HE_XM657E2_Halloween_event_1>
+  <_152mm_HEAT_XM409_Halloween_event>
+    <id>	169	</id>
+    <userString>	#usa_vehicles:_152mm_HEAT_XM409_Halloween_event	</userString>
+    <icon>	he_2021_hcp	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	550	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <tags>	pick-up	</tags>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_152mm_HEAT_XM409_Halloween_event>
   <_155mm_AP_M111>
     <id>	33	</id>
     <userString>	#usa_vehicles:_155mm_AP_M111	</userString>
@@ -2747,4 +2871,109 @@
     </damage>
     <notInShop>	True	</notInShop>
   </_76mm_AP_M79_MapsTraining_Dummy_LT_2>
+  <_76mm_AP_M79_HELL>
+    <id>	20058	</id>
+    <userString>	#usa_vehicles:_76mm_AP_M79	</userString>
+    <icon>	ap	</icon>
+    <price>	96	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing_hw19	</effects>
+    <damage>
+      <armor>	180	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_76mm_AP_M79_HELL>
+  <_120mm_AP_T42_HELL>
+    <id>	20069	</id>
+    <userString>	#usa_vehicles:_120mm_AP_T42	</userString>
+    <icon>	ap	</icon>
+    <price>	1060	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing_hw19	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_120mm_AP_T42_HELL>
+  <_90mm_AP_M77_HELL>
+    <id>	20070	</id>
+    <userString>	#usa_vehicles:_90mm_AP_M77	</userString>
+    <icon>	ap	</icon>
+    <price>	255	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing_hw19	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_90mm_AP_M77_HELL>
+  <_90mm_AP_M77_HALL>
+    <id>	20072	</id>
+    <userString>	#usa_vehicles:_90mm_AP_M77	</userString>
+    <icon>	ap	</icon>
+    <price>	255	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing_hw19	</effects>
+    <damage>
+      <armor>	220	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_90mm_AP_M77_HALL>
+  <_90mm_AP_M77_HW_bot>
+    <id>	83	</id>
+    <userString>	#usa_vehicles:_90mm_AP_M77	</userString>
+    <icon>	ap	</icon>
+    <price>	255	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_90mm_AP_M77_HW_bot>
+  <_105mm_AP_T32_HW_bot>
+    <id>	88	</id>
+    <userString>	#usa_vehicles:_105mm_AP_T32	</userString>
+    <icon>	ap	</icon>
+    <price>	1000	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	220	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_105mm_AP_T32_HW_bot>
+  <_120mm_AP-T_M358_HW_bot>
+    <id>	89	</id>
+    <userString>	#usa_vehicles:_120mm_AP-T_M358	</userString>
+    <icon>	ap	</icon>
+    <price>	1060	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_120mm_AP-T_M358_HW_bot>
 </shells.xml>

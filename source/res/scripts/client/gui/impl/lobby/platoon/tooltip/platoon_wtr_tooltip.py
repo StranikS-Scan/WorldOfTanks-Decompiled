@@ -7,11 +7,14 @@ from gui.impl.pub import ViewImpl
 
 class WTRTooltip(ViewImpl):
 
-    def __init__(self, name, clanTag, badgeID, rating):
+    def __init__(self, name, clanTag, badgeID, rating, maxDifficultyLevelMessage, isEvent, maxDifficultyLevel):
         self.__name = name
         self.__clanTag = clanTag
         self.__badgeID = badgeID
         self.__rating = rating
+        self.__maxDifficultyLevelMessage = maxDifficultyLevelMessage
+        self.__isEvent = isEvent
+        self.__maxDifficultyLevel = maxDifficultyLevel
         settings = ViewSettings(R.views.lobby.platoon.WTRTooltip(), model=CommonPlayerDataModel())
         super(WTRTooltip, self).__init__(settings)
 
@@ -25,3 +28,6 @@ class WTRTooltip(ViewImpl):
             model.setClanTag(self.__clanTag)
             model.setBadgeID(self.__badgeID)
             model.setRating(self.__rating)
+            model.setMaxDifficultyLevelMessage(self.__maxDifficultyLevelMessage)
+            model.setIsEvent(self.__isEvent)
+            model.setMaxDifficultyLevel(self.__maxDifficultyLevel)

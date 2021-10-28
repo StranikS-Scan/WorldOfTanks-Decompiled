@@ -35,5 +35,8 @@ class SequenceIDGenerator(object):
     def max(self):
         return self.__highBound
 
+    def clear(self):
+        self.__sequenceID = self.__lowBound
+
     currSequenceID = property(lambda self: self.__sequenceID)
     nextSequenceID = property(lambda self: self.next())

@@ -57,6 +57,9 @@ class HangarCarouselDataProvider(CarouselDataProvider):
             self.buildList()
         return
 
+    def hasEventVehicles(self):
+        return False
+
     @property
     def collection(self):
         return self._vehicleItems + self._supplyItems + self._frontSupplyItems
@@ -95,8 +98,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self._frontSupplyItems = []
 
     def _setBaseCriteria(self):
-        self._baseCriteria = REQ_CRITERIA.INVENTORY
-        self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
 
     def _buildWotPlusVehicleItems(self):
         self._wotPlusVehicles = []

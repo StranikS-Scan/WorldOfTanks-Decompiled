@@ -212,6 +212,10 @@ def getUnitPlayerNotification(key, pInfo, tierRange=None):
     return i18n.makeString(SYSTEM_MESSAGES.unit_notification(key), userName=pInfo.getFullName(), tierRange=tierRange)
 
 
+def getDifficultyLevelUnitPlayerNotification(key, username, level):
+    return i18n.makeString(SYSTEM_MESSAGES.unit_notification(key), userName=username, level=level)
+
+
 def makeEntityI18nKey(ctrlType, entityType, prefix):
     if ctrlType in (CTRL_ENTITY_TYPE.LEGACY, CTRL_ENTITY_TYPE.UNIT):
         if entityType in PREBATTLE_TYPE.SQUAD_PREBATTLES:

@@ -45,3 +45,34 @@ class SPEAKERS_CONFIG(object):
      SPEAKER_SETUP_2_0,
      SPEAKER_SETUP_5_1,
      SPEAKER_SETUP_7_1)
+
+
+class SoundLanguage(CONST_CONTAINER):
+    VOICEOVER_LOCALIZATION_SWITCH = 'SWITCH_ext_ev_halloween_2019_voiceover'
+    VOICEOVER_RU = 'SWITCH_ext_ev_halloween_2019_voiceover_ru'
+    VOICEOVER_EN = 'SWITCH_ext_ev_halloween_2019_voiceover_en'
+    VOICEOVER_CN = 'SWITCH_ext_ev_halloween_2019_voiceover_cn'
+    VOICEOVER_SILENCE = 'SWITCH_ext_ev_halloween_2019_voiceover_silence'
+    HANGAR_LANGUAGE_CONFIG = {('RU', 'ST', 'QA', 'DEV', 'SB'): {'EN': VOICEOVER_EN,
+                                       'default': VOICEOVER_RU},
+     ('NA', 'EU', 'KR', 'ASIA'): {'EN': VOICEOVER_EN,
+                                  'default': VOICEOVER_SILENCE},
+     ('CN',): {'default': VOICEOVER_CN}}
+    BATTLE_LANGUAGE_CONFIG = {('RU', 'ST', 'QA', 'DEV', 'SB'): {'default': VOICEOVER_RU},
+     ('NA', 'EU', 'KR', 'ASIA'): {'default': VOICEOVER_EN},
+     ('CN',): {'default': VOICEOVER_CN}}
+
+
+class HW21SoundConsts(CONST_CONTAINER):
+    EVENT_ENTER_EVENT = 'ev_halloween_2019_hangar_metagame_enter'
+    EVENT_LEAVE_EVENT = 'ev_halloween_2019_hangar_metagame_exit'
+    HANGAR_FIRST_DAILY_VO = 'ev_halloween_2021_hangar_vo_hello_first'
+    HANGAR_DAILY_VO = 'ev_halloween_2021_hangar_vo_hello'
+    HANGAR_BR_WIN_VO_TEMPLATE = 'ev_halloween_2021_vo_victory_difficulty{}'
+    HANGAR_PBS_SLIDER = 'ev_halloween_2021_hangar_pbs_slider'
+    HANGAR_PBS_MAIN_POINTS = 'ev_halloween_2020_hangar_pbs_main_points'
+    HANGAR_PBS_QUEST = 'ev_halloween_2020_hangar_pbs_quest'
+    HANGAR_PBS_REWARD = 'ev_halloween_2020_hangar_pbs_reward'
+    HANGAR_PBS_PROGRESSBAR = 'ev_halloween_2020_hangar_pbs_progressbar'
+    HANGAR_TEAMFIGHT_LOSE = 'ev_halloween_2019_vo_result_defeat_no_enough_matter'
+    HANGAR_BOSSFIGHT_LOSE = 'ev_halloween_2021_vo_defeat_bossfight'

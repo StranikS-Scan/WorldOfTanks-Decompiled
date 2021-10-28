@@ -12,6 +12,8 @@
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
+    <he_2021_apcr>	ARMOR_PIERCING_CR_PREMIUM_HW.png 0 0	</he_2021_apcr>
+    <he_2021_hep>	HIGH_EXPLOSIVE_PREMIUM_HW.png 0 0	</he_2021_hep>
   </icons>
   <_13.2mm_Balle_P.>
     <id>	15	</id>
@@ -1187,6 +1189,47 @@
       </damage>
     </armorSpalls>
   </_90mm_OE_mle_1924>
+  <_90mm_OFL_Halloween_1>
+    <id>	20163	</id>
+    <userString>	#france_vehicles:_90mm_OFL_Halloween	</userString>
+    <icon>	he_2021_apcr	</icon>
+    <price>	0	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <notInShop>	true	</notInShop>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_OFL_Halloween_1>
+  <_90mm_OE_mle_1924_Halloween>
+    <id>	20162	</id>
+    <userString>	#france_vehicles:_90mm_OE_mle_1924_Halloween	</userString>
+    <icon>	he_2021_hep	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <tags>	pick-up	</tags>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_90mm_OE_mle_1924_Halloween>
   <_90mm_AP_americaine>
     <id>	106	</id>
     <userString>	#france_vehicles:_90mm_AP_americaine	</userString>
@@ -2720,4 +2763,94 @@
     </damage>
     <notInShop>	True	</notInShop>
   </_155_OE_mle_1956_MapsTraining_Dummy_SPG_2>
+  <_105mm_OFL_105_D1504_L51_HW_bot>
+    <id>	22	</id>
+    <userString>	#france_vehicles:_105mm_OFL_105_D1504_L51	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	580	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_105mm_OFL_105_D1504_L51_HW_bot>
+  <_90mm_Prf1941_HW_bot>
+    <id>	24	</id>
+    <userString>	#france_vehicles:_90mm_Prf1941	</userString>
+    <icon>	ap	</icon>
+    <price>	255	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	220	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_90mm_Prf1941_HW_bot>
+  <_105mm_OFL_105_F1_HW_bot>
+    <id>	51	</id>
+    <userString>	#france_vehicles:_105mm_OFL_105_F1	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1210	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_105mm_OFL_105_F1_HW_bot>
+  <_120mm_Prf1951_HW_bot>
+    <id>	58	</id>
+    <userString>	#france_vehicles:_120mm_Prf1951	</userString>
+    <icon>	ap	</icon>
+    <price>	1050	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_120mm_Prf1951_HW_bot>
+  <_120mm_Prf1951_HW_bot__0>
+    <id>	59	</id>
+    <userString>	#france_vehicles:_120mm_Prf1951	</userString>
+    <icon>	ap	</icon>
+    <price>	1050	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	220	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_120mm_Prf1951_HW_bot__0>
+  <_100mm_Prf1940_HW_bot>
+    <id>	70	</id>
+    <userString>	#france_vehicles:_100mm_Prf1940	</userString>
+    <icon>	ap	</icon>
+    <price>	1030	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_100mm_Prf1940_HW_bot>
 </shells.xml>

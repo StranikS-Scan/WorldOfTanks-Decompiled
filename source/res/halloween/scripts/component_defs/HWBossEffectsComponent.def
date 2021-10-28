@@ -1,0 +1,16 @@
+<HWBossEffectsComponent.def>
+  <Properties></Properties>
+  <CellMethods>
+    <appearEffectPlay></appearEffectPlay>
+  </CellMethods>
+  <ClientMethods>
+    <playHitEffect>
+      <Arg>	STRING	</Arg>
+    </playHitEffect>
+    <playDeathEffect></playDeathEffect>
+  </ClientMethods>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	hwBossEffectsComponent	</DefaultKeyName>
+</HWBossEffectsComponent.def>

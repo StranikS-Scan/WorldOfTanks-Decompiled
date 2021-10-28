@@ -154,6 +154,8 @@
     <V_12_6V_1>	234	</V_12_6V_1>
     <TD-12_cl>	236	</TD-12_cl>
     <General_Motors_6046_ussr>	237	</General_Motors_6046_ussr>
+    <V-55U_Halloween_event>	216	</V-55U_Halloween_event>
+    <R77_KV2_turret_2_Engine>	228	</R77_KV2_turret_2_Engine>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -180,6 +182,7 @@
     <V-2-34_MapsTraining_Player_MT_1>	30	</V-2-34_MapsTraining_Player_MT_1>
     <V-54K_MapsTraining_Player_MT_2>	32	</V-54K_MapsTraining_Player_MT_2>
     <V-5F_MapsTraining_Dummy_HT_2>	33	</V-5F_MapsTraining_Dummy_HT_2>
+    <V-12-6M_hw21>	20001	</V-12-6M_hw21>
   </ids>
   <shared>
     <V-2>
@@ -1004,6 +1007,23 @@
       <rpm_min>	333	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </V-55U_FL>
+    <V-55U_Halloween_event>
+      <userString>	#ussr_vehicles:V-55U_Halloween_event	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.001	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </V-55U_Halloween_event>
     <V-55UM>
       <userString>	#ussr_vehicles:V-55UM	</userString>
       <tags>	diesel	</tags>
@@ -3180,5 +3200,39 @@
       <rpm_max>	2200	</rpm_max>
       <notInShop>	True	</notInShop>
     </V-5F_MapsTraining_Dummy_HT_2>
+    <R77_KV2_turret_2_Engine>
+      <userString>	#ussr_vehicles:M-17F	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	27860	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	ev_halloween_2020_turret_eng	</wwsoundPC>
+      <wwsoundNPC>	ev_halloween_2020_turret_eng	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	750	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
+    </R77_KV2_turret_2_Engine>
+    <V-12-6M_hw21>
+      <userString>	#ussr_vehicles:V-12-6M	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	84600	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	780	</power>
+      <weight>	1024	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.05	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2264	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </V-12-6M_hw21>
   </shared>
 </engines.xml>

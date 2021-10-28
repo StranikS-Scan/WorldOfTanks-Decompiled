@@ -20,6 +20,7 @@ from skeletons.gui.turret_gun_angles import ITurretAndGunAngles
 from skeletons.map_activities import IMapActivities
 from visual_script.multi_plan_provider import MultiPlanProvider
 from visual_script.misc import ASPECT, VisualScriptTag
+from event_tanks_highlight_controller import EventTanksHighlightController
 from skeletons.gui.shared.utils import IHangarSpace
 _DEFAULT_SPACES_PATH = 'spaces'
 SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
@@ -151,6 +152,7 @@ class ClientHangarSpace(object):
         self.__spacePath = None
         self.__spaceVisibilityMask = None
         self._vsePlans = MultiPlanProvider(ASPECT.CLIENT)
+        self.__highlightController = EventTanksHighlightController()
         _HANGAR_CFGS = _readHangarSettings()
         return
 
@@ -196,6 +198,7 @@ class ClientHangarSpace(object):
         BigWorld.wg_setGUIBackground(_LOGIN_BLACK_BG_IMG)
         self.mapActivities.generateOfflineActivities(spacePath)
         BigWorld.pauseDRRAutoscaling(True)
+        self.__highlightController.start()
         vsePlans = _CFG.get('vse_plans', None)
         if vsePlans is not None:
             self._vsePlans.load(vsePlans)
@@ -284,6 +287,7 @@ class ClientHangarSpace(object):
 
     def __destroy(self):
         LOG_DEBUG('Hangar successfully destroyed.')
+        self.__highlightController.stop()
         self._vsePlans.reset()
         MusicControllerWWISE.unloadCustomSounds()
         if self.__cameraManager:

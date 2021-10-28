@@ -5,6 +5,8 @@ from gui.shared.tooltips import contexts, TOOLTIP_COMPONENT
 from gui.shared.tooltips import module
 from gui.shared.tooltips import shell, advanced
 from gui.shared.tooltips.builders import DataBuilder, AdvancedDataBuilder, AdvancedComplexBuilder
+from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
+from items import vehicles
 __all__ = ('getTooltipBuilders',)
 
 def _advancedBlockCondition(context):
@@ -32,6 +34,12 @@ def _nationChangeShellAdvancedBlockCondition(context):
         return (item.type, item.isModernMechanics) in advanced.SHELL_MOVIES
 
     return advancedTooltipExist
+
+
+def _allowEventConsumableAdvancedTooltip(compactDesc, *args):
+    intCD = int(compactDesc)
+    descriptor = vehicles.getItemByCompactDescr(intCD)
+    return VEHICLE_TAGS.EVENT not in descriptor.tags
 
 
 class InventoryModuleBuilder(AdvancedDataBuilder):
@@ -67,7 +75,7 @@ class TechTreeModuleBuilder(AdvancedDataBuilder):
 class ModuleDataBuilder(AdvancedDataBuilder):
     __slots__ = ()
 
-    def __init__(self, tooltipType, linkage):
+    def __init__(self, tooltipType, linkage, condition=None):
         super(ModuleDataBuilder, self).__init__(tooltipType, linkage, module.ModuleBlockTooltipData(contexts.TechMainContext()), advanced.HangarModuleAdvanced(contexts.TechMainContext()), condition=_advancedBlockCondition(contexts.TechMainContext()))
 
     def _buildData(self, _advanced, intCD, buyPrice=None, inventoryCount=0, vehicleCount=0, slotIdx=0, eqs=None, *args):
@@ -92,7 +100,7 @@ def getTooltipBuilders():
     return (InventoryModuleBuilder(TOOLTIPS_CONSTANTS.INVENTORY_MODULE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      ShopModuleBuilder(TOOLTIPS_CONSTANTS.DEFAULT_MODULE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      TechTreeModuleBuilder(TOOLTIPS_CONSTANTS.TECHTREE_MODULE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
-     ModuleDataBuilder(TOOLTIPS_CONSTANTS.TECH_MAIN_MODULE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
+     ModuleDataBuilder(TOOLTIPS_CONSTANTS.TECH_MAIN_MODULE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, _allowEventConsumableAdvancedTooltip),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.HANGAR_MODULE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, module.ModuleBlockTooltipData(contexts.HangarContext()), advanced.HangarModuleAdvanced(contexts.HangarContext()), condition=_advancedBlockCondition(contexts.HangarContext())),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.HANGAR_CARD_MODULE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, module.ModuleBlockTooltipData(contexts.HangarCardContext()), advanced.HangarModuleAdvanced(contexts.HangarCardContext()), condition=_advancedBlockCondition(contexts.HangarCardContext())),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.HANGAR_SLOT_MODULE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, module.ModuleBlockTooltipData(contexts.HangarSlotContext()), advanced.HangarModuleAdvanced(contexts.HangarSlotContext()), condition=_advancedBlockCondition(contexts.HangarSlotContext())),

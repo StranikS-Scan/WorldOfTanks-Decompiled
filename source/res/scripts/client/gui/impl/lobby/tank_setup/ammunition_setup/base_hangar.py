@@ -15,6 +15,7 @@ from frameworks.wulf import ViewSettings, ViewFlags
 from gui.impl.gen.view_models.views.lobby.tank_setup.ammunition_setup_view_model import AmmunitionSetupViewModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
+from gui.impl.lobby.halloween.tooltips.nitro_tooltip import NitroTooltip
 from gui.impl.lobby.tank_setup.ammunition_setup.base import BaseAmmunitionSetupView
 from gui.impl.lobby.tank_setup.backports.context_menu import getContextMenuData
 from gui.impl.lobby.tank_setup.interactors.base import InteractingItem
@@ -65,7 +66,7 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
         return None
 
     def createToolTipContent(self, event, contentID):
-        return None
+        return NitroTooltip() if contentID == R.views.lobby.halloween.tooltips.NitroTooltip() else None
 
     def sendSlotAction(self, args):
         if self._tankSetup is not None and self._tankSetup.getCurrentSubView() is not None:
@@ -135,6 +136,7 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
     def _onLoading(self, **kwargs):
         super(BaseHangarAmmunitionSetupView, self)._onLoading(**kwargs)
         fillVehicleInfo(self.viewModel.vehicleInfo, self._vehItem.getItem())
+        self.viewModel.setIsEvent(self._vehItem.getItem().isOnlyForEventBattles)
 
     def _initialize(self, *args, **kwargs):
         super(BaseHangarAmmunitionSetupView, self)._initialize()

@@ -4,7 +4,7 @@ import logging
 from collections import namedtuple
 import BigWorld
 from BWUtil import AsyncReturn
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from Event import Event
 from Math import Matrix
 from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, CAROUSEL_ARROWS_HINT_SHOWN_FIELD
@@ -679,6 +679,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def _populate(self):
         self._invalidate(self.__viewCtx)
         super(MainView, self)._populate()
+        if g_currentPreviewVehicle.isPresent() and g_currentPreviewVehicle.item.isOnlyForEventBattles:
+            g_currentPreviewVehicle.selectNoVehicle()
         self.__ctx = self.service.getCtx()
         self.__selectFirstVisibleTab()
         self.__ctx.events.onSeasonChanged += self.__onSeasonChanged

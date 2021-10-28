@@ -75,14 +75,15 @@ class PrbCtrlRequestCtx(RequestCtx):
         return ', '.join(convertFlagsToNames(self.__flags))
 
 
-@ReprInjector.simple('actionName', 'mmData', 'accountsToInvite')
+@ReprInjector.simple('actionName', 'mmData', 'accountsToInvite', 'keepCurrentView')
 class PrbAction(object):
-    __slots__ = ('actionName', 'mmData', 'accountsToInvite')
+    __slots__ = ('actionName', 'mmData', 'accountsToInvite', 'keepCurrentView')
 
-    def __init__(self, actionName, mmData=0, accountsToInvite=None):
+    def __init__(self, actionName, mmData=0, accountsToInvite=None, keepCurrentView=False):
         self.actionName = actionName if actionName is not None else ''
         self.mmData = mmData
         self.accountsToInvite = accountsToInvite or ()
+        self.keepCurrentView = keepCurrentView
         return
 
 

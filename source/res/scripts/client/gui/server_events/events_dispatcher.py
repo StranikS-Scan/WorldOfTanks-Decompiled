@@ -139,6 +139,10 @@ def showMissionsCategories(missionID=None, groupID=None, anchor=None):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
 
 
+def showMissionsHalloween(groupID=None):
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, groupID=groupID)
+
+
 def showMissionsForCurrentVehicle(missionID=None, groupID=None, anchor=None):
     showMissions(tab=QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
 
@@ -354,3 +358,8 @@ def showActions(tab=None, anchor=None):
 def showBattlePass3dStyleChoiceWindow():
     from gui.battle_pass.battle_pass_helpers import BattlePassProgressionSubTabs
     showMissionsBattlePassCommonProgression(subTab=BattlePassProgressionSubTabs.SELECT_STYLE_TAB)
+
+
+def showEventHangar():
+    from gui.shared.event_dispatcher import showHangar
+    showHangar()

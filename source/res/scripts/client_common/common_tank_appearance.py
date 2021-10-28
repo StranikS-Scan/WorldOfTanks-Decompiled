@@ -203,6 +203,39 @@ class CommonTankAppearance(ScriptGameObject):
 
         return prereqs
 
+    @staticmethod
+    def collectPrerequisitesForEventBattle(typeDescriptor, outfit, spaceID, isTurretDetached, damageState):
+        isUndamaged = VehicleDamageState.isUndamagedModel(damageState)
+        prereqs = typeDescriptor.prerequisites(True)
+        attachments = camouflages.getAttachments(outfit, typeDescriptor) if isUndamaged else []
+        prereqs.extend(camouflages.getCamoPrereqs(outfit, typeDescriptor))
+        prereqs.extend(camouflages.getModelAnimatorsPrereqs(outfit, spaceID))
+        prereqs.extend(camouflages.getAttachmentsAnimatorsPrereqs(attachments, spaceID))
+        splineDesc = typeDescriptor.chassis.splineDesc
+        if splineDesc is not None:
+            if splineDesc.trackPairs:
+                trackPairsDesc = splineDesc.trackPairs[0]
+                modelsSet = outfit.modelsSet
+                prereqs.append(trackPairsDesc.segmentModelLeft(modelsSet))
+                prereqs.append(trackPairsDesc.segmentModelRight(modelsSet))
+                segment2ModelLeft = trackPairsDesc.segment2ModelLeft(modelsSet)
+                if segment2ModelLeft is not None:
+                    prereqs.append(segment2ModelLeft)
+                segment2ModelRight = trackPairsDesc.segment2ModelRight(modelsSet)
+                if segment2ModelRight is not None:
+                    prereqs.append(segment2ModelRight)
+        modelsSetParams = ModelsSetParams(outfit.modelsSet, damageState, attachments)
+        compoundAssembler = model_assembler.prepareCompoundAssembler(typeDescriptor, modelsSetParams, spaceID, isTurretDetached)
+        prereqs.append(compoundAssembler)
+        collisionAssembler = model_assembler.prepareCollisionAssembler(typeDescriptor, isTurretDetached, spaceID)
+        prereqs.append(collisionAssembler)
+        physicalTracksBuilders = typeDescriptor.chassis.physicalTracks
+        for name, builders in physicalTracksBuilders.iteritems():
+            for index, builder in enumerate(builders):
+                prereqs.append(builder.createLoader(spaceID, '{0}{1}PhysicalTrack'.format(name, index), modelsSetParams.skin))
+
+        return prereqs
+
     def construct(self, isPlayer, resourceRefs):
         _logger.info('CommonTankAppearance::construct. v=%s. ds=%s', self._vehicle, self.damageState.state)
         self.__isObserver = 'observer' in self.typeDescriptor.type.tags

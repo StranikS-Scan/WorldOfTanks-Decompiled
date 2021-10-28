@@ -158,32 +158,44 @@
     </modules>
     <eventHint1>
       <header1>
-        <text>	#event:loading/event/common1/header/1	</text>
-        <autoSize>	left	</autoSize>
+        <text>	#event:loading/event/page1/header	</text>
+        <autoSize>	center	</autoSize>
       </header1>
-      <header2>
-        <text>	#event:loading/event/common1/header/2	</text>
-        <autoSize>	left	</autoSize>
-      </header2>
-      <header3>
-        <text>	#event:loading/event/common1/header/3	</text>
-        <autoSize>	left	</autoSize>
-      </header3>
+      <description1>
+        <text>	#event:loading/event/page1/description	</text>
+        <autoSize>	center	</autoSize>
+      </description1>
     </eventHint1>
     <eventHint2>
       <header1>
-        <text>	#event:loading/event/common1/header/1	</text>
-        <autoSize>	left	</autoSize>
+        <text>	#event:loading/event/page2/header	</text>
+        <autoSize>	center	</autoSize>
       </header1>
-      <header2>
-        <text>	#event:loading/event/common1/header/2	</text>
-        <autoSize>	left	</autoSize>
-      </header2>
-      <header3>
-        <text>	#event:loading/event/common1/header/3	</text>
-        <autoSize>	left	</autoSize>
-      </header3>
+      <description1>
+        <text>	#event:loading/event/page2/description	</text>
+        <autoSize>	center	</autoSize>
+      </description1>
     </eventHint2>
+    <eventHint3>
+      <header1>
+        <text>	#event:loading/event/page3/header	</text>
+        <autoSize>	center	</autoSize>
+      </header1>
+      <description1>
+        <text>	#event:loading/event/page3/description	</text>
+        <autoSize>	center	</autoSize>
+      </description1>
+    </eventHint3>
+    <eventHint4>
+      <header1>
+        <text>	#event:loading/event/page4/header	</text>
+        <autoSize>	center	</autoSize>
+      </header1>
+      <description1>
+        <text>	#event:loading/event/page4/description	</text>
+        <autoSize>	center	</autoSize>
+      </description1>
+    </eventHint4>
   </lesson_pages>
   <prebattle>	crewHint modulesHint hitpointsHint crosshairHint	</prebattle>
   <primary_hints></primary_hints>

@@ -1,0 +1,23 @@
+<HWVehiclesPositionArenaInfo.def>
+  <Properties>
+    <vehiclesPositionParams>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <vehicleID>
+              <Type>	OBJECT_ID	</Type>
+            </vehicleID>
+            <position>
+              <Type>	VECTOR3	</Type>
+            </position>
+            <velocity>
+              <Type>	VECTOR3	</Type>
+            </velocity>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehiclesPositionParams>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+</HWVehiclesPositionArenaInfo.def>

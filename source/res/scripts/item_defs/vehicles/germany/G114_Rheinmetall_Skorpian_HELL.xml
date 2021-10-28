@@ -1,0 +1,1019 @@
+<G114_Rheinmetall_Skorpian_HELL.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	loader	</commander>
+    <radioman></radioman>
+    <driver></driver>
+    <gunner></gunner>
+  </crew>
+  <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
+  <speedLimits>
+    <forward>	60	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.098	</moving>
+    <still>	0.163	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.245	</firePenalty>
+  </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.07	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
+  </optDevsOverrides>
+  <repairCost>	6.0	</repairCost>
+  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle></battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	30	</armor_1>
+      <armor_2>	30	</armor_2>
+      <armor_3>	16	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	10	</armor_5>
+      <armor_6>	10	</armor_6>
+      <armor_7>	16	</armor_7>
+      <armor_8>	10	</armor_8>
+      <armor_9>	30	</armor_9>
+      <armor_10>	20	</armor_10>
+      <armor_11>	16	</armor_11>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	15865	</weight>
+    <maxHealth>	910	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G114_Rheinmetall_Skorpian/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G114_Rheinmetall_Skorpian/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G114_Rheinmetall_Skorpian/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000056 0.660448 -0.288547	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G114_Skorpian/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G114_Skorpian/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/german/G114_Skorpian/Skorpian_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10000	</slotId>
+        <rayStart>	-0.510113 0.341291 2.70221	</rayStart>
+        <rayEnd>	-0.510113 0.177848 2.58695	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.26	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	14000	</slotId>
+        <rayStart>	-1.73471 0.504984 -0.180665	</rayStart>
+        <rayEnd>	-1.53471 0.504917 -0.180693	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.68	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	14001	</slotId>
+        <rayStart>	1.73471 0.504984 -0.180665	</rayStart>
+        <rayEnd>	1.53471 0.504917 -0.180693	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.68	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	sequence	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <attachNode>	HP_light_hull_1	</attachNode>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <camouflage>
+      <tiling>	1.72 1.72 0.03 0.000000	</tiling>
+      <density>	93.5501 89.5073	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_G114_Rheinmetall_Skorpian_HELL>
+      <userString>	#germany_vehicles:Chassis_G114_Rheinmetall_Skorpian	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	15000	</weight>
+      <maxLoad>	45000	</maxLoad>
+      <terrainResistance>	1.2 1.5 3	</terrainResistance>
+      <brakeForce>	40000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G114_Rheinmetall_Skorpian/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G114_Rheinmetall_Skorpian/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G114_Rheinmetall_Skorpian/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.5 0.6	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.5	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.475769	</radius>
+          <syncAngle>	21.1764	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.3435	</radius>
+          <syncAngle>	21.1764	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.447001	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.475769	</radius>
+          <syncAngle>	21.1764	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.3435	</radius>
+          <syncAngle>	21.1764	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.447001	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.23974 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G114_Skorpian/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G114_Skorpian/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.32129 1.91752	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.408630 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.456020 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.944430	</row2>
+            <row3>	-0.000006 0.000000 -0.000007	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G114_Skorpian/track/PzV_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G114_Skorpian/track/PzV_track.model	</segmentModelRight>
+        <left>	vehicles/german/G114_Skorpian/track/left.track	</left>
+        <right>	vehicles/german/G114_Skorpian/track/right.track	</right>
+        <segmentLength>	0.155	</segmentLength>
+        <segmentOffset>	0.214	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.05	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.14	</maxAmplitude>
+        <maxOffset>	0.14	</maxOffset>
+        <gravity>	-7.4	</gravity>
+        <elasticity>	1094	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.165	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.22	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.238	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.217	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.183	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.157	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.128	</offset>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.098	</offset>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.6	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.6	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.165	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.22	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.238	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.217	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.183	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.157	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.128	</offset>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.098	</offset>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.15	</minOffset>
+          <maxOffset>	0.15	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.15	</minOffset>
+          <maxOffset>	0.15	</maxOffset>
+        </group>
+      </groundNodes>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	86	</segmentsCount>
+          <segmentsOuterThickness>	0.0625644	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.00506839	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.32129	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.154957	</back>
+              <top>	0.151678	</top>
+              <front>	0.147482	</front>
+              <bottom>	0.127978	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.149337	</back>
+              <top>	0.141013	</top>
+              <front>	0.155977	</front>
+              <bottom>	0.127978	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/german/G114_Skorpian/track/PzV_track.model	</model>
+            <length>	0.159393	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-2.92345	</xStart>
+                <xStep>	0.0796967	</xStep>
+                <ySamples>	1.16125 1.16844 1.17563 1.18397 1.19237 1.17448 1.20918 1.21758 1.22598 1.23439 1.24279 1.22481 1.23321 1.26789 1.27612 1.28443 1.29282 1.30122 1.30963 1.31803 1.32643 1.3595 1.40735 1.39354 1.42087 1.42077 1.42067 1.42057 1.42047 1.42037 1.42027 1.42017 1.42006 1.41996 1.41986 1.39354 1.41966 1.41956 1.41945 1.41934 1.41924 1.41913 1.41902 1.41892 1.41883 1.41873 1.39354 1.41854 1.41844 1.41835 1.41825 1.41816 1.40826 1.40829 1.40832 1.40835 1.40838 1.38165 1.40844 1.40847 1.40851 1.40854 1.40857 1.4086 1.40863 1.40866 1.38165 1.38165 1.40876 1.40805 1.41567 1.4141 1.41253 1.40551 1.38519 1.3468 1.28264 1.18863	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L1	</wheel>
+            <wheel>	W_L7	</wheel>
+            <wheel>	W_L6	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	2.71685 0.934323	</basePos>
+              <shiftVec>	0.400442 0.13198	</shiftVec>
+              <jointIdx>	10	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L1	</wheelName>
+              <basePos>	-2.50709 0.744476	</basePos>
+              <shiftVec>	-0.28278 0.188081	</shiftVec>
+              <jointIdx>	50	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L7	</wheelName>
+              <basePos>	-1.91987 0.492012	</basePos>
+              <shiftVec>	-0.0501386 -0.44928	</shiftVec>
+              <jointIdx>	59	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.99613 0.492012	</basePos>
+              <shiftVec>	0.121771 -0.43536	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L1	</name>
+              <radius>	0.338117	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.420424	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	-1.321	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L1	</name>
+              <startAngle>	-89.3242	</startAngle>
+              <teethCount>	17	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	-92.2913	</startAngle>
+              <teethCount>	17	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.52741 1.2722 -2.92345	</point>
+                <point>	-1.52741 1.27939 -2.84376	</point>
+                <point>	-1.52741 1.28658 -2.76406	</point>
+                <point>	-1.52741 1.29492 -2.68436	</point>
+                <point>	-1.52741 1.30333 -2.60467	</point>
+                <point>	-1.50741 1.28543 -2.52497	</point>
+                <point>	-1.52741 1.32013 -2.44527	</point>
+                <point>	-1.52741 1.32853 -2.36558	</point>
+                <point>	-1.52741 1.33694 -2.28588	</point>
+                <point>	-1.52741 1.34534 -2.20618	</point>
+                <point>	-1.52741 1.35374 -2.12649	</point>
+                <point>	-1.50741 1.33576 -2.04679	</point>
+                <point>	-1.50741 1.34417 -1.96709	</point>
+                <point>	-1.52741 1.37885 -1.8874	</point>
+                <point>	-1.52741 1.38707 -1.8077	</point>
+                <point>	-1.48741 1.39538 -1.728	</point>
+                <point>	-1.37742 1.40378 -1.64831	</point>
+                <point>	-1.28742 1.41218 -1.56861	</point>
+                <point>	-1.28742 1.42059 -1.48891	</point>
+                <point>	-1.28742 1.42899 -1.40922	</point>
+                <point>	-1.28742 1.43739 -1.32952	</point>
+                <point>	-1.28742 1.47046 -1.24982	</point>
+                <point>	-1.28742 1.51831 -1.17013	</point>
+                <point>	-1.50742 1.50449 -1.09043	</point>
+                <point>	-1.28742 1.53183 -1.01073	</point>
+                <point>	-1.28742 1.53173 -0.931036	</point>
+                <point>	-1.28742 1.53163 -0.851339	</point>
+                <point>	-1.28742 1.53153 -0.771643	</point>
+                <point>	-1.28742 1.53142 -0.691946	</point>
+                <point>	-1.28742 1.53132 -0.612249	</point>
+                <point>	-1.28742 1.53122 -0.532553	</point>
+                <point>	-1.28742 1.53112 -0.452856	</point>
+                <point>	-1.28742 1.53102 -0.37316	</point>
+                <point>	-1.28742 1.53092 -0.293463	</point>
+                <point>	-1.28742 1.53082 -0.213766	</point>
+                <point>	-1.50742 1.50449 -0.134069	</point>
+                <point>	-1.28742 1.53062 -0.0543729	</point>
+                <point>	-1.52742 1.53051 0.025324	</point>
+                <point>	-1.52742 1.53041 0.105021	</point>
+                <point>	-1.52742 1.5303 0.184717	</point>
+                <point>	-1.52742 1.53019 0.264414	</point>
+                <point>	-1.52742 1.53008 0.344111	</point>
+                <point>	-1.52742 1.52998 0.423807	</point>
+                <point>	-1.52742 1.52988 0.503504	</point>
+                <point>	-1.52741 1.52978 0.583201	</point>
+                <point>	-1.50741 1.52968 0.662897	</point>
+                <point>	-1.50741 1.50449 0.742594	</point>
+                <point>	-1.32741 1.5295 0.82229	</point>
+                <point>	-1.28741 1.5294 0.901987	</point>
+                <point>	-1.28741 1.52931 0.981684	</point>
+                <point>	-1.28741 1.52921 1.06138	</point>
+                <point>	-1.28741 1.52912 1.14108	</point>
+                <point>	-1.52741 1.51921 1.22077	</point>
+                <point>	-1.52741 1.51924 1.30047	</point>
+                <point>	-1.52741 1.51927 1.38017	</point>
+                <point>	-1.52741 1.5193 1.45986	</point>
+                <point>	-1.52741 1.51934 1.53956	</point>
+                <point>	-1.49741 1.49261 1.61926	</point>
+                <point>	-1.52741 1.5194 1.69895	</point>
+                <point>	-1.52741 1.51943 1.77865	</point>
+                <point>	-1.52741 1.51946 1.85835	</point>
+                <point>	-1.52741 1.51949 1.93804	</point>
+                <point>	-1.52741 1.51952 2.01774	</point>
+                <point>	-1.52741 1.51955 2.09744	</point>
+                <point>	-1.52741 1.51959 2.17713	</point>
+                <point>	-1.52741 1.51962 2.25683	</point>
+                <point>	-1.49741 1.49261 2.33653	</point>
+                <point>	-1.49741 1.49261 2.41622	</point>
+                <point>	-1.52741 1.51971 2.49592	</point>
+                <point>	-1.52741 1.519 2.57562	</point>
+                <point>	-1.52741 1.52663 2.65531	</point>
+                <point>	-1.52741 1.52506 2.73501	</point>
+                <point>	-1.52741 1.52349 2.81471	</point>
+                <point>	-1.52741 1.51646 2.8944	</point>
+                <point>	-1.52741 1.49615 2.9741	</point>
+                <point>	-1.52741 1.45776 3.0538	</point>
+                <point>	-1.52741 1.39359 3.13349	</point>
+                <point>	-1.28741 1.29959 3.21319	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	86	</segmentsCount>
+          <segmentsOuterThickness>	0.0625837	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.00506827	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.32129	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.154957	</back>
+              <top>	0.151678	</top>
+              <front>	0.147482	</front>
+              <bottom>	0.127978	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.149337	</back>
+              <top>	0.141013	</top>
+              <front>	0.155977	</front>
+              <bottom>	0.127978	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/german/G114_Skorpian/track/PzV_track.model	</model>
+            <length>	0.159392	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-2.92348	</xStart>
+                <xStep>	0.0796959	</xStep>
+                <ySamples>	1.1616 1.16878 1.17599 1.18437 1.19275 1.17448 1.20952 1.2179 1.22629 1.23467 1.24305 1.2248 1.23321 1.26803 1.27622 1.2845 1.29288 1.30126 1.30964 1.31803 1.32641 1.35945 1.40732 1.39354 1.42086 1.42076 1.42067 1.42057 1.42047 1.42037 1.42027 1.42017 1.42006 1.41996 1.41986 1.39354 1.41966 1.41956 1.41946 1.41936 1.41926 1.41916 1.41906 1.41896 1.41886 1.41876 1.39354 1.41856 1.41846 1.41836 1.41826 1.41816 1.40826 1.40829 1.40832 1.40836 1.40839 1.38165 1.40845 1.40848 1.40851 1.40855 1.40858 1.40861 1.40864 1.40867 1.38165 1.38165 1.40877 1.41893 1.41685 1.41477 1.41268 1.40414 1.38279 1.34459 1.27685 1.14232	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R1	</wheel>
+            <wheel>	W_R7	</wheel>
+            <wheel>	W_R6	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	2.71686 0.934323	</basePos>
+              <shiftVec>	0.400453 0.131982	</shiftVec>
+              <jointIdx>	10	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R1	</wheelName>
+              <basePos>	-2.50709 0.744476	</basePos>
+              <shiftVec>	-0.282778 0.188066	</shiftVec>
+              <jointIdx>	50	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R7	</wheelName>
+              <basePos>	-1.91987 0.491984	</basePos>
+              <shiftVec>	-0.0501266 -0.449282	</shiftVec>
+              <jointIdx>	59	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.99613 0.491985	</basePos>
+              <shiftVec>	0.121794 -0.435354	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R1	</name>
+              <radius>	0.338107	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.420435	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	1.321	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R1	</name>
+              <startAngle>	-89.3246	</startAngle>
+              <teethCount>	17	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	-92.2913	</startAngle>
+              <teethCount>	17	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	1.52745 1.2726 -2.92349	</point>
+                <point>	1.52745 1.27979 -2.84379	</point>
+                <point>	1.52745 1.287 -2.76409	</point>
+                <point>	1.52745 1.29538 -2.6844	</point>
+                <point>	1.52745 1.30376 -2.6047	</point>
+                <point>	1.50745 1.28548 -2.52501	</point>
+                <point>	1.52745 1.32053 -2.44531	</point>
+                <point>	1.52745 1.32891 -2.36562	</point>
+                <point>	1.52745 1.33729 -2.28592	</point>
+                <point>	1.52745 1.34568 -2.20622	</point>
+                <point>	1.52745 1.35406 -2.12653	</point>
+                <point>	1.50745 1.33581 -2.04683	</point>
+                <point>	1.50745 1.34421 -1.96714	</point>
+                <point>	1.52745 1.37904 -1.88744	</point>
+                <point>	1.52745 1.38723 -1.80774	</point>
+                <point>	1.52745 1.3955 -1.72805	</point>
+                <point>	1.52745 1.40389 -1.64835	</point>
+                <point>	1.52745 1.41227 -1.56866	</point>
+                <point>	1.52745 1.42065 -1.48896	</point>
+                <point>	1.52745 1.42904 -1.40927	</point>
+                <point>	1.52745 1.43742 -1.32957	</point>
+                <point>	1.52745 1.47046 -1.24987	</point>
+                <point>	1.52745 1.51833 -1.17018	</point>
+                <point>	1.50745 1.50454 -1.09048	</point>
+                <point>	1.52745 1.53187 -1.01079	</point>
+                <point>	1.52745 1.53177 -0.93109	</point>
+                <point>	1.28745 1.53167 -0.851394	</point>
+                <point>	1.28745 1.53157 -0.771698	</point>
+                <point>	1.28745 1.53147 -0.692002	</point>
+                <point>	1.28745 1.53137 -0.612306	</point>
+                <point>	1.28745 1.53127 -0.532611	</point>
+                <point>	1.28745 1.53117 -0.452915	</point>
+                <point>	1.28745 1.53107 -0.373219	</point>
+                <point>	1.29745 1.53097 -0.293523	</point>
+                <point>	1.31745 1.53087 -0.213828	</point>
+                <point>	1.50745 1.50454 -0.134132	</point>
+                <point>	1.40745 1.53067 -0.0544357	</point>
+                <point>	1.44745 1.53057 0.0252599	</point>
+                <point>	1.48745 1.53047 0.104956	</point>
+                <point>	1.51745 1.53037 0.184652	</point>
+                <point>	1.52745 1.53027 0.264347	</point>
+                <point>	1.31745 1.53017 0.344044	</point>
+                <point>	1.28745 1.53007 0.42374	</point>
+                <point>	1.29745 1.52997 0.503435	</point>
+                <point>	1.33745 1.52987 0.583131	</point>
+                <point>	1.41745 1.52977 0.662827	</point>
+                <point>	1.50745 1.50454 0.742523	</point>
+                <point>	1.29745 1.52956 0.822219	</point>
+                <point>	1.28745 1.52946 0.901915	</point>
+                <point>	1.28745 1.52936 0.98161	</point>
+                <point>	1.28745 1.52926 1.06131	</point>
+                <point>	1.50745 1.52917 1.141	</point>
+                <point>	1.28745 1.51927 1.2207	</point>
+                <point>	1.28745 1.5193 1.30039	</point>
+                <point>	1.28745 1.51933 1.38009	</point>
+                <point>	1.28745 1.51936 1.45979	</point>
+                <point>	1.28745 1.51939 1.53948	</point>
+                <point>	1.49745 1.49266 1.61918	</point>
+                <point>	1.28745 1.51945 1.69887	</point>
+                <point>	1.28745 1.51949 1.77857	</point>
+                <point>	1.28745 1.51952 1.85827	</point>
+                <point>	1.28745 1.51955 1.93796	</point>
+                <point>	1.28745 1.51958 2.01766	</point>
+                <point>	1.28745 1.51961 2.09735	</point>
+                <point>	1.28745 1.51964 2.17705	</point>
+                <point>	1.28745 1.51968 2.25674	</point>
+                <point>	1.49745 1.49266 2.33644	</point>
+                <point>	1.49745 1.49266 2.41614	</point>
+                <point>	1.28745 1.51977 2.49583	</point>
+                <point>	1.52745 1.52994 2.57553	</point>
+                <point>	1.52745 1.52786 2.65522	</point>
+                <point>	1.52745 1.52577 2.73492	</point>
+                <point>	1.52745 1.52369 2.81461	</point>
+                <point>	1.52745 1.51515 2.89431	</point>
+                <point>	1.52745 1.4938 2.97401	</point>
+                <point>	1.52745 1.4556 3.0537	</point>
+                <point>	1.52746 1.38785 3.1334	</point>
+                <point>	1.52746 1.25333 3.21309	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <repairTime>	6.85714293	</repairTime>
+    </Chassis_G114_Rheinmetall_Skorpian_HELL>
+  </chassis>
+  <turrets0>
+    <Turret_1_G114_Rheinmetall_Skorpian_HELL>
+      <userString>	#germany_vehicles:Turret_1_G114_Rheinmetall_Skorpian	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	8	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	14.5	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	14.5	</armor_3>
+        <armor_4>	14.5	</armor_4>
+        <armor_5>	10	</armor_5>
+      </armor>
+      <weight>	3150	</weight>
+      <maxHealth>	10	</maxHealth>
+      <rotationSpeed>	18	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	200	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_128mm_K43_L55_HELL>	shared	  <maxAmmo>	30	</maxAmmo>
+          <armor>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <pitchLimits>	-90 90	  <minPitch>	0 -14 1 -14	</minPitch>
+            <maxPitch>	0 5.75 0.072222 5.75 0.086111 7 0.386111 7 0.4 2.9 0.6 2.9 0.613889 7 0.913889 7 0.927778 5.75 1 5.75	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
+          <reloadTime>	12.2	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <models>
+            <undamaged>	vehicles/german/G114_Rheinmetall_Skorpian/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G114_Rheinmetall_Skorpian/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G114_Rheinmetall_Skorpian/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G114_Skorpian/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G114_Skorpian/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_largeext_mb	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	-0.000056 0.246871 5.79	</rayStart>
+              <rayEnd>	-0.00628333 0.485546 5.72571	</rayEnd>
+              <rayUp>	0.103 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.47	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <camouflage>
+            <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+            <density>	116.747 79.9339	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
+        </_128mm_K43_L55_HELL>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G114_Rheinmetall_Skorpian/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G114_Rheinmetall_Skorpian/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G114_Rheinmetall_Skorpian/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G114_Skorpian/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G114_Skorpian/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.26241 -0.114005	</gunPosition>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.030 0.216 1.053 0.000 1.006 0.000 0.581 0.401 0.622 0.500 0.075 0.500 0.312 0.000 0.000	</physicsShape>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	33000	</slotId>
+          <rayStart>	-1.24143 0.352097 -0.049547	</rayStart>
+          <rayEnd>	-1.20143 0.352096 -0.0495469	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	33001	</slotId>
+          <rayStart>	1.24218 0.350598 -0.0473717	</rayStart>
+          <rayEnd>	1.20218 0.350596 -0.0473717	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
+          <size>	0.26	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	sequence	</slotType>
+          <slotId>	38002	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
+          <attachNode>	HP_turretJoint	</attachNode>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <camouflage>
+        <tiling>	1.96 0.82 0.52 0.06	</tiling>
+        <density>	97.8914 101.39	</density>
+        <aoTextureSize>	1024 512	</aoTextureSize>
+      </camouflage>
+    </Turret_1_G114_Rheinmetall_Skorpian_HELL>
+  </turrets0>
+  <engines>
+    <Maybach_HL_210_TRM_P30_A_HELL>	shared	</Maybach_HL_210_TRM_P30_A_HELL>
+  </engines>
+  <fuelTanks>
+    <Heavy_HELL__0>	shared	</Heavy_HELL__0>
+  </fuelTanks>
+  <radios>
+    <FuG_FA_HELL>	shared	</FuG_FA_HELL>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_210_TRM_P30_A_HELL>
+          <smplEnginePower>	850	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+        </Maybach_HL_210_TRM_P30_A_HELL>
+      </engines>
+      <chassis>
+        <Chassis_G114_Rheinmetall_Skorpian_HELL>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.2415	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.12075	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_G114_Rheinmetall_Skorpian_HELL>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <armour>	0.850624002	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	hw19large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	15502	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <customDefaultCamouflage>	true	</customDefaultCamouflage>
+</G114_Rheinmetall_Skorpian_HELL.xml>

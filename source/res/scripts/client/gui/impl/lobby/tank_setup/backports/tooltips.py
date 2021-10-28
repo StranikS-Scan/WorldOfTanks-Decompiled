@@ -160,6 +160,17 @@ class ShellTooltipBuilder(HangarModuleTooltipBuilder):
         return copyVehicle
 
 
+class EventShellTooltipBuilder(ShellTooltipBuilder):
+
+    @classmethod
+    def _getInSlotTooltipAlias(cls):
+        return TOOLTIPS_CONSTANTS.TECH_MAIN_SHELL_EVENT
+
+    @classmethod
+    def _getTooltipSpecialAlias(cls):
+        return TOOLTIPS_CONSTANTS.TECH_MAIN_SHELL_EVENT
+
+
 class BattleAbilitiesToolitpBuilder(HangarModuleTooltipBuilder):
     itemsCache = dependency.descriptor(IItemsCache)
 

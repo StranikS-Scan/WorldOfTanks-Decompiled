@@ -244,6 +244,34 @@ class MapsTrainingStatsComposer(IStatsComposer):
             MapsTrainingStatsComposer._fromNotifications.remove(arenaUniqueID)
 
 
+class EventStatsComposer(IStatsComposer):
+    __slots__ = ('_block',)
+
+    def __init__(self, _):
+        super(EventStatsComposer, self).__init__()
+        self._block = templates.EVENT_TOTAL_RESULTS_BLOCK.clone()
+
+    def clear(self):
+        self._block.clear()
+
+    def setResults(self, results, reusable):
+        self._block.setRecord(results, reusable)
+
+    def getVO(self):
+        return self._block.getVO()
+
+    def popAnimation(self):
+        return None
+
+    @staticmethod
+    def onShowResults(arenaUniqueID):
+        pass
+
+    @staticmethod
+    def onResultsPosted(arenaUniqueID):
+        event_dispatcher.showHalloweenResults(arenaUniqueID)
+
+
 def createComposer(reusable):
     bonusType = reusable.common.arenaBonusType
     if bonusType == ARENA_BONUS_TYPE.CYBERSPORT:
@@ -264,6 +292,8 @@ def createComposer(reusable):
         composer = BattleRoyaleStatsComposer(reusable)
     elif bonusType == ARENA_BONUS_TYPE.MAPS_TRAINING:
         composer = MapsTrainingStatsComposer(reusable)
+    elif bonusType == ARENA_BONUS_TYPE.EVENT_BATTLES:
+        composer = EventStatsComposer(reusable)
     else:
         composer = RegularStatsComposer(reusable)
     return composer

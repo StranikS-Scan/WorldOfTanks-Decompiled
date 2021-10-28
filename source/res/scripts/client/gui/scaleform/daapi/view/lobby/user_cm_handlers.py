@@ -466,6 +466,20 @@ class UserVehicleCMHandler(AppealCMHandler):
             options.insert(2, self._makeItem(_EXTENDED_OPT_IDS.VEHICLE_COMPARE, MENU.contextmenu(_EXTENDED_OPT_IDS.VEHICLE_COMPARE), {'enabled': self.comparisonBasket.isReadyToAdd(self.itemsCache.items.getItemByCD(self._vehicleCD))}))
 
 
+class EventBattleResultsUserCMHandler(AppealCMHandler):
+
+    def _addSquadInfo(self, options, isIgnored):
+        options = super(EventBattleResultsUserCMHandler, self)._addSquadInfo(options, isIgnored)
+        options = [ opt for opt in options if opt['id'] is not USER.CREATE_EVENT_SQUAD ]
+        return options
+
+    def _addFriendshipInfo(self, options, userCMInfo):
+        return options
+
+    def _addPrebattleInfo(self, options, userCMInfo):
+        return options
+
+
 class CustomUserCMHandler(BaseUserCMHandler):
 
     def __init__(self, cmProxy, ctx=None):

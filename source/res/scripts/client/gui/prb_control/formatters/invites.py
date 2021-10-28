@@ -24,6 +24,7 @@ class _PrbInvitePart(CONST_CONTAINER):
     TITLE_CREATOR_NAME = 'inviteTitleCreatorName'
     TITLE = 'inviteTitle'
     WARNING = 'inviteWarning'
+    ERROR = 'inviteError'
     COMMENT = 'inviteComment'
     NOTE = 'inviteNote'
     STATE = 'inviteState'
@@ -32,6 +33,7 @@ class _PrbInvitePart(CONST_CONTAINER):
 _PRB_INVITE_PART_KEYS = {_PrbInvitePart.TITLE_CREATOR_NAME: 'name',
  _PrbInvitePart.TITLE: 'sender',
  _PrbInvitePart.WARNING: 'warning',
+ _PrbInvitePart.ERROR: 'error',
  _PrbInvitePart.COMMENT: 'comment',
  _PrbInvitePart.NOTE: 'note',
  _PrbInvitePart.STATE: 'state'}
@@ -149,6 +151,10 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         warning = backport.text(_R_INVITES.warning.dyn(invite.warning)())
         return _formatInvite(_PrbInvitePart.WARNING, warning)
 
+    def getError(self, invite):
+        error = backport.text(_R_INVITES.error.dyn(invite.error)())
+        return _formatInvite(_PrbInvitePart.ERROR, error)
+
     def getComment(self, invite):
         comment = passCensor(invite.comment)
         comment = backport.text(_R_INVITES.comment(), comment=htmlEscape(comment)) if comment else ''
@@ -168,6 +174,9 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
     def getText(self, invite):
         result = []
         text = self.getTitle(invite)
+        if text:
+            result.append(text)
+        text = self.getError(invite)
         if text:
             result.append(text)
         text = self.getWarning(invite)

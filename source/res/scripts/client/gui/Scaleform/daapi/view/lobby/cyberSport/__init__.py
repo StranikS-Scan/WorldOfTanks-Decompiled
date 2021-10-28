@@ -15,6 +15,7 @@ class PLAYER_GUI_STATUS(object):
     BATTLE = 3
     LOCKED = 4
     CREATOR = 5
+    BANNED = 6
 
 
 class SLOT_LABEL(object):

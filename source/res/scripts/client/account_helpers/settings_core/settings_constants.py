@@ -371,6 +371,8 @@ class OnceOnlyHints(CONST_CONTAINER):
     COMPARE_SPECIALIZATION_BUTTON_HINT = 'CompareSpecializationButtonHint'
     TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'TradeInVehiclePreviewPostProgressionButtonHint'
     PERSONAL_TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'PersonalTradeInVehiclePreviewPostProgressionButtonHint'
+    EVENT_INTERROGATION_INFO = 'EventInterrogationInfo'
+    EVENT_BOSSFIGHT_HINT = 'EventBossfightHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -483,3 +485,8 @@ class ScorePanelStorageKeys(CONST_CONTAINER):
     SHOW_HP_VALUES = 'showHPValues'
     SHOW_HP_DIFFERENCE = 'showHPDifference'
     ENABLE_TIER_GROUPING = 'enableTierGrouping'
+
+
+class Hw21StorageKeys(CONST_CONTAINER):
+    HANGAR_HELLO_FIRST = 'hw21hangarHelloFirst'
+    HANGAR_LAST_HELLO_DATE = 'hw21hangarLastHelloDate'

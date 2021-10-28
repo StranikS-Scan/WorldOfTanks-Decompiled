@@ -54,6 +54,8 @@ AnchorHelper = namedtuple('AnchorHelper', ['location',
  'partIdx',
  'attachedPartIdx'])
 AnchorParams = namedtuple('AnchorParams', ['location', 'descriptor', 'id'])
+_DEFAULT_TURRET_YAW_ANGLE = 0.0
+_DEFAULT_GUN_PITCH_ANGLE = 0.0
 _logger = logging.getLogger(__name__)
 
 class _LoadStateNotifier(object):
@@ -272,6 +274,12 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def _getGunPitch(self):
         return self.turretAndGunAngles.getGunPitch()
+
+    def _getGunPitchLimits(self):
+        return self.__vDesc.gun.pitchLimits['absolute']
+
+    def _getTurretYawLimits(self):
+        return self.__vDesc.gun.turretYawLimits
 
     def __reload(self, vDesc, vState, outfit):
         self.__clearModelAnimators()
@@ -686,7 +694,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         return
 
     def updateCustomization(self, outfit=None, callback=None):
-        if self.__isVehicleDestroyed:
+        if self.__isVehicleDestroyed or g_currentVehicle.item is None:
             return
         else:
             if g_currentVehicle.item:
@@ -703,22 +711,22 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.__applyCustomization(outfit, None)
             return
 
-    def rotateTurretForAnchor(self, anchorId, duration=EASING_TRANSITION_DURATION):
+    def rotateTurretForAnchor(self, anchorId, duration=EASING_TRANSITION_DURATION, useStaticTurretYaw=False):
         if self.compoundModel is None or self.__vDesc is None:
             return False
         else:
-            defaultYaw = self._getTurretYaw()
+            defaultYaw = self.__staticTurretYaw if useStaticTurretYaw else self._getTurretYaw()
             turretYaw = self.__getTurretYawForAnchor(anchorId, defaultYaw)
             self.turretRotator.start(turretYaw, rotationTime=duration)
             return
 
-    def rotateGunToDefault(self):
+    def rotateGunToDefault(self, useStaticGunPitch=False):
         if self.compoundModel is None:
             return False
         else:
             localGunMatrix = self.__getGunNode().local
             currentGunPitch = localGunMatrix.pitch
-            gunPitchAngle = self._getGunPitch()
+            gunPitchAngle = self.__staticGunPitch if useStaticGunPitch else self._getGunPitch()
             if abs(currentGunPitch - gunPitchAngle) < 0.0001:
                 return False
             gunPitchMatrix = math_utils.createRotationMatrix((0.0, gunPitchAngle, 0.0))

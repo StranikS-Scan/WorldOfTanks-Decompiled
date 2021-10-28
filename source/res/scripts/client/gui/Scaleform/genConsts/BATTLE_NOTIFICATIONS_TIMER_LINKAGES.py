@@ -37,3 +37,5 @@ class BATTLE_NOTIFICATIONS_TIMER_LINKAGES(object):
     STEALTH_ICON = 'secondaryTimerStealthIconUI'
     STEALTH_INACTIVE_ICON = 'secondaryTimerStealthInactiveIconUI'
     ENEMY_SMOKE_ICON = 'enemySmokeIconUI'
+    EVENT_STATIC_DEATH_ZONE = 'destroyTimerEventStaticDeathZoneUI'
+    EVENT_PERSONAL_DEATH_ZONE = 'destroyTimerEventPersonalDeathZoneUI'

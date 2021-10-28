@@ -2,28 +2,35 @@
 # Embedded file name: scripts/client/gui/impl/lobby/platoon/view/platoon_members_view.py
 import logging
 from enum import Enum
+import functools
 import BigWorld
 import VOIP
 from CurrentVehicle import g_currentVehicle
-from UnitBase import UNDEFINED_ESTIMATED_TIME
-from constants import PREBATTLE_TYPE
+from UnitBase import UNDEFINED_ESTIMATED_TIME, UNIT_ROLE
+from constants import PREBATTLE_TYPE, REQUEST_COOLDOWN, SQUAD_DIFFICULTY_EVENTS
+from debug_utils import LOG_DEBUG_DEV
 from frameworks.wulf import WindowFlags, ViewSettings, WindowStatus
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS
+from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatTimeAndDate
 from gui.Scaleform.daapi.view.lobby.prb_windows.squad_action_button_state_vo import SquadActionButtonStateVO
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES import MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
+from gui.Scaleform.Waiting import Waiting
 from gui.impl import backport
 from gui.impl.backport import BackportContextMenuWindow
 from gui.impl.backport.backport_context_menu import createContextMenuData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.platoon.bonus_model import BonusModel
+from gui.impl.gen.view_models.views.lobby.platoon.difficulty_dropdown_item_model import DifficultyDropdownItemModel
 from gui.impl.gen.view_models.views.lobby.platoon.members_window_model import MembersWindowModel
 from gui.impl.gen.view_models.views.lobby.platoon.slot_label_element_model import SlotLabelElementModel, Types
 from gui.impl.gen.view_models.views.lobby.platoon.slot_model import SlotModel
+from gui.impl.lobby.halloween.event_helpers import notifyCursorOver3DScene
 from gui.impl.lobby.platoon.platoon_helpers import formatSearchEstimatedTime, removeNationFromTechName
 from gui.impl.lobby.platoon.tooltip.platoon_alert_tooltip import AlertTooltip
+from gui.impl.lobby.platoon.tooltip.platoon_event_tooltip import EventTooltip
 from gui.impl.lobby.platoon.tooltip.platoon_wtr_tooltip import WTRTooltip
 from gui.impl.lobby.platoon.view.slot_label_html_handler import SlotLabelHtmlParser
 from gui.impl.lobby.platoon.view.subview.platoon_chat_subview import ChatSubview
@@ -42,8 +49,10 @@ from helpers.CallbackDelayer import CallbackDelayer
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
+from skeletons.gui.afk_controller import IAFKController
 from skeletons.gui.game_control import IPlatoonController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from messenger.m_constants import USER_TAG
@@ -53,6 +62,9 @@ from messenger.ext import channel_num_gen
 from adisp import process
 _logger = logging.getLogger(__name__)
 _strButtons = R.strings.platoon.buttons
+DIFFICULTY_ICON = '%(level)'
+DIFFICULTY_DISABLED = '%(lock)'
+DIFFICULTY_INFO = '%(info)'
 
 def getMemberContextMenuData(event, platoonSlotsData):
     userName = event.getArgument('userName')
@@ -87,6 +99,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __afkController = dependency.descriptor(IAFKController)
     _battleType = 'standard'
 
     def __init__(self):
@@ -132,7 +145,27 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         return SettingsPopover()
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.lobby.platoon.AlertTooltip():
+        if contentID == R.views.lobby.platoon.EventTooltips():
+            tooltipID = int(event.getArgument('id'))
+            commander = next((slot.player for slot in self.viewModel.getSlots() if slot.player.getIsCommander()), None)
+            header = ''
+            level = commander.commonData.getSquadDifficultyLevel()
+            if tooltipID == SQUAD_DIFFICULTY_EVENTS.COMMANDER:
+                header = backport.text(R.strings.tooltips.event.squad.difficulty.dropdown.header())
+                body = backport.text(R.strings.tooltips.event.squad.difficulty.dropdown.commander.body())
+            elif tooltipID == SQUAD_DIFFICULTY_EVENTS.MEMBER:
+                header = backport.text(R.strings.tooltips.event.squad.difficulty.dropdown.header())
+                body = backport.text(R.strings.tooltips.event.squad.difficulty.dropdown.body())
+            elif tooltipID == SQUAD_DIFFICULTY_EVENTS.LOCK:
+                body = backport.text(R.strings.tooltips.event.squad.difficulty.lock(), icon=DIFFICULTY_DISABLED, level=DIFFICULTY_ICON)
+                level = commander.commonData.getMaxDifficultyLevel()
+            elif tooltipID == SQUAD_DIFFICULTY_EVENTS.INFO:
+                body = backport.text(R.strings.tooltips.event.squad.difficulty.warning(), icon=DIFFICULTY_INFO)
+            else:
+                _logger.error('Cannot find appropriate tooltip for event: %s', str(tooltipID))
+                return
+            return EventTooltip(level=level, header=header, body=body)
+        elif contentID == R.views.lobby.platoon.AlertTooltip():
             if self.__platoonCtrl.isInCoolDown(REQUEST_TYPE.AUTO_SEARCH):
                 return
             tooltip = R.strings.platoon.buttons.findPlayers.tooltip
@@ -150,7 +183,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
                 slot = next((slot for slot in self.viewModel.getSlots() if slot.getSlotId() == slotId), None)
                 if slot is not None:
                     commonData = slot.player.commonData
-                    return WTRTooltip(commonData.getName(), commonData.getClanTag(), commonData.getBadgeID(), commonData.getRating())
+                    return WTRTooltip(commonData.getName(), commonData.getClanTag(), commonData.getBadgeID(), commonData.getRating(), commonData.getMaxDifficultyLevelMessage(), commonData.getIsEvent(), commonData.getMaxDifficultyLevel())
             return super(SquadMembersView, self).createToolTipContent(event=event, contentID=contentID)
 
     def createContextMenu(self, event):
@@ -252,21 +285,29 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         isWTREnabled = self.__lobbyContext.getServerSettings().isWTREnabled()
         accID = BigWorld.player().id
         estimatedTime = self.__getEstimatedTimeInQueue()
+        playerIDs = []
         with self.viewModel.transaction() as model:
             slotModelArray = model.getSlots()
             slotModelArray.clear()
             slotCount = 0
             for it in slots:
                 playerData = it.get('player', {})
+                isEvent = it.get('isEvent')
                 slot = SlotModel()
                 slot.setIsEmpty(not bool(playerData))
                 if playerData:
+                    playerAccID = playerData.get('accID', None)
+                    if playerAccID and playerAccID in playerIDs:
+                        continue
+                    elif playerAccID:
+                        playerIDs.append(playerAccID)
                     slot.player.commonData.setName(playerData.get('userName', ''))
                     slot.player.commonData.setColor('#DE1E7E')
                     slot.player.setIsReady(playerData.get('readyState', False))
+                    slot.player.setIsBanned(playerData.get('afkIsBanned', False))
                     slot.player.setAccID(str(playerData.get('dbID', None)))
                     slot.player.setIsCommander(playerData.get('isCommander', False))
-                    slot.player.setIsCurrentUser(accID == playerData.get('accID', None))
+                    slot.player.setIsCurrentUser(accID == playerAccID)
                     slot.player.commonData.setClanTag(playerData.get('clanAbbrev', ''))
                     slot.player.setIsPrem(it.get('hasPremiumAccount', False))
                     slot.player.commonData.setRating(playerData.get('accountWTR', '') if isWTREnabled else '')
@@ -276,10 +317,12 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
                     slot.setIsInBattle(playerStatus == PLAYER_GUI_STATUS.BATTLE)
                     if playerStatus == PLAYER_GUI_STATUS.BATTLE:
                         slot.setInfoText(backport.text(R.strings.platoon.members.card.inBattle()))
+                    elif playerStatus == PLAYER_GUI_STATUS.BANNED:
+                        slot.setInfoText(backport.text(R.strings.event.squad.afk.warning(), pardonDate=formatTimeAndDate(playerData.get('afkExpireTime', 0))))
                     elif playerStatus != PLAYER_GUI_STATUS.READY:
                         slot.setInfoText(backport.text(R.strings.platoon.members.card.notReady()))
                     isAdditionalMsgVisible = it.get('isVisibleAdtMsg', False)
-                    if isAdditionalMsgVisible:
+                    if isAdditionalMsgVisible and not isEvent:
                         additionalMsg = it.get('additionalMsg', '')
                         slot.setInfoText(additionalMsg)
                     isOffline = playerData.get('isOffline', False)
@@ -291,6 +334,15 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
                     tags = playerData.get('tags', [])
                     slot.player.voice.setIsMutedByUser(USER_TAG.MUTED in tags)
                     slot.player.setIsIgnored(USER_TAG.IGNORED in tags)
+                    slot.player.commonData.setIsEvent(isEvent)
+                    squadDifficultyLevel = it.get('squadDifficultyLevel')
+                    if squadDifficultyLevel:
+                        slot.player.commonData.setSquadDifficultyLevel(squadDifficultyLevel)
+                    maxDifficultyLevel = it.get('maxDifficultyLevel')
+                    if maxDifficultyLevel is not None:
+                        maxDifficultyMsg = backport.text(R.strings.event.event.difficulty.squad_player_max_difficulty_level())
+                        slot.player.commonData.setMaxDifficultyLevelMessage(maxDifficultyMsg)
+                        slot.player.commonData.setMaxDifficultyLevel(maxDifficultyLevel)
                     vehicle = it.get('selectedVehicle', {})
                     if vehicle:
                         vehicleItem = self.__itemsCache.items.getItemByCD(vehicle.get('intCD', 0))
@@ -421,6 +473,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
             model.header.btnLeavePlatoon.setCaption(backport.text(_strButtons.leavePlatoon.caption()))
             model.header.btnLeavePlatoon.setDescription(backport.text(_strButtons.leavePlatoon.description()))
             model.header.btnLeavePlatoon.setIsEnabled(not isInQueue)
+            model.setShouldShowInvitePlayersButton(True)
             model.btnInviteFriends.setCaption(backport.text(_strButtons.invite.caption()))
             model.btnInviteFriends.setDescription(backport.text(_strButtons.invite.description()))
             model.btnInviteFriends.setIsEnabled(platoonCtrl.hasFreeSlot() and isCommander and canSendInvite and not isInQueue and not isInSearch)
@@ -485,7 +538,11 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
                 model.btnSwitchReady.setCaption(backport.text(_strButtons.notReady.caption()))
             else:
                 model.btnSwitchReady.setCaption(backport.text(_strButtons.ready.caption()))
-            model.btnSwitchReady.setDescription(i18n.makeString(actionButtonStateVO['toolTipData'] + '/body'))
+            description = i18n.makeString(actionButtonStateVO['toolTipData'] + '/body') if actionButtonStateVO['toolTipData'] else ''
+            model.btnSwitchReady.setDescription(description)
+            if self.__afkController.isBanned:
+                model.btnSwitchReady.setTooltipHeader(backport.text(R.strings.tooltips.event.afk.ban.header()))
+                model.btnSwitchReady.setDescription(backport.text(R.strings.tooltips.event.afk.ban.fbBody(), value=formatTimeAndDate(self.__afkController.banExpiryTime)))
             model.setFooterMessage(simpleState)
         model.setIsFooterMessageGrey(actionButtonStateVO['isEnabled'] or onlyReadinessText or isInQueue)
 
@@ -583,15 +640,122 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
 
 class EventMembersView(SquadMembersView):
     _battleType = 'event'
+    __platoonCtrl = dependency.descriptor(IPlatoonController)
+    __gameEventCtrl = dependency.descriptor(IGameEventController)
+    _R_TOOLTIPS_TEXT = R.strings.tooltips.event.squad
+
+    def __init__(self):
+        super(EventMembersView, self).__init__()
+        self._playersWithMaxDifficultyLevel = {}
+        self.viewModel.setIsEvent(True)
+
+    def _finalize(self):
+        self.__removeListeners()
+        self.__gameEventCtrl.setSquadDifficultyLevel(None)
+        super(EventMembersView, self)._finalize()
+        return
+
+    def _onLoading(self, *args, **kwargs):
+        entity = self.__platoonCtrl.getPrbEntity()
+        level = entity.gameEventController.getSquadDifficultyLevel()
+        self._selectDifficulty(level, isCommander=entity.isCommander())
+        super(EventMembersView, self)._onLoading(*args, **kwargs)
+        self._addListeners()
+        self._updateButtons()
+        self._fillModel()
+
+    @staticmethod
+    def _showWaiting(show):
+        if show:
+            Waiting.show('sinhronize')
+        else:
+            Waiting.hide('sinhronize')
+
+    def _updateMembers(self):
+        super(EventMembersView, self)._updateMembers()
+        self._fillModel()
+
+    def _fillModel(self):
+        with self.viewModel.transaction() as model:
+            entity = self.__platoonCtrl.getPrbEntity()
+            model.setIsCommander(entity.isCommander())
+            model.setIsEvent(True)
+            self._checkCommandersDifficultyLevel()
+            self._updatePlayersWithMaxDifficultyLevel(model)
+            self._fillDifficultyDropdown(model)
+
+    def _selectDifficulty(self, difficultyLevel, force=False, isCommander=False):
+        entity = self.__platoonCtrl.getPrbEntity()
+        if (self.viewModel.getIsCommander() or isCommander) and entity.gameEventController.hasDifficultyLevelToken(difficultyLevel):
+            self._showWaiting(True)
+            callback = functools.partial(self._showWaiting, False)
+            BigWorld.callback(REQUEST_COOLDOWN.CMD_CHANGE_SELECTED_DIFFICULTY_LEVEL, callback)
+            BigWorld.player().changeSelectedDifficultyLevel(int(difficultyLevel), force)
+            self.__setSelected(self.viewModel.eventDifficulty.getSelected(), difficultyLevel)
+
+    def _checkCommandersDifficultyLevel(self):
+        entity = self.__platoonCtrl.getPrbEntity()
+        if entity.isCommander():
+            return
+        _, unit = entity.getUnit()
+        for player in unit.getPlayers().itervalues():
+            if player['role'] & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR:
+                level = player.get('extraData', {}).get('eventEnqueueData', {}).get('difficultyLevel')
+                entity.gameEventController.setSquadDifficultyLevel(level)
+                return
+            LOG_DEBUG_DEV('EventSquadView._setCommandersDifficultyLevel. Could not find commander.')
+
+    def _updatePlayersWithMaxDifficultyLevel(self, model):
+        if not model.getIsCommander():
+            return
+        entity = self.__platoonCtrl.getPrbEntity()
+        unitMgrID = entity.getID()
+        playersDifficultyLevels = {}
+        for slot in entity.getSlotsIterator(*entity.getUnit(unitMgrID=unitMgrID)):
+            if slot.player:
+                maxDifficulyLevel = slot.player.extraData.get('eventEnqueueData').get('maxDifficultyLevel')
+                playersDifficultyLevels[slot.player.slotIdx] = maxDifficulyLevel
+
+        self._playersWithMaxDifficultyLevel = playersDifficultyLevels
+        LOG_DEBUG_DEV('EventSquadView._updatePlayersWithMaxDifficultyLevel._playersWithMaxDifficultyLevelwas updated with players: ', playersDifficultyLevels)
+
+    def _showInfoWarningByLevel(self, dropDownLevel):
+        for maxLevel in self._playersWithMaxDifficultyLevel.itervalues():
+            if maxLevel < dropDownLevel:
+                return True
+
+        return False
+
+    def _fillDifficultyItem(self, level):
+        entity = self.__platoonCtrl.getPrbEntity()
+        disabled = not entity.gameEventController.hasDifficultyLevelToken(level)
+        levelModel = DifficultyDropdownItemModel()
+        levelModel.setIsDisabled(disabled)
+        levelModel.setShowInfoIcon(self._showInfoWarningByLevel(level))
+        levelModel.setLabel(backport.text(R.strings.event.event.squad_difficulty(), level=''))
+        levelModel.setId(level)
+        return levelModel
+
+    def _fillDifficultyDropdown(self, model):
+        entity = self.__platoonCtrl.getPrbEntity()
+        levels = entity.gameEventController.getDifficultyLevels()
+        eventDifficulty = model.eventDifficulty
+        difficultyDropdownItems = eventDifficulty.getItems()
+        difficultyDropdownItems.clear()
+        for level in levels:
+            difficultyItem = self._fillDifficultyItem(level)
+            difficultyDropdownItems.addViewModel(difficultyItem)
+
+        difficultyDropdownItems.invalidate()
+        squadLevel = entity.gameEventController.getSquadDifficultyLevel()
+        model.setSelectedDifficulty(str(squadLevel))
+        self.__setSelected(eventDifficulty.getSelected(), int(squadLevel))
 
     def _addSubviews(self):
         self._addSubviewToLayout(ChatSubview())
 
-    def _onFindPlayers(self):
-        pass
-
     def _getTitle(self):
-        title = ''.join((i18n.makeString(backport.text(R.strings.platoon.squad())), i18n.makeString(backport.text(R.strings.platoon.members.header.event()))))
+        title = ' '.join((i18n.makeString(backport.text(R.strings.platoon.squad())), i18n.makeString(backport.text(R.strings.platoon.members.header.event()))))
         return title
 
     def _getWindowInfoTooltipHeaderAndBody(self):
@@ -616,6 +780,79 @@ class EventMembersView(SquadMembersView):
         header = backport.text(tooltip.header())
         body = backport.text(tooltip.body())
         return self._createSimpleTooltipContent(header=header, body=body)
+
+    def _addListeners(self):
+        model = self.viewModel
+        model.eventDifficulty.onChange += self.__onEventDifficultyChanged
+        model.onOverViewChange += self.__onOverViewChange
+        unitMgr = prb_getters.getClientUnitMgr()
+        if unitMgr and unitMgr.unit:
+            unitMgr.unit.onUnitPlayerInfoChanged += self.__onUnitPlayerInfoChanged
+            unitMgr.unit.onUnitPlayerRoleChanged += self.__onUnitPlayerRoleChanged
+
+    def __removeListeners(self):
+        model = self.viewModel
+        model.eventDifficulty.onChange -= self.__onEventDifficultyChanged
+        model.onOverViewChange -= self.__onOverViewChange
+        unitMgr = prb_getters.getClientUnitMgr()
+        if unitMgr and unitMgr.unit:
+            unitMgr.unit.onUnitPlayerInfoChanged -= self.__onUnitPlayerInfoChanged
+            unitMgr.unit.onUnitPlayerRoleChanged -= self.__onUnitPlayerRoleChanged
+
+    def __onEventDifficultyChanged(self, args=None):
+        level = args.get('selectedIds')
+        if level:
+            self._selectDifficulty(int(level))
+
+    def __setSelected(self, model, value):
+        model.clear()
+        model.addNumber(value)
+        model.invalidate()
+
+    def __onUnitPlayerRoleChanged(self, playerID, prevRoleFlags, nextRoleFlags):
+        playerInfo = self.__platoonCtrl.getPlayerInfo()
+        if not playerInfo.isCurrentPlayer():
+            return
+        diff = prevRoleFlags ^ nextRoleFlags
+        if diff & UNIT_ROLE.CREATOR > 0:
+            entity = self.__platoonCtrl.getPrbEntity()
+            currentSquadDifficultyLevel = entity.gameEventController.getSquadDifficultyLevel()
+            maxDifficultyLevel = playerInfo.extraData.get('eventEnqueueData', {}).get('maxDifficultyLevel')
+            difficultyLevelToSet = min(maxDifficultyLevel, currentSquadDifficultyLevel)
+            self._selectDifficulty(int(difficultyLevelToSet), True, True)
+
+    def __onUnitPlayerInfoChanged(self, accountDBID, playerData):
+        playerInfo = self.__platoonCtrl.getPlayerInfo()
+        entity = self.__platoonCtrl.getPrbEntity()
+        if playerInfo.isCurrentPlayer():
+            level = playerData.get('extraData', {}).get('eventEnqueueData', {}).get('difficultyLevel')
+            entity.gameEventController.setSquadDifficultyLevel(level)
+        self.__updateSelectedDifficultyLevel()
+        self._checkCommandersDifficultyLevel()
+
+    def __onUnitPlayerStateChanged(self, pInfo):
+        playerInfo = self.__platoonCtrl.getPlayerInfo()
+        if playerInfo.isCurrentPlayer() and not playerInfo.isReady and not playerInfo.isCommander():
+            entity = self.__platoonCtrl.getPrbEntity()
+            maxDifficultyLevel = playerInfo.extraData.get('eventEnqueueData', {}).get('maxDifficultyLevel')
+            if maxDifficultyLevel < entity.gameEventController.getSquadDifficultyLevel():
+                entity.gameEventController.setSelectedDifficultyLevel(maxDifficultyLevel)
+
+    def __updateSelectedDifficultyLevel(self):
+        with self.viewModel.transaction() as model:
+            if model.getIsCommander():
+                entity = self.__platoonCtrl.getPrbEntity()
+                difficultyLevel = entity.gameEventController.getSelectedDifficultyLevel()
+                entity.gameEventController.setSquadDifficultyLevel(difficultyLevel)
+            self._fillDifficultyDropdown(model)
+
+    def __onOverViewChange(self, args=None):
+        if args is None:
+            _logger.error("Can't notified cursor over changed. args=None. Please fix JS")
+            return
+        else:
+            notifyCursorOver3DScene(args.get('isOver3dScene', False))
+            return
 
 
 class EpicMembersView(SquadMembersView):

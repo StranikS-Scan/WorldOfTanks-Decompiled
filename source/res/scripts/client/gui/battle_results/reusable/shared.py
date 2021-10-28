@@ -3,7 +3,7 @@
 import functools
 import operator
 from account_shared import getFairPlayViolationName
-from constants import DEATH_REASON_ALIVE
+from constants import DEATH_REASON_ALIVE, EVENT
 from debug_utils import LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui import achievements, layouts
@@ -371,7 +371,7 @@ class _VehicleInfo(object):
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_numDefended', '_vehicleNumCaptured', '_numRecovered', '_destructiblesNumDestroyed', '_destructiblesDamageDealt', '_achievedLevel')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_numDefended', '_vehicleNumCaptured', '_numRecovered', '_destructiblesNumDestroyed', '_destructiblesDamageDealt', '_achievedLevel', '_eventPoints', '_eventPointsTotal', '_eventPointsLeft', '_environmentID', '_eventAFKViolator', '_eventAFKBanned', '_hwRewardBoxKeys', '_hwRewardBoxBossKeys', '_hwTeamFightPlace', '_hwBossFightPlace', '_difficultyLevel')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -426,6 +426,17 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._destructiblesDamageDealt = 0
         self._numDefended = 0
         self._achievedLevel = 0
+        self._eventPoints = 0
+        self._eventPointsTotal = 0
+        self._eventPointsLeft = 0
+        self._environmentID = 0
+        self._eventAFKViolator = False
+        self._eventAFKBanned = False
+        self._hwRewardBoxKeys = 0
+        self._hwRewardBoxBossKeys = 0
+        self._hwTeamFightPlace = EVENT.INVALID_BATTLE_PLACE
+        self._hwBossFightPlace = EVENT.INVALID_BATTLE_PLACE
+        self._difficultyLevel = 0
 
     @property
     def vehicle(self):
@@ -635,6 +646,50 @@ class VehicleDetailedInfo(_VehicleInfo):
     def xpPenalty(self):
         return self._xpPenalty
 
+    @property
+    def eventPoints(self):
+        return self._eventPoints
+
+    @property
+    def eventPointsLeft(self):
+        return self._eventPointsLeft
+
+    @property
+    def eventPointsTotal(self):
+        return self._eventPointsTotal
+
+    @property
+    def environmentID(self):
+        return self._environmentID
+
+    @property
+    def eventAFKViolator(self):
+        return self._eventAFKViolator
+
+    @property
+    def eventAFKBanned(self):
+        return self._eventAFKBanned
+
+    @property
+    def hwRewardBoxKeys(self):
+        return self._hwRewardBoxKeys
+
+    @property
+    def hwRewardBoxBossKeys(self):
+        return self._hwRewardBoxBossKeys
+
+    @property
+    def hwTeamFightPlace(self):
+        return self._hwTeamFightPlace
+
+    @property
+    def hwBossFightPlace(self):
+        return self._hwBossFightPlace
+
+    @property
+    def difficultyLevel(self):
+        return self._difficultyLevel
+
     def haveInteractionDetails(self):
         return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._directEnemyHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._piercingEnemyHits != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0 or self._damageBlockedByArmor != 0
 
@@ -696,6 +751,17 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._numDefended = vehicleRecords['numDefended']
         info._equipmentDamageAssisted = vehicleRecords.get('damageAssistedInspire', 0) + vehicleRecords.get('damageAssistedSmoke', 0)
         info._achievedLevel = vehicleRecords.get('achivedLevel', 0)
+        info._eventPoints = vehicleRecords.get('eventPoints', info._eventPoints)
+        info._eventPointsTotal = vehicleRecords.get('eventPointsTotal', info._eventPointsTotal)
+        info._eventPointsLeft = vehicleRecords.get('eventPointsLeft', info._eventPointsLeft)
+        info._environmentID = vehicleRecords.get('environmentID', info._environmentID)
+        info._eventAFKViolator = vehicleRecords.get('eventAFKViolator', info._eventAFKViolator)
+        info._eventAFKBanned = vehicleRecords.get('eventAFKBanned', info._eventAFKBanned)
+        info._hwRewardBoxKeys = vehicleRecords.get('hwRewardBoxKeys', info._hwRewardBoxKeys)
+        info._hwRewardBoxBossKeys = vehicleRecords.get('hwRewardBoxBossKeys', info._hwRewardBoxBossKeys)
+        info._hwTeamFightPlace = vehicleRecords.get('hwTeamFightPlace', info._hwTeamFightPlace)
+        info._hwBossFightPlace = vehicleRecords.get('hwBossFightPlace', info._hwBossFightPlace)
+        info._difficultyLevel = vehicleRecords.get('difficultyLevel', info._difficultyLevel)
         cls._setSharedRecords(info, vehicleRecords)
         return info
 
@@ -952,6 +1018,50 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def equipmentDamageAssisted(self):
         return self.__accumulate('equipmentDamageAssisted')
+
+    @property
+    def eventPoints(self):
+        return self.__findFirstNoZero('eventPoints')
+
+    @property
+    def eventPointsTotal(self):
+        return self.__findFirstNoZero('eventPointsTotal')
+
+    @property
+    def eventPointsLeft(self):
+        return self.__findFirstNoZero('eventPointsLeft')
+
+    @property
+    def environmentID(self):
+        return self.__findFirstNoZero('environmentID')
+
+    @property
+    def eventAFKViolator(self):
+        return self.__findFirstNoZero('eventAFKViolator')
+
+    @property
+    def eventAFKBanned(self):
+        return self.__findFirstNoZero('eventAFKBanned')
+
+    @property
+    def hwRewardBoxKeys(self):
+        return self.__findFirstNoZero('hwRewardBoxKeys')
+
+    @property
+    def hwRewardBoxBossKeys(self):
+        return self.__findFirstNoZero('hwRewardBoxBossKeys')
+
+    @property
+    def hwTeamFightPlace(self):
+        return self.__findMaxInt('hwTeamFightPlace', start=EVENT.INVALID_BATTLE_PLACE)
+
+    @property
+    def hwBossFightPlace(self):
+        return self.__findMaxInt('hwBossFightPlace', start=EVENT.INVALID_BATTLE_PLACE)
+
+    @property
+    def difficultyLevel(self):
+        return self.__findFirstNoZero('difficultyLevel')
 
     def addVehicleInfo(self, info):
         self.__vehicles.append(info)

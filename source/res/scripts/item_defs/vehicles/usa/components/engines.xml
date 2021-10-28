@@ -123,6 +123,16 @@
     <Wright_Continental_R-975C4_MapsTraining_Dummy_MT_1>	6	</Wright_Continental_R-975C4_MapsTraining_Dummy_MT_1>
     <Ford_GAC_1_MapsTraining_Player_HT_1>	8	</Ford_GAC_1_MapsTraining_Player_HT_1>
     <Ford_GAN_A_MapsTraining_Dummy_LT_2>	21	</Ford_GAN_A_MapsTraining_Dummy_LT_2>
+    <Continental_AV-1790-7C_Halloween_event>	20122	</Continental_AV-1790-7C_Halloween_event>
+    <Continental_AOSI-895-5B_Halloween_event>	20123	</Continental_AOSI-895-5B_Halloween_event>
+    <Ford_GAA_HELL>	20004	</Ford_GAA_HELL>
+    <Ford_GAFM2_HELL>	20005	</Ford_GAFM2_HELL>
+    <Continental_AV-1790-1_HELL>	20006	</Continental_AV-1790-1_HELL>
+    <Continental_AV-1790-1M2_HALL>	20008	</Continental_AV-1790-1M2_HALL>
+    <Continental_AV-1790-5_HELL>	20021	</Continental_AV-1790-5_HELL>
+    <Continental_AV-1790-3_HW_bot>	4	</Continental_AV-1790-3_HW_bot>
+    <Continental_AV-1790-7C_HW_bot>	5	</Continental_AV-1790-7C_HW_bot>
+    <AOI-1490_HW_bot>	30	</AOI-1490_HW_bot>
   </ids>
   <shared>
     <Ford_GAC>
@@ -1050,6 +1060,24 @@
       <rpm_min>	500	</rpm_min>
       <rpm_max>	2000	</rpm_max>
     </Continental_AV-1790-7C>
+    <Continental_AV-1790-7C_Halloween_event>
+      <userString>	#usa_vehicles:Continental_AV-1790-7C_Halloween_event	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV-1790-7C_Halloween_event_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	860	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
+    </Continental_AV-1790-7C_Halloween_event>
     <Continental_AV_1790_5C>
       <userString>	#usa_vehicles:Continental_AV_1790_5C	</userString>
       <shortUserString>	#usa_vehicles:Continental_AV_1790_5C_short	</shortUserString>
@@ -1681,6 +1709,24 @@
       <rpm_min>	429	</rpm_min>
       <rpm_max>	2817	</rpm_max>
     </Continental_AV_1790_5B>
+    <Continental_AOSI-895-5B_Halloween_event>
+      <userString>	#usa_vehicles:Continental_AOSI-895-5B_Halloween_event	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AOSI-895-5B_Halloween_event_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	93000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	840	</power>
+      <weight>	771	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	375	</rpm_min>
+      <rpm_max>	2941	</rpm_max>
+    </Continental_AOSI-895-5B_Halloween_event>
     <Continental_AOI-628-1>
       <userString>	#usa_vehicles:Continental_AOI-628-1	</userString>
       <shortUserString>	#usa_vehicles:Continental_AOI-628-1_short	</shortUserString>
@@ -2239,5 +2285,147 @@
       <rpm_max>	2200	</rpm_max>
       <notInShop>	True	</notInShop>
     </Ford_GAN_A_MapsTraining_Dummy_LT_2>
+    <Ford_GAA_HELL>
+      <userString>	#usa_vehicles:Ford_GAA	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	520	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2841	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Ford_GAA_HELL>
+    <Ford_GAFM2_HELL>
+      <userString>	#usa_vehicles:Ford_GAFM2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	34600	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	780	</power>
+      <weight>	569	</weight>
+      <maxHealth>	280	</maxHealth>
+      <maxRegenHealth>	147	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	456	</rpm_min>
+      <rpm_max>	2755	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Ford_GAFM2_HELL>
+    <Continental_AV-1790-1_HELL>
+      <userString>	#usa_vehicles:Continental_AV-1790-1	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV-1790-1_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	45000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	704	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	559	</rpm_min>
+      <rpm_max>	2521	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Continental_AV-1790-1_HELL>
+    <Continental_AV-1790-1M2_HALL>
+      <userString>	#usa_vehicles:Continental_AV-1790-1M2	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV-1790-1M2_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	99000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	820	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	402	</rpm_min>
+      <rpm_max>	2879	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Continental_AV-1790-1M2_HALL>
+    <Continental_AV-1790-5_HELL>
+      <userString>	#usa_vehicles:Continental_AV-1790-5	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV-1790-5_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	860	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Continental_AV-1790-5_HELL>
+    <Continental_AV-1790-3_HW_bot>
+      <userString>	#usa_vehicles:Continental_AV-1790-3	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV-1790-3_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	59000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Continental_AV-1790-3_HW_bot>
+    <Continental_AV-1790-7C_HW_bot>
+      <userString>	#usa_vehicles:Continental_AV-1790-7C	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV-1790-7C_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	860	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Continental_AV-1790-7C_HW_bot>
+    <AOI-1490_HW_bot>
+      <userString>	#usa_vehicles:AOI-1490	</userString>
+      <shortUserString>	#usa_vehicles:AOI-1490_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	875	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	495	</rpm_min>
+      <rpm_max>	2013	</rpm_max>
+    </AOI-1490_HW_bot>
   </shared>
 </engines.xml>

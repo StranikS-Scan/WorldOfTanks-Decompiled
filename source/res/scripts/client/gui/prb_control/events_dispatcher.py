@@ -9,6 +9,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
+from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.CHAT import CHAT
@@ -87,10 +88,17 @@ class EventDispatcher(object):
         self.__invalidatePrbEntity(loadedAlias)
 
     def loadHangar(self):
-        self.__fireLoadEvent(VIEW_ALIAS.LOBBY_HANGAR)
+        from gui.shared.event_dispatcher import showHangar
+        showHangar()
 
     def loadBattleQueue(self):
         self.__fireLoadEvent(VIEW_ALIAS.BATTLE_QUEUE)
+
+    def loadEventBattleQueue(self):
+        self.__fireLoadEvent(VIEW_ALIAS.EVENT_BATTLE_QUEUE)
+
+    def loadDifficultyLevelUnlocked(self):
+        self.__fireLoadEvent(VIEW_ALIAS.EVENT_DIFFICULTY_UNLOCK)
 
     def loadTrainingList(self):
         self.addTrainingToCarousel()
@@ -353,6 +361,12 @@ class EventDispatcher(object):
             if inView.alias in aliasToLoad:
                 res = True
         return res
+
+    def showEpicBattlesPrimeTimeWindow(self):
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+    def showRankedPrimeTimeWindow(self):
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
     def _showUnitProgress(self, prbType, show):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)

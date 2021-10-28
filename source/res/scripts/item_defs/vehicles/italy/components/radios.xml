@@ -16,7 +16,11 @@
     <SEM_35>	13	</SEM_35>
     <SEM_80>	14	</SEM_80>
     <SEM_90>	15	</SEM_90>
+    <R_F_3_M_2_HELL>	21	</R_F_3_M_2_HELL>
+    <R_F_2_C_A_HELL>	22	</R_F_2_C_A_HELL>
+    <R_F_2_C_A_HELL__0>	23	</R_F_2_C_A_HELL__0>
     <Development_Radio>	65000	</Development_Radio>
+    <Selex_STR_70_hw21>	20001	</Selex_STR_70_hw21>
   </ids>
   <shared>
     <R_F_C_R>
@@ -213,5 +217,53 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Development_Radio>
+    <R_F_3_M_2_HELL>
+      <userString>	#italy_vehicles:R_F_3_M_2	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	23400	</price>
+      <weight>	136	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </R_F_3_M_2_HELL>
+    <R_F_2_C_A_HELL>
+      <userString>	#italy_vehicles:R_F_2_C_A	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	8200	</price>
+      <weight>	35	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </R_F_2_C_A_HELL>
+    <R_F_2_C_A_HELL__0>
+      <userString>	#italy_vehicles:R_F_2_C_A	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	8200	</price>
+      <weight>	35	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </R_F_2_C_A_HELL__0>
+    <Selex_STR_70_hw21>
+      <userString>	#italy_vehicles:Selex_STR_70	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54500	</price>
+      <weight>	50	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Selex_STR_70_hw21>
   </shared>
 </radios.xml>

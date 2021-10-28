@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/radar_ctrl.py
 import logging
 import BigWorld
+import constants
 from constants import ARENA_PERIOD
 from gui.battle_control.view_components import ViewComponentsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -63,11 +64,12 @@ class RadarController(ViewComponentsController, IRadarController, EventsSubscrib
         arena = avatar.arena
         if arena is not None:
             self.subscribeToEvent(arena.onRadarInfoReceived, self.__onRadarInfoReceived)
-        playerVehicle = avatar.vehicle
-        if playerVehicle is not None:
-            self.updateRadarReadinessTime(playerVehicle.radar.radarReadinessTime)
-        else:
-            self.subscribeToEvent(avatar.onVehicleEnterWorld, self.__onVehicleEnterWorld)
+        if not avatar.arenaBonusType == constants.ARENA_BONUS_TYPE.EVENT_BATTLES:
+            playerVehicle = avatar.vehicle
+            if playerVehicle is not None:
+                self.updateRadarReadinessTime(playerVehicle.radar.radarReadinessTime)
+            else:
+                self.subscribeToEvent(avatar.onVehicleEnterWorld, self.__onVehicleEnterWorld)
         self.subscribeToEvent(self.__guiSessionProvider.onUpdateObservedVehicleData, self.__onUpdateObservedVehicleData)
         return
 
@@ -205,6 +207,8 @@ class RadarController(ViewComponentsController, IRadarController, EventsSubscrib
             listener.startTimeOut(0.0, 0.0)
 
     def __onUpdateObservedVehicleData(self, vID, extraData):
+        if BigWorld.player().arenaBonusType == constants.ARENA_BONUS_TYPE.EVENT_BATTLES:
+            return
         vehicle = BigWorld.entities.get(vID)
         if vehicle:
             vehicle.radar.refreshRadar()

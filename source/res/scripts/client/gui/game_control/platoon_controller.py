@@ -32,6 +32,7 @@ from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.base.unit.ctx import AutoSearchUnitCtx
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.formatters import messages
+from gui.prb_control.entities.event.squad.entity import EventBattleSquadEntity
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
@@ -58,7 +59,7 @@ if TYPE_CHECKING:
     from typing import Optional as TOptional, Tuple as TTuple
     from UnitBase import ProfileVehicle
 _logger = logging.getLogger(__name__)
-_QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME = {QUEUE_TYPE.EVENT_BATTLES: PREBATTLE_ACTION_NAME.SQUAD,
+_QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME = {QUEUE_TYPE.EVENT_BATTLES: PREBATTLE_ACTION_NAME.EVENT_SQUAD,
  QUEUE_TYPE.RANDOMS: PREBATTLE_ACTION_NAME.SQUAD,
  QUEUE_TYPE.EPIC: PREBATTLE_ACTION_NAME.SQUAD,
  QUEUE_TYPE.BATTLE_ROYALE: PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD,
@@ -78,6 +79,7 @@ _PREBATTLE_TYPE_TO_VEH_CRITERIA = {PREBATTLE_TYPE.SQUAD: _RANDOM_VEHICLE_CRITERI
  PREBATTLE_TYPE.EVENT: REQ_CRITERIA.VEHICLE.EVENT_BATTLE,
  PREBATTLE_TYPE.MAPBOX: _RANDOM_VEHICLE_CRITERIA}
 _MIN_PERF_PRESET_NAME = 'MIN'
+_DIFFICULTY_LEVEL_ICON = '/*{}'
 _MAX_SLOT_COUNT_FOR_PLAYER_RESORTING = 3
 SquadInfo = namedtuple('SquadInfo', ['platoonState', 'squadManStates', 'commanderIndex'])
 Position = namedtuple('Position', ['x', 'y'])
@@ -546,6 +548,10 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def onUnitPlayerInfoChanged(self, pInfo):
         if self.getPrbEntityType() in PREBATTLE_TYPE.SQUAD_PREBATTLES:
             self.onMembersUpdate()
+            if self.getPrbEntityType() == PREBATTLE_TYPE.EVENT and pInfo.isCommander():
+                if not pInfo.extraData['eventEnqueueData']['difficultyLevel']:
+                    return
+                self.__addPlayerDifficultyLevelNotification(settings.UNIT_NOTIFICATION_KEY.SELECTED_DIFFICULTY_LEVEL, pInfo, _DIFFICULTY_LEVEL_ICON.format(pInfo.extraData['eventEnqueueData']['difficultyLevel']))
 
     def onUnitRosterChanged(self):
         if self.getPrbEntityType() not in PREBATTLE_TYPE.SQUAD_PREBATTLES:
@@ -562,7 +568,12 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         if self.getPrbEntityType() not in PREBATTLE_TYPE.SQUAD_PREBATTLES:
             return
         _logger.debug('PlatoonController: onUnitPlayerAdded')
-        self.__addPlayerJoinNotification(pInfo)
+        if not pInfo.isInvite():
+            if self.getPrbEntityType() == PREBATTLE_TYPE.EVENT:
+                key = settings.UNIT_NOTIFICATION_KEY.EVENT_PLAYER_ADDED
+            else:
+                key = settings.UNIT_NOTIFICATION_KEY.PLAYER_ADDED
+            self.__addPlayerNotification(key, pInfo)
         if pInfo.isInSlot:
             SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.gui_platoon_2_member_joined()))
         self.__areOtherMembersReady = False
@@ -573,7 +584,11 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             return
         _logger.debug('PlatoonController: onUnitPlayerRemoved')
         if not pInfo.isInvite():
-            self.__addPlayerNotification(settings.UNIT_NOTIFICATION_KEY.PLAYER_REMOVED, pInfo)
+            if self.getPrbEntityType() == PREBATTLE_TYPE.EVENT:
+                key = settings.UNIT_NOTIFICATION_KEY.EVENT_PLAYER_REMOVED
+            else:
+                key = settings.UNIT_NOTIFICATION_KEY.PLAYER_REMOVED
+            self.__addPlayerNotification(key, pInfo)
             if pInfo.dbID in self.__alreadyJoinedAccountDBIDs:
                 self.__alreadyJoinedAccountDBIDs.remove(pInfo.dbID)
         SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.gui_platoon_2_member_left()))
@@ -590,6 +605,8 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                 self.destroyUI(hideOnly=True)
         self.__checkOtherPlatoonMembersReady(pInfo)
         self.__updatePlatoonTankInfo()
+        if self.getPrbEntityType() == PREBATTLE_TYPE.EVENT and not (pInfo.isReady or pInfo.isCommander()):
+            self.__addPlayerDifficultyLevelNotification(settings.UNIT_NOTIFICATION_KEY.NOT_READY_DIFFICULTY_LEVEL, pInfo, _DIFFICULTY_LEVEL_ICON.format(pInfo.extraData['eventEnqueueData']['maxDifficultyLevel']))
 
     def onUnitPlayerOnlineStatusChanged(self, pInfo):
         if self.getPrbEntityType() not in PREBATTLE_TYPE.SQUAD_PREBATTLES:
@@ -632,6 +649,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def __orderSlotsBasedOnDisplaySlotsIndices(self, slots):
         self.__updateDisplaySlotsIndices()
         orderedSlots = [ slot for slot in slots ]
+        nextEmptySlotIndex = len(self.__tankDisplayPosition)
         for slot in slots:
             validPlayerSlot = False
             playerAccId = slot['player']['accID'] if slot['player'] else -1
@@ -649,6 +667,9 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                 while availableSlotIndex in self.__tankDisplayPosition.values():
                     availableSlotIndex += 1
 
+                if self.getPrbEntityType() == PREBATTLE_TYPE.EVENT:
+                    availableSlotIndex = nextEmptySlotIndex
+                    nextEmptySlotIndex += 1
                 if availableSlotIndex < len(orderedSlots):
                     orderedSlots[availableSlotIndex] = slot
                 else:
@@ -891,6 +912,10 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         unitMgr = prb_getters.getClientUnitMgr()
         return unitMgr.unit.getAutoSearchFlagsOfAccount(accountDBID) if unitMgr and unitMgr.unit else 0
 
+    def __addPlayerDifficultyLevelNotification(self, key, pInfo, level):
+        if self.getChannelController():
+            self.__channelCtrl.addMessage(messages.getDifficultyLevelUnitPlayerNotification(key, pInfo.getFullName(), level))
+
     def __onAppResolutionChanged(self, event):
         ctx = event.ctx
         if 'width' not in ctx:
@@ -1018,11 +1043,13 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def __updateDisplaySlotsIndices(self):
         players = self.prbEntity.getPlayers()
-        playerIds = [ player.accID for player in players.values() if player.isInSlot ]
+        playersInSlots = [ player for player in players.values() if player.isInSlot ]
+        playerIds = [ player.accID for player in playersInSlots ]
         maxSlotCount = self.prbEntity.getRosterSettings().getMaxSlots()
+        isEventSquad = isinstance(self.prbEntity, EventBattleSquadEntity)
         if len(playerIds) > maxSlotCount:
             _logger.warning('The number of players in slot (%s) is higher then max slots to display (%s). This state should not happen for this type of unit.', len(playerIds), maxSlotCount)
-        if not self.__tankDisplayPosition:
+        if not self.__tankDisplayPosition or isEventSquad:
             nextDisplayIndex = 0
             if maxSlotCount == _MAX_SLOT_COUNT_FOR_PLAYER_RESORTING:
                 currentPlayerIndex = 1
@@ -1037,6 +1064,21 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                         if nextDisplayIndex == currentPlayerIndex:
                             nextDisplayIndex += 1
                     self.__tankDisplayPosition[playerId] = displaySlot
+
+            elif isEventSquad:
+                commanderPlayerIndex = 0
+                for player in playersInSlots:
+                    playerId = player.accID
+                    if player.isCommander():
+                        displaySlot = commanderPlayerIndex
+                    else:
+                        nextDisplayIndex += 1
+                        displaySlot = nextDisplayIndex
+                    self.__tankDisplayPosition[playerId] = displaySlot
+
+                for playerId, displayIndex in self.__tankDisplayPosition.items():
+                    if playerId not in playerIds:
+                        self.__tankDisplayPosition.pop(playerId)
 
             else:
                 for playerId in playerIds:

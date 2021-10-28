@@ -128,6 +128,8 @@ class BaseAmmunitionSetupView(ViewImpl):
     @async
     def _onPanelSelected(self, args):
         sectionName, slotID = args.get('selectedSection'), int(args.get('selectedSlot'))
+        if self._vehItem.getItem().isOnlyForEventBattles and sectionName == TankSetupConstants.SHELLS:
+            return
         if sectionName:
             switch = yield await(self._tankSetup.switch(sectionName, slotID))
             if switch and self.viewStatus == ViewStatus.LOADED:

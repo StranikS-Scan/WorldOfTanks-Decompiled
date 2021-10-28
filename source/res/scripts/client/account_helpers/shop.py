@@ -482,6 +482,12 @@ class Shop(object):
             self.__account._doCmdInt3(AccountCommands.CMD_BUY_BATTLE_PASS_LEVELS, self.__getCacheRevision(), seasonID, levels, proxy)
             return
 
+    def purchaseEventShopBundle(self, bundleID, count=1, callback=None):
+        self.__account._doCmdInt2Str(AccountCommands.CMD_PURCHASE_EVENT_SHOP_BUNDLE, self.__getCacheRevision(), count, bundleID, callback)
+
+    def openRewardBox(self, boxId, isSkipQuest, callback=None):
+        self.__account._doCmdInt2Str(AccountCommands.CMD_HW21_REWARDBOX_OPEN, self.__getCacheRevision(), int(isSkipQuest), boxId, callback)
+
     def __onSyncResponse(self, syncID, resultID, ext=None):
         ext = ext or {}
         if resultID == AccountCommands.RES_NON_PLAYER:

@@ -16,6 +16,9 @@
       <Arg>	STRING	</Arg>
       <Arg>	STRING	</Arg>
     </respawnController_redrawVehicleOnRespawn>
+    <respawnController_explodeVehicleBeforeRespawn>
+      <Arg>	OBJECT_ID	</Arg>
+    </respawnController_explodeVehicleBeforeRespawn>
     <respawnController_updateRespawnVehicles>
       <Arg>	ARRAY	  <of>	RESPAWN_AVAILABLE_VEHICLE	</of>
       </Arg>

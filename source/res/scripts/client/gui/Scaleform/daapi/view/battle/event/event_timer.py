@@ -1,69 +1,87 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/event/event_timer.py
+from enum import IntEnum
 from gui import makeHtmlString
+from gui.Scaleform.daapi.view.battle.event.game_event_getter import GameEventGetterMixin
 from gui.Scaleform.daapi.view.meta.EventTimerMeta import EventTimerMeta
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.battle_control.battle_constants import EventBattleGoal
 
-class EventTimer(EventTimerMeta):
+class _AlarmTime(IntEnum):
+    FIRST = 60
+    SECOND = 30
+    LAST = 10
+
+
+class _AlertState(IntEnum):
+    DISABLED = 0
+    ENABLED = 1
+
+
+class EventTimer(EventTimerMeta, GameEventGetterMixin):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _COLOR = '#ffffff'
-    _MESSAGE = 'timerEventMessage'
     _HTML_TEMPLATE_PATH = 'html_templates:battleTimer'
-    _WAIT_TIME = 300
-    _ALARM_TIME = 60
-    _ALART_STATE_ENABLED = 1
-    _ALART_STATE_DISABLED = 0
-    _MAX_PROGRESS = 100
-    _TITLE_TMPL = '<font color="{color}">{text}</font>'
-    _TIMER_TMPL = '<font color="{color}">{min:02d}:{sec:02d}</font>'
+    _ALERT_STATE_ENABLED = 1
+    _ALERT_STATE_DISABLED = 0
+    _ONE_MINUTE_SECONDS = 60
+    _GOAL_MESSAGES = {EventBattleGoal.UNKNOWN: None,
+     EventBattleGoal.COLLECT_MATTER: 'collectMatter',
+     EventBattleGoal.DELIVER_MATTER: 'deliverMatter',
+     EventBattleGoal.GET_TO_COLLECTOR: 'getToPoint'}
 
     def __init__(self):
         super(EventTimer, self).__init__()
-        self._waitTime = self._WAIT_TIME
-        self._alarmTime = self._ALARM_TIME
-        self._visible = True
-        self._progress = 0
+        self._visible = False
+        self._currentHint = None
+        return
 
     def _populate(self):
         super(EventTimer, self)._populate()
-        self._onUpdateScenarioTimer(self._waitTime, self._alarmTime, self._visible)
+        battleGoalsCtrl = self.sessionProvider.dynamic.battleGoals
+        if battleGoalsCtrl is not None:
+            battleGoalsCtrl.events.onTimerUpdated += self._onTimerUpdated
+            battleGoalsCtrl.events.onUpdatePointerMessage += self._onBattlePointerUpdated
+        return
 
     def _dispose(self):
-        self._waitTime = 0
-        self._alarmTime = 0
         self._visible = False
+        battleGoalsCtrl = self.sessionProvider.dynamic.battleGoals
+        if battleGoalsCtrl is not None:
+            battleGoalsCtrl.events.onTimerUpdated -= self._onTimerUpdated
+            battleGoalsCtrl.events.onUpdatePointerMessage -= self._onBattlePointerUpdated
         super(EventTimer, self)._dispose()
+        return
 
-    def _onUpdateScenarioTimer(self, waitTime, alarmTime, visible):
-        self._waitTime = waitTime
-        self._alarmTime = alarmTime
-        self._visible = visible
-        self._updateTimer()
-
-    def _updateTimer(self):
-        if self._waitTime >= 0 and self._visible:
-            m, s = divmod(int(self._waitTime), self._ALARM_TIME)
-            timeLeft = self._TIMER_TMPL.format(color=self._COLOR, min=m, sec=s)
-            message = makeHtmlString(self._HTML_TEMPLATE_PATH, self._MESSAGE)
-            titlText = self._TITLE_TMPL.format(color=self._COLOR, text=message)
-            timerStateAlarm = self._ALART_STATE_DISABLED
-            if self._waitTime <= self._alarmTime:
-                timerStateAlarm = self._ALART_STATE_ENABLED
-                if self._waitTime == self._ALARM_TIME:
-                    self.as_playFxS()
-            self.as_setTimerStateS(timerStateAlarm)
-            self.as_updateTimeS(timeLeft)
-            if self._progress < self._MAX_PROGRESS:
-                self.as_updateTitleS(titlText)
-                self.as_updateProgressBarS(self._progress, True)
-        else:
+    def _onTimerUpdated(self, seconds, isVisible, isAlarm):
+        self._visible = isVisible
+        if not isVisible:
             self._hideTimer()
+            return
+        m, s = divmod(int(seconds), self._ONE_MINUTE_SECONDS)
+        timeString = '<font color="{color}">{min:02d}:{sec:02d}</font>'.format(color=self._COLOR, min=m, sec=s)
+        if isAlarm or seconds == _AlarmTime.FIRST or seconds == _AlarmTime.SECOND or seconds <= _AlarmTime.LAST:
+            self.as_playFxS()
+        needAlarm = isAlarm or seconds <= _AlarmTime.FIRST
+        timerState = _AlertState.ENABLED if needAlarm else _AlertState.DISABLED
+        self.as_setTimerStateS(timerState.value)
+        self.as_updateTimeS(timeString)
 
-    def _playFxS(self):
-        self.as_playFxS()
+    def _onBattlePointerUpdated(self, currentGoal):
+        self._updateTitle(currentGoal)
+
+    def _updateTitle(self, currentGoal):
+        if not self._visible:
+            return
+        else:
+            title = ''
+            if currentGoal is not None and currentGoal != EventBattleGoal.UNKNOWN:
+                messageId = self._GOAL_MESSAGES[currentGoal]
+                title = makeHtmlString(self._HTML_TEMPLATE_PATH, messageId)
+            self.as_updateTitleS(title)
+            return
 
     def _hideTimer(self):
         self.as_updateTimeS('')
         self.as_updateTitleS('')
-        self.as_updateProgressBarS(0, False)
-
-    def setProgress(self, progress):
-        self._progress = progress

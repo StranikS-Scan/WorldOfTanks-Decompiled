@@ -187,6 +187,10 @@ class IGameSessionController(IGameController):
         raise NotImplementedError
 
     @property
+    def sessionStartedAt(self):
+        return NotImplementedError
+
+    @property
     def sessionDuration(self):
         raise NotImplementedError
 
@@ -1286,6 +1290,9 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
     def isBattlePassAvailable(self, bonusType):
         raise NotImplementedError
 
+    def isEventMode(self):
+        raise NotImplementedError
+
     def isInBattleRoyaleSquad(self):
         raise NotImplementedError
 
@@ -1932,4 +1939,19 @@ class IYearHareAffairController(IGameWindowController):
         raise NotImplementedError
 
     def getFinishTime(self):
+        raise NotImplementedError
+
+
+class IEventTokenController(IGameController):
+    onNotesUpdated = None
+    onShopItemUpdated = None
+    onEventMoneyUpdated = None
+
+    def getNewNotesCount(self):
+        raise NotImplementedError
+
+    def getReadNotes(self):
+        raise NotImplementedError
+
+    def markNoteRead(self, note):
         raise NotImplementedError

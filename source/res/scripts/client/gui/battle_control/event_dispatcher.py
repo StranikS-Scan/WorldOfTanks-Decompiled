@@ -5,7 +5,7 @@ from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.avatar_getter import isVehicleAlive
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.shared.events import GameEvent, LoadViewEvent
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
@@ -47,6 +47,12 @@ def toggleHelp():
     if _killHelpView():
         return
     g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.INGAME_HELP)), scope=_SCOPE)
+
+
+def toggleHWIngameHelp():
+    if _killHelpView():
+        return
+    g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EVENT_INGAME_HELP)), scope=_SCOPE)
 
 
 def toggleHelpDetailed(ctx):
@@ -155,3 +161,20 @@ def sniperCameraTransition(transitionTime, currentGunIndex):
 
 def showCommanderCamHint(show):
     g_eventBus.handleEvent(GameEvent(GameEvent.COMMANDER_HINT, {'show': show}), scope=_SCOPE)
+
+
+def toggleFadeOut(settings):
+    g_eventBus.handleEvent(GameEvent(GameEvent.FADE_OUT_AND_IN, {'settings': settings}), scope=_SCOPE)
+
+
+def onCollectorProgress(overlays):
+    g_eventBus.handleEvent(GameEvent(GameEvent.COLLECTOR_PROGRESS, {'overlays': overlays}), scope=_SCOPE)
+
+
+def onCollectorProgressStop():
+    g_eventBus.handleEvent(GameEvent(GameEvent.COLLECTOR_PROGRESS_STOP), scope=_SCOPE)
+
+
+def onHideBossHealthBar():
+    g_eventBus.handleEvent(events.BossHPBarEvent(events.BossHPBarEvent.ON_HIDE, None), scope=EVENT_BUS_SCOPE.BATTLE)
+    return

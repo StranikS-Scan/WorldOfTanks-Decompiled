@@ -194,7 +194,7 @@ class SharedPage(BattlePageMeta):
                 self._onPostMortemSwitched(noRespawnPossible=False, respawnAvailable=False)
             self._isInPostmortem = ctrl.isInPostmortem
             ctrl.onPostMortemSwitched += self._onPostMortemSwitched
-            ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
+            ctrl.onRespawnBaseMoving += self._onRespawnBaseMoving
         crosshairCtrl = self.sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
@@ -214,7 +214,7 @@ class SharedPage(BattlePageMeta):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onPostMortemSwitched -= self._onPostMortemSwitched
-            ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
+            ctrl.onRespawnBaseMoving -= self._onRespawnBaseMoving
         aih_global_binding.unsubscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self._onAvatarCtrlModeChanged)
         for alias, _ in self.__componentsConfig.getViewsConfig():
             self.sessionProvider.removeViewComponent(alias)
@@ -241,15 +241,19 @@ class SharedPage(BattlePageMeta):
 
     def _onBattleLoadingStart(self):
         self._isBattleLoading = True
+        additionalToggling, visible = set(), set()
         if not self._blToggling:
             self._blToggling = set(self.as_getComponentsVisibilityS())
-        self._blToggling.difference_update([_ALIASES.BATTLE_LOADING])
+        battleLoadingVisibleAliases = self._getBattleLoadingVisibleAliases()
+        if battleLoadingVisibleAliases is not None:
+            self._blToggling.difference_update(battleLoadingVisibleAliases)
         if not avatar_getter.isObserverSeesAll():
             self._blToggling.add(_ALIASES.BATTLE_MESSENGER)
         hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
         if hintPanel and hintPanel.getActiveHint():
             self._blToggling.add(_ALIASES.HINT_PANEL)
-        visible, additionalToggling = {_ALIASES.BATTLE_LOADING}, set()
+        if self.getComponent(_ALIASES.BATTLE_LOADING) is not None:
+            visible.add(_ALIASES.BATTLE_LOADING)
         if self.getComponent(_ALIASES.PREBATTLE_AMMUNITION_PANEL) is not None:
             visible.add(_ALIASES.PREBATTLE_AMMUNITION_PANEL)
             additionalToggling.add(_ALIASES.PREBATTLE_AMMUNITION_PANEL)
@@ -260,12 +264,15 @@ class SharedPage(BattlePageMeta):
 
     def _onBattleLoadingFinish(self):
         self._isBattleLoading = False
-        self._setComponentsVisibility(visible=self._blToggling, hidden={_ALIASES.BATTLE_LOADING})
+        self._setComponentsVisibility(visible=self._blToggling, hidden=self._getBattleLoadingVisibleAliases())
         self._blToggling.clear()
         for component in self._external:
             component.active(True)
 
         self.sessionProvider.shared.hitDirection.setVisible(True)
+
+    def _getBattleLoadingVisibleAliases(self):
+        return {_ALIASES.BATTLE_LOADING}
 
     def _onDestroyTimerStart(self):
         hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
@@ -352,7 +359,7 @@ class SharedPage(BattlePageMeta):
             self._isInPostmortem = True
             self._switchToPostmortem()
 
-    def __onRespawnBaseMoving(self):
+    def _onRespawnBaseMoving(self):
         if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
             self.as_setPostmortemTipsVisibleS(False)
             self._isInPostmortem = False

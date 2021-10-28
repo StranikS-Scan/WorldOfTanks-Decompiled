@@ -627,6 +627,9 @@ class AmmoController(MethodsRules, ViewComponentsController):
         else:
             return quantity
 
+    def getClipCapacity(self):
+        return self.__gunSettings.clip.size
+
     @MethodsRules.delayable('setGunSettings')
     def setShells(self, intCD, quantity, quantityInClip):
         result = SHELL_SET_RESULT.UNDEFINED
@@ -707,6 +710,9 @@ class AmmoController(MethodsRules, ViewComponentsController):
 
     def setDualGunShellChangeTime(self, left, right, activeIdx):
         self.__dualGunShellChangeTime = _DualGunShellChangeTime(left, right, activeIdx)
+
+    def getDualGunShellChangeTime(self):
+        return self.__dualGunShellChangeTime
 
     def setDualGunQuickChangeReady(self, ready):
         self.__dualGunQuickChangeReady = ready

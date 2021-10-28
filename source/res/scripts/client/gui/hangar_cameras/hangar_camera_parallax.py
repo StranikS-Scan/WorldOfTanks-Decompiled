@@ -149,6 +149,6 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
         self.__isInIdle = event.ctx['started']
 
     def __onForceDisable(self, event):
-        if not event.ctx['setParallax']:
+        if not event.ctx.get('setParallax'):
             return
         self.__isForcedDisabled = event.ctx['isDisable']

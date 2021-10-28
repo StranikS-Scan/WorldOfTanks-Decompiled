@@ -23,8 +23,8 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import finders
 from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID
-from gui.server_events.events_dispatcher import showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap, showMissionsCategories, showMissionsBattlePassCommonProgression, showMissionsMapboxProgression
-from gui.server_events.events_helpers import isRankedDaily, isDailyEpic
+from gui.server_events.events_dispatcher import showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap, showMissionsCategories, showMissionsBattlePassCommonProgression, showMissionsMapboxProgression, showMissionsHalloween
+from gui.server_events.events_helpers import isRankedDaily, isDailyEpic, filterHalloweenAvailableQuest, isHalloween, isHalloweenAFK
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showSeniorityInfoWindow
@@ -34,8 +34,9 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IBattlePassController, IBootcampController
+from skeletons.gui.afk_controller import IAFKController
 from skeletons.gui.event_boards_controllers import IEventBoardController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController
 from skeletons.gui.game_control import IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -85,7 +86,8 @@ FLAG_BY_QUEST_TYPE = {HANGAR_HEADER_QUESTS.QUEST_TYPE_PERSONAL_REGULAR: RES_ICON
  HANGAR_HEADER_QUESTS.QUEST_TYPE_PERSONAL_PM2: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_RED,
  HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_BLUE,
  HANGAR_HEADER_QUESTS.QUEST_TYPE_EVENT: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_KHACKI,
- HANGAR_HEADER_QUESTS.QUEST_TYPE_BATTLE_ROYALE: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_EPIC_STEELHUNTER}
+ HANGAR_HEADER_QUESTS.QUEST_TYPE_BATTLE_ROYALE: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_EPIC_STEELHUNTER,
+ HANGAR_HEADER_QUESTS.QUEST_TYPE_HALLOWEEN: RES_ICONS.MAPS_ICONS_EVENT_QUESTS_HEADERFLAG}
 TOOLTIPS_HANGAR_HEADER_PM = {WIDGET_PM_STATE.BRANCH_DISABLED: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS_BRANCH_DISABLED,
  WIDGET_PM_STATE.LOW_LEVEL: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS_LOWLEVEL,
  WIDGET_PM_STATE.MISSION_DISABLED: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS_MISSION_DISABLED,
@@ -206,6 +208,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
     _festivityController = dependency.descriptor(IFestivityController)
+    _afkController = dependency.descriptor(IAFKController)
     __battlePassController = dependency.descriptor(IBattlePassController)
     __bootcampController = dependency.descriptor(IBootcampController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
@@ -247,6 +250,11 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             showSeniorityInfoWindow()
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_BATTLE_ROYALE:
             showMissionsCategories(groupID=BATTLE_ROYALE_GROUPS_ID)
+        elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_HALLOWEEN:
+            groupID = HANGAR_HEADER_QUESTS.QUEST_GROUP_HALLOWEEN
+            if self._afkController.isBanned:
+                groupID = HANGAR_HEADER_QUESTS.QUEST_GROUP_HALLOWEEN_AFK
+            showMissionsHalloween(groupID)
 
     def onUpdateHangarFlag(self):
         self.update()
@@ -305,18 +313,21 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return
 
     def _makeHeaderVO(self):
+        entity = self.prbDispatcher.getEntity() if self.prbDispatcher else None
+        inEvent = entity is not None and entity.getQueueType() == constants.QUEUE_TYPE.EVENT_BATTLES
         emptyHeaderVO = {'isVisible': False,
          'quests': []}
         if not self.__tutorialLoader.gui.hangarHeaderEnabled:
             return emptyHeaderVO
-        if self.__rankedController.isRankedPrbActive():
+        elif self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,
              'quests': self.__getRankedQuestsToHeaderVO()}
-        if self.__epicController.isEpicPrbActive():
+        elif self.__epicController.isEpicPrbActive():
             return {'isVisible': True,
              'quests': self.__getEpicQuestsToHeaderVO()}
-        return {'isVisible': True,
-         'quests': self._getCommonQuestsToHeaderVO(self._currentVehicle.item)} if self._currentVehicle.isPresent() else emptyHeaderVO
+        else:
+            return {'isVisible': not inEvent,
+             'quests': self._getCommonQuestsToHeaderVO(self._currentVehicle.item)} if self._currentVehicle.isPresent() else emptyHeaderVO
 
     def _getCommonQuestsToHeaderVO(self, vehicle):
         quests = []
@@ -510,7 +521,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_PERSONAL, '', quests)
 
     def __getBattleQuestsVO(self, vehicle):
-        quests = self._questController.getCurrentModeQuestsForVehicle(vehicle)
+        quests = [ q for q in self._questController.getCurrentModeQuestsForVehicle(vehicle) if filterHalloweenAvailableQuest(q) and self._afkController.questFilter(q) ]
         totalCount = len(quests)
         completedQuests = len([ q for q in quests if q.isCompleted() ])
         festivityFlagData = self._festivityController.getHangarQuestsFlagData()
@@ -543,6 +554,30 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             else:
                 label = icons.makeImageTag(backport.image(libraryIcons.time_icon()))
         return label
+
+    def __getHalloweenQuestsVO(self, vehicle):
+        if not self._eventsCache.isEventEnabled():
+            return None
+        else:
+            questController = self._questController
+            questForVehicle = questController.getQuestForVehicle(vehicle)
+            afkQuests = [ q for q in questForVehicle if isHalloweenAFK(q.getGroupID()) and not q.isCompleted() and q.isAvailable()[0] ]
+            allQuests = questController.getAllAvailableQuests()
+            halloweenQuestsAvailable = any((q for q in allQuests if isHalloween(q.getGroupID())))
+            if not halloweenQuestsAvailable and not afkQuests:
+                return None
+            quests = [ q for q in questForVehicle if isHalloween(q.getGroupID()) ] + afkQuests
+            rQuests = R.images.gui.maps.icons.event.quests
+            if quests:
+                questLeft = [ q for q in quests if not q.isCompleted() and q.isAvailable()[0] ]
+                if questLeft:
+                    label = str(len(questLeft))
+                else:
+                    label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE)
+                vo = self._headerQuestFormaterVo(enable=True, icon=backport.image(rQuests.headerFlagIcon()), label=label, questType=HANGAR_HEADER_QUESTS.QUEST_TYPE_HALLOWEEN, tooltip=TOOLTIPS_CONSTANTS.HALLOWEEN_QUESTS_PREVIEW, isTooltipSpecial=True)
+            else:
+                vo = self._headerQuestFormaterVo(enable=False, icon=backport.image(rQuests.headerFlagIconDisabled()), label='', questType=HANGAR_HEADER_QUESTS.QUEST_TYPE_HALLOWEEN, tooltip=TOOLTIPS_CONSTANTS.HALLOWEEN_NO_SUITABLE_VEHICLE_FOR_QUEST, isTooltipSpecial=True, flagDisabled=backport.image(rQuests.headerFlagDisabled()))
+            return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_HALLOWEEN, '', [vo])
 
     def __getRankedBattleQuestsVO(self):
         quests = self._eventsCache.getActiveQuests(lambda q: isRankedDaily(q.getID()))

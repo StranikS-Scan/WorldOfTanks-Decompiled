@@ -5,6 +5,8 @@ import cgi
 import time
 import BigWorld
 import account_helpers
+from adisp import process
+from gui.shared.utils import functions
 from ClientUnit import ClientUnit
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
@@ -16,7 +18,6 @@ from gui.prb_control import prb_getters, settings
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.actions_validator import NotSupportedActionsValidator
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.entity import BasePrbEntity, BasePrbEntryPoint
 from gui.prb_control.entities.base.unit.actions_handler import UnitActionsHandler
 from gui.prb_control.entities.base.unit.actions_validator import UnitActionsValidator
@@ -1049,10 +1050,13 @@ class UnitEntity(_UnitEntity):
         self._requestsProcessor.doRequest(ctx, 'changeSortieDivision', division=ctx.getDivisionID(), callback=callback)
         self._cooldown.process(settings.REQUEST_TYPE.CHANGE_DIVISION, coolDown=ctx.getCooldown())
 
-    @vehicleAmmoCheck
+    @process
     def togglePlayerReadyAction(self, launchChain=False):
         notReady = not self.getPlayerInfo().isReady
         if notReady:
+            checkRes = yield functions.checkAmmoLevel((g_currentVehicle.item,))
+            if not checkRes:
+                return
             waitingID = 'prebattle/player_ready'
         else:
             waitingID = 'prebattle/player_not_ready'

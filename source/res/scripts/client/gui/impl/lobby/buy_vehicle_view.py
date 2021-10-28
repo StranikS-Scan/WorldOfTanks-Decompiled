@@ -273,7 +273,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             return
 
     def __onInHangar(self, *_):
-        event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
+        event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD, leaveEventMode=True)
         self.__startTutorial()
         self.__destroyWindow()
         self.fireEvent(events.CloseWindowEvent(events.CloseWindowEvent.BUY_VEHICLE_VIEW_CLOSED, isAgree=True))

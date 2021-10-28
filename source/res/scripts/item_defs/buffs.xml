@@ -1,0 +1,1876 @@
+<buffs.xml>
+  <enlargeHealth>
+    <server>
+      <healVehicle>
+        <amount>	10	</amount>
+        <tickCycle>	10	</tickCycle>
+      </healVehicle>
+    </server>
+    <client>
+      <effect>
+        <timeline>
+          <effectEnd>	3600	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles/Tank/destruction/healing_tank_sparks.eff	</file>
+            <position>	HP_effect	</position>
+          </pixie>
+        </effects>
+      </effect>
+      <effect>
+        <visibleTo>	self	</visibleTo>
+        <timeline>
+          <effectEnd>	1000	</effectEnd>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	0 1 0 0.4	</color>
+              </stage>
+              <stage>	1000	  <color>	0 0 0 1	</color>
+              </stage>
+            </stages>
+          </flashBang>
+        </effects>
+      </effect>
+    </client>
+  </enlargeHealth>
+  <regenerationHP>
+    <server>
+      <logger>
+        <isExecuted>	true	</isExecuted>
+      </logger>
+      <healVehicle>
+        <amount>	10	</amount>
+        <tickCycle>	25	</tickCycle>
+      </healVehicle>
+    </server>
+    <client>
+      <icon>
+        <name>	buffsConstantHpRegeneration	</name>
+        <tooltipTextTag>	regenerationHP	</tooltipTextTag>
+      </icon>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_halloween_2020_ui_buff_appear	</wwsoundOnStart>
+      </sound>
+      <sequence>
+        <visibleTo>	self	</visibleTo>
+        <sequence>	particles/eff_sequence/hw_regeneration_buff.seq	</sequence>
+        <bindNode>	HP_turretJoint	</bindNode>
+      </sequence>
+    </client>
+  </regenerationHP>
+  <teamHealing>
+    <server>
+      <healVehicle>
+        <amount>	200	</amount>
+        <tickCycle>	15	</tickCycle>
+      </healVehicle>
+    </server>
+  </teamHealing>
+  <multiplyCircularVision>
+    <server>
+      <multiplyFactor>
+        <data>	circularVisionRadius	</data>
+        <factor>	0.75	</factor>
+      </multiplyFactor>
+    </server>
+    <client></client>
+  </multiplyCircularVision>
+  <invulnerabilityRammingBossFight>
+    <server>
+      <assignFactor>
+        <data>	vehicle/canBeRammed	</data>
+        <factor>	false	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <storageDataModifier>
+        <storageKey>	MARKER	</storageKey>
+        <data>	{
+					  "method": "setBossMode",
+					  "args": [true]
+				   }	</data>
+      </storageDataModifier>
+    </client>
+  </invulnerabilityRammingBossFight>
+  <invulnerabilityBoss>
+    <server>
+      <assignFactor>
+        <data>	vehicle/canBeDamaged	</data>
+        <factor>	false	</factor>
+      </assignFactor>
+      <assignFactor>
+        <data>	vehicle/canBeRammed	</data>
+        <factor>	false	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <invulnerability></invulnerability>
+      <storageDataModifier>
+        <storageKey>	SOUND_ON_SHOT	</storageKey>
+        <data>	{
+					 "soundName": "hw21_vo_boss_shoot_ineffective",
+					 "priority": 13
+				  }	</data>
+      </storageDataModifier>
+      <storageDataModifier>
+        <storageKey>	MARKER	</storageKey>
+        <data>	{
+					  "method": "setBossMode",
+					  "args": [false]
+				   }	</data>
+      </storageDataModifier>
+    </client>
+  </invulnerabilityBoss>
+  <invulnerabilityWhileTeleporting>
+    <server>
+      <healBossVehicle></healBossVehicle>
+    </server>
+  </invulnerabilityWhileTeleporting>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var0>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm03.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm06.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z11.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var0>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var1>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm06.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z11.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var1>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var2>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm06.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z11.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var2>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var3>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm04.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z13.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var3>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var4>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z13.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var4>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var5>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z13.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var5>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var6>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm03.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z16.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var6>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var7>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm03.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z16.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var7>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var8>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm03.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z16.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var8>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var9>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm04.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm06.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z14.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var9>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var10>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm04.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z14.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var10>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var11>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm04.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z14.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var11>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var12>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm04.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z12.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var12>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var13>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z12.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var13>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var14>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zm05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z12.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var14>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var15>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh03.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh06.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z11.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var15>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var16>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh06.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z11.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var16>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var17>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh06.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z11.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var17>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var18>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh04.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z13.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var18>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var19>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z13.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var19>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var20>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z13.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var20>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var21>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh03.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z16.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var21>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var22>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh03.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z16.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var22>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var23>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh03.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z16.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var23>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var24>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh04.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh06.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z14.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var24>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var25>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh04.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z14.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var25>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var26>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh04.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z14.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var26>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var27>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh04.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z12.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var27>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var28>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z12.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var28>
+  <highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var29>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/zh05.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_turret/z12.seq	</sequence>
+        <bindNode>	turret_01	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleTurret_Turret_1_G146_E100_Hell_Boss_var29>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var0>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm01.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm09.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var0>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var1>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm01.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm09.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var1>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var2>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm01.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var2>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var3>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm10.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm18.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm20.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var3>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var4>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm10.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm18.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm20.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var4>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var5>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm18.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm20.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var5>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var6>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm01.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm08.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm20.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var6>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var7>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm01.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm08.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm20.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var7>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var8>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm01.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm20.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var8>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var9>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm07.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm18.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var9>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var10>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm07.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm18.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var10>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var11>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm18.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var11>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var12>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm07.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var12>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var13>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm07.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var13>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var14>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zm19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var14>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var15>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh01.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh09.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var15>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var16>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh01.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh09.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var16>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var17>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh01.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var17>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var18>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh10.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh18.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh20.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var18>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var19>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh10.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh18.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh20.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var19>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var20>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh18.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh20.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var20>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var21>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh01.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh08.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh20.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var21>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var22>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh01.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh08.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh20.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var22>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var23>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh01.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh20.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var23>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var24>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh07.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh18.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var24>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var25>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh07.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh18.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var25>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var26>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh18.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var26>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var27>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh07.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var27>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var28>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh07.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var28>
+  <highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var29>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh02.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh17.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+      <sequence>
+        <sequence>	particles/eff_sequence/boss_weakpoints_hull/zh19.seq	</sequence>
+        <bindNode>	HP_Fire_1	</bindNode>
+      </sequence>
+    </client>
+  </highlightArea_vehicleChassis_Chassis_G146_E100_Hell_Boss_var29>
+  <invulnerabilityPlayer>
+    <server>
+      <assignFactor>
+        <data>	vehicle/canBeDamaged	</data>
+        <factor>	false	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <sequence>
+        <sequence>	particles/Environment/event_halloween_2019/our_tank_demolitiy/tank_bubble_defense.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+      <invulnerability></invulnerability>
+    </client>
+  </invulnerabilityPlayer>
+  <multiplyMaxSpeed>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.6	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	25	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[17.0, 17.0, 17.0]	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <exhaust>
+        <nitro>	gas	</nitro>
+      </exhaust>
+    </client>
+  </multiplyMaxSpeed>
+  <multiplyMaxSpeed_1390>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.4	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	15	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[19.0, 19.0, 19.0]	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <exhaust>
+        <nitro>	gas	</nitro>
+      </exhaust>
+    </client>
+  </multiplyMaxSpeed_1390>
+  <multiplyMaxSpeed__WZ-120>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.4	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	16	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[15.0, 15.0, 15.0]	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <exhaust>
+        <nitro>	gas	</nitro>
+      </exhaust>
+    </client>
+  </multiplyMaxSpeed__WZ-120>
+  <multiplyMaxSpeed_Progetto_C50>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.45	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	25	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[13.0, 13.0, 13.0]	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <exhaust>
+        <nitro>	gas	</nitro>
+      </exhaust>
+    </client>
+  </multiplyMaxSpeed_Progetto_C50>
+  <multiplyMaxSpeed_T49>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.4	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	12.5	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[15.0, 15.0, 15.0]	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <exhaust>
+        <nitro>	gas	</nitro>
+      </exhaust>
+    </client>
+  </multiplyMaxSpeed_T49>
+  <multiplyMaxSpeed_T54>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.42	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	13	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[12.0, 12.0, 12.0]	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <exhaust>
+        <nitro>	gas	</nitro>
+      </exhaust>
+    </client>
+  </multiplyMaxSpeed_T54>
+  <multiplyRadioDistance>
+    <server>
+      <multiplyFactor>
+        <data>	radio/distance	</data>
+        <factor>	1.5	</factor>
+      </multiplyFactor>
+    </server>
+    <client></client>
+  </multiplyRadioDistance>
+  <multiplyGunReloadTime>
+    <server>
+      <logger>
+        <isExecuted>	true	</isExecuted>
+      </logger>
+      <multiplyFactor>
+        <data>	gun/reloadTime	</data>
+        <factor>	0.85	</factor>
+      </multiplyFactor>
+    </server>
+    <client>
+      <icon>
+        <name>	buffsRateFire	</name>
+        <tooltipTextTag>	multiplyGunReloadTime	</tooltipTextTag>
+      </icon>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_halloween_2020_ui_buff_appear	</wwsoundOnStart>
+      </sound>
+    </client>
+  </multiplyGunReloadTime>
+  <multiplyRamDamage>
+    <server>
+      <multiplyFactor>
+        <data>	ramming	</data>
+        <factor>	1.3	</factor>
+      </multiplyFactor>
+    </server>
+  </multiplyRamDamage>
+  <multiplyShotDispersion>
+    <server>
+      <logger>
+        <isExecuted>	true	</isExecuted>
+      </logger>
+      <multiplyFactor>
+        <data>	chassis/shotDispersionFactors/movement	</data>
+        <factor>	0.85	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	chassis/shotDispersionFactors/rotation	</data>
+        <factor>	0.85	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	gun/shotDispersionFactors/turretRotation	</data>
+        <factor>	0.85	</factor>
+      </multiplyFactor>
+    </server>
+    <client>
+      <icon>
+        <name>	buffsConversionSpeed	</name>
+        <tooltipTextTag>	multiplyShotDispersion	</tooltipTextTag>
+      </icon>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_halloween_2020_ui_buff_appear	</wwsoundOnStart>
+      </sound>
+    </client>
+  </multiplyShotDispersion>
+  <fuel>
+    <server>
+      <logger>
+        <isExecuted>	true	</isExecuted>
+      </logger>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	1.1	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	turret/rotationSpeed	</data>
+        <factor>	1.1	</factor>
+      </multiplyFactor>
+    </server>
+    <client>
+      <icon>
+        <name>	buffsFuel	</name>
+        <tooltipTextTag>	fuel	</tooltipTextTag>
+      </icon>
+    </client>
+  </fuel>
+  <ration>
+    <server>
+      <logger>
+        <isExecuted>	true	</isExecuted>
+      </logger>
+      <additionFactor>
+        <data>	crewLevelIncrease	</data>
+        <factor>	15	</factor>
+      </additionFactor>
+    </server>
+    <client>
+      <icon>
+        <name>	buffsRation	</name>
+        <tooltipTextTag>	ration	</tooltipTextTag>
+      </icon>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_halloween_2020_ui_buff_appear	</wwsoundOnStart>
+      </sound>
+    </client>
+  </ration>
+  <armor>
+    <server>
+      <logger>
+        <isExecuted>	true	</isExecuted>
+      </logger>
+      <multiplyFactor>
+        <data>	vehicle/antifragmentationLiningFactor	</data>
+        <factor>	1.25	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	crewChanceToHitFactor	</data>
+        <factor>	1.25	</factor>
+      </multiplyFactor>
+    </server>
+    <client>
+      <icon>
+        <name>	buffsArmor	</name>
+        <tooltipTextTag>	armor	</tooltipTextTag>
+      </icon>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_halloween_2020_ui_buff_appear	</wwsoundOnStart>
+      </sound>
+    </client>
+  </armor>
+  <auraVisualEffect>
+    <radius>	50	</radius>
+    <server></server>
+    <client>
+      <sequence>
+        <sequence>	particles/Environment/event_halloween_2019/enemies/boss_aura.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+      <effect>
+        <timeline>
+          <effectEnd>	10000	</effectEnd>
+        </timeline>
+        <effects>
+          <sound>
+            <dynamic>	true	</dynamic>
+            <startKey>	start	</startKey>
+            <wwsound>	ev_halloween_2019_gameplay_boss_aura	</wwsound>
+            <position>	hull	</position>
+            <stopSyncVisual>	true	</stopSyncVisual>
+            <sound>	/NONE	</sound>
+          </sound>
+        </effects>
+      </effect>
+    </client>
+  </auraVisualEffect>
+  <auraVisualEffectBossfight>
+    <server></server>
+    <client>
+      <sequence>
+        <sequence>	particles/Environment/event_halloween_2019/enemies/boss_aura_vulnerable.seq	</sequence>
+        <bindNode>	detached	</bindNode>
+      </sequence>
+      <effect>
+        <timeline>
+          <effectEnd>	10000	</effectEnd>
+        </timeline>
+        <effects>
+          <sound>
+            <dynamic>	true	</dynamic>
+            <startKey>	start	</startKey>
+            <wwsound>	ev_halloween_2019_gameplay_boss_aura	</wwsound>
+            <position>	hull	</position>
+            <stopSyncVisual>	true	</stopSyncVisual>
+            <sound>	/NONE	</sound>
+          </sound>
+        </effects>
+      </effect>
+    </client>
+  </auraVisualEffectBossfight>
+  <auraVictim>
+    <server>
+      <damageVehicle>
+        <healthMaxFactor>	200	</healthMaxFactor>
+        <healthMinFactor>	100	</healthMinFactor>
+        <soulsMaxFactor>	10	</soulsMaxFactor>
+        <soulsMinFactor>	5	</soulsMinFactor>
+        <tickCycle>	10	</tickCycle>
+      </damageVehicle>
+    </server>
+    <client>
+      <auraVictimEffect></auraVictimEffect>
+      <effect>
+        <visibleTo>	self	</visibleTo>
+        <timeline>
+          <effectEnd>	1000	</effectEnd>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	1	  <color>	0.7 0.27 0 0.4	</color>
+              </stage>
+              <stage>	1000	  <color>	0.2 0.08 0 1	</color>
+              </stage>
+            </stages>
+          </flashBang>
+        </effects>
+      </effect>
+    </client>
+  </auraVictim>
+  <laserBeamBuff>
+    <server></server>
+    <client>
+      <laserBeam>
+        <beamModel>	particles/content_deferred/GFX_models/environment/event_halloween_2019/hell_sight.model	</beamModel>
+        <beamModelFwd>	particles/content_deferred/GFX_models/environment/event_halloween_2019/hell_sight_fwd.model	</beamModelFwd>
+        <beamLength>	10.0	</beamLength>
+        <bindNode>	Gun	</bindNode>
+      </laserBeam>
+    </client>
+  </laserBeamBuff>
+  <personalAmmoBuffsIncome>
+    <server></server>
+    <client>
+      <sequence>
+        <visibleTo>	self	</visibleTo>
+        <sequence>	particles/Environment/event_halloween_2019/our_tank_demolitiy/buff_catch.seq	</sequence>
+        <bindNode>	HP_effect	</bindNode>
+      </sequence>
+      <effect>
+        <visibleTo>	self	</visibleTo>
+        <timeline>
+          <effectEnd>	3	</effectEnd>
+        </timeline>
+        <effects>
+          <sound>
+            <dynamic>	true	</dynamic>
+            <startKey>	start	</startKey>
+            <wwsound>	ev_halloween_2021_catch_cartridge	</wwsound>
+            <sound>	/NONE	</sound>
+          </sound>
+        </effects>
+      </effect>
+    </client>
+  </personalAmmoBuffsIncome>
+  <personalHealBuffsIncome>
+    <server></server>
+    <client>
+      <sequence>
+        <visibleTo>	self	</visibleTo>
+        <sequence>	particles/Environment/event_halloween_2019/our_tank_demolitiy/buff_catch.seq	</sequence>
+        <bindNode>	HP_effect	</bindNode>
+      </sequence>
+      <effect>
+        <visibleTo>	self	</visibleTo>
+        <timeline>
+          <effectEnd>	3	</effectEnd>
+        </timeline>
+        <effects>
+          <sound>
+            <dynamic>	true	</dynamic>
+            <startKey>	start	</startKey>
+            <wwsound>	ev_halloween_2021_catch_healing_sphere	</wwsound>
+            <sound>	/NONE	</sound>
+          </sound>
+        </effects>
+      </effect>
+    </client>
+  </personalHealBuffsIncome>
+  <personalBuffsIncome>
+    <server></server>
+    <client>
+      <sequence>
+        <visibleTo>	self	</visibleTo>
+        <sequence>	particles/Environment/event_halloween_2019/our_tank_demolitiy/buff_catch.seq	</sequence>
+        <bindNode>	HP_effect	</bindNode>
+      </sequence>
+      <effect>
+        <visibleTo>	self	</visibleTo>
+        <timeline>
+          <effectEnd>	3	</effectEnd>
+        </timeline>
+        <effects>
+          <sound>
+            <dynamic>	true	</dynamic>
+            <startKey>	start	</startKey>
+            <wwsound>	ev_halloween_2020_gameplay_collect_buff	</wwsound>
+            <sound>	/NONE	</sound>
+          </sound>
+        </effects>
+      </effect>
+    </client>
+  </personalBuffsIncome>
+  <demolitiyIncome>
+    <server></server>
+    <client>
+      <sequence>
+        <visibleTo>	self	</visibleTo>
+        <sequence>	particles/Environment/event_halloween_2019/our_tank_demolitiy/tank_dem_incame_collector.seq	</sequence>
+        <bindNode>	HP_effect	</bindNode>
+      </sequence>
+      <sequence>
+        <visibleTo>	others	</visibleTo>
+        <sequence>	particles/Environment/event_halloween_2019/our_tank_demolitiy/tank_dem_incame_collector_Non_Player.seq	</sequence>
+        <bindNode>	HP_effect	</bindNode>
+      </sequence>
+      <effect>
+        <visibleTo>	self	</visibleTo>
+        <timeline>
+          <effectEnd>	3	</effectEnd>
+        </timeline>
+        <effects>
+          <sound>
+            <dynamic>	true	</dynamic>
+            <startKey>	start	</startKey>
+            <wwsound>	ev_halloween_2019_gameplay_collect	</wwsound>
+            <sound>	/NONE	</sound>
+          </sound>
+        </effects>
+      </effect>
+    </client>
+  </demolitiyIncome>
+  <demolitiyIdle>
+    <server></server>
+    <client>
+      <sequence>
+        <sequence>	particles/Environment/event_halloween_2019/our_tank_demolitiy/tank_dem_idle_collector.seq	</sequence>
+        <bindNode>	HP_effect	</bindNode>
+        <hideInSniperModeFor>	self	</hideInSniperModeFor>
+      </sequence>
+    </client>
+  </demolitiyIdle>
+  <demolitiyOutcome>
+    <server></server>
+    <client>
+      <sequence>
+        <sequence>	particles/Environment/event_halloween_2019/our_tank_demolitiy/tank_dem_transfer_volot.seq	</sequence>
+        <bindNode>	HP_effect	</bindNode>
+      </sequence>
+    </client>
+  </demolitiyOutcome>
+  <modifyRepairSpeed>
+    <server>
+      <multiplyFactor>
+        <data>	repairSpeed	</data>
+        <factor>	1.2	</factor>
+      </multiplyFactor>
+    </server>
+  </modifyRepairSpeed>
+  <teamRepairingOwner>
+    <client>
+      <sequence>
+        <sequence>	particles/Environment/event_halloween_2019/our_tank_demolitiy/tank_bubble_healing_all.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+    </client>
+  </teamRepairingOwner>
+  <teamRepairingParticipant>
+    <client>
+      <effect>
+        <timeline>
+          <effectEnd>	3600	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles/Tank/destruction/healing_tank_sparks.eff	</file>
+            <position>	HP_effect	</position>
+          </pixie>
+        </effects>
+      </effect>
+    </client>
+  </teamRepairingParticipant>
+  <ignite>
+    <server>
+      <logger>
+        <isExecuted>	true	</isExecuted>
+      </logger>
+      <igniteVehicle>
+        <buffName>	igniteOnShot	</buffName>
+        <damagePerSecond>	55	</damagePerSecond>
+      </igniteVehicle>
+    </server>
+  </ignite>
+  <igniteOnShot>
+    <server>
+      <logger>
+        <isExecuted>	false	</isExecuted>
+      </logger>
+      <applyBuffsOnShot>
+        <baseChance>	5	</baseChance>
+        <failStackChance>	2	</failStackChance>
+        <buffs>
+          <buff>
+            <target>	victim	</target>
+            <name>	ignite	</name>
+            <duration>	5	</duration>
+          </buff>
+        </buffs>
+      </applyBuffsOnShot>
+    </server>
+    <client>
+      <icon>
+        <name>	buffsIncendiaryShot	</name>
+        <tooltipTextTag>	igniteOnShot	</tooltipTextTag>
+      </icon>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_halloween_2020_ui_buff_appear	</wwsoundOnStart>
+      </sound>
+    </client>
+  </igniteOnShot>
+  <damageOnce>
+    <server>
+      <logger>
+        <isExecuted>	true	</isExecuted>
+      </logger>
+      <damageVehicleOnce>
+        <buffName>	damageOnceOnShot	</buffName>
+        <staticDamage>	0	</staticDamage>
+        <shotDamageMultiplier>	0.2	</shotDamageMultiplier>
+      </damageVehicleOnce>
+    </server>
+  </damageOnce>
+  <damageOnceOnShot>
+    <server>
+      <logger>
+        <isExecuted>	false	</isExecuted>
+      </logger>
+      <applyBuffsOnShot>
+        <baseChance>	5	</baseChance>
+        <failStackChance>	2	</failStackChance>
+        <buffs>
+          <buff>
+            <target>	victim	</target>
+            <name>	damageOnce	</name>
+            <duration>	0.01	</duration>
+          </buff>
+        </buffs>
+      </applyBuffsOnShot>
+    </server>
+    <client>
+      <icon>
+        <name>	buffsDoubleDamage	</name>
+        <tooltipTextTag>	damageOnceOnShot	</tooltipTextTag>
+      </icon>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_halloween_2020_ui_buff_appear	</wwsoundOnStart>
+      </sound>
+    </client>
+  </damageOnceOnShot>
+  <healOnce>
+    <server>
+      <logger>
+        <isExecuted>	true	</isExecuted>
+      </logger>
+      <healVehicleOnce>
+        <buffName>	healOnceOnShot	</buffName>
+        <staticAmount>	0	</staticAmount>
+        <shotDamageMultiplier>	0.2	</shotDamageMultiplier>
+      </healVehicleOnce>
+    </server>
+  </healOnce>
+  <healOnceOnShot>
+    <server>
+      <logger>
+        <isExecuted>	false	</isExecuted>
+      </logger>
+      <applyBuffsOnShot>
+        <baseChance>	5	</baseChance>
+        <failStackChance>	2	</failStackChance>
+        <buffs>
+          <buff>
+            <target>	attacker	</target>
+            <name>	healOnce	</name>
+            <duration>	0.01	</duration>
+          </buff>
+        </buffs>
+      </applyBuffsOnShot>
+    </server>
+    <client>
+      <icon>
+        <name>	buffsVampiricShot	</name>
+        <tooltipTextTag>	healOnceOnShot	</tooltipTextTag>
+      </icon>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_halloween_2020_ui_buff_appear	</wwsoundOnStart>
+      </sound>
+    </client>
+  </healOnceOnShot>
+  <multiplyDamageBy10>
+    <server>
+      <logger>
+        <isExecuted>	true	</isExecuted>
+      </logger>
+      <multiplyFactor>
+        <data>	damageFactor	</data>
+        <factor>	1.2	</factor>
+      </multiplyFactor>
+    </server>
+    <client>
+      <icon>
+        <name>	buffsIncreasedMaximumDamage	</name>
+        <tooltipTextTag>	multiplyDamageBy10	</tooltipTextTag>
+      </icon>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_halloween_2020_ui_buff_appear	</wwsoundOnStart>
+      </sound>
+    </client>
+  </multiplyDamageBy10>
+  <critTrack>
+    <server>
+      <logger>
+        <isExecuted>	true	</isExecuted>
+      </logger>
+      <critVehicleTrack></critVehicleTrack>
+      <assignFactor>
+        <data>	deviceCanBeRepaired/leftTrackHealth	</data>
+        <factor>	false	</factor>
+      </assignFactor>
+      <assignFactor>
+        <data>	deviceCanBeRepaired/rightTrackHealth	</data>
+        <factor>	false	</factor>
+      </assignFactor>
+    </server>
+  </critTrack>
+  <safeZonePeriodicDamageEffect>
+    <client>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_halloween_2021_red_zone_red_damage	</wwsoundOnStart>
+      </sound>
+      <sequence>
+        <visibleTo>	self	</visibleTo>
+        <sequence>	particles/eff_sequence/event_halloween_2021/enemies/limit_zone.seq	</sequence>
+        <bindNode>	ground	</bindNode>
+      </sequence>
+    </client>
+  </safeZonePeriodicDamageEffect>
+  <nearestEnemyDamage_player>
+    <server></server>
+    <client>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_halloween_2021_ability_damage	</wwsoundOnStart>
+      </sound>
+      <sequence>
+        <sequence>	particles/eff_sequence/event_halloween_2021/ability_damage.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+    </client>
+  </nearestEnemyDamage_player>
+  <nearestEnemyDamage_enemy>
+    <server></server>
+    <client></client>
+  </nearestEnemyDamage_enemy>
+  <igniteEnemyConsumable>
+    <server>
+      <igniteVehicle>
+        <buffName>	igniteEnemyConsumable	</buffName>
+        <damagePerSecond>	40	</damagePerSecond>
+      </igniteVehicle>
+    </server>
+  </igniteEnemyConsumable>
+  <igniteEnemyConsumableSelfBuff>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/event_halloween_2021/ability_fire.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+    </client>
+  </igniteEnemyConsumableSelfBuff>
+  <drainEnemyHpInRadiusConsumableSelfBuff>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/event_halloween_2021/ability_vampiric.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+    </client>
+  </drainEnemyHpInRadiusConsumableSelfBuff>
+  <boostVisualEffect>
+    <server></server>
+    <client>
+      <sequence>
+        <visibleTo>	others	</visibleTo>
+        <sequence>	particles/eff_sequence/event_halloween_2021/enemies/boss_charge.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+      <exhaust>
+        <nitro>	gas	</nitro>
+      </exhaust>
+    </client>
+  </boostVisualEffect>
+  <bossPhase2Visual>
+    <server></server>
+    <client>
+      <sequence>
+        <visibleTo>	others	</visibleTo>
+        <sequence>	particles/eff_sequence/event_halloween_2021/enemies/boss_heat_hull_mediumRare.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+      <sequence>
+        <visibleTo>	others	</visibleTo>
+        <sequence>	particles/eff_sequence/event_halloween_2021/enemies/boss_heat_turret_mediumRare.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+    </client>
+  </bossPhase2Visual>
+  <bossPhase3Visual>
+    <server></server>
+    <client>
+      <sequence>
+        <visibleTo>	others	</visibleTo>
+        <sequence>	particles/eff_sequence/event_halloween_2021/enemies/boss_heat_hull_wellDone.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+      <sequence>
+        <visibleTo>	others	</visibleTo>
+        <sequence>	particles/eff_sequence/event_halloween_2021/enemies/boss_heat_turret_wellDone.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+    </client>
+  </bossPhase3Visual>
+  <bossAppear>
+    <server></server>
+    <client>
+      <sequence>
+        <visibleTo>	others	</visibleTo>
+        <sequence>	particles/eff_sequence/event_halloween_2021/enemies/boss_appeared.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+    </client>
+  </bossAppear>
+</buffs.xml>

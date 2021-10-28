@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
+import re
 import enum
 import calendar
 import time
@@ -8,6 +9,7 @@ from time import time as timestamp
 from collections import namedtuple
 from itertools import izip
 from realm import CURRENT_REALM
+from enumerations import Enumeration, AttributeEnumItem
 try:
     import BigWorld
 except ImportError:
@@ -388,6 +390,7 @@ class ARENA_SYNC_OBJECTS:
     OVERTIME = 6
     SMOKE = 7
     BR_DEATH_ZONE = 8
+    GAME_EVENT = 9
 
 
 ARENA_SYNC_OBJECT_NAMES = dict([ (v, k) for k, v in ARENA_SYNC_OBJECTS.__dict__.iteritems() if not k.startswith('_') ])
@@ -410,6 +413,9 @@ class JOIN_FAILURE:
     WRONG_VEHICLE_LVL = 16
     QUEUE_FULL = 17
     QUEUE_FAILURE = 18
+    DIFFICULTY_LEVEL_NOT_AVAILABLE = 19
+    DIFFICULTY_LEVEL_NOT_UNLOCKED = 20
+    AFK_BAN = 21
 
 
 JOIN_FAILURE_NAMES = dict([ (v, k) for k, v in JOIN_FAILURE.__dict__.iteritems() if not k.startswith('_') ])
@@ -1065,13 +1071,24 @@ class ATTACK_REASON(object):
     BERSERKER = 'berserker_eq'
     SPAWNED_BOT_RAM = 'spawned_bot_ram'
     SMOKE = 'smoke'
+    EVENT_BOMBER_EXPLOSION = 'event_bomber_explosion'
+    EVENT_DEATH_ON_PHASE_CHANGE = 'event_death_on_phase_change'
+    EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC = 'event_death_on_phase_change_full_sc'
+    EVENT_DEATH_ON_BOSS_PHASE_END = 'event_death_on_boss_phase_end'
+    EVENT_BOSS_AURA = 'event_boss_aura'
+    EVENT_ABILITY = 'event_ability'
     NONE = 'none'
 
     @classmethod
     def getIndex(cls, attackReason):
         return ATTACK_REASON_INDICES[attackReason]
 
+    @classmethod
+    def getValue(cls, index):
+        return ATTACK_REASON_VALUES[index]
 
+
+PHASE_CHANGE_ATTACK_REASONS = (ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE, ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC, ATTACK_REASON.EVENT_DEATH_ON_BOSS_PHASE_END)
 ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.FIRE,
  ATTACK_REASON.RAM,
@@ -1092,8 +1109,15 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.SPAWNED_BOT_EXPLOSION,
  ATTACK_REASON.BERSERKER,
  ATTACK_REASON.SPAWNED_BOT_RAM,
- ATTACK_REASON.SMOKE)
+ ATTACK_REASON.SMOKE,
+ ATTACK_REASON.EVENT_BOMBER_EXPLOSION,
+ ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE,
+ ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC,
+ ATTACK_REASON.EVENT_DEATH_ON_BOSS_PHASE_END,
+ ATTACK_REASON.EVENT_BOSS_AURA,
+ ATTACK_REASON.EVENT_ABILITY)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
+ATTACK_REASON_VALUES = dict(((index, value) for index, value in enumerate(ATTACK_REASONS)))
 DEATH_REASON_ALIVE = -1
 
 class REPAIR_TYPE:
@@ -1146,7 +1170,7 @@ class VEHICLE_HIT_FLAGS:
     IS_ANY_PIERCING_MASK = IS_ANY_DAMAGE_MASK | ARMOR_WITH_ZERO_DF_PIERCED_BY_PROJECTILE | ARMOR_WITH_ZERO_DF_PIERCED_BY_EXPLOSION
 
 
-DAMAGE_INFO_CODES = ('DEVICE_CRITICAL', 'DEVICE_DESTROYED', 'TANKMAN_HIT', 'FIRE', 'DEVICE_CRITICAL_AT_SHOT', 'DEVICE_DESTROYED_AT_SHOT', 'DEVICE_CRITICAL_AT_RAMMING', 'DEVICE_DESTROYED_AT_RAMMING', 'DEVICE_STARTED_FIRE_AT_SHOT', 'DEVICE_STARTED_FIRE_AT_RAMMING', 'TANKMAN_HIT_AT_SHOT', 'DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT', 'DEVICE_CRITICAL_AT_FIRE', 'DEVICE_DESTROYED_AT_FIRE', 'DEVICE_CRITICAL_AT_WORLD_COLLISION', 'DEVICE_DESTROYED_AT_WORLD_COLLISION', 'DEVICE_CRITICAL_AT_DROWNING', 'DEVICE_DESTROYED_AT_DROWNING', 'DEVICE_REPAIRED_TO_CRITICAL', 'DEVICE_REPAIRED', 'TANKMAN_HIT_AT_WORLD_COLLISION', 'TANKMAN_HIT_AT_DROWNING', 'TANKMAN_RESTORED', 'DEATH_FROM_DEVICE_EXPLOSION_AT_FIRE', 'ENGINE_CRITICAL_AT_UNLIMITED_RPM', 'ENGINE_DESTROYED_AT_UNLIMITED_RPM', 'ENGINE_CRITICAL_AT_BURNOUT', 'ENGINE_DESTROYED_AT_BURNOUT', 'DEATH_FROM_SHOT', 'DEATH_FROM_INACTIVE_CREW_AT_SHOT', 'DEATH_FROM_RAMMING', 'DEATH_FROM_MINE_EXPLOSION', 'DEATH_FROM_FIRE', 'DEATH_FROM_INACTIVE_CREW', 'DEATH_FROM_DROWNING', 'DEATH_FROM_WORLD_COLLISION', 'DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION', 'DEATH_FROM_DEATH_ZONE', 'DEATH_FROM_GAS_ATTACK', 'DEATH_FROM_OVERTURN', 'DEATH_FROM_ARTILLERY_PROTECTION', 'DEATH_FROM_ARTILLERY_SECTOR', 'DEATH_FROM_BOMBER', 'FIRE_STOPPED', 'DEATH_FROM_RECOVERY', 'DEATH_FROM_KAMIKAZE')
+DAMAGE_INFO_CODES = ('DEVICE_CRITICAL', 'DEVICE_DESTROYED', 'TANKMAN_HIT', 'FIRE', 'DEVICE_CRITICAL_AT_SHOT', 'DEVICE_DESTROYED_AT_SHOT', 'DEVICE_CRITICAL_AT_RAMMING', 'DEVICE_DESTROYED_AT_RAMMING', 'DEVICE_STARTED_FIRE_AT_SHOT', 'DEVICE_STARTED_FIRE_AT_RAMMING', 'TANKMAN_HIT_AT_SHOT', 'DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT', 'DEVICE_CRITICAL_AT_FIRE', 'DEVICE_DESTROYED_AT_FIRE', 'DEVICE_CRITICAL_AT_WORLD_COLLISION', 'DEVICE_DESTROYED_AT_WORLD_COLLISION', 'DEVICE_CRITICAL_AT_DROWNING', 'DEVICE_DESTROYED_AT_DROWNING', 'DEVICE_REPAIRED_TO_CRITICAL', 'DEVICE_REPAIRED', 'TANKMAN_HIT_AT_WORLD_COLLISION', 'TANKMAN_HIT_AT_DROWNING', 'TANKMAN_RESTORED', 'DEATH_FROM_DEVICE_EXPLOSION_AT_FIRE', 'ENGINE_CRITICAL_AT_UNLIMITED_RPM', 'ENGINE_DESTROYED_AT_UNLIMITED_RPM', 'ENGINE_CRITICAL_AT_BURNOUT', 'ENGINE_DESTROYED_AT_BURNOUT', 'DEATH_FROM_SHOT', 'DEATH_FROM_INACTIVE_CREW_AT_SHOT', 'DEATH_FROM_RAMMING', 'DEATH_FROM_MINE_EXPLOSION', 'DEATH_FROM_FIRE', 'DEATH_FROM_INACTIVE_CREW', 'DEATH_FROM_DROWNING', 'DEATH_FROM_WORLD_COLLISION', 'DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION', 'DEATH_FROM_DEATH_ZONE', 'DEATH_FROM_GAS_ATTACK', 'DEATH_FROM_OVERTURN', 'DEATH_FROM_ARTILLERY_PROTECTION', 'DEATH_FROM_ARTILLERY_SECTOR', 'DEATH_FROM_BOMBER', 'FIRE_STOPPED', 'DEATH_FROM_RECOVERY', 'DEATH_FROM_KAMIKAZE', 'EVENT_DEATH_ON_PHASE_CHANGE', 'EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC', 'EVENT_DEATH_ON_BOSS_PHASE_END', 'EVENT_DEATH_FROM_BOSS_AURA')
 
 class IGR_TYPE:
     NONE = 0
@@ -1569,6 +1593,11 @@ class REQUEST_COOLDOWN:
     TANKMAN_RESPECIALIZE = 1.0
     POST_PROGRESSION_BASE = 1.0
     POST_PROGRESSION_CELL = 0.5
+    BUY_HE19_ENERGY = 1.0
+    BUY_HE19_SHOP_ITEM = 1.0
+    CMD_CHANGE_SELECTED_DIFFICULTY_LEVEL = 1.0
+    BOOSTER = 1.0
+    HEALING = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1783,6 +1812,9 @@ class USER_SERVER_SETTINGS:
     LINKEDSET_QUESTS = 89
     QUESTS_PROGRESS = 90
     SESSION_STATS = 96
+    GAME_EVENT = 105
+    HW21_NARRATIVE = 106
+    HW21_SHOWN_NOTIFICATIONS = 107
     _ALL = (HIDE_MARKS_ON_GUN,
      EULA_VERSION,
      GAME_EXTENDED,
@@ -1895,7 +1927,10 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  101: 'Battle Royale carousel filter 2',
  USER_SERVER_SETTINGS.GAME_EXTENDED_2: 'Game extended section settings 2',
  103: 'Mapbox carousel filter 1',
- 104: 'Mapbox carousel filter 2'}
+ 104: 'Mapbox carousel filter 2',
+ USER_SERVER_SETTINGS.GAME_EVENT: 'game event',
+ USER_SERVER_SETTINGS.HW21_NARRATIVE: 'HW21 hangar narrative',
+ USER_SERVER_SETTINGS.HW21_SHOWN_NOTIFICATIONS: 'HW21 flags for shown system notifications'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2219,6 +2254,7 @@ class RESPAWN_TYPES:
     SHARED = 2
     LIMITED = 3
     EPIC = 4
+    EVENT_LIMITED = 5
 
 
 class VISIBILITY:
@@ -2867,3 +2903,171 @@ class DeviceRepairMode(enum.Enum):
     NORMAL = 0
     SLOWED = 1
     SUSPENDED = 2
+
+
+class EVENT:
+    PLAYERS_TEAM = 1
+    ENEMY_TEAM = 2
+    ALL_TEAMS = (PLAYERS_TEAM, ENEMY_TEAM)
+    PLAYERS_COUNT = 5
+    RESURRECT_EQUIPMENT = 'resurrect_equipment'
+    NITRO_BUILTIN_EXTRA_PATTERN = 'nitroRamDamage'
+    DEFAULT_RESURRECT_HEAL_FACTOR = 0.7
+    SET_ACTIVE_RESPAWN_GROUP_DELAY = 7
+    HW21_DAILY_TOKEN = 'hw21_rbk_dailyPass:{}'
+    HW21_DAILY_TOKEN_PREFIX = 'hw21_rbk_dailyPass'
+    HW21_ACHIEVEMENTS_QUESTS_PREFIX = 'hw_2021_achievements'
+    BOSS_FIGHT_EVENT = '_bossPhaseChange'
+    DISABLE_AI_BATTLE_RESULTS_SEND = True
+    INVALID_BATTLE_PLACE = -1
+    INVALID_ENVIRONMENT_ID = -1
+    INVALID_SOUND_ENVIRONMENT_ID = 0
+    INVALID_BOSSFIGHT_PHASE_ID = 0
+    INVALID_DIFFICULTY_LEVEL = 0
+
+    class REWARD_BOX:
+        QUEST_PREFIX = 'hw21RewardBox_'
+        TOKEN_PREFIX = 'hw21RewardBox_'
+        KEY_TOKEN = 'hw_rewardBoxKey'
+        KEY_TOKEN_TTL = 2160
+        KEY_TOKEN_LIMIT = 10000
+        KEY_DAILY_QUESTS_GROUP = 'hw21RewardBoxDailyKeysQuestsGroup'
+        KEY_DAILY_QUEST_FORMAT = 'hw21_key_daily_quest:{}'
+
+    class DIFFICULTY:
+        QUEST_PREFIX = 'hw_2021_difficulty_level'
+        LEVEL_TOKEN_FORMAT = 'hw_2021_difficulty_level_{}'
+        NOTIFY_COUNTER_TOKEN_FORMAT = 'hw_2021_notify_counter_difficulty_level_{}'
+        EVENT_POINTS_TOKEN = 'hw_2021_difficulty_event_points'
+        KEY_TOKEN_TTL = 2160
+
+    class TRIGGER_TYPES(object):
+        TIME_INTERVAL = 'TimeIntervalTrigger'
+        TIMER = 'Timer'
+        CIRCULAR_AREA_TRIGGER = 'TriggerVehicleAreaCircle'
+        RECTANGULAR_AREA_TRIGGER = 'TriggerVehicleAreaRectangle'
+        CONTROL_POINT_PROGRESS = 'ControlPointProgressTrigger'
+        CIRCULAR_ENTITY_AREA_TRIGGER = 'EntityCircularAreaTrigger'
+
+    class LOG_TYPE:
+        ENVIRONMENT_CHANGED = 1
+        PICK_UP_SOULS = 2
+        DELIVER_SOULS = 3
+        VEHICLE_KILLED = 4
+        BUFF_APPLIED = 5
+
+    class ARENA_COMPONENTS_CONFIG_NAME:
+        BUFF_DISPENSER = 'buffDispenser'
+
+    class SHOP:
+        REAL_CURRENCY = 0
+        VIRTUAL_CURRENCY = 1
+        WG_MONEY_CALLBACK = 'purchaseEventShopBundleWGMoney'
+        PURCHASES_COUNTER_TOKEN_TTL = 2160
+        PURCHASES_COUNTER_TOKEN_SUFFIX = ':purchased'
+        PURCHASES_COUNTER_TOKEN_LIMIT = 10000
+
+        @classmethod
+        def getBundlePurchaseCounterTokenName(cls, bundleID):
+            return bundleID + cls.PURCHASES_COUNTER_TOKEN_SUFFIX
+
+        class TYPE:
+            KEYS = 'keysShop'
+            VEHICLES = 'vehiclesShop'
+            C11N = 'c11nShop'
+
+
+class EVENT_SOULS_CHANGE_REASON:
+    NONE = 0
+    ADD = 1
+    DRAW_BY_COLLECTOR = 2
+    DRAW_BY_BOSS = 3
+    DEATH = 4
+
+
+class EVENT_BOT_ROLE:
+    BOSS = 'eventBigBossBot'
+    HUNTER = 'eventHunterBot'
+    BOMBER = 'eventBomberBot'
+    TURRET = 'eventTurretBot'
+    RUNNER = 'eventRunnerBot'
+    SENTRY = 'eventSentryBot'
+    RUNNER_SHOOTER = 'eventRunnerShooterBot'
+    QUEEN_BOMBER = 'eventQueenBomberBot'
+
+
+class EVENT_BOSS_PHASE:
+    PHASE_1 = 'boss_phase_1'
+    PHASE_2 = 'boss_phase_2'
+    PHASE_3 = 'boss_phase_3'
+
+
+class EVENT_BOSSFIGHT_PHASE:
+    PHASE_1 = 1
+    PHASE_2 = 2
+    PHASE_3 = EVENT.INVALID_BOSSFIGHT_PHASE_ID
+
+
+EVENT_BOSS_PHASE_TO_BOSSFIGHT_PHASE = {EVENT_BOSS_PHASE.PHASE_1: EVENT_BOSSFIGHT_PHASE.PHASE_1,
+ EVENT_BOSS_PHASE.PHASE_2: EVENT_BOSSFIGHT_PHASE.PHASE_2,
+ EVENT_BOSS_PHASE.PHASE_3: EVENT_BOSSFIGHT_PHASE.PHASE_3}
+EVENT_BOSSFIGHT_PHASE_BUFFS = {EVENT_BOSSFIGHT_PHASE.PHASE_1: '',
+ EVENT_BOSSFIGHT_PHASE.PHASE_2: 'bossPhase2Visual',
+ EVENT_BOSSFIGHT_PHASE.PHASE_3: 'bossPhase3Visual'}
+
+class EVENT_BOT_NAME:
+    BOSS = 'germany:G146_E100_Hell_Boss'
+    QUEEN_BOMBER = 'germany:G00_K_bomber__HW_21_AI'
+
+
+ECP_INDEXES = Enumeration('eventControlPointConfigs', ['light',
+ 'capturing',
+ 'circle',
+ 'minimap',
+ 'marker',
+ 'soulCollector'])
+ECP_SWITCHES = Enumeration('eventControlPointSwitches', ['none', 'on', 'off'])
+ECP_EVENTS = Enumeration('eventControlPointEvents', ['none',
+ 'onCall',
+ 'onEnter',
+ 'onCapture',
+ 'onFullOfSouls'])
+ECP_CONFIG_INDEXES = Enumeration('eventControlPointConfigIndexes', ['switches', 'events', 'value'])
+ECP_HUD_INDEXES = Enumeration('ecpHUDIndexes', ['minimap', 'marker'])
+ECP_HUD_TOGGLES = Enumeration('ecpHUDToggles', ['off', 'on'])
+HW_AFK_PERSONAL_QUEST_ID = 'hw21_afk_battle_quest'
+HW_AFK_PARDON_ORDER_TOKEN_ID = 'img:he21_afk_pardon_order:webId'
+EVENT_BATTLES_TAG = 'event_battles'
+
+class SQUAD_SETTINGS:
+    BASE_MIN_OCCUPIED_SLOTS_COUNT = 1
+    EVENT_MIN_OCCUPIED_SLOTS_COUNT = 5
+
+
+class SQUAD_DIFFICULTY_EVENTS:
+    COMMANDER = 0
+    MEMBER = 1
+    LOCK = 2
+    INFO = 3
+
+
+class BuffComponentVisibilityMode(enum.IntEnum):
+    NONE = 0
+    SELF = 1
+    OTHERS = 2
+    ALL = 3
+
+
+class BuffTarget(enum.IntEnum):
+    VICTIM = 0
+    ATTACKER = 1
+
+
+class EventStorageModifiers(enum.Enum):
+    SOUND_ON_SHOT = 'soundOnShot'
+    MARKER = 'marker'
+
+
+AOE_TYPE_MAPPING = {'arcade_artillery_aoe': 'AreaOfEffect',
+ 'arcade_bomber_aoe': 'AttackBomber',
+ 'artillery_deathzone_aoe': 'PersonalDeathZone'}

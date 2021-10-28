@@ -12,6 +12,8 @@
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
+    <he_2021_ap>	ARMOR_PIERCING_PREMIUM_HW.png 0 0	</he_2021_ap>
+    <he_2021_hep>	HIGH_EXPLOSIVE_PREMIUM_HW.png 0 0	</he_2021_hep>
   </icons>
   <_20mm_c_p_20_mod_35>
     <id>	6	</id>
@@ -1027,4 +1029,104 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
+  <_75mm_c_p_75_50_Skoda_HELL>
+    <id>	75	</id>
+    <userString>	#italy_vehicles:_75mm_c_p_75_50_Skoda	</userString>
+    <icon>	ap	</icon>
+    <price>	88	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_75mm_c_p_75_50_Skoda_HELL>
+  <_90mm_c_p_90_53_mod_09_HELL>
+    <id>	76	</id>
+    <userString>	#italy_vehicles:_90mm_c_p_90_53_mod_09	</userString>
+    <icon>	ap	</icon>
+    <price>	435	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_90mm_c_p_90_53_mod_09_HELL>
+  <_90mm_c_p_90_53_mod_09_HELL__0>
+    <id>	77	</id>
+    <userString>	#italy_vehicles:_90mm_c_p_90_53_mod_09	</userString>
+    <icon>	ap	</icon>
+    <price>	435	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_90mm_c_p_90_53_mod_09_HELL__0>
+  <_120mm_AP_T_M365_hw21>
+    <id>	20001	</id>
+    <userString>	#italy_vehicles:_120mm_AP_T_M365	</userString>
+    <icon>	he_2021_ap	</icon>
+    <price>	0	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_120mm_AP_T_M365_hw21>
+  <_120mm_HE_M356_hw21>
+    <id>	20003	</id>
+    <userString>	#italy_vehicles:_120mm_HE_M356	</userString>
+    <icon>	he_2021_hep	</icon>
+    <price>	0	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <tags>	pick-up	</tags>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	470	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+    <notInShop>	True	</notInShop>
+  </_120mm_HE_M356_hw21>
 </shells.xml>

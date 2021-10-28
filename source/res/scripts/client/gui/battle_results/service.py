@@ -4,7 +4,7 @@ import logging
 import BigWorld
 import Event
 from adisp import async, process
-from constants import PREMIUM_TYPE
+from constants import PREMIUM_TYPE, ARENA_BONUS_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import SystemMessages
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
@@ -28,7 +28,6 @@ from skeletons.gui.server_events import IEventsCache
 import personal_missions
 from gui.battle_results.components.progress import VehicleProgressHelper
 from Account import PlayerAccount
-from constants import ARENA_BONUS_TYPE
 from soft_exception import SoftException
 from shared_utils import first
 from shared_utils.account_helpers.battle_results_helpers import getEmptyClientPB20UXStats

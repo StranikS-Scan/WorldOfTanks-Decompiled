@@ -31,6 +31,7 @@ def clear():
     if _g_manager is not None:
         _g_manager.clear()
         _g_manager = None
+    _orderGen.clear()
     return
 
 

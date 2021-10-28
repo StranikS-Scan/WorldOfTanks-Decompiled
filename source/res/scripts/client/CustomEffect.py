@@ -166,7 +166,7 @@ class DiscreteSelectorDesc(SelectorDesc):
         if keyValue is None:
             return
         else:
-            value = self._selectors.get(keyValue, None)
+            value = self._selectors.get(keyValue, self._selectors.get('default'))
             if value is not None:
                 value.getActiveEffects(effects, args)
             return

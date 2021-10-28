@@ -8,7 +8,7 @@ import BigWorld
 import Event
 from PlayerEvents import g_playerEvents
 from account_helpers import isRoamingEnabled
-from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES
+from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES, PREBATTLE_TYPE
 from gui import SystemMessages
 from gui.impl import backport
 from gui.impl.gen import R
@@ -42,6 +42,7 @@ from skeletons.gui.game_control import IAnonymizerController
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.afk_controller import IAFKController
 _logger = logging.getLogger(__name__)
 
 class _InviteVersion(CONST_CONTAINER):
@@ -51,6 +52,10 @@ class _InviteVersion(CONST_CONTAINER):
 
 class _WarningType(object):
     ANONYMIZED = 'anonymized'
+
+
+class _ErrorType(object):
+    AFK_BAN = 'afkban'
 
 
 _PrbInviteData = namedtuple('_PrbInviteData', ('clientID',
@@ -86,6 +91,7 @@ def _getOldInviteOrderKey(item):
 class PrbInviteWrapper(_PrbInviteData):
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
+    afkController = dependency.descriptor(IAFKController)
     __anonymizerController = dependency.descriptor(IAnonymizerController)
 
     @staticmethod
@@ -130,6 +136,12 @@ class PrbInviteWrapper(_PrbInviteData):
     @property
     def warning(self):
         return _WarningType.ANONYMIZED if self.__anonymizerController.isAnonymized else ''
+
+    @property
+    def error(self):
+        if self.type == PREBATTLE_TYPE.EVENT:
+            if self.afkController.isBanned:
+                return _ErrorType.AFK_BAN
 
     def getCreatorBadgeID(self):
         badge = self.creatorBadges.getBadge()

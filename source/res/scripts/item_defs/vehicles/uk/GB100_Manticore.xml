@@ -66,6 +66,13 @@
       <undamaged>	vehicles/british/GB100_Manticore/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB100_Manticore/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB100_Manticore/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB100_Manticore_3DSt_HW_21>
+          <undamaged>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Hull.model	</exploded>
+        </GB100_Manticore_3DSt_HW_21>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -89,9 +96,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.150475 0.172947 2.29526	</rayStart>
-        <rayEnd>	-0.150475 0.0356165 2.14986	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <rayStart>	-0.690894 0.340331 1.93242	</rayStart>
+        <rayEnd>	-0.690894 0.143065 1.89944	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.25	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -590,6 +597,58 @@
         <clipAngle>	0.784013	</clipAngle>
         <anchorShift>	0.055327	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15039	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB100_Manticore_3DSt_HW_21	</compatibleModels>
+        <position>	-0.457069 1.01466 1.33008	</position>
+        <rotation>	0.173494 0.000006 3.14157	</rotation>
+        <scale>	0.450705 0.450706 0.450705	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.784013	</clipAngle>
+        <anchorShift>	0.075325	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15040	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB100_Manticore_3DSt_HW_21	</compatibleModels>
+        <position>	-1.16651 0.662803 1.21758	</position>
+        <rotation>	1.56907 1.57049 0.00113938	</rotation>
+        <scale>	0.342279 0.2 0.34228	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.16565	</clipAngle>
+        <anchorShift>	0.131260	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15041	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB100_Manticore_3DSt_HW_21	</compatibleModels>
+        <position>	1.1665 0.6552 1.21757	</position>
+        <rotation>	1.5691 -1.5708 -0.00098668	</rotation>
+        <scale>	0.342279 0.2 0.34228	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.16565	</clipAngle>
+        <anchorShift>	0.141260	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15042	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB100_Manticore_3DSt_HW_21	</compatibleModels>
+        <position>	-0.000006 0.834509 -1.43563	</position>
+        <rotation>	3.13985 -0.000005 -0.000059	</rotation>
+        <scale>	0.515759 0.0893328 0.515762	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.16565	</clipAngle>
+        <anchorShift>	0.081269	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -632,6 +691,13 @@
         <undamaged>	vehicles/british/GB100_Manticore/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB100_Manticore/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB100_Manticore/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB100_Manticore_3DSt_HW_21>
+            <undamaged>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Chassis.model	</exploded>
+          </GB100_Manticore_3DSt_HW_21>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1298,6 +1364,13 @@
             <undamaged>	vehicles/british/GB100_Manticore/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB100_Manticore/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB100_Manticore/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB100_Manticore_3DSt_HW_21>
+                <undamaged>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Gun_01.model	</exploded>
+              </GB100_Manticore_3DSt_HW_21>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB100_Manticore/collision/Gun_01.model	</collisionModelServer>
@@ -1735,6 +1808,26 @@
               <hiddenForUser>	true	</hiddenForUser>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45032	</slotId>
+              <rayStart>	0.000000 0.000000 3.36934	</rayStart>
+              <rayEnd>	0.799098 -0.530075 3.35783	</rayEnd>
+              <rayUp>	0.097444 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	GB100_Manticore_3DSt_HW_21	</compatibleModels>
+              <position>	0.0849423 1.64988 -1.07914	</position>
+              <rotation>	-0.000001 0.000004 3.14157	</rotation>
+              <scale>	0.51194 0.0886712 0.511943	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.16565	</clipAngle>
+              <anchorShift>	0.081273	</anchorShift>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	0.000000 0.000000 3.36934	</rayStart>
@@ -1763,6 +1856,13 @@
         <undamaged>	vehicles/british/GB100_Manticore/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB100_Manticore/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB100_Manticore/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB100_Manticore_3DSt_HW_21>
+            <undamaged>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Turret_01.model	</exploded>
+          </GB100_Manticore_3DSt_HW_21>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB100_Manticore/collision/Turret_01.model	</collisionModelServer>
@@ -1961,6 +2061,39 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.10619	</clipAngle>
           <anchorShift>	0.175445	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35012	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB100_Manticore_3DSt_HW_21	</compatibleModels>
+          <position>	0.56142 1.35298 0.158555	</position>
+          <rotation>	0.842306 0.0059892 2.96004	</rotation>
+          <scale>	0.276466 0.276465 0.276466	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.784013	</clipAngle>
+          <anchorShift>	0.010429	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35013	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	-0.53534 1.26068 0.0552421	</position>
+          <rotation>	0.842306 -0.00594869 -2.9601	</rotation>
+          <scale>	0.276466 0.276465 0.276466	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.784013	</clipAngle>
+          <compatibleModels>	GB100_Manticore_3DSt_HW_21	</compatibleModels>
+          <anchorShift>	0.144464	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	sequence	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.105 0.446 -0.085	</position>
+          <rotation>	0.0233 0.0 0.0	</rotation>
+          <attachNode>	Gun	</attachNode>
         </slot>
       </customizationSlots>
       <customization>

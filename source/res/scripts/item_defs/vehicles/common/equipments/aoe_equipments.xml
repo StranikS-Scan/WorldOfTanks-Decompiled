@@ -140,12 +140,12 @@
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	true	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
-      <delay>	4	</delay>
-      <duration>	3.0	</duration>
-      <shotsNumber>	4	</shotsNumber>
+      <delay>	5	</delay>
+      <duration>	1	</duration>
+      <shotsNumber>	1	</shotsNumber>
       <explodeDestructible>	false	</explodeDestructible>
-      <areaRadius>	10	</areaRadius>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
+      <areaRadius>	15	</areaRadius>
+      <areaVisual></areaVisual>
       <areaShow>	always	</areaShow>
       <noOwner>	false	</noOwner>
       <attackerType>	DEATH_ZONE	</attackerType>
@@ -153,22 +153,21 @@
       <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
       <effects>
         <start>
-          <areaColor>	0x3FFF0000	</areaColor>
+          <sequences>	particles/eff_sequence/event_halloween_2021/enemies/death_zone.seq	</sequences>
         </start>
         <action>
           <shotEffects>	epicArtilleryStrike	</shotEffects>
           <offsetDeviation>	0	</offsetDeviation>
           <repeatCount>	1	</repeatCount>
           <repeatDelay>	0.3	</repeatDelay>
-          <areaColor>	0x3FFFFF00	</areaColor>
         </action>
       </effects>
       <actions>
         <action>
           <type>	DamageVehicle	</type>
-          <applyTo>	all	</applyTo>
+          <applyTo>	Team1	</applyTo>
           <args>
-            <value>	100	</value>
+            <value>	600	</value>
           </args>
         </action>
       </actions>

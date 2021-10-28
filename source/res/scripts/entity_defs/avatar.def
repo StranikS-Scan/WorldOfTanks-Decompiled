@@ -16,6 +16,9 @@
     <Interface>	VehicleRemovalController_Avatar	</Interface>
     <Interface>	VehicleHealthBroadcastListenerComponent_Avatar	</Interface>
     <Interface>	TriggersController_Avatar	</Interface>
+    <Interface>	WaveBotsSpawnController_Avatar	</Interface>
+    <Interface>	BattleHintsController_Avatar	</Interface>
+    <Interface>	WarningHintsController_Avatar	</Interface>
     <Interface>	AvatarEpic	</Interface>
   </Implements>
   <Volatile>
@@ -308,6 +311,13 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
     </showOwnVehicleHitDirection>
+    <showVehicleDamageInfo>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	EXTRA_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT16	</Arg>
+    </showVehicleDamageInfo>
     <showOtherVehicleDamagedDevices>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	ARRAY	  <of>	EXTRA_ID	</of>
@@ -380,7 +390,7 @@
       </VariableLengthHeaderSize>
     </updateArena>
     <updatePositions>
-      <Arg>	ARRAY	  <of>	UINT8	</of>
+      <Arg>	ARRAY	  <of>	UINT16	</of>
       </Arg>
       <Arg>	ARRAY	  <of>	INT16	</of>
       </Arg>
@@ -451,6 +461,20 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR3	</Arg>
     </enemySPGShotSound>
+    <updateScenarioTimer>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </updateScenarioTimer>
+    <sendPlayerBattleLogNotification>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </sendPlayerBattleLogNotification>
+    <sendEquipmentBattleLogNotification>
+      <Arg>	UINT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+    </sendEquipmentBattleLogNotification>
   </ClientMethods>
   <CellMethods>
     <autoAim>
@@ -674,6 +698,13 @@
       <Arg>	ARRAY	  <of>	FLOAT32	</of>
       </Arg>
     </updatePositions>
+    <showVehicleDamageInfo>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	EXTRA_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT16	</Arg>
+    </showVehicleDamageInfo>
     <vehicle_teleport>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
@@ -745,6 +776,9 @@
       <Arg>	CLIENT_STATUS_STATISTICS	</Arg>
     </reportClientStats>
     <setAvatarClient></setAvatarClient>
+    <onAFKRulesViolation>
+      <Arg>	UINT64	</Arg>
+    </onAFKRulesViolation>
     <leaveArenaByAccount>
       <Arg>	BOOL	</Arg>
     </leaveArenaByAccount>

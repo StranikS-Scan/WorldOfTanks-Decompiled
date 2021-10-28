@@ -30,6 +30,7 @@ class TOOLTIPS_CONSTANTS(object):
     TECHTREE_NATION_DISCOUNT = 'techtreeNationDiscount'
     VEH_COMPARE_TECHTREE_MODULE = 'vehCompareTechtreeModule'
     TECH_MAIN_SHELL = 'techMainShell'
+    TECH_MAIN_SHELL_EVENT = 'techMainShellEvent'
     HANGAR_MODULE = 'hangarModule'
     HANGAR_CARD_MODULE = 'hangarCardModule'
     HANGAR_SLOT_MODULE = 'hangarSlotModule'
@@ -189,12 +190,22 @@ class TOOLTIPS_CONSTANTS(object):
     BADGE_LOYAL_SERVICE = 'badgeLoyalService'
     EVENT_BOARDS_BADGE = 'eventBoardsBadge'
     EVENT_BOARDS_BADGES_GROUP = 'eventBoardsBadgesGroup'
+    EVENT_CAROUSEL_VEHICLE = 'eventCarouselVehicle'
+    EVENT_COST = 'eventCost'
+    EVENT_INTERROGATION = 'eventInterrogation'
+    EVENT_KEY_INFO = 'eventKeyInfo'
+    EVENT_EFFICIENT_INFO = 'eventEfficientInfo'
+    EVENT_DAILY_INFO = 'eventDailyInfo'
+    EVENT_SELECTOR_INFO = 'eventSelectorInfo'
+    EVENT_BAN_INFO = 'eventBanInfo'
+    EVENT_SELECTOR_PERF_INFO = 'eventSelectorPerfInfo'
     OPERATION = 'operation'
     OPERATIONS_CHAIN_DETAILS = 'operationsChainDetails'
     PERSONAL_MISSIONS_MAP_REGION = 'personalMissionsMapRegion'
     BATTLE_TRAINING = 'battleTraining'
     OPERATION_POSTPONED = 'operationPostponed'
     SQUAD_BONUS = 'squadBonus'
+    GF_BANNER_TOOLTIP = 'gfBannerTooltip'
     GF_TEST_TOOLTIP = 'gfTestTooltip'
     WOT_PLUS = 'wotPlus'
     BATTLE_PASS_VEHICLE_POINTS = 'battlePassVehiclePoints'
@@ -365,6 +376,8 @@ class TOOLTIPS_CONSTANTS(object):
     ACCOUNT_COMPLETION = 'AccountCompletion'
     VEH_POST_PROGRESSION_ENTRY_POINT = 'VehPostProgressionEntryPoint'
     EPIC_RANK_UNLOCK_INFO = 'epicRankUnlockTooltip'
+    HALLOWEEN_QUESTS_PREVIEW = 'halloweenQuestsPreview'
+    HALLOWEEN_NO_SUITABLE_VEHICLE_FOR_QUEST = 'halloweenNoSuitableVechileForQuest'
     ACHIEVEMENTS_SET = [BATTLE_STATS_ACHIEVS,
      BATTLE_STATS_MARKS_ON_GUN_ACHIEVEMENT,
      ACHIEVEMENT,
@@ -619,3 +632,16 @@ class TOOLTIPS_CONSTANTS(object):
      MAPBOX_CALENDAR]
     ACCOUNT_COMPLETION_SET = [ACCOUNT_COMPLETION]
     REFERRAL_PROGRAM_SET = [REFERRAL_AWARDS]
+    EVENT_SET = [EVENT_COST,
+     EVENT_INTERROGATION,
+     EVENT_KEY_INFO,
+     EVENT_EFFICIENT_INFO,
+     EVENT_DAILY_INFO,
+     EVENT_CAROUSEL_VEHICLE,
+     EVENT_SELECTOR_INFO,
+     EVENT_BAN_INFO,
+     HALLOWEEN_QUESTS_PREVIEW,
+     HALLOWEEN_NO_SUITABLE_VEHICLE_FOR_QUEST,
+     TECH_MAIN_SHELL_EVENT,
+     GF_BANNER_TOOLTIP,
+     EVENT_SELECTOR_PERF_INFO]

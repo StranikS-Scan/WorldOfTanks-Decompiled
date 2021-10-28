@@ -49,6 +49,19 @@ def packTextBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_T
      'useHtml': useHtml}, padding, blockWidth)
 
 
+def packGlowTextBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_GLOW_TEXT_BLOCK_LINKAGE, distance=0, angle=0, color=16711680, alpha=1, blurX=16, blurY=16, strength=2, quality=2, padding=None, blockWidth=0):
+    return packBlockDataItem(linkage, {'text': text,
+     'useHtml': useHtml,
+     'distance': distance,
+     'angle': angle,
+     'color': color,
+     'alpha': alpha,
+     'blurX': blurX,
+     'blurY': blurY,
+     'strength': strength,
+     'quality': quality}, padding, blockWidth)
+
+
 def packTextWithBgBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_WITH_BG_BLOCK_LINKAGE, padding=None, bgColor=-1, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT):
     return packBlockDataItem(linkage, {'text': text,
      'useHtml': useHtml,

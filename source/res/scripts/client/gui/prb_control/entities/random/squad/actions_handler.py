@@ -6,7 +6,6 @@ from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.impl.gen import R
 from gui.prb_control.entities.base.squad.actions_handler import SquadActionsHandler
-from gui.shared.event_dispatcher import showPlatoonResourceDialog
 
 class RandomSquadActionsHandler(SquadActionsHandler):
     pass
@@ -30,6 +29,7 @@ class BalancedSquadActionsHandler(RandomSquadActionsHandler):
 
             if not fullData.playerInfo.isReady:
                 notReadyCount -= 1
+            from gui.shared.event_dispatcher import showPlatoonResourceDialog
             if fullData.stats.occupiedSlotsCount == 1:
                 showPlatoonResourceDialog(R.strings.dialogs.squadHaveNoPlayers, self._confirmCallback)
                 return

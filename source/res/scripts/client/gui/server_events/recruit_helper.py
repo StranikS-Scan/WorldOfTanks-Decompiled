@@ -19,7 +19,7 @@ from helpers.i18n import makeString as _ms
 from account_helpers.AccountSettings import AccountSettings, RECRUIT_NOTIFICATIONS
 from soft_exception import SoftException
 from shared_utils import first, findFirst
-from .events_helpers import getTankmanRewardQuests
+from gui.server_events.events_helpers import getTankmanRewardQuests
 
 class RecruitSourceID(object):
     TANKWOMAN = 'tankwoman'

@@ -94,6 +94,9 @@
     <Rolls_Royse_Meteor_Mk_XI_supercharged_SH>	10001	</Rolls_Royse_Meteor_Mk_XI_supercharged_SH>
     <Leyland_L60_No_4_SH>	10002	</Leyland_L60_No_4_SH>
     <Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>	3	</Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>
+    <Rolls_Royce_Griffon_Halloween_event>	20102	</Rolls_Royce_Griffon_Halloween_event>
+    <Rolls_Royce_Griffon_HELL>	20000	</Rolls_Royce_Griffon_HELL>
+    <Rolls_Royce_Griffon_HELL__0>	20015	</Rolls_Royce_Griffon_HELL__0>
   </ids>
   <shared>
     <Vickers-Armstrong>
@@ -895,6 +898,23 @@
       <rpm_min>	474	</rpm_min>
       <rpm_max>	2080	</rpm_max>
     </Rolls_Royce_Griffon_FL>
+    <Rolls_Royce_Griffon_Halloween_event>
+      <userString>	#gb_vehicles:Rolls_Royce_Griffon_Halloween_event	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	952	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+    </Rolls_Royce_Griffon_Halloween_event>
     <Rolls_Royce_Griffon_A>
       <userString>	#gb_vehicles:Rolls_Royce_Griffon_A	</userString>
       <tags>	gasoline	</tags>
@@ -1650,5 +1670,39 @@
       <rpm_max>	2721	</rpm_max>
       <notInShop>	True	</notInShop>
     </Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>
+    <Rolls_Royce_Griffon_HELL>
+      <userString>	#gb_vehicles:Rolls_Royce_Griffon	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	952	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Rolls_Royce_Griffon_HELL>
+    <Rolls_Royce_Griffon_HELL__0>
+      <userString>	#gb_vehicles:Rolls_Royce_Griffon	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	952	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Rolls_Royce_Griffon_HELL__0>
   </shared>
 </engines.xml>

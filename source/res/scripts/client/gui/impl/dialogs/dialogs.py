@@ -4,6 +4,9 @@ from collections import namedtuple
 import typing
 from BWUtil import AsyncReturn
 from async import async, await
+from gui.impl.lobby.halloween.dialogs.buy_pack_confirm_dialog import BuyPackConfirmDialog
+from gui.impl.lobby.halloween.dialogs.customization_confirm_dialog import CustomizationConfirmDialog
+from gui.impl.lobby.halloween.dialogs.decode_confirm_dialog import DecodeConfirmDialog
 from helpers import dependency
 from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.trophy_device_confirm_view import TrophyDeviceUpgradeConfirmView
@@ -109,8 +112,8 @@ def showSingleDialog(wrappedViewClass, layoutID, parent=None, *args, **kwargs):
 
 
 @async
-def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, *args, **kwargs):
-    dialog = FullScreenDialogWindowWrapper.createIfNotExist(layoutID, wrappedViewClass, parent, *args, **kwargs)
+def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, doBlur=True, *args, **kwargs):
+    dialog = FullScreenDialogWindowWrapper.createIfNotExist(layoutID, wrappedViewClass, parent, doBlur, *args, **kwargs)
     if dialog is not None:
         result = yield await(showSimpleWithResultData(dialog))
         raise AsyncReturn(SingleDialogResult(busy=False, result=result))
@@ -122,3 +125,33 @@ def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, *arg
 def showExchangeToUpgradeDeviceDialog(device, parent=None):
     result = yield await(showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToUpgradeItems(), parent=parent, wrappedViewClass=ExchangeToUpgradeDevice, device=device))
     raise AsyncReturn(result)
+
+
+@async
+def showCustomizationConfirmDialog(shopItem, count):
+    result = yield await(showSingleDialogWithResultData(shopItem=shopItem, count=count, layoutID=CustomizationConfirmDialog.LAYOUT_ID, wrappedViewClass=CustomizationConfirmDialog))
+    if result.busy:
+        raise AsyncReturn((False, {}))
+    else:
+        isOk, _ = result.result
+        raise AsyncReturn((isOk, {}))
+
+
+@async
+def showBuyPackConfirmDialog(bundle):
+    result = yield await(showSingleDialogWithResultData(bundle=bundle, layoutID=BuyPackConfirmDialog.LAYOUT_ID, wrappedViewClass=BuyPackConfirmDialog))
+    if result.busy:
+        raise AsyncReturn((False, {}))
+    else:
+        isOk, _ = result.result
+        raise AsyncReturn((isOk, {}))
+
+
+@async
+def showDecodeConfirmDialog(price):
+    result = yield await(showSingleDialogWithResultData(price=price, layoutID=DecodeConfirmDialog.LAYOUT_ID, wrappedViewClass=DecodeConfirmDialog))
+    if result.busy:
+        raise AsyncReturn((False, {}))
+    else:
+        isOk, _ = result.result
+        raise AsyncReturn((isOk, {}))

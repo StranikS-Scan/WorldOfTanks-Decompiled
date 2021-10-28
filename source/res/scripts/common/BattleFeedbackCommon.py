@@ -32,6 +32,9 @@ class BATTLE_EVENT_TYPE:
     MULTI_STUN = 21
     DETECTED = 22
     EQUIPMENT_TIMER_EXPIRED = 23
+    BUFF_APPLIED = 24
+    BUFF_EFFECT_APPLIED = 25
+    EVENT_ACTION_APPLIED = 26
     HIDE_IF_TARGET_INVISIBLE = (CRIT,
      DAMAGE,
      TRACK_ASSIST,
@@ -58,6 +61,8 @@ class BATTLE_EVENT_TYPE:
      ENEMY_SECTOR_CAPTURED,
      DEFENDER_BONUS])
     EQUIPMENT_EVENTS = frozenset([EQUIPMENT_TIMER_EXPIRED])
+    BUFF_EVENTS = frozenset([BUFF_APPLIED, BUFF_EFFECT_APPLIED])
+    EVENT_ACTION_EVENTS = frozenset([EVENT_ACTION_APPLIED])
     ALL = frozenset([SPOTTED,
      RADIO_ASSIST,
      TRACK_ASSIST,
@@ -81,7 +86,13 @@ class BATTLE_EVENT_TYPE:
      BASE_CAPTURE_BLOCKED,
      MULTI_STUN,
      DETECTED,
-     EQUIPMENT_TIMER_EXPIRED])
+     BUFF_APPLIED,
+     BUFF_EFFECT_APPLIED,
+     EQUIPMENT_TIMER_EXPIRED,
+     EVENT_ACTION_APPLIED])
+    __EVENT_ACTIONS_INDEXES = list(enumerate(['healVehicleAction', 'addAmmoVehicleAction']))
+    __EVENT_ACTIONS_BY_INDEX = {i:eventAction for i, eventAction in __EVENT_ACTIONS_INDEXES}
+    __EVENT_ACTIONS_INDEX_BY_ACTION = {eventAction:i for i, eventAction in __EVENT_ACTIONS_INDEXES}
 
     @staticmethod
     def packDamage(damage, attackReasonID, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE], isRoleAction=False):
@@ -120,3 +131,21 @@ class BATTLE_EVENT_TYPE:
     @staticmethod
     def unpackVisibility(packedVisibility):
         return (packedVisibility & 1, packedVisibility & 2, packedVisibility & 4)
+
+    @staticmethod
+    def packBuffEffectApplied(effectValue, buffIndex, victimID):
+        return (int(victimID) & 65535) << 24 | (int(effectValue) & 4095) << 12 | buffIndex & 255
+
+    @staticmethod
+    def unpackBuffEffectApplied(packedEffect):
+        return (packedEffect >> 24 & 65535, packedEffect >> 12 & 4095, packedEffect & 255)
+
+    @classmethod
+    def packEventActionApplied(cls, victimID, effectValue, action):
+        actionIndex = cls.__EVENT_ACTIONS_INDEX_BY_ACTION[action]
+        return (int(victimID) & 65535) << 24 | (int(effectValue) & 4095) << 12 | actionIndex & 255
+
+    @classmethod
+    def unpackEventActionApplied(cls, packedEffect):
+        action = cls.__EVENT_ACTIONS_BY_INDEX[packedEffect & 255]
+        return (packedEffect >> 24 & 65535, packedEffect >> 12 & 4095, action)

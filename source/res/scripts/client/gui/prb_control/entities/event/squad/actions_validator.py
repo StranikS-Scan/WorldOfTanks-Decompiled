@@ -1,23 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/event/squad/actions_validator.py
-from gui.prb_control.entities.base.actions_validator import ActionsValidatorComposite
+from helpers import dependency
+from CurrentVehicle import g_currentPreviewVehicle
 from gui.prb_control.entities.base.squad.actions_validator import SquadActionsValidator, SquadVehiclesValidator
 from gui.prb_control.entities.base.unit.actions_validator import CommanderValidator
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import UNIT_RESTRICTION
+from gui.prb_control.entities.base.actions_validator import ActionsValidatorComposite
+from gui.prb_control.entities.event.pre_queue.actions_validator import AFKBanValidator as AFKBanValidatorBase
+from skeletons.gui.game_event_controller import IGameEventController
 
 class _EventBattleVehiclesValidator(SquadVehiclesValidator):
+    gameEventController = dependency.descriptor(IGameEventController)
 
     def _validate(self):
-        leaderEventEnqueueData = self._entity.getLeaderEventEnqueueData()
-        if leaderEventEnqueueData is not None:
-            result = True
-            if not result:
-                return ValidationResult(False, UNIT_RESTRICTION.UNIT_WRONG_DATA)
-        return super(_EventBattleVehiclesValidator, self)._validate()
+        return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_NOT_VALID) if g_currentPreviewVehicle.isPresent() else super(_EventBattleVehiclesValidator, self)._validate()
 
     def _isValidMode(self, vehicle):
-        return vehicle.isEvent and not vehicle.isOnlyForEpicBattles
+        return self.gameEventController.isEnabled() and vehicle.isEvent
+
+
+class AFKBanValidator(AFKBanValidatorBase):
+    RESTRICTION = UNIT_RESTRICTION.EVENT_AFK_BAN
 
 
 class EventSquadSlotsValidator(CommanderValidator):
@@ -33,7 +37,7 @@ class EventSquadSlotsValidator(CommanderValidator):
 class EventBattleSquadActionsValidator(SquadActionsValidator):
 
     def _createVehiclesValidator(self, entity):
-        return _EventBattleVehiclesValidator(entity)
+        return ActionsValidatorComposite(entity, [AFKBanValidator(entity), _EventBattleVehiclesValidator(entity)])
 
     def _createSlotsValidator(self, entity):
         baseValidator = super(EventBattleSquadActionsValidator, self)._createSlotsValidator(entity)

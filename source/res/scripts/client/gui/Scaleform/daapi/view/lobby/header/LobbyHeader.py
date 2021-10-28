@@ -16,7 +16,6 @@ from account_helpers.AccountSettings import KNOWN_SELECTOR_BATTLES
 from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS, NEW_SHOP_TABS, LAST_SHOP_ACTION_COUNTER_MODIFICATION, OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES
 from account_helpers.renewable_subscription import RenewableSubscription
 from adisp import process, async
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from constants import PREMIUM_TYPE, EPlatoonButtonState
 from debug_utils import LOG_ERROR
 from frameworks.wulf import ViewFlags, WindowLayer
@@ -24,6 +23,7 @@ from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatTimeAndDate
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getAchievementsTabCounter
 from gui.Scaleform.daapi.view.lobby.mapbox.mapbox_helpers import getMapboxFightBtnTooltipData
@@ -75,9 +75,10 @@ from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from helpers import dependency
 from helpers import i18n, time_utils, isPlayerAccount
 from predefined_hosts import g_preDefinedHosts, PING_STATUSES
-from shared_utils import CONST_CONTAINER, BitmaskHelper, first
+from shared_utils import CONST_CONTAINER, BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.afk_controller import IAFKController
 from skeletons.gui.demount_kit import IDemountKitNovelty
 from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBoostersController, IBootcampController, IChinaController, IEpicBattleMetaGameController, IGameSessionController, IIGRController, IRankedBattlesController, IServerStatsController, IWalletController, IClanNotificationController, IBattleRoyaleController, IUISpamController, IPlatoonController, IMapboxController, IMapsTrainingController
 from skeletons.gui.goodies import IGoodiesCache
@@ -91,6 +92,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.techtree_events import ITechTreeEventsListener
+from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.tutorial import ITutorialLoader
 from uilogging.mode_selector.constants import LOG_ACTIONS, LOG_CLOSE_DETAILS, SELECTOR_BUTTON_TOOLTIP_LOG_ID
 from uilogging.mode_selector.loggers import ModeSelectorEntryPointLogger
@@ -177,6 +179,7 @@ class _LobbyHeaderVisibilityHelper(object):
 
 
 class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
+    afkController = dependency.descriptor(IAFKController)
     __PREM_WARNING_LIMIT = time_utils.ONE_DAY
 
     class BUTTONS(CONST_CONTAINER):
@@ -241,6 +244,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     settingsCore = dependency.descriptor(ISettingsCore)
     wallet = dependency.descriptor(IWalletController)
     offersNovelty = dependency.descriptor(IOffersNovelty)
+    gameEventController = dependency.descriptor(IGameEventController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __mapsTrainingController = dependency.descriptor(IMapsTrainingController)
     uiSpamController = dependency.descriptor(IUISpamController)
@@ -529,6 +533,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.techTreeEventsListener.onSettingsChanged += self._updateHangarMenuData
         self._renewableSubInfo.onRenewableSubscriptionDataChanged += self._onRenewableSubscriptionDataChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
+        self.gameEventController.onSquadDifficultyLevelChanged += self._updatePrebattleControls
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -633,6 +638,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.demountKitNovelty.onUpdated -= self.__updateStorageTabCounter
         self.offersNovelty.onUpdated -= self.__updateStorageTabCounter
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
+        self.gameEventController.onSquadDifficultyLevelChanged -= self._updatePrebattleControls
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitLeft -= self.__unitMgr_onUnitLeft
@@ -982,12 +988,28 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if view:
             view.update()
 
-    def __getEventTooltipData(self):
-        header = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_HEADER)
-        vehicles = self.eventsCache.getEventVehicles()
-        vehicle = first(vehicles)
-        tankName = vehicle.shortUserName if vehicle else None
-        body = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_BODY, tankName=tankName)
+    def __getEventTooltipData(self, state):
+        header = R.strings.tooltips.hangar.startBtn.squadNotReady.header()
+        body = R.strings.tooltips.hangar.startBtn.squadNotReady.body()
+        if state == UNIT_RESTRICTION.EVENT_UNIT_SQUAD_DIFFICULTY_LEVEL_NOT_ENABLE:
+            header = R.strings.tooltips.event.squad.disableWrongDifficulty.header()
+            body = R.strings.tooltips.event.squad.disableWrongDifficultyPlayer.body()
+        elif state == UNIT_RESTRICTION.NOT_READY_IN_SLOTS:
+            selectedDifficultyLevel = self.gameEventController.getSquadDifficultyLevel()
+            entity = self.prbEntity
+            unitMgrID = entity.getID()
+            for slot in entity.getSlotsIterator(*entity.getUnit(unitMgrID=unitMgrID)):
+                maxDifficultyLevel = slot.player.extraData.get('eventEnqueueData', {}).get('maxDifficultyLevel')
+                if slot.player and maxDifficultyLevel < selectedDifficultyLevel:
+                    header = R.strings.tooltips.event.squad.disableWrongDifficulty.header()
+                    body = R.strings.tooltips.event.squad.disableWrongDifficultyCommander.body()
+                    break
+
+        return makeTooltip(backport.text(header), backport.text(body))
+
+    def __getEventAFKBanTooltipData(self):
+        header = backport.text(R.strings.tooltips.event.afk.ban.header())
+        body = backport.text(R.strings.tooltips.event.afk.ban.fbBody(), value=formatTimeAndDate(self.afkController.banExpiryTime))
         return makeTooltip(header, body)
 
     def __getPreviewTooltipData(self):
@@ -1096,7 +1118,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         brAvailable = isBrCycle and self.__battleRoyaleController.isEnabled()
         isEpicBattleAvailabe = self.epicController.isEnabled() and self.epicController.isCurrentCycleActive()
         mapboxAvailable = self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
-        return not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or isEpicBattleAvailabe or brAvailable or mapboxAvailable)
+        return not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or isEpicBattleAvailabe or brAvailable or mapboxAvailable or self.eventsCache.isEventEnabled())
 
     def _updatePrebattleControls(self, *_):
         if self._isLobbyHeaderControlsDisabled:
@@ -1138,25 +1160,27 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                     tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_INMAPBOXSQUAD
                 else:
                     tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_MAPBOXSQUAD
-            elif isInSquad or isEvent:
-                tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_INSQUAD
             elif isRanked:
                 tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_RANKEDSQUAD
+            elif isInSquad or isEvent:
+                tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_INSQUAD
             elif isRoyale or isRoyaleTournament:
                 tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_BATTLEROYALESQUAD if isRoyale else ''
             else:
                 tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
-            hasEventSquadCap = bool(BONUS_CAPS.checkAny(constants.ARENA_BONUS_TYPE.EVENT_BATTLES, BONUS_CAPS.SQUADS))
-            isEventSquadEnable = isEvent and hasEventSquadCap
             hasSearchSupport = self.platoonCtrl.hasWelcomeWindow()
-            self.as_updateSquadS(isInSquad, tooltip, TOOLTIP_TYPES.COMPLEX, isEventSquadEnable, squadSelected.squadIcon, hasSearchSupport, extendedSquadInfoVo._asdict())
+            self.as_updateSquadS(isInSquad, tooltip, TOOLTIP_TYPES.COMPLEX, False, squadSelected.squadIcon, hasSearchSupport, extendedSquadInfoVo._asdict())
         self.__isFightBtnDisabled = self._checkFightButtonDisabled(canDo, selected.isLocked())
         tooltipData, isSpecial = '', False
         if self.__isFightBtnDisabled and not state.hasLockedState:
             if isSandbox:
                 tooltipData = self.__getSandboxTooltipData(result)
+            elif isEvent and result.restriction in (PREBATTLE_RESTRICTION.EVENT_AFK_BAN, UNIT_RESTRICTION.EVENT_AFK_BAN):
+                tooltipData = self.__getEventAFKBanTooltipData()
             elif isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
-                tooltipData = self.__getEventTooltipData()
+                tooltipData = self.__getEventTooltipData(canDoMsg)
+            elif isEvent and result.restriction == PREBATTLE_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT:
+                tooltipData = self.__getPreviewTooltipData()
             elif g_currentVehicle.isTooHeavy():
                 tooltipData = makeTooltip(body=backport.text(R.strings.tooltips.hangar.startBtn.vehicleToHeavy.body()))
             elif g_currentVehicle.isOnlyForEpicBattles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):

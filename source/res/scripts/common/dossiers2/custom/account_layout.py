@@ -772,7 +772,9 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'august21',
  'BattlePassCommonPr_6',
  'september21',
- 'october21']
+ 'october21',
+ 'hw2021Medal1',
+ 'hw2021Medal2']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -928,7 +930,9 @@ _singleAchievementsPopUps = ['titleSniper',
  'august21',
  'BattlePassCommonPr_6',
  'september21',
- 'october21']
+ 'october21',
+ 'hw2021Medal1',
+ 'hw2021Medal2']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, SINGLE_ACHIEVEMENTS_DEPENDENCIES, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

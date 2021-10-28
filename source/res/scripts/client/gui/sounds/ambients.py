@@ -453,7 +453,8 @@ class GuiAmbientsCtrl(object):
         for layer in (WindowLayer.TOP_WINDOW,
          WindowLayer.WINDOW,
          WindowLayer.SUB_VIEW,
-         WindowLayer.TOP_SUB_VIEW):
+         WindowLayer.TOP_SUB_VIEW,
+         WindowLayer.FULLSCREEN_WINDOW):
             result.extend(self._customEnvs[layer].values())
 
         result.append(self._spaceEnv)

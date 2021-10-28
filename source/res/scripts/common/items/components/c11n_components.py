@@ -420,7 +420,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.MODIFICATION: ModificationItem, CustomizationType.PAINT: PaintItem, CustomizationType.STYLE: StyleItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.FONT: Font, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.DECAL: DecalItem}
+    CUSTOMIZATION_TYPES = {CustomizationType.MODIFICATION: ModificationItem, CustomizationType.DECAL: DecalItem, CustomizationType.PAINT: PaintItem, CustomizationType.STYLE: StyleItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.FONT: Font, CustomizationType.SEQUENCE: SequenceItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')

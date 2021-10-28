@@ -42,6 +42,7 @@ from gui.wgnc import g_wgncProvider
 from helpers import dependency
 from helpers import uniprof
 from messenger import MessengerEntry
+from messenger.proto.events import g_messengerEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
@@ -530,6 +531,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def objectsSelectionEnabled(self, enabled):
         if not enabled and self.__selectedEntity is not None:
             self.targetBlur(self.__selectedEntity)
+        self.hangarSpace.onObjectsSelectionEnabled(enabled)
         self.__objectsSelectionEnabled = enabled
         return
 
@@ -883,9 +885,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_SANDBOX, 0, 0, 0)
 
-    def enqueueEventBattles(self, vehInvIDs):
+    def enqueueEventBattles(self, vehInvIDs, difficultyLevel):
         if not events.isPlayerEntityChanging:
-            arr = [len(vehInvIDs)] + vehInvIDs
+            arr = [len(vehInvIDs)] + vehInvIDs + [difficultyLevel]
             self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_EVENT_BATTLES, arr)
 
     def dequeueEventBattles(self):
@@ -1156,6 +1158,51 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdIntArrStrArr(AccountCommands.CMD_CHANGE_EVENT_ENQUEUE_DATA, intArr, strArr, proxy)
         return
 
+    def rentHalloweenVehicle(self, vehTypeCompDescr, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode, ext={}: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdIntArr(AccountCommands.CMD_RENT_HALLOWEEN_TANKS, [vehTypeCompDescr], proxy)
+        return
+
+    def unlockHalloweenVehicles(self, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdIntArr(AccountCommands.CMD_UNLOCK_HALLOWEEN_TANKS, [], proxy)
+        return
+
+    def addDifficultyEventPoints(self, eventPoints, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdInt(AccountCommands.CMD_ADD_DIFFICULTY_EVENT_POINTS, eventPoints, proxy)
+        return
+
+    def changeSelectedDifficultyLevel(self, difficultyLevel, force=False, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        strArr = ['difficultyLevel', 'force']
+        intArr = [difficultyLevel, int(force)]
+        self._doCmdIntArrStrArr(AccountCommands.CMD_CHANGE_EVENT_ENQUEUE_DATA, intArr, strArr, proxy)
+        return
+
+    def addHW19AFKPenalty(self, penaltyType):
+        self._doCmdStr(AccountCommands.CMD_HW19_AFK_ADD_PENALTY, penaltyType, None)
+        return
+
+    def drawHW19AFKPenalty(self, penaltyType):
+        self._doCmdStr(AccountCommands.CMD_HW19_AFK_DRAW_PENALTY, penaltyType, None)
+        return
+
+    def openRewardBox(self, boxId, isSkipQuest, callback=None):
+        self.shop.openRewardBox(boxId, isSkipQuest, callback)
+
     def logClientSystem(self, stats):
         self.base.logClientSystem(stats)
 
@@ -1206,6 +1253,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def requestSingleToken(self, tokenName, callback=None):
         self._doCmdStr(AccountCommands.CMD_GET_SINGLE_TOKEN, tokenName, callback)
+
+    def broadcastAFKWarning(self):
+        g_messengerEvents.onAFKWarningReceived()
 
     def messenger_onActionByServer_chat2(self, actionID, reqID, args):
         from messenger_common_chat2 import MESSENGER_ACTION_IDS as actions

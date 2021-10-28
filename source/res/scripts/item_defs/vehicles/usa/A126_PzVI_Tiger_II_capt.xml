@@ -71,6 +71,11 @@
           <destroyed>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/KingTiger/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/KingTiger/crash/lod0/Hull.model	</exploded>
         </KingTiger>
+        <A126_PzVI_Tiger_II_capt_3DSt_HW21>
+          <undamaged>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/crash/lod0/Hull.model	</exploded>
+        </A126_PzVI_Tiger_II_capt_3DSt_HW21>
       </sets>
     </models>
     <swinging>
@@ -220,6 +225,39 @@
         <clipAngle>	0.755204	</clipAngle>
         <anchorShift>	0.23867	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15007	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A126_PzVI_Tiger_II_capt_3DSt_HW21	</compatibleModels>
+        <position>	-1.23616 1.49888 3.06672	</position>
+        <rotation>	0.377806 -0.036195 -3.09166	</rotation>
+        <scale>	0.498553 0.498553 0.498553	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorShift>	0.030002	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15008	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A126_PzVI_Tiger_II_capt_3DSt_HW21	</compatibleModels>
+        <position>	0.549524 1.14283 3.08748	</position>
+        <rotation>	0.697883 -0.000006 3.13992	</rotation>
+        <scale>	0.543273 0.188357 0.543277	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.680177	</clipAngle>
+        <anchorShift>	0.136876	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	sequence	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0.000000 0.000000 0.000000	</rotation>
+        <attachNode>	HP_Light	</attachNode>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	1.48 1.48 0.000000 0.000000	</tiling>
@@ -262,6 +300,11 @@
             <destroyed>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/KingTiger/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/KingTiger/crash/lod0/Chassis.model	</exploded>
           </KingTiger>
+          <A126_PzVI_Tiger_II_capt_3DSt_HW21>
+            <undamaged>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/crash/lod0/Chassis.model	</exploded>
+          </A126_PzVI_Tiger_II_capt_3DSt_HW21>
         </sets>
       </models>
       <traces>
@@ -379,6 +422,14 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <A126_PzVI_Tiger_II_capt_3DSt_HW21>
+            <segmentModelLeft>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/track/segment1_R.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/track/segment1_L.model	</segmentModelRight>
+            <segment2ModelLeft>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/track/segment2_R.model	</segment2ModelLeft>
+            <segment2ModelRight>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/track/segment2_L.model	</segment2ModelRight>
+          </A126_PzVI_Tiger_II_capt_3DSt_HW21>
+        </modelSets>
       </splineDesc>
       <trackNodes>
         <enable>	true	</enable>
@@ -600,6 +651,12 @@
             <model>	vehicles/american/A126_PzVI_Tiger_II_capt/track/segment2_L.model	</model>
             <length>	0.148016	</length>
           </secSegment>
+          <modelSets>
+            <A126_PzVI_Tiger_II_capt_3DSt_HW21>
+              <mainSegmentModel>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/track/segment1_L.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/track/segment2_L.model	</secSegmentModel>
+            </A126_PzVI_Tiger_II_capt_3DSt_HW21>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -797,6 +854,12 @@
             <model>	vehicles/american/A126_PzVI_Tiger_II_capt/track/segment2_R.model	</model>
             <length>	0.137683	</length>
           </secSegment>
+          <modelSets>
+            <A126_PzVI_Tiger_II_capt_3DSt_HW21>
+              <mainSegmentModel>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/track/segment1_R.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/track/segment2_R.model	</secSegmentModel>
+            </A126_PzVI_Tiger_II_capt_3DSt_HW21>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1068,6 +1131,11 @@
                 <destroyed>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/KingTiger/crash/lod0/Gun_04.model	</destroyed>
                 <exploded>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/KingTiger/crash/lod0/Gun_04.model	</exploded>
               </KingTiger>
+              <A126_PzVI_Tiger_II_capt_3DSt_HW21>
+                <undamaged>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/crash/lod0/Gun_04.model	</exploded>
+              </A126_PzVI_Tiger_II_capt_3DSt_HW21>
             </sets>
           </models>
           <hitTester>
@@ -1133,6 +1201,11 @@
             <destroyed>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/KingTiger/crash/lod0/Turret_02.model	</destroyed>
             <exploded>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/KingTiger/crash/lod0/Turret_02.model	</exploded>
           </KingTiger>
+          <A126_PzVI_Tiger_II_capt_3DSt_HW21>
+            <undamaged>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/american/A126_PzVI_Tiger_II_capt/_skins/A126_PzVI_Tiger_II_capt_3DSt_HW21/crash/lod0/Turret_02.model	</exploded>
+          </A126_PzVI_Tiger_II_capt_3DSt_HW21>
         </sets>
       </models>
       <hitTester>
@@ -1384,6 +1457,45 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.29713	</clipAngle>
           <anchorShift>	0.011933	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35015	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A126_PzVI_Tiger_II_capt_3DSt_HW21	</compatibleModels>
+          <position>	-0.870176 2.26771 0.549067	</position>
+          <rotation>	1.25228 -1.18004 -3.11738	</rotation>
+          <scale>	0.800396 0.276977 0.800396	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorShift>	0.071543	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35016	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A126_PzVI_Tiger_II_capt_3DSt_HW21	</compatibleModels>
+          <position>	0.848186 2.16588 0.695197	</position>
+          <rotation>	1.25364 1.19338 3.12904	</rotation>
+          <scale>	0.561615 0.194347 0.561617	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorShift>	0.071541	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35017	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A126_PzVI_Tiger_II_capt_3DSt_HW21	</compatibleModels>
+          <position>	-0.00908109 2.69228 0.510515	</position>
+          <rotation>	0.252571 -0.00453499 3.13766	</rotation>
+          <scale>	0.701456 0.2 0.701456	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorShift>	0.130002	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

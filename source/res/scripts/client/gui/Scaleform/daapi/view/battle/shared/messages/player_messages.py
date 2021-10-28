@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/player_messages.py
 import logging
 from constants import EQUIPMENT_STAGES
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from gui.battle_royale.constants import BR_EQUIPMENTS_WITH_MESSAGES
 from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from items import vehicles
@@ -16,6 +17,8 @@ _EQUIPMENT_NAME_TO_POSTFIX_KEY = {'arcade_bomber_battle_royale': 'BOMBER',
  'fl_regenerationKit': 'REGENERATION_KIT_EPIC',
  'arcade_minefield_epic_battle': 'MINEFIELD_EPIC',
  'stealth_radar': 'STEALTH_RADAR'}
+_EVENT_ACTION_TO_KEY = {'healVehicleAction': 'EVENT_HEAL',
+ 'addAmmoVehicleAction': 'EVENT_ADD_AMMO'}
 
 class PlayerMessages(fading_messages.FadingMessages):
 
@@ -36,6 +39,9 @@ class PlayerMessages(fading_messages.FadingMessages):
         if ctrl is not None:
             ctrl.onEquipmentUpdated += self.__onCombatEquipmentUpdated
             ctrl.onCombatEquipmentUsed += self.__onCombatEquipmentUsed
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onPlayerFeedbackReceived += self._onPlayerFeedbackReceived
         return
 
     def _removeGameListeners(self):
@@ -48,8 +54,19 @@ class PlayerMessages(fading_messages.FadingMessages):
         if ctrl is not None:
             ctrl.onEquipmentUpdated -= self.__onCombatEquipmentUpdated
             ctrl.onCombatEquipmentUsed -= self.__onCombatEquipmentUsed
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onPlayerFeedbackReceived -= self._onPlayerFeedbackReceived
         super(PlayerMessages, self)._removeGameListeners()
         return
+
+    def _onPlayerFeedbackReceived(self, events):
+        for event in events:
+            eventType = event.getType()
+            if eventType == FEEDBACK_EVENT_ID.EVENT_ACTION_APPLIED:
+                _, actionValue, actionName = event.getExtra()
+                if actionName in _EVENT_ACTION_TO_KEY:
+                    self.showMessage(_EVENT_ACTION_TO_KEY[actionName], {'value': str(actionValue)})
 
     def __onShowDestructibleEntityMessageByCode(self, code, entityID, attackerID):
         _logger.debug('onShowDestructibleEntityMessage %r %r %r', code, entityID, attackerID)

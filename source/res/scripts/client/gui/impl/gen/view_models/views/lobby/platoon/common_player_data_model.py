@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class CommonPlayerDataModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(CommonPlayerDataModel, self).__init__(properties=properties, commands=commands)
 
     def getName(self):
@@ -38,6 +38,30 @@ class CommonPlayerDataModel(ViewModel):
     def setColor(self, value):
         self._setString(4, value)
 
+    def getMaxDifficultyLevelMessage(self):
+        return self._getString(5)
+
+    def setMaxDifficultyLevelMessage(self, value):
+        self._setString(5, value)
+
+    def getMaxDifficultyLevel(self):
+        return self._getNumber(6)
+
+    def setMaxDifficultyLevel(self, value):
+        self._setNumber(6, value)
+
+    def getSquadDifficultyLevel(self):
+        return self._getNumber(7)
+
+    def setSquadDifficultyLevel(self, value):
+        self._setNumber(7, value)
+
+    def getIsEvent(self):
+        return self._getBool(8)
+
+    def setIsEvent(self, value):
+        self._setBool(8, value)
+
     def _initialize(self):
         super(CommonPlayerDataModel, self)._initialize()
         self._addStringProperty('name', 'rookie')
@@ -45,3 +69,7 @@ class CommonPlayerDataModel(ViewModel):
         self._addStringProperty('badgeID', '')
         self._addStringProperty('rating', '')
         self._addStringProperty('color', '')
+        self._addStringProperty('maxDifficultyLevelMessage', '')
+        self._addNumberProperty('maxDifficultyLevel', 0)
+        self._addNumberProperty('squadDifficultyLevel', 0)
+        self._addBoolProperty('isEvent', False)

@@ -10,10 +10,19 @@
     <Medium_MapsTraining_Dummy_ATSPG_1>	2	</Medium_MapsTraining_Dummy_ATSPG_1>
     <Large_MapsTraining_Player_HT_2>	3	</Large_MapsTraining_Player_HT_2>
     <Heavy_MapsTraining_Dummy_ATSPG_2>	4	</Heavy_MapsTraining_Dummy_ATSPG_2>
+    <Medium_HELL>	5	</Medium_HELL>
+    <Heavy_HELL__0>	6	</Heavy_HELL__0>
+    <Medium_HELL_HALL>	7	</Medium_HELL_HALL>
+    <Heavy_HW_bot>	0	</Heavy_HW_bot>
+    <Heavy_HW_bot__0>	8	</Heavy_HW_bot__0>
+    <Large_HW_bot>	9	</Large_HW_bot>
+    <Large_HW_bot__0>	10	</Large_HW_bot__0>
+    <Large_HW_bot__1>	11	</Large_HW_bot__1>
+    <Heavy_HW_bot__1>	12	</Heavy_HW_bot__1>
+    <Heavy_HW_bot__2>	13	</Heavy_HW_bot__2>
   </ids>
   <shared>
-    <Small>
-      <tags></tags>
+    <Small>	FuG_FA_HELL	  <tags></tags>
       <price>	100	</price>
       <weight>	200	</weight>
       <maxHealth>	100	</maxHealth>
@@ -98,5 +107,95 @@
       <repairCost>	1.0	</repairCost>
       <notInShop>	True	</notInShop>
     </Heavy_MapsTraining_Dummy_ATSPG_2>
+    <Medium_HELL>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Medium_HELL>
+    <Heavy_HELL__0>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Heavy_HELL__0>
+    <Medium_HELL_HALL>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Medium_HELL_HALL>
+    <Heavy_HW_bot>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Heavy_HW_bot>
+    <Heavy_HW_bot__0>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Heavy_HW_bot__0>
+    <Large_HW_bot>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Large_HW_bot>
+    <Large_HW_bot__0>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Large_HW_bot__0>
+    <Large_HW_bot__1>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Large_HW_bot__1>
+    <Heavy_HW_bot__1>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Heavy_HW_bot__1>
+    <Heavy_HW_bot__2>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Heavy_HW_bot__2>
   </shared>
 </fuelTanks.xml>

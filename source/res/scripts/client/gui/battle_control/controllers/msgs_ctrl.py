@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/msgs_ctrl.py
 import weakref
 import BigWorld
+import constants
 from helpers import dependency
 import BattleReplay
 import Event
@@ -35,7 +36,11 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['artillery_eq']: 'DEATH_FROM_SHOT',
  _AR_INDICES['bomber_eq']: 'DEATH_FROM_SHOT',
  _AR_INDICES['minefield_eq']: 'DEATH_FROM_SHOT',
- _AR_INDICES['spawned_bot_explosion']: 'DEATH_FROM_SHOT'}
+ _AR_INDICES['spawned_bot_explosion']: 'DEATH_FROM_SHOT',
+ _AR_INDICES['event_death_on_phase_change']: 'EVENT_DEATH_ON_PHASE_CHANGE',
+ _AR_INDICES['event_death_on_phase_change_full_sc']: 'EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC',
+ _AR_INDICES['event_death_on_boss_phase_end']: 'EVENT_DEATH_ON_BOSS_PHASE_END',
+ _AR_INDICES['event_boss_aura']: 'EVENT_DEATH_FROM_BOSS_AURA'}
 _PLAYER_KILL_ENEMY_SOUND = 'enemy_killed_by_player'
 _PLAYER_KILL_ALLY_SOUND = 'ally_killed_by_player'
 _ALLY_KILLED_SOUND = 'ally_killed_by_enemy'
@@ -126,6 +131,9 @@ class BattleMessagesController(IBattleController):
     def showAllyHitMessage(self, vehicleID=None):
         self.onShowPlayerMessageByKey('ALLY_HIT', {'entity': self._battleCtx.getPlayerFullName(vID=vehicleID)}, (('entity', vehicleID),))
 
+    def showPlayerMessageByKey(self, key, args=None):
+        self.onShowPlayerMessageByKey(key, args)
+
     def __getEntityString(self, avatar, entityID):
         if entityID == avatar.playerVehicleID:
             return _ENTITY_TYPE.SELF
@@ -159,7 +167,7 @@ class BattleMessagesController(IBattleController):
         elif target == _ENTITY_TYPE.ALLY or target == _ENTITY_TYPE.SUICIDE and attacker == _ENTITY_TYPE.ALLY:
             soundExt = _ALLY_KILLED_SOUND
         elif target == _ENTITY_TYPE.ENEMY or target == _ENTITY_TYPE.SUICIDE and attacker == _ENTITY_TYPE.ENEMY:
-            soundExt = _ENEMY_KILLED_SOUND
+            soundExt = None if BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES else _ENEMY_KILLED_SOUND
         return (code,
          '%s_%s' % (attacker.upper(), target.upper()),
          sound,

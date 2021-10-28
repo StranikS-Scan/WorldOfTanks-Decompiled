@@ -53,7 +53,7 @@ class HangarCameraIdleController(HangarCameraSettingsListener):
         self._setStartDelay(self.__camPeriod)
 
     def __onCameraForceDisable(self, event):
-        if not event.ctx['setIdle']:
+        if not event.ctx.get('setIdle'):
             return
         isDisabled = event.ctx['isDisable']
         if isDisabled:

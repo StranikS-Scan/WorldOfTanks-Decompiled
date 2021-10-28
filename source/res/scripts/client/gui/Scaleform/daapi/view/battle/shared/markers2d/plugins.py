@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/markers2d/plugins.py
 import logging
+import math
 from collections import defaultdict
 from functools import partial
 import BattleReplay
@@ -127,6 +128,9 @@ class MarkerPlugin(IPlugin):
     def _setMarkerSticky(self, markerID, isSticky):
         self._parentObj.setMarkerSticky(markerID, isSticky)
 
+    def _markerSetCustomStickyRadiusScale(self, markerID, scale):
+        self._parentObj.markerSetCustomStickyRadiusScale(markerID, scale)
+
     def _setMarkerRenderInfo(self, markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale):
         self._parentObj.setMarkerRenderInfo(markerID, minScale, offset, innerOffset, cullDistance, boundsMinScale)
 
@@ -246,6 +250,9 @@ class ChatCommunicationComponent(IPlugin):
     def _getMarkerFromTargetID(self, targetID, markerType):
         raise NotImplementedError
 
+    def _invokeMarker(self, markerID, function, *args):
+        raise NotImplementedError
+
     def _onReplyFeedbackReceived(self, targetID, replierID, markerType, oldReplyCount, newReplyCount):
         marker = self._getMarkerFromTargetID(targetID, markerType)
         if marker is not None:
@@ -261,7 +268,7 @@ class ChatCommunicationComponent(IPlugin):
             else:
                 isRepliedByPlayer = count > oldReplyCount
             marker.setIsRepliedByPlayer(isRepliedByPlayer)
-            self._parentObj.invokeMarker(markerID, 'triggerClickAnimation')
+            self._invokeMarker(markerID, 'triggerClickAnimation')
         if oldReplyCount != count and (oldReplyCount == 0 or count == 0):
             self._setMarkerReplied(marker, count > 0)
         self._setMarkerReplyCount(marker, count)
@@ -287,19 +294,19 @@ class ChatCommunicationComponent(IPlugin):
 
     def _setMarkerReplied(self, marker, isReplied):
         if marker.getIsReplied() != isReplied:
-            self._parentObj.invokeMarker(marker.getMarkerID(), 'setMarkerReplied', isReplied)
+            self._invokeMarker(marker.getMarkerID(), 'setMarkerReplied', isReplied)
             marker.setIsReplied(isReplied)
 
     def _setMarkerReplyCount(self, marker, replyCount):
         if marker.getReplyCount() != replyCount:
-            self._parentObj.invokeMarker(marker.getMarkerID(), 'setReplyCount', replyCount)
+            self._invokeMarker(marker.getMarkerID(), 'setReplyCount', replyCount)
             marker.setReplyCount(replyCount)
 
     def _setActiveState(self, marker, state):
         markerID = marker.getMarkerID()
         if state is None:
             state = marker.getState()
-        self._parentObj.invokeMarker(markerID, 'setActiveState', state.value)
+        self._invokeMarker(markerID, 'setActiveState', state.value)
         return
 
 
@@ -518,10 +525,14 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
         super(EquipmentsMarkerPlugin, self).stop()
         return
 
+    def _getSymbolName(self):
+        return settings.MARKER_SYMBOL_NAME.EQUIPMENT_MARKER
+
     def __onEquipmentMarkerShown(self, item, position, _, delay):
-        markerID = self._createMarkerWithPosition(settings.MARKER_SYMBOL_NAME.EQUIPMENT_MARKER, position + settings.MARKER_POSITION_ADJUSTMENT)
-        self._invokeMarker(markerID, 'init', item.getMarker(), _EQUIPMENT_DELAY_FORMAT.format(round(delay)), self.__defaultPostfix)
-        self.__setCallback(markerID, round(BigWorld.serverTime() + delay))
+        markerID = self._createMarkerWithPosition(self._getSymbolName(), position + settings.MARKER_POSITION_ADJUSTMENT)
+        self._invokeMarker(markerID, 'init', item.getMarker(), _EQUIPMENT_DELAY_FORMAT.format(math.ceil(delay)), self.__defaultPostfix)
+        firstUpdateTime = delay - math.floor(delay)
+        self.__setCallback(markerID, BigWorld.serverTime() + delay, firstUpdateTime)
 
     def __setCallback(self, markerID, finishTime, interval=_EQUIPMENT_DEFAULT_INTERVAL):
         self.__callbackIDs[markerID] = BigWorld.callback(interval, partial(self.__handleCallback, markerID, finishTime))
@@ -709,12 +720,12 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
 
 
 class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
-    __slots__ = ('__personalTeam', '_markers', '__clazz')
+    __slots__ = ('_personalTeam', '_markers', '_clazz')
 
     def __init__(self, parentObj, clazz=BaseMarker):
         super(TeamsOrControlsPointsPlugin, self).__init__(parentObj)
-        self.__personalTeam = 0
-        self.__clazz = clazz
+        self._personalTeam = 0
+        self._clazz = clazz
         self._markers = {}
 
     def start(self):
@@ -769,7 +780,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
             return DefaultMarkerSubType.ALLY_MARKER_SUBTYPE if foundMarker.getOwningTeam() == 'ally' else DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE
 
     def _restart(self):
-        self.__personalTeam = self.sessionProvider.getArenaDP().getNumberOfTeam()
+        self._personalTeam = self.sessionProvider.getArenaDP().getNumberOfTeam()
         self.__removeExistingMarkers()
         self.__addTeamBasePositions()
         self.__addControlPoints()
@@ -791,7 +802,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
         self._invokeMarker(markerID, 'setIdentifier', RANDOM_BATTLE_BASE_ID)
         self._invokeMarker(markerID, 'setActive', True)
         self._setMarkerRenderInfo(markerID, _BASE_MARKER_MIN_SCALE, _BASE_MARKER_BOUNDS, _INNER_BASE_MARKER_BOUNDS, _STATIC_MARKER_CULL_DISTANCE, _BASE_MARKER_BOUND_MIN_SCALE)
-        marker = self.__clazz(markerID, True, owner)
+        marker = self._clazz(markerID, True, owner)
         self._markers[baseOrControlPointID] = marker
         marker.setState(ReplyStateForMarker.NO_ACTION)
         self._setActiveState(marker, marker.getState())
@@ -801,7 +812,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
     def __addTeamBasePositions(self):
         positions = self.sessionProvider.arenaVisitor.type.getTeamBasePositionsIterator()
         for team, position, number in positions:
-            if team == self.__personalTeam:
+            if team == self._personalTeam:
                 owner = 'ally'
             else:
                 owner = 'enemy'

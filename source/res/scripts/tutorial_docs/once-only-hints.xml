@@ -886,5 +886,25 @@
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
+    <hint>	EventNewDifficultyHint	  <item-id>	EventNewDifficultyUnlocked	</item-id>
+      <text>	_(#event:hint/unlockedDifficulty)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	EventNewDifficultySmallHint	  <item-id>	EventNewDifficultyUnlockedSmall	</item-id>
+      <text>	_(#event:hint/unlockedDifficulty)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
   </hints>
 </once-only-hints.xml>

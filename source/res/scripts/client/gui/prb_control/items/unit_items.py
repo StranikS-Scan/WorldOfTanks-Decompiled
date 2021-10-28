@@ -18,7 +18,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 
 class PlayerUnitInfo(object):
-    __slots__ = ('dbID', 'unitMgrID', 'unit', 'name', 'rating', 'accountWTR', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType', 'badges', 'hasPremium', 'extraData')
+    __slots__ = ('dbID', 'unitMgrID', 'unit', 'name', 'rating', 'accountWTR', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType', 'badges', 'hasPremium', 'extraData', 'afkIsBanned', 'afkExpireTime')
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -45,6 +45,8 @@ class PlayerUnitInfo(object):
         self.badges = BadgesHelper(badges or ())
         self.hasPremium = kwargs.get('isPremium', False)
         self.extraData = kwargs.get('extraData', {})
+        self.afkIsBanned = kwargs.get('afkIsBanned', False)
+        self.afkExpireTime = kwargs.get('afkExpireTime', 0)
         return
 
     def __repr__(self):

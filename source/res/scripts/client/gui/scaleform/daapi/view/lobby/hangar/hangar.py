@@ -5,7 +5,8 @@ import typing
 from functools import partial
 import BigWorld
 from shared_utils import nextTick
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from HalloweenHangarTank import HalloweenHangarTank
 from HeroTank import HeroTank
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from constants import QUEUE_TYPE, PREBATTLE_TYPE, Configs, DOG_TAGS_CONFIG, RENEWABLE_SUBSCRIPTION_CONFIG
@@ -32,6 +33,7 @@ from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.promo.hangar_teaser_widget import TeaserViewer
 from gui.shared import event_dispatcher as shared_events
+from gui.shared.event_dispatcher import isViewLoaded
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showAmmunitionSetupView, showEpicBattlesPrimeTimeWindow
 from gui.shared.events import LobbySimpleEvent
@@ -51,6 +53,7 @@ from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMeta
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
@@ -97,6 +100,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _offersBannerController = dependency.descriptor(IOffersBannerController)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __yhaController = dependency.descriptor(IYearHareAffairController)
+    eventsCache = dependency.descriptor(IEventsCache)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -112,6 +116,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__wotPlusInfo = BigWorld.player().renewableSubscription
         self.__updateDogTagsState()
         self.__updateWotPlusState()
+        self.__helpLayoutShown = False
         return
 
     def onEscape(self):
@@ -133,11 +138,13 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def showHelpLayout(self):
         windows = self.gui.windowsManager.findWindows(predicateHelpLayoutAllowedWindow)
         if not windows:
+            self.__helpLayoutShown = True
             self.gui.windowsManager.onWindowStatusChanged += self.__onWindowLoaded
             self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.SHOW_HELPLAYOUT), scope=EVENT_BUS_SCOPE.LOBBY)
             self.as_showHelpLayoutS()
 
     def closeHelpLayout(self):
+        self.__helpLayoutShown = False
         self.gui.windowsManager.onWindowStatusChanged -= self.__onWindowLoaded
         nextTick(partial(self.fireEvent, LobbySimpleEvent(LobbySimpleEvent.CLOSE_HELPLAYOUT), EVENT_BUS_SCOPE.LOBBY))
         self.as_closeHelpLayoutS()
@@ -148,12 +155,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__isVehicleReadyForC11n = self.hangarSpace.isModelLoaded
         self.__checkVehicleCameraState()
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
+        g_currentPreviewVehicle.onChanged += self.__onCurrentVehicleChanged
         self.hangarSpace.onVehicleChangeStarted += self.__onVehicleLoading
         self.hangarSpace.onVehicleChanged += self.__onVehicleLoaded
         self.hangarSpace.onSpaceRefresh += self.__onSpaceRefresh
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreate
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
-        self.itemsCache.onSyncCompleted += self.onCacheResync
         self.rankedController.onUpdated += self.onRankedUpdate
         self.rankedController.onGameModeStatusTick += self.__updateAlertMessage
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.__updateAlertMessage
@@ -199,6 +206,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
         self.itemsCache.onSyncCompleted -= self.onCacheResync
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
+        g_currentPreviewVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.hangarSpace.onVehicleChangeStarted -= self.__onVehicleLoading
         self.hangarSpace.onVehicleChanged -= self.__onVehicleLoaded
         self.hangarSpace.onSpaceRefresh -= self.__onSpaceRefresh
@@ -215,7 +223,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         if self.__teaser is not None:
             self.__teaser.stop()
             self.__teaser = None
-        self.hangarSpace.setVehicleSelectable(False)
+        if not isViewLoaded(R.views.lobby.halloween.CustomizationShopView()):
+            self.hangarSpace.setVehicleSelectable(False)
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
@@ -316,9 +325,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         return
 
     def __updateCrew(self):
-        if self.crewPanel is not None:
-            self.crewPanel.updateTankmen()
-        return
+        if g_currentVehicle.item is None or g_currentVehicle.item.isEvent:
+            return
+        else:
+            if self.crewPanel is not None:
+                self.crewPanel.updateTankmen()
+            return
 
     def __updateAlertMessage(self, *_):
         if self.prbDispatcher is not None:
@@ -361,7 +373,14 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         ctx = event.ctx
         if ctx['state'] != CameraMovementStates.FROM_OBJECT:
             entity = BigWorld.entities.get(ctx['entityId'], None)
-            if isinstance(entity, HeroTank):
+            if isinstance(entity, HalloweenHangarTank):
+                descriptor = entity.typeDescriptor
+                if descriptor:
+                    if entity.isKingReward:
+                        shared_events.showHalloweenKingRewardPreview(descriptor.type.compactDescr)
+                    else:
+                        shared_events.showCustomizationShopView(entity.id)
+            elif isinstance(entity, HeroTank):
                 descriptor = entity.typeDescriptor
                 if descriptor:
                     shared_events.showHeroTankPreview(descriptor.type.compactDescr)
@@ -642,7 +661,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __onUnitJoined(self, _, __):
         self.__isUnitJoiningInProgress = False
-        self.__timer.stopCallback(self.__onResetUnitJoiningProgress)
+        if self.__timer is not None:
+            self.__timer.stopCallback(self.__onResetUnitJoiningProgress)
+        return
 
     def __onPrebattleInvitationAccepted(self, _, __):
         self.__isUnitJoiningInProgress = True

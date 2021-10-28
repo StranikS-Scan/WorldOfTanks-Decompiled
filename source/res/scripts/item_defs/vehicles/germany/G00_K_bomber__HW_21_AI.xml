@@ -1,0 +1,316 @@
+<G00_K_bomber__HW_21_AI.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	gunner
+			radioman
+			loader
+			driver	</commander>
+  </crew>
+  <supplySlots>	8 8 8	</supplySlots>
+  <speedLimits>
+    <forward>	120	</forward>
+    <backward>	120	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.196	</moving>
+    <still>	0.196	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <firePenalty>	0.294	</firePenalty>
+  </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.09	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
+  </optDevsOverrides>
+  <repairCost>	2.0	</repairCost>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+    <density>	1 1	</density>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	15	</armor_1>
+      <armor_2>	10	</armor_2>
+      <armor_3>	0	</armor_3>
+    </armor>
+    <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
+    <weight>	6600	</weight>
+    <maxHealth>	250	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	700	</maxHealth>
+      <maxRegenHealth>	600	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G00_K_bomber__HW_21_AI/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G00_K_bomber__HW_21_AI/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G00_K_bomber__HW_21_AI/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.94	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	bomber_hw19	</pixie>
+      <nodes>	HP_Track_LRear	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 -2.44336 0.000000	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G00_K_bomber__HW_21_AI/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G00_K_bomber__HW_21_AI/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <turretPitches>
+      <turret>	0.000000	</turret>
+    </turretPitches>
+    <hangarShadowTexture>	vehicles/german/G00_K_bomber__HW_21_AI/K_bomber__HW_21_AI_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <density>	1.000000 1.000000	</density>
+      <aoTextureSize>	0.000000 0.000000	</aoTextureSize>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_G00_K_bomber__HW_21_AI>
+      <userString>	#germany_vehicles:Chassis_G00_K_bomber__HW_21_AI	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	15000	</weight>
+      <maxLoad>	45000	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.5	</terrainResistance>
+      <brakeForce>	40000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	300	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	9999	</maxHealth>
+      <maxRegenHealth>	9999	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G00_K_bomber__HW_21_AI/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G00_K_bomber__HW_21_AI/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G00_K_bomber__HW_21_AI/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.5 1	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.1	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	5.470180 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.759930	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.0767683	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.0703019	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.0771111	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L1	</name>
+          <radius>	0.0433475	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.0827234	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.082852	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.0825472	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	2	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 2.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G00_K_bomber__HW_21_AI/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G00_K_bomber__HW_21_AI/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.191632 0.06596	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <repairTime>	5.71428585	</repairTime>
+    </Chassis_G00_K_bomber__HW_21_AI>
+  </chassis>
+  <turrets0>
+    <Turret_1_G00_K_bomber__HW_21_AI>
+      <userString>	#germany_vehicles:Turret_1_G00_K_bomber__HW_21_AI	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	0	</armor_1>
+      </armor>
+      <primaryArmor>	armor_2 armor_2 armor_2	</primaryArmor>
+      <weight>	100	</weight>
+      <maxHealth>	250	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	500	</maxHealth>
+        <maxRegenHealth>	250	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	270	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	400	</maxHealth>
+        <maxRegenHealth>	190	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Gun_1_G00_Bomber_SH_21>	shared	  <maxAmmo>	74	</maxAmmo>
+          <armor>
+            <gun>	300	</gun>
+          </armor>
+          <models>
+            <undamaged>	vehicles/german/G00_K_bomber__HW_21_AI/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G00_K_bomber__HW_21_AI/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G00_K_bomber__HW_21_AI/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G00_K_bomber__HW_21_AI/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G00_K_bomber__HW_21_AI/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <camouflage>
+            <density>	1.000000 1.000000	</density>
+            <aoTextureSize>	0.000000 0.000000	</aoTextureSize>
+          </camouflage>
+        </Gun_1_G00_Bomber_SH_21>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G00_K_bomber__HW_21_AI/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G00_K_bomber__HW_21_AI/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G00_K_bomber__HW_21_AI/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G00_K_bomber__HW_21_AI/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G00_K_bomber__HW_21_AI/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <camouflage>
+        <density>	1.000000 1.000000	</density>
+        <aoTextureSize>	0.000000 0.000000	</aoTextureSize>
+      </camouflage>
+    </Turret_1_G00_K_bomber__HW_21_AI>
+  </turrets0>
+  <engines>
+    <G00_Bomber_SH_21_Engine>	shared	</G00_Bomber_SH_21_Engine>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <G00_Bomber_SH_21_Radio>	shared	</G00_Bomber_SH_21_Radio>
+  </radios>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <G00_Bomber_SH_21_Engine>
+          <smplEnginePower>	2000	</smplEnginePower>
+          <smplFwMaxSpeed>	120	</smplFwMaxSpeed>
+        </G00_Bomber_SH_21_Engine>
+      </engines>
+      <chassis>
+        <Chassis_G00_K_bomber__HW_21_AI>
+          <axleCount>	5	</axleCount>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.20125	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0855	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_G00_K_bomber__HW_21_AI>
+      </chassis>
+    </detailed>
+  </physics>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	hw21bomber	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	0	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+</G00_K_bomber__HW_21_AI.xml>

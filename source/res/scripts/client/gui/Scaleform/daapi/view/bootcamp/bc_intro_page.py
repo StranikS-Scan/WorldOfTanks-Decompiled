@@ -132,7 +132,7 @@ class BCIntroPage(BCIntroVideoPageMeta):
         super(BCIntroPage, self)._dispose()
 
     def _start(self):
-        WWISE.WW_eventGlobal('loginscreen_mute')
+        self._muteLoginScreenMusic()
         listSmall = []
         listBig = []
         for pageId in self._tutorialPages:
@@ -236,3 +236,6 @@ class BCIntroPage(BCIntroVideoPageMeta):
          'isSpecial': True,
          'specialAlias': TOOLTIPS_CONSTANTS.BOOTCAMP_REWARD_PROGRESS,
          'specialArgs': specialArgs}
+
+    def _muteLoginScreenMusic(self):
+        WWISE.WW_eventGlobal('loginscreen_mute')

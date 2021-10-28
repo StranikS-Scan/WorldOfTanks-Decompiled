@@ -30,6 +30,7 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
     def __init__(self):
         super(BattleFieldCtrl, self).__init__()
         self.__battleCtx = None
+        self.__isEventBattle = False
         self._aliveAllies = {}
         self._aliveEnemies = {}
         self.__alliesHealth = 0
@@ -57,6 +58,7 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
 
     def startControl(self, battleCtx, arenaVisitor):
         self.__battleCtx = battleCtx
+        self.__isEventBattle = arenaVisitor.gui.isEventBattle()
 
     def stopControl(self):
         super(BattleFieldCtrl, self).stopControl()
@@ -114,6 +116,9 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
             if not vInfoVO.isAlive():
                 continue
             vehicleID = vInfoVO.vehicleID
+            if self.__isEventBattle and vehicleID in self.__deadAllies:
+                self.__deadAllies.remove(vehicleID)
+                self.addVehicleInfo(vInfoVO, arenaDP)
             if vehicleID in self._aliveEnemies or vehicleID in self._aliveAllies:
                 self.__changeMaxVehicleHealth(vehicleID, vInfoVO.vehicleType.maxHealth)
             self.addVehicleInfo(vInfoVO, arenaDP)

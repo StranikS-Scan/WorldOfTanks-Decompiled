@@ -543,13 +543,16 @@ class AmmoPlugin(CrosshairPlugin):
         return
 
     def __onGunAutoReloadTimeSet(self, state, stunned):
-        if not self.__autoReloadCallbackID:
-            timeLeft = min(state.getTimeLeft(), state.getActualValue())
-            baseValue = state.getBaseValue()
-            if self.__shellsInClip == 0:
-                baseValue = self.__reCalcFirstShellAutoReload(baseValue)
-            self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
+        if self.__autoReloadCallbackID:
+            BigWorld.cancelCallback(self.__autoReloadCallbackID)
+            self.__autoReloadCallbackID = None
+        timeLeft = min(state.getTimeLeft(), state.getActualValue())
+        baseValue = state.getBaseValue()
+        if self.__shellsInClip == 0:
+            baseValue = self.__reCalcFirstShellAutoReload(baseValue)
+        self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
         self.__autoReloadSnapshot = state
+        return
 
     def __onGunAutoReloadBoostUpd(self, state, stateDuration, stateTotalTime, extraData):
         _logger.debug('Auto loader boost incoming state=%s, stateDuration=%s, stateTotalTime=%s, extraData=%s', state, stateDuration, stateTotalTime, extraData)

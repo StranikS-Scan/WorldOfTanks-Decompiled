@@ -34,6 +34,7 @@ class ENTRY_SYMBOL_NAME(object):
     BOMBER_ENTRY = 'BomberEntry'
     RECON_ENTRY = 'ReconEntry'
     SMOKE_ENTRY = 'SmokeEntry'
+    EVENT_DEATH_ZONE_ENTRY = 'EventPersonalDeathZoneMinimapEntryUI'
     VEHICLE = 'VehicleEntry'
     VIEW_POINT = 'ViewPointEntry'
     DEAD_POINT = 'DeadPointEntry'
@@ -114,7 +115,8 @@ class VIEW_RANGE_CIRCLES_AS3_DESCR(object):
 EQ_MARKER_TO_SYMBOL = {'artillery': ENTRY_SYMBOL_NAME.ARTILLERY_ENTRY,
  'bomber': ENTRY_SYMBOL_NAME.BOMBER_ENTRY,
  'recon': ENTRY_SYMBOL_NAME.RECON_ENTRY,
- 'smoke': ENTRY_SYMBOL_NAME.SMOKE_ENTRY}
+ 'smoke': ENTRY_SYMBOL_NAME.SMOKE_ENTRY,
+ 'EventDeathZone': ENTRY_SYMBOL_NAME.EVENT_DEATH_ZONE_ENTRY}
 
 class SettingsTypes(Enum):
     MinimapVehicles = 0

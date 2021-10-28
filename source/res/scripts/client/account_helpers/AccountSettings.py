@@ -59,6 +59,8 @@ ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
 ROYALE_VEHICLE = 'ROYALE_VEHICLE'
 BOOTCAMP_VEHICLE = 'BOOTCAMP_VEHICLE'
+EVENT_CURRENT_VEHICLE = 'event_current'
+EVENT_CURRENT_DIFFICULTY_LEVEL = 'eventCurrentDifficultyLevel'
 LOBBY_MENU_TRIGGER_SHOWN = 'lobby_menu_trigger_shown'
 MANUAL_NEW_CONTENT = 'manual_new_content'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
@@ -104,6 +106,8 @@ BLUEPRINTS_CONVERT_SALE_STARTED_SEEN = 'bcsStartedSeen'
 IS_SHOP_VISITED = 'isShopVisited'
 LAST_SHOP_ACTION_COUNTER_MODIFICATION = 'lastShopActionCounterModification'
 OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES = 'overridenHeaderCounterActionAliases'
+EVENT_HEALING_SEEN = 'eventHealingSeen'
+EVENT_COMMANDERS_READY_SEEN = 'eventCommandersReadySeen'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -182,6 +186,7 @@ DOG_TAGS = 'dogTags'
 WOT_PLUS = 'wotPlus'
 LAST_ARTY_CTRL_MODE = 'lastArtyCtrlMode'
 ACTIVE_TEST_PARTICIPATION_CONFIRMED = 'activeTestParticipateConfirmed'
+HALLOWEEN_NOTES_SEEN = 'halloweenNotesSeen'
 MAPBOX_PROGRESSION = 'mapbox_progression'
 UNLOCK_VEHICLES_IN_BATTLE_HINTS = 'unlockVehiclesInBattleHints'
 BECOME_ELITE_VEHICLES_WATCHED = 'becomeEliteWatched'
@@ -561,6 +566,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_FAVORITES: {BOOTCAMP_VEHICLE: 0,
                  CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
+                 EVENT_CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_MANUAL: {LOBBY_MENU_TRIGGER_SHOWN: False,
               MANUAL_NEW_CONTENT: {}},
@@ -877,7 +883,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                      'lastCycleId': None},
                 UNLOCK_VEHICLES_IN_BATTLE_HINTS: 5,
                 MODE_SELECTOR_BATTLE_PASS_SHOWN: {},
-                RANKED_LAST_CYCLE_ID: None},
+                RANKED_LAST_CYCLE_ID: None,
+                HALLOWEEN_NOTES_SEEN: []},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -893,7 +900,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SENIORITY_AWARDS_COUNTER: 1,
                 DEMOUNT_KIT_SEEN: False,
                 NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False},
-                VPP_ENTRY_POINT_LAST_SEEN_STEP: {}},
+                VPP_ENTRY_POINT_LAST_SEEN_STEP: {},
+                EVENT_HEALING_SEEN: False,
+                EVENT_CURRENT_DIFFICULTY_LEVEL: 1,
+                EVENT_COMMANDERS_READY_SEEN: True},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},

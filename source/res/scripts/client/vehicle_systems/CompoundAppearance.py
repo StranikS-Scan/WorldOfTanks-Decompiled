@@ -34,6 +34,9 @@ _GUN_RECOIL_NODE_NAME = 'G'
 _PERIODIC_TIME_ENGINE = 0.1
 _PERIODIC_TIME_DIRT = ((0.05, 0.25), (10.0, 400.0))
 _DIRT_ALPHA = tan((_PERIODIC_TIME_DIRT[0][1] - _PERIODIC_TIME_DIRT[0][0]) / (_PERIODIC_TIME_DIRT[1][1] - _PERIODIC_TIME_DIRT[1][0]))
+_DISSOLVE_TIME_TICK = 0.05
+_DISSOLVE_FACTOR_STEP = 0.01
+_DISSOLVE_FULL_FACTOR = 1.0
 _MOVE_THROUGH_WATER_SOUND = '/vehicles/tanks/water'
 _CAMOUFLAGE_MIN_INTENSITY = 1.0
 _PITCH_SWINGING_MODIFIERS = (0.9, 1.88, 0.3, 4.0, 1.0, 1.0)
@@ -72,6 +75,8 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.__tmpGameObjects = {}
         self.__engineStarted = False
         self.__turbochargerSoundPlaying = False
+        self.__dissolveHandler = None
+        self.__effects = set()
         return
 
     def setVehicle(self, vehicle):
@@ -239,8 +244,13 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.removeComponent(go)
             go.deactivate()
 
-        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), None, None, None)
+        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGVehicleFashion(), BigWorld.WGVehicleFashion(), BigWorld.WGVehicleFashion())
         self._setFashions(fashions, isTurretDetached)
+        self.__dissolveHandler = BigWorld.PyDissolveHandler()
+        for fashionIdx, _ in enumerate(TankPartNames.ALL):
+            self.fashions[fashionIdx].addMaterialHandler(self.__dissolveHandler)
+            self.fashions[fashionIdx].addTrackMaterialHandler(self.__dissolveHandler)
+
         model_assembler.setupTracksFashion(self.typeDescriptor, self.fashion)
         self.showStickers(False)
         self.customEffectManager = None
@@ -260,6 +270,19 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.siegeEffects = None
         self._destroySystems()
         return
+
+    def __dissolve(self, factor):
+        factor += _DISSOLVE_FACTOR_STEP
+        self.__dissolveHandler.dissolveFactor(factor)
+        if factor < _DISSOLVE_FULL_FACTOR:
+            self.delayCallback(_DISSOLVE_TIME_TICK, self.__dissolve, factor)
+
+    def startDissolve(self):
+        if not self.__dissolveHandler:
+            self.delayCallback(0.1, self.startDissolve)
+        else:
+            self.__dissolveHandler.enabled(True)
+            self.delayCallback(5.0, self.__dissolve, 0.0)
 
     def destroy(self):
         _logger.info('CompoundAppearance::destroy. v=%s. ds=%s', self._vehicle, self.damageState.state)
@@ -479,6 +502,9 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self._onRequestModelsRefresh()
         self._isTurretDetached = self._vehicle.isTurretDetached
         modelsSetParams = self.modelsSetParams
+        self._vehicle.compoundInvalidated = True
+        self._vehicle.clearBuffs()
+        self._vehicle.compoundInvalidated = False
         assembler = model_assembler.prepareCompoundAssembler(self.typeDescriptor, modelsSetParams, self.spaceID, self.isTurretDetached)
         collisionAssembler = model_assembler.prepareCollisionAssembler(self.typeDescriptor, self.isTurretDetached, self.spaceID)
         BigWorld.loadResourceListBG((assembler, collisionAssembler), makeCallbackWeak(self.__onModelsRefresh, modelsSetParams.state), loadingPriority(self._vehicle.id))
@@ -659,10 +685,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self.engineAudition is not None:
             self.engineAudition.onCameraChanged(cameraName, currentVehicleId if currentVehicleId is not None else 0)
         if self.tracks is not None:
-            if cameraName == 'sniper':
-                self.tracks.sniperMode(True)
-            else:
-                self.tracks.sniperMode(False)
+            self.tracks.sniperMode(cameraName == 'sniper')
         super(CompoundAppearance, self)._onCameraChanged(cameraName, currentVehicleId=currentVehicleId)
         return
 

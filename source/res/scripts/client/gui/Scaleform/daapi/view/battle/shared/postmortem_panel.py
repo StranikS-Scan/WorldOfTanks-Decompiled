@@ -48,8 +48,20 @@ _ATTACK_REASON_CODE_TO_MSG = {ATTACK_REASON_INDICES['shot']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['recovery']: 'DEATH_FROM_RECOVERY',
  ATTACK_REASON_INDICES['artillery_eq']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['bomber_eq']: 'DEATH_FROM_SHOT',
- ATTACK_REASON_INDICES[ATTACK_REASON.MINEFIELD_EQ]: 'DEATH_FROM_MINE_EXPLOSION'}
+ ATTACK_REASON_INDICES[ATTACK_REASON.MINEFIELD_EQ]: 'DEATH_FROM_MINE_EXPLOSION',
+ ATTACK_REASON_INDICES[ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE]: 'EVENT_DEATH_ON_PHASE_CHANGE',
+ ATTACK_REASON_INDICES[ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC]: 'EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC',
+ ATTACK_REASON_INDICES[ATTACK_REASON.EVENT_DEATH_ON_BOSS_PHASE_END]: 'EVENT_DEATH_ON_BOSS_PHASE_END',
+ ATTACK_REASON_INDICES['event_boss_aura']: 'EVENT_DEATH_FROM_BOSS_AURA'}
+_ATTACK_REASON_MSG_TO_EVENT = {'DEATH_FROM_SHOT': 'EVENT_DEATH_FROM_SHOT',
+ 'DEATH_FROM_DEATH_ZONE_SELF_SUICIDE': 'EVENT_DEATH_FROM_DEATH_ZONE',
+ 'DEATH_FROM_DEATH_ZONE_ENEMY_SELF': 'EVENT_DEATH_FROM_DEATH_ZONE',
+ 'DEATH_FROM_DEATH_ZONE_ALLY_SELF': 'EVENT_DEATH_FROM_DEATH_ZONE',
+ 'EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC_SELF_SUICIDE': 'EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC',
+ 'EVENT_DEATH_FROM_BOSS_AURA_ENEMY_SELF': 'EVENT_DEATH_FROM_BOSS_AURA'}
 _ALLOWED_EQUIPMENT_DEATH_CODES = ['DEATH_FROM_MINE_EXPLOSION']
+_WITHOUT_HINT_DEATH_REASONS = (ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE, ATTACK_REASON.EVENT_DEATH_ON_BOSS_PHASE_END)
+_WITHOUT_HINT_DEATH_CODES = tuple([ _ATTACK_REASON_CODE_TO_MSG[ATTACK_REASON_INDICES[reasonValue]] for reasonValue in _WITHOUT_HINT_DEATH_REASONS ])
 
 class _ENTITIES_POSTFIX(object):
     UNKNOWN = '_UNKNOWN'
@@ -101,6 +113,7 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
         pass
 
     def _prepareMessage(self, code, killerVehID, device=None):
+        code = code if not self.sessionProvider.arenaVisitor.gui.isEventBattle() else self.__mapToEventReasonCode(code)
         msgText, colors = self.__messages[code]
         context = self.sessionProvider.getCtx()
         if context.isTeamKiller(killerVehID):
@@ -131,6 +144,10 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
         if code in self.__messages:
             self._prepareMessage(code, entityID, device)
         return
+
+    @staticmethod
+    def __mapToEventReasonCode(code):
+        return _ATTACK_REASON_MSG_TO_EVENT.get(code, code)
 
 
 class _SummaryPostmortemPanel(_BasePostmortemPanel):
@@ -277,6 +294,40 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         self.__setHealthPercent(vehicle.health)
         self._updateVehicleInfo()
 
+    def _prepareMessage(self, code, killerVehID, device=None):
+        super(PostmortemPanel, self)._prepareMessage(code, killerVehID, device)
+        self._eventShowHint(code in _WITHOUT_HINT_DEATH_CODES)
+
+    def _eventShowHint(self, withoutHint):
+        if not self.sessionProvider.arenaVisitor.gui.isEventBattle() or not self.__isInPostmortem or withoutHint:
+            return
+        else:
+            component = self.__arenaInfo.hwBossHealthBarComponent
+            showHint = True
+            if component.isActive and component.getCurrentUIPhase() == 1:
+                showHint = False
+            envData = self._getEventEnvironmentData()
+            if envData is not None and envData.getCurrentEnvironmentID() == envData.getMaxEnvironmentID() and envData.getCurrentEnvironmentID() != envData.getBossFightEnvironmentID():
+                showHint = False
+            arenaDP = self.sessionProvider.getArenaDP()
+            isAliveAnyPlayer = False
+            for vInfo in arenaDP.getVehiclesInfoIterator():
+                if vInfo.player.accountDBID > 0 and vInfo.team == arenaDP.getAllyTeams()[0]:
+                    if vInfo.isAlive():
+                        isAliveAnyPlayer = True
+                        break
+
+            self.as_showHintS(isAliveAnyPlayer and showHint)
+            return
+
+    def _getEventEnvironmentData(self):
+        componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
+        if componentSystem is None:
+            return
+        else:
+            gameEventStorage = getattr(componentSystem, 'gameEventComponent', None)
+            return None if gameEventStorage is None else gameEventStorage.getEnvironmentData()
+
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.HEALTH:
             if self.__maxHealth != 0 and self.__maxHealth > value:
@@ -287,6 +338,8 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         elif state == VEHICLE_VIEW_STATE.SWITCHING:
             self.__maxHealth = 0
             self.__healthPercent = 0
+        elif state == VEHICLE_VIEW_STATE.DEATH_INFO:
+            self._eventShowHint(value.get('reason') in _WITHOUT_HINT_DEATH_REASONS)
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__isInPostmortem = True
@@ -294,7 +347,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
     def __onRespawnBaseMoving(self):
         self.__isInPostmortem = False
-        self.__deathAlreadySet = False
+        self._deathAlreadySet = False
         self.resetDeathInfo()
 
     def _updateVehicleInfo(self):

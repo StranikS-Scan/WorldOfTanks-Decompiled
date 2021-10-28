@@ -318,7 +318,7 @@ class DestructibleEntityState(ScriptGameObject):
             BigWorld.player().addModel(fakeModel)
             tmpMatrix = Math.Matrix(self.__visualModel.matrix)
             fakeModel.position = tmpMatrix.translation
-            self.__effectsPlayer = EffectsListPlayer(effects.effectsList, effects.keyPoints)
+            self.__effectsPlayer = EffectsListPlayer(effects.effectsList, effects.keyPoints, debugParent=self)
             self.__effectsPlayer.play(fakeModel, None)
             return
 

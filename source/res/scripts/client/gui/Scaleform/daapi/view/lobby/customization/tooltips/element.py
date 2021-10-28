@@ -14,6 +14,7 @@ from gui.customization.constants import CustomizationModes
 from gui.customization.shared import PROJECTION_DECAL_TEXT_FORM_TAG, SEASON_TYPE_TO_NAME, PROJECTION_DECAL_FORM_TO_UI_ID, getBaseStyleItems, getAncestors, getInheritors
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.halloween.event_helpers import getCurrentVehicle
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.customization import CustomizationTooltipContext
@@ -167,17 +168,21 @@ class ElementTooltip(BlocksTooltipData):
         self._showOnlyProgressBlock = False
         self.__ctx = None
         self.__vehicle = None
+        self._customVehicleCD = -1
         return
 
     def _packBlocks(self, *args):
         config = CustomizationTooltipContext(*args)
+        self._customVehicleCD = config.customVehicleCD
         self._item = self.itemsCache.items.getItemByCD(config.itemCD)
         statsConfig = self.context.getStatsConfiguration(self._item)
         self.__ctx = self.service.getCtx()
-        if config.vehicleIntCD == 0:
+        if self._customVehicleCD > 0:
+            self.__vehicle = self.itemsCache.items.getItemByCD(self._customVehicleCD)
+        elif config.vehicleIntCD == 0:
             self.__vehicle = None
         elif config.vehicleIntCD == -1:
-            self.__vehicle = g_currentVehicle.item
+            self.__vehicle = getCurrentVehicle(self.itemsCache) or g_currentVehicle.item
         else:
             self.__vehicle = self.itemsCache.items.getItemByCD(config.vehicleIntCD)
         showInventoryBlock = config.showInventoryBlock
@@ -194,6 +199,7 @@ class ElementTooltip(BlocksTooltipData):
         topBlocks = [self._packTitleBlock(), self._packIconBlock(self._item.isDim())]
         items = [formatters.packBuildUpBlockData(blocks=topBlocks, gap=10)]
         self.boundVehs = self._item.getBoundVehicles()
+        self.boundVehs.add(self._customVehicleCD)
         self.installedVehs = self._item.getInstalledVehicles()
         self.installedCount = self._item.installedCount(vehIntCD) if vehIntCD else 0
         itemCD = self._item.intCD
@@ -333,8 +339,11 @@ class ElementTooltip(BlocksTooltipData):
         if self._item.itemTypeID == GUI_ITEM_TYPE.STYLE:
             modifiedStrRoot = rCharacteristics.collapsible
             if self._item.isEditable:
-                vehicleIntCD = self.__vehicle.intCD
-                if not self._item.canBeEditedForVehicle(vehicleIntCD) and self._progressionLevel <= 0:
+                vehicleIntCD = self.__vehicle.intCD if self.__vehicle is not None else -1
+                if vehicleIntCD == -1:
+                    modifiedStr = modifiedStrRoot.mutableWithDecal()
+                    modifiedIcon = self.EDITABLE_DISABLE_ICON
+                elif not self._item.canBeEditedForVehicle(vehicleIntCD) and self._progressionLevel <= 0:
                     modifiedStr = modifiedStrRoot.mutableWithDecal()
                     modifiedIcon = self.EDITABLE_DISABLE_ICON
                 elif self._item.isEditedForVehicle(vehicleIntCD):
@@ -366,7 +375,8 @@ class ElementTooltip(BlocksTooltipData):
         else:
             boundAndInstalledVehs = self.boundVehs | self.installedVehs
             if self._item.isVehicleBound and not self._item.mayApply and boundAndInstalledVehs:
-                return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.main(makeVehiclesShortNamesString(boundAndInstalledVehs, self.__vehicle)), padding=formatters.packPadding(top=-2))
+                isCustom = self._customVehicleCD > 0
+                return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.main(makeVehiclesShortNamesString(boundAndInstalledVehs, self.__vehicle, flat=isCustom)), padding=formatters.packPadding(top=-2))
             elif not self._item.descriptor.filter or not self._item.descriptor.filter.include:
                 return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.main(backport.text(R.strings.vehicle_customization.customization.tooltip.suitable.text.allVehicle())), padding=formatters.packPadding(top=-2))
             blocks = []

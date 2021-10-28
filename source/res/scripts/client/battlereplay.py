@@ -75,6 +75,7 @@ class CallbackDataNames(object):
     SHOW_AUTO_AIM_MARKER = 'showAutoAimMarker'
     HIDE_AUTO_AIM_MARKER = 'hideAutoAimMarker'
     MT_CONFIG_CALLBACK = 'mapsTrainingConfigurationCallback'
+    SWITCH_ENVIRONMENT = 'switchEnvironment'
 
 
 class BattleReplay(object):
@@ -385,24 +386,24 @@ class BattleReplay(object):
             else:
                 self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx if self.__savedPlaybackSpeedIdx != 0 else self.__playbackSpeedModifiers.index(1.0))
             return True
-        if key == Keys.KEY_DOWNARROW and isDown and not self.__isFinished:
+        if key == Keys.KEY_DOWNARROW and isDown and not self.__isFinished and BigWorld.player().arena.guiType != constants.ARENA_GUI_TYPE.EVENT_BATTLES:
             if self.__playbackSpeedIdx > 0:
                 self.setPlaybackSpeedIdx(self.__playbackSpeedIdx - 1)
             return True
-        if key == Keys.KEY_UPARROW and isDown and not self.__isFinished:
+        if key == Keys.KEY_UPARROW and isDown and not self.__isFinished and BigWorld.player().arena.guiType != constants.ARENA_GUI_TYPE.EVENT_BATTLES:
             if self.__playbackSpeedIdx < len(self.__playbackSpeedModifiers) - 1:
                 self.setPlaybackSpeedIdx(self.__playbackSpeedIdx + 1)
             return True
-        if key == Keys.KEY_RIGHTARROW and isDown and not self.__isFinished:
+        if key == Keys.KEY_RIGHTARROW and isDown and not self.__isFinished and BigWorld.player().arena.guiType != constants.ARENA_GUI_TYPE.EVENT_BATTLES:
             self.__timeWarp(currReplayTime + fastForwardStep)
             return True
-        if key == Keys.KEY_LEFTARROW:
+        if key == Keys.KEY_LEFTARROW and BigWorld.player().arena.guiType != constants.ARENA_GUI_TYPE.EVENT_BATTLES:
             self.__timeWarp(currReplayTime - fastForwardStep)
             return True
-        if key == Keys.KEY_HOME and isDown:
+        if key == Keys.KEY_HOME and isDown and BigWorld.player().arena.guiType != constants.ARENA_GUI_TYPE.EVENT_BATTLES:
             self.__timeWarp(0.0)
             return True
-        if key == Keys.KEY_END and isDown and not self.__isFinished:
+        if key == Keys.KEY_END and isDown and not self.__isFinished and BigWorld.player().arena.guiType != constants.ARENA_GUI_TYPE.EVENT_BATTLES:
             self.__timeWarp(finishReplayTime)
             return True
         if key == Keys.KEY_C and isDown:
@@ -687,7 +688,8 @@ class BattleReplay(object):
     def __showInfoMessages(self):
         self.__showInfoMessage('replayControlsHelp1')
         self.__showInfoMessage('replayControlsHelp2')
-        self.__showInfoMessage('replayControlsHelp3')
+        if BigWorld.player().arena.guiType != constants.ARENA_GUI_TYPE.EVENT_BATTLES:
+            self.__showInfoMessage('replayControlsHelp3')
 
     def __getArenaVehiclesInfo(self):
         vehicles = {}

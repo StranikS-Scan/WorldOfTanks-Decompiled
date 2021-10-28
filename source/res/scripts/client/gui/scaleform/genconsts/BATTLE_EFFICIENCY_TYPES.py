@@ -39,3 +39,27 @@ class BATTLE_EFFICIENCY_TYPES(object):
     RECEIVED_BY_MINEFIELD = 'receivedByMinefield'
     DAMAGE_BY_MINEFIELD = 'damageByMinefield'
     RECEIVED_BY_SMOKE = 'receivedBySmoke'
+    EVENT_DEATH_ON_PHASE_CHANGE = 'eventDeathOnPhaseChange'
+    EVENT_HEAL_UP = 'eventHealUp'
+    EVENT_ADD_AMMO = 'eventAddAmmo'
+    EVENT_SET = [EVENT_HEAL_UP, EVENT_ADD_AMMO]
+    BUFFS_RATION = 'buffsRation'
+    BUFFS_FUEL = 'buffsFuel'
+    BUFFS_RATE_FIRE = 'buffsRateFire'
+    BUFFS_CONVERSION_SPEED = 'buffsConversionSpeed'
+    BUFFS_INCREASED_MAXIMUM_DAMAGE = 'buffsIncreasedMaximumDamage'
+    BUFFS_DOUBLE_DAMAGE = 'buffsDoubleDamage'
+    BUFFS_INCENDIARY_SHOT = 'buffsIncendiaryShot'
+    BUFFS_VAMPIRIC_SHOT = 'buffsVampiricShot'
+    BUFFS_CONSTANT_HP_REGENERATION = 'buffsConstantHpRegeneration'
+    BUFFS_ARMOR = 'buffsArmor'
+    BUFFS_SET = [BUFFS_RATION,
+     BUFFS_FUEL,
+     BUFFS_RATE_FIRE,
+     BUFFS_CONVERSION_SPEED,
+     BUFFS_INCREASED_MAXIMUM_DAMAGE,
+     BUFFS_DOUBLE_DAMAGE,
+     BUFFS_INCENDIARY_SHOT,
+     BUFFS_VAMPIRIC_SHOT,
+     BUFFS_CONSTANT_HP_REGENERATION,
+     BUFFS_ARMOR]

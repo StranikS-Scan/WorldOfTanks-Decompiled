@@ -270,8 +270,8 @@ class _ConsumablesCollector(_ExpendableCollector):
 
     def _parse(self, vehDescr, capacity, invData):
         setups = []
-        installedItems = None
-        resultLayoutItems = None
+        installedItems = []
+        resultLayoutItems = []
         eqsLayouts = invData.get(self._layoutType(), [[]])
         eqsLayoutsSize = len(eqsLayouts)
         for layoutIdx in range(self.setupLayouts.capacity):
@@ -417,8 +417,8 @@ class _ShellsCollector(_EquipmentCollector):
 
     def _parse(self, vehDescr, capacity, invData):
         setups = []
-        resultInstalledItems = None
-        resultLayoutItems = None
+        resultInstalledItems = []
+        resultLayoutItems = []
         for layoutIdx in range(self.setupLayouts.capacity):
             layoutItems, shellsLayout = self.__parseLayout(invData.get(self._layoutType(), {}), vehDescr, capacity, layoutIdx)
             installedItems = self.__parseInstalled(invData.get('shells', []), shellsLayout, vehDescr, capacity)
@@ -561,7 +561,7 @@ class _OptDevicesCollector(_EquipmentCollector):
         else:
             devicesLayout = invData.get(self._layoutType(), [[]])
         eqsLayoutsSize = len(devicesLayout)
-        result = None
+        result = []
         setups = []
         for layoutIdx in range(self.setupLayouts.capacity):
             if eqsLayoutsSize <= layoutIdx < self.setupLayouts.capacity:

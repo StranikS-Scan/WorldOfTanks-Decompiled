@@ -280,6 +280,15 @@
     <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	9	</level>
   </R40_T-54>
+  <R40_T-54_Halloween_event>
+    <id>	203	</id>
+    <userString>	#ussr_vehicles:T-54_Halloween_event	</userString>
+    <description>	#ussr_vehicles:T-54_Halloween_event_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank mediumTank3 improvedVentilation_class2_user secret event_battles cannot_be_sold HD lockOutfit lockCrew lockCrewSkills event_premium_vehicle event_overturn_recovery nitroRamDamage4	</tags>
+    <level>	9	</level>
+  </R40_T-54_Halloween_event>
   <R53_Object_704>
     <id>	32	</id>
     <userString>	#ussr_vehicles:R53_Object_704	</userString>
@@ -1775,6 +1784,17 @@
     <tags>	mediumTank HD clanWarsBattles special cannot_be_sold improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user role_MT_universal	</tags>
     <level>	10	</level>
   </R97_Object_140_cl>
+  <R77_KV2_turret_2>
+    <id>	196	</id>
+    <userString>	#ussr_vehicles:R77_KV2_turret_2	</userString>
+    <shortUserString>	#ussr_vehicles:R77_KV2_turret_2_short	</shortUserString>
+    <description>	#ussr_vehicles:R77_KV2_turret_2_descr	</description>
+    <price>	920000	</price>
+    <tags>	heavyTank improvedVentilation_class3_user HD event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
+    <level>	6	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </R77_KV2_turret_2>
   <R47_ISU-152_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:ISU-152_IGR	</userString>
@@ -2024,4 +2044,15 @@
     <tags>	mediumTank HD epic_battles mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user private	</tags>
     <level>	9	</level>
   </R40_T-54_FL>
+  <R171_IS_3_II_hw21>
+    <id>	50	</id>
+    <userString>	#ussr_vehicles:IS_3_II_Halloween_event	</userString>
+    <description>	#ussr_vehicles:IS_3_II_Halloween_event_descr	</description>
+    <shortUserString>	#ussr_vehicles:IS_3_II_Halloween_event_short	</shortUserString>
+    <price>	3570000	</price>
+    <tags>	heavyTank HD sinai siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user  event_battles secret nitroRamDamage6 cannot_be_sold lockCrew lockOutfit lockCrewSkills event_overturn_recovery event_not_elite_vehicle	</tags>
+    <level>	9	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </R171_IS_3_II_hw21>
 </list.xml>

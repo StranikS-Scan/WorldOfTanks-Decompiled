@@ -30,6 +30,8 @@ def buildCache():
                 continue
             elif 'maps_training' in vehDescr.tags:
                 continue
+            elif 'event_battles' in vehDescr.tags:
+                continue
             vehiclesByLevel.setdefault(vehDescr.level, set()).add(vehDescr.compactDescr)
             for tag in ('beast', 'sinai', 'patton'):
                 if tag in vehDescr.tags:

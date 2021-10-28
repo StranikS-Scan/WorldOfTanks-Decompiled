@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_panel/hangar_view.py
 import logging
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from async import async
 from frameworks.wulf import ViewStatus
+from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.ammunition_panel.base_view import BaseAmmunitionPanelView
 from gui.impl.lobby.tank_setup.intro_ammunition_setup_view import showIntro
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -59,10 +60,15 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     @async
     def _onPanelSectionSelected(self, args):
         selectedSection = args['selectedSection']
-        yield showIntro(selectedSection, self.getParentWindow())
-        if self.viewStatus != ViewStatus.LOADED:
+        currentVehicle = g_currentVehicle.item or g_currentPreviewVehicle.item
+        if currentVehicle is not None and currentVehicle.isOnlyForEventBattles and selectedSection == TankSetupConstants.SHELLS:
             return
-        super(HangarAmmunitionPanelView, self)._onPanelSectionSelected(args)
+        else:
+            yield showIntro(selectedSection, self.getParentWindow())
+            if self.viewStatus != ViewStatus.LOADED:
+                return
+            super(HangarAmmunitionPanelView, self)._onPanelSectionSelected(args)
+            return
 
     def _onChangeSetupIndex(self, args):
         groupID = int(args.get('groupId', None))

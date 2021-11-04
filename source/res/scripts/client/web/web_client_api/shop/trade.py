@@ -2,19 +2,22 @@
 # Embedded file name: scripts/client/web/web_client_api/shop/trade.py
 from collections import namedtuple
 from gui import SystemMessages
-from gui.shared.gui_items.processors.module import ModuleBuyer
+from gui.SystemMessages import pushMessagesFromResult
+from gui.shared.gui_items.processors.common import GoldToCreditsExchanger, PremiumAccountBuyer
 from gui.shared.gui_items.processors.goodies import BoosterBuyer
+from gui.shared.gui_items.processors.module import ModuleBuyer
 from gui.shared.gui_items.processors.vehicle import VehicleBuyer, showVehicleReceivedResultMessages
-from gui.shared.gui_items.processors.common import PremiumAccountBuyer
+from gui.shared.money import Currency
 from helpers import dependency
 from helpers.time_utils import timestampToISO
 from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from skeletons.gui.goodies import IGoodiesCache
-from web.web_client_api import W2CSchema, w2c, Field
+from web.web_client_api import Field, W2CSchema, w2c
 from web.web_client_api.common import ShopItemType
 _ItemBuySpec = namedtuple('ItemBuySpec', ('type', 'id', 'count'))
+_EXCHANGER = {Currency.GOLD: lambda value: GoldToCreditsExchanger(value, withConfirm=False)}
 
 def parseItemsSpec(specList):
     specList = specList or tuple()
@@ -37,12 +40,20 @@ def itemsSpecValidator(specList):
     return True
 
 
+def _currencyExchangeValidator(_, data):
+    return all((v > 0 and c in _EXCHANGER.iterkeys() for c, v in data.get('currencies', {}).iteritems()))
+
+
 class _SetTradeOffSelectedSchema(W2CSchema):
     id = Field(required=False, type=int)
 
 
 class _BuyItemsSchema(W2CSchema):
     items = Field(required=True, type=list, validator=lambda value, _: itemsSpecValidator(value))
+
+
+class _CurrencyExchangeSchema(W2CSchema):
+    currencies = Field(required=True, type=dict, validator=_currencyExchangeValidator)
 
 
 class TradeWebApiMixin(object):
@@ -68,6 +79,17 @@ class TradeWebApiMixin(object):
     @w2c(_SetTradeOffSelectedSchema, 'set_trade_off_selected')
     def setTradeOffVehicleCD(self, cmd):
         self._tradeIn.setActiveTradeOffVehicleCD(cmd.id)
+
+    @w2c(_CurrencyExchangeSchema, 'exchange')
+    def exchange(self, cmd):
+        exchangeResults = {}
+        for currencyType, currencyValue in cmd.currencies.iteritems():
+            result = yield _EXCHANGER[currencyType](currencyValue).request()
+            exchangeResults[currencyType] = {'success': result.success,
+             'message': result.userMsg}
+            pushMessagesFromResult(result)
+
+        yield exchangeResults
 
     @w2c(_BuyItemsSchema, 'buy_items')
     def buyItems(self, cmd):

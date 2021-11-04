@@ -322,14 +322,14 @@ class _MarathonVehiclePackPreviewSchema(W2CSchema):
 class _VehicleStylePreviewSchema(W2CSchema):
     vehicle_cd = Field(required=False, type=int)
     style_id = Field(required=True, type=int)
-    back_btn_descr = Field(required=True, type=basestring)
+    back_btn_descr = Field(required=False, type=basestring)
     back_url = Field(required=False, type=basestring)
 
 
 class _VehicleMarathonStylePreviewSchema(W2CSchema):
     vehicle_cd = Field(required=False, type=int)
     style_id = Field(required=True, type=int)
-    back_btn_descr = Field(required=True, type=basestring)
+    back_btn_descr = Field(required=False, type=basestring)
     back_url = Field(required=False, type=basestring)
     marathon_prefix = Field(required=True, type=basestring)
 
@@ -338,7 +338,7 @@ class _VehicleListStylePreviewSchema(W2CSchema):
     style_id = Field(required=True, type=int)
     vehicle_min_level = Field(required=False, type=int, default=10)
     vehicle_list = Field(required=False, type=(list, NoneType), validator=lambda value, _: _validateVehiclesCDList(value), default=DEFAULT_STYLED_VEHICLES)
-    back_btn_descr = Field(required=True, type=basestring)
+    back_btn_descr = Field(required=False, type=basestring)
     back_url = Field(required=False, type=basestring)
 
 
@@ -387,7 +387,7 @@ class VehiclePreviewWebApiMixin(object):
     @w2c(_VehiclePreviewSchema, 'vehicle_preview')
     def openVehiclePreview(self, cmd):
         if cmd.hidden_blocks is not None:
-            showPreviewFunc = partial(event_dispatcher.showConfigurableVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items))
+            showPreviewFunc = partial(event_dispatcher.showConfigurableVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items or []))
         else:
             showPreviewFunc = event_dispatcher.showVehiclePreview
         vehicleID = cmd.vehicle_id
@@ -528,7 +528,8 @@ class VehiclePreviewWebApiMixin(object):
                 showStyle = showBlueprintsExchangeStylePreview
             else:
                 showStyle = showStylePreview
-            showStyle(vehicleCD, style, style.getDescription(), cmd.back_url if isinstance(cmd.back_url, Callable) else self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
+            backButtonText = backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()) if cmd.back_btn_descr else ''
+            showStyle(vehicleCD, style, style.getDescription(), cmd.back_url if isinstance(cmd.back_url, Callable) else self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backButtonText)
             return True
         else:
             return False

@@ -15,6 +15,7 @@ _logger = logging.getLogger(__name__)
 _SETTINGS_DRAW_TYPE_MAP = {0: 1,
  1: 0,
  2: 0}
+_DEFAULT_SAFEZONE_BORER_TYPE = 0
 
 class HWSafeZone(BigWorld.Entity):
     _BORDER_ID = 0
@@ -165,6 +166,6 @@ class HWSafeZone(BigWorld.Entity):
             return
         else:
             arenaBorderDrawType = self.settingsCore.getSetting(settings_constants.BATTLE_BORDER_MAP.TYPE_BORDER)
-            zoneDrawType = _SETTINGS_DRAW_TYPE_MAP[arenaBorderDrawType]
+            zoneDrawType = _SETTINGS_DRAW_TYPE_MAP.get(arenaBorderDrawType, _DEFAULT_SAFEZONE_BORER_TYPE)
             BigWorld.ArenaBorderHelper.setBordersDrawType(self._spaceID, self._BORDER_ID, zoneDrawType)
             return

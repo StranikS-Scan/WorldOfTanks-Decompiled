@@ -38,7 +38,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__styleDescr = ctx.get('styleDescr') % {'insertion_open': '',
          'insertion_close': ''}
         self.__backCallback = ctx.get('backCallback', event_dispatcher.showHangar)
-        self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()))
+        self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', '')
         self.__selectedVehicleEntityId = None
         g_currentPreviewVehicle.selectHeroTank(ctx.get('isHeroTank', False))
         return

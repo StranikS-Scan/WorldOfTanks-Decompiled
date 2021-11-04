@@ -16,7 +16,7 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, shop_sales_event, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale
 from account_helpers.dog_tags import DogTags
 from account_helpers.maps_training import MapsTraining
 from account_helpers.offers.sync_data import OffersSyncData
@@ -164,6 +164,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.dailyQuests = g_accountRepository.dailyQuests
         self.battlePass = g_accountRepository.battlePass
         self.offers = g_accountRepository.offers
+        self.shopSalesEvent = g_accountRepository.shopSalesEvent
         self.dogTags = g_accountRepository.dogTags
         self.mapsTraining = g_accountRepository.mapsTraining
         self.renewableSubscription = g_accountRepository.renewableSubscription
@@ -191,6 +192,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.spaFlags.setAccount(self)
         self.anonymizer.setAccount(self)
         self.offers.setAccount(self)
+        self.shopSalesEvent.setAccount(self)
         self.dogTags.setAccount(self)
         self.mapsTraining.setAccount(self)
         self.renewableSubscription.setAccount(self)
@@ -258,6 +260,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.anonymizer.onAccountBecomePlayer()
         self.battlePass.onAccountBecomePlayer()
         self.offers.onAccountBecomePlayer()
+        self.shopSalesEvent.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         BigWorld.target.source = BigWorld.MouseTargetingMatrix()
@@ -296,6 +299,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.anonymizer.onAccountBecomeNonPlayer()
         self.battlePass.onAccountBecomeNonPlayer()
         self.offers.onAccountBecomeNonPlayer()
+        self.shopSalesEvent.onAccountBecomeNonPlayer()
         self.dogTags.onAccountBecomeNonPlayer()
         self.mapsTraining.onAccountBecomeNonPlayer()
         self.renewableSubscription.onAccountBecomeNonPlayer()
@@ -322,6 +326,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.spaFlags.setAccount(None)
         self.anonymizer.setAccount(None)
         self.offers.setAccount(None)
+        self.shopSalesEvent.setAccount(None)
         g_accountRepository.commandProxy.setGateway(None)
         self.unitMgr.clear()
         self.unitBrowser.clear()
@@ -1606,6 +1611,7 @@ class _AccountRepository(object):
         self.dailyQuests = {}
         self.battlePass = BattlePassManager(self.syncData, self.commandProxy)
         self.offers = OffersSyncData(self.syncData)
+        self.shopSalesEvent = shop_sales_event.ShopSalesEvent()
         self.dogTags = DogTags(self.syncData)
         self.mapsTraining = MapsTraining(self.syncData)
         self.renewableSubscription = RenewableSubscription(self.syncData)

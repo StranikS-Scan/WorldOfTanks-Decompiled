@@ -3,28 +3,31 @@
 import typing
 from constants import ARENA_BONUS_TYPE
 if typing.TYPE_CHECKING:
+    from typing import Callable, Dict, Iterable, Iterator, List, Optional, Set, Tuple
     from Event import Event
+    from constants import EventPhase
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import EpicBattleScreens
-    from gui.game_control.mapbox_controller import ProgressionData
-    from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
-    from gui.shared.gui_items import Vehicle, Tankman
-    from gui.periodic_battles.models import PrimeTime, PeriodInfo, AlertData
-    from gui.prb_control.items import ValidationResult
-    from gui.ranked_battles.ranked_helpers.sound_manager import RankedSoundManager
-    from gui.ranked_battles.ranked_helpers.web_season_provider import WebSeasonInfo, RankedWebSeasonProvider
-    from gui.ranked_battles.ranked_helpers.stats_composer import RankedBattlesStatsComposer
-    from gui.ranked_battles.ranked_models import PostBattleRankInfo, Rank, Division
-    from gui.ranked_battles.constants import YearAwardsNames
-    from gui.shared.gui_items.fitting_item import RentalInfoProvider
-    from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
-    from gui.server_events.event_items import RankedQuest
-    from helpers.server_settings import _MapboxConfig
-    from season_common import GameSeason
-    from gui.ranked_battles.ranked_models import BattleRankInfo
-    from gui.server_events.bonuses import SimpleBonus
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
-    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, RankedBattlesConfig, VehiclePostProgressionConfig
+    from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
+    from gui.game_control.mapbox_controller import ProgressionData
+    from gui.game_control.trade_in import TradeInInfo
+    from gui.periodic_battles.models import AlertData, PeriodInfo, PrimeTime
+    from gui.prb_control.items import ValidationResult
+    from gui.ranked_battles.constants import YearAwardsNames
+    from gui.ranked_battles.ranked_helpers.sound_manager import RankedSoundManager
+    from gui.ranked_battles.ranked_helpers.stats_composer import RankedBattlesStatsComposer
+    from gui.ranked_battles.ranked_helpers.web_season_provider import RankedWebSeasonProvider, WebSeasonInfo
+    from gui.ranked_battles.ranked_models import BattleRankInfo, Division, PostBattleRankInfo, Rank
+    from gui.server_events.bonuses import SimpleBonus
+    from gui.server_events.event_items import RankedQuest
+    from gui.shared.gui_items import Tankman, Vehicle
+    from gui.shared.gui_items.fitting_item import RentalInfoProvider
+    from gui.shared.gui_items.gui_item_economics import ItemPrice
+    from gui.shared.money import Money
+    from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
+    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig
     from items.vehicles import VehicleType
+    from season_common import GameSeason
 
 class IGameController(object):
 
@@ -1954,4 +1957,74 @@ class IEventTokenController(IGameController):
         raise NotImplementedError
 
     def markNoteRead(self, note):
+        raise NotImplementedError
+
+
+class IShopSalesEventController(IGameController):
+    onStateChanged = None
+    onPhaseChanged = None
+    onBundlePurchased = None
+    onCurrentBundleChanged = None
+    onFavoritesChanged = None
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def isInEvent(self):
+        raise NotImplementedError
+
+    @property
+    def currentEventPhase(self):
+        raise NotImplementedError
+
+    @property
+    def currentEventPhaseTimeRange(self):
+        raise NotImplementedError
+
+    @property
+    def reRollPrice(self):
+        raise NotImplementedError
+
+    @property
+    def activePhaseStartTime(self):
+        raise NotImplementedError
+
+    @property
+    def activePhaseFinishTime(self):
+        raise NotImplementedError
+
+    @property
+    def eventFinishTime(self):
+        raise NotImplementedError
+
+    @property
+    def currentBundleID(self):
+        raise NotImplementedError
+
+    @property
+    def currentBundleReRolls(self):
+        raise NotImplementedError
+
+    @property
+    def favoritesCount(self):
+        raise NotImplementedError
+
+    def reRollBundle(self, callback=None):
+        raise NotImplementedError
+
+    def getEventPhase(self, timestamp):
+        raise NotImplementedError
+
+    def getEventPhaseTimeRange(self, state):
+        raise NotImplementedError
+
+    def setFavoritesCount(self, value):
+        raise NotImplementedError
+
+    def openMainView(self, url=None, origin=None):
+        raise NotImplementedError
+
+    def closeMainView(self):
         raise NotImplementedError

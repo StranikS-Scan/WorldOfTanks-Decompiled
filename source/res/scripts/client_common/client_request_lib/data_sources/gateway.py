@@ -604,5 +604,9 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/webbrg/year_hare_affair/api/video/'
         return self._request_data(callback, url, method='GET')
 
+    def shop_sales_event_fetch_favorites(self, callback):
+        url = '/wgds/favorites/'
+        return self._request_data(callback, url)
+
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

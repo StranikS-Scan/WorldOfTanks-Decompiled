@@ -24,6 +24,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     MANUAL_BROWSER_VIEW = 'ManualBrowserView'
     OVERLAY_PREM_CONTENT_VIEW = 'overlayPremContentView'
     WEB_VIEW_TRANSPARENT = 'webViewTransparent'
+    SHOP_SALES_MAIN_VIEW = 'shopSalesMainView'
     LOBBY_PROFILE = 'profile'
     LOBBY_MISSIONS = 'missions'
     LOBBY_MISSION_DETAILS = 'missionDetails'

@@ -191,7 +191,8 @@ class GameEventController(IGameEventController):
         return True
 
     def getSelectedDifficultyLevel(self):
-        self._selectedDifficultyLevel = AccountSettings.getCounters(EVENT_CURRENT_DIFFICULTY_LEVEL)
+        level = AccountSettings.getCounters(EVENT_CURRENT_DIFFICULTY_LEVEL)
+        self._selectedDifficultyLevel = level if self.hasDifficultyLevelToken(level) else None
         if not self._selectedDifficultyLevel and self.getDifficultyLevels():
             self.setSelectedDifficultyLevel(self.eventsCache.getDifficultyParams().get('defaultLevel'))
         return self._selectedDifficultyLevel

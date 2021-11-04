@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/client_web_api/shop/stats.py
-from skeletons.gui.game_control import IWalletController
-from web.client_web_api.api import C2WHandler, c2w
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.game_control.wallet import WalletController
 from gui.shared.money import Currency
 from helpers import dependency
+from skeletons.gui.game_control import IWalletController
 from skeletons.gui.shared import IItemsCache
+from web.client_web_api.api import C2WHandler, c2w
 
 class BalanceEventHandler(C2WHandler):
     __walletController = dependency.descriptor(IWalletController)

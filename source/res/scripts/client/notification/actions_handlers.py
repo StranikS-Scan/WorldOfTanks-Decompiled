@@ -7,6 +7,7 @@ from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from adisp import process
 from async import async, await
+from constants import EventPhase
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.battle_pass.battle_pass_helpers import showOfferByBonusName
@@ -44,7 +45,7 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, IBattlePassController
+from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, IBattlePassController, IShopSalesEventController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
@@ -1033,6 +1034,23 @@ class _GotoEventRedeemQuestHandler(_ActionHandler):
         dependency.instance(IAFKController).showQuest()
 
 
+class _OpenShopSalesEventMainView(_NavigationDisabledActionHandler):
+    __shopSales = dependency.descriptor(IShopSalesEventController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        canShow = self.__shopSales.isEnabled and self.__shopSales.isInEvent and self.__shopSales.currentEventPhase != EventPhase.NOT_STARTED
+        if canShow:
+            self.__shopSales.openMainView()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -1079,7 +1097,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _ShowEventBanWindowHandler,
  _ShowEventWarningWindowHandler,
  _GotoEventRedeemQuestHandler,
- _OpenMissingEventsHandler)
+ _OpenMissingEventsHandler,
+ _OpenShopSalesEventMainView)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

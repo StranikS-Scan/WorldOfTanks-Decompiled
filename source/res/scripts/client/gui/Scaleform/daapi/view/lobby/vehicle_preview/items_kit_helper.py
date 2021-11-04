@@ -117,7 +117,11 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_MODULE,
  ItemPackType.BLUEPRINT_ANY: TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO,
  ItemPackType.REFERRAL_AWARDS: TOOLTIPS_CONSTANTS.REFERRAL_AWARDS,
  ItemPackType.DEMOUNT_KIT: TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT,
- ItemPackType.CUSTOM_BATTLE_PASS_POINTS: TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS}
+ ItemPackType.CUSTOM_BATTLE_PASS_POINTS: TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS,
+ ItemPackType.SHOP_SALES_CURRENT_DISCOUNT: TOOLTIPS_CONSTANTS.CURRENT_DISCOUNT_INFO,
+ ItemPackType.SHOP_SALES_FREE_SHUFFLE: TOOLTIPS_CONSTANTS.SHOP_SALES_FREE_SHUFFLE_INFO,
+ ItemPackType.SHOP_SALES_PAID_SHUFFLE: TOOLTIPS_CONSTANTS.SHOP_SALES_PAID_SHUFFLE_INFO,
+ ItemPackType.SHOP_SALES_VOTE_FOR_DISCOUNT: TOOLTIPS_CONSTANTS.SHOP_SALES_VOTE_FOR_DISCOUNT}
 _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_WINTER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_SUMMER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
@@ -344,6 +348,34 @@ def showItemTooltip(toolTipMgr, rawItem, item):
         body = getItemDescription(rawItem, item)
         tooltip = makeTooltip(header, body)
         toolTipMgr.onCreateComplexTooltip(tooltip, 'INFO')
+    return
+
+
+def showCurrentDiscountTooltip(toolTipMgr, itemType, currentDiscount):
+    tooltipType = _TOOLTIP_TYPE.get(itemType)
+    if tooltipType is not None:
+        toolTipMgr.onCreateTypedTooltip(tooltipType, [currentDiscount], 'INFO')
+    return
+
+
+def showFreeShuffleTooltip(toolTipMgr, itemType, maxNumber, paidShuffleCost):
+    tooltipType = _TOOLTIP_TYPE.get(itemType)
+    if tooltipType is not None:
+        toolTipMgr.onCreateTypedTooltip(tooltipType, [maxNumber, paidShuffleCost], 'INFO')
+    return
+
+
+def showPaidShuffleTooltip(toolTipMgr, itemType):
+    tooltipType = _TOOLTIP_TYPE.get(itemType)
+    if tooltipType is not None:
+        toolTipMgr.onCreateTypedTooltip(tooltipType, [], 'INFO')
+    return
+
+
+def showVoteForDiscountTooltip(toolTipMgr, itemType, maxNumber, available):
+    tooltipType = _TOOLTIP_TYPE.get(itemType)
+    if tooltipType is not None:
+        toolTipMgr.onCreateTypedTooltip(tooltipType, [maxNumber, available], 'INFO')
     return
 
 

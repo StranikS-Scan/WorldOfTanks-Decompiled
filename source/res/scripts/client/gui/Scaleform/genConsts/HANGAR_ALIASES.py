@@ -52,3 +52,4 @@ class HANGAR_ALIASES(object):
     POST_PROGRESSION_VIEW = 'VehPostProgressionView'
     POST_PROGRESSION_VEHICLE_PARAMS = 'PostProgressionVehicleParams'
     HE20_EVENT_ENTRY_POINT = 'he20EventEntryPoint'
+    SHOP_SALES_ENTRY_POINT = 'shopSalesEntryPoint'

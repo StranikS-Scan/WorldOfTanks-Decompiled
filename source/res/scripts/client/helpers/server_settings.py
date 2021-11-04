@@ -28,7 +28,7 @@ from UnitBase import PREBATTLE_TYPE_TO_UNIT_ASSEMBLER, UNIT_ASSEMBLER_IMPL_TO_CO
 from BonusCaps import BonusCapsConst
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 if TYPE_CHECKING:
-    from typing import List as TList
+    from typing import Dict, List
 _logger = logging.getLogger(__name__)
 _CLAN_EMBLEMS_SIZE_MAPPING = {16: 'clan_emblems_16',
  32: 'clan_emblems_small',
@@ -726,6 +726,28 @@ class _MapboxConfig(namedtuple('_MapboxConfig', ('isEnabled',
         return cls()
 
 
+class _ShopSalesEventConfig(namedtuple('_ShopSalesEventConfig', ('enabled',
+ 'url',
+ 'activePhaseStartTime',
+ 'activePhaseFinishTime',
+ 'eventFinishTime',
+ 'rerollPrice'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(enabled=False, url='', activePhaseStartTime=0, activePhaseFinishTime=0, eventFinishTime=0, rerollPrice={})
+        defaults.update(kwargs)
+        return super(_ShopSalesEventConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
 class VehiclePostProgressionConfig(namedtuple('_VehiclePostProgression', ('isPostProgressionEnabled',
  'enabledFeatures',
  'forbiddenVehicles',
@@ -808,6 +830,7 @@ class ServerSettings(object):
         self.__bwProductCatalog = _BwProductCatalog()
         self.__vehiclePostProgressionConfig = VehiclePostProgressionConfig()
         self.__yearHareAffairConfig = YearHareAffairConfig()
+        self.__shopSalesEventConfig = _ShopSalesEventConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -902,6 +925,8 @@ class ServerSettings(object):
             self.__vehiclePostProgressionConfig = makeTupleByDict(VehiclePostProgressionConfig, self.__serverSettings[post_progression_common.SERVER_SETTINGS_KEY])
         if year_hare_affair_common.SERVER_SETTINGS_KEY in self.__serverSettings:
             self.__yearHareAffairConfig = makeTupleByDict(YearHareAffairConfig, self.__serverSettings[year_hare_affair_common.SERVER_SETTINGS_KEY])
+        if constants.SHOP_SALES_CONFIG in self.__serverSettings:
+            self.__shopSalesEventConfig = makeTupleByDict(_ShopSalesEventConfig, self.__serverSettings[constants.SHOP_SALES_CONFIG])
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -972,6 +997,9 @@ class ServerSettings(object):
             self.__updateYearHareAffairConfig(serverSettingsDiff)
         self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
+        if constants.SHOP_SALES_CONFIG in serverSettingsDiff:
+            self.__updateShopSalesEvent(serverSettingsDiff)
+            self.__serverSettings[constants.SHOP_SALES_CONFIG] = serverSettingsDiff[constants.SHOP_SALES_CONFIG]
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1075,6 +1103,10 @@ class ServerSettings(object):
     @property
     def yearHareAffair(self):
         return self.__yearHareAffairConfig
+
+    @property
+    def shopSalesEventConfig(self):
+        return self.__shopSalesEventConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -1453,6 +1485,9 @@ class ServerSettings(object):
 
     def __updateYearHareAffairConfig(self, serverSettingsDiff):
         self.__yearHareAffairConfig = self.__yearHareAffairConfig.replace(serverSettingsDiff[year_hare_affair_common.SERVER_SETTINGS_KEY])
+
+    def __updateShopSalesEvent(self, targetSettings):
+        self.__shopSalesEventConfig = self.__shopSalesEventConfig.replace(targetSettings[constants.SHOP_SALES_CONFIG])
 
 
 def serverSettingsChangeListener(*configKeys):

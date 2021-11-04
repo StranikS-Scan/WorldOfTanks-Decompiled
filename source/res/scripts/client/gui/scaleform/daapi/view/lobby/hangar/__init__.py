@@ -67,6 +67,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.marathon_entry_point import MarathonEntryPoint
     from gui.impl.lobby.yha.yha_entry_point import YhaEntryPointInjectWidget
     from gui.impl.lobby.halloween.he20_entry_point import HE20EntryPoint
+    from gui.impl.lobby.shop_sales.entry_point import ShopSalesEntryPointInject
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', WindowLayer.SUB_VIEW, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STRONGHOLD_ADS, StrongholdAdsView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.STRONGHOLD_ADS, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -109,7 +110,8 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, MapBoxEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.MARATHON_ENTRY_POINT, MarathonEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.YHA_ENTRANCE_POINT, YhaEntryPointInjectWidget, None),
-     ComponentSettings(HANGAR_ALIASES.HE20_EVENT_ENTRY_POINT, HE20EntryPoint, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(HANGAR_ALIASES.HE20_EVENT_ENTRY_POINT, HE20EntryPoint, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.SHOP_SALES_ENTRY_POINT, ShopSalesEntryPointInject, None))
 
 
 def getBusinessHandlers():

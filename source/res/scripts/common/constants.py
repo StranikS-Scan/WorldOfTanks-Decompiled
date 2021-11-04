@@ -817,6 +817,7 @@ ACTIVE_TEST_CONFIRMATION_CONFIG = 'active_test_confirmation_config'
 MISC_GUI_SETTINGS = 'misc_gui_settings'
 META_GAME_SETTINGS = 'meta_game_settings'
 MAPS_TRAINING_ENABLED_KEY = 'isMapsTrainingEnabled'
+SHOP_SALES_CONFIG = 'shop_sales_event_config'
 
 class Configs(enum.Enum):
     BATTLE_ROYALE_CONFIG = 'battle_royale_config'
@@ -1598,6 +1599,7 @@ class REQUEST_COOLDOWN:
     CMD_CHANGE_SELECTED_DIFFICULTY_LEVEL = 1.0
     BOOSTER = 1.0
     HEALING = 1.0
+    BUNDLE = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -3071,3 +3073,9 @@ class EventStorageModifiers(enum.Enum):
 AOE_TYPE_MAPPING = {'arcade_artillery_aoe': 'AreaOfEffect',
  'arcade_bomber_aoe': 'AttackBomber',
  'artillery_deathzone_aoe': 'PersonalDeathZone'}
+
+@enum.unique
+class EventPhase(enum.Enum):
+    NOT_STARTED = 0
+    IN_PROGRESS = 1
+    FINISHED = 2

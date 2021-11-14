@@ -53,6 +53,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     MANUAL_CHAPTER_VIEW = 'manualChapterView'
     WOT_PLUS_INFO_VIEW = 'wotPlusInfoView'
     VEHICLE_RENTAL_VIEW = 'vehicleRentalView'
+    TELECOM_RENTAL_VIEW = 'telecomRentalView'
     AMMUNITION_SETUP_VIEW = 'ammunitionSetupView'
     LOBBY_TECHTREE = 'techtree'
     LOBBY_RESEARCH = 'research'

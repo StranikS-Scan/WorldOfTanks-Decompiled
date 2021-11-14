@@ -950,6 +950,10 @@ class Vehicle(FittingItem):
         return self._rentInfo.isWotPlus
 
     @property
+    def isTelecomRent(self):
+        return self._rentInfo.isTelecomRent
+
+    @property
     def type(self):
         return set(vehicles.VEHICLE_CLASS_TAGS & self.tags).pop()
 

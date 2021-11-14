@@ -27,6 +27,7 @@ from shared_utils import makeTupleByDict, updateDict
 from UnitBase import PREBATTLE_TYPE_TO_UNIT_ASSEMBLER, UNIT_ASSEMBLER_IMPL_TO_CONFIG
 from BonusCaps import BonusCapsConst
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
+from telecom_rentals_common import TELECOM_RENTALS_CONFIG
 if TYPE_CHECKING:
     from typing import Dict, List
 _logger = logging.getLogger(__name__)
@@ -1268,6 +1269,9 @@ class ServerSettings(object):
 
     def getArenaTypesWithGoldReserve(self):
         return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get(GOLD_RESERVE_GAINS_SECTION, {}).keys()
+
+    def isTelecomRentalsEnabled(self):
+        return self.__getGlobalSetting(TELECOM_RENTALS_CONFIG, {}).get('enabled', True)
 
     def isBattleNotifierEnabled(self):
         return self.__getGlobalSetting(BATTLE_NOTIFIER_CONFIG, {}).get('enabled', False)

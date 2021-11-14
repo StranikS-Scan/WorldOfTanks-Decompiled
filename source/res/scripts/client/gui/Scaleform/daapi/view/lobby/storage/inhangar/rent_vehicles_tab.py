@@ -31,7 +31,7 @@ class _RentVehiclesDataProvider(StorageCarouselDataProvider):
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(_RentVehiclesDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
-        self._baseCriteria = REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.WOTPLUS_RENT | REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.TELECOM
+        self._baseCriteria = REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.WOTPLUS_RENT ^ REQ_CRITERIA.VEHICLE.TELECOM_RENT | REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.TELECOM
 
     def _addCriteria(self):
         self._addVehicleItemsByCriteria(self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP)
@@ -43,7 +43,7 @@ class _RentVehiclesDataProvider(StorageCarouselDataProvider):
         vo = super(_RentVehiclesDataProvider, self)._buildVehicle(item)
         rentText = RentLeftFormatter(item.rentInfo, item.isPremiumIGR).getRentLeftStr() or _ms(MENU.STORE_VEHICLESTATES_RENTALISOVER)
         vo.update({'isMoneyEnough': True,
-         'enabled': item.canSell and item.rentalIsOver,
+         'enabled': item.canSell and item.rentalIsOver and not item.isTelecomRent,
          'rentText': rentText,
          'rentIcon': RES_ICONS.MAPS_ICONS_LIBRARY_CLOCKICON_1,
          'contextMenuId': CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RENTED_ITEM})

@@ -1246,6 +1246,10 @@ class SYSTEM_MESSAGES(object):
     VEHICLEPOSTPROGRESSION_CREDITSSPENT = '#system_messages:vehiclePostProgression/creditsSpent'
     VEHICLEPOSTPROGRESSION_RESEARCHSTEP_BODY = '#system_messages:vehiclePostProgression/researchStep/body'
     VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_BODY = '#system_messages:vehiclePostProgression/researchSteps/body'
+    TELECOM_RENTALS_SWITCH_OFF_TITLE = '#system_messages:telecom_rentals/switch_off/title'
+    TELECOM_RENTALS_SWITCH_OFF_BODY = '#system_messages:telecom_rentals/switch_off/body'
+    TELECOM_RENTALS_SWITCH_ON_TITLE = '#system_messages:telecom_rentals/switch_on/title'
+    TELECOM_RENTALS_SWITCH_ON_BODY = '#system_messages:telecom_rentals/switch_on/body'
     VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_LEVELS_SEPARATOR = '#system_messages:vehiclePostProgression/researchSteps/levels/separator'
     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_SHELLS_CONSUMABLES_SWITCH_TITLE = '#system_messages:vehiclePostProgression/unlockFeature/shells_consumables_switch/title'
     VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_SHELLS_CONSUMABLES_SWITCH_BODY = '#system_messages:vehiclePostProgression/unlockFeature/shells_consumables_switch/body'
@@ -2660,6 +2664,10 @@ class SYSTEM_MESSAGES(object):
      VEHICLEPOSTPROGRESSION_CREDITSSPENT,
      VEHICLEPOSTPROGRESSION_RESEARCHSTEP_BODY,
      VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_BODY,
+     TELECOM_RENTALS_SWITCH_OFF_TITLE,
+     TELECOM_RENTALS_SWITCH_OFF_BODY,
+     TELECOM_RENTALS_SWITCH_ON_TITLE,
+     TELECOM_RENTALS_SWITCH_ON_BODY,
      VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_LEVELS_SEPARATOR,
      VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_SHELLS_CONSUMABLES_SWITCH_TITLE,
      VEHICLEPOSTPROGRESSION_UNLOCKFEATURE_SHELLS_CONSUMABLES_SWITCH_BODY,

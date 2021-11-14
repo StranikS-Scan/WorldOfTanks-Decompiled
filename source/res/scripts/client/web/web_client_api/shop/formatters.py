@@ -107,6 +107,8 @@ def _formatVehicleOwnership(item):
                 rentType = 'event'
             elif item.isWotPlusRent:
                 rentType = 'wotPlus'
+            elif item.isTelecomRent:
+                rentType = 'telecom'
             else:
                 rentType = None
             result['info'] = {'event': {'type': SHOP_RENT_SEASON_TYPE_MAP.get(event.seasonType, 'unknown'),

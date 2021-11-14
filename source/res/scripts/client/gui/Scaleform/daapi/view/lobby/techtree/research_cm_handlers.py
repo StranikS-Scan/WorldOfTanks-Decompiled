@@ -171,7 +171,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
                 nationChangeIsNew = False
             options.append(self._makeItem(VEHICLE.NATION_CHANGE, MENU.CONTEXTMENU_NATIONCHANGE, {'enabled': isNationChangeAvailable,
              'isNew': nationChangeIsNew}))
-        if not vehicle.isPremiumIGR:
+        if not vehicle.isPremiumIGR and not vehicle.isTelecomRent:
             isAvailable2SellOrRemove = NODE_STATE.isAvailable2Sell(self._nodeState)
             if isAvailable2SellOrRemove:
                 options.append(self._makeItem(VEHICLE.SELL, MENU.CONTEXTMENU_VEHICLEREMOVE if vehicle.isRented else MENU.CONTEXTMENU_SELL, {'enabled': isAvailable2SellOrRemove}))

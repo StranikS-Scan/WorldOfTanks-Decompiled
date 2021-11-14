@@ -235,40 +235,44 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_TRADE), value='', icon=ICON_TEXT_FRAMES.TRADE, valueWidth=valueWidth, padding=formatters.packPadding(left=-5, top=0, bottom=-10)))
         if not vehicle.isPremiumIGR and not frontlineBlock and vehicle.getRentPackage() and (vehicle.rentalIsOver or not vehicle.isRented):
             items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main('#tooltips:vehicle/rentAvailable'), value='', icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, valueWidth=valueWidth, padding=formatters.packPadding(left=-5, top=0, bottom=-10)))
-        if statsConfig.rentals and not vehicle.isPremiumIGR and not frontlineBlock and vehicle.isWotPlusRent:
+        if statsConfig.rentals and not vehicle.isPremiumIGR and not frontlineBlock and (vehicle.isWotPlusRent or vehicle.isTelecomRent) and not vehicle.rentExpiryState:
             rentInfo = vehicle.rentInfo
             timeKey, formattedTime = getTimeLeftInfo(rentInfo.getTimeLeft())
-            items.append(formatters.packTextParameterBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.wotPlusRenting())), value='', valueWidth=valueWidth + 18))
-            items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.gold(backport.text(R.strings.tooltips.vehicle.wotPlusRenting.remainingTime.dyn(timeKey)()) % {'time': formattedTime}), value='', icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=-10)))
-        if statsConfig.rentals and not vehicle.isPremiumIGR and not frontlineBlock and not vehicle.isWotPlusRent:
-            if statsConfig.futureRentals:
-                rentLeftKey = '#tooltips:vehicle/rentLeftFuture/%s'
-                rentInfo = RentalInfoProvider(time=ctxParams.get('rentExpiryTime'), battles=ctxParams.get('rentBattlesLeft'), wins=ctxParams.get('rentWinsLeft'), seasonRent=ctxParams.get('rentSeason'), isRented=True)
+            if vehicle.isWotPlusRent:
+                rentText = R.strings.tooltips.vehicle.wotPlusRenting()
             else:
-                rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
-                rentInfo = vehicle.rentInfo
-            descrStr = RentLeftFormatter(rentInfo).getRentLeftStr(rentLeftKey)
-            leftStr = ''
-            rentTimeLeft = rentInfo.getTimeLeft()
-            if rentTimeLeft:
-                _, formattedTime = getTimeLeftInfo(rentTimeLeft)
-                leftStr = str(formattedTime)
-            elif rentInfo.battlesLeft:
-                leftStr = str(rentInfo.battlesLeft)
-            elif rentInfo.winsLeft > 0:
-                leftStr = str(rentInfo.winsLeft)
-            if descrStr or leftStr:
-                items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descrStr), value=text_styles.expText(leftStr), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=-10)))
-        if statsConfig.showRankedBonusBattle:
-            items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.rankedBonusBattle())), value='', icon=ICON_TEXT_FRAMES.BONUS_BATTLE, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
-        if statsConfig.dailyXP:
-            attrs = self.__itemsCache.items.stats.attributes
-            if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and vehicle.dailyXPFactor > 0:
-                dailyXPText = text_styles.main(text_styles.expText(''.join(('x', backport.getIntegralFormat(vehicle.dailyXPFactor)))))
-                items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=2, top=-2, bottom=5)))
-        if statsConfig.restorePrice:
-            if vehicle.isRestorePossible() and vehicle.hasLimitedRestore():
-                timeKey, formattedTime = getTimeLeftInfo(vehicle.restoreInfo.getRestoreTimeLeft(), None)
+                rentText = R.strings.tooltips.vehicle.telecomRentalsRenting()
+            items.append(formatters.packTextParameterBlockData(name=text_styles.main(backport.text(rentText)), value='', valueWidth=valueWidth + 18))
+            items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.gold(backport.text(R.strings.tooltips.vehicle.wotPlusRenting.remainingTime.dyn(timeKey)()) % {'time': formattedTime}), value='', icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=-10)))
+        if statsConfig.rentals and not vehicle.isPremiumIGR and not frontlineBlock:
+            if not (vehicle.isWotPlusRent or vehicle.isTelecomRent):
+                if statsConfig.futureRentals:
+                    rentLeftKey = '#tooltips:vehicle/rentLeftFuture/%s'
+                    rentInfo = RentalInfoProvider(time=ctxParams.get('rentExpiryTime'), battles=ctxParams.get('rentBattlesLeft'), wins=ctxParams.get('rentWinsLeft'), seasonRent=ctxParams.get('rentSeason'), isRented=True)
+                else:
+                    rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
+                    rentInfo = vehicle.rentInfo
+                descrStr = RentLeftFormatter(rentInfo).getRentLeftStr(rentLeftKey)
+                leftStr = ''
+                rentTimeLeft = rentInfo.getTimeLeft()
+                if rentTimeLeft:
+                    _, formattedTime = getTimeLeftInfo(rentTimeLeft)
+                    leftStr = str(formattedTime)
+                elif rentInfo.battlesLeft:
+                    leftStr = str(rentInfo.battlesLeft)
+                elif rentInfo.winsLeft > 0:
+                    leftStr = str(rentInfo.winsLeft)
+                if descrStr or leftStr:
+                    items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descrStr), value=text_styles.expText(leftStr), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=-10)))
+            if statsConfig.showRankedBonusBattle:
+                items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.rankedBonusBattle())), value='', icon=ICON_TEXT_FRAMES.BONUS_BATTLE, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
+            if statsConfig.dailyXP:
+                attrs = self.__itemsCache.items.stats.attributes
+                if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and vehicle.dailyXPFactor > 0:
+                    dailyXPText = text_styles.main(text_styles.expText(''.join(('x', backport.getIntegralFormat(vehicle.dailyXPFactor)))))
+                    items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=2, top=-2, bottom=5)))
+            if statsConfig.restorePrice:
+                timeKey, formattedTime = vehicle.isRestorePossible() and vehicle.hasLimitedRestore() and getTimeLeftInfo(vehicle.restoreInfo.getRestoreTimeLeft(), None)
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(''.join(('#tooltips:vehicle/restoreLeft/', timeKey))), value=text_styles.stats(formattedTime), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=0, bottom=-10)))
         return
 
@@ -911,7 +915,7 @@ class FrontlineRentBlockConstructor(VehicleTooltipBlockConstructor):
                 if rentInfo.getActiveSeasonRent() is not None:
                     rentFormatter = RentLeftFormatter(rentInfo)
                     rentLeftInfo = rentFormatter.getRentLeftStr(rentLeftKey)
-                    if rentLeftInfo and not rentInfo.isWotPlus:
+                    if rentLeftInfo and not (rentInfo.isWotPlus or rentInfo.isTelecomRent):
                         block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.neutral(rentLeftInfo), value='', icon=ICON_TEXT_FRAMES.RENTALS, valueWidth=self._valueWidth, padding=paddings))
                 return block
         return

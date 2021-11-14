@@ -105,7 +105,7 @@ class PostProgressionContextMenuHandler(SimpleVehicleCMHandler):
         return True
 
     def __addSellOption(self, options, vehicle):
-        if vehicle.isPremiumIGR or not vehicle.canSell:
+        if vehicle.isPremiumIGR or not vehicle.canSell or vehicle.isTelecomRent:
             return False
         options.append(self._makeItem(VEHICLE.SELL, MENU.CONTEXTMENU_VEHICLEREMOVE if vehicle.isRented else MENU.CONTEXTMENU_SELL))
         return True

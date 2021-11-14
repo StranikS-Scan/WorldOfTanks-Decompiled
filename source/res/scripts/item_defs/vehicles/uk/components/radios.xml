@@ -34,9 +34,6 @@
     <C45A_SH>	10001	</C45A_SH>
     <C42_B47_SH>	10002	</C42_B47_SH>
     <N19Mk3_MapsTraining_Dummy_MT_2>	3	</N19Mk3_MapsTraining_Dummy_MT_2>
-    <C42_Halloween_event>	20036	</C42_Halloween_event>
-    <C42_HELL>	20000	</C42_HELL>
-    <C45_HELL>	20007	</C45_HELL>
   </ids>
   <shared>
     <Alarm_flags_bot>
@@ -268,18 +265,6 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C42_FL>
-    <C42_Halloween_event>
-      <userString>	#gb_vehicles:C42_Halloween_event	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </C42_Halloween_event>
     <C42_VHF>
       <userString>	#gb_vehicles:C42_VHF	</userString>
       <tags></tags>
@@ -453,29 +438,5 @@
       <repairCost>	3.5	</repairCost>
       <notInShop>	True	</notInShop>
     </N19Mk3_MapsTraining_Dummy_MT_2>
-    <C42_HELL>
-      <userString>	#gb_vehicles:C42	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <weight>	40	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-      <notInShop>	True	</notInShop>
-    </C42_HELL>
-    <C45_HELL>
-      <userString>	#gb_vehicles:C45	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	45600	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </C45_HELL>
   </shared>
 </radios.xml>

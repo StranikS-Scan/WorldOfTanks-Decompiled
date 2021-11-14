@@ -13,6 +13,7 @@ from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
+from gui.shared.gui_items.customization import directionByTag
 from gui.shared.image_helper import getTextureLinkByID
 from gui.shared.money import Money
 from gui.shared.utils.functions import getImageResourceFromPath
@@ -21,7 +22,7 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from helpers import dependency
 from items import makeIntCompactDescrByID
 from items.components.c11n_components import EditingStyleReason
-from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalDirectionTags, ProjectionDecalFormTags, UNBOUND_VEH_KEY, ImageOptions, EDITING_STYLE_REASONS, CustomizationType
+from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalFormTags, UNBOUND_VEH_KEY, ImageOptions, EDITING_STYLE_REASONS, CustomizationType
 from items.customizations import parseCompDescr, isEditedStyle, createNationalEmblemComponents, parseOutfitDescr
 from items.vehicles import VehicleDescr
 from shared_utils import first
@@ -725,8 +726,7 @@ class ProjectionDecal(Decal):
 
     @property
     def direction(self):
-        directionTags = (tag for tag in self.tags if tag.startswith(ProjectionDecalDirectionTags.PREFIX))
-        return first(directionTags, ProjectionDecalDirectionTags.ANY)
+        return directionByTag(self.tags)
 
     @property
     def formfactor(self):
@@ -756,17 +756,12 @@ class ProjectionDecal(Decal):
         return self.__previewIcon
 
     @property
-    def previewIconUrl(self):
+    def icon(self):
         return getTextureLinkByID(self.previewIcon)
 
     @property
     def previewIconRes(self):
         return getImageResourceFromPath(self.previewIcon)
-
-    @property
-    def icon(self):
-        texture, size, innerSize = self.__getPreviewParams()
-        return previewTemplate(texture, size[0], size[1], innerSize[0], innerSize[1])
 
     @property
     def iconUrl(self):

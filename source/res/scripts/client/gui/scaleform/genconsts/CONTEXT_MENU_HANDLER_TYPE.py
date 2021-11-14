@@ -12,7 +12,6 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     BASE_USER = 'baseUser'
     BASE_CLAN = 'baseClan'
     BATTLE_RESULTS_USER = 'battleResultsUser'
-    EVENT_BATTLE_RESULTS_USER = 'eventBattleResultsUser'
     PREBATTLE_USER = 'prebattleUser'
     UNIT_USER = 'unitUser'
     FORT_BUILDING = 'fortBuilding'

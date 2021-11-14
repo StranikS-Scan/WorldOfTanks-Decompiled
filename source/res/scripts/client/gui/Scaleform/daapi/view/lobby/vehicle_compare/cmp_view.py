@@ -12,7 +12,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import MAX_VEHICLES_TO_COMPARE_COUNT
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import selectVehicleInHangar, showVehiclePreview, goToHalloweenKingRewardOnScene
+from gui.shared.event_dispatcher import selectVehicleInHangar, showVehiclePreview
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters.formatters import getAllParametersTitles
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
@@ -21,9 +21,6 @@ from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
-from HalloweenHangarTank import HalloweenHangarTank
-from ClientSelectableCameraObject import ClientSelectableCameraObject
-from gui.impl.lobby.halloween.event_helpers import isEvent
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
@@ -65,23 +62,13 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         vehicleStrCD = cmpVehicle.getVehicleStrCD()
         vehicleIntCD = cmpVehicle.getVehicleCD()
         vehicle = self.itemsCache.items.getItemByCD(vehicleIntCD)
-        hwKingRewardCompactDescr = None
-        for cameraObject in ClientSelectableCameraObject.allCameraObjects:
-            if isinstance(cameraObject, HalloweenHangarTank) and cameraObject.isKingReward:
-                descriptor = cameraObject.typeDescriptor
-                hwKingRewardCompactDescr = descriptor.type.compactDescr
-                break
-
-        if vehicleIntCD == hwKingRewardCompactDescr:
-            goToHalloweenKingRewardOnScene(VIEW_ALIAS.VEHICLE_COMPARE, hideBottomPanel=False)
-        elif vehicle.isPreviewAllowed():
+        if vehicle.isPreviewAllowed():
             showVehiclePreview(vehicleIntCD, VIEW_ALIAS.VEHICLE_COMPARE, vehStrCD=vehicleStrCD)
         else:
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.VEHICLECOMPARE_PREVIEWNOTALLOWED, vehicle=vehicle.userName, type=SystemMessages.SM_TYPE.Error)
-        return
 
     def onGoToHangarClick(self, vehicleID):
-        selectVehicleInHangar(int(vehicleID), leaveEventMode=isEvent())
+        selectVehicleInHangar(int(vehicleID))
 
     def onParamDeltaRequested(self, index, paramID):
         deltas = self.__paramsCache.getParametersDelta(int(index), paramID)

@@ -12,7 +12,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.bootcamp.bootcamp_exit_view import BootcampExitWindow
 from helpers import dependency
-from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.bootcamp.disabled_settings import BCDisabledSettings
@@ -27,6 +27,7 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui import DialogsInterface, makeHtmlString
 from debug_utils import LOG_ERROR
 from gui.shared.event_dispatcher import showResSimpleDialog
+from skeletons.gui.shared import IItemsCache
 BootcampDialogConstants = namedtuple('BootcampDialogConstants', 'dialogType dialogKey focusedID needAwarding premiumType')
 _GREEN = 'green'
 _YELLOW = 'yellow'
@@ -35,6 +36,8 @@ _REWARD = '\n{}'
 
 class BootcampController(IBootcampController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    demoAccController = dependency.descriptor(IDemoAccCompletionController)
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(BootcampController, self).__init__()
@@ -79,6 +82,8 @@ class BootcampController(IBootcampController):
         if inBattle:
             g_bootcamp.requestBootcampFinishFromBattle = True
             self.sessionProvider.exit()
+        elif self.demoAccController.isDemoAccount:
+            self.demoAccController.runDemoAccRegistration()
         else:
             self.__doStopBootcamp()
 
@@ -161,7 +166,11 @@ class BootcampController(IBootcampController):
 
     def finishBootcamp(self):
         Waiting.show('login')
-        g_bootcampEvents.onGarageLessonFinished(self.getLessonNum())
+        if self.demoAccController.isDemoAccount:
+            self.demoAccController.isInDemoAccRegistration = False
+        currentLesson = self.getLessonNum()
+        if g_bootcamp.isLastLesson(currentLesson):
+            g_bootcampEvents.onGarageLessonFinished(currentLesson)
         g_bootcampEvents.onRequestBootcampFinish()
 
     def __onEnterBootcamp(self):

@@ -42,7 +42,6 @@
     <R123_fallout>	208	</R123_fallout>
     <R113_FL>	210	</R113_FL>
     <R113M_cl>	214	</R113M_cl>
-    <R113_Halloween_event>	211	</R113_Halloween_event>
     <_10RK_IGR>	60001	</_10RK_IGR>
     <_12RT_IGR>	60002	</_12RT_IGR>
     <R113_IGR>	60003	</R113_IGR>
@@ -62,8 +61,6 @@
     <_9RM_MapsTraining_Player_MT_1>	37	</_9RM_MapsTraining_Player_MT_1>
     <_9RM_MapsTraining_Player_MT_2>	38	</_9RM_MapsTraining_Player_MT_2>
     <_10RK_MapsTraining_Dummy_HT_2>	39	</_10RK_MapsTraining_Dummy_HT_2>
-    <R77_KV2_turret_2_Radio>	212	</R77_KV2_turret_2_Radio>
-    <_12RT_hw21>	20001	</_12RT_hw21>
   </ids>
   <shared>
     <Alarm_flags_bot>
@@ -393,18 +390,6 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113>
-    <R113_Halloween_event>
-      <userString>	#ussr_vehicles:R113_Halloween_event	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R113_Halloween_event>
     <R113_FL>
       <userString>	#ussr_vehicles:R113	</userString>
       <tags></tags>
@@ -807,29 +792,5 @@
       <repairCost>	1.5	</repairCost>
       <notInShop>	True	</notInShop>
     </_10RK_MapsTraining_Dummy_HT_2>
-    <R77_KV2_turret_2_Radio>
-      <userString>	#ussr_vehicles:_10RK	</userString>
-      <tags></tags>
-      <level>	7	</level>
-      <price>	18600	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	440	</distance>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	125	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </R77_KV2_turret_2_Radio>
-    <_12RT_hw21>
-      <userString>	#ussr_vehicles:_12RT	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	33600	</price>
-      <weight>	110	</weight>
-      <distance>	625	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <notInShop>	True	</notInShop>
-    </_12RT_hw21>
   </shared>
 </radios.xml>

@@ -106,24 +106,6 @@ def onStartup():
         return False
 
 
-def _applyEnvSettings():
-    keyWord = 'ENV_SETTINGS='
-    envSettings = None
-    for params in sys.argv:
-        if params.startswith(keyWord):
-            envSettings = params[len(keyWord)::].split(';')
-            break
-
-    if envSettings:
-        BigWorld.CustomizationEnvironment().enable(True, envSettings[0])
-        if len(envSettings) > 1:
-            triggers = envSettings[1].split(',')
-            for trigger in triggers:
-                BigWorld.wg_setTrigger(trigger)
-
-    return
-
-
 def _clearGUI():
     global g_gui
     if g_gui is not None:
@@ -148,7 +130,6 @@ def _offlineLoadCheck():
         BigWorld.uniprofSceneStart()
         _clearGUI()
         g_offlineModeSpaceLoaded = True
-        _applyEnvSettings()
     else:
         BigWorld.callback(0.5, _offlineLoadCheck)
 

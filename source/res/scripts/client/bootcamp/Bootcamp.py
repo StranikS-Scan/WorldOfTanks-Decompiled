@@ -40,7 +40,7 @@ from helpers import dependency, aop, i18n
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
 from skeletons.gui.shared import IItemsCache
 from gui.impl.gen.view_models.views.bootcamp.bootcamp_lesson_model import BootcampLessonModel
 from gui.impl.gen.view_models.views.bootcamp.bootcamp_reward_item_model import BootcampRewardItemModel
@@ -100,6 +100,7 @@ class Bootcamp(EventSystemEntity):
     itemsCache = dependency.descriptor(IItemsCache)
     appLoader = dependency.descriptor(IAppLoader)
     bootcampController = dependency.descriptor(IBootcampController)
+    demoAccController = dependency.descriptor(IDemoAccCompletionController)
     tutorialLoader = dependency.descriptor(ITutorialLoader)
 
     def __init__(self):
@@ -350,7 +351,7 @@ class Bootcamp(EventSystemEntity):
             dropNewSettingsCounters()
         g_bootcampEvents.onBootcampStarted()
         if not autoStartBattle:
-            if isBattleLesson:
+            if isBattleLesson and not self.demoAccController.isInDemoAccRegistration:
                 g_prbLoader.createBattleDispatcher()
                 g_prbLoader.setEnabled(True)
                 self.enqueueBattleLesson()
@@ -460,10 +461,15 @@ class Bootcamp(EventSystemEntity):
         self.__currentState.deactivate()
         MC.g_musicController.stop()
         if self.requestBootcampFinishFromBattle:
-            self.onRequestBootcampFinish()
-            return
-        self.__currentState = StateResultScreen(lessonResults)
-        self.__currentState.activate()
+            if self.demoAccController.isDemoAccount:
+                self.demoAccController.isInDemoAccRegistration = True
+                self.__currentState = StateInGarage()
+                self.__currentState.activate()
+            else:
+                self.onRequestBootcampFinish()
+        else:
+            self.__currentState = StateResultScreen(lessonResults)
+            self.__currentState.activate()
 
     def onInterludeVideoStarted(self, index):
         messageVO = self.getInterludeVideoPageData(index)

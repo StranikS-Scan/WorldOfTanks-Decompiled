@@ -326,6 +326,8 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
 
     def onModeChanged(self, modeId, prevModeId):
         visibleTabs = self.getVisibleTabs()
+        if not visibleTabs:
+            return
         tabId = visibleTabs[0]
         if CustomizationModes.EDITABLE_STYLE in (modeId, prevModeId):
             self.clearFilter()
@@ -336,8 +338,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
                     tabId = CustomizationTabs.CAMOUFLAGES
                 else:
                     _logger.warning('Style with dependencies have to open Camouflages tab, but this tab is not found!')
-        if visibleTabs:
-            self.__ctx.mode.changeTab(tabId)
+        self.__ctx.mode.changeTab(tabId)
 
     def hasAppliedFilter(self):
         isGroupSelected = self.__getSelectedGroupIdx() is not None

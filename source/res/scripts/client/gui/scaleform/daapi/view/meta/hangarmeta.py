@@ -85,11 +85,5 @@ class HangarMeta(View):
     def as_toggleCnSubscriptionS(self, isCnSubscription):
         return self.flashObject.as_toggleCnSubscription(isCnSubscription) if self._isDAAPIInited() else None
 
-    def as_setYHAVisibleS(self, value):
-        return self.flashObject.as_setYHAVisible(value) if self._isDAAPIInited() else None
-
     def as_setDQWidgetLayoutS(self, lyout):
         return self.flashObject.as_setDQWidgetLayout(lyout) if self._isDAAPIInited() else None
-
-    def as_setShopSalesVisibleS(self, value):
-        return self.flashObject.as_setShopSalesVisible(value) if self._isDAAPIInited() else None

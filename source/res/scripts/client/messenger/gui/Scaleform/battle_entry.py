@@ -4,8 +4,6 @@ import weakref
 import BigWorld
 import Keys
 from debug_utils import LOG_ERROR
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent, ChannelManagementEvent
 from messenger import g_settings
@@ -65,11 +63,11 @@ class BattleEntry(IGUIEntry):
 
     def show(self):
         g_messengerEvents.channels.onMessageReceived += self.__me_onMessageReceived
+        g_messengerEvents.channels.onHistoryReceived += self.__me_onHistoryReceived
         g_messengerEvents.channels.onCommandReceived += self.__me_onCommandReceived
         g_messengerEvents.users.onBattleUserActionReceived += self.__me_onBattleUserActionReceived
         g_messengerEvents.onErrorReceived += self.__me_onErrorReceived
         g_messengerEvents.onWarningReceived += self.__me_onWarningReceived
-        g_messengerEvents.onAFKWarningReceived += self.__showAFKWarningMessage
         g_settings.onUserPreferencesUpdated += self.__ms_onUserPreferencesUpdated
         g_settings.onColorsSchemesUpdated += self.__ms_onColorsSchemesUpdated
         self.__initialized = 0
@@ -81,11 +79,11 @@ class BattleEntry(IGUIEntry):
 
     def close(self, nextScope):
         g_messengerEvents.channels.onMessageReceived -= self.__me_onMessageReceived
+        g_messengerEvents.channels.onHistoryReceived -= self.__me_onHistoryReceived
         g_messengerEvents.channels.onCommandReceived -= self.__me_onCommandReceived
         g_messengerEvents.users.onBattleUserActionReceived -= self.__me_onBattleUserActionReceived
         g_messengerEvents.onErrorReceived -= self.__me_onErrorReceived
         g_messengerEvents.onWarningReceived -= self.__me_onWarningReceived
-        g_messengerEvents.onAFKWarningReceived -= self.__showAFKWarningMessage
         g_settings.onUserPreferencesUpdated -= self.__ms_onUserPreferencesUpdated
         g_settings.onColorsSchemesUpdated -= self.__ms_onColorsSchemesUpdated
         g_settings.resetBattleReceiverIfNeed()
@@ -188,15 +186,6 @@ class BattleEntry(IGUIEntry):
             view.addMessage(formatted, fillColor=fillColor)
         return
 
-    def __showAFKWarningMessage(self):
-        message = backport.text(R.strings.messenger.client.warning.AFKWarning.message())
-        formatted = g_settings.htmlTemplates.format('battleWarningMessage', ctx={'fontColor': '#FF3362',
-         'message': message})
-        view = self.__view()
-        if view is not None:
-            view.addMessage(formatted, fillColor=FILL_COLORS.BLACK)
-        return
-
     def __me_onBattleUserActionReceived(self, action, user):
         message = getUserActionReceivedMessage(action, user)
         if message:
@@ -208,6 +197,16 @@ class BattleEntry(IGUIEntry):
             if controller is None or not controller.isEnabled():
                 return
             controller.addMessage(message)
+        return
+
+    def __me_onHistoryReceived(self, history, channel):
+        if channel is not None:
+            controller = self.__channelsCtrl.getController(channel.getClientID())
+            if controller is None or not controller.isEnabled():
+                return
+            for message in history:
+                controller.addMessage(message)
+
         return
 
     def __me_onCommandReceived(self, command):

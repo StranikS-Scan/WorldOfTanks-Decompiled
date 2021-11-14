@@ -35,10 +35,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-EventBattles = namedtuple('EventBattles', ['vehicleTags',
- 'vehicles',
- 'enabled',
- 'arenaTypeID'])
+from gui.ranked_battles.ranked_helpers import isQualificationQuestID, getQualificationBattlesCountFromID
 
 class DEFAULTS_GROUPS(object):
     FOR_CURRENT_VEHICLE = 'currentlyAvailable'
@@ -540,11 +537,13 @@ class PersonalQuest(Quest):
 
 
 class RankedQuest(Quest):
-    __slots__ = Quest.__slots__ + ('__rankedData',)
+    __slots__ = Quest.__slots__ + ('__rankedData', '__qualificationBattlesCount', '__isQualificationQuest')
 
     def __init__(self, qID, data, progress=None):
         super(RankedQuest, self).__init__(qID, data, progress)
         self.__rankedData = self.__parseRankSeasonData(data)
+        self.__isQualificationQuest = isQualificationQuestID(qID)
+        self.__qualificationBattlesCount = getQualificationBattlesCountFromID(qID) if self.__isQualificationQuest else 0
 
     def getRank(self):
         return self.__rankedData.get('rank')
@@ -560,6 +559,12 @@ class RankedQuest(Quest):
 
     def isForRank(self):
         return self.__rankedData['subtype'] == 'rank'
+
+    def isQualificationQuest(self):
+        return self.__isQualificationQuest
+
+    def getQualificationBattlesCount(self):
+        return self.__qualificationBattlesCount
 
     @classmethod
     def __parseRankSeasonData(cls, data):

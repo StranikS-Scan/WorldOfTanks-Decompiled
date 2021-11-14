@@ -5,7 +5,7 @@ import typing
 from collections import namedtuple
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, RankedTokenQuestPostfix, LOBBY_SUB_LANDING_PARAM, SEASON_RATING_PARAM
+from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, RankedTokenQuestPostfix, LOBBY_SUB_LANDING_PARAM, SEASON_RATING_PARAM, QUALIFICATION_QUEST
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.formatters import text_styles
@@ -115,3 +115,14 @@ def makeStatTooltip(statKey):
     header = backport.text(R.strings.tooltips.rankedBattleView.stats.dyn(statKey).header())
     body = backport.text(R.strings.tooltips.rankedBattleView.stats.dyn(statKey).body())
     return makeTooltip(header, body)
+
+
+def isQualificationQuestID(qID):
+    return QUALIFICATION_QUEST in qID
+
+
+def getQualificationBattlesCountFromID(qID):
+    try:
+        return int(qID.split('_')[-1])
+    except ValueError:
+        return 0

@@ -36,8 +36,7 @@ from helpers import i18n, dependency, int2roman, time_utils, func_utils
 from helpers.time_utils import getCurrentTimestamp
 from skeletons.gui.lobby_context import ILobbyContext
 from items import vehicles
-from items.vehicles import makeVehicleTypeCompDescrByName, getSuitableShellsForVehicle
-from skeletons.gui.server_events import IEventsCache
+from items.vehicles import makeVehicleTypeCompDescrByName
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from items.components.supply_slot_categories import SlotCategories
@@ -175,8 +174,6 @@ def getStorageShellsCriteria(itemsCache, invVehicles, compatible):
         requestCriteria |= cdListCriteria
     else:
         requestCriteria |= ~cdListCriteria
-    eventShells = set(chain(*(getSuitableShellsForVehicle(i) for i in dependency.instance(IEventsCache).getGameEventData().get('vehicles', {}).iterkeys())))
-    requestCriteria |= ~REQ_CRITERIA.IN_CD_LIST(eventShells)
     return requestCriteria
 
 

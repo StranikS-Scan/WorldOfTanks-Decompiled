@@ -21,6 +21,7 @@ def _getDialogStr(i18nKey):
 class DIALOG_BUTTON_ID(object):
     SUBMIT = 'submit'
     CLOSE = 'close'
+    HYPERLINK = 'hyperLink'
 
 
 class IDialogMeta(object):
@@ -201,6 +202,12 @@ class I18nConfirmDialogMeta(I18nDialogMeta):
     def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None, scope=ScopeTemplates.VIEW_SCOPE):
         buttons = I18nConfirmDialogButtons(key, focusedID)
         super(I18nConfirmDialogMeta, self).__init__(key, buttons, titleCtx, messageCtx, meta, scope)
+
+
+class DemoAccountBootcampFailureMeta(I18nInfoDialogMeta):
+
+    def getEventType(self):
+        return events.ShowDialogEvent.SHOW_BUTTON_DLG
 
 
 class BCConfirmDialogMeta(IDialogMeta):

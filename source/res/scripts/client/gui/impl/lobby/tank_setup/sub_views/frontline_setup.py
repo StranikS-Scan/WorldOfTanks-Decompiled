@@ -6,6 +6,7 @@ from gui.impl.lobby.tank_setup.sub_views.base_equipment_setup import BaseEquipme
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 
 class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
@@ -19,11 +20,12 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
     def updateSlots(self, slotID, fullUpdate=True, updateData=True):
         self._viewModel.setIsLocked(self.__hasBattleAbilities())
         super(EpicBattleSetupSubView, self).updateSlots(slotID, True, updateData)
-        slots = self._viewModel.getSlots()
-        itemCategory = slots[slotID].getCategory() if len(slots) >= slotID else ''
+        slot = first(self._viewModel.getSlots())
+        itemCategory = slot.getCategory() if slot is not None else ''
         if self.__currentCategory != itemCategory:
             self.__currentCategory = itemCategory
             self._viewModel.setSelectedCategory(itemCategory)
+        return
 
     def revertItem(self, slotID):
         self._interactor.revertSlot(slotID)

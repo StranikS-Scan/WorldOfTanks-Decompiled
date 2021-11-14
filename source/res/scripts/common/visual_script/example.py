@@ -5,7 +5,7 @@ from block import Block, Meta, InitParam, buildStrKeysValue, makeResEditorData
 from slot_types import SLOT_TYPE, arrayOf
 from visual_script.misc import ASPECT, BLOCK_MODE, EDITOR_TYPE
 from tunable_event_block import TunableEventBlock
-from type import VScriptType, VScriptEnum
+from type import VScriptType, VScriptEnum, VScriptStruct, VScriptStructField
 import weakref
 
 class Example(Meta):
@@ -231,6 +231,14 @@ class ClampedBlock(Block, Example):
         return [InitParam('value [0, 100]', SLOT_TYPE.INT, 0, None, [0, 100])]
 
 
+class TestStruct(VScriptStruct):
+    name = VScriptStructField('name', SLOT_TYPE.STR)
+    value = VScriptStructField('year', SLOT_TYPE.INT)
+
+    def __repr__(self):
+        return 'TestStruct(name = {}, year = {})'.format(self.name, self.value)
+
+
 class TestType(VScriptType):
 
     def __init__(self, name, age):
@@ -294,3 +302,22 @@ class SelectTest(Block, Example):
     def _exec(self):
         v = self._enum.getValue()
         self._res.setValue(v)
+
+
+class PrintTestStruct(Block, Example):
+
+    def __init__(self, *args, **kwargs):
+        super(PrintTestStruct, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._exec)
+        self._out = self._makeEventOutputSlot('out')
+        self._s = self._makeDataInputSlot('struct', TestStruct.slotType())
+        self._ns = self._makeDataOutputSlot('changed', TestStruct.slotType(), None)
+        return
+
+    def _exec(self):
+        self._writeLog('PrintTestStruct: {}'.format(self._s.getValue()))
+        newStuct = TestStruct()
+        newStuct.name = 'Metallica'
+        newStuct.value = 1981
+        self._ns.setValue(newStuct)
+        self._out.call()

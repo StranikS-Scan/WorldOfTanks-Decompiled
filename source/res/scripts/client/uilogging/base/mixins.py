@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/base/mixins.py
-import typing
 import logging
 from functools import wraps
+import typing
 import BigWorld
-from uilogging.core.core_constants import LogLevels
 from uilogging.base.logger import ifUILoggingEnabled
+from uilogging.core.core_constants import LogLevels
 from wotdecorators import noexcept
 if typing.TYPE_CHECKING:
     from uilogging.base.logger import BaseLogger
@@ -47,9 +47,10 @@ class LogOnceMixin(object):
 
 class TimedActionMixin(object):
 
-    def __init__(self, feature, group):
-        super(TimedActionMixin, self).__init__(feature, group)
+    def __init__(self, *args, **kwargs):
+        super(TimedActionMixin, self).__init__(*args, **kwargs)
         self._timedActions = {}
+        self._suspendedActions = {}
 
     @noexcept
     def reset(self):
@@ -91,12 +92,34 @@ class TimedActionMixin(object):
 
     @noexcept
     def stopAction(self, action, loglevel=LogLevels.INFO, timeLimit=0, **params):
-        startTime = self._timedActions.pop(action, None)
-        if startTime is None:
+        if action not in self._timedActions:
             _logger.debug('%s action: %s not started.', self, action)
             return
         else:
+            if action in self._suspendedActions:
+                self.resume(action)
+            startTime = self._timedActions.pop(action, None)
             timeSpent = BigWorld.time() - startTime
             if timeSpent > timeLimit:
                 self.log(action, loglevel=loglevel, timeSpent=timeSpent, **params)
+            return
+
+    @noexcept
+    def suspend(self, action):
+        if action not in self._timedActions:
+            return
+        if action in self._suspendedActions:
+            return
+        self._suspendedActions[action] = BigWorld.time()
+
+    @noexcept
+    def resume(self, action):
+        if action not in self._timedActions:
+            return
+        else:
+            suspensionStartTime = self._suspendedActions.pop(action, None)
+            if suspensionStartTime is None:
+                return
+            suspensionTime = BigWorld.time() - suspensionStartTime
+            self._timedActions[action] += suspensionTime
             return

@@ -12,7 +12,6 @@ from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.impl.lobby.veh_post_progression.post_progression_intro import getPostProgressionInfoWindowProc
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
-from gui.shared.event_dispatcher import goToHalloweenKingRewardOnScene
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.veh_post_progression.sounds import PP_VIEW_SOUND_SPACE
 from gui.veh_post_progression.vo_builders.cfg_page_vos import getDataVO, getTitleVO
@@ -90,8 +89,6 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
     def _onExit(self):
         if self._exitEvent.alias == VIEW_ALIAS.HERO_VEHICLE_PREVIEW:
             self.__goToHeroTank()
-        elif self._exitEvent.alias == VIEW_ALIAS.EVENT_KING_REWARD_PREVIEW:
-            goToHalloweenKingRewardOnScene()
         else:
             g_eventBus.handleEvent(self._exitEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 

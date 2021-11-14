@@ -3,7 +3,8 @@
 import logging
 from shared_utils import first
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from items.components.c11n_constants import ProjectionDecalDirectionTags, ProjectionDecalFormTags, SLOT_DEFAULT_ALLOWED_MODEL, ProjectionDecalMatchingTags
+from items.components.c11n_constants import ProjectionDecalFormTags, SLOT_DEFAULT_ALLOWED_MODEL, ProjectionDecalMatchingTags
+from gui.shared.gui_items.customization import directionByTag
 _logger = logging.getLogger(__name__)
 SLOT_ASPECT_RATIO = {GUI_ITEM_TYPE.EMBLEM: 1.0,
  GUI_ITEM_TYPE.INSCRIPTION: 0.5}
@@ -156,8 +157,7 @@ class ProjectionDecalSlot(BaseCustomizationSlot):
 
     @property
     def direction(self):
-        directionTags = (tag for tag in self.tags if tag.startswith(ProjectionDecalDirectionTags.PREFIX))
-        return first(directionTags, ProjectionDecalDirectionTags.ANY)
+        return directionByTag(self.tags)
 
     @property
     def canBeMirroredVertically(self):

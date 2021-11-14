@@ -29,8 +29,7 @@ class RankedDivisionTooltip(BlocksTooltipData):
         items.append(self._getStatusBlock(division, isLocked, isCompleted))
         return items
 
-    @staticmethod
-    def _getDescriptionBlock(division, isLocked, isCompleted):
+    def _getDescriptionBlock(self, division, isLocked, isCompleted):
         descTitle = text_styles.middleTitle(backport.text(R.strings.ranked_battles.division.tooltip.desc.title()))
         descKey = 'current'
         if isLocked:
@@ -41,7 +40,9 @@ class RankedDivisionTooltip(BlocksTooltipData):
             descKey += 'Qual'
         elif division.isFinal():
             descKey += 'Final'
-        descText = text_styles.standard(backport.text(R.strings.ranked_battles.division.tooltip.desc.dyn(descKey).text()))
+        qualBattles = sorted(self.rankedController.getQualificationQuests().keys())
+        qualBattles.append(self.rankedController.getTotalQualificationBattles())
+        descText = text_styles.standard(backport.text(R.strings.ranked_battles.division.tooltip.desc.dyn(descKey).text(), battles=', '.join([ str(x) for x in qualBattles ])))
         return formatters.packImageTextBlockData(title=descTitle, desc=descText, txtPadding=formatters.packPadding(left=10))
 
     @staticmethod

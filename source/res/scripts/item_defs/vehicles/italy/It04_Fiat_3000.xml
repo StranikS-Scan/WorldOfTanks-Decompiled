@@ -1309,13 +1309,10 @@
       <splineDesc>
         <segmentModelLeft>	vehicles/italy/It04_Fiat_3000/track/segment.model	</segmentModelLeft>
         <segmentModelRight>	vehicles/italy/It04_Fiat_3000/track/segment.model	</segmentModelRight>
-        <segment2ModelLeft>	vehicles/italy/It04_Fiat_3000/track/segment.model	</segment2ModelLeft>
-        <segment2ModelRight>	vehicles/italy/It04_Fiat_3000/track/segment.model	</segment2ModelRight>
         <left>	vehicles/italy/It04_Fiat_3000/track/left.track	</left>
         <right>	vehicles/italy/It04_Fiat_3000/track/right.track	</right>
         <segmentLength>	0.136	</segmentLength>
         <segmentOffset>	0.143606	</segmentOffset>
-        <segment2Offset>	0.000000	</segment2Offset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -2030,7 +2027,7 @@
         <collisionModelClient>	vehicles/italy/It04_Fiat_3000/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.196663 0.298249 0.430145	</gunPosition>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.983 0.000 1.006 0.000 0.650 0.038 0.625 0.472 0.623 0.500 0.166 0.500 0.180 0.420 0.217	</physicsShape>
       <customization>

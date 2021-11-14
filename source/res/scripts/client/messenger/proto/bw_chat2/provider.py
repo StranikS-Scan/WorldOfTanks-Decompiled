@@ -2,12 +2,14 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/provider.py
 import weakref
 from collections import defaultdict, deque
-import BigWorld
 import BattleReplay
+import BigWorld
+import Event
 from BattleReplay import CallbackDataNames
 from chat_commands_consts import CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
+from gui.shared.utils import transport
 from ids_generators import SequenceIDGenerator
 from messenger.proto.bw_chat2.errors import createCoolDownError
 from messenger.proto.events import g_messengerEvents
@@ -26,7 +28,7 @@ class _ChatCooldownManager(RequestCooldownManager):
 
 
 class BWChatProvider(object):
-    __slots__ = ('__weakref__', '__handlers', '__msgFilters', '__coolDown', '__idGen', '__isEnabled', '__queue', '__battleCmdCooldowns')
+    __slots__ = ('__weakref__', '__handlers', '__msgFilters', '__coolDown', '__idGen', '__isEnabled', '__queue', '__battleCmdCooldowns', '__replayHelper')
 
     def __init__(self):
         super(BWChatProvider, self).__init__()
@@ -37,15 +39,18 @@ class BWChatProvider(object):
         self.__idGen = SequenceIDGenerator()
         self.__isEnabled = False
         self.__queue = []
+        self.__replayHelper = ChatProviderReplayHelper()
         return
 
     def clear(self):
         self.__handlers.clear()
         self.__battleCmdCooldowns = []
-        BattleReplay.g_replayCtrl.delDataCallback(CallbackDataNames.BW_CHAT2_REPLAY_ACTION_RECEIVED_CALLBACK, self.__onActionReceivedFromReplay)
+        self.__replayHelper.onActionReceivedFromReplay -= self.onActionReceived
+        self.__replayHelper.clear()
 
     def goToReplay(self):
-        BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.BW_CHAT2_REPLAY_ACTION_RECEIVED_CALLBACK, self.__onActionReceivedFromReplay)
+        self.__replayHelper.goToReplay()
+        self.__replayHelper.onActionReceivedFromReplay += self.onActionReceived
 
     def setEnable(self, value):
         if self.__isEnabled == value:
@@ -72,8 +77,7 @@ class BWChatProvider(object):
         return (success, reqID)
 
     def onActionReceived(self, actionID, reqID, args):
-        if BattleReplay.g_replayCtrl.isRecording and self.__isActionWrittenToReplay(actionID):
-            BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.BW_CHAT2_REPLAY_ACTION_RECEIVED_CALLBACK, (actionID, reqID, args))
+        self.__replayHelper.onActionReceived(actionID, reqID, args)
         handlers = self.__handlers[actionID]
         for handler in handlers:
             try:
@@ -176,13 +180,6 @@ class BWChatProvider(object):
                 continue
             self.__sendAction(actionID, reqID, args)
             invokedIDs.add(actionID)
-
-    @staticmethod
-    def __isActionWrittenToReplay(actionID):
-        return actionID == _ACTIONS.INIT_BATTLE_CHAT or _ACTIONS.battleChatCommandFromActionID(actionID) is not None
-
-    def __onActionReceivedFromReplay(self, actionID, reqID, args):
-        self.onActionReceived(actionID, reqID, args)
 
     def __isCooldownInProcess(self, actionID, args=None):
         command = _ACTIONS.battleChatCommandFromActionID(actionID)
@@ -307,3 +304,51 @@ class ResponseDictHandler(ResponseHandler):
             result = True
             self._reqIDs = dict((item for item in self._reqIDs.iteritems() if item[1] != value))
         return result
+
+
+class ChatProviderReplayHelper(object):
+
+    def __init__(self):
+        self.__unitChatInitParams = None
+        self.onActionReceivedFromReplay = Event.Event()
+        return
+
+    def clear(self):
+        self.__unitChatInitParams = None
+        self.onActionReceivedFromReplay.clear()
+        BattleReplay.g_replayCtrl.delDataCallback(CallbackDataNames.BW_CHAT2_REPLAY_ACTION_RECEIVED_CALLBACK, self.__onActionReceivedFromReplay)
+        return
+
+    def goToReplay(self):
+        BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.BW_CHAT2_REPLAY_ACTION_RECEIVED_CALLBACK, self.__onActionReceivedFromReplay)
+
+    def onActionReceived(self, actionID, reqID, args):
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying:
+            return
+        else:
+            self.__storeUnitChatActions(actionID, reqID, args)
+            if replayCtrl.isRecording and self.__isActionWrittenToReplay(actionID):
+                replayCtrl.serializeCallbackData(CallbackDataNames.BW_CHAT2_REPLAY_ACTION_RECEIVED_CALLBACK, (actionID, reqID, args))
+                if actionID == _ACTIONS.INIT_BATTLE_CHAT and self.__unitChatInitParams is not None:
+                    replayCtrl.serializeCallbackData(CallbackDataNames.BW_CHAT2_REPLAY_ACTION_RECEIVED_CALLBACK, self.__unitChatInitParams)
+            return
+
+    def __storeUnitChatActions(self, actionID, reqID, args):
+        if actionID == _ACTIONS.INIT_UNIT_CHAT:
+            args = dict(args)
+            args['strArg1'] = transport.z_dumps([])
+            self.__unitChatInitParams = (actionID, reqID, args)
+        elif actionID == _ACTIONS.DEINIT_UNIT_CHAT:
+            self.__unitChatInitParams = None
+        return
+
+    def __onActionReceivedFromReplay(self, actionID, reqID, args):
+        self.onActionReceivedFromReplay(actionID, reqID, args)
+
+    @staticmethod
+    def __isActionWrittenToReplay(actionID):
+        return actionID in (_ACTIONS.INIT_BATTLE_CHAT,
+         _ACTIONS.INIT_UNIT_CHAT,
+         _ACTIONS.DEINIT_BATTLE_CHAT,
+         _ACTIONS.DEINIT_UNIT_CHAT) or _ACTIONS.battleChatCommandFromActionID(actionID) is not None

@@ -3,6 +3,7 @@
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.ranked_battles.constants import ZERO_RANK_ID
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
@@ -36,18 +37,36 @@ class RankedTooltipData(BlocksTooltipData):
         if comment is not None:
             items.append(comment)
         items.append(formatters.packBuildUpBlockData([formatters.packRankBlockData(rank=self.item, padding=formatters.packPadding(top=10, bottom=15))]))
-        quest = self.item.getQuest()
+        if self.item.isQualification():
+            quest = self.__getQualificationQuest()
+        else:
+            quest = self.item.getQuest()
         if quest is not None:
             items.append(formatters.packBuildUpBlockData(self.__packAwardsBlock(quest), 0, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, topPaddingText))
         bottomBlocks = self.__packStatusBlock()
         items.append(formatters.packBuildUpBlockData(bottomBlocks))
         return items
 
+    def __getQualificationQuest(self):
+        divisionID = self.item.getDivision().getID()
+        stats = self.rankedController.getStatsComposer()
+        currentBattlesCount = stats.divisionsStats.get(divisionID, {}).get('battles', 0)
+        totalBattlesCount = self.rankedController.getTotalQualificationBattles()
+        quests = self.rankedController.getQualificationQuests()
+        quests[totalBattlesCount] = self.rankedController.getRank(ZERO_RANK_ID + 1).getQuest()
+        battles = quests.keys()
+        fitBattles = [ x for x in battles if x > currentBattlesCount ]
+        return quests[min(fitBattles) if fitBattles else max(battles)] if battles else None
+
     def __packTitle(self):
-        name = text_styles.highTitle(backport.text(R.strings.tooltips.battleTypes.ranked.rank.name(), rank=self.item.getUserName()))
-        division = self.item.getDivision()
-        divisionName = text_styles.main(division.getUserName())
-        return formatters.packTextBlockData(text_styles.concatStylesToMultiLine(name, divisionName))
+        divisionUserName = self.item.getDivisionUserName()
+        if self.item.isQualification():
+            text = text_styles.highTitle(divisionUserName)
+        else:
+            divisionName = text_styles.main(divisionUserName)
+            name = text_styles.highTitle(backport.text(R.strings.tooltips.battleTypes.ranked.rank.name(), rank=self.item.getUserName()))
+            text = text_styles.concatStylesToMultiLine(name, divisionName)
+        return formatters.packTextBlockData(text)
 
     def __packComment(self):
         comment = self.__getDivisionComment() or self.__getShieldComment() or self.__getUnburnableComment()
@@ -104,7 +123,12 @@ class RankedTooltipData(BlocksTooltipData):
 
     def __packStatusBlock(self):
         result = []
-        if self.item.isAcquired():
+        if self.item.isQualification():
+            if self.item.isCurrent():
+                status = text_styles.warning(backport.text(R.strings.tooltips.battleTypes.ranked.rank.status.qualificationNotEarned()))
+            else:
+                status = text_styles.statInfo(backport.text(R.strings.tooltips.battleTypes.ranked.rank.status.receivedQualification()))
+        elif self.item.isAcquired():
             status = text_styles.statInfo(backport.text(R.strings.tooltips.battleTypes.ranked.rank.status.received()))
         elif self.item.isLost():
             status = text_styles.statusAlert(backport.text(R.strings.tooltips.battleTypes.ranked.rank.status.lost()))
@@ -114,6 +138,8 @@ class RankedTooltipData(BlocksTooltipData):
         division = self.item.getDivision()
         if not division.isCurrent() and not division.isCompleted():
             result.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.battleTypes.ranked.rank.anotherDivision(), division=division.getUserName()))))
+        if self.item.isQualification() and self.item.isCurrent():
+            result.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.battleTypes.ranked.rank.conditions.qualification(), count=self.rankedController.getTotalQualificationBattles()))))
         if not self.item.isAcquired():
             result.append(formatters.packTextBlockData(self.__packStepsBlock()))
         return result
@@ -123,7 +149,11 @@ class RankedTooltipData(BlocksTooltipData):
         if quest.isCompleted():
             middleTitle = formatters.packImageTextBlockData(title=text_styles.statInfo(backport.text(R.strings.tooltips.battleTypes.ranked.rank.award.received())), img=backport.image(R.images.gui.maps.icons.buttons.checkmark()), imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20)
         else:
-            middleTitle = formatters.packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.battleTypes.ranked.rank.reward())))
+            if quest.isQualificationQuest():
+                middleTitleText = backport.text(R.strings.tooltips.battleTypes.ranked.rank.qualificationReward(), count=quest.getQualificationBattlesCount())
+            else:
+                middleTitleText = backport.text(R.strings.tooltips.battleTypes.ranked.rank.reward())
+            middleTitle = formatters.packTextBlockData(text_styles.middleTitle(middleTitleText))
         listData = getRankedAwardsFormatter().getFormattedBonuses(quest.getBonuses())
         awardsWidth = len(listData) * _AWARD_STEP
         if awardsWidth < _TOOLTIP_MIN_WIDTH:

@@ -8,6 +8,7 @@ from constants import RentType, SEASON_NAME_BY_TYPE, CLIENT_COMMAND_SOURCES
 from AccountCommands import VEHICLE_SETTINGS_FLAG
 from gui.impl import backport
 from gui.impl.gen import R
+from nation_change.nation_change_helpers import getMainVehicleInNationGroup, hasNationGroup, getNationGroupID
 from gui.shared.gui_items.processors.messages.items_processor_messages import ItemBuyProcessorMessage, BattleAbilitiesApplyProcessorMessage, LayoutApplyProcessorMessage, BattleBoostersApplyProcessorMessage, OptDevicesApplyProcessorMessage, ConsumablesApplyProcessorMessage, ShellsApplyProcessorMessage
 from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
 from gui.veh_post_progression.messages import makeVehiclePostProgressionUnlockMsg, makeAllPairsDiscardMsg
@@ -27,6 +28,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getCrewCount
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins as proc_plugs, makeSuccess, makeCrewSkinCompensationMessage
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency, ZERO_MONEY
+from gui.shared.utils.requesters.recycle_bin_requester import VehicleRestoreInfo
 from helpers import time_utils, dependency
 from gui.shared.gui_items.gui_item_economics import ItemPrice, getVehicleBattleBoostersLayoutPrice, getVehicleConsumablesLayoutPrice, getVehicleOptionalDevicesLayoutPrice, getVehicleShellsLayoutPrice
 from helpers.i18n import makeString
@@ -669,13 +671,21 @@ def tryToLoadDefaultShellsLayout(vehicle, callback=None):
     return
 
 
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def _getUniqueVehicleSellConfirmator(vehicle, lobbyContext=None):
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext, itemsCache=IItemsCache)
+def _getUniqueVehicleSellConfirmator(vehicle, lobbyContext=None, itemsCache=None):
+    info = vehicle.restoreInfo
+    if info is None and itemsCache and hasNationGroup(vehicle.intCD):
+        mainVehTypeCD = getMainVehicleInNationGroup(getNationGroupID(vehicle.intCD))
+        restoreData = itemsCache.items.recycleBin.vehiclesBuffer.get(mainVehTypeCD)
+        if restoreData:
+            restoreType, changedAt = restoreData
+            restoreCfg = itemsCache.items.shop.vehiclesRestoreConfig
+            info = VehicleRestoreInfo(restoreType, changedAt, restoreCfg.restoreDuration, restoreCfg.restoreCooldown)
     sellForGold = vehicle.getSellPrice(preferred=True).getCurrency(byWeight=True) == Currency.GOLD
     if lobbyContext is not None and lobbyContext.getServerSettings().isVehicleRestoreEnabled():
         if not sellForGold and not vehicle.isUnrecoverable:
-            if vehicle.isRecentlyRestored():
-                return proc_plugs.MessageConfirmator('vehicleSell/restoreCooldown', ctx={'cooldown': formatTime(vehicle.restoreInfo.getRestoreCooldownTimeLeft(), time_utils.ONE_DAY)}, isEnabled=vehicle.isUnique)
+            if info is not None and vehicle.isPurchased and info.isInCooldown():
+                return proc_plugs.MessageConfirmator('vehicleSell/restoreCooldown', ctx={'cooldown': formatTime(info.getRestoreCooldownTimeLeft(), time_utils.ONE_DAY)}, isEnabled=vehicle.isUnique)
             if vehicle.isPurchased:
                 return proc_plugs.MessageConfirmator('vehicleSell/restoreUnlimited', isEnabled=vehicle.isUnique)
         dialogI18n = vehicle.isCrewLocked and 'vehicleSell/unique/crewLocked'

@@ -4,8 +4,9 @@ import time
 import typing
 import logging
 import BigWorld
+import async as future_async
 from async import async, await
-from account_helpers import account_completion
+from constants import QUEUE_TYPE
 from constants import RENEWABLE_SUBSCRIPTION_CONFIG
 from frameworks.wulf import ViewSettings, ViewStatus
 from gui import GUI_SETTINGS
@@ -17,8 +18,9 @@ from gui.clans.settings import getClanRoleName
 from gui.goodies.goodie_items import MAX_ACTIVE_BOOSTERS_COUNT
 from gui.impl.gen.view_models.views.lobby.subscription.subscription_card_model import SubscriptionCardState
 from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
-from gui.platform.wgnp.controller import isEmailConfirmationNeeded, getEmail, isEmailAddingNeeded
 from gui.impl import backport
+from gui.impl.dialogs import dialogs
+from gui.impl.dialogs.gf_builders import ResDialogBuilder
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_header_model import PremDashboardHeaderModel
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_header_reserve_model import PremDashboardHeaderReserveModel
@@ -26,23 +28,34 @@ from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_heade
 from gui.impl.lobby.account_completion.tooltips.hangar_tooltip_view import HangarTooltipView
 from gui.impl.lobby.tooltips.clans import ClanShortInfoTooltipContent
 from gui.impl.pub import ViewImpl
+from gui.impl.pub.dialog_window import DialogButtons
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
+from gui.platform.base.statuses.constants import StatusTypes
+from gui.platform.wgnp.demo_account.controller import NICKNAME_CONTEXT
+from gui.prb_control.ctrl_events import g_prbCtrlEvents
+from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showStrongholds, showAddEmailOverlay, showConfirmEmailOverlay, showWotPlusInfoPage
+from gui.shared.event_dispatcher import showStrongholds, showSteamAddEmailOverlay, showSteamConfirmEmailOverlay, showDemoAccRenamingOverlay, showWotPlusInfoPage
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
-from skeletons.gui.game_control import IBadgesController, IBoostersController, IExternalLinksController
+from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.game_control import IBadgesController, IBoostersController, ISteamCompletionController, IPlatoonController, IExternalLinksController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController, IWGNPDemoAccRequestController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-from skeletons.gui.platform.wgnp_controller import IWGNPRequestController
+from uilogging.account_completion.constants import LogGroup, LogActions, ViewClosingResult
+from uilogging.account_completion.loggers import AccountCompletionViewLogger
 if typing.TYPE_CHECKING:
+    from typing import Optional
     from gui.clans.clan_account_profile import ClanAccountProfile
+    from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
+    from gui.platform.base.statuses.status import Status
 _logger = logging.getLogger(__name__)
 
 class PremDashboardHeader(ViewImpl):
-    __slots__ = ('__notConfirmedEmail', '_renewableSub')
+    __slots__ = ('__notConfirmedEmail', '_renewableSub', '__confirmationWindow')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __webCtrl = dependency.descriptor(IWebController)
     __badgesController = dependency.descriptor(IBadgesController)
@@ -50,10 +63,16 @@ class PremDashboardHeader(ViewImpl):
     __goodiesCache = dependency.descriptor(IGoodiesCache)
     __boosters = dependency.descriptor(IBoostersController)
     __externalLinks = dependency.descriptor(IExternalLinksController)
-    wgnpController = dependency.descriptor(IWGNPRequestController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    connectionMgr = dependency.descriptor(IConnectionManager)
+    platoonCtrl = dependency.descriptor(IPlatoonController)
+    wgnpSteamAccCtrl = dependency.descriptor(IWGNPSteamAccRequestController)
+    wgnpDemoAccCtrl = dependency.descriptor(IWGNPDemoAccRequestController)
+    steamRegistrationCtrl = dependency.descriptor(ISteamCompletionController)
     __MAX_VIEWABLE_CLAN_RESERVES_COUNT = 2
     __TOOLTIPS_MAPPING = {PremDashboardHeaderTooltips.TOOLTIP_PERSONAL_RESERVE: TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,
      PremDashboardHeaderTooltips.TOOLTIP_CLAN_RESERVE: TOOLTIPS_CONSTANTS.CLAN_RESERVE_INFO}
+    _accountCompletionUILogger = AccountCompletionViewLogger(LogGroup.ACCOUNT_DASHBOARD)
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.premacc.dashboard.prem_dashboard_header.PremDashboardHeader())
@@ -61,6 +80,8 @@ class PremDashboardHeader(ViewImpl):
         super(PremDashboardHeader, self).__init__(settings)
         self.__notConfirmedEmail = ''
         self._renewableSub = BigWorld.player().renewableSubscription
+        self.__confirmationWindow = None
+        return
 
     @property
     def viewModel(self):
@@ -92,6 +113,7 @@ class PremDashboardHeader(ViewImpl):
         self.viewModel.personalReserves.onUserItemClicked += self.__onPersonalReserveClick
         self.viewModel.clanReserves.onUserItemClicked += self.__onClanReserveClick
         self.viewModel.onEmailButtonClicked += self.__onEmailButtonClicked
+        self.viewModel.onRenamingButtonClicked += self.__onRenamingButtonClicked
         self.viewModel.subscriptionCard.onCardClick += self.__onSubscriptionClick
         self.viewModel.subscriptionCard.onInfoButtonClik += self.__onSubscriptionInfoClick
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
@@ -104,19 +126,28 @@ class PremDashboardHeader(ViewImpl):
             self.__updateSubscriptionCard(model)
             self.__buildPersonalReservesList(model=model)
             self.__updateBadges(model=model)
-            self.__askEmailStatus()
+            if self.steamRegistrationCtrl.isSteamAccount:
+                self.__askEmailStatus()
+            else:
+                self.__askDemoAccountRenameStatus()
 
     def _finalize(self):
         super(PremDashboardHeader, self)._finalize()
+        self._accountCompletionUILogger.viewClosed()
         self.viewModel.onShowBadges -= self.__onShowBadges
         self.viewModel.personalReserves.onUserItemClicked -= self.__onPersonalReserveClick
         self.viewModel.clanReserves.onUserItemClicked -= self.__onClanReserveClick
         self.viewModel.onEmailButtonClicked -= self.__onEmailButtonClicked
+        self.viewModel.onRenamingButtonClicked -= self.__onRenamingButtonClicked
         self.viewModel.subscriptionCard.onCardClick -= self.__onSubscriptionClick
         self.viewModel.subscriptionCard.onInfoButtonClik -= self.__onSubscriptionInfoClick
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         self._renewableSub.onRenewableSubscriptionDataChanged -= self._onWotPlusDataChanged
+        if self.__confirmationWindow is not None:
+            self.__confirmationWindow.stopWaiting(DialogButtons.CANCEL)
+            self.__confirmationWindow = None
         self.__clearListeners()
+        return
 
     def _onWotPlusDataChanged(self, diff):
         with self.viewModel.transaction() as model:
@@ -126,21 +157,33 @@ class PremDashboardHeader(ViewImpl):
         g_clientUpdateManager.addCallbacks({'stats.clanInfo': self.__onClanInfoChanged,
          'goodies': self.__onGoodiesUpdated,
          'cache.activeOrders': self.__onClanInfoChanged})
+        g_prbCtrlEvents.onPreQueueJoined += self.__onPreQueueJoined
         self.__badgesController.onUpdated += self.__updateBadges
         self.__boosters.onBoosterChangeNotify += self.__onBoosterChangeNotify
         self.__boosters.onReserveTimerTick += self.__buildClanReservesList
-        self.wgnpController.onEmailConfirmed += self.__setEmailConfirmed
-        self.wgnpController.onEmailAdded += self.__setEmailActionNeeded
-        self.wgnpController.onEmailAddNeeded += self.__setEmailActionNeeded
+        self.wgnpSteamAccCtrl.statusEvents.subscribe(StatusTypes.CONFIRMED, self.__setEmailConfirmed)
+        self.wgnpSteamAccCtrl.statusEvents.subscribe(StatusTypes.ADDED, self.__setEmailActionNeeded)
+        self.wgnpSteamAccCtrl.statusEvents.subscribe(StatusTypes.ADD_NEEDED, self.__setEmailActionNeeded)
+        demoAccSubscribe = self.wgnpDemoAccCtrl.statusEvents.subscribe
+        demoAccSubscribe(StatusTypes.ADD_NEEDED, self.__showDemoAccountRenaming, context=NICKNAME_CONTEXT)
+        demoAccSubscribe(StatusTypes.PROCESSING, self.__showDemoAccountRenamingInProcess, context=NICKNAME_CONTEXT)
+        demoAccSubscribe(StatusTypes.ADDED, self.__hideDemoAccountRenaming, context=NICKNAME_CONTEXT)
+        demoAccSubscribe(StatusTypes.UNDEFINED, self.__hideDemoAccountRenaming, context=NICKNAME_CONTEXT)
 
     def __clearListeners(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
+        g_prbCtrlEvents.onPreQueueJoined -= self.__onPreQueueJoined
         self.__badgesController.onUpdated -= self.__updateBadges
         self.__boosters.onBoosterChangeNotify -= self.__onBoosterChangeNotify
         self.__boosters.onReserveTimerTick -= self.__buildClanReservesList
-        self.wgnpController.onEmailConfirmed -= self.__setEmailConfirmed
-        self.wgnpController.onEmailAdded -= self.__setEmailActionNeeded
-        self.wgnpController.onEmailAddNeeded -= self.__setEmailActionNeeded
+        self.wgnpSteamAccCtrl.statusEvents.unsubscribe(StatusTypes.CONFIRMED, self.__setEmailConfirmed)
+        self.wgnpSteamAccCtrl.statusEvents.unsubscribe(StatusTypes.ADDED, self.__setEmailActionNeeded)
+        self.wgnpSteamAccCtrl.statusEvents.unsubscribe(StatusTypes.ADD_NEEDED, self.__setEmailActionNeeded)
+        demoAccUnsubscribe = self.wgnpDemoAccCtrl.statusEvents.unsubscribe
+        demoAccUnsubscribe(StatusTypes.ADD_NEEDED, self.__showDemoAccountRenaming, context=NICKNAME_CONTEXT)
+        demoAccUnsubscribe(StatusTypes.PROCESSING, self.__showDemoAccountRenamingInProcess, context=NICKNAME_CONTEXT)
+        demoAccUnsubscribe(StatusTypes.ADDED, self.__hideDemoAccountRenaming, context=NICKNAME_CONTEXT)
+        demoAccUnsubscribe(StatusTypes.UNDEFINED, self.__hideDemoAccountRenaming, context=NICKNAME_CONTEXT)
 
     def __onServerSettingsChange(self, diff):
         if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
@@ -241,7 +284,7 @@ class PremDashboardHeader(ViewImpl):
         return
 
     @replaceNoneKwargsModel
-    def __setEmailConfirmed(self, model=None):
+    def __setEmailConfirmed(self, status=None, model=None):
         model.setEmailButtonLabel(R.invalid())
         model.setIsWarningIconVisible(False)
         model.setShowEmailActionTooltip(False)
@@ -249,9 +292,10 @@ class PremDashboardHeader(ViewImpl):
         _logger.debug('User email confirmed.')
 
     @replaceNoneKwargsModel
-    def __setEmailActionNeeded(self, notConfirmedEmail='', model=None):
+    def __setEmailActionNeeded(self, status=None, model=None):
         model.setIsWarningIconVisible(True)
         model.setShowEmailActionTooltip(True)
+        notConfirmedEmail = status.email if status else ''
         if notConfirmedEmail:
             model.setEmailButtonLabel(R.strings.badge.badgesPage.accountCompletion.button.confirmEmail())
         else:
@@ -261,34 +305,103 @@ class PremDashboardHeader(ViewImpl):
 
     @async
     def __askEmailStatus(self):
-        if not account_completion.isEnabled():
+        if not self.steamRegistrationCtrl.isSteamAccount:
             _logger.debug('Account completion disabled.')
             return
-        else:
-            _logger.debug('Sending email status request.')
-            response = yield await(self.wgnpController.getEmailStatus())
-            destroyed = self.viewStatus in (ViewStatus.DESTROYED, ViewStatus.DESTROYING)
-            if not response.isSuccess() or destroyed or self.viewModel is None:
-                _logger.warning('Can not get account email status.')
-                return
-            if isEmailAddingNeeded(response):
-                self.__setEmailActionNeeded(notConfirmedEmail='')
-            elif isEmailConfirmationNeeded(response):
-                self.__setEmailActionNeeded(notConfirmedEmail=getEmail(response))
-            else:
-                self.__setEmailConfirmed()
+        _logger.debug('Sending email status request.')
+        status = yield await(self.wgnpSteamAccCtrl.getEmailStatus())
+        if status.isUndefined or self.__isDestroyed:
+            _logger.warning('Can not get account email status.')
             return
+        if status.typeIs(StatusTypes.ADD_NEEDED):
+            self.__setEmailActionNeeded()
+        elif status.typeIs(StatusTypes.ADDED):
+            self.__setEmailActionNeeded(status=status)
+        else:
+            self.__setEmailConfirmed()
 
     def __onEmailButtonClicked(self):
         label = self.viewModel.getEmailButtonLabel()
         if label == R.strings.badge.badgesPage.accountCompletion.button.confirmEmail():
             _logger.debug('Show email confirmation overlay with email=%s.', self.__notConfirmedEmail)
-            showConfirmEmailOverlay(email=self.__notConfirmedEmail)
+            showSteamConfirmEmailOverlay(email=self.__notConfirmedEmail)
         elif label == R.strings.badge.badgesPage.accountCompletion.button.provideEmail():
             _logger.debug('Show add email overlay.')
-            showAddEmailOverlay()
+            showSteamAddEmailOverlay()
         else:
             _logger.warning('Unknown email button label: %s. Action skipped.', label)
+
+    def __onRenamingButtonClicked(self):
+        _logger.debug('Show demo account renaming overlay.')
+        self._accountCompletionUILogger.log(LogActions.RENAME_CLICKED)
+        if self.platoonCtrl.isInPlatoon():
+            self.__showLeaveSquadForRenamingDialog()
+        else:
+            showDemoAccRenamingOverlay()
+
+    @future_async.async
+    def __askDemoAccountRenameStatus(self):
+        if not self.wgnpDemoAccCtrl.settings.isRenameApiEnabled():
+            return
+        status = yield future_async.await(self.wgnpDemoAccCtrl.getNicknameStatus())
+        if status.isUndefined or self.__isDestroyed:
+            return
+        if status.typeIs(StatusTypes.ADD_NEEDED):
+            self.__showDemoAccountRenaming()
+        elif status.typeIs(StatusTypes.PROCESSING):
+            self.__showDemoAccountRenamingInProcess()
+
+    @replaceNoneKwargsModel
+    def __showDemoAccountRenaming(self, status=None, model=None):
+        model.setIsRenamingButtonVisible(True)
+        self._accountCompletionUILogger.viewOpened(self.getParentWindow())
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher is not None:
+            queueType = dispatcher.getEntity().getQueueType()
+            self.__updateRenameButtonStatus(queueType)
+        _logger.debug('Demo account renaming needed.')
+        return
+
+    @replaceNoneKwargsModel
+    def __showDemoAccountRenamingInProcess(self, status=None, model=None):
+        model.setIsWarningIconVisible(True)
+        model.setIsRenamingButtonVisible(False)
+        model.setIsRenamingProcessVisible(True)
+        self._accountCompletionUILogger.viewClosed(result=ViewClosingResult.SUCCESS)
+        _logger.debug('Demo account renaming in process.')
+
+    @replaceNoneKwargsModel
+    def __hideDemoAccountRenaming(self, status=None, model=None):
+        model.setIsWarningIconVisible(False)
+        model.setIsRenamingButtonVisible(False)
+        model.setIsRenamingProcessVisible(False)
+        self._accountCompletionUILogger.viewClosed()
+        _logger.debug('Hide demo account renaming.')
+
+    @replaceNoneKwargsModel
+    def __updateRenameButtonStatus(self, queueType, model=None):
+        isEnabled = queueType == QUEUE_TYPE.RANDOMS
+        model.setIsRenamingButtonEnabled(isEnabled)
+
+    def __onPreQueueJoined(self, queueType):
+        self.__updateRenameButtonStatus(queueType)
+
+    @future_async.async
+    def __showLeaveSquadForRenamingDialog(self):
+        builder = ResDialogBuilder()
+        builder.setMessagesAndButtons(R.strings.dialogs.accountCompletion.leaveSquad)
+        self.__confirmationWindow = builder.build()
+        result = yield future_async.await(dialogs.show(self.__confirmationWindow))
+        self.__confirmationWindow = None
+        if result.result == DialogButtons.SUBMIT:
+            self.platoonCtrl.leavePlatoon(ignoreConfirmation=True)
+            showDemoAccRenamingOverlay()
+        return
+
+    @property
+    def __isDestroyed(self):
+        destroyed = self.viewStatus in (ViewStatus.DESTROYED, ViewStatus.DESTROYING)
+        return destroyed or self.viewModel is None
 
     @staticmethod
     def __setBadge(setter, badge):

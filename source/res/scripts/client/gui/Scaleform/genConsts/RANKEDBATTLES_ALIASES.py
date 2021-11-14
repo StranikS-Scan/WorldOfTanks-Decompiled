@@ -192,12 +192,15 @@ class RANKEDBATTLES_ALIASES(object):
     STEP_VALUE_LOSE = -1
     STEP_VALUE_NO_CHANGE = 0
     AWARD_VIEW_QUAL_STATE = 'award_view_qual_state'
+    AWARD_VIEW_QUAL_BATTLES_STATE = 'award_view_qual_battles_state'
     AWARD_VIEW_RANK_STATE = 'award_view_rank_state'
     AWARD_VIEW_DIVISION_STATE = 'award_view_division_state'
     AWARD_VIEW_LEAGUE_STATE = 'award_view_league_state'
     SOUND_AWARD_DIVISION = 'gui_rb_division_award'
     SOUND_AWARD_LEAGUE = 'gui_rb_league_award'
     SOUND_AWARD_RANK = 'gui_rb_rank_award'
+    SOUND_AWARD_QUALIFICATION = 'gui_hangar_award_screen'
+    SOUND_AWARD_QUALIFICATION_STOP = 'gui_hangar_award_screen_stop'
     SEASON_GAP_VIEW_LEAGUE_STATE = 'league_state'
     SEASON_GAP_VIEW_DIVISION_STATE = 'division_state'
     SHIELD_DISABLED = 'shield_disabled'
@@ -248,3 +251,4 @@ class RANKEDBATTLES_ALIASES(object):
      DIVISIONS_SILVER,
      DIVISIONS_GOLD]
     ENTRY_POINT = 'RankedEntryPoint'
+    QUALIFICATION_REWARDS_VIEW_ALIAS = 'qualificationRewardsViewAlias'

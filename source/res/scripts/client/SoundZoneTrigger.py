@@ -6,7 +6,6 @@ import Math
 from GenericComponents import TransformComponent
 from Triggers import SquareAreaComponent
 from Sound import SoundZoneComponent
-from Account import Account
 import math_utils
 VISUALISE_ZONE = False
 
@@ -14,9 +13,7 @@ class SoundZoneTrigger(BigWorld.UserDataObject):
 
     def __init__(self):
         BigWorld.UserDataObject.__init__(self)
-        isHangar = isinstance(BigWorld.player(), Account)
-        spaceID = BigWorld.camera().spaceID if isHangar else BigWorld.player().spaceID
-        self.__gameObject = CGF.GameObject(spaceID, 'SoundZoneTrigger')
+        self.__gameObject = CGF.GameObject(BigWorld.player().spaceID, 'SoundZoneTrigger')
         self.__gameObject.setStatic(True)
         position = math_utils.createRTMatrix(Math.Vector3(self.direction.z, self.direction.y, self.direction.x), self.position)
         self.__gameObject.createComponent(TransformComponent, position)

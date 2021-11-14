@@ -42,7 +42,7 @@ def _getToolTipText(arenaVisitor):
             result = settings.toolTipText
         elif arenaVisitor.getArenaBonusType() == ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD:
             result = settings.battleRoyaleTooltip
-        elif g_settings.userPrefs.disableBattleChat and (arenaVisitor.gui.isRandomBattle() or arenaVisitor.gui.isEventBattle()):
+        elif arenaVisitor.gui.isRandomBattle() and g_settings.userPrefs.disableBattleChat:
             result = settings.chatIsLockedToolTipText
         else:
             result = settings.toolTipTextWithMuteInfo

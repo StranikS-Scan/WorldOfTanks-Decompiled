@@ -8,9 +8,13 @@ from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.squad.permissions import SquadPermissions
 from gui.prb_control.entities.base.unit.entity import UnitEntryPoint, UnitEntity
 from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.entities.View import ViewKey
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.impl.gen.resources import R
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from async import async, await
 
 class SquadEntryPoint(UnitEntryPoint):
@@ -26,6 +30,7 @@ class SquadEntryPoint(UnitEntryPoint):
 
 
 class SquadEntity(UnitEntity):
+    __appLoader = dependency.descriptor(IAppLoader)
 
     def init(self, ctx=None):
         self.invalidateVehicleStates()
@@ -128,7 +133,9 @@ class SquadEntity(UnitEntity):
         key = meta.getKey()
         res = self.__resourceSplitter(key)
         if res:
-            result = yield await(showDynamicButtonInfoDialogBuilder(res, None, ''))
+            app = self.__appLoader.getApp()
+            parent = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
+            result = yield await(showDynamicButtonInfoDialogBuilder(res, None, '', parent))
             if result:
                 callback(result)
         return

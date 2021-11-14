@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/tank_carousel.py
-import BigWorld
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -14,7 +13,7 @@ from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
 from gui.shop import showBuyGoldForSlot
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showStorage, showVehicleRentalPage, showTelecomRentalPage
+from gui.shared.event_dispatcher import showStorage, showVehicleRentalPage
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
@@ -48,14 +47,7 @@ class TankCarousel(TankCarouselMeta):
         ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE, intCD)
 
     def selectWotPlusVehicle(self, intCD):
-        telecomRentals = BigWorld.player().telecomRentals
-        hasTelecomRentalsActive = telecomRentals.isActive()
-        hasAvailableRent = telecomRentals.getAvailableRentCount() > 0
-        isRentalEnabled = self.lobbyContext.getServerSettings().isTelecomRentalsEnabled()
-        if isRentalEnabled and hasTelecomRentalsActive and hasAvailableRent:
-            showTelecomRentalPage()
-        else:
-            showVehicleRentalPage()
+        showVehicleRentalPage()
 
     def updateHotFilters(self):
         self.as_setCarouselFilterS({'hotFilters': [ self.filter.get(key) for key in self._usedFilters ]})

@@ -50,10 +50,8 @@ class Source(object):
 
 
 class Origin(object):
-    SHOP = 'shop'
     STORAGE = 'storage'
     HERO_TANK = 'hero_tank'
-    VEHICLE_PREVIEW = 'vehicle_preview'
     ADVENT_CALENDAR = 'advent_calendar'
     BATTLE_BOOSTERS = 'battle_boosters'
     CONSUMABLES = 'consumables'

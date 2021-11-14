@@ -161,7 +161,7 @@ class ProjectileMover(object):
         BigWorld.player().terrainEffects.addNew(position, effects, keyPoints, None, dir=velocityDir, start=position + velocityDir.scale(-1.0), end=position + velocityDir.scale(1.0), attackerID=proj['attackerID'])
         return
 
-    def __killProjectile(self, shotID, position, impactVelDir, deathType):
+    def __killProjectile(self, shotID, position, impactVelDir, deathType, explode):
         proj = self.__projectiles.get(shotID)
         if proj is None:
             return
@@ -169,7 +169,7 @@ class ProjectileMover(object):
             effectsDescr = proj['effectsDescr']
             projEffects = effectsDescr['projectile'][2]
             projEffects.detachFrom(proj['effectsData'], 'stopFlying', deathType)
-            if proj['showExplosion']:
+            if proj['showExplosion'] and explode:
                 self.__addExplosionEffect(position, proj, impactVelDir)
             return
 

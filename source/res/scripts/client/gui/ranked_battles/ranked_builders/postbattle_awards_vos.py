@@ -5,13 +5,14 @@ from collections import namedtuple
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.ranked_builders import shared_vos
-from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome
+from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome, isQualificationQuestID, getQualificationBattlesCountFromID
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 if typing.TYPE_CHECKING:
     from gui.ranked_battles.ranked_models import Rank, PostBattleRankInfo
-AwardBlock = namedtuple('AwardBlock', 'rankID, awards')
+AwardBlock = namedtuple('AwardBlock', 'rankID, awards, qID')
+AwardBlock.__new__.__defaults__ = (0, [], '')
 
 def getVOsSequence(awardBlocks, ranks, rankedInfo):
     result = []
@@ -19,7 +20,10 @@ def getVOsSequence(awardBlocks, ranks, rankedInfo):
     for awardBlock in awardBlocks:
         rank = ranks[awardBlock.rankID]
         if rank.isQualification():
-            result.append(_getQualificationCongVO(awardBlock, ranks, rankedInfo))
+            if isQualificationQuestID(awardBlock.qID):
+                result.append(_getQualificationQuestCongVO(awardBlock))
+            else:
+                result.append(_getQualificationCongVO(awardBlock, ranks, rankedInfo))
         result.append(_getRankCongVO(awardBlock, rank))
         if rank.isInitialForNextDivision():
             result.append(_getDivisionCongVO(awardBlock, ranks, rankedInfo))
@@ -31,6 +35,11 @@ def getVOsSequence(awardBlocks, ranks, rankedInfo):
 
 def _getRankCongVO(awardBlock, rank):
     return _getBlockVO(RANKEDBATTLES_ALIASES.AWARD_VIEW_RANK_STATE, backport.text(R.strings.ranked_battles.awards.gotRank()), rankVO=shared_vos.buildRankVO(rank=rank, imageSize=RANKEDBATTLES_ALIASES.WIDGET_HUGE, isEnabled=True), awards=awardBlock.awards)
+
+
+def _getQualificationQuestCongVO(awardBlock):
+    qualificationBattles = getQualificationBattlesCountFromID(awardBlock.qID)
+    return _getBlockVO(RANKEDBATTLES_ALIASES.AWARD_VIEW_QUAL_BATTLES_STATE, backport.text(R.strings.ranked_battles.awards.gotQualificationQuest(), count=qualificationBattles), awards=awardBlock.awards)
 
 
 def _getQualificationCongVO(awardBlock, ranks, rankedInfo):

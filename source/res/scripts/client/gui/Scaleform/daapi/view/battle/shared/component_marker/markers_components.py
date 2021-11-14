@@ -31,7 +31,6 @@ class ComponentBitMask(BitmaskHelper):
     DIRECTION_INDICATOR = 4
     ANIM_SEQUENCE_MARKER = 8
     TERRAIN_MARKER = 16
-    SAFE_ZONE_MINIMAP_MARKER = 32
     ALL = MARKER_2D | MINIMAP_MARKER | DIRECTION_INDICATOR | ANIM_SEQUENCE_MARKER | TERRAIN_MARKER
     BASE = MARKER_2D | MINIMAP_MARKER | DIRECTION_INDICATOR
     BASE_SEQ = ANIM_SEQUENCE_MARKER | MINIMAP_MARKER | DIRECTION_INDICATOR
@@ -41,8 +40,7 @@ class ComponentBitMask(BitmaskHelper):
      MINIMAP_MARKER,
      DIRECTION_INDICATOR,
      ANIM_SEQUENCE_MARKER,
-     TERRAIN_MARKER,
-     SAFE_ZONE_MINIMAP_MARKER)
+     TERRAIN_MARKER)
 
 
 class _IMarkerComponentBase(object):
@@ -422,27 +420,3 @@ class TerrainMarkerComponent(_IMarkerComponentBase):
         if not self.__area:
             return
         self.__area.setGUIVisible(self._isVisible)
-
-
-class SafeZoneMinimapAreaMarkerComponent(MinimapMarkerComponent):
-    _SCALE_FACTOR = 1.0 / 650.0
-
-    def __init__(self, idx, data):
-        super(SafeZoneMinimapAreaMarkerComponent, self).__init__(idx, data)
-        self._size = self._initData['size']
-
-    @property
-    def maskType(self):
-        return ComponentBitMask.SAFE_ZONE_MINIMAP_MARKER
-
-    def updateSize(self, size):
-        self._size = size
-        gui = self._gui()
-        if gui and self._isMarkerExists:
-            gui.invokeMarker(self._componentID, 'setScale', size[0] * self._SCALE_FACTOR, size[1] * self._SCALE_FACTOR)
-
-    def _createMarker(self):
-        super(SafeZoneMinimapAreaMarkerComponent, self)._createMarker()
-        gui = self._gui()
-        if gui and self._isMarkerExists:
-            self.updateSize(self._size)

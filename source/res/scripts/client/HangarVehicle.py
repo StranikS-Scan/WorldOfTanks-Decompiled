@@ -6,11 +6,9 @@ from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
-from skeletons.gui.game_event_controller import IGameEventController
 
 class HangarVehicle(ClientSelectableCameraVehicle):
     hangarSpace = dependency.descriptor(IHangarSpace)
-    gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self):
         self.selectionId = ''
@@ -31,8 +29,6 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         self.movementYDelta = 0.0
         self.cameraBackwardDuration = 10.0
         self.cameraUpcomingDuration = 10.0
-        self.markerHeightFactor = 1.0
-        self.markerStyleId = 1
         super(HangarVehicle, self).__init__()
         self.camDistState = CameraDistanceModes.CUSTOM
         return
@@ -51,11 +47,6 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         g_eventBus.removeListener(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM, self.__resetVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
         super(HangarVehicle, self).onLeaveWorld()
 
-    def _makeUpdateCtx(self):
-        ctx = super(HangarVehicle, self)._makeUpdateCtx()
-        ctx['alwaysShowMarker'] = True
-        return ctx
-
     def __onSpaceCreated(self):
         self.setEnable(False)
         self.setState(CameraMovementStates.ON_OBJECT)
@@ -73,6 +64,3 @@ class HangarVehicle(ClientSelectableCameraVehicle):
 
     def __resetVehicleModelTransform(self, event):
         self._resetVehicleModelTransform()
-
-    def __getEventVehicleSettings(self):
-        return self.gameEventController.getVehicleSettings()

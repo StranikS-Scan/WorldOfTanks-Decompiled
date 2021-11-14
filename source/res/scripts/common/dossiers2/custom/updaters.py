@@ -16,7 +16,7 @@ from wotdecorators import singleton
 from debug_utils import LOG_DEBUG_DEV
 ACCOUNT_DOSSIER_VERSION = 138
 ACCOUNT_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromAccountDossier%d'
-VEHICLE_DOSSIER_VERSION = 105
+VEHICLE_DOSSIER_VERSION = 106
 VEHICLE_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromVehicleDossier%d'
 TANKMAN_DOSSIER_VERSION = 66
 TANKMAN_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromTankmanDossier%d'
@@ -6989,6 +6989,69 @@ def __updateFromVehicleDossier104(compDescr):
     addBlock(updateCtx, 'maxRanked_10x10')
     setVersion(updateCtx, 105)
     return (105, updateCtx['dossierCompDescr'])
+
+
+def __updateFromVehicleDossier105(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'total',
+     'max15x15',
+     'max7x7',
+     'inscriptions',
+     'emblems',
+     'camouflages',
+     'compensation',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortSorties',
+     'maxFortSorties',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'globalMapCommon',
+     'maxGlobalMapCommon',
+     'fallout',
+     'maxFallout',
+     'falloutAchievements',
+     'ranked',
+     'maxRanked',
+     'rankedSeasons',
+     'a30x30',
+     'max30x30',
+     'epicBattle',
+     'maxEpicBattle',
+     'epicBattleAchievements',
+     'maxRankedSeason1',
+     'maxRankedSeason2',
+     'maxRankedSeason3',
+     'ranked_10x10',
+     'maxRanked_10x10']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    rankedPacking = {'playedBonusBattles': (116, 'I')}
+    rankedValues = getStaticSizeBlockRecordValues(updateCtx, 'ranked', rankedPacking)
+    ranked10x10Values = getStaticSizeBlockRecordValues(updateCtx, 'ranked_10x10', rankedPacking)
+    ranked10x10Values['playedBonusBattles'] = ranked10x10Values.get('playedBonusBattles', 0) + rankedValues.get('playedBonusBattles', 0)
+    playedBonusBattlesRecords = [(116, 'I', ranked10x10Values['playedBonusBattles'])]
+    updateStaticSizeBlockRecords(updateCtx, 'ranked_10x10', playedBonusBattlesRecords)
+    setVersion(updateCtx, 106)
+    return (106, updateCtx['dossierCompDescr'])
 
 
 def __bootstrapTankmanDossierFrom(ver, compDescr):

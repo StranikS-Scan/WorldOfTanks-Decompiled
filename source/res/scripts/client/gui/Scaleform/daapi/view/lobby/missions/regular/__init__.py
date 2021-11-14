@@ -75,17 +75,10 @@ class MissionsPackageBusinessHandler(PackageBusinessHandler):
 
     def __loadMissionsPageOrUpdateCurrentTab(self, event):
         subView = self.findViewByAlias(WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_MISSIONS)
-        if not subView:
-            self.loadViewByCtxEvent(event)
-            return
+        if subView and subView.getCurrentTabAlias() == event.ctx.get('tab') and 'subTab' in event.ctx:
+            if subView.getCurrentTabAlias() == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
+                subView.currentTab.setDefaultTab(event.ctx['subTab'])
+            elif subView.getCurrentTabAlias() == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS:
+                subView.currentTab.setSubTab(event.ctx['subTab'])
         else:
-            currentTab = subView.getCurrentTabAlias()
-            targetTab = event.ctx.get('tab')
-            subTab = event.ctx.get('subTab')
-            if subTab is not None:
-                targetTab == currentTab == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS and subView.currentTab.setDefaultTab(event.ctx['subTab'])
-            elif subTab is not None:
-                targetTab == currentTab == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS and subView.currentTab.setSubTab(event.ctx['subTab'])
-            elif event.ctx.get('showMissionDetails', False) and 'eventID' in event.ctx:
-                subView.validate(event.ctx)
-            return
+            self.loadViewByCtxEvent(event)

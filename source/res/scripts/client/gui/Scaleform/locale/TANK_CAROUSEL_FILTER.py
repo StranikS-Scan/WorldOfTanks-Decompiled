@@ -47,6 +47,8 @@ class TANK_CAROUSEL_FILTER(object):
     TOOLTIP_BONUS_BODY = '#tank_carousel_filter:tooltip/bonus/body'
     TOOLTIP_RENTED_HEADER = '#tank_carousel_filter:tooltip/rented/header'
     TOOLTIP_RENTED_BODY = '#tank_carousel_filter:tooltip/rented/body'
+    TOOLTIP_RANKED_HEADER = '#tank_carousel_filter:tooltip/ranked/header'
+    TOOLTIP_RANKED_BODY = '#tank_carousel_filter:tooltip/ranked/body'
     TOOLTIP_EVENT_HEADER = '#tank_carousel_filter:tooltip/event/header'
     TOOLTIP_EVENT_BODY = '#tank_carousel_filter:tooltip/event/body'
     TOOLTIP_BATTLEROYALE_HEADER = '#tank_carousel_filter:tooltip/battleRoyale/header'

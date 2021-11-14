@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/collections_by_type.py
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
+from gui.gift_system.proxy import GiftSystemMessagesProxy
 from messenger.formatters import service_channel as _sc
 from messenger.formatters import wot_plus as _wotPlusFormatters
 from messenger.formatters import token_quest_subformatters
@@ -90,15 +91,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.passiveXPIncompatibleCrew.index(): _wotPlusFormatters.SimpleFormatter('PassiveXPIncompatibleCrewMessage'),
  _SM_TYPE.wotPlusRentEnd.index(): _wotPlusFormatters.RentEnd(),
  _SM_TYPE.wotPlusNoRentSelected.index(): _wotPlusFormatters.SimpleFormatter('WotPlusRentNoRentSelectedMessage'),
- _SM_TYPE.halloweenVehicleRent.index(): _sc.VehicleRentFormatter(),
- _SM_TYPE.halloweenStyleBought.index(): _sc.StyleBoughtFormatter(),
- _SM_TYPE.halloweenStyleBoughtByGold.index(): _sc.StyleBoughtByGoldFormatter(),
- _SM_TYPE.halloweenStyleBundleBought.index(): _sc.StyleBundleFormatter(),
- _SM_TYPE.halloweenDifficultyLevelReached.index(): _sc.DifficultyLevelReachedFormatter(),
- _SM_TYPE.bestDealBandleBought.index(): _sc.BestDealBandleFormatter(),
- _SM_TYPE.eventVehiclePurchased.index(): _sc.EventVehiclePurchasedFormatter(),
- _SM_TYPE.eventTokenPurchased.index(): _sc.EventTokenPurchasedFormatter(),
- _SM_TYPE.eventC11nItemPurchased.index(): _sc.EventC11nItemPurchasedFormatter()}
+ _SM_TYPE.giftSystemMessage.index(): GiftSystemMessagesProxy()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),

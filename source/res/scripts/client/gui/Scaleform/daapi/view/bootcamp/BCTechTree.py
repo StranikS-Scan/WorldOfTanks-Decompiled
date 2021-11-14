@@ -11,6 +11,9 @@ from nations import NAMES as NATION_NAMES
 
 class BCTechTree(TechTree):
 
+    def invalidateBlueprintMode(self, isEnabled):
+        pass
+
     def goToNextVehicle(self, vehCD):
         if not g_bootcamp.isResearchFreeLesson():
             nationData = g_bootcamp.getNationData()

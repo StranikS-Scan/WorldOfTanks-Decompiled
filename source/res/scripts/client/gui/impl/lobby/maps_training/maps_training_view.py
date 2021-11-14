@@ -187,7 +187,6 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         isMapSelected = bool(self.__selectedMap)
         model.setIsMapSelected(isMapSelected)
         if isMapSelected:
-            self.__blur.enable()
             mapConfig = self.__mapsConfig.getMapConfig(self.__selectedMap)
             geometryID = ArenaType.g_geometryNamesToIDs[self.__selectedMap]
             data = self.__account.mapsTraining.getGeometryData(geometryID)
@@ -384,6 +383,8 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
     def __onBlurRectUpdated(self, args):
         viewX, viewY = self.getParentWindow().globalPosition
         blurRect = Math.Vector4(int(args.get('left')) + viewX, int(args.get('top')) + viewY, int(args.get('right')) + viewX, int(args.get('bottom')) + viewY)
+        if not self.__blur.enabled:
+            self.__blur.enable()
         if self.__blurRectId:
             self.__blur.changeRect(self.__blurRectId, blurRect)
         else:

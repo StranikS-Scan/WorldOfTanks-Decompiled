@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/damage_log_panel.py
 from collections import defaultdict
-import BigWorld
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
 from account_helpers.settings_core.options import DamageLogDetailsSetting as _VIEW_MODE, DamageLogEventPositionsSetting as _EVENT_POSITIONS, DamageLogEventTypesSetting as _DISPLAYED_EVENT_TYPES
 from account_helpers.settings_core.settings_constants import DAMAGE_LOG, GRAPHICS
@@ -9,7 +8,6 @@ from constants import SHELL_TYPES
 from gui.Scaleform.daapi.view.meta.BattleDamageLogPanelMeta import BattleDamageLogPanelMeta
 from gui.Scaleform.genConsts.BATTLEDAMAGELOG_IMAGES import BATTLEDAMAGELOG_IMAGES as _IMAGES
 from gui.Scaleform.genConsts.DAMAGE_LOG_SHELL_BG_TYPES import DAMAGE_LOG_SHELL_BG_TYPES
-from gui.Scaleform.locale.EVENT import EVENT
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE as _ETYPE
 from gui.battle_control.controllers.personal_efficiency_ctrl import _DamageEfficiencyInfo
@@ -50,14 +48,7 @@ _VEHICLE_CLASS_TAGS_ICONS = {'lightTank': _IMAGES.WHITE_ICON_LIGHTTANK_16X16,
  'mediumTank': _IMAGES.WHITE_ICON_MEDIUM_TANK_16X16,
  'heavyTank': _IMAGES.WHITE_ICON_HEAVYTANK_16X16,
  'SPG': _IMAGES.WHITE_ICON_SPG_16X16,
- 'AT-SPG': _IMAGES.WHITE_ICON_AT_SPG_16X16,
- 'eventBigBossBot': _IMAGES.DAMAGELOG_BOSS_16X16,
- 'eventBomberBot': _IMAGES.DAMAGELOG_BOMBER_16X16,
- 'eventHunterBot': _IMAGES.DAMAGELOG_HUNTER_16X16,
- 'eventRunnerBot': _IMAGES.DAMAGELOG_RUNNER_16X16,
- 'eventSentryBot': _IMAGES.DAMAGELOG_SENTRY_16X16,
- 'eventTurretBot': _IMAGES.DAMAGELOG_TURRET_16X16,
- 'eventRunnerShooterBot': _IMAGES.DAMAGELOG_RUNNER_16X16}
+ 'AT-SPG': _IMAGES.WHITE_ICON_AT_SPG_16X16}
 _SHELL_TYPES_TO_STR = {SHELL_TYPES.ARMOR_PIERCING: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING,
  SHELL_TYPES.HIGH_EXPLOSIVE: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
  SHELL_TYPES.ARMOR_PIERCING_HE: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_HE,
@@ -128,16 +119,12 @@ class _VehicleVOBuilder(_IVOBuilder):
         return vo
 
     def _populateVO(self, vehicleVO, info, arenaDP):
-        player = BigWorld.player()
-        vehicleId = info.getArenaVehicleID()
-        botRole = player.getBotRole(vehicleId)
-        vTypeInfoVO = arenaDP.getVehicleInfo(vehicleId).vehicleType
-        vehicleVO.vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS.get(botRole or vTypeInfoVO.classTag, '')
+        vTypeInfoVO = arenaDP.getVehicleInfo(info.getArenaVehicleID()).vehicleType
+        vehicleVO.vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS.get(vTypeInfoVO.classTag, '')
         vehicleVO.vehicleName = vTypeInfoVO.shortNameWithPrefix
 
 
 class _ReceivedHitVehicleVOBuilder(_VehicleVOBuilder):
-    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def _populateVO(self, vehicleVO, info, arenaDP):
         super(_ReceivedHitVehicleVOBuilder, self)._populateVO(vehicleVO, info, arenaDP)
@@ -145,9 +132,8 @@ class _ReceivedHitVehicleVOBuilder(_VehicleVOBuilder):
             vehicleVO.vehicleName = ''
             vehicleVO.vehicleTypeImg = ''
         if info.isDeathZone():
-            isEventBattle = self.guiSessionProvider.arenaVisitor.gui.isEventBattle()
-            vehicleVO.vehicleName = EVENT.DAMAGELOG_DEATH_ZONE if isEventBattle else ''
-            vehicleVO.vehicleTypeImg = _IMAGES.DAMAGELOG_AIRSTRIKE_16X16 if isEventBattle else ''
+            vehicleVO.vehicleName = ''
+            vehicleVO.vehicleTypeImg = ''
         if info.isDamagingSmoke():
             vehicleVO.vehicleName = ''
             vehicleVO.vehicleTypeImg = ''
@@ -195,14 +181,9 @@ class _EmptyShellVOBuilder(_ShellVOBuilder):
 
 
 class _DeathZoneVOBuilder(_ShellVOBuilder):
-    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def _getShellTypeStr(self, info):
-        isEventBattle = self.guiSessionProvider.arenaVisitor.gui.isEventBattle()
-        return '' if isEventBattle else _DEATH_ZONES_STR
-
-    def _getShellTypeBg(self, info):
-        return DAMAGE_LOG_SHELL_BG_TYPES.EMPTY if self.guiSessionProvider.arenaVisitor.gui.isEventBattle() else super(_DeathZoneVOBuilder, self)._getShellTypeBg(info)
+        return _DEATH_ZONES_STR
 
 
 class _DamageShellVOBuilder(_ShellVOBuilder):

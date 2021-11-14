@@ -1,38 +1,35 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ingame_menu.py
 from functools import partial
-import BattleReplay
 import constants
-from account_helpers.counter_settings import getCountNewSettings
+import BattleReplay
 from adisp import process
 from bootcamp.Bootcamp import g_bootcamp
 from gui import DialogsInterface, GUI_SETTINGS
 from gui import makeHtmlString
+from account_helpers.counter_settings import getCountNewSettings
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.daapi.view.dialogs.deserter_meta import IngameDeserterDialogMeta
-from gui.Scaleform.daapi.view.dialogs.event_afk_dialog import EventAFKDialogMetaData
 from gui.Scaleform.daapi.view.meta.IngameMenuMeta import IngameMenuMeta
 from gui.Scaleform.genConsts.GLOBAL_VARS_MGR_CONSTS import GLOBAL_VARS_MGR_CONSTS
 from gui.Scaleform.genConsts.INTERFACE_STATES import INTERFACE_STATES
-from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
-from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control import event_dispatcher as battle_event_dispatcher
 from gui.impl.lobby.bootcamp.bootcamp_exit_view import BootcampExitWindow
 from gui.shared import event_dispatcher as shared_event_dispatcher
 from gui.shared import events
-from gui.shared.formatters import icons
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.formatters import icons
 from helpers import i18n, dependency
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IServerStatsController, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
-from constants import ARENA_GUI_TYPE
-_ARENAS_WITHOUT_DEZERTER_PUNISHMENTS = frozenset([ARENA_GUI_TYPE.BATTLE_ROYALE, ARENA_GUI_TYPE.EVENT_BATTLES])
+from skeletons.gui.game_control import IServerStatsController, IBootcampController
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
 class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     serverStats = dependency.descriptor(IServerStatsController)
@@ -58,10 +55,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
 
     def helpClick(self):
         self.destroy()
-        if self.sessionProvider.arenaVisitor.gui.isEventBattle():
-            battle_event_dispatcher.toggleHWIngameHelp()
-        else:
-            battle_event_dispatcher.toggleHelp()
+        battle_event_dispatcher.toggleHelp()
 
     def cancelClick(self):
         self.destroy()
@@ -148,10 +142,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     @process
     def __doLeaveArena(self):
         exitResult = self.sessionProvider.getExitResult()
-        arenaType = self.sessionProvider.arenaVisitor.getArenaGuiType()
-        if not BattleReplay.isPlaying() and self._isEventPrematureLeave():
-            result = yield DialogsInterface.showDialog(EventAFKDialogMetaData(EventAFKDialogMetaData.BATTLE_WARNING))
-        elif exitResult.isDeserter and arenaType not in _ARENAS_WITHOUT_DEZERTER_PUNISHMENTS:
+        if exitResult.isDeserter:
             quitBattleKey = self.__getQuitBattleKey(exitResult.playerInfo)
             result = yield DialogsInterface.showDialog(IngameDeserterDialogMeta(quitBattleKey + '/deserter', focusedID=DIALOG_BUTTON_ID.CLOSE))
         elif BattleReplay.isPlaying():
@@ -185,21 +176,3 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         else:
             self.showBootcampExitWindow()
         self.destroy()
-
-    def _getGameEventComponent(self):
-        componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
-        return None if componentSystem is None else getattr(componentSystem, 'gameEventComponent', None)
-
-    def _getEnvironmentData(self):
-        gameEventStorage = self._getGameEventComponent()
-        return None if gameEventStorage is None else gameEventStorage.getEnvironmentData()
-
-    def _isEventPrematureLeave(self):
-        if not self.sessionProvider.arenaVisitor.gui.isEventBattle():
-            return False
-        else:
-            envData = self._getEnvironmentData()
-            if envData is None:
-                return False
-            inPostmortem = self.sessionProvider.shared.vehicleState.isInPostmortem
-            return False if envData.getCurrentEnvironmentID() >= envData.getMaxEnvironmentID() and inPostmortem else True

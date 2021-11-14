@@ -13,7 +13,6 @@ import AnimationSequence
 from helpers import dependency
 from items.customization_slot_tags_validator import getDirectionAndFormFactorTags
 from shared_utils import first
-from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 import items.vehicles
 from constants import IS_EDITOR
@@ -340,11 +339,8 @@ def getCamo(appearance, outfit, containerId, vDesc, descId, isDamaged, default=N
             vehPartCompDesc = getattr(vDesc, descId, None)
             if not vehPartCompDesc:
                 return result
-            area = vehPartCompDesc.customizableVehicleAreas.get(lower(CustomizationTypeNames[CustomizationType.CAMOUFLAGE]), (0, None))
+            area = vehPartCompDesc.customizableVehicleAreas.get(lower(CustomizationTypeNames[CustomizationType.CAMOUFLAGE]), (0, None))[0]
             if not area:
-                _logger.error('Error in customizableVehicleAreas ({}, {})').format(vDesc.name, descId)
-                return result
-            if not area[0]:
                 return result
             tiling, exclusionMap = processTiling(appearance, vDesc, descId, camouflage, component)
             glossMetallicMap = camouflage.glossMetallicSettings['glossMetallicMap']
@@ -455,8 +451,10 @@ def getRepaint(outfit, containerId, vDesc):
     overlapMetallic = overlapGloss = None
     nationID = vDesc.type.customizationNationID
     colorId = vDesc.type.baseColorID
-    defaultColors = items.vehicles.g_cache.customization20().defaultColors
-    defaultColor = defaultColors[nationID][colorId]
+    defaultColor = 0
+    if items.vehicles.g_cache.customization20(createNew=False):
+        defaultColors = items.vehicles.g_cache.customization20().defaultColors
+        defaultColor = defaultColors[nationID][colorId]
     intCD = outfit.misc.slotFor(GUI_ITEM_TYPE.MODIFICATION).getItemCD()
     if intCD:
         mod = getItemByCompactDescr(intCD)
@@ -551,8 +549,6 @@ def getModelAnimators(outfit, vehicleDescr, spaceId, loadedAnimators, compoundMo
             continue
         fakeModel = newFakeModel()
         node = compoundModel.node(param.attachNode)
-        if node is None:
-            continue
         node.attach(fakeModel, param.transform)
         animWrapper = AnimationSequence.ModelWrapperContainer(fakeModel, spaceId)
         animator = __prepareAnimator(loadedAnimators, param.animatorName, animWrapper, node)
@@ -672,9 +668,10 @@ def _findAndMatchProjectionDecalsSlotsByTags(decals, appliedDecals, slotsByTagMa
     return []
 
 
-@dependency.replace_none_kwargs(service=ICustomizationService)
-def _checkAndMirrorProjectionDecal(component, slot, service=None):
-    item = service.getItemByID(GUI_ITEM_TYPE.PROJECTION_DECAL, component.id)
+@dependency.replace_none_kwargs(guiItemsFactory=IGuiItemsFactory)
+def _checkAndMirrorProjectionDecal(component, slot, guiItemsFactory=None):
+    intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.PROJECTION_DECAL, component.id)
+    item = guiItemsFactory.createCustomization(intCD)
     if not item.canBeMirroredHorizontally:
         return
     slorDirection = first([ tag for tag in slot.tags if tag.startswith(ProjectionDecalDirectionTags.PREFIX) ], ProjectionDecalDirectionTags.ANY)

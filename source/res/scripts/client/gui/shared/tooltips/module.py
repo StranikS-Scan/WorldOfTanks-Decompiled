@@ -745,7 +745,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
                     titleFormatter = text_styles.critical
                     conflictEqs = module.getConflictedEquipments(vehicle)
                     tooltipText %= {'eqs': ', '.join([ _ms(e.userName) for e in conflictEqs ])}
-            elif reason == 'already_installed':
+            elif reason in ('already_installed', 'similar_device_already_installed'):
                 if isEqOrDev and installedVehicles:
                     tooltipHeader, tooltipText = self.__getInstalledVehiclesBlock(installedVehicles, module)
                 else:

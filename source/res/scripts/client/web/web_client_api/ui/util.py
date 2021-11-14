@@ -6,14 +6,13 @@ from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HEADER_BUTTONS_COUNTERS_CHANGED_EVENT
-from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import lookupItem, showItemTooltip, getCDFromId, canInstallStyle, showAwardsTooltip, showCurrentDiscountTooltip, showFreeShuffleTooltip, showPaidShuffleTooltip, showVoteForDiscountTooltip
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import lookupItem, showItemTooltip, getCDFromId, canInstallStyle, showAwardsTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as TC
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.shared import g_eventBus
 from gui.shared.events import HasCtxEvent
 from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
-from gui.shared.money import Money
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.event_dispatcher import runSalesChain
 from gui.shared.view_helpers import UsersInfoHelper
@@ -37,12 +36,6 @@ _COUNTER_IDS_MAP = {'shop': VIEW_ALIAS.LOBBY_STORE}
 def _itemTypeValidator(itemType, _=None):
     if not ItemPackType.hasValue(itemType):
         raise WebCommandException('unsupported item type "{}"'.format(itemType))
-    return True
-
-
-def _currencyValidator(moneyDict, _=None):
-    if not Money.hasMoney(moneyDict):
-        raise WebCommandException('{} - is not valid Money dict'.format(moneyDict))
     return True
 
 
@@ -94,27 +87,6 @@ class _ShowItemTooltipSchema(W2CSchema):
 class _ShowAwardsTooltipSchema(W2CSchema):
     type = Field(required=True, type=basestring, validator=_itemTypeValidator)
     data = Field(required=True, type=dict)
-
-
-class _CurrentDiscountTooltipSchema(W2CSchema):
-    type = Field(required=True, type=basestring, validator=_itemTypeValidator)
-    current_discount = Field(required=True, type=int)
-
-
-class _FreeShuffleTooltipSchema(W2CSchema):
-    type = Field(required=True, type=basestring, validator=_itemTypeValidator)
-    max_number = Field(required=True, type=int)
-    paid_shuffle_cost = Field(required=True, type=dict, validator=_currencyValidator)
-
-
-class _PaidShuffleTooltipSchema(W2CSchema):
-    type = Field(required=True, type=basestring, validator=_itemTypeValidator)
-
-
-class _VoteForDiscountTooltipSchema(W2CSchema):
-    type = Field(required=True, type=basestring, validator=_itemTypeValidator)
-    max_number = Field(required=True, type=int)
-    available = Field(required=True, type=bool)
 
 
 class _ChatAvailabilitySchema(W2CSchema):
@@ -215,24 +187,6 @@ class UtilWebApiMixin(object):
         rawItem = ItemPackEntry(type=itemType, id=itemId, count=cmd.count or 1, extra=cmd.extra or {})
         item = lookupItem(rawItem, self.itemsCache, self.goodiesCache)
         showItemTooltip(self.__getTooltipMgr(), rawItem, item)
-
-    @w2c(_CurrentDiscountTooltipSchema, 'show_current_discount')
-    def showCurrentDiscountTooltip(self, cmd):
-        itemType = cmd.type
-        currentDiscount = cmd.current_discount
-        showCurrentDiscountTooltip(self.__getTooltipMgr(), itemType, currentDiscount)
-
-    @w2c(_FreeShuffleTooltipSchema, 'show_free_shuffle')
-    def showFreeShuffleTooltip(self, cmd):
-        showFreeShuffleTooltip(self.__getTooltipMgr(), itemType=cmd.type, maxNumber=cmd.max_number, paidShuffleCost=Money(**cmd.paid_shuffle_cost))
-
-    @w2c(_PaidShuffleTooltipSchema, 'show_paid_shuffle')
-    def showPaidShuffleTooltip(self, cmd):
-        showPaidShuffleTooltip(self.__getTooltipMgr(), itemType=cmd.type)
-
-    @w2c(_VoteForDiscountTooltipSchema, 'show_vote_for_discount')
-    def showVoteForDiscount(self, cmd):
-        showVoteForDiscountTooltip(self.__getTooltipMgr(), itemType=cmd.type, maxNumber=cmd.max_number, available=cmd.available)
 
     @w2c(_ShowAwardsTooltipSchema, 'show_awards_tooltip')
     def showAwardsTooltip(self, cmd):

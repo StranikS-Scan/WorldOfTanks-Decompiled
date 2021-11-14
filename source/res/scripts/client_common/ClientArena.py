@@ -87,7 +87,6 @@ class ClientArena(object):
         self.onFogOfWarHiddenVehiclesSet = Event.Event(em)
         self.onTeamHealthPercentUpdate = Event.Event(em)
         self.onChatCommandTargetUpdate = Event.Event(em)
-        self.onRadarInfoReceived = Event.Event(em)
         self.onChatCommandTriggered = Event.Event(em)
         self.onRadarInfoReceived = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID

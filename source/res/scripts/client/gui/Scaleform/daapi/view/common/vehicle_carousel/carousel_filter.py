@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/vehicle_carousel/carousel_filter.py
 import copy
+import BattleReplay
 import constants
 import nations
 from account_helpers.AccountSettings import AccountSettings, CAROUSEL_FILTER_1, CAROUSEL_FILTER_2
@@ -124,7 +125,7 @@ class CarouselFilter(_CarouselFilter):
         self._setCriteriaGroups()
 
     def save(self):
-        self.settingsCore.serverSettings.setSections(self._serverSections, self._filters)
+        self._saveToServer()
         for section in self._clientSections:
             defaultFilter = AccountSettings.getFilterDefault(section)
             filtersToSave = {key:self._filters.get(key, defaultFilter[key]) for key in defaultFilter}
@@ -132,7 +133,7 @@ class CarouselFilter(_CarouselFilter):
 
     def load(self):
         defaultFilters = AccountSettings.getFilterDefaults(self._serverSections)
-        savedFilters = self.settingsCore.serverSettings.getSections(self._serverSections, defaultFilters)
+        savedFilters = self._getFromServerStorage(defaultFilters)
         for section in self._clientSections:
             defaultFilters.update(AccountSettings.getFilterDefault(section))
             savedFilters.update(AccountSettings.getFilter(section))
@@ -155,6 +156,13 @@ class CarouselFilter(_CarouselFilter):
 
     def __getCurrentVehicleClasses(self, updateDict):
         return {vehClass for vehClass in VEHICLE_CLASS_NAME.ALL() if (self._filters[vehClass] or updateDict.get(vehClass)) and updateDict.get(vehClass) is not False}
+
+    def _saveToServer(self):
+        if not BattleReplay.isPlaying():
+            self.settingsCore.serverSettings.setSections(self._serverSections, self._filters)
+
+    def _getFromServerStorage(self, defaultFilters):
+        return defaultFilters if BattleReplay.isPlaying() else self.settingsCore.serverSettings.getSections(self._serverSections, defaultFilters)
 
     @staticmethod
     def __resetRoles():

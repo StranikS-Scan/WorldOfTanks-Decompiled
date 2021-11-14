@@ -99,7 +99,6 @@
     <Maybach_HL_233P50>	114	</Maybach_HL_233P50>
     <SOFAM_12GSds_B>	115	</SOFAM_12GSds_B>
     <Maybach_HL_295_a_injection_d_essence_FL>	501	</Maybach_HL_295_a_injection_d_essence_FL>
-    <Detroit_Diesel_6V53T-S_Halloween>	20115	</Detroit_Diesel_6V53T-S_Halloween>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
     <Renault_A_IGR>	60003	</Renault_A_IGR>
@@ -112,12 +111,6 @@
     <Detroit_Diesel_6V53T_SH>	10001	</Detroit_Diesel_6V53T_SH>
     <Hispano-Suiza_HS110_SH>	10002	</Hispano-Suiza_HS110_SH>
     <_6F11SRY_MapsTraining_Dummy_SPG_2>	11	</_6F11SRY_MapsTraining_Dummy_SPG_2>
-    <Cummins_VT8-460_HW_bot>	0	</Cummins_VT8-460_HW_bot>
-    <Hispano-Suiza_HS110_A_HW_bot>	14	</Hispano-Suiza_HS110_A_HW_bot>
-    <Hispano-Suiza_HS110_HW_bot>	35	</Hispano-Suiza_HS110_HW_bot>
-    <Maybach_HL_295_F_HW_bot>	37	</Maybach_HL_295_F_HW_bot>
-    <Maybach_HL_295_a_injection_d_essence_HW_bot>	38	</Maybach_HL_295_a_injection_d_essence_HW_bot>
-    <Maybach_HL_234P45A_HW_bot>	41	</Maybach_HL_234P45A_HW_bot>
   </ids>
   <shared>
     <Somua_S-40>
@@ -918,7 +911,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	980	</power>
+      <power>	1000	</power>
       <weight>	750	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
@@ -1767,24 +1760,6 @@
       <rpm_min>	354	</rpm_min>
       <rpm_max>	2136	</rpm_max>
     </E_9>
-    <Detroit_Diesel_6V53T-S_Halloween>
-      <userString>	#france_vehicles:Detroit_Diesel_6V53T-S_Halloween	</userString>
-      <shortUserString>	#france_vehicles:Detroit_Diesel_6V53T-S_Halloween_short	</shortUserString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	78000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	470	</power>
-      <weight>	770	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	394	</rpm_min>
-      <rpm_max>	2016	</rpm_max>
-    </Detroit_Diesel_6V53T-S_Halloween>
     <Maybach_HL_295_IGR>
       <userString>	#igr_vehicles:Maybach_HL_295_IGR	</userString>
       <tags>	gasoline	</tags>
@@ -1973,108 +1948,5 @@
       <rpm_max>	2149	</rpm_max>
       <notInShop>	True	</notInShop>
     </_6F11SRY_MapsTraining_Dummy_SPG_2>
-    <Cummins_VT8-460_HW_bot>
-      <userString>	#france_vehicles:Cummins_VT8-460	</userString>
-      <tags>	gasoline	</tags>
-      <level>	5	</level>
-      <price>	13500	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	550	</power>
-      <weight>	550	</weight>
-      <maxHealth>	176	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	280	</rpm_min>
-      <rpm_max>	2901	</rpm_max>
-    </Cummins_VT8-460_HW_bot>
-    <Hispano-Suiza_HS110_A_HW_bot>
-      <userString>	#france_vehicles:Hispano-Suiza_HS110_A	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	94250	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	720	</power>
-      <weight>	1426	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	328	</rpm_min>
-      <rpm_max>	2216	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </Hispano-Suiza_HS110_A_HW_bot>
-    <Hispano-Suiza_HS110_HW_bot>
-      <userString>	#france_vehicles:Hispano-Suiza_HS110	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	94250	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	720	</power>
-      <weight>	1426	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	328	</rpm_min>
-      <rpm_max>	2216	</rpm_max>
-    </Hispano-Suiza_HS110_HW_bot>
-    <Maybach_HL_295_F_HW_bot>
-      <userString>	#france_vehicles:Maybach_HL_295_F	</userString>
-      <tags>	gasoline	</tags>
-      <level>	10	</level>
-      <notInShop>	true	</notInShop>
-      <price>	123000	</price>
-      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1200	</power>
-      <weight>	750	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	404	</rpm_min>
-      <rpm_max>	2305	</rpm_max>
-    </Maybach_HL_295_F_HW_bot>
-    <Maybach_HL_295_a_injection_d_essence_HW_bot>
-      <userString>	#france_vehicles:Maybach_HL_295_a_injection_d_essence	</userString>
-      <tags>	gasoline	</tags>
-      <level>	9	</level>
-      <price>	86000	</price>
-      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1100	</power>
-      <weight>	1200	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	129	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	432	</rpm_min>
-      <rpm_max>	2215	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </Maybach_HL_295_a_injection_d_essence_HW_bot>
-    <Maybach_HL_234P45A_HW_bot>
-      <userString>	#france_vehicles:Maybach_HL_234P45A	</userString>
-      <shortUserString>	#france_vehicles:Maybach_HL_234P45A_short	</shortUserString>
-      <tags>	gasoline	</tags>
-      <level>	9	</level>
-      <price>	98730	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1000	</power>
-      <weight>	750	</weight>
-      <maxHealth>	320	</maxHealth>
-      <maxRegenHealth>	160	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	460	</rpm_min>
-      <rpm_max>	2125	</rpm_max>
-    </Maybach_HL_234P45A_HW_bot>
   </shared>
 </engines.xml>

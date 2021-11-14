@@ -8,7 +8,7 @@ from helpers.aop import pointcutable
 import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
 from async import async, await
-from constants import RentType, GameSeasonType, QUEUE_TYPE
+from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
 from frameworks.wulf import ViewFlags, WindowLayer
 from frameworks.wulf import Window
@@ -18,7 +18,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL, getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx, getRentVehicleUrl, getTelecomRentVehicleUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL, getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx, getRentVehicleUrl
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.entities.sf_window import SFWindow
@@ -34,17 +34,17 @@ from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.lobby.account_completion.decorators import waitShowOverlay
+from gui.impl.lobby.account_completion.utils.common import AccountCompletionType
+from gui.impl.lobby.account_completion.utils.decorators import waitShowOverlay
 from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
 from gui.impl.lobby.maps_training.maps_training_queue_view import MapsTrainingQueueView
 from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDialog, TankSetupExitConfirmDialog
 from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import RefillShells, ExitFromShellsConfirm
 from gui.impl.lobby.techtree.techtree_intro_view import TechTreeIntroWindow
-from gui.impl.pub.lobby_window import LobbyWindow, LobbyNotificationWindow
+from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
-from gui.prb_control.entities.base.ctx import PrbAction
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, PREBATTLE_ACTION_NAME
+from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus, money
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -63,12 +63,10 @@ from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IClanNotificationController, IBrowserController
-from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.prb_control.dispatcher import g_prbLoader
 from soft_exception import SoftException
 from uilogging.veh_post_progression.loggers import VehPostProgressionEntryPointLogger
 if typing.TYPE_CHECKING:
@@ -102,10 +100,6 @@ def showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress, par
      'questsProgress': questsProgress}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showHalloweenResults(arenaUniqueID):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EVENT_BATTLE_RESULTS, getViewName(VIEW_ALIAS.EVENT_BATTLE_RESULTS, str(arenaUniqueID))), ctx={'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
-
-
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
 def showRankedAwardWindow(awardsSequence, rankedInfo, notificationMgr=None):
     alias = RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD
@@ -116,6 +110,10 @@ def showRankedAwardWindow(awardsSequence, rankedInfo, notificationMgr=None):
 
 def showRankedPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME), ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showRankedBattleIntro():
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesPrimeTimeWindow():
@@ -132,15 +130,6 @@ def showBattleRoyaleLevelUpWindow(reusableInfo, parent=None):
 
 def showBattleRoyalePrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(BATTLEROYALE_ALIASES.BATTLE_ROYALE_PRIME_TIME), ctx={}), EVENT_BUS_SCOPE.LOBBY)
-
-
-def showInterrogationInfoWindow():
-    gameEventCtrl = dependency.instance(IGameEventController)
-    if isViewLoaded(R.views.lobby.halloween.InterrogationInfoPageView()) or not gameEventCtrl.getEventRewardController().isEnabled():
-        return
-    from gui.impl.lobby.halloween.interrogation_info_page_view import InterrogationInfoPageWindow
-    wnd = InterrogationInfoPageWindow()
-    wnd.load()
 
 
 def showBattleRoyaleResultsView(ctx):
@@ -338,7 +327,9 @@ def showBattleBoosterSellDialog(battleBoosterIntCD):
 
 @async
 def showPlatoonResourceDialog(resources, callback):
-    result = yield await(showResSimpleDialog(resources, None, ''))
+    app = dependency.instance(IAppLoader).getApp()
+    parent = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY)) if app is not None else None
+    result = yield await(showResSimpleDialog(resources, None, '', parent))
     if result:
         callback(result)
     return
@@ -363,28 +354,7 @@ def showVehicleStats(vehTypeCompDescr):
 
 
 def showHangar():
-    from gui.impl.lobby.halloween.event_helpers import isEvent
-    if isEvent():
-        g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
-        showEventHangar()
-    else:
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showEventHangar():
-    from gui.impl.lobby.halloween.hangar_view import HangarView
-    layoutID = R.views.lobby.halloween.HangarView()
-    if isViewLoaded(layoutID):
-        return
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, HangarView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showCustomizationShopView(initialEntityID=None):
-    from gui.impl.lobby.halloween.customization_shop_view import CustomizationShopView
-    layoutID = R.views.lobby.halloween.CustomizationShopView()
-    if isViewLoaded(layoutID):
-        return
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, CustomizationShopView, ScopeTemplates.LOBBY_SUB_SCOPE), initialEntityID=initialEntityID), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBarracks():
@@ -508,8 +478,6 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
             viewAlias = VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW
         elif offers and offers[0].eventType == 'subscription':
             viewAlias = VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW
-        elif offers and offers[0].eventType == 'telecom_rentals':
-            viewAlias = VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW
         else:
             viewAlias = VIEW_ALIAS.VEHICLE_PREVIEW
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(viewAlias), ctx={'itemCD': vehTypeCompDescr,
@@ -546,25 +514,6 @@ def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
      'previousBackAlias': previousBackAlias,
      'previewBackCb': previewBackCb,
      'hangarVehicleCD': hangarVehicleCD}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def goToHalloweenKingRewardOnScene(previewAlias=VIEW_ALIAS.LOBBY_HANGAR, hideBottomPanel=False):
-    from HalloweenHangarTank import HalloweenHangarTank
-    from ClientSelectableCameraObject import ClientSelectableCameraObject
-    for cameraObject in ClientSelectableCameraObject.allCameraObjects:
-        if isinstance(cameraObject, HalloweenHangarTank) and cameraObject.isKingReward:
-            descriptor = cameraObject.typeDescriptor
-            showHalloweenKingRewardPreview(descriptor.type.compactDescr, previewAlias=previewAlias, hideBottomPanel=hideBottomPanel)
-            ClientSelectableCameraObject.switchCamera(cameraObject)
-            break
-
-
-def showHalloweenKingRewardPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, hideBottomPanel=False):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EVENT_KING_REWARD_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
-     'previewAppearance': HeroTankPreviewAppearance(),
-     'isHeroTank': True,
-     'previewAlias': previewAlias,
-     'hideBottomPanel': hideBottomPanel}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def hideVehiclePreview(back=True, close=False):
@@ -649,27 +598,15 @@ def showClanSendInviteWindow(clanDbID):
      'ctrlType': CTRL_ENTITY_TYPE.UNIT}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-@adisp.process
-def selectVehicleInHangar(itemCD, loadHangar=True, leaveEventMode=False):
+def selectVehicleInHangar(itemCD, loadHangar=True):
     from CurrentVehicle import g_currentVehicle
     itemsCache = dependency.instance(IItemsCache)
     veh = itemsCache.items.getItemByCD(int(itemCD))
     if not veh.isInInventory:
         raise SoftException('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
     g_currentVehicle.selectVehicle(veh.invID)
-    if leaveEventMode:
-        dispatcher = g_prbLoader.getDispatcher()
-        if dispatcher:
-            entity = dispatcher.getEntity()
-            if entity is not None and entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES:
-                yield switchOutEventMode()
-                entity = dispatcher.getEntity()
-                if entity is not None and entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES:
-                    showHangar()
-                return
     if loadHangar:
         showHangar()
-    return
 
 
 def showPersonalCase(tankmanInvID, tabIndex, scope=EVENT_BUS_SCOPE.DEFAULT):
@@ -806,7 +743,7 @@ def showTankPremiumAboutPage():
 
 
 @adisp.process
-def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False, browserParams=None, hiddenLayers=None, callbackOnUnload=None):
+def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False, browserParams=None, hiddenLayers=None):
     if url:
         if browserParams is None:
             browserParams = {}
@@ -814,7 +751,6 @@ def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=N
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx={'url': url,
          'allowRightClick': False,
          'callbackOnLoad': callbackOnLoad,
-         'callbackOnUnload': callbackOnUnload,
          'webHandlers': webHandlers,
          'forcedSkipEscape': forcedSkipEscape,
          'browserParams': browserParams,
@@ -977,26 +913,26 @@ def showPreformattedDialog(preset, title, message, buttons, focusedButton, btnDo
 
 
 @async
-def showResSimpleDialog(resources, icon, formattedMessage):
+def showResSimpleDialog(resources, icon, formattedMessage, parent=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.builders import ResSimpleDialogBuilder
     builder = ResSimpleDialogBuilder()
     builder.setMessagesAndButtons(resources)
     builder.setIcon(icon)
     builder.setFormattedMessage(formattedMessage)
-    result = yield await(dialogs.showSimple(builder.build()))
+    result = yield await(dialogs.showSimple(builder.build(parent)))
     raise AsyncReturn(result)
 
 
 @async
-def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage):
+def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.builders import InfoDialogBuilder
     builder = InfoDialogBuilder()
     builder.setMessagesAndButtons(resources, resources)
     builder.setIcon(icon)
     builder.setFormattedMessage(formattedMessage)
-    result = yield await(dialogs.showSimple(builder.build()))
+    result = yield await(dialogs.showSimple(builder.build(parent)))
     raise AsyncReturn(result)
 
 
@@ -1350,21 +1286,91 @@ def showMapboxRewardChoice(selectableCrewbook):
 
 
 @waitShowOverlay
-def showAddEmailOverlay(initialEmail='', fadeAnimation=False):
-    if isViewLoaded(R.views.lobby.account_completion.EmailConfirmationCurtainView()):
-        return
-    from gui.impl.lobby.account_completion.add_email_overlay_view import AddEmailOverlayWindow
-    wnd = AddEmailOverlayWindow(initialEmail, fadeAnimation)
-    wnd.load()
+def showSteamAddEmailOverlay(initialEmail='', onClose=None):
+    from gui.impl.lobby.account_completion.steam_add_email_overlay_view import SteamAddEmailOverlayView
+    from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
+    wnd = CurtainWindow.getInstance()
+    wnd.setSubView(SteamAddEmailOverlayView, initialEmail=initialEmail, onClose=onClose)
 
 
 @waitShowOverlay
-def showConfirmEmailOverlay(email='', fadeAnimation=False):
-    if isViewLoaded(R.views.lobby.account_completion.EmailActivateCurtainView()):
-        return
-    from gui.impl.lobby.account_completion.confirm_email_overlay_view import ConfirmEmailOverlayWindow
-    wnd = ConfirmEmailOverlayWindow(email, fadeAnimation)
-    wnd.load()
+def showDemoAddCredentialsOverlay(initialEmail='', emailError='', onClose=None):
+    from gui.impl.lobby.account_completion.demo_add_credentials_overlay_view import DemoAddCredentialsOverlayView
+    from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
+    wnd = CurtainWindow.getInstance()
+    wnd.setSubView(DemoAddCredentialsOverlayView, initialEmail=initialEmail, emailError=emailError, onClose=onClose)
+
+
+@waitShowOverlay
+def showSteamConfirmEmailOverlay(email='', onClose=None):
+    from gui.impl.lobby.account_completion.steam_confirm_email_overlay_view import SteamConfirmEmailOverlayView
+    from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
+    wnd = CurtainWindow.getInstance()
+    wnd.setSubView(SteamConfirmEmailOverlayView, email=email, onClose=onClose)
+
+
+@waitShowOverlay
+def showDemoRenamingUnavailableOverlay(onClose=None):
+    from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
+    wnd = CurtainWindow.getInstance()
+    from gui.impl.lobby.account_completion.demo_renaming_unavailable_overlay_view import DemoRenamingUnavailableOverlayView
+    wnd.setSubView(DemoRenamingUnavailableOverlayView, onClose=onClose)
+
+
+@waitShowOverlay
+def showDemoConfirmCredentialsOverlay(email='', onClose=None):
+    from gui.impl.lobby.account_completion.demo_confirm_credentials_overlay_view import DemoConfirmCredentialsOverlayView
+    from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
+    wnd = CurtainWindow.getInstance()
+    wnd.setSubView(DemoConfirmCredentialsOverlayView, email=email, onClose=onClose)
+
+
+@waitShowOverlay
+def showDemoWaitingForTokenOverlayViewOverlay(completionType=AccountCompletionType.UNDEFINED, onClose=None):
+    from gui.impl.lobby.account_completion.demo_waiting_for_token_overlay_view import DemoWaitingForTokenOverlayView
+    from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
+    wnd = CurtainWindow.getInstance()
+    wnd.setSubView(DemoWaitingForTokenOverlayView, completionType=completionType, onClose=onClose)
+
+
+@waitShowOverlay
+def showDemoCompleteOverlay(completionType=AccountCompletionType.UNDEFINED, onClose=None):
+    from gui.impl.lobby.account_completion.demo_complete_overlay_view import DemoCompleteOverlayView
+    from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
+    wnd = CurtainWindow.getInstance()
+    wnd.setSubView(DemoCompleteOverlayView, completionType=completionType, onClose=onClose)
+
+
+@waitShowOverlay
+def showDemoErrorOverlay(onClose=None):
+    from gui.impl.lobby.account_completion.demo_error_overlay_view import DemoErrorOverlayView
+    from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
+    wnd = CurtainWindow.getInstance()
+    wnd.setSubView(DemoErrorOverlayView, onClose=onClose)
+
+
+@waitShowOverlay
+def showDemoAccRenamingOverlay(onClose=None):
+    from gui.impl.lobby.account_completion.demo_renaming_overlay_view import DemoRenamingOverlayView
+    from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
+    wnd = CurtainWindow.getInstance()
+    wnd.setSubView(DemoRenamingOverlayView, onClose=onClose)
+
+
+@waitShowOverlay
+def showDemoAccRenamingCompleteOverlay(name, onClose=None):
+    from gui.impl.lobby.account_completion.demo_renaming_complete_overlay_view import DemoRenamingCompleteOverlayView
+    from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
+    wnd = CurtainWindow.getInstance()
+    wnd.setSubView(DemoRenamingCompleteOverlayView, name=name, onClose=onClose)
+
+
+@waitShowOverlay
+def showContactSupportOverlay(message, isCloseVisible=True, onClose=None):
+    from gui.impl.lobby.account_completion.contact_support_overlay_view import ContactSupportOverlayView
+    from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
+    wnd = CurtainWindow.getInstance()
+    wnd.setSubView(ContactSupportOverlayView, message=message, isCloseVisible=isCloseVisible, onClose=onClose)
 
 
 def showModeSelectorWindow(isEventEnabled, provider=None):
@@ -1510,96 +1516,3 @@ def showWotPlusInfoPage():
 def showVehicleRentalPage():
     url = getRentVehicleUrl()
     showBrowserOverlayView(url, VIEW_ALIAS.VEHICLE_RENTAL_VIEW)
-
-
-def showTelecomRentalPage():
-    url = getTelecomRentVehicleUrl()
-    showBrowserOverlayView(url, VIEW_ALIAS.TELECOM_RENTAL_VIEW)
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showYearHareAffairAwardsWindow(rewards, notificationMgr=None):
-    from gui.impl.lobby.yha.yha_awards_view import YhaAwardsWindow
-    window = YhaAwardsWindow(rewards)
-    notificationMgr.append(WindowNotificationCommand(window))
-
-
-@adisp.async
-@adisp.process
-def switchOutEventMode(callback=None):
-    dispatcher = g_prbLoader.getDispatcher()
-    if dispatcher:
-        entity = dispatcher.getEntity()
-        if entity is not None and entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES:
-            yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
-    if callable(callback):
-        callback(False)
-    return
-
-
-def showShopView(pageType):
-    from gui.impl.lobby.halloween.shop_view import ShopView
-    from gui.impl.lobby.halloween.shop_view_vehicles import ShopViewVehicles
-    from gui.impl.gen.view_models.views.lobby.halloween.shop_view_model import PageTypeEnum
-    layoutID = R.views.lobby.halloween.ShopView()
-    if isViewLoaded(layoutID):
-        return
-    content = ShopView if pageType == PageTypeEnum.KEYS else ShopViewVehicles
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, content, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showMetaView(pageType=''):
-    gameEventCtrl = dependency.instance(IGameEventController)
-    from gui.impl.lobby.halloween.meta_view import MetaView
-    layoutID = R.views.lobby.halloween.MetaView()
-    if isViewLoaded(layoutID):
-        return
-    if not gameEventCtrl.getEventRewardController().isEnabled():
-        SystemMessages.pushI18nMessage('#event_boards:maintenance/body', type=SystemMessages.SM_TYPE.Warning)
-        return
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, MetaView, ScopeTemplates.LOBBY_SUB_SCOPE), pageType=pageType), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showDifficultyUnlockWindow(unlockedLevel):
-    from gui.impl.lobby.halloween.difficulty_window_view import DifficultyWindowView
-    if isViewLoaded(R.views.lobby.halloween.DifficultyWindowView()):
-        return
-    window = LobbyNotificationWindow(content=DifficultyWindowView(unlockedLevel), layer=WindowLayer.FULLSCREEN_WINDOW)
-    window.load()
-
-
-@adisp.async
-def hideTopWindows(callback=None):
-    from gui.Scaleform.framework.entities.View import View
-    from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
-    windowsManager = dependency.instance(IGuiLoader).windowsManager
-    appLoader = dependency.instance(IAppLoader)
-    app = appLoader.getApp()
-    view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.AMMUNITION_SETUP_VIEW))
-    if view is not None:
-        gfView = view.getComponent(HANGAR_ALIASES.AMMUNITION_SETUP_VIEW_INJECT).getInjectView()
-        gfView._BaseHangarAmmunitionSetupView__closeWindow()
-
-    def predicateSFWindows(window):
-        content = window.content
-        return False if content is None else isinstance(content, View) and content.layer in (WindowLayer.TOP_WINDOW,)
-
-    for window in windowsManager.findWindows(predicateSFWindows):
-        if hasattr(window, 'destroyWindow'):
-            window.destroyWindow()
-        if hasattr(window, 'destroy'):
-            window.destroy()
-
-    if callback is not None:
-        callback(None)
-    return
-
-
-def showVideoRewardView(ctx):
-    from gui.impl.lobby.halloween.video_result_view import VideoResultViewWindow
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.lobby.halloween.VideoResult()
-    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
-        window = VideoResultViewWindow(ctx)
-        window.load()
-    return

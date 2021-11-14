@@ -79,7 +79,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     RANDOM_CREWBOOK = 'randomCrewbook'
     REFERRAL_PROGRAMM = 'referralProgram'
     EPIC_RANK_UNLOCK = 'epicRankUnlock'
-    SHOP_SALES_ENTRY_POINT = 'shopSalesEntryPoint'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

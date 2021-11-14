@@ -92,9 +92,9 @@ class AvatarObserver(CallbackDelayer):
                     self.gunRotator.start()
                 self.updateObservedVehicleData()
                 self.vehicle.set_dotEffect()
+                if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
+                    self.vehicle.filter.enableStabilisedMatrix(True)
                 if not self.guiSessionProvider.shared.vehicleState.isInPostmortem:
-                    if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
-                        self.vehicle.filter.enableStabilisedMatrix(True)
                     BigWorld.target.exclude = self.vehicle
                     for v in BigWorld.player().vehicles:
                         if v.appearance is not None:

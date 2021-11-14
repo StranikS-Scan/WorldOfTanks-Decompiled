@@ -48,16 +48,20 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
         super(VehiclesFilterPopover, self).__init__()
         self._carousel = None
         self._isFrontline = False
+        self._isRanked = False
         self._withRoles = False
         if ctx and 'data' in ctx:
             data = ctx['data']
             self._isFrontline = getattr(data, 'isFrontline', False)
+            self._isRanked = getattr(data, 'isRanked', False)
         self.__mapping = {}
         self.__usedFilters = ()
         return
 
     def setTankCarousel(self, carousel):
-        self.__mapping = self._generateMapping((carousel.hasRentedVehicles() or not carousel.filter.isDefault(('rented',))), (carousel.hasEventVehicles() or not carousel.filter.isDefault(('event',))), carousel.hasRoles(), **carousel.getCustomParams())
+        customParams = carousel.getCustomParams()
+        customParams['isRanked'] = self._isRanked
+        self.__mapping = self._generateMapping((carousel.hasRentedVehicles() or not carousel.filter.isDefault(('rented',))), (carousel.hasEventVehicles() or not carousel.filter.isDefault(('event',))), carousel.hasRoles(), **customParams)
         self.__usedFilters = list(itertools.chain.from_iterable(self.__mapping.itervalues()))
         self._carousel = carousel
         self._carousel.setPopoverCallback(self.__onCarouselSwitched)
@@ -292,6 +296,8 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
         clanWarsVehicles = cls.itemsCache.items.getItems(GUI_ITEM_TYPE.VEHICLE, REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.CLAN_WARS)
         if bool(clanWarsVehicles):
             mapping[_SECTION.SPECIALS].append('clanRented')
+        if kwargs.get('isRanked', False):
+            mapping[_SECTION.SPECIALS].append('ranked')
         return mapping
 
     @classmethod

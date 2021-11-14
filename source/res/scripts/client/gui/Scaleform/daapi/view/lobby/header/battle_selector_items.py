@@ -9,7 +9,6 @@ from battle_selector_item import SelectorItem
 from account_helpers import isDemonstratorExpert
 from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR
 from gui import GUI_SETTINGS
-from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.battle_royale.constants import BattleRoyalePerfProblems
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.impl import backport
@@ -27,10 +26,8 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency, int2roman
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_event_controller import IGameEventController
 from gui.prb_control import prbEntityProperty
 if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import ISeasonProvider
@@ -203,23 +200,6 @@ class _MapsTrainingItem(_SelectorItem):
             self.mapsTrainingController.showMapsTrainingPage()
 
 
-class _EventBattleItem(_SelectorItem):
-    eventsCache = dependency.descriptor(IEventsCache)
-    gameEventCtrl = dependency.descriptor(IGameEventController)
-
-    def getSpecialBGIcon(self):
-        return backport.image(_R_ICONS.buttons.selectorRendererBGEvent())
-
-    def _update(self, state):
-        self._isDisabled = state.hasLockedState
-        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
-        self._isVisible = self.eventsCache.isEventEnabled() and self.gameEventCtrl.isEventCurrentDateActive()
-
-    def select(self):
-        super(_EventBattleItem, self).select()
-        selectorUtils.setBattleTypeAsKnown(self._selectorType)
-
-
 class _DisabledSelectorItem(_SelectorItem):
 
     def update(self, state):
@@ -363,6 +343,18 @@ class _SandboxItem(_SelectorItem):
         self._isVisible = self.lobbyContext.getServerSettings().isSandboxEnabled()
 
 
+class _EventBattlesItem(_SelectorItem):
+    __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
+
+    def isRandomBattle(self):
+        return True
+
+    def _update(self, state):
+        self._isDisabled = state.hasLockedState
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
+        self._isVisible = self.__eventBattlesCtrl.isEnabled()
+
+
 class _BattleSelectorItems(object):
 
     def __init__(self, items, extraItems=None):
@@ -477,7 +469,7 @@ class _SquadItem(SelectorItem):
         self._isDisabled = False
         self._isSelected = False
         self._isVisible = True
-        self._isDescription = False
+        self._isDescription = True
         self._prebattleType = None
         return
 
@@ -533,24 +525,18 @@ class _SpecialSquadItem(_SquadItem):
 
 
 class _EventSquadItem(_SpecialSquadItem):
-    __eventsCache = dependency.descriptor(IEventsCache)
-    __gameEventCtrl = dependency.descriptor(IGameEventController)
+    __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
         super(_EventSquadItem, self).__init__(label, data, order, selectorType, isVisible)
         self._prebattleType = PREBATTLE_TYPE.EVENT
-        self._isVisible = self.__eventsCache.isEventEnabled() and self.__gameEventCtrl.isEventCurrentDateActive()
+        self._isVisible = self.__eventBattlesCtrl.isEnabled()
         self._isSpecialBgIcon = True
         self._isDescription = False
 
     @property
     def squadIcon(self):
         return backport.image(_R_ICONS.battleTypes.c_40x40.eventSquad())
-
-    def _update(self, state):
-        super(_EventSquadItem, self)._update(state)
-        self._isVisible = self.__eventsCache.isEventEnabled()
-        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
 
 
 class _BattleRoyaleSquadItem(_SpecialSquadItem):
@@ -619,13 +605,7 @@ class _RankedItem(_SelectorItem):
         return backport.image(_R_ICONS.buttons.selectorRendererBGEvent()) if self.rankedController.isAvailable() else ''
 
     def select(self):
-        if self.rankedController.isAvailable():
-            super(_RankedItem, self).select()
-        elif self.__hasPastSeason:
-            ctx = {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID}
-            if self.rankedController.isYearLBEnabled() and self.rankedController.isYearGap():
-                ctx = {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}
-            self.rankedController.showRankedBattlePage(ctx)
+        self.rankedController.doActionOnEntryPointClick()
         selectorUtils.setBattleTypeAsKnown(self._selectorType)
 
     def _update(self, state):
@@ -899,9 +879,9 @@ def _createItems(lobbyContext=None):
     _addMapboxBattleType(items)
     _addMapsTrainingBattleType(items)
     _addEpicBattleType(items)
+    _addEventBattlesType(items)
     if GUI_SETTINGS.specPrebatlesVisible:
         _addSpecialBattleType(items)
-    _addEventBattleType(items)
     if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
         _addSandboxType(items)
     return _BattleSelectorItems(items)
@@ -977,8 +957,8 @@ def _addEpicTrainingBattleType(items, settings=None):
     return
 
 
-def _addEventBattleType(items):
-    items.append(_EventBattleItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.eventBattle())), PREBATTLE_ACTION_NAME.EVENT_BATTLE, 10, SELECTOR_BATTLE_TYPES.EVENT_BATTLE))
+def _addEventBattlesType(items):
+    items.append(_EventBattlesItem('Event Battle', PREBATTLE_ACTION_NAME.EVENT_BATTLE, 2, SELECTOR_BATTLE_TYPES.EVENT))
 
 
 def _addSimpleSquadType(items):

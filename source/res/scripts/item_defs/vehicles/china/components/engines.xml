@@ -58,6 +58,7 @@
     <_12150L7BW>	255	</_12150L7BW>
     <V_2_54SCP>	256	</V_2_54SCP>
     <_12150LZ_A>	257	</_12150LZ_A>
+    <V_2_54SC>	259	</V_2_54SC>
     <_12150LT_FL>	501	</_12150LT_FL>
     <_8V135_IGR>	60001	</_8V135_IGR>
     <_12150LS_IGR>	60002	</_12150LS_IGR>
@@ -1055,6 +1056,23 @@
       <rpm_min>	258	</rpm_min>
       <rpm_max>	2424	</rpm_max>
     </V_2_54SCP>
+    <V_2_54SC>
+      <userString>	#china_vehicles:V_2_54SC	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	1024	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </V_2_54SC>
     <_8V135_IGR>
       <userString>	#igr_vehicles:_8V135_IGR	</userString>
       <tags>	diesel	</tags>

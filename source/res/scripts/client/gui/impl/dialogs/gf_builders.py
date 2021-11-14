@@ -17,6 +17,14 @@ from gui.impl.pub.dialog_window import DialogButtons
 if typing.TYPE_CHECKING:
     from typing import Optional, List, Union
 
+class BuilderDialogTemplateView(DialogTemplateView):
+    __slots__ = ()
+
+    def _closeClickHandler(self, args=None):
+        reason = (args or {}).get('reason')
+        self._setResult(reason or DialogButtons.CANCEL)
+
+
 class BaseDialogBuilder(object):
     __slots__ = ('__title', '__description', '__icon', '__buttons', '__uniqueID', '__backgroundID', '__backgroundDimmed', '__layoutID', '__selectedButtonID')
 
@@ -34,7 +42,7 @@ class BaseDialogBuilder(object):
         return
 
     def buildView(self):
-        template = DialogTemplateView(layoutID=self.__layoutID, uniqueID=self.__uniqueID)
+        template = BuilderDialogTemplateView(layoutID=self.__layoutID, uniqueID=self.__uniqueID)
         if self.__title:
             template.setSubView(DefaultDialogPlaceHolders.TITLE, SimpleTextTitle(self.__title))
         if self.__description:

@@ -118,11 +118,18 @@ class _BonusSorter(object):
 
     def __conditionsSorter(self, bonuses):
         if self.__paramName in CONDITIONAL_BONUSES:
-            condition, _ = CONDITIONAL_BONUSES[self.__paramName]
-            if condition in bonuses:
-                bonuses.remove(condition)
-                bonuses.append(condition)
+            prioritizedBonuses = {}
+            for bonus in bonuses:
+                numDependencies = self.__getNumDependencies(bonus)
+                if numDependencies not in prioritizedBonuses:
+                    prioritizedBonuses[numDependencies] = []
+                prioritizedBonuses[numDependencies].append(bonus)
+
+            bonuses = [ bonus for key in sorted(prioritizedBonuses.keys())[::-1] for bonus in prioritizedBonuses[key] ]
         return bonuses
+
+    def __getNumDependencies(self, bonus, dependenciesNum=0):
+        return self.__getNumDependencies(CONDITIONAL_BONUSES[self.__paramName][bonus], dependenciesNum + 1) if bonus in CONDITIONAL_BONUSES[self.__paramName] else dependenciesNum
 
     def __notStackSorter(self, bonuses):
         if self.__paramName in _NOT_STACK_BONUSES:
@@ -164,12 +171,6 @@ class BonusExtractor(object):
 
     def __updateCurrValue(self):
         self.__currValue = getattr(_CustomizedVehicleParams(self.__vehicle, self.__removeCamouflage), self.__paramName)
-
-    def getVehicle(self):
-        return self.__vehicle
-
-    def reUpdateCurrValue(self):
-        self.__updateCurrValue()
 
 
 class TankSetupBonusExtractor(BonusExtractor):

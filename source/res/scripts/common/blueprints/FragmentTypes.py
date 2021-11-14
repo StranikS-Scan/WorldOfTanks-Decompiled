@@ -5,7 +5,7 @@ import typing
 from backports.functools_lru_cache import lru_cache
 from items import vehicles, ITEM_TYPES
 from random_utils import wchoices
-from debug_utils import LOG_DEBUG_DEV
+from debug_utils import LOG_DEBUG_DEV, LOG_ERROR
 from . import g_cache, BlueprintsException, getAllResearchedVehicles
 from BlueprintTypes import BlueprintTypes
 
@@ -22,7 +22,7 @@ class BlueprintFragment(object):
         pass
 
     def makeIntCompDescr(self, normalized=False):
-        raise NotImplementedError
+        return _makeIntCompDescr(self.vehTypeCD, self.FTYPE, normalized)
 
     def isUniversal(self):
         return False
@@ -62,9 +62,6 @@ class NationalBlueprintFragment(BlueprintFragment):
     def isUniversal(self):
         return True
 
-    def makeIntCompDescr(self, normalized=False):
-        return ((self.vehTypeCD | 65280 if normalized else self.vehTypeCD) & 65520) + self.FTYPE
-
 
 class VehicleBlueprintFragment(BlueprintFragment):
     __slots__ = ('progressPerFragment', 'require', 'decays', 'nationalRequiredOptions')
@@ -80,14 +77,7 @@ class VehicleBlueprintFragment(BlueprintFragment):
     def __init__(self, vehTypeCD, enableException=True):
         super(VehicleBlueprintFragment, self).__init__(vehTypeCD)
         vehicleLevel = vehicles.getVehicleType(vehTypeCD).level
-        availableLevels = g_cache.levels
-        if enableException and vehicleLevel not in availableLevels:
-            raise BlueprintsException('Invalid vehicle level for having blueprints')
-        self.total, self.progressPerFragment, self.require, self.decays, _ = availableLevels.get(vehicleLevel, (0,
-         0,
-         (0, 0),
-         (0, 0),
-         {}))
+        self.total, self.progressPerFragment, self.require, self.decays, _ = _getFragmentSpecs(vehTypeCD, enableException)
         self.nationalRequiredOptions = self.__getNationalRequiredOptions(self.nationID, vehicleLevel)
         LOG_DEBUG_DEV('[BPF] VehicleFragment: total={}, progress={}, require={}'.format(self.total, self.progressPerFragment, self.require))
 
@@ -101,9 +91,6 @@ class VehicleBlueprintFragment(BlueprintFragment):
     @property
     def asIntelligenceDataCD(self):
         return (self.vehTypeCD & 65520) + BlueprintTypes.INTELLIGENCE_DATA
-
-    def makeIntCompDescr(self, normalized=False):
-        return (self.vehTypeCD & 65520) + self.FTYPE
 
     def getXPValueForFragments(self, count):
         return self.progressPerFragment * count if count < self.total else 1.0
@@ -139,9 +126,6 @@ class IntelligenceDataFragment(BlueprintFragment):
     __slots__ = ()
     FTYPE = BlueprintTypes.INTELLIGENCE_DATA
     nationID = property(lambda self: nations.NONE_INDEX)
-
-    def makeIntCompDescr(self, normalized=False):
-        return ((65521 if normalized else self.vehTypeCD) & 65520) + self.FTYPE
 
     def isUniversal(self):
         return True
@@ -189,6 +173,52 @@ def isSimilar(fragmentTypeCD1, fragmentTypeCD2, strict=True):
     return isSimilar(fragmentTypeCD1 & 15, fragmentTypeCD2 & 15, True) if 15 & fragmentTypeCD1 == BlueprintTypes.INTELLIGENCE_DATA else False
 
 
-@lru_cache(maxsize=256)
+@lru_cache(maxsize=512)
 def normalizeFragment(ifragmentCD):
-    return fromIntFragmentCD(ifragmentCD).makeIntCompDescr(normalized=True)
+    vehTypeCD = ITEM_TYPES.vehicle + (ifragmentCD & 65520)
+    fType = getFragmentType(ifragmentCD)
+    return _makeIntCompDescr(vehTypeCD, fType, normalized=True)
+
+
+@lru_cache(maxsize=512)
+def _makeIntCompDescr(vehTypeCD, fType, normalized):
+    if BlueprintTypes.INTELLIGENCE_DATA == fType:
+        return ((65521 if normalized else vehTypeCD) & 65520) + fType
+    if BlueprintTypes.NATIONAL == fType:
+        return ((vehTypeCD | 65280 if normalized else vehTypeCD) & 65520) + fType
+    if BlueprintTypes.VEHICLE == fType:
+        return (vehTypeCD & 65520) + fType
+    LOG_ERROR('Incorrect fType={}'.format(fType))
+
+
+@lru_cache(maxsize=512)
+def getFragmentSpecs(fragmentCD):
+    fragmentCD = normalizeFragment(fragmentCD)
+    isUniversal = isUniversalFragment(fragmentCD)
+    total, _, _, _, _ = _getFragmentSpecs(fragmentCD)
+    return (isUniversal, total)
+
+
+@lru_cache(maxsize=512)
+def _getFragmentSpecs(fragmentCD, enableException=True):
+    total, progressPerFragment, require, decays, _ = (0,
+     0,
+     (0, 0),
+     (0, 0),
+     {})
+    if getFragmentType(fragmentCD) == BlueprintTypes.VEHICLE:
+        vehicleLevel = vehicles.getVehicleType(fragmentCD).level
+        availableLevels = g_cache.levels
+        LOG_DEBUG_DEV('_getFragmentSpecs vehicleLevel={}, availableLevels={}'.format(vehicleLevel, availableLevels))
+        if enableException and vehicleLevel not in availableLevels:
+            raise BlueprintsException('Invalid vehicle level for having blueprints')
+        total, progressPerFragment, require, decays, _ = availableLevels.get(vehicleLevel, (0,
+         0,
+         (0, 0),
+         (0, 0),
+         {}))
+    return (total,
+     progressPerFragment,
+     require,
+     decays,
+     _)

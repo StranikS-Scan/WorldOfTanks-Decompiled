@@ -19,7 +19,7 @@ class _DisableEventBoards(aop.Aspect):
 class InitEventPointcut(aop.Pointcut):
 
     def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.server_events.EventsCache', 'EventsCache', 'isEventEnabled', aspects=(_ParametrizeInitAspect,))
+        aop.Pointcut.__init__(self, 'gui.game_control.event_battles_controller', 'EventBattlesController', 'isEnabled', aspects=(_ParametrizeInitAspect,))
 
 
 class DisableEventBoards(aop.Pointcut):

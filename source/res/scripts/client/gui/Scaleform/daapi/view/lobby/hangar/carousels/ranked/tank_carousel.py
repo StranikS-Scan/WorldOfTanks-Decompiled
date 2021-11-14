@@ -15,3 +15,6 @@ class RankedTankCarousel(BattlePassTankCarousel):
         filtersVO = super(RankedTankCarousel, self)._getInitialFilterVO(contexts)
         filtersVO['isRanked'] = True
         return filtersVO
+
+    def _getFilters(self):
+        return super(RankedTankCarousel, self)._getFilters() + ('ranked',)

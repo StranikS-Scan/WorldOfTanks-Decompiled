@@ -32,7 +32,6 @@ class WebView(BrowserScreenMeta):
         self._forcedSkipEscape = ctx.get('forcedSkipEscape', False) if ctx else False
         self._browserParams = (ctx or {}).get('browserParams', makeBrowserParams())
         self.__callbackOnLoad = ctx.get('callbackOnLoad', None) if ctx else None
-        self.__callbackOnUnload = ctx.get('callbackOnUnload', None) if ctx else None
         return
 
     def onEscapePress(self):
@@ -82,10 +81,6 @@ class WebView(BrowserScreenMeta):
         self.removeListener(events.HideWindowEvent.HIDE_OVERLAY_BROWSER_VIEW, self.__handleBrowserClose, scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__browserId:
             self.browserCtrl.delBrowser(self.__browserId)
-        if self.__callbackOnUnload:
-            self.__callbackOnUnload()
-            self.__callbackOnUnload = None
-        return
 
     def _refresh(self):
         self.__browser.refresh()

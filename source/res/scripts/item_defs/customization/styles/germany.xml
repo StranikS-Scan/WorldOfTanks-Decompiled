@@ -433,7 +433,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -483,7 +483,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 13g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -523,7 +523,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -573,7 +573,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 13g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -613,7 +613,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 4000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -663,7 +663,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 13g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -1093,7 +1093,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 4500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -1511,5 +1511,51 @@
       <modelsSet></modelsSet>
     </style>
     <modelsSet></modelsSet>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 4500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G144_Kpz_50t	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	300	</id>
+      <texture>	gui/maps/vehicles/styles/G144_Kpz_50t_3Dst_DRXXI.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G144_Kpz_50t_3Dst_DRXXI_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G144_Kpz_50t_3Dst_DRXXI	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G144_Kpz_50t_3Dst_DRXXI	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	18	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
   </itemGroup>
 </germany.xml>

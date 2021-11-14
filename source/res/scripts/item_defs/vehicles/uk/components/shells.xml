@@ -12,8 +12,6 @@
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
-    <he_2021_ap>	ARMOR_PIERCING_PREMIUM_HW.png 0 0	</he_2021_ap>
-    <he_2021_hep>	HIGH_EXPLOSIVE_PREMIUM_HW.png 0 0	</he_2021_hep>
   </icons>
   <_12.7mm_AP_M2>
     <id>	15	</id>
@@ -1500,47 +1498,6 @@
       </damage>
     </armorSpalls>
   </_QF_20pdr_HE_Mk3>
-  <_20pdr_AP_Mk1_Halloween_event_1>
-    <id>	20178	</id>
-    <userString>	#gb_vehicles:_20pdr_AP_Mk1_Halloween_event	</userString>
-    <icon>	he_2021_ap	</icon>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	83.4	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
-    <damage>
-      <armor>	230	</armor>
-      <devices>	200	</devices>
-    </damage>
-  </_20pdr_AP_Mk1_Halloween_event_1>
-  <_20pdr_HE_Mk3_Halloween_event>
-    <id>	20211	</id>
-    <userString>	#gb_vehicles:_20pdr_HE_Mk3_Halloween_event	</userString>
-    <icon>	he_2021_hep	</icon>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	83.4	</caliber>
-    <explosionRadius>	1.28	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
-    <tags>	pick-up	</tags>
-    <damage>
-      <armor>	320	</armor>
-      <devices>	200	</devices>
-    </damage>
-    <armorSpalls>
-      <impactRadius>	1.28	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	140	</armor>
-        <devices>	60	</devices>
-      </damage>
-    </armorSpalls>
-  </_20pdr_HE_Mk3_Halloween_event>
   <_18pdr_HE_Mk_1C>
     <id>	92	</id>
     <userString>	#gb_vehicles:_18pdr_HE_Mk_1C	</userString>
@@ -3234,34 +3191,4 @@
     </damage>
     <notInShop>	True	</notInShop>
   </_17pdr_AP_Mk3T_MapsTraining_Dummy_MT_2>
-  <_5_5inch_AP_Mk_1_HELL>
-    <id>	20000	</id>
-    <userString>	#gb_vehicles:_5_5inch_AP_Mk_1	</userString>
-    <icon>	ap	</icon>
-    <price>	1250	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	139.7	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	largeArmorPiercing_hw19	</effects>
-    <damage>
-      <armor>	400	</armor>
-      <devices>	191	</devices>
-    </damage>
-    <notInShop>	True	</notInShop>
-  </_5_5inch_AP_Mk_1_HELL>
-  <_183mm_AP_Mk1_HELL>
-    <id>	20013	</id>
-    <userString>	#gb_vehicles:_183mm_AP_Mk1	</userString>
-    <icon>	ap	</icon>
-    <price>	2250	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	182.9	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	hugeArmorPiercing	</effects>
-    <damage>
-      <armor>	600	</armor>
-      <devices>	244	</devices>
-    </damage>
-    <notInShop>	True	</notInShop>
-  </_183mm_AP_Mk1_HELL>
 </shells.xml>

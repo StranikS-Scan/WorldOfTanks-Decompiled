@@ -30,7 +30,7 @@ def wasModulesAnimationShown():
 
 @replace_none_kwargs(itemsCache=IItemsCache)
 def getCollectibleVehicles(nationID=ALL_NATIONS_INDEX, itemsCache=None):
-    criteria = REQ_CRITERIA.COLLECTIBLE if nationID == ALL_NATIONS_INDEX else REQ_CRITERIA.NATIONS((nationID,)) | REQ_CRITERIA.COLLECTIBLE
+    criteria = REQ_CRITERIA.COLLECTIBLE if nationID == ALL_NATIONS_INDEX else REQ_CRITERIA.NATIONS((nationID,)) | REQ_CRITERIA.COLLECTIBLE | ~REQ_CRITERIA.HIDDEN
     items = itemsCache.items.getVehicles(criteria)
     return items
 

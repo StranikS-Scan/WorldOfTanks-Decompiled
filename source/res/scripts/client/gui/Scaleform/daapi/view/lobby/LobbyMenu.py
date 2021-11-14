@@ -2,33 +2,37 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyMenu.py
 import BigWorld
 import constants
+from PlayerEvents import g_playerEvents as events
+from account_helpers import AccountSettings
+from account_helpers.counter_settings import getCountNewSettings
 from adisp import process
 from async import async, await
-from account_helpers import AccountSettings
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
-from gui.impl.dialogs import dialogs
-from account_helpers.counter_settings import getCountNewSettings
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
 from gui.Scaleform.genConsts.MENU_CONSTANTS import MENU_CONSTANTS
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl.dialogs import dialogs
+from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
+from gui.prb_control import prbEntityProperty
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import i18n, getShortClientVersion, dependency
-from skeletons.gui.game_control import IBootcampController
 from skeletons.gameplay import IGameplayLogic
-from skeletons.gui.game_control import IPromoController
+from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
 from skeletons.gui.game_control import IManualController
+from skeletons.gui.game_control import IPromoController
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
-from PlayerEvents import g_playerEvents as events
-from gui.prb_control import prbEntityProperty
+from tutorial.control.context import GLOBAL_FLAG
+from uilogging.account_completion.constants import LogActions
+from uilogging.account_completion.loggers import AccountCompletionMenuLogger
 from uilogging.manual.constants import ManualLogActions, ManualLogKeys
 from uilogging.manual.loggers import ManualLogger
-from tutorial.control.context import GLOBAL_FLAG
 
 def _getVersionMessage():
     return ('{0} {1}'.format(text_styles.main(i18n.makeString(MENU.PROMO_PATCH_MESSAGE)), text_styles.stats(getShortClientVersion())),)
@@ -42,6 +46,9 @@ class LobbyMenu(LobbyMenuMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
     gameplay = dependency.descriptor(IGameplayLogic)
     manualController = dependency.descriptor(IManualController)
+    gui = dependency.descriptor(IGuiLoader)
+    demoAccController = dependency.descriptor(IDemoAccCompletionController)
+    _accountCompletionUILogger = AccountCompletionMenuLogger()
 
     @prbEntityProperty
     def prbEntity(self):
@@ -52,15 +59,18 @@ class LobbyMenu(LobbyMenuMeta):
         self.promo.showFieldPost()
 
     def settingsClick(self):
+        self._accountCompletionUILogger.log(LogActions.SETTINGS_CLICKED)
         event_dispatcher.showSettingsWindow(redefinedKeyMode=False)
 
     def onWindowClose(self):
         self.destroy()
 
     def cancelClick(self):
+        self._accountCompletionUILogger.log(LogActions.CONTINUE_CLICKED)
         self.destroy()
 
     def onEscapePress(self):
+        self._accountCompletionUILogger.log(LogActions.ESCAPE_PRESSED)
         self.destroy()
 
     @process
@@ -80,6 +90,7 @@ class LobbyMenu(LobbyMenuMeta):
     def quitClick(self):
         isOk = yield await(dialogs.quitGame(self.getParentWindow()))
         if isOk:
+            self._accountCompletionUILogger.log(LogActions.QUIT_CLICKED)
             self.gameplay.quitFromGame()
 
     def onCounterNeedUpdate(self):
@@ -101,8 +112,9 @@ class LobbyMenu(LobbyMenuMeta):
     def _populate(self):
         super(LobbyMenu, self)._populate()
         self.__addListeners()
+        isDemoAccountWithOpenedCurtain = self.demoAccController.isDemoAccount and CurtainWindow.isOpened()
         state = MENU_CONSTANTS.STATE_SHOW_ALL
-        if self.bootcamp.isInBootcamp():
+        if self.bootcamp.isInBootcamp() or isDemoAccountWithOpenedCurtain:
             state = MENU_CONSTANTS.STATE_HIDE_ALL
         elif constants.IS_CHINA:
             state = MENU_CONSTANTS.STATE_SHOW_SERVER_NAME
@@ -138,6 +150,10 @@ class LobbyMenu(LobbyMenuMeta):
             isShowLobbyMenuTrigger = not AccountSettings.isLobbyMenuTriggerShown() and not self.bootcamp.isInBootcamp()
             getTutorialGlobalStorage().setValue(GLOBAL_FLAG.LOBBY_MENU_ITEM_MANUAL, isShowLobbyMenuTrigger)
             getTutorialGlobalStorage().setValue(GLOBAL_FLAG.LOBBY_MENU_ITEM_BOOTCAMP, isShowLobbyMenuTrigger and not self.bootcamp.hasFinishedBootcampBefore())
+        if isDemoAccountWithOpenedCurtain:
+            self.as_showManualButtonS(False)
+            self.as_showBootcampButtonS(False)
+            self.as_setPostButtonVisibleS(False)
 
     def _dispose(self):
         if not self.bootcamp.isInBootcamp():

@@ -118,3 +118,14 @@ class AcyclicNotifier(SimpleNotifier):
         self._notificationCallbackID = None
         self._updateFunc()
         return
+
+
+class TimerNotifier(_Notifier):
+
+    def _getNextNotificationDelta(self, delta):
+        if delta <= time_utils.ONE_DAY:
+            period = time_utils.ONE_MINUTE
+        else:
+            period = time_utils.ONE_HOUR
+        td = delta % period or period
+        return td

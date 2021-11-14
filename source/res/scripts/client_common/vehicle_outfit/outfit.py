@@ -72,11 +72,15 @@ class Outfit(HasStrCD):
             component = CustomizationOutfit()
         self._id = component.styleId
         self.__styleProgressionLevel = component.styleProgressionLevel
+        self._styleDescr = None
         if self._id:
             intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, self._id)
-            self._styleDescr = getItemByCompactDescr(intCD)
-        else:
-            self._styleDescr = None
+            if not IS_EDITOR:
+                self._styleDescr = getItemByCompactDescr(intCD)
+            else:
+                from items.vehicles import g_cache
+                if g_cache.customization20(createNew=False):
+                    self._styleDescr = getItemByCompactDescr(intCD)
         self._construct(vehicleType=vehicleType)
         for container in self._containers.itervalues():
             container.unpack(component)

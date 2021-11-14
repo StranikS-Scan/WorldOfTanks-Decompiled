@@ -98,6 +98,8 @@ class LocationPointManager(CallbackDelayer):
                 ctx = self.sessionProvider.getCtx()
                 markerText = ctx.getPlayerFullName(creatorID, showVehShortName=False)
             commandName = _ACTIONS.battleChatCommandFromActionID(cmdID).name
+            if targetID in self.__markedAreas:
+                self.__removeMarkedArea(targetID)
             self.__markedAreas[targetID] = LocationPointData(creatorID, position, targetID, cmdID, numberOfReplies, markerText, COMMAND_NAME_TO_LOCATION_MARKER_SUBTYPE[commandName])
             if commandName in self.__visualisationData.keys():
                 params = self.__visualisationData[commandName]

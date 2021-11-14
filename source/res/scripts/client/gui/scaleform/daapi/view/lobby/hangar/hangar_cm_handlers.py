@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_cm_handlers.py
 from logging import getLogger
-import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import process
 from gui import SystemMessages
@@ -13,7 +12,7 @@ from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
 from gui.prb_control import prbDispatcherProperty
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showShop, showVehicleRentalPage, showTelecomRentalPage
+from gui.shared.event_dispatcher import showShop, showVehicleRentalPage
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
@@ -62,7 +61,6 @@ class VEHICLE(object):
     NATION_CHANGE = 'nationChange'
     GO_TO_COLLECTION = 'goToCollection'
     WOT_PLUS_RENT = 'wotPlusRent'
-    TELECOM_RENT = 'telecomRent'
 
 
 class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
@@ -179,8 +177,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.COMPARE: 'compareVehicle',
          VEHICLE.NATION_CHANGE: 'changeVehicleNation',
          VEHICLE.GO_TO_COLLECTION: 'goToCollection',
-         VEHICLE.WOT_PLUS_RENT: 'showWotPlusRent',
-         VEHICLE.TELECOM_RENT: 'showTelecomRent'})
+         VEHICLE.WOT_PLUS_RENT: 'showWotPlusRent'})
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -230,9 +227,6 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def showWotPlusRent(self):
         showVehicleRentalPage()
-
-    def showTelecomRent(self):
-        showTelecomRentalPage()
 
     def _initFlashValues(self, ctx):
         self.vehInvID = int(ctx.inventoryId)
@@ -286,7 +280,6 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     options.append(self._makeItem(VEHICLE.NATION_CHANGE, MENU.CONTEXTMENU_NATIONCHANGE, {'enabled': vehicle.isNationChangeAvailable,
                      'isNew': isNew}))
                 if vehicle.isRented:
-                    canSell = vehicle.canSell and vehicle.rentalIsOver
                     if not vehicle.isPremiumIGR:
                         items = self.itemsCache.items
                         enabled = vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
@@ -296,13 +289,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                         serverSettings = self._lobbyContext.getServerSettings()
                         isRentalEnabled = serverSettings.isWotPlusTankRentalEnabled()
                         options.append(self._makeItem(VEHICLE.WOT_PLUS_RENT, MENU.contextmenu(VEHICLE.WOT_PLUS_RENT), {'enabled': isRentalEnabled}))
-                    if vehicle.isTelecomRent:
-                        canSell = False
-                        serverSettings = self._lobbyContext.getServerSettings()
-                        isRentalEnabled = serverSettings.isTelecomRentalsEnabled()
-                        isActive = BigWorld.player().telecomRentals.isActive()
-                        options.append(self._makeItem(VEHICLE.TELECOM_RENT, MENU.contextmenu(VEHICLE.WOT_PLUS_RENT), {'enabled': isRentalEnabled and isActive}))
-                    options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': canSell}))
+                    options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
                 else:
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell and not isEventVehicle}))
                 if vehicle.isFavorite:

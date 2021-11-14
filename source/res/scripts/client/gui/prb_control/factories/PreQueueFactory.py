@@ -16,7 +16,7 @@ from gui.prb_control.entities.tutorial.pre_queue.entity import TutorialEntity, T
 from gui.prb_control.entities.ranked.pre_queue.entity import RankedEntity, RankedEntryPoint
 from gui.prb_control.entities.epic.pre_queue.entity import EpicEntity, EpicEntryPoint
 from gui.prb_control.entities.mapbox.pre_queue.entity import MapboxEntity, MapboxEntryPoint
-from gui.prb_control.entities.event.pre_queue.entity import EventBattleEntryPoint, EventBattleEntity
+from gui.prb_control.entities.event.pre_queue.entity import EventBattleEntity, EventBattleEntryPoint
 from gui.prb_control.items import FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG as _FLAG
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE

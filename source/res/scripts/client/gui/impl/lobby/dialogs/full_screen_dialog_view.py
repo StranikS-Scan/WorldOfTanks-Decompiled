@@ -52,6 +52,9 @@ class FullScreenDialogBaseView(ViewImpl):
         self.__result = result
         self.__event.set()
 
+    def stopWaiting(self, result):
+        self._setResult(result)
+
 
 class FullScreenDialogView(FullScreenDialogBaseView, typing.Generic[TViewModel]):
     __slots__ = ('_stats',)
@@ -159,10 +162,13 @@ class FullScreenDialogWindowWrapper(LobbyWindow):
     def wait(self):
         return self._wrappedView.wait()
 
+    def stopWaiting(self, result):
+        self._wrappedView.stopWaiting(result)
+
     @classmethod
-    def createIfNotExist(cls, layoutID, wrappedViewClass, parent=None, doBlur=True, *args, **kwargs):
+    def createIfNotExist(cls, layoutID, wrappedViewClass, parent=None, *args, **kwargs):
         currentView = cls.__gui.windowsManager.getViewByLayoutID(layoutID)
-        return FullScreenDialogWindowWrapper(wrappedViewClass(*args, **kwargs), parent, doBlur) if currentView is None else None
+        return FullScreenDialogWindowWrapper(wrappedViewClass(*args, **kwargs), parent) if currentView is None else None
 
     def _finalize(self):
         if self._blur:

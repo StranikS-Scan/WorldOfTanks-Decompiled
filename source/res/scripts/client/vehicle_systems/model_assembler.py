@@ -594,6 +594,9 @@ def setupSplineTracks(fashion, vDesc, chassisModel, prereqs, modelsSet):
             if segmentModelLeft is not None and segmentModelRight is not None:
                 identityMatrix = Math.Matrix()
                 identityMatrix.setIdentity()
+                if not chassisModel.isValid():
+                    _logger.error('chassisModel is not valid')
+                    return
                 track = BigWorld.wg_createSplineTrack(chassisModel, trackDesc.leftDesc, idx, trackDesc.segmentLength, segmentModelLeft, trackDesc.segmentOffset, segment2ModelLeft, trackDesc.segment2Offset, _ROOT_NODE_NAME, trackDesc.atlasUTiles, trackDesc.atlasVTiles)
                 if track is not None:
                     leftSpline.append(track)

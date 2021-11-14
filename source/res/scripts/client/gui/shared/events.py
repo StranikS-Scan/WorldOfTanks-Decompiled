@@ -73,7 +73,6 @@ class GameEvent(HasCtxEvent):
     PRE_CHARGE = 'game/preCharge'
     CONTROL_MODE_CHANGE = 'game/controlModeChange'
     SNIPER_CAMERA_TRANSITION = 'game/sniperCameraTransition'
-    WORLD_MARKERS_COMPONENT_LIFETIME = 'game/worldMarkersComponentLifetime'
     FADE_OUT_AND_IN = 'game/fadeOutIn'
     CALLOUT_DISPLAY_EVENT = 'game/calloutDisplayEvent'
     RESPOND_TO_CALLOUT = 'game/respondToCallout'
@@ -82,9 +81,6 @@ class GameEvent(HasCtxEvent):
     ROLE_HINT_TOGGLE = 'roleHintToggle'
     COMMANDER_HINT = 'game/commanderHint'
     CHANGE_AMMUNITION_SETUP = 'game/changeAmmunitionSetup'
-    COLLECTOR_PROGRESS = 'game/collectorProgress'
-    COLLECTOR_PROGRESS_STOP = 'game/collectorProgressStop'
-    SHOW_BOSS_HP_BAR = 'game/showBossHPBar'
 
 
 class GUICommonEvent(SharedEvent):
@@ -193,6 +189,7 @@ class BrowserEvent(HasCtxEvent):
 
 class ShowDialogEvent(SharedEvent):
     SHOW_SIMPLE_DLG = 'showSimpleDialog'
+    SHOW_BUTTON_DLG = 'showButtonDialog'
     SHOW_ICON_DIALOG = 'showIconDialog'
     SHOW_ICON_PRICE_DIALOG = 'showIconPriceDialog'
     SHOW_CREW_SKINS_COMPENSATION_DIALOG = 'showCrewSkinsCompensationDialog'
@@ -214,7 +211,6 @@ class ShowDialogEvent(SharedEvent):
     SHOW_USE_AWARD_SHEET_DIALOG = 'useAwardSheetDialog'
     SHOW_CONFIRM_C11N_BUY_DIALOG = 'showConfirmC11nBuyDialog'
     SHOW_CONFIRM_C11N_SELL_DIALOG = 'showConfirmC11nSellDialog'
-    SHOW_EVENT_AFK_DIALOG = 'showEventAFKDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(ViewEventType.LOAD_VIEW)
@@ -620,12 +616,9 @@ class VehicleBuyEvent(HasCtxEvent):
 class HangarVehicleEvent(HasCtxEvent):
     ON_HERO_TANK_LOADED = 'hangarVehicle/onHeroTankLoaded'
     ON_HERO_TANK_DESTROY = 'hangarVehicle/onHeroTankDestroy'
-    HERO_TANK_MARKER = 'hangarVehicle/heroTankMarker'
     ON_PLATOON_TANK_LOADED = 'hangarVehicle/onPlatoonTankLoaded'
     ON_PLATOON_TANK_DESTROY = 'hangarVehicle/onPlatoonTankDestroy'
     PLATOON_TANK_MARKER = 'hangarVehicle/platoonTankMarker'
-    ON_HALLOWEEN_TANK_LOADED = 'hangarVehicle/onHalloweenTankLoaded'
-    ON_HALLOWEEN_TANK_DESTROY = 'hangarVehicle/onHalloweenTankDestroy'
 
 
 class LinkedSetEvent(HasCtxEvent):
@@ -650,24 +643,6 @@ class HangarCustomizationEvent(HasCtxEvent):
 class SeniorityAwardsEvent(HasCtxEvent):
     ON_REWARD_VIEW_CLOSED = 'seniorityAwards/onRewardViewClosed'
     ON_ENTRY_VIEW_LOADED = 'seniorityAwards/onEntryViewLoaded'
-
-
-class PickUpEvent(HasCtxEvent):
-    ON_PICKUP = 'PickUpEvent/onPickup'
-
-
-class BuffUiEvent(HasCtxEvent):
-    ON_APPLY = 'BuffUiEvent/onApply'
-    ON_UNAPPLY = 'BuffUiEvent/onUnapply'
-
-
-class BattleHintEvent(HasCtxEvent):
-    ON_SHOW = 'BattleHintEvent/onShow'
-    ON_HIDE = 'BattleHintEvent/onHide'
-
-
-class BossHPBarEvent(HasCtxEvent):
-    ON_HIDE = 'BossHPBarEvent/onHide'
 
 
 class ReferralProgramEvent(HasCtxEvent):
@@ -782,8 +757,3 @@ class FullscreenModeSelectorEvent(HasCtxEvent):
 
 class ModeSelectorPopoverEvent(HasCtxEvent):
     NAME = 'ModeSelectorPopoverEvent'
-
-
-class HalloweenEvent(HasCtxEvent):
-    BOX_OPENED = 'halloween/box/opened'
-    BOX_SELECTED = 'halloween/box/selected'

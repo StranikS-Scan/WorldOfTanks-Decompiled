@@ -7,6 +7,7 @@ from account_helpers.AccountSettings import AccountSettings, COLOR_SETTINGS_TAB_
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.common.settings.mixins import LayerVisibilityMixin
 from gui.Scaleform.daapi.view.meta.ColorSettingsViewMeta import ColorSettingsViewMeta
 from gui.Scaleform.genConsts.COLOR_SETTINGS import COLOR_SETTINGS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -28,7 +29,7 @@ class TABS(object):
 
 COLOR_GRADING_TECHNIQUE_DEFAULT = 0
 
-class ColorSettingsView(ColorSettingsViewMeta):
+class ColorSettingsView(LayerVisibilityMixin, ColorSettingsViewMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx=None):
@@ -39,6 +40,7 @@ class ColorSettingsView(ColorSettingsViewMeta):
         self.__isColorPreviewFilterActive = False
         self.__initSettings = self.__getSettings()
         self.__tabsPreviewSettings = self.__getLastAppliedTabsSettings()
+        self.__wasGraphicsOptimizationEnabled = False
         if self.__selectedTabIdx == TABS.CUSTOM:
             self.__showColorPreviewFilter()
         self.__blur = None
@@ -118,6 +120,8 @@ class ColorSettingsView(ColorSettingsViewMeta):
             self._savedBackgroundAlpha = self.app.getBackgroundAlpha()
             self.app.setBackgroundAlpha(0)
             self.addListener(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, self.__onExternalBackgroundAlphaChange, EVENT_BUS_SCOPE.GLOBAL)
+            self.__wasGraphicsOptimizationEnabled = self.app.graphicsOptimizationManager.getEnable()
+            self.app.graphicsOptimizationManager.switchOptimizationEnabled(False)
         self.as_initDataS({'header': text_styles.superPromoTitle(SETTINGS.COLORSETTINGS_VIEW_HEADER),
          'typesHeader': text_styles.highTitle(SETTINGS.COLORSETTINGS_VIEW_SUBTITLE),
          'typesDesc': text_styles.main(SETTINGS.COLORSETTINGS_VIEW_DESCRIPTION),
@@ -147,6 +151,7 @@ class ColorSettingsView(ColorSettingsViewMeta):
             self.app.setBackgroundAlpha(self._savedBackgroundAlpha)
             if hasattr(self.app, 'leaveGuiControlMode'):
                 self.app.leaveGuiControlMode(VIEW_ALIAS.COLOR_SETTING)
+            self.app.graphicsOptimizationManager.switchOptimizationEnabled(self.__wasGraphicsOptimizationEnabled)
         self.fireEvent(GameEvent(GameEvent.SHOW_EXTERNAL_COMPONENTS), scope=EVENT_BUS_SCOPE.GLOBAL)
         if self.__initSettings is not None:
             self.__initSettings.clear()

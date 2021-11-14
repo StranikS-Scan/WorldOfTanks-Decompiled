@@ -77,7 +77,7 @@ class MapsTrainingBattleGoals(BattleHintComponent, MapsTrainingGoalsMeta, IArena
     def _getSoundNotification(self, hint, data):
         return hint.soundNotificationNewbie if hint.soundNotificationNewbie is not None and not self.settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.MAPS_TRAINING_NEWBIE_HINT, default=False) else hint.soundNotification
 
-    def _showHint(self, hint, hintData):
+    def _showHint(self, hintData):
         hintType = hintData['hintType']
         descr = hintData.get('description1')
         if hintType is HintType.GOAL:
@@ -88,9 +88,6 @@ class MapsTrainingBattleGoals(BattleHintComponent, MapsTrainingGoalsMeta, IArena
             self.as_showHintS(hintType.value, descr)
 
     def _hideHint(self):
-        self.as_hideHintS()
-
-    def _finishHint(self):
         self.as_hideHintS()
 
     def _destroyGoal(self, vehType):

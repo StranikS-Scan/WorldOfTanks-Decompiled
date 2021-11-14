@@ -4,6 +4,7 @@ from inspect import getmembers
 from enumerations import Enumeration
 from misc import EDITOR_TYPE, ASPECT
 from typing import Any, List
+__all__ = ('VScriptType', 'VScriptEnum', 'VScriptStruct', 'VScriptStructField')
 
 class VScriptType(object):
 
@@ -84,3 +85,51 @@ class VScriptEnum(object):
     @classmethod
     def vs_aspects(cls):
         return ASPECT.ALL
+
+
+class VScriptStructField(object):
+
+    def __init__(self, displayName, fieldType):
+        self.name = '#' + displayName
+        self.type = fieldType
+
+    def __get__(self, instance, owner):
+        return getattr(instance, self.name, None)
+
+    def __set__(self, instance, value):
+        setattr(instance, self.name, value)
+
+
+class AllowVScriptStruct(type):
+
+    def __new__(cls, name, bases, members):
+        fieldData = {}
+        for key, value in members.iteritems():
+            if isinstance(value, VScriptStructField):
+                fieldData[value.name[1:]] = value.type
+
+        members.update({'vs_fields': fieldData})
+        return type.__new__(cls, name, bases, members)
+
+
+class VScriptStruct(object):
+    __metaclass__ = AllowVScriptStruct
+
+    def __new__(cls, *args, **kwargs):
+        return super(VScriptStruct, cls).__new__(cls)
+
+    @classmethod
+    def slotType(cls):
+        return cls.__name__
+
+    @classmethod
+    def vs_aspects(cls):
+        return ASPECT.ALL
+
+    @classmethod
+    def vs_module(cls):
+        return cls.__module__
+
+    @classmethod
+    def vs_name(cls):
+        return cls.slotType() + 'T'

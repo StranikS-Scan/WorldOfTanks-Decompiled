@@ -42,7 +42,7 @@ from gui.shared.utils import makeSearchableString
 from helpers import i18n, time_utils, dependency, func_utils
 from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr, filterIntCDsByItemType
 from items.vehicles import getItemByCompactDescr, getVehicleType
-from items.components.c11n_constants import SeasonType, CustomizationType, HIDDEN_CAMOUFLAGE_ID, ApplyArea, CUSTOM_STYLE_POOL_ID, ItemTags
+from items.components.c11n_constants import SeasonType, CustomizationType, HIDDEN_CAMOUFLAGE_ID, ApplyArea, CUSTOM_STYLE_POOL_ID, ItemTags, EMPTY_ITEM_ID
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.game_control import IIGRController, IRentalsController, IVehiclePostProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -145,8 +145,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     OBSERVER = 'observer'
     DISABLED_IN_ROAMING = 'disabledInRoaming'
     EVENT = 'event_battles'
-    EVENT_PREMIUM_VEHICLE = 'event_premium_vehicle'
-    EVENT_NOT_ELITE_VEHICLE = 'event_not_elite_vehicle'
     EXCLUDED_FROM_SANDBOX = 'excluded_from_sandbox'
     TELECOM = 'telecom'
     UNRECOVERABLE = 'unrecoverable'
@@ -297,7 +295,6 @@ class Vehicle(FittingItem):
             if proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles and not self.isOnlyForEventBattles:
                 self._dailyXPFactor = proxy.shop.dailyXPFactor
             self._isElite = not vehDescr.type.unlocksDescrs or self.intCD in proxy.stats.eliteVehicles
-            self._isElite = self._isElite and VEHICLE_TAGS.EVENT_NOT_ELITE_VEHICLE not in vehDescr.type.tags
             self._isFullyElite = self.isElite and not any((data[1] not in proxy.stats.unlocks for data in vehDescr.type.unlocksDescrs))
             clanDamageLock = proxy.stats.vehicleTypeLocks.get(self.intCD, {}).get(CLAN_LOCK, 0)
             clanNewbieLock = proxy.stats.globalVehicleLocks.get(CLAN_LOCK, 0)
@@ -475,6 +472,9 @@ class Vehicle(FittingItem):
         vehicleCD = self.descriptor.makeCompactDescr()
         outfits = {season:self.__getOutfit(component, vehicleCD) for season, component in self._outfitComponents.iteritems()}
         return outfits
+
+    def getPersonalDiscountPrice(self):
+        return self._personalDiscountPrice
 
     def getUnlockDescrByIntCD(self, intCD):
         for unlockIdx, data in enumerate(self.descriptor.type.unlocksDescrs):
@@ -950,10 +950,6 @@ class Vehicle(FittingItem):
         return self._rentInfo.isWotPlus
 
     @property
-    def isTelecomRent(self):
-        return self._rentInfo.isTelecomRent
-
-    @property
     def type(self):
         return set(vehicles.VEHICLE_CLASS_TAGS & self.tags).pop()
 
@@ -1069,8 +1065,13 @@ class Vehicle(FittingItem):
         return count
 
     def getNewC11nItems(self, proxy):
-        newItemsIds = proxy.inventory.getC11nItemsNoveltyCounters(self._descriptor.type).iterkeys()
-        newItems = [ proxy.getItemByCD(itemCD) for itemCD in newItemsIds ]
+        newItems = []
+        for itemCD in proxy.inventory.getC11nItemsNoveltyCounters(self._descriptor.type).iterkeys():
+            item = proxy.getItemByCD(itemCD)
+            if item.id == EMPTY_ITEM_ID:
+                continue
+            newItems.append(item)
+
         return newItems
 
     def getState(self, isCurrentPlayer=True):
@@ -1138,10 +1139,6 @@ class Vehicle(FittingItem):
             return Vehicle.VEHICLE_STATE.RENTABLE_AGAIN
         return state
 
-    @classmethod
-    def __getEventVehicles(cls):
-        return cls.eventsCache.getEventVehicles()
-
     def isRotationApplied(self):
         return self.rotationGroupNum != 0
 
@@ -1200,7 +1197,7 @@ class Vehicle(FittingItem):
 
     @property
     def isEvent(self):
-        return self.isOnlyForEventBattles and self in Vehicle.__getEventVehicles()
+        return self.isOnlyForEventBattles
 
     @property
     def isDisabledInRoaming(self):
@@ -1670,7 +1667,7 @@ class Vehicle(FittingItem):
         return self._outfitComponents.get(season)
 
     def removeOutfitForSeason(self, season):
-        self._outfitComponents[season] = self.__getEmptyOutfitComponent()
+        self._outfitComponents[season] = customizations.CustomizationOutfit()
 
     def setCustomOutfit(self, season, outfit):
         for s in SeasonType.REGULAR:

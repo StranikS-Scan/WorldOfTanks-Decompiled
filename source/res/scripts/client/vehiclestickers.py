@@ -88,10 +88,9 @@ class Insignia(object):
 
 class ModelStickers(object):
 
-    def __init__(self, componentIdx, stickerPacks, vDesc, emblemSlots, vehicleId):
+    def __init__(self, componentIdx, stickerPacks, vDesc, emblemSlots):
         self.__componentIdx = componentIdx
         self.__stickerPacks = stickerPacks
-        self.__vehicleId = vehicleId
         for slot in emblemSlots:
             if slot.type in self.__stickerPacks:
                 stickerPackTuple = self.__stickerPacks[slot.type]
@@ -111,7 +110,6 @@ class ModelStickers(object):
         self.detachStickers()
 
     def attachStickers(self, model, parentNode, isDamaged, toPartRootMatrix=None):
-        _logger.info('ModelStickers::attachStickers. vid=%s', self.__vehicleId)
         self.detachStickers()
         self.__model = model
         if toPartRootMatrix is not None:
@@ -131,7 +129,6 @@ class ModelStickers(object):
         return
 
     def detachStickers(self):
-        _logger.info('ModelStickers::detachStickers. vid=%s', self.__vehicleId)
         if self.__model is None:
             return
         else:
@@ -147,11 +144,9 @@ class ModelStickers(object):
             return
 
     def addDamageSticker(self, stickerID, segStart, segEnd):
-        _logger.info('ModelStickers::addDamageSticker. vid=%s', self.__vehicleId)
         return 0 if self.__model is None else self.__stickerModel.addDamageSticker(stickerID, segStart, segEnd)
 
     def delDamageSticker(self, handle):
-        _logger.info('ModelStickers::delDamageSticker. vid=%s', self.__vehicleId)
         if self.__model is not None:
             self.__stickerModel.delSticker(handle)
         return
@@ -162,6 +157,16 @@ class ModelStickers(object):
             for clanStickerPack in clanStickerPackTuple:
                 clanStickerPack.detach(self.__componentIdx, self.__stickerModel)
                 clanStickerPack.attach(self.__componentIdx, self.__stickerModel, self.__isDamaged)
+
+        return
+
+    def updateInsigniaSticker(self):
+        insigniaStickerPacks = set(self.__stickerPacks[SlotTypes.INSIGNIA] + self.__stickerPacks[SlotTypes.INSIGNIA_ON_GUN])
+        if self.__model is not None:
+            for insigniaStickerPack in insigniaStickerPacks:
+                insigniaStickerPack.detach(self.__componentIdx, self.__stickerModel)
+                insigniaStickerPack.update(self.__componentIdx)
+                insigniaStickerPack.attach(self.__componentIdx, self.__stickerModel, self.__isDamaged)
 
         return
 
@@ -449,6 +454,7 @@ class ClanStickerPack(StickerPack):
 
 class InsigniaStickerPack(StickerPack):
     _ALLOWED_PART_IDX = (TankPartIndexes.HULL, TankPartIndexes.TURRET) + Insignia.Indexes.ALL
+    _NO_INSIGNIA_RANK = 0
 
     def __init__(self, vDesc, outfit, insigniaRank):
         super(InsigniaStickerPack, self).__init__(vDesc, outfit)
@@ -457,34 +463,37 @@ class InsigniaStickerPack(StickerPack):
         self._useCustomInsignia = False
         self._useOldInsignia = True
 
+    def setInsigniaRank(self, insigniaRank):
+        if self._insigniaRank == insigniaRank:
+            return False
+        self._insigniaRank = insigniaRank
+        return True
+
     def bind(self, componentIdx, componentSlot):
-        if not self._isValidComponentIdx(componentIdx):
-            return
-        else:
-            params = self._data[componentIdx]
-            slotIdx = len(params)
-            if componentIdx in Insignia.Indexes.ALL:
-                container = self._outfit.getContainer(TankPartIndexes.GUN)
-                slot = container.slotFor(GUI_ITEM_TYPE.INSIGNIA)
-                intCD = slot.getItemCD(slotIdx)
-                if intCD:
-                    item = getItemByCompactDescr(intCD)
-                    stickerParam = self._convertToInsignia(item)
-                    self._useCustomInsignia = True
-                else:
-                    stickerParam = self._getDefaultParams()
+        params = self._data[componentIdx]
+        slotIdx = len(params)
+        if componentIdx in Insignia.Indexes.ALL:
+            container = self._outfit.getContainer(TankPartIndexes.GUN)
+            slot = container.slotFor(GUI_ITEM_TYPE.INSIGNIA)
+            intCD = slot.getItemCD(slotIdx)
+            if intCD:
+                item = getItemByCompactDescr(intCD)
+                stickerParam = self._convertToInsignia(item)
+                self._useCustomInsignia = True
             else:
-                container = self._outfit.getContainer(componentIdx)
-                slot = container.slotFor(GUI_ITEM_TYPE.INSIGNIA)
-                intCD = slot.getItemCD(slotIdx)
-                if intCD:
-                    item = getItemByCompactDescr(intCD)
-                    stickerParam = self._convertToCounter(item)
-                    self._useOldInsignia = False
-                else:
-                    stickerParam = None
-            params.append(_StickerSlotPair(componentSlot, stickerParam))
-            return
+                stickerParam = self._getDefaultParams()
+        else:
+            container = self._outfit.getContainer(componentIdx)
+            slot = container.slotFor(GUI_ITEM_TYPE.INSIGNIA)
+            intCD = slot.getItemCD(slotIdx)
+            if intCD:
+                item = getItemByCompactDescr(intCD)
+                stickerParam = self._convertToCounter(item)
+                self._useOldInsignia = False
+            else:
+                stickerParam = None
+        params.append(_StickerSlotPair(componentSlot, stickerParam))
+        return
 
     def attach(self, componentIdx, stickerModel, isDamaged):
         if not self._isValidComponentIdx(componentIdx):
@@ -513,8 +522,17 @@ class InsigniaStickerPack(StickerPack):
              True))
             self._handles[componentIdx][idx] = handle
 
+    def update(self, componentIdx):
+        if not self._isValidComponentIdx(componentIdx):
+            return
+        params = self._data.pop(componentIdx, [])
+        self._data[componentIdx] = []
+        for param in params:
+            slot, _ = param
+            self.bind(componentIdx, slot)
+
     def _isValidComponentIdx(self, componentIdx):
-        return self._insigniaRank != 0 and super(InsigniaStickerPack, self)._isValidComponentIdx(componentIdx)
+        return False if self._insigniaRank == self._NO_INSIGNIA_RANK else super(InsigniaStickerPack, self)._isValidComponentIdx(componentIdx)
 
     def _getDefaultParams(self):
         defaultParams = _TextureParams('', '', False)
@@ -554,6 +572,9 @@ class DebugStickerPack(StickerPack):
     def setClanId(self, clanId):
         pass
 
+    def setInsigniaRank(self, insigniaRank):
+        pass
+
     def _getStickerSize(self, slot):
         return (slot.size, slot.size * 0.5) if slot.type in (SlotTypes.INSCRIPTION, SlotTypes.FIXED_INSCRIPTION) else super(DebugStickerPack, self)._getStickerSize(slot)
 
@@ -575,6 +596,14 @@ class VehicleStickers(object):
                 for componentStickers in self.__stickers.itervalues():
                     componentStickers.stickers.updateClanSticker()
 
+    def setInsigniaRank(self, insigniaRank):
+        self.__currentInsigniaRank = insigniaRank
+        insigniaStickerPacks = set(self.__stickerPacks[SlotTypes.INSIGNIA] + self.__stickerPacks[SlotTypes.INSIGNIA_ON_GUN])
+        for insigniaStickerPack in insigniaStickerPacks:
+            if insigniaStickerPack.setInsigniaRank(insigniaRank):
+                for componentStickers in self.__stickers.itervalues():
+                    componentStickers.stickers.updateInsigniaSticker()
+
     def __setAlpha(self, alpha):
         multipliedAlpha = alpha * self.__defaultAlpha
         for componentStickers in self.__stickers.itervalues():
@@ -593,7 +622,7 @@ class VehicleStickers(object):
     show = property(lambda self: self.__show, __setShow)
     __INSIGNIA_NODE_NAME = 'G'
 
-    def __init__(self, vehicleDesc, insigniaRank=0, outfit=None, vehicleId=-1):
+    def __init__(self, vehicleDesc, insigniaRank=0, outfit=None):
         self.__defaultAlpha = vehicleDesc.type.emblemsAlpha
         self.__show = True
         self.__animateGunInsignia = vehicleDesc.gun.animateEmblemSlots
@@ -617,7 +646,7 @@ class VehicleStickers(object):
                 componentIdx = Insignia.Indexes.DUAL_RIGHT
             else:
                 componentIdx = TankPartNames.getIdx(componentName)
-            modelStickers = ModelStickers(componentIdx, self.__stickerPacks, vehicleDesc, emblemSlots, vehicleId)
+            modelStickers = ModelStickers(componentIdx, self.__stickerPacks, vehicleDesc, emblemSlots)
             self.__stickers[componentName] = ComponentStickers(modelStickers, {}, 1.0)
 
         return

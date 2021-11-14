@@ -33,7 +33,6 @@
     <FuG_7>	41	</FuG_7>
     <TRVP_13_A_1>	42	</TRVP_13_A_1>
     <SCR_528_FL>	501	</SCR_528_FL>
-    <SCR_528_Halloween>	46	</SCR_528_Halloween>
     <SCR_528_IGR>	60001	</SCR_528_IGR>
     <FuG8f_IGR>	60002	</FuG8f_IGR>
     <ER_56_IGR>	60003	</ER_56_IGR>
@@ -44,12 +43,6 @@
     <TRVP_13_SH>	44	</TRVP_13_SH>
     <SCR_508_SH>	45	</SCR_508_SH>
     <SCR_528_MapsTraining_Dummy_SPG_2>	6	</SCR_528_MapsTraining_Dummy_SPG_2>
-    <SCR_528A_HW_bot>	3	</SCR_528A_HW_bot>
-    <TRVP_13_HW_bot>	12	</TRVP_13_HW_bot>
-    <TRVP_13_A_HW_bot>	13	</TRVP_13_A_HW_bot>
-    <SCR_619_HW_bot>	14	</SCR_619_HW_bot>
-    <SCR_528_HW_bot>	15	</SCR_528_HW_bot>
-    <SCR_528A_HW_bot__0>	18	</SCR_528A_HW_bot__0>
   </ids>
   <shared>
     <FuG_Spr.D>
@@ -444,18 +437,6 @@
       <maxRegenHealth>	96	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </FuG_7>
-    <SCR_528_Halloween>
-      <userString>	#france_vehicles:SCR_528_Halloween	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </SCR_528_Halloween>
     <SCR_528_IGR>
       <userString>	#igr_vehicles:SCR_528_IGR	</userString>
       <tags></tags>
@@ -570,77 +551,5 @@
       <repairCost>	3	</repairCost>
       <notInShop>	True	</notInShop>
     </SCR_528_MapsTraining_Dummy_SPG_2>
-    <SCR_528A_HW_bot>
-      <userString>	#france_vehicles:SCR_528	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </SCR_528A_HW_bot>
-    <TRVP_13_HW_bot>
-      <userString>	#france_vehicles:TRVP_13	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <weight>	80	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <notInShop>	True	</notInShop>
-    </TRVP_13_HW_bot>
-    <TRVP_13_A_HW_bot>
-      <userString>	#france_vehicles:TRVP_13_A	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </TRVP_13_A_HW_bot>
-    <SCR_619_HW_bot>
-      <userString>	#france_vehicles:SCR_619	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <notInShop>	true	</notInShop>
-      <price>	54000	</price>
-      <weight>	80	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </SCR_619_HW_bot>
-    <SCR_528_HW_bot>
-      <userString>	#france_vehicles:SCR_528	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <weight>	80	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <notInShop>	True	</notInShop>
-    </SCR_528_HW_bot>
-    <SCR_528A_HW_bot__0>
-      <userString>	#france_vehicles:SCR_528	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	50	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </SCR_528A_HW_bot__0>
   </shared>
 </radios.xml>

@@ -817,7 +817,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -857,7 +857,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -1248,7 +1248,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -1288,7 +1288,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -1621,6 +1621,46 @@
               <slotId>	18000	</slotId>
             </item>
           </sequences>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A92_M60	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	576	</id>
+      <texture>	gui/maps/vehicles/styles/A92_M60_3DSt_ZI_21.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A92_M60_3DSt_ZI_21_desc/long	</longDescriptionSpecial>
+      <modelsSet>	A92_M60_3DSt_ZI_21	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A92_M60_3DSt_ZI_21	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
         </outfit>
       </outfits>
       <itemFilters>

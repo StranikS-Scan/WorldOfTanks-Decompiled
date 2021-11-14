@@ -6,7 +6,7 @@ from gui.impl.gen import R
 from gui.shared.money import Currency
 from gui.shared.utils.functions import getAbsoluteUrl
 from gui.Scaleform.genConsts.COMPONENTS import COMPONENTS
-__all__ = ('noSeason', 'swords', 'alert', 'arrow', 'xp', 'notAvailable', 'notAvailableRed', 'checkmark', 'info', 'premiumIgrBig', 'premiumIgrSmall', 'freeXP', 'nut', 'clock', 'makeImageTag', 'getRoleIcon', 'rewardBoxKey') + Currency.ALL
+__all__ = ('noSeason', 'swords', 'alert', 'arrow', 'xp', 'notAvailable', 'notAvailableRed', 'checkmark', 'info', 'premiumIgrBig', 'premiumIgrSmall', 'freeXP', 'nut', 'clock', 'makeImageTag', 'getRoleIcon') + Currency.ALL
 _IMG_TAG_TPL = "<img src='{0}' width='{1}' height='{2}' vspace='{3}' hspace='{4}'/>"
 
 def _getIcon(icon, width=None, height=None, vspace=None, hspace=None):
@@ -204,8 +204,3 @@ def getRoleIcon(role, vSpace=-6, width=24, height=24):
 def lightning(vSpace=-4):
     source = backport.image(R.images.gui.maps.icons.library.lightning())
     return makeImageTag(source, width=10, height=16, vSpace=vSpace)
-
-
-def rewardBoxKey(vSpace=-12, hSpace=-58):
-    source = backport.image(R.images.gui.maps.icons.event.components.key.key_44x44())
-    return makeImageTag(source, width=32, height=32, vSpace=vSpace, hSpace=hSpace)

@@ -7,11 +7,12 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import process, async
 from gui.Scaleform.daapi.view.lobby.customization.context.customization_mode import CustomizationMode
-from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, isNeedToMirrorProjectionDecal, isSlotFilled, isItemsQuantityLimitReached, fitPersonalNumber, formatPersonalNumber, EMPTY_PERSONAL_NUMBER, customizationSlotIdToUid, CustomizationSlotUpdateVO, getCustomPurchaseItems
+from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, isSlotFilled, isItemsQuantityLimitReached, fitPersonalNumber, formatPersonalNumber, EMPTY_PERSONAL_NUMBER, customizationSlotIdToUid, CustomizationSlotUpdateVO, getCustomPurchaseItems
 from gui.Scaleform.daapi.view.lobby.customization.shared import getOutfitWithoutItems
 from gui.customization.constants import CustomizationModes
 from gui.customization.shared import C11nId, PurchaseItem, getAvailableRegions
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.customization import isNeedToMirrorProjectionDecal
 from gui.shared.gui_items.processors.common import OutfitApplier, CustomizationsSeller
 from gui.shared.utils.decorators import process as wrappedProcess
 from items.components.c11n_components import isPersonalNumberAllowed

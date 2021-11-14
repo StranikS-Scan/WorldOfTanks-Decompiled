@@ -16,6 +16,7 @@ import DynamicCameras.ArtyCamera
 import DynamicCameras.DualGunCamera
 import DynamicCameras.SniperCamera
 import DynamicCameras.StrategicCamera
+import GenericComponents
 import MapCaseMode
 import RespawnDeathMode
 import aih_constants
@@ -39,7 +40,7 @@ from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
 from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker, TurboshaftModeSoundNotifications
 from Event import Event
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from constants import ARENA_PERIOD, AIMING_MODE, ATTACK_REASONS, PHASE_CHANGE_ATTACK_REASONS
+from constants import ARENA_PERIOD, AIMING_MODE
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import g_guiResetters, GUI_CTRL_MODE_FLAG, GUI_SETTINGS
 from gui.app_loader import settings
@@ -145,7 +146,6 @@ class DynamicCameraSettings(object):
 
 class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     bootcampCtrl = dependency.descriptor(IBootcampController)
-    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     ctrl = property(lambda self: self.__curCtrl)
     ctrls = property(lambda self: self.__ctrls)
     isSPG = property(lambda self: self.__isSPG)
@@ -288,6 +288,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.__detachedCommands.append(VehicleUpgradePanelControl())
             if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.SWITCH_SETUPS):
                 self.__persistentCommands.append(PrebattleSetupsControl())
+            vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
+            vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
             return
 
     def prerequisites(self):
@@ -407,6 +409,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     def setAutorotation(self, bValue, triggeredByKey=False):
         if not self.__curCtrl.enableSwitchAutorotationMode(triggeredByKey):
             return
+        elif triggeredByKey and BigWorld.player().isVehicleMoving():
+            return
         elif not BigWorld.player().isOnArena:
             return
         else:
@@ -423,7 +427,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     def switchAutorotation(self, triggeredByKey=False):
         self.setAutorotation(not self.__isAutorotation, triggeredByKey)
 
-    def activatePostmortem(self, isRespawn, deathReasonID=0):
+    def activatePostmortem(self, isRespawn):
         if self.siegeModeSoundNotifications is not None:
             self.siegeModeControl.onSiegeStateChanged -= self.siegeModeSoundNotifications.onSiegeStateChanged
             self.siegeModeSoundNotifications = None
@@ -437,15 +441,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             params = None
 
         onPostmortemActivation = getattr(self.__curCtrl, 'onPostmortemActivation', None)
-        bPostmortemDelay = True
-        isEventBattle = self.guiSessionProvider.arenaVisitor.gui.isEventBattle()
-        isKilledByPhaseChange = ATTACK_REASONS[deathReasonID] in PHASE_CHANGE_ATTACK_REASONS
-        if isEventBattle and isKilledByPhaseChange:
-            bPostmortemDelay = False
         if onPostmortemActivation is not None:
-            onPostmortemActivation(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=bPostmortemDelay, respawn=isRespawn)
+            onPostmortemActivation(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=True, respawn=isRespawn)
         else:
-            self.onControlModeChanged(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=bPostmortemDelay, respawn=isRespawn)
+            self.onControlModeChanged(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=True, respawn=isRespawn)
         return
 
     def deactivatePostmortem(self):
@@ -547,7 +546,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             control.setObservedVehicle(vehicleID)
 
     def onControlModeChanged(self, eMode, **args):
-        LOG_DEBUG('onControlModeChanged', self, eMode)
         if self.steadyVehicleMatrixCalculator is not None:
             self.steadyVehicleMatrixCalculator.relinkSources()
         if not self.__isArenaStarted and eMode != _CTRL_MODE.POSTMORTEM:
@@ -635,6 +633,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             self.onCameraChanged(eMode, vehicleID)
             if not isReplayPlaying and vehicle is not None and not vehicle.isUpgrading:
                 self.__curCtrl.handleMouseEvent(0.0, 0.0, 0.0)
+            vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
+            vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(eMode))
             return
 
     def onVehicleControlModeChanged(self, eMode):

@@ -123,9 +123,9 @@ class _BlurManager(object):
             if isActiveBlur:
                 if blur.enabled:
                     self._globalBlur.enable = False
-                    if not self._hasEnabledLayerBlur():
-                        self._resetLayerBlur()
                 self._restoreLastAdded()
+            if not self._hasEnabledLayerBlur():
+                self._resetLayerBlur()
 
     def addRect(self, blur, blurRect, rectId):
         if self._isBlurInCache(blur) and blur is self._activeBlur():

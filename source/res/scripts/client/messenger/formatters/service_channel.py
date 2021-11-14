@@ -37,14 +37,14 @@ from gui.impl.gen import R
 from gui.mapbox.mapbox_helpers import formatMapboxRewards
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
-from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome
+from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome, isQualificationQuestID, getQualificationBattlesCountFromID
 from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
-from gui.server_events.awards_formatters import CompletionTokensBonusFormatter, TokenBonusFormatter
+from gui.server_events.awards_formatters import CompletionTokensBonusFormatter
 from gui.server_events.bonuses import VehiclesBonus, EntitlementBonus, DEFAULT_CREW_LVL, MetaBonus, getMergedBonusesFromDicts
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import formatters as shared_fmts
-from gui.shared.formatters import text_styles, formatPrice
+from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import getBWFormatter, getStyle, applyAll
 from gui.shared.formatters.time_formatters import getTillTimeByResource, getTimeLeftInfo, RentDurationKeys
 from gui.shared.gui_items.Tankman import Tankman
@@ -56,8 +56,8 @@ from gui.shared.gui_items.loot_box import SENIORITY_AWARDS_LOOT_BOXES_TYPE, Even
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency, ZERO_MONEY
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
 from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
-from gui.shared.utils.transport import z_loads
 from gui.shared.utils.requesters.blueprints_requester import getUniqueBlueprints, getFragmentNationID
+from gui.shared.utils.transport import z_loads
 from helpers import dependency
 from helpers import i18n, html, getLocalizedData, int2roman
 from helpers import time_utils
@@ -79,9 +79,7 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.afk_controller import IAFKController
 if typing.TYPE_CHECKING:
     from account_helpers.offers.events_data import OfferEventData, OfferGift
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
@@ -399,9 +397,6 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
     __BRResultKeys = {-1: 'battleRoyaleDefeatResult',
      0: 'battleRoyaleDefeatResult',
      1: 'battleRoyaleVictoryResult'}
-    __HW20ResultKeys = {-1: 'HW20DefeatResult',
-     0: 'HW20DefeatResult',
-     1: 'HW20VictoryResult'}
     __MTResultKeys = {SCENARIO_RESULT.LOSE: 'mapsTrainingDefeatResult',
      SCENARIO_RESULT.WIN: 'mapsTrainingVictoryResult'}
     __goldTemplateKey = 'battleResultGold'
@@ -432,10 +427,6 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 xp = battleResults.get('xp')
                 if xp:
                     ctx['xp'] = backport.getIntegralFormat(xp)
-                freeXP = battleResults.get('freeXP', 0)
-                ctx['freeXP'] = backport.getIntegralFormat(freeXP)
-                hwRewardBoxKeys = battleResults.get('hwRewardBoxKeys', 0)
-                ctx['hwRewardBoxKeys'] = backport.getIntegralFormat(hwRewardBoxKeys)
                 battleResKey = battleResults.get('isWinner', 0)
                 ctx['xpEx'] = self.__makeXpExString(xp, battleResKey, battleResults.get('xpPenalty', 0), battleResults)
                 ctx[Currency.GOLD] = self.__makeGoldString(battleResults.get(Currency.GOLD, 0))
@@ -478,8 +469,6 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                     ctx = self.__makeMapsTrainingMsgCtx(battleResults, ctx)
                     battleResKey = battleResults.get('mtScenarioResult')
                     battleResultKeys = self.__MTResultKeys
-                elif guiType == ARENA_GUI_TYPE.EVENT_BATTLES:
-                    battleResultKeys = self.__HW20ResultKeys
                 else:
                     battleResultKeys = self.__battleResultKeys
                 templateName = battleResultKeys[battleResKey]
@@ -527,7 +516,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         return '<br/>'.join(rewards)
 
     def __makeQuestsAchieve(self, message):
-        fmtMsg = HalloweenQuestAchievesFormatter.formatQuestAchieves(message.data, asBattleFormatter=True)
+        fmtMsg = QuestAchievesFormatter.formatQuestAchieves(message.data, asBattleFormatter=True)
         return g_settings.htmlTemplates.format('battleQuests', {'achieves': fmtMsg}) if fmtMsg is not None else ''
 
     def __makeVehicleLockString(self, vehicleNames, battleResults):
@@ -593,7 +582,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 if block == BADGES_BLOCK:
                     badges.append(name)
                 achieve = getAchievementFactory(recordName).create(value=value)
-                if achieve is not None and not achieve.isApproachable() and achieve not in popUpRecords:
+                if achieve is not None and achieve not in popUpRecords:
                     popUpRecords.append(achieve)
 
             if 'markOfMastery' in vehBattleResults and vehBattleResults['markOfMastery'] > 0:
@@ -836,7 +825,8 @@ class AchievementFormatter(ServiceChannelFormatter):
 
 
 class CurrencyUpdateFormatter(ServiceChannelFormatter):
-    _EMITTER_ID_TO_TITLE = {2525: R.strings.messenger.serviceChannelMessages.currencyUpdate.auction()}
+    _EMITTER_ID_TO_TITLE = {2525: R.strings.messenger.serviceChannelMessages.currencyUpdate.auction(),
+     2524: R.strings.messenger.serviceChannelMessages.currencyUpdate.battlepass()}
     _DEFAULT_TITLE = R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction()
 
     def format(self, message, *args):
@@ -1269,11 +1259,9 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             tankmenFreeXP = dataEx.get('tankmenFreeXP', {})
             if tankmenFreeXP:
                 operations.append(self.__getTankmenFreeXPString(tankmenFreeXP))
-            tokens = dataEx.get('tokens', {})
-            if tokens:
-                tokensStr = self.__getTokensString(tokens)
-                if tokensStr:
-                    operations.extend(tokensStr)
+            tokensStr = self.__getTokensString(dataEx.get('tokens', {}))
+            if tokensStr:
+                operations.extend(tokensStr)
             entitlementsStr = self.__getEntitlementsString(dataEx.get('entitlements', {}))
             if entitlementsStr:
                 operations.append(entitlementsStr)
@@ -1657,7 +1645,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
 
     def __getTokensString(self, data):
         count = 0
-        eventCount = 0
         tokenStrings = []
         for tokenName, tokenData in data.iteritems():
             tankmanTokenResult = _processTankmanToken(tokenName)
@@ -1669,16 +1656,12 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                     tokenStrings.append(offerTokenResult)
             if tokenName == constants.PERSONAL_MISSION_FREE_TOKEN_NAME:
                 count += tokenData.get('count', 0)
-            if tokenName == constants.EVENT.REWARD_BOX.KEY_TOKEN:
-                eventCount += tokenData.get('count', 0)
             quests = self.__eventsCache.getQuestsByTokenRequirement(tokenName)
             for quest in quests:
                 text = quest.getNotificationText().format(count=tokenData.get('count', 0))
                 if text:
                     tokenStrings.append(g_settings.htmlTemplates.format('questTokenInvoiceReceived', {'text': text}))
 
-        if eventCount > 0:
-            tokenStrings.append(backport.text(R.strings.messenger.serviceChannelMessages.halloweenHangar.eventTokenBought(), count=eventCount))
         if count != 0:
             template = 'awardListAccruedInvoiceReceived' if count > 0 else 'awardListDebitedInvoiceReceived'
             tokenStrings.append(g_settings.htmlTemplates.format(template, {'count': count}))
@@ -2436,14 +2419,6 @@ class QuestAchievesFormatter(object):
     __itemsCache = dependency.descriptor(IItemsCache)
 
     @classmethod
-    def isEventTokens(cls):
-        return cls._isEventTokens()
-
-    @classmethod
-    def getQuestLevel(cls, questId):
-        return cls._getQuestLevel(questId)
-
-    @classmethod
     def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True):
         result = []
         tokenResult = cls._processTokens(data)
@@ -2582,14 +2557,6 @@ class QuestAchievesFormatter(object):
 
     @classmethod
     def _processTokens(cls, tokens):
-        pass
-
-    @classmethod
-    def _isEventTokens(cls):
-        return False
-
-    @classmethod
-    def _getQuestLevel(cls, questIDs):
         pass
 
     @classmethod
@@ -3370,6 +3337,7 @@ class RankedQuestFormatter(WaitItemsSyncFormatter):
         formattedMessage = None
         formattedRanks = {}
         quests = self.__eventsCache.getHiddenQuests()
+        qualificationBattles = 0
         for questID in completedQuestIDs:
             quest = quests.get(questID)
             if quest is not None and quest.isForRank():
@@ -3377,8 +3345,12 @@ class RankedQuestFormatter(WaitItemsSyncFormatter):
                 division = self.__rankedController.getDivision(rankID)
                 textID = R.strings.system_messages.ranked.notifications.singleRank.text()
                 if division.isQualification():
-                    textID = R.strings.system_messages.ranked.notifications.qualificationFinish()
-                formattedRanks[rankID] = backport.text(textID, rankName=division.getRankUserName(rankID), divisionName=division.getUserName())
+                    if isQualificationQuestID(questID):
+                        textID = R.strings.ranked_battles.awards.gotQualificationQuest()
+                        qualificationBattles = getQualificationBattlesCountFromID(questID)
+                    else:
+                        textID = R.strings.system_messages.ranked.notifications.qualificationFinish()
+                formattedRanks[rankID] = backport.text(textID, rankName=division.getRankUserName(rankID), divisionName=division.getUserName(), count=qualificationBattles)
 
         if formattedRanks:
             formattedMessage = g_settings.msgTemplates.format('rankedRankQuest', ctx={'ranksBlock': EOL.join([ formattedRanks[key] for key in sorted(formattedRanks) ]),
@@ -4265,193 +4237,3 @@ class MapboxRewardReceivedFormatter(ServiceChannelFormatter):
              'text': '<br>'.join(textItems)}, data={'savedData': {'rewards': rewards,
                            'battles': battles}})
             return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, messageType=message.get('msgType')))]
-
-
-class HalloweenFormatter(WaitItemsSyncFormatter):
-    _MESSAGE_TEMPLATE = 'tokenQuests'
-
-    def __init__(self):
-        super(HalloweenFormatter, self).__init__()
-        self._achievesFormatter = HalloweenQuestAchievesFormatter()
-
-    @classmethod
-    def isEventTokens(cls):
-        return cls._isEventTokens()
-
-    @classmethod
-    def getQuestLevel(cls, questId):
-        return cls._getQuestLevel(questId)
-
-    @classmethod
-    def _isEventTokens(cls):
-        return False
-
-    @classmethod
-    def _getQuestLevel(cls, questIDs):
-        pass
-
-    @async
-    @process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        messageDataList = []
-        if isSynced and message.data:
-            completedQuestIDs = set(message.data.get('completedQuestIDs', set()))
-            if completedQuestIDs:
-                messageData = self._buildMessage(message, completedQuestIDs)
-                if messageData is not None:
-                    messageDataList.append(messageData)
-        if not messageDataList:
-            messageDataList = [MessageData(None, None)]
-        callback(messageDataList)
-        return
-
-    def _buildMessage(self, message, questIDs):
-        rewards = getRewardsForQuests(message, questIDs)
-        fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processCustomizations=True)
-        messageData = None
-        if fmt is not None:
-            data = message.data or {}
-            extra = self._formatExtraData(data, questIDs)
-            if extra is not None:
-                fmt += extra
-            templateParams = {'achieves': fmt}
-            if self.isEventTokens():
-                templateParams['level'] = self.getQuestLevel(questIDs)
-            settings = self._getGuiSettings(message, self._MESSAGE_TEMPLATE)
-            formatted = g_settings.msgTemplates.format(self._MESSAGE_TEMPLATE, templateParams)
-            messageData = MessageData(formatted, settings)
-        return messageData
-
-    def _formatExtraData(self, data, questIDs):
-        return None
-
-
-class HalloweenPurchaseFormatter(HalloweenFormatter):
-
-    def _formatExtraData(self, data, questIDs):
-        result = None
-        sysMsgExtraData = data.get('sysMsgExtraData')
-        if sysMsgExtraData:
-            price = sysMsgExtraData.get('price')
-            if price:
-                result = g_settings.htmlTemplates.format('halloweenVehicleRentMoneySpent', ctx={'message': backport.text(R.strings.menu.price.spent(), formatPrice(Money(**price)))})
-        return result
-
-
-class VehicleRentFormatter(HalloweenPurchaseFormatter):
-    _MESSAGE_TEMPLATE = 'halloweenVehicleRent'
-
-
-class StyleBoughtFormatter(HalloweenPurchaseFormatter):
-    _MESSAGE_TEMPLATE = 'halloweenStyleBought'
-
-
-class StyleBoughtByGoldFormatter(HalloweenPurchaseFormatter):
-    _MESSAGE_TEMPLATE = 'halloweenStyleBoughtByGold'
-
-
-class StyleBundleFormatter(HalloweenPurchaseFormatter):
-    _MESSAGE_TEMPLATE = 'halloweenStyleBundleBought'
-
-
-class DifficultyLevelReachedFormatter(HalloweenFormatter):
-    eventsCache = dependency.descriptor(IEventsCache)
-    _MESSAGE_TEMPLATE = 'halloweenDifficultyLevelReached'
-
-    def _buildMessage(self, message, questIDs):
-        settings = self._getGuiSettings(message, self._MESSAGE_TEMPLATE)
-        formatted = g_settings.msgTemplates.format(self._MESSAGE_TEMPLATE)
-        messageData = MessageData(formatted, settings)
-        return messageData
-
-
-class BestDealBandleFormatter(HalloweenPurchaseFormatter):
-    _MESSAGE_TEMPLATE = 'bestDealBandleBought'
-
-
-class HalloweenQuestAchievesFormatter(QuestAchievesFormatter):
-    __afkController = dependency.descriptor(IAFKController)
-
-    @classmethod
-    def _processTokens(cls, data):
-        result = []
-        afkPardonOrderToken = cls.__afkController.pardonOrderToken.tokenID
-        count = data.get('tokens', {}).get(afkPardonOrderToken, {}).get('count', 0)
-        quest = cls.__afkController.AFKPersonalQuest
-        if count and quest:
-            bonuses = quest.getBonuses('tokens')
-            if bonuses:
-                for b in bonuses:
-                    if afkPardonOrderToken in b.getTokens().keys():
-                        result.append(g_settings.htmlTemplates.format('afkPardonOrder', {'userName': first(TokenBonusFormatter().format(b)).userName}))
-
-        return ', '.join(result)
-
-
-class EventShopBundleItemPurchasedFormatter(ServiceChannelFormatter):
-    _INFO_TEMPLATE = 'halloweenShopBundlePurchaseInfo'
-    _GOLD_TRANSACTION_MESSAGE_TEMPLATE = 'halloweenShopBundleBoughtByGold'
-    _TOKEN_TRANSACTION_MESSAGE_TEMPLATE = 'halloweenShopBundleBought'
-    _GOLD_TRANSACTION_PURCHASE_NAME_TEMPLATE = 'halloweenBundleNamePurchasedByGold'
-    _TOKEN_TRANSACTION_PURCHASE_NAME_TEMPLATE = 'halloweenBundleNamePurchasedByToken'
-    _BONUS_TYPE = None
-    _MESSAGE_KEY = 'text'
-    _RES_ID_PREFIX = R.strings.messenger.serviceChannelMessages.halloweenHangar.purchased.bundle
-    gameEventController = dependency.descriptor(IGameEventController)
-
-    def format(self, message, *args):
-        messageDataList = []
-        bundleID = message.data['bundleID']
-        shop = self.gameEventController.getShop()
-        bundle = shop.getBundle(bundleID)
-        currency = bundle.price.currency
-        price = formatPrice(Money(gold=bundle.price.amount)) if currency == Currency.GOLD else str(bundle.price.amount * message.data['count'])
-        purchaseNameTemplate = self._GOLD_TRANSACTION_PURCHASE_NAME_TEMPLATE if currency == Currency.GOLD else self._TOKEN_TRANSACTION_PURCHASE_NAME_TEMPLATE
-        purchaseNameString = g_settings.htmlTemplates.format(purchaseNameTemplate, ctx={self._MESSAGE_KEY: self._getPurchaseName(bundle)})
-        transactionText = backport.text(self._RES_ID_PREFIX.dyn(currency)(), purchaseName=purchaseNameString, price=price)
-        transactionTemplate = self._GOLD_TRANSACTION_MESSAGE_TEMPLATE if currency == Currency.GOLD else self._TOKEN_TRANSACTION_MESSAGE_TEMPLATE
-        transactionMessage = self.__buildMessage(message, transactionText, transactionTemplate)
-        messageDataList.append(transactionMessage)
-        bonuses = shop.getShopBundleBonusesWithQuests(bundle)
-        bonus = next((bonus for bonus in bonuses if bonus.getName() == self._BONUS_TYPE), None)
-        if bonus:
-            bonusMessages = self._getBonusMessages(bonus)
-            for messageText in bonusMessages:
-                bonusInfoMessage = self.__buildMessage(message, messageText, self._INFO_TEMPLATE)
-                messageDataList.append(bonusInfoMessage)
-
-        return messageDataList
-
-    def _getBonusMessages(self, bonus):
-        return []
-
-    def _getPurchaseName(self, bundle):
-        return backport.text(R.strings.event.shop21.description.dyn(bundle.id)())
-
-    def __buildMessage(self, message, text, template):
-        settings = self._getGuiSettings(message, template)
-        formatted = g_settings.msgTemplates.format(template, {self._MESSAGE_KEY: text})
-        return MessageData(formatted, settings)
-
-
-class EventVehiclePurchasedFormatter(EventShopBundleItemPurchasedFormatter):
-    _BONUS_TYPE = 'vehicles'
-
-    def _getBonusMessages(self, bonus):
-        resId = R.strings.messenger.serviceChannelMessages.halloweenHangar.eventVehicleAcquired()
-        return [ backport.text(resId, vehicle=veh.userName) for veh, _ in bonus.getVehicles() if not veh.isInInventory ]
-
-
-class EventTokenPurchasedFormatter(EventShopBundleItemPurchasedFormatter):
-    pass
-
-
-class EventC11nItemPurchasedFormatter(EventShopBundleItemPurchasedFormatter):
-    _RES_ID_PREFIX = R.strings.messenger.serviceChannelMessages.halloweenHangar.purchased.c11nItem
-
-    def _getPurchaseName(self, bundle):
-        bonus = first(bundle.bonuses)
-        itemData = first(bonus.getCustomizations())
-        c11Item = bonus.getC11nItem(itemData)
-        return c11Item.userName

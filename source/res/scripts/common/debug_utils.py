@@ -14,6 +14,7 @@ from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, CURRENT_REALM, IS_DEVEL
 from constants import LEAKS_DETECTOR_MAX_EXECUTION_TIME
 from contextlib import contextmanager
 from threading import RLock
+from soft_exception import SoftException
 _src_file_trim_to = ('res/wot/scripts/', len('res/wot/scripts/'))
 _g_logMapping = {}
 _g_logLock = RLock()
@@ -176,6 +177,14 @@ def LOG_CODEPOINT_WARNING(*kargs):
 @_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_ERROR(msg, *kargs, **kwargs):
     _doLog('ERROR', msg, kargs, kwargs)
+
+
+@_LogWrapper(LOG_LEVEL.RELEASE)
+def LOG_SENTRY(msg, *kargs):
+    try:
+        raise SoftException('{} {}'.format(msg, kargs))
+    except:
+        LOG_CURRENT_EXCEPTION()
 
 
 @_LogWrapper(LOG_LEVEL.DEV)
@@ -423,24 +432,6 @@ def traceCalls(func):
         return ret
 
     return wrapper
-
-
-class CatchNativeCallstack(object):
-
-    def __init__(self):
-        self._stack = None
-        return
-
-    def __enter__(self):
-        self._stack = traceback.extract_stack()
-        return self
-
-    def __exit__(self, exctype, value, tb):
-        if exctype:
-            LOG_ERROR('Original callstack:')
-            traceback.print_list(self._stack[:-1])
-            traceback.print_exception(exctype, value, tb)
-        return True
 
 
 def traceMethodCalls(obj, *names):

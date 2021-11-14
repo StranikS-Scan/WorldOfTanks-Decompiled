@@ -489,15 +489,3 @@ class RoyaleCurtailingAwardsComposer(CurtailingAwardsComposer):
             bonuses.append(shortData)
 
         return bonuses
-
-
-class EventShopBundleBonusesAwardsComposer(CurtailingAwardsComposer):
-
-    def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
-        return bonus
-
-    def _packMergedBonuses(self, mergedBonuses, size=AWARDS_SIZES.SMALL):
-        mergedBonusCount = len(mergedBonuses)
-        imgs = {AWARDS_SIZES.SMALL: RES_ICONS.getBonusIcon(AWARDS_SIZES.SMALL, 'default'),
-         AWARDS_SIZES.BIG: RES_ICONS.getBonusIcon(AWARDS_SIZES.BIG, 'default')}
-        return PreformattedBonus(label=formatCountLabel(mergedBonusCount), images=imgs, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.ADDITIONAL_AWARDS, specialArgs=self._getShortBonusesData(mergedBonuses, size))

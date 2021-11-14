@@ -37,7 +37,8 @@ class BootcampLobbyControlsFactory(ControlsFactory):
          EFFECT_TYPE.FINISH_TRAINING: functional.FunctionalFinishBootcampEffect,
          EFFECT_TYPE.CLOSE_VIEW: core_func.FunctionalCloseViewEffect,
          EFFECT_TYPE.GLOBAL_ACTIVATE: core_func.FunctionalGlobalActivateEffect,
-         EFFECT_TYPE.GLOBAL_DEACTIVATE: core_func.FunctionalGlobalDeactivateEffect}
+         EFFECT_TYPE.GLOBAL_DEACTIVATE: core_func.FunctionalGlobalDeactivateEffect,
+         EFFECT_TYPE.SHOW_DEMO_ACCOUNT_RENAMING: functional.FunctionalShowDemoAccRenameOverlay}
         queries_ = {'bootcampVideo': queries.VideoDialogContentQuery,
          'bootcampSubtitle': queries.SubtitleDialogContentQuery,
          'bootcampMessage': queries.MessageDialogContentQuery,

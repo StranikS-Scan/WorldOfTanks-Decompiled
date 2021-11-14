@@ -41,7 +41,7 @@ from gui.shared import event_dispatcher, events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.money import Currency
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier
+from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, TimerNotifier
 from helpers import dependency, time_utils
 from season_provider import SeasonProvider
 from shared_utils import first, findFirst
@@ -128,7 +128,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def init(self):
         super(RankedBattlesController, self).init()
         self.addNotificator(SimpleNotifier(self.getTimer, self.__timerUpdate))
-        self.addNotificator(PeriodicNotifier(self.getTimer, self.__timerTick))
+        self.addNotificator(TimerNotifier(self.getTimer, self.__timerTick))
 
     def fini(self):
         self.onUpdated.clear()
@@ -494,6 +494,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def getRankedWelcomeCallback(self):
         return self.__rankedWelcomeCallback
 
+    def setRankedWelcomeCallback(self, value):
+        self.__rankedWelcomeCallback = value
+
     def getRanksChanges(self, isLoser=False):
         return self.__rankedSettings.loserRankChanges if isLoser else self.__rankedSettings.winnerRankChanges
 
@@ -577,6 +580,13 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         finalTokenQuest = quests.get(FINAL_QUEST_PATTERN.format(points))
         return finalTokenQuest.getBonuses() if finalTokenQuest else []
 
+    def getQualificationQuests(self, quests=None):
+        if quests is None:
+            qualificationQuests = self.getQuestsForRank(ZERO_RANK_ID) or {}
+        else:
+            qualificationQuests = {quest.getID():quest for quest in quests}
+        return {value.getQualificationBattlesCount():value for key, value in qualificationQuests.iteritems() if value.isQualificationQuest()}
+
     def awardWindowShouldBeShown(self, rankChangeInfo):
         if rankChangeInfo.prevAccRank == ZERO_RANK_ID:
             return True
@@ -615,7 +625,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
                 isCompleted = pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
                 quest = quests.get(qID)
                 if quest is not None and quest.isForRank() and isCompleted:
-                    awardsSequence.append(AwardBlock(quest.getRank(), formatter.getFormattedBonuses(quest.getBonuses(), AWARDS_SIZES.BIG)))
+                    awardsSequence.append(AwardBlock(quest.getRank(), formatter.getFormattedBonuses(quest.getBonuses(), AWARDS_SIZES.BIG), qID))
 
             if awardsSequence:
                 event_dispatcher.showRankedAwardWindow(awardsSequence=awardsSequence, rankedInfo=rankedInfo)
@@ -680,8 +690,11 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         isYearGap = self.isYearGap()
         isYearLBEnabled = self.isYearLBEnabled()
         hasCurSeason = self.getCurrentSeason() is not None
+        passedSeasons = self.getSeasonPassed()
         if isEnabled:
-            if hasCurSeason:
+            if self.isFrozen() or not passedSeasons and not hasCurSeason:
+                self.__showPreSeason()
+            elif hasCurSeason:
                 self.__switchForcedToRankedPrb()
             elif isYearGap and isYearLBEnabled:
                 self.__showYearlyLeaders()
@@ -885,9 +898,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             self.__battlesGroups = self.__buildGroupsForBattle()
         return self.__battlesGroups
 
-    def __getQuestForRank(self, rankId):
+    def getQuestsForRank(self, rankId):
         season = self.getCurrentSeason()
-        return None if season is None else first(self.__eventsCache.getRankedQuests(lambda q: q.getRank() == rankId and q.isHidden() and q.isForRank() and q.getSeasonID() == season.getSeasonID()).values())
+        return None if season is None else self.__eventsCache.getRankedQuests(lambda q: q.getRank() == rankId and q.isHidden() and q.isForRank() and q.getSeasonID() == season.getSeasonID())
 
     def __getRank(self, currentProgress, lastProgress, maxProgress, lastShield, shield, rankID, bonusSteps=None):
         stepsToProgress = self.__rankedSettings.accSteps
@@ -899,7 +912,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             bonusStepsCount = bonusSteps[rankIdx] if bonusSteps else None
         isCurrent = True if rankID == currentProgress[0] else False
         shieldStatus = self.__getDynamicShieldStatus(rankID, isCurrent, shield, lastShield)
-        rank = Rank(division=self.getDivision(rankID), quest=self.__getQuestForRank(rankID), shield=shieldStatus, isUnburnable=(rankID in self.__rankedSettings.unburnableRanks), *self.__buildRank(rankID, stepsCount, bonusStepsCount, currentProgress, maxProgress, lastProgress))
+        quests = self.getQuestsForRank(rankID)
+        quests = quests.values() if quests is not None else None
+        rank = Rank(division=self.getDivision(rankID), quests=quests, shield=shieldStatus, isUnburnable=(rankID in self.__rankedSettings.unburnableRanks), *self.__buildRank(rankID, stepsCount, bonusStepsCount, currentProgress, maxProgress, lastProgress))
         return rank
 
     def __getRankedDossier(self):
@@ -1108,6 +1123,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def __showBetweenSeason(self):
         ctx = {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID}
         self.showRankedBattlePage(ctx)
+
+    def __showPreSeason(self):
+        event_dispatcher.showRankedBattleIntro()
 
     def __showYearlyLeaders(self):
         ctx = {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}

@@ -6,7 +6,6 @@ import collections
 import weakref
 from collections import defaultdict
 from PlayerEvents import g_playerEvents
-from account_helpers.account_completion import isEmailConfirmationRequired
 from constants import ARENA_BONUS_TYPE, MAPS_TRAINING_ENABLED_KEY
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, SENIORITY_AWARDS_COUNTER
@@ -27,6 +26,7 @@ from gui.clans.settings import CLAN_APPLICATION_STATES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
+from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.recruit_helper import getAllRecruitsInfo
@@ -48,16 +48,17 @@ from notification import tutorial_helper
 from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from shared_utils import first
-from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController
+from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController, ISteamCompletionController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
-from skeletons.gui.platform.wgnp_controller import IWGNPRequestController
+from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
 if typing.TYPE_CHECKING:
     from notification.NotificationsModel import NotificationsModel
+    from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
 _logger = logging.getLogger(__name__)
 
 class _FeatureState(object):
@@ -1219,41 +1220,44 @@ class RecruitReminderlListener(_NotificationListener):
 
 class EmailConfirmationReminderListener(_NotificationListener):
     __bootCampController = dependency.descriptor(IBootcampController)
-    __wgnpCtrl = dependency.descriptor(IWGNPRequestController)
+    __wgnpSteamAccCtrl = dependency.descriptor(IWGNPSteamAccRequestController)
+    __steamRegistrationCtrl = dependency.descriptor(ISteamCompletionController)
     MSG_ID = 0
 
     def start(self, model):
         result = super(EmailConfirmationReminderListener, self).start(model)
         if result:
             g_playerEvents.onBattleResultsReceived += self.__tryNotify
-            self.__wgnpCtrl.onEmailConfirmed += self.__removeNotify
-            self.__wgnpCtrl.onEmailAddNeeded += self.__removeNotify
+            self.__wgnpSteamAccCtrl.statusEvents.subscribe(StatusTypes.CONFIRMED, self.__removeNotify)
+            self.__wgnpSteamAccCtrl.statusEvents.subscribe(StatusTypes.ADD_NEEDED, self.__removeNotify)
             self.__tryNotify()
         return result
 
     def stop(self):
         super(EmailConfirmationReminderListener, self).stop()
         g_playerEvents.onBattleResultsReceived -= self.__tryNotify
-        self.__wgnpCtrl.onEmailConfirmed -= self.__removeNotify
-        self.__wgnpCtrl.onEmailAddNeeded -= self.__removeNotify
+        self.__wgnpSteamAccCtrl.statusEvents.unsubscribe(StatusTypes.CONFIRMED, self.__removeNotify)
+        self.__wgnpSteamAccCtrl.statusEvents.unsubscribe(StatusTypes.ADD_NEEDED, self.__removeNotify)
 
     @async
     def __tryNotify(self):
-        emailConfirmationRequired = yield await(isEmailConfirmationRequired())
-        isInBootcamp = self.__bootCampController.isInBootcamp()
-        if emailConfirmationRequired and not isInBootcamp:
-            model = self._model()
-            if model is not None:
-                message = R.strings.messenger.serviceChannelMessages.emailConfirmationReminder.text()
-                notification = EmailConfirmationReminderMessageDecorator(self.MSG_ID, backport.text(message))
-                prevNotifacation = model.getNotification(NOTIFICATION_TYPE.EMAIL_CONFIRMATION_REMINDER, notification.getID())
-                if prevNotifacation is None:
-                    model.addNotification(notification)
-                else:
-                    model.updateNotification(NOTIFICATION_TYPE.EMAIL_CONFIRMATION_REMINDER, notification.getID(), notification.getEntity(), False)
-        return
+        if self.__bootCampController.isInBootcamp() or not self.__steamRegistrationCtrl.isSteamAccount:
+            return
+        else:
+            status = yield await(self.__wgnpSteamAccCtrl.getEmailStatus())
+            if not self.__bootCampController.isInBootcamp() and status.typeIs(StatusTypes.ADDED):
+                model = self._model()
+                if model is not None:
+                    message = R.strings.messenger.serviceChannelMessages.emailConfirmationReminder.text()
+                    notification = EmailConfirmationReminderMessageDecorator(self.MSG_ID, backport.text(message))
+                    prevNotifacation = model.getNotification(NOTIFICATION_TYPE.EMAIL_CONFIRMATION_REMINDER, notification.getID())
+                    if prevNotifacation is None:
+                        model.addNotification(notification)
+                    else:
+                        model.updateNotification(NOTIFICATION_TYPE.EMAIL_CONFIRMATION_REMINDER, notification.getID(), notification.getEntity(), False)
+            return
 
-    def __removeNotify(self):
+    def __removeNotify(self, status=None):
         model = self._model()
         if model is not None:
             model.removeNotification(NOTIFICATION_TYPE.EMAIL_CONFIRMATION_REMINDER, self.MSG_ID)

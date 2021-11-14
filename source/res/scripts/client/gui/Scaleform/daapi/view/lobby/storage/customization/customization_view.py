@@ -4,7 +4,6 @@ import math
 from typing import Optional
 import nations
 from adisp import process
-from constants import EVENT_BATTLES_TAG
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta import ConfirmC11nSellMeta
 from gui.Scaleform.daapi.view.lobby.event_boards.event_helpers import LEVELS_RANGE
@@ -177,7 +176,6 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
         criteria = REQ_CRITERIA.CUSTOMIZATION.FULL_INVENTORY
         if invVehicles:
             criteria |= REQ_CRITERIA.CUSTOM(_getCustomizationCriteria(_VehiclesFilter(invVehicles)))
-        criteria |= ~REQ_CRITERIA.CUSTOMIZATION.HAS_TAGS([EVENT_BATTLES_TAG])
         return criteria
 
     def _getInvVehicleCriteria(self):
@@ -226,11 +224,10 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
         if tooltipKey:
             title = _ms(tooltipKey, group=item.userType, value=item.userName)
         if item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
-            icon = item.previewIconUrl
             formfactor = item.formfactor
         else:
-            icon = item.icon
             formfactor = ''
+        icon = item.icon
         levelIcon = ''
         customizationSuitableText = backport.text(R.strings.storage.customizationSuitable.label())
         if vehicleCD is None:

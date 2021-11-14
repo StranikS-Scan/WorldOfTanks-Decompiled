@@ -220,7 +220,7 @@ def getClientMainVersion():
 
 def readClientServerVersion():
     import ResMgr
-    fileName = 'scripts/entity_defs/Account.def'
+    fileName = 'scripts/entity_defs/interfaces/AccountVersion.def'
     section = ResMgr.openSection(fileName)
     if section is None:
         raise SoftException('Cannot open ' + fileName)
@@ -229,10 +229,10 @@ def readClientServerVersion():
             continue
         version = section.readString('Default')
         if not version:
-            raise SoftException('Subsection Account.def/Properties/%s/Default is missing or empty' % attrName)
+            raise SoftException('Subsection AccountVersion.def/Properties/%s/Default is missing or empty' % attrName)
         section = None
         ResMgr.purge(fileName)
         return (attrName, version)
 
-    raise SoftException('Field Account.def/Properties/requiredVersion_* is not found')
+    raise SoftException('Field AccountVersion.def/Properties/requiredVersion_* is not found')
     return

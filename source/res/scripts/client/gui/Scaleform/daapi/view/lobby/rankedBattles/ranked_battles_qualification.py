@@ -9,7 +9,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles import ranked_formatters
 from gui.ranked_battles.ranked_builders import shared_vos
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from shared_utils import findFirst
 from skeletons.gui.game_control import IRankedBattlesController
@@ -63,13 +63,26 @@ class RankedBattlesQualification(RankedBattlesDivisionQualificationMeta):
         total = self.__rankedController.getTotalQualificationBattles()
         stats = self.__rankedController.getStatsComposer()
         current = stats.divisionsStats.get(divisionID, {}).get('battles', 0)
-        progressShortcut = R.strings.ranked_battles.division.status.qualification.progress()
-        titleShortcut = R.strings.ranked_battles.division.status.qualification()
-        progressSmall = text_styles.superPromoTitleEm(backport.text(progressShortcut, current=text_styles.superPromoTitle(current), total=total))
-        progressTextSmall = text_styles.superPromoTitle(backport.text(titleShortcut, progress=progressSmall))
-        progressBig = text_styles.grandTitleYellow(backport.text(progressShortcut, current=text_styles.grandTitle(current), total=total))
-        progressTextBig = text_styles.grandTitle(backport.text(titleShortcut, progress=progressBig))
-        self.as_setQualificationProgressS(progressTextSmall, progressTextBig, division.isCompleted())
+        isCompleted = division.isCompleted()
+        if not isCompleted:
+            progressShortcut = R.strings.ranked_battles.division.status.qualification.progress()
+            titleShortcut = R.strings.ranked_battles.division.status.qualification()
+            progressSmall = text_styles.superPromoTitle(backport.text(progressShortcut, current=text_styles.superPromoTitleEm(current), total=total))
+            progressTextSmall = text_styles.superPromoTitle(backport.text(titleShortcut, progress=progressSmall))
+            progressBig = text_styles.grandTitle(backport.text(progressShortcut, current=text_styles.grandTitleYellow(current), total=total))
+            progressTextBig = text_styles.grandTitle(backport.text(titleShortcut, progress=progressBig))
+        else:
+            progressTextSmall = ''
+            progressTextBig = ''
+        qualificationDescr = ''
+        numQualificationQuestBattles = sorted(self.__rankedController.getQualificationQuests().keys())
+        if numQualificationQuestBattles:
+            numQualificationQuestBattles.append(total)
+            if isCompleted:
+                qualificationDescr = text_styles.concatStylesToSingleLine(icons.check(), text_styles.statInfo(backport.text(R.strings.ranked_battles.division.status.qualificationDescr.complete())))
+            else:
+                qualificationDescr = text_styles.main(backport.text(R.strings.ranked_battles.division.status.qualificationDescr.progress(), battlesTotal=total, battlesList=', '.join([ str(x) for x in numQualificationQuestBattles ])))
+        self.as_setQualificationProgressS(progressTextSmall, progressTextBig, isCompleted, qualificationDescr)
 
     def __setQualificationSteps(self, divisionID):
         steps = self.__rankedController.getStatsComposer().divisionsStats.get(divisionID, {}).get('stepsCount', 0)

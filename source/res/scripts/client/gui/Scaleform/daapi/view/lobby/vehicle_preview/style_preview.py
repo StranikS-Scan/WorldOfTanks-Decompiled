@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/style_preview.py
 import logging
-import BigWorld
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
@@ -38,7 +37,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__styleDescr = ctx.get('styleDescr') % {'insertion_open': '',
          'insertion_close': ''}
         self.__backCallback = ctx.get('backCallback', event_dispatcher.showHangar)
-        self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', '')
+        self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()))
         self.__selectedVehicleEntityId = None
         g_currentPreviewVehicle.selectHeroTank(ctx.get('isHeroTank', False))
         return
@@ -58,9 +57,6 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         self.__heroTanksControl.setInteractive(False)
-        if BigWorld.player() is not None:
-            BigWorld.player().objectsSelectionEnabled(False)
-        self._hideMarkers()
         self.as_setDataS({'closeBtnLabel': backport.text(R.strings.vehicle_preview.header.closeBtn.label()),
          'backBtnLabel': backport.text(R.strings.vehicle_preview.header.backBtn.label()),
          'backBtnDescrLabel': self.__backBtnDescrLabel,
@@ -81,20 +77,11 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         g_currentPreviewVehicle.selectNoVehicle()
         g_currentPreviewVehicle.resetAppearance()
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
-        if BigWorld.player() is not None:
-            BigWorld.player().objectsSelectionEnabled(True)
-        self._showMarkers()
         super(VehicleStylePreview, self)._dispose()
         return
 
     def _createSelectableLogic(self):
         return PreviewSelectableLogic()
-
-    def _showMarkers(self):
-        self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
-
-    def _hideMarkers(self):
-        self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
 
     def __onVehicleLoading(self, ctxEvent):
         isVehicleLoadingStarted = ctxEvent.ctx['started']

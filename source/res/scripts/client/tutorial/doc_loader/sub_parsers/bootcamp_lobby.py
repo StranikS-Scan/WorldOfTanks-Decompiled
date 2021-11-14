@@ -149,7 +149,8 @@ def init():
      'restore-checkpoint': sub_parsers.makeSimpleEffectReader(_EFFECT_TYPE.RESTORE_CHECKPOINT),
      'save-checkpoint': sub_parsers.makeSimpleEffectReader(_EFFECT_TYPE.SAVE_CHECKPOINT),
      'set-bootcamp-nation': _readSetBootcampNationEffectSection,
-     'play-final-video': sub_parsers.makeSimpleEffectReader(_EFFECT_TYPE.PLAY_VIDEO)})
+     'play-final-video': sub_parsers.makeSimpleEffectReader(_EFFECT_TYPE.PLAY_VIDEO),
+     'show-demo-acc-renaming': sub_parsers.makeSimpleEffectReader(_EFFECT_TYPE.SHOW_DEMO_ACCOUNT_RENAMING)})
     sub_parsers.setEntitiesParsers({'checkpoint': _readCheckpointSection})
     sub_parsers.setTriggersParsers({'linear-checkpoint-controller': _readLinearCheckpointControllerTriggerSection,
      'current-vehicle-changed': _makeSimpleValidateVarTriggerReader(triggers.CurrentVehicleChangedTrigger),

@@ -48,6 +48,7 @@ class RankedDossierKeys(CONST_CONTAINER):
 ARCHIVE_SEASON_ID = 0
 STANDARD_POINTS_COUNT = 1
 NOT_IN_LEAGUES_QUEST = 'ranked_{}_0_common'
+QUALIFICATION_QUEST = '_qualification_'
 FINAL_QUEST_PATTERN = 'ranked_2021_{}_final'
 FINAL_LEADER_QUEST = 'ranked_2021_final_leader'
 RANKED_QUEST_ID_PREFIX = 'ranked'

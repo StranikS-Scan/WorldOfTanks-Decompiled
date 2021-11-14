@@ -432,15 +432,15 @@ class AmmoController(MethodsRules, ViewComponentsController):
         if reloadEffect is not None:
             reloadEffect.stop()
         self.__gunSettings = _GunSettings.default()
+        self._reloadingState.clear()
         if leave:
-            self._reloadingState.clear()
             self.__autoShoots.destroy()
             self._autoReloadingBoostState.destroy()
             self.__dualGunQuickChangeReady = False
             self.__quickChangerInProcess = False
             self.__quickChangerActive = False
         else:
-            self.onShellsCleared()
+            self.onShellsCleared(self._reloadingState.getSnapshot())
         return
 
     def setViewComponents(self, *components):
@@ -627,9 +627,6 @@ class AmmoController(MethodsRules, ViewComponentsController):
         else:
             return quantity
 
-    def getClipCapacity(self):
-        return self.__gunSettings.clip.size
-
     @MethodsRules.delayable('setGunSettings')
     def setShells(self, intCD, quantity, quantityInClip):
         result = SHELL_SET_RESULT.UNDEFINED
@@ -710,9 +707,6 @@ class AmmoController(MethodsRules, ViewComponentsController):
 
     def setDualGunShellChangeTime(self, left, right, activeIdx):
         self.__dualGunShellChangeTime = _DualGunShellChangeTime(left, right, activeIdx)
-
-    def getDualGunShellChangeTime(self):
-        return self.__dualGunShellChangeTime
 
     def setDualGunQuickChangeReady(self, ready):
         self.__dualGunQuickChangeReady = ready

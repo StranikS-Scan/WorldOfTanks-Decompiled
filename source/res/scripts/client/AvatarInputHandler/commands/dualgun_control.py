@@ -116,3 +116,6 @@ class DualGunController(InputHandlerCommand):
             return True
         else:
             return False
+
+    def cancelShootKeyEvent(self):
+        self.__shotControl.shootKeyEvent(DUALGUN_CHARGER_ACTION_TYPE.CANCEL)

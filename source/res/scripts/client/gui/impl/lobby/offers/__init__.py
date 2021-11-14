@@ -9,6 +9,7 @@ def getGfImagePath(imgPath):
         return
     else:
         newPath = getAbsoluteUrl(imgPath)
+        newPath = newPath.replace('\\', '/')
         if not newPath.startswith(GF_RES_PROTOCOL.IMG):
             newPath = ''.join([GF_RES_PROTOCOL.IMG, newPath])
         return newPath

@@ -633,7 +633,7 @@ def _migrateTo74(core, data, initialized):
 
 
 def _migrateTo75(core, data, initialized):
-    data['clear']['rankedCarouselFilter2'] = data['clear'].get('rankedCarouselFilter2', 0) | 512 | 1024
+    data['clear']['rankedCarouselFilter2'] = data['clear'].get('rankedCarouselFilter2', 0) | 1024
 
 
 def _migrateTo76(core, data, initialized):
@@ -671,6 +671,64 @@ def _migrateTo79(core, data, initialized):
 
 def _migrateTo80(core, data, initialized):
     pass
+
+
+def _migrateTo81(core, data, initialized):
+    data['rankedCarouselFilter1'] = {'ussr': False,
+     'germany': False,
+     'usa': False,
+     'china': False,
+     'france': False,
+     'uk': False,
+     'japan': False,
+     'czech': False,
+     'sweden': False,
+     'poland': False,
+     'italy': False,
+     'lightTank': False,
+     'mediumTank': False,
+     'heavyTank': False,
+     'SPG': False,
+     'AT-SPG': False,
+     'level_1': False,
+     'level_2': False,
+     'level_3': False,
+     'level_4': False,
+     'level_5': False,
+     'level_6': False,
+     'level_7': False,
+     'level_8': False,
+     'level_9': False,
+     'level_10': False}
+    data['rankedCarouselFilter2'] = {'premium': False,
+     'elite': False,
+     'igr': False,
+     'rented': True,
+     'event': True,
+     'gameMode': False,
+     'favorite': False,
+     'bonus': False,
+     'crystals': False,
+     'ranked': True,
+     'role_HT_assault': False,
+     'role_HT_break': False,
+     'role_HT_universal': False,
+     'role_HT_support': False,
+     'role_MT_assault': False,
+     'role_MT_universal': False,
+     'role_MT_sniper': False,
+     'role_MT_support': False,
+     'role_ATSPG_assault': False,
+     'role_ATSPG_universal': False,
+     'role_ATSPG_sniper': False,
+     'role_ATSPG_support': False,
+     'role_LT_universal': False,
+     'role_LT_wheeled': False,
+     'role_SPG': False}
+
+
+def _migrateTo82(core, data, initialized):
+    data['guiStartBehavior']['isRankedWelcomeViewShowed'] = False
 
 
 _versions = ((1,
@@ -987,6 +1045,14 @@ _versions = ((1,
   False),
  (80,
   _migrateTo80,
+  False,
+  False),
+ (81,
+  _migrateTo81,
+  False,
+  False),
+ (82,
+  _migrateTo82,
   False,
   False))
 

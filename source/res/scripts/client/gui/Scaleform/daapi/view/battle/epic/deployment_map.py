@@ -35,6 +35,9 @@ class EpicDeploymentMapComponent(EpicDeploymentMapMeta):
     def getRangeScale(self):
         pass
 
+    def canChangeAlpha(self):
+        return False
+
     def setMinimapCenterEntry(self, entryID):
         pass
 

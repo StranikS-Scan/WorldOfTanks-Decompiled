@@ -2,10 +2,9 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/ServerSettingsManager.py
 import weakref
 from collections import namedtuple
-from enum import Enum
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys, SPGAim, Hw21StorageKeys
+from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys, SPGAim
 from adisp import process, async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -61,9 +60,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     UNIT_FILTER = 'UNIT_FILTER'
     BATTLE_HUD = 'BATTLE_HUD'
     SPG_AIM = 'SPG_AIM'
-    GAME_EVENT = 'GAME_EVENT'
-    HW21_NARRATIVE = 'HW21_NARRATIVE'
-    HW21_SHOWN_NOTIFICATIONS = 'HW21_SHOWN_NOTIFICATIONS'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -82,16 +78,6 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     EPIC_BATTLE_ABILITIES_INTRO_SHOWN = 'epic_battle_abilities_intro_shown'
     POST_PROGRESSION_INTRO_SHOWN = 'post_progression_intro_shown'
     VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN = 'veh_preview_post_progression_bullet_shown'
-
-
-class UIGameEventKeys(Enum):
-    AFK_WARNING_SHOWN = 1
-    AFK_BAN_SHOWN = 2
-    DIFFICULTY_LEVEL_SHOWN = 3
-    HW21KEYSSHOPBUNDLE2 = 4
-    REWARD_BOXES_SHOWN = 5
-    AFK_WARNING_MESSAGE_SHOWN = 6
-    AFK_BAN_MESSAGE_SHOWN = 7
 
 
 class ServerSettingsManager(object):
@@ -279,6 +265,7 @@ class ServerSettingsManager(object):
                                                   'bonus': 6,
                                                   'event': 7,
                                                   'crystals': 8,
+                                                  'ranked': 9,
                                                   'role_HT_assault': 11,
                                                   'role_HT_break': 12,
                                                   'role_HT_support': 13,
@@ -424,9 +411,7 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.WOTPLUS_HANGAR_HINT: 20,
                                            OnceOnlyHints.WOTPLUS_PROFILE_HINT: 21,
                                            OnceOnlyHints.HANGAR_HAVE_NEW_BADGE_HINT: 22,
-                                           OnceOnlyHints.HANGAR_HAVE_NEW_SUFFIX_BADGE_HINT: 23,
-                                           OnceOnlyHints.EVENT_INTERROGATION_INFO: 24,
-                                           OnceOnlyHints.EVENT_BOSSFIGHT_HINT: 25}, offsets={}),
+                                           OnceOnlyHints.HANGAR_HAVE_NEW_SUFFIX_BADGE_HINT: 23}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -515,12 +500,6 @@ class ServerSettingsManager(object):
                                      BATTLE_COMM.SHOW_CALLOUT_MESSAGES: 3,
                                      BATTLE_COMM.SHOW_BASE_MARKERS: 4,
                                      BATTLE_COMM.SHOW_LOCATION_MARKERS: 5}, offsets={}),
-     SETTINGS_SECTIONS.GAME_EVENT: Section(masks={UIGameEventKeys.AFK_WARNING_SHOWN: 0,
-                                    UIGameEventKeys.AFK_BAN_SHOWN: 1,
-                                    UIGameEventKeys.HW21KEYSSHOPBUNDLE2: 2,
-                                    UIGameEventKeys.AFK_WARNING_MESSAGE_SHOWN: 3,
-                                    UIGameEventKeys.AFK_BAN_MESSAGE_SHOWN: 4}, offsets={UIGameEventKeys.DIFFICULTY_LEVEL_SHOWN: Offset(5, 65504),
-                                    UIGameEventKeys.REWARD_BOXES_SHOWN: Offset(16, 33488896)}),
      SETTINGS_SECTIONS.DOG_TAGS: Section(masks={GAME.SHOW_VICTIMS_DOGTAG: 0,
                                   GAME.SHOW_DOGTAG_TO_KILLER: 1}, offsets={}),
      SETTINGS_SECTIONS.BATTLE_HUD: Section(masks={SCORE_PANEL.SHOW_HP_VALUES: 0,
@@ -614,17 +593,7 @@ class ServerSettingsManager(object):
                                                   'role_LT_universal': 23,
                                                   'role_LT_wheeled': 24,
                                                   'role_SPG': 25}, offsets={}),
-     SETTINGS_SECTIONS.UNIT_FILTER: Section(masks={}, offsets={GAME.UNIT_FILTER: Offset(0, 2047)}),
-     SETTINGS_SECTIONS.HW21_NARRATIVE: Section(masks={Hw21StorageKeys.HANGAR_HELLO_FIRST: 0}, offsets={Hw21StorageKeys.HANGAR_LAST_HELLO_DATE: Offset(1, 62)}),
-     SETTINGS_SECTIONS.HW21_SHOWN_NOTIFICATIONS: Section(masks={'hw21RewardBox_1': 0,
-                                                  'hw21RewardBox_2': 1,
-                                                  'hw21RewardBox_3': 2,
-                                                  'hw21RewardBox_4': 3,
-                                                  'hw21RewardBox_5': 4,
-                                                  'hw21RewardBox_6': 5,
-                                                  'hw21RewardBox_7': 6,
-                                                  'hw21RewardBox_8': 7,
-                                                  'hw21RewardBox_9': 8}, offsets={})}
+     SETTINGS_SECTIONS.UNIT_FILTER: Section(masks={}, offsets={GAME.UNIT_FILTER: Offset(0, 2047)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -751,12 +720,6 @@ class ServerSettingsManager(object):
         newValue = self.getSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, 'shown', 0) | mask
         return self.setSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, {'shown': newValue})
 
-    def getGameEventStorage(self, defaults=None):
-        return self.getSection(SETTINGS_SECTIONS.GAME_EVENT, defaults)
-
-    def saveInGameEventStorage(self, fields):
-        return self.setSections([SETTINGS_SECTIONS.GAME_EVENT], fields)
-
     def setQuestProgressSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)
 
@@ -820,20 +783,6 @@ class ServerSettingsManager(object):
         self.settingsCache.setSettings(storingValue)
         LOG_DEBUG('Applying MARKER server settings: ', settings)
         self._core.onSettingsChanged(settings)
-
-    def getHW21NarrativeSettings(self, key, default=None):
-        return self.getSectionSettings(SETTINGS_SECTIONS.HW21_NARRATIVE, key, default)
-
-    def setHW21NarrativeSettings(self, fields):
-        if fields:
-            self.setSectionSettings(SETTINGS_SECTIONS.HW21_NARRATIVE, fields)
-
-    def getHW21NotificationShown(self, key):
-        return self.getSectionSettings(SETTINGS_SECTIONS.HW21_SHOWN_NOTIFICATIONS, key, False) if key in self.SECTIONS[SETTINGS_SECTIONS.HW21_SHOWN_NOTIFICATIONS].masks else False
-
-    def setHW21NotificationShown(self, key):
-        if key in self.SECTIONS[SETTINGS_SECTIONS.HW21_SHOWN_NOTIFICATIONS].masks:
-            self.setSectionSettings(SETTINGS_SECTIONS.HW21_SHOWN_NOTIFICATIONS, {key: True})
 
     def setSessionStatsSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.SESSION_STATS, settings)
@@ -968,6 +917,7 @@ class ServerSettingsManager(object):
          'onceOnlyHints2': {},
          'uiStorage': {},
          'epicCarouselFilter2': {},
+         'rankedCarouselFilter1': {},
          'rankedCarouselFilter2': {},
          'sessionStats': {},
          'battleComm': {},
@@ -1029,10 +979,14 @@ class ServerSettingsManager(object):
         clearEpicFilterCarousel = clear.get('epicCarouselFilter2', 0)
         if epicFilterCarousel or clearEpicFilterCarousel:
             settings[SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_2, epicFilterCarousel) ^ clearEpicFilterCarousel
-        rankedFilterCarousel = data.get('rankedCarouselFilter2', {})
-        clearRankedFilterCarousel = clear.get('rankedCarouselFilter2', 0)
-        if rankedFilterCarousel or clearRankedFilterCarousel:
-            settings[SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2, rankedFilterCarousel) ^ clearRankedFilterCarousel
+        rankedFilterCarousel1 = data.get('rankedCarouselFilter1', {})
+        clearRankedFilterCarousel1 = clear.get('rankedCarouselFilter1', 0)
+        if rankedFilterCarousel1 or clearRankedFilterCarousel1:
+            settings[SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_1] = self._buildSectionSettings(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_1, rankedFilterCarousel1) ^ clearRankedFilterCarousel1
+        rankedFilterCarousel2 = data.get('rankedCarouselFilter2', {})
+        clearRankedFilterCarousel2 = clear.get('rankedCarouselFilter2', 0)
+        if rankedFilterCarousel2 or clearRankedFilterCarousel2:
+            settings[SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2, rankedFilterCarousel2) ^ clearRankedFilterCarousel2
         feedbackDamageIndicator = data.get('feedbackDamageIndicator', {})
         if feedbackDamageIndicator:
             settings[SETTINGS_SECTIONS.DAMAGE_INDICATOR] = self._buildSectionSettings(SETTINGS_SECTIONS.DAMAGE_INDICATOR, feedbackDamageIndicator)

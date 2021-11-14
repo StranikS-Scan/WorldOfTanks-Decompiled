@@ -99,7 +99,6 @@ class _BattleSettings(object):
         self.messageFormat = u'%(playerName)s : %(messageText)s'
         self.targetFormat = '%(target)s'
         self.inactiveStateAlpha = 100
-        self.hintText = ''
         self.toolTipText = ''
         self.chatIsLockedToolTipText = ''
         self.toolTipTextWithMuteInfo = ''

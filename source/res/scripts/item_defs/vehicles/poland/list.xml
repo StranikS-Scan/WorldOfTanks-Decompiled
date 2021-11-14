@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <Pl01_TKS_20mm>
     <id>	1	</id>
     <userString>	#poland_vehicles:Pl01_TKS_20mm	</userString>
@@ -192,7 +191,7 @@
     <price>	3100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD dog improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
+    <tags>	mediumTank role_MT_universal HD dog improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
   </Pl16_T34_85_Rudy>
   <Pl19_CS_52_LIS>
@@ -208,81 +207,4 @@
     <tags>	mediumTank role_MT_universal improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user aimingStabilizer_class1_user HD	</tags>
     <level>	8	</level>
   </Pl19_CS_52_LIS>
-  <Pl11_45TP_Habicha_HELL>
-    <id>	2	</id>
-    <userString>	#poland_vehicles:Pl11_45TP_Habicha_HELL	</userString>
-    <shortUserString>	#poland_vehicles:Pl11_45TP_Habicha_short_HELL	</shortUserString>
-    <description>	#poland_vehicles:Pl11_45TP_Habicha_descr	</description>
-    <price>	1450000	</price>
-    <tags>	heavyTank improvedVentilation_class3_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	7	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </Pl11_45TP_Habicha_HELL>
-  <Pl13_53TP_Markowskiego_HELL>
-    <id>	41	</id>
-    <userString>	#poland_vehicles:Pl13_53TP_Markowskiego_HELL	</userString>
-    <shortUserString>	#poland_vehicles:Pl13_53TP_Markowskiego_short_HELL	</shortUserString>
-    <description>	#poland_vehicles:Pl13_53TP_Markowskiego_descr	</description>
-    <price>	2600000	</price>
-    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	8	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </Pl13_53TP_Markowskiego_HELL>
-  <Pl05_50TP_Tyszkiewicza_HELL>
-    <id>	42	</id>
-    <userString>	#poland_vehicles:Pl05_50TP_Tyszkiewicza_HELL	</userString>
-    <shortUserString>	#poland_vehicles:Pl05_50TP_Tyszkiewicza_short_HELL	</shortUserString>
-    <description>	#poland_vehicles:Pl05_50TP_Tyszkiewicza_descr	</description>
-    <price>	3500000	</price>
-    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	9	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </Pl05_50TP_Tyszkiewicza_HELL>
-  <Pl10_40TP_Habicha_HELL>
-    <id>	43	</id>
-    <userString>	#poland_vehicles:Pl10_40TP_Habicha_HELL	</userString>
-    <shortUserString>	#poland_vehicles:Pl10_40TP_Habicha_short_HELL	</shortUserString>
-    <description>	#poland_vehicles:Pl10_40TP_Habicha_descr	</description>
-    <price>	925000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	6	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </Pl10_40TP_Habicha_HELL>
-  <Pl20_CS_44_HW_bot>
-    <id>	19	</id>
-    <userString>	#poland_vehicles:Pl20_CS_44_HW_bot	</userString>
-    <shortUserString>	#poland_vehicles:Pl20_CS_44_HW_bot_short	</shortUserString>
-    <description>	#poland_vehicles:Pl20_CS_44_descr	</description>
-    <price>	1410000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user antifragmentationLining_medium_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	7	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </Pl20_CS_44_HW_bot>
-  <Pl23_CS_53_HW_bot>
-    <id>	21	</id>
-    <userString>	#poland_vehicles:Pl23_CS_53_HW_bot	</userString>
-    <description>	#poland_vehicles:Pl23_CS_53_HW_bot_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl23_CS_53_HW_bot_short	</shortUserString>
-    <price>	2550000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	8	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </Pl23_CS_53_HW_bot>
-  <Pl18_BUGI_HW_bot>
-    <id>	18	</id>
-    <userString>	#poland_vehicles:Pl18_BUGI_HW_bot	</userString>
-    <shortUserString>	#poland_vehicles:Pl18_BUGI_HW_bot_short	</shortUserString>
-    <description>	#poland_vehicles:Pl18_BUGI_descr	</description>
-    <price>	915000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user antifragmentationLining_medium_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	6	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </Pl18_BUGI_HW_bot>
 </list.xml>

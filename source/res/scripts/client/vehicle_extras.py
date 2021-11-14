@@ -9,7 +9,10 @@ import Math
 import material_kinds
 import AnimationSequence
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
+from gui.impl import backport
+from gui.impl.gen import R
 from items import vehicles
+from items.components.component_constants import MAIN_TRACK_PAIR_IDX
 from common_tank_appearance import MAX_DISTANCE
 from helpers import i18n
 from helpers.EffectsList import EffectsListPlayer
@@ -213,13 +216,17 @@ class DamageMarker(EntityExtra):
         self.deviceUserString = dataSection.readString('deviceUserString')
         if not self.deviceUserString:
             self._raiseWrongConfig('deviceUserString', containerName)
-        self.deviceUserString = i18n.makeString(self.deviceUserString)
+        deviceUserString = self._getDeviceUserString(dataSection, containerName)
+        self.deviceUserString = deviceUserString
         soundSection = dataSection['sounds']
         self.sounds = {}
         for state in ('critical', 'destroyed', 'functional', 'fixed'):
             sound = soundSection.readString(state)
             if sound:
                 self.sounds[state] = sound
+
+    def _getDeviceUserString(self, dataSection, containerName):
+        return i18n.makeString(dataSection.readString('deviceUserString'))
 
     @property
     def isTankman(self):
@@ -239,20 +246,33 @@ def wheelHealths(name, index, containerName, dataSection, vehType):
 
 
 class TrackHealth(DamageMarker):
-    __slots__ = ('__isLeft', '__trackPairIndex')
+    __slots__ = ('__isLeft', '_trackPairIndex')
 
     def _readConfig(self, dataSection, containerName):
-        DamageMarker._readConfig(self, dataSection, containerName)
         self.__isLeft = dataSection.readBool('isLeft')
+        self._trackPairIndex = dataSection.readInt('trackPairIdx', 0)
+        DamageMarker._readConfig(self, dataSection, containerName)
         functionalCanMoveState = 'functionalCanMove'
         self.sounds[functionalCanMoveState] = dataSection.readString('sounds/' + functionalCanMoveState)
-        self.__trackPairIndex = dataSection.readInt('trackPairIdx', 0)
+
+    def _getDeviceUserString(self, dataSection, _):
+        resource = R.strings.ingame_gui.devices.track
+        typeTxt = backport.text(resource.left() if self.__isLeft else resource.right())
+        return backport.text(resource(), type=typeTxt)
 
     def _start(self, data, args):
-        data['entity'].appearance.addCrashedTrack(self.__isLeft, self.__trackPairIndex)
+        data['entity'].appearance.addCrashedTrack(self.__isLeft, self._trackPairIndex)
 
     def _cleanup(self, data):
-        data['entity'].appearance.delCrashedTrack(self.__isLeft, self.__trackPairIndex)
+        data['entity'].appearance.delCrashedTrack(self.__isLeft, self._trackPairIndex)
+
+
+class TrackWithinTrackHealth(TrackHealth):
+
+    def _getDeviceUserString(self, dataSection, _):
+        resource = R.strings.ingame_gui.devices.track
+        typeTxt = backport.text(resource.main() if self._trackPairIndex == MAIN_TRACK_PAIR_IDX else resource.outer())
+        return backport.text(resource(), type=typeTxt)
 
 
 class Fire(EntityExtra):
@@ -278,8 +298,8 @@ class Fire(EntityExtra):
         fire = vehicle.appearance.findComponentByType(Health.FireComponent)
         if fire is None:
             vehicle.appearance.createComponent(Health.FireComponent)
-        apperance = vehicle.appearance
-        if apperance is not None and not apperance.isUnderwater:
+        isUnderwater = vehicle.appearance.isUnderwater
+        if not isUnderwater:
             self.__playEffect(data)
         data['_isStarted'] = True
         data['_invokeTime'] = BigWorld.time()
@@ -332,24 +352,16 @@ class Fire(EntityExtra):
         data['_effectsPlayer'] = weakref.ref(effectListPlayer)
         return
 
-    def __stopEffect(self, data):
-        effectsListPlayer = self.__getEffectsListPlayer(data)
-        if effectsListPlayer is not None:
-            effectsListPlayer.stop(forceCallback=True)
-            del data['_effectsPlayer']
-        return
-
     def checkUnderwater(self, vehicle, isVehicleUnderwater):
         data = vehicle.extras[self.index]
         if isVehicleUnderwater:
-            self.__stopEffect(data)
+            effectsListPlayer = self.__getEffectsListPlayer(data)
+            if effectsListPlayer is not None:
+                effectsListPlayer.stop(forceCallback=True)
+                del data['_effectsPlayer']
         if not isVehicleUnderwater:
             self.__playEffect(data)
-
-    def canBeDamagedChanged(self, vehicle, canBeDamaged):
-        if not canBeDamaged:
-            data = vehicle.extras[self.index]
-            self.__stopEffect(data)
+        return
 
 
 class TankmanHealth(DamageMarker):

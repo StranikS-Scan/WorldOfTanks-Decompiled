@@ -286,8 +286,6 @@ class CombatEquipmentManager(object):
         self.__lastSmokeInfos = smokeInfos
         if ctrl is not None:
             ctrl.notifyStateChanged(VEHICLE_VIEW_STATE.SMOKE, smokeInfos)
-            SmokeScreen.enableSmokePostEffect(bool(smokeInfos), smokeInfos)
-        SmokeScreen.enableSmokePostEffect(bool(smokeInfos), smokeInfos)
         return
 
     @property

@@ -130,6 +130,9 @@ class Stats(object):
             spaDiff = cacheDiff.get('SPA', None)
             if spaDiff:
                 synchronizeDicts(spaDiff, cache.setdefault('SPA', dict()))
+            entitlementsDiff = cacheDiff.get('entitlements', None)
+            if entitlementsDiff is not None:
+                synchronizeDicts(entitlementsDiff, cache.setdefault('entitlements', {}))
         piggyBankDiff = diff.get(PIGGY_BANK_PDATA_KEY, None)
         if piggyBankDiff is not None:
             synchronizeDicts(piggyBankDiff, cache.setdefault(PIGGY_BANK_PDATA_KEY, dict()))

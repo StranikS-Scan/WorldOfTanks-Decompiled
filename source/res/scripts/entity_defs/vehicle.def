@@ -27,8 +27,6 @@
     <Interface>	RespawnController_Vehicle	</Interface>
     <Interface>	SmokeController_Vehicle	</Interface>
     <Interface>	Wheels	</Interface>
-    <Interface>	AuraController_Vehicle	</Interface>
-    <Interface>	EventControlPoint_Vehicle	</Interface>
   </Implements>
   <Volatile>
     <position></position>
@@ -309,11 +307,6 @@
       <Flags>	ALL_CLIENTS	</Flags>
       <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </ownVehiclePosition>
-    <buffs>
-      <Type>	ARRAY	  <of>	UINT16	</of>
-      </Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </buffs>
   </Properties>
   <TempProperties>
     <events></events>
@@ -337,7 +330,6 @@
     <_ProximityManager__data></_ProximityManager__data>
     <_TimerManager__unpersistedTimers></_TimerManager__unpersistedTimers>
     <gameObject></gameObject>
-    <buffContainer></buffContainer>
   </TempProperties>
   <ClientMethods>
     <onHealthChanged>
@@ -393,9 +385,6 @@
       <Arg>	VECTOR3	</Arg>
       <DetailDistance>	100	</DetailDistance>
     </showRammingEffect>
-    <showNotDamage>
-      <Arg>	OBJECT_ID	</Arg>
-    </showNotDamage>
   </ClientMethods>
   <CellMethods>
     <updatePrebattleID>
@@ -578,16 +567,9 @@
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
     </switchSetup>
-    <redrawVehicleOnRespawnAfterReconnect></redrawVehicleOnRespawnAfterReconnect>
-    <getLastDeathReason></getLastDeathReason>
-    <getDamageDealt></getDamageDealt>
   </CellMethods>
   <BaseMethods>
     <onCreateCellSuccess></onCreateCellSuccess>
-    <receiveBotFinalStats>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	STRING	</Arg>
-    </receiveBotFinalStats>
     <setAvatar>
       <Arg>	MAILBOX	</Arg>
     </setAvatar>

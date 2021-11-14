@@ -10570,7 +10570,7 @@
           <paints>
             <item>
               <id>	100	</id>
-              <appliedTo>	30583	</appliedTo>
+              <appliedTo>	22391	</appliedTo>
             </item>
           </paints>
           <decals>
@@ -11634,7 +11634,7 @@
           <paints>
             <item>
               <id>	192	</id>
-              <appliedTo>	30583	</appliedTo>
+              <appliedTo>	22391	</appliedTo>
             </item>
           </paints>
           <decals>
@@ -11956,6 +11956,146 @@
           </include>
         </projection_decal>
       </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	558	</id>
+      <texture>	gui/maps/vehicles/styles/ranked_1_4th.png	</texture>
+      <description>	#vehicle_customization:special_style/ranked_2021_2_gold_desc	</description>
+      <userString>	#vehicle_customization:special_style/ranked_2021_2_gold	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	659	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	6	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	306	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	836	</id>
+              <appliedTo>	17472	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	559	</id>
+      <texture>	gui/maps/vehicles/styles/ranked_2_4th.png	</texture>
+      <description>	#vehicle_customization:special_style/ranked_2021_2_silver_desc	</description>
+      <userString>	#vehicle_customization:special_style/ranked_2021_2_silver	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	655	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	6	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	306	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	836	</id>
+              <appliedTo>	17472	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	560	</id>
+      <texture>	gui/maps/vehicles/styles/ranked_3_4th.png	</texture>
+      <description>	#vehicle_customization:special_style/ranked_2021_2_bronze_desc	</description>
+      <userString>	#vehicle_customization:special_style/ranked_2021_2_bronze	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	656	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	6	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	306	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	836	</id>
+              <appliedTo>	17472	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
     </style>
   </itemGroup>
   <itemGroup>

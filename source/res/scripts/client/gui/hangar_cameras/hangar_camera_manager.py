@@ -366,9 +366,12 @@ class HangarCameraManager(object):
         ctx = event.ctx
         if self.__currentEntityId != ctx['vEntityId']:
             return
-        self.__updateCameraDistanceLimits()
-        self.__cam.pivotMaxDist = self.__getCameraPivotDistance()
-        self.__cam.forceUpdate()
+        isDone = not ctx['started']
+        self.__cam.isMovementEnabled = isDone
+        if isDone:
+            self.__updateCameraDistanceLimits()
+            self.__cam.pivotMaxDist = self.__getCameraPivotDistance()
+            self.__cam.forceUpdate()
 
     def __handleSettingsChange(self, diff):
         if 'fov' in diff:

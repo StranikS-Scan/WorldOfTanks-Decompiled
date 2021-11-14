@@ -3,21 +3,18 @@
 import BigWorld
 from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
-from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
-from gui.prb_control.entities.base import vehicleAmmoCheck
+from debug_utils import LOG_DEBUG
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.entities.event.pre_queue.actions_validator import EventActionsValidator
-from gui.prb_control.items import SelectResult
-from gui.prb_control.entities.event.pre_queue.ctx import EventBattleQueueCtx
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
 from gui.prb_control.prb_getters import isInEventBattlesQueue
-from CurrentVehicle import g_currentVehicle
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
+from gui.prb_control.items import SelectResult
+from gui.prb_control.entities.event.pre_queue.ctx import EventBattleQueueCtx
+from CurrentVehicle import g_currentVehicle
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.prb_control.entities.event.pre_queue.scheduler import EventScheduler
 from helpers import dependency
-from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_event_controller import IGameEventController
+from skeletons.gui.game_control import IEventBattlesController
 
 class EventBattleSubscriber(PreQueueSubscriber):
 
@@ -41,20 +38,14 @@ class EventBattleSubscriber(PreQueueSubscriber):
 class EventBattleEntryPoint(PreQueueEntryPoint):
 
     def __init__(self):
-        super(EventBattleEntryPoint, self).__init__(FUNCTIONAL_FLAG.EVENT | FUNCTIONAL_FLAG.LOAD_PAGE, QUEUE_TYPE.EVENT_BATTLES)
+        super(EventBattleEntryPoint, self).__init__(FUNCTIONAL_FLAG.EVENT, QUEUE_TYPE.EVENT_BATTLES)
 
 
 class EventBattleEntity(PreQueueEntity):
-    eventsCache = dependency.descriptor(IEventsCache)
-    gameEventController = dependency.descriptor(IGameEventController)
+    __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self):
         super(EventBattleEntity, self).__init__(FUNCTIONAL_FLAG.EVENT, QUEUE_TYPE.EVENT_BATTLES, EventBattleSubscriber())
-        self.__eventStartQueuedTime = 0.0
-
-    @property
-    def eventStartQueuedTime(self):
-        return self.__eventStartQueuedTime
 
     @prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)
     def storage(self):
@@ -75,10 +66,7 @@ class EventBattleEntity(PreQueueEntity):
         return super(EventBattleEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
     def doSelectAction(self, action):
-        if action.actionName == PREBATTLE_ACTION_NAME.EVENT_BATTLE:
-            g_eventDispatcher.loadHangar()
-            return SelectResult(True)
-        return super(EventBattleEntity, self).doSelectAction(action)
+        return SelectResult(True) if action.actionName == PREBATTLE_ACTION_NAME.EVENT_BATTLE else super(EventBattleEntity, self).doSelectAction(action)
 
     def isInQueue(self):
         return isInEventBattlesQueue()
@@ -87,16 +75,8 @@ class EventBattleEntity(PreQueueEntity):
         self.storage.suspend()
         super(EventBattleEntity, self).leave(ctx, callback=callback)
 
-    @vehicleAmmoCheck
-    def queue(self, ctx, callback=None):
-        super(EventBattleEntity, self).queue(ctx, callback=callback)
-
-    def _makeQueueCtxByAction(self, action=None):
-        return EventBattleQueueCtx([g_currentVehicle.item.invID], difficultyLevel=self.gameEventController.getSelectedDifficultyLevel(), waitingID='prebattle/join')
-
     def _doQueue(self, ctx):
-        LOG_DEBUG_DEV('EventBattleEntity _doQueue level', ctx.getDifficultyLevel())
-        BigWorld.player().enqueueEventBattles(ctx.getVehicleInventoryIDs(), ctx.getDifficultyLevel())
+        BigWorld.player().enqueueEventBattles(ctx.getVehicleInventoryID())
         LOG_DEBUG('Sends request on queuing to the event battles', ctx)
 
     def _doDequeue(self, ctx):
@@ -104,15 +84,17 @@ class EventBattleEntity(PreQueueEntity):
         LOG_DEBUG('Sends request on dequeuing from the event battles')
 
     def _goToQueueUI(self):
-        self.__eventStartQueuedTime = BigWorld.time()
-        g_eventDispatcher.loadEventBattleQueue()
+        g_eventDispatcher.loadBattleQueue()
         return FUNCTIONAL_FLAG.LOAD_PAGE
 
     def _exitFromQueueUI(self):
-        g_eventDispatcher.loadHangar()
+        if not self.__eventBattlesCtrl.isEnabled():
+            g_eventDispatcher.loadHangar()
+        else:
+            g_eventDispatcher.loadEventHangar()
 
-    def _createActionsValidator(self):
-        return EventActionsValidator(self)
+    def _makeQueueCtxByAction(self, action=None):
+        return EventBattleQueueCtx(g_currentVehicle.item.invID, waitingID='prebattle/join')
 
     def _createScheduler(self):
         return EventScheduler(self)

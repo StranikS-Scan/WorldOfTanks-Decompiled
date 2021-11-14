@@ -40,10 +40,6 @@ class HangarTabWebApiMixin(object):
         else:
             shared_events.showHangar()
 
-    @w2c(W2CSchema, 'halloween21_buy')
-    def openHWRewardView(self, _):
-        shared_events.showMetaView()
-
 
 class HangarWindowsWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)

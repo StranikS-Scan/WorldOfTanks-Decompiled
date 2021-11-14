@@ -145,6 +145,3 @@ class INGAME_HELP(object):
     DETAILSHELP_SPGREWORKTITLE = '#ingame_help:detailsHelp/spgReworkTitle'
     DETAILSHELP_TRACKWITHINTRACK_TITLE = '#ingame_help:detailsHelp/trackWithinTrack/title'
     DETAILSHELP_TRACKWITHINTRACK_DESCRIPTION = '#ingame_help:detailsHelp/trackWithinTrack/description'
-    EVENTRADIALMENU_CANCEL = '#ingame_help:eventRadialMenu/cancel'
-    EVENTRADIALMENU_CAMP = '#ingame_help:eventRadialMenu/camp'
-    EVENTRADIALMENU_COLLECTOR = '#ingame_help:eventRadialMenu/collector'

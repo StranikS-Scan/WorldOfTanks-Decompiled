@@ -7,7 +7,6 @@ from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from adisp import process
 from async import async, await
-from constants import EventPhase
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.battle_pass.battle_pass_helpers import showOfferByBonusName
@@ -22,20 +21,19 @@ from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.platform.wgnp.controller import isEmailConfirmationNeeded, getEmail
+from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression, showBattlePass3dStyleChoiceWindow, showMissionsMapboxProgression
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showBlueprintsSalePage, showConfirmEmailOverlay
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showBlueprintsSalePage, showSteamConfirmEmailOverlay
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.afk_controller import IAFKController
 from skeletons.gui.impl import INotificationWindowController
-from skeletons.gui.platform.wgnp_controller import IWGNPRequestController
+from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from helpers import dependency
@@ -45,12 +43,13 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, IBattlePassController, IShopSalesEventController
+from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, IBattlePassController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
 if typing.TYPE_CHECKING:
     from notification.NotificationsModel import NotificationsModel
+    from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
 
 class _ActionHandler(object):
 
@@ -808,7 +807,7 @@ class _OpenNotrecruitedSysMessageHandler(_OpenNotrecruitedHandler):
 
 
 class _OpenConfirmEmailHandler(_NavigationDisabledActionHandler):
-    __wgnpCtrl = dependency.descriptor(IWGNPRequestController)
+    __wgnpSteamAccCtrl = dependency.descriptor(IWGNPSteamAccRequestController)
 
     @classmethod
     def getNotType(cls):
@@ -820,9 +819,9 @@ class _OpenConfirmEmailHandler(_NavigationDisabledActionHandler):
 
     @async
     def doAction(self, model, entityID, action):
-        emailStatus = yield await(self.__wgnpCtrl.getEmailStatus())
-        if emailStatus.isSuccess() and isEmailConfirmationNeeded(emailStatus):
-            showConfirmEmailOverlay(email=getEmail(emailStatus))
+        status = yield await(self.__wgnpSteamAccCtrl.getEmailStatus())
+        if status.typeIs(StatusTypes.ADDED):
+            showSteamConfirmEmailOverlay(email=status.email)
 
 
 class OpenPersonalMissionHandler(_ActionHandler):
@@ -989,68 +988,6 @@ class _OpenMapboxSurvey(_NavigationDisabledActionHandler):
         self.__mapboxCtrl.showSurvey(notification.getSavedData())
 
 
-class _ShowEventWarningWindowHandler(_ActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(_ShowEventWarningWindowHandler, self).handleAction(model, entityID, action)
-        dependency.instance(IAFKController).showWarningWindow()
-
-
-class _ShowEventBanWindowHandler(_ActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(_ShowEventBanWindowHandler, self).handleAction(model, entityID, action)
-        dependency.instance(IAFKController).showBanWindow()
-
-
-class _GotoEventRedeemQuestHandler(_ActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(_GotoEventRedeemQuestHandler, self).handleAction(model, entityID, action)
-        dependency.instance(IAFKController).showQuest()
-
-
-class _OpenShopSalesEventMainView(_NavigationDisabledActionHandler):
-    __shopSales = dependency.descriptor(IShopSalesEventController)
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        canShow = self.__shopSales.isEnabled and self.__shopSales.isInEvent and self.__shopSales.currentEventPhase != EventPhase.NOT_STARTED
-        if canShow:
-            self.__shopSales.openMainView()
-
-
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -1093,12 +1030,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpentBlueprintsConvertSale,
  _OpenConfirmEmailHandler,
  _OpenMapboxProgression,
- _OpenMapboxSurvey,
- _ShowEventBanWindowHandler,
- _ShowEventWarningWindowHandler,
- _GotoEventRedeemQuestHandler,
- _OpenMissingEventsHandler,
- _OpenShopSalesEventMainView)
+ _OpenMapboxSurvey)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

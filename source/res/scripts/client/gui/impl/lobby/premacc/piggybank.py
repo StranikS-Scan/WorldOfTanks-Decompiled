@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/piggybank.py
 import logging
-import time
 from math import ceil
 from constants import PremiumConfigs
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
@@ -12,24 +11,12 @@ from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.impl.gen.view_models.views.lobby.premacc.piggybank_model import PiggybankModel
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.shared.event_dispatcher import showTankPremiumAboutPage, showShop
-from gui.shared.utils.scheduled_notifications import _Notifier
+from gui.shared.utils.scheduled_notifications import TimerNotifier
 from helpers import time_utils
 _logger = logging.getLogger(__name__)
 
 def _getBackBtnLabel():
     return R.strings.premacc.piggyBank.backBtnAddLabel()
-
-
-class TimerNotifier(_Notifier):
-
-    def _getNextNotificationDelta(self, delta):
-        if delta <= time_utils.ONE_DAY:
-            period = time_utils.ONE_MINUTE
-        else:
-            period = time_utils.ONE_HOUR
-        td = delta % period or period
-        _logger.debug('_getNextNotificationDelta: %s ', time.strftime('%H:%M:%S', time.gmtime(td)))
-        return td
 
 
 class PiggyBankView(PiggyBankBaseView):

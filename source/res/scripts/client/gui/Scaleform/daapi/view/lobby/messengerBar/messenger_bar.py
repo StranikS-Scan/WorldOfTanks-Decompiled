@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/messenger_bar.py
 from account_helpers.settings_core.settings_constants import SESSION_STATS
 from adisp import process
-from constants import PREBATTLE_TYPE, QUEUE_TYPE
+from constants import PREBATTLE_TYPE
 from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
 from gui import SystemMessages
@@ -178,8 +178,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
 
     def __handleFightButtonUpdated(self, event):
         state = self.prbDispatcher.getFunctionalState()
-        isInEvent = self.prbEntity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES
-        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled() and not isInEvent)
+        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled())
 
     def __manageWindow(self, eventType):
         manager = self.app.containerManager

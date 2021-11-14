@@ -7,9 +7,13 @@ import adisp
 import nations
 import constants
 from CurrentVehicle import g_currentPreviewVehicle
+from constants import QUEUE_TYPE
 from gui.impl import backport
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.veh_post_progression.models.progression import PostProgressionCompletion
+from gui.prb_control.entities.base.ctx import PrbAction
+from gui.prb_control.entities.base.listener import IPrbListener
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from items import UNDEFINED_ITEM_CD
 from rent_common import parseRentID
 from gui import SystemMessages
@@ -71,7 +75,7 @@ _VP_SHOW_PREVIOUS_SCREEN_ON_SUCCESS_ALIASES = (VIEW_ALIAS.VEHICLE_PREVIEW,
  VIEW_ALIAS.LOBBY_STORE)
 _COLLECTIBLE_VEHICLE_TUTORIAL = 'collectibleVehicle'
 
-class BuyVehicleView(ViewImpl, EventSystemEntity):
+class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
     __itemsCache = dependency.descriptor(IItemsCache)
     __rentals = dependency.descriptor(IRentalsController)
     __tradeIn = dependency.descriptor(ITradeInController)
@@ -272,11 +276,14 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             self.__updateTotalPrice()
             return
 
+    @adisp.process
     def __onInHangar(self, *_):
-        event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD, leaveEventMode=True)
+        event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
         self.__startTutorial()
         self.__destroyWindow()
         self.fireEvent(events.CloseWindowEvent(events.CloseWindowEvent.BUY_VEHICLE_VIEW_CLOSED, isAgree=True))
+        if self.prbEntity.getEntityType() == QUEUE_TYPE.MAPS_TRAINING:
+            yield self.prbDispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
 
     def __onCheckboxWithoutCrewChanged(self, args):
         self.__isWithoutCommander = args['selected']

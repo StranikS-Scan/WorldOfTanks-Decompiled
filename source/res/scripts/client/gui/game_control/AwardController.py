@@ -10,7 +10,6 @@ from itertools import ifilter, chain
 import ArenaType
 import BigWorld
 import async
-import constants
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
 from adisp import process
@@ -59,7 +58,7 @@ from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBan
 from gui.server_events.events_helpers import isDailyQuest, isACEmailConfirmationQuest
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
-from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showBadgeInvoiceAwardWindow, showMultiAwardWindow, showEliteWindow, showYearHareAffairAwardsWindow
+from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYearAwardWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow, showDedicationRewardWindow, showBadgeInvoiceAwardWindow, showMultiAwardWindow, showEliteWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -74,10 +73,9 @@ from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.events import g_messengerEvents
 from nations import NAMES
-from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController, IBattlePassController, IMapboxController, IYearHareAffairController
+from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController, IBattlePassController, IMapboxController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -86,11 +84,9 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
-from year_hare_affair_common import isYearHareAffairFinalTokenQuest
 if typing.TYPE_CHECKING:
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
 _logger = logging.getLogger(__name__)
-EVENT_TOKEN_MESSAGES_MAP = {constants.HW_AFK_PARDON_ORDER_TOKEN_ID: None}
 
 class QUEST_AWARD_POSTFIX(object):
     CREW_SKINS = 'awardcrewskin'
@@ -193,8 +189,7 @@ class AwardController(IAwardController, IGlobalListener):
          BadgesInvoiceHandler(self),
          MapboxProgressionRewardHandler(self),
          PurchaseHandler(self),
-         RenewableSubscriptionHandler(self),
-         YearHareAffairRewardHandler(self)]
+         RenewableSubscriptionHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -637,71 +632,46 @@ class MarkByInvoiceHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         invoiceData = ctx[1].data
         totalCount = 0
-        eventTokensList = {}
         if invoiceData.get('assetType') == INVOICE_ASSET.DATA:
             if 'data' in invoiceData:
                 data = invoiceData['data']
                 if 'tokens' in data:
                     tokensDict = data['tokens']
                     for tokenName, tokenData in tokensDict.iteritems():
-                        if tokenName in EVENT_TOKEN_MESSAGES_MAP:
-                            count = eventTokensList.get(tokenName, 0) + tokenData.get('count', 0)
-                            eventTokensList[tokenName] = count
-                            continue
                         if tokenName.startswith('img:'):
                             totalCount += tokenData.get('count', 0)
 
         if totalCount:
-            self._showMessage(totalCount, SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED)
-        for token in eventTokensList:
-            if eventTokensList[token] and EVENT_TOKEN_MESSAGES_MAP.get(token):
-                self._showMessage(eventTokensList[token], EVENT_TOKEN_MESSAGES_MAP.get(token))
+            self._showMessage(totalCount)
 
     @staticmethod
-    def _showMessage(tokenCount, sysMsg):
-        SystemMessages.pushI18nMessage(sysMsg, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
+    def _showMessage(tokenCount):
+        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
 
 class MarkByQuestHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
         super(MarkByQuestHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
-        self.__tokenCount = 0
-        self.__eventTokensList = {}
-
-    def _needToShowAward(self, ctx):
-        if not super(MarkByQuestHandler, self)._needToShowAward(ctx):
-            return False
-        _, message = ctx
-        self.__tokenCount, self.__eventTokensList = self.__extractCount(message)
-        return bool(self.__tokenCount) or len(self.__eventTokensList) > 0
 
     def _showAward(self, ctx):
-        self.__showMessage(ctx)
-
-    def __showMessage(self, ctx):
         _, message = ctx
-        if self.__tokenCount:
-            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=self.__tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
-        for token in self.__eventTokensList:
-            tokenMsg = EVENT_TOKEN_MESSAGES_MAP.get(token)
-            if self.__eventTokensList[token] and tokenMsg and message.type != SYS_MESSAGE_TYPE.battleResults.index():
-                SystemMessages.pushI18nMessage(tokenMsg, count=self.__eventTokensList[token], type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
+        tokenCount = self.__extractCount(message)
+        if tokenCount > 0:
+            self.__showMessage(tokenCount)
+
+    def __showMessage(self, tokenCount):
+        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
     @staticmethod
     def __extractCount(message):
         totalCounts = 0
-        eventTokensList = {}
         tokensDict = message.data.get('tokens', {})
         for tokenName, tokenData in tokensDict.iteritems():
-            if tokenName in EVENT_TOKEN_MESSAGES_MAP:
-                count = eventTokensList.get(tokenName, 0) + tokenData.get('count', 0)
-                eventTokensList[tokenName] = count
-                continue
             if tokenName.startswith('img:'):
                 totalCounts += tokenData.get('count', 0)
 
-        return (totalCounts, eventTokensList)
+        return totalCounts
 
 
 class CrewSkinsQuestHandler(MultiTypeServiceChannelHandler):
@@ -759,7 +729,10 @@ class RecruitHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
         super(RecruitHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
-        self.__questTypes = [SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.invoiceReceived.index()]
+        self.__questTypes = [SYS_MESSAGE_TYPE.battleResults.index(),
+         SYS_MESSAGE_TYPE.tokenQuests.index(),
+         SYS_MESSAGE_TYPE.invoiceReceived.index(),
+         SYS_MESSAGE_TYPE.converter.index()]
 
     def _needToShowAward(self, ctx):
         _, message = ctx
@@ -1705,33 +1678,3 @@ class PurchaseHandler(ServiceChannelHandler):
                         _logger.info('Reward list is empty, multiple awards window will not be shown for purchase %s', productCode)
             else:
                 _logger.debug('Product code is empty! Awards Window will not be shown!')
-
-
-class YearHareAffairRewardHandler(MultiTypeServiceChannelHandler):
-    __yhaController = dependency.descriptor(IYearHareAffairController)
-
-    def __init__(self, awardCtrl):
-        super(YearHareAffairRewardHandler, self).__init__(handledTypes=(SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.battleResults.index()), awardCtrl=awardCtrl)
-        self._qId = None
-        return
-
-    def _needToShowAward(self, ctx):
-        _, message = ctx
-        if not super(YearHareAffairRewardHandler, self)._needToShowAward(ctx):
-            return False
-        else:
-            _, message = ctx
-            questIDs = message.data.get('completedQuestIDs', set())
-            self._qId = findFirst(isYearHareAffairFinalTokenQuest, questIDs)
-            return self._qId is not None
-
-    def _showAward(self, ctx):
-        if self._qId is None:
-            return
-        else:
-            _, message = ctx
-            rewards = message.data.get('detailedRewards', {}).get(self._qId, {})
-            self._qId = None
-            if rewards:
-                showYearHareAffairAwardsWindow(rewards)
-            return

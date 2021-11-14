@@ -12,7 +12,7 @@ class RankedEntryPointModel(ViewModel):
     STATE_WAIT_NEXT_SEASON_WITHOUT_DATE = 4
     STATE_FROZEN = 5
 
-    def __init__(self, properties=4, commands=1):
+    def __init__(self, properties=3, commands=1):
         super(RankedEntryPointModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -29,16 +29,9 @@ class RankedEntryPointModel(ViewModel):
     def setState(self, value):
         self._setNumber(2, value)
 
-    def getTimeUntilNextSeason(self):
-        return self._getNumber(3)
-
-    def setTimeUntilNextSeason(self, value):
-        self._setNumber(3, value)
-
     def _initialize(self):
         super(RankedEntryPointModel, self)._initialize()
         self._addViewModelProperty('currentSeason', RankedSeasonModel())
         self._addViewModelProperty('nextSeason', RankedSeasonModel())
         self._addNumberProperty('state', 0)
-        self._addNumberProperty('timeUntilNextSeason', -1)
         self.onClick = self._addCommand('onClick')

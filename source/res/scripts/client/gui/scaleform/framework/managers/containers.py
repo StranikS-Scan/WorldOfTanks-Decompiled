@@ -3,6 +3,7 @@
 import logging
 import weakref
 from collections import OrderedDict
+import typing
 from Event import Event
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
@@ -12,6 +13,8 @@ from gui.Scaleform.framework.entities.abstract.ContainerManagerMeta import Conta
 from gui.Scaleform.framework.managers.loaders import ViewLoadMode, ViewKey
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 from shared_utils import findFirst
+if typing.TYPE_CHECKING:
+    from typing import List
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 _POPUPS_CONTAINERS = (WindowLayer.TOP_WINDOW, WindowLayer.FULLSCREEN_WINDOW, WindowLayer.WINDOW)
@@ -674,58 +677,54 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
 
     def load(self, loadParams, *args, **kwargs):
         viewKey = loadParams.viewKey
-        if self.__loader is None:
-            _logger.warning('Loader destroyed. View loading will be skipped. %s', loadParams)
-            return
+        viewLoadingItem = self.__loader.getViewLoadingItem(viewKey)
+        if viewLoadingItem is not None:
+            _logger.debug('View with key %s is already loading. item=[%r]', viewKey, viewLoadingItem)
+            view = viewLoadingItem.pyEntity
+            if loadParams.loadMode == ViewLoadMode.DEFAULT:
+                loadingViewLoadMode = viewLoadingItem.loadParams.loadMode
+                if loadingViewLoadMode == ViewLoadMode.PRELOAD:
+                    viewLoadingItem.loadParams = loadParams
+                    self.__addLoadingView(view)
+            elif loadParams.loadMode == ViewLoadMode.PRELOAD:
+                pass
+            else:
+                _logger.warning('Unsupported load mode %r. View loading will be skipped.', loadParams)
+                view = None
         else:
-            viewLoadingItem = self.__loader.getViewLoadingItem(viewKey)
-            if viewLoadingItem is not None:
-                _logger.debug('View with key %s is already loading. item=[%r]', viewKey, viewLoadingItem)
-                view = viewLoadingItem.pyEntity
-                if loadParams.loadMode == ViewLoadMode.DEFAULT:
-                    loadingViewLoadMode = viewLoadingItem.loadParams.loadMode
-                    if loadingViewLoadMode == ViewLoadMode.PRELOAD:
-                        viewLoadingItem.loadParams = loadParams
-                        self.__addLoadingView(view)
+            view = self.__globalContainer.findView(viewKey)
+            if view is None:
+                view = self.__viewCache.getView(viewKey)
+                if view is None:
+                    chain = self.__chainMng.getChainByViewKey(viewKey)
+                    if chain is not None:
+                        _logger.warning('View with loadParams=%r is in the loading chain %r. The request will be skipped.', loadParams, chain)
+                    else:
+                        _logger.debug('Load view with loadParams=%r. Loader=[%r]', loadParams, self.__loader)
+                        if loadParams.loadMode == ViewLoadMode.DEFAULT:
+                            view = self.__loader.loadView(loadParams, *args, **kwargs)
+                            self.__addLoadingView(view)
+                        elif loadParams.loadMode == ViewLoadMode.PRELOAD:
+                            view = self.__loader.loadView(loadParams, *args, **kwargs)
+                        else:
+                            _logger.warning('Unsupported load mode %r. View loading will be skipped.', loadParams)
                 elif loadParams.loadMode == ViewLoadMode.PRELOAD:
-                    pass
+                    _logger.debug('View with key %s (%r) is already pre-loaded.', viewKey, view)
+                elif loadParams.loadMode == ViewLoadMode.DEFAULT:
+                    _logger.debug('Load view with loadParams=%r from the cache. Cache=[%r]', loadParams, self.__viewCache)
+                    self.__viewCache.removeView(viewKey)
+                    self.__showAndInitializeView(view)
+                    view.validate(*args, **kwargs)
                 else:
                     _logger.warning('Unsupported load mode %r. View loading will be skipped.', loadParams)
                     view = None
             else:
-                view = self.__globalContainer.findView(viewKey)
-                if view is None:
-                    view = self.__viewCache.getView(viewKey)
-                    if view is None:
-                        chain = self.__chainMng.getChainByViewKey(viewKey)
-                        if chain is not None:
-                            _logger.warning('View with loadParams=%r is in the loading chain %r. The request will be skipped.', loadParams, chain)
-                        else:
-                            _logger.debug('Load view with loadParams=%r. Loader=[%r]', loadParams, self.__loader)
-                            if loadParams.loadMode == ViewLoadMode.DEFAULT:
-                                view = self.__loader.loadView(loadParams, *args, **kwargs)
-                                self.__addLoadingView(view)
-                            elif loadParams.loadMode == ViewLoadMode.PRELOAD:
-                                view = self.__loader.loadView(loadParams, *args, **kwargs)
-                            else:
-                                _logger.warning('Unsupported load mode %r. View loading will be skipped.', loadParams)
-                    elif loadParams.loadMode == ViewLoadMode.PRELOAD:
-                        _logger.debug('View with key %s (%r) is already pre-loaded.', viewKey, view)
-                    elif loadParams.loadMode == ViewLoadMode.DEFAULT:
-                        _logger.debug('Load view with loadParams=%r from the cache. Cache=[%r]', loadParams, self.__viewCache)
-                        self.__viewCache.removeView(viewKey)
-                        self.__showAndInitializeView(view)
-                        view.validate(*args, **kwargs)
-                    else:
-                        _logger.warning('Unsupported load mode %r. View loading will be skipped.', loadParams)
-                        view = None
-                else:
-                    _logger.debug('View with key %s (%r) is already loaded.', viewKey, view)
-                    layer = view.layer
-                    viewContainer = self.__globalContainer.findContainer(layer)
-                    viewContainer.addView(view)
-                    view.validate(*args, **kwargs)
-            return view
+                _logger.debug('View with key %s (%r) is already loaded.', viewKey, view)
+                layer = view.layer
+                viewContainer = self.__globalContainer.findContainer(layer)
+                viewContainer.addView(view)
+                view.validate(*args, **kwargs)
+        return view
 
     def getContainer(self, layer):
         return self.__globalContainer.findContainer(layer)
@@ -774,6 +773,12 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
 
     def hideContainers(self, layers, time=0):
         self.as_hideContainersS(layers, time)
+
+    def getVisibleLayers(self):
+        return self.as_getVisibleLayersS()
+
+    def setVisibleLayers(self, layerList):
+        self.as_setVisibleLayersS(layerList)
 
     def isContainerShown(self, layer):
         return self.as_isContainerShownS(layer)

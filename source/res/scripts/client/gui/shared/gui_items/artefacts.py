@@ -560,9 +560,9 @@ class OptionalDevice(RemovableDevice):
         if self.isUpgradable and proxy is not None:
             price = proxy.shop.getOperationPrices().get(ITEM_OPERATION.UPGRADE, {}).get((self.intCD, self.descriptor.upgradeInfo.upgradedCompDescr), None)
             defaultPrice = proxy.shop.defaults.getOperationPrices().get(ITEM_OPERATION.UPGRADE, {}).get((self.intCD, self.descriptor.upgradeInfo.upgradedCompDescr), None)
-            return ItemPrice(price=Money(**price), defPrice=Money(**defaultPrice))
-        else:
-            return ITEM_PRICE_EMPTY
+            if price is not None and defaultPrice is not None:
+                return ItemPrice(price=Money(**price), defPrice=Money(**defaultPrice))
+        return ITEM_PRICE_EMPTY
 
     def mayPurchaseUpgrade(self, proxy):
         canBuy, _ = self._isEnoughMoney(self.getUpgradePrice(proxy).price, proxy.stats.money)

@@ -122,6 +122,10 @@ def getAllResearchedVehicles(defaultUnlocks=frozenset()):
     return getHelperCache()['vehiclesInTrees'] - defaultUnlocks
 
 
+def getResearchableVehiclesWithout1Lvl(defaultUnlocks=frozenset()):
+    return getHelperCache()['vehiclesInTreesWithout1Lvl'] - defaultUnlocks
+
+
 def getUnlockedVehicles(defaultUnlocks=frozenset()):
     return getHelperCache()['vehiclesInTrees'] & defaultUnlocks
 

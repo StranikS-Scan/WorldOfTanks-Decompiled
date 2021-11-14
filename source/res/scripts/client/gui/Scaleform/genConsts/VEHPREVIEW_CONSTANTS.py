@@ -15,7 +15,6 @@ class VEHPREVIEW_CONSTANTS(object):
     BROWSE_LINKAGE = 'VPBrowseUI'
     MODULES_LINKAGE = 'VPModulesUI'
     CREW_LINKAGE = 'VPCrewTabUI'
-    EVENT_KING_REWARD = 'EventKingRewardUI'
     CREW_INFO_DATA_CLASS_NAME = 'net.wg.gui.lobby.vehiclePreview.data.VehPreviewCrewInfoVO'
     FACT_SHEET_DATA_CLASS_NAME = 'net.wg.gui.lobby.vehiclePreview.data.VehPreviewFactSheetVO'
     ELITE_FACT_SHEET_DATA_CLASS_NAME = 'net.wg.gui.lobby.vehiclePreview.data.VehPreviewEliteFactSheetVO'
@@ -27,7 +26,6 @@ class VEHPREVIEW_CONSTANTS(object):
     PERSONAL_TRADE_IN_BUYING_PANEL_PY_ALIAS = 'vehPreviewPersonalTradeInBuyingPanel'
     OFFER_GIFT_BUYING_PANEL_PY_ALIAS = 'vehPreviewOfferGiftBuyingPanel'
     TRADE_OFF_WIDGET_ALIAS = 'vehPreviewTradeOffWidget'
-    EVENT_KING_REWARD_PY_ALIAS = 'EventKingRewardBuyingPanel'
     CREW_BONUS = 0
     BATTLE_BONUS = 1
     REPLACE_BONUS = 2

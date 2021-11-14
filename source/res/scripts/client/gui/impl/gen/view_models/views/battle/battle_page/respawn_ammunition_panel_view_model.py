@@ -6,12 +6,12 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.ammunition_panel_view_model
 class RespawnAmmunitionPanelViewModel(AmmunitionPanelViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=2):
+    def __init__(self, properties=7, commands=2):
         super(RespawnAmmunitionPanelViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def vehicleInfo(self):
-        return self._getViewModel(7)
+        return self._getViewModel(6)
 
     def _initialize(self):
         super(RespawnAmmunitionPanelViewModel, self)._initialize()

@@ -70,6 +70,13 @@
       <undamaged>	vehicles/german/G144_Kpz_50t/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G144_Kpz_50t/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G144_Kpz_50t/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G144_Kpz_50t_3Dst_DRXXI>
+          <undamaged>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/crash/lod0/Hull.model	</exploded>
+        </G144_Kpz_50t_3Dst_DRXXI>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -99,9 +106,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.528363 0.404381 2.3493	</rayStart>
-        <rayEnd>	0.499222 0.221731 2.27321	</rayEnd>
-        <rayUp>	-0.253261 0.0266716 -0.96703	</rayUp>
+        <rayStart>	-0.443144 0.366965 2.47846	</rayStart>
+        <rayEnd>	-0.412616 0.184605 2.40222	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.263	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -1088,14 +1095,14 @@
         <slotType>	projectionDecal	</slotType>
         <slotId>	15079	</slotId>
         <tags>	formfactor_square safe front	</tags>
-        <position>	-0.395926 1.31725 2.43035	</position>
-        <rotation>	0.389604 -0.0192546 3.06293	</rotation>
-        <scale>	0.481016 0.192407 0.481015	</scale>
+        <position>	0.522475 1.26409 2.38709	</position>
+        <rotation>	0.391613 0.0104462 3.07424	</rotation>
+        <scale>	0.563344 0.225338 0.563344	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	1.29398	</clipAngle>
         <hiddenForUser>	true	</hiddenForUser>
-        <anchorShift>	0.037603	</anchorShift>
+        <anchorShift>	0.067603	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -1136,6 +1143,40 @@
         <clipAngle>	0.00795127	</clipAngle>
         <anchorShift>	-0.072406	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15083	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G144_Kpz_50t_3Dst_DRXXI	</compatibleModels>
+        <position>	-0.318816 1.47744 1.9664	</position>
+        <rotation>	0.335831 -0.0208512 3.12918	</rotation>
+        <scale>	0.315092 0.126037 0.315091	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.29398	</clipAngle>
+        <anchorShift>	0.037603	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15084	</slotId>
+        <position>	0.864342 1.54133 1.37185	</position>
+        <rotation>	0.0167009 -0.0169572 3.12987	</rotation>
+        <attachNode>	V	</attachNode>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G144_Kpz_50t_3Dst_DRXXI	</compatibleModels>
+        <scale>	0.423686 0.169475 0.423687	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.29398	</clipAngle>
+        <anchorShift>	0.037604	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0.000000 0.000000 0.000000	</position>
+        <rotation>	0.000000 0.000000 0.000000	</rotation>
+        <compatibleModels>	G144_Kpz_50t_3Dst_DRXXI	</compatibleModels>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	2.5 2.5 0.000000 0.000000	</tiling>
@@ -1172,6 +1213,13 @@
         <undamaged>	vehicles/german/G144_Kpz_50t/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G144_Kpz_50t/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G144_Kpz_50t/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G144_Kpz_50t_3Dst_DRXXI>
+            <undamaged>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/crash/lod0/Chassis.model	</exploded>
+          </G144_Kpz_50t_3Dst_DRXXI>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1302,6 +1350,14 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <G144_Kpz_50t_3Dst_DRXXI>
+            <segmentModelLeft>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/track/segment_1.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/track/segment_1.model	</segmentModelRight>
+            <segment2ModelLeft>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/track/segment_2.model	</segment2ModelLeft>
+            <segment2ModelRight>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/track/segment_2.model	</segment2ModelRight>
+          </G144_Kpz_50t_3Dst_DRXXI>
+        </modelSets>
       </splineDesc>
       <trackThickness>	-0.00970588	</trackThickness>
       <trackNodes>
@@ -1435,6 +1491,12 @@
             <model>	vehicles/german/G144_Kpz_50t/track/segment_2.model	</model>
             <length>	0.0929261	</length>
           </secSegment>
+          <modelSets>
+            <G144_Kpz_50t_3Dst_DRXXI>
+              <mainSegmentModel>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/track/segment_1.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/track/segment_2.model	</secSegmentModel>
+            </G144_Kpz_50t_3Dst_DRXXI>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1669,6 +1731,12 @@
             <model>	vehicles/german/G144_Kpz_50t/track/segment_2.model	</model>
             <length>	0.0929262	</length>
           </secSegment>
+          <modelSets>
+            <G144_Kpz_50t_3Dst_DRXXI>
+              <mainSegmentModel>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/track/segment_1.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/track/segment_2.model	</secSegmentModel>
+            </G144_Kpz_50t_3Dst_DRXXI>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1978,6 +2046,13 @@
             <undamaged>	vehicles/german/G144_Kpz_50t/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G144_Kpz_50t/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G144_Kpz_50t/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G144_Kpz_50t_3Dst_DRXXI>
+                <undamaged>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/crash/lod0/Gun_01.model	</exploded>
+              </G144_Kpz_50t_3Dst_DRXXI>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G144_Kpz_50t/collision/Gun_01.model	</collisionModelServer>
@@ -1993,23 +2068,26 @@
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
-              <anchorPosition>	-0.00427483 -0.0211186 3.18378	</anchorPosition>
-              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <anchorPosition>	-0.00427483 -0.0211184 3.18378	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
-              <anchorPosition>	-0.00427483 -0.0211186 3.18379	</anchorPosition>
-              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <anchorPosition>	-0.00427483 -0.0211184 3.18379	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.000000 -0.045 3.18756	</rayStart>
+              <position>	0.000000 0.000000 0.000000	</position>
+              <rotation>	0.000000 0.000000 0.000000	</rotation>
+              <attachNode>	HP_FX_gun	</attachNode>
+              <rayStart>	-0.013 -0.04 3.18756	</rayStart>
               <rayEnd>	0.609222 -0.986744 3.16777	</rayEnd>
-              <rayUp>	0.0875 0.000000 0.000000	</rayUp>
+              <rayUp>	0.0925 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.42	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -2028,6 +2106,13 @@
         <undamaged>	vehicles/german/G144_Kpz_50t/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G144_Kpz_50t/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G144_Kpz_50t/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G144_Kpz_50t_3Dst_DRXXI>
+            <undamaged>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G144_Kpz_50t/_skins/G144_Kpz_50t_3Dst_DRXXI/crash/lod0/Turret_01.model	</exploded>
+          </G144_Kpz_50t_3Dst_DRXXI>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G144_Kpz_50t/collision/Turret_01.model	</collisionModelServer>
@@ -2048,13 +2133,13 @@
           <slotType>	paint	</slotType>
           <slotId>	31000	</slotId>
           <anchorPosition>	0.000000 0.690777 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
           <slotId>	32000	</slotId>
           <anchorPosition>	0.000000 0.690777 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	player	</slotType>
@@ -2712,6 +2797,45 @@
           <clipAngle>	0.825029	</clipAngle>
           <hiddenForUser>	true	</hiddenForUser>
           <anchorShift>	0.102281	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35050	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G144_Kpz_50t_3Dst_DRXXI	</compatibleModels>
+          <position>	-1.49334 1.68831 0.168956	</position>
+          <rotation>	1.77994 1.52927 -0.0190773	</rotation>
+          <scale>	0.292209 0.239689 0.292209	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.825029	</clipAngle>
+          <anchorShift>	-0.005238	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35051	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G144_Kpz_50t_3Dst_DRXXI	</compatibleModels>
+          <position>	1.20759 1.67623 0.169021	</position>
+          <rotation>	1.45393 1.38456 3.11591	</rotation>
+          <scale>	0.297337 0.243897 0.297337	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.13866	</clipAngle>
+          <anchorShift>	0.074745	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35052	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G144_Kpz_50t_3Dst_DRXXI	</compatibleModels>
+          <position>	-0.372284 1.8308 1.52225	</position>
+          <rotation>	1.0783 -0.155728 -3.06635	</rotation>
+          <scale>	0.323165 0.265082 0.323167	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.0869088	</clipAngle>
+          <anchorShift>	0.070180	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

@@ -8,9 +8,13 @@ from items import vehicles, ITEM_TYPES
 from math_common import roundToPower10
 from time_converters import time2decisec
 from wotdecorators import noexcept
-from helpers_common import unpackDeviceRepairProgress
 Cooldowns = namedtuple('Cooldows', ['id', 'leftTime', 'baseTime'])
 _DO_LOG = False
+
+def noneAccepted(func):
+    func.__isNoneAccepted = True
+    return func
+
 
 class OwnVehicleBase(BigWorld.DynamicScriptComponent):
 
@@ -64,8 +68,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         avatar = self._avatar()
         for device in deviceList:
             timeLeft = self.__getTimeLeft(device)
-            progress, isLimited = unpackDeviceRepairProgress(device.progressData)
-            avatar.updateDestroyedDevicesIsRepairing(self.entity.id, device.extraIndex, progress, timeLeft, isLimited)
+            avatar.updateDestroyedDevicesIsRepairing(self.entity.id, device.extraIndex, device.progress, timeLeft, device.repairMode)
 
     @noexcept
     def update_vehicleDamageInfoList(self, damageInfoList):
@@ -142,9 +145,12 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
     def update_overturnLevel(self, overturnLevel):
         self._avatar().updateOverturnLevel(self.entity.id, overturnLevel.level, self.__getDestroyTimes(overturnLevel.times))
 
+    @noneAccepted
     @noexcept
     def update_smoke(self, smoke):
-        self._avatar().onSmoke(smoke.smokeInfos)
+        smokeInfos = smoke.smokeInfos if smoke is not None else None
+        self._avatar().onSmoke(smokeInfos)
+        return
 
     @noexcept
     def update_targetVehicleID(self, targetVehicleID):
@@ -152,7 +158,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
 
     @noexcept
     def update_targetingInfo(self, data):
-        self._avatar().updateTargetingInfo(data.turretYaw, data.gunPitch, data.maxTurretRotationSpeed, data.maxGunRotationSpeed, data.shotDispMultiplierFactor, data.gunShotDispersionFactorsTurretRotation, data.chassisShotDispersionFactorsMovement, data.chassisShotDispersionFactorsRotation, data.aimingTime)
+        self._avatar().updateTargetingInfo(self.entity.id, data.turretYaw, data.gunPitch, data.maxTurretRotationSpeed, data.maxGunRotationSpeed, data.shotDispMultiplierFactor, data.gunShotDispersionFactorsTurretRotation, data.chassisShotDispersionFactorsMovement, data.chassisShotDispersionFactorsRotation, data.aimingTime)
 
     @noexcept
     def update_vehicleHealthInfo(self, data):
@@ -303,7 +309,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         if _DO_LOG:
             self._doLog('__set {} {} {}'.format(propname, getattr(self, propname), oldValue))
         prop = getattr(self, propname)
-        if prop is not None:
+        if prop is not None or getattr(func, '__isNoneAccepted', False):
             func(prop)
         return
 

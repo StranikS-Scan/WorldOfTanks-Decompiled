@@ -111,8 +111,9 @@ def _getRentBannerStr(param):
     return text_styles.concatStylesToMultiLine(text_styles.mainBig(backport.text(R.strings.menu.research.premium.discount())), text_styles.grandTitle(''.join(('-', str(param), '%'))))
 
 
-def _getActionBannerStr(paramDate, paramDiscount):
-    return text_styles.concatStylesToMultiLine(text_styles.mainBig(backport.text(R.strings.menu.barracks.notRecruitedActivateBefore(), date=paramDate)), text_styles.grandTitle(''.join(('-', str(paramDiscount), '%'))))
+def _getActionBannerStr(paramDiscount, paramDate=''):
+    discountStr = text_styles.grandTitle(''.join(('-', str(paramDiscount), '%')))
+    return discountStr if not paramDate else text_styles.concatStylesToMultiLine(text_styles.mainBig(backport.text(R.strings.menu.barracks.notRecruitedActivateBefore(), date=paramDate)), discountStr)
 
 
 _BENEFIT_GETTERS = (_getPremiumBaseBenefit,
@@ -437,9 +438,10 @@ class Research(ResearchMeta):
             if discount != 0:
                 return _BANNER_GETTERS[States.RENT](discount)
         if not NODE_STATE.inInventory(nodeState) and NODE_STATE.isActionVehicle(nodeState) or NODE_STATE.isCollectibleActionVehicle(nodeState):
-            actionDueDate = getDueDateOrTimeStr(rootNode.getActionFinishTime(), isShortDateFormat=True)
-            if actionDueDate:
-                return _BANNER_GETTERS[States.ACTION](actionDueDate, rootNode.getActionDiscount())
+            discount, isPersonalDiscount = rootNode.getActionDetails()
+            if discount != 0:
+                actionDueDate = '' if isPersonalDiscount else getDueDateOrTimeStr(rootNode.getActionFinishTime(), isShortDateFormat=True)
+                return _BANNER_GETTERS[States.ACTION](discount, actionDueDate)
         return htmlStr
 
     def __getViewLayoutData(self):

@@ -5,12 +5,12 @@ from constants import ARENA_BONUS_TYPE
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Iterable, Iterator, List, Optional, Set, Tuple
     from Event import Event
-    from constants import EventPhase
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import EpicBattleScreens
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
     from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
     from gui.game_control.mapbox_controller import ProgressionData
     from gui.game_control.trade_in import TradeInInfo
+    from gui.gift_system.hubs.base.hub_core import IGiftEventHub
     from gui.periodic_battles.models import AlertData, PeriodInfo, PrimeTime
     from gui.prb_control.items import ValidationResult
     from gui.ranked_battles.constants import YearAwardsNames
@@ -23,9 +23,10 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Tankman, Vehicle
     from gui.shared.gui_items.fitting_item import RentalInfoProvider
     from gui.shared.gui_items.gui_item_economics import ItemPrice
+    from gui.shared.gui_items.Tankman import TankmanSkill
     from gui.shared.money import Money
     from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
-    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig
+    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, GiftSystemConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig
     from items.vehicles import VehicleType
     from season_common import GameSeason
 
@@ -188,10 +189,6 @@ class IGameSessionController(IGameController):
     @property
     def isParentControlActive(self):
         raise NotImplementedError
-
-    @property
-    def sessionStartedAt(self):
-        return NotImplementedError
 
     @property
     def sessionDuration(self):
@@ -949,6 +946,12 @@ class IRankedBattlesController(IGameController, ISeasonProvider):
     def getRankedWelcomeCallback(self):
         raise NotImplementedError
 
+    def getQuestsForRank(self, rankID):
+        raise NotImplementedError
+
+    def setRankedWelcomeCallback(self, value):
+        raise NotImplementedError
+
     def getRanksChain(self, leftRequiredBorder, rightRequiredBorder):
         raise NotImplementedError
 
@@ -989,6 +992,9 @@ class IRankedBattlesController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def getWebOpenPageCtx(self):
+        raise NotImplementedError
+
+    def getQualificationQuests(self, quests=None):
         raise NotImplementedError
 
     def awardWindowShouldBeShown(self, rankChangeInfo):
@@ -1291,9 +1297,6 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def isBattlePassAvailable(self, bonusType):
-        raise NotImplementedError
-
-    def isEventMode(self):
         raise NotImplementedError
 
     def isInBattleRoyaleSquad(self):
@@ -1812,7 +1815,7 @@ class IMapboxController(IGameController, ISeasonProvider):
 
 class IOverlayController(IGameController):
 
-    def switchOverlay(self):
+    def isActive(self):
         raise NotImplementedError
 
     def setOverlayState(self, state):
@@ -1822,15 +1825,31 @@ class IOverlayController(IGameController):
         raise NotImplementedError
 
 
-class ISteamRegistrationOverlay(IOverlayController):
+class ISteamCompletionController(IGameController):
 
-    def switchOverlay(self):
+    @property
+    def isSteamAccount(self):
         raise NotImplementedError
 
-    def setOverlayState(self, state):
+
+class IDemoAccCompletionController(IGameController):
+
+    @property
+    def isDemoAccount(self):
         raise NotImplementedError
 
-    def waitShow(self):
+    @property
+    def isInDemoAccRegistration(self):
+        raise NotImplementedError
+
+    @isInDemoAccRegistration.setter
+    def isInDemoAccRegistration(self, value):
+        raise NotImplementedError
+
+    def runDemoAccRegistration(self):
+        raise NotImplementedError
+
+    def updateOverlayState(self, waitingID=None, onComplete=None):
         raise NotImplementedError
 
 
@@ -1931,106 +1950,31 @@ class IWotPlusNotificationController(IGameController):
         raise NotImplementedError
 
 
-class IYearHareAffairController(IGameWindowController):
-    onStateChanged = None
-
-    @property
-    def isVideoAvailable(self):
-        raise NotImplementedError
+class IEventBattlesController(IGameController, ISeasonProvider):
+    onPrimeTimeStatusUpdated = None
 
     def isEnabled(self):
         raise NotImplementedError
 
-    def getFinishTime(self):
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def isFrozen(self):
+        raise NotImplementedError
+
+    def getConfig(self):
         raise NotImplementedError
 
 
-class IEventTokenController(IGameController):
-    onNotesUpdated = None
-    onShopItemUpdated = None
-    onEventMoneyUpdated = None
+class IGiftSystemController(IGameController):
+    onEventHubsCreated = None
+    onEventHubsDestroyed = None
 
-    def getNewNotesCount(self):
+    def getEventHub(self, eventID):
         raise NotImplementedError
 
-    def getReadNotes(self):
+    def getSettings(self):
         raise NotImplementedError
 
-    def markNoteRead(self, note):
-        raise NotImplementedError
-
-
-class IShopSalesEventController(IGameController):
-    onStateChanged = None
-    onPhaseChanged = None
-    onBundlePurchased = None
-    onCurrentBundleChanged = None
-    onFavoritesChanged = None
-
-    @property
-    def isEnabled(self):
-        raise NotImplementedError
-
-    @property
-    def isInEvent(self):
-        raise NotImplementedError
-
-    @property
-    def currentEventPhase(self):
-        raise NotImplementedError
-
-    @property
-    def currentEventPhaseTimeRange(self):
-        raise NotImplementedError
-
-    @property
-    def reRollPrice(self):
-        raise NotImplementedError
-
-    @property
-    def activePhaseStartTime(self):
-        raise NotImplementedError
-
-    @property
-    def activePhaseFinishTime(self):
-        raise NotImplementedError
-
-    @property
-    def eventFinishTime(self):
-        raise NotImplementedError
-
-    @property
-    def currentBundleID(self):
-        raise NotImplementedError
-
-    @property
-    def currentBundleReRolls(self):
-        raise NotImplementedError
-
-    @property
-    def favoritesCount(self):
-        raise NotImplementedError
-
-    def reRollBundle(self, callback=None):
-        raise NotImplementedError
-
-    def getEventPhase(self, timestamp):
-        raise NotImplementedError
-
-    def getEventPhaseTimeRange(self, state):
-        raise NotImplementedError
-
-    def setFavoritesCount(self, value):
-        raise NotImplementedError
-
-    def openMainView(self, url=None, origin=None):
-        raise NotImplementedError
-
-    def closeMainView(self):
-        raise NotImplementedError
-
-
-class ITelecomRentalsNotificationController(IGameController):
-
-    def processSwitchNotifications(self):
+    def requestWebState(self, eventID):
         raise NotImplementedError

@@ -1260,7 +1260,7 @@
       <notInShop>	true	</notInShop>
       <price>	30000	</price>
       <weight>	11000	</weight>
-      <maxLoad>	70000	</maxLoad>
+      <maxLoad>	50000	</maxLoad>
       <terrainResistance>	1.4 1.7 3.4	</terrainResistance>
       <brakeForce>	47000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3433,25 +3433,45 @@
   </physics>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <extras>
-    <leftTrack1Health>	TrackHealth : TrackHealth	  <isLeft>	true	</isLeft>
+    <leftTrack0Health>	TrackWithinTrackHealth : TrackHealth	  <isLeft>	true	</isLeft>
+      <trackPairIdx>	0	</trackPairIdx>
+      <sounds>
+        <destroyed>	track_destroyed	</destroyed>
+        <critical>	track_damaged	</critical>
+        <functional>	track_functional	</functional>
+        <functionalCanMove>	track_functional_can_move	</functionalCanMove>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/track	</deviceUserString>
+    </leftTrack0Health>
+    <rightTrack0Health>	TrackWithinTrackHealth : TrackHealth	  <isLeft>	false	</isLeft>
+      <trackPairIdx>	0	</trackPairIdx>
+      <sounds>
+        <destroyed>	track_destroyed	</destroyed>
+        <critical>	track_damaged	</critical>
+        <functional>	track_functional	</functional>
+        <functionalCanMove>	track_functional_can_move	</functionalCanMove>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/track	</deviceUserString>
+    </rightTrack0Health>
+    <leftTrack1Health>	TrackWithinTrackHealth : TrackHealth	  <isLeft>	true	</isLeft>
       <trackPairIdx>	1	</trackPairIdx>
       <sounds>
-        <destroyed>	track_damaged_outer	</destroyed>
-        <critical>	track_damaged_outer	</critical>
+        <destroyed></destroyed>
+        <critical></critical>
         <functional>	track_functional_outer	</functional>
         <functionalCanMove>	track_functional_outer	</functionalCanMove>
       </sounds>
-      <deviceUserString>	#ingame_gui:devices/left_track	</deviceUserString>
+      <deviceUserString>	#ingame_gui:devices/track	</deviceUserString>
     </leftTrack1Health>
-    <rightTrack1Health>	TrackHealth : TrackHealth	  <isLeft>	false	</isLeft>
+    <rightTrack1Health>	TrackWithinTrackHealth : TrackHealth	  <isLeft>	false	</isLeft>
       <trackPairIdx>	1	</trackPairIdx>
       <sounds>
-        <destroyed>	track_damaged_outer	</destroyed>
-        <critical>	track_damaged_outer	</critical>
+        <destroyed></destroyed>
+        <critical></critical>
         <functional>	track_functional_outer	</functional>
         <functionalCanMove>	track_functional_outer	</functionalCanMove>
       </sounds>
-      <deviceUserString>	#ingame_gui:devices/right_track	</deviceUserString>
+      <deviceUserString>	#ingame_gui:devices/track	</deviceUserString>
     </rightTrack1Health>
   </extras>
   <deviceExtras>

@@ -21,7 +21,7 @@ from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
 PATH_BACKGROUNDS = '../maps/icons/bootcamp/loading/{0}_{1}.png'
 PATH_BACKGROUNDS_CORE = '../maps/icons/bootcamp/loading/{0}_{1}_core.png'
 LINKAGE_BACKGROUNDS = '{0}Page{1}UI'
@@ -35,6 +35,7 @@ class INTRO_HIGHLIGHT_TYPE(object):
 class BCIntroPage(BCIntroVideoPageMeta):
     bootcampCtrl = dependency.descriptor(IBootcampController)
     appLoader = dependency.descriptor(IAppLoader)
+    demoAccController = dependency.descriptor(IDemoAccCompletionController)
 
     def __init__(self, settings):
         super(BCIntroPage, self).__init__()
@@ -73,7 +74,11 @@ class BCIntroPage(BCIntroVideoPageMeta):
 
     def skipBootcamp(self):
         if self._isChoice:
-            g_bootcampEvents.onGameplayChoice(WOT_GAMEPLAY.BOOTCAMP, WOT_GAMEPLAY.OFF)
+            if self.demoAccController.isDemoAccount:
+                self.demoAccController.runDemoAccRegistration()
+                self.goToBattle()
+            else:
+                g_bootcampEvents.onGameplayChoice(WOT_GAMEPLAY.BOOTCAMP, WOT_GAMEPLAY.OFF)
         else:
             self.bootcampCtrl.runBootcamp()
 
@@ -132,7 +137,7 @@ class BCIntroPage(BCIntroVideoPageMeta):
         super(BCIntroPage, self)._dispose()
 
     def _start(self):
-        self._muteLoginScreenMusic()
+        WWISE.WW_eventGlobal('loginscreen_mute')
         listSmall = []
         listBig = []
         for pageId in self._tutorialPages:
@@ -236,6 +241,3 @@ class BCIntroPage(BCIntroVideoPageMeta):
          'isSpecial': True,
          'specialAlias': TOOLTIPS_CONSTANTS.BOOTCAMP_REWARD_PROGRESS,
          'specialArgs': specialArgs}
-
-    def _muteLoginScreenMusic(self):
-        WWISE.WW_eventGlobal('loginscreen_mute')

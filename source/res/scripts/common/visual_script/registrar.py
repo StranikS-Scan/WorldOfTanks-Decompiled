@@ -3,7 +3,7 @@
 import inspect
 from block import Block
 from context import VScriptContext
-from type import VScriptType, VScriptEnum
+from type import VScriptType, VScriptEnum, VScriptStruct
 __all__ = ['VSBlockRegistrar']
 
 def _findVScriptConponentsInModule(module, cls):
@@ -27,6 +27,7 @@ class VSBlockRegistrar(object):
         self._domainContexts = {}
         self._domainTypes = []
         self._domainEnums = []
+        self._domainStructs = []
         self._isEngineLoadBlocks = False
         self._isEngineLoadContexts = False
         self._isEngineLoadTypes = False
@@ -61,12 +62,17 @@ class VSBlockRegistrar(object):
             self._domainTypes.append(cls)
         elif issubclass(cls, VScriptEnum) and cls not in self._domainEnums:
             self._domainEnums.append(cls)
+        elif issubclass(cls, VScriptStruct) and cls not in self._domainStructs:
+            self._domainStructs.append(cls)
 
     def regTypesFromModule(self, module):
         for cls in _findVScriptConponentsInModule(module, VScriptType):
             self.regType(cls)
 
         for cls in _findVScriptConponentsInModule(module, VScriptEnum):
+            self.regType(cls)
+
+        for cls in _findVScriptConponentsInModule(module, VScriptStruct):
             self.regType(cls)
 
     def getTypes(self):
@@ -76,3 +82,7 @@ class VSBlockRegistrar(object):
     def getEnums(self):
         self._isEngineLoadTypes = True
         return self._domainEnums
+
+    def getStructs(self):
+        self._isEngineLoadTypes = True
+        return self._domainStructs

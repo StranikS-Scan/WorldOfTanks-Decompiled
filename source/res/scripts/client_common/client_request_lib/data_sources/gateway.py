@@ -600,13 +600,17 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def request_authorized_survey_url(self, callback, mapURL):
         return self._request_data(callback, mapURL, method='GET')
 
-    def get_yha_video(self, callback):
-        url = '/webbrg/year_hare_affair/api/video/'
-        return self._request_data(callback, url, method='GET')
+    def get_gift_system_state(self, callback, req_event_ids):
+        url = '/giftsystem/event/state'
+        get_params = {'event_id': req_event_ids}
+        return self._request_data(callback, url, get_data=get_params, method='GET')
 
-    def shop_sales_event_fetch_favorites(self, callback):
-        url = '/wgds/favorites/'
-        return self._request_data(callback, url)
+    def post_gift_system_gift(self, callback, entitlement_code, receiver_id, meta_info):
+        url = '/giftsystem/gift'
+        post_data = {'entitlement_code': entitlement_code,
+         'receiver_id': receiver_id}
+        post_data.update(meta_info)
+        return self._request_data(callback, url, method='POST', post_data=post_data)
 
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

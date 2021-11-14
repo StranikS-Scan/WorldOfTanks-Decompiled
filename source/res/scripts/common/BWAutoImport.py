@@ -3,6 +3,7 @@
 import collections
 from weakref import proxy as _proxy
 from WeakMethod import WeakMethodProxy
+import inspect
 
 def _fix_base_handler_in_urllib2():
     import functools
@@ -13,6 +14,18 @@ def _fix_base_handler_in_urllib2():
 
     functools.update_wrapper(add_parent, BaseHandler.add_parent)
     setattr(BaseHandler, 'add_parent', add_parent)
+
+
+def _fix_proxy_handler_in_urllib2():
+    from urllib2 import ProxyHandler
+
+    def wrapper_setattr(self_, key, value):
+        if inspect.isfunction(value):
+            self_.__dict__[key] = _proxy(value)
+        else:
+            self_.__dict__[key] = value
+
+    setattr(ProxyHandler, '__setattr__', wrapper_setattr)
 
 
 def _fix_http_response_in_urllib2():
@@ -224,6 +237,7 @@ def _fix_namedtuple():
 
 
 _fix_base_handler_in_urllib2()
+_fix_proxy_handler_in_urllib2()
 _fix_http_response_in_urllib2()
 _fix_ordered_dict()
 _fix_namedtuple()

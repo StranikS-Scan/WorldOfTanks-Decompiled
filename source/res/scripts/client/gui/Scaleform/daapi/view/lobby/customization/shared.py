@@ -32,7 +32,7 @@ from helpers.func_utils import CallParams, cooldownCallerDecorator
 from helpers.i18n import makeString as _ms
 from items import parseIntCompactDescr
 from items.components.c11n_components import getItemSlotType
-from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags, ProjectionDecalDirectionTags
+from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags
 from items.vehicles import VEHICLE_CLASS_TAGS
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -380,12 +380,6 @@ def getComponentFromSlot(outfit, slotId):
     return None if slotData is None else slotData.component
 
 
-def isNeedToMirrorProjectionDecal(item, slot):
-    if not item.canBeMirroredHorizontally:
-        return False
-    return False if item.direction == ProjectionDecalDirectionTags.ANY or slot.direction == ProjectionDecalDirectionTags.ANY else item.direction != slot.direction
-
-
 def isSlotFilled(outfit, slotId):
     if slotId.slotType == GUI_ITEM_TYPE.STYLE:
         return bool(outfit.id)
@@ -711,18 +705,15 @@ def __getItemInventoryCount(item, outfits=None):
 
 
 def __getStyleInventoryCount(item, outfits=None):
-    if g_currentVehicle is None:
-        return 0
-    else:
-        inventoryCount = item.fullInventoryCount(g_currentVehicle.intCD)
-        appliedCount = 0
-        if outfits is not None:
-            appliedCount = getItemAppliedCount(item, outfits)
-            inventoryCount -= appliedCount
-        if item.isRentable:
-            if getItemInstalledCount(item) + appliedCount:
-                inventoryCount += 1
-        return inventoryCount
+    inventoryCount = item.fullInventoryCount(g_currentVehicle.intCD)
+    appliedCount = 0
+    if outfits is not None:
+        appliedCount = getItemAppliedCount(item, outfits)
+        inventoryCount -= appliedCount
+    if item.isRentable:
+        if getItemInstalledCount(item) + appliedCount:
+            inventoryCount += 1
+    return inventoryCount
 
 
 def __getItemAppliedCount(item, outfits):

@@ -59,8 +59,6 @@ ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
 ROYALE_VEHICLE = 'ROYALE_VEHICLE'
 BOOTCAMP_VEHICLE = 'BOOTCAMP_VEHICLE'
-EVENT_CURRENT_VEHICLE = 'event_current'
-EVENT_CURRENT_DIFFICULTY_LEVEL = 'eventCurrentDifficultyLevel'
 LOBBY_MENU_TRIGGER_SHOWN = 'lobby_menu_trigger_shown'
 MANUAL_NEW_CONTENT = 'manual_new_content'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
@@ -106,8 +104,6 @@ BLUEPRINTS_CONVERT_SALE_STARTED_SEEN = 'bcsStartedSeen'
 IS_SHOP_VISITED = 'isShopVisited'
 LAST_SHOP_ACTION_COUNTER_MODIFICATION = 'lastShopActionCounterModification'
 OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES = 'overridenHeaderCounterActionAliases'
-EVENT_HEALING_SEEN = 'eventHealingSeen'
-EVENT_COMMANDERS_READY_SEEN = 'eventCommandersReadySeen'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -169,7 +165,6 @@ RANKED_AWARDS_BUBBLE_YEAR_REACHED = 'rankedAwardsBubbleYearReached'
 RANKED_ENTITLEMENT_EVENTS_AMOUNT = 'rankedEntitlementEventsAmount'
 RANKED_YEAR_POSITION = 'rankedYearPosition'
 BATTLE_ROYALE_HANGAR_BOTTOM_PANEL_VIEWED = 'battleRoyaleHangarBottomPanelViewed'
-SHOP_SALES_EVENT_STATE = 'shopSalesEventState'
 MARATHON_REWARD_WAS_SHOWN_PREFIX = 'marathonRewardScreenWasShown'
 MARATHON_VIDEO_WAS_SHOWN_PREFIX = 'marathonRewardVideoWasShown'
 SUBTITLES = 'subtitles'
@@ -185,15 +180,14 @@ QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
 TOP_OF_TREE_CONFIG = 'topOfTree'
 DOG_TAGS = 'dogTags'
 WOT_PLUS = 'wotPlus'
-TELECOM_RENTALS = 'telecomRentals'
 LAST_ARTY_CTRL_MODE = 'lastArtyCtrlMode'
 ACTIVE_TEST_PARTICIPATION_CONFIRMED = 'activeTestParticipateConfirmed'
-HALLOWEEN_NOTES_SEEN = 'halloweenNotesSeen'
 MAPBOX_PROGRESSION = 'mapbox_progression'
 UNLOCK_VEHICLES_IN_BATTLE_HINTS = 'unlockVehiclesInBattleHints'
 BECOME_ELITE_VEHICLES_WATCHED = 'becomeEliteWatched'
 VPP_ENTRY_POINT_LAST_SEEN_STEP = 'vehiclePostProgressionLastSeenStep'
 CLAN_PREBATTLE_SORTING_KEY = 'ClanPrebattleSortingKey'
+SHOW_DEMO_ACC_REGISTRATION = 'showDemoAccRegistration'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
@@ -326,7 +320,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'level_7': False,
                                           'level_8': False,
                                           'level_9': False,
-                                          'level_10': True},
+                                          'level_10': False},
                RANKED_CAROUSEL_FILTER_2: {'premium': False,
                                           'elite': False,
                                           'igr': False,
@@ -336,6 +330,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'favorite': False,
                                           'bonus': False,
                                           'crystals': False,
+                                          'ranked': True,
                                           'role_HT_assault': False,
                                           'role_HT_break': False,
                                           'role_HT_universal': False,
@@ -568,7 +563,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_FAVORITES: {BOOTCAMP_VEHICLE: 0,
                  CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
-                 EVENT_CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_MANUAL: {LOBBY_MENU_TRIGGER_SHOWN: False,
               MANUAL_NEW_CONTENT: {}},
@@ -733,8 +727,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'isTankRentalEnabled': True,
                            'isFreeDirectivesEnabled': True,
                            'rentPendingVehCD': None},
-                TELECOM_RENTALS: {'isTelecomRentalsEnabled': True,
-                                  'isTelecomRentalsBlocked': True},
                 CUSTOMIZATION_SECTION: {CAROUSEL_ARROWS_HINT_SHOWN_FIELD: False,
                                         PROJECTION_DECAL_HINT_SHOWN_FIELD: False},
                 SESSION_STATS_SECTION: {BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD: False},
@@ -888,8 +880,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 UNLOCK_VEHICLES_IN_BATTLE_HINTS: 5,
                 MODE_SELECTOR_BATTLE_PASS_SHOWN: {},
                 RANKED_LAST_CYCLE_ID: None,
-                HALLOWEEN_NOTES_SEEN: [],
-                SHOP_SALES_EVENT_STATE: {'enabled': True}},
+                SHOW_DEMO_ACC_REGISTRATION: False},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -905,10 +896,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SENIORITY_AWARDS_COUNTER: 1,
                 DEMOUNT_KIT_SEEN: False,
                 NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False},
-                VPP_ENTRY_POINT_LAST_SEEN_STEP: {},
-                EVENT_HEALING_SEEN: False,
-                EVENT_CURRENT_DIFFICULTY_LEVEL: 1,
-                EVENT_COMMANDERS_READY_SEEN: True},
+                VPP_ENTRY_POINT_LAST_SEEN_STEP: {}},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},
@@ -1047,7 +1035,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 48
+    version = 49
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1546,6 +1534,23 @@ class AccountSettings(object):
 
             if currVersion < 48:
                 pass
+            if currVersion < 49:
+                for key, section in _filterAccountSection(ads):
+                    filtersSection = AccountSettings._readSection(section, KEY_FILTERS)
+                    existingSections = set(filtersSection.keys()).intersection((CAROUSEL_FILTER_CLIENT_1,
+                     RANKED_CAROUSEL_FILTER_CLIENT_1,
+                     ROYALE_CAROUSEL_FILTER_CLIENT_1,
+                     EPICBATTLE_CAROUSEL_FILTER_CLIENT_1,
+                     EPICBATTLE_CAROUSEL_FILTER_CLIENT_2,
+                     MAPBOX_CAROUSEL_FILTER_CLIENT_1,
+                     STORAGE_VEHICLES_CAROUSEL_FILTER_1,
+                     STORAGE_BLUEPRINTS_CAROUSEL_FILTER))
+                    for filterSection in existingSections:
+                        savedFilters = _unpack(filtersSection[filterSection].asString)
+                        if 'clanRented' in savedFilters:
+                            savedFilters['clanRented'] = False
+                        filtersSection.write(filterSection, _pack(savedFilters))
+
         return
 
     @staticmethod

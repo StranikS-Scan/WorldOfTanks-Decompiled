@@ -104,6 +104,7 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         self.__isFullStatsShown = False
         self.__panelsIsVisible = False
         self.__es = EventsSubscriber()
+        self.__isAllowToogleGuiVisible = False
         super(BattleRoyalePage, self).__init__(components, external=(crosshair.CrosshairPanelContainer, BattleRoyaleMarkersManager))
         return
 
@@ -117,6 +118,7 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         self.app.enterGuiControlMode(BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN)
 
     def closeSpawnPoints(self):
+        self.__isAllowToogleGuiVisible = True
         if self.__selectSpawnToggling:
             self._setComponentsVisibility(visible=self.__selectSpawnToggling, hidden=[BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN])
             self.__selectSpawnToggling.clear()
@@ -196,6 +198,8 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
     def _toggleGuiVisible(self):
         componentsVisibility = self.as_getComponentsVisibilityS()
         if BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN in componentsVisibility:
+            return
+        if not self.__isAllowToogleGuiVisible:
             return
         super(BattleRoyalePage, self)._toggleGuiVisible()
 

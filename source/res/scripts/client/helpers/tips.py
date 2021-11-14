@@ -235,7 +235,8 @@ class _TipsValidator(object):
          _RealmsValidator(),
          _BattlePassValidator(),
          _RankedBattlesValidator(),
-         _PostProgressionValidator())
+         _PostProgressionValidator(),
+         _ChassisTypeValidator())
 
     def validateRegularTip(self, tipFilter, ctx=None):
         if not tipFilter:
@@ -304,6 +305,14 @@ class _PrecedingBattleLoadingTip(_BattleLoadingTip):
     def getPriority(self):
         watchedTimes = _getTipWatchedCounter(self._tipId)
         return _BattleLoadingTipPriority.PRECEDING if watchedTimes < self._showLimit else _BattleLoadingTipPriority.GENERIC
+
+
+class _ChassisTypeValidator(object):
+
+    @staticmethod
+    def validate(tipFilter, ctx):
+        chassisType = tipFilter['chassisType']
+        return chassisType < 0 or ctx['vehicleType'].chassisType == chassisType
 
 
 class _BattlesValidator(object):

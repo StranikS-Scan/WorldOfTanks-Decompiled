@@ -195,7 +195,6 @@ class Source(object):
                 questClientData['conditions'] = mainNode.questClientConditions
             if mainNode.groupContent:
                 questClientData['groupContent'] = mainNode.groupContent
-                mainNode.info['groupContent'] = mainNode.groupContent
             self.__stripServerQuestData(questClientData)
             mainNode.info['questClientData'] = questClientData
             nodes.setdefault(eventType, []).append(mainNode)

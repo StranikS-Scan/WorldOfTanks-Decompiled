@@ -30,8 +30,6 @@ def buildCache():
                 continue
             elif 'maps_training' in vehDescr.tags:
                 continue
-            elif 'event_battles' in vehDescr.tags:
-                continue
             vehiclesByLevel.setdefault(vehDescr.level, set()).add(vehDescr.compactDescr)
             for tag in ('beast', 'sinai', 'patton'):
                 if tag in vehDescr.tags:
@@ -52,6 +50,7 @@ def buildCache():
     vehicles8p = vehiclesByLevel[8] | vehiclesByLevel[9] | vehiclesByLevel[10]
     _g_cache.update({'vehiclesByLevel': vehiclesByLevel,
      'vehicles8+': vehicles8p,
+     'vehiclesInTreesWithout1Lvl': vehiclesInTree - vehiclesByLevel[1],
      'vehiclesByTag': vehiclesByTag,
      'mausTypeCompDescr': vehicles.makeVehicleTypeCompDescrByName('germany:G42_Maus'),
      'vehiclesInTreesByNation': vehiclesInTreeByNation,

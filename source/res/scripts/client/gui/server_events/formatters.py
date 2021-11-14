@@ -324,14 +324,14 @@ def packMissionBonusTypeElements(bonusTypes, width=32, height=32, vSpace=-11):
     elements = []
     for bonusType in uniqueTypes:
         label = i18n.makeString('#menu:bonusType/%d' % bonusType)
-        icon = gui_icons.makeImageTag(RES_ICONS.getBrebattleConditionIcon(bonusType), width=width, height=height, vSpace=vSpace)
+        icon = gui_icons.makeImageTag(RES_ICONS.getPrebattleConditionIcon(bonusType), width=width, height=height, vSpace=vSpace)
         elements.append(_IconData(icon, label))
 
     return elements
 
 
 def packMissionFormationElement(formationName, width=32, height=32, vSpace=-11):
-    return _IconData(gui_icons.makeImageTag(RES_ICONS.getBrebattleConditionIcon(formationName), width=width, height=height, vSpace=vSpace), i18n.makeString('#quests:details/conditions/formation/%s' % formationName))
+    return _IconData(gui_icons.makeImageTag(RES_ICONS.getPrebattleConditionIcon(formationName), width=width, height=height, vSpace=vSpace), i18n.makeString('#quests:details/conditions/formation/%s' % formationName))
 
 
 def getUniqueBonusTypes(bonusTypes):
@@ -362,7 +362,7 @@ def packMissionPrebattleCondition(label, icons='', tooltip=''):
 
 
 def packMissionCamoElement(camoTypeName, width=32, height=32, vSpace=-11):
-    return _IconData(gui_icons.makeImageTag(RES_ICONS.getBrebattleConditionIcon(camoTypeName), width=width, height=height, vSpace=vSpace), i18n.makeString('#quests:details/conditions/mapsType/%s' % camoTypeName))
+    return _IconData(gui_icons.makeImageTag(RES_ICONS.getPrebattleConditionIcon(camoTypeName), width=width, height=height, vSpace=vSpace), i18n.makeString('#quests:details/conditions/mapsType/%s' % camoTypeName))
 
 
 def packMissionkMapElement(arenaTypeID):

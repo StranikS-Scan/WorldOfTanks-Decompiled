@@ -39,6 +39,3 @@ class ICON_TEXT_FRAMES(object):
     LOCK = 'lock'
     RANKED_POINTS = 'rankedPoints'
     BONUS_BATTLE = 'bonusBattle'
-    HW20_EVENT_COIN = 'HW20EventCoin'
-    HW21_EVENT_COIN = 'HW21EventCoin'
-    ATTENTION1 = 'attention1'

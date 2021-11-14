@@ -4,11 +4,17 @@ from functools import partial
 import BigWorld
 import VSE
 from visual_script import ASPECT
+from async import await, async
+from gui.platform.base.statuses.constants import StatusTypes
+from gui.shared.event_dispatcher import showDemoAccRenamingOverlay
+from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.platform.wgnp_controllers import IWGNPDemoAccRequestController
+from skeletons.gui.shared.utils import IHangarSpace
 from tutorial.control.functional import FunctionalCondition, FunctionalEffect, FunctionalChapterContext
 from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.logger import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 from helpers import dependency
-from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
 from PlayerEvents import g_playerEvents
 from tutorial.control.context import SOUND_EVENT
 
@@ -123,9 +129,13 @@ class FunctionalPlayFinalVideoEffect(FunctionalEffect):
 
 class FunctionalFinishBootcampEffect(FunctionalEffect):
     bootcampCtrl = dependency.descriptor(IBootcampController)
+    demoAccController = dependency.descriptor(IDemoAccCompletionController)
 
     def triggerEffect(self):
-        self.bootcampCtrl.finishBootcamp()
+        if self.demoAccController.isDemoAccount:
+            self.demoAccController.runDemoAccRegistration()
+        else:
+            self.bootcampCtrl.finishBootcamp()
         return True
 
 
@@ -245,3 +255,43 @@ class FunctionalBootcampLobbyChapterContext(FunctionalChapterContext):
             BigWorld.cancelCallback(self.__exclusiveHintSoundCallback)
             self.__exclusiveHintSoundCallback = None
         return
+
+
+class FunctionalShowDemoAccRenameOverlay(FunctionalEffect):
+    _hangarSpace = dependency.descriptor(IHangarSpace)
+    _wgnpDemoAccCtrl = dependency.descriptor(IWGNPDemoAccRequestController)
+    _connectionMgr = dependency.descriptor(IConnectionManager)
+    _demoAccController = dependency.descriptor(IDemoAccCompletionController)
+    _WAITING_ID = 'loadContent'
+
+    def __init__(self, effect):
+        super(FunctionalShowDemoAccRenameOverlay, self).__init__(effect)
+        self.__running = False
+
+    def isInstantaneous(self):
+        return False
+
+    def isStillRunning(self):
+        return self.__running
+
+    @async
+    def triggerEffect(self):
+        self._gui.release()
+        if not self._demoAccController.isDemoAccount:
+            return
+        self.__running = True
+        status = yield await(self._wgnpDemoAccCtrl.getNicknameStatus(self._WAITING_ID))
+        if status.typeIs(StatusTypes.ADD_NEEDED):
+            if self._hangarSpace.spaceInited:
+                self._showRenameOverlay()
+            else:
+                self._hangarSpace.onSpaceCreate += self._showRenameOverlay
+        else:
+            self.__running = False
+
+    def stop(self):
+        self._hangarSpace.onSpaceCreate -= self._showRenameOverlay
+        self.__running = False
+
+    def _showRenameOverlay(self):
+        showDemoAccRenamingOverlay(onClose=self.stop)

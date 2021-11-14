@@ -1,15 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/fake.py
-from functools import wraps, partial
-from datetime import datetime, timedelta, time as dt_time
 import random
 import string
+import time
+from functools import wraps, partial
+from datetime import datetime, timedelta, time as dt_time
 from client_request_lib import exceptions
 from client_request_lib.data_sources import base
+from helpers import time_utils
 EXAMPLES = {}
 
 def _doResponse(callback, result, status_code, response_code):
-    callback(result, status_code, response_code)
+    callback(result, status_code, response_code, None)
+    return
 
 
 def fake_method(example):
@@ -56,6 +59,22 @@ def paginated_method(func):
         return result
 
     return wrapped
+
+
+def get_gift_system_state(req_event_ids):
+    current_time = int(time.time())
+    event_stub = {'send_limit': 1,
+     'execution_time': current_time - time_utils.ONE_SECOND,
+     'expiration_time': current_time + time_utils.ONE_MINUTE,
+     'expiration_delta': 5 * time_utils.ONE_MINUTE,
+     'state': []}
+    return {event_id:event_stub for event_id in req_event_ids}
+
+
+def post_gift_system_gift(*_):
+    current_time = int(time.time())
+    response_stub = {'execution_time': current_time - time_utils.ONE_SECOND}
+    return response_stub
 
 
 class FakeDataAccessor(base.BaseDataAccessor):
@@ -618,12 +637,6 @@ class FakeDataAccessor(base.BaseDataAccessor):
     def user_season_statistics(self, fields=None):
         return self._request_data('user_season_statistics', None)
 
-    @fake_method(example={'meta': {'total': 224},
-     'results': {'spa_id': 502,
-                 'position': 1}})
-    def user_ranked_position(self, fields=None):
-        return self._request_data('user_ranked_position', None)
-
     @fake_method(example={'data': {'promo_name': 'Bang bang bang',
               'type': 'news',
               'image': '//webbrg-ru.wgcdn.co/dcont/fb/image/9.12.jpg',
@@ -633,10 +646,34 @@ class FakeDataAccessor(base.BaseDataAccessor):
      'unread': 3,
      'sent_at': 1423813849})
     def get_teaser(self, fields=None):
-        url = '/teaser/'
-        return self._request_data(url, None)
+        return self._request_data('teaser', None)
+
+    @fake_method(example=None)
+    def send_teaser(self, promo_id):
+        return self._request_data('send_teaser', None)
 
     @fake_method(example={'unread': 3})
     def get_unread_count(self, fields=None):
-        url = '/unread/'
-        return self._request_data(url, None)
+        return self._request_data('unread', None)
+
+    @fake_method(example=None)
+    def get_events_data(self, fields=None):
+        return self._request_data('events_data', None, fields)
+
+    @fake_method(example=None)
+    def get_hangar_flag(self, fields=None):
+        return self._request_data('hangar_flag', None, fields)
+
+    @fake_method(example=None)
+    def get_mapbox_progression(self):
+        return self._request_data('mapbox_progression', None)
+
+    @fake_method(example=get_gift_system_state)
+    def get_gift_system_state(self, req_event_ids):
+        self._storage.get('gift_system_state', {}).clear()
+        return self._request_data('gift_system_state', frozenset(req_event_ids))
+
+    @fake_method(example=post_gift_system_gift)
+    def post_gift_system_gift(self, *_):
+        self._storage.get('post_gift_system_gift', {}).clear()
+        return self._request_data('post_gift_system_gift', None)

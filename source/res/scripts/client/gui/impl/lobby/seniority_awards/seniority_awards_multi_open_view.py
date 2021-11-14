@@ -119,7 +119,7 @@ class SeniorityAwardsMultiOpenView(ViewImpl):
             if result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             if result.success:
-                lootBoxList = result.auxData
+                lootBoxList = result.auxData['bonus']
                 if not lootBoxList:
                     _logger.error('Lootbox is opened, but no rewards has been received.')
                     self.__setServerError()

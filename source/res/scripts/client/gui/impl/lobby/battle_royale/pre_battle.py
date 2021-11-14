@@ -17,7 +17,6 @@ from gui.impl.gen.view_models.views.lobby.battle_royale.user_extended_model impo
 from gui.impl.gen.view_models.views.lobby.battle_royale.user_model import UserModel
 from gui.impl.pub import ViewImpl
 from gui.prb_control import prbEntityProperty
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.Scaleform.daapi import LobbySubView
 from skeletons.gui.game_control import IBattleRoyaleController, IBattleRoyaleTournamentController
 from skeletons.gui.shared import IItemsCache
@@ -47,14 +46,12 @@ class PreBattleView(ViewImpl, LobbySubView):
         return super(PreBattleView, self).getViewModel()
 
     def _initialize(self, *args, **kwargs):
-        g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         self.viewModel.onBattleClick += self.__onBattleClick
         self.viewModel.onClose += self.__onClose
         self.__battleRoyaleTournamentController.onUpdatedParticipants += self.__updateParticipants
         super(PreBattleView, self)._initialize(*args, **kwargs)
 
     def _finalize(self):
-        g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         self.viewModel.onBattleClick -= self.__onBattleClick
         self.viewModel.onClose -= self.__onClose
         self.__battleRoyaleTournamentController.onUpdatedParticipants -= self.__updateParticipants

@@ -256,11 +256,6 @@ def vehicleAttributeFactors():
      'stunResistanceEffect': 0.0,
      'stunResistanceDuration': 0.0,
      'repeatedStunDurationFactor': 1.0,
-     'vehicle/canBeDamaged': True,
-     'vehicle/canBeRammed': True,
-     'vehicle/antifragmentationLiningFactor': 1.0,
-     'deviceCanBeRepaired/leftTrackHealth': True,
-     'deviceCanBeRepaired/rightTrackHealth': True,
      'healthFactor': 1.0,
      'damageFactor': 1.0,
      'enginePowerFactor': 1.0,
@@ -275,7 +270,6 @@ def vehicleAttributeFactors():
 
 
 WHEEL_SIZE_COEF = 2.2
-VEHICLE_ATTRIBUTE_FACTORS = vehicleAttributeFactors()
 _g_prices = None
 
 class CamouflageBonus():
@@ -1440,8 +1434,6 @@ class VehicleDescriptor(object):
          'radioHealthFactor': 1.0,
          'surveyingDeviceHealthFactor': 1.0,
          'gunHealthFactor': 1.0,
-         'deviceCanBeRepaired/leftTrackHealth': True,
-         'deviceCanBeRepaired/rightTrackHealth': True,
          'demaskMovingFactor': 1.0,
          'centerRotationFwdSpeedFactor': 1.0,
          'deathZones/sensitivityFactor': 1.0,
@@ -2863,12 +2855,6 @@ def stripOptionalDeviceFromVehicleCompactDescr(compactDescr):
     return _combineVehicleCompactDescr(vehType, components, optionalDevicesSlots, optionalDevices, enhancements, emblemSlots, emblems, inscriptions, camouflages)
 
 
-def getSuitableShellsForVehicle(compDescr):
-    _, nationID, vehTypeID = parseIntCompactDescr(compDescr)
-    vehType = g_cache.vehicle(nationID, vehTypeID)
-    return [ shot.shell.compactDescr for turrets in vehType.turrets for turret in turrets for gun in turret.guns for shot in gun.shots ]
-
-
 def isShellSuitableForGun(shellCompactDescr, gunDescr):
     itemTypeID, nationID, shellTypeID = parseIntCompactDescr(shellCompactDescr)
     shellID = (nationID, shellTypeID)
@@ -2989,28 +2975,6 @@ def isRestorable(vehTypeCD, gameParams):
 def hasAnyOfTags(vehTypeCD, tags=()):
     vehicleType = getVehicleType(vehTypeCD)
     return bool(vehicleType.tags.intersection(tags))
-
-
-def makeOutfitCD(outfitData):
-    from items import customizations
-    outfit = ''
-    if outfitData:
-        camouflages = None
-        camouflageID = outfitData.get('camouflage')
-        if camouflageID:
-            camouflages = [customizations.CamouflageComponent(camouflageID, appliedTo=ApplyArea.HULL | ApplyArea.TURRET | ApplyArea.GUN)]
-        decals = []
-        decalID = outfitData.get('decal')
-        if decalID:
-            decals.append(customizations.DecalComponent(decalID, ApplyArea.ALL))
-        paints = []
-        paintID = outfitData.get('paint')
-        if paintID:
-            flag = ApplyArea.CHASSIS | ApplyArea.HULL | ApplyArea.TURRET
-            paints.append(customizations.PaintComponent(paintID, flag))
-        styleId = outfitData.get('style', 0)
-        outfit = customizations.CustomizationOutfit(camouflages=camouflages, decals=decals, paints=paints, styleId=styleId).makeCompDescr()
-    return outfit
 
 
 def _readComponents(xmlPath, reader, nationID, itemTypeID):
@@ -4860,10 +4824,8 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if v is None:
         _xml.raiseWrongXml(xmlCtx, 'effects', "unknown effect '%s'" % effName)
     shell.effectsIndex = v
-    if IS_CELLAPP:
-        if section.has_key('tags'):
-            tags = _xml.readStringOrNone(xmlCtx, section, 'tags')
-            shell.tags = frozenset(tags.split())
+    if section.has_key('tags'):
+        shell.tags = _readTags(xmlCtx, section, 'tags', 'shell')
     return shell
 
 
@@ -6232,15 +6194,19 @@ def __readDamagedStateEffects(xmlCtx, damagedStateGroupName, personalEffects, ca
 
 def __readNormalEffects(xmlCtx, section, personalEffects, cachedEffects, defaultEffects):
     res = {}
+    isPersonalEffects = personalEffects is not None and len(personalEffects) > 0
     for effectKind in _vehicleEffectKindNames:
-        effect = personalEffects.get(effectKind) if personalEffects is not None and len(personalEffects) > 0 else None
-        if effect is None:
+        effect = personalEffects.get(effectKind) if isPersonalEffects else None
+        if not effect:
             subsection = section[effectKind]
             if subsection is not None:
                 effectName = subsection.asString
-                effect = cachedEffects.get(effectName)
-                if effect is None:
-                    _xml.raiseWrongXml((xmlCtx, section.asString), effectKind, 'missing or wrong effect name')
+                if effectName:
+                    effect = cachedEffects.get(effectName)
+                    if effect is None:
+                        _xml.raiseWrongXml((xmlCtx, section.asString), effectKind, 'missing or wrong effect name')
+                else:
+                    effect = []
             elif defaultEffects is not None:
                 effect = defaultEffects.get(effectKind)
         if effect is not None:
@@ -6298,7 +6264,7 @@ if IS_CLIENT or IS_EDITOR:
      'collisionVehicleHeavy3',
      'rammingCollisionLight',
      'rammingCollisionHeavy',
-     'collisionDamage'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction', 'hw19fullDestruction'] + ['dynamicCollision'])
+     'collisionDamage'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction'] + ['dynamicCollision'])
     _damagedStateGroupEffectKindNames = ('ammoBayExplosion',
      'ammoBayBurnOff',
      'fuelExplosion',

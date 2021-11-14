@@ -64,12 +64,12 @@ def getGameControllersConfig(manager):
     from gui.ui_spam.ui_spam_controller import UISpamController
     from gui.game_control.blueprints_convert_sale_controller import BlueprintsConvertSaleController
     from gui.game_control.mapbox_controller import MapboxController
-    from gui.game_control.overlay import SteamRegistrationOverlay as _SteamRegistrationOverlay
+    from gui.game_control.overlay import OverlayController as _OverlayController
+    from gui.game_control.account_completion import SteamCompletionController as _SteamCompletionController, DemoAccCompletionController as _DemoAccCompletionController
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
     from gui.game_control.wot_plus_controller import WotPlusNotificationController
-    from gui.game_control.year_hare_affair_controller import YearHareAffairController as _YearHareAffairController
-    from gui.game_control.shop_sales_event_controller import ShopSalesEventController as _ShopSalesController
-    from gui.game_control.telecom_rentals_controller import TelecomRentalsNotificationController
+    from gui.game_control.event_battles_controller import EventBattlesController
+    from gui.game_control.gift_system_controller import GiftSystemController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -123,6 +123,7 @@ def getGameControllersConfig(manager):
     else:
         _config(_interface.IChinaController, _NoChina())
     _config(_interface.IMapboxController, MapboxController())
+    _config(_interface.IEventBattlesController, EventBattlesController())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
@@ -132,9 +133,9 @@ def getGameControllersConfig(manager):
     _config(_interface.IMapsTrainingController, _MapsTrainingController())
     _config(_interface.IUISpamController, UISpamController())
     _config(_interface.IBlueprintsConvertSaleController, BlueprintsConvertSaleController())
+    _config(_interface.IOverlayController, _OverlayController())
+    _config(_interface.ISteamCompletionController, _SteamCompletionController())
+    _config(_interface.IDemoAccCompletionController, _DemoAccCompletionController())
     _config(_interface.IVehiclePostProgressionController, VehiclePostProgressionController())
-    _config(_interface.ISteamRegistrationOverlay, _SteamRegistrationOverlay())
     _config(_interface.IWotPlusNotificationController, WotPlusNotificationController())
-    _config(_interface.IYearHareAffairController, _YearHareAffairController())
-    _config(_interface.IShopSalesEventController, _ShopSalesController())
-    _config(_interface.ITelecomRentalsNotificationController, TelecomRentalsNotificationController())
+    _config(_interface.IGiftSystemController, GiftSystemController())

@@ -260,7 +260,7 @@ class DestructibleEntityState(ScriptGameObject):
             for componentIdx, component in enumerate(self.__stateProperties.components.itervalues()):
                 self.__visualModel.setPartProperties(componentIdx, int(component.destructible) << PART_PROPERTIES.HIGHLIGHTABLE)
                 link = self.__visualModel.getPartGeometryLink(componentIdx)
-                self.__damageStickers[componentIdx] = DestructibleStickers(link, self.__visualModel.node('root'), self.__entityId)
+                self.__damageStickers[componentIdx] = DestructibleStickers(link, self.__visualModel.node('root'))
 
             nodeName = next((comp.guiNode for comp in self.__stateProperties.components.itervalues() if comp.guiNode is not None), None)
             if nodeName is not None:
@@ -318,7 +318,7 @@ class DestructibleEntityState(ScriptGameObject):
             BigWorld.player().addModel(fakeModel)
             tmpMatrix = Math.Matrix(self.__visualModel.matrix)
             fakeModel.position = tmpMatrix.translation
-            self.__effectsPlayer = EffectsListPlayer(effects.effectsList, effects.keyPoints, debugParent=self)
+            self.__effectsPlayer = EffectsListPlayer(effects.effectsList, effects.keyPoints)
             self.__effectsPlayer.play(fakeModel, None)
             return
 

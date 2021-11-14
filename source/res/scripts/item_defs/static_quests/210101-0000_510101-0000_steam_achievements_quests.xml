@@ -1,0 +1,134 @@
+<210101-0000_510101-0000_steam_achievements_quests.xml>
+  <quests>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	WGSSA-52694_q01	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isSteamAllowed>	true	</isSteamAllowed>
+              <or>
+                <token>
+                  <id>	steam_add_briefing_medal	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                  <consume>	10	  <force></force>
+                  </consume>
+                </token>
+                <token>
+                  <id>	linkedset_2_8_complete	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                  <consume>	10	</consume>
+                </token>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	steamAchievements:steamBriefingMedal	</name>
+          <value>	1	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	WGSSA-52694_q02	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isSteamAllowed>	true	</isSteamAllowed>
+              <or>
+                <token>
+                  <id>	token:pt:final:s1:t1:complete	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+                <token>
+                  <id>	token:pt:final:s1:t2:complete	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+                <token>
+                  <id>	token:pt:final:s1:t3:complete	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+                <token>
+                  <id>	token:pt:final:s1:t4:complete	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+                <token>
+                  <id>	token:pt:final:s2:t5:complete	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+                <token>
+                  <id>	token:pt:final:s2:t6:complete	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+                <token>
+                  <id>	token:pt:final:s2:t7:complete	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	steamAchievements:steamDoOperationMedal	</name>
+          <value>	1	</value>
+          <type>	set	</type>
+        </dossier>
+        <dossier>
+          <name>	steamAchievements:steamDoPotapovQuestMedal	</name>
+          <value>	1	</value>
+          <type>	set	</type>
+        </dossier>
+        <dossier>
+          <name>	steamAchievements:steamDoAllBranchPotapovQuestMedal	</name>
+          <value>	1	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	WGSSA-52694_q03	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isSteamAllowed>	true	</isSteamAllowed>
+              <token>
+                <id>	steam_add_bootcamp_medal	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	steamAchievements:steamBootcampMedal	</name>
+          <value>	1	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+  </quests>
+</210101-0000_510101-0000_steam_achievements_quests.xml>

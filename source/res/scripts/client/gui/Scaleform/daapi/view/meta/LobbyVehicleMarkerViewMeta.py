@@ -7,8 +7,8 @@ class LobbyVehicleMarkerViewMeta(View):
     def onMarkerClick(self, id):
         self._printOverrideError('onMarkerClick')
 
-    def as_createMarkerS(self, id, vType, vName, styleId=1):
-        return self.flashObject.as_createMarker(id, vType, vName, styleId) if self._isDAAPIInited() else None
+    def as_createMarkerS(self, id, vType, vName):
+        return self.flashObject.as_createMarker(id, vType, vName) if self._isDAAPIInited() else None
 
     def as_createPlatoonMarkerS(self, id, vType, pName):
         return self.flashObject.as_createPlatoonMarker(id, vType, pName) if self._isDAAPIInited() else None

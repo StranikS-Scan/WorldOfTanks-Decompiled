@@ -593,11 +593,6 @@ def __readBonus_customizations(bonus, _name, section, eventType, checkLimit):
          'id': subsection.readInt('id', -1)}
         if subsection.has_key('boundVehicle'):
             custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('boundVehicle', '')))
-        elif subsection.has_key('applyToVehicle'):
-            if custData['custType'] != 'style':
-                raise SoftException('applyToVehicle supports only style customization type')
-            custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('applyToVehicle', '')))
-            custData['applyToVehicle'] = True
         elif subsection.has_key('boundToCurrentVehicle'):
             if eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS:
                 raise SoftException("Unsupported tag 'boundToCurrentVehicle' in 'like token' quests")
@@ -810,12 +805,9 @@ def __readBonus_optionalData(config, bonusReaders, section, eventType):
         properties['compensation'] = section['compensation'].asBool
     if section.has_key('shouldCompensated'):
         properties['shouldCompensated'] = section['shouldCompensated'].asBool
-    if section.has_key('name'):
-        properties['name'] = section['name'].asString
-    if section.has_key('isAvailable'):
-        properties['isAvailable'] = section['isAvailable'].asBool
-    if section.has_key('playerMaxLimit'):
-        properties['playerMaxLimit'] = section['playerMaxLimit'].asInt
+    if IS_DEVELOPMENT:
+        if section.has_key('name'):
+            properties['name'] = section['name'].asString
     if section.has_key('limitID'):
         limitID = section['limitID'].asString
         limitConfig = config.get('limits', {}).get(limitID, {})
@@ -1019,9 +1011,7 @@ _RESERVED_NAMES = frozenset(['config',
  'name',
  'shouldCompensated',
  'probabilityStageDependence',
- 'bonusProbability',
- 'isAvailable',
- 'playerMaxLimit'])
+ 'bonusProbability'])
 SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
 __SORTED_BONUSES = sorted(SUPPORTED_BONUSES)
 SUPPORTED_BONUSES_IDS = dict(((n, i) for i, n in enumerate(__SORTED_BONUSES)))

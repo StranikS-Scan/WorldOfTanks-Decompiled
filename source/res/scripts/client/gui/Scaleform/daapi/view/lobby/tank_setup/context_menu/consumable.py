@@ -55,9 +55,6 @@ class ConsumableItemContextMenu(BaseEquipmentItemContextMenu):
     def _getVehicleItems(self):
         return self._getVehicle().consumables
 
-    def _isVisible(self, label):
-        return False if label == CMLabel.BUY_MORE and self.isInEventMode else super(ConsumableItemContextMenu, self)._isVisible(label)
-
 
 @consumableDecorator
 class ConsumableSlotContextMenu(BaseEquipmentSlotContextMenu):
@@ -82,9 +79,6 @@ class ConsumableSlotContextMenu(BaseEquipmentSlotContextMenu):
 
     def _getVehicleItems(self):
         return self._getVehicle().consumables
-
-    def _isVisible(self, label):
-        return False if label in (CMLabel.BUY_MORE, TankSetupCMLabel.UNLOAD) and self.isInEventMode else super(ConsumableSlotContextMenu, self)._isVisible(label)
 
 
 @consumableDecorator
@@ -132,6 +126,3 @@ class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
         if result:
             self._sendLastSlotAction(TankSetupConstants.CONSUMABLES, BaseSetupModel.REVERT_SLOT_ACTION, {'slotID': self._installedSlotId})
         return
-
-    def _isVisible(self, label):
-        return False if label in (CMLabel.BUY_MORE, TankSetupCMLabel.UNLOAD) and self.isInEventMode else super(HangarConsumableSlotContextMenu, self)._isVisible(label)

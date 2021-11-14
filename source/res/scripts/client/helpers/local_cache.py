@@ -251,7 +251,7 @@ def makeFileLocalCachePath(space, tags, fileFormat='.dat'):
         if not os.path.isdir(dirPath):
             os.makedirs(dirPath)
     except Exception:
-        LOG_CURRENT_EXCEPTION()
+        LOG_WARNING('Error while creating directory', dirPath, tags)
         return ''
 
     tagsType = type(tags)

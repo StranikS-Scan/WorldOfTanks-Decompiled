@@ -135,12 +135,8 @@ class UNIT_NOTIFICATION_KEY(object):
     PLAYER_ONLINE = 'playerOnline'
     PLAYER_ADDED = 'playerAdded'
     PLAYER_ADDED_WITH_FILTER = 'playerAddedWithFilter'
-    EVENT_PLAYER_ADDED = 'eventPlayerAdded'
     PLAYER_REMOVED = 'playerRemoved'
-    EVENT_PLAYER_REMOVED = 'eventPlayerRemoved'
     GIVE_LEADERSHIP = 'giveLeadership'
-    SELECTED_DIFFICULTY_LEVEL = 'selectedDifficultyLevel'
-    NOT_READY_DIFFICULTY_LEVEL = 'notReadyDifficultyLevel'
 
 
 class PREBATTLE_ACTION_NAME(object):
@@ -167,7 +163,7 @@ class PREBATTLE_ACTION_NAME(object):
     BATTLE_ROYALE = 'battleRoyaleQueue'
     BATTLE_ROYALE_TOURNAMENT = 'battleRoyaleTournamentQueue'
     MAPS_TRAINING = 'mapsTraining'
-    EVENT_BATTLE = 'eventBattle'
+    EVENT_BATTLE = 'event'
     MAPBOX = 'mapbox'
 
 
@@ -186,7 +182,7 @@ class SELECTOR_BATTLE_TYPES(object):
     BATTLE_ROYALE = 'battleRoyale'
     MAPBOX = 'mapbox'
     MAPS_TRAINING = 'mapsTraining'
-    EVENT_BATTLE = 'eventBattle'
+    EVENT = 'event'
 
 
 class REQUEST_TYPE(object):
@@ -269,7 +265,6 @@ class PREBATTLE_RESTRICTION(object):
     CREW_NOT_FULL = 'crew/notFull'
     UNIT_NOT_FULL = 'squad/notFull'
     TUTORIAL_NOT_FINISHED = 'tutorial/notFinished'
-    EVENT_AFK_BAN = 'event/afk/ban'
     SERVER_LIMITS = (LIMIT_MIN_COUNT,
      LIMIT_MAX_COUNT,
      LIMIT_LEVEL,
@@ -359,10 +354,6 @@ class UNIT_RESTRICTION(object):
     UNSUITABLE_VEHICLE = 44
     VEHICLE_TOO_HEAVY = 45
     UNIT_WRONG_DATA = 46
-    EVENT_UNIT_DIFFICULTY_LEVEL_INACTIVE = 47
-    EVENT_UNIT_DIFFICULTY_LEVEL_NOT_VALID = 48
-    EVENT_UNIT_SQUAD_DIFFICULTY_LEVEL_NOT_ENABLE = 49
-    EVENT_AFK_BAN = 50
 
 
 class PRE_QUEUE_RESTRICTION(object):

@@ -7,6 +7,11 @@ class INGAME_GUI(object):
     DEVICES_AMMO_BAY = '#ingame_gui:devices/ammo_bay'
     DEVICES_FUEL_TANK = '#ingame_gui:devices/fuel_tank'
     DEVICES_RADIO = '#ingame_gui:devices/radio'
+    DEVICES_TRACK = '#ingame_gui:devices/track'
+    DEVICES_TRACK_LEFT = '#ingame_gui:devices/track/left'
+    DEVICES_TRACK_RIGHT = '#ingame_gui:devices/track/right'
+    DEVICES_TRACK_MAIN = '#ingame_gui:devices/track/main'
+    DEVICES_TRACK_OUTER = '#ingame_gui:devices/track/outer'
     DEVICES_LEFT_TRACK = '#ingame_gui:devices/left_track'
     DEVICES_RIGHT_TRACK = '#ingame_gui:devices/right_track'
     DEVICES_GUN = '#ingame_gui:devices/gun'
@@ -108,10 +113,6 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_DEFENDING_BASE_NUMBERED = '#ingame_gui:chat_shortcuts/defending_base_numbered'
     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF = '#ingame_gui:chat_shortcuts/attention_to_objective_def'
     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF_AUTOCOMMIT = '#ingame_gui:chat_shortcuts/attention_to_objective_def_autocommit'
-    CHAT_SHORTCUTS_MOVETO_COLLECTOR = '#ingame_gui:chat_shortcuts/moveto_collector'
-    CHAT_SHORTCUTS_MOVING_TO_COLLECTOR = '#ingame_gui:chat_shortcuts/moving_to_collector'
-    CHAT_SHORTCUTS_MOVETO_CAMP = '#ingame_gui:chat_shortcuts/moveto_camp'
-    CHAT_SHORTCUTS_MOVING_TO_CAMP = '#ingame_gui:chat_shortcuts/moving_to_camp'
     CHAT_SHORTCUTS_HELP_ME_EX = '#ingame_gui:chat_shortcuts/help_me_ex'
     CHAT_SHORTCUTS_SUPPORTING_ALLY = '#ingame_gui:chat_shortcuts/supporting_ally'
     CHAT_SHORTCUTS_TURN_BACK = '#ingame_gui:chat_shortcuts/turn_back'
@@ -162,7 +163,6 @@ class INGAME_GUI(object):
     CHAT_EXAMPLE_SUPPORTING_ALLY = '#ingame_gui:chat_example/supporting_ally'
     STATISTICS_TAB_LINE_UP_HEADER = '#ingame_gui:statistics/tab/line_up/header'
     STATISTICS_TAB_LINE_UP_TITLE = '#ingame_gui:statistics/tab/line_up/title'
-    STATISTICS_TAB_EVENT_TITLE = '#ingame_gui:statistics/tab/event/title'
     STATISTICS_TAB_QUESTS_HEADER = '#ingame_gui:statistics/tab/quests/header'
     STATISTICS_TAB_QUESTS_STATUS_INPROGRESS = '#ingame_gui:statistics/tab/quests/status/inProgress'
     STATISTICS_TAB_QUESTS_STATUS_ONPAUSE = '#ingame_gui:statistics/tab/quests/status/onPause'
@@ -285,8 +285,6 @@ class INGAME_GUI(object):
     POSTMORTEM_TIPS_OBSERVERMODE_TEXT = '#ingame_gui:postmortem/tips/observerMode/text'
     POSTMORTEM_TIPS_EXITHANGAR_LABEL = '#ingame_gui:postmortem/tips/exitHangar/label'
     POSTMORTEM_TIPS_EXITHANGAR_TEXT = '#ingame_gui:postmortem/tips/exitHangar/text'
-    POSTMORTEM_TIPS_HINT_TITLE = '#ingame_gui:postmortem/tips/hint/title'
-    POSTMORTEM_TIPS_HINT_DESC = '#ingame_gui:postmortem/tips/hint/desc'
     PLAYERS_PANEL_STATE_NONE_HEADER = '#ingame_gui:players_panel/state/none/header'
     PLAYERS_PANEL_STATE_NONE_BODY = '#ingame_gui:players_panel/state/none/body'
     PLAYERS_PANEL_STATE_NONE_NOTE = '#ingame_gui:players_panel/state/none/note'
@@ -307,9 +305,6 @@ class INGAME_GUI(object):
     PLAYERS_PANEL_UNKNOWN_FRAGS = '#ingame_gui:players_panel/unknown_frags'
     PLAYERS_PANEL_UNKNOWN_VEHICLESTATE = '#ingame_gui:players_panel/unknown_vehicleState'
     PLAYERS_PANEL_UNKNOWN_CLAN = '#ingame_gui:players_panel/unknown_clan'
-    PLAYERS_PANEL_INFO_TEAM = '#ingame_gui:players_panel/info/team'
-    PLAYERS_PANEL_INFO_COLLECTOR = '#ingame_gui:players_panel/info/collector'
-    PLAYERS_PANEL_INFO_COLLECTOR_FULL = '#ingame_gui:players_panel/info/collector_full'
     EPIC_PLAYERS_PANEL_STATE_HIDDEN_HEADER = '#ingame_gui:epic_players_panel/state/hidden/header'
     EPIC_PLAYERS_PANEL_STATE_HIDDEN_BODY = '#ingame_gui:epic_players_panel/state/hidden/body'
     EPIC_PLAYERS_PANEL_STATE_HIDDEN_NOTE = '#ingame_gui:epic_players_panel/state/hidden/note'
@@ -368,13 +363,6 @@ class INGAME_GUI(object):
     VEHICLE_MESSAGES_DEATH_FROM_SHOT_BOMBER = '#ingame_gui:vehicle_messages/DEATH_FROM_SHOT_BOMBER'
     POSTMORTEM_MESSAGES_DEATH_FROM_SHOT_ARTILLERY = '#ingame_gui:postmortem_messages/DEATH_FROM_SHOT_ARTILLERY'
     POSTMORTEM_MESSAGES_DEATH_FROM_SHOT_BOMBER = '#ingame_gui:postmortem_messages/DEATH_FROM_SHOT_BOMBER'
-    POSTMORTEM_MESSAGES_EVENT_DEATH_FROM_SHOT = '#ingame_gui:postmortem_messages/EVENT_DEATH_FROM_SHOT'
-    POSTMORTEM_MESSAGES_EVENT_DEATH_ON_PHASE_CHANGE = '#ingame_gui:postmortem_messages/EVENT_DEATH_ON_PHASE_CHANGE'
-    POSTMORTEM_MESSAGES_EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC = '#ingame_gui:postmortem_messages/EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC'
-    POSTMORTEM_MESSAGES_EVENT_DEATH_ON_BOSS_PHASE_END = '#ingame_gui:postmortem_messages/EVENT_DEATH_ON_BOSS_PHASE_END'
-    POSTMORTEM_MESSAGES_EVENT_DEATH_FROM_BOSS_AURA = '#ingame_gui:postmortem_messages/EVENT_DEATH_FROM_BOSS_AURA'
-    PLAYER_MESSAGES_EVENT_DEATH_FROM_BOSS_AURA_ENEMY_SELF = '#ingame_gui:player_messages/EVENT_DEATH_FROM_BOSS_AURA_ENEMY_SELF'
-    PLAYER_MESSAGES_EVENT_DEATH_FROM_BOSS_AURA_ENEMY_ALLY = '#ingame_gui:player_messages/EVENT_DEATH_FROM_BOSS_AURA_ENEMY_ALLY'
     POSTMORTEM_MESSAGES_DEATH_FROM_OVERTURN_SELF_SUICIDE = '#ingame_gui:postmortem_messages/DEATH_FROM_OVERTURN_SELF_SUICIDE'
     POSTMORTEM_MESSAGES_DEATH_FROM_OVERTURN_ENEMY_SELF = '#ingame_gui:postmortem_messages/DEATH_FROM_OVERTURN_ENEMY_SELF'
     POSTMORTEM_MESSAGES_DEATH_FROM_OVERTURN_ALLY_SELF = '#ingame_gui:postmortem_messages/DEATH_FROM_OVERTURN_ALLY_SELF'
@@ -469,8 +457,6 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_MINEFIELD_EPIC = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_MINEFIELD_EPIC'
     PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_STEALTH_RADAR = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_STEALTH_RADAR'
     PLAYER_MESSAGES_COMBAT_BR_EQUIPMENT_READY = '#ingame_gui:player_messages/COMBAT_BR_EQUIPMENT_READY'
-    PLAYER_MESSAGES_EVENT_HEAL = '#ingame_gui:player_messages/EVENT_HEAL'
-    PLAYER_MESSAGES_EVENT_ADD_AMMO = '#ingame_gui:player_messages/EVENT_ADD_AMMO'
     VEHICLE_MESSAGES_DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE = '#ingame_gui:vehicle_messages/DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE'
     POSTMORTEM_MESSAGES_DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE = '#ingame_gui:postmortem_messages/DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE'
     VEHICLE_MESSAGES_DEATH_FROM_WORLD_COLLISION_ENEMY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_WORLD_COLLISION_ENEMY_SELF'
@@ -507,17 +493,13 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_ENEMY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_ENEMY_ENEMY'
     VEHICLE_MESSAGES_DEATH_FROM_DEATH_ZONE_SELF_SUICIDE = '#ingame_gui:vehicle_messages/DEATH_FROM_DEATH_ZONE_SELF_SUICIDE'
     POSTMORTEM_MESSAGES_DEATH_FROM_DEATH_ZONE_SELF_SUICIDE = '#ingame_gui:postmortem_messages/DEATH_FROM_DEATH_ZONE_SELF_SUICIDE'
-    POSTMORTEM_MESSAGES_DEATH_FROM_DEATH_ZONE_ARTILLERY = '#ingame_gui:postmortem_messages/DEATH_FROM_DEATH_ZONE_ARTILLERY'
     VEHICLE_MESSAGES_DEATH_FROM_DEATH_ZONE_ENEMY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_DEATH_ZONE_ENEMY_SELF'
     POSTMORTEM_MESSAGES_DEATH_FROM_DEATH_ZONE_ENEMY_SELF = '#ingame_gui:postmortem_messages/DEATH_FROM_DEATH_ZONE_ENEMY_SELF'
     VEHICLE_MESSAGES_DEATH_FROM_DEATH_ZONE_ALLY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_DEATH_ZONE_ALLY_SELF'
     POSTMORTEM_MESSAGES_DEATH_FROM_DEATH_ZONE_ALLY_SELF = '#ingame_gui:postmortem_messages/DEATH_FROM_DEATH_ZONE_ALLY_SELF'
-    POSTMORTEM_MESSAGES_EVENT_DEATH_FROM_DEATH_ZONE = '#ingame_gui:postmortem_messages/EVENT_DEATH_FROM_DEATH_ZONE'
     VEHICLE_MESSAGES_DEATH_FROM_GAS_ATTACK_ENEMY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_GAS_ATTACK_ENEMY_SELF'
     VEHICLE_MESSAGES_DEATH_FROM_GAS_ATTACK_ALLY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_GAS_ATTACK_ALLY_SELF'
     PLAYER_MESSAGES_DEATH_FROM_DEATH_ZONE_SELF_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_DEATH_ZONE_SELF_SUICIDE'
-    PLAYER_MESSAGES_DEATH_FROM_DEATH_ZONE_SELF_SUICIDE_ARTILLERY = '#ingame_gui:player_messages/DEATH_FROM_DEATH_ZONE_SELF_SUICIDE_ARTILLERY'
-    PLAYER_MESSAGES_DEATH_FROM_DEATH_ZONE_ALLY_SUICIDE_ARTILLERY = '#ingame_gui:player_messages/DEATH_FROM_DEATH_ZONE_ALLY_SUICIDE_ARTILLERY'
     PLAYER_MESSAGES_DEATH_FROM_DEATH_ZONE_SELF_ALLY = '#ingame_gui:player_messages/DEATH_FROM_DEATH_ZONE_SELF_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_DEATH_ZONE_SELF_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_DEATH_ZONE_SELF_ENEMY'
     PLAYER_MESSAGES_DEATH_FROM_DEATH_ZONE_ALLY_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_DEATH_ZONE_ALLY_SUICIDE'
@@ -600,7 +582,6 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_STUN = '#ingame_gui:efficiencyRibbons/stun'
     EFFICIENCYRIBBONS_ASSISTSTUN = '#ingame_gui:efficiencyRibbons/assistStun'
     EFFICIENCYRIBBONS_DEATHZONE = '#ingame_gui:efficiencyRibbons/deathZone'
-    EFFICIENCYRIBBONS_EVENTDEATHONPHASECHANGE = '#ingame_gui:efficiencyRibbons/eventDeathOnPhaseChange'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING'
     DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE = '#ingame_gui:damageLog/shellType/HIGH_EXPLOSIVE'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_HE = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_HE'
@@ -615,7 +596,6 @@ class INGAME_GUI(object):
     HITMARKER_MISSARMOR = '#ingame_gui:hitMarker/missArmor'
     HITMARKER_TRACKBLOCKED = '#ingame_gui:hitMarker/trackBlocked'
     HITMARKER_WHEELBLOCKED = '#ingame_gui:hitMarker/wheelBlocked'
-    HITMARKER_BOSS = '#ingame_gui:hitMarker/boss'
     RESPAWNVIEW_TITLE = '#ingame_gui:respawnView/title'
     RESPAWNVIEW_ADDITIONALTIP = '#ingame_gui:respawnView/additionalTip'
     RESPAWNVIEW_ADDITIONALTIPLIMITED = '#ingame_gui:respawnView/additionalTipLimited'
@@ -925,15 +905,6 @@ class INGAME_GUI(object):
     PREBATTLEAMMUNITIONPANEL_WAITINFORPLAYERS = '#ingame_gui:prebattleAmmunitionPanel/waitinForPlayers'
     PREBATTLEAMMUNITIONPANEL_LOADINGTIMER = '#ingame_gui:prebattleAmmunitionPanel/loadingTimer'
     PREBATTLEAMMUNITIONPANEL_CURRENTSETUP = '#ingame_gui:prebattleAmmunitionPanel/currentSetup'
-    PLAYER_MESSAGES_PICKUP_SOULS = '#ingame_gui:player_messages/PICKUP_SOULS'
-    PLAYER_MESSAGES_EQUIPMENT_USAGE = '#ingame_gui:player_messages/EQUIPMENT_USAGE'
-    PLAYER_MESSAGES_TEAM_EQUIPMENT_USAGE = '#ingame_gui:player_messages/TEAM_EQUIPMENT_USAGE'
-    PLAYER_ERRORS_EQUIPMENT_HPREPAIRANDCREWHEAL_NOTREQUIRED = '#ingame_gui:player_errors/equipment/hpRepairAndCrewHeal/notRequired'
-    PLAYER_ERRORS_EQUIPMENT_INSTANTRELOAD_NOTREQUIRED = '#ingame_gui:player_errors/equipment/instantReload/notRequired'
-    REWARDWINDOW_HW19_COMMANDERS_HEADERTEXT = '#ingame_gui:rewardWindow/hw19_commanders/headerText'
-    REWARDWINDOW_HW19_COMMANDERS_SUBHEADERTEXT = '#ingame_gui:rewardWindow/hw19_commanders/subHeaderText'
-    REWARDWINDOW_HW19_COMMANDERS_DESCTEXT = '#ingame_gui:rewardWindow/hw19_commanders/descText'
-    REWARDWINDOW_HW19_COMMANDERS_BTNLABEL = '#ingame_gui:rewardWindow/hw19_commanders/btnLabel'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,
@@ -966,10 +937,6 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_DEFENDING_BASE_NUMBERED,
      CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF,
      CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF_AUTOCOMMIT,
-     CHAT_SHORTCUTS_MOVETO_COLLECTOR,
-     CHAT_SHORTCUTS_MOVING_TO_COLLECTOR,
-     CHAT_SHORTCUTS_MOVETO_CAMP,
-     CHAT_SHORTCUTS_MOVING_TO_CAMP,
      CHAT_SHORTCUTS_HELP_ME_EX,
      CHAT_SHORTCUTS_SUPPORTING_ALLY,
      CHAT_SHORTCUTS_TURN_BACK,
@@ -1045,7 +1012,6 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_STUN,
      EFFICIENCYRIBBONS_ASSISTSTUN,
      EFFICIENCYRIBBONS_DEATHZONE,
-     EFFICIENCYRIBBONS_EVENTDEATHONPHASECHANGE,
      EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED,
@@ -1092,8 +1058,7 @@ class INGAME_GUI(object):
      REWARDWINDOW_ANNIVERSARY_GA_HEADERTEXT,
      REWARDWINDOW_PIGGYBANK_HEADERTEXT,
      REWARDWINDOW_COMMANDER_MARINA_HEADERTEXT,
-     REWARDWINDOW_COMMANDER_PATRICK_HEADERTEXT,
-     REWARDWINDOW_HW19_COMMANDERS_HEADERTEXT)
+     REWARDWINDOW_COMMANDER_PATRICK_HEADERTEXT)
     REWARDWINDOW_ALL_SUBHEADERTEXT_ENUM = (REWARDWINDOW_BASE_SUBHEADERTEXT,
      REWARDWINDOW_WGCQ_CLAN_REWARD_SUBHEADERTEXT,
      REWARDWINDOW_WGCQ_PLAYER_REWARD_SUBHEADERTEXT,
@@ -1129,8 +1094,7 @@ class INGAME_GUI(object):
      REWARDWINDOW_ANNIVERSARY_GA_SUBHEADERTEXT,
      REWARDWINDOW_PIGGYBANK_SUBHEADERTEXT,
      REWARDWINDOW_COMMANDER_MARINA_SUBHEADERTEXT,
-     REWARDWINDOW_COMMANDER_PATRICK_SUBHEADERTEXT,
-     REWARDWINDOW_HW19_COMMANDERS_SUBHEADERTEXT)
+     REWARDWINDOW_COMMANDER_PATRICK_SUBHEADERTEXT)
     REWARDWINDOW_ALL_BTNLABEL_ENUM = (REWARDWINDOW_BASE_BTNLABEL,
      REWARDWINDOW_WGCQ_CLAN_REWARD_BTNLABEL,
      REWARDWINDOW_WGCQ_PLAYER_REWARD_BTNLABEL,
@@ -1167,8 +1131,7 @@ class INGAME_GUI(object):
      REWARDWINDOW_ANNIVERSARY_GA_BTNLABEL,
      REWARDWINDOW_PIGGYBANK_BTNLABEL,
      REWARDWINDOW_COMMANDER_MARINA_BTNLABEL,
-     REWARDWINDOW_COMMANDER_PATRICK_BTNLABEL,
-     REWARDWINDOW_HW19_COMMANDERS_BTNLABEL)
+     REWARDWINDOW_COMMANDER_PATRICK_BTNLABEL)
     REWARDWINDOW_ALL_DESCTEXT_ENUM = (REWARDWINDOW_BASE_DESCTEXT,
      REWARDWINDOW_WGCQ_CLAN_REWARD_DESCTEXT,
      REWARDWINDOW_WGCQ_PLAYER_REWARD_DESCTEXT,
@@ -1205,8 +1168,7 @@ class INGAME_GUI(object):
      REWARDWINDOW_ANNIVERSARY_GA_DESCTEXT,
      REWARDWINDOW_PIGGYBANK_DESCTEXT,
      REWARDWINDOW_COMMANDER_MARINA_DESCTEXT,
-     REWARDWINDOW_COMMANDER_PATRICK_DESCTEXT,
-     REWARDWINDOW_HW19_COMMANDERS_DESCTEXT)
+     REWARDWINDOW_COMMANDER_PATRICK_DESCTEXT)
 
     @classmethod
     def chat_shortcuts(cls, key0):

@@ -141,12 +141,19 @@ class _EntityChatHandler(bw2_provider.ResponseSeqHandler):
         return None
 
     def _addMessage(self, message):
+        message = self._preprocessMessage(message)
+        if message is not None:
+            g_messengerEvents.channels.onMessageReceived(message, self._getChannel(message))
+        return
+
+    def _preprocessMessage(self, message):
         self._preprocessMessageVO(message)
         message = self.provider().filterInMessage(message)
         if message:
             user = self._getUser(message)
             if not (user and user.isIgnored()):
-                g_messengerEvents.channels.onMessageReceived(message, self._getChannel(message))
+                return message
+        return None
 
     def _getUser(self, message):
         raise NotImplementedError
@@ -305,7 +312,13 @@ class UnitChatHandler(_EntityChatHandler):
         if self.__history is None:
             self.__history = iterator
             if self.__channel is not None:
-                g_messengerEvents.channels.onHistoryReceived(sorted(list(self.__history), key=operator.attrgetter('sentAt')), self.__channel)
+                messages = []
+                for message in iterator:
+                    message = self._preprocessMessage(message)
+                    if message is not None:
+                        messages.append(message)
+
+                g_messengerEvents.channels.onHistoryReceived(sorted(messages, key=operator.attrgetter('sentAt')), self.__channel)
         else:
             super(UnitChatHandler, self)._addHistory(iterator)
         return

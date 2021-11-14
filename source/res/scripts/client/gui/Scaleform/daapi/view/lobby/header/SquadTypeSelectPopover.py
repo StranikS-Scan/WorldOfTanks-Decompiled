@@ -7,25 +7,13 @@ from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleType
 from gui.Scaleform.locale.PLATOON import PLATOON
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
-from helpers import dependency
-from skeletons.gui.lobby_context import ILobbyContext
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 
 class SquadTypeSelectPopover(BattleTypeSelectPopoverMeta, IGlobalListener):
-    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
         super(SquadTypeSelectPopover, self).__init__()
 
     def selectFight(self, actionName):
-        self.__selectFight(actionName)
-
-    @process
-    def __selectFight(self, actionName):
-        if actionName == PREBATTLE_ACTION_NAME.EVENT_SQUAD or actionName == PREBATTLE_ACTION_NAME.SQUAD:
-            navigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
-            if not navigationPossible:
-                return
         if self.prbDispatcher:
             self.__doSelect(actionName)
         else:
@@ -33,9 +21,9 @@ class SquadTypeSelectPopover(BattleTypeSelectPopoverMeta, IGlobalListener):
 
     def getTooltipData(self, itemData, itemIsDisabled):
         tooltip = ''
-        if itemData == PREBATTLE_ACTION_NAME.EVENT_SQUAD:
+        if itemData == 'eventSquad':
             tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_EVENTSQUAD
-        elif itemData == PREBATTLE_ACTION_NAME.SQUAD:
+        elif itemData == 'squad':
             tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
         return tooltip
 

@@ -193,13 +193,13 @@ class ClassicPage(SharedPage):
     def _changeCtrlMode(self, ctrlMode):
 
         def invalidateSiegeVehicle(vehicleType):
-            return 'siegeMode' in vehicleType.tags and 'wheeledVehicle' not in vehicleType.tags and 'dualgun' not in vehicleType.tags
+            return (vehicleType.hasSiegeMode or vehicleType.isTrackWithinTrack) and not vehicleType.isWheeledVehicle and not vehicleType.isDualgunVehicle
 
         components = {BATTLE_VIEW_ALIASES.DAMAGE_PANEL, BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL}
         if ctrlMode != CTRL_MODE_NAME.POSTMORTEM:
             ctrl = self.sessionProvider.shared.vehicleState
             vehicle = ctrl.getControllingVehicle()
-            if vehicle and invalidateSiegeVehicle(vehicle.typeDescriptor.type):
+            if vehicle and invalidateSiegeVehicle(vehicle.typeDescriptor):
                 components.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
         if ctrlMode == CTRL_MODE_NAME.VIDEO:
             self._setComponentsVisibility(hidden=components)

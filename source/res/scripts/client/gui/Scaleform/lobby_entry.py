@@ -125,9 +125,6 @@ class LobbyEntry(AppEntry):
     def _createGraphicsOptimizationManager(self):
         return GraphicsOptimizationManager(config=LOBBY_OPTIMIZATION_CONFIG)
 
-    def _createFadeManager(self):
-        return None
-
     def _setup(self):
         self.movie.backgroundAlpha = 0.0
         self.movie.setFocused(SCALEFORM_SWF_PATH_V3)

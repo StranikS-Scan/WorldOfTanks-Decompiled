@@ -177,16 +177,6 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	9	</level>
   </GB24_Centurion_Mk3>
-  <GB24_Centurion_Mk3_Halloween_event>
-    <id>	64	</id>
-    <userString>	#gb_vehicles:GB24_Centurion_Mk3_Halloween_event	</userString>
-    <description>	#gb_vehicles:GB24_Centurion_Mk3_Halloween_event_descr	</description>
-    <shortUserString>	#gb_vehicles:GB24_Centurion_Mk3_Halloween_event_short	</shortUserString>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank improvedVentilation_class2_user secret event_battles cannot_be_sold HD lockOutfit lockCrew lockCrewSkills event_not_elite_vehicle event_overturn_recovery nitroRamDamage	</tags>
-    <level>	9	</level>
-  </GB24_Centurion_Mk3_Halloween_event>
   <GB23_Centurion>
     <id>	23	</id>
     <userString>	#gb_vehicles:GB23_Centurion	</userString>
@@ -487,7 +477,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD lockOutfit improvedVentilation_class3_user extraHealthReserve_class3_user secret testTank	</tags>
+    <tags>	mediumTank HD extraHealthReserve_class3_user secret testTank	</tags>
     <level>	4	</level>
   </GB113_Matilda_LVT>
   <GB112_Caliban>
@@ -1052,26 +1042,4 @@
     <tags>	heavyTank HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user private	</tags>
     <level>	9	</level>
   </GB12_Conqueror_FL>
-  <GB81_FV4004_HELL>
-    <id>	7	</id>
-    <userString>	#gb_vehicles:GB81_FV4004_HELL	</userString>
-    <description>	#gb_vehicles:GB81_FV4004_descr	</description>
-    <shortUserString>	#gb_vehicles:GB81_FV4004_short_HELL	</shortUserString>
-    <price>	3440000	</price>
-    <tags>	AT-SPG heavyAT-SPG AT-SPG1 improvedVentilation_class3_user HD  event_battles secret cannot_be_sold lockCrew lockOutfit	</tags>
-    <level>	9	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </GB81_FV4004_HELL>
-  <GB83_FV4005_HELL>
-    <id>	40	</id>
-    <userString>	#gb_vehicles:GB83_FV4005_HELL	</userString>
-    <description>	#gb_vehicles:GB83_FV4005_descr	</description>
-    <shortUserString>	#gb_vehicles:GB83_FV4005_short_HELL	</shortUserString>
-    <price>	6100000	</price>
-    <tags>	AT-SPG heavyAT-SPG AT-SPG2 improvedVentilation_class3_user HD  event_battles secret lockOutfit cannot_be_sold lockCrew earn_crystals	</tags>
-    <level>	10	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </GB83_FV4005_HELL>
 </list.xml>

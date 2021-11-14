@@ -1,21 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/overlay.py
+import typing
 import GUI
-from account_helpers import account_completion
 from async import async, await, AsyncEvent
-from bootcamp.BootCampEvents import g_bootcampEvents
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.lobby_entry import LobbyEntry
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
-from gui.platform.wgnp.controller import isEmailConfirmationNeeded, isEmailAddingNeeded, getEmail
 from gui.shared import g_eventBus
-from gui.shared.event_dispatcher import showAddEmailOverlay, showConfirmEmailOverlay
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IOverlayController, IHeroTankController, IBootcampController
-from skeletons.gui.platform.wgnp_controller import IWGNPRequestController
+from skeletons.gui.game_control import IOverlayController, IHeroTankController
 from skeletons.gui.shared.utils import IHangarSpace
+if typing.TYPE_CHECKING:
+    pass
 _ANIMATION_DURATION = 300
 _LAYERS = (WindowLayer.MARKER,
  WindowLayer.VIEW,
@@ -24,7 +22,7 @@ _LAYERS = (WindowLayer.MARKER,
  WindowLayer.SYSTEM_MESSAGE,
  WindowLayer.FULLSCREEN_WINDOW)
 
-class Overlay(IOverlayController):
+class OverlayController(IOverlayController):
     _hangarSpace = dependency.descriptor(IHangarSpace)
     _appLoader = dependency.descriptor(IAppLoader)
     _heroTankCtrl = dependency.descriptor(IHeroTankController)
@@ -39,7 +37,7 @@ class Overlay(IOverlayController):
         self._wasBlurEnabled = False
         self._showEvent = AsyncEvent()
         self._cameraState = CameraMovementStates.ON_OBJECT
-        super(Overlay, self).__init__()
+        super(OverlayController, self).__init__()
 
     def init(self):
         g_eventBus.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self._onCameraEntityUpdated)
@@ -55,8 +53,9 @@ class Overlay(IOverlayController):
             return
         yield await(self._showEvent.wait())
 
-    def switchOverlay(self):
-        self.setOverlayState(not self._stateOn)
+    @property
+    def isActive(self):
+        return self._stateOn
 
     def setOverlayState(self, state):
         if self._stateOn != state:
@@ -102,42 +101,3 @@ class Overlay(IOverlayController):
 
     def _canShow(self):
         return self._cameraState == CameraMovementStates.ON_OBJECT
-
-
-class SteamRegistrationOverlay(Overlay):
-    _wgnpCtrl = dependency.descriptor(IWGNPRequestController)
-    _bootcampController = dependency.descriptor(IBootcampController)
-
-    def __init__(self):
-        super(SteamRegistrationOverlay, self).__init__()
-        self._bootcampNotFinished = False
-        self._bootcampExit = False
-        self._overlayDestroyed = False
-
-    def init(self):
-        g_bootcampEvents.onBootcampFinished += self.__onExitBootcamp
-        self._hangarSpace.onSpaceCreate += self.__onSpaceCreate
-        super(SteamRegistrationOverlay, self).init()
-
-    def fini(self):
-        g_bootcampEvents.onBootcampFinished -= self.__onExitBootcamp
-        self._hangarSpace.onSpaceCreate -= self.__onSpaceCreate
-        self._overlayDestroyed = True
-        super(SteamRegistrationOverlay, self).fini()
-
-    def __onExitBootcamp(self, *args, **kwargs):
-        self._bootcampExit = True
-
-    @async
-    def __onSpaceCreate(self, *args, **kwargs):
-        if not self._bootcampExit or self._bootcampController.isInBootcamp() or self._stateOn or not account_completion.isEnabled():
-            return
-        self._bootcampExit = False
-        emailStatus = yield await(self._wgnpCtrl.getEmailStatus(showWaiting=True))
-        if self._overlayDestroyed or not emailStatus.isSuccess() or not self._hangarSpace.spaceInited:
-            return
-        if isEmailAddingNeeded(emailStatus):
-            showAddEmailOverlay()
-        elif isEmailConfirmationNeeded(emailStatus):
-            email = getEmail(emailStatus)
-            showConfirmEmailOverlay(email=email)

@@ -11,8 +11,10 @@ from gui.impl.gen.view_models.views.lobby.crew_books.crew_books_dialog_content_m
 from gui.impl.pub.dialog_window import DialogButtons, DialogFlags, DialogContent, DialogResult
 from gui.impl.wrappers.user_format_string_arg_model import UserFormatStringArgModel
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.items_actions import factory
 from helpers.dependency import descriptor
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -66,7 +68,7 @@ class CrewBooksDialog(Window):
                 tankmanList.invalidate()
                 model.setDescription(R.strings.dialogs.crewBooks.confirmation.desc.personalBook())
                 descriptionFmtArgsVM = model.getDescriptionFmtArgs()
-                descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__tankman.fullUserName, 'name'))
+                descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__getTankmanName(), 'name'))
                 descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__selectedBook.getXP()), 'exp'))
                 descriptionFmtArgsVM.invalidate()
             else:
@@ -126,7 +128,7 @@ class CrewBooksDialog(Window):
                 model.setDescription(R.strings.dialogs.crewBooks.success.desc.personalBook())
                 descriptionFmtArgsVM = model.getDescriptionFmtArgs()
                 descriptionFmtArgsVM.clear()
-                descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__tankman.fullUserName, 'name'))
+                descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__getTankmanName(), 'name'))
                 descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__selectedBook.getXP()), 'exp'))
             else:
                 model.setDescription(R.strings.dialogs.crewBooks.success.desc.crewBook())
@@ -151,3 +153,10 @@ class CrewBooksDialog(Window):
             self.__result = DialogButtons.CANCEL
         self.__event.set()
         return
+
+    def __getTankmanName(self):
+        tankman = self.__tankman
+        if tankman.skinID != NO_CREW_SKIN_ID and self.__lobbyContext.getServerSettings().isCrewSkinsEnabled():
+            skinItem = self.__itemsCache.items.getCrewSkin(tankman.skinID)
+            return localizedFullName(skinItem)
+        return tankman.fullUserName

@@ -2,32 +2,8 @@
   <physics_preset>
     <name>	physics	</name>
     <decomposition>
-      <primaryMethod>	0	</primaryMethod>
-      <reduceMethod>	2	</reduceMethod>
-      <hollowMethod>	0	</hollowMethod>
       <maxPieces>	1000	</maxPieces>
-      <maxWrapIterations>	4	</maxWrapIterations>
-      <reduceOverlapsPasses>	0	</reduceOverlapsPasses>
-      <decimateOverlapsPasses>	0	</decimateOverlapsPasses>
-      <finalOverlapsPasses>	0	</finalOverlapsPasses>
       <maxVertices>	65535	</maxVertices>
-      <accuracy>	0.700000	</accuracy>
-      <maxWrapConcacity>	0.000000	</maxWrapConcacity>
-      <finalOVerlapsMinVolume>	0.000000	</finalOVerlapsMinVolume>
-      <volumeSimplification>	0.000000	</volumeSimplification>
-      <meshPreprocessor>
-        <optimize>	true	</optimize>
-        <simplifyPlanar>	true	</simplifyPlanar>
-        <repairTJunctions>	false	</repairTJunctions>
-        <closeHoles>	false	</closeHoles>
-        <planeCosAngle>	0.200000	</planeCosAngle>
-        <maximumTJunctionsDistance>	0.000000	</maximumTJunctionsDistance>
-        <maximumOptimizationError>	0.300000	</maximumOptimizationError>
-      </meshPreprocessor>
-      <guardsGenerator>
-        <method>	0	</method>
-        <offset>	0.000000	</offset>
-      </guardsGenerator>
     </decomposition>
     <common>
       <dynamicDecompositionMethod>	2	</dynamicDecompositionMethod>

@@ -72,6 +72,10 @@ class IItemsRequester(requesters.IRequester):
     def battlePass(self):
         raise NotImplementedError
 
+    @property
+    def giftSystem(self):
+        raise NotImplementedError
+
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 
@@ -183,7 +187,6 @@ class IHangarSpace(object):
     onSpaceChanged = None
     onNotifyCursorOver3dScene = None
     onSpaceChangedByAction = None
-    onObjectsSelectionEnabled = None
 
     @property
     def space(self):

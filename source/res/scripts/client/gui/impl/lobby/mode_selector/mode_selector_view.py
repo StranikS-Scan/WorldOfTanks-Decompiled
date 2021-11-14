@@ -10,7 +10,6 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow, createAndLoadBackportTooltipWindow
 from gui.impl.gen import R
@@ -23,7 +22,6 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view im
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
 from gui.impl.lobby.mode_selector.battle_session_view import BattleSessionView
 from gui.impl.lobby.mode_selector.items import saveBattlePassStateForItems
-from gui.impl.lobby.mode_selector.items.event_battle_mode_selector_item import EventModeSelectorItem
 from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelectorDataProvider
 from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBattlePopover
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
@@ -37,7 +35,6 @@ from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
-from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from uilogging.bootcamp.loggers import BootcampLogger
@@ -68,7 +65,6 @@ class ModeSelectorView(ViewImpl):
      R.views.lobby.battle_pass.tooltips.BattlePass3dStyleNotChosenTooltip(): BattlePass3dStyleNotChosenTooltip}
     layoutID = R.views.lobby.mode_selector.ModeSelectorView()
     _areWidgetsVisible = False
-    _gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self, layoutId, isEventEnabled=False, provider=None):
         super(ModeSelectorView, self).__init__(ViewSettings(layoutId, ViewFlags.LOBBY_TOP_SUB_VIEW, ModeSelectorModel()))
@@ -104,18 +100,7 @@ class ModeSelectorView(ViewImpl):
                     body = modeSelectorItem.calendarTooltipText
                 return self.__createSimpleTooltip(event, body=body)
             if tooltipId == ModeSelectorTooltipsConstants.RANDOM_BP_PAUSED_TOOLTIP:
-                return self.__createSimpleTooltip(event, header=backport.text(R.strings.battle_pass_2020.tooltips.entryPoint.disabled.header()), body=backport.text(R.strings.battle_pass_2020.tooltips.entryPoint.disabled.body()))
-            if tooltipId == TOOLTIPS_CONSTANTS.EVENT_KEY_INFO:
-                return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=[])
-            if tooltipId == TOOLTIPS_CONSTANTS.EVENT_INTERROGATION:
-                specArgs = None
-                for item in self.__dataProvider.itemList:
-                    if isinstance(item, EventModeSelectorItem):
-                        specArgs = item.createProgressionTooltipArgs()
-
-                if specArgs is None:
-                    return
-                return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=specArgs)
+                return self.__createSimpleTooltip(event, header=backport.text(R.strings.battle_pass.tooltips.entryPoint.disabled.header()), body=backport.text(R.strings.battle_pass.tooltips.entryPoint.disabled.body()))
             if tooltipId in [ModeSelectorTooltipsConstants.RANKED_CALENDAR_DAY_INFO_TOOLTIP,
              ModeSelectorTooltipsConstants.RANKED_STEP_TOOLTIP,
              ModeSelectorTooltipsConstants.RANKED_BATTLES_LEAGUE_TOOLTIP,
@@ -125,8 +110,6 @@ class ModeSelectorView(ViewImpl):
              ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
              ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP]:
                 return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=(None,))
-            if tooltipId == TOOLTIPS_CONSTANTS.EVENT_SELECTOR_PERF_INFO:
-                return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=['medium_risk'])
             if tooltipId == ModeSelectorTooltipsConstants.RANKED_BATTLES_RANK_TOOLTIP:
                 rankID = int(event.getArgument('rankID'))
                 return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=(rankID,))
@@ -162,7 +145,6 @@ class ModeSelectorView(ViewImpl):
         g_eventBus.handleEvent(events.DestroyGuiImplViewEvent(self.layoutID))
 
     def _onLoading(self):
-        self._gameEventController.onIngameEventsUpdated += self.__updateEvent
         self.__gui.windowsManager.onWindowStatusChanged += self.__windowStatusChanged
         self.__lobbyContext.addHeaderNavigationConfirmator(self.__handleHeaderNavigation)
         self.viewModel.onItemClicked += self.__itemClickHandler
@@ -190,7 +172,6 @@ class ModeSelectorView(ViewImpl):
         self.uiLogger.log(LOG_ACTIONS.OPENED, isNew=self.__dataProvider.hasNewIndicator, isWidget=self._areWidgetsVisible, isFeatured=self.__isEventEnabled)
 
     def _finalize(self):
-        self._gameEventController.onIngameEventsUpdated -= self.__updateEvent
         self.uiBootcampLogger.logOnlyFromBootcamp(LOG_ACTIONS.CLOSED)
         self.__gui.windowsManager.onWindowStatusChanged -= self.__windowStatusChanged
         self.inputManager.removeEscapeListener(self.__handleEscape)
@@ -206,9 +187,6 @@ class ModeSelectorView(ViewImpl):
         g_eventBus.handleEvent(FullscreenModeSelectorEvent(FullscreenModeSelectorEvent.NAME, ctx={'showing': False}))
         g_eventBus.handleEvent(events.GameEvent(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS), scope=EVENT_BUS_SCOPE.GLOBAL)
         self.__restoreGraphics()
-
-    def __updateEvent(self):
-        self.__dataProvider.refreshItems()
 
     def __restoreGraphics(self):
         if self.__isGraphicsRestored:

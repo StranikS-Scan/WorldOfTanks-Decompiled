@@ -444,6 +444,7 @@ class AmmoPlugin(CrosshairPlugin):
         self.__setup(ctrl, self.sessionProvider.isReplayPlaying)
         ctrl.onGunSettingsSet += self.__onGunSettingsSet
         ctrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
+        ctrl.onShellsCleared += self.__onGunReloadCleared
         ctrl.onGunAutoReloadTimeSet += self.__onGunAutoReloadTimeSet
         ctrl.onGunAutoReloadBoostUpdated += self.__onGunAutoReloadBoostUpd
         ctrl.onShellsUpdated += self.__onShellsUpdated
@@ -467,6 +468,7 @@ class AmmoPlugin(CrosshairPlugin):
             ctrl.onGunAutoReloadTimeSet -= self.__onGunAutoReloadTimeSet
             ctrl.onGunAutoReloadBoostUpdated -= self.__onGunAutoReloadBoostUpd
             ctrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
+            ctrl.onShellsCleared -= self.__onGunReloadCleared
             ctrl.onShellsUpdated -= self.__onShellsUpdated
             ctrl.onCurrentShellChanged -= self.__onCurrentShellChanged
             ctrl.onCurrentShellReset -= self.__onCurrentShellReset
@@ -511,6 +513,9 @@ class AmmoPlugin(CrosshairPlugin):
         self.__guiSettings = guiSettings
         self._parentObj.as_setClipParamsS(guiSettings.getClipCapacity(), guiSettings.getBurstSize(), guiSettings.hasAutoReload)
 
+    def __onGunReloadCleared(self, state):
+        self.__setReloadingState(state)
+
     def __onGunReloadTimeSet(self, _, state, skipAutoLoader):
         self.__setReloadingState(state)
         if self.__guiSettings.hasAutoReload and not skipAutoLoader:
@@ -543,16 +548,13 @@ class AmmoPlugin(CrosshairPlugin):
         return
 
     def __onGunAutoReloadTimeSet(self, state, stunned):
-        if self.__autoReloadCallbackID:
-            BigWorld.cancelCallback(self.__autoReloadCallbackID)
-            self.__autoReloadCallbackID = None
-        timeLeft = min(state.getTimeLeft(), state.getActualValue())
-        baseValue = state.getBaseValue()
-        if self.__shellsInClip == 0:
-            baseValue = self.__reCalcFirstShellAutoReload(baseValue)
-        self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
+        if not self.__autoReloadCallbackID:
+            timeLeft = min(state.getTimeLeft(), state.getActualValue())
+            baseValue = state.getBaseValue()
+            if self.__shellsInClip == 0:
+                baseValue = self.__reCalcFirstShellAutoReload(baseValue)
+            self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
         self.__autoReloadSnapshot = state
-        return
 
     def __onGunAutoReloadBoostUpd(self, state, stateDuration, stateTotalTime, extraData):
         _logger.debug('Auto loader boost incoming state=%s, stateDuration=%s, stateTotalTime=%s, extraData=%s', state, stateDuration, stateTotalTime, extraData)

@@ -112,7 +112,6 @@ class INVITES(object):
     INVITES_NOTE_LEAVE_QUEUE_MAPBOX = '#invites:invites/note/leave/QUEUE_MAPBOX'
     INVITES_NOTE_CHANGE_AND_LEAVE_QUEUE_MAPBOX = '#invites:invites/note/change_and_leave/QUEUE_MAPBOX'
     INVITES_WARNING_ANONYMIZED = '#invites:invites/warning/anonymized'
-    INVITES_ERROR_AFKBAN = '#invites:invites/error/afkban'
     GUI_TITLES_RECEIVEDINVITES = '#invites:gui/titles/receivedInvites'
     GUI_TITLES_INVITE = '#invites:gui/titles/invite'
     GUI_TITLES_BARTER = '#invites:gui/titles/barter'

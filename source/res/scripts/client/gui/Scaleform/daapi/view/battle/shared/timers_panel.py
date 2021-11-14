@@ -8,7 +8,6 @@ import BigWorld
 import BattleReplay
 import SoundGroups
 from AvatarInputHandler import AvatarInputHandler
-from Event import Event
 from ReplayEvents import g_replayEvents
 from gui.Scaleform.daapi.view.battle.shared import destroy_times_mapping as _mapping
 from gui.Scaleform.daapi.view.battle.shared.timers_common import TimerComponent, PythonTimer
@@ -40,7 +39,6 @@ _TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.DEATH_ZONE, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.ORANGE_ZONE, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.ORANGE_ZONE, _TIMER_STATES.WARNING_VIEW): 3,
- (_TIMER_STATES.LOSE_SOULS_IN_AURA, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW): 2,
  (_TIMER_STATES.DROWN, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.OVERTURNED, _TIMER_STATES.WARNING_VIEW): 4,
@@ -56,8 +54,7 @@ _TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.HEALING, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.HEALING_CD, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.REPAIRING, _TIMER_STATES.WARNING_VIEW): 3,
- (_TIMER_STATES.REPAIRING_CD, _TIMER_STATES.WARNING_VIEW): 3,
- (_TIMER_STATES.EVENT_DEATH_ZONE, _TIMER_STATES.CRITICAL_VIEW): 1}
+ (_TIMER_STATES.REPAIRING_CD, _TIMER_STATES.WARNING_VIEW): 3}
 _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
  _TIMER_STATES.CAPTURE_BLOCK,
  _TIMER_STATES.SMOKE,
@@ -89,17 +86,6 @@ def _hideTimerView(typeID, view):
 
 
 class _ActionScriptTimer(TimerComponent):
-
-    def show(self, isBubble=True):
-        super(_ActionScriptTimer, self).show(isBubble)
-        if self._typeID == _TIMER_STATES.EVENT_DEATH_ZONE:
-            self._startRoundedTick()
-
-    def _startRoundedTick(self):
-        if self._totalTime > 0:
-            time = BigWorld.serverTime() - self._startTime
-            self._viewObject.as_setTimeInSecondsS(self._typeID, self._totalTime, math.floor(time))
-            BigWorld.callback(1 - (time - math.floor(time)), self._startTick)
 
     def _startTick(self):
         if self._totalTime > 0 and self._typeID not in _SECONDARY_TIMERS:
@@ -188,7 +174,7 @@ class _TimersCollection(_BaseTimersCollection):
 
 
 class _StackTimersCollection(_BaseTimersCollection):
-    __slots__ = ('_currentTimer', '_currentSecondaryTimers', '_priorityMap', '_prioritySecondaryMap', '_maxDisplayedSecondaryTimers', 'onCurrentTimerChange')
+    __slots__ = ('_currentTimer', '_currentSecondaryTimers', '_priorityMap', '_prioritySecondaryMap', '_maxDisplayedSecondaryTimers')
 
     def __init__(self, panel, clazz):
         super(_StackTimersCollection, self).__init__(panel, clazz)
@@ -197,14 +183,11 @@ class _StackTimersCollection(_BaseTimersCollection):
         self._priorityMap = defaultdict(set)
         self._prioritySecondaryMap = defaultdict(set)
         self._maxDisplayedSecondaryTimers = _MAX_DISPLAYED_SECONDARY_STATUS_TIMERS
-        self.onCurrentTimerChange = Event()
         return
 
     def clear(self):
         self._currentTimer = None
         self._priorityMap.clear()
-        self.onCurrentTimerChange.clear()
-        self.onCurrentTimerChange = None
         while self._timers:
             _, timer = self._timers.popitem()
             timer.clear()
@@ -241,7 +224,6 @@ class _StackTimersCollection(_BaseTimersCollection):
                 self._currentTimer.hide()
                 self._currentTimer = timer
                 self._currentTimer.show(True)
-        self.onCurrentTimerChange()
         return
 
     def addSecondaryTimer(self, typeID, viewID, totalTime, finishTime, startTime=None):
@@ -280,7 +262,6 @@ class _StackTimersCollection(_BaseTimersCollection):
         self._currentTimer = self.__findNextPriorityByPriorityMap()
         if self._currentTimer and self._currentTimer.typeID != typeID:
             self._currentTimer.show(False)
-        self.onCurrentTimerChange()
         return
 
     def removeSecondaryTimer(self, typeID):
@@ -302,11 +283,7 @@ class _StackTimersCollection(_BaseTimersCollection):
         self._currentTimer = None
         self._timers.clear()
         self._priorityMap.clear()
-        self.onCurrentTimerChange()
         return
-
-    def getCurrentTimerId(self):
-        return self._currentTimer.typeID if self._currentTimer is not None else None
 
     def __evaluateMultipleStatusStates(self, bubble=True):
         activeTimers = self.__getActiveSecondaryTimers()
@@ -444,13 +421,10 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
     def _generateMainTimersData(self):
         link = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DESTROY_TIMER_UI
         data = [self._getNotificationTimerData(_TIMER_STATES.DROWN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DROWN_ICON, link),
-         self._getNotificationTimerData(_TIMER_STATES.DEATH_ZONE, self._getStaticDeathZoneIcon(), link),
+         self._getNotificationTimerData(_TIMER_STATES.DEATH_ZONE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DEATHZONE_ICON, link),
          self._getNotificationTimerData(_TIMER_STATES.OVERTURNED, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.OVERTURNED_ICON, link),
          self._getNotificationTimerData(_TIMER_STATES.FIRE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.FIRE_ICON, link)]
         return data
-
-    def _getStaticDeathZoneIcon(self):
-        return BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DEATHZONE_ICON
 
     def _generateSecondaryTimersData(self):
         link = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.SECONDARY_TIMER_UI
@@ -657,11 +631,12 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
         else:
             self._hideTimer(_TIMER_STATES.DEATH_ZONE)
 
-    def __updatePersonalDeathZoneWarningNotification(self, visible, totalTime, finishTime):
+    def __updatePersonalDeathZoneWarningNotification(self, visible, time):
         if visible:
-            self._showTimer(_TIMER_STATES.EVENT_DEATH_ZONE, totalTime, 'critical', finishTime)
+            self._showTimer(_TIMER_STATES.DEATH_ZONE, max(time - BigWorld.serverTime(), 0), 'warning', None)
         else:
-            self._hideTimer(_TIMER_STATES.EVENT_DEATH_ZONE)
+            self._hideTimer(_TIMER_STATES.DEATH_ZONE)
+        return
 
     @MethodsRules.delayable()
     def __initData(self):

@@ -52,7 +52,6 @@ REQUIRED_TANKMAN_FIELDS = {'isPremium',
  'nationID',
  'vehicleTypeID'}
 DEFAULT_STYLED_VEHICLES = (15697, 6193, 19969, 3937)
-_CUSTOM_CREW_KEYS = {'subscription', 'telecom_rentals'}
 
 class _ItemPackValidationError(SoftException):
     pass
@@ -249,7 +248,7 @@ def _parseRent(offer):
 
 
 def _getOfferCrew(offer):
-    if offer.get('event_type', '') in _CUSTOM_CREW_KEYS:
+    if offer.get('event_type', '') == 'subscription':
         crew = ItemPackType.CREW_CUSTOM
     elif Money(**offer.get('buy_price', MONEY_UNDEFINED)).gold:
         crew = ItemPackType.CREW_100
@@ -323,14 +322,14 @@ class _MarathonVehiclePackPreviewSchema(W2CSchema):
 class _VehicleStylePreviewSchema(W2CSchema):
     vehicle_cd = Field(required=False, type=int)
     style_id = Field(required=True, type=int)
-    back_btn_descr = Field(required=False, type=basestring)
+    back_btn_descr = Field(required=True, type=basestring)
     back_url = Field(required=False, type=basestring)
 
 
 class _VehicleMarathonStylePreviewSchema(W2CSchema):
     vehicle_cd = Field(required=False, type=int)
     style_id = Field(required=True, type=int)
-    back_btn_descr = Field(required=False, type=basestring)
+    back_btn_descr = Field(required=True, type=basestring)
     back_url = Field(required=False, type=basestring)
     marathon_prefix = Field(required=True, type=basestring)
 
@@ -339,7 +338,7 @@ class _VehicleListStylePreviewSchema(W2CSchema):
     style_id = Field(required=True, type=int)
     vehicle_min_level = Field(required=False, type=int, default=10)
     vehicle_list = Field(required=False, type=(list, NoneType), validator=lambda value, _: _validateVehiclesCDList(value), default=DEFAULT_STYLED_VEHICLES)
-    back_btn_descr = Field(required=False, type=basestring)
+    back_btn_descr = Field(required=True, type=basestring)
     back_url = Field(required=False, type=basestring)
 
 
@@ -388,7 +387,7 @@ class VehiclePreviewWebApiMixin(object):
     @w2c(_VehiclePreviewSchema, 'vehicle_preview')
     def openVehiclePreview(self, cmd):
         if cmd.hidden_blocks is not None:
-            showPreviewFunc = partial(event_dispatcher.showConfigurableVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items or []))
+            showPreviewFunc = partial(event_dispatcher.showConfigurableVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items))
         else:
             showPreviewFunc = event_dispatcher.showVehiclePreview
         vehicleID = cmd.vehicle_id
@@ -529,8 +528,7 @@ class VehiclePreviewWebApiMixin(object):
                 showStyle = showBlueprintsExchangeStylePreview
             else:
                 showStyle = showStylePreview
-            backButtonText = backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()) if cmd.back_btn_descr else ''
-            showStyle(vehicleCD, style, style.getDescription(), cmd.back_url if isinstance(cmd.back_url, Callable) else self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backButtonText)
+            showStyle(vehicleCD, style, style.getDescription(), cmd.back_url if isinstance(cmd.back_url, Callable) else self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
             return True
         else:
             return False

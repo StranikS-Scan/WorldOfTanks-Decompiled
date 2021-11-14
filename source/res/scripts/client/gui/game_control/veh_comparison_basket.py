@@ -357,6 +357,7 @@ class _VehCompareData(object):
         dataClone.setInvEquipment(self.__invEquipment)
         dataClone.setHasCamouflage(self.__hasCamouflage)
         dataClone.setHasBattleBooster(self.__hasBattleBooster)
+        dataClone.setBattleBooster(self.getBattleBooster())
         dataClone.setInvHasCamouflage(self.__invHasCamouflage)
         dataClone.setSelectedShellIndex(self.getSelectedShellIndex())
         dataClone.setDynSlotType(self.__dynSlotType)

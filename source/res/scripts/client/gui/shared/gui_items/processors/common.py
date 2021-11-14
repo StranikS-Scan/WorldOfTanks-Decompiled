@@ -35,7 +35,7 @@ class TankmanBerthsBuyer(Processor):
         return makeI18nError(sysMsgKey='buy_tankmen_berths/{}'.format(errStr), defaultSysMsgKey='buy_tankmen_berths/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='buy_tankmen_berths/success', money=formatPrice(self.berthsPrice), type=SM_TYPE.PurchaseForGold)
+        return makeI18nSuccess(sysMsgKey='buy_tankmen_berths/success', money=formatPrice(self.berthsPrice, useStyle=True), type=SM_TYPE.PurchaseForGold)
 
     def _request(self, callback):
         _logger.debug('Make server request to buy tankman berths')

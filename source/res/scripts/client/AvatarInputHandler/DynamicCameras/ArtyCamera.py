@@ -140,6 +140,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         return
 
     def enable(self, targetPos, saveDist, switchToPos=None, switchToPlace=None):
+        BigWorld.wg_trajectory_drawer().setStrategicMode(False)
         self.__prevTime = 0.0
         if switchToPlace == SwitchToPlaces.TO_TRANSITION_DIST:
             self.__camDist = math_utils.clamp(self._cfg['distRange'][0], self._cfg['distRange'][1], self._cfg['transitionDist'])

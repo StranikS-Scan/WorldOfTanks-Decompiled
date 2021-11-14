@@ -7,6 +7,7 @@ from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
+from gui.prb_control.entities.bootcamp.pre_queue.actions_validator import BootcampActionsValidator
 from gui.shared.events import ViewEventType
 from gui.prb_control import prb_getters, prbDispatcherProperty
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
@@ -140,3 +141,6 @@ class BootcampEntity(PreQueueEntity):
 
     def _validateParentControl(self):
         return False
+
+    def _createActionsValidator(self):
+        return BootcampActionsValidator(self)

@@ -68,8 +68,6 @@ class BattleControllersFactory(IControllerFactory):
         if settings == BATTLE_CHANNEL.TEAM:
             if arenaVisitor.gui.isInEpicRange():
                 controller = battle_controllers.EpicTeamChannelController(channel)
-            elif arenaVisitor.gui.isEventBattle():
-                controller = battle_controllers.EventTeamChannelController(channel)
             else:
                 controller = battle_controllers.TeamChannelController(channel)
         elif settings == BATTLE_CHANNEL.COMMON:

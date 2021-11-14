@@ -4,7 +4,6 @@
 
 class BLOCKS_TOOLTIP_TYPES(object):
     TOOLTIP_TEXT_BLOCK_LINKAGE = 'TooltipTextBlockUI'
-    TOOLTIP_GLOW_TEXT_BLOCK_LINKAGE = 'TooltipGlowTextBlockUI'
     TOOLTIP_TEXT_WITH_BG_BLOCK_LINKAGE = 'TooltipTextWithBgBlockUI'
     TOOLTIP_BUILDUP_BLOCK_LINKAGE = 'TooltipBuildUpBlockUI'
     TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE = 'TooltipBuildUpBlockWhiteBgUI'
@@ -56,11 +55,9 @@ class BLOCKS_TOOLTIP_TYPES(object):
     TOOLTIP_SESSION_STATS_EFFICIENCY_PARAM_BLOCK = 'SessionStatsEfficiencyParamBlockUI'
     TOOLTIP_BUILD_BLOCK_VIOLET_LINKAGE = 'TooltipBuildUpBlockVioletBgUI'
     TOOLTIP_BUILD_BLOCK_VIOLET_BIG_LINKAGE = 'TooltipBuildUpBlockVioletBgBigUI'
-    TOOLTIP_BUILD_BLOCK_BLUE_BIG_LINKAGE = 'TooltipBuildUpBlockBlueBgBigUI'
     TOOLTIP_BUILD_BLOCK_GRAY_LINKAGE = 'TooltipBuildUpBlockGrayBgUI'
     TOOLTIP_EPIC_PROGRESS_BLOCK_LINKAGE = 'EpicProgressBlockUI'
     BATTLE_ROYALE_WEAK_ZONES_UI = 'BattleRoyaleWeakZonesBlockUI'
-    TOOLTIP_BUILD_BLOCK_EVENT_AWARD_UI = 'TooltipBuildUpBlockEventAwardUI'
     ALIGN_LEFT = 'left'
     ALIGN_RIGHT = 'right'
     ALIGN_CENTER = 'center'

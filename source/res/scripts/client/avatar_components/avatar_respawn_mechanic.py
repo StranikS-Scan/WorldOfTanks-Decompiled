@@ -60,8 +60,6 @@ class AvatarRespawnMechanic(object):
             return
 
     def explodeVehicleBeforeRespawn(self, vehID):
-        if BONUS_CAPS.checkAny(self.arenaBonusType, BONUS_CAPS.HALLOWEEN):
-            return
         RespawnDestroyEffect.play(vehID)
 
     def updatePlayerLives(self, lives):

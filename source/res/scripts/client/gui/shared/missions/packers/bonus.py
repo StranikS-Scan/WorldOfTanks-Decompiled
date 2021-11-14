@@ -13,7 +13,8 @@ from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusMo
 from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
-from gui.server_events.awards_formatters import TOKEN_SIZES, BATTLE_BONUS_X5_TOKEN, ItemsBonusFormatter, TokenBonusFormatter
+from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
+from gui.server_events.awards_formatters import TOKEN_SIZES, BATTLE_BONUS_X5_TOKEN, ItemsBonusFormatter, TokenBonusFormatter, formatCountLabel, AWARDS_SIZES
 from gui.server_events.formatters import COMPLEX_TOKEN, parseComplexToken, TokenComplex
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
@@ -153,6 +154,7 @@ class SimpleBonusUIPacker(BaseBonusUIPacker):
 
 class TokenBonusUIPacker(BaseBonusUIPacker):
     _eventsCache = dependency.descriptor(IEventsCache)
+    _RANKED_TOKEN_SOURCE = 'rankedPoint'
 
     @classmethod
     def _pack(cls, bonus):
@@ -201,17 +203,21 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
     def __getTokenBonusType(cls, tokenID, complexToken):
         if complexToken.isDisplayable:
             return COMPLEX_TOKEN
-        return BATTLE_BONUS_X5_TOKEN if tokenID.startswith(BATTLE_BONUS_X5_TOKEN) else ''
+        if tokenID.startswith(BATTLE_BONUS_X5_TOKEN):
+            return BATTLE_BONUS_X5_TOKEN
+        return YEAR_POINTS_TOKEN if tokenID.startswith(YEAR_POINTS_TOKEN) else ''
 
     @classmethod
     def __getTokenBonusPackers(cls):
         return {BATTLE_BONUS_X5_TOKEN: cls.__packBattleBonusX5Token,
-         COMPLEX_TOKEN: cls.__packComplexToken}
+         COMPLEX_TOKEN: cls.__packComplexToken,
+         YEAR_POINTS_TOKEN: cls.__packRankedToken}
 
     @classmethod
     def __getTooltipsPackers(cls):
         return {BATTLE_BONUS_X5_TOKEN: TokenBonusFormatter.getBattleBonusX5Tooltip,
-         COMPLEX_TOKEN: cls.__getComplexToolTip}
+         COMPLEX_TOKEN: cls.__getComplexToolTip,
+         YEAR_POINTS_TOKEN: cls.__getRankedPointToolTip}
 
     @classmethod
     def __packToken(cls, bonusPacker, bonus, *args):
@@ -231,6 +237,14 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
         return model
 
     @classmethod
+    def __packRankedToken(cls, model, bonus, *args):
+        model.setUserName(backport.text(R.strings.tooltips.rankedBattleView.scorePoint.short.header()))
+        model.setIconSmall(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.SMALL).dyn(cls._RANKED_TOKEN_SOURCE)()))
+        model.setIconBig(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.BIG).dyn(cls._RANKED_TOKEN_SOURCE)()))
+        model.setLabel(formatCountLabel(bonus.getCount()))
+        return model
+
+    @classmethod
     def __packBattleBonusX5Token(cls, model, bonus, *args):
         model.setValue(str(bonus.getCount()))
         return model
@@ -241,6 +255,10 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
         userName = i18n.makeString(webCache.getTokenInfo(complexToken.styleID))
         tooltip = makeTooltip(i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=userName), i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY))
         return tooltip
+
+    @classmethod
+    def __getRankedPointToolTip(cls, *_):
+        return makeTooltip(header=backport.text(R.strings.tooltips.rankedBattleView.scorePoint.header()), body=backport.text(R.strings.tooltips.rankedBattleView.scorePoint.body()))
 
 
 class ItemBonusUIPacker(BaseBonusUIPacker):

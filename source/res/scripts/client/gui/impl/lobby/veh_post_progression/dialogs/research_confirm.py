@@ -127,7 +127,7 @@ class PostProgressionResearchMainContent(BaseSubModelView):
             features = viewModel.getUnlockFeatures()
             stepsResearch.clear()
             features.clear()
-            for step in steps:
+            for step in sorted(steps, key=lambda s: s.getLevel()):
                 stepModel = self.__fillStepModel(step)
                 if step.action.actionType == ACTION_TYPES.FEATURE:
                     feature = self.__fillModificationModel(step)

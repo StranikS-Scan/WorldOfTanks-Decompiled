@@ -31,7 +31,7 @@ class VOIPManager(VOIPHandler):
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
-        _logger.debug('VOIPManager.Create')
+        _logger.info('Create')
         super(VOIPManager, self).__init__()
         self.__initialized = False
         self.__enabled = False
@@ -80,7 +80,7 @@ class VOIPManager(VOIPHandler):
         self.__fsm.onStateChanged -= self.__onStateChanged
         self.__cancelReloginCallback()
         BigWorld.VOIP.finalise()
-        _logger.debug('VOIPManager.Destroy')
+        _logger.info('Destroy')
 
     def isEnabled(self):
         return self.__enabled
@@ -140,7 +140,7 @@ class VOIPManager(VOIPHandler):
         return self.__loggedIn
 
     def onConnected(self):
-        _logger.debug('VOIPManager.Subscribe')
+        _logger.info('Subscribe')
         self.__loginAttemptsRemained = 2
         voipEvents = g_messengerEvents.voip
         voipEvents.onChannelAvailable += self.__me_onChannelAvailable
@@ -151,7 +151,7 @@ class VOIPManager(VOIPHandler):
         usersEvents.onUserActionReceived += self.__me_onUserActionReceived
 
     def onDisconnected(self):
-        _logger.debug('VOIPManager.Unsubscribe')
+        _logger.info('Unsubscribe')
         voipEvents = g_messengerEvents.voip
         voipEvents.onChannelAvailable -= self.__me_onChannelAvailable
         voipEvents.onChannelLost -= self.__me_onChannelLost
@@ -188,7 +188,7 @@ class VOIPManager(VOIPHandler):
             channelID = hash(channelUrl)
             self.settingsCore.applySetting(SOUND.VOIP_ENABLE_CHANNEL, (isEnabled, channelID))
         else:
-            _logger.error('VOIPManager.EnableCurrentChannel: Failed to enable channel. No channel available!')
+            _logger.error('EnableCurrentChannel: Failed to enable channel. No channel available!')
 
     def isCurrentChannelEnabled(self):
         params = self.bwProto.voipProvider.getChannelParams()
@@ -199,7 +199,7 @@ class VOIPManager(VOIPHandler):
         return False
 
     def __enable(self, isInitFromPrefs):
-        _logger.debug('VOIPManager.Enable')
+        _logger.info('Enable')
         self.__enabled = True
         if self.__channel[0]:
             if not self.__user[0]:
@@ -208,14 +208,14 @@ class VOIPManager(VOIPHandler):
                 self.enableCurrentChannel(True)
 
     def __disable(self):
-        _logger.debug('VOIPManager.Disable')
+        _logger.info('Disable')
         self.__enabled = False
 
     def initialize(self, domain, server):
         if self.__initialized:
             _logger.warning('VOIPManager is already initialized')
             return
-        _logger.debug('VOIPManager.Initialize')
+        _logger.info('Initialize')
         self.__voipServer = server
         self.__voipDomain = domain
         self.__testDomain = 'sip:confctl-2@' + self.__voipDomain
@@ -246,7 +246,7 @@ class VOIPManager(VOIPHandler):
             self.__fsm.update(self)
 
     def __loginUser(self):
-        _logger.debug('Login Request: %s', self.__user[0])
+        _logger.info('Login Request: %s', self.__user[0])
         cmd = {VOIPCommon.KEY_PARTICIPANT_PROPERTY_FREQUENCY: '100'}
         BigWorld.VOIP.login(self.__user[0], self.__user[1], cmd)
 
@@ -257,7 +257,7 @@ class VOIPManager(VOIPHandler):
 
     def __reloginUser(self):
         self.__loginAttemptsRemained -= 1
-        _logger.debug('VOIPHandler.ReloginUser. Attempts remained: %d', self.__loginAttemptsRemained)
+        _logger.warning('VOIPHandler.ReloginUser. Attempts remained: %d', self.__loginAttemptsRemained)
         if self.__enabled:
             self.__requestCredentials(1)
 
@@ -269,11 +269,11 @@ class VOIPManager(VOIPHandler):
 
     def __setReloginCallback(self):
         delay = self.__expBackOff.next()
-        _logger.debug('__setReloginCallback. Next attempt after %d seconds', delay)
+        _logger.info('__setReloginCallback. Next attempt after %d seconds', delay)
         self.__reLoginCallbackID = BigWorld.callback(delay, self.__loginUserOnCallback)
 
     def logout(self):
-        _logger.debug('VOIPManager.Logout')
+        _logger.info('Logout')
         self.__clearUser()
         self.__clearDesiredChannel()
         self.__fsm.update(self)
@@ -283,7 +283,7 @@ class VOIPManager(VOIPHandler):
             self.initialize(self.__voipDomain, self.__voipServer)
         if not self.__user[0] and self.isEnabled():
             self.__requestCredentials()
-        _logger.debug('VOIPManager.ReceivedAvailableChannel: %s', channel)
+        _logger.info('ReceivedAvailableChannel: %s', channel)
         self.__channel = [channel, password]
         self.__fsm.update(self)
         self.__evaluateAutoJoinChannel(channel)
@@ -297,27 +297,27 @@ class VOIPManager(VOIPHandler):
             self.enableCurrentChannel(self.__isAutoJoinChannel(), autoEnableVOIP=False)
 
     def __joinChannel(self, channel, password):
-        _logger.debug("VOIPManager.JoinChannel '%s'", channel)
+        _logger.info("JoinChannel '%s'", channel)
         BigWorld.VOIP.joinChannel(channel, password)
 
     def __leaveChannel(self):
         if not self.__initialized:
             return
-        _logger.debug('VOIPManager.LeaveChannel')
+        _logger.info('LeaveChannel')
         self.__clearDesiredChannel()
         self.__fsm.update(self)
 
     def enterTestChannel(self):
         if self.__inTesting:
             return
-        _logger.debug('VOIPManager.EnterTestChannel: %s', self.__testDomain)
+        _logger.info('EnterTestChannel: %s', self.__testDomain)
         self.__inTesting = True
         self.__setAvailableChannel(self.__testDomain, '')
 
     def leaveTestChannel(self):
         if not self.__inTesting:
             return
-        _logger.debug('VOIPManager.LeaveTestChannel')
+        _logger.info('LeaveTestChannel')
         self.__inTesting = False
         params = self.bwProto.voipProvider.getChannelParams()
         if params[0]:
@@ -342,7 +342,7 @@ class VOIPManager(VOIPHandler):
         SoundGroups.g_instance.restoreWWISEVolume()
 
     def setVoiceActivation(self, enabled):
-        _logger.debug('VOIPManager.SetVoiceActivation: %s', str(enabled))
+        _logger.debug('SetVoiceActivation: %s', str(enabled))
         self.__activateMicByVoice = enabled
         self.setMicMute(not enabled)
 
@@ -354,18 +354,18 @@ class VOIPManager(VOIPHandler):
         self.__setMicMute(muted)
 
     def __setMicMute(self, muted):
-        _logger.debug('VOIPManager.SetMicMute: %s', str(muted))
+        _logger.debug('SetMicMute: %s', str(muted))
         if muted:
             BigWorld.VOIP.disableMicrophone()
         else:
             BigWorld.VOIP.enableMicrophone()
 
     def requestCaptureDevices(self):
-        _logger.debug('VOIPManager.RequestCaptureDevices')
+        _logger.debug('RequestCaptureDevices')
         BigWorld.VOIP.getCaptureDevices()
 
     def setCaptureDevice(self, deviceName):
-        _logger.debug('VOIPManager.SetCaptureDevice: %s', deviceName)
+        _logger.info('SetCaptureDevice: %s', deviceName)
         BigWorld.VOIP.setCaptureDevice(deviceName)
 
     def isParticipantTalking(self, dbid):
@@ -373,7 +373,7 @@ class VOIPManager(VOIPHandler):
         return outcome
 
     def __requestCredentials(self, reset=0):
-        _logger.debug('VOIPManager.RequestUserCredentials')
+        _logger.info('RequestUserCredentials')
         self.bwProto.voipProvider.requestCredentials(reset)
 
     def __clearDesiredChannel(self):
@@ -383,12 +383,12 @@ class VOIPManager(VOIPHandler):
         self.__user = ['', '']
 
     def __onChatActionMute(self, dbid, muted):
-        _logger.debug('VOIPManager.OnChatActionMute: dbID = %d, muted = %r', dbid, muted)
+        _logger.error('OnChatActionMute: dbID = %d, muted = %r', dbid, muted)
         if dbid in self.__channelUsers and self.__channelUsers[dbid]['muted'] != muted:
             self.__muteParticipantForMe(dbid, muted)
 
     def __muteParticipantForMe(self, dbid, mute):
-        _logger.debug('VOIPManager.MuteParticipantForMe: %d, %s', dbid, str(mute))
+        _logger.error('MuteParticipantForMe: %d, %s', dbid, str(mute))
         self.__channelUsers[dbid]['muted'] = mute
         uri = self.__channelUsers[dbid]['uri']
         cmd = {VOIPCommon.KEY_COMMAND: VOIPCommon.CMD_SET_PARTICIPANT_MUTE,
@@ -414,13 +414,13 @@ class VOIPManager(VOIPHandler):
             return -1
 
     def __sendLeaveChannelCommand(self, channel):
-        _logger.debug('Leaving channel %s', channel)
+        _logger.info('Leaving channel %s', channel)
         if channel:
             BigWorld.VOIP.leaveChannel(channel)
         self.__fsm.update(self)
 
     def __resetToInitializedState(self):
-        _logger.debug('VOIPManager.__resetToInitializesState')
+        _logger.debug('resetToInitializesState')
         if self.__currentChannel != '':
             for dbid in self.__channelUsers.iterkeys():
                 self.onPlayerSpeaking(dbid, False)
@@ -444,7 +444,7 @@ class VOIPManager(VOIPHandler):
             self.setMicMute(muteMic)
             self.__joinChannel(self.__channel[0], self.__channel[1])
         elif newState == STATE.JOINED_CHANNEL:
-            _logger.debug('Joined to channel: %s', self.__currentChannel)
+            _logger.info('Joined to channel: %s', self.__currentChannel)
             self.__fsm.update(self)
         elif newState == STATE.LEAVING_CHANNEL:
             self.__sendLeaveChannelCommand(self.getCurrentChannel())
@@ -453,7 +453,7 @@ class VOIPManager(VOIPHandler):
             BigWorld.VOIP.logout()
 
     def onVoipInited(self, data):
-        _logger.debug('VOIPManager.onVoipInited')
+        _logger.debug('onVoipInited')
         returnCode = int(data[VOIPCommon.KEY_RETURN_CODE])
         if returnCode == VOIPCommon.CODE_SUCCESS:
             self.__initialized = True
@@ -502,12 +502,12 @@ class VOIPManager(VOIPHandler):
         returnCode = int(data[VOIPCommon.KEY_RETURN_CODE])
         statusCode = int(data[VOIPCommon.KEY_STATUS_CODE])
         statusString = data[VOIPCommon.KEY_STATUS_STRING]
-        _logger.debug('VOIPManager.onLoginStateChange: Return code %s', returnCode)
+        _logger.debug('onLoginStateChange: Return code %s', returnCode)
         if returnCode == VOIPCommon.CODE_SUCCESS:
             state = int(data[VOIPCommon.KEY_STATE])
             _logger.debug('Return state %s', state)
             if state == VOIPCommon.STATE_LOGGED_IN:
-                _logger.debug('VOIPManager.onLoginStateChange: LOGGED IN')
+                _logger.debug('onLoginStateChange: LOGGED IN')
                 if self.getAPI() == VOIP_SUPPORTED_API.VIVOX:
                     self.bwProto.voipProvider.logVivoxLogin()
                 self.__loggedIn = True
@@ -516,17 +516,17 @@ class VOIPManager(VOIPHandler):
                     self.__joinChannel(self.__channel[0], self.__channel[1])
                 self.__fsm.update(self)
             elif state == VOIPCommon.STATE_LOGGED_OUT:
-                _logger.debug('VOIPManager.onLoginStateChange: LOGGED OUT %d - %s', statusCode, statusString)
+                _logger.debug('onLoginStateChange: LOGGED OUT %d - %s', statusCode, statusString)
                 if self.__normalLogout:
-                    _logger.debug('VOIPManager.onLoginStateChange: Normal logout')
+                    _logger.debug('onLoginStateChange: Normal logout')
                     self.__normalLogout = False
                     self.__loggedIn = False
                     self.__fsm.update(self)
                 elif self.__reLoginCallbackID is None:
-                    _logger.debug('VOIPManager.onLoginStateChange: Network lost logout')
+                    _logger.debug('onLoginStateChange: Network lost logout')
                     self.__setReloginCallback()
             elif state == VOIPCommon.STATE_LOGGIN_OUT:
-                _logger.debug('VOIPManager.onLoginStateChange: LOGGING OUT %d - %s', statusCode, statusString)
+                _logger.debug('onLoginStateChange: LOGGING OUT %d - %s', statusCode, statusString)
         else:
             _logger.info('---------------------------')
             _logger.info("ERROR: '%d' - '%s'", statusCode, statusString)
@@ -635,7 +635,7 @@ class VOIPManager(VOIPHandler):
             self.settingsCore.applySetting(SOUND.VOIP_ENABLE_CHANNEL, (False, 0))
 
     def __me_onCredentialReceived(self, name, pwd):
-        _logger.debug('VOIPManager.OnUserCredentials: %s', name)
+        _logger.debug('OnUserCredentials: %s', name)
         self.__login(name, pwd)
 
     def __me_onUsersListReceived(self, tags):

@@ -4,13 +4,15 @@ from collections import namedtuple
 from functools import partial
 import logging
 import BigWorld
-import Event
+from aih_constants import CTRL_MODE_NAME
 from client_arena_component_system import ClientArenaComponent
 from constants import ARENA_SYNC_OBJECTS, ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR_DEV
+from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, FEEDBACK_EVENT_ID
 from gui.battle_control.matrix_factory import makeVehicleEntityMP
 from helpers import dependency
+from helpers.CallbackDelayer import CallbackDelayer
 from shared_utils import CONST_CONTAINER
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -136,14 +138,13 @@ class Effect(object):
         self.providingVehicles.clear()
 
 
-class ArenaEquipmentComponent(ClientArenaComponent):
+class ArenaEquipmentComponent(ClientArenaComponent, CallbackDelayer):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __dynamicObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
 
     def __init__(self, componentSystem):
         ClientArenaComponent.__init__(self, componentSystem)
-        self.onSmokeScreenStarted = Event.Event(self._eventManager)
-        self.onSmokeScreenEnded = Event.Event(self._eventManager)
+        CallbackDelayer.__init__(self)
         self.__smokeScreen = dict()
         self.__healingEffect = None
         self.__inspiringEffect = None
@@ -159,10 +160,13 @@ class ArenaEquipmentComponent(ClientArenaComponent):
             self.__healingEffect = Effect('healPoint', HealPointArgsAdapter, VEHICLE_VIEW_STATE.HEALING, FEEDBACK_EVENT_ID.VEHICLE_HEAL_POINT, dynamicObjects.getHealPointEffect())
             if BigWorld.player().arenaGuiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
                 self.__repairPointEffect = Effect('repairPoint', HealPointArgsAdapter, VEHICLE_VIEW_STATE.REPAIR_POINT, FEEDBACK_EVENT_ID.VEHICLE_REPAIR_POINT, dynamicObjects.getRepairPointEffect())
+        self.__subscribe()
         return
 
     def deactivate(self):
         super(ArenaEquipmentComponent, self).deactivate()
+        CallbackDelayer.destroy(self)
+        self.__unsubscribe()
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.SMOKE, '', self.__onSmokeScreenUpdated)
         self.__smokeScreen.clear()
         if self.__inspiringEffect is not None:
@@ -171,6 +175,24 @@ class ArenaEquipmentComponent(ClientArenaComponent):
             self.__healingEffect.destroy()
         if self.__repairPointEffect is not None:
             self.__repairPointEffect.destroy()
+        return
+
+    def __subscribe(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        aih = avatar_getter.getInputHandler()
+        if aih is not None:
+            aih.onCameraChanged += self.__onCameraChanged
+        return
+
+    def __unsubscribe(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        aih = avatar_getter.getInputHandler()
+        if aih is not None:
+            aih.onCameraChanged -= self.__onCameraChanged
         return
 
     def __removeEffect(self, vehicleId, effect):
@@ -307,6 +329,7 @@ class ArenaEquipmentComponent(ClientArenaComponent):
             args = effect.args(isSourceVehicle, True, data.inactivationEndTime, data.inactivationEndTime - data.inactivationStartTime, data.primary, data.senderKey, data.equipmentID)
             data.setNextCallback(partial(self.__evaluateExposedData, effect=effect))
         else:
+            self.__checkAffectComponent(data.vehicleID, RepairAffectComponent, False)
             args = effect.args(None, None, None, None, None, None, None)
             data.destroy()
             del effect.exposedVehicles[data.vehicleID]
@@ -375,4 +398,25 @@ class ArenaEquipmentComponent(ClientArenaComponent):
             self.__smokeScreen[key].stop()
             self.__smokeScreen[key] = None
 
+        return
+
+    def __onVehicleStateUpdated(self, state, value):
+        if state == VEHICLE_VIEW_STATE.SMOKE:
+            self.__updateSmokePostEffect()
+
+    def __onCameraChanged(self, ctrlMode, _=None):
+        self.__updateSmokePostEffect()
+
+    def __updateSmokePostEffect(self):
+        self.delayCallback(0.1, self.__doUpdateSmokePostEffect)
+
+    @staticmethod
+    def __doUpdateSmokePostEffect():
+        aih = avatar_getter.getInputHandler()
+        avatar = BigWorld.player()
+        if avatar is None or aih is None or aih.ctrlModeName == CTRL_MODE_NAME.DEATH_FREE_CAM:
+            SmokeScreen.enableSmokePostEffect(enabled=False)
+        else:
+            smokeInfos = avatar.lastSmokeInfos
+            SmokeScreen.enableSmokePostEffect(enabled=bool(smokeInfos), smokeInfos=smokeInfos)
         return

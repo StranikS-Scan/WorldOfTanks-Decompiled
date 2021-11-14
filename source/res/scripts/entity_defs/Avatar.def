@@ -16,9 +16,6 @@
     <Interface>	VehicleRemovalController_Avatar	</Interface>
     <Interface>	VehicleHealthBroadcastListenerComponent_Avatar	</Interface>
     <Interface>	TriggersController_Avatar	</Interface>
-    <Interface>	WaveBotsSpawnController_Avatar	</Interface>
-    <Interface>	BattleHintsController_Avatar	</Interface>
-    <Interface>	WarningHintsController_Avatar	</Interface>
     <Interface>	AvatarEpic	</Interface>
   </Implements>
   <Volatile>
@@ -220,11 +217,6 @@
       <Type>	PLAY_LIMITS	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
     </playLimits>
-    <clientData>
-      <Type>	PYTHON	</Type>
-      <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	{}	</Default>
-    </clientData>
   </Properties>
   <TempProperties>
     <_Avatar__p></_Avatar__p>
@@ -311,13 +303,6 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
     </showOwnVehicleHitDirection>
-    <showVehicleDamageInfo>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	EXTRA_ID	</Arg>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT16	</Arg>
-    </showVehicleDamageInfo>
     <showOtherVehicleDamagedDevices>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	ARRAY	  <of>	EXTRA_ID	</of>
@@ -390,7 +375,7 @@
       </VariableLengthHeaderSize>
     </updateArena>
     <updatePositions>
-      <Arg>	ARRAY	  <of>	UINT16	</of>
+      <Arg>	ARRAY	  <of>	UINT8	</of>
       </Arg>
       <Arg>	ARRAY	  <of>	INT16	</of>
       </Arg>
@@ -461,20 +446,6 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR3	</Arg>
     </enemySPGShotSound>
-    <updateScenarioTimer>
-      <Arg>	PYTHON	</Arg>
-      <AllowUnsafeData>	true	</AllowUnsafeData>
-    </updateScenarioTimer>
-    <sendPlayerBattleLogNotification>
-      <Arg>	STRING	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <AllowUnsafeData>	true	</AllowUnsafeData>
-    </sendPlayerBattleLogNotification>
-    <sendEquipmentBattleLogNotification>
-      <Arg>	UINT32	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	BOOL	</Arg>
-    </sendEquipmentBattleLogNotification>
   </ClientMethods>
   <CellMethods>
     <autoAim>
@@ -603,27 +574,27 @@
       <Arg>	UINT8	</Arg>
     </onRankUpdated>
     <vehicle_moveWith>
-      <Exposed></Exposed>
+      <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	UINT8	</Arg>
     </vehicle_moveWith>
     <vehicle_shoot>
-      <Exposed></Exposed>
+      <Exposed>	OWN_CLIENT	</Exposed>
     </vehicle_shoot>
     <vehicle_trackWorldPointWithGun>
-      <Exposed></Exposed>
+      <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	VECTOR3	</Arg>
     </vehicle_trackWorldPointWithGun>
     <vehicle_trackRelativePointWithGun>
-      <Exposed></Exposed>
+      <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	VECTOR3	</Arg>
     </vehicle_trackRelativePointWithGun>
     <vehicle_stopTrackingWithGun>
-      <Exposed></Exposed>
+      <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
     </vehicle_stopTrackingWithGun>
     <vehicle_changeSetting>
-      <Exposed></Exposed>
+      <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
     </vehicle_changeSetting>
@@ -698,13 +669,6 @@
       <Arg>	ARRAY	  <of>	FLOAT32	</of>
       </Arg>
     </updatePositions>
-    <showVehicleDamageInfo>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	EXTRA_ID	</Arg>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT16	</Arg>
-    </showVehicleDamageInfo>
     <vehicle_teleport>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
@@ -776,9 +740,6 @@
       <Arg>	CLIENT_STATUS_STATISTICS	</Arg>
     </reportClientStats>
     <setAvatarClient></setAvatarClient>
-    <onAFKRulesViolation>
-      <Arg>	UINT64	</Arg>
-    </onAFKRulesViolation>
     <leaveArenaByAccount>
       <Arg>	BOOL	</Arg>
     </leaveArenaByAccount>

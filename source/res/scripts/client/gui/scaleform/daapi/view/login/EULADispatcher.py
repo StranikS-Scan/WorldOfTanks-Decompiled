@@ -15,6 +15,8 @@ from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from Event import Event
 from adisp import async
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import ISteamCompletionController, IDemoAccCompletionController
+from skeletons.gui.lobby_context import ILobbyContext
 VERSION_TAG = 'showLicense'
 EULA_TEMPLATES_FILE_PATH = 'gui/EULA_templates.xml'
 EULA_FILE_PATH = 'text/EULA.xml'
@@ -22,6 +24,9 @@ EULA_FILE_PATH = 'text/EULA.xml'
 class EULADispatcher(EventSystemEntity):
     onEULAClosed = Event()
     settingsCore = dependency.descriptor(ISettingsCore)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    _demoAccController = dependency.descriptor(IDemoAccCompletionController)
+    _steamRegistrationCtrl = dependency.descriptor(ISteamCompletionController)
 
     def __init__(self):
         super(EULADispatcher, self).__init__()
@@ -62,7 +67,8 @@ class EULADispatcher(EventSystemEntity):
         self.serverVersion = int(filters['version'])
         self.isShow = False
         xmlVersion = self.EULAVersion.xmlVersion
-        if self.serverVersion != xmlVersion and xmlVersion != 0:
+        EULASettings = self.lobbyContext.getServerSettings().eula
+        if self.serverVersion != xmlVersion and xmlVersion != 0 and EULASettings.isEnabled() and (not self._demoAccController.isDemoAccount or EULASettings.isDemoAccEnabled()) and (not self._steamRegistrationCtrl.isSteamAccount or EULASettings.isSteamAccEnabled()):
             self.isShow = True
         if self.isShow:
             Waiting.close()

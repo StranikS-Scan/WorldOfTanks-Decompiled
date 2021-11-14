@@ -10,12 +10,12 @@ import constants
 import WWISE
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from SoundGroups import g_instance as SoundGroupsInstance
-from account_helpers import account_completion
 from account_helpers.AccountSettings import AccountSettings, QUESTS, QUEST_DELTAS, QUEST_DELTAS_COMPLETION, ACTIVE_TEST_PARTICIPATION_CONFIRMED
 from account_helpers.AccountSettings import KNOWN_SELECTOR_BATTLES
 from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS, NEW_SHOP_TABS, LAST_SHOP_ACTION_COUNTER_MODIFICATION, OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES
 from account_helpers.renewable_subscription import RenewableSubscription
 from adisp import process, async
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from constants import PREMIUM_TYPE, EPlatoonButtonState
 from debug_utils import LOG_ERROR
 from frameworks.wulf import ViewFlags, WindowLayer
@@ -23,7 +23,6 @@ from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatTimeAndDate
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getAchievementsTabCounter
 from gui.Scaleform.daapi.view.lobby.mapbox.mapbox_helpers import getMapboxFightBtnTooltipData
@@ -49,7 +48,8 @@ from gui.game_control.wallet import WalletController
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.platform.wgnp.controller import isEmailConfirmationNeeded, getEmail, isEmailAddingNeeded
+from gui.platform.base.statuses.constants import StatusTypes
+from gui.platform.wgnp.demo_account.controller import NICKNAME_CONTEXT
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
@@ -78,25 +78,27 @@ from predefined_hosts import g_preDefinedHosts, PING_STATUSES
 from shared_utils import CONST_CONTAINER, BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.afk_controller import IAFKController
 from skeletons.gui.demount_kit import IDemountKitNovelty
-from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBoostersController, IBootcampController, IChinaController, IEpicBattleMetaGameController, IGameSessionController, IIGRController, IRankedBattlesController, IServerStatsController, IWalletController, IClanNotificationController, IBattleRoyaleController, IUISpamController, IPlatoonController, IMapboxController, IMapsTrainingController
+from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBoostersController, IBootcampController, IChinaController, IEpicBattleMetaGameController, IGameSessionController, IIGRController, IRankedBattlesController, IServerStatsController, IWalletController, IClanNotificationController, IBattleRoyaleController, IUISpamController, IPlatoonController, IMapboxController, IMapsTrainingController, ISteamCompletionController, IEventBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.offers import IOffersNovelty
-from skeletons.gui.platform.wgnp_controller import IWGNPRequestController
+from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController, IWGNPDemoAccRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.techtree_events import ITechTreeEventsListener
-from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.tutorial import ITutorialLoader
+from uilogging.account_completion.loggers import AccountCompletionLobbyHeaderLogger
 from uilogging.mode_selector.constants import LOG_ACTIONS, LOG_CLOSE_DETAILS, SELECTOR_BUTTON_TOOLTIP_LOG_ID
 from uilogging.mode_selector.loggers import ModeSelectorEntryPointLogger
 from PlayerEvents import g_playerEvents
+if typing.TYPE_CHECKING:
+    from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
+    from gui.platform.wgnp.demo_account.statuses import DemoAccNicknameStatus
 _MAX_HEADER_SERVER_NAME_LEN = 6
 _SERVER_NAME_PREFIX = '%s..'
 _SHORT_VALUE_DIVIDER = 1000000
@@ -179,7 +181,6 @@ class _LobbyHeaderVisibilityHelper(object):
 
 
 class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
-    afkController = dependency.descriptor(IAFKController)
     __PREM_WARNING_LIMIT = time_utils.ONE_DAY
 
     class BUTTONS(CONST_CONTAINER):
@@ -244,17 +245,20 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     settingsCore = dependency.descriptor(ISettingsCore)
     wallet = dependency.descriptor(IWalletController)
     offersNovelty = dependency.descriptor(IOffersNovelty)
-    gameEventController = dependency.descriptor(IGameEventController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __mapsTrainingController = dependency.descriptor(IMapsTrainingController)
+    __eventBattlesController = dependency.descriptor(IEventBattlesController)
     uiSpamController = dependency.descriptor(IUISpamController)
     platoonCtrl = dependency.descriptor(IPlatoonController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __loginManager = dependency.descriptor(ILoginManager)
-    wgnpController = dependency.descriptor(IWGNPRequestController)
+    wgnpSteamAccCtrl = dependency.descriptor(IWGNPSteamAccRequestController)
+    steamRegistrationCtrl = dependency.descriptor(ISteamCompletionController)
+    wgnpDemoAccCtrl = dependency.descriptor(IWGNPDemoAccRequestController)
     uiModeSelectorButtonLogger = ModeSelectorEntryPointLogger()
+    uiAccountCompletionLogger = AccountCompletionLobbyHeaderLogger()
     __SELECTOR_TOOLTIP_TYPE = TOOLTIPS.HEADER_BATTLETYPE
 
     def __init__(self):
@@ -371,6 +375,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
             dashbordView = self.gui.windowsManager.getViewByLayoutID(R.views.lobby.premacc.prem_dashboard_view.PremDashboardView())
             if dashbordView is None:
+                self.uiAccountCompletionLogger.logShowDashboard()
                 shared_events.showDashboardView()
             else:
                 hideWebBrowserOverlay()
@@ -533,7 +538,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.techTreeEventsListener.onSettingsChanged += self._updateHangarMenuData
         self._renewableSubInfo.onRenewableSubscriptionDataChanged += self._onRenewableSubscriptionDataChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
-        self.gameEventController.onSquadDifficultyLevelChanged += self._updatePrebattleControls
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -638,7 +642,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.demountKitNovelty.onUpdated -= self.__updateStorageTabCounter
         self.offersNovelty.onUpdated -= self.__updateStorageTabCounter
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
-        self.gameEventController.onSquadDifficultyLevelChanged -= self._updatePrebattleControls
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitLeft -= self.__unitMgr_onUnitLeft
@@ -648,14 +651,19 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._removeWGNPListeners()
 
     def _addWGNPListeners(self):
-        self.wgnpController.onEmailConfirmed += self.__onEmailConfirmed
-        self.wgnpController.onEmailAdded += self.__onEmailAdded
-        self.wgnpController.onEmailAddNeeded += self.__onEmailAddNeeded
+        self.wgnpSteamAccCtrl.statusEvents.subscribe(StatusTypes.CONFIRMED, self.__onEmailConfirmed)
+        self.wgnpSteamAccCtrl.statusEvents.subscribe(StatusTypes.ADDED, self.__onEmailAdded)
+        self.wgnpSteamAccCtrl.statusEvents.subscribe(StatusTypes.ADD_NEEDED, self.__onEmailAddNeeded)
+        self.wgnpDemoAccCtrl.statusEvents.subscribe(StatusTypes.PROCESSING, self.__onDemoAccountRenameProcessing, context=NICKNAME_CONTEXT)
+        self.wgnpDemoAccCtrl.statusEvents.subscribe(StatusTypes.ADDED, self.__onDemoAccountRenameCompleted, context=NICKNAME_CONTEXT)
+        self.wgnpDemoAccCtrl.statusEvents.subscribe(StatusTypes.UNDEFINED, self.__onDemoAccountRenameCompleted, context=NICKNAME_CONTEXT)
 
     def _removeWGNPListeners(self):
-        self.wgnpController.onEmailConfirmed -= self.__onEmailConfirmed
-        self.wgnpController.onEmailAdded -= self.__onEmailAdded
-        self.wgnpController.onEmailAddNeeded -= self.__onEmailAddNeeded
+        self.wgnpSteamAccCtrl.statusEvents.unsubscribe(StatusTypes.CONFIRMED, self.__onEmailConfirmed)
+        self.wgnpSteamAccCtrl.statusEvents.unsubscribe(StatusTypes.ADDED, self.__onEmailAdded)
+        self.wgnpSteamAccCtrl.statusEvents.unsubscribe(StatusTypes.ADD_NEEDED, self.__onEmailAddNeeded)
+        self.wgnpDemoAccCtrl.statusEvents.unsubscribe(StatusTypes.PROCESSING, self.__onDemoAccountRenameProcessing, context=NICKNAME_CONTEXT)
+        self.wgnpDemoAccCtrl.statusEvents.unsubscribe(StatusTypes.ADDED, self.__onDemoAccountRenameCompleted, context=NICKNAME_CONTEXT)
 
     def __closeWindowsWithTopSubViewLayer(self):
         windows = self.gui.windowsManager.findWindows(lambda w: w.layer == WindowLayer.TOP_SUB_VIEW)
@@ -700,6 +708,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
              'userName': name,
              'clanAbbrev': clanAbbrev})
             self.__updateAccountCompletionStatus()
+            self.__updateDemoAccountRenamingStatus()
             self.__updateBoostersStatus()
             self.__removeClanIconFromMemory()
             if g_clanCache.clanDBID:
@@ -721,26 +730,50 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             data['userVO'] = userVO
         self.as_nameResponseS(data)
 
-    def __onEmailConfirmed(self):
+    def __onEmailConfirmed(self, status):
         self.__setPlayerInfo(TOOLTIPS.HEADER_ACCOUNT, TOOLTIP_TYPES.COMPLEX, warningIcon=False)
 
-    def __onEmailAdded(self, email):
-        self.__setPlayerInfo(TOOLTIPS_CONSTANTS.ACCOUNT_COMPLETION, TOOLTIP_TYPES.WULF, warningIcon=True, tooltipArgs=[email])
+    def __onEmailAdded(self, status):
+        self.__setPlayerInfo(TOOLTIPS_CONSTANTS.ACCOUNT_COMPLETION, TOOLTIP_TYPES.WULF, warningIcon=True, tooltipArgs=[status.email])
 
-    def __onEmailAddNeeded(self):
+    def __onEmailAddNeeded(self, status=None):
         self.__setPlayerInfo(TOOLTIPS_CONSTANTS.ACCOUNT_COMPLETION, TOOLTIP_TYPES.WULF, warningIcon=True)
+
+    def __onDemoAccountRenameProcessing(self, status=None):
+        self.__setPlayerInfo(TOOLTIPS_CONSTANTS.DEMO_ACCOUNT_RENAME_PROCESSING, TOOLTIP_TYPES.WULF, warningIcon=True)
+
+    def __onDemoAccountRenameCompleted(self, status=None):
+        self.__setPlayerInfo(TOOLTIPS.HEADER_ACCOUNT, TOOLTIP_TYPES.COMPLEX, warningIcon=False)
 
     @future_async.async
     def __updateAccountCompletionStatus(self):
-        if not account_completion.isEnabled() or self.bootcampController.isInBootcamp():
+        if not self.steamRegistrationCtrl.isSteamAccount or self.bootcampController.isInBootcamp():
             return
-        response = yield future_async.await(self.wgnpController.getEmailStatus())
-        if not response.isSuccess() or self.isDisposed():
+        status = yield future_async.await(self.wgnpSteamAccCtrl.getEmailStatus())
+        if status.isUndefined or self.isDisposed():
             return
-        if isEmailAddingNeeded(response):
+        if status.typeIs(StatusTypes.ADD_NEEDED):
             self.__onEmailAddNeeded()
-        elif isEmailConfirmationNeeded(response):
-            self.__onEmailAdded(getEmail(response))
+        elif status.typeIs(StatusTypes.ADDED):
+            self.__onEmailAdded(status)
+
+    @future_async.async
+    def __updateDemoAccountRenamingStatus(self):
+        if self.steamRegistrationCtrl.isSteamAccount or self.bootcampController.isInBootcamp():
+            return
+        self.uiAccountCompletionLogger.canRename = False
+        if not self.wgnpDemoAccCtrl.settings.isRenameApiEnabled():
+            self.__onDemoAccountRenameCompleted()
+            return
+        status = yield future_async.await(self.wgnpDemoAccCtrl.getNicknameStatus())
+        if status.isUndefined or self.isDisposed():
+            return
+        if status.typeIs(StatusTypes.PROCESSING):
+            self.__onDemoAccountRenameProcessing()
+        elif status.typeIs(StatusTypes.ADDED):
+            self.__onDemoAccountRenameCompleted()
+        else:
+            self.uiAccountCompletionLogger.canRename = True
 
     def __updateAnonymizedState(self, **_):
         self.as_updateAnonymizedStateS(self.anonymizerController.isAnonymized)
@@ -988,28 +1021,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if view:
             view.update()
 
-    def __getEventTooltipData(self, state):
-        header = R.strings.tooltips.hangar.startBtn.squadNotReady.header()
-        body = R.strings.tooltips.hangar.startBtn.squadNotReady.body()
-        if state == UNIT_RESTRICTION.EVENT_UNIT_SQUAD_DIFFICULTY_LEVEL_NOT_ENABLE:
-            header = R.strings.tooltips.event.squad.disableWrongDifficulty.header()
-            body = R.strings.tooltips.event.squad.disableWrongDifficultyPlayer.body()
-        elif state == UNIT_RESTRICTION.NOT_READY_IN_SLOTS:
-            selectedDifficultyLevel = self.gameEventController.getSquadDifficultyLevel()
-            entity = self.prbEntity
-            unitMgrID = entity.getID()
-            for slot in entity.getSlotsIterator(*entity.getUnit(unitMgrID=unitMgrID)):
-                maxDifficultyLevel = slot.player.extraData.get('eventEnqueueData', {}).get('maxDifficultyLevel')
-                if slot.player and maxDifficultyLevel < selectedDifficultyLevel:
-                    header = R.strings.tooltips.event.squad.disableWrongDifficulty.header()
-                    body = R.strings.tooltips.event.squad.disableWrongDifficultyCommander.body()
-                    break
-
-        return makeTooltip(backport.text(header), backport.text(body))
-
-    def __getEventAFKBanTooltipData(self):
-        header = backport.text(R.strings.tooltips.event.afk.ban.header())
-        body = backport.text(R.strings.tooltips.event.afk.ban.fbBody(), value=formatTimeAndDate(self.afkController.banExpiryTime))
+    def __getEventTooltipData(self):
+        header = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_HEADER)
+        body = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_BODY, tankName='')
         return makeTooltip(header, body)
 
     def __getPreviewTooltipData(self):
@@ -1117,8 +1131,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         _, isBrCycle = self.__battleRoyaleController.getCurrentCycleInfo()
         brAvailable = isBrCycle and self.__battleRoyaleController.isEnabled()
         isEpicBattleAvailabe = self.epicController.isEnabled() and self.epicController.isCurrentCycleActive()
+        isEventBattlesAvailable = self.__eventBattlesController.isEnabled()
         mapboxAvailable = self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
-        return not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or isEpicBattleAvailabe or brAvailable or mapboxAvailable or self.eventsCache.isEventEnabled())
+        return not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or isEpicBattleAvailabe or brAvailable or mapboxAvailable or isEventBattlesAvailable)
 
     def _updatePrebattleControls(self, *_):
         if self._isLobbyHeaderControlsDisabled:
@@ -1141,7 +1156,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             isInSquad = False
             self.as_doDisableHeaderButtonS(self.BUTTONS.SQUAD, self.prbDispatcher.getEntity().getPermissions().canCreateSquad())
         isNavigationEnabled = not state.isNavigationDisabled()
-        isEvent = self.eventsCache.isEventEnabled()
+        isEvent = state.isInPreQueue(constants.QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(constants.PREBATTLE_TYPE.EVENT)
         isRanked = state.isInPreQueue(constants.QUEUE_TYPE.RANKED)
         isSandbox = state.isInPreQueue(constants.QUEUE_TYPE.SANDBOX)
         isEpic = state.isInPreQueue(constants.QUEUE_TYPE.EPIC) or state.isInUnit(constants.PREBATTLE_TYPE.EPIC)
@@ -1160,27 +1175,25 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                     tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_INMAPBOXSQUAD
                 else:
                     tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_MAPBOXSQUAD
-            elif isRanked:
-                tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_RANKEDSQUAD
             elif isInSquad or isEvent:
                 tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_INSQUAD
+            elif isRanked:
+                tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_RANKEDSQUAD
             elif isRoyale or isRoyaleTournament:
                 tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_BATTLEROYALESQUAD if isRoyale else ''
             else:
                 tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
+            hasEventSquadCap = bool(BONUS_CAPS.checkAny(constants.ARENA_BONUS_TYPE.EVENT_BATTLES, BONUS_CAPS.SQUADS))
+            isEventSquadEnable = isEvent and hasEventSquadCap
             hasSearchSupport = self.platoonCtrl.hasWelcomeWindow()
-            self.as_updateSquadS(isInSquad, tooltip, TOOLTIP_TYPES.COMPLEX, False, squadSelected.squadIcon, hasSearchSupport, extendedSquadInfoVo._asdict())
+            self.as_updateSquadS(isInSquad, tooltip, TOOLTIP_TYPES.COMPLEX, isEventSquadEnable, squadSelected.squadIcon, hasSearchSupport, extendedSquadInfoVo._asdict())
         self.__isFightBtnDisabled = self._checkFightButtonDisabled(canDo, selected.isLocked())
         tooltipData, isSpecial = '', False
         if self.__isFightBtnDisabled and not state.hasLockedState:
             if isSandbox:
                 tooltipData = self.__getSandboxTooltipData(result)
-            elif isEvent and result.restriction in (PREBATTLE_RESTRICTION.EVENT_AFK_BAN, UNIT_RESTRICTION.EVENT_AFK_BAN):
-                tooltipData = self.__getEventAFKBanTooltipData()
             elif isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
-                tooltipData = self.__getEventTooltipData(canDoMsg)
-            elif isEvent and result.restriction == PREBATTLE_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT:
-                tooltipData = self.__getPreviewTooltipData()
+                tooltipData = self.__getEventTooltipData()
             elif g_currentVehicle.isTooHeavy():
                 tooltipData = makeTooltip(body=backport.text(R.strings.tooltips.hangar.startBtn.vehicleToHeavy.body()))
             elif g_currentVehicle.isOnlyForEpicBattles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
@@ -1466,6 +1479,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         bootcampStateChanged = 'isBootcampEnabled' in diff
         battleRoyaleStateChanged = constants.Configs.BATTLE_ROYALE_CONFIG.value in diff
         mapsTrainingStateChanged = 'isMapsTrainingEnabled' in diff
+        eventBattlesStateChanged = 'event_battles_config' in diff
+        renameApiSettingsChanged = 'wgnp' in diff and any((k in diff['wgnp'] for k in ['renameApiEnabled', 'enabled']))
         updateHangarMenuData = any((strongholdSettingsChanged,
          epicRandomStateChanged,
          commandBattlesStateChanged,
@@ -1479,7 +1494,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
          'ranked_config' in diff,
          'epic_config' in diff,
          battleRoyaleStateChanged,
-         mapsTrainingStateChanged))
+         mapsTrainingStateChanged,
+         eventBattlesStateChanged))
         if bootcampStateChanged:
             self._rebootBattleSelector()
         if updateHangarMenuData:
@@ -1491,6 +1507,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if legacyModelSelectorEnabledChanged:
             self.closeFullscreenBattleSelector()
             self.__closeBattleTypeSelectPopover()
+        if renameApiSettingsChanged:
+            self.__updateDemoAccountRenamingStatus()
 
     def __updateProfileTabCounter(self):
         if self.lobbyContext.getServerSettings().isHofEnabled() and not self.uiSpamController.shouldBeHidden(self.TABS.PROFILE):

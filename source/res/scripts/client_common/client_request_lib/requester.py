@@ -350,16 +350,13 @@ class MapboxAccessor(BaseAccessor):
         return self._data_source.request_authorized_survey_url(callback, mapURL)
 
 
-class YearHareAffairAccessor(BaseAccessor):
+class GiftSystemAccessor(BaseAccessor):
 
-    def get_yha_video(self, callback):
-        return self._data_source.get_yha_video(callback)
+    def get_gift_system_state(self, callback, reqEventIds):
+        return self._data_source.get_gift_system_state(callback, reqEventIds)
 
-
-class ShopSalesEventAccessor(BaseAccessor):
-
-    def shop_sales_event_fetch_favorites(self, callback):
-        return self._data_source.shop_sales_event_fetch_favorites(callback)
+    def post_gift_system_gift(self, callback, entitlementCode, receiverID, metaInfo):
+        return self._data_source.post_gift_system_gift(callback, entitlementCode, receiverID, metaInfo)
 
 
 class Requester(object):
@@ -381,8 +378,7 @@ class Requester(object):
     freya = RequestDescriptor(FreyaAccessor)
     craftmachine = RequestDescriptor(CrafmachineAccessor)
     mapbox = RequestDescriptor(MapboxAccessor)
-    yha = RequestDescriptor(YearHareAffairAccessor)
-    shop_sales_event = RequestDescriptor(ShopSalesEventAccessor)
+    gifts = RequestDescriptor(GiftSystemAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

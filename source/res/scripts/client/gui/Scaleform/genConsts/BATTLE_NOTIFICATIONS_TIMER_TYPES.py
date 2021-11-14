@@ -13,8 +13,6 @@ class BATTLE_NOTIFICATIONS_TIMER_TYPES(object):
     RECOVERY = 'recovery'
     HALF_OVERTURNED = 'halfOverturned'
     EVENT_WARNING = 'eventWarning'
-    LOSE_SOULS_IN_AURA = 'loseSoulsInAura'
-    EVENT_DEATH_ZONE = 'eventDeathZone'
     STUN = 'stun'
     CAPTURE_BLOCK = 'captureLock'
     SMOKE = 'smoke'

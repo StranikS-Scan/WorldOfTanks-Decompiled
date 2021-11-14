@@ -3,6 +3,7 @@
 from helpers import i18n
 from items import tankmen, vehicles, ITEM_TYPE_NAMES, special_crew
 from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT
+from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS
 from gui.shared.utils.functions import getShortDescr
 from gui.shared.gui_items import ItemsCollection, GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item import HasStrCD, GUIItem
@@ -539,7 +540,7 @@ class TankmanSkill(GUIItem):
 
     @property
     def icon(self):
-        return getSkillIconName(self.name)
+        return '{}.png'.format(self.name) if self._name == SKILLS_CONSTANTS.TYPE_NEW_SKILL else getSkillIconName(self.name)
 
     @property
     def extensionLessIconName(self):

@@ -180,8 +180,6 @@ class UNIT_ERROR:
     UNIT_ASSEMBLER_DISABLED = 107
     UNIT_ASSEMBLER_TIMEOUT = 108
     KICKED_SEARCH_ONLY_PLAYER = 109
-    WRONG_DIFFICULTY_LEVEL = 110
-    MISSING_DIFFICULTY_LEVEL = 111
 
 
 OK = UNIT_ERROR.OK
@@ -547,8 +545,6 @@ class UnitPlayerDataKey(object):
     VEH_DICT = 'vehDict'
     VEH_BATTLES_COUNT = 'vehBattlesCount'
     EXTRA_DATA = 'extraData'
-    AFK_IS_BANNED = 'afkIsBanned'
-    AFK_EXPIRE_TIME = 'afkExpireTime'
 
 
 FALLOUT_QUEUE_TYPE_TO_ROSTER = {QUEUE_TYPE.FALLOUT_CLASSIC: ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER,
@@ -802,7 +798,7 @@ class UnitBase(OpsUnpacker):
         return True
 
     _HEADER = '<HHHHHHHHBiiii?'
-    _PLAYER_DATA = '<qiIHBHHHq??i'
+    _PLAYER_DATA = '<qiIHBHHHq?'
     _PLAYER_VEHICLES_LIST = '<qH'
     _PLAYER_VEHICLE_TUPLE = '<iH'
     _SLOT_PLAYERS = '<Bq'
@@ -899,7 +895,7 @@ class UnitBase(OpsUnpacker):
             unpacking = unpacking[self._SLOT_PLAYERS_SIZE:]
 
         for i in xrange(0, playerCount):
-            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventEnqueueData, afkIsBanned, afkExpireTime = self.__unpackPlayerData(unpacking)
+            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventEnqueueData = self.__unpackPlayerData(unpacking)
             unpacking = unpacking[blockLength:]
             playerData = {UnitPlayerDataKey.ACCOUNT_ID: accountID,
              UnitPlayerDataKey.TIME_JOIN: timeJoin,
@@ -913,8 +909,6 @@ class UnitBase(OpsUnpacker):
              UnitPlayerDataKey.IGRTYPE: igrType,
              UnitPlayerDataKey.BADGES: badges,
              UnitPlayerDataKey.IS_PREMIUM: isPremium,
-             UnitPlayerDataKey.AFK_IS_BANNED: afkIsBanned,
-             UnitPlayerDataKey.AFK_EXPIRE_TIME: afkExpireTime,
              UnitPlayerDataKey.EXTRA_DATA: dict(eventEnqueueData=eventEnqueueData)}
             self._addPlayer(accountDBID, **playerData)
 
@@ -1348,7 +1342,7 @@ class UnitBase(OpsUnpacker):
         return packedOps[opLen:]
 
     def _unpackPlayer(self, packedOps):
-        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventEnqueueData, afkIsBanned, afkExpireTime = self.__unpackPlayerData(packedOps)
+        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventEnqueueData = self.__unpackPlayerData(packedOps)
         playerData = {UnitPlayerDataKey.ACCOUNT_ID: accountID,
          UnitPlayerDataKey.TIME_JOIN: timeJoin,
          UnitPlayerDataKey.ROLE: role,
@@ -1361,8 +1355,6 @@ class UnitBase(OpsUnpacker):
          UnitPlayerDataKey.IGRTYPE: igrType,
          UnitPlayerDataKey.BADGES: badges,
          UnitPlayerDataKey.IS_PREMIUM: isPremium,
-         UnitPlayerDataKey.AFK_IS_BANNED: afkIsBanned,
-         UnitPlayerDataKey.AFK_EXPIRE_TIME: afkExpireTime,
          UnitPlayerDataKey.EXTRA_DATA: dict(eventEnqueueData=eventEnqueueData)}
         self._addPlayer(accountDBID, **playerData)
         return packedOps[blockLength:]
@@ -1443,7 +1435,7 @@ class UnitBase(OpsUnpacker):
         return (True, None)
 
     def __packPlayerData(self, accountDBID, **kwargs):
-        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get(UnitPlayerDataKey.ACCOUNT_ID, 0), kwargs.get(UnitPlayerDataKey.TIME_JOIN, 0), kwargs.get(UnitPlayerDataKey.ROLE, 0), kwargs.get(UnitPlayerDataKey.IGRTYPE, 0), kwargs.get(UnitPlayerDataKey.RATING, 0), kwargs.get(UnitPlayerDataKey.ACCOUNT_WTR, 0), kwargs.get(UnitPlayerDataKey.PERIPHERY_ID, 0), kwargs.get(UnitPlayerDataKey.CLAN_DBID, 0), kwargs.get(UnitPlayerDataKey.IS_PREMIUM, False), kwargs.get(UnitPlayerDataKey.AFK_IS_BANNED, False), kwargs.get(UnitPlayerDataKey.AFK_EXPIRE_TIME, 0))
+        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get(UnitPlayerDataKey.ACCOUNT_ID, 0), kwargs.get(UnitPlayerDataKey.TIME_JOIN, 0), kwargs.get(UnitPlayerDataKey.ROLE, 0), kwargs.get(UnitPlayerDataKey.IGRTYPE, 0), kwargs.get(UnitPlayerDataKey.RATING, 0), kwargs.get(UnitPlayerDataKey.ACCOUNT_WTR, 0), kwargs.get(UnitPlayerDataKey.PERIPHERY_ID, 0), kwargs.get(UnitPlayerDataKey.CLAN_DBID, 0), kwargs.get(UnitPlayerDataKey.IS_PREMIUM, False))
         packed += packPascalString(kwargs.get(UnitPlayerDataKey.NICKNAME, ''))
         packed += packPascalString(kwargs.get(UnitPlayerDataKey.CLAN_ABBREV, ''))
         badges = kwargs.get(UnitPlayerDataKey.BADGES, BadgesCommon.selectedBadgesEmpty())
@@ -1453,7 +1445,7 @@ class UnitBase(OpsUnpacker):
 
     def __unpackPlayerData(self, packedData):
         sz = self._PLAYER_DATA_SIZE
-        accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, afkIsBanned, afkExpireTime = struct.unpack_from(self._PLAYER_DATA, packedData)
+        accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium = struct.unpack_from(self._PLAYER_DATA, packedData)
         offset = sz
         nickName, lenNickBytes = unpackPascalString(packedData, offset)
         offset += lenNickBytes
@@ -1477,9 +1469,7 @@ class UnitBase(OpsUnpacker):
          nickName,
          clanAbbrev,
          badges,
-         eventEnqueueData,
-         afkIsBanned,
-         afkExpireTime)
+         eventEnqueueData)
 
     @staticmethod
     def __packEventEnqueueContainerData(packedData):

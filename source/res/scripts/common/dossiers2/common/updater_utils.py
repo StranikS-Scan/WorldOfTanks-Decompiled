@@ -192,7 +192,7 @@ def updateStaticSizeBlockRecords(updateCtx, block, records):
         itemSize = struct.calcsize('<' + format)
         if offset + itemSize > len(blockDescr):
             toExpand = offset + itemSize - len(blockDescr)
-            blockDescr += ''.zfill(toExpand)
+            blockDescr += '\x00' * toExpand
         newValue = struct.pack('<' + format, value)
         blockDescr = blockDescr[:offset] + newValue + blockDescr[offset + itemSize:]
 

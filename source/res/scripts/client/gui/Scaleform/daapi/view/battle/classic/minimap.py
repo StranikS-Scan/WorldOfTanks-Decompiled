@@ -55,13 +55,14 @@ class ClassicMinimapComponent(component.MinimapComponent):
         return _CLASSIC_MINIMAP_DIMENSIONS
 
 class GlobalSettingsPlugin(common.SimplePlugin):
-    __slots__ = ('__currentSizeSettings', '__isVisible', '__sizeIndex')
+    __slots__ = ('__currentSizeSettings', '__isVisible', '__sizeIndex', '__canChangeAlpha')
     _AccountSettingsClass = AccountSettings
     def __init__(self, parentObj):
         super(GlobalSettingsPlugin, self).__init__(parentObj)
         self._GlobalSettingsPlugin__currentSizeSettings = 'minimapSize'
         self._GlobalSettingsPlugin__isVisible = True
         self._GlobalSettingsPlugin__sizeIndex = 0
+        self._GlobalSettingsPlugin__canChangeAlpha = parentObj.canChangeAlpha()
 
     def start(self):
         super(GlobalSettingsPlugin, self).start()
@@ -138,11 +139,15 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         self._GlobalSettingsPlugin__handleKey(event.ctx['key'])
 
     def __updateAlpha(self):
-        if self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_ALPHA_ENABLED):
-            value = int(self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_ALPHA))
+        if self._GlobalSettingsPlugin__canChangeAlpha:
+            if self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_ALPHA_ENABLED):
+                value = int(self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_ALPHA))
+            else:
+                value = 0.0
+            self._parentObj.as_setAlphaS(1 - value / 100.0)
+            return
         else:
-            value = 0.0
-        self._parentObj.as_setAlphaS(1 - value / 100.0)
+            return
 
 class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
     __slots__ = ('__personalTeam', '__entries', '__markerIDs', '__hasActiveCommit')
@@ -241,9 +246,6 @@ class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
         if entryID:
             self._invoke(entryID, BATTLE_MINIMAP_CONSTS.SET_POINT_NUMBER, number)
             self._TeamsOrControlsPointsPlugin__entries.append(entryID)
-            return entryID
-        else:
-            return
 
     def __addTeamSpawnPoints(self):
         points = self._arenaVisitor.getTeamSpawnPointsIterator(self._TeamsOrControlsPointsPlugin__personalTeam)

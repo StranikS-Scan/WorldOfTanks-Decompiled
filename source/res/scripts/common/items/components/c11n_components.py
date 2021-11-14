@@ -20,7 +20,6 @@ from items.components.c11n_constants import PROJECTION_DECALS_SCALE_ID_VALUES
 from items.components.c11n_constants import MAX_USERS_PROJECTION_DECALS
 from items.components.c11n_constants import CustomizationTypeNames
 from items.components.c11n_constants import DecalTypeNames
-from items.components.c11n_constants import CustomizationNamesToTypes
 from items.components.c11n_constants import ProjectionDecalFormTags
 from items.components.c11n_constants import DEFAULT_SCALE_FACTOR_ID
 from items.components.c11n_constants import CUSTOMIZATION_SLOTS_VEHICLE_PARTS
@@ -420,7 +419,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.MODIFICATION: ModificationItem, CustomizationType.DECAL: DecalItem, CustomizationType.PAINT: PaintItem, CustomizationType.STYLE: StyleItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.FONT: Font, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.CAMOUFLAGE: CamouflageItem}
+    CUSTOMIZATION_TYPES = {CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PAINT: PaintItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.DECAL: DecalItem, CustomizationType.STYLE: StyleItem, CustomizationType.FONT: Font, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -582,7 +581,7 @@ class CustomizationCache(object):
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self._CustomizationCache__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.MODIFICATION: self.modifications, CustomizationType.STYLE: self.styles, CustomizationType.PAINT: self.paints, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.INSIGNIA: self.insignias, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.SEQUENCE: self.sequences, CustomizationType.DECAL: self.decals, CustomizationType.PERSONAL_NUMBER: self.personal_numbers}
+        self.itemTypes = {CustomizationType.STYLE: self.styles, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.MODIFICATION: self.modifications, CustomizationType.INSIGNIA: self.insignias, CustomizationType.PAINT: self.paints, CustomizationType.DECAL: self.decals, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.SEQUENCE: self.sequences, CustomizationType.ATTACHMENT: self.attachments}
         super(CustomizationCache, self).__init__()
 
     def getVehiclesCanMayInclude(self, item):
@@ -773,9 +772,9 @@ def _validateItem(typeName, item, season, tokens, vehType, styleID):
     if item.matchVehicleType(vehType):
         if item.season & season:
             if item.isUnlocked(tokens):
-                if vehType.progressionDecalsOnly and not item.isProgressive() and ItemTags.NATIONAL_EMBLEM not in item.tags:
-                    raise SoftException('{} can have only progression customization'.format(vehType))
-                elif styleID == 0 and item.isStyleOnly:
+                if vehType.progressionDecalsOnly and not item.isProgressive() and (not ItemTags.NATIONAL_EMBLEM in item.tags or item.id != vehType.defaultPlayerEmblemID):
+                    raise SoftException('{} can have only progression customization'.format(vehType.name))
+                if styleID == 0 and item.isStyleOnly:
                     raise SoftException("styleOnly {} {} can't be used with custom style".format(typeName, item.id, vehType))
                 else:
                     return

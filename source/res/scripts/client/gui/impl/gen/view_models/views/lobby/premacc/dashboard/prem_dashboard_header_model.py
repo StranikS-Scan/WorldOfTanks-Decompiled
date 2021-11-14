@@ -8,9 +8,9 @@ from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_heade
 from gui.impl.gen.view_models.views.lobby.subscription.subscription_card_model import SubscriptionCardModel
 
 class PremDashboardHeaderModel(ViewModel):
-    __slots__ = ('onShowBadges', 'onEmailButtonClicked')
+    __slots__ = ('onShowBadges', 'onEmailButtonClicked', 'onRenamingButtonClicked')
 
-    def __init__(self, properties=15, commands=2):
+    def __init__(self, properties=18, commands=3):
         super(PremDashboardHeaderModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -93,6 +93,24 @@ class PremDashboardHeaderModel(ViewModel):
     def setIsSubscriptionEnable(self, value):
         self._setBool(14, value)
 
+    def getIsRenamingButtonVisible(self):
+        return self._getBool(15)
+
+    def setIsRenamingButtonVisible(self, value):
+        self._setBool(15, value)
+
+    def getIsRenamingButtonEnabled(self):
+        return self._getBool(16)
+
+    def setIsRenamingButtonEnabled(self, value):
+        self._setBool(16, value)
+
+    def getIsRenamingProcessVisible(self):
+        return self._getBool(17)
+
+    def setIsRenamingProcessVisible(self, value):
+        self._setBool(17, value)
+
     def _initialize(self):
         super(PremDashboardHeaderModel, self)._initialize()
         self._addViewModelProperty('userName', UserNameModel())
@@ -110,5 +128,9 @@ class PremDashboardHeaderModel(ViewModel):
         self._addResourceProperty('emailButtonLabel', R.invalid())
         self._addBoolProperty('showEmailActionTooltip', False)
         self._addBoolProperty('isSubscriptionEnable', False)
+        self._addBoolProperty('isRenamingButtonVisible', False)
+        self._addBoolProperty('isRenamingButtonEnabled', False)
+        self._addBoolProperty('isRenamingProcessVisible', False)
         self.onShowBadges = self._addCommand('onShowBadges')
         self.onEmailButtonClicked = self._addCommand('onEmailButtonClicked')
+        self.onRenamingButtonClicked = self._addCommand('onRenamingButtonClicked')

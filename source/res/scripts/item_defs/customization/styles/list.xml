@@ -10571,7 +10571,7 @@
           <paints>
             <item>
               <id>	100	</id>
-              <appliedTo>	30583	</appliedTo>
+              <appliedTo>	22391	</appliedTo>
             </item>
           </paints>
           <decals>
@@ -11635,7 +11635,7 @@
           <paints>
             <item>
               <id>	192	</id>
-              <appliedTo>	30583	</appliedTo>
+              <appliedTo>	22391	</appliedTo>
             </item>
           </paints>
           <decals>
@@ -11957,6 +11957,146 @@
           </include>
         </projection_decal>
       </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	558	</id>
+      <texture>	gui/maps/vehicles/styles/ranked_1_4th.png	</texture>
+      <description>	#vehicle_customization:special_style/ranked_2021_2_gold_desc	</description>
+      <userString>	#vehicle_customization:special_style/ranked_2021_2_gold	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	659	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	6	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	306	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	836	</id>
+              <appliedTo>	17472	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	559	</id>
+      <texture>	gui/maps/vehicles/styles/ranked_2_4th.png	</texture>
+      <description>	#vehicle_customization:special_style/ranked_2021_2_silver_desc	</description>
+      <userString>	#vehicle_customization:special_style/ranked_2021_2_silver	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	655	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	6	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	306	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	836	</id>
+              <appliedTo>	17472	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	560	</id>
+      <texture>	gui/maps/vehicles/styles/ranked_3_4th.png	</texture>
+      <description>	#vehicle_customization:special_style/ranked_2021_2_bronze_desc	</description>
+      <userString>	#vehicle_customization:special_style/ranked_2021_2_bronze	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	656	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	6	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	306	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	836	</id>
+              <appliedTo>	17472	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
     </style>
   </itemGroup>
   <itemGroup>
@@ -14616,1501 +14756,6 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <priceGroup>	styles 750g notInShop	</priceGroup>
-    <historical>	1	</historical>
-    <vehicleFilter>
-      <include>
-        <vehicles>	uk:GB24_Centurion_Mk3_Halloween_event
-					france:F17_AMX_13_90_Halloween_event
-					ussr:R171_IS_3_II_hw21
-					usa:A100_T49_Halloween_event
-					ussr:R40_T-54_Halloween_event
-					italy:It19_Progetto_C50_mod_66_hw21	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	6661	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	9184	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <priceGroup>	styles 750g notInShop	</priceGroup>
-    <historical>	1	</historical>
-    <vehicleFilter>
-      <include>
-        <vehicles>	france:F17_AMX_13_90_Halloween_event	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	921	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage2	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	9185	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	9350	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	302	</id>
-              <showOn>	HULL TURRET GUN	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-0.708976	</p0>
-                <p1>	1.59386	</p1>
-                <p2>	0.398043	</p2>
-              </position>
-              <rotation>
-                <r0>	1.29536	</r0>
-                <r1>	-0.933095	</r1>
-                <r2>	2.99588	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.18053	</s0>
-                <s1>	1.79578	</s1>
-                <s2>	1.18055	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	931	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage3	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	9186	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	9350	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	303	</id>
-              <showOn>	HULL TURRET GUN	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-0.529774	</p0>
-                <p1>	1.58002	</p1>
-                <p2>	-0.0316999	</p2>
-              </position>
-              <rotation>
-                <r0>	1.02143	</r0>
-                <r1>	-0.979664	</r1>
-                <r2>	2.89766	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.39308	</s0>
-                <s1>	1.85693	</s1>
-                <s2>	1.39207	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	941	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage4	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	58	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	57	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	304	</id>
-              <showOn>	HULL TURRET GUN	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-0.524038	</p0>
-                <p1>	1.52439	</p1>
-                <p2>	0.0285209	</p2>
-              </position>
-              <rotation>
-                <r0>	0.925504	</r0>
-                <r1>	-0.739909	</r1>
-                <r2>	-3.12737	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.24994	</s0>
-                <s1>	2.06602	</s1>
-                <s2>	1.54882	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <priceGroup>	styles 750g notInShop	</priceGroup>
-    <historical>	1	</historical>
-    <vehicleFilter>
-      <include>
-        <vehicles>	uk:GB24_Centurion_Mk3_Halloween_event	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	922	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage2	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	9185	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	9350	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	302	</id>
-              <showOn>	HULL TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.74125	</p0>
-                <p1>	1.78877	</p1>
-                <p2>	0.991667	</p2>
-              </position>
-              <rotation>
-                <r0>	1.12004	</r0>
-                <r1>	-0.751713	</r1>
-                <r2>	-2.30167	</r2>
-              </rotation>
-              <scale>
-                <s0>	2.04943	</s0>
-                <s1>	2.72264	</s1>
-                <s2>	2.28851	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	932	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage3	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	9186	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	9350	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	303	</id>
-              <showOn>	HULL TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.74125	</p0>
-                <p1>	1.78877	</p1>
-                <p2>	0.991667	</p2>
-              </position>
-              <rotation>
-                <r0>	1.12004	</r0>
-                <r1>	-0.751713	</r1>
-                <r2>	-2.30167	</r2>
-              </rotation>
-              <scale>
-                <s0>	2.04943	</s0>
-                <s1>	2.72264	</s1>
-                <s2>	2.28851	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	942	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage4	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	58	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	57	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	304	</id>
-              <showOn>	HULL TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.74125	</p0>
-                <p1>	1.78877	</p1>
-                <p2>	0.687058	</p2>
-              </position>
-              <rotation>
-                <r0>	1.12004	</r0>
-                <r1>	-0.751713	</r1>
-                <r2>	-2.30167	</r2>
-              </rotation>
-              <scale>
-                <s0>	2.04943	</s0>
-                <s1>	2.72264	</s1>
-                <s2>	2.28851	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <priceGroup>	styles 750g notInShop	</priceGroup>
-    <historical>	1	</historical>
-    <vehicleFilter>
-      <include>
-        <vehicles>	usa:A100_T49_Halloween_event	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	924	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage2	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	9185	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	9350	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	302	</id>
-              <showOn>	HULL TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.03985	</p0>
-                <p1>	1.6687	</p1>
-                <p2>	0.48522	</p2>
-              </position>
-              <rotation>
-                <r0>	0.553182	</r0>
-                <r1>	-1.17767	</r1>
-                <r2>	3.08758	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.27515	</s0>
-                <s1>	0.981767	</s1>
-                <s2>	1.27515	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	934	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage3	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	9186	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	9350	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-            <item>
-              <id>	0	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	303	</id>
-              <showOn>	HULL TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.03985	</p0>
-                <p1>	1.6687	</p1>
-                <p2>	0.48522	</p2>
-              </position>
-              <rotation>
-                <r0>	0.553182	</r0>
-                <r1>	-1.17767	</r1>
-                <r2>	3.08758	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.27515	</s0>
-                <s1>	0.981767	</s1>
-                <s2>	1.27515	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	944	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage4	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	58	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	57	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-            <item>
-              <id>	0	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	304	</id>
-              <showOn>	HULL TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.03985	</p0>
-                <p1>	1.6687	</p1>
-                <p2>	0.48522	</p2>
-              </position>
-              <rotation>
-                <r0>	0.553182	</r0>
-                <r1>	-1.17767	</r1>
-                <r2>	3.08758	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.27515	</s0>
-                <s1>	0.981767	</s1>
-                <s2>	1.27515	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <priceGroup>	styles 750g notInShop	</priceGroup>
-    <historical>	1	</historical>
-    <vehicleFilter>
-      <include>
-        <vehicles>	usa:A66_M103_Halloween_event	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	923	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage2	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	9185	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	9350	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	302	</id>
-              <showOn>	HULL TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.12111	</p0>
-                <p1>	2.07649	</p1>
-                <p2>	0.326062	</p2>
-              </position>
-              <rotation>
-                <r0>	0.62154	</r0>
-                <r1>	-1.10175	</r1>
-                <r2>	3.10206	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.58815	</s0>
-                <s1>	1.11495	</s1>
-                <s2>	1.71757	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	933	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage3	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	9186	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	9350	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-            <item>
-              <id>	0	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	303	</id>
-              <showOn>	HULL TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.12111	</p0>
-                <p1>	2.07649	</p1>
-                <p2>	0.326062	</p2>
-              </position>
-              <rotation>
-                <r0>	0.62154	</r0>
-                <r1>	-1.10175	</r1>
-                <r2>	3.10206	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.58815	</s0>
-                <s1>	1.11495	</s1>
-                <s2>	1.71757	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	943	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage4	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	58	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	57	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-            <item>
-              <id>	0	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	304	</id>
-              <showOn>	HULL TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.12111	</p0>
-                <p1>	2.07649	</p1>
-                <p2>	0.326062	</p2>
-              </position>
-              <rotation>
-                <r0>	0.62154	</r0>
-                <r1>	-1.10175	</r1>
-                <r2>	3.10206	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.58815	</s0>
-                <s1>	1.11495	</s1>
-                <s2>	1.71757	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <priceGroup>	styles 750g notInShop	</priceGroup>
-    <historical>	1	</historical>
-    <vehicleFilter>
-      <include>
-        <vehicles>	ussr:R40_T-54_Halloween_event	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	925	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage2	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	9185	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	9350	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	302	</id>
-              <showOn>	HULL TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.28917	</p0>
-                <p1>	1.93427	</p1>
-                <p2>	0.417651	</p2>
-              </position>
-              <rotation>
-                <r0>	0.716488	</r0>
-                <r1>	-0.864897	</r1>
-                <r2>	-2.96527	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.23701	</s0>
-                <s1>	1.54573	</s1>
-                <s2>	1.23701	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	935	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage3	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	9186	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	9350	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	303	</id>
-              <showOn>	HULL TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.28917	</p0>
-                <p1>	1.93427	</p1>
-                <p2>	0.417651	</p2>
-              </position>
-              <rotation>
-                <r0>	0.716488	</r0>
-                <r1>	-0.864897	</r1>
-                <r2>	-2.96527	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.23701	</s0>
-                <s1>	1.54573	</s1>
-                <s2>	1.23701	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	945	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage4	</userString>
-      <tags>	event_battles	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	58	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	1019	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <decals>
-            <item>
-              <id>	57	</id>
-              <appliedTo>	48	</appliedTo>
-            </item>
-            <item>
-              <id>	0	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-          <projection_decals>
-            <item>
-              <id>	304	</id>
-              <showOn>	HULL TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.28917	</p0>
-                <p1>	1.93427	</p1>
-                <p2>	0.417651	</p2>
-              </position>
-              <rotation>
-                <r0>	0.716488	</r0>
-                <r1>	-0.864897	</r1>
-                <r2>	-2.96527	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.23701	</s0>
-                <s1>	1.54573	</s1>
-                <s2>	1.23701	</s2>
-              </scale>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <priceGroup>	styles 750g notInShop	</priceGroup>
-    <historical>	0	</historical>
-    <vehicleFilter></vehicleFilter>
-    <style>
-      <id>	9000	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	5	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	7	</id>
-              <appliedTo>	112	</appliedTo>
-            </item>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	28672	</appliedTo>
-            </item>
-            <item>
-              <id>	9	</id>
-              <appliedTo>	1799	</appliedTo>
-            </item>
-          </paints>
-          <sequences>
-            <item>
-              <id>	11	</id>
-              <slotId>	38000	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	9001	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	5	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	7	</id>
-              <appliedTo>	112	</appliedTo>
-            </item>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	28672	</appliedTo>
-            </item>
-            <item>
-              <id>	9	</id>
-              <appliedTo>	1799	</appliedTo>
-            </item>
-          </paints>
-          <sequences>
-            <item>
-              <id>	11	</id>
-              <slotId>	18000	</slotId>
-            </item>
-            <item>
-              <id>	11	</id>
-              <slotId>	18001	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	9002	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	5	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	7	</id>
-              <appliedTo>	112	</appliedTo>
-            </item>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	28672	</appliedTo>
-            </item>
-            <item>
-              <id>	9	</id>
-              <appliedTo>	1799	</appliedTo>
-            </item>
-          </paints>
-          <sequences>
-            <item>
-              <id>	11	</id>
-              <slotId>	38000	</slotId>
-            </item>
-            <item>
-              <id>	11	</id>
-              <slotId>	38001	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	9003	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <sequences>
-            <item>
-              <id>	13	</id>
-              <slotId>	18000	</slotId>
-            </item>
-            <item>
-              <id>	14	</id>
-              <slotId>	38000	</slotId>
-            </item>
-            <item>
-              <id>	38	</id>
-              <slotId>	38002	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	9004	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <sequences>
-            <item>
-              <id>	37	</id>
-              <slotId>	38000	</slotId>
-            </item>
-            <item>
-              <id>	37	</id>
-              <slotId>	38001	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	9005	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	5	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	7	</id>
-              <appliedTo>	112	</appliedTo>
-            </item>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	28672	</appliedTo>
-            </item>
-            <item>
-              <id>	9	</id>
-              <appliedTo>	1799	</appliedTo>
-            </item>
-          </paints>
-          <sequences>
-            <item>
-              <id>	15	</id>
-              <slotId>	38002	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	9006	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	5	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	7	</id>
-              <appliedTo>	112	</appliedTo>
-            </item>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	28672	</appliedTo>
-            </item>
-            <item>
-              <id>	9	</id>
-              <appliedTo>	1799	</appliedTo>
-            </item>
-          </paints>
-          <sequences>
-            <item>
-              <id>	11	</id>
-              <slotId>	18000	</slotId>
-            </item>
-            <item>
-              <id>	11	</id>
-              <slotId>	18001	</slotId>
-            </item>
-            <item>
-              <id>	11	</id>
-              <slotId>	18002	</slotId>
-            </item>
-            <item>
-              <id>	11	</id>
-              <slotId>	18003	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	9007	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	5	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	7	</id>
-              <appliedTo>	112	</appliedTo>
-            </item>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	28672	</appliedTo>
-            </item>
-            <item>
-              <id>	9	</id>
-              <appliedTo>	1799	</appliedTo>
-            </item>
-          </paints>
-          <sequences>
-            <item>
-              <id>	11	</id>
-              <slotId>	18000	</slotId>
-            </item>
-            <item>
-              <id>	38	</id>
-              <slotId>	38002	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	9008	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	5	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	7	</id>
-              <appliedTo>	112	</appliedTo>
-            </item>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	28672	</appliedTo>
-            </item>
-            <item>
-              <id>	9	</id>
-              <appliedTo>	1799	</appliedTo>
-            </item>
-          </paints>
-          <sequences>
-            <item>
-              <id>	11	</id>
-              <slotId>	18000	</slotId>
-            </item>
-            <item>
-              <id>	11	</id>
-              <slotId>	18001	</slotId>
-            </item>
-            <item>
-              <id>	38	</id>
-              <slotId>	38002	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	9009	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	5	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	7	</id>
-              <appliedTo>	112	</appliedTo>
-            </item>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	28672	</appliedTo>
-            </item>
-            <item>
-              <id>	9	</id>
-              <appliedTo>	1799	</appliedTo>
-            </item>
-          </paints>
-          <sequences>
-            <item>
-              <id>	11	</id>
-              <slotId>	38000	</slotId>
-            </item>
-            <item>
-              <id>	11	</id>
-              <slotId>	38001	</slotId>
-            </item>
-            <item>
-              <id>	38	</id>
-              <slotId>	38002	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	9010	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	5	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	7	</id>
-              <appliedTo>	112	</appliedTo>
-            </item>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	28672	</appliedTo>
-            </item>
-            <item>
-              <id>	9	</id>
-              <appliedTo>	1799	</appliedTo>
-            </item>
-          </paints>
-          <sequences>
-            <item>
-              <id>	11	</id>
-              <slotId>	18000	</slotId>
-            </item>
-            <item>
-              <id>	11	</id>
-              <slotId>	18001	</slotId>
-            </item>
-            <item>
-              <id>	11	</id>
-              <slotId>	18002	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	9011	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	5	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	7	</id>
-              <appliedTo>	112	</appliedTo>
-            </item>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	28672	</appliedTo>
-            </item>
-            <item>
-              <id>	9	</id>
-              <appliedTo>	1799	</appliedTo>
-            </item>
-          </paints>
-          <sequences>
-            <item>
-              <id>	13	</id>
-              <slotId>	18000	</slotId>
-            </item>
-            <item>
-              <id>	14	</id>
-              <slotId>	38000	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-    <style>
-      <id>	9012	</id>
-      <texture>	gui/maps/vehicles/styles/none.png	</texture>
-      <userString>	#vehicle_customization:special_style/halloween_2019_stage1	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	5	</item>
-          </modifications>
-          <paints>
-            <item>
-              <id>	7	</id>
-              <appliedTo>	112	</appliedTo>
-            </item>
-            <item>
-              <id>	8	</id>
-              <appliedTo>	28672	</appliedTo>
-            </item>
-            <item>
-              <id>	9	</id>
-              <appliedTo>	1799	</appliedTo>
-            </item>
-          </paints>
-          <sequences>
-            <item>
-              <id>	13	</id>
-              <slotId>	18000	</slotId>
-            </item>
-          </sequences>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
@@ -18031,7 +16676,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -18334,7 +16979,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -19166,7 +17811,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -19216,7 +17861,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 13g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -19256,7 +17901,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -19306,7 +17951,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 13g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -19346,7 +17991,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 4000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -19396,7 +18041,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 13g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -19826,7 +18471,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 4500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -20244,6 +18889,52 @@
       <modelsSet></modelsSet>
     </style>
     <modelsSet></modelsSet>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 4500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G144_Kpz_50t	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	300	</id>
+      <texture>	gui/maps/vehicles/styles/G144_Kpz_50t_3Dst_DRXXI.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G144_Kpz_50t_3Dst_DRXXI_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G144_Kpz_50t_3Dst_DRXXI	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G144_Kpz_50t_3Dst_DRXXI	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	18	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
@@ -22775,7 +21466,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -24070,7 +22761,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -24110,7 +22801,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -24501,7 +23192,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -24541,7 +23232,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -24874,6 +23565,46 @@
               <slotId>	18000	</slotId>
             </item>
           </sequences>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A92_M60	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	576	</id>
+      <texture>	gui/maps/vehicles/styles/A92_M60_3DSt_ZI_21.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A92_M60_3DSt_ZI_21_desc/long	</longDescriptionSpecial>
+      <modelsSet>	A92_M60_3DSt_ZI_21	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A92_M60_3DSt_ZI_21	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
         </outfit>
       </outfits>
       <itemFilters>
@@ -25839,7 +24570,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -26748,7 +25479,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
+    <historical>	2	</historical>
     <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>

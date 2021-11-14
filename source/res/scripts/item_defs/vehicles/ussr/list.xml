@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <Observer>
     <id>	255	</id>
     <userString>	#ussr_vehicles:Observer	</userString>
@@ -14,7 +13,7 @@
     <userString>	#ussr_vehicles:T-34	</userString>
     <description>	#ussr_vehicles:T-34_descr	</description>
     <price>	356700	</price>
-    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
   </R04_T-34>
   <R02_SU-85>
@@ -95,7 +94,7 @@
     <userString>	#ussr_vehicles:T-34-85	</userString>
     <description>	#ussr_vehicles:T-34-85_descr	</description>
     <price>	915000	</price>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
   </R07_T-34-85>
   <R13_KV-1s>
@@ -280,15 +279,6 @@
     <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	9	</level>
   </R40_T-54>
-  <R40_T-54_Halloween_event>
-    <id>	203	</id>
-    <userString>	#ussr_vehicles:T-54_Halloween_event	</userString>
-    <description>	#ussr_vehicles:T-54_Halloween_event_descr	</description>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank mediumTank3 improvedVentilation_class2_user secret event_battles cannot_be_sold HD lockOutfit lockCrew lockCrewSkills event_premium_vehicle event_overturn_recovery nitroRamDamage4	</tags>
-    <level>	9	</level>
-  </R40_T-54_Halloween_event>
   <R53_Object_704>
     <id>	32	</id>
     <userString>	#ussr_vehicles:R53_Object_704	</userString>
@@ -949,7 +939,7 @@
     <description>	#ussr_vehicles:T-34-85_descr	</description>
     <price>	5000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank private HD secret unrecoverable t34_disclaimer	</tags>
+    <tags>	mediumTank private HD secret unrecoverable	</tags>
     <level>	1	</level>
   </R07_T-34-85_training>
   <R86_LTP>
@@ -1009,7 +999,7 @@
     <longDescriptionSpecial>	#ussr_vehicles:R108_T34_85M_long_special	</longDescriptionSpecial>
     <price>	3300	  <gold></gold>
     </price>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
   </R108_T34_85M>
   <R110_Object_260>
@@ -1072,7 +1062,7 @@
     <price>	3100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD dog improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
+    <tags>	mediumTank role_MT_universal HD dog improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
   </R117_T34_85_Rudy>
   <R116_ISU122C_Berlin>
@@ -1457,7 +1447,7 @@
     <price>	2200	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
   </R154_T_34E_1943>
   <R157_Object_279R>
@@ -1713,7 +1703,7 @@
     <price>	1200	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD lockExceptProgression improvedVentilation_class3_user extraHealthReserve_class3_user t34_disclaimer	</tags>
+    <tags>	mediumTank HD lockExceptProgression improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	4	</level>
   </R185_T_34_L_11_1941>
   <R187_Object_590>
@@ -1739,7 +1729,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank t34_disclaimer	</tags>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
     <level>	5	</level>
   </R193_M4A2_T_34>
   <R87_T62A_fallout>
@@ -1784,17 +1774,6 @@
     <tags>	mediumTank HD clanWarsBattles special cannot_be_sold improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user role_MT_universal	</tags>
     <level>	10	</level>
   </R97_Object_140_cl>
-  <R77_KV2_turret_2>
-    <id>	196	</id>
-    <userString>	#ussr_vehicles:R77_KV2_turret_2	</userString>
-    <shortUserString>	#ussr_vehicles:R77_KV2_turret_2_short	</shortUserString>
-    <description>	#ussr_vehicles:R77_KV2_turret_2_descr	</description>
-    <price>	920000	</price>
-    <tags>	heavyTank improvedVentilation_class3_user HD event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	6	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R77_KV2_turret_2>
   <R47_ISU-152_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:ISU-152_IGR	</userString>
@@ -1941,7 +1920,7 @@
     <description>	#ussr_vehicles:T-34-85_descr	</description>
     <price>	915000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank private HD secret extraHealthReserve_class3_user t34_disclaimer	</tags>
+    <tags>	mediumTank private HD secret extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </R07_T-34-85_bootcamp>
   <R22_T-46_bootcamp>
@@ -2008,7 +1987,7 @@
     <userString>	#ussr_vehicles:T-34_MapsTraining_Player_MT_1	</userString>
     <description>	#ussr_vehicles:T-34_descr_MapsTraining_Player_MT_1	</description>
     <price>	356700	</price>
-    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user secret maps_training private t34_disclaimer	</tags>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user secret maps_training private	</tags>
     <level>	5	</level>
     <clone_tags>	cloned cloned_localization	</clone_tags>
     <notInShop>	True	</notInShop>
@@ -2044,15 +2023,4 @@
     <tags>	mediumTank HD epic_battles mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user private	</tags>
     <level>	9	</level>
   </R40_T-54_FL>
-  <R171_IS_3_II_hw21>
-    <id>	50	</id>
-    <userString>	#ussr_vehicles:IS_3_II_Halloween_event	</userString>
-    <description>	#ussr_vehicles:IS_3_II_Halloween_event_descr	</description>
-    <shortUserString>	#ussr_vehicles:IS_3_II_Halloween_event_short	</shortUserString>
-    <price>	3570000	</price>
-    <tags>	heavyTank HD sinai siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user  event_battles secret nitroRamDamage6 cannot_be_sold lockCrew lockOutfit lockCrewSkills event_overturn_recovery event_not_elite_vehicle	</tags>
-    <level>	9	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R171_IS_3_II_hw21>
 </list.xml>

@@ -17,7 +17,7 @@ class C2WHandler(object):
 
     def __init__(self, sender):
         super(C2WHandler, self).__init__()
-        self._sender = weakref.proxy(sender)
+        self.__sender = weakref.proxy(sender)
         self.__previous = {}
 
     @property
@@ -28,17 +28,17 @@ class C2WHandler(object):
         pass
 
     def fini(self):
-        self._sender = None
+        self.__sender = None
         return
 
     def _sendWebEvent(self, webEvent):
-        if self._sender is not None:
+        if self.__sender is not None:
             hashedEvent = self.__hashedEvent(webEvent)
             if self.preventIdentical and self.__isDuplicate(*hashedEvent):
                 return
             try:
                 del webEvent[_TIME]
-                self._sender.sendEvent(json.dumps(webEvent))
+                self.__sender.sendEvent(json.dumps(webEvent))
                 self.__cachePrevious(*hashedEvent)
             except ReferenceError:
                 return

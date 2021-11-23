@@ -257,12 +257,12 @@ def _getParamStateInfo(paramName, val1, val2, customReverted=False):
         hasNoParam = False
         if isinstance(val1, float) and isinstance(val2, float):
             diff = val1 - val2
-            diff = round(diff, 2)
+            diff = round(diff, 4)
         else:
             if isinstance(val1, float):
-                val1 = round(val1, 2)
+                val1 = round(val1, 4)
             if isinstance(val2, float):
-                val2 = round(val2, 2)
+                val2 = round(val2, 4)
             diff = val1 - val2
     if paramName in NEGATIVE_PARAMS and hasNoParam:
         if val1 is None and val2 is None:

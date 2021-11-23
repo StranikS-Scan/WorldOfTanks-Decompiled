@@ -1016,8 +1016,8 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             return
         isDown = event.ctx['isDown']
         if isDown:
-            features = _FEATURES.addIfNot(self.__flags, _FEATURES.DO_REQUEST)
-            hpFeature = _FEATURES.addIfNot(self.__flagHpMinimap, _FEATURES.DO_REQUEST)
+            features = _FEATURES.addIfNot(self.__flags, _FEATURES.DO_REQUEST) if self.__flags != _FEATURES.OFF else self.__flags
+            hpFeature = _FEATURES.addIfNot(self.__flagHpMinimap, _FEATURES.DO_REQUEST) if self.__flagHpMinimap != _FEATURES.OFF else self.__flagHpMinimap
         else:
             features = _FEATURES.removeIfHas(self.__flags, _FEATURES.DO_REQUEST)
             hpFeature = _FEATURES.removeIfHas(self.__flagHpMinimap, _FEATURES.DO_REQUEST)

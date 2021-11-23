@@ -600,28 +600,26 @@ class CrystalDetailsBlock(_EconomicsDetailsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        crystalTotal = 0
-        eventsCrystal = 0
-        for details in result.earned:
-            achievementName, value = details
-            if achievementName == 'originalCrystal':
-                if value > 0:
-                    crystalTotal += value
-                    self._addRecord(backport.text(R.strings.battle_results.details.calculations.crystal.total()), value)
-            eventsCrystal += value
+        label = backport.text(R.strings.battle_results.details.calculations.crystal.total())
+        earned = self.__addRecordField('originalCrystal', result, label)
+        label = backport.text(R.strings.battle_results.details.calculations.crystal.events())
+        earned += self.__addRecordField('events', result, label)
+        label = backport.text(R.strings.battle_results.details.calculations.autoBoosters())
+        expenses = self.__addRecordField('autoEquipCrystals', result, label)
+        if earned or expenses:
+            self.__addTotalResults(earned + expenses)
 
-        if eventsCrystal > 0:
-            self._addRecord(backport.text(R.strings.battle_results.details.calculations.crystal.events()), eventsCrystal)
-        crystalTotal += eventsCrystal
-        autoBoosters = result.expenses
-        if autoBoosters:
-            self._addRecord(backport.text(R.strings.battle_results.details.calculations.autoBoosters()), autoBoosters)
-            crystalTotal += autoBoosters
-        if result.earned or result.expenses:
-            self.addNextComponent(style.EmptyStatRow())
-            i18nText = backport.text(R.strings.battle_results.details.calculations.total())
-            totalStr = makeHtmlString('html_templates:lobby/battle_results', 'lightText', {'value': i18nText})
-            self._addRecord(totalStr, crystalTotal)
+    def __addRecordField(self, key, result, label, force=False):
+        value = result.getRecord(key)
+        if force or value:
+            self._addRecord(label, value)
+        return value
+
+    def __addTotalResults(self, value):
+        self.addNextComponent(style.EmptyStatRow())
+        i18nText = backport.text(R.strings.battle_results.details.calculations.total())
+        totalStr = makeHtmlString('html_templates:lobby/battle_results', 'lightText', {'value': i18nText})
+        self._addRecord(totalStr, value)
 
     def _addRecord(self, res, value):
         self.addNextComponent(style.StatRow(res, res, style.SMALL_STAT_LINE, column1=style.makeCrystalLabel(value)))
@@ -670,9 +668,10 @@ class TotalCrystalDetailsBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         personal = reusable.personal
-        block = CrystalDetailsBlock(base.ListMeta(registered=True))
-        block.setRecord(personal.getCrystalDetails(), reusable)
-        self.addNextComponent(block)
+        for record in personal.getCrystalDetailsRecords():
+            block = CrystalDetailsBlock(base.ListMeta(registered=True))
+            block.setRecord(record, reusable)
+            self.addNextComponent(block)
 
 
 class PremiumBonusDetailsBlock(base.StatsBlock):

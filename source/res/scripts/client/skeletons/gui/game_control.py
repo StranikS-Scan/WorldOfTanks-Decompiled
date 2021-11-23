@@ -1950,6 +1950,12 @@ class IWotPlusNotificationController(IGameController):
         raise NotImplementedError
 
 
+class ITelecomRentalsNotificationController(IGameController):
+
+    def processSwitchNotifications(self):
+        raise NotImplementedError
+
+
 class IEventBattlesController(IGameController, ISeasonProvider):
     onPrimeTimeStatusUpdated = None
 

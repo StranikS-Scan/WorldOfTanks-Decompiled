@@ -30,8 +30,9 @@ _modeSelectorLegacyItemByModeName = {PREBATTLE_ACTION_NAME.RANDOM: RandomModeSel
  PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST: SpecModeSelectorItem,
  PREBATTLE_ACTION_NAME.TRAININGS_LIST: TrainingsModeSelectorItem,
  PREBATTLE_ACTION_NAME.MAPBOX: MapboxModeSelectorItem,
- PREBATTLE_ACTION_NAME.EPIC: EpicModeSelectorItem}
-_additionalItems = {CustomModeName.BOOTCAMP: BootcampModeSelectorItem()}
+ PREBATTLE_ACTION_NAME.EPIC: EpicModeSelectorItem,
+ CustomModeName.BOOTCAMP: BootcampModeSelectorItem}
+_additionalItems = {CustomModeName.BOOTCAMP: None}
 
 class ModeSelectorDataProvider(IGlobalListener):
     __slots__ = ('onListChanged', '_items')
@@ -80,11 +81,10 @@ class ModeSelectorDataProvider(IGlobalListener):
         return items[index] if len(items) > index else None
 
     def onPrbEntitySwitched(self):
-        allItems = battle_selector_items.getItems().allItems
-        self.__createItems()
-        allNames = [ name.getData() for name in allItems ] + _additionalItems.keys()
+        items = self.__getItems()
+        self.__createItems(items)
         for nameItem in self._items:
-            if nameItem not in allNames:
+            if nameItem not in items:
                 self._items.pop(nameItem).dispose()
 
         self.updateItems()
@@ -94,17 +94,11 @@ class ModeSelectorDataProvider(IGlobalListener):
             self._items.pop(key).dispose()
 
     def _initializeModeSelectorItems(self):
-        for item in _additionalItems.values():
-            if item is not None:
-                item.initialize()
-
-        self.__createItems()
-        return
+        self.__createItems(self.__getItems())
 
     @staticmethod
-    def _getModeSelectorLegacyItem(selectorItem):
-        modeName = selectorItem.getData()
-        return None if not selectorItem.isVisible() else _modeSelectorLegacyItemByModeName.get(modeName, ModeSelectorLegacyItem)(selectorItem)
+    def _getModeSelectorLegacyItem(modeName, selectorItem):
+        return None if selectorItem is not None and not selectorItem.isVisible() else _modeSelectorLegacyItemByModeName.get(modeName, ModeSelectorLegacyItem)(selectorItem)
 
     def _updateSelection(self):
         prbDispatcher = g_prbLoader.getDispatcher()
@@ -142,13 +136,19 @@ class ModeSelectorDataProvider(IGlobalListener):
         for item in self.itemList:
             item.viewModel.commit()
 
-    def __createItems(self):
-        allItems = battle_selector_items.getItems().allItems
-        for nameItem in allItems:
-            if nameItem.getData() not in self._items:
-                item = self._getModeSelectorLegacyItem(nameItem)
+    def __createItems(self, items):
+        for modeName in items:
+            if modeName not in self._items:
+                item = self._getModeSelectorLegacyItem(modeName, items[modeName])
                 if item is not None:
-                    self._items[nameItem.getData()] = item
+                    self._items[modeName] = item
                     item.initialize()
 
         return
+
+    @staticmethod
+    def __getItems():
+        allItems = battle_selector_items.getItems().allItems
+        items = {nameItem.getData():nameItem for nameItem in allItems}
+        items.update(_additionalItems)
+        return items

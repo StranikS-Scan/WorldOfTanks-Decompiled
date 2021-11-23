@@ -1434,6 +1434,7 @@ class RentType(object):
     SEASON_RENT = 4
     SEASON_CYCLE_RENT = 5
     WOTPLUS_RENT = 6
+    TELECOM_RENT = 7
 
 
 class GameSeasonType(object):

@@ -124,6 +124,10 @@ def getRentVehicleUrl():
     return _getUrl('rentVehicle')
 
 
+def getTelecomRentVehicleUrl():
+    return _getUrl('telecomTankRental')
+
+
 def getBuyRenewableSubscriptionUrl():
     return _getUrl('buyRenewableSubscription')
 

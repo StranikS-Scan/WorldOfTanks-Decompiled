@@ -18,7 +18,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL, getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx, getRentVehicleUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL, getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx, getRentVehicleUrl, getTelecomRentVehicleUrl
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.entities.sf_window import SFWindow
@@ -477,6 +477,8 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
         elif not (itemsPack or offers or vehParams) and vehicle.canTradeIn:
             viewAlias = VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW
         elif offers and offers[0].eventType == 'subscription':
+            viewAlias = VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW
+        elif offers and offers[0].eventType == 'telecom_rentals':
             viewAlias = VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW
         else:
             viewAlias = VIEW_ALIAS.VEHICLE_PREVIEW
@@ -1499,6 +1501,11 @@ def showPostProgressionResearchDialog(vehicle, stepIDs, parent=None):
     from gui.impl.dialogs import dialogs
     result = yield await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.veh_post_progression.PostProgressionResearchSteps(), parent=parent, wrappedViewClass=PostProgressionResearchConfirm, vehicle=vehicle, stepIDs=stepIDs))
     raise AsyncReturn(result)
+
+
+def showTelecomRentalPage():
+    url = getTelecomRentVehicleUrl()
+    showBrowserOverlayView(url, VIEW_ALIAS.TELECOM_RENTAL_VIEW)
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)

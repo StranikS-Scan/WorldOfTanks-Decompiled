@@ -27,6 +27,7 @@ from account_helpers.AccountSettings import CURRENT_VEHICLE
 from account_helpers.battle_pass import BattlePassManager
 from account_helpers.festivity_manager import FestivityManager
 from account_helpers.renewable_subscription import RenewableSubscription
+from account_helpers.telecom_rentals import TelecomRentals
 from account_helpers.settings_core import IntUserSettings
 from account_helpers.session_statistics import SessionStatistics
 from account_helpers.spa_flags import SPAFlags
@@ -167,6 +168,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.dogTags = g_accountRepository.dogTags
         self.mapsTraining = g_accountRepository.mapsTraining
         self.renewableSubscription = g_accountRepository.renewableSubscription
+        self.telecomRentals = g_accountRepository.telecomRentals
         self.giftSystem = g_accountRepository.giftSystem
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
@@ -195,6 +197,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.dogTags.setAccount(self)
         self.mapsTraining.setAccount(self)
         self.renewableSubscription.setAccount(self)
+        self.telecomRentals.setAccount(self)
         g_accountRepository.commandProxy.setGateway(self.__doCmd)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
@@ -254,6 +257,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.dogTags.onAccountBecomePlayer()
         self.mapsTraining.onAccountBecomePlayer()
         self.renewableSubscription.onAccountBecomePlayer()
+        self.telecomRentals.onAccountBecomePlayer()
         self.sessionStats.onAccountBecomePlayer()
         self.spaFlags.onAccountBecomePlayer()
         self.anonymizer.onAccountBecomePlayer()
@@ -301,6 +305,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.dogTags.onAccountBecomeNonPlayer()
         self.mapsTraining.onAccountBecomeNonPlayer()
         self.renewableSubscription.onAccountBecomeNonPlayer()
+        self.telecomRentals.onAccountBecomeNonPlayer()
         self.giftSystem.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
@@ -1317,6 +1322,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.dogTags.synchronize(isFullSync, diff)
             self.mapsTraining.synchronize(isFullSync, diff)
             self.renewableSubscription.synchronize(isFullSync, diff)
+            self.telecomRentals.synchronize(isFullSync, diff)
             self.giftSystem.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeDisabledPersonalMissions(diff)
@@ -1563,6 +1569,7 @@ class _AccountRepository(object):
         self.dogTags = DogTags(self.syncData)
         self.mapsTraining = MapsTraining(self.syncData)
         self.renewableSubscription = RenewableSubscription(self.syncData)
+        self.telecomRentals = TelecomRentals(self.syncData)
         self.giftSystem = GiftSystem(self.syncData, self.commandProxy)
         self.platformBlueprintsConvertSaleLimits = {}
         self.gMap = ClientGlobalMap()

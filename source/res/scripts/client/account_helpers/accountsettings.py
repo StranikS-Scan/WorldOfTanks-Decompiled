@@ -180,6 +180,7 @@ QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
 TOP_OF_TREE_CONFIG = 'topOfTree'
 DOG_TAGS = 'dogTags'
 WOT_PLUS = 'wotPlus'
+TELECOM_RENTALS = 'telecomRentals'
 LAST_ARTY_CTRL_MODE = 'lastArtyCtrlMode'
 ACTIVE_TEST_PARTICIPATION_CONFIRMED = 'activeTestParticipateConfirmed'
 MAPBOX_PROGRESSION = 'mapbox_progression'
@@ -727,6 +728,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'isTankRentalEnabled': True,
                            'isFreeDirectivesEnabled': True,
                            'rentPendingVehCD': None},
+                TELECOM_RENTALS: {'isTelecomRentalsEnabled': True,
+                                  'isTelecomRentalsBlocked': True},
                 CUSTOMIZATION_SECTION: {CAROUSEL_ARROWS_HINT_SHOWN_FIELD: False,
                                         PROJECTION_DECAL_HINT_SHOWN_FIELD: False},
                 SESSION_STATS_SECTION: {BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD: False},

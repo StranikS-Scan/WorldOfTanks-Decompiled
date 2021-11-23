@@ -52,6 +52,7 @@ REQUIRED_TANKMAN_FIELDS = {'isPremium',
  'nationID',
  'vehicleTypeID'}
 DEFAULT_STYLED_VEHICLES = (15697, 6193, 19969, 3937)
+_CUSTOM_CREW_KEYS = {'subscription', 'telecom_rentals'}
 
 class _ItemPackValidationError(SoftException):
     pass
@@ -248,7 +249,7 @@ def _parseRent(offer):
 
 
 def _getOfferCrew(offer):
-    if offer.get('event_type', '') == 'subscription':
+    if offer.get('event_type', '') in _CUSTOM_CREW_KEYS:
         crew = ItemPackType.CREW_CUSTOM
     elif Money(**offer.get('buy_price', MONEY_UNDEFINED)).gold:
         crew = ItemPackType.CREW_100

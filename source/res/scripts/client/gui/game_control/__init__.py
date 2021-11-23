@@ -68,6 +68,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.account_completion import SteamCompletionController as _SteamCompletionController, DemoAccCompletionController as _DemoAccCompletionController
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
     from gui.game_control.wot_plus_controller import WotPlusNotificationController
+    from gui.game_control.telecom_rentals_controller import TelecomRentalsNotificationController
     from gui.game_control.event_battles_controller import EventBattlesController
     from gui.game_control.gift_system_controller import GiftSystemController
     tracker = GameStateTracker()
@@ -138,4 +139,5 @@ def getGameControllersConfig(manager):
     _config(_interface.IDemoAccCompletionController, _DemoAccCompletionController())
     _config(_interface.IVehiclePostProgressionController, VehiclePostProgressionController())
     _config(_interface.IWotPlusNotificationController, WotPlusNotificationController())
+    _config(_interface.ITelecomRentalsNotificationController, TelecomRentalsNotificationController())
     _config(_interface.IGiftSystemController, GiftSystemController())

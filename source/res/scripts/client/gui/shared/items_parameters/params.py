@@ -436,7 +436,7 @@ class VehicleParams(_ParameterBase):
     @property
     def shotDispersionAngle(self):
         shotDispersion = items_utils.getClientShotDispersion(self._itemDescr, self.__factors['shotDispersion'][0])
-        return round(shotDispersion * 100, 2)
+        return round(shotDispersion * 100, 4)
 
     @property
     def reloadTimeSecs(self):

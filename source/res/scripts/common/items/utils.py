@@ -279,7 +279,8 @@ if IS_CLIENT:
         factors['camouflage'] = vehicleDescrCrew.camouflageFactor
         if perksController and aspect == VEHICLE_TTC_ASPECTS.DEFAULT:
             perksController.onCollectFactors(factors)
-        shotDispersionFactors = [1.0, 0.0]
+        multShotDispersionFactor = factors.get('multShotDispersionFactor', 1.0)
+        shotDispersionFactors = [multShotDispersionFactor, 0.0]
         vehicleDescrCrew.onCollectShotDispersionFactors(shotDispersionFactors)
         factors['shotDispersion'] = shotDispersionFactors
         return

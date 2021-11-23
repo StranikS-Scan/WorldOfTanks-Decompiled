@@ -809,7 +809,7 @@ class EpicBattleItem(SelectorItem):
 
     def _update(self, state):
         self._isVisible = any((self.__epicController.getCurrentSeason(), self.__epicController.getNextSeason()))
-        self._isDisabled = not self.__epicController.isEnabled()
+        self._isDisabled = not self.__epicController.isEnabled() or state.hasLockedState
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.EPIC)
         if self._selectorType is not None:
             self._isNew = not selectorUtils.isKnownBattleType(self._selectorType)

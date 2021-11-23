@@ -63,7 +63,7 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
 
 def getVehicleDataVO(vehicle):
     rentInfoText = ''
-    if not vehicle.isWotPlusRent:
+    if not vehicle.isWotPlusRent and not vehicle.isTelecomRent:
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
     vState, vStateLvl = vehicle.getState()
     if vehicle.isRotationApplied():
@@ -91,6 +91,8 @@ def getVehicleDataVO(vehicle):
     tankType = '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type
     current, maximum = vehicle.getCrystalsEarnedInfo()
     isCrystalsLimitReached = current == maximum
+    isWotPlusSlot = (vehicle.isWotPlusRent or vehicle.isTelecomRent) and not vehicle.rentExpiryState
+    extraImage = RES_ICONS.MAPS_ICONS_LIBRARY_RENT_ICO_BIG if isWotPlusSlot else ''
     return {'id': vehicle.invID,
      'intCD': vehicle.intCD,
      'infoText': largeStatus,
@@ -123,8 +125,8 @@ def getVehicleDataVO(vehicle):
      'isCrystalsLimitReached': isCrystalsLimitReached,
      'isUseRightBtn': True,
      'tooltip': TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE,
-     'isWotPlusSlot': vehicle.isWotPlusRent,
-     'extraImage': RES_ICONS.MAPS_ICONS_LIBRARY_RENT_ICO_BIG if vehicle.isWotPlusRent else ''}
+     'isWotPlusSlot': isWotPlusSlot,
+     'extraImage': extraImage}
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):
@@ -307,7 +309,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._addCriteria()
 
     def _addCriteria(self):
-        self._addVehicleItemsByCriteria(self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | ~REQ_CRITERIA.VEHICLE.WOTPLUS_RENT)
+        self._addVehicleItemsByCriteria(self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | (~REQ_CRITERIA.VEHICLE.WOTPLUS_RENT | ~REQ_CRITERIA.VEHICLE.TELECOM_RENT))
 
     def _buildVehicle(self, vehicle):
         vo = getVehicleDataVO(vehicle)

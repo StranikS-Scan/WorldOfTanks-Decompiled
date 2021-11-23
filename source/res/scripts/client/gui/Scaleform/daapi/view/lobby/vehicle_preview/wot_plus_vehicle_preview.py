@@ -39,8 +39,13 @@ class VPWotPlusPanel(VehiclePreviewWotPlusPanelMeta):
             showRentVehicleOverlay(self.__buyParams)
 
         title = backport.text(R.strings.dialogs.wotPlusRental.title())
-        title = title % g_currentPreviewVehicle.item.userName
+        vehicleName = g_currentPreviewVehicle.item.userName
+        vehicleName = vehicleName.replace('(', '%((')
+        vehicleName = vehicleName.replace(')', '))')
+        title %= vehicleName
         date = formatDate(BigWorld.player().renewableSubscription.getExpiryTime())
+        if 'event_type' in self.__buyParams and self.__buyParams['event_type'] == 'telecom_rentals':
+            date = formatDate(BigWorld.player().telecomRentals.getRosterExpirationTime())
         description = backport.text(R.strings.dialogs.wotPlusRental.description()) % date
         iconName = getIconResourceName(getNationLessName(g_currentPreviewVehicle.item.name))
         icon = R.images.gui.maps.shop.vehicles.c_360x270.dyn(iconName)()

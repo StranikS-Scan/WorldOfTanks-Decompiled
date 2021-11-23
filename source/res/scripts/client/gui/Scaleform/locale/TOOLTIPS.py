@@ -1157,6 +1157,7 @@ class TOOLTIPS(object):
     VEHICLE_WOTPLUSRENTING = '#tooltips:vehicle/wotPlusRenting'
     VEHICLE_WOTPLUSRENTING_REMAININGTIME_DAYS = '#tooltips:vehicle/wotPlusRenting/remainingTime/days'
     VEHICLE_WOTPLUSRENTING_REMAININGTIME_HOURS = '#tooltips:vehicle/wotPlusRenting/remainingTime/hours'
+    VEHICLE_TELECOMRENTALSRENTING = '#tooltips:vehicle/telecomRentalsRenting'
     VEHICLE_RESTORELEFT_DAYS = '#tooltips:vehicle/restoreLeft/days'
     VEHICLE_RESTORELEFT_HOURS = '#tooltips:vehicle/restoreLeft/hours'
     VEHICLEIGR_SPECIALABILITY = '#tooltips:vehicleIgr/specialAbility'

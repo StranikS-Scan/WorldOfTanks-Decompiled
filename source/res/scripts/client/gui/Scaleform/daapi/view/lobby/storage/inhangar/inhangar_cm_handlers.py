@@ -218,7 +218,7 @@ class VehiclesRentedCMHandler(ContextMenu):
 
     def __canRemove(self):
         vehicle = self.__itemsCache.items.getItemByCD(self._id)
-        return vehicle is not None and vehicle.canSell and vehicle.rentalIsOver
+        return vehicle is not None and vehicle.canSell and vehicle.rentalIsOver and not vehicle.isTelecomRent
 
 
 @dependency.replace_none_kwargs(comparisonBasket=IVehicleComparisonBasket, itemsCache=IItemsCache)

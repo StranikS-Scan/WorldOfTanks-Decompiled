@@ -38,7 +38,6 @@ from gui.shared.utils.plugins import IPlugin
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IBootcampController
 from soft_exception import SoftException
 from helpers.time_utils import MS_IN_SECOND
 _logger = logging.getLogger(__name__)
@@ -165,6 +164,10 @@ class CrosshairPlugin(IPlugin):
     __slots__ = ('__weakref__',)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
+
+    def _isHideAmmo(self):
+        arenaGuiTypeVisitor = self.sessionProvider.arenaVisitor.gui
+        return arenaGuiTypeVisitor.isBootcampBattle() or arenaGuiTypeVisitor.isMapsTraining()
 
 
 class CorePlugin(CrosshairPlugin):
@@ -423,7 +426,6 @@ class _PythonAutoReloadProxy(_ReloadingAnimationsProxy):
 
 class AmmoPlugin(CrosshairPlugin):
     __slots__ = ('__guiSettings', '__burstSize', '__shellsInClip', '__autoReloadCallbackID', '__autoReloadSnapshot', '__scaledInterval', '__reloadAnimator', '__isShowingAutoloadingBoost')
-    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, parentObj):
         super(AmmoPlugin, self).__init__(parentObj)
@@ -498,7 +500,7 @@ class AmmoPlugin(CrosshairPlugin):
         self.__setReloadingState(reloadingState)
         if self.__guiSettings.hasAutoReload:
             self.__reloadAnimator.setClipAutoLoading(reloadingState.getActualValue(), reloadingState.getBaseValue(), isStun=False)
-        if self.bootcampController.isInBootcamp():
+        if self._isHideAmmo():
             self._parentObj.as_setNetVisibleS(CROSSHAIR_CONSTANTS.VISIBLE_NET)
         self._parentObj.as_setShellChangeTimeS(ctrl.canQuickShellChange(), ctrl.getQuickShellChangeTime())
 
@@ -976,7 +978,6 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
 
 class SiegeModePlugin(CrosshairPlugin):
     __slots__ = ('__siegeState',)
-    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, parentObj):
         super(SiegeModePlugin, self).__init__(parentObj)
@@ -1040,7 +1041,7 @@ class SiegeModePlugin(CrosshairPlugin):
             self._parentObj.as_setNetTypeS(self.__getEnabledNetType(vTypeDescr))
         elif self.__siegeState == _SIEGE_STATE.DISABLED:
             self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
-        visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_NET if self.bootcampController.isInBootcamp() else CROSSHAIR_CONSTANTS.VISIBLE_ALL
+        visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_NET if self._isHideAmmo() else CROSSHAIR_CONSTANTS.VISIBLE_ALL
         visibleMask = visibleMask if self.__siegeState not in _SIEGE_STATE.SWITCHING else CROSSHAIR_CONSTANTS.INVISIBLE
         self._parentObj.as_setNetVisibleS(visibleMask)
         return

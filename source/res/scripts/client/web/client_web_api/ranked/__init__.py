@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/client_web_api/ranked/__init__.py
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.shared import g_eventBus
 from web.client_web_api.api import C2WHandler, c2w
 from web.web_client_api.ranked_battles import BROWSER_BRIDGE_EVENT
-from gui.shared import g_eventBus
 _ALLOWED_TOKENS = {'ranked_shop_no_log'}
 
 class RankedEventHandler(C2WHandler):

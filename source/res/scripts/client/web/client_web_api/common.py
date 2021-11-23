@@ -5,6 +5,7 @@ from Event import Event
 from web.client_web_api.platform import PlatformEventHandler
 from web.client_web_api.ranked import RankedEventHandler, BrowsersBridgeC2W
 from web.client_web_api.shop.stats import BalanceEventHandler
+from web.client_web_api.shop.telecom_rentals import TelecomTokenEventHandler
 from web.client_web_api.shop.trade import TradeEventHandler
 from web.client_web_api.reactive_comm import ReactiveCommunicationEventHandler
 from web.client_web_api.util.vehicle import VehicleCompareEventHandler, VehicleStateEventHandler
@@ -39,4 +40,5 @@ class WebEventSender(object):
          ReactiveCommunicationEventHandler(self),
          PlatformEventHandler(self),
          RankedEventHandler(self),
-         BrowsersBridgeC2W(self))
+         BrowsersBridgeC2W(self),
+         TelecomTokenEventHandler(self))

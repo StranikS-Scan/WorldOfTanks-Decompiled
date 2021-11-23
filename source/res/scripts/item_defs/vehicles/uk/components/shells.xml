@@ -2279,32 +2279,43 @@
   <_47inch_QF>
     <id>	173	</id>
     <userString>	#gb_vehicles:_47inch_QF	</userString>
-    <icon>	ap	</icon>
+    <icon>	hc	</icon>
     <price>	1060	</price>
-    <kind>	ARMOR_PIERCING	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	120	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeArmorPiercing	</effects>
+    <effects>	largeHollowCharge	</effects>
     <damage>
-      <armor>	420	</armor>
+      <armor>	360	</armor>
       <devices>	165	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_47inch_QF>
-  <_47inch_MkIIA>
+  <_47inch_HESH_MkIIA>
     <id>	175	</id>
-    <userString>	#gb_vehicles:_47inch_MkIIA	</userString>
-    <icon>	ap_cr_premium	</icon>
+    <userString>	#gb_vehicles:_47inch_HESH_MkIIA	</userString>
+    <icon>	he_modern_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
-    <kind>	ARMOR_PIERCING_CR	</kind>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
     <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
     <isTracer>	true	</isTracer>
-    <effects>	largeAPCR	</effects>
+    <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	420	</armor>
+      <armor>	515	</armor>
       <devices>	165	</devices>
     </damage>
-  </_47inch_MkIIA>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_47inch_HESH_MkIIA>
   <_47inch_HE>
     <id>	177	</id>
     <userString>	#gb_vehicles:_47inch_HE	</userString>

@@ -11,6 +11,9 @@ class BootcampModeSelectorItem(ModeSelectorNormalCardItem):
     __slots__ = ()
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
+    def __init__(self, _=None):
+        super(BootcampModeSelectorItem, self).__init__()
+
     @property
     def modeName(self):
         return CustomModeName.BOOTCAMP

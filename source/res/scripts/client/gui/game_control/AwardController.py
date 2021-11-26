@@ -1103,7 +1103,8 @@ class VehiclesResearchHandler(SpecialAchievement):
         isNeededToShow = super(VehiclesResearchHandler, self)._needToShowAward()
         if isNeededToShow:
             bcVehicles = self.bootcampController.getAwardVehicles()
-            return not set(bcVehicles).issubset(self.__unlocks) and self.__achievementCounts in self._awardCntToMsg
+            isAwardVehicles = set(bcVehicles).issubset(self.__unlocks) if bcVehicles else False
+            return not isAwardVehicles and self.__achievementCounts in self._awardCntToMsg
         return False
 
 
@@ -1545,7 +1546,7 @@ class DynamicBonusHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         invoiceData = ctx[1].data
-        if invoiceData.get('assetType') == INVOICE_ASSET.DATA and 'tags' in invoiceData:
+        if invoiceData.get('assetType') in (INVOICE_ASSET.DATA, INVOICE_ASSET.PURCHASE) and 'tags' in invoiceData:
             if 'data' not in invoiceData:
                 _logger.error('Invalid Reached Cap data!')
             for tag in invoiceData['tags']:

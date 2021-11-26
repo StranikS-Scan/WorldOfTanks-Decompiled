@@ -62,7 +62,7 @@ from items import vehicles as vehicles_core, parseIntCompactDescr, ITEM_TYPES
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IClanNotificationController, IBrowserController
+from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IClanNotificationController, IBrowserController, IMarathonEventsController
 from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
@@ -479,11 +479,17 @@ def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR
      'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showMarathonVehiclePreview(vehTypeCompDescr, itemsPack=None, title='', marathonPrefix=''):
+def showMarathonVehiclePreview(vehTypeCompDescr, itemsPack=None, title='', marathonPrefix='', backToHangar=False):
+    previewAppearance = None
+    if backToHangar:
+        previewAppearance = HeroTankPreviewAppearance()
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
      'itemsPack': itemsPack,
      'title': title,
-     'marathonPrefix': marathonPrefix}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'marathonPrefix': marathonPrefix,
+     'previewAppearance': previewAppearance,
+     'backToHangar': backToHangar}), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
 
 
 def showConfigurableVehiclePreview(vehTypeCompDescr, previewAlias, previewBackCb, hiddenBlocks, itemPack):
@@ -531,11 +537,22 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
     import BigWorld
     from HeroTank import HeroTank
     from ClientSelectableCameraObject import ClientSelectableCameraObject
+    marathonCtrl = dependency.instance(IMarathonEventsController)
     for entity in BigWorld.entities.values():
         if entity and isinstance(entity, HeroTank):
-            showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb, previousBackAlias=previousBackAlias, hangarVehicleCD=hangarVehicleCD)
+            descriptor = entity.typeDescriptor
+            if descriptor:
+                marathons = marathonCtrl.getMarathons()
+                activeMarathon = next((marathon for marathon in marathons if marathon.vehicleID == descriptor.type.compactDescr), None)
+                if activeMarathon:
+                    title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
+                    showMarathonVehiclePreview(descriptor.type.compactDescr, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
+                else:
+                    showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb, previousBackAlias=previousBackAlias, hangarVehicleCD=hangarVehicleCD)
             ClientSelectableCameraObject.switchCamera(entity)
             break
+
+    return
 
 
 def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None):
@@ -822,26 +839,6 @@ def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=N
     return
 
 
-def showSeniorityRewardWindow():
-    from gui.impl.lobby.seniority_awards.seniority_reward_view import SeniorityRewardWindow
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.lobby.seniority_awards.seniority_reward_view.SeniorityRewardView()
-    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
-        window = SeniorityRewardWindow(contentResId)
-        window.load()
-    return
-
-
-def showSeniorityInfoWindow():
-    from gui.impl.lobby.seniority_awards.seniority_info_view import SeniorityInfoViewWindow
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.lobby.seniority_awards.SeniorityInfoView()
-    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
-        window = SeniorityInfoViewWindow(contentResId)
-        window.load()
-    return
-
-
 def showProgressiveRewardWindow():
     lobbyContext = dependency.instance(ILobbyContext)
     if not lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled:
@@ -867,8 +864,21 @@ def showProgressiveRewardAwardWindow(bonuses, specialRewardType, currentStep, no
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
 def showSeniorityRewardAwardWindow(qID, data, notificationMgr=None):
     from gui.impl.lobby.seniority_awards.seniority_reward_award_view import SeniorityRewardAwardWindow
+    from account_helpers.AccountSettings import AccountSettings, SENIORITY_AWARDS_WINDOW_SHOWN
+    AccountSettings.setSessionSettings(SENIORITY_AWARDS_WINDOW_SHOWN, True)
     window = SeniorityRewardAwardWindow(qID, data, R.views.lobby.seniority_awards.SeniorityAwardsView())
     notificationMgr.append(WindowNotificationCommand(window))
+
+
+def showSeniorityAwardsNotificationWindow():
+    from gui.impl.lobby.seniority_awards.seniority_awards_notification_view import SeniorityAwardsNotificationWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.seniority_awards.SeniorityAwardsNotificationView()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        window = SeniorityAwardsNotificationWindow()
+        window.load()
+        window.center()
+    return
 
 
 def showBattlePassAwardsWindow(bonuses, data, callback=None):
@@ -1603,3 +1613,28 @@ def showVideoRewardView(ctx):
         window = VideoResultViewWindow(ctx)
         window.load()
     return
+
+
+def showMarathonRewardScreen(marathonPrefix):
+    from gui.impl.lobby.marathon.marathon_reward_window_view import MarathonRewardWindowView
+    from gui.server_events.bonuses import CustomizationsBonus
+    marathonController = dependency.instance(IMarathonEventsController)
+    marathon = marathonController.getMarathon(marathonPrefix)
+    if not marathon:
+        LOG_WARNING('Could not find marathon with prefix ', marathonPrefix)
+        return
+    currentStage, maxStage = marathon.getMarathonProgress()
+    crewRewards = []
+    if marathon.isPostRewardObtained():
+        remainingRewards = marathon.getStyleQuestReward()
+        remainingRewards = [ reward for reward in remainingRewards if not isinstance(reward, CustomizationsBonus) ]
+    elif currentStage == maxStage:
+        remainingRewards = marathon.getRewardsForQuestNumber(currentStage - 1)
+        crewRewards = marathon.getVehicleCrewReward()
+    else:
+        remainingRewards = marathon.remainingRewards
+        crewRewards = marathon.getVehicleCrewReward()
+    window = LobbyNotificationWindow(content=MarathonRewardWindowView({'rewards': remainingRewards,
+     'crewRewards': crewRewards,
+     'marathonPrefix': marathonPrefix}), layer=WindowLayer.FULLSCREEN_WINDOW)
+    window.load()

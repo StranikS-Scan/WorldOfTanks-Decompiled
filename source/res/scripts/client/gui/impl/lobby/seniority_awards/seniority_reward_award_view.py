@@ -5,6 +5,7 @@ import re
 from collections import defaultdict
 from helpers import dependency
 from frameworks.wulf import ViewSettings
+from gui.game_control.seniority_awards_controller import SACOIN
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.auxiliary.rewards_helper import getRewardRendererModelPresenter, getRewardTooltipContent
 from gui.impl.backport import TooltipData, BackportTooltipWindow, createTooltipData
@@ -12,6 +13,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips import BlueprintScreenTooltips
 from gui.impl.gen.view_models.views.lobby.seniority_awards.seniority_awards_vehicle_renderer_model import SeniorityAwardsVehicleRendererModel
 from gui.impl.gen.view_models.views.lobby.seniority_awards.seniority_reward_award_view_model import SeniorityRewardAwardViewModel
+from gui.impl.gen.view_models.views.lobby.seniority_awards.seniority_awards_bonus_renderer_model import SeniorityAwardsBonusRendererModel
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared.gui_items.Vehicle import getNationLessName, getIconResourceName
@@ -19,10 +21,11 @@ from gui.impl.auxiliary.rewards_helper import getSeniorityAwardsRewardsAndBonuse
 from gui.impl.auxiliary.rewards_helper import DEF_MODEL_PRESENTERS
 from gui.server_events.bonuses import BlueprintsBonusSubtypes
 from gui.impl.auxiliary.rewards_helper import LootRewardDefModelPresenter
-from gui.shared.event_dispatcher import showSeniorityInfoWindow
+from gui.shared.event_dispatcher import showShop
 from gui.shared.utils.functions import getAbsoluteUrl, stripHTMLTags
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPlayerSeniorityAwardsUrl
 _logger = logging.getLogger(__name__)
 REG_EXP_QUEST_SUBTYPE = ':([Y, y]\\d*)|:([A,a,B,b][T,t])'
 _BONUSES_COUNT = 9
@@ -66,7 +69,7 @@ def _vehiclesSortOrder(vehicle):
 
 
 class SeniorityRewardAwardView(ViewImpl):
-    __slots__ = ('__bonuses', '__vehicles', '__tooltipData')
+    __slots__ = ('__bonuses', '__vehicles', '__specialCurrencies', '__tooltipData')
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -76,6 +79,10 @@ class SeniorityRewardAwardView(ViewImpl):
         settings.args = args
         settings.kwargs = kwargs
         super(SeniorityRewardAwardView, self).__init__(settings)
+        self.__bonuses = []
+        self.__vehicles = []
+        self.__specialCurrencies = {}
+        self.__tooltipData = {}
 
     @property
     def viewModel(self):
@@ -95,24 +102,27 @@ class SeniorityRewardAwardView(ViewImpl):
         tooltipData = self.__getBackportTooltipData(event)
         return getRewardTooltipContent(event, tooltipData)
 
-    def _initialize(self, questID, data):
-        super(SeniorityRewardAwardView, self)._initialize()
-        self.viewModel.onCloseAction += self.__onWindowClose
-        self.viewModel.onOpenBtnClick += self.__onOpenBtnClick
+    def _onLoading(self, questID, data, *args, **kwargs):
+        super(SeniorityRewardAwardView, self)._onLoading(*args, **kwargs)
         questYearsType = None
         seniorityLvlSearch = re.search(REG_EXP_QUEST_SUBTYPE, questID) if questID else None
         if seniorityLvlSearch is not None:
             questYearsType = seniorityLvlSearch.groups()[0] or seniorityLvlSearch.groups()[1]
         self.__updateBonuses(data)
         self.__tooltipData = {}
-        self.__setRewards()
-        self.__setBonuses()
-        if questYearsType is not None:
-            self.viewModel.setCategory(questYearsType.upper())
-        config = self.__lobbyContext.getServerSettings().getSeniorityAwardsConfig()
-        hasToken = self.__itemsCache.items.tokens.getToken(config.getSecretBoxToken()) is not None
-        self.viewModel.setSecretBoxAvailable(hasToken)
+        with self.viewModel.transaction() as vm:
+            self.__setRewards(vm)
+            self.__setBonuses(vm)
+            self.__setSpecialCurrency(vm)
+            vm.setIsShopOnOpenLocked(self.__needBlockShopTransition)
+            if questYearsType is not None:
+                vm.setCategory(questYearsType.upper())
         return
+
+    def _initialize(self, *args, **kwargs):
+        super(SeniorityRewardAwardView, self)._initialize(*args, **kwargs)
+        self.viewModel.onCloseAction += self.__onWindowClose
+        self.viewModel.onOpenBtnClick += self.__onOpenBtnClick
 
     def _finalize(self):
         self.__bonuses = None
@@ -122,36 +132,50 @@ class SeniorityRewardAwardView(ViewImpl):
         super(SeniorityRewardAwardView, self)._finalize()
         return
 
-    def __setRewards(self):
-        with self.viewModel.transaction() as vm:
-            vehiclesList = vm.getVehicles()
-            vehiclesList.clear()
-            for vehicle in self.__vehicles:
-                rendererModel = SeniorityAwardsVehicleRendererModel()
-                rendererModel.setVehicleCD(str(vehicle.vehicleCD))
-                rendererModel.setImgSource(self.__getVehImgResource(vehicle.name))
-                vehiclesList.addViewModel(rendererModel)
+    @property
+    def __needBlockShopTransition(self):
+        return bool(not self.__specialCurrencies.get(SACOIN))
 
-            vehiclesList.invalidate()
+    def __setRewards(self, viewModel):
+        vehiclesList = viewModel.getVehicles()
+        vehiclesList.clear()
+        for vehicle in self.__vehicles:
+            rendererModel = SeniorityAwardsVehicleRendererModel()
+            rendererModel.setVehicleCD(str(vehicle.vehicleCD))
+            rendererModel.setImgSource(self.__getVehImgResource(vehicle.name))
+            rendererModel.setVehicleName(vehicle.userName)
+            vehiclesList.addViewModel(rendererModel)
 
-    def __setBonuses(self):
-        with self.viewModel.transaction() as vm:
-            bonusesList = vm.getBonuses()
-            bonusesList.clear()
-            for index, bonus in enumerate(self.__bonuses):
-                if bonus.get('imgSource') is not None:
-                    bonus['imgSource'] = getAbsoluteUrl(bonus['imgSource'])
-                if bonus.get('label') is not None:
-                    bonus['label'] = stripHTMLTags(bonus['label'])
-                presenters = DEF_MODEL_PRESENTERS.copy()
-                presenters[BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT] = LootRewardDefModelPresenter()
-                modelPresenter = getRewardRendererModelPresenter(bonus, presenters=presenters)
-                rendererModel = modelPresenter.getModel(bonus, index)
-                bonusesList.addViewModel(rendererModel)
-                self.__tooltipData[index] = TooltipData(tooltip=bonus.get('tooltip', None), isSpecial=bonus.get('isSpecial', False), specialAlias=bonus.get('specialAlias', ''), specialArgs=bonus.get('specialArgs', None))
+        vehiclesList.invalidate()
 
-            bonusesList.invalidate()
+    def __setBonuses(self, viewModel):
+        bonusesList = viewModel.getBonuses()
+        bonusesList.clear()
+        for index, bonus in enumerate(self.__bonuses):
+            if bonus.get('imgSource') is not None:
+                bonus['imgSource'] = getAbsoluteUrl(bonus['imgSource'])
+            if bonus.get('label') is not None:
+                bonus['label'] = stripHTMLTags(bonus['label'])
+            presenters = DEF_MODEL_PRESENTERS.copy()
+            presenters[BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT] = LootRewardDefModelPresenter()
+            modelPresenter = getRewardRendererModelPresenter(bonus, presenters=presenters)
+            rendererModel = modelPresenter.getModel(bonus, index)
+            tooltipId = str(index)
+            bonusModel = SeniorityAwardsBonusRendererModel()
+            bonusModel.setLabelStr(rendererModel.getLabelStr())
+            bonusModel.setIcon(rendererModel.getIcon())
+            bonusModel.setTooltipId(tooltipId)
+            bonusModel.setBonusName(rendererModel.getRewardName())
+            bonusesList.addViewModel(bonusModel)
+            self.__tooltipData[tooltipId] = TooltipData(tooltip=bonus.get('tooltip', None), isSpecial=bonus.get('isSpecial', False), specialAlias=bonus.get('specialAlias', ''), specialArgs=bonus.get('specialArgs', None))
+
+        bonusesList.invalidate()
         return
+
+    def __setSpecialCurrency(self, viewModel):
+        currencyCount = self.__specialCurrencies.get(SACOIN)
+        if currencyCount:
+            viewModel.setSpecialCurrencyCount(currencyCount)
 
     def __onWindowClose(self, _=None):
         self.destroyWindow()
@@ -180,17 +204,20 @@ class SeniorityRewardAwardView(ViewImpl):
              True)) if tooltipId == SeniorityAwardsVehicleRendererModel.TOOLTIP_VEHICLE_REWARD else None
 
     def __updateBonuses(self, data):
-        bonuses, vehicles = getSeniorityAwardsRewardsAndBonuses(data, maxAwardCount=_BONUSES_COUNT, excluded=_EXCLUDED_BONUSES, sortKey=lambda b: _keySortOrder(b, _getBonusOrder()))
-        self.__bonuses = bonuses or []
-        self.__vehicles = sorted(vehicles, key=_vehiclesSortOrder) or []
+        seniorityAwards = getSeniorityAwardsRewardsAndBonuses(data, maxAwardCount=_BONUSES_COUNT, excluded=_EXCLUDED_BONUSES, sortKey=lambda b: _keySortOrder(b, _getBonusOrder()))
+        self.__bonuses = seniorityAwards.bonuses or []
+        self.__vehicles = sorted(seniorityAwards.vehicles, key=_vehiclesSortOrder) or []
+        self.__specialCurrencies = seniorityAwards.currencies or {}
 
     @staticmethod
     def __getVehImgResource(vehicleName):
         return getIconResourceName(getNationLessName(vehicleName))
 
-    @staticmethod
-    def __onOpenBtnClick():
-        showSeniorityInfoWindow()
+    def __onOpenBtnClick(self):
+        if not self.viewModel.getIsShopOnOpenLocked():
+            showShop(getPlayerSeniorityAwardsUrl())
+        else:
+            self.destroyWindow()
 
 
 class SeniorityRewardAwardWindow(LobbyNotificationWindow):

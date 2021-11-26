@@ -5,7 +5,6 @@ import logging
 from operator import attrgetter
 from itertools import chain
 from constants import QUEUE_TYPE
-from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSenorityEntryPointIsActive
 from gui.Scaleform.daapi.view.meta.EventEntryPointsContainerMeta import EventEntryPointsContainerMeta
 from gui.impl.lobby.mapbox.mapbox_entry_point_view import isMapboxEntryPointAvailable
 from gui.impl.lobby.halloween.he20_entry_point import isHE20EntryPointAvailable
@@ -25,9 +24,8 @@ from skeletons.gui.shared import IItemsCache
 _HANGAR_ENTRY_POINTS = 'hangarEntryPoints'
 _SECONDS_BEFORE_UPDATE = 2
 _COUNT_VISIBLE_ENTRY_POINTS = 2
-_ADDITIONAL_SWFS_MAP = {HANGAR_ALIASES.SENIORITY_AWARDS_ENTRY_POINT_2020: 'seniorityAwardsComponents.swf'}
+_ADDITIONAL_SWFS_MAP = {}
 _ENTRY_POINT_ENABLED_VALIDATOR = {HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT: getCraftMachineEntryPointIsActive,
- HANGAR_ALIASES.SENIORITY_AWARDS_ENTRY_POINT_2020: getSenorityEntryPointIsActive,
  RANKEDBATTLES_ALIASES.ENTRY_POINT: isRankedEntryPointAvailable,
  HANGAR_ALIASES.MAPBOX_ENTRY_POINT: isMapboxEntryPointAvailable,
  HANGAR_ALIASES.MARATHON_ENTRY_POINT: isMarathonEntryPointAvailable,

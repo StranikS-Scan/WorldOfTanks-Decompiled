@@ -3,6 +3,7 @@
 import functools
 import logging
 from collections import namedtuple
+from enum import Enum
 import BigWorld
 from account_helpers.AccountSettings import AccountSettings, LAST_CALENDAR_SHOW_TIMESTAMP
 from adisp import process
@@ -53,6 +54,12 @@ class _CloseWindowWebApi(CloseWindowWebApi):
         self.__calendarController.hideWindow()
 
 
+class CalendarOfferType(Enum):
+    VEHICLE = 'vehicle'
+    STYLE = 'style'
+    STYLE_BUNDLE = 'styleBundle'
+
+
 _BROWSER_SIZE = (1014, 654)
 _MIN_BROWSER_ID = 827709
 _logger = logging.getLogger(__name__)
@@ -62,8 +69,12 @@ def calendarEnabledActionFilter(act):
     return any((isinstance(mod, CalendarSplashModifier) for mod in act.getModifiers()))
 
 
-_HeroAdventActionInfo = namedtuple('HeroAdventActionInfo', ('isEnabled', 'vehicleCD', 'endTimestamp'))
-_HeroAdventActionInfo.__new__.__defaults__ = (False, 0, 0)
+_HeroAdventActionInfo = namedtuple('HeroAdventActionInfo', ('isEnabled', 'vehicleCD', 'styleId', 'offerType', 'endTimestamp'))
+_HeroAdventActionInfo.__new__.__defaults__ = (False,
+ 0,
+ 0,
+ None,
+ 0)
 
 class _HeroAdventActionHelper(object):
     __webController = dependency.descriptor(IWebController)
@@ -98,25 +109,35 @@ class _HeroAdventActionHelper(object):
             response = yield self.__webController.sendRequest(ctx=AdventCalendarFetchHeroTankInfoCtx())
             if response.isSuccess():
                 data = (response.getData() or {}).get('data', {})
-                self.__updateInfo(data.get('vehicle_cd', 0), data.get('finish_date', 0))
+                self.__updateInfo(data.get('vehicle_cd', 0), data.get('style_id', 0), data.get('offer_type', None), data.get('finish_date', 0))
                 self.__postponeRecall()
             else:
                 _logger.warning('Unable to fetch Hero-Tank info. Code: %s.', response.getCode())
         else:
             _logger.debug('Unable to fetch Hero-Tank info. Reason: Disabled by Server.')
+        return
 
     def __postponeRecall(self):
         if 0 < self.__actionInfo.endTimestamp > time_utils.getServerUTCTime():
             self.__timer = BigWorld.callback(self.__actionInfo.endTimestamp - time_utils.getServerUTCTime(), self.update)
 
     def __onSyncCompleted(self, *_):
-        self.__updateInfo(self.__actionInfo.vehicleCD, self.__actionInfo.endTimestamp)
+        self.__updateInfo(self.__actionInfo.vehicleCD, self.__actionInfo.styleId, self.__actionInfo.offerType, self.__actionInfo.endTimestamp)
 
-    def __updateInfo(self, vehicleCD, endTimestamp):
+    def __updateInfo(self, vehicleCD, styleId, offerType, endTimestamp):
         oldInfo = self.getInfo()
-        self.__actionInfo = _HeroAdventActionInfo(self.__isByServerSwitchEnabled() and vehicleCD > 0 and endTimestamp > time_utils.getServerUTCTime(), vehicleCD, endTimestamp)
+        isEnabled = self.__isByServerSwitchEnabled() and vehicleCD > 0 and endTimestamp > time_utils.getServerUTCTime()
+        try:
+            offerTypeEnum = CalendarOfferType(offerType)
+        except ValueError:
+            offerTypeEnum = None
+            isEnabled = False
+            _logger.warning('Unsupported calendar offer type %s.', offerType)
+
+        self.__actionInfo = _HeroAdventActionInfo(isEnabled, vehicleCD, styleId, offerTypeEnum, endTimestamp)
         if self.__actionInfo != oldInfo:
             self.__dispatchStateChanged()
+        return
 
     def __isByServerSwitchEnabled(self):
         action = self.__eventsCache.getHeroTankAdventCalendarRedirectAction()

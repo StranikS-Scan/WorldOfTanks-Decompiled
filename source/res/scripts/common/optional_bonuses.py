@@ -120,6 +120,13 @@ def __mergeEntitlements(total, key, value, isLeaf=False, count=1, *args):
             total['expires'] = entitlementData['expires']
 
 
+def __mergeCurrencies(total, key, value, isLeaf=False, count=1, *args):
+    totalCurrency = total.setdefault(key, {})
+    for currencyCode, currencyData in value.iteritems():
+        total = totalCurrency.setdefault(currencyCode, {'count': 0})
+        total['count'] += count * currencyData.get('count', 1)
+
+
 def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
     totalDossiers = total.setdefault(key, {})
     for _dossierType, changes in value.iteritems():
@@ -205,6 +212,7 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'blueprints': __mergeBlueprints,
  'enhancements': __mergeEnhancements,
  'entitlements': __mergeEntitlements,
+ 'currencies': __mergeCurrencies,
  'rankedDailyBattles': __mergeValue,
  'rankedBonusBattles': __mergeValue,
  'dogTagComponents': __mergeDogTag,

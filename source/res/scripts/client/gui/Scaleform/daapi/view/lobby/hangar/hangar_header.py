@@ -27,7 +27,6 @@ from gui.server_events.events_dispatcher import showPersonalMission, showMission
 from gui.server_events.events_helpers import isRankedDaily, isDailyEpic, filterHalloweenAvailableQuest, isHalloween, isHalloweenAFK
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showSeniorityInfoWindow
 from gui.shared.formatters import icons
 from gui.shared.personality import ServicesLocator
 from helpers import dependency
@@ -246,8 +245,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         elif HANGAR_HEADER_QUESTS.QUEST_TYPE_MARATHON in questType:
             marathonPrefix = questID or self._marathonsCtrl.getPrimaryMarathon()
             showMissionsMarathon(marathonPrefix)
-        elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_SENIORITY:
-            showSeniorityInfoWindow()
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_BATTLE_ROYALE:
             showMissionsCategories(groupID=BATTLE_ROYALE_GROUPS_ID)
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_HALLOWEEN:
@@ -355,9 +352,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         eventQuests = self.__getElenQuestsVO(vehicle)
         if eventQuests:
             quests.append(eventQuests)
-        seniorityQuest = self.__getSeniorityQuestsVO()
-        if seniorityQuest:
-            quests.append(seniorityQuest)
         return quests
 
     def __getRankedQuestsToHeaderVO(self):
@@ -623,15 +617,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                     return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_MARATHON, RES_ICONS.MAPS_ICONS_QUESTS_HEADERFLAGICONS_MARATHONS, result)
                 return result
         return None
-
-    def __getSeniorityQuestsVO(self):
-        config = self._lobbyContext.getServerSettings().getSeniorityAwardsConfig()
-        hasToken = self._itemsCache.items.tokens.getToken(config.getSecretBoxToken())
-        if config.isEnabled() and hasToken and config.hangarWidgetIsVisible():
-            quests = [self._headerQuestFormaterVo(True, None, None, HANGAR_HEADER_QUESTS.QUEST_TYPE_SENIORITY, flag=backport.image(R.images.gui.maps.icons.library.hangarFlag.flag_seniority_awards()), isReward=False, tooltip=TOOLTIPS_CONSTANTS.SENIORITY_FLAG, isTooltipSpecial=True)]
-            return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_SENIORITY, backport.image(R.images.gui.maps.icons.library.seniorityAwards.reward()), quests)
-        else:
-            return
 
     def __getEpicBattleQuestsVO(self):
         if not self.__epicController.isEnabled():

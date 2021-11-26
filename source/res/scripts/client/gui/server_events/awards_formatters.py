@@ -328,6 +328,14 @@ def getRoyaleFormatterMap():
      'dossier': DossierBonusFormatter()}
 
 
+def getMarathonRewardScrenFormatterMap():
+    mapping = getDefaultFormattersMap()
+    mapping[PREMIUM_ENTITLEMENTS.BASIC] = PremiumDaysMarathonFormatter()
+    mapping[PREMIUM_ENTITLEMENTS.PLUS] = PremiumDaysMarathonFormatter()
+    mapping['tankmen'] = TankmenMarathonRewardBonusFormatter()
+    return mapping
+
+
 def getDefaultAwardFormatter():
     return AwardsPacker(getDefaultFormattersMap())
 
@@ -418,6 +426,10 @@ def getAnniversaryPacker():
 
 def getBattlePassAwardsPacker():
     return AwardsPacker(getBattlePassFormatterMap())
+
+
+def getMarathonRewardScreenPacker():
+    return AwardsPacker(getMarathonRewardScrenFormatterMap())
 
 
 def formatCountLabel(count, defaultStr=''):
@@ -730,6 +742,21 @@ class PremiumDaysBonusFormatter(SimpleBonusFormatter):
             imgPath = RES_ICONS.getPremiumDaysAwardIcon(size, bonus.getName(), bonus.getValue())
             if imgPath is None:
                 imgPath = RES_ICONS.getPremiumDaysAwardIcon(size, bonus.getName(), 'universal')
+            result[size] = imgPath
+
+        return result
+
+
+class PremiumDaysMarathonFormatter(PremiumDaysBonusFormatter):
+
+    def _format(self, bonus):
+        return [PreformattedBonus(bonusName='items', label=formatCountLabel(bonus.getValue()), userName=self._getUserName(bonus), images=self._getImages(bonus), tooltip=bonus.getTooltip(), isCompensation=self._isCompensation(bonus))]
+
+    @classmethod
+    def _getImages(cls, bonus):
+        result = {}
+        for size in AWARDS_SIZES.ALL():
+            imgPath = RES_ICONS.getPremiumDaysAwardIcon(size, bonus.getName(), 'universal')
             result[size] = imgPath
 
         return result
@@ -1328,6 +1355,21 @@ class TankmenBonusFormatter(SimpleBonusFormatter):
         result = {}
         for size in AWARDS_SIZES.ALL():
             result[size] = RES_ICONS.getBonusIcon(size, bonus.getName())
+
+        return result
+
+
+class TankmenMarathonRewardBonusFormatter(TankmenBonusFormatter):
+
+    def _format(self, bonus):
+        result = []
+        for group in bonus.getTankmenGroups().itervalues():
+            if group['skills']:
+                key = 'with_skills'
+            else:
+                key = 'no_skills'
+            label = '#quests:bonuses/item/tankmen/%s' % key
+            result.append(PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(key), images=self._getImages(bonus), specialAlias=TOOLTIPS_CONSTANTS.TANKMAN, tooltip=makeTooltip(backport.text(R.strings.marathon.rewardTooltip.tankmen.header()), i18n.makeString(label, **group)), isCompensation=self._isCompensation(bonus)))
 
         return result
 

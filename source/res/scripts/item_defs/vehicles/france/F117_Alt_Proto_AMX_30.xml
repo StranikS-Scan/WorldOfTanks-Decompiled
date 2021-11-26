@@ -76,6 +76,13 @@
       <undamaged>	vehicles/french/F117_Alt_Proto_AMX_30/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/french/F117_Alt_Proto_AMX_30/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/french/F117_Alt_Proto_AMX_30/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <F117_Alt_Proto_AMX_30_3DSt_MH>
+          <undamaged>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/crash/lod0/Hull.model	</exploded>
+        </F117_Alt_Proto_AMX_30_3DSt_MH>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -108,8 +115,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.670807 0.398729 2.46257	</rayStart>
-        <rayEnd>	-0.671392 0.0608918 2.33824	</rayEnd>
+        <rayStart>	-0.714507 0.363071 2.5549	</rayStart>
+        <rayEnd>	-0.719264 0.0258613 2.42897	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -873,6 +880,13 @@
         <undamaged>	vehicles/french/F117_Alt_Proto_AMX_30/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F117_Alt_Proto_AMX_30/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/french/F117_Alt_Proto_AMX_30/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <F117_Alt_Proto_AMX_30_3DSt_MH>
+            <undamaged>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/crash/lod0/Chassis.model	</exploded>
+          </F117_Alt_Proto_AMX_30_3DSt_MH>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -987,6 +1001,12 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <F117_Alt_Proto_AMX_30_3DSt_MH>
+            <segmentModelLeft>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/track/segment_L.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/track/segment_R.model	</segmentModelRight>
+          </F117_Alt_Proto_AMX_30_3DSt_MH>
+        </modelSets>
       </splineDesc>
       <trackNodes>
         <enable>	true	</enable>
@@ -1243,6 +1263,11 @@
             <model>	vehicles/french/F117_Alt_Proto_AMX_30/track/segment_L.model	</model>
             <length>	0.159798	</length>
           </mainSegment>
+          <modelSets>
+            <F117_Alt_Proto_AMX_30_3DSt_MH>
+              <mainSegmentModel>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/track/segment_L.model	</mainSegmentModel>
+            </F117_Alt_Proto_AMX_30_3DSt_MH>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1430,6 +1455,11 @@
             <model>	vehicles/french/F117_Alt_Proto_AMX_30/track/segment_R.model	</model>
             <length>	0.159797	</length>
           </mainSegment>
+          <modelSets>
+            <F117_Alt_Proto_AMX_30_3DSt_MH>
+              <mainSegmentModel>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/track/segment_R.model	</mainSegmentModel>
+            </F117_Alt_Proto_AMX_30_3DSt_MH>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1715,6 +1745,13 @@
             <undamaged>	vehicles/french/F117_Alt_Proto_AMX_30/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F117_Alt_Proto_AMX_30/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/french/F117_Alt_Proto_AMX_30/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <F117_Alt_Proto_AMX_30_3DSt_MH>
+                <undamaged>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/crash/lod0/Gun_01.model	</exploded>
+              </F117_Alt_Proto_AMX_30_3DSt_MH>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F117_Alt_Proto_AMX_30/collision/Gun_01.model	</collisionModelServer>
@@ -1751,11 +1788,11 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.00625 0.000000 2.95453	</rayStart>
-              <rayEnd>	0.0235811 0.0189469 2.95402	</rayEnd>
+              <rayStart>	0.00625 0.000000 3.09137	</rayStart>
+              <rayEnd>	0.0697283 0.00864727 3.12877	</rayEnd>
               <rayUp>	0.089094 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
-              <size>	0.6	</size>
+              <size>	0.54	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
@@ -1772,6 +1809,13 @@
         <undamaged>	vehicles/french/F117_Alt_Proto_AMX_30/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/french/F117_Alt_Proto_AMX_30/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/french/F117_Alt_Proto_AMX_30/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <F117_Alt_Proto_AMX_30_3DSt_MH>
+            <undamaged>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F117_Alt_Proto_AMX_30/_skins/F117_Alt_Proto_AMX_30_3DSt_MH/crash/lod0/Turret_01.model	</exploded>
+          </F117_Alt_Proto_AMX_30_3DSt_MH>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/french/F117_Alt_Proto_AMX_30/collision/Turret_01.model	</collisionModelServer>

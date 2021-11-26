@@ -12,7 +12,6 @@ from gui.Scaleform.genConsts.PROGRESSIVEREWARD_CONSTANTS import PROGRESSIVEREWAR
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import BonusNameQuestsBonusComposer
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import LootBoxBonusComposer
-from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsEntryPointVO, getSeniorityAwardsBoxesCount
 from gui.impl import backport
 from gui.impl.auxiliary.tooltips.compensation_tooltip import CompensationTooltipContent
 from gui.impl.auxiliary.tooltips.compensation_tooltip import CrewSkinsCompensationTooltipContent
@@ -49,7 +48,6 @@ from helpers import dependency, int2roman
 from helpers.func_utils import makeFlashPath
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.lobby_context import ILobbyContext
 STYLES_TAGS = []
 VIDEO_TAGS = []
 _logger = logging.getLogger(__name__)
@@ -100,7 +98,8 @@ _COMPENSATION_TOOLTIP_CONTENT_CLASSES = {LootBoxCompensationTooltipTypes.CREW_SK
 _MIN_PROBABILITY = 7
 _MAX_PROBABILITY = 15
 _MIN_VEHICLE_LVL_BLUEPRINT_AWARD = 8
-VehicleAward = namedtuple('VehicleAward', 'vehicleCD level name')
+VehicleAward = namedtuple('VehicleAward', 'vehicleCD level name userName')
+SeniorityAwards = namedtuple('SeniorityAwards', 'bonuses vehicles currencies')
 
 class LootRewardDefModelPresenter(object):
     __slots__ = ('_reward',)
@@ -139,6 +138,8 @@ class LootRewardDefModelPresenter(object):
             m.setHighlightType(self._reward.get('highlightIcon') or '')
             m.setOverlayType(self._reward.get('overlayIcon') or '')
             m.setIsEnabled(bool(self._reward.get('isEnabled', True)))
+            m.setRewardName(self._reward.get('bonusName') or '')
+            m.setSpecialAlias(self._reward.get('specialAlias') or '')
 
 
 class LootRewardAnimatedModelPresenter(LootRewardDefModelPresenter):
@@ -593,21 +594,24 @@ def getSeniorityAwardsRewardsAndBonuses(rewards, size=AWARDS_SIZES.BIG, maxAward
     alwaysVisibleBonuses = []
     bonuses = []
     vehicles = []
+    currencies = {}
     if rewards:
         for rewardType, rewardValue in rewards.iteritems():
             if rewardType in excluded:
                 continue
             if rewardType == 'vehicles':
                 vehicles = [ vehCD for vehiclesDict in rewardValue for vehCD in vehiclesDict if vehiclesDict[vehCD].get('compensatedNumber', 0) < 1 ]
+            if rewardType == 'currencies':
+                currencies = {name:value['count'] for name, value in rewardValue.items()}
             bonuses.extend(getNonQuestBonuses(rewardType, rewardValue))
 
     formattedBonuses = formatter.getVisibleFormattedBonuses(bonuses, alwaysVisibleBonuses, size, sortKey=sortKey)
     orderedVehicles = []
     for vehicleCD in vehicles:
         vehicle = itemsCache.items.getItemByCD(vehicleCD)
-        orderedVehicles.append(VehicleAward(vehicleCD, vehicle.level, vehicle.name))
+        orderedVehicles.append(VehicleAward(vehicleCD, vehicle.level, vehicle.name, vehicle.userName))
 
-    return (formattedBonuses, orderedVehicles)
+    return SeniorityAwards(formattedBonuses, orderedVehicles, currencies)
 
 
 def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISPLAYED_AWARDS_COUNT, packBlueprints=False, ctx=None):
@@ -681,23 +685,10 @@ def fillStepsModel(currentStep, probability, maxSteps, hasCompleted, stepsModel)
         stepsModel.addViewModel(rendererModel)
 
 
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def getProgressiveRewardVO(currentStep, probability, maxSteps, descText='', isEnabled=True, showBg=False, align=prConst.WIDGET_LAYOUT_V, isHighTitle=False, hasCompleted=False, showSeniorityAwards=False, lobbyContext=None):
+def getProgressiveRewardVO(currentStep, probability, maxSteps, descText='', isEnabled=True, showBg=False, align=prConst.WIDGET_LAYOUT_V, isHighTitle=False, hasCompleted=False):
     stepsVO = _getProgressiveStepsVO(currentStep, probability, maxSteps, hasCompleted)
     titleFormatter = text_styles.highlightText if isHighTitle else text_styles.middleTitle
-    seniorityAwardVO = None
-    config = lobbyContext.getServerSettings().getSeniorityAwardsConfig()
-    seniorityAwardsEnabled = config.isEnabled()
-    countBoxes = 0
-    if seniorityAwardsEnabled:
-        countBoxes = getSeniorityAwardsBoxesCount()
-        seniorityAwardVO = getSeniorityAwardsEntryPointVO() if countBoxes > 0 and showSeniorityAwards else None
-    showLinkBtn = not seniorityAwardsEnabled or countBoxes <= 0
-    if seniorityAwardVO:
-        titleText = R.strings.seniority_awards.notifications.header()
-        descText = text_styles.main(backport.text(R.strings.seniority_awards.notifications.description()))
-    else:
-        titleText = R.strings.menu.progressiveReward.widget.title()
+    titleText = R.strings.menu.progressiveReward.widget.title()
     result = {'steps': stepsVO,
      'stepIdx': currentStep,
      'widgetAlign': align,
@@ -706,9 +697,7 @@ def getProgressiveRewardVO(currentStep, probability, maxSteps, descText='', isEn
      'btnTooltip': makeTooltip(body=TOOLTIPS.PROGRESSIVEREWARD_WIDGET_LINKBTN),
      'rewardTooltip': TOOLTIPS.PROGRESSIVEREWARD_WIDGET,
      'showBg': showBg,
-     'isEnabled': isEnabled,
-     'showLinkBtn': showLinkBtn,
-     'seniorityAwards': seniorityAwardVO}
+     'isEnabled': isEnabled}
     return result
 
 

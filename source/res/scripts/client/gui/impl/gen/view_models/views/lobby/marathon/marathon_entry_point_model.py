@@ -12,7 +12,7 @@ class MarathonEntryPointModel(ViewModel):
     STATE_MARATHON_IN_PROGRESS = 1
     STATE_MARATHON_FINISHED = 3
 
-    def __init__(self, properties=14, commands=1):
+    def __init__(self, properties=19, commands=1):
         super(MarathonEntryPointModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -69,29 +69,59 @@ class MarathonEntryPointModel(ViewModel):
     def setIsPostProgression(self, value):
         self._setBool(9, value)
 
+    def getIsVehicleInHangar(self):
+        return self._getBool(10)
+
+    def setIsVehicleInHangar(self, value):
+        self._setBool(10, value)
+
+    def getIsVehicleStyleInHangar(self):
+        return self._getBool(11)
+
+    def setIsVehicleStyleInHangar(self, value):
+        self._setBool(11, value)
+
+    def getIsPostQuestDone(self):
+        return self._getBool(12)
+
+    def setIsPostQuestDone(self, value):
+        self._setBool(12, value)
+
+    def getCurrentPostQuestIndex(self):
+        return self._getNumber(13)
+
+    def setCurrentPostQuestIndex(self, value):
+        self._setNumber(13, value)
+
+    def getFormattedTimeTillPostQuestFinish(self):
+        return self._getString(14)
+
+    def setFormattedTimeTillPostQuestFinish(self, value):
+        self._setString(14, value)
+
     def getDiscount(self):
-        return self._getNumber(10)
+        return self._getNumber(15)
 
     def setDiscount(self, value):
-        self._setNumber(10, value)
+        self._setNumber(15, value)
 
     def getTokenTemplate(self):
-        return self._getString(11)
+        return self._getString(16)
 
     def setTokenTemplate(self, value):
-        self._setString(11, value)
+        self._setString(16, value)
 
     def getTokenDoneTemplate(self):
-        return self._getString(12)
+        return self._getString(17)
 
     def setTokenDoneTemplate(self, value):
-        self._setString(12, value)
+        self._setString(17, value)
 
     def getUserTokens(self):
-        return self._getArray(13)
+        return self._getArray(18)
 
     def setUserTokens(self, value):
-        self._setArray(13, value)
+        self._setArray(18, value)
 
     def _initialize(self):
         super(MarathonEntryPointModel, self)._initialize()
@@ -105,6 +135,11 @@ class MarathonEntryPointModel(ViewModel):
         self._addBoolProperty('rewardObtained', False)
         self._addBoolProperty('isPremShopURL', False)
         self._addBoolProperty('isPostProgression', False)
+        self._addBoolProperty('isVehicleInHangar', False)
+        self._addBoolProperty('isVehicleStyleInHangar', False)
+        self._addBoolProperty('isPostQuestDone', False)
+        self._addNumberProperty('currentPostQuestIndex', 0)
+        self._addStringProperty('formattedTimeTillPostQuestFinish', '')
         self._addNumberProperty('discount', 0)
         self._addStringProperty('tokenTemplate', '')
         self._addStringProperty('tokenDoneTemplate', '')

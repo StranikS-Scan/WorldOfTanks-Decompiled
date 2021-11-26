@@ -149,6 +149,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
                 viewPy.init(browserID, self._marathonEvent.createMarathonWebHandlers(), alias=alias)
                 self.__browserView = viewPy
                 self.__browserView.showContentUnderLoading = False
+                self.__updateBrowserProperties()
             else:
                 LOG_ERROR('Attampt to initialize browser 2nd time!')
         return
@@ -164,10 +165,10 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         self._marathonEvent.showRewardVideo()
         Waiting.hide('loadPage')
         self.__loadBrowserCallbackID = BigWorld.callback(0.01, self.__loadBrowser)
-        g_eventBus.addListener(events.MissionsEvent.ON_TAB_CHANGED, self.__onMissionsTabChanged, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.MissionsEvent.ON_TAB_CHANGED, self.__updateBrowserProperties, EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
-        g_eventBus.removeListener(events.MissionsEvent.ON_TAB_CHANGED, self.__onMissionsTabChanged, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.MissionsEvent.ON_TAB_CHANGED, self.__updateBrowserProperties, EVENT_BUS_SCOPE.LOBBY)
         self.__cancelLoadBrowserCallback()
         self.__browserView = None
         super(MissionsMarathonView, self)._dispose()
@@ -187,17 +188,16 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     def __updateEvents(self):
         self._builder.invalidateBlocks()
 
-    def __onMissionsTabChanged(self, event):
-        self.__viewActive = event.ctx.get('alias') == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS
-        if self._marathonEvent.isNeedHandlingEscape and self.__viewActive:
-            self.__setSkipEscapeInBrowser(False)
-        else:
-            self.__setSkipEscapeInBrowser(True)
-
-    def __setSkipEscapeInBrowser(self, value):
+    def __updateBrowserProperties(self, *args):
+        self.__viewActive = caches.getNavInfo().getMissionsTab() == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS
         browser = self._browserCtrl.getBrowser(self.__browserID)
         if browser:
-            browser.skipEscape = value
+            if self.__viewActive:
+                browser.skipEscape = not self._marathonEvent.isNeedHandlingEscape
+                browser.useSpecialKeys = False
+            else:
+                browser.skipEscape = False
+                browser.useSpecialKeys = True
 
 
 class MissionsEventBoardsView(MissionsEventBoardsViewMeta):

@@ -9,6 +9,7 @@ from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.game_control.calendar_controller import CalendarOfferType
 from helpers import dependency
 from skeletons.gui.game_control import IHeroTankController, IBootcampController, ICalendarController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -72,8 +73,9 @@ class HeroTankController(IHeroTankController):
         return self.hasAdventHero() and self.__currentTankCD == self.__actionInfo.vehicleCD
 
     def getRandomTankCD(self):
-        if self.hasAdventHero() and not self.__containsVehicle(self.__actionInfo.vehicleCD):
-            self.__currentTankCD = self.__actionInfo.vehicleCD
+        adventTankCD, _ = self._getAdventHeroTankData()
+        if adventTankCD:
+            self.__currentTankCD = adventTankCD
         else:
             self.__currentTankCD = random.choice(self.__data.keys() or [None]) if self.isEnabled() else None
         return self.__currentTankCD
@@ -82,7 +84,11 @@ class HeroTankController(IHeroTankController):
         return self.__currentTankCD
 
     def getCurrentTankStyleId(self):
-        return self.__data[self.__currentTankCD].styleID if self.isEnabled() and self.__currentTankCD in self.__data else None
+        _, adventTankStyleId = self._getAdventHeroTankData()
+        if adventTankStyleId:
+            return adventTankStyleId
+        else:
+            return self.__data[self.__currentTankCD].styleID if self.isEnabled() and self.__currentTankCD in self.__data else None
 
     def getCurrentRelatedURL(self):
         return self.__data[self.__currentTankCD].url if self.isEnabled() and self.__currentTankCD in self.__data else ''
@@ -98,6 +104,19 @@ class HeroTankController(IHeroTankController):
 
     def setInteractive(self, interactive):
         self.onInteractive(interactive)
+
+    def _getAdventHeroTankData(self):
+        if not self.hasAdventHero():
+            return (None, None)
+        else:
+            vehicleCD = self.__actionInfo.vehicleCD or None
+            if not vehicleCD:
+                return (None, None)
+            styleId = self.__actionInfo.styleId or None
+            styleAvailable = styleId and not self.__containsStyle(styleId)
+            vehicleAvailable = not self.__containsVehicle(vehicleCD)
+            offerType = self.__actionInfo.offerType
+            return (vehicleCD, styleId) if offerType == CalendarOfferType.VEHICLE and vehicleAvailable or offerType == CalendarOfferType.STYLE and styleAvailable or offerType == CalendarOfferType.STYLE_BUNDLE and (styleAvailable or vehicleAvailable) else (None, None)
 
     def __fullUpdate(self):
         items = self.itemsCache.items
@@ -219,3 +238,10 @@ class HeroTankController(IHeroTankController):
             return i.intCD == vehicleCD and (i.inventoryCount > 0 or i.isRestorePossible())
 
         return any(self.itemsCache.items.getVehicles(REQ_CRITERIA.CUSTOM(contains)))
+
+    def __containsStyle(self, styleId):
+
+        def contains(i):
+            return i.id == styleId and (i.inventoryCount > 0 or i.isRestorePossible())
+
+        return any(self.itemsCache.items.getStyles(REQ_CRITERIA.CUSTOM(contains)))

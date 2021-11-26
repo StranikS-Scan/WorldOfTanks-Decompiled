@@ -19,7 +19,6 @@ class HANGAR_ALIASES(object):
     RANKED_WIDGET = 'rankedWdgt'
     ALERT_MESSAGE_BLOCK = 'alertMessageBlock'
     EPIC_WIDGET = 'epicWdgt'
-    SENIORITY_AWARDS_ENTRY_POINT_2020 = 'SeniorityAwardsEntryPoint2020'
     RANKED_PRIME_TIME = 'rankedPrimeTime.swf'
     EPIC_PRIME_TIME = 'epicPrimeTime.swf'
     TANK_CAROUSEL_UI = 'TankCarouselUI'

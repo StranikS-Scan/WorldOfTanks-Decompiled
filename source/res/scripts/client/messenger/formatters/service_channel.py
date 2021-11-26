@@ -459,6 +459,12 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                     ctx[Currency.BPCOIN] = self.__makeCurrencyString(Currency.BPCOIN, accBpcoin)
                     ctx['bpcoinStr'] = g_settings.htmlTemplates.format('battleResultBpcoin', {Currency.BPCOIN: ctx[Currency.BPCOIN]})
                 ctx['creditsEx'] = self.__makeCreditsExString(accCredits, battleResults.get('creditsPenalty', 0), battleResults.get('creditsContributionIn', 0), battleResults.get('creditsContributionOut', 0))
+                platformCurrencies = battleResults.get('currencies', {})
+                if platformCurrencies:
+                    ctx['platformCurrencyStr'] = '<br/>' + '<br/>'.join((g_settings.htmlTemplates.format('platformCurrency', {'msg': backport.text(R.strings.messenger.platformCurrencyMsg.received.dyn(currency)()),
+                     'count': backport.getIntegralFormat(countDict.get('count', 0))}) for currency, countDict in platformCurrencies.iteritems()))
+                else:
+                    ctx['platformCurrencyStr'] = ''
                 guiType = battleResults.get('guiType', 0)
                 ctx['achieves'], ctx['badges'] = self.__makeAchievementsAndBadgesStrings(battleResults)
                 ctx['rankedProgress'] = self.__makeRankedFlowStrings(battleResults)
@@ -849,11 +855,17 @@ class CurrencyUpdateFormatter(ServiceChannelFormatter):
             xmlKey = 'currencyUpdate'
             formatted = g_settings.msgTemplates.format(xmlKey, ctx={'title': backport.text(self._EMITTER_ID_TO_TITLE.get(emitterID, self._DEFAULT_TITLE)),
              'date': TimeFormatter.getLongDatetimeFormat(transactionTime),
-             'currency': backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.dyn('debited' if amountDelta < 0 else 'received').dyn(currencyCode)()),
+             'currency': self.__getCurrencyString(currencyCode, amountDelta),
              'amount': getStyle(currencyCode)(getBWFormatter(currencyCode)(abs(amountDelta)))}, data={'icon': currencyCode.title() + 'Icon'})
             return [MessageData(formatted, self._getGuiSettings(message, xmlKey))]
         else:
             return [MessageData(None, None)]
+
+    def __ifPlatformCurrency(self, currencyCode):
+        return currencyCode not in Currency.ALL
+
+    def __getCurrencyString(self, currencyCode, amountDelta):
+        return backport.text(R.strings.messenger.platformCurrencyMsg.dyn('debited' if amountDelta < 0 else 'received').dyn(currencyCode)()) if self.__ifPlatformCurrency(currencyCode) else backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.dyn('debited' if amountDelta < 0 else 'received').dyn(currencyCode)())
 
 
 class GiftReceivedFormatter(ServiceChannelFormatter):
@@ -1282,6 +1294,9 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             rankedBonusBattlesStr = self.__getRankedBonusBattlesString(rankedPersistentBattles, rankedDailyBattles)
             if rankedBonusBattlesStr:
                 operations.append(rankedBonusBattlesStr)
+            platformCurrenciesStr = self.__getPlatformCurrenciesString(dataEx.get('currencies', {}))
+            if platformCurrenciesStr:
+                operations.append(platformCurrenciesStr)
             return operations
 
     def _formatData(self, assetType, data):
@@ -1716,6 +1731,22 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             debitedFormatted = g_settings.htmlTemplates.format(templateId, ctx={'bonusBattles': debitedStr})
             result = text_styles.concatStylesToMultiLine(result, debitedFormatted) if result else debitedFormatted
         return result
+
+    def __getPlatformCurrenciesString(self, data):
+        msgs = []
+        for currencyName, countData in data.iteritems():
+            count = countData.get('count', 0)
+            if count == 0:
+                continue
+            elif count > 0:
+                op = 'received'
+            else:
+                op = 'debited'
+            msg = backport.text(R.strings.messenger.platformCurrencyMsg.dyn(op).dyn(currencyName)())
+            msgs.append(g_settings.htmlTemplates.format('platformCurrency', {'msg': msg,
+             'count': backport.getIntegralFormat(abs(count))}))
+
+        return '<br/>'.join(msgs)
 
     def __getDiscardPairModificationsMsg(self, data):
         dataEx = data.get('data', {})
@@ -2466,6 +2497,10 @@ class QuestAchievesFormatter(object):
             if bpcoin:
                 fomatter = getBWFormatter(Currency.BPCOIN)
                 result.append(cls.__makeQuestsAchieve('battleQuestsBpcoin', bpcoin=fomatter(bpcoin)))
+            platformCurrencies = data.get('currencies', {})
+            for currency, countDict in platformCurrencies.iteritems():
+                result.append(cls.__makeQuestsAchieve('platformCurrency', msg=backport.text(R.strings.messenger.platformCurrencyMsg.received.dyn(currency)()), count=backport.getIntegralFormat(countDict.get('count', 0))))
+
         for premiumType in PREMIUM_ENTITLEMENTS.ALL_TYPES:
             premium = data.get(premiumType, 0)
             if premium:

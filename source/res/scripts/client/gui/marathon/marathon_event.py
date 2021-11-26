@@ -14,25 +14,33 @@ from gui.marathon.marathon_event_container import MarathonEventContainer
 from gui.marathon.marathon_resource_manager import MarathonResourceManager
 from gui.marathon.marathon_constants import MarathonState, MarathonWarning, ZERO_TIME
 from gui.prb_control import prbEntityProperty
+from gui.server_events.bonuses import mergeBonuses, VehiclesBonus, getVehicleCrewReward
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
 from helpers.time_utils import ONE_DAY
+from items.writers.c11n_writers import natsorted
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
+from web.web_client_api.common import ItemPackEntry
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import Quest
+    from gui.server_events.bonuses import SimpleBonus
 _logger = logging.getLogger(__name__)
 
 class MarathonEvent(object):
     _eventsCache = dependency.descriptor(IEventsCache)
     _bootcamp = dependency.descriptor(IBootcampController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, resourceGeneratorClass, dataContainerClass):
         super(MarathonEvent, self).__init__()
         self._data = dataContainerClass()
         self._resource = resourceGeneratorClass(self._data)
+        self._remainingPackedRewards = []
+        self._remainingRewards = []
 
     @property
     def prefix(self):
@@ -62,9 +70,33 @@ class MarathonEvent(object):
     def showFlagTooltipBottom(self):
         return self._data.showFlagTooltipBottom
 
+    @property
+    def rewardPostfix(self):
+        return self._data.rewardPostfix
+
+    @property
+    def vehicleID(self):
+        return self._data.vehicleID
+
+    @property
+    def vehicle(self):
+        return self._itemsCache.items.getItemByCD(self.vehicleID)
+
+    @property
+    def remainingPackedRewards(self):
+        return self._remainingPackedRewards
+
+    @property
+    def remainingRewards(self):
+        return self._remainingRewards
+
     @prbEntityProperty
     def prbEntity(self):
         return None
+
+    @property
+    def styleID(self):
+        return self._data.styleID
 
     @async
     @process
@@ -124,7 +156,7 @@ class MarathonEvent(object):
 
     def getMarathonPostProgress(self):
         tokens = self.getTokensData(prefix=self._data.tokenPrefix, postfix=self._data.styleTokenPostfix)
-        progress = tokens.values()[0][1] if tokens.values()[0] else 0
+        progress = tokens.values()[0][1] if tokens and tokens.values()[0] else 0
         return progress
 
     def getState(self):
@@ -162,6 +194,10 @@ class MarathonEvent(object):
         passQuests, allQuests = self.getMarathonProgress()
         return int(passQuests * 100) / allQuests if passQuests and self._data.questsInChain else 0
 
+    def getMarathonPostProgressionDiscount(self):
+        progress = self.getMarathonPostProgress()
+        return progress * self._data.styleTokenDiscount
+
     def setState(self):
         if not self._data.group:
             self._data.setState(MarathonState.UNKNOWN)
@@ -188,6 +224,8 @@ class MarathonEvent(object):
         tokensData = self.getTokensData(prefix=self._data.tokenPrefix)
         self._data.setRewardObtained(tokensData)
         self._data.setPostRewardObtained(tokensData)
+        self._remainingRewards = self._getRemainingRewards()
+        self._remainingPackedRewards = self._packRewards(self._remainingRewards)
 
     def getClosestStatusUpdateTime(self):
         if self._data.state not in MarathonState.ENABLED_STATE:
@@ -224,6 +262,61 @@ class MarathonEvent(object):
             return self._resource.getBuyBtnEnabledData(hasIgbLink)
         return self._resource.getBuyBtnDisabledData(hasIgbLink)
 
+    def getRewardsForQuestNumber(self, questNumber):
+        rewardsQuests = self._getQuestsWithRewards()
+        hiddenQuests = self._eventsCache.getHiddenQuests()
+        questID = rewardsQuests[questNumber]
+        rewards = hiddenQuests.get(questID).getBonuses()
+        return rewards
+
+    def getStyleQuestReward(self):
+        quests = self._eventsCache.getHiddenQuests(self.__styleQuestFilterFunc)
+        if not quests:
+            return []
+        styleQuest = quests.values()[0]
+        return styleQuest.getBonuses()
+
+    def _getRemainingRewards(self):
+        finished, _ = self.getMarathonProgress()
+        rewardsQuests = self._getQuestsWithRewards()
+        remainingQuests = rewardsQuests[finished:]
+        hiddenQuests = self._eventsCache.getHiddenQuests()
+        bonuses = []
+        for questID in remainingQuests:
+            quest = hiddenQuests.get(questID)
+            bonuses.extend(quest.getBonuses())
+
+        merged = mergeBonuses(bonuses)
+        return merged
+
+    def getVehicleCrewReward(self):
+        hiddenQuests = self._eventsCache.getHiddenQuests()
+        vehiclesReward = None
+        for questID in self._getQuestsWithRewards():
+            quest = hiddenQuests.get(questID)
+            if quest:
+                bonuses = quest.getBonuses()
+                vehiclesReward = next((reward for reward in bonuses if isinstance(reward, VehiclesBonus)), None)
+            if vehiclesReward:
+                break
+
+        return getVehicleCrewReward(vehiclesReward)
+
+    def _packRewards(self, rewards):
+        packed = []
+        for bonus in rewards:
+            packed.extend(bonus.wrapToItemsPack(1))
+
+        return packed
+
+    def _getQuestsWithRewards(self):
+        hiddenQuests = self._eventsCache.getHiddenQuests(self.__rewardQuestsFilterFunc)
+        return natsorted(hiddenQuests)
+
+    def __rewardQuestsFilterFunc(self, quest):
+        questID = quest.getID()
+        return questID.startswith(self.prefix) and self.rewardPostfix in questID
+
     def _getUrl(self, urlType=MarathonConfig.URL):
         baseUrl = self._lobbyContext.getServerSettings().getMarathonConfig().get(urlType, MarathonConfig.EMPTY_PATH)
         if not baseUrl:
@@ -238,6 +331,9 @@ class MarathonEvent(object):
 
     def __marathonFilterFunc(self, q):
         return q.getID().startswith(self._data.prefix)
+
+    def __styleQuestFilterFunc(self, q):
+        return q.getID().startswith('post_reward')
 
     def __getProgress(self, progressType, prefix=None, postfix=None):
         progress = {}

@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class LootDefRendererModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=13, commands=0):
         super(LootDefRendererModel, self).__init__(properties=properties, commands=commands)
 
     def getLabelStr(self):
@@ -74,6 +74,18 @@ class LootDefRendererModel(ViewModel):
     def setIsEnabled(self, value):
         self._setBool(10, value)
 
+    def getRewardName(self):
+        return self._getString(11)
+
+    def setRewardName(self, value):
+        self._setString(11, value)
+
+    def getSpecialAlias(self):
+        return self._getString(12)
+
+    def setSpecialAlias(self, value):
+        self._setString(12, value)
+
     def _initialize(self):
         super(LootDefRendererModel, self)._initialize()
         self._addStringProperty('labelStr', '')
@@ -87,3 +99,5 @@ class LootDefRendererModel(ViewModel):
         self._addStringProperty('highlightType', '')
         self._addStringProperty('overlayType', '')
         self._addBoolProperty('isEnabled', True)
+        self._addStringProperty('rewardName', '')
+        self._addStringProperty('specialAlias', '')

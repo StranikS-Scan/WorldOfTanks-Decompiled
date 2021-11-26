@@ -33,7 +33,7 @@ from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.promo.hangar_teaser_widget import TeaserViewer
 from gui.shared import event_dispatcher as shared_events
-from gui.shared.event_dispatcher import isViewLoaded
+from gui.shared.event_dispatcher import isViewLoaded, showMarathonVehiclePreview
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showAmmunitionSetupView, showEpicBattlesPrimeTimeWindow
 from gui.shared.events import LobbySimpleEvent
@@ -49,7 +49,7 @@ from helpers.CallbackDelayer import CallbackDelayer
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IIGRController, IBattlePassController, IBattleRoyaleController, IBootcampController, IMapboxController, IYearHareAffairController, IShopSalesEventController
+from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IIGRController, IBattlePassController, IBattleRoyaleController, IBootcampController, IMapboxController, IYearHareAffairController, IShopSalesEventController, IMarathonEventsController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -102,6 +102,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     __yhaController = dependency.descriptor(IYearHareAffairController)
     eventsCache = dependency.descriptor(IEventsCache)
     __shopSales = dependency.descriptor(IShopSalesEventController)
+    __marathonCtrl = dependency.descriptor(IMarathonEventsController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -389,7 +390,13 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             elif isinstance(entity, HeroTank):
                 descriptor = entity.typeDescriptor
                 if descriptor:
-                    shared_events.showHeroTankPreview(descriptor.type.compactDescr)
+                    marathons = self.__marathonCtrl.getMarathons()
+                    activeMarathon = next((marathon for marathon in marathons if marathon.vehicleID == descriptor.type.compactDescr), None)
+                    if activeMarathon:
+                        title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
+                        showMarathonVehiclePreview(descriptor.type.compactDescr, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
+                    else:
+                        shared_events.showHeroTankPreview(descriptor.type.compactDescr)
         self.__checkVehicleCameraState()
         self.__updateState()
         return

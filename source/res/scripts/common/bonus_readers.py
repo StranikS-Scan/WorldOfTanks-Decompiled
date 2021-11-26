@@ -4,6 +4,7 @@ import time
 from typing import Union, TYPE_CHECKING
 import blueprints
 import dossiers2
+from dynamic_currencies import g_dynamicCurrenciesData
 import items
 import calendar
 from account_shared import validateCustomizationItem
@@ -684,6 +685,14 @@ def __readBonus_entitlement(bonus, _name, section, eventType, checkLimit):
         entitlement['expires'] = readUTC(section, 'expires')
 
 
+def __readBonus_currency(bonus, _name, section, eventType, checkLimit):
+    currencyCode = section['code'].asString
+    if not g_dynamicCurrenciesData.isCurrencyCodeCorrect(currencyCode):
+        raise SoftException('Incorrect code "%(code)s" has been provided in section <currency> in quests xml - it does not exist at platform.' % {'code': currencyCode})
+    currency = bonus.setdefault('currencies', {})[currencyCode] = {}
+    currency['count'] = section['count'].asInt
+
+
 def __readBonus_expires(id, expires, section):
     if section['expires'].has_key('endOfGameDay'):
         expires['endOfGameDay'] = True
@@ -1007,7 +1016,8 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'battlePassPoints': __readBonus_battlePassPoints,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
- 'blueprintAny': __readBonus_blueprintAny}
+ 'blueprintAny': __readBonus_blueprintAny,
+ 'currency': __readBonus_currency}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}

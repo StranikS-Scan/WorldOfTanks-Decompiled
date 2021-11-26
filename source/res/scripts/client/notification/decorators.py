@@ -259,6 +259,23 @@ class EmailConfirmationReminderMessageDecorator(MessageDecorator):
         return NotificationGroup.OFFER
 
 
+class PsaCoinReminderMessageDecorator(MessageDecorator):
+
+    def __init__(self, entityID, coinCount, msgPrLevel=NotificationPriorityLevel.LOW):
+        entity = g_settings.msgTemplates.format('PsaCoinReminder', ctx={'count': str(coinCount)}, data={'savedData': coinCount})
+        settings = NotificationGuiSettings(isNotify=True, priorityLevel=msgPrLevel)
+        super(PsaCoinReminderMessageDecorator, self).__init__(entityID, entity, settings)
+
+    def getType(self):
+        return NOTIFICATION_TYPE.PSACOIN_REMINDER
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+    def getSavedData(self):
+        return self._vo['message'].get('savedData', 0)
+
+
 class LockButtonMessageDecorator(MessageDecorator):
 
     def __init__(self, entityID, entity=None, settings=None, model=None):

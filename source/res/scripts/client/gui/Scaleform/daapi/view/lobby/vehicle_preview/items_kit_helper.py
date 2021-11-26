@@ -44,7 +44,7 @@ _UNLIMITED_ITEMS_COUNT = -1
 _EXCLUDE_ITEMS = {v for v in ItemPackTypeGroup.CREW} | {ItemPackType.FRONTLINE_TOKEN}
 _ANY_ITEM_TYPE = {v for _, v in ItemPackType.getIterator()} - _EXCLUDE_ITEMS
 _FRONTLINE_GIFTS = {v for _, v in ItemPackType.getIterator()} - {ItemPackType.FRONTLINE_TOKEN}
-_NATIVE_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.VEHICLE, ItemPackTypeGroup.ITEM))
+_NATIVE_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.VEHICLE, ItemPackTypeGroup.ITEM, ItemPackTypeGroup.CREW_BOOKS))
 _CUSTOMIZATION_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.STYLE, ItemPackTypeGroup.CAMOUFLAGE, ItemPackTypeGroup.PAINT, ItemPackTypeGroup.DECAL, ItemPackTypeGroup.PROJECTION_DECAL, ItemPackTypeGroup.PERSONAL_NUMBER, ItemPackTypeGroup.MODIFICATION))
 _CUSTOMIZATION_TYPES_MAP = {ItemPackType.STYLE: CustomizationType.STYLE,
  ItemPackType.CAMOUFLAGE_ALL: CustomizationType.CAMOUFLAGE,
@@ -145,7 +145,8 @@ _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CA
  ItemPackType.CREW_50: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
  ItemPackType.CREW_75: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
  ItemPackType.CREW_100: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
- ItemPackType.CUSTOM_CREW_100: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW}
+ ItemPackType.CUSTOM_CREW_100: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
+ ItemPackType.CREW_BOOK_BROCHURE: RES_ICONS.MAPS_ICONS_MODULETYPES_CREWBOOK_BROCHURE}
 _NOT_FOUND_ICONS = {ItemPackType.TOKEN: RES_ICONS.MAPS_ICONS_QUESTS_ICON_BATTLE_MISSIONS_PRIZE_TOKEN}
 _PREM_ICONS = {1: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_1DAYPREM,
  2: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_2DAYPREM,
@@ -159,7 +160,13 @@ _PREM_ICONS = {1: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_1D
 
 def __getPremiumPlusIcon(days):
     r = R.images.gui.maps.icons.quests.bonuses.small.dyn('premium_plus_{}'.format(days))
-    return backport.image(r()) if r.exists() else ''
+    default = R.images.gui.maps.icons.quests.bonuses.small.premium_plus_universal
+    return backport.image(r() if r.exists() else default())
+
+
+def __getPremiumPlusIconExists(days):
+    r = R.images.gui.maps.icons.quests.bonuses.small.dyn('premium_plus_{}'.format(days))
+    return r.exists()
 
 
 _BOX_ITEM = None
@@ -414,12 +421,15 @@ def _createItemVO(rawItem, itemsCache, goodiesCache, slotIndex, rawTooltipData=N
         cd = fittingItem.intCD if fittingItem is not None else rawItem.id
         icon = getItemIcon(rawItem, fittingItem)
         overlay = fittingItem.getHighlightType() if fittingItem is not None else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+        count = rawItem.count
         if rawItem.type in ItemPackTypeGroup.CREW:
             countFormat = _formatCrew(rawItem)
         elif rawItem.type in _UNCOUNTABLE_ITEM_TYPE:
-            countFormat = ''
+            if rawItem.type == ItemPackType.CUSTOM_PREMIUM_PLUS and not __getPremiumPlusIconExists(count):
+                countFormat = 'x{}'.format(count) if count > 1 else ''
+            else:
+                countFormat = ''
         else:
-            count = rawItem.count
             countFormat = 'x{}'.format(count) if count > 1 else ''
     return {'id': str(cd),
      'icon': icon,
@@ -452,12 +462,14 @@ def _getBoxTooltipVO(rawItems, itemsCache, goodiesCache):
             overlay = fittingItem.getHighlightType()
         else:
             overlay = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
-        items.append({'id': rawItem.id,
+        items.append({'id': str(rawItem.id),
+         'icon': icon,
+         'overlayType': overlay,
          'type': rawItem.type,
          'count': str(rawItem.count) if rawItem.type not in _UNCOUNTABLE_ITEM_TYPE and rawItem.count > 1 else '',
-         'icon': icon,
-         'overlay': overlay,
-         'desc': getItemTitle(rawItem, fittingItem, forBox=True)})
+         'description': getItemTitle(rawItem, fittingItem, forBox=True),
+         'groupID': rawItem.groupID,
+         'rawCount': rawItem.count})
 
     vo = {'icon': backport.image(R.images.gui.maps.icons.rankedBattles.boxes.c_48x48.metal_1()),
      'count': len(rawItems),

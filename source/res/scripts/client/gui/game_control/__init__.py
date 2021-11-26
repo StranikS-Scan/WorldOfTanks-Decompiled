@@ -67,6 +67,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.overlay import SteamRegistrationOverlay as _SteamRegistrationOverlay
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
     from gui.game_control.wot_plus_controller import WotPlusNotificationController
+    from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     from gui.game_control.year_hare_affair_controller import YearHareAffairController as _YearHareAffairController
     from gui.game_control.shop_sales_event_controller import ShopSalesEventController as _ShopSalesController
     from gui.game_control.telecom_rentals_controller import TelecomRentalsNotificationController
@@ -135,6 +136,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IVehiclePostProgressionController, VehiclePostProgressionController())
     _config(_interface.ISteamRegistrationOverlay, _SteamRegistrationOverlay())
     _config(_interface.IWotPlusNotificationController, WotPlusNotificationController())
+    _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
     _config(_interface.IYearHareAffairController, _YearHareAffairController())
     _config(_interface.IShopSalesEventController, _ShopSalesController())
     _config(_interface.ITelecomRentalsNotificationController, TelecomRentalsNotificationController())

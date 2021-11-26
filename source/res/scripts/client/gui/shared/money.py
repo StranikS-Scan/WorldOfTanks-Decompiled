@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/money.py
-import typing
 from collections import namedtuple
 from shared_utils import CONST_CONTAINER
 from soft_exception import SoftException

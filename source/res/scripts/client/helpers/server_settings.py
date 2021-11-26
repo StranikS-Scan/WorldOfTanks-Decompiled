@@ -578,14 +578,11 @@ class _BlueprintsConfig(namedtuple('_BlueprintsConfig', ('allowBlueprintsConvers
         return 'isEnabled' in diff or 'useBlueprintsForUnlock' in diff
 
 
-class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled',
- 'autoOpenTime',
- 'hangarWidgetVisibility',
- 'secretBoxToken'))):
+class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled', 'endTime'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(enabled=False, autoOpenTime=0, hangarWidgetVisibility=False, secretBoxToken='')
+        defaults = dict(enabled=False, endTime=0)
         defaults.update(kwargs)
         return super(_SeniorityAwardsConfig, cls).__new__(cls, **defaults)
 
@@ -600,14 +597,8 @@ class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled',
     def isEnabled(self):
         return self.enabled
 
-    def autoOpenTimestamp(self):
-        return self.autoOpenTime
-
-    def hangarWidgetIsVisible(self):
-        return self.hangarWidgetVisibility
-
-    def getSecretBoxToken(self):
-        return self.secretBoxToken
+    def endTimestamp(self):
+        return self.endTime
 
 
 class _AdventCalendarConfig(namedtuple('_AdventCalendarConfig', ('calendarURL', 'popupIntervalInHours'))):

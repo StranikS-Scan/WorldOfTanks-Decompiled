@@ -91,6 +91,7 @@ RANKED_YEAR_RATING_COUNTER = 'rankedYearRatingCounter'
 RANKED_SHOP_COUNTER = 'rankedShopCounter'
 BOOSTERS_FOR_CREDITS_SLOT_COUNTER = 'boostersForCreditsSlotCounter'
 SENIORITY_AWARDS_COUNTER = 'seniorityAwardsCounter'
+SENIORITY_AWARDS_WINDOW_SHOWN = 'seniorityAwardsWindowShown'
 DEMOUNT_KIT_SEEN = 'demountKitSeen'
 VIEWED_OFFERS = 'viewedOffers'
 OFFERS_DISABLED_MSG_SEEN = 'offersDisabledMsgSeen'
@@ -1011,7 +1012,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                         ACTIVE_TEST_PARTICIPATION_CONFIRMED: False,
                         IS_SHOP_VISITED: False,
                         LAST_SHOP_ACTION_COUNTER_MODIFICATION: None,
-                        OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES: set()},
+                        OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES: set(),
+                        SENIORITY_AWARDS_WINDOW_SHOWN: False},
  KEY_UI_FLAGS: {}}
 
 def _filterAccountSection(dataSec):

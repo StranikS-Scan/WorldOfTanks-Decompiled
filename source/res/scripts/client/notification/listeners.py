@@ -9,7 +9,7 @@ from PlayerEvents import g_playerEvents
 from account_helpers.account_completion import isEmailConfirmationRequired
 from constants import ARENA_BONUS_TYPE, MAPS_TRAINING_ENABLED_KEY
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, SENIORITY_AWARDS_COUNTER
+from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED
 from adisp import process
 from async import async, await
 from chat_shared import SYS_MESSAGE_TYPE
@@ -45,17 +45,16 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, PsaCoinReminderMessageDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from shared_utils import first
-from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController
+from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController, ISeniorityAwardsController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.platform.wgnp_controller import IWGNPRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
 if typing.TYPE_CHECKING:
     from notification.NotificationsModel import NotificationsModel
 _logger = logging.getLogger(__name__)
@@ -830,10 +829,7 @@ class ProgressiveRewardListener(_NotificationListener):
             return
         else:
             model.removeNotification(NOTIFICATION_TYPE.PROGRESSIVE_REWARD, ProgressiveRewardDecorator.ENTITY_ID)
-            if self.__seniorityAwardsIsActive():
-                AccountSettings.setCounters(SENIORITY_AWARDS_COUNTER, 1)
-            else:
-                AccountSettings.setNotifications(PROGRESSIVE_REWARD_VISITED, True)
+            AccountSettings.setNotifications(PROGRESSIVE_REWARD_VISITED, True)
             return
 
     def __onServerSettingsChange(self, diff):
@@ -855,8 +851,6 @@ class ProgressiveRewardListener(_NotificationListener):
         else:
             model.removeNotificationsByType(NOTIFICATION_TYPE.PROGRESSIVE_REWARD)
             wasVisited = AccountSettings.getNotifications(PROGRESSIVE_REWARD_VISITED)
-            if self.__seniorityAwardsIsActive():
-                wasVisited = wasVisited and AccountSettings.getCounters(SENIORITY_AWARDS_COUNTER)
             if wasVisited:
                 return
             progressiveConfig = self.__lobbyContext.getServerSettings().getProgressiveRewardConfig()
@@ -864,9 +858,6 @@ class ProgressiveRewardListener(_NotificationListener):
                 return
             model.addNotification(ProgressiveRewardDecorator())
             return
-
-    def __seniorityAwardsIsActive(self):
-        return getSeniorityAwardsBoxesCount() > 0
 
 
 class SwitcherListener(_NotificationListener):
@@ -1282,6 +1273,55 @@ class VehiclePostProgressionUnlockListener(_NotificationListener):
         return
 
 
+class PsaCoinReminderListener(_NotificationListener):
+    __bootCampController = dependency.descriptor(IBootcampController)
+    __saCtrl = dependency.descriptor(ISeniorityAwardsController)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    MSG_ID = 0
+
+    def start(self, model):
+        result = super(PsaCoinReminderListener, self).start(model)
+        if result:
+            self.__saCtrl.onUpdated += self.__tryNotify
+            self.__itemsCache.onSyncCompleted += self.__tryNotify
+            self.__tryNotify()
+        return result
+
+    def stop(self):
+        super(PsaCoinReminderListener, self).stop()
+        self.__saCtrl.onUpdated -= self.__tryNotify
+        self.__itemsCache.onSyncCompleted -= self.__tryNotify
+
+    def __tryNotify(self, *_):
+        if self.__bootCampController.isInBootcamp():
+            return
+        coinsCount = self.__saCtrl.getSACoin()
+        if not self.__saCtrl.isEnabled or coinsCount <= 0:
+            self.__onCoinsRemoved()
+        else:
+            msgPrLevel = NotificationPriorityLevel.LOW
+            notification = PsaCoinReminderMessageDecorator(self.MSG_ID, coinsCount, msgPrLevel)
+            self.__onCoinsAdded(notification)
+
+    def __onCoinsAdded(self, newNotification):
+        model = self._model()
+        if model:
+            prevNotifacation = model.getNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, newNotification.getID())
+            if prevNotifacation is None:
+                model.addNotification(newNotification)
+            else:
+                savedCount = newNotification.getSavedData()
+                prevSavedCount = prevNotifacation.getSavedData()
+                if prevSavedCount != savedCount:
+                    model.updateNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, newNotification.getID(), newNotification.getEntity(), False)
+        return
+
+    def __onCoinsRemoved(self):
+        model = self._model()
+        if model:
+            model.removeNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, self.MSG_ID)
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -1300,7 +1340,8 @@ class NotificationsListeners(_NotificationListener):
          ChoosingDeviceslListener(),
          RecruitReminderlListener(),
          EmailConfirmationReminderListener(),
-         VehiclePostProgressionUnlockListener())
+         VehiclePostProgressionUnlockListener(),
+         PsaCoinReminderListener())
 
     def start(self, model):
         for listener in self.__listeners:

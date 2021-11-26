@@ -7,8 +7,5 @@ class ProgressiveRewardWidgetMeta(BaseDAAPIComponent):
     def onWidgetClick(self):
         self._printOverrideError('onWidgetClick')
 
-    def onOpenBtnClick(self):
-        self._printOverrideError('onOpenBtnClick')
-
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

@@ -10,6 +10,7 @@ from async import async, await
 from constants import EventPhase
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPlayerSeniorityAwardsUrl
 from gui.battle_pass.battle_pass_helpers import showOfferByBonusName
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
@@ -27,7 +28,7 @@ from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression, showBattlePass3dStyleChoiceWindow, showMissionsMapboxProgression
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showBlueprintsSalePage, showConfirmEmailOverlay
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYearAwardWindow, showBlueprintsSalePage, showConfirmEmailOverlay, showShop
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
@@ -1034,6 +1035,20 @@ class _GotoEventRedeemQuestHandler(_ActionHandler):
         dependency.instance(IAFKController).showQuest()
 
 
+class _OpenPsaShop(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.PSACOIN_REMINDER
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showShop(getPlayerSeniorityAwardsUrl())
+
+
 class _OpenShopSalesEventMainView(_NavigationDisabledActionHandler):
     __shopSales = dependency.descriptor(IShopSalesEventController)
 
@@ -1098,6 +1113,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _ShowEventWarningWindowHandler,
  _GotoEventRedeemQuestHandler,
  _OpenMissingEventsHandler,
+ _OpenPsaShop,
  _OpenShopSalesEventMainView)
 
 class NotificationsActionsHandlers(object):

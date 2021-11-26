@@ -21,7 +21,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showStylePreview, showHangar, showBlueprintsSalePage, showBlueprintsExchangeStylePreview
+from gui.shared.event_dispatcher import showStylePreview, showHangar, showBlueprintsSalePage, showBlueprintsExchangeStylePreview, showMarathonRewardScreen
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -347,6 +347,10 @@ class _VehicleCustomizationPreviewSchema(W2CSchema):
     style_id = Field(required=True, type=int)
 
 
+class _MarathonRewardScreen(W2CSchema):
+    marathon_prefix = Field(required=True, type=basestring)
+
+
 class VehicleSellWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -472,11 +476,15 @@ class VehiclePreviewWebApiMixin(object):
                 ctx = self.c11n.getCtx()
                 ctx.changeMode(CustomizationModes.STYLED)
                 slotId = ctx.mode.STYLE_SLOT
-                ctx.installItem(result.style.intCD, slotId)
+                ctx.mode.installItem(result.style.intCD, slotId)
             return
 
         self.c11n.showCustomization(result.vehicle.invID, callback=styleCallback)
         return {'installed': result.canInstall}
+
+    @w2c(_MarathonRewardScreen, 'marathon_reward_screen')
+    def openMarathonRewardScreen(self, cmd):
+        showMarathonRewardScreen(cmd.marathon_prefix)
 
     def _openVehicleStylePreview(self, cmd):
         if cmd.vehicle_cd:

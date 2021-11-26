@@ -228,6 +228,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'twitchPrime4'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'alphaTester'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, 'betaTester'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, '11YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, '10YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, '09YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, '08YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),

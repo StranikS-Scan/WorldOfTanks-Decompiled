@@ -1537,7 +1537,7 @@ class REQUEST_COOLDOWN:
     SEND_INVITATION_COOLDOWN = 1.0
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
-    LOOTBOX = 1.0
+    LOOTBOX = 0.5
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
@@ -1556,6 +1556,19 @@ class REQUEST_COOLDOWN:
     ANONYMIZER = 1.0
     UPDATE_IN_BATTLE_PLAYER_RELATIONS = 1.0
     FLUSH_RELATIONS = 1.0
+    NEW_YEAR_SLOT_FILL = 0.4
+    NEW_YEAR_CRAFT = 0.5
+    NEW_YEAR_CRAFT_OLD_TOYS = 0.5
+    NEW_YEAR_BREAK_TOYS = 1.0
+    NEW_YEAR_SEE_INVENTORY_TOYS = 0.5
+    NEW_YEAR_SEE_COLLECTION_TOYS = 0.5
+    NEW_YEAR_SELECT_DISCOUNT = 1.0
+    NEW_YEAR_VIEW_ALBUM = 0.5
+    NEW_YEAR_CONVERT_FILLERS = 1.0
+    NEW_YEAR_FILL_OLD_COLLECTION = 0.5
+    NEW_YEAR_SET_NY_VEHICLE = 0.5
+    NEW_YEAR_SIMPLIFY_CELEBRITY_QUEST = 1.0
+    NEW_YEAR_CHOOSE_SLOT_BONUS = 0.5
     EQUIP_ENHANCEMENT = 1.0
     DISMOUNT_ENHANCEMENT = 1.0
     BUY_BATTLE_PASS = 1.0
@@ -1893,6 +1906,10 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
+ 92: 'Oriental loot box last viewed count',
+ 93: 'New year loot box last viewed count',
+ 94: 'Fairytale loot box last viewed count',
+ 95: 'Christmas loot box last viewed count',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
  98: 'Battle Pass Storage',
@@ -1901,7 +1918,9 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  101: 'Battle Royale carousel filter 2',
  USER_SERVER_SETTINGS.GAME_EXTENDED_2: 'Game extended section settings 2',
  103: 'Mapbox carousel filter 1',
- 104: 'Mapbox carousel filter 2'}
+ 104: 'Mapbox carousel filter 2',
+ 105: 'New Year settings storage',
+ 106: 'Common loot box last viewed count'}
 
 class WG_GAMES:
     TANKS = 'wot'

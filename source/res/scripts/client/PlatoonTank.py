@@ -6,7 +6,6 @@ from collections import namedtuple
 import logging
 import math
 import AccountCommands
-import BigWorld
 from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
 from constants import IS_DEVELOPMENT
 from gui.hangar_vehicle_appearance import HangarVehicleAppearance
@@ -17,7 +16,7 @@ from skeletons.gui.game_control import IPlatoonController
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import GAME
-from vehicle_systems.tankStructure import ModelStates, TankPartNames
+from vehicle_systems.tankStructure import ModelStates, ColliderTypes
 from vehicle_systems import camouflages
 from items import vehicles
 from items.components.c11n_constants import SeasonType
@@ -75,10 +74,10 @@ class _PlatoonTankAppearance(HangarVehicleAppearance):
         return self.__gunPitch
 
     def _reloadColliderType(self, state):
-        if not self.collisions:
-            return
-        colliderData = (self.collisions.getColliderID(), (TankPartNames.getIdx(TankPartNames.GUN) + 1, TankPartNames.getIdx(TankPartNames.GUN) + 2, TankPartNames.getIdx(TankPartNames.GUN) + 3))
-        BigWorld.appendCameraCollider(colliderData)
+        pass
+
+    def _getColliderType(self):
+        return ColliderTypes.PLATOON_VEHICLE_COLLIDER
 
 
 class PlatoonTank(ClientSelectableCameraVehicle):

@@ -135,6 +135,8 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.addListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_ON, self.__turnLobbyDraggingOn, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_OFF, self.__turnLobbyDraggingOff, EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
         viewLifecycleHandler = _LobbySubViewsLifecycleHandler()
@@ -164,6 +166,8 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.removeListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_ON, self.__turnLobbyDraggingOn, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_OFF, self.__turnLobbyDraggingOff, EVENT_BUS_SCOPE.LOBBY)
         View._dispose(self)
         return
 
@@ -209,3 +213,9 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         elif roomType in [constants.IGR_TYPE.BASE, constants.IGR_TYPE.NONE] and self.__currIgrType == constants.IGR_TYPE.PREMIUM:
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.IGR_CUSTOMIZATION_END, igrIcon=icon), type=SystemMessages.SM_TYPE.Information)
         self.__currIgrType = roomType
+
+    def __turnLobbyDraggingOn(self, _):
+        self.as_switchLobbyDraggingS(True)
+
+    def __turnLobbyDraggingOff(self, _):
+        self.as_switchLobbyDraggingS(False)

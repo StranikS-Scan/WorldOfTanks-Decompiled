@@ -371,6 +371,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     COMPARE_SPECIALIZATION_BUTTON_HINT = 'CompareSpecializationButtonHint'
     TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'TradeInVehiclePreviewPostProgressionButtonHint'
     PERSONAL_TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'PersonalTradeInVehiclePreviewPostProgressionButtonHint'
+    NY_GIFT_SYSTEM_FRIEND_SELECT_HINT = 'NyGiftSystemFriendSelectHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -483,3 +484,34 @@ class ScorePanelStorageKeys(CONST_CONTAINER):
     SHOW_HP_VALUES = 'showHPValues'
     SHOW_HP_DIFFERENCE = 'showHPDifference'
     ENABLE_TIER_GROUPING = 'enableTierGrouping'
+
+
+class NYLootBoxesStorageKeys(CONST_CONTAINER):
+    NEW_COUNT = 'newCount'
+    DELIVERED_COUNT = 'deliveredCount'
+
+
+class NewYearStorageKeys(CONST_CONTAINER):
+    HAS_TOYS_HINT_SHOWN = 'hasToysHintShown'
+    NY_VEHICLES_PROGRESS_ENTRY = 'nyVehiclesProgressEntry'
+    NY_VEHICLES_POST_EVENT_ENTRY = 'nyVehiclesPostEventEntry'
+    NY_VEHICLES_LEVEL_UP_ENTRY = 'nyVehiclesLevelUpEntry'
+    NY_STATISTICS_HINT_SHOWN = 'nyLootboxStatisticsHintShown'
+    GLADE_INTRO_VISITED = 'gladeIntroVisited'
+    GIFT_SYSTEM_INTRO_VISITED = 'giftSystemIntroVisited'
+    DECORATIONS_POPOVER_VIEWED = 'decorationsPopoverViewed'
+    DECORATIONS_POPOVER_BROKEN = 'decorationsPopoverBroken'
+    CELEBRITY_CHALLENGE_VISITED = 'celebrityChallengeVisited'
+    CELEBRITY_WELCOME_VIEWED = 'celebrityChallengeWelcomeViewed'
+    LOOT_BOX_VIDEO_OFF = 'lootBoxVideoOff'
+    BOOL_FLAGS = (HAS_TOYS_HINT_SHOWN,
+     NY_VEHICLES_PROGRESS_ENTRY,
+     NY_VEHICLES_POST_EVENT_ENTRY,
+     NY_STATISTICS_HINT_SHOWN,
+     GLADE_INTRO_VISITED,
+     GIFT_SYSTEM_INTRO_VISITED,
+     DECORATIONS_POPOVER_VIEWED,
+     DECORATIONS_POPOVER_BROKEN,
+     CELEBRITY_CHALLENGE_VISITED,
+     CELEBRITY_WELCOME_VIEWED,
+     LOOT_BOX_VIDEO_OFF)

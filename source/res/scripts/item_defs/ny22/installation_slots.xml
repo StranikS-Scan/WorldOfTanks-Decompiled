@@ -1,0 +1,42 @@
+<installation_slots.xml>
+  <slot>
+    <id>	13	</id>
+    <type>	sculpture	</type>
+    <object>	Installation	</object>
+    <nodes>	HP_sculpture	</nodes>
+    <selectable>	true	</selectable>
+    <defaultToy>	1	</defaultToy>
+    <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_sculpture.seq	</hoverEffect>
+  </slot>
+  <slot>
+    <id>	14	</id>
+    <type>	sculpture_light	</type>
+    <object>	Installation	</object>
+    <nodes>	HP_decoration	</nodes>
+    <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_decoration.seq	</hoverEffect>
+  </slot>
+  <slot>
+    <id>	15	</id>
+    <type>	kiosk	</type>
+    <object>	Installation	</object>
+    <nodes>	HP_kiosk	</nodes>
+    <hoverEffect>	particles/eff_sequence/New_Year/h30_slot_kiosk.seq	</hoverEffect>
+    <defaultToy>	8	</defaultToy>
+  </slot>
+  <slot>
+    <id>	16	</id>
+    <type>	pyro	</type>
+    <object>	Installation	</object>
+    <nodes>	HP_pyro	</nodes>
+    <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_megainstallation.seq	</hoverEffect>
+    <defaultToy>	9	</defaultToy>
+  </slot>
+  <slot>
+    <id>	17	</id>
+    <type>	garland_installation	</type>
+    <object>	Installation	</object>
+    <nodes>	HP_gates_right	</nodes>
+    <hoverEffect>	particles/eff_sequence/New_Year/ny_slot_garland_right.seq	</hoverEffect>
+    <defaultToy>	11	</defaultToy>
+  </slot>
+</installation_slots.xml>

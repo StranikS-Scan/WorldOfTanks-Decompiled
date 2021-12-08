@@ -168,24 +168,16 @@
     <script>
       <module>	client.cgf_components.client_selectable_components	</module>
       <module>	client.cgf_components.marker_component	</module>
-      <module>	vehicle_systems.components.debris_crashed_tracks	</module>
+      <module>	client.vehicle_systems.components.debris_crashed_tracks	</module>
+      <module>	client.new_year.cgf_components.registrars	</module>
+      <module>	client.vehicle_systems.components.vehicle_custom_effects_settings	</module>
     </script>
-    <testScript>
-      <module>	client.cgf_demo_client.test_client_component	</module>
-      <module>	client.cgf_demo_client.test_hierarchy_modificator	</module>
-      <module>	client.cgf_demo_client.test_state_machine_trigger	</module>
-      <module>	client.cgf_demo_client.test_triggers	</module>
-      <module>	client.cgf_demo_client.demo_rules	</module>
-      <module>	common.cgf_demo.test_movers	</module>
-      <module>	common.cgf_demo.test_triggers	</module>
-      <module>	common.cgf_demo.test_bridge	</module>
-      <module>	common.cgf_demo.test_manager_rule	</module>
-    </testScript>
     <testPrefabs></testPrefabs>
     <prefabs>
       <path>	particles/content_deferred/GFX_models/tank_customization/A120_M48A5_3DSt_TLXXL/A120_M48A5_3DSt_TLXXL.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/F18_Bat_Chatillon25t_3DSt_TLXXL/F18_Bat_Chatillon25t_3DSt_TLXXL.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/R97_Object_140_3Dst_TLXXL/R97_Object_140_3Dst_TLXXL.prefab	</path>
+      <path>	content/HangarPrefabs/HangarManagers.prefab	</path>
     </prefabs>
   </cgf>
 </resources.xml>

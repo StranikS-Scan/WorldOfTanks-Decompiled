@@ -57,6 +57,8 @@ class BaseBlock(object):
             slotModel = slots[idx]
             self._updateAmmunitionSlot(slotModel, idx)
 
+        slots.invalidate()
+
     def _getSectionName(self):
         raise NotImplementedError
 
@@ -162,13 +164,22 @@ class OptDeviceBlock(BaseBlock):
         slotModel.setActiveSpecsMask(getCategoriesMask(itemCategories & optDeviceItem.categories))
         isSpecializationClickable = isDynamic and optDeviceItem.categories and self._isSpecializationClickable and self._vehicle.isRoleSlotActive
         specializations = slotModel.specializations.getSpecializations()
-        specializations.clear()
-        for category in optDeviceItem.categories:
-            specialization = SpecializationModel()
-            specialization.setName(category)
-            specialization.setIsClickable(isSpecializationClickable)
-            specialization.setIsCorrect(category in itemCategories)
-            specializations.addViewModel(specialization)
+        categories = optDeviceItem.categories
+        if len(specializations) != len(categories):
+            specializations.clear()
+            for category in categories:
+                specialization = SpecializationModel()
+                specialization.setName(category)
+                specialization.setIsClickable(isSpecializationClickable)
+                specialization.setIsCorrect(category in itemCategories)
+                specializations.addViewModel(specialization)
+
+        else:
+            for categoryIdx, category in enumerate(categories):
+                specialization = specializations[categoryIdx]
+                specialization.setName(category)
+                specialization.setIsClickable(isSpecializationClickable)
+                specialization.setIsCorrect(category in itemCategories)
 
         specializations.invalidate()
         return

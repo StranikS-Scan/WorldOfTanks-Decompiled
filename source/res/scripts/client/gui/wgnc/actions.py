@@ -3,6 +3,7 @@
 import BigWorld
 from adisp import process
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING, LOG_DEBUG
+from gui.game_control.links import URLMacros
 from gui.promo.promo_logger import PromoLogSourceType
 from gui.shared.event_dispatcher import showStrongholds
 from gui.shared.utils.decorators import ReprInjector
@@ -133,9 +134,11 @@ class OpenRankedBrowser(OpenInternalBrowser):
 @ReprInjector.withParent()
 class OpenExternalBrowser(_OpenBrowser):
 
+    @process
     def invoke(self, notID, actor=None):
+        processedUrl = yield URLMacros().parse(self._url)
         try:
-            BigWorld.wg_openWebBrowser(self._url)
+            BigWorld.wg_openWebBrowser(processedUrl)
         except (AttributeError, TypeError):
             LOG_CURRENT_EXCEPTION()
 

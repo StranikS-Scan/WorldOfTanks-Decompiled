@@ -38,6 +38,9 @@ from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import Vehi
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
 from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
+from gui.impl.lobby.new_year.tooltips.ny_total_bonus_tooltip import NyTotalBonusTooltip
+from gui.impl.new_year.tooltips.new_year_vehicles_bonus_tooltip import NewYearVehiclesBonusTooltip
+from gui.impl.lobby.new_year.tooltips.ny_vehicle_bonuses_tooltip import NyVehicleBonusesTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.server_events.events_helpers import missionsSortFunc
@@ -1410,6 +1413,67 @@ class SquadBonusTooltipWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return DecoratedTooltipWindow(SquadBonusTooltipContent())
+
+
+class NYCreditBonusTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(NYCreditBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.NY_CREDIT_BONUS)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return DecoratedTooltipWindow(NyTotalBonusTooltip(), useDecorator=False)
+
+
+class NYVehicleBonusTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(NYVehicleBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.NY_VEHICLE_BONUS)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return DecoratedTooltipWindow(NewYearVehiclesBonusTooltip())
+
+
+class NYAmmunitionVehicleBonusTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(NYAmmunitionVehicleBonusTooltipWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.NY_AMMUNITION_BONUSES)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return DecoratedTooltipWindow(NyVehicleBonusesTooltip(*args), useDecorator=False)
+
+
+class NYGiftStamps(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(NYGiftStamps, self).__init__(context, None)
+        self._setContentMargin(19, 18, 12, 14)
+        self._setWidth(332)
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(NYGiftStamps, self)._packBlocks(*args, **kwargs)
+        compressPadding = formatters.packPadding(bottom=5)
+        title = backport.text(R.strings.ny.nyPostMarkTooltip.title())
+        image = backport.image(R.images.gui.maps.icons.newYear.gift_system.gift_coin.large())
+        description = text_styles.concatStylesToMultiLine(backport.text(R.strings.ny.nyPostMarkTooltip.description1()), '', backport.text(R.strings.ny.nyPostMarkTooltip.description2()), '', backport.text(R.strings.ny.nyPostMarkTooltip.description3()))
+        blocks = [formatters.packTextBlockData(text_styles.highTitle(title), padding=compressPadding), formatters.packImageBlockData(image, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER), formatters.packTextBlockData(text_styles.main(description))]
+        items.append(formatters.packBuildUpBlockData(blocks=blocks))
+        return items
+
+
+class NewYearFillers(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(NewYearFillers, self).__init__(context, None)
+        self._setWidth(365)
+        self._setContentMargin(0, 0, 0, 0)
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(NewYearFillers, self)._packBlocks(*args, **kwargs)
+        blocks = [formatters.packImageBlockData(backport.image(R.images.gui.maps.icons.newYear.infotype.icon_filler())), formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.ny.fillersTooltip.header())), padding=formatters.packPadding(-364, 30, 0, 30)), formatters.packTextBlockData(text_styles.mainBig(backport.text(R.strings.ny.fillersTooltip.description())), padding=formatters.packPadding(240, 30, 30, 30))]
+        items.append(formatters.packBuildUpBlockData(blocks=blocks))
+        return items
 
 
 class VehiclePointsTooltipContentWindowData(ToolTipBaseData):

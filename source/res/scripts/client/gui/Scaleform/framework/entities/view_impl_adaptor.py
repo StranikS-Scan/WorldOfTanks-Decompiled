@@ -104,17 +104,20 @@ class ViewImplAdaptor(DisposableEntity, ViewInterface):
         self.__loadID = BigWorld.callback(0.0, self.__startToLoad)
         return
 
-    def _destroy(self):
+    def destroy(self):
         if self.__loadID is not None:
             BigWorld.cancelCallback(self.__loadID)
             self.__loadID = None
-        if self.__window is None:
-            return
-        else:
+        if self.__window is not None:
             self.__window.onStatusChanged -= self.__onStatusChanged
+        super(ViewImplAdaptor, self).destroy()
+        return
+
+    def _destroy(self):
+        if self.__window is not None:
             self.__window.destroy()
             self.__window = None
-            return
+        return
 
     def __onStatusChanged(self, state):
         if state == WindowStatus.LOADED:

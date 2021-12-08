@@ -25,12 +25,6 @@ def showRestrictedSysMessage():
     BigWorld.callback(0.0, _showRestrictedSysMessage)
 
 
-def showSeniorityAwardsMultyOpen():
-    from gui.impl.lobby.seniority_awards.seniority_awards_multi_open_view import SeniorityAwardsMultiOpenWindow
-    window = SeniorityAwardsMultiOpenWindow()
-    window.load()
-
-
 def fireCloseToHangar():
     playSound(LootBoxViewEvents.ENTRY_VIEW_EXIT)
     _closeLootBoxWindows()

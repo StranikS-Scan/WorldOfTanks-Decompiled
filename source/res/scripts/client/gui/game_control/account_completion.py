@@ -11,6 +11,7 @@ from gui.impl.lobby.account_completion.common import errors
 from gui.platform.base.settings import CONTENT_WAITING
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.shared.event_dispatcher import showSteamAddEmailOverlay, showSteamConfirmEmailOverlay, showDemoAddCredentialsOverlay, showDemoErrorOverlay, showDemoConfirmCredentialsOverlay, showDemoCompleteOverlay, showDemoWaitingForTokenOverlayViewOverlay
+from gui.shared.lock_overlays import lockNotificationManager
 from helpers import dependency
 from skeletons.gui.game_control import IOverlayController, IBootcampController, ISteamCompletionController, IDemoAccCompletionController
 from skeletons.gui.login_manager import ILoginManager
@@ -46,21 +47,28 @@ class SteamCompletionController(ISteamCompletionController):
     def isSteamAccount(self):
         return self._loginManager.isWgcSteam
 
+    def onLobbyStarted(self, ctx):
+        lockNotificationManager(lock=True)
+
     def __onExitBootcamp(self, *args, **kwargs):
         self._bootcampExit = True
 
     @async
     def __onSpaceCreate(self, *args, **kwargs):
         if not self._bootcampExit or self._bootcampController.isInBootcamp() or self._overlayController.isActive or not self.isSteamAccount:
+            lockNotificationManager(lock=False, releasePostponed=True)
             return
         self._bootcampExit = False
         status = yield await(self._wgnpSteamAccCtrl.getEmailStatus(waitingID=CONTENT_WAITING))
         if self._overlayDestroyed or status.isUndefined or not self._hangarSpace.spaceInited:
+            lockNotificationManager(lock=False, releasePostponed=True)
             return
         if status.typeIs(StatusTypes.ADD_NEEDED):
             showSteamAddEmailOverlay()
+            lockNotificationManager(lock=False, releasePostponed=True, fireReleased=False)
         elif status.typeIs(StatusTypes.ADDED):
             showSteamConfirmEmailOverlay(email=status.email)
+        lockNotificationManager(lock=False, releasePostponed=True)
 
 
 class DemoAccCompletionController(IDemoAccCompletionController):

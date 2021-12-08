@@ -1,0 +1,21 @@
+<NewYearCelebrityObject.def>
+  <Parent>	ClientSelectableObject	</Parent>
+  <Properties>
+    <collisionModelName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </collisionModelName>
+    <stateMachine>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </stateMachine>
+    <selectionGroupIdx>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	0	</Default>
+    </selectionGroupIdx>
+  </Properties>
+</NewYearCelebrityObject.def>

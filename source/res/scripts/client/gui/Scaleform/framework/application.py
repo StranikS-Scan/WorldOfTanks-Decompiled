@@ -429,6 +429,9 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
     def unblurBackgroundViews(self):
         self.as_unblurBackgroundViewsS()
 
+    def setMouseEventsEnabled(self, enabled):
+        self.as_setMouseEventsEnabledS(enabled)
+
     def _createManagers(self):
         self._loaderMgr = self._createLoaderManager()
         self._containerMgr = self._createContainerManager()

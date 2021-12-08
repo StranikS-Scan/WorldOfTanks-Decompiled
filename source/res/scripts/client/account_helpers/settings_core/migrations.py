@@ -2,13 +2,14 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 import BigWorld
 import constants
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior, NewYearStorageKeys
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCache
 from skeletons.gui.game_control import IIGRController
+from items.components.ny_constants import NY_BRANCH_MIN_LEVEL
 
 def _initializeDefaultSettings(core, data, initialized):
     LOG_DEBUG('Initializing server settings.')
@@ -731,6 +732,22 @@ def _migrateTo82(core, data, initialized):
     data['guiStartBehavior']['isRankedWelcomeViewShowed'] = False
 
 
+def _migrateTo83(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    nyStorageData = data['nyStorage']
+    nyStorageData[NewYearStorageKeys.NY_VEHICLES_LEVEL_UP_ENTRY] = NY_BRANCH_MIN_LEVEL
+    for key in NewYearStorageKeys.BOOL_FLAGS:
+        nyStorageData[key] = False
+
+    clear = data['clear']
+    newYearFilter = 1024
+    clearingBatch = [(SETTINGS_SECTIONS.CAROUSEL_FILTER_2, 'carousel_filter'), (SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_2, 'epicCarouselFilter2'), (SETTINGS_SECTIONS.MAPBOX_CAROUSEL_FILTER_2, 'mapBoxCarouselFilter2')]
+    for section, clearKey in clearingBatch:
+        storedValue = _getSettingsCache().getSectionSettings(section, 0)
+        if storedValue & newYearFilter:
+            clear[clearKey] = clear.get(clearKey, 0) | newYearFilter
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1053,6 +1070,10 @@ _versions = ((1,
   False),
  (82,
   _migrateTo82,
+  False,
+  False),
+ (83,
+  _migrateTo83,
   False,
   False))
 

@@ -14,9 +14,11 @@ from gui.impl.lobby.dialogs.exchange_with_items import ExchangeToBuyItems, Excha
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
 from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
+from gui.impl.new_year.dialogs.new_year_buy_gift_upgrade_dialog_view import NewYearBuyGiftUpgradeDialogView
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow
 from skeletons.gui.impl import IGuiLoader
 from frameworks.wulf import WindowStatus
+from gui.impl.pub.wait_view_impl import WaitWindowWrapper
 if typing.TYPE_CHECKING:
     from typing import Any, Optional, Iterable, Union
     from frameworks.wulf import View
@@ -121,4 +123,11 @@ def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, *arg
 @async
 def showExchangeToUpgradeDeviceDialog(device, parent=None):
     result = yield await(showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToUpgradeItems(), parent=parent, wrappedViewClass=ExchangeToUpgradeDevice, device=device))
+    raise AsyncReturn(result)
+
+
+@async
+def showNYGiftUpgradeDialog(parent, level, cost, shortage, tokensCount):
+    dialog = FullScreenDialogWindowWrapper(NewYearBuyGiftUpgradeDialogView(level, cost, shortage, tokensCount), parent)
+    result = yield await(showSimple(dialog))
     raise AsyncReturn(result)

@@ -73,6 +73,13 @@
       <undamaged>	vehicles/italy/It15_Rinoceronte/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/italy/It15_Rinoceronte/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/italy/It15_Rinoceronte/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <It15_Rinoceronte_3DSt_MD_21_XXII>
+          <undamaged>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Hull.model	</exploded>
+        </It15_Rinoceronte_3DSt_MD_21_XXII>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -1150,6 +1157,45 @@
         <clipAngle>	0.409437	</clipAngle>
         <anchorShift>	0.102958	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15084	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <compatibleModels>	It15_Rinoceronte_3DSt_MD_21_XXII	</compatibleModels>
+        <position>	-1.66026 0.908701 2.1909	</position>
+        <rotation>	1.55566 -1.49972 -3.06534	</rotation>
+        <scale>	0.339439 0.0523598 0.33944	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.409437	</clipAngle>
+        <anchorShift>	0.043448	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15085	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	It15_Rinoceronte_3DSt_MD_21_XXII	</compatibleModels>
+        <position>	1.66015 0.90866 2.19098	</position>
+        <rotation>	1.55567 1.49948 3.06524	</rotation>
+        <scale>	0.339439 0.0523597 0.33944	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.409437	</clipAngle>
+        <anchorShift>	0.043448	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15086	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It15_Rinoceronte_3DSt_MD_21_XXII	</compatibleModels>
+        <position>	-0.000032 1.05576 3.18718	</position>
+        <rotation>	0.494239 -0.000038 3.14139	</rotation>
+        <scale>	0.385724 0.102151 0.385724	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.409437	</clipAngle>
+        <anchorShift>	0.087381	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	96.7538 103.152	</density>
@@ -1186,6 +1232,13 @@
         <undamaged>	vehicles/italy/It15_Rinoceronte/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/italy/It15_Rinoceronte/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/italy/It15_Rinoceronte/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <It15_Rinoceronte_3DSt_MD_21_XXII>
+            <undamaged>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Chassis.model	</exploded>
+          </It15_Rinoceronte_3DSt_MD_21_XXII>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -2202,6 +2255,13 @@
             <undamaged>	vehicles/italy/It15_Rinoceronte/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/italy/It15_Rinoceronte/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/italy/It15_Rinoceronte/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <It15_Rinoceronte_3DSt_MD_21_XXII>
+                <undamaged>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Gun_01.model	</exploded>
+              </It15_Rinoceronte_3DSt_MD_21_XXII>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/italy/It15_Rinoceronte/collision/Gun_01.model	</collisionModelServer>
@@ -2419,6 +2479,26 @@
               <hiddenForUser>	true	</hiddenForUser>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45011	</slotId>
+              <rayStart>	-0.000000 -0.000000 3.31699	</rayStart>
+              <rayEnd>	0.074268 0.0454808 3.31699	</rayEnd>
+              <rayUp>	0.120835 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	It15_Rinoceronte_3DSt_MD_21_XXII	</compatibleModels>
+              <position>	0.000208489 2.29065 0.696106	</position>
+              <rotation>	-0.00153222 -0.00233189 3.14101	</rotation>
+              <scale>	0.471619 0.205149 0.471622	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.854925	</clipAngle>
+              <anchorShift>	-0.032786	</anchorShift>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.000000 -0.000000 3.31699	</rayStart>
@@ -2440,6 +2520,13 @@
         <undamaged>	vehicles/italy/It15_Rinoceronte/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/italy/It15_Rinoceronte/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/italy/It15_Rinoceronte/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <It15_Rinoceronte_3DSt_MD_21_XXII>
+            <undamaged>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Turret_01.model	</exploded>
+          </It15_Rinoceronte_3DSt_MD_21_XXII>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/italy/It15_Rinoceronte/collision/Turret_01.model	</collisionModelServer>
@@ -2921,6 +3008,45 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.29895	</clipAngle>
           <anchorShift>	0.020003	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35034	</slotId>
+          <tags>	formfactor_square direction_right_to_left	</tags>
+          <compatibleModels>	It15_Rinoceronte_3DSt_MD_21_XXII	</compatibleModels>
+          <position>	0.727616 2.24951 -0.753314	</position>
+          <rotation>	0.00368375 0.000046 3.14141	</rotation>
+          <scale>	0.70337 0.305961 0.703375	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.696379	</clipAngle>
+          <anchorShift>	0.038033	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35035	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	It15_Rinoceronte_3DSt_MD_21_XXII	</compatibleModels>
+          <position>	-0.000042 1.95634 -2.18828	</position>
+          <rotation>	1.68492 -0.000105381 -0.000105143	</rotation>
+          <scale>	0.380044 0.05 0.380047	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.854925	</clipAngle>
+          <anchorShift>	0.072787	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35036	</slotId>
+          <tags>	formfactor_square direction_left_to_right	</tags>
+          <compatibleModels>	It15_Rinoceronte_3DSt_MD_21_XXII	</compatibleModels>
+          <position>	-0.773255 1.99791 0.0715569	</position>
+          <rotation>	0.844654 -0.000139712 3.14133	</rotation>
+          <scale>	0.510872 0.222225 0.510877	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.675778	</clipAngle>
+          <anchorShift>	0.029997	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

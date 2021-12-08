@@ -4,15 +4,16 @@ import Math
 import GUI
 import BigWorld
 import Windowing
+import Keys
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 import math_utils
 from account_helpers.settings_core.settings_constants import GAME
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.shared.utils import IHangarSpace
 from helpers import dependency
 from gui.Scaleform.Waiting import Waiting
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
+from gui import g_keyEventHandlers
 
 def cubicEasing(delta, position):
     return delta ** 3 * position
@@ -26,7 +27,6 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
     CURSOR_POSITION_CLAMP_VALUE = 2.0
     MAX_DT = 0.05
     settingsCore = dependency.descriptor(ISettingsCore)
-    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self, camera):
         CallbackDelayer.__init__(self)
@@ -48,29 +48,28 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
         self.__distanceDelta = cfg['cam_parallax_distance']
         self.__anglesDelta = cfg['cam_parallax_angles']
         self.__smoothingMultiplier = cfg['cam_parallax_smoothing']
-        self.hangarSpace.onSpaceCreate += self.__onSpaceCreated
-        self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
 
-    def __onSpaceCreated(self):
+    def activate(self):
         self.setEnabled(self.settingsCore.getSetting(GAME.HANGAR_CAM_PARALLAX_ENABLED))
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         g_eventBus.addListener(CameraRelatedEvents.IDLE_CAMERA, self.__handleIdleCameraActivation)
+        g_keyEventHandlers.add(self.__handleKeyEvent)
         g_eventBus.addListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onForceDisable, EVENT_BUS_SCOPE.LOBBY)
-        Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
+        Windowing.addWindowAccessibilitynHandler(self.onWindowAccessibilityChanged)
 
-    def __onSpaceDestroy(self, inited):
+    def deactivate(self):
         self.__isForcedDisabled = False
-        if inited:
-            self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
-            g_eventBus.removeListener(CameraRelatedEvents.IDLE_CAMERA, self.__handleIdleCameraActivation)
-            g_eventBus.removeListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onForceDisable, EVENT_BUS_SCOPE.LOBBY)
-            Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        g_eventBus.removeListener(CameraRelatedEvents.IDLE_CAMERA, self.__handleIdleCameraActivation)
+        g_keyEventHandlers.remove(self.__handleKeyEvent)
+        g_eventBus.removeListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onForceDisable, EVENT_BUS_SCOPE.LOBBY)
+        Windowing.removeWindowAccessibilityHandler(self.onWindowAccessibilityChanged)
 
     def __onSettingsChanged(self, diff):
         if GAME.HANGAR_CAM_PARALLAX_ENABLED in diff:
             self.setEnabled(self.settingsCore.getSetting(GAME.HANGAR_CAM_PARALLAX_ENABLED))
 
-    def __onWindowAccessibilityChanged(self, isAccessible):
+    def onWindowAccessibilityChanged(self, isAccessible):
         self.__isWindowAccessible = isAccessible
 
     def setEnabled(self, isEnabled):
@@ -81,13 +80,15 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
             self.stopCallback(self.__update)
 
     def destroy(self):
-        self.hangarSpace.onSpaceCreate -= self.__onSpaceCreated
-        self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
         self.__camera = None
         self.__isInIdle = None
         self.stopCallback(self.__update)
         CallbackDelayer.destroy(self)
         return
+
+    def __handleKeyEvent(self, event):
+        if event.key == Keys.KEY_LEFTMOUSE:
+            self.__isForcedDisabled = event.isKeyDown()
 
     def __updateValues(self):
         matrix = Math.Matrix(self.__camera.source)
@@ -111,13 +112,7 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
             return True
         if Waiting.isVisible():
             return True
-        if not self.__isWindowAccessible:
-            return True
-        currentYaw = Math.Matrix(self.__camera.invViewMatrix).yaw
-        currentPitch = Math.Matrix(self.__camera.invViewMatrix).pitch
-        goalYaw = Math.Matrix(self.__camera.source).yaw
-        goalPitch = -Math.Matrix(self.__camera.source).pitch
-        return True if abs(goalYaw - currentYaw) > 0.001 or abs(goalPitch - currentPitch) > 0.001 else False
+        return True if not self.__isWindowAccessible else False
 
     def __getClampedCursor(self):
         cursorPosition = GUI.mcursor().position

@@ -70,6 +70,13 @@
       <undamaged>	vehicles/czech/Cz17_Vz_55/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/czech/Cz17_Vz_55/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/czech/Cz17_Vz_55/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Cz17_Vz_55_3DSt_MD_21_XXII>
+          <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Hull.model	</exploded>
+        </Cz17_Vz_55_3DSt_MD_21_XXII>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -765,6 +772,45 @@
         <clipAngle>	0.637807	</clipAngle>
         <anchorShift>	0.005457	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15052	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <compatibleModels>	Cz17_Vz_55_3DSt_MD_21_XXII	</compatibleModels>
+        <position>	0.54975 1.35437 2.70046	</position>
+        <rotation>	0.345786 -0.00174951 3.14158	</rotation>
+        <scale>	0.364465 0.164305 0.364464	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.951439	</clipAngle>
+        <anchorShift>	0.045461	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15053	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	Cz17_Vz_55_3DSt_MD_21_XXII	</compatibleModels>
+        <position>	-0.549734 1.35438 2.70046	</position>
+        <rotation>	0.345786 -0.00174951 3.14158	</rotation>
+        <scale>	0.364465 0.164305 0.364463	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.951439	</clipAngle>
+        <anchorShift>	0.045461	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15054	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Cz17_Vz_55_3DSt_MD_21_XXII	</compatibleModels>
+        <position>	0.000327602 1.14066 3.31851	</position>
+        <rotation>	0.395258 -0.00174972 3.14158	</rotation>
+        <scale>	0.447485 0.059237 0.447485	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.584951	</clipAngle>
+        <anchorShift>	0.055459	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	101.802 101.732	</density>
@@ -800,6 +846,13 @@
         <undamaged>	vehicles/czech/Cz17_Vz_55/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/czech/Cz17_Vz_55/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/czech/Cz17_Vz_55/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Cz17_Vz_55_3DSt_MD_21_XXII>
+            <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Chassis.model	</exploded>
+          </Cz17_Vz_55_3DSt_MD_21_XXII>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1566,6 +1619,13 @@
             <undamaged>	vehicles/czech/Cz17_Vz_55/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/czech/Cz17_Vz_55/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/czech/Cz17_Vz_55/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <Cz17_Vz_55_3DSt_MD_21_XXII>
+                <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Gun_02.model	</exploded>
+              </Cz17_Vz_55_3DSt_MD_21_XXII>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/czech/Cz17_Vz_55/collision/Gun_02.model	</collisionModelServer>
@@ -1658,7 +1718,7 @@
               <slotId>	49000	</slotId>
               <rayStart>	-0.0048 -0.0032 3.46474	</rayStart>
               <rayEnd>	-0.119603 -0.0270335 2.7316	</rayEnd>
-              <rayUp>	0.110618 0.000000 0.000000	</rayUp>
+              <rayUp>	0.113618 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.7	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -1737,6 +1797,13 @@
             <undamaged>	vehicles/czech/Cz17_Vz_55/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/czech/Cz17_Vz_55/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/czech/Cz17_Vz_55/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Cz17_Vz_55_3DSt_MD_21_XXII>
+                <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Gun_01.model	</exploded>
+              </Cz17_Vz_55_3DSt_MD_21_XXII>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/czech/Cz17_Vz_55/collision/Gun_01.model	</collisionModelServer>
@@ -1829,7 +1896,7 @@
               <slotId>	49000	</slotId>
               <rayStart>	-0.0048 -0.0032 3.46474	</rayStart>
               <rayEnd>	-0.119603 -0.0270335 2.7316	</rayEnd>
-              <rayUp>	0.110618 0.000000 0.000000	</rayUp>
+              <rayUp>	0.116618 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.7	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -1846,6 +1913,13 @@
         <undamaged>	vehicles/czech/Cz17_Vz_55/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/czech/Cz17_Vz_55/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/czech/Cz17_Vz_55/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Cz17_Vz_55_3DSt_MD_21_XXII>
+            <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Turret_01.model	</exploded>
+          </Cz17_Vz_55_3DSt_MD_21_XXII>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/czech/Cz17_Vz_55/collision/Turret_01.model	</collisionModelServer>
@@ -1877,8 +1951,8 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <rayStart>	-1.23611 0.581919 -0.645904	</rayStart>
-          <rayEnd>	-1.05753 0.492461 -0.635535	</rayEnd>
+          <rayStart>	-1.57973 0.483374 0.624873	</rayStart>
+          <rayEnd>	-1.41485 0.377905 0.583735	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.25	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -1888,8 +1962,8 @@
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
           <isMirrored>	true	</isMirrored>
-          <rayStart>	1.22951 0.578104 -0.602187	</rayStart>
-          <rayEnd>	1.05529 0.481343 -0.585255	</rayEnd>
+          <rayStart>	1.57973 0.483374 0.624873	</rayStart>
+          <rayEnd>	1.41485 0.377905 0.583735	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.25	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
@@ -2418,6 +2492,58 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.784142	</clipAngle>
           <anchorShift>	1.35746	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35041	</slotId>
+          <tags>	formfactor_square direction_right_to_left	</tags>
+          <compatibleModels>	Cz17_Vz_55_3DSt_MD_21_XXII	</compatibleModels>
+          <position>	-1.48677 1.89968 1.08744	</position>
+          <rotation>	1.44502 -1.10704 -3.0192	</rotation>
+          <scale>	0.472489 0.181141 0.472488	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.753982	</clipAngle>
+          <anchorShift>	0.115453	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35042	</slotId>
+          <tags>	formfactor_square direction_left_to_right	</tags>
+          <compatibleModels>	Cz17_Vz_55_3DSt_MD_21_XXII	</compatibleModels>
+          <position>	1.4868 1.89965 1.08744	</position>
+          <rotation>	1.44503 1.10703 3.01921	</rotation>
+          <scale>	0.472488 0.181141 0.472487	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.753982	</clipAngle>
+          <anchorShift>	0.095453	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35043	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz17_Vz_55_3DSt_MD_21_XXII	</compatibleModels>
+          <position>	0.000036 2.17514 1.10144	</position>
+          <rotation>	0.107813 -0.00174722 3.14158	</rotation>
+          <scale>	0.722096 0.20132 0.722096	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.951439	</clipAngle>
+          <anchorShift>	0.135452	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35044	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz17_Vz_55_3DSt_MD_21_XXII	</compatibleModels>
+          <position>	0.000015 1.82319 -2.16957	</position>
+          <rotation>	3.13985 -0.000003 -0.000009	</rotation>
+          <scale>	0.718266 0.0708078 0.71827	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorShift>	0.045455	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

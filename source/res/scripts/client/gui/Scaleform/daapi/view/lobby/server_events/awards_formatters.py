@@ -1,16 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/awards_formatters.py
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import NewStyleBonusComposer
+import typing
 from gui.battle_pass.battle_pass_helpers import getStyleForChapter
+from gui.gift_system.constants import NY_STAMP_CODE
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.auxiliary.rewards_helper import NEW_STYLE_FORMATTED_BONUSES
 from gui.server_events import formatters
 from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, QuestsBonusComposer, getPostBattleAwardsPacker
-from gui.server_events.bonuses import BlueprintsBonusSubtypes
+from gui.server_events.bonuses import BlueprintsBonusSubtypes, LootBoxTokensBonus
 from gui.battle_pass.battle_pass_bonuses_helper import BonusesHelper
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import NewStyleBonusComposer
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.formatters import text_styles
+from gui.shared.formatters.icons import makeImageTag
 from gui.shared.gui_items.crew_skin import localizedFullName as localizeSkinName
 from gui.shared.utils.functions import makeTooltip
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.server_events.bonuses import TokensBonus, EntitlementBonus
 SIMPLE_BONUSES_MAX_ITEMS = 5
 _DISPLAYED_AWARDS_COUNT = 2
 _END_LINE_SEPARATOR = ','
@@ -173,6 +182,45 @@ class SimpleBonusFormatter(OldStyleBonusFormatter):
         return result
 
 
+class LootBoxTokenFormatter(SimpleBonusFormatter):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def accumulateBonuses(self, bonus, event=None):
+        for token in bonus.getTokens().itervalues():
+            lootBox = self.__itemsCache.items.tokens.getLootBoxByTokenID(token.id)
+            if lootBox is None:
+                return
+            boxType = lootBox.getType()
+            iconName = 'lootBox_{0}'.format(boxType)
+            icon = makeImageTag(source=backport.image(R.images.gui.maps.icons.quests.bonuses.small.dyn(iconName)()), width=32, height=32, vSpace=-14)
+            boxName = backport.text(R.strings.lootboxes.type.dyn(boxType)())
+            boxCount = text_styles.stats(backport.text(R.strings.ny.postbattle.lootBox.boxCount(), count=token.count))
+            label = text_styles.main(backport.text(R.strings.ny.postbattle.lootBox.boxesLabel(), boxName=boxName, icon=icon, boxCount=boxCount))
+            tooltip = makeTooltip(header=lootBox.getUserName(), body=TOOLTIPS.QUESTS_BONUSES_LOOTBOXTOKEN_BODY)
+            self._result.append(formatters.packSingleLineBonusesBlock([label], complexTooltip=tooltip))
+
+        return
+
+    def extractFormattedBonuses(self, addLineSeparator=False):
+        result = []
+        if self._result:
+            result.extend(self._result)
+        return result
+
+
+class GiftStampsFormatter(OldStyleBonusFormatter):
+
+    def accumulateBonuses(self, bonus, event=None):
+        amount = bonus.getValue().amount
+        iconRes = R.images.gui.maps.icons.quests.bonuses.small.giftSystem_2_nyStamp
+        icon = makeImageTag(source=backport.image(iconRes()), width=32, height=32, vSpace=-14)
+        stampsCount = text_styles.stats(backport.text(R.strings.ny.postbattle.giftSystem.stampsCount(), count=amount))
+        label = backport.text(R.strings.ny.postbattle.giftSystem.stampsLabel(), icon=icon, stampsCount=stampsCount)
+        tooltipData = bonus.getTooltipData()
+        block = formatters.packSingleLineBonusesBlock([text_styles.main(label)], complexTooltip=tooltipData.tooltip, specialTooltip=tooltipData.specialAlias)
+        self._result.append(block)
+
+
 class TextBonusFormatter(OldStyleBonusFormatter):
 
     def accumulateBonuses(self, bonus, event=None):
@@ -240,19 +288,29 @@ class OldStyleAwardsPacker(AwardsPacker):
         super(OldStyleAwardsPacker, self).__init__(getFormattersMap(event))
         self.__defaultFormatter = SimpleBonusFormatter()
         self.__newStyleFormatter = NewStyleBonusFormatter()
+        self.__lootBoxFormatter = LootBoxTokenFormatter()
+        self.__giftStampsFormatter = GiftStampsFormatter()
 
     def format(self, bonuses, event=None):
         formattedBonuses = []
         isCustomizationBonusExist = False
         for b in bonuses:
             if b.isShowInGUI():
-                formatter = self._getBonusFormatter(b.getName())
+                if b.getName() == 'battleToken' and isinstance(b, LootBoxTokensBonus):
+                    formatter = self.__lootBoxFormatter
+                elif b.getName() == 'entitlements' and b.getValue().id == NY_STAMP_CODE:
+                    formatter = self.__giftStampsFormatter
+                else:
+                    formatter = self._getBonusFormatter(b.getName())
                 if formatter:
                     formatter.accumulateBonuses(b)
                 if b.getName() == 'customizations':
                     isCustomizationBonusExist = True
 
-        fmts = [self.__defaultFormatter, self.__newStyleFormatter]
+        fmts = [self.__lootBoxFormatter,
+         self.__giftStampsFormatter,
+         self.__defaultFormatter,
+         self.__newStyleFormatter]
         fmts.extend(sorted(self.getFormatters().itervalues(), key=lambda f: f.getOrder()))
         for formatter in fmts:
             formattedBonuses.extend(formatter.extractFormattedBonuses(isCustomizationBonusExist))

@@ -53,9 +53,9 @@ class NotificationsModel(object):
         if notification is None:
             return
         else:
-            groupID = notification.getGroup()
+            groupID, _, _, count, resetCounter = notification.getCounterInfo()
             if self.__collection.removeItem(typeID, entityID):
-                self.onNotificationRemoved(typeID, entityID, groupID)
+                self.onNotificationRemoved(typeID, entityID, groupID, count, resetCounter)
             return
 
     def removeNotificationsByType(self, typeID):
@@ -67,11 +67,14 @@ class NotificationsModel(object):
     def getNotification(self, typeID, entityID):
         return self.__collection.getItem(typeID, entityID)
 
-    def incrementNotifiedMessagesCount(self, group, typeID, entityID):
-        self.onNotifiedMessagesCountChanged(self.__counter.addNotification(group, typeID, entityID))
+    def incrementNotifiedMessagesCount(self, group, typeID, entityID, count, resetCounter):
+        self.onNotifiedMessagesCountChanged(self.__counter.addNotification(group, typeID, entityID, count, resetCounter))
 
-    def decrementNotifiedMessagesCount(self, group, typeID, entityID):
-        self.onNotifiedMessagesCountChanged(self.__counter.removeNotification(group, typeID, entityID))
+    def decrementNotifiedMessagesCount(self, group, typeID, entityID, count, resetCounter):
+        self.onNotifiedMessagesCountChanged(self.__counter.removeNotification(group, typeID, entityID, count, resetCounter))
+
+    def updateNotifiedMessagesCount(self, group, typeID, entityID, count, resetCounter):
+        self.onNotifiedMessagesCountChanged(self.__counter.updateNotification(group, typeID, entityID, count, resetCounter))
 
     def resetNotifiedMessagesCount(self, group=None):
         self.onNotifiedMessagesCountChanged(self.__counter.reset(group))

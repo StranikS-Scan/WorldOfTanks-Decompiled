@@ -1863,6 +1863,46 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R149_Object_268_4	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	442	</id>
+      <texture>	gui/maps/vehicles/styles/R149_Object_268_4_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/R149_Object_268_4_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	R149_Object_268_4_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:unique_style/R149_Object_268_4_3Dst	</userString>
+      <tags>	progression_required NY_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -2307,6 +2347,46 @@
           <camouflages>
             <item>
               <id>	336	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R169_ST_II	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	334	</id>
+      <texture>	gui/maps/vehicles/styles/R169_ST_II_3DSt_MD_21_XXII.png	</texture>
+      <modelsSet>	R169_ST_II_3DSt_MD_21_XXII	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/R169_ST_II_3DSt_MD_21_XXII	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R169_ST_II_3DSt_MD_21_XXII_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required addNationalEmblem NY_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>

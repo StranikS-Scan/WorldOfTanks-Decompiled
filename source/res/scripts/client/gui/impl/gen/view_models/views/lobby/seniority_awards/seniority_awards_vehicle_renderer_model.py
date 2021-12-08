@@ -6,7 +6,7 @@ class SeniorityAwardsVehicleRendererModel(ViewModel):
     __slots__ = ()
     TOOLTIP_VEHICLE_REWARD = 'TOOLTIP_VEHICLE_REWARD'
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=3, commands=0):
         super(SeniorityAwardsVehicleRendererModel, self).__init__(properties=properties, commands=commands)
 
     def getVehicleCD(self):
@@ -21,7 +21,14 @@ class SeniorityAwardsVehicleRendererModel(ViewModel):
     def setImgSource(self, value):
         self._setString(1, value)
 
+    def getVehicleName(self):
+        return self._getString(2)
+
+    def setVehicleName(self, value):
+        self._setString(2, value)
+
     def _initialize(self):
         super(SeniorityAwardsVehicleRendererModel, self)._initialize()
         self._addStringProperty('vehicleCD', '')
         self._addStringProperty('imgSource', '')
+        self._addStringProperty('vehicleName', '')

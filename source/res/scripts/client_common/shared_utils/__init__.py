@@ -5,11 +5,15 @@ import weakref
 import itertools
 import types
 import logging
+import typing
 from functools import partial
 import BigWorld
 from adisp import async
-from debug_utils import LOG_ERROR
 _logger = logging.getLogger(__name__)
+if typing.TYPE_CHECKING:
+    from typing import Callable, Iterable, List, Optional, Tuple, TypeVar, Union
+    T = TypeVar('T')
+    R = TypeVar('R')
 ScalarTypes = (types.IntType,
  types.LongType,
  types.FloatType,
@@ -81,6 +85,10 @@ def collapseIntervals(sequence):
         result.append(prevElement)
 
     return result
+
+
+def getSafeFromCollection(lst, ndx, default=None):
+    return lst[ndx] if 0 <= ndx < len(lst) else default
 
 
 def allEqual(sequence, accessor=None):
@@ -258,3 +266,7 @@ def nextTick(func):
 def awaitNextFrame(callback):
     BigWorld.callback(0.0, partial(callback, None))
     return
+
+
+def inPercents(fraction, digitsToRound=1):
+    return round(fraction * 100, digitsToRound)

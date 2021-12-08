@@ -1,0 +1,35 @@
+<NewYearToyObject.def>
+  <Parent>	NewYearSelectableObject	</Parent>
+  <Properties>
+    <regularEffectName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </regularEffectName>
+    <hangingEffectName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </hangingEffectName>
+    <animationSequence>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </animationSequence>
+    <hangingAnimationSequence>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </hangingAnimationSequence>
+    <appearanceDelay>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </appearanceDelay>
+    <minAlpha>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </minAlpha>
+    <maxAlphaDistance>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	10.0	</Default>
+    </maxAlphaDistance>
+  </Properties>
+</NewYearToyObject.def>

@@ -81,6 +81,7 @@ def _isStrList(l):
 class _ClientCommandProxy(object):
     _COMMAND_SIGNATURES = (('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
      ('doCmdIntStr', lambda args: len(args) == 2 and _isInt(args[0]) and _isStr(args[1])),
+     ('doCmdInt', lambda args: len(args) == 1 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt2', lambda args: len(args) == 2 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt3', lambda args: len(args) == 3 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt4', lambda args: len(args) == 4 and all([ _isInt(arg) for arg in args ])),
@@ -271,6 +272,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         BigWorld.target.skeletonCheckEnabled = True
         BigWorld.target.caps()
         BigWorld.target.isEnabled = True
+        BigWorld.target.isFastPicking = True
         uniprof.exitFromRegion('player.account.entering')
         return
 
@@ -524,6 +526,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInTutorialQueue = True
         events.onTutorialEnqueued(number, queueLen, avgWaitingTime)
         events.onEnqueued(QUEUE_TYPE.TUTORIAL)
+
+    @property
+    def selectedEntity(self):
+        return self.__selectedEntity
 
     def targetFocus(self, entity):
         if self.__objectsSelectionEnabled:
@@ -1283,6 +1289,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def _doCmdIntArr(self, cmd, arr, callback):
         return self.__doCmd('doCmdIntArr', cmd, callback, arr)
+
+    def _doCmdIntArrStr(self, cmd, arr, s, callback):
+        return self.__doCmd('doCmdIntArrStr', cmd, callback, arr, s)
 
     def _doCmdIntStrArr(self, cmd, int1, strArr, callback):
         return self.__doCmd('doCmdIntStrArr', cmd, callback, int1, strArr)

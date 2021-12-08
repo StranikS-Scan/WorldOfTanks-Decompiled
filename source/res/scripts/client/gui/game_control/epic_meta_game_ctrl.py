@@ -352,6 +352,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return BigWorld.player().epicMetaGame.getStoredDiscount()
 
     def getEventTimeLeft(self):
+        if not self.isEnabled():
+            return 0
         timeLeft = self.getSeasonTimeRange()[1] - time_utils.getCurrentLocalServerTimestamp()
         return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
 

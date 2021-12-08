@@ -22,6 +22,7 @@ from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from helpers import dependency, getClientVersion
 from items.components.crew_books_constants import CREW_BOOK_RARITY
+from items.components.ny_constants import YEARS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from soft_exception import SoftException
 KEY_FILTERS = 'filters'
@@ -74,6 +75,8 @@ GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
 LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
+LAST_HEROTANK_SHOW_TIMESTAMP = 'lastHerotankShowTimestamp'
+LAST_HEROTANK_SHOW_ID = 'lastHerotankShowId'
 LAST_STORAGE_VISITED_TIMESTAMP = 'lastStorageVisitedTimestamp'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
@@ -89,6 +92,7 @@ RANKED_YEAR_RATING_COUNTER = 'rankedYearRatingCounter'
 RANKED_SHOP_COUNTER = 'rankedShopCounter'
 BOOSTERS_FOR_CREDITS_SLOT_COUNTER = 'boostersForCreditsSlotCounter'
 SENIORITY_AWARDS_COUNTER = 'seniorityAwardsCounter'
+SENIORITY_AWARDS_WINDOW_SHOWN = 'seniorityAwardsWindowShown'
 DEMOUNT_KIT_SEEN = 'demountKitSeen'
 VIEWED_OFFERS = 'viewedOffers'
 OFFERS_DISABLED_MSG_SEEN = 'offersDisabledMsgSeen'
@@ -189,6 +193,14 @@ BECOME_ELITE_VEHICLES_WATCHED = 'becomeEliteWatched'
 VPP_ENTRY_POINT_LAST_SEEN_STEP = 'vehiclePostProgressionLastSeenStep'
 CLAN_PREBATTLE_SORTING_KEY = 'ClanPrebattleSortingKey'
 SHOW_DEMO_ACC_REGISTRATION = 'showDemoAccRegistration'
+NY_DAILY_QUESTS_VISITED = 'NYDailyQuestsVisited'
+NY_BONUS_DAILY_QUEST_VISITED = 'NYBonusDailyQuestVisited'
+NY_CELEBRITY_QUESTS_COMPLETED_MASK = 'NYCelebrityQuestsCompletedMask'
+NY_CELEBRITY_QUESTS_VISITED_MASK = 'NYCelebrityQuestsVisitedMask'
+NY_CELEBRITY_COMPLETED_QUESTS_ANIMATION_SHOWN_MASK = 'NYCelebrityCompletedQuestsAnimationShownMask'
+NY_OLD_COLLECTIONS_BY_YEAR_VISITED = 'NYOldCollectionsByYearVisited'
+NY_OLD_REWARDS_BY_YEAR_VISITED = 'NYOldRewardsByYearVisited'
+NY_LAST_SEEN_LEVEL_INFO = 'NYLastSeenLevelInfo'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
@@ -278,6 +290,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'favorite': False,
                                    'bonus': False,
                                    'crystals': False,
+                                   'newYear': False,
                                    'role_HT_assault': False,
                                    'role_HT_break': False,
                                    'role_HT_support': False,
@@ -422,6 +435,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'favorite': False,
                                               'bonus': False,
                                               'crystals': False,
+                                              'newYear': False,
                                               'role_HT_assault': False,
                                               'role_HT_break': False,
                                               'role_HT_support': False,
@@ -481,6 +495,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'favorite': False,
                                           'bonus': False,
                                           'crystals': False,
+                                          'newYear': False,
                                           'role_HT_assault': False,
                                           'role_HT_break': False,
                                           'role_HT_support': False,
@@ -750,6 +765,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'isEpicPerformanceWarningClicked': False,
                 LAST_PROMO_PATCH_VERSION: '',
                 LAST_CALENDAR_SHOW_TIMESTAMP: '',
+                LAST_HEROTANK_SHOW_TIMESTAMP: '',
+                LAST_HEROTANK_SHOW_ID: '',
                 LAST_RESTORE_NOTIFICATION: None,
                 'dynamicRange': 0,
                 'soundDevice': 0,
@@ -764,6 +781,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'contentType': 0,
                 'vehicleCarouselStats': True,
                 WHEELED_DEATH_DELAY_COUNT: 10,
+                'lootBoxVideoOff': False,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         BattleCommStorageKeys.SHOW_LOCATION_MARKERS: True,
                                                         GAME.DISPLAY_PLATOON_MEMBERS: True,
@@ -1002,8 +1020,23 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                         ACTIVE_TEST_PARTICIPATION_CONFIRMED: False,
                         IS_SHOP_VISITED: False,
                         LAST_SHOP_ACTION_COUNTER_MODIFICATION: None,
-                        OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES: set()},
- KEY_UI_FLAGS: {}}
+                        OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES: set(),
+                        SENIORITY_AWARDS_WINDOW_SHOWN: False},
+ KEY_UI_FLAGS: {NY_DAILY_QUESTS_VISITED: False,
+                NY_BONUS_DAILY_QUEST_VISITED: False,
+                NY_CELEBRITY_QUESTS_COMPLETED_MASK: 0,
+                NY_CELEBRITY_QUESTS_VISITED_MASK: 0,
+                NY_CELEBRITY_COMPLETED_QUESTS_ANIMATION_SHOWN_MASK: 0,
+                NY_OLD_COLLECTIONS_BY_YEAR_VISITED: {YEARS.YEAR18: False,
+                                                     YEARS.YEAR19: False,
+                                                     YEARS.YEAR20: False,
+                                                     YEARS.YEAR21: False},
+                NY_OLD_REWARDS_BY_YEAR_VISITED: {YEARS.YEAR18: False,
+                                                 YEARS.YEAR19: False,
+                                                 YEARS.YEAR20: False,
+                                                 YEARS.YEAR21: False},
+                NY_LAST_SEEN_LEVEL_INFO: {'level': 1,
+                                          'points': 0}}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -1038,7 +1071,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 49
+    version = 50
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1553,6 +1586,12 @@ class AccountSettings(object):
                         if 'clanRented' in savedFilters:
                             savedFilters['clanRented'] = False
                         filtersSection.write(filterSection, _pack(savedFilters))
+
+            if currVersion < 50:
+                for _, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_UI_FLAGS)
+                    for key in accSettings.keys()[:]:
+                        accSettings.deleteSection(key)
 
         return
 

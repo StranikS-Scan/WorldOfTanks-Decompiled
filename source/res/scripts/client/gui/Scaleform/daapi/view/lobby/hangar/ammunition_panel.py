@@ -10,7 +10,9 @@ from gui.impl.gen import R
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
+from gui.impl.new_year.new_year_helper import BONUS_ICONS
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters.icons import getRoleIcon
 from gui.shared.formatters import text_styles
@@ -18,12 +20,17 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.items_actions.actions import VehicleRepairAction
+from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, int2roman
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBootcampController, IUISpamController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.new_year import INewYearController
 from gui.customization.shared import isVehicleCanBeCustomized
+from new_year.ny_constants import SyncDataKeys, PERCENT
+from ny_common.settings import NY_CONFIG_NAME, NYVehBranchConsts
 
 class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __slots__ = ('__hangarMessage',)
@@ -32,10 +39,14 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __service = dependency.descriptor(ICustomizationService)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __uiSpamController = dependency.descriptor(IUISpamController)
+    _nyController = dependency.descriptor(INewYearController)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
+    _keysForUpdate = (SyncDataKeys.VEHICLE_BRANCH, SyncDataKeys.VEHICLE_BONUS_CHOICES)
 
     def __init__(self):
         super(AmmunitionPanel, self).__init__()
         self.__hangarMessage = None
+        g_currentVehicle.onChanged += self.__updateTankName
         return
 
     def update(self):
@@ -66,16 +77,32 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             shared_events.showModuleInfo(itemCD, g_currentVehicle.item.descriptor)
         return
 
+    def onNYBonusPanelClicked(self):
+        shared_events.showNewYearVehiclesView()
+
+    @staticmethod
+    def _getVehicleIcon(vehicleType):
+        vehTypeStr = vehicleType.replace('-', '_') + '_widget'
+        backPortImage = backport.image(R.images.gui.maps.icons.newYear.vehicles.icons.dyn(vehTypeStr)())
+        return "<img src='{0}' vspace='-3'/>".format(backPortImage.replace('../', 'img://gui/'))
+
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
         self.startGlobalListening()
         g_clientUpdateManager.addMoneyCallback(self.__moneyUpdateCallback)
         g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
+        self._nyController.onDataUpdated += self.__onNewYearDataUpdated
+        self._nyController.onStateChanged += self.__onNewYearStateUpdated
+        self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsUpdate
 
     def _dispose(self):
         self.stopGlobalListening()
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__hangarMessage = None
+        self._nyController.onDataUpdated -= self.__onNewYearDataUpdated
+        self._nyController.onStateChanged -= self.__onNewYearStateUpdated
+        self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsUpdate
+        g_currentVehicle.onChanged -= self.__updateTankName
         super(AmmunitionPanel, self)._dispose()
         return
 
@@ -101,6 +128,27 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
                 msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': msg})
             self.__applyCustomizationNewCounter(vehicle)
             self.__updateDevices(vehicle)
+            nySlot, isNewYearVehicle = None, self.__isNewYearSupportedPrbActive()
+            if isNewYearVehicle:
+                nySlot = self._nyController.getVehicleBranch().getSlotForVehicle(vehicle.invID)
+                isNewYearVehicle = self._nyController.isVehicleBranchEnabled() and nySlot is not None
+            if self._nyController.isPostEvent() and isNewYearVehicle:
+                creditBonus = self._nyController.getActiveSettingBonusValue()
+            else:
+                creditBonus = 0
+            nyCreditBonus = ''
+            shouldShowCreditsBonus = creditBonus > 0
+            if shouldShowCreditsBonus:
+                nyCreditBonus = backport.text(R.strings.ny.totalBonusWidget.pbBonus(), value=100 * creditBonus)
+            if isNewYearVehicle:
+                bonusType, bonusValue = nySlot.getSlotBonus()
+                nyBonusValue = backport.text(R.strings.ny.vehiclesView.bonusFormat(), bonus=int(bonusValue * PERCENT))
+                nyBonusIcon = backport.image(BONUS_ICONS[bonusType])
+                nyTooltip = makeTooltip(header=backport.text(R.strings.tooltips.tankCarusel.newYearSlot.header()), body=backport.text(R.strings.tooltips.tankCarusel.newYearSlot.body()))
+            else:
+                nyBonusValue = ''
+                nyBonusIcon = ''
+                nyTooltip = ''
             self.as_updateVehicleStatusS({'message': msgString,
              'rentAvailable': rentAvailable,
              'isElite': vehicle.isElite,
@@ -109,9 +157,31 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
              'vehicleName': '{}'.format(vehicle.shortUserName),
              'roleId': vehicle.role,
              'roleMessage': self.__getRoleMessage(),
-             'vehicleCD': vehicle.intCD})
+             'vehicleCD': vehicle.intCD,
+             'isNYVehicle': isNewYearVehicle,
+             'nyBonusIcon': nyBonusIcon,
+             'nyBonusValue': nyBonusValue,
+             'nyTooltip': nyTooltip,
+             'isCreditsBonusVisible': shouldShowCreditsBonus,
+             'creditsAmount': nyCreditBonus})
+        return
+
+    @staticmethod
+    def __getRoleMessage():
+        msg = ''
+        hasRole = g_currentVehicle.item.role != ROLE_TYPE.NOT_DEFINED
+        if hasRole:
+            roleLabel = g_currentVehicle.item.roleLabel
+            msg = text_styles.concatStylesToSingleLine(getRoleIcon(roleLabel), ' ', backport.text(R.strings.menu.roleExp.roleName.dyn(roleLabel)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleLabel)())))
+        return makeHtmlString('html_templates:vehicleStatus', Vehicle.VEHICLE_STATE_LEVEL.ROLE, {'message': msg}) if hasRole else ''
+
+    def __isNewYearSupportedPrbActive(self):
+        return self.prbEntity and not bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.RANKED)
 
     def __inventoryUpdateCallBack(self, *args):
+        self.update()
+
+    def __updateTankName(self):
         self.update()
 
     def __applyCustomizationNewCounter(self, vehicle):
@@ -141,11 +211,13 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             stateWarning = vehicle.isBroken
         self.as_setWarningStateS(stateWarning)
 
-    @staticmethod
-    def __getRoleMessage():
-        msg = ''
-        hasRole = g_currentVehicle.item.role != ROLE_TYPE.NOT_DEFINED
-        if hasRole:
-            roleLabel = g_currentVehicle.item.roleLabel
-            msg = text_styles.concatStylesToSingleLine(getRoleIcon(roleLabel), ' ', backport.text(R.strings.menu.roleExp.roleName.dyn(roleLabel)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleLabel)())))
-        return makeHtmlString('html_templates:vehicleStatus', Vehicle.VEHICLE_STATE_LEVEL.ROLE, {'message': msg}) if hasRole else ''
+    def __onNewYearDataUpdated(self, keys):
+        if any((key in keys for key in self._keysForUpdate)):
+            self._update()
+
+    def __onNewYearStateUpdated(self):
+        self._update()
+
+    def __onServerSettingsUpdate(self, diff):
+        if NY_CONFIG_NAME in diff and NYVehBranchConsts.CONFIG_NAME in diff[NY_CONFIG_NAME]:
+            self._update()

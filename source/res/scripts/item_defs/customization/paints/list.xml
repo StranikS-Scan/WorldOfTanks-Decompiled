@@ -1758,7 +1758,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	NY 2021	</name>
+    <name>	NY	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -1813,6 +1813,51 @@
       <userString>	#vehicle_customization:repaint/ny_2021_chuck	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
+    <paint>
+      <id>	197	</id>
+      <texture>	gui/maps/vehicles/repaints/italy_color_06.png	</texture>
+      <color>	82 127 112 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.24	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2022_east	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	198	</id>
+      <texture>	gui/maps/vehicles/repaints/primer_marmot_01.png	</texture>
+      <color>	81 16 16 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2022_xmas	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	199	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_26.png	</texture>
+      <color>	36 49 66 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.203	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2022_fantasy	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	201	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	37 38 37 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.203	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2022_bro	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	233	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	33 33 33 255	</color>
+      <gloss>	0.52	</gloss>
+      <metallic>	0.2	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2022_schwarz	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
@@ -1838,6 +1883,14 @@
       <gloss>	0.55	</gloss>
       <metallic>	0.55	</metallic>
       <userString>	#vehicle_customization:repaint/seniority_awards_2020	</userString>
+    </paint>
+    <paint>
+      <id>	231	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_base_color.png	</texture>
+      <color>	101 101 101 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/seniority_awards_2021	</userString>
     </paint>
     <usages>
       <item>
@@ -2918,21 +2971,30 @@
       </exclude>
     </vehicleFilter>
     <paint>
-      <id>	308	</id>
-      <texture>	gui/maps/vehicles/repaints/france_color_05.png	</texture>
-      <color>	87 27 37 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:repaint/twitch_august_2021	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <paint>
       <id>	208	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
       <color>	17 17 20 255	</color>
       <gloss>	0.63	</gloss>
       <metallic>	0.235	</metallic>
       <userString>	#vehicle_customization:repaint/twitch_october_2021	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	235	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_03.png	</texture>
+      <color>	49 50 79 255	</color>
+      <gloss>	0.346	</gloss>
+      <metallic>	0.2	</metallic>
+      <userString>	#vehicle_customization:repaint/twitch_december_2021	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	308	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_05.png	</texture>
+      <color>	87 27 37 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/twitch_august_2021	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
     <usages>

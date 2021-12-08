@@ -3,6 +3,7 @@
 import copy
 import json
 from logging import getLogger
+import AnimationSequence
 import BigWorld
 import Math
 import MusicControllerWWISE
@@ -22,6 +23,7 @@ from visual_script.multi_plan_provider import MultiPlanProvider
 from visual_script.misc import ASPECT, VisualScriptTag
 from skeletons.gui.shared.utils import IHangarSpace
 _DEFAULT_SPACES_PATH = 'spaces'
+_DEFAULT_HANGAR = 'hangar_v3'
 SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
 _CUSTOMIZATION_HANGAR_SETTINGS_SEC = 'customizationHangarSettings'
@@ -76,6 +78,7 @@ def secondaryHangarCFG():
 
 
 def _readHangarSettings():
+    global _DEFAULT_HANGAR
     hangarsXml = ResMgr.openSection('gui/hangars.xml')
     paths = [ path for path, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items() ]
     defaultSpace = 'hangar_v3'
@@ -112,6 +115,9 @@ def _readHangarSettings():
         configset[spaceKey] = cfg
         _validateConfigValues(cfg)
 
+    defaultHangar = hangarsXml.readString('default_hangar')
+    if defaultHangar:
+        _DEFAULT_HANGAR = defaultHangar
     return configset
 
 
@@ -171,11 +177,13 @@ class ClientHangarSpace(object):
             spacePath = safeSpacePath
         try:
             self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath, spaceVisibilityMask)
+            BigWorld.enableLowFrequencyAnimation(self.__spaceId, True)
         except Exception:
             try:
                 LOG_CURRENT_EXCEPTION()
                 spacePath = safeSpacePath
                 self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath, spaceVisibilityMask)
+                BigWorld.enableLowFrequencyAnimation(self.__spaceId, True)
             except Exception:
                 BigWorld.releaseSpace(self.__spaceId)
                 self.__spaceMappingId = None
@@ -313,7 +321,8 @@ class ClientHangarSpace(object):
     def __waitLoadingSpace(self):
         self.__loadingStatus = BigWorld.spaceLoadStatus()
         BigWorld.worldDrawEnabled(True)
-        if self.__loadingStatus < 1 or not BigWorld.virtualTextureRenderComplete():
+        AnimationSequence.setEnableAnimationSequenceUpdate(True)
+        if self.__loadingStatus < 1:
             self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         else:
             BigWorld.uniprofSceneStart()
@@ -341,7 +350,7 @@ class ClientHangarSpace(object):
 
     @property
     def camera(self):
-        return self.__cameraManager.camera
+        return None if self.__cameraManager is None else self.__cameraManager.camera
 
     @property
     def spacePath(self):

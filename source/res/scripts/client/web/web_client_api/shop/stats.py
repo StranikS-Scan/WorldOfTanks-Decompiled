@@ -2,13 +2,13 @@
 # Embedded file name: scripts/client/web/web_client_api/shop/stats.py
 import logging
 from constants import PREM_TYPE_TO_ENTITLEMENT
-from gui.game_control.wallet import WalletController
 from gui.shared.money import Currency
 from gui.shared.utils.vehicle_collector_helper import hasCollectibleVehicles
-from helpers import dependency
-from helpers import time_utils
+from helpers import dependency, time_utils
 import nations
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.shared.utils.requesters import IStatsRequester
+from web.common import getWalletCurrencyStatuses, getBalance
 from web.web_client_api import W2CSchema, w2c
 _logger = logging.getLogger(__name__)
 
@@ -18,16 +18,15 @@ class BalanceWebApiMixin(object):
     @w2c(W2CSchema, 'get_balance')
     def getBalance(self, cmd):
         stats = self.itemsCache.items.stats
-        money = stats.actualMoney
         premiumExpireLocalTime = time_utils.makeLocalServerTime(stats.activePremiumExpiryTime)
         if premiumExpireLocalTime:
             premiumExpireISOTime = time_utils.timestampToISO(premiumExpireLocalTime)
         else:
             premiumExpireISOTime = None
-        balanceData = {Currency.currencyExternalName(currency):money.get(currency, 0) for currency in Currency.ALL}
-        balanceData.update({'walletStatus': {Currency.currencyExternalName(key):WalletController.STATUS.getKeyByValue(code).lower() for key, code in stats.currencyStatuses.items() if key in Currency.ALL},
+        response = getBalance(stats)
+        response.update({'walletStatus': getWalletCurrencyStatuses(stats),
          'premiumExpireDate': premiumExpireISOTime})
-        return balanceData
+        return response
 
     @w2c(W2CSchema, 'get_stats')
     def getStats(self, cmd):

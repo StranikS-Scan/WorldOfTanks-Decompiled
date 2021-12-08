@@ -82,6 +82,10 @@ class WalletController(IWalletController):
          'bpcoin': self.__currentStatus if not constants.IS_CHINA else self.STATUS.AVAILABLE}
 
     @property
+    def dynamicComponentsStatuses(self):
+        return {currencyCode:(self.__currentStatus if not constants.IS_CHINA else self.STATUS.AVAILABLE) for currencyCode in self.itemsCache.items.stats.dynamicCurrencies.keys()}
+
+    @property
     def isSyncing(self):
         return self.__checkStatus(self.STATUS.SYNCING)
 

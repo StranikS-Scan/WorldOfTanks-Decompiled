@@ -581,7 +581,7 @@ class CustomizationCache(object):
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self._CustomizationCache__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.SEQUENCE: self.sequences, CustomizationType.DECAL: self.decals, CustomizationType.MODIFICATION: self.modifications, CustomizationType.PAINT: self.paints, CustomizationType.STYLE: self.styles, CustomizationType.INSIGNIA: self.insignias, CustomizationType.PROJECTION_DECAL: self.projection_decals}
+        self.itemTypes = {CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.DECAL: self.decals, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.SEQUENCE: self.sequences, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.MODIFICATION: self.modifications, CustomizationType.PAINT: self.paints, CustomizationType.STYLE: self.styles, CustomizationType.INSIGNIA: self.insignias, CustomizationType.PROJECTION_DECAL: self.projection_decals}
         super(CustomizationCache, self).__init__()
 
     def getVehiclesCanMayInclude(self, item):

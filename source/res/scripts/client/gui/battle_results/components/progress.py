@@ -20,6 +20,7 @@ from gui.battle_results.settings import PROGRESS_ACTION
 from gui.impl import backport
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardVO
 from gui.impl.gen import R
+from gui.server_events.events_constants import CELEBRITY_GROUP_PREFIX
 from gui.shared.formatters import text_styles, getItemUnlockPricesVO, getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman, getVehicleComponentsByType
 from gui.shared.gui_items.crew_skin import localizedFullName
@@ -29,11 +30,14 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from new_year.celebrity.celebrity_quests_helpers import getCelebrityQuests, getCelebrityQuestsGroups, getCelebrityTokens
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from battle_pass_common import BattlePassConsts
+if typing.TYPE_CHECKING:
+    from gui.server_events.event_items import CelebrityGroup
 MIN_BATTLES_TO_SHOW_PROGRESS = 5
 _logger = logging.getLogger(__name__)
 
@@ -251,6 +255,7 @@ class BattlePassProgressBlock(base.StatsBlock):
 
 class QuestsProgressBlock(base.StatsBlock):
     eventsCache = dependency.descriptor(IEventsCache)
+    itemsCache = dependency.descriptor(IItemsCache)
     __slots__ = ()
 
     def getVO(self):
@@ -263,8 +268,16 @@ class QuestsProgressBlock(base.StatsBlock):
         commonQuests = []
         allCommonQuests = self.eventsCache.getQuests()
         allCommonQuests.update(self.eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))
+        allCelebrityQuests = getCelebrityQuests()
+        celebrityProgressGroups = set()
         if questsProgress:
             for qID, qProgress in questsProgress.iteritems():
+                if qID.startswith(CELEBRITY_GROUP_PREFIX):
+                    if qID in allCelebrityQuests:
+                        quest = allCelebrityQuests[qID]
+                        groupID = quest.getGroupID()
+                        celebrityProgressGroups.add(groupID)
+                    continue
                 pGroupBy, pPrev, pCur = qProgress
                 isCompleted = isQuestCompleted(pGroupBy, pPrev, pCur)
                 if qID in allCommonQuests:
@@ -292,6 +305,36 @@ class QuestsProgressBlock(base.StatsBlock):
                     personalMissions[quest].update(data)
                 progress = personalMissions.setdefault(quest, {})
                 progress.update(data)
+
+        if celebrityProgressGroups:
+            celebrityQuestGroups = getCelebrityQuestsGroups()
+            celebrityTokens = getCelebrityTokens()
+            for groupID in sorted(celebrityProgressGroups):
+                celebrityGroup = celebrityQuestGroups.get(groupID)
+                if celebrityGroup is None:
+                    continue
+                celebrityGroup.update(allCelebrityQuests)
+                if not celebrityGroup.isValid:
+                    continue
+                activeQuest = celebrityGroup.getActiveQuest(celebrityTokens)
+                if activeQuest is None:
+                    continue
+                questProgress = questsProgress.get(activeQuest.getID())
+                if questProgress is None:
+                    continue
+                pGroupBy, pPrev, pCur = questProgress
+                isCompleted = isQuestCompleted(pGroupBy, pPrev, pCur)
+                info = None
+                if isCompleted:
+                    bonusQuest = celebrityGroup.bonusQuest
+                    info = getEventPostBattleInfo(bonusQuest, allCelebrityQuests, None, None, False, True)
+                elif pPrev or max(pCur.itervalues()) != 0:
+                    isProgressReset = activeQuest.bonusCond.isInRow() and pCur.get('battlesCount', 0) == 0
+                    pPrevProgress = {pGroupBy: pPrev} if pPrev else None
+                    pCurProgress = {pGroupBy: pCur} if pCur else None
+                    info = getEventPostBattleInfo(activeQuest, allCelebrityQuests, pCurProgress, pPrevProgress, isProgressReset, isCompleted)
+                if info is not None:
+                    self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
 
         for quest, data in sorted(personalMissions.items(), key=operator.itemgetter(0), cmp=self.__sortPersonalMissions):
             if data.get(quest.getAddQuestID(), False):

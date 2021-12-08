@@ -17,9 +17,15 @@ from debug_utils import LOG_WARNING, LOG_DEBUG
 from battle_pass_common import BattlePassConfig, BATTLE_PASS_CONFIG_NAME
 from gifts.gifts_common import ClientReqStrategy, GiftEventID, GiftEventState
 from gui import GUI_SETTINGS, SystemMessages
-from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.SystemMessages import SM_TYPE
 from gui.shared.utils.decorators import ReprInjector
+from ny_common.CraftCost import CraftCostConfig
+from ny_common.GeneralConfig import GeneralConfig
+from ny_common.SettingBonus import SettingBonusConfig
+from ny_common.CelebrityConfig import CelebrityConfig
+from ny_common.ToyDecayCost import ToyDecayCostConfig
+from ny_common.settings import SettingBonusConsts, NYVehBranchConsts, NYLootBoxConsts, NYGeneralConsts, CraftCostConsts, ToyDecayCostConsts, NY_CONFIG_NAME, CelebrityConsts
 from personal_missions import PM_BRANCH
 from renewable_subscription_common.settings_constants import GOLD_RESERVE_GAINS_SECTION
 from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
@@ -598,14 +604,11 @@ class _BlueprintsConfig(namedtuple('_BlueprintsConfig', ('allowBlueprintsConvers
         return 'isEnabled' in diff or 'useBlueprintsForUnlock' in diff
 
 
-class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled',
- 'autoOpenTime',
- 'hangarWidgetVisibility',
- 'secretBoxToken'))):
+class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled', 'endTime', 'rewardViewEnabled'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(enabled=False, autoOpenTime=0, hangarWidgetVisibility=False, secretBoxToken='')
+        defaults = dict(enabled=False, endTime=0, rewardViewEnabled=True)
         defaults.update(kwargs)
         return super(_SeniorityAwardsConfig, cls).__new__(cls, **defaults)
 
@@ -620,14 +623,11 @@ class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled',
     def isEnabled(self):
         return self.enabled
 
-    def autoOpenTimestamp(self):
-        return self.autoOpenTime
+    def endTimestamp(self):
+        return self.endTime
 
-    def hangarWidgetIsVisible(self):
-        return self.hangarWidgetVisibility
-
-    def getSecretBoxToken(self):
-        return self.secretBoxToken
+    def isRewardViewEnabled(self):
+        return self.rewardViewEnabled
 
 
 class _AdventCalendarConfig(namedtuple('_AdventCalendarConfig', ('calendarURL', 'popupIntervalInHours'))):
@@ -834,7 +834,7 @@ class GiftEventConfig(namedtuple('_GiftEventConfig', ('eventID',
         return self.giftEventState == GiftEventState.DISABLED
 
 
-class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events',))):
+class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events', 'itemToEventID'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
@@ -855,7 +855,16 @@ class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events',))):
 
     @classmethod
     def __packEventConfigs(cls, data):
-        data['events'] = {eID:makeTupleByDict(GiftEventConfig, eData) for eID, eData in data['events'].iteritems()}
+        events = {eID:makeTupleByDict(GiftEventConfig, eData) for eID, eData in data['events'].iteritems()}
+        data['events'], data['itemToEventID'] = events, cls.__getItemToEventMap(events)
+
+    @classmethod
+    def __getItemToEventMap(cls, events):
+        result = {}
+        for eventID, eventConfig in events.iteritems():
+            result.update({itemID:eventID for itemID in eventConfig.giftItemIDs})
+
+        return result
 
 
 class ServerSettings(object):
@@ -1219,6 +1228,9 @@ class ServerSettings(object):
     def isLootBoxesEnabled(self):
         return self.__getGlobalSetting('isLootBoxesEnabled')
 
+    def isLootBoxEnabled(self, boxId):
+        return self.__getGlobalSetting('lootBoxes_config', {}).get(boxId, {}).get('enabled', False)
+
     def isAnonymizerEnabled(self):
         return self.__getGlobalSetting('isAnonymizerEnabled', False)
 
@@ -1482,6 +1494,30 @@ class ServerSettings(object):
 
     def getActiveTestConfirmationConfig(self):
         return self.__getGlobalSetting(constants.ACTIVE_TEST_CONFIRMATION_CONFIG, {})
+
+    def getNewYearBonusConfig(self):
+        return SettingBonusConfig(self.__getNYConfig(SettingBonusConsts.CONFIG_NAME))
+
+    def getNewYearToyDecayCostConfig(self):
+        return ToyDecayCostConfig(self.__getNYConfig(ToyDecayCostConsts.CONFIG_NAME))
+
+    def getNewYearCraftCostConfig(self):
+        return CraftCostConfig(self.__getNYConfig(CraftCostConsts.CONFIG_NAME))
+
+    def getLootBoxShop(self):
+        return self.__getNYConfig(NYLootBoxConsts.CONFIG_NAME)
+
+    def getNewYearVehBranchConfig(self):
+        return self.__getNYConfig(NYVehBranchConsts.CONFIG_NAME)
+
+    def getNewYearCelebrityConfig(self):
+        return CelebrityConfig(self.__getNYConfig(CelebrityConsts.CONFIG_NAME))
+
+    def getNewYearGeneralConfig(self):
+        return GeneralConfig(self.__getNYConfig(NYGeneralConsts.CONFIG_NAME))
+
+    def __getNYConfig(self, configName):
+        return self.__getGlobalSetting(NY_CONFIG_NAME, {}).get(configName, {})
 
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)

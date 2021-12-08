@@ -27,6 +27,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.links import URLMacros
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
+from gui.impl.new_year.sounds import NewYearSoundVars, NewYearSoundStates
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
@@ -48,6 +49,7 @@ from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IIGRController, IBattlePassController, IBattleRoyaleController, IBootcampController, IMapboxController
+from skeletons.gui.game_control import IFestivityController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -75,11 +77,10 @@ def predicateHelpLayoutAllowedWindow(window):
 
 
 class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
-    _SOUND_STATE_PLACE = 'STATE_hangar_place'
-    _SOUND_STATE_PLACE_GARAGE = 'STATE_hangar_place_garage'
     __background_alpha__ = 0.0
-    __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={_SOUND_STATE_PLACE: _SOUND_STATE_PLACE_GARAGE,
-     StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
+    __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={StatesGroup.HANGAR_PLACE: States.HANGAR_PLACE_GARAGE,
+     StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF,
+     NewYearSoundVars.STATE_NEWYEAR_PLACE: NewYearSoundStates.HANGAR}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
     rankedController = dependency.descriptor(IRankedBattlesController)
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
     battlePassController = dependency.descriptor(IBattlePassController)
@@ -94,6 +95,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     hangarSpace = dependency.descriptor(IHangarSpace)
     _promoController = dependency.descriptor(IPromoController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
+    _festivityController = dependency.descriptor(IFestivityController)
     _offersBannerController = dependency.descriptor(IOffersBannerController)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
@@ -151,6 +153,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.hangarSpace.onVehicleChanged += self.__onVehicleLoaded
         self.hangarSpace.onSpaceRefresh += self.__onSpaceRefresh
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreate
+        self._festivityController.onStateChanged += self.__updateFestivityState
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
         self.itemsCache.onSyncCompleted += self.onCacheResync
         self.rankedController.onUpdated += self.onRankedUpdate
@@ -200,6 +203,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.hangarSpace.onVehicleChanged -= self.__onVehicleLoaded
         self.hangarSpace.onSpaceRefresh -= self.__onSpaceRefresh
         self.hangarSpace.onSpaceCreate -= self.__onSpaceCreate
+        self._festivityController.onStateChanged -= self.__updateFestivityState
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.rankedController.onUpdated -= self.onRankedUpdate
         self.__mapboxCtrl.onPrimeTimeStatusUpdated -= self.__updateAlertMessage
@@ -433,6 +437,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff and g_currentVehicle.isPresent():
                 if g_currentVehicle.item.invID in diff[GUI_ITEM_TYPE.VEHICLE]:
                     self.__updateAmmoPanel()
+                    self.__updateParams()
             return
 
     def onPlayerStateChanged(self, entity, roster, accountInfo):
@@ -487,6 +492,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateBattleRoyaleComponents()
         self._updateCnSubscriptionMode()
         self._updateBattleRoyaleMode()
+        self.__updateFestivityState()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -529,6 +535,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __updateState(self):
         state = g_currentVehicle.getViewState()
         self.as_setCrewEnabledS(state.isCrewOpsEnabled())
+        self.__updateFestivityState()
         isBattleRoyaleMode = self.battleRoyaleController.isBattleRoyaleMode()
         isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and not state.isOnlyForEventBattles() and self.__isSpaceReadyForC11n and self.__isVehicleReadyForC11n and self.__isVehicleCameraReadyForC11n and not isBattleRoyaleMode
         if isC11nEnabled:
@@ -646,3 +653,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __onResetUnitJoiningProgress(self):
         self.__isUnitJoiningInProgress = False
+
+    def __updateFestivityState(self):
+        self.as_setLootboxesVisibleS(self._festivityController.isEnabled())

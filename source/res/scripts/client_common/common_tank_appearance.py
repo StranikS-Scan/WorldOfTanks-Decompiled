@@ -31,7 +31,7 @@ from vehicle_outfit.outfit import Outfit
 from items.battle_royale import isSpawnedBot
 from helpers import isPlayerAvatar
 from ModelHitTester import ModelStatus
-from vehicle_systems.components.debris_crashed_tracks import TrackCrashWithDebrisComponent
+from vehicle_systems.components import debris_crashed_tracks
 _logger = logging.getLogger(__name__)
 DEFAULT_STICKERS_ALPHA = 1.0
 MATKIND_COUNT = 3
@@ -804,7 +804,7 @@ class CommonTankAppearance(ScriptGameObject):
             return
         else:
             track = self.tracks.getTrackGameObject(isLeft, pairIndex)
-            debris = track.createComponent(TrackCrashWithDebrisComponent, isLeft, pairIndex, self.typeDescriptor, self.gameObject, self.boundEffects)
+            debris = track.createComponent(debris_crashed_tracks.TrackCrashWithDebrisComponent, isLeft, pairIndex, self.typeDescriptor, self.gameObject, self.boundEffects)
             debris.isTopPriority = self._vehicle.isPlayerVehicle
             debris.isPlayer = self._vehicle.isPlayerVehicle
             debris.isFlying = isSideFlying
@@ -819,7 +819,7 @@ class CommonTankAppearance(ScriptGameObject):
             return
         else:
             track = self.tracks.getTrackGameObject(isLeft, pairIndex)
-            debris = track.findComponentByType(TrackCrashWithDebrisComponent)
+            debris = track.findComponentByType(debris_crashed_tracks.TrackCrashWithDebrisComponent)
             if debris is not None:
                 debris.markAsRepaired()
                 track.removeComponent(debris)

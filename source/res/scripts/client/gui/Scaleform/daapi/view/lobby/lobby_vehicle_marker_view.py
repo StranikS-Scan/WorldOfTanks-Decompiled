@@ -21,6 +21,7 @@ if typing.TYPE_CHECKING:
     from cgf_components.marker_component import LobbyFlashMarker
 
 class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
+    hangarSpace = dependency.descriptor(IHangarSpace)
     __LAYERS_WITHOUT_MARKERS = {WindowLayer.FULLSCREEN_WINDOW,
      WindowLayer.OVERLAY,
      WindowLayer.SUB_VIEW,
@@ -37,6 +38,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
     def _populate(self):
         super(LobbyVehicleMarkerView, self)._populate()
         self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_LABEL_UPDATE_REQUIRED, self.__onHeroTankLabelUpdateRequested, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self.__onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
@@ -48,6 +50,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         super(LobbyVehicleMarkerView, self)._dispose()
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_LABEL_UPDATE_REQUIRED, self.__onHeroTankLabelUpdateRequested, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self.__onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
         self.__markersCache = None
@@ -60,6 +63,10 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.__destroyAllMarkers()
 
     def __onHeroTankLoaded(self, event):
+        vehicle = event.ctx['entity']
+        self.__beginCreateVehicleMarker(vehicle)
+
+    def __onHeroTankLabelUpdateRequested(self, event):
         vehicle = event.ctx['entity']
         self.__beginCreateVehicleMarker(vehicle)
 
@@ -135,11 +142,12 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.__createVehicleMarker(vehicle)
 
     def __createVehicleMarker(self, vehicle):
-        vClass, vName, vMatrix = self.__getVehicleInfo(vehicle)
-        flashMarker = self.as_createMarkerS(vehicle.id, vClass, vName)
-        self.__markersCache[vehicle.id] = GUI.WGHangarVehicleMarker()
-        self.__markersCache[vehicle.id].setMarker(flashMarker, vMatrix)
-        self.__updateMarkerVisibility(vehicle.id)
+        if vehicle and vehicle.typeDescriptor:
+            vClass, vName, vMatrix = self.__getVehicleInfo(vehicle)
+            flashMarker = self.as_createMarkerS(vehicle.id, vClass, vName)
+            self.__markersCache[vehicle.id] = GUI.WGHangarVehicleMarker()
+            self.__markersCache[vehicle.id].setMarker(flashMarker, vMatrix)
+            self.__updateMarkerVisibility(vehicle.id)
 
     def __createPlatoonMarker(self, vehicle, playerName):
         vClass, _, vMatrix = self.__getVehicleInfo(vehicle)

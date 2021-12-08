@@ -17,6 +17,7 @@ if typing.TYPE_CHECKING:
     from helpers.server_settings import GiftEventConfig
 
 class IGiftEventHub(object):
+    onHubUpdated = None
 
     def destroy(self):
         pass

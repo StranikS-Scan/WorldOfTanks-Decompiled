@@ -46,23 +46,41 @@ class CustomEffectManager(Component):
         args['engineTags'] = typeDesc.engine.tags
         args['vehicleTags'] = typeDesc.type.tags
         args['drawOrderBase'] = CustomEffectManager._DRAW_ORDER_IDX
+        self.__hullSelectors = []
+        self.__chassisSelectors = []
         for desc in typeDesc.hull.customEffects:
             if desc is not None:
                 selector = desc.create(args)
                 if selector is not None:
                     self.__selectors.append(selector)
+                    self.__hullSelectors.append(selector)
 
         for desc in typeDesc.chassis.customEffects:
             if desc is not None:
                 selector = desc.create(args)
                 if selector is not None:
                     self.__selectors.append(selector)
+                    self.__chassisSelectors.append(selector)
 
         self.__createChassisCenterNodes()
         self.__wheelsData = None
         self.__variableArgs['Nitro'] = 0
         PixieCache.incref()
         return
+
+    def disableDefaultSelectors(self, disableChassis, disableHull):
+        if disableChassis:
+            for selector in self.__chassisSelectors:
+                selector.destroy()
+                self.__selectors.remove(selector)
+
+            self.__chassisSelectors = []
+        if disableHull:
+            for selector in self.__hullSelectors:
+                selector.destroy()
+                self.__selectors.remove(selector)
+
+            self.__hullSelectors = []
 
     def setWheelsData(self, appearance):
         wheelsConfig = appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig

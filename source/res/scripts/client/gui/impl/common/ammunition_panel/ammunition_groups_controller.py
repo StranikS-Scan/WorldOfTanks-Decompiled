@@ -29,23 +29,20 @@ class AmmunitionGroupsController(object):
         self._controller.updateCurrentSection(currentSection)
 
     def createGroupsModels(self, groupsArray):
-        groupsArray.clear()
-        for group in self._getGroups():
-            viewModel = self._createViewModel()
-            hudGroupID = group.groupID
-            viewModel.setGroupId(hudGroupID)
-            groupID = GROUPS_MAP.get(hudGroupID, None)
-            layoutIdx = self._vehicle.setupLayouts.getLayoutIndex(groupID)
-            capacity = self._vehicle.setupLayouts.getGroupCapacity(groupID)
-            viewModel.setCurrentIndex(layoutIdx)
-            viewModel.setTotalCount(capacity)
-            self._setupStates(viewModel.setupSelector, group)
-            self._controller.addSections(group)
-            self._controller.createTabModels(viewModel.getSections(), groupID=group.groupID)
-            groupsArray.addViewModel(viewModel)
+        groups = self._getGroups()
+        if len(groupsArray) != len(groups):
+            groupsArray.clear()
+            for group in groups:
+                viewModel = self._createViewModel()
+                self._updateGroupModel(viewModel, group)
+                groupsArray.addViewModel(viewModel)
+
+        else:
+            for idx, group in enumerate(groups):
+                self._updateGroupModel(groupsArray[idx], group)
 
         self._autoCreating = False
-        return
+        groupsArray.invalidate()
 
     def updateGroupsModels(self, groupsArray):
         if self._autoCreating:
@@ -99,6 +96,19 @@ class AmmunitionGroupsController(object):
                 return group.groupID
 
         return AmmunitionPanelConstants.NO_GROUP
+
+    def _updateGroupModel(self, viewModel, group):
+        hudGroupID = group.groupID
+        viewModel.setGroupId(hudGroupID)
+        groupID = GROUPS_MAP.get(hudGroupID, None)
+        layoutIdx = self._vehicle.setupLayouts.getLayoutIndex(groupID)
+        capacity = self._vehicle.setupLayouts.getGroupCapacity(groupID)
+        viewModel.setCurrentIndex(layoutIdx)
+        viewModel.setTotalCount(capacity)
+        self._setupStates(viewModel.setupSelector, group)
+        self._controller.addSections(group)
+        self._controller.createTabModels(viewModel.getSections(), groupID=group.groupID)
+        return
 
     def _setupStates(self, setupSelectorModel, groupSettings):
         isSwitchEnabled = self._isSwitchEnabled(groupSettings)

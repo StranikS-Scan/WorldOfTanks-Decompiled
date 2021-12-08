@@ -19,14 +19,14 @@ _CURRENCY_TO_TEXT_STYLE = {Currency.CREDITS: text_styles.credits,
 def getBWFormatter(currency):
     if currency in _CURRENCY_TO_BW_FORMATTER:
         return _CURRENCY_TO_BW_FORMATTER[currency]
-    _logger.warning('BW formatter is not set for the following currency: %r', currency)
+    _logger.info('BW formatter is not set for the following currency: %r', currency)
     return backport.getIntegralFormat
 
 
 def getStyle(currency):
     if currency in _CURRENCY_TO_TEXT_STYLE:
         return _CURRENCY_TO_TEXT_STYLE[currency]
-    _logger.warning('Text style is not set for the following currency: %r', currency)
+    _logger.info('Text style is not set for the following currency: %r', currency)
     return str
 
 

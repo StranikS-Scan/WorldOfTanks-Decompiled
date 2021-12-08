@@ -31,6 +31,10 @@ def makeI18nError(sysMsgKey='', defaultSysMsgKey='', auxData=None, *args, **kwar
     return makeError(i18n.makeString(localKey, *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData)
 
 
+def makeNYSuccess(sysMsgKey='', msgType=SM_TYPE.Information, auxData=None, *args, **kwargs):
+    return makeSuccess(i18n.makeString('#ny:{}'.format(sysMsgKey), *args, **kwargs), msgType, auxData)
+
+
 def makeCrewSkinCompensationMessage(comp):
     compMsg = None
     if comp is not None:

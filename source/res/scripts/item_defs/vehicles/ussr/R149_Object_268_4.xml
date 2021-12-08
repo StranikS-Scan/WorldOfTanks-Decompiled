@@ -84,6 +84,13 @@
       <undamaged>	vehicles/russian/R149_Object_268_4/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R149_Object_268_4/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R149_Object_268_4/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R149_Object_268_4_3Dst>
+          <undamaged>	vehicles/russian/R149_Object_268_4/_skins/R149_Object_268_4_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R149_Object_268_4/_skins/R149_Object_268_4_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R149_Object_268_4/_skins/R149_Object_268_4_3Dst/crash/lod0/Hull.model	</exploded>
+        </R149_Object_268_4_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -107,10 +114,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.53353 0.550727 3.00273	</rayStart>
-        <rayEnd>	0.53353 0.359466 2.94426	</rayEnd>
+        <rayStart>	-0.27995 0.608495 2.81317	</rayStart>
+        <rayEnd>	-0.27995 0.417234 2.75469	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.35	</size>
+        <size>	0.29	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -1257,6 +1264,98 @@
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15089	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	0.000065 2.4587 -0.609254	</position>
+        <rotation>	0.124188 -0.000011 3.14156	</rotation>
+        <scale>	0.447177 0.05 0.447184	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.987444	</clipAngle>
+        <compatibleModels>	R149_Object_268_4_3Dst	</compatibleModels>
+        <anchorShift>	0.022251	</anchorShift>
+        <verticalMirror>	true	</verticalMirror>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15090	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R149_Object_268_4_3Dst	</compatibleModels>
+        <position>	0.734756 1.61002 2.21886	</position>
+        <rotation>	-0.00163395 -0.00267637 -3.11836	</rotation>
+        <scale>	0.541855 0.0378671 0.541858	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.636809	</clipAngle>
+        <anchorShift>	0.035798	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15091	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R149_Object_268_4_3Dst	</compatibleModels>
+        <position>	-0.734738 1.61003 2.21886	</position>
+        <rotation>	-0.00163395 -0.00267637 -3.11836	</rotation>
+        <scale>	0.541854 0.037867 0.541858	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.636809	</clipAngle>
+        <anchorShift>	0.035800	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15092	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R149_Object_268_4_3Dst	</compatibleModels>
+        <position>	1.18097 1.57873 -2.80614	</position>
+        <rotation>	1.52018 0.477882 1.30897	</rotation>
+        <scale>	0.600971 0.451333 0.600967	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.693141	</clipAngle>
+        <anchorShift>	0.132111	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15093	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	0.565869 1.52288 2.88722	</position>
+        <rotation>	0.315198 0.00493866 -3.11716	</rotation>
+        <scale>	0.491006 0.0343135 0.491008	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.636809	</clipAngle>
+        <compatibleModels>	R149_Object_268_4_3Dst	</compatibleModels>
+        <anchorShift>	0.035801	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15094	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R149_Object_268_4_3Dst	</compatibleModels>
+        <position>	-1.89458 2.02823 -2.00059	</position>
+        <rotation>	1.89327 1.4931 0.0424199	</rotation>
+        <scale>	0.552254 0.05 0.552257	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.00724811	</clipAngle>
+        <anchorShift>	0.059958	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15095	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R149_Object_268_4_3Dst	</compatibleModels>
+        <position>	1.89474 2.02819 -2.00045	</position>
+        <rotation>	1.89325 -1.49317 -0.0424166	</rotation>
+        <scale>	0.552254 0.05 0.552257	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.00724811	</clipAngle>
+        <anchorShift>	0.059962	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15096	</slotId>
         <tags>	formfactor_square safe front	</tags>
         <position>	-0.515168 1.27827 3.24017	</position>
         <rotation>	0.289808 -0.000012 3.14155	</rotation>
@@ -1269,7 +1368,7 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	15090	</slotId>
+        <slotId>	15097	</slotId>
         <tags>	formfactor_rect1x2 safe front	</tags>
         <position>	0.000008 1.45132 2.76526	</position>
         <rotation>	0.289808 -0.000012 3.14155	</rotation>
@@ -1282,7 +1381,7 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	15091	</slotId>
+        <slotId>	15098	</slotId>
         <tags>	formfactor_rect1x2 mimic front	</tags>
         <position>	0.000013 1.41745 2.87882	</position>
         <rotation>	0.221286 -0.000009 3.14155	</rotation>
@@ -1295,7 +1394,7 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	15092	</slotId>
+        <slotId>	15099	</slotId>
         <tags>	formfactor_square safe left direction_right_to_left	</tags>
         <position>	-1.31369 1.98834 -1.9519	</position>
         <rotation>	1.87371 1.54608 0.0930076	</rotation>
@@ -1308,7 +1407,7 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	15093	</slotId>
+        <slotId>	15100	</slotId>
         <tags>	formfactor_square safe right direction_left_to_right	</tags>
         <position>	1.31372 1.98832 -1.9519	</position>
         <rotation>	1.26705 1.56876 3.02304	</rotation>
@@ -1321,7 +1420,7 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	15094	</slotId>
+        <slotId>	15101	</slotId>
         <tags>	formfactor_rect1x2 safe left direction_right_to_left	</tags>
         <position>	-1.08168 2.14171 -0.765153	</position>
         <rotation>	1.24753 -1.18295 3.10504	</rotation>
@@ -1334,7 +1433,7 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	15095	</slotId>
+        <slotId>	15102	</slotId>
         <tags>	formfactor_rect1x2 safe right direction_left_to_right	</tags>
         <position>	1.08325 2.13659 -0.764405	</position>
         <rotation>	1.24742 1.20392 -3.09601	</rotation>
@@ -1347,7 +1446,7 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	15096	</slotId>
+        <slotId>	15103	</slotId>
         <tags>	formfactor_rect1x2  mimic left direction_right_to_left	</tags>
         <position>	-1.28671 2.0985 -1.23441	</position>
         <rotation>	1.24101 -1.46793 3.14107	</rotation>
@@ -1360,7 +1459,7 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	15097	</slotId>
+        <slotId>	15104	</slotId>
         <tags>	formfactor_rect1x2  mimic right direction_left_to_right	</tags>
         <position>	1.28674 2.09848 -1.23441	</position>
         <rotation>	1.24103 1.46799 3.14107	</rotation>
@@ -1373,7 +1472,7 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	15098	</slotId>
+        <slotId>	15105	</slotId>
         <tags>	formfactor_rect1x2 cover direction_right_to_left	</tags>
         <position>	0.000011 1.85695 0.364995	</position>
         <rotation>	-0.000008 -1.57062 2.97875	</rotation>
@@ -1426,6 +1525,13 @@
         <undamaged>	vehicles/russian/R149_Object_268_4/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R149_Object_268_4/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R149_Object_268_4/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R149_Object_268_4_3Dst>
+            <undamaged>	vehicles/russian/R149_Object_268_4/_skins/R149_Object_268_4_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R149_Object_268_4/_skins/R149_Object_268_4_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R149_Object_268_4/_skins/R149_Object_268_4_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R149_Object_268_4_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -2115,6 +2221,13 @@
             <undamaged>	vehicles/russian/R149_Object_268_4/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R149_Object_268_4/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R149_Object_268_4/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R149_Object_268_4_3Dst>
+                <undamaged>	vehicles/russian/R149_Object_268_4/_skins/R149_Object_268_4_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R149_Object_268_4/_skins/R149_Object_268_4_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R149_Object_268_4/_skins/R149_Object_268_4_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </R149_Object_268_4_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R149_Object_268_4/collision/Gun_01.model	</collisionModelServer>
@@ -2158,9 +2271,9 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.000079 -0.000412467 2.58708	</rayStart>
-              <rayEnd>	0.0132057 -0.0087605 2.58708	</rayEnd>
-              <rayUp>	0.11 0.000000 0.000000	</rayUp>
+              <rayStart>	0.000079 -0.000412467 3.03912	</rayStart>
+              <rayEnd>	-0.108325 0.00398243 3.03912	</rayEnd>
+              <rayUp>	0.142872 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.73	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -2184,6 +2297,13 @@
         <undamaged>	vehicles/russian/R149_Object_268_4/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R149_Object_268_4/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R149_Object_268_4/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R149_Object_268_4_3Dst>
+            <undamaged>	vehicles/russian/R149_Object_268_4/_skins/R149_Object_268_4_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R149_Object_268_4/_skins/R149_Object_268_4_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R149_Object_268_4/_skins/R149_Object_268_4_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </R149_Object_268_4_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R149_Object_268_4/collision/Turret_01.model	</collisionModelServer>

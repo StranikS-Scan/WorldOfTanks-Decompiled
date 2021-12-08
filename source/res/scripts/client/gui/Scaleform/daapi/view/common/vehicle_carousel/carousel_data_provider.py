@@ -10,6 +10,7 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIData
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath
@@ -17,9 +18,14 @@ from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.i18n import makeString as ms
 from helpers import dependency
+from new_year.ny_constants import PERCENT
 from skeletons.gui.game_control import IBattleRoyaleController
+from skeletons.new_year import INewYearController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsCache
+_BONUS_ICONS_EXTRA_SMALL = {'xpFactor': backport.image(R.images.gui.maps.icons.newYear.vehicles.icons.icon_battle_exp_small()),
+ 'freeXPFactor': backport.image(R.images.gui.maps.icons.newYear.vehicles.icons.icon_free_exp_small()),
+ 'tankmenXPFactor': backport.image(R.images.gui.maps.icons.newYear.vehicles.icons.icon_crew_exp_small())}
 
 def sortedIndices(seq, getter, reverse=False):
     return sorted(range(len(seq)), key=lambda idx: getter(seq[idx]), reverse=reverse)
@@ -47,14 +53,18 @@ def _isLockedBackground(vState, vStateLvl):
     return result
 
 
-def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substitute='', style=None, ctx=None):
+def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substitute='', style=None, styleLarge=None, ctx=None):
     ctx = ctx or {}
     state = MENU.tankcarousel_vehiclestates(vState)
     status = ms(state, **ctx)
     if style is None:
         smallStyle, largeStyle = getStatusCountStyle(vStateLvl)
     else:
-        smallStyle = largeStyle = style
+        smallStyle = style
+        if styleLarge is None:
+            largeStyle = smallStyle
+        else:
+            largeStyle = styleLarge
     if status:
         return (smallStyle(status), largeStyle(status))
     else:
@@ -62,6 +72,7 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
 
 
 def getVehicleDataVO(vehicle):
+    nyController = dependency.instance(INewYearController)
     rentInfoText = ''
     if not vehicle.isWotPlusRent and not vehicle.isTelecomRent:
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
@@ -86,13 +97,23 @@ def getVehicleDataVO(vehicle):
         bonusImage = getButtonsAssetPath('bonus_x{}'.format(vehicle.dailyXPFactor))
     else:
         bonusImage = ''
+    nySlot = None
+    if nyController.isVehicleBranchEnabled():
+        nySlot = nyController.getVehicleBranch().getSlotForVehicle(vehicle.invID)
+    isNYVehicle = nySlot is not None
     label = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName
-    labelStyle = text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName
+    labelStyle = text_styles.vehicleNameNY if isNYVehicle else (text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName)
     tankType = '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type
     current, maximum = vehicle.getCrystalsEarnedInfo()
     isCrystalsLimitReached = current == maximum
     isWotPlusSlot = (vehicle.isWotPlusRent or vehicle.isTelecomRent) and not vehicle.rentExpiryState
     extraImage = RES_ICONS.MAPS_ICONS_LIBRARY_RENT_ICO_BIG if isWotPlusSlot else ''
+    bonusValue = ''
+    bonusIcon = ''
+    if isNYVehicle:
+        bonusType, bonusValue = nySlot.getSlotBonus()
+        bonusValue = backport.text(R.strings.ny.vehiclesView.bonusFormat(), bonus=int(bonusValue * PERCENT))
+        bonusIcon = _BONUS_ICONS_EXTRA_SMALL[bonusType]
     return {'id': vehicle.invID,
      'intCD': vehicle.intCD,
      'infoText': largeStatus,
@@ -106,6 +127,10 @@ def getVehicleDataVO(vehicle):
      'iconAlt': getIconPath('noImage'),
      'iconSmall': vehicle.iconSmall,
      'iconSmallAlt': getSmallIconPath('noImage'),
+     'iconHover': '',
+     'iconHoverAlt': getIconPath('noImage'),
+     'iconHoverSmall': '',
+     'iconHoverSmallAlt': getSmallIconPath('noImage'),
      'label': labelStyle(label),
      'level': vehicle.level,
      'premium': vehicle.isPremium,
@@ -126,7 +151,10 @@ def getVehicleDataVO(vehicle):
      'isUseRightBtn': True,
      'tooltip': TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE,
      'isWotPlusSlot': isWotPlusSlot,
-     'extraImage': extraImage}
+     'extraImage': extraImage,
+     'hasNyBonus': isNYVehicle,
+     'nyBonusValue': bonusValue,
+     'nyBonusIcon': bonusIcon}
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):
@@ -244,6 +272,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         currentVehicleInvID = self._currentVehicle.invID
         visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
         sortedVehicleIndices = self._getSortedIndices()
+        self._filteredIndices += self._getBeforeAdditionalItemsIndexes()
         for idx in sortedVehicleIndices:
             vehicle = self._vehicles[idx]
             if vehicle.intCD in visibleVehiclesIntCDs:
@@ -282,6 +311,9 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         return []
 
     def _getAdditionalItemsIndexes(self):
+        return []
+
+    def _getBeforeAdditionalItemsIndexes(self):
         return []
 
     def _syncRandomStats(self):

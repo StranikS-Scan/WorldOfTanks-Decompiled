@@ -9352,6 +9352,81 @@
         </projection_decal>
       </itemFilters>
     </style>
+    <style>
+      <id>	580	</id>
+      <texture>	gui/maps/vehicles/styles/seniority_awards_2021_shop.png	</texture>
+      <description>	#vehicle_customization:special_style/seniority_awards_2021_shop_desc	</description>
+      <userString>	#vehicle_customization:special_style/seniority_awards_2021_shop	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	376	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	231	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	581	</id>
+      <texture>	gui/maps/vehicles/styles/seniority_awards_2020.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/seniority_awards_2021_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/seniority_awards_2020	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	202	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	847	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
@@ -12096,6 +12171,226 @@
           </decals>
         </outfit>
       </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	554	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2022_east.png	</texture>
+      <description>	#vehicle_customization:special_style/ny_2022_east_desc	</description>
+      <userString>	#vehicle_customization:special_style/ny_2022_east	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	364	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	197	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	555	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2022_newyear.png	</texture>
+      <description>	#vehicle_customization:special_style/ny_2022_newyear_desc	</description>
+      <userString>	#vehicle_customization:special_style/ny_2022_newyear	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	365	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	556	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2022_xmas.png	</texture>
+      <description>	#vehicle_customization:special_style/ny_2022_xmas_desc	</description>
+      <userString>	#vehicle_customization:special_style/ny_2022_xmas	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	366	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	198	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	557	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2022_fantasy.png	</texture>
+      <description>	#vehicle_customization:special_style/ny_2022_fantasy_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/ny_2022_fantasy_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/ny_2022_fantasy	</userString>
+      <tags>	progression_required NY2022_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	367	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	199	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	571	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2022_bro.png	</texture>
+      <description>	#vehicle_customization:special_style/ny_2022_bro_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/ny_2022_bro_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/ny_2022_bro	</userString>
+      <tags>	progression_required NY2022_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	368	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	201	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	583	</id>
+      <texture>	gui/maps/vehicles/styles/ny_2022_schwarz.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/ny_2022_schwarz_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/ny_2022_schwarz	</userString>
+      <tags>	progression_required NY2022_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	378	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	16	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <paints>
+            <item>
+              <id>	233	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
     </style>
   </itemGroup>
   <itemGroup>

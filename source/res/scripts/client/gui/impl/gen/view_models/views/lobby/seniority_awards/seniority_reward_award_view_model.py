@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class SeniorityRewardAwardViewModel(ViewModel):
     __slots__ = ('onCloseAction', 'onOpenBtnClick')
 
-    def __init__(self, properties=4, commands=2):
+    def __init__(self, properties=5, commands=2):
         super(SeniorityRewardAwardViewModel, self).__init__(properties=properties, commands=commands)
 
     def getCategory(self):
@@ -27,17 +27,24 @@ class SeniorityRewardAwardViewModel(ViewModel):
     def setVehicles(self, value):
         self._setArray(2, value)
 
-    def getSecretBoxAvailable(self):
-        return self._getBool(3)
+    def getSpecialCurrencyCount(self):
+        return self._getNumber(3)
 
-    def setSecretBoxAvailable(self, value):
-        self._setBool(3, value)
+    def setSpecialCurrencyCount(self, value):
+        self._setNumber(3, value)
+
+    def getIsShopOnOpenLocked(self):
+        return self._getBool(4)
+
+    def setIsShopOnOpenLocked(self, value):
+        self._setBool(4, value)
 
     def _initialize(self):
         super(SeniorityRewardAwardViewModel, self)._initialize()
         self._addStringProperty('category', '')
         self._addArrayProperty('bonuses', Array())
         self._addArrayProperty('vehicles', Array())
-        self._addBoolProperty('secretBoxAvailable', False)
+        self._addNumberProperty('specialCurrencyCount', -1)
+        self._addBoolProperty('isShopOnOpenLocked', False)
         self.onCloseAction = self._addCommand('onCloseAction')
         self.onOpenBtnClick = self._addCommand('onOpenBtnClick')

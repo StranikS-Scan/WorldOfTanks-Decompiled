@@ -53,8 +53,9 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.epic_battles_widget import EpicBattlesWidget
     from gui.Scaleform.daapi.view.lobby.manual.manual_main_view import ManualMainView
     from gui.Scaleform.daapi.view.lobby.manual.manual_chapter_view import ManualChapterView
-    from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import SeniorityAwardsHangarEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.daily_quest_widget import DailyQuestWidget
+    from gui.impl.lobby.new_year.widgets.ny_main_widget import NyMainWidgetInject
+    from gui.impl.lobby.loot_box.loot_box_entry_point import LootboxesEntrancePointInjectWidget
     from gui.Scaleform.daapi.view.lobby.hangar.progressive_reward_widget import ProgressiveRewardWidget
     from gui.Scaleform.daapi.view.lobby.hangar.ammunition_panel_inject import AmmunitionPanelInject
     from gui.impl.lobby.battle_pass.battle_pass_entry_point_view import BattlePassEntryPointComponent
@@ -93,7 +94,6 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.BATTLE_ROYALE_ENTRY_POINT, BattleRoyaleHangarWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.BATTLE_ROYALE_TOURNAMENT, BattleRoyaleTournamentHangarWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.PROGRESSIVE_REWARD_WIDGET, ProgressiveRewardWidget, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.SENIORITY_AWARDS_ENTRY_POINT_2020, SeniorityAwardsHangarEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalViewSettings(HANGAR_ALIASES.DAILY_QUEST_WIDGET, BootcampComponentOverride(DailyQuestWidget, BootcampQuestComponent), None, WindowLayer.UNDEFINED, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL, BattlePassTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.BATTLE_PASSS_ENTRY_POINT, BattlePassEntryPointComponent, ScopeTemplates.DEFAULT_SCOPE),
@@ -103,7 +103,9 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.ENTRIES_CONTAINER, EventEntryPointsContainer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, CraftMachineEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, MapBoxEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.MARATHON_ENTRY_POINT, MarathonEntryPoint, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(HANGAR_ALIASES.MARATHON_ENTRY_POINT, MarathonEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.NY_MAIN_WIDGET_UI, NyMainWidgetInject, None),
+     ComponentSettings(HANGAR_ALIASES.LOOTBOXES_ENTRANCE_POINT, LootboxesEntrancePointInjectWidget, None))
 
 
 def getBusinessHandlers():

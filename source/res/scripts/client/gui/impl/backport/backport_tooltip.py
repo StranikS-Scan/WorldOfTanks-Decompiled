@@ -10,6 +10,18 @@ from skeletons.gui.app_loader import IAppLoader
 _STATE_TYPE_INFO = 'INFO'
 TooltipData = namedtuple('TooltipData', ('tooltip', 'isSpecial', 'specialAlias', 'specialArgs'))
 
+def showBackportTooltip(event, tooltipData, parentWindow):
+    if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
+        tooltipId = int(event.getArgument('tooltipId'))
+        window = None
+        if tooltipId is not None:
+            window = BackportTooltipWindow(tooltipData[tooltipId], parentWindow)
+            window.load()
+        return window
+    else:
+        return
+
+
 def createTooltipData(tooltip=None, isSpecial=False, specialAlias=None, specialArgs=None):
     if specialArgs is None:
         specialArgs = ()
@@ -25,6 +37,10 @@ def createAndLoadBackportTooltipWindow(parentWindow, tooltip=None, isSpecial=Fal
 
 def createBackportTooltipContent(specialAlias=None, specialArgs=None, isSpecial=True, tooltip=None, tooltipData=None):
     return _BackportTooltipContent(tooltipData or createTooltipData(tooltip, isSpecial, specialAlias, specialArgs or []))
+
+
+def createTooltipDataByDict(bonus):
+    return TooltipData(tooltip=bonus.get('tooltip', None), isSpecial=bonus.get('isSpecial', False), specialAlias=bonus.get('specialAlias', ''), specialArgs=bonus.get('specialArgs', None))
 
 
 class _BackportTooltipContent(ViewImpl):

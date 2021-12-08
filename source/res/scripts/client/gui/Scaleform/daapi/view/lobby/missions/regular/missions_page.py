@@ -12,7 +12,7 @@ import BigWorld
 import Windowing
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import MISSIONS_PAGE
+from account_helpers.AccountSettings import MISSIONS_PAGE, NY_DAILY_QUESTS_VISITED
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -412,6 +412,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                             newEventsCount += 1
                 elif alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS:
                     newEventsCount = self.__mapboxCtrl.getUnseenItemsCount()
+                    if not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED):
+                        newEventsCount += 1
                 elif self.currentTab is not None and self.__currentTabAlias == alias:
                     suitableEvents = [ quest for quest in self.currentTab.getSuitableEvents() if not isLinkedSet(quest.getGroupID()) or quest.isAvailable().isValid ]
                     newEventsCount = len(settings.getNewCommonEvents(suitableEvents))
@@ -583,13 +585,14 @@ class MissionView(MissionViewBase):
         result = []
         self._totalQuestsCount = 0
         self._filteredQuestsCount = 0
+        nyBannerAdded = self._appendNYBanner(result)
         for data in self._builder.getBlocksData(self.__viewQuests, self.__filter):
             self._appendBlockDataToResult(result, data)
             self._totalQuestsCount += self._getQuestTotalCountFromBlockData(data)
             self._filteredQuestsCount += self._getQuestFilteredCountFromBlockData(data)
 
         self._questsDP.buildList(result)
-        if not self._totalQuestsCount:
+        if not self._totalQuestsCount and not nyBannerAdded:
             self.as_showDummyS(self._getDummy())
         else:
             self.as_hideDummyS()
@@ -646,6 +649,9 @@ class MissionView(MissionViewBase):
 
     def __onPremiumTypeChanged(self, newAcctType):
         self.markVisited()
+
+    def _appendNYBanner(self, _):
+        return False
 
 
 class ElenMissionView(MissionViewBase):

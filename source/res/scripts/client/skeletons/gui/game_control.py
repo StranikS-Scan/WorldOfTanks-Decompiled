@@ -297,6 +297,10 @@ class IWalletController(IGameController):
         raise NotImplementedError
 
     @property
+    def dynamicComponentsStatuses(self):
+        raise NotImplementedError
+
+    @property
     def isSyncing(self):
         raise NotImplementedError
 
@@ -355,6 +359,8 @@ class ISoundEventChecker(IGameController):
 class IHeroTankController(IGameController):
     onUpdated = None
     onInteractive = None
+    onHeroTankChanged = None
+    onHeroTankBought = None
 
     def hasAdventHero(self):
         raise NotImplementedError
@@ -1413,6 +1419,9 @@ class ICraftmachineController(IGameController):
 
 class ICalendarController(IGameController):
 
+    def mustShow(self):
+        raise NotImplementedError
+
     def updateHeroAdventActionInfo(self):
         raise NotImplementedError
 
@@ -1459,7 +1468,16 @@ class IFestivityController(IGameController):
     def isEnabled(self):
         raise NotImplementedError
 
+    def isPostEvent(self):
+        raise NotImplementedError
+
     def getHangarQuestsFlagData(self):
+        raise NotImplementedError
+
+    def getHangarWidgetLinkage(self):
+        raise NotImplementedError
+
+    def getHangarEdgeColor(self):
         raise NotImplementedError
 
 
@@ -1941,6 +1959,29 @@ class IVehiclePostProgressionController(IGameController):
         raise NotImplementedError
 
     def processVehExtData(self, vehCD, extData):
+        raise NotImplementedError
+
+
+class ISeniorityAwardsController(IGameController):
+    onUpdated = None
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def endTimestamp(self):
+        raise NotImplementedError
+
+    @property
+    def showNotificationLastCallTimestamp(self):
+        raise NotImplementedError
+
+    @property
+    def needShowNotification(self):
+        raise NotImplementedError
+
+    def getSACoin(self):
         raise NotImplementedError
 
 

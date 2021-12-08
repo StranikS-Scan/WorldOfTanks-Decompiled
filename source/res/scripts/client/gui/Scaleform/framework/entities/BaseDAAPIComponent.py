@@ -44,9 +44,9 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         for flashObject, alias in snapshot:
             self.registerFlashComponent(flashObject, alias)
 
-    def registerFlashComponent(self, component, alias, *args):
+    def registerFlashComponent(self, component, alias, *args, **kwargs):
         from gui.Scaleform.framework import g_entitiesFactories
-        componentPy, idx = g_entitiesFactories.factory(alias, *args)
+        componentPy, idx = g_entitiesFactories.factory(alias, *args, **kwargs)
         if componentPy is not None:
             componentPy = g_entitiesFactories.initialize(componentPy, component, idx)
         else:

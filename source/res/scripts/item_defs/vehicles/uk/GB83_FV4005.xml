@@ -79,6 +79,11 @@
           <destroyed>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Hull.model	</exploded>
         </GB83_FV4005_3Dst>
+        <GB83_FV4005_3DSt_MD_21_XXII>
+          <undamaged>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/crash/lod0/Hull.model	</exploded>
+        </GB83_FV4005_3DSt_MD_21_XXII>
       </sets>
     </models>
     <swinging>
@@ -103,8 +108,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	1.74511 0.0501436 2.67935	</rayStart>
-        <rayEnd>	1.54511 0.0501436 2.67935	</rayEnd>
+        <rayStart>	1.74193 -0.122735 2.69966	</rayStart>
+        <rayEnd>	1.54193 -0.122735 2.69966	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -1052,6 +1057,51 @@
         <clipAngle>	0.000000	</clipAngle>
         <anchorShift>	-0.009997	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15076	</slotId>
+        <tags>	direction_left_to_right formfactor_square	</tags>
+        <compatibleModels>	GB83_FV4005_3DSt_MD_21_XXII	</compatibleModels>
+        <position>	-0.447315 1.7053 2.01987	</position>
+        <rotation>	0.0523596 -0.000006 3.14158	</rotation>
+        <scale>	0.554113 0.194695 0.554115	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.00240075	</clipAngle>
+        <anchorShift>	-0.022909	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15077	</slotId>
+        <tags>	direction_right_to_left formfactor_square	</tags>
+        <compatibleModels>	GB83_FV4005_3DSt_MD_21_XXII	</compatibleModels>
+        <position>	-1.66586 1.06186 1.29294	</position>
+        <rotation>	1.56894 2.70792 1.13693	</rotation>
+        <scale>	0.598236 0.210201 0.598231	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.894613	</clipAngle>
+        <anchorShift>	0.00953	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15078	</slotId>
+        <tags>	direction_right_to_left formfactor_square	</tags>
+        <compatibleModels>	GB83_FV4005_3DSt_MD_21_XXII	</compatibleModels>
+        <position>	1.66587 1.06182 1.29294	</position>
+        <rotation>	1.56878 -2.698 -1.12686	</rotation>
+        <scale>	0.598235 0.210201 0.59823	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.894613	</clipAngle>
+        <anchorShift>	0.00953	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1099,6 +1149,11 @@
             <destroyed>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Chassis.model	</exploded>
           </GB83_FV4005_3Dst>
+          <GB83_FV4005_3DSt_MD_21_XXII>
+            <undamaged>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/crash/lod0/Chassis.model	</exploded>
+          </GB83_FV4005_3DSt_MD_21_XXII>
         </sets>
       </models>
       <splineDesc>
@@ -1113,6 +1168,12 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <GB83_FV4005_3DSt_MD_21_XXII>
+            <segmentModelLeft>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/track/segment.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/track/segment.model	</segmentModelRight>
+          </GB83_FV4005_3DSt_MD_21_XXII>
+        </modelSets>
       </splineDesc>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1341,6 +1402,11 @@
             <model>	vehicles/british/GB83_FV4005/track/segment.model	</model>
             <length>	0.147958	</length>
           </mainSegment>
+          <modelSets>
+            <GB83_FV4005_3DSt_MD_21_XXII>
+              <mainSegmentModel>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/track/segment.model	</mainSegmentModel>
+            </GB83_FV4005_3DSt_MD_21_XXII>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1765,6 +1831,11 @@
             <model>	vehicles/british/GB83_FV4005/track/segment.model	</model>
             <length>	0.148001	</length>
           </mainSegment>
+          <modelSets>
+            <GB83_FV4005_3DSt_MD_21_XXII>
+              <mainSegmentModel>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/track/segment.model	</mainSegmentModel>
+            </GB83_FV4005_3DSt_MD_21_XXII>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -2257,6 +2328,11 @@
                 <destroyed>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Gun_01.model	</exploded>
               </GB83_FV4005_3Dst>
+              <GB83_FV4005_3DSt_MD_21_XXII>
+                <undamaged>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/crash/lod0/Gun_01.model	</exploded>
+              </GB83_FV4005_3DSt_MD_21_XXII>
             </sets>
           </models>
           <hitTester>
@@ -2326,6 +2402,11 @@
             <destroyed>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Turret_01.model	</exploded>
           </GB83_FV4005_3Dst>
+          <GB83_FV4005_3DSt_MD_21_XXII>
+            <undamaged>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3DSt_MD_21_XXII/crash/lod0/Turret_01.model	</exploded>
+          </GB83_FV4005_3DSt_MD_21_XXII>
         </sets>
       </models>
       <hitTester>
@@ -2884,6 +2965,71 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.528732	</clipAngle>
           <anchorShift>	1.58639	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35040	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB83_FV4005_3DSt_MD_21_XXII	</compatibleModels>
+          <position>	-1.03878 2.53918 0.238194	</position>
+          <rotation>	1.53636 1.73561 0.0908606	</rotation>
+          <scale>	0.550237 0.0872719 0.550237	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorShift>	0.070003	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35041	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB83_FV4005_3DSt_MD_21_XXII	</compatibleModels>
+          <position>	1.03882 2.53915 0.238194	</position>
+          <rotation>	1.53633 -1.73548 -0.0907027	</rotation>
+          <scale>	0.550236 0.0872718 0.550237	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorShift>	0.080003	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35042	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB83_FV4005_3DSt_MD_21_XXII	</compatibleModels>
+          <position>	0.000064 3.19332 0.884837	</position>
+          <rotation>	0.157433 -0.000007 3.14156	</rotation>
+          <scale>	0.739486 0.379134 0.739437	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.838799	</clipAngle>
+          <anchorShift>	0.05944	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35043	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB83_FV4005_3DSt_MD_21_XXII	</compatibleModels>
+          <position>	-0.25837 3.71676 -1.18582	</position>
+          <rotation>	3.14159 -0.000027 -0.000250816	</rotation>
+          <scale>	0.593756 0.479774 0.593742	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.661638	</clipAngle>
+          <anchorShift>	-0.12579	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35044	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB83_FV4005_3DSt_MD_21_XXII	</compatibleModels>
+          <position>	-0.129042 2.34234 -2.20425	</position>
+          <rotation>	1.62796 -0.0041337 -0.004143	</rotation>
+          <scale>	0.582159 0.0999999 0.582144	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorShift>	0.043075	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

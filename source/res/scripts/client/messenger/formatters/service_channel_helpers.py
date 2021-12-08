@@ -16,6 +16,15 @@ if typing.TYPE_CHECKING:
     from messenger.proto.bw.wrappers import ServiceChannelMessage
 MessageData = namedtuple('MessageData', 'data, settings')
 
+def getRewardsForBoxes(message, boxIDs):
+    data = message.data or {}
+    resultRewards = {}
+    for boxID in boxIDs:
+        mergeRewards(resultRewards, data[boxID]['rewards'])
+
+    return resultRewards
+
+
 def getRewardsForQuests(message, questIDs):
     data = message.data or {}
     detailRewards = data.get('detailedRewards', {})

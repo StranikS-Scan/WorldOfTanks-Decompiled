@@ -345,7 +345,7 @@ def customizationPreview(itemCD, itemsCache=None, vehicleCD=None):
     showStylePreviewFunc = showStylePreview
     if item.isProgression:
         showStylePreviewFunc = showProgressionStylesStylePreview
-    showStylePreviewFunc(vehicleCD, item, item.getDescription(), partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION), backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.storage()))
+    showStylePreviewFunc(vehicleCD, item, item.getDescription(), partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.storage()))
     return
 
 

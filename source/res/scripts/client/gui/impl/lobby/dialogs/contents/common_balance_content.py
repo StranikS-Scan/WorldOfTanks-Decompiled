@@ -70,17 +70,19 @@ class CommonBalanceContent(ViewImpl):
         currencies = kwargs.get('currencies', chain(Currency.GUI_ALL, (ValuePrice.FREE_XP,)))
         for currency in currencies:
             if currency == ValuePrice.FREE_XP:
-                self.__addCurrency(ValuePrice.FREE_XP, self.__getCurrencyFormat(ValuePrice.FREE_XP, self.__stats.actualFreeXP))
-                self.__onCurrencyUpdated(currency, self.__stats.actualFreeXP)
-            self.__addCurrency(currency, self.__getCurrencyFormat(currency, self.__stats.actualMoney.get(currency)))
-            self.__onCurrencyUpdated(currency, self.__stats.actualMoney.get(currency))
+                self._addCurrency(ValuePrice.FREE_XP, self.__getCurrencyFormat(ValuePrice.FREE_XP, self.__stats.actualFreeXP))
+                self._onCurrencyUpdated(currency, self.__stats.actualFreeXP)
+            self._addCurrency(currency, self.__getCurrencyFormat(currency, self.__stats.actualMoney.get(currency)))
+            self._onCurrencyUpdated(currency, self.__stats.actualMoney.get(currency))
+
+        self.__updateMoneyStatus()
 
     def _finalize(self):
         super(CommonBalanceContent, self)._finalize()
         self.__wallet.onWalletStatusChanged -= self.__onWalletChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
 
-    def __addCurrency(self, currency, value):
+    def _addCurrency(self, currency, value):
         currencyModel = CurrencyItemModel()
         currencyModel.setCurrency(currency)
         currencyModel.setValue(value)
@@ -91,6 +93,12 @@ class CommonBalanceContent(ViewImpl):
         self.viewModel.currency.addViewModel(currencyModel)
         self.__currencyIndexes.append(currency)
 
+    def _onCurrencyUpdated(self, currency, value):
+        if currency in self.__currencyIndexes:
+            index = self.__currencyIndexes.index(currency)
+            self.viewModel.currency.getItem(index).setValue(self.__getCurrencyFormat(currency, value) if value is not None and self.__isGoldAutoPurhaseEnabled else '')
+        return
+
     def __getCurrencyFormat(self, currency, value):
         if currency in self.__CURRENCY_FORMATTER:
             formatType = self.__CURRENCY_FORMATTER[currency]
@@ -99,23 +107,21 @@ class CommonBalanceContent(ViewImpl):
         return self.gui.systemLocale.getNumberFormat(value, formatType=formatType)
 
     def __onFreeXpUpdated(self, value):
-        self.__onCurrencyUpdated('freeXP', value)
+        self._onCurrencyUpdated('freeXP', value)
 
     def __onMoneyUpdated(self, _):
         for currency in Currency.GUI_ALL:
             moneyValue = self.__stats.actualMoney.get(currency)
-            self.__onCurrencyUpdated(currency, moneyValue)
+            self._onCurrencyUpdated(currency, moneyValue)
 
-    def __onCurrencyUpdated(self, currency, value):
-        if currency in self.__currencyIndexes:
-            index = self.__currencyIndexes.index(currency)
-            self.viewModel.currency.getItem(index).setValue(self.__getCurrencyFormat(currency, value) if value is not None and self.__isGoldAutoPurhaseEnabled else '')
-        return
+    def __onWalletChanged(self, *_):
+        self.__updateMoneyStatus()
 
-    def __onWalletChanged(self, status):
+    def __updateMoneyStatus(self):
+        status = self.__wallet.componentsStatuses
         self.__isGoldAutoPurhaseEnabled &= self.__wallet.isAvailable
         for currency in Currency.GUI_ALL:
-            self.__onCurrencyUpdated(currency, self.__stats.actualMoney.get(currency) if status[currency] == CurrencyStatus.AVAILABLE else None)
+            self._onCurrencyUpdated(currency, self.__stats.actualMoney.get(currency) if status[currency] == CurrencyStatus.AVAILABLE else None)
 
-        self.__onCurrencyUpdated('freeXP', self.__stats.actualFreeXP if status['freeXP'] == CurrencyStatus.AVAILABLE else None)
+        self._onCurrencyUpdated('freeXP', self.__stats.actualFreeXP if status['freeXP'] == CurrencyStatus.AVAILABLE else None)
         return

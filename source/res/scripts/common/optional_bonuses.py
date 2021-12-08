@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/optional_bonuses.py
-import random
 import copy
+import random
 import time
 from typing import Optional, Dict
 from account_shared import getCustomizationItem
+from items.components.ny_constants import CurrentNYConstants, PREV_NY_TOYS_COLLECTIONS, YEARS_INFO
 from soft_exception import SoftException
-from items import tankmen
-from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from battle_pass_common import NON_VEH_CD
 
 def _packTrack(track):
@@ -120,6 +119,13 @@ def __mergeEntitlements(total, key, value, isLeaf=False, count=1, *args):
             total['expires'] = entitlementData['expires']
 
 
+def __mergeCurrencies(total, key, value, isLeaf=False, count=1, *args):
+    totalCurrency = total.setdefault(key, {})
+    for currencyCode, currencyData in value.iteritems():
+        total = totalCurrency.setdefault(currencyCode, {'count': 0})
+        total['count'] += count * currencyData.get('count', 1)
+
+
 def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
     totalDossiers = total.setdefault(key, {})
     for _dossierType, changes in value.iteritems():
@@ -174,6 +180,20 @@ def __mergeBattlePassPoints(total, key, value, isLeaf=False, count=1, *args):
     battlePass['vehicles'][NON_VEH_CD] += value.get('vehicles', {}).get(NON_VEH_CD, 0) * count
 
 
+def __mergeNYToys(total, key, value, isLeaf=False, count=1, *args):
+    result = total.setdefault(key, {})
+    for toyID, toysCount in value.iteritems():
+        toyData = result.setdefault(toyID, {})
+        toyData['count'] = toyData.get('count', 0) + count * toysCount.get('count', 0)
+        toyData['pureCount'] = toyData.get('pureCount', 0) + count * toysCount.get('pureCount', 0)
+        toyData['newCount'] = toyData.get('newCount', 0) or toysCount.get('newCount', 0)
+
+
+def __mergeNYAnyOf(total, key, value, isLeaf=False, count=1, *args):
+    result = total.setdefault(key, [])
+    result.extend(value if isinstance(value, list) else [value])
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -205,14 +225,21 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'blueprints': __mergeBlueprints,
  'enhancements': __mergeEnhancements,
  'entitlements': __mergeEntitlements,
+ 'currencies': __mergeCurrencies,
  'rankedDailyBattles': __mergeValue,
  'rankedBonusBattles': __mergeValue,
  'dogTagComponents': __mergeDogTag,
  'battlePassPoints': __mergeBattlePassPoints,
- 'meta': lambda *args, **kwargs: None}
+ 'meta': lambda *args, **kwargs: None,
+ CurrentNYConstants.TOYS: __mergeNYToys,
+ CurrentNYConstants.TOY_FRAGMENTS: __mergeValue,
+ CurrentNYConstants.ANY_OF: __mergeNYAnyOf,
+ CurrentNYConstants.FILLERS: __mergeValue}
+BONUS_MERGERS.update({k:__mergeNYToys for k in PREV_NY_TOYS_COLLECTIONS})
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0 and not account._rent.isVehicleRented(account._inventory.getVehicleInvID(key)),
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
- 'tokens': lambda account, key: account._quests.hasToken(key)}
+ 'tokens': lambda account, key: account._quests.hasToken(key),
+ CurrentNYConstants.TOYS: lambda account, key: account._newYear.isToyPresentInCollection(key, YEARS_INFO.CURRENT_YEAR_STR)}
 
 class BonusItemsCache(object):
 
@@ -335,7 +362,7 @@ class BonusNodeAcceptor(object):
 
     def updateBonusCache(self, bonusNode):
         cache = self.__bonusCache
-        for itemType in ('vehicles', 'tokens'):
+        for itemType in ('vehicles', 'tokens', CurrentNYConstants.TOYS):
             if itemType in bonusNode:
                 for itemID in bonusNode[itemType].iterkeys():
                     cache.onItemAccepted(itemType, itemID)
@@ -347,7 +374,7 @@ class BonusNodeAcceptor(object):
 
     def isBonusExists(self, bonusNode):
         cache = self.__bonusCache
-        for itemType in ('vehicles', 'tokens'):
+        for itemType in ('vehicles', 'tokens', CurrentNYConstants.TOYS):
             if itemType in bonusNode:
                 for itemID in bonusNode[itemType].iterkeys():
                     if cache.isItemExists(itemType, itemID):
@@ -549,22 +576,47 @@ class ProbabilityVisitor(NodeVisitor):
 
         isAcceptable = acceptor.isAcceptable
         if not isAcceptable(selectedValue):
-            altList = list(enumerate(bonusNodes))
-            random.shuffle(altList)
-            for i, (_1, _2, _3, bonusValue) in altList:
-                if i != selectedIdx:
-                    isCompensation = bonusValue.get('properties', {}).get('compensation', False)
-                    if isCompensation and isAcceptable(bonusValue):
-                        selectedIdx = i
-                        selectedValue = bonusValue
-                        break
-            else:
+            availableBonusNodes = []
+            sumOfAvailableProbabilities = 0
+            sumOfPreviousProbabilities = 0
+            previousOwnProbability = 0.0
+            canUsePrevInsteadOfZeroProbability = False
+            for index, (probabilities, bonusProbability, _, bonusValue) in enumerate(bonusNodes):
+                ownProbability = bonusProbability if useBonusProbability else probabilities[probablitiesStage]
+                if ownProbability != 0.0:
+                    ownProbability, sumOfPreviousProbabilities = ownProbability - sumOfPreviousProbabilities, ownProbability
+                if ownProbability != 0.0:
+                    canUsePrevInsteadOfZeroProbability = True
+                    previousOwnProbability = ownProbability
+                    probability = ownProbability
+                elif canUsePrevInsteadOfZeroProbability and previousOwnProbability != 0.0:
+                    probability = previousOwnProbability
+                else:
+                    continue
+                if index != selectedIdx and bonusValue.get('properties', {}).get('compensation', False) and isAcceptable(bonusValue):
+                    sumOfAvailableProbabilities += probability
+                    availableBonusNodes.append((index, probability, bonusValue))
+                    canUsePrevInsteadOfZeroProbability = False
+
+            if not availableBonusNodes:
                 shouldCompensated = selectedValue.get('properties', {}).get('shouldCompensated', False)
                 if not isAcceptable(selectedValue, False) or shouldCompensated:
                     for i in xrange(len(bonusNodes)):
                         self.__trackChoice(False)
 
                     return
+            elif len(availableBonusNodes) == 1:
+                selectedIdx, _, selectedValue = availableBonusNodes[0]
+            else:
+                randomValue = random.random() * sumOfAvailableProbabilities
+                sumOfPreviousProbabilities = 0
+                for bonusNode in availableBonusNodes:
+                    sumOfPreviousProbabilities += bonusNode[1]
+                    if randomValue < sumOfPreviousProbabilities:
+                        selectedIdx, _, selectedValue = bonusNode
+                        break
+                else:
+                    raise SoftException('Unreachable code, oneof probability bug, random value: {}, available bonus nodes: {}'.format(randomValue, availableBonusNodes))
 
         for i in xrange(selectedIdx):
             self.__trackChoice(False)

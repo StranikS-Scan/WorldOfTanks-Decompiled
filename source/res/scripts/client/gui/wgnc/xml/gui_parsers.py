@@ -73,7 +73,7 @@ class _PopUpParser(SectionParser):
             buttons = sub.parse(section[sub.getTagName()])
         else:
             buttons = None
-        return gui_items.PopUpItem(body, topic, priority, buttons, icon, bg, group, isNotify)
+        return gui_items.createPopUpItem(body, topic, priority, buttons, icon, bg, group, isNotify)
 
 
 class _WindowParser(SectionParser):

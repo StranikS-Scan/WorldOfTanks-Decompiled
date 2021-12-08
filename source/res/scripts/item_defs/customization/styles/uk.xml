@@ -617,7 +617,7 @@
       <modelsSet>	GB83_FV4005_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/GB83_FV4005_3Dst	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
+      <tags>	progression_required addNationalEmblem NY_style	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -1407,6 +1407,52 @@
               <slotId>	38000	</slotId>
             </item>
           </sequences>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB83_FV4005	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	301	</id>
+      <texture>	gui/maps/vehicles/styles/GB83_FV4005_3DSt_MD_21_XXII.png	</texture>
+      <modelsSet>	GB83_FV4005_3DSt_MD_21_XXII	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB83_FV4005_3DSt_MD_21_XXII	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB83_FV4005_3DSt_MD_21_XXII_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required NY_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	19	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
         </outfit>
       </outfits>
       <itemFilters>

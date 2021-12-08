@@ -8,13 +8,18 @@ from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.server_events import formatters as events_fmts
-from gui.server_events.cond_formatters import FormattableField, FORMATTER_IDS, VEHICLE_TYPES, MAX_CONDITIONS_IN_OR_SECTION_SUPPORED, packSimpleTitle, packDescriptionField
-from personal_missions_constants import CONDITION_ICON
+from gui.server_events.cond_formatters import FORMATTER_IDS, FormattableField, MAX_CONDITIONS_IN_OR_SECTION_SUPPORED, VEHICLE_TYPES, packDescriptionField, packSimpleTitle
 from gui.server_events.conditions import GROUP_TYPE
+from gui.server_events.formatters import RELATIONS_SCHEME, packMissionIconCondition
 from gui.shared.formatters import text_styles
 from helpers import i18n
+from personal_missions_constants import CONDITION_ICON
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from typing import Dict, List, Optional, Union
+    from gui.server_events.conditions import _Condition, _Cumulativable, _VehsListCondition
+    from gui.server_events.event_items import ServerEventAbstract
+    from gui.server_events.formatters import PreFormattedCondition, ProgressData
 
 class ConditionsFormatter(object):
 
@@ -103,7 +108,7 @@ class SimpleMissionsFormatter(MissionFormatter):
         return result
 
     def _packGui(self, condition):
-        return events_fmts.packMissionIconCondition(self.getTitle(condition), MISSIONS_ALIASES.NONE, self.getDescription(condition), self._getIconKey(condition), sortKey=self._getSortKey(condition), progressID=condition.progressID)
+        return packMissionIconCondition(self.getTitle(condition), MISSIONS_ALIASES.NONE, self.getDescription(condition), self._getIconKey(condition), sortKey=self._getSortKey(condition), progressID=condition.progressID)
 
 
 class MissionsVehicleListFormatter(MissionFormatter):
@@ -126,7 +131,7 @@ class MissionsVehicleListFormatter(MissionFormatter):
     def _getTitle(cls, condition):
         return FormattableField(FORMATTER_IDS.RELATION, (condition.relationValue,
          condition.relation,
-         events_fmts.RELATIONS_SCHEME.DEFAULT,
+         RELATIONS_SCHEME.DEFAULT,
          cls._getTitleKey(condition))) if condition.isAnyVehicleAcceptable() else FormattableField(FORMATTER_IDS.COMPLEX_RELATION, (condition.relationValue, condition.relation, cls._getTitleKey(condition)))
 
     @classmethod
@@ -195,7 +200,7 @@ class MissionsVehicleListFormatter(MissionFormatter):
         return self._packGui(title, progressType, self.getDescription(condition), current=current, total=total, conditionData=self._getConditionData(condition), progressData=progressData, condition=condition)
 
     def _packGui(self, title, progressType, label, current=None, total=None, conditionData=None, progressData=None, condition=None):
-        return events_fmts.packMissionIconCondition(title, progressType, label, self._getIconKey(condition), current=current, total=total, conditionData=conditionData, progressData=progressData, sortKey=self._getSortKey(condition), progressID=condition.progressID)
+        return packMissionIconCondition(title, progressType, label, self._getIconKey(condition), current=current, total=total, conditionData=conditionData, progressData=progressData, sortKey=self._getSortKey(condition), progressID=condition.progressID)
 
     @staticmethod
     def __makeVehicleVO(vehicle):

@@ -8,6 +8,9 @@ class FormatStringArgModel(ViewModel):
     ALIGN_LEFT = 'left'
     ALIGN_RIGHT = 'right'
     ALIGN_CENTER = 'center'
+    ALIGN_TOP = 'top'
+    ALIGN_MIDDLE = 'middle'
+    ALIGN_BOTTOM = 'bottom'
 
     def __init__(self, properties=5, commands=0):
         super(FormatStringArgModel, self).__init__(properties=properties, commands=commands)

@@ -3,6 +3,7 @@
 from constants import IS_DEVELOPMENT
 from soft_exception import SoftException
 UNKNOWN_SENDER_ID = 0
+UNPROCESSED_GIFT_DB_ID = -1
 
 class ClientReqStrategy(object):
     AUTO = 'auto'
@@ -13,7 +14,8 @@ class ClientReqStrategy(object):
 class GiftEventID(object):
     UNKNOWN = 0
     DEV_TEST = 1
-    ALL = (UNKNOWN,) + ((DEV_TEST,) if IS_DEVELOPMENT else ())
+    NY_HOLIDAYS = 2
+    ALL = (UNKNOWN, NY_HOLIDAYS) + ((DEV_TEST,) if IS_DEVELOPMENT else ())
 
 
 class GiftEventState(object):

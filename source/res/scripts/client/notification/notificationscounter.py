@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationsCounter.py
+import typing
 from gui.prb_control import prbInvitesProperty
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -9,19 +10,25 @@ class _GroupCounter(object):
 
     def __init__(self):
         super(_GroupCounter, self).__init__()
-        self.__notifications = set()
+        self._notifications = {}
 
-    def addNotification(self, typeID, entityID):
-        self.__notifications.add((typeID, entityID))
+    def addNotification(self, typeID, entityID, count, resetCounter):
+        self._notifications.update({(typeID, entityID): {'count': count,
+                              'resetCounter': resetCounter}})
 
-    def removeNotification(self, typeID, entityID):
-        self.__notifications.discard((typeID, entityID))
+    def removeNotification(self, typeID, entityID, count, resetCounter):
+        self._notifications.pop((typeID, entityID), None)
+        return
+
+    def updateNotification(self, typeID, entityID, count, resetCounter):
+        self._notifications.update({(typeID, entityID): {'count': count,
+                              'resetCounter': resetCounter}})
 
     def count(self):
-        return len(self.__notifications)
+        return sum((notificationData['count'] for notificationData in self._notifications.itervalues()))
 
     def reset(self):
-        self.__notifications.clear()
+        self._notifications = {notificationID:notificationData for notificationID, notificationData in self._notifications.iteritems() if not notificationData['resetCounter']}
         self.resetUnreadCount()
 
     def resetUnreadCount(self):
@@ -78,17 +85,26 @@ class _CounterCollection(object):
     def clear(self):
         self.__counters.clear()
 
-    def addNotification(self, group, typeID, entityID):
-        self.__counters[group].addNotification(typeID, entityID)
+    def addNotification(self, group, typeID, entityID, count, resetCounter):
+        self.__counters[group].addNotification(typeID, entityID, count, resetCounter)
         return self.count()
 
-    def removeNotification(self, group, typeID, entityID):
+    def removeNotification(self, group, typeID, entityID, count, resetCounter):
         if group is None:
             for counter in self.__counters.itervalues():
-                counter.removeNotification(typeID, entityID)
+                counter.removeNotification(typeID, entityID, count, resetCounter)
 
         else:
-            self.__counters[group].removeNotification(typeID, entityID)
+            self.__counters[group].removeNotification(typeID, entityID, count, resetCounter)
+        return self.count()
+
+    def updateNotification(self, group, typeID, entityID, count, resetCounter):
+        if group is None:
+            for counter in self.__counters.itervalues():
+                counter.updateNotification(typeID, entityID, count, resetCounter)
+
+        else:
+            self.__counters[group].updateNotification(typeID, entityID, count, resetCounter)
         return self.count()
 
     def count(self, group=None):

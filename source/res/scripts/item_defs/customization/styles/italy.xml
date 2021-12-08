@@ -539,4 +539,44 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	italy:It15_Rinoceronte	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	306	</id>
+      <texture>	gui/maps/vehicles/styles/It15_Rinoceronte_3DSt_MD_21_XXII.png	</texture>
+      <modelsSet>	It15_Rinoceronte_3DSt_MD_21_XXII	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/It15_Rinoceronte_3DSt_MD_21_XXII	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/It15_Rinoceronte_3DSt_MD_21_XXII_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required NY_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </italy.xml>

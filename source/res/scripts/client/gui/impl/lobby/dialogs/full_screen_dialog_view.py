@@ -147,8 +147,8 @@ class FullScreenDialogWindowWrapper(LobbyWindow):
     __slots__ = ('_wrappedView', '_blur', '_doBlur')
     __gui = dependency.descriptor(IGuiLoader)
 
-    def __init__(self, wrappedView, parent=None, doBlur=True):
-        super(FullScreenDialogWindowWrapper, self).__init__(DialogFlags.TOP_FULLSCREEN_WINDOW, content=wrappedView, parent=parent)
+    def __init__(self, wrappedView, parent=None, doBlur=True, **kwargs):
+        super(FullScreenDialogWindowWrapper, self).__init__(DialogFlags.TOP_FULLSCREEN_WINDOW, content=wrappedView, parent=parent, **kwargs)
         self._wrappedView = wrappedView
         self._blur = None
         self._doBlur = doBlur

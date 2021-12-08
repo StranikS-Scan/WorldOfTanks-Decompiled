@@ -10,6 +10,7 @@ from skeletons.gameplay import GameplayStateID, IGameplayLogic
 from skeletons.gui.impl import IGuiLoader, IFullscreenManager, INotificationWindowController
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.sf_window import SFWindow
+from gui.impl.lobby.platoon.view.platoon_welcome_view import SelectionWindow
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
 _logger = logging.getLogger(__name__)
@@ -55,7 +56,10 @@ class FullscreenManager(IFullscreenManager):
         windowsToClose = []
         for window in windows:
             if window != newWindow and (window.layer > layer or window.layer == layer) and not self.__isParent(window, newWindow) and self.__isAllowed(newWindow):
-                windowsToClose.append(window)
+                if window.canBeClosed():
+                    windowsToClose.append(window)
+                else:
+                    _logger.info("Window %r hasn't been destroyed by opening window %r", window, newWindow)
 
         if (not windows or windowsToClose) and not self.__notificationMgr.hasWindow(newWindow) and self.__isAllowed(newWindow):
             _logger.info('Notification queue postpones by opening window %r', newWindow)
@@ -83,7 +87,7 @@ class FullscreenManager(IFullscreenManager):
                 if alias.startswith(priority):
                     return False
 
-        return True
+        return False if isinstance(window, SelectionWindow) else True
 
 
 class _LobbyStateObserver(SingleStateObserver):

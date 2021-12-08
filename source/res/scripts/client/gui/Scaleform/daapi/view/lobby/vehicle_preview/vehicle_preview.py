@@ -39,7 +39,6 @@ from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IHeroTankController, IVehicleComparisonBasket, IMapsTrainingController
 from skeletons.gui.shared import IItemsCache
@@ -279,7 +278,10 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.as_hide3DSceneTooltipS()
 
     def _createSelectableLogic(self):
-        return PreviewSelectableLogic()
+        if self.__isHeroTank:
+            return super(VehiclePreview, self)._createSelectableLogic()
+        from new_year.custom_selectable_logic import WithoutNewYearObjectsSelectableLogic
+        return WithoutNewYearObjectsSelectableLogic()
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(VehiclePreview, self)._onRegisterFlashComponent(viewPy, alias)
@@ -445,11 +447,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             return entity.getQueueType() if entity is not None else QUEUE_TYPE.UNKNOWN
 
     def __onHangarCreateOrRefresh(self):
-        if self._getPrbEntityType() in (QUEUE_TYPE.BATTLE_ROYALE, QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT):
-            self.closeView()
-            return
-        self.__keepVehicleSelectionEnabled = True
-        self.__handleWindowClose()
+        self.closeView()
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleWindowClose(self, event=None):

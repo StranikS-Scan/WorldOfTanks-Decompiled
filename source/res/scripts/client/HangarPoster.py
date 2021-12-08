@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/HangarPoster.py
-import BigWorld
 from ClientSelectableObject import ClientSelectableObject
-from gui.game_control import CalendarInvokeOrigin
+from CurrentVehicle import g_currentPreviewVehicle
+from gui.impl.new_year.navigation import NewYearNavigation
 from gui.shared import g_eventBus
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from helpers import dependency
@@ -13,38 +13,39 @@ class HangarPoster(ClientSelectableObject):
     _hangarSpace = dependency.descriptor(IHangarSpace)
     _calendarController = dependency.descriptor(ICalendarController)
 
-    def __init__(self):
-        super(HangarPoster, self).__init__()
-        self.__alphaFadeFashion = None
-        return
-
     def onEnterWorld(self, prereqs):
         super(HangarPoster, self).onEnterWorld(prereqs)
-        self.__alphaFadeFashion = BigWorld.WGAlphaFadeFashion()
-        self.__alphaFadeFashion.minAlpha = self.minAlpha
-        self.__alphaFadeFashion.maxAlphaDist = self.maxAlphaDistance * self.maxAlphaDistance
-        self.model.fashion = self.__alphaFadeFashion
         g_eventBus.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated)
+        g_currentPreviewVehicle.onSelected += self.__onHeroTankSelected
 
     def onLeaveWorld(self):
         super(HangarPoster, self).onLeaveWorld()
         g_eventBus.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated)
+        g_currentPreviewVehicle.onSelected -= self.__onHeroTankSelected
 
     def onMouseClick(self):
         super(HangarPoster, self).onMouseClick()
-        self._calendarController.showWindow(invokedFrom=CalendarInvokeOrigin.HANGAR)
+        self._calendarController.showWindow()
 
     def __onCameraEntityUpdated(self, event):
         ctx = event.ctx
         state = ctx['state']
         entityId = ctx['entityId']
-        if state == CameraMovementStates.FROM_OBJECT:
-            if self.__isHangarVehicleEntity(entityId):
-                self.setEnable(False)
+        enabled = None
+        if NewYearNavigation.getCurrentObject() is not None:
+            enabled = True
+        elif state == CameraMovementStates.FROM_OBJECT:
+            enabled = not self.__isHangarVehicleEntity(entityId)
         elif state == CameraMovementStates.ON_OBJECT:
-            if self.__isHangarVehicleEntity(entityId):
-                if not self.enabled:
-                    self.setEnable(True)
+            enabled = self.__isHangarVehicleEntity(entityId)
+        if enabled is not None and enabled != self.enabled:
+            self.setEnable(enabled)
+        return
 
     def __isHangarVehicleEntity(self, entityId):
         return entityId == self._hangarSpace.space.vehicleEntityId
+
+    def __onHeroTankSelected(self):
+        if g_currentPreviewVehicle.item is not None:
+            self.setEnable(g_currentPreviewVehicle.isHeroTank)
+        return

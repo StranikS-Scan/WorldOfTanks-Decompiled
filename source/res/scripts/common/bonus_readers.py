@@ -1,21 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bonus_readers.py
+import calendar
 import time
+from functools import partial
 from typing import Union, TYPE_CHECKING
 import blueprints
 import dossiers2
+from dynamic_currencies import g_dynamicCurrenciesData
 import items
-import calendar
 from account_shared import validateCustomizationItem
 from battle_pass_common import NON_VEH_CD
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import isUniversalFragment
+from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS
 from dossiers2.custom.cache import getCache
 from invoices_helpers import checkAccountDossierOperation
-from items import vehicles, tankmen, utils
+from items import vehicles, tankmen, utils, new_year, collectibles
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS
+from items.components.ny_constants import YEARS_INFO, TOY_TYPE_IDS_BY_NAME, CurrentNYConstants, YEARS
 from soft_exception import SoftException
 if TYPE_CHECKING:
     from ResMgr import DataSection
@@ -679,6 +682,14 @@ def __readBonus_entitlement(bonus, _name, section, eventType, checkLimit):
         entitlement['expires'] = readUTC(section, 'expires')
 
 
+def __readBonus_currency(bonus, _name, section, eventType, checkLimit):
+    currencyCode = section['code'].asString
+    if not g_dynamicCurrenciesData.isCurrencyCodeCorrect(currencyCode):
+        raise SoftException('Incorrect code "%(code)s" has been provided in section <currency> in quests xml - it does not exist at platform.' % {'code': currencyCode})
+    currency = bonus.setdefault('currencies', {})[currencyCode] = {}
+    currency['count'] = section['count'].asInt
+
+
 def __readBonus_expires(id, expires, section):
     if section['expires'].has_key('endOfGameDay'):
         expires['endOfGameDay'] = True
@@ -775,6 +786,51 @@ def __readMetaSection(bonus, _name, section, eventType, checkLimit):
 
         bonus['meta'] = meta
         return
+
+
+def __readBonus_nyToy(bonus, _name, section, eventType, year, checkLimit):
+    if section.has_key('id'):
+        tid = section['id'].asInt
+        if year == YEARS_INFO.CURRENT_YEAR:
+            cache = new_year.g_cache.toys
+        else:
+            cache = collectibles.g_cache[YEARS.getYearStrFromYearNum(year)].toys
+        if tid not in cache:
+            raise SoftException('Unknown NY{} toyID: {}'.format(year, tid))
+        count = section['count'].asInt if section.has_key('count') else 0
+        pureCount = section['pureCount'].asInt if section.has_key('pureCount') else count
+        if pureCount > count:
+            raise SoftException('Pure count should be less or equal than count', pureCount, count)
+        toysCollectionKey = YEARS_INFO.getCollectionKeyForYear(year)
+        nyToys = bonus.setdefault(toysCollectionKey, {})
+        nyToys[tid] = {'count': count,
+         'pureCount': pureCount}
+
+
+def __readBonus_nyToyFragments(bonus, _name, section, eventType, checkLimit):
+    count = section.asInt
+    bonus[CurrentNYConstants.TOY_FRAGMENTS] = bonus.get(CurrentNYConstants.TOY_FRAGMENTS, 0) + count
+
+
+def __readBonus_nyAnyOf(bonus, _name, section, eventType, checkLimit):
+    if section.has_key('setting'):
+        settingID = YEARS_INFO.CURRENT_SETTING_IDS_BY_NAME[section.readString('setting')]
+    else:
+        settingID = -1
+    if section.has_key('type'):
+        typeID = TOY_TYPE_IDS_BY_NAME[section.readString('type')]
+    else:
+        typeID = -1
+    if section.has_key('rank'):
+        rank = section['rank'].asInt
+    else:
+        rank = -1
+    bonus.setdefault(CurrentNYConstants.ANY_OF, []).append((typeID, settingID, rank))
+
+
+def __readBonus_nyFillers(bonus, _name, section, eventType, checkLimit):
+    count = section.asInt
+    bonus[CurrentNYConstants.FILLERS] = bonus.get(CurrentNYConstants.FILLERS, 0) + count
 
 
 def __readBonus_optionalData(config, bonusReaders, section, eventType):
@@ -999,7 +1055,16 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'battlePassPoints': __readBonus_battlePassPoints,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
- 'blueprintAny': __readBonus_blueprintAny}
+ 'blueprintAny': __readBonus_blueprintAny,
+ 'currency': __readBonus_currency,
+ 'ny18Toy': partial(__readBonus_nyToy, year=YEARS.YEAR18),
+ 'ny19Toy': partial(__readBonus_nyToy, year=YEARS.YEAR19),
+ 'ny20Toy': partial(__readBonus_nyToy, year=YEARS.YEAR20),
+ 'ny21Toy': partial(__readBonus_nyToy, year=YEARS.YEAR21),
+ CurrentNYConstants.TOY_BONUS: partial(__readBonus_nyToy, year=YEARS_INFO.CURRENT_YEAR),
+ CurrentNYConstants.TOY_FRAGMENTS: __readBonus_nyToyFragments,
+ CurrentNYConstants.ANY_OF: __readBonus_nyAnyOf,
+ CurrentNYConstants.FILLERS: __readBonus_nyFillers}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}
@@ -1089,7 +1154,7 @@ def __readBonusSubSection(config, bonusReaders, section, eventType=None, checkLi
             if limitIDs:
                 resultLimitIDs.update(limitIDs)
         if name in bonusReaders:
-            bonusReaders[name](bonus, name, subSection, eventType, checkLimit)
+            bonusReaders[name](bonus, name, subSection, eventType, checkLimit=checkLimit)
         if name in _RESERVED_NAMES:
             pass
         raise SoftException('Bonus {} not in bonus readers: {}'.format(name, bonusReaders.keys()))

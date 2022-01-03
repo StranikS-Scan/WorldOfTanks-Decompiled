@@ -61,7 +61,7 @@ def showStyledVehicleByStyleCD(styleIntCD, isBackToMultiOpen=False, itemsCache=N
     _hideLootBoxWindows(isBackToMultiOpen)
     vehicle = getVehByStyleCD(styleIntCD)
     style = itemsCache.items.getItemByCD(styleIntCD)
-    if vehicle.isInInventory:
+    if vehicle.isInInventory and vehicle.isCustomizationEnabled():
 
         def _callback():
             c11nService.getCtx().previewStyle(style, _ExitCallback(isBackToMultiOpen))

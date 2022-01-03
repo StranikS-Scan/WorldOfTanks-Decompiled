@@ -186,6 +186,7 @@
     <_100mm_D54_obr_45_1>	237	</_100mm_D54_obr_45_1>
     <_100mm_D54_TS_cl>	238	</_100mm_D54_TS_cl>
     <_85mm_S_31_M>	239	</_85mm_S_31_M>
+    <_85mm_ZiS_S_53_G>	242	</_85mm_ZiS_S_53_G>
     <_152mm_BL-10_IGR>	60001	</_152mm_BL-10_IGR>
     <_100mm_LB-1_IGR>	60002	</_100mm_LB-1_IGR>
     <_122mm_BL-9_IGR>	60003	</_122mm_BL-9_IGR>
@@ -4797,6 +4798,64 @@
         </_85mm_UOF-365BM100>
       </shots>
     </_85mm_ZiS_S-53_44BM>
+    <_85mm_ZiS_S_53_G>
+      <userString>	#ussr_vehicles:_85mm_ZiS_S_53_G	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	93700	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.3	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -23.0 1.0 -23.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	39.375	</rotationSpeed>
+      <reloadTime>	5.02857142857143	</reloadTime>
+      <maxAmmo>	55	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	1150	</weight>
+      <maxHealth>	122	</maxHealth>
+      <maxRegenHealth>	61	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_85mm_UBR-365KBM100>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	171 162	</piercingPower>
+        </_85mm_UBR-365KBM100>
+        <_85mm_UBR-365PBM100>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1125	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	210 178	</piercingPower>
+        </_85mm_UBR-365PBM100>
+        <_85mm_UOF-365BM100>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	44 44	</piercingPower>
+        </_85mm_UOF-365BM100>
+      </shots>
+    </_85mm_ZiS_S_53_G>
     <_85mm_ZiS_S-53T>
       <userString>	#ussr_vehicles:_85mm_ZiS_S-53	</userString>
       <tags></tags>
@@ -10764,7 +10823,7 @@
       <shots>
         <_152mm_UBR551M>
           <defaultPortion>	0.85	</defaultPortion>
-          <speed>	760	</speed>
+          <speed>	950	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	303 293	</piercingPower>

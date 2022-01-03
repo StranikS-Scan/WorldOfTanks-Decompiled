@@ -322,7 +322,8 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         return hasTelecomRentalsActive and isRentalEnabled
 
     def __getVehicleBranchIndices(self):
-        return [ len(self._vehicles) + len(_SUPPLY_ITEMS.ALL) + idx for idx in _BEFORE_SUPPLY_ITEMS.ALL ]
+        rentSlotIdx = self._getFrontAdditionalItemsIndexes()
+        return [ len(self._vehicles) + len(_SUPPLY_ITEMS.ALL) + len(rentSlotIdx) + idx for idx in _BEFORE_SUPPLY_ITEMS.ALL ]
 
 
 class BCCarouselDataProvider(CarouselDataProvider):

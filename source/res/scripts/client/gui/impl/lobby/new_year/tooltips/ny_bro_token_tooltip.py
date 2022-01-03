@@ -10,7 +10,7 @@ from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier
 from helpers import dependency
 from helpers.time_utils import getDayTimeLeft, ONE_MINUTE
-from new_year.ny_constants import NY_GIFT_SYSTEM_SUBPROGRESS_TOKEN
+from new_year.ny_constants import NY_GIFT_SYSTEM_SUBPROGRESS_TOKEN, NY_GIFT_SYSTEM_PROGRESSION_TOKEN
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from uilogging.ny.constants import LogGroups
@@ -71,5 +71,6 @@ class NyBroTokenTooltip(ViewImpl):
         subprogressQuest = subprogressQuests.itervalues().next() if subprogressQuests else None
         model.setCurrentCount(self.__itemsCache.items.tokens.getTokenCount(NY_GIFT_SYSTEM_SUBPROGRESS_TOKEN))
         model.setTotalCount(getGiftsTokensCountByID(subprogressQuest.getID()) if subprogressQuest else 0)
+        model.setBroTokenCount(self.__itemsCache.items.tokens.getTokenCount(NY_GIFT_SYSTEM_PROGRESSION_TOKEN))
         self.__invalidateStages(model.getAmountRequired())
         return

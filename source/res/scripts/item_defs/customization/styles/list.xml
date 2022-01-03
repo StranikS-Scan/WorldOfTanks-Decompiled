@@ -27331,6 +27331,46 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 2500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	italy:It18_Progetto_C45_mod_71	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	584	</id>
+      <texture>	gui/maps/vehicles/styles/It18_Progetto_C45_mod_71_3DSt_WHAC_2021.png	</texture>
+      <modelsSet>	Progetto_C45_mod_71_3DSt_WHAC_2021	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/It18_Progetto_C45_mod_71_3DSt_WHAC_2021	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/It18_Progetto_C45_mod_71_3DSt_WHAC_2021_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>

@@ -265,22 +265,41 @@ class NyLootBoxMainView(LootBoxHideableView):
         if self.__isWaitingToHide:
             return
         with self.viewModel.transaction() as model:
+            if isAfterRewardView:
+                self.viewModel.setIsBoxOpenEnabled(True)
+                if self.__getSelectedBoxNumber() > 0:
+                    model.setIsBoxChangeAnimation(False)
+                else:
+                    model.setIsBoxChangeAnimation(True)
             self.__updateLootBoxViewed(isAfterRewardView)
             self.__updateMainContent()
             self.__updateLootBoxesDeliveryVideo(isAfterRewardView)
             self.__tabsController.updateAvailableBoxes(self.__availableBoxes)
             self.__tabsController.updateTabModels(model.sidebar.getItemsTabBar())
 
+    def __getSelectedBoxNumber(self):
+        boxNumber = 0
+        boxType = self.__tabsController.getSelectedBoxType()
+        boxCategory = self.__tabsController.getSelectedBoxCategory()
+        if boxType in self.__availableBoxes:
+            available = self.__availableBoxes[boxType]
+            if boxType == NewYearLootBoxes.PREMIUM:
+                categories = available['categories']
+                boxNumber = categories[boxCategory] if boxCategory in categories else available['total']
+            else:
+                boxNumber = available['total']
+        return boxNumber
+
     def __onViewAddedToContainer(self, _, pyEntity):
         if pyEntity.alias == VIEW_ALIAS.BATTLE_QUEUE:
             self.destroyWindow()
 
-    def __onDeliveryVideoEnd(self, event=None):
+    def __onDeliveryVideoEnd(self, _=None):
         self.__isDeliveryVideoPlaying = False
         with self.viewModel.transaction() as model:
             model.setIsViewHidden(False)
 
-    def __onBoxTransitionEnd(self, event=None):
+    def __onBoxTransitionEnd(self, _=None):
         with self.viewModel.transaction() as model:
             model.setIsBoxChangeAnimation(False)
 
@@ -288,6 +307,8 @@ class NyLootBoxMainView(LootBoxHideableView):
         self.__lastStatisticsResetFailed = event.ctx['serverError']
 
     def __onBoxSelectTabClick(self, args=None):
+        if self.viewModel.getIsBoxChangeAnimation():
+            return
         tabName = args['tabName']
         self.__doSelectTab(tabName)
 
@@ -303,19 +324,12 @@ class NyLootBoxMainView(LootBoxHideableView):
 
     def __updateMainContent(self, isClickTab=False, prevBoxType=None, prevHasBoxes=False):
         with self.viewModel.transaction() as model:
-            hasBoxes = False
             boxType = self.__tabsController.getSelectedBoxType()
             boxCategory = self.__tabsController.getSelectedBoxCategory()
-            if boxType in self.__availableBoxes:
-                available = self.__availableBoxes[boxType]
-                if boxType == NewYearLootBoxes.PREMIUM:
-                    categories = available['categories']
-                    boxNumber = categories[boxCategory] if boxCategory in categories else available['total']
-                else:
-                    boxNumber = available['total']
-                hasBoxes = boxNumber > 0
-                if hasBoxes:
-                    self.__updateBoxesButtons(boxNumber, boxType == NewYearLootBoxes.PREMIUM)
+            boxNumber = self.__getSelectedBoxNumber()
+            hasBoxes = boxNumber > 0
+            if hasBoxes:
+                self.__updateBoxesButtons(boxNumber, boxType == NewYearLootBoxes.PREMIUM)
             setting = self.__LOOT_BOX_CATEGORY_MAPPING.get(boxCategory) if boxCategory is not None else None
             NewYearSoundsManager.setStylesSwitchBox(setting if setting else RANDOM_STYLE_BOX)
             NewYearSoundsManager.setRTPCBoxEntryView(boxType)
@@ -437,7 +451,7 @@ class NyLootBoxMainView(LootBoxHideableView):
     @process
     def __requestLootBoxOpen(self, boxItem, count):
         self.__isWaitingToHide = True
-        self.viewModel.setIsBoxOpenEnabled(False)
+        self.__switchTabsAndButtonsInteraction(interactionEnabled=False)
         isPremiumMulti = boxItem.getType() == NewYearLootBoxes.PREMIUM and count > 1
         openCount = 1 if isPremiumMulti else count
         result = yield LootBoxOpenProcessor(boxItem, openCount).request()
@@ -448,7 +462,7 @@ class NyLootBoxMainView(LootBoxHideableView):
                 rewardsList = result.auxData.get('bonus')
                 if not rewardsList:
                     _logger.error('Lootbox is opened, but no rewards has been received.')
-                    self.viewModel.setIsBoxOpenEnabled(True)
+                    self.__switchTabsAndButtonsInteraction(interactionEnabled=True)
                     self.__isViewHidden = False
                     self.__isWaitingToHide = False
                     return
@@ -469,10 +483,15 @@ class NyLootBoxMainView(LootBoxHideableView):
                 else:
                     openBoxesFunc()
             else:
-                self.viewModel.setIsBoxOpenEnabled(True)
+                self.__switchTabsAndButtonsInteraction(interactionEnabled=True)
                 self.__isWaitingToHide = False
                 self.__isViewHidden = False
         return
+
+    def __switchTabsAndButtonsInteraction(self, interactionEnabled):
+        with self.viewModel.transaction() as model:
+            model.setIsBoxChangeAnimation(not interactionEnabled)
+            model.setIsBoxOpenEnabled(interactionEnabled)
 
     def __openBoxesCallback(self):
         if self.__openBoxesFunc is not None:
@@ -529,7 +548,6 @@ class NyLootBoxMainView(LootBoxHideableView):
         self.settingsCore.applySetting(NewYearStorageKeys.LOOT_BOX_VIDEO_OFF, not self.__isVideoOff)
 
     def __handleRewardViewHide(self, _):
-        self.viewModel.setIsBoxOpenEnabled(True)
         self.__isViewHidden = False
         self.__update(True)
 

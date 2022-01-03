@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class NyBroTokenTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(NyBroTokenTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getCurrentCount(self):
@@ -27,15 +27,22 @@ class NyBroTokenTooltipModel(ViewModel):
     def setRebootTimer(self, value):
         self._setNumber(2, value)
 
+    def getBroTokenCount(self):
+        return self._getNumber(3)
+
+    def setBroTokenCount(self, value):
+        self._setNumber(3, value)
+
     def getAmountRequired(self):
-        return self._getArray(3)
+        return self._getArray(4)
 
     def setAmountRequired(self, value):
-        self._setArray(3, value)
+        self._setArray(4, value)
 
     def _initialize(self):
         super(NyBroTokenTooltipModel, self)._initialize()
         self._addNumberProperty('currentCount', 0)
         self._addNumberProperty('totalCount', 0)
         self._addNumberProperty('rebootTimer', 0)
+        self._addNumberProperty('broTokenCount', 0)
         self._addArrayProperty('amountRequired', Array())

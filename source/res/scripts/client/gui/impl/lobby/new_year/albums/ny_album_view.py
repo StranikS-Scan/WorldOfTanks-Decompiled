@@ -140,7 +140,9 @@ class NyAlbumView(HistorySubModelPresenter):
             model.setIsFaded(True)
 
     def __onCollectionSelected(self, args):
-        if args is None or 'collectionName' not in args:
+        if not (self.isCurrentYear or self._nyController.isMaxAtmosphereLevel()):
+            return
+        elif args is None or 'collectionName' not in args:
             return
         else:
             state = (TabState.PAGE_STATE, {'collectionType': args['collectionName'],

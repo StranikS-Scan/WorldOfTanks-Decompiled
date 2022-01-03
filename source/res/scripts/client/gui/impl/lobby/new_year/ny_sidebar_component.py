@@ -230,8 +230,12 @@ class NYSidebar(HistorySubModelPresenter):
         if self.__currentViewName == NyWidgetTopMenu.GLADE:
             return _GLADE_SOUNDS_MAP.get(eventType, {}).get(self.__currentTab)
         else:
-            if self.__currentViewName == NyWidgetTopMenu.COLLECTIONS and (self.__currentTab == Collections.NewYear22 or self.__newYearController.isMaxAtmosphereLevel()):
-                return _COLLECTIONS_SOUNDS_MAP.get(eventType, {}).get(self.__currentTab)
+            if self.__currentViewName == NyWidgetTopMenu.COLLECTIONS:
+                isMaxAtmosphereLevel = self.__newYearController.isMaxAtmosphereLevel()
+                if self.__currentTab == Collections.NewYear22 or isMaxAtmosphereLevel:
+                    return _COLLECTIONS_SOUNDS_MAP.get(eventType, {}).get(self.__currentTab)
+                if not isMaxAtmosphereLevel:
+                    return _COLLECTIONS_SOUNDS_MAP.get(eventType, {}).get(Collections.NewYear22)
             return None
 
     def __getSoundStateValue(self):

@@ -56,10 +56,11 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, IBattlePassController, IGiftSystemController
+from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, IBattlePassController, IGiftSystemController, IWOController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
+from wo2022.wo_constants import WO_GOTO_AUCTION_ACTION
 if typing.TYPE_CHECKING:
     from notification.NotificationsModel import NotificationsModel
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
@@ -1127,6 +1128,21 @@ class _NewYearCollectionCompleteHandler(_ActionHandler):
         return
 
 
+class _WinterOfferToAuctionHandler(_NavigationDisabledActionHandler):
+    __woController = dependency.descriptor(IWOController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        return (WO_GOTO_AUCTION_ACTION,)
+
+    def doAction(self, model, entityID, action):
+        self.__woController.goToAuction()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -1177,7 +1193,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenNewYearVehiclesViewHandler,
  _NewYearOpenSpecialBoxPopUpHandler,
  _NewYearOpenSpecialBoxEntryHandler,
- _NewYearCollectionCompleteHandler)
+ _NewYearCollectionCompleteHandler,
+ _WinterOfferToAuctionHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

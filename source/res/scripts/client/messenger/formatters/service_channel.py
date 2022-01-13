@@ -20,7 +20,9 @@ from blueprints.FragmentTypes import getFragmentType
 from cache import cached_property
 from chat_shared import decompressSysMessage, SYS_MESSAGE_TYPE, MapRemovedFromBLReason
 from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, OFFER_TOKEN_PREFIX, LOOTBOX_TOKEN_PREFIX
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.server_events.events_helpers import isCelebrityQuest
+from gui.shared.formatters.ext_currency import formatExtendedCurrencyValue
 from items.components.ny_constants import CurrentNYConstants, TOKEN_VARIADIC_DISCOUNT_PREFIX, VEH_BRANCH_EXTRA_SLOT_TOKEN
 from new_year.ny_constants import TOY_COLLECTIONS
 from dog_tags_common.components_config import componentConfigAdapter
@@ -49,11 +51,11 @@ from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import formatters as shared_fmts
 from gui.shared.formatters import text_styles
-from gui.shared.formatters.currency import getBWFormatter, getStyle, applyAll
+from gui.shared.formatters.currency import getBWFormatter, applyAll
 from gui.shared.formatters.time_formatters import getTillTimeByResource, getTimeLeftInfo, RentDurationKeys
 from gui.shared.gui_items.loot_box import NewYearCategories
 from gui.shared.gui_items.Tankman import Tankman
-from gui.shared.gui_items.Vehicle import getUserName, getShortUserName
+from gui.shared.gui_items.Vehicle import getUserName, getShortUserName, getShopIconResource
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.gui_items.fitting_item import RentalInfoProvider
@@ -875,6 +877,8 @@ class CurrencyUpdateFormatter(ServiceChannelFormatter):
     _EMITTER_ID_TO_TITLE = {2525: R.strings.messenger.serviceChannelMessages.currencyUpdate.auction(),
      2524: R.strings.messenger.serviceChannelMessages.currencyUpdate.battlepass()}
     _DEFAULT_TITLE = R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction()
+    _FREE_XP = 'freeXp'
+    _CURRENCY_MAP = {'freeXP': _FREE_XP}
 
     def format(self, message, *args):
         data = message.data
@@ -887,15 +891,16 @@ class CurrencyUpdateFormatter(ServiceChannelFormatter):
             formatted = g_settings.msgTemplates.format(xmlKey, ctx={'title': backport.text(self._EMITTER_ID_TO_TITLE.get(emitterID, self._DEFAULT_TITLE)),
              'date': TimeFormatter.getLongDatetimeFormat(transactionTime),
              'currency': self.__getCurrencyString(currencyCode, amountDelta),
-             'amount': getStyle(currencyCode)(getBWFormatter(currencyCode)(abs(amountDelta)))}, data={'icon': currencyCode.title() + 'Icon'})
+             'amount': formatExtendedCurrencyValue(currencyCode, abs(amountDelta))}, data={'icon': currencyCode.title() + 'Icon'})
             return [MessageData(formatted, self._getGuiSettings(message, xmlKey))]
         else:
             return [MessageData(None, None)]
 
     def __ifPlatformCurrency(self, currencyCode):
-        return currencyCode not in Currency.ALL
+        return currencyCode not in Currency.ALL + (self._FREE_XP,)
 
     def __getCurrencyString(self, currencyCode, amountDelta):
+        currencyCode = self._CURRENCY_MAP.get(currencyCode, currencyCode)
         return backport.text(R.strings.messenger.platformCurrencyMsg.currencyUpdate.dyn('debited' if amountDelta < 0 else 'received').dyn(currencyCode)()) if self.__ifPlatformCurrency(currencyCode) else backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.dyn('debited' if amountDelta < 0 else 'received').dyn(currencyCode)())
 
 
@@ -4148,6 +4153,29 @@ class NewNYEventFormatter(ClientSysMessageFormatter):
         if groupID is None:
             groupID = g_settings.msgTemplates.groupID(key)
         return NotificationGuiSettings(self.isNotify(), priorityLevel=priorityLevel, auxData=auxData, groupID=groupID, messageSubtype=SCH_CLIENT_MSG_TYPE.NY_EVENT_BUTTON_MESSAGE)
+
+
+class WinterOfferFormatter(ServiceChannelFormatter):
+    __template = 'WinterOfferMessage'
+
+    def format(self, message, *auxData):
+        if auxData and auxData[0]:
+            params = auxData[0][0]
+            buttonLabel = params.get('buttonLabel', '')
+            vehicleName = params.get('vehicleName', None)
+            rIcon = getShopIconResource(vehicleName, size=STORE_CONSTANTS.ICON_SIZE_SMALL)
+            ctx = {'header': params.get('header', ''),
+             'body': params.get('body', '')}
+            data = {'icon': backport.image(rIcon) if rIcon else ''}
+            if buttonLabel:
+                data.update({'buttonsLayout': [{'action': params.get('action', False),
+                                    'type': 'submit',
+                                    'label': buttonLabel}]})
+            formatted = g_settings.msgTemplates.format(self.__template, ctx, data=data)
+            settings = self._getGuiSettings(message, self.__template, messageSubtype=SCH_CLIENT_MSG_TYPE.WO_NOTIFICATION)
+            return [MessageData(formatted, settings)]
+        else:
+            return [MessageData(None, None)]
 
 
 class CustomizationProgressFormatter(WaitItemsSyncFormatter):

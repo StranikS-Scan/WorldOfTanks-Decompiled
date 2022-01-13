@@ -23,7 +23,8 @@ _TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.LootBoxTokenQuestFormat
  token_quest_subformatters.NewYearCelebrityQuestRewardFormatter(),
  token_quest_subformatters.NewYearCelebrityMarathonRewardFormatter(),
  token_quest_subformatters.NewYearGiftSystemSubProgressRewardFormatter(),
- token_quest_subformatters.NewYearGiftSystemProgressionRewardFormatter())
+ token_quest_subformatters.NewYearGiftSystemProgressionRewardFormatter(),
+ token_quest_subformatters.WOAnnouncementFormatter())
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),
@@ -122,4 +123,5 @@ CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageForma
  SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_ENABLED: _wotPlusFormatters.SimpleFormatter('FreeDirectivesEnabledMessage'),
  SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_DISABLED: _wotPlusFormatters.SimpleFormatter('FreeDirectivesDisabledMessage'),
  SCH_CLIENT_MSG_TYPE.NEW_NY_LOOT_BOXES: _sc.NewNYLootBoxesFormatter(),
+ SCH_CLIENT_MSG_TYPE.WO_NOTIFICATION: _sc.WinterOfferFormatter(),
  SCH_CLIENT_MSG_TYPE.NY_EVENT_BUTTON_MESSAGE: _sc.NewNYEventFormatter()}

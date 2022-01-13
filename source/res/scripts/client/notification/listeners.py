@@ -52,7 +52,7 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, GiftSystemOperationsFactory, NyLootBoxesReceivedDecorator, NySpecialBoxesEntryDecorator, PsaCoinReminderMessageDecorator, NyCelebrityRewardDecorator, NyMessageButtonDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, GiftSystemOperationsFactory, NyLootBoxesReceivedDecorator, NySpecialBoxesEntryDecorator, PsaCoinReminderMessageDecorator, NyCelebrityRewardDecorator, NyMessageButtonDecorator, WinterOfferDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController, ISteamCompletionController, ISeniorityAwardsController
 from skeletons.gui.impl import INotificationWindowController
@@ -220,6 +220,8 @@ class ServiceChannelListener(_NotificationListener):
                 return NyCelebrityRewardDecorator
             if messageSubtype == SCH_CLIENT_MSG_TYPE.NY_EVENT_BUTTON_MESSAGE:
                 return NyMessageButtonDecorator
+            if messageSubtype == SCH_CLIENT_MSG_TYPE.WO_NOTIFICATION:
+                return WinterOfferDecorator
         return MessageDecorator
 
 

@@ -67,7 +67,7 @@ class HeroTank(ClientSelectableCameraVehicle):
         self._hangarSpace.onHeroTankReady += self._updateHeroTank
         self._heroTankCtrl.onUpdated += self._updateHeroTank
         self._heroTankCtrl.onInteractive += self._updateInteractive
-        self._heroTankCtrl.onHeroTankChanged += self._drawTankSwitchedEffect
+        self._heroTankCtrl.onHeroTankChanged += self._onHeroTankChanged
         self._heroTankCtrl.onHeroTankBought += self._drawTankBoughtEffect
         g_currentPreviewVehicle.onSelected += self._updateHeroTank
 
@@ -79,7 +79,7 @@ class HeroTank(ClientSelectableCameraVehicle):
         self._hangarSpace.onHeroTankReady -= self._updateHeroTank
         self._heroTankCtrl.onUpdated -= self._updateHeroTank
         self._heroTankCtrl.onInteractive -= self._updateInteractive
-        self._heroTankCtrl.onHeroTankChanged -= self._drawTankSwitchedEffect
+        self._heroTankCtrl.onHeroTankChanged -= self._onHeroTankChanged
         self._heroTankCtrl.onHeroTankBought -= self._drawTankBoughtEffect
         g_currentPreviewVehicle.onSelected -= self._updateHeroTank
         for effect in self.__effects.values():
@@ -123,12 +123,15 @@ class HeroTank(ClientSelectableCameraVehicle):
         if g_currentPreviewVehicle.item is not None:
             if g_currentPreviewVehicle.item.intCD == self.__heroTankCD:
                 return
-        self.__heroTankCD = self._heroTankCtrl.getRandomTankCD()
+        self._heroTankCtrl.getRandomTankCD()
+        return
+
+    def _onHeroTankChanged(self):
+        self.__heroTankCD = self._heroTankCtrl.getCurrentTankCD()
         if self.__heroTankCD:
             self.recreateVehicle()
         else:
             self.removeModelFromScene()
-        return
 
     def _updateInteractive(self, interactive):
         if self.enabled != interactive:

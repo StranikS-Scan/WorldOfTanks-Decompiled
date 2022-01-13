@@ -67,6 +67,7 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_BUYBTN_LABEL_OBTAIN = '#vehicle_preview:buyingPanel/buyBtn/label/obtain'
     BUYINGPANEL_BUYBTN_LABEL_SHOWADVENTCALENDAR = '#vehicle_preview:buyingPanel/buyBtn/label/showAdventCalendar'
     BUYINGPANEL_BUYBTN_LABEL_OFFSPRING = '#vehicle_preview:buyingPanel/buyBtn/label/offspring'
+    BUYINGPANEL_BUYBTN_LABEL_AUCTION = '#vehicle_preview:buyingPanel/buyBtn/label/auction'
     BUYINGPANEL_NOTRESEARCHEDVEHICLEWARNING = '#vehicle_preview:buyingPanel/notResearchedVehicleWarning'
     BUYINGPANEL_COLLECTIBLE_NOTRESEARCHEDVEHICLESWARNING = '#vehicle_preview:buyingPanel/collectible/notResearchedVehiclesWarning'
     BUYINGPANEL_BUYBTN_LABEL_TOCALENDAR = '#vehicle_preview:buyingPanel/buyBtn/label/toCalendar'

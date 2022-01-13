@@ -36,6 +36,8 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IRankedBattlesController
 from helpers import dependency
 from helpers import time_utils
+from wo2022 import wo_helpers
+from wo2022.wo_constants import WO_PENDING_OFFER_QUEST_PREFIX, WO_EVENT_DISABLED
 _logger = logging.getLogger(__name__)
 
 class ITokenQuestsSubFormatter(object):
@@ -971,3 +973,39 @@ class NewYearGiftSystemProgressionRewardFormatter(AsyncTokenQuestsSubFormatter):
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return questID.startswith(NY_GIFT_SYSTEM_PROGRESSION_PREFIX)
+
+
+class WOAnnouncementFormatter(AsyncTokenQuestsSubFormatter):
+    __MESSAGE_TEMPLATE = 'WOAnnouncementSysMessage'
+    _eventsCache = dependency.descriptor(IEventsCache)
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messages = [MessageData(None, None)]
+        tokens = self._eventsCache.questsProgress.getTokensData()
+        if isSynced and message.data and WO_EVENT_DISABLED not in tokens:
+            data = message.data
+            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', tuple()))
+            quests = self._eventsCache.getHiddenQuests()
+            for questID in completedQuestIDs:
+                quest = quests.get(questID)
+                if quest is None:
+                    continue
+                timeLeft = quest.getFinishTimeLeft()
+                if timeLeft <= 0:
+                    continue
+                header = backport.text(R.strings.wo2022.notifications.pendingOffer.header(), time=wo_helpers.getTimeLeftString(timeLeft), eventName=wo_helpers.getEventName())
+                description = backport.text(R.strings.wo2022.notifications.pendingOffer.description())
+                formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={'header': header,
+                 'description': description})
+                settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+                messages = [MessageData(formatted, settings)]
+
+        callback(messages)
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return questID.startswith(WO_PENDING_OFFER_QUEST_PREFIX)

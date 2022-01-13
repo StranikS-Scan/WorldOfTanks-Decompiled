@@ -1224,4 +1224,9 @@ def _getDifferVehiclePartNames(newVehDescr, oldVehDescr):
         if getattr(newVehDescr, partName).compactDescr != getattr(oldVehDescr, partName).compactDescr:
             differPartNames.append(partName)
 
+    if 'turret' in differPartNames:
+        if 'gun' not in differPartNames:
+            differPartNames.append('gun')
+    elif 'gun' in differPartNames:
+        differPartNames.append('turret')
     return differPartNames

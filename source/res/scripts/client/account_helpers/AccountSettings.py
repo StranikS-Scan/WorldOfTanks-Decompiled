@@ -201,6 +201,7 @@ NY_CELEBRITY_COMPLETED_QUESTS_ANIMATION_SHOWN_MASK = 'NYCelebrityCompletedQuests
 NY_OLD_COLLECTIONS_BY_YEAR_VISITED = 'NYOldCollectionsByYearVisited'
 NY_OLD_REWARDS_BY_YEAR_VISITED = 'NYOldRewardsByYearVisited'
 NY_LAST_SEEN_LEVEL_INFO = 'NYLastSeenLevelInfo'
+VIEWED_WO_NOTIFICATIONS = 'WONotificationsWatched'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
@@ -925,7 +926,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                      PROGRESSIVE_REWARD_VISITED: False,
                      VIEWED_OFFERS: set(),
                      OFFERS_DISABLED_MSG_SEEN: False,
-                     BLUEPRINTS_CONVERT_SALE_STARTED_SEEN: False},
+                     BLUEPRINTS_CONVERT_SALE_STARTED_SEEN: False,
+                     VIEWED_WO_NOTIFICATIONS: []},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,

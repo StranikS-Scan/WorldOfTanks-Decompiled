@@ -426,7 +426,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         itemPrices = ItemPrice(price=price, defPrice=self.__oldPrice)
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None
         if specialData is not None and specialData.buyButtonLabel:
-            buttonLabel = backport.text(specialData.buyButtonLabel)
+            buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.dyn(specialData.buyButtonLabel)())
         elif self.__isReferralWindow():
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.obtain())
         elif self._marathonEvent is not None:
@@ -527,7 +527,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
                 tooltip = _buildBuyButtonTooltip('parentVehicleIsLocked')
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None
         if specialData is not None and specialData.buyButtonLabel:
-            buyLabel = backport.text(specialData.buyButtonLabel)
+            buyLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.dyn(specialData.buyButtonLabel)())
         else:
             buyLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.research())
         return _ButtonState(enabled=isAvailableToUnlock, itemPrice=getItemUnlockPricesVO(unlockProps), label=buyLabel, icon=buttonIcon, iconAlign=buttonIconAlign, isAction=unlockProps.discount > 0, actionTooltip=None, tooltip=tooltip, title=self.__title, isMoneyEnough=isXpEnough, isUnlock=True, isPrevItemsUnlock=isNext2Unlock, customOffer=None, isShowSpecial=False)
@@ -677,7 +677,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
     def __getUnlockedVehicleBtnLabel(self, priceType):
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None
         if specialData is not None and specialData.buyButtonLabel:
-            buttonLabel = backport.text(specialData.buyButtonLabel)
+            buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.dyn(specialData.buyButtonLabel)())
         elif priceType == ActualPrice.RESTORE_PRICE:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.restore())
         elif priceType == ActualPrice.RENT_PRICE:

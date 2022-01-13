@@ -1145,6 +1145,51 @@ class NyLootBoxesReceivedDecorator(NySpecialBoxesLockDecorator, GiftEventHubWatc
             self._updateButtons()
 
 
+class WinterOfferDecorator(MessageDecorator, IGlobalListener):
+
+    def __init__(self, entityID, entity=None, settings=None, model=None):
+        super(WinterOfferDecorator, self).__init__(entityID, entity, settings, model)
+        self.startGlobalListening()
+
+    def clear(self):
+        self.stopGlobalListening()
+        super(WinterOfferDecorator, self).clear()
+
+    def onEnqueued(self, queueType, *args):
+        self._updateButtons()
+
+    def onDequeued(self, queueType, *args):
+        self._updateButtons()
+
+    def onUnitFlagsChanged(self, flags, timeLeft):
+        self._updateButtons()
+
+    def _make(self, formatted=None, settings=None):
+        self._updateEntityButtons()
+        super(WinterOfferDecorator, self)._make(formatted, settings)
+
+    def _updateEntityButtons(self):
+        if self._entity is None:
+            return
+        else:
+            buttonsLayout = self._entity.get('buttonsLayout')
+            if not buttonsLayout:
+                return
+            buttonsStates = self._entity.get('buttonsStates')
+            if self.prbEntity is not None and self.prbEntity.isInQueue():
+                state = NOTIFICATION_BUTTON_STATE.VISIBLE
+            else:
+                state = NOTIFICATION_BUTTON_STATE.DEFAULT
+            buttonsStates['submit'] = state
+            return
+
+    def _updateButtons(self):
+        self._updateEntityButtons()
+        if self._model is not None:
+            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+        return
+
+
 class NySpecialBoxesEntryDecorator(NySpecialBoxesLockDecorator):
     __TEMPLATE = 'NYSpecialLootBoxesMessage'
 

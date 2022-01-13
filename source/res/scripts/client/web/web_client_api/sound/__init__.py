@@ -31,7 +31,8 @@ class SoundWebApi(object):
      'clans_battles_global_map_enter': 'clans_battles_global_map_exit',
      'clans_winner_reward_enter': 'clans_winner_reward_exit',
      'gui_cq_progress_bar_start': 'gui_cq_progress_bar_stop',
-     'gui_cq_progression_start': 'gui_cq_progression_stop'}
+     'gui_cq_progression_start': 'gui_cq_progression_stop',
+     'ev_winter_offer_enter': 'ev_winter_offer_exit'}
 
     def __init__(self):
         super(SoundWebApi, self).__init__()
@@ -60,7 +61,8 @@ class SoundStateWebApi(object):
     _ON_EXIT_STATES = {'STATE_overlay_hangar_general': 'STATE_overlay_hangar_general_off',
      'STATE_video_overlay': 'STATE_video_overlay_off',
      'STATE_clans_craft': 'STATE_clans_craft_progress_off',
-     'STATE_gamemode_progress_page': 'STATE_gamemode_progress_page_off'}
+     'STATE_gamemode_progress_page': 'STATE_gamemode_progress_page_off',
+     'STATE_ext_ev_winter_offer': 'STATE_ext_ev_winter_offer_off'}
 
     def __init__(self):
         super(SoundStateWebApi, self).__init__()

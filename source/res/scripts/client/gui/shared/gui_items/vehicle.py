@@ -1904,6 +1904,12 @@ def getIconShopPath(vehicleName, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
     return func_utils.makeFlashPath(path) if path is not None else '../maps/shop/vehicles/%s/empty_tank.png' % size
 
 
+def getShopIconResource(vehicleName, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+    rName = getNationLessName(vehicleName=vehicleName)
+    image = R.images.gui.maps.shop.vehicles.dyn('c_{}'.format(size)).dyn(rName)
+    return image() if image.isValid() else None
+
+
 def getIconResource(vehicleName):
     rName = getIconResourceName(vehicleName=vehicleName)
     image = R.images.gui.maps.icons.vehicle.dyn(rName)

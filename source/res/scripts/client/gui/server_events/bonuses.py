@@ -14,8 +14,10 @@ from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PRE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
+from external_strings_utils import strtobool
 from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader.decorators import sf_lobby
 from gui.game_control.links import URLMacros
 from gui.gift_system.constants import NY_STAMP_CODE
@@ -73,6 +75,8 @@ _CUSTOMIZATION_BONUSES = frozenset(['camouflage',
  'modification',
  'projection_decal',
  'personal_number'])
+_META_BONUS_BROWSER_VIEW_TYPE = {'internal': VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB,
+ 'overlay': VIEW_ALIAS.WEB_VIEW_TRANSPARENT}
 _logger = logging.getLogger(__name__)
 
 def _getAchievement(block, record, value):
@@ -374,6 +378,7 @@ class MetaBonus(SimpleBonus):
 
     @process
     def __handleBrowseAction(self, params):
+        from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getClientControlledCloseCtx
         from gui.shared.event_dispatcher import showBrowserOverlayView
         url = params.get('url')
         if url is None:
@@ -385,12 +390,16 @@ class MetaBonus(SimpleBonus):
             if target is None:
                 _logger.warning('Browse target is empty')
                 return
-            if target == 'internal':
+            if target in _META_BONUS_BROWSER_VIEW_TYPE:
+                viewType = _META_BONUS_BROWSER_VIEW_TYPE[target]
+                kwargs = {}
+                if strtobool(params.get('isClientCloseControl', 'False')):
+                    kwargs.update(getClientControlledCloseCtx())
                 if self.__isLobbyLoaded():
-                    showBrowserOverlayView(url)
+                    showBrowserOverlayView(url, viewType, **kwargs)
                 else:
                     self.__app.loaderManager.onViewLoaded += self.__onViewLoaded
-                    self.__onLobbyLoadedCallbacks.append(partial(showBrowserOverlayView, url))
+                    self.__onLobbyLoadedCallbacks.append(partial(showBrowserOverlayView, url, viewType, **kwargs))
             elif target == 'external':
                 BigWorld.wg_openWebBrowser(url)
             else:

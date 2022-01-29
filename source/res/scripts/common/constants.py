@@ -817,6 +817,7 @@ class Configs(enum.Enum):
     EPIC_CONFIG = 'epic_config'
     MAPBOX_CONFIG = 'mapbox_config'
     GIFTS_CONFIG = 'gifts_config'
+    LUNAR_NY_EVENT_CONFIG = 'lunar_ny_event_config'
 
 
 class RESTRICTION_TYPE:
@@ -1588,6 +1589,9 @@ class REQUEST_COOLDOWN:
     POST_PROGRESSION_BASE = 1.0
     POST_PROGRESSION_CELL = 0.5
     SYNC_GIFTS = 0.5
+    GIFTS_HISTORY_PAGE = 1.0
+    GIFTS_HISTORY_LOAD = 1.0
+    LUNAR_NEW_YEAR = 0.4
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False

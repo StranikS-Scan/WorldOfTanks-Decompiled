@@ -139,3 +139,7 @@ def getBuyRenewableSubscriptionUrl():
 def getClientControlledCloseCtx():
     return {'browserParams': makeBrowserParams(isCloseBtnVisible=True),
      'forcedSkipEscape': True}
+
+
+def getEnvelopesUrl():
+    return _getUrl('envelopes')

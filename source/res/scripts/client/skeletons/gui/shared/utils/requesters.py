@@ -7,6 +7,7 @@ if typing.TYPE_CHECKING:
     from gui.veh_post_progression.models.ext_money import ExtendedMoney
     from post_progression_common import VehicleState
     from items.vehicles import VehicleType
+    from gui.gift_system.wrappers import GiftStorageData
 
 class IRequester(object):
 
@@ -1089,4 +1090,19 @@ class IGiftSystemRequester(IRequester):
 
     @property
     def isHistoryReady(self):
+        raise NotImplementedError
+
+    def getGiftFromStorage(self, giftTypeID, offset=0, limit=0):
+        raise NotImplementedError
+
+    def getGiftStorageGroupedCount(self, giftTypeID):
+        raise NotImplementedError
+
+    def getGiftStorageDataCount(self, giftTypeID):
+        raise NotImplementedError
+
+    def findGiftBySenderID(self, giftTypeID, receiverID):
+        raise NotImplementedError
+
+    def sortGiftStorage(self, giftTypeID):
         raise NotImplementedError

@@ -34,10 +34,12 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
 
     def onMessageHidden(self, byTimeout, wasNotified, typeID, entityID):
         if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
+            notification = self._model.getNotification(typeID, self._getNotificationID(entityID))
             if not byTimeout and wasNotified:
-                notification = self._model.getNotification(typeID, self._getNotificationID(entityID))
                 if notification and notification.decrementCounterOnHidden():
                     self._model.decrementNotifiedMessagesCount(*notification.getCounterInfo())
+            if notification.onlyPopUp and wasNotified:
+                notification.onHidden()
 
     def setListClear(self):
         self.__noDisplayingPopups = True

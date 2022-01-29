@@ -22,6 +22,7 @@ class RES_COMMON(object):
     MAPS_ICONS_MAPBOX_BG = '../maps/icons/mapbox/bg.png'
     MAPS_ICONS_MAPSTRAINING_BG = '../maps/icons/mapsTraining/bg.png'
     MAPS_ICONS_MAPSTRAINING_MINIMAP_BG = '../maps/icons/mapsTraining/minimap/bg.png'
+    MAPS_ICONS_MARATHON_REWARDWINDOW_BG = '../maps/icons/marathon/rewardWindow/bg.png'
     MAPS_ICONS_NEWYEAR_ATMOSPHERE_INTRO_BG = '../maps/icons/newYear/atmosphere_intro/bg.png'
     MAPS_ICONS_NEWYEAR_COLLECTIONS_REWARD_BG = '../maps/icons/newYear/collections_reward/bg.png'
     MAPS_ICONS_NEWYEAR_CRAFT_MACHINE_BG = '../maps/icons/newYear/craft_machine/bg.png'

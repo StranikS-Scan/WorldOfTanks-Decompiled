@@ -3,13 +3,16 @@
 import typing
 import BigWorld
 from adisp import async, process
+from dossiers2.ui.achievements import BADGES_BLOCK
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.gui_items.loot_box import NewYearLootBoxes, EventLootBoxes
+from gui.server_events.bonuses import getLunarMergedBonusesFromDicts
+from gui.shared.gui_items.dossier import getAchievementFactory
+from gui.shared.gui_items.loot_box import NewYearLootBoxes, EventLootBoxes, ALL_LUNAR_NY_LOOT_BOX_TYPES
 from gui.shared.notifications import NotificationGroup
 from helpers import dependency
 from messenger import g_settings
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, ServiceChannelFormatter, BattlePassQuestAchievesFormatter
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, ServiceChannelFormatter, BattlePassQuestAchievesFormatter, QuestAchievesFormatter
 from messenger.formatters.service_channel_helpers import MessageData, getRewardsForBoxes
 from skeletons.gui.shared import IItemsCache
 
@@ -153,3 +156,67 @@ class NYGiftSystemSurpriseFormatter(AsyncAutoLootBoxSubFormatter):
     @classmethod
     def _isBoxOfThisGroup(cls, boxID):
         return cls._isBoxOfRequiredTypes(boxID, cls.__REQUIERED_BOX_TYPES)
+
+
+class LunarNYEnvelopeAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):
+    __MESSAGE_TEMPLATE = 'LunarBoxesAutoOpenMessage'
+
+    def __init__(self):
+        super(LunarNYEnvelopeAutoOpenFormatter, self).__init__()
+        self._achievesFormatter = QuestAchievesFormatter()
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        if isSynced:
+            openedBoxesIDs = self.getBoxesOfThisGroup(message.data.keys())
+            rewards = getRewardsForBoxes(message, openedBoxesIDs)
+            if 'charms' in rewards:
+                rewards.pop('charms')
+            if 'customizationSum' in rewards:
+                rewards.pop('customizationSum')
+            fmt = self.formatAchieves(rewards, self._achievesFormatter)
+            formattedRewards = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={'rewards': fmt})
+            settingsRewards = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+            settingsRewards.showAt = BigWorld.time()
+            callback([MessageData(formattedRewards, settingsRewards)])
+        else:
+            callback([MessageData(None, None)])
+        return
+
+    @classmethod
+    def formatAchieves(cls, rewards, formatter):
+        result = []
+        items = getLunarMergedBonusesFromDicts((rewards,))
+        formatedItems = formatter.formatQuestAchieves(items, False)
+        if formatedItems:
+            result.append(formatedItems)
+        achievementsNames = cls.__extractAchievements(items)
+        if achievementsNames:
+            result.append(cls.__makeAchieve('dossiersAccruedInvoiceReceived', dossiers=', '.join(achievementsNames)))
+        return '<br/>'.join(result)
+
+    @classmethod
+    def _isBoxOfThisGroup(cls, boxID):
+        return cls._isBoxOfRequiredTypes(boxID, ALL_LUNAR_NY_LOOT_BOX_TYPES)
+
+    @classmethod
+    def __makeAchieve(cls, key, **kwargs):
+        return g_settings.htmlTemplates.format(key, kwargs)
+
+    @staticmethod
+    def __extractAchievements(data):
+        result = set()
+        for block in data.get('dossier', {}).values():
+            if isinstance(block, dict):
+                for record in block.keys():
+                    if record[0] == BADGES_BLOCK:
+                        continue
+                    factory = getAchievementFactory(record)
+                    if factory is not None:
+                        a = factory.create()
+                        if a is not None:
+                            result.add(a.getUserName())
+
+        return result

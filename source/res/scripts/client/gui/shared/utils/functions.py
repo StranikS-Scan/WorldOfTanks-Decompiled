@@ -268,3 +268,15 @@ def getImageResourceFromPath(path):
         resource = resource.dyn(pathItem)
 
     return resource
+
+
+def getStringResourceFromPath(path):
+    path = path[1:]
+    path = path.replace(':', '/')
+    resource = R.strings
+    for pathItem in path.split('/'):
+        resource = resource.dyn(pathItem)
+        if not resource:
+            return R.invalid
+
+    return resource

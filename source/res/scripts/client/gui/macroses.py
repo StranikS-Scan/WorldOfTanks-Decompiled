@@ -113,12 +113,11 @@ def getMarathonStylePackage(args=None, marathonCtrl=None):
     result = ''
     marathon = marathonCtrl.getPrimaryMarathon()
     if marathon is not None:
-        currentDiscount = marathon.getMarathonPostProgress()
         packageTemplate = marathon.packageStyleTemplate
         state = marathon.getState()
         if state == MarathonState.FINISHED:
             postfix = marathon.finishedPostfix
-        result = packageTemplate.format(currentDiscount, postfix)
+        result = packageTemplate.format(postfix)
     return result
 
 

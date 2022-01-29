@@ -33,7 +33,7 @@
       <invisibilityBonus>	0.05	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	8.945	</repairCost>
+  <repairCost>	10	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -87,6 +87,13 @@
       <undamaged>	vehicles/chinese/Ch45_WZ_114/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/chinese/Ch45_WZ_114/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/chinese/Ch45_WZ_114/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Ch45_WZ_114_3DSt_CNG_21>
+          <undamaged>	vehicles/chinese/Ch45_WZ_114/_skins/Ch45_WZ_114_3DSt_CNG_21/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/chinese/Ch45_WZ_114/_skins/Ch45_WZ_114_3DSt_CNG_21/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/chinese/Ch45_WZ_114/_skins/Ch45_WZ_114_3DSt_CNG_21/crash/lod0/Hull.model	</exploded>
+        </Ch45_WZ_114_3DSt_CNG_21>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -1090,6 +1097,19 @@
         <clipAngle>	0.000000	</clipAngle>
         <anchorShift>	0.315235	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15078	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Ch45_WZ_114_3DSt_CNG_21	</compatibleModels>
+        <position>	-0.492235 1.40527 2.83923	</position>
+        <rotation>	0.420987 -0.00174946 3.14158	</rotation>
+        <scale>	0.396175 0.0669211 0.396175	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorShift>	0.05	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	113.204 116.528	</density>
@@ -1125,6 +1145,13 @@
         <undamaged>	vehicles/chinese/Ch45_WZ_114/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch45_WZ_114/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/chinese/Ch45_WZ_114/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Ch45_WZ_114_3DSt_CNG_21>
+            <undamaged>	vehicles/chinese/Ch45_WZ_114/_skins/Ch45_WZ_114_3DSt_CNG_21/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch45_WZ_114/_skins/Ch45_WZ_114_3DSt_CNG_21/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch45_WZ_114/_skins/Ch45_WZ_114_3DSt_CNG_21/crash/lod0/Chassis.model	</exploded>
+          </Ch45_WZ_114_3DSt_CNG_21>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1822,11 +1849,20 @@
             <undamaged>	vehicles/chinese/Ch45_WZ_114/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch45_WZ_114/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/chinese/Ch45_WZ_114/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <Ch45_WZ_114_3DSt_CNG_21>
+                <undamaged>	vehicles/chinese/Ch45_WZ_114/_skins/Ch45_WZ_114_3DSt_CNG_21/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/chinese/Ch45_WZ_114/_skins/Ch45_WZ_114_3DSt_CNG_21/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/chinese/Ch45_WZ_114/_skins/Ch45_WZ_114_3DSt_CNG_21/crash/lod0/Gun_02.model	</exploded>
+              </Ch45_WZ_114_3DSt_CNG_21>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/chinese/Ch45_WZ_114/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch45_WZ_114/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <shotOffset>	0.000000 0.000000 0.000000	</shotOffset>
           <customization>
@@ -1867,6 +1903,18 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.001837 0.00396 1.93019	</rayStart>
+              <rayEnd>	0.101931 0.0104098 1.93004	</rayEnd>
+              <rayUp>	0.123707 0.000000 0.000000	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <size>	0.670375	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <compatibleModels>	Ch45_WZ_114_3DSt_CNG_21	</compatibleModels>
+            </slot>
           </customizationSlots>
           <camouflage>
             <density>	133.09 141.305	</density>
@@ -1878,6 +1926,13 @@
         <undamaged>	vehicles/chinese/Ch45_WZ_114/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch45_WZ_114/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/chinese/Ch45_WZ_114/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Ch45_WZ_114_3DSt_CNG_21>
+            <undamaged>	vehicles/chinese/Ch45_WZ_114/_skins/Ch45_WZ_114_3DSt_CNG_21/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch45_WZ_114/_skins/Ch45_WZ_114_3DSt_CNG_21/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch45_WZ_114/_skins/Ch45_WZ_114_3DSt_CNG_21/crash/lod0/Turret_01.model	</exploded>
+          </Ch45_WZ_114_3DSt_CNG_21>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/chinese/Ch45_WZ_114/collision/Turret_01.model	</collisionModelServer>
@@ -2558,6 +2613,65 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.579909	</clipAngle>
           <anchorShift>	1.2357	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35050	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch45_WZ_114_3DSt_CNG_21	</compatibleModels>
+          <position>	-0.952836 2.17947 -0.433564	</position>
+          <rotation>	1.83037 1.51932 -0.00574279	</rotation>
+          <scale>	0.695907 0.280287 0.695904	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.571913	</clipAngle>
+          <anchorShift>	0.12	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35051	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch45_WZ_114_3DSt_CNG_21	</compatibleModels>
+          <position>	0.952864 2.17945 -0.433564	</position>
+          <rotation>	1.83036 -1.51931 -0.00576067	</rotation>
+          <scale>	0.695907 0.280287 0.695904	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.571913	</clipAngle>
+          <anchorShift>	0.12	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35052	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch45_WZ_114_3DSt_CNG_21	</compatibleModels>
+          <position>	0.00400056 2.37232 1.10333	</position>
+          <rotation>	0.277545 -0.00174758 3.14158	</rotation>
+          <scale>	0.510996 0.190854 0.510991	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.21763	</clipAngle>
+          <anchorShift>	0.16	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35053	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch45_WZ_114_3DSt_CNG_21	</compatibleModels>
+          <position>	0.35036 2.52248 -1.16168	</position>
+          <rotation>	3.14159 0.000000 -0.000008	</rotation>
+          <scale>	0.541855 0.0915289 0.541852	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.13066	</clipAngle>
+          <anchorShift>	0.07	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	sequence	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.000004 -0.396911 -1.31357	</position>
+          <rotation>	0.000000 0.000000 0.000000	</rotation>
+          <attachNode>	HP_gunJoint	</attachNode>
         </slot>
       </customizationSlots>
       <camouflage>

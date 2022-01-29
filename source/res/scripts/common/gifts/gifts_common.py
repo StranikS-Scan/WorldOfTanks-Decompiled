@@ -4,6 +4,8 @@ from constants import IS_DEVELOPMENT
 from soft_exception import SoftException
 UNKNOWN_SENDER_ID = 0
 UNPROCESSED_GIFT_DB_ID = -1
+GIFT_HISTORY_PAGE_LEN = 50
+LUNAR_NY_PROGRESSION_QUEST_TOKEN = 'LunarNYEnvelopesProgression:sendEnvelopes'
 
 class ClientReqStrategy(object):
     AUTO = 'auto'
@@ -15,7 +17,8 @@ class GiftEventID(object):
     UNKNOWN = 0
     DEV_TEST = 1
     NY_HOLIDAYS = 2
-    ALL = (UNKNOWN, NY_HOLIDAYS) + ((DEV_TEST,) if IS_DEVELOPMENT else ())
+    LUNAR_NY = 3
+    ALL = (UNKNOWN, LUNAR_NY, NY_HOLIDAYS) + ((DEV_TEST,) if IS_DEVELOPMENT else ())
 
 
 class GiftEventState(object):
@@ -30,8 +33,18 @@ class GiftStatus(object):
     NEW = 1
     AVAILABLE = 2
     OPENED = 3
+    DRAW = 4
     ACTIVE = (NEW, AVAILABLE)
-    ALL = (NEW, AVAILABLE, OPENED)
+    ALL = (NEW,
+     AVAILABLE,
+     OPENED,
+     DRAW)
+
+
+class GiftMetaType(object):
+    GRANT = 1
+    SECRET_SANTA = 3
+    RETURN_SECRET_SANTA = 4
 
 
 class Gift(object):
@@ -51,6 +64,10 @@ class Gift(object):
     @property
     def giftItemID(self):
         return self._giftItemID
+
+    @property
+    def senderID(self):
+        return self._senderID
 
     @property
     def status(self):

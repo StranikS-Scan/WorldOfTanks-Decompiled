@@ -3,6 +3,7 @@
 import logging
 import time
 import typing
+from gui.gift_system.constants import RANDOM_RECEIVER_ID
 from gui.gift_system.wrappers import GiftsWebState, SendGiftResponse
 from gui.wgcg.base.contexts import CommonWebRequestCtx
 from gui.wgcg.settings import WebRequestDataType
@@ -18,7 +19,8 @@ def _packEventWebState(eventData):
              'expireTime': eventData['expiration_time'],
              'expireDelta': eventData['expiration_delta'],
              'executionTime': eventData['execution_time'],
-             'state': eventData['state']}
+             'state': eventData['state'],
+             'common': eventData.get('common', {})}
             result = makeTupleByDict(GiftsWebState, result)
         except (KeyError, TypeError):
             _logger.exception('Can not _packEventWebState because of invalid eventData')
@@ -98,3 +100,12 @@ class GiftSystemSendGiftCtx(CommonWebRequestCtx):
          'receiverID': self.__receiverID,
          'entitlementCode': self.__entitlementCode,
          'executionTime': int(time.time())}
+
+
+class GiftSystemSendGiftToRandomUserCtx(GiftSystemSendGiftCtx):
+
+    def __init__(self, entitlementCode, metaInfo=None, waitingID=''):
+        super(GiftSystemSendGiftToRandomUserCtx, self).__init__(entitlementCode, RANDOM_RECEIVER_ID, metaInfo, waitingID)
+
+    def getRequestType(self):
+        return WebRequestDataType.GIFT_SYSTEM_SECRET_SANTA_POST

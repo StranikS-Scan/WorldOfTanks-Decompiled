@@ -10067,6 +10067,41 @@
         </projection_decal>
       </itemFilters>
     </style>
+    <style>
+      <id>	592	</id>
+      <texture>	gui/maps/vehicles/styles/lunar_marathon_2022.png	</texture>
+      <description>	#vehicle_customization:special_style/lunar_marathon_2022_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/lunar_marathon_2022_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/lunar_marathon_2022	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	384	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	675	</id>
+              <doubleSided>	0	</doubleSided>
+              <tags>	formfactor_rect1x2 mimic front	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
@@ -12435,6 +12470,62 @@
             <item>
               <id>	844	</id>
               <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	585	</id>
+      <texture>	gui/maps/vehicles/styles/cerberus.png	</texture>
+      <userString>	#vehicle_customization:special_style/cerberus	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/cerberus_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	379	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	234	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	599	</id>
+              <appliedTo>	13104	</appliedTo>
             </item>
           </decals>
         </outfit>
@@ -15657,6 +15748,60 @@
               <palette>	0	</palette>
             </item>
           </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch45_WZ_114	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	594	</id>
+      <texture>	gui/maps/vehicles/styles/Ch45_WZ_114_3DSt_CNG_21.png	</texture>
+      <modelsSet>	Ch45_WZ_114_3DSt_CNG_21	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/Ch45_WZ_114_3DSt_CNG_21	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Ch45_WZ_114_3DSt_CNG_21_desc/long	</longDescriptionSpecial>
+      <tags>	styleProgression progression_required progression_rewind_enabled	</tags>
+      <styleProgressions>
+        <stage>
+          <materials>	tank_guns_skinned	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_guns_skinned tank_mat_tiger_skinned firecrackers_mat_skinned	</materials>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <sequences>
+            <item>
+              <id>	31	</id>
+              <slotId>	38000	</slotId>
+            </item>
+          </sequences>
         </outfit>
       </outfits>
       <itemFilters>

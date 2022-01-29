@@ -415,6 +415,8 @@ class HangarCameraManager(object):
                 _logger.warning('incorrect values - camera MAX pitch < camera MIN pitch, use min distance as max')
                 maxDist = minDist
             self.__camConstraints[0] = (minDist, maxDist)
+        else:
+            self.__camConstraints[0] = cfg['cam_pitch_constr']
 
     def __updateCameraLimits(self):
         self.__updateCameraDistanceLimits()

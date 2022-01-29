@@ -84,14 +84,15 @@ class PrbListItem(object):
 
 
 class AutoInviteItem(object):
-    __slots__ = ('prbID', 'peripheryID', 'description', 'startTime', 'isValid', 'prbType', 'addInfo')
+    __slots__ = ('prbID', 'peripheryID', 'description', 'startTime', 'isValid', 'prbType', 'addInfo', 'arenaTypeID')
 
-    def __init__(self, prbID, type=PREBATTLE_TYPE.CLAN, peripheryID=0, description=None, startTime=0, isValid=True, addInfo=None):
+    def __init__(self, prbID, type=PREBATTLE_TYPE.CLAN, peripheryID=0, description=None, startTime=0, arenaTypeID=0, isValid=True, addInfo=None):
         super(AutoInviteItem, self).__init__()
         self.prbID = prbID
         self.peripheryID = peripheryID
         self.prbType = type
         self.addInfo = addInfo
+        self.arenaTypeID = arenaTypeID
         if description:
             self.description = description
         else:

@@ -436,6 +436,7 @@ class _ItemUIDataPacker(_BaseUIDataPacker):
             currentProgression = item.getLatestOpenedProgressionLevel(g_currentVehicle.item)
             model.setTypeId(item.itemTypeID)
             model.setProgressionLevel(desc.progressionLevel)
+            model.setIsProgressionRewindEnabled(item.isProgressionRewindEnabled)
             model.price.assign(item.getUpgradePrice(currentProgression, desc.progressionLevel))
             model.setIcon(item.iconUrl)
         else:

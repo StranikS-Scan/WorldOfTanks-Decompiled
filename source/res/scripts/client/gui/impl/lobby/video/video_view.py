@@ -8,6 +8,7 @@ from gui.impl.gen.view_models.views.lobby.video.video_view_model import VideoVie
 from gui.impl.lobby.video.video_sound_manager import DummySoundManager
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.Scaleform.Waiting import Waiting
 from gui.sounds.filters import switchVideoOverlaySoundFilter
 from helpers import getClientLanguage
@@ -67,7 +68,7 @@ _SUBTITLE_TO_LOCALES_MAP = {_SubtitlesLanguages.CS: {'cs'},
 _LOCALE_TO_SUBTITLE_MAP = {loc:subID for subID, locales in _SUBTITLE_TO_LOCALES_MAP.iteritems() for loc in locales}
 
 class VideoView(ViewImpl):
-    __slots__ = ('__isAutoClose', '__soundControl', '__onVideoStartedHandle', '__onVideoStoppedHandle', '__onVideoClosedHandle')
+    __slots__ = ('__onVideoStartedHandle', '__onVideoStoppedHandle', '__onVideoClosedHandle', '__isAutoClose', '__soundControl', '__videoResID')
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.video.video_view.VideoView())
@@ -80,17 +81,18 @@ class VideoView(ViewImpl):
         self.__onVideoClosedHandle = kwargs.get('onVideoClosed')
         self.__isAutoClose = kwargs.get('isAutoClose')
         self.__soundControl = kwargs.get('soundControl') or DummySoundManager()
+        self.__videoResID = kwargs.get('videoResID')
 
     @property
     def viewModel(self):
         return super(VideoView, self).getViewModel()
 
-    def _onLoading(self, videoSource, *args, **kwargs):
+    def _onLoading(self, *args, **kwargs):
         super(VideoView, self)._initialize(*args, **kwargs)
-        if videoSource is None:
-            _logger.error('__videoSource is not specified!')
+        if self.__videoResID is None:
+            _logger.error('__videoResID is not specified!')
         else:
-            self.viewModel.setVideoSource(videoSource)
+            self.viewModel.setVideoSource(self.__videoResID)
             language = getClientLanguage()
             self.viewModel.setSubtitleTrack(_LOCALE_TO_SUBTITLE_MAP.get(language, 0))
             self.viewModel.setIsWindowAccessible(Windowing.isWindowAccessible())
@@ -152,4 +154,12 @@ class VideoViewWindow(LobbyWindow):
 
     def __init__(self, *args, **kwargs):
         super(VideoViewWindow, self).__init__(content=VideoView(*args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.OVERLAY, decorator=None)
+        return
+
+
+class LunarNYVideoViewWindow(LobbyNotificationWindow):
+    __slots__ = ()
+
+    def __init__(self, parent=None, *args, **kwargs):
+        super(LunarNYVideoViewWindow, self).__init__(content=VideoView(*args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.OVERLAY, parent=parent, decorator=None)
         return

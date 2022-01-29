@@ -102,6 +102,7 @@ class ItemTags(object):
     ADD_NATIONAL_EMBLEM = 'addNationalEmblem'
     DISABLE_VERTICAL_MIRROR = 'disableVerticalMirror'
     STYLE_PROGRESSION = 'styleProgression'
+    PROGRESSION_REWIND_ENABLED = 'progression_rewind_enabled'
     ONLY_VERTICAL_MIRROR = 'onlyVerticalMirror'
     HIDE_IF_INCOMPATIBLE = 'hideIfIncompatible'
 

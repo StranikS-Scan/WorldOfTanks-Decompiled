@@ -62,6 +62,7 @@ class MessageTemplates(templates.XMLCollection):
         data = {'type': source.readString('type'),
          'timestamp': -1,
          'savedData': None,
+         'lunarNYData': None,
          'nyData': None,
          'bgIcon': self._makeBgIconsData(source['bgIcon']),
          'bgIconSizeAuto': source.readBool('bgIconSizeAuto'),

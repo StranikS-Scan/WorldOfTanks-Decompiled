@@ -1213,4 +1213,24 @@
     </projection_decal>
     <name>	CIS: Missile Troops and Artillery Day	</name>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/animals	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 150g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	854	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_56_AM.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_56	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_56_GMM.dds	</glossTexture>
+    </projection_decal>
+    <name>	Yandex: 2022	</name>
+  </itemGroup>
 </projection_decals_nonCN.xml>

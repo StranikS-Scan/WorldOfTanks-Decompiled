@@ -274,14 +274,15 @@ def packSimpleBonusesBlock(bonusesList, endlineSymbol='', complexTooltip=''):
     return UiElement(data)
 
 
-def packSingleLineBonusesBlock(bonusesList, endlineSymbol='', complexTooltip='', specialTooltip=''):
+def packSingleLineBonusesBlock(bonusesList, endlineSymbol='', complexTooltip='', specialTooltip='', specialTooltipArgs=None):
     data = {'linkage': 'QuestSingleLineTextAwardBlockUI',
      'items': bonusesList,
      'separator': ', ',
      'ellipsis': '..',
      'endline': endlineSymbol,
      'complexTooltip': complexTooltip,
-     'specialTooltip': specialTooltip}
+     'specialTooltip': specialTooltip,
+     'specialTooltipArgs': specialTooltipArgs or ()}
     return UiElement(data)
 
 

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/marathon/marathon_event_container.py
 import typing
+from cache import cached_property
 from gui.server_events.event_items import Group, Quest
 from gui.game_control.links import URLMacros
 from gui.marathon.marathon_constants import MarathonState, MISSION_TAB_FORMAT, AWARD_TOKENS_FORMAT, R_TITLE_TOOLTIP, TOKEN_COUNT_INDEX, ZERO_TIME
@@ -24,7 +25,7 @@ class MarathonEventContainer(object):
         self.questsInChain = 10
         self.minVehicleLevel = 6
         self.awardTokensPostfix = ('complete', 'ps_stop')
-        self.awardPostTokensPostfix = ('post_complete',)
+        self.awardPostTokensPostfix = ('post_complete', '3d_style_bought')
         self.showFlagTooltipBottom = True
         self.flagTooltip = TOOLTIPS_CONSTANTS.MARATHON_QUESTS_PREVIEW
         self.disabledFlagTooltip = TOOLTIPS.MARATHON_OFF
@@ -42,7 +43,6 @@ class MarathonEventContainer(object):
         self.suspendFlag = False
         self.quest = None
         self.group = None
-        self.vehicleID = 0
         self.awardTokens = None
         self.postAwardTokens = None
         self.tabTooltip = None
@@ -52,18 +52,24 @@ class MarathonEventContainer(object):
         self.tooltips = None
         self.icons = None
         self.urlMacros = URLMacros()
+        self.rewardPostfix = '_reward'
+        self.styleID = None
+        self.styleTokenDiscount = 1
         self._override()
         self._initialize()
         return
 
     def _initialize(self):
-        self.vehicleID = 0 if not self.vehicleName else makeVehicleTypeCompDescrByName(self.vehicleName)
         self.awardTokens = tuple((AWARD_TOKENS_FORMAT.format(self.tokenPrefix, postfix) for postfix in self.awardTokensPostfix))
         self.postAwardTokens = tuple((AWARD_TOKENS_FORMAT.format(self.tokenPrefix, postfix) for postfix in self.awardPostTokensPostfix))
         self.tabTooltip = getattr(QUESTS, MISSION_TAB_FORMAT.format(self.prefix.upper()), QUESTS.MISSIONS_TAB_MARATHONS)
 
     def _override(self):
         pass
+
+    @cached_property
+    def vehicleID(self):
+        return 0 if not self.vehicleName else makeVehicleTypeCompDescrByName(self.vehicleName)
 
     def getTimeFromGroupStart(self):
         return self.group.getTimeFromStartTillNow() if self.group else ZERO_TIME
@@ -86,7 +92,7 @@ class MarathonEventContainer(object):
             self.quest = None
             return
         else:
-            sortedQuests = sorted(quests.itervalues(), key=lambda quest: quest.getStartTimeLeft())
+            sortedQuests = sorted(quests.itervalues(), key=lambda quest: quest.getStartTime())
             for q in quests:
                 if self.suspendPrefix in q:
                     self.suspendFlag = True

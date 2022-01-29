@@ -50,6 +50,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
 from gui.impl.lobby.awards.items_collection_provider import MultipleAwardRewardsMainPacker
 from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardWindow
+from gui.impl.lobby.lunar_ny.lunar_ny_helpers import showLunarNYProgressionAwardView
 from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
 from gui.impl.lobby.new_year.gift_system.ny_gift_system_rewards_view import NyGiftSystemRewardsWindow, RewardsTypes
 from gui.impl.new_year.new_year_helper import extractCompletedCollectionQuests, extractCollectionsRewards
@@ -74,6 +75,7 @@ from helpers import dependency
 from helpers import i18n
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core, new_year
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
+from lunar_ny.lunar_ny_progression_config import isLunarNYProgressionQuest, getLevelFromQuestID
 from items.components.ny_constants import CelebrityQuestTokenParts
 from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
@@ -214,6 +216,7 @@ class AwardController(IAwardController, IGlobalListener):
          MapboxProgressionRewardHandler(self),
          PurchaseHandler(self),
          RenewableSubscriptionHandler(self),
+         LunarNYProgressionAwardHandler(self),
          NewYearCelebrityHandler(self),
          NewYearLootBoxReceivedHandler(self),
          NYGiftSystemProgressionHandler(self),
@@ -1805,6 +1808,27 @@ class PurchaseHandler(ServiceChannelHandler):
                         _logger.info('Reward list is empty, multiple awards window will not be shown for purchase %s', productCode)
             else:
                 _logger.debug('Product code is empty! Awards Window will not be shown!')
+
+
+class LunarNYProgressionAwardHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(LunarNYProgressionAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        return False if not super(LunarNYProgressionAwardHandler, self)._needToShowAward(ctx) else any((isLunarNYProgressionQuest(qID) for qID in message.data.get('completedQuestIDs', set())))
+
+    def _showAward(self, ctx=None):
+        _, message = ctx
+        lunarProgressionRewards = []
+        for qID, rawReward in message.data.get('detailedRewards', {}).iteritems():
+            if isLunarNYProgressionQuest(qID):
+                lunarProgressionRewards.append((getLevelFromQuestID(qID), rawReward))
+
+        lunarProgressionRewards.sort()
+        for receivedLevel, rawReward in lunarProgressionRewards:
+            showLunarNYProgressionAwardView(rawReward, receivedLevel)
 
 
 class NewYearLootBoxReceivedHandler(MultiTypeServiceChannelHandler):

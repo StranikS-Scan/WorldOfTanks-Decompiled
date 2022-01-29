@@ -32,6 +32,7 @@ from account_helpers.settings_core import IntUserSettings
 from account_helpers.session_statistics import SessionStatistics
 from account_helpers.spa_flags import SPAFlags
 from account_helpers.gift_system import GiftSystem
+from lunar_ny.lunar_ny_account_helper import LunarNYAccountHelper
 from account_shared import NotificationItem, readClientServerVersion
 from adisp import process
 from bootcamp.Bootcamp import g_bootcamp
@@ -79,7 +80,8 @@ def _isStrList(l):
 
 
 class _ClientCommandProxy(object):
-    _COMMAND_SIGNATURES = (('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
+    _COMMAND_SIGNATURES = (('doCmdInt', lambda args: len(args) == 1 and _isInt(args[0])),
+     ('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
      ('doCmdIntStr', lambda args: len(args) == 2 and _isInt(args[0]) and _isStr(args[1])),
      ('doCmdInt', lambda args: len(args) == 1 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt2', lambda args: len(args) == 2 and all([ _isInt(arg) for arg in args ])),
@@ -171,6 +173,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.renewableSubscription = g_accountRepository.renewableSubscription
         self.telecomRentals = g_accountRepository.telecomRentals
         self.giftSystem = g_accountRepository.giftSystem
+        self.lunarNY = g_accountRepository.lunarNY
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -188,7 +191,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.ranked.setAccount(self)
         self.battleRoyale.setAccount(self)
         self.badges.setAccount(self)
-        self.tokens.setAccount(self)
         self.epicMetaGame.setAccount(self)
         self.blueprints.setAccount(self)
         self.sessionStats.setAccount(self)
@@ -251,7 +253,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.ranked.onAccountBecomePlayer()
         self.battleRoyale.onAccountBecomePlayer()
         self.badges.onAccountBecomePlayer()
-        self.tokens.onAccountBecomeNonPlayer()
+        self.tokens.onAccountBecomePlayer()
         self.epicMetaGame.onAccountBecomePlayer()
         self.blueprints.onAccountBecomePlayer()
         self.festivities.onAccountBecomePlayer()
@@ -265,6 +267,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.battlePass.onAccountBecomePlayer()
         self.offers.onAccountBecomePlayer()
         self.giftSystem.onAccountBecomePlayer()
+        self.lunarNY.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         BigWorld.target.source = BigWorld.MouseTargetingMatrix()
@@ -309,6 +312,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.renewableSubscription.onAccountBecomeNonPlayer()
         self.telecomRentals.onAccountBecomeNonPlayer()
         self.giftSystem.onAccountBecomeNonPlayer()
+        self.lunarNY.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -325,7 +329,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.ranked.setAccount(None)
         self.battleRoyale.setAccount(None)
         self.badges.setAccount(None)
-        self.tokens.setAccount(None)
         self.epicMetaGame.setAccount(None)
         self.blueprints.setAccount(None)
         self.sessionStats.setAccount(None)
@@ -1333,6 +1336,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.renewableSubscription.synchronize(isFullSync, diff)
             self.telecomRentals.synchronize(isFullSync, diff)
             self.giftSystem.synchronize(isFullSync, diff)
+            self.lunarNY.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeDisabledPersonalMissions(diff)
             self.__synchronizeEventNotifications(diff)
@@ -1565,7 +1569,7 @@ class _AccountRepository(object):
         self.ranked = client_ranked.ClientRanked(self.syncData)
         self.battleRoyale = ClientBattleRoyale.ClientBattleRoyale(self.syncData)
         self.badges = ClientBadges.ClientBadges(self.syncData)
-        self.tokens = tokens.Tokens(self.syncData)
+        self.tokens = tokens.Tokens(self.syncData, self.commandProxy)
         self.epicMetaGame = client_epic_meta_game.ClientEpicMetaGame(self.syncData)
         self.blueprints = client_blueprints.ClientBlueprints(self.syncData)
         self.festivities = FestivityManager(self.syncData, self.commandProxy)
@@ -1580,6 +1584,7 @@ class _AccountRepository(object):
         self.renewableSubscription = RenewableSubscription(self.syncData)
         self.telecomRentals = TelecomRentals(self.syncData)
         self.giftSystem = GiftSystem(self.syncData, self.commandProxy)
+        self.lunarNY = LunarNYAccountHelper(self.syncData, self.commandProxy)
         self.platformBlueprintsConvertSaleLimits = {}
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()

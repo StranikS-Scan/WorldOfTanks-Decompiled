@@ -282,6 +282,7 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_VEHICLEBRANCH = '#battle_results:details/calculations/vehicleBranch'
     DETAILS_CALCULATIONS_NOPENALTY = '#battle_results:details/calculations/noPenalty'
     DETAILS_CALCULATIONS_EVENT = '#battle_results:details/calculations/event'
+    DETAILS_CALCULATIONS_LUNARNY = '#battle_results:details/calculations/lunarNY'
     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_DESERTER = '#battle_results:details/calculations/fairPlayViolation/deserter'
     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_EPIC_DESERTER = '#battle_results:details/calculations/fairPlayViolation/epic_deserter'
     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_AFK = '#battle_results:details/calculations/fairPlayViolation/afk'
@@ -366,6 +367,7 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_VEHICLEBRANCH,
      DETAILS_CALCULATIONS_NOPENALTY,
      DETAILS_CALCULATIONS_EVENT,
+     DETAILS_CALCULATIONS_LUNARNY,
      DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_DESERTER,
      DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_EPIC_DESERTER,
      DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_AFK,

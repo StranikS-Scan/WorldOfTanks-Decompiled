@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/info/progression_styles_buying_panel.py
 from gui.impl.gen import R
 from frameworks.wulf import ViewFlags, ViewSettings
+from gui.impl.gen.view_models.views.lobby.customization.progression_styles.stage_switcher_model import SwitcherType
 from gui.impl.pub import ViewImpl
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import BattlePassEvent
@@ -29,13 +30,16 @@ class VehiclePreviewProgressionStylesBuyingPanel(VehiclePreviewProgressionStyles
         self.__styleLevel = styleLevel
         self.__view.setStyleLevel(self.__styleLevel)
 
+    def setCtx(self, ctx):
+        self.__view.setCtx(ctx)
+
     def _makeInjectView(self):
         self.__view = ProgressionStylesBuyingPanelView(flags=ViewFlags.COMPONENT)
         return self.__view
 
 
 class ProgressionStylesBuyingPanelView(ViewImpl):
-    __slots__ = ('__styleLevel',)
+    __slots__ = ('__styleLevel', '__ctx')
     customizationService = dependency.descriptor(ICustomizationService)
 
     def __init__(self, flags=ViewFlags.VIEW):
@@ -43,6 +47,7 @@ class ProgressionStylesBuyingPanelView(ViewImpl):
         settings.flags = flags
         settings.model = ProgressionStylesBuyingPanelModel()
         self.__styleLevel = None
+        self.__ctx = None
         super(ProgressionStylesBuyingPanelView, self).__init__(settings)
         return
 
@@ -52,6 +57,9 @@ class ProgressionStylesBuyingPanelView(ViewImpl):
 
     def setStyleLevel(self, styleLevel):
         self.__styleLevel = styleLevel
+
+    def setCtx(self, ctx):
+        self.__ctx = ctx
 
     def _initialize(self, *args, **kwargs):
         super(ProgressionStylesBuyingPanelView, self)._initialize(*args, **kwargs)
@@ -69,6 +77,15 @@ class ProgressionStylesBuyingPanelView(ViewImpl):
             model.setCurrentLevel(currentLevel if currentLevel else 1)
             model.setSelectedLevel(currentLevel if self.__styleLevel is None else self.__styleLevel)
             model.setIsReady(True)
+            style = self.__ctx.get('style') if self.__ctx else None
+            if style and style.isProgressionRewindEnabled:
+                model.setCurrentLevel(style.maxProgressionLevel)
+                model.setSelectedLevel(style.maxProgressionLevel)
+                model.setNumberOfBullets(style.maxProgressionLevel)
+                model.setSwitcherType(SwitcherType.TEXT)
+                model.setStyleID(style.id)
+                self.__styleLevel = style.maxProgressionLevel
+            model.setIsBulletsBeforeCurrentDisabled(False)
         if self.__styleLevel is not None:
             self.customizationService.changeStyleProgressionLevelPreview(self.__styleLevel)
         return

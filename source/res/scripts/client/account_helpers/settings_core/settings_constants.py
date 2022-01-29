@@ -372,6 +372,8 @@ class OnceOnlyHints(CONST_CONTAINER):
     TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'TradeInVehiclePreviewPostProgressionButtonHint'
     PERSONAL_TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'PersonalTradeInVehiclePreviewPostProgressionButtonHint'
     NY_GIFT_SYSTEM_FRIEND_SELECT_HINT = 'NyGiftSystemFriendSelectHint'
+    LUNAR_NY_DROPDOWN_HINT = 'LunarNYDropdownHint'
+    LUNAR_NY_CONGRATULATION_HINT = 'LunarNYCongratulationHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

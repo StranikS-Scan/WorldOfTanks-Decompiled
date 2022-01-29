@@ -77,6 +77,12 @@ def post_gift_system_gift(*_):
     return response_stub
 
 
+def post_secret_santa_gift(*_):
+    current_time = int(time.time())
+    response_stub = {'execution_time': current_time - time_utils.ONE_SECOND}
+    return response_stub
+
+
 class FakeDataAccessor(base.BaseDataAccessor):
     requests_before_logout = -1
 
@@ -677,3 +683,8 @@ class FakeDataAccessor(base.BaseDataAccessor):
     def post_gift_system_gift(self, *_):
         self._storage.get('post_gift_system_gift', {}).clear()
         return self._request_data('post_gift_system_gift', None)
+
+    @fake_method(example=post_secret_santa_gift)
+    def post_secret_santa_gift(self, *_):
+        self._storage.get('post_secret_santa_gift', {}).clear()
+        return self._request_data('post_secret_santa_gift', None)

@@ -4,7 +4,8 @@ import typing
 import collections
 import weakref
 import logging
-from collections import defaultdict
+from collections import defaultdict, namedtuple
+import BigWorld
 from PlayerEvents import g_playerEvents
 from constants import ARENA_BONUS_TYPE, MAPS_TRAINING_ENABLED_KEY
 from account_helpers import AccountSettings
@@ -43,6 +44,8 @@ from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import time_utils, i18n, dependency
+from lunar_ny import ILunarNYController
+from lunar_ny.lunar_ny_constants import ENVELOPE_ENTITLEMENT_COUNTER
 from helpers.server_settings import serverSettingsChangeListener
 from ids_generators import SequenceIDGenerator
 from lootboxes_common import makeLootboxTokenID
@@ -52,7 +55,7 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, GiftSystemOperationsFactory, NyLootBoxesReceivedDecorator, NySpecialBoxesEntryDecorator, PsaCoinReminderMessageDecorator, NyCelebrityRewardDecorator, NyMessageButtonDecorator, WinterOfferDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, LunarNYEnvelopesDecorator, LunarNYNewReceivedEnvelopesDecorator, LunarNYNewReceivedEnvelopesSimpleDecorator, GiftSystemOperationsFactory, NyLootBoxesReceivedDecorator, NySpecialBoxesEntryDecorator, PsaCoinReminderMessageDecorator, NyCelebrityRewardDecorator, NyMessageButtonDecorator, WinterOfferDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController, ISteamCompletionController, ISeniorityAwardsController
 from skeletons.gui.impl import INotificationWindowController
@@ -62,6 +65,7 @@ from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestControll
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from shared_utils import first, findFirst
+from gui.Scaleform.managers.UtilsManager import SECONDS_IN_MINUTE
 if typing.TYPE_CHECKING:
     from notification.NotificationsModel import NotificationsModel
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
@@ -1292,6 +1296,269 @@ class VehiclePostProgressionUnlockListener(_NotificationListener):
         return
 
 
+class LunarNYListener(_NotificationListener):
+    __lunarNYController = dependency.descriptor(ILunarNYController)
+
+    def __init__(self):
+        super(LunarNYListener, self).__init__()
+        self.__entityID = 0
+        self.__lunarIsEnabled = False
+
+    def start(self, model):
+        result = super(LunarNYListener, self).start(model)
+        self.__lunarNYController.giftSystem.onGiftSystemSettingsUpdated += self.__invalidateEntryPoint
+        self.__lunarNYController.receivedEnvelopes.onReceivedEnvelopesUpdated += self.__invalidateEntryPoint
+        self.__lunarNYController.onStatusChange += self.__onLunarNYStatusChange
+        self.__invalidateEntryPoint()
+        self.__lunarIsEnabled = self.__lunarNYController.isEnabled()
+        g_clientUpdateManager.addCallback('cache.entitlements', self.__onEntitlementsUpdate)
+        return result
+
+    def stop(self):
+        super(LunarNYListener, self).stop()
+        self.__lunarNYController.onStatusChange -= self.__onLunarNYStatusChange
+        self.__lunarNYController.receivedEnvelopes.onReceivedEnvelopesUpdated -= self.__invalidateEntryPoint
+        self.__lunarNYController.giftSystem.onGiftSystemSettingsUpdated -= self.__invalidateEntryPoint
+        g_clientUpdateManager.removeCallback('cache.entitlements', self.__onEntitlementsUpdate)
+
+    def __invalidateEntryPoint(self, *_):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            currentCount = self.__lunarNYController.receivedEnvelopes.getReceivedEnvelopesCount()
+            isGiftSystemActive = self.__lunarNYController.isGiftSystemEventActive()
+            prevNotification = model.getNotification(NOTIFICATION_TYPE.LUNAR_NY_ENVELOPES_RECEIVED, self.__entityID)
+            if not isGiftSystemActive or not currentCount:
+                if prevNotification is not None:
+                    model.removeNotification(NOTIFICATION_TYPE.LUNAR_NY_ENVELOPES_RECEIVED, self.__entityID)
+                return
+            previousBoxesCount = prevNotification.getCount() if prevNotification is not None else 0
+            if previousBoxesCount == currentCount:
+                return
+            if prevNotification is not None:
+                prevNotification.setCount(currentCount)
+                model.updateNotification(prevNotification.getType(), self.__entityID, prevNotification.getEntity(), True)
+            else:
+                newNotification = LunarNYEnvelopesDecorator(self.__entityID, currentCount, model)
+                model.addNotification(newNotification)
+            return
+
+    def __onLunarNYStatusChange(self):
+        self.__invalidateEntryPoint()
+        self.__checkLunarEnableStatus()
+
+    def __checkLunarEnableStatus(self):
+        currentLunarIsEnabled = self.__lunarNYController.isEnabled()
+        startTime, endTime = self.__lunarNYController.getEventActiveTime()
+        currentTime = time_utils.getCurrentTimestamp()
+        if self.__lunarIsEnabled != currentLunarIsEnabled:
+            self.__lunarIsEnabled = startTime < currentTime < endTime and currentLunarIsEnabled
+            msgRes = R.strings.lunar_ny.systemMessage.enableChanged
+            msgRes = msgRes.isEnabled() if self.__lunarIsEnabled else msgRes.isDisabled()
+            SystemMessages.pushMessage(backport.text(msgRes), SM_TYPE.Warning)
+
+    def __onEntitlementsUpdate(self, diff):
+        if ENVELOPE_ENTITLEMENT_COUNTER in diff:
+            maxCount = self.__lunarNYController.getEnvelopePurchasesLimit()
+            if self.__lunarNYController.giftSystem.getAmountOfPurchasedEnvelopes() >= maxCount:
+                msgKey = R.strings.lunar_ny.systemMessage.shop.maxEnvelopes
+                startServerDay = time_utils.getServerUTCTime() - time_utils.getServerTimeCurrentDay()
+                SystemMessages.pushMessage(backport.text(msgKey.body(), maxCount=maxCount, time=backport.getShortTimeFormat(startServerDay)), type=SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': backport.text(msgKey.header())})
+
+
+class LunarNYNewEnvelopesListener(_NotificationListener):
+    __lunarNYController = dependency.descriptor(ILunarNYController)
+
+    def __init__(self):
+        super(LunarNYNewEnvelopesListener, self).__init__()
+        self.__entityID = 0
+        self.__userInfoHelper = UsersInfoHelper()
+
+    def start(self, model):
+        result = super(LunarNYNewEnvelopesListener, self).start(model)
+        self.__lunarNYController.receivedEnvelopes.onNewEnvelopesReceived += self.__onNewEnvelopesReceived
+        self.__lunarNYController.onStatusChange += self.__invalidateNotification
+        self.__userInfoHelper.onNamesReceived += self.__onNamesReceived
+        return result
+
+    def stop(self):
+        super(LunarNYNewEnvelopesListener, self).stop()
+        self.__userInfoHelper.onNamesReceived -= self.__onNamesReceived
+        self.__lunarNYController.onStatusChange -= self.__invalidateNotification
+        self.__lunarNYController.receivedEnvelopes.onNewEnvelopesReceived -= self.__onNewEnvelopesReceived
+
+    def __invalidateNotification(self):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            prevNotification = model.getNotification(NOTIFICATION_TYPE.LUNAR_NY_NEW_ENVELOPES_RECEIVED, self.__entityID)
+            if not self.__lunarNYController.isActive() and prevNotification is not None:
+                model.removeNotification(NOTIFICATION_TYPE.LUNAR_NY_ENVELOPES_RECEIVED, self.__entityID)
+            return
+
+    def __onNewEnvelopesReceived(self, senderIDs, count, giftIDs):
+        model = self._model()
+        if model is None or not self.__lunarNYController.isActive():
+            return
+        else:
+            prevNotification = model.getNotification(NOTIFICATION_TYPE.LUNAR_NY_NEW_ENVELOPES_RECEIVED, self.__entityID)
+            if len(senderIDs) == 1 and first(senderIDs) > 0:
+                userName = self.__userInfoHelper.getUserName(first(senderIDs), withEmptyName=True)
+                if not userName and self.__userInfoHelper.proto.isConnected():
+                    self.__userInfoHelper.syncUsersInfo()
+            else:
+                userName = ''
+            if prevNotification is None:
+                newNotification = LunarNYNewReceivedEnvelopesDecorator(self.__entityID, count, senderIDs, userName, giftIDs, model)
+                model.addNotification(newNotification)
+            else:
+                prevNotification.setExtData(count, senderIDs, userName, giftIDs)
+                model.updateNotification(prevNotification.getType(), self.__entityID, prevNotification.getEntity(), True)
+            return
+
+    def __onNamesReceived(self, names):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            prevNotification = model.getNotification(NOTIFICATION_TYPE.LUNAR_NY_NEW_ENVELOPES_RECEIVED, self.__entityID)
+            if prevNotification is not None and prevNotification.isOneSender():
+                prevNotification.setNames(names)
+                model.updateNotification(prevNotification.getType(), self.__entityID, prevNotification.getEntity(), True)
+            return
+
+
+NewEnvelopesData = namedtuple('NewEnvelopesData', ['time', 'envelopesCount', 'senderIDs'])
+
+class EnvelopesSimpleNotificationListener(_NotificationListener):
+    __lunarNYController = dependency.descriptor(ILunarNYController)
+    __COUNT_SIMPLE_NOTIFICATIONS_IN_MINUTE = 10
+
+    def __init__(self):
+        super(EnvelopesSimpleNotificationListener, self).__init__()
+        self.__lastSimpleID = 0
+        self.__userInfoHelper = UsersInfoHelper()
+        self.__envelopesData = []
+        self.__simpleNotificationsIsGrouped = False
+
+    def start(self, model):
+        result = super(EnvelopesSimpleNotificationListener, self).start(model)
+        self.__lunarNYController.receivedEnvelopes.onNewEnvelopesReceived += self.__onNewEnvelopesReceived
+        self.__userInfoHelper.onNamesReceived += self.__onNamesReceived
+        return result
+
+    def stop(self):
+        super(EnvelopesSimpleNotificationListener, self).stop()
+        self.__userInfoHelper.onNamesReceived -= self.__onNamesReceived
+        self.__lunarNYController.receivedEnvelopes.onNewEnvelopesReceived -= self.__onNewEnvelopesReceived
+        self.__envelopesData = []
+        self.__lastSimpleID = 0
+        self.__simpleNotificationsIsGrouped = False
+
+    def __groupEnvelopesData(self, count):
+        startIdx = self.__lastSimpleID - count
+        senderIDs = []
+        envelopesCount = 0
+        for idx in range(startIdx, startIdx + count):
+            curData = self.__envelopesData[idx]
+            envelopesCount += curData.envelopesCount
+            senderIDs.extend(curData.senderIDs)
+
+        self.__envelopesData = self.__envelopesData[0:startIdx]
+        self.__envelopesData.append(NewEnvelopesData(BigWorld.serverTime(), count, senderIDs))
+
+    def __updateGroupedEnvelopesData(self, time, envelopesCount, senderIDs):
+        data = self.__envelopesData.pop()
+        data.senderIDs.extend(senderIDs)
+        self.__envelopesData.append(NewEnvelopesData(time, envelopesCount, data.senderIDs))
+
+    def __onNewEnvelopesReceived(self, senderIDs, count, giftIDs):
+        model = self._model()
+        if model is None or not self.__lunarNYController.isActive():
+            return
+        else:
+            if len(senderIDs) == 1 and first(senderIDs) > 0:
+                userName = self.__userInfoHelper.getUserName(first(senderIDs), withEmptyName=True)
+                if not userName and self.__userInfoHelper.proto.isConnected():
+                    self.__userInfoHelper.syncUsersInfo()
+            else:
+                userName = ''
+            self.__handleSimpleNotification(model, userName, senderIDs, count, giftIDs)
+            return
+
+    def __handleSimpleNotification(self, model, userName, senderIDs, count, giftIDs):
+        if self.__simpleNotificationsIsGrouped and self.__lastEnvelopeIsFast():
+            self.__updateGroupedEnvelopesData(BigWorld.serverTime(), count, senderIDs)
+            self.__updateSimpleGroupedNotification(model, count, giftIDs)
+        else:
+            self.__envelopesData.append(NewEnvelopesData(BigWorld.serverTime(), count, senderIDs))
+            self.__simpleNotificationsIsGrouped = False
+            self.__lastSimpleID += 1
+            if self.__isNeedGroupSimpleNotifications():
+                self.__simpleNotificationsIsGrouped = True
+                self.__groupEnvelopesData(self.__COUNT_SIMPLE_NOTIFICATIONS_IN_MINUTE)
+                self.__removePrevNotGroupedNotifications(model)
+                giftsCount = self.__envelopesData[-1].envelopesCount
+                newNotification = LunarNYNewReceivedEnvelopesSimpleDecorator(self.__lastSimpleID, giftsCount, giftIDs=giftIDs, model=model)
+            else:
+                newNotification = LunarNYNewReceivedEnvelopesSimpleDecorator(self.__lastSimpleID, count, userName, giftIDs=giftIDs, model=model)
+            model.addNotification(newNotification)
+
+    def __lastEnvelopeIsFast(self):
+        result = False
+        if self.__envelopesData:
+            lastEnvelopeDelay = BigWorld.serverTime() - self.__envelopesData[-1].time
+            result = lastEnvelopeDelay <= SECONDS_IN_MINUTE
+        return result
+
+    def __removePrevNotGroupedNotifications(self, model):
+        startId = self.__lastSimpleID - self.__COUNT_SIMPLE_NOTIFICATIONS_IN_MINUTE
+        for notificationID in range(startId, startId + self.__COUNT_SIMPLE_NOTIFICATIONS_IN_MINUTE):
+            model.removeNotification(NOTIFICATION_TYPE.LUNAR_NY_NEW_ENVELOPES_RECEIVED_SIMPLE, notificationID)
+
+        self.__lastSimpleID = startId
+
+    def __updateSimpleGroupedNotification(self, model, count, giftIDs):
+        nType = NOTIFICATION_TYPE.LUNAR_NY_NEW_ENVELOPES_RECEIVED_SIMPLE
+        prevNotification = model.getNotification(nType, self.__lastSimpleID)
+        if prevNotification:
+            giftIDs.update(prevNotification.getGiftIDs())
+            count += prevNotification.getDataCount()
+        model.removeNotification(nType, self.__lastSimpleID)
+        newNotification = LunarNYNewReceivedEnvelopesSimpleDecorator(self.__lastSimpleID, count, '', giftIDs=giftIDs, model=model)
+        model.addNotification(newNotification)
+
+    def __isNeedGroupSimpleNotifications(self):
+        idx = len(self.__envelopesData) - self.__COUNT_SIMPLE_NOTIFICATIONS_IN_MINUTE
+        if idx >= 0:
+            lastNotificationTime = self.__envelopesData[idx].time
+            if BigWorld.serverTime() - lastNotificationTime < SECONDS_IN_MINUTE:
+                return True
+        return False
+
+    def __onNamesReceived(self, names):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            self.__updateSimpleNotificationUserName(model, names)
+            return
+
+    def __updateSimpleNotificationUserName(self, model, names):
+        nType = NOTIFICATION_TYPE.LUNAR_NY_NEW_ENVELOPES_RECEIVED_SIMPLE
+        for idx in range(1, self.__lastSimpleID + 1):
+            notification = model.getNotification(nType, idx)
+            if notification is not None and notification.getDataCount() == 1 and not notification.hasSenderName():
+                name = names.get(first(self.__envelopesData[idx - 1].senderIDs))
+                if name:
+                    notification.setSenderName(name)
+                    model.updateNotification(notification.getType(), self.__lastSimpleID, notification.getEntity(), True)
+
+        return
+
+
 class PsaCoinReminderListener(_NotificationListener):
     __bootCampController = dependency.descriptor(IBootcampController)
     __saCtrl = dependency.descriptor(ISeniorityAwardsController)
@@ -1533,7 +1800,10 @@ class NotificationsListeners(_NotificationListener):
          PsaCoinReminderListener(),
          LootBoxConfigListener(),
          GiftSystemOperationsListener(),
-         NySpecialBoxesEntryListener())
+         NySpecialBoxesEntryListener(),
+         LunarNYListener(),
+         LunarNYNewEnvelopesListener(),
+         EnvelopesSimpleNotificationListener())
 
     def start(self, model):
         for listener in self.__listeners:

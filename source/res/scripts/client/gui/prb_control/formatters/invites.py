@@ -6,8 +6,7 @@ from constants import QUEUE_TYPE_NAMES
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.prb_control.formatters import getPrebattleFullDescription
-from gui.prb_control.formatters import getBattleSessionStartTimeString
+from gui.prb_control.formatters import getPrebattleFullDescription, getPrebattleStartTimeString
 from gui.prb_control import prbDispatcherProperty, prbAutoInvitesProperty, prbInvitesProperty
 from gui.prb_control.settings import PRB_INVITE_STATE
 from helpers import dependency
@@ -222,7 +221,8 @@ class AutoInviteTextFormatter(InviteFormatter):
         return note
 
     def getText(self, invite):
-        return u'{}, {}'.format(unicode(getPrebattleFullDescription(invite.description), 'utf-8'), unicode(getBattleSessionStartTimeString(invite.startTime), 'utf-8'))
+        startTimeStr = '{} {}'.format(backport.text(R.strings.prebattle.title.battleSession.startTime()), getPrebattleStartTimeString(invite.startTime))
+        return u'{}, {}'.format(unicode(getPrebattleFullDescription(invite.description), 'utf-8'), unicode(startTimeStr, 'utf-8'))
 
 
 class _PrbInviteInfo(object):

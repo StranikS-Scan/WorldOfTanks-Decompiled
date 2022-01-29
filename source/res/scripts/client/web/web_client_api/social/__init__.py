@@ -65,7 +65,7 @@ class SocialWebApi(object):
             player = self.__usersInfoHelper.getContact(playerId)
             return {'is_online': player.isOnline() if player is not None else False}
 
-        def onNamesReceivedCallback():
+        def onNamesReceivedCallback(_):
             callback(isAvailable())
             self.__usersInfoHelper.onNamesReceived -= onNamesReceivedCallback
 

@@ -17,6 +17,7 @@ from gui.shared.formatters.icons import makeImageTag
 from gui.shared.gui_items.crew_skin import localizedFullName as localizeSkinName
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
+from lunar_ny.lunar_ny_constants import ENVELOPE_ENTITLEMENT_CODE_TO_TYPE, ENVELOPE_NAME_BY_TYPE
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import TokensBonus, EntitlementBonus
@@ -221,6 +222,20 @@ class GiftStampsFormatter(OldStyleBonusFormatter):
         self._result.append(block)
 
 
+class LunarEnvelopesFormatter(OldStyleBonusFormatter):
+
+    def accumulateBonuses(self, bonus, event=None):
+        code, amount = bonus.getValue().id, bonus.getValue().amount
+        envelopeType = ENVELOPE_ENTITLEMENT_CODE_TO_TYPE[code]
+        iconRes = R.images.gui.maps.icons.lunar_ny.bonus.small.dyn(code)
+        nameRes = R.strings.lunar_ny.glossary.envelopeType.dyn(ENVELOPE_NAME_BY_TYPE[envelopeType])
+        icon = makeImageTag(source=backport.image(iconRes()), width=16, height=16, vSpace=-4)
+        label = backport.text(R.strings.lunar_ny.postbattle.envelopesLabel(), envelopeName=backport.text(nameRes()), count=text_styles.stats(amount), icon=icon)
+        tooltipData = bonus.getTooltipData()
+        block = formatters.packSingleLineBonusesBlock([text_styles.main(label)], complexTooltip=tooltipData.tooltip, specialTooltip=tooltipData.specialAlias, specialTooltipArgs=tooltipData.specialArgs)
+        self._result.append(block)
+
+
 class TextBonusFormatter(OldStyleBonusFormatter):
 
     def accumulateBonuses(self, bonus, event=None):
@@ -290,6 +305,7 @@ class OldStyleAwardsPacker(AwardsPacker):
         self.__newStyleFormatter = NewStyleBonusFormatter()
         self.__lootBoxFormatter = LootBoxTokenFormatter()
         self.__giftStampsFormatter = GiftStampsFormatter()
+        self.__lunarEnvelopesFormatter = LunarEnvelopesFormatter()
 
     def format(self, bonuses, event=None):
         formattedBonuses = []
@@ -300,6 +316,8 @@ class OldStyleAwardsPacker(AwardsPacker):
                     formatter = self.__lootBoxFormatter
                 elif b.getName() == 'entitlements' and b.getValue().id == NY_STAMP_CODE:
                     formatter = self.__giftStampsFormatter
+                elif b.getName() == 'entitlements' and b.getValue().id in ENVELOPE_ENTITLEMENT_CODE_TO_TYPE.keys():
+                    formatter = self.__lunarEnvelopesFormatter
                 else:
                     formatter = self._getBonusFormatter(b.getName())
                 if formatter:
@@ -309,6 +327,7 @@ class OldStyleAwardsPacker(AwardsPacker):
 
         fmts = [self.__lootBoxFormatter,
          self.__giftStampsFormatter,
+         self.__lunarEnvelopesFormatter,
          self.__defaultFormatter,
          self.__newStyleFormatter]
         fmts.extend(sorted(self.getFormatters().itervalues(), key=lambda f: f.getOrder()))

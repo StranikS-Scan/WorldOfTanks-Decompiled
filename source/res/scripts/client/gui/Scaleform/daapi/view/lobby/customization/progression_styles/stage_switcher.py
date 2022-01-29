@@ -5,7 +5,7 @@ from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.StageSwitcherMeta import StageSwitcherMeta
 from gui.customization.constants import CustomizationModes
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.customization.progression_styles.stage_switcher_model import StageSwitcherModel
+from gui.impl.gen.view_models.views.lobby.customization.progression_styles.stage_switcher_model import StageSwitcherModel, SwitcherType
 from gui.impl.pub import ViewImpl
 from helpers import dependency
 from skeletons.gui.customization import ICustomizationService
@@ -45,6 +45,12 @@ class StageSwitcherView(ViewImpl):
         with self.getViewModel().transaction() as model:
             model.setCurrentLevel(progressionLevel)
             model.setSelectedLevel(progressionLevel)
+            style = self.__ctx.mode.modifiedStyle
+            if style.isProgressionRewindEnabled:
+                model.setNumberOfBullets(style.maxProgressionLevel)
+                model.setIsBulletsBeforeCurrentDisabled(False)
+                model.setSwitcherType(SwitcherType.TEXT)
+                model.setStyleID(style.id)
 
     def _finalize(self):
         super(StageSwitcherView, self)._finalize()

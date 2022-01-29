@@ -32,6 +32,7 @@ from gui.shared.formatters import icons
 from gui.shared.personality import ServicesLocator
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from lunar_ny import ILunarNYController
 from new_year.ny_bonuses import CreditsBonusHelper
 from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
@@ -87,6 +88,8 @@ FLAG_BY_QUEST_TYPE = {HANGAR_HEADER_QUESTS.QUEST_TYPE_PERSONAL_REGULAR: RES_ICON
  HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_BLUE,
  HANGAR_HEADER_QUESTS.QUEST_TYPE_EVENT: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_KHACKI,
  HANGAR_HEADER_QUESTS.QUEST_TYPE_BATTLE_ROYALE: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_EPIC_STEELHUNTER}
+LUNAR_NY_FLAG_BY_QUEST_TYPE = {HANGAR_HEADER_QUESTS.QUEST_TYPE_PERSONAL_REGULAR: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_RED,
+ HANGAR_HEADER_QUESTS.QUEST_TYPE_PERSONAL_PM2: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_VINOUS}
 NY_FLAG_BY_QUEST_TYPE = {HANGAR_HEADER_QUESTS.QUEST_TYPE_PERSONAL_REGULAR: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_RED,
  HANGAR_HEADER_QUESTS.QUEST_TYPE_PERSONAL_PM2: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_VINOUS}
 TOOLTIPS_HANGAR_HEADER_PM = {WIDGET_PM_STATE.BRANCH_DISABLED: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS_BRANCH_DISABLED,
@@ -216,6 +219,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __lunarNYController = dependency.descriptor(ILunarNYController)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
@@ -278,6 +282,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__battlePassController.onSeasonStateChange += self.update
         self.__rankedController.onGameModeStatusUpdated += self.update
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.update
+        self.__lunarNYController.onStatusChange += self.update
         self.__mapboxCtrl.addProgressionListener(self.update)
         g_clientUpdateManager.addCallbacks({'inventory.1': self.update,
          'stats.tutorialsCompleted': self.update})
@@ -298,6 +303,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._festivityController.onStateChanged -= self.update
         self.__battlePassController.onSeasonStateChange -= self.update
         self.__rankedController.onGameModeStatusUpdated -= self.update
+        self.__lunarNYController.onStatusChange -= self.update
         self._currentVehicle = None
         self.__screenWidth = None
         if self._eventsController:
@@ -319,6 +325,12 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if self.__epicController.isEpicPrbActive():
             return {'isVisible': True,
              'quests': self.__getEpicQuestsToHeaderVO()}
+        if self.__lunarNYController.isActive() and not self.__bootcampController.isInBootcamp():
+            isCurrentVehiclePresent = self._currentVehicle.isPresent()
+            quests = self._getCommonQuestsToHeaderVO(self._currentVehicle.item) if isCurrentVehiclePresent else []
+            return {'isVisible': True,
+             'quests': quests,
+             'isLunarNYWidgetVisible': True}
         if self._currentVehicle.isPresent():
             vehicle = self._currentVehicle.item
             isNYWidgetVisible = self._festivityController.isEnabled()
@@ -432,10 +444,15 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if vehicle.isOnlyForBattleRoyaleBattles:
             return []
         else:
-            isRightSide = not self._festivityController.isEnabled()
+            isRightSide = not (self._festivityController.isEnabled() or self.__lunarNYController.isActive())
             for branch in reversed(PM_BRANCH.ACTIVE_BRANCHES):
                 questType = QUEST_TYPE_BY_PM_BRANCH[branch]
-                flag = NY_FLAG_BY_QUEST_TYPE[questType] if not isRightSide else None
+                if self.__lunarNYController.isActive():
+                    flag = LUNAR_NY_FLAG_BY_QUEST_TYPE[questType]
+                elif self._festivityController.isEnabled():
+                    flag = NY_FLAG_BY_QUEST_TYPE[questType]
+                else:
+                    flag = None
                 if not self._lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch):
                     result.append(self._headerQuestFormaterVo(False, _getPersonalMissionsIcon(vehicle, branch, False), _ms(MENU.hangarHeaderPersonalMissionsLabel(LABEL_STATE.EMPTY)), questType, tooltip=_getPersonalMissionsTooltip(branch, WIDGET_PM_STATE.BRANCH_DISABLED), flag=flag))
                     states.append(WIDGET_PM_STATE.BRANCH_DISABLED)

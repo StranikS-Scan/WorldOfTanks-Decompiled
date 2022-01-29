@@ -39,6 +39,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.ranked_battles.ranked_helpers import isQualificationQuestID, getQualificationBattlesCountFromID
+from lunar_ny.lunar_ny_constants import ENVELOPE_ENTITLEMENT_CODE_TO_TYPE
 _logger = logging.getLogger()
 
 class DEFAULTS_GROUPS(object):
@@ -403,6 +404,7 @@ class Quest(ServerEventAbstract):
     def getBonuses(self, bonusName=None, isCompensation=False, bonusData=None, ctx=None):
         result = []
         bonusData = bonusData or self._data.get('bonus', {})
+        hasEnvelope = False
         if bonusName is None:
             for name, value in bonusData.iteritems():
                 for bonus in getBonuses(self, name, value, isCompensation, ctx=ctx):
@@ -414,11 +416,17 @@ class Quest(ServerEventAbstract):
                         for bonus in getBonuses(self, 'customizations', stylesData, isCompensation, ctx=ctx):
                             result.append(self._bonusDecorator(bonus))
 
+                if name == 'entitlements' and set(value.keys()).intersection(ENVELOPE_ENTITLEMENT_CODE_TO_TYPE.keys()):
+                    hasEnvelope = True
+
         elif bonusName in bonusData:
             for bonus in getBonuses(self, bonusName, bonusData[bonusName], isCompensation, ctx=ctx):
                 result.append(self._bonusDecorator(bonus))
 
-        return sorted(result, cmp=compareBonuses, key=operator.methodcaller('getName'))
+        result = sorted(result, cmp=compareBonuses, key=operator.methodcaller('getName'))
+        if hasEnvelope:
+            result = sorted(result, key=lambda x: x.getName() != 'entitlements')
+        return result
 
     def __getVehicleStyleBonuses(self, vehiclesData):
         stylesData = []

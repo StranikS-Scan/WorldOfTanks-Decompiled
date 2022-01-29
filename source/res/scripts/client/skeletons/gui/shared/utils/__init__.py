@@ -7,6 +7,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.utils.requesters import battle_pass_requester
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
+    from lunar_ny.lunar_ny_requester import ILunarNYRequester
     from new_year import ny_requester
 
 class IItemsRequester(requesters.IRequester):
@@ -77,6 +78,10 @@ class IItemsRequester(requesters.IRequester):
 
     @property
     def giftSystem(self):
+        raise NotImplementedError
+
+    @property
+    def lunarNY(self):
         raise NotImplementedError
 
     @property

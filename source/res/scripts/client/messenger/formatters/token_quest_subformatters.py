@@ -20,6 +20,7 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.server_events.events_constants import CELEBRITY_MARATHON_PREFIX, CELEBRITY_GROUP_PREFIX
 from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items.dossier import factories
 from gui.shared.money import Currency
 from gui.shared.notifications import NotificationPriorityLevel
 from items.components.ny_constants import VEH_BRANCH_EXTRA_SLOT_TOKEN
@@ -38,6 +39,7 @@ from helpers import dependency
 from helpers import time_utils
 from wo2022 import wo_helpers
 from wo2022.wo_constants import WO_PENDING_OFFER_QUEST_PREFIX, WO_EVENT_DISABLED
+from lunar_ny.lunar_ny_constants import LUNAR_NY_PROGRESSION_QUEST_ID
 _logger = logging.getLogger(__name__)
 
 class ITokenQuestsSubFormatter(object):
@@ -700,6 +702,94 @@ class WotPlusDirectivesFormatter(AsyncTokenQuestsSubFormatter):
     def _isQuestOfThisGroup(cls, questID):
         tmp = cls.__RENEWABLE_SUB_TOKEN_QUEST_PATTERN in questID
         return tmp
+
+
+class LunarNYProgressionFormatter(AsyncTokenQuestsSubFormatter):
+    __MESSAGE_TEMPLATE = 'LunarNYProgression'
+    __HTML_BLOCK_ITEM = 'progressionBlockItem'
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        if isSynced:
+            messageDataList = []
+            data = message.data or {}
+            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
+            completedQuestIDs = sorted(completedQuestIDs)
+            for qID in completedQuestIDs:
+                messageData = self.__buildMessage(qID, message)
+                if messageData is not None:
+                    messageDataList.append(messageData)
+
+            callback(messageDataList)
+        else:
+            callback([MessageData(None, None)])
+        return
+
+    def __buildMessage(self, qID, message):
+        level = qID.replace(LUNAR_NY_PROGRESSION_QUEST_ID, '')
+        level = level.replace('_', '')
+        settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+        formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, {'level': level})
+        awards = ''
+        bonuses = getRewardsForQuests(message, [qID])
+        if bonuses:
+            awards += backport.text(R.strings.lunar_ny.systemMessage.progression.awards.header())
+            entitlements = bonuses.get('entitlements')
+            if entitlements is not None:
+                awards += self.__processEnvelope(entitlements)
+            dossier = bonuses.get('dossier')
+            if dossier is not None:
+                awards += self.__processBadge(dossier)
+                awards += self.__processAchievements(dossier, level)
+        formatted['message'] += awards
+        return MessageData(formatted, settings)
+
+    def __processEnvelope(self, entitlements):
+        result = ''
+        for entitlementName, entitlementData in entitlements.iteritems():
+            count = entitlementData.get('count', 0)
+            description = backport.text(R.strings.lunar_ny.systemMessage.progression.awards.dyn(entitlementName)())
+            result += self.__getBlockText(description, count)
+
+        return result
+
+    def __processBadge(self, data):
+        result = ''
+        for block in data.values():
+            if isinstance(block, dict):
+                for record in block.keys():
+                    recordType, badgeName = record
+                    if recordType == BADGES_BLOCK:
+                        text = backport.text(R.strings.lunar_ny.systemMessage.progression.awards.badge())
+                        badge = backport.text(R.strings.badge.dyn('badge_{}'.format(badgeName))())
+                        result += self.__getBlockText(text, badge)
+
+        return result
+
+    def __processAchievements(self, data, level):
+        result = ''
+        for block in data.values():
+            if isinstance(block, dict):
+                for record in block.keys():
+                    if record[0] in ACHIEVEMENT_BLOCK.ALL:
+                        factory = factories.getAchievementFactory(record)
+                        if factory is not None:
+                            item = factory.create(value=level)
+                            descr = backport.text(R.strings.lunar_ny.systemMessage.progression.awards.achievement())
+                            result += self.__getBlockText(descr, item.getUserName())
+
+        return result
+
+    def __getBlockText(self, description, item):
+        ctx = {'description': description,
+         'item': item}
+        return g_settings.htmlTemplates.format(self.__HTML_BLOCK_ITEM, ctx=ctx)
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return LUNAR_NY_PROGRESSION_QUEST_ID in questID
 
 
 class NewYearLevelUpRewardFormatter(AsyncTokenQuestsSubFormatter):

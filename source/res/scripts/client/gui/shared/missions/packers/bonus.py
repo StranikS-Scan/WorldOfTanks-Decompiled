@@ -4,6 +4,8 @@ import logging
 import typing
 import constants
 from adisp import async, process
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.dog_tag_composer import dogTagComposer
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
@@ -22,11 +24,10 @@ from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.gui_items.customization.c11n_items import Style
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from helpers import i18n, dependency
-from skeletons.gui.server_events import IEventsCache
 from helpers import time_utils
+from lunar_ny.lunar_ny_constants import ENVELOPE_ENTITLEMENT_CODE_TO_TYPE
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 DOSSIER_BADGE_ICON_PREFIX = 'badge_'
 DOSSIER_ACHIEVEMENT_POSTFIX = '_achievement'
@@ -115,6 +116,10 @@ class BaseBonusUIPacker(object):
 
     def asyncGetToolTip(self, bonus, callback=None):
         pass
+
+    def packToolTip(self, bonusModel, index, contentId):
+        bonusModel.setTooltipContentId(str(contentId))
+        bonusModel.setTooltipId(str(index))
 
     @classmethod
     def _pack(cls, bonus):
@@ -296,21 +301,29 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
 
 
 class EntitlementBonusUIPacker(BaseBonusUIPacker):
+    _LUNAR_ENVELOPE_BONUS_NAME = 'lunarNYEnvelope'
 
     @classmethod
     def _pack(cls, bonus):
-        entModel = TokenBonusModel()
-        cls._packCommon(bonus, entModel)
-        cls.__packCommonEntitlement(bonus, entModel)
+        value = bonus.getValue()
+        if value.id in ENVELOPE_ENTITLEMENT_CODE_TO_TYPE:
+            entModel = IconBonusModel()
+            cls.__packLunarNYEnvelope(bonus, entModel)
+        else:
+            entModel = TokenBonusModel()
+            cls._packCommon(bonus, entModel)
+            cls.__packCommonEntitlement(bonus, entModel)
         return [entModel]
 
     @classmethod
     def _getToolTip(cls, bonus):
-        return [bonus.getTooltipData()]
+        value = bonus.getValue()
+        return [TooltipData(tooltip=None, isSpecial=False, specialAlias=None, specialArgs=[ENVELOPE_ENTITLEMENT_CODE_TO_TYPE[value.id]])] if value.id in ENVELOPE_ENTITLEMENT_CODE_TO_TYPE else [bonus.getTooltipData()]
 
     @classmethod
     def _getContentId(cls, bonus):
-        return [BACKPORT_TOOLTIP_CONTENT_ID]
+        value = bonus.getValue()
+        return [R.views.lobby.lunar_ny.tooltips.EnvelopeTooltip()] if value.id in ENVELOPE_ENTITLEMENT_CODE_TO_TYPE else [BACKPORT_TOOLTIP_CONTENT_ID]
 
     @classmethod
     def __packCommonEntitlement(cls, bonus, model):
@@ -320,6 +333,13 @@ class EntitlementBonusUIPacker(BaseBonusUIPacker):
         model.setIconSmall(bonus.getIconBySize(AWARDS_SIZES.SMALL))
         model.setIconBig(bonus.getIconBySize(AWARDS_SIZES.BIG))
         model.setLabel(bonus.getUserName(value.id))
+
+    @classmethod
+    def __packLunarNYEnvelope(cls, bonus, model):
+        value = bonus.getValue()
+        model.setValue(str(value.amount))
+        model.setName(cls._LUNAR_ENVELOPE_BONUS_NAME)
+        model.setIcon(value.id)
 
 
 class ItemBonusUIPacker(BaseBonusUIPacker):
@@ -910,16 +930,19 @@ def getDefaultBonusPacker():
 def packBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None):
     bonusIndexTotal = 0
     bonusTooltipList = []
+    bonusContentIdList = []
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = packer.pack(bonus)
             if bonusList and tooltipData is not None:
                 bonusTooltipList = packer.getToolTip(bonus)
+                bonusContentIdList = packer.getContentId(bonus)
             for bonusIndex, item in enumerate(bonusList):
                 item.setIndex(bonusIndexTotal)
                 model.addViewModel(item)
                 if tooltipData is not None:
                     tooltipData[bonusIndexTotal] = bonusTooltipList[bonusIndex]
+                    item.setTooltipContentId(str(bonusContentIdList[bonusIndex]))
                 bonusIndexTotal += 1
 
     model.invalidate()

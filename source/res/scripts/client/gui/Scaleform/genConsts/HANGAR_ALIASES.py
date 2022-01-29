@@ -35,6 +35,8 @@ class HANGAR_ALIASES(object):
     NY_MAIN_WIDGET_UI = 'NYMainWidgetUI'
     LOOTBOXES_ENTRANCE_POINT = 'lootboxesEntrancePoint'
     PROGRESSIVE_REWARD_WIDGET = 'progressiveRewardWdgt'
+    ENVELOPES_ENTRANCE_POINT = 'envelopesEntrancePoint'
+    LUNAR_NY_MAIN_WIDGET_UI = 'LunarNYMainWidgetUI'
     DAILY_QUEST_WIDGET = 'dqWidget'
     BATTLE_PASSS_ENTRY_POINT = 'battlePassEntryPoint'
     BATTLE_ROYALE_ENTRY_POINT = 'battleRoyaleEntryPoint'

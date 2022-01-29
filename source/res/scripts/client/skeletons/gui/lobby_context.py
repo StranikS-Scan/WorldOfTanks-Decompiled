@@ -78,7 +78,7 @@ class ILobbyContext(object):
     def isPeripheryAvailable(self, peripheryID, itemsCache=None):
         raise NotImplementedError
 
-    def getPeripheryName(self, peripheryID, checkAnother=True):
+    def getPeripheryName(self, peripheryID, checkAnother=True, useShortName=False):
         raise NotImplementedError
 
     def addHeaderNavigationConfirmator(self, confirmator):

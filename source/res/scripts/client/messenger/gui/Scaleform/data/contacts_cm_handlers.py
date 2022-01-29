@@ -7,8 +7,12 @@ from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHan
 from gui.Scaleform.genConsts.CONTACTS_ACTION_CONSTS import CONTACTS_ACTION_CONSTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.lobby.lunar_ny.lunar_ny_helpers import showLunarNYMainView
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
+from lunar_ny import ILunarNYController
 from messenger.m_constants import USER_TAG
 from new_year.ny_navigation_helper import externalSwitchToGiftSystemView
 from skeletons.gui.game_control import IGiftSystemController
@@ -39,6 +43,7 @@ class SimpleContactsCMHandler(AbstractContextMenuHandler, EventSystemEntity):
 
 
 class PlayerContactsCMHandler(BaseUserCMHandler):
+    __lunarNYController = dependency.descriptor(ILunarNYController)
     __giftsController = dependency.descriptor(IGiftSystemController)
     __nyController = dependency.descriptor(INewYearController)
 
@@ -61,6 +66,9 @@ class PlayerContactsCMHandler(BaseUserCMHandler):
     def rejectFriendship(self):
         self.proto.contacts.cancelFriendship(self.databaseID)
 
+    def openLunarNYMainView(self):
+        showLunarNYMainView()
+
     def sendGift(self):
         externalSwitchToGiftSystemView()
         NyGiftSystemContextMenuLogger().logClick()
@@ -77,6 +85,7 @@ class PlayerContactsCMHandler(BaseUserCMHandler):
          CONTACTS_ACTION_CONSTS.REMOVE_CONTACT_NOTE: 'removeContactNote',
          CONTACTS_ACTION_CONSTS.REMOVE_FROM_GROUP: 'removeFromGroup',
          CONTACTS_ACTION_CONSTS.REJECT_FRIENDSHIP: 'rejectFriendship',
+         CONTACTS_ACTION_CONSTS.LUNAR_NY_SEND_GIFT: 'openLunarNYMainView',
          CONTACTS_ACTION_CONSTS.NY_SEND_GIFT: 'sendGift'})
         return handlers
 
@@ -114,6 +123,8 @@ class PlayerContactsCMHandler(BaseUserCMHandler):
 
     def _addSendGiftInfo(self, options, userCMInfo):
         eventHub = self.__giftsController.getEventHub(GiftEventID.NY_HOLIDAYS)
+        if self.__lunarNYController.isGiftSystemEventActive() and userCMInfo.isAnySub:
+            options.insert(0, self._makeItem(CONTACTS_ACTION_CONSTS.LUNAR_NY_SEND_GIFT, backport.text(R.strings.lunar_ny.menu.contextMenu.lunarNYSendGift()), iconType=CONTACTS_ACTION_CONSTS.LUNAR_NY_SEND_GIFT, linkage='LunarNYContextMenuItemUI'))
         if self.__nyController.isEnabled() and eventHub and eventHub.getSettings().isEnabled and userCMInfo.isAnySub:
             isEnabled = self.prbEntity is None or not self.prbEntity.isInQueue()
             options.insert(0, self._makeItem(CONTACTS_ACTION_CONSTS.NY_SEND_GIFT, MENU.contextmenu(CONTACTS_ACTION_CONSTS.NY_SEND_GIFT), iconType=CONTACTS_ACTION_CONSTS.NY_SEND_GIFT, linkage='NYContextMenuItemUI', optInitData={'enabled': isEnabled}))

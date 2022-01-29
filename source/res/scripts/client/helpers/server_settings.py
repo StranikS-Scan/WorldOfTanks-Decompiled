@@ -781,6 +781,54 @@ class VehiclePostProgressionConfig(namedtuple('_VehiclePostProgression', ('isPos
         return self._replace(**dataToUpdate)
 
 
+LUNAR_NY_EVENT_CONFIG = Configs.LUNAR_NY_EVENT_CONFIG.value
+
+class _LunarNYEventConfig(object):
+    __slots__ = ('__isEnabled', '__startDateInUTC', '__finishDateInUTC', '__aboutEnvelopesUrl', '__eventRulesURL', '__infoVideoURL', '__envelopePurchasesLimit', '__minRareCharmProbability', '__envelopesExternalShopURL')
+
+    def __init__(self, **kwargs):
+        self.__isEnabled = kwargs.get('enabled', False)
+        self.__startDateInUTC = kwargs.get('startDateInUTC', 0)
+        self.__finishDateInUTC = kwargs.get('finishDateInUTC', 0)
+        self.__aboutEnvelopesUrl = kwargs.get('aboutEnvelopesUrl', '')
+        self.__eventRulesURL = kwargs.get('eventRulesURL', '')
+        self.__infoVideoURL = kwargs.get('infoVideoURL', '')
+        self.__envelopesExternalShopURL = kwargs.get('envelopesExternalShopURL', '')
+        self.__envelopePurchasesLimit = kwargs.get('envelopePurchasesLimit', 0)
+        self.__minRareCharmProbability = kwargs.get('minRareCharmProbability', 0)
+
+    @property
+    def isEnabled(self):
+        return self.__isEnabled
+
+    @property
+    def aboutEnvelopesUrl(self):
+        return self.__aboutEnvelopesUrl
+
+    @property
+    def eventRulesURL(self):
+        return self.__eventRulesURL
+
+    @property
+    def infoVideoURL(self):
+        return self.__infoVideoURL
+
+    @property
+    def envelopesExternalShopURL(self):
+        return self.__envelopesExternalShopURL
+
+    @property
+    def envelopePurchasesLimit(self):
+        return self.__envelopePurchasesLimit
+
+    @property
+    def minRareCharmProbability(self):
+        return self.__minRareCharmProbability
+
+    def getEventActiveTime(self):
+        return (self.__startDateInUTC, self.__finishDateInUTC)
+
+
 class _EventBattlesConfig(namedtuple('_EventBattlesConfig', ('isEnabled',
  'peripheryIDs',
  'primeTimes',
@@ -809,11 +857,12 @@ class _EventBattlesConfig(namedtuple('_EventBattlesConfig', ('isEnabled',
 class GiftEventConfig(namedtuple('_GiftEventConfig', ('eventID',
  'giftEventState',
  'giftItemIDs',
- 'clientReqStrategy'))):
+ 'clientReqStrategy',
+ 'disabledGiftsForSend'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(eventID=GiftEventID.UNKNOWN, giftEventState=GiftEventState.DISABLED, giftItemIDs=[], clientReqStrategy=ClientReqStrategy.AUTO)
+        defaults = dict(eventID=GiftEventID.UNKNOWN, giftEventState=GiftEventState.DISABLED, giftItemIDs=[], clientReqStrategy=ClientReqStrategy.AUTO, disabledGiftsForSend=[])
         defaults.update(kwargs)
         return super(GiftEventConfig, cls).__new__(cls, **defaults)
 
@@ -832,6 +881,10 @@ class GiftEventConfig(namedtuple('_GiftEventConfig', ('eventID',
     @property
     def isDisabled(self):
         return self.giftEventState == GiftEventState.DISABLED
+
+    @property
+    def disabledGifts(self):
+        return self.disabledGiftsForSend
 
 
 class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events', 'itemToEventID'))):
@@ -901,6 +954,7 @@ class ServerSettings(object):
         self.__vehiclePostProgressionConfig = VehiclePostProgressionConfig()
         self.__eventBattlesConfig = _EventBattlesConfig()
         self.__giftSystemConfig = GiftSystemConfig()
+        self.__lunarNYEventConfig = _LunarNYEventConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1001,6 +1055,7 @@ class ServerSettings(object):
             self.__eventBattlesConfig = _EventBattlesConfig.defaults()
         if Configs.GIFTS_CONFIG.value in self.__serverSettings:
             self.__giftSystemConfig = makeTupleByDict(GiftSystemConfig, {'events': self.__serverSettings[Configs.GIFTS_CONFIG.value]})
+        self.__updateLunarNYEventConfig(self.__serverSettings)
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1075,6 +1130,7 @@ class ServerSettings(object):
             self.__updateGiftSystemConfig(serverSettingsDiff)
         self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
+        self.__updateLunarNYEventConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1495,6 +1551,9 @@ class ServerSettings(object):
     def getActiveTestConfirmationConfig(self):
         return self.__getGlobalSetting(constants.ACTIVE_TEST_CONFIRMATION_CONFIG, {})
 
+    def getLunarNYEventConfig(self):
+        return self.__lunarNYEventConfig
+
     def getNewYearBonusConfig(self):
         return SettingBonusConfig(self.__getNYConfig(SettingBonusConsts.CONFIG_NAME))
 
@@ -1595,6 +1654,18 @@ class ServerSettings(object):
 
     def __updateVehiclePostProgressionConfig(self, serverSettingsDiff):
         self.__vehiclePostProgressionConfig = self.__vehiclePostProgressionConfig.replace(serverSettingsDiff[post_progression_common.SERVER_SETTINGS_KEY])
+
+    def __updateLunarNYEventConfig(self, settings):
+        if LUNAR_NY_EVENT_CONFIG in settings:
+            config = settings[LUNAR_NY_EVENT_CONFIG]
+            if config is None:
+                self.__lunarNYEventConfig = _LunarNYEventConfig()
+            elif isinstance(config, dict):
+                self.__lunarNYEventConfig = _LunarNYEventConfig(**config)
+            else:
+                _logger.error('Unexpected format of subscriptions service config: %r', config)
+                self.__lunarNYEventConfig = _LunarNYEventConfig()
+        return
 
     def __updateEventBattles(self, targetSettings):
         self.__eventBattlesConfig = self.__eventBattlesConfig.replace(targetSettings['event_battles_config'])

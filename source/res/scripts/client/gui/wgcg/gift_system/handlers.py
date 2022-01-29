@@ -7,7 +7,8 @@ class GiftSystemRequestHandlers(RequestHandlers):
 
     def get(self):
         handlers = {WebRequestDataType.GIFT_SYSTEM_STATE: self.__getGiftSystemState,
-         WebRequestDataType.GIFT_SYSTEM_POST_GIFT: self.__postGiftSystemGift}
+         WebRequestDataType.GIFT_SYSTEM_POST_GIFT: self.__postGiftSystemGift,
+         WebRequestDataType.GIFT_SYSTEM_SECRET_SANTA_POST: self.__postSecretSanta}
         return handlers
 
     def __getGiftSystemState(self, ctx, callback):
@@ -15,3 +16,6 @@ class GiftSystemRequestHandlers(RequestHandlers):
 
     def __postGiftSystemGift(self, ctx, callback):
         return self._requester.doRequestEx(ctx, callback, ('gifts', 'post_gift_system_gift'), ctx.getEntitlementCode(), ctx.getReceiverID(), ctx.getMetaInfo())
+
+    def __postSecretSanta(self, ctx, callback):
+        return self._requester.doRequestEx(ctx, callback, ('gifts', 'post_secret_santa_gift'), ctx.getEntitlementCode(), ctx.getMetaInfo())

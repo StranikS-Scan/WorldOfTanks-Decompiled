@@ -174,12 +174,12 @@ class LobbyContext(ILobbyContext):
                 result = False
             return result
 
-    def getPeripheryName(self, peripheryID, checkAnother=True):
+    def getPeripheryName(self, peripheryID, checkAnother=True, useShortName=False):
         name = None
         if not checkAnother or self.isAnotherPeriphery(peripheryID):
             host = g_preDefinedHosts.periphery(peripheryID)
             if host is not None:
-                name = host.name
+                name = host.shortName if useShortName else host.name
         return name
 
     def addHeaderNavigationConfirmator(self, confirmator):

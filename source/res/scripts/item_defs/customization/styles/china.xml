@@ -503,4 +503,58 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch45_WZ_114	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	594	</id>
+      <texture>	gui/maps/vehicles/styles/Ch45_WZ_114_3DSt_CNG_21.png	</texture>
+      <modelsSet>	Ch45_WZ_114_3DSt_CNG_21	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/Ch45_WZ_114_3DSt_CNG_21	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Ch45_WZ_114_3DSt_CNG_21_desc/long	</longDescriptionSpecial>
+      <tags>	styleProgression progression_required progression_rewind_enabled	</tags>
+      <styleProgressions>
+        <stage>
+          <materials>	tank_guns_skinned	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_guns_skinned tank_mat_tiger_skinned firecrackers_mat_skinned	</materials>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <sequences>
+            <item>
+              <id>	31	</id>
+              <slotId>	38000	</slotId>
+            </item>
+          </sequences>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </china.xml>

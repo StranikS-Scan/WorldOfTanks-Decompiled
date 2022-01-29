@@ -15,8 +15,9 @@ class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_DESCRLABEL_REFERRALPROGRAM = '#vehicle_preview:header/backBtn/descrLabel/referralProgram'
     HEADER_BACKBTN_DESCRLABEL_FRONTLINE = '#vehicle_preview:header/backBtn/descrLabel/frontline'
     HEADER_BACKBTN_DESCRLABEL_EVENTPROGRESSION = '#vehicle_preview:header/backBtn/descrLabel/eventProgression'
+    HEADER_BACKBTN_DESCRLABEL_LUNAR_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/lunar_marathon'
+    HEADER_BACKBTN_DESCRLABEL_LUNAR_MARATHON_POST = '#vehicle_preview:header/backBtn/descrLabel/lunar_marathon_post'
     HEADER_BACKBTN_DESCRLABEL_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/marathon'
-    HEADER_BACKBTN_DESCRLABEL_MAY21_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/may21_marathon'
     HEADER_BACKBTN_DESCRLABEL_RANKED = '#vehicle_preview:header/backBtn/descrLabel/ranked'
     HEADER_BACKBTN_DESCRLABEL_VEHPOSTPROGRESSION = '#vehicle_preview:header/backBtn/descrLabel/vehPostProgression'
     HEADER_BACKBTN_DESCRLABEL_BLUEPRINTSEXCHANGE = '#vehicle_preview:header/backBtn/descrLabel/blueprintsExchange'
@@ -105,6 +106,7 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_FRONTLINEPACK_COUPONLABEL = '#vehicle_preview:buyingPanel/frontlinePack/couponLabel'
     BUYINGPANEL_PERSONALTRADEIN_TITLE = '#vehicle_preview:buyingPanel/personalTradeIn/title'
     BUYINGPANEL_PROGRESSIONSTYLES_NOTIFICATION_TEXT = '#vehicle_preview:buyingPanel/progressionStyles/notification/text'
+    BUYINGPANEL_PROGRESSIONSTYLES_NOTIFICATION_REWIND_ENABLE_TEXT = '#vehicle_preview:buyingPanel/progressionStyles/notification/rewind_enable/text'
     BUYINGPANEL_PROGRESSIONSTYLES_CURRENTLEVEL = '#vehicle_preview:buyingPanel/progressionStyles/currentLevel'
     HEADER_BACKBTN_DESCRLABEL_ENUM = (HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE,
      HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS,
@@ -116,8 +118,9 @@ class VEHICLE_PREVIEW(object):
      HEADER_BACKBTN_DESCRLABEL_REFERRALPROGRAM,
      HEADER_BACKBTN_DESCRLABEL_FRONTLINE,
      HEADER_BACKBTN_DESCRLABEL_EVENTPROGRESSION,
+     HEADER_BACKBTN_DESCRLABEL_LUNAR_MARATHON,
+     HEADER_BACKBTN_DESCRLABEL_LUNAR_MARATHON_POST,
      HEADER_BACKBTN_DESCRLABEL_MARATHON,
-     HEADER_BACKBTN_DESCRLABEL_MAY21_MARATHON,
      HEADER_BACKBTN_DESCRLABEL_RANKED,
      HEADER_BACKBTN_DESCRLABEL_VEHPOSTPROGRESSION,
      HEADER_BACKBTN_DESCRLABEL_BLUEPRINTSEXCHANGE,

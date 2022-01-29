@@ -10,6 +10,7 @@ from async import async, await
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gifts.gifts_common import GiftEventID
 from gui import DialogsInterface, makeHtmlString, SystemMessages
+from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPlayerSeniorityAwardsUrl
 from gui.battle_pass.battle_pass_helpers import showOfferByBonusName
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -24,6 +25,8 @@ from gui.impl.new_year.navigation import ViewAliases
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.lunar_ny.main_view.main_view_model import Tab
+from gui.impl.lobby.lunar_ny.lunar_ny_helpers import showLunarNYMainView, showOpenEnvelopesAwardView
 from gui.impl.lobby.loot_box.loot_box_helper import showLootBoxSpecialMultiOpen
 from gui.impl.new_year.new_year_helper import extractCollectionsRewards
 from gui.platform.base.statuses.constants import StatusTypes
@@ -39,8 +42,10 @@ from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
+from lunar_ny import ILunarNYController
+from lunar_ny.lunar_ny_constants import MAIN_VIEW_INIT_CONTEXT_TAB, MAIN_VIEW_INIT_CONTEXT_ENVELOPE_SENDER_ID, MAIN_VIEW_INIT_CONTEXT_ENVELOPE_TYPE, ALL_ENVELOPE_TYPES
+from shared_utils import first, findFirst
 from new_year.ny_navigation_helper import switchNewYearView, showLootBox
-from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.impl import INotificationWindowController
 from new_year.ny_constants import AnchorNames
@@ -61,6 +66,7 @@ from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
 from wo2022.wo_constants import WO_GOTO_AUCTION_ACTION
+from uilogging.lunar_ny.loggers import LunarOpenEnvelopeLogger
 if typing.TYPE_CHECKING:
     from notification.NotificationsModel import NotificationsModel
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
@@ -1002,6 +1008,95 @@ class _OpenMapboxSurvey(_NavigationDisabledActionHandler):
         self.__mapboxCtrl.showSurvey(notification.getSavedData())
 
 
+class _OpenEnvelopesSendView(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showLunarNYMainView(initCtx={MAIN_VIEW_INIT_CONTEXT_TAB: Tab.SENDENVELOPES})
+
+
+class _OpenEnvelopesStorage(_NavigationDisabledActionHandler):
+    __lunarNYController = dependency.descriptor(ILunarNYController)
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.LUNAR_NY_ENVELOPES_RECEIVED
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        count = notification.getCount()
+        if count == 1:
+            for eType in ALL_ENVELOPE_TYPES:
+                lootBox = self.__lunarNYController.receivedEnvelopes.getLootBoxByEnvelopeType(eType)
+                if lootBox is not None and lootBox.getInventoryCount() > 0:
+                    eData = first(self.__itemsCache.items.giftSystem.getGiftFromStorage(lootBox.getID()))
+                    if eData is not None:
+                        self._openEnvelopes(eType, 1, eData.senderID)
+                        return
+
+        else:
+            showLunarNYMainView(initCtx={MAIN_VIEW_INIT_CONTEXT_TAB: Tab.STOREENVELOPES})
+        self._logAction(notification)
+        return
+
+    def _logAction(self, notification):
+        LunarOpenEnvelopeLogger().logOpenFromNotification(notification)
+
+    @process
+    def _openEnvelopes(self, envelopeType, count, senderID):
+        lootBox = self.__lunarNYController.receivedEnvelopes.getLootBoxByEnvelopeType(envelopeType)
+        result = None
+        if self.__lunarNYController.receivedEnvelopes.isOpenAvailability() and lootBox is not None:
+            result = yield LootBoxOpenProcessor(lootBox, count, senderID).request()
+        if result is not None and result.success:
+            showOpenEnvelopesAwardView(result.auxData, envelopeType)
+        else:
+            msg = backport.text(R.strings.lunar_ny.systemMessage.openEnvelopesAwards.error())
+            SystemMessages.pushMessage(msg, SM_TYPE.ErrorSimple, NotificationPriorityLevel.MEDIUM)
+        return
+
+
+class _OpenEnvelopesStorageBySender(_OpenEnvelopesStorage):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.LUNAR_NY_NEW_ENVELOPES_RECEIVED
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        if notification.isOneSender():
+            savedData = notification.getSavedData()
+            senderID = first(savedData.get('senderIDs', ()), default=0)
+            envelopeType = savedData.get('envelopeTypes', set()).copy().pop()
+        else:
+            senderID = None
+            envelopeType = None
+        if notification.isOneSender() and notification.getDataCount() == 1:
+            self._openEnvelopes(envelopeType, notification.getDataCount(), senderID)
+        else:
+            showLunarNYMainView(initCtx={MAIN_VIEW_INIT_CONTEXT_TAB: Tab.STOREENVELOPES,
+             MAIN_VIEW_INIT_CONTEXT_ENVELOPE_TYPE: envelopeType,
+             MAIN_VIEW_INIT_CONTEXT_ENVELOPE_SENDER_ID: senderID})
+        self._logAction(notification)
+        return
+
+
 class _OpenPsaShop(_NavigationDisabledActionHandler):
 
     @classmethod
@@ -1194,7 +1289,10 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _NewYearOpenSpecialBoxPopUpHandler,
  _NewYearOpenSpecialBoxEntryHandler,
  _NewYearCollectionCompleteHandler,
- _WinterOfferToAuctionHandler)
+ _WinterOfferToAuctionHandler,
+ _OpenEnvelopesStorage,
+ _OpenEnvelopesStorageBySender,
+ _OpenEnvelopesSendView)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

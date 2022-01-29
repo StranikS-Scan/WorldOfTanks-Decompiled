@@ -242,17 +242,23 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
             customizationSuitableText += vehicle.shortUserName
             count = item.boundInventoryCount(vehicleCD)
         if item.isProgressive:
-            level = item.getProgressionLevel(vehicle)
-            if level > 0:
-                if item.itemTypeID == GUI_ITEM_TYPE.STYLE:
-                    levelIconPath = R.images.gui.maps.icons.customization.progression_styles.icons
-                else:
-                    levelIconPath = R.images.gui.maps.icons.customization.progression_icons
-                levelIcon = backport.image(levelIconPath.dyn('level_{}'.format(level))())
-                if item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
-                    icon = item.previewIconUrlByProgressionLevel(level)
-                else:
+            if item.isProgressionRewindEnabled:
+                levelIcon = backport.image(R.images.gui.maps.icons.customization.progression_rewind())
+                level = item.getProgressionLevel(vehicle)
+                if level > 0:
                     icon = item.iconUrlByProgressionLevel(level)
+            else:
+                level = item.getProgressionLevel(vehicle)
+                if level > 0:
+                    if item.itemTypeID == GUI_ITEM_TYPE.STYLE:
+                        levelIconPath = R.images.gui.maps.icons.customization.progression_styles.icons
+                    else:
+                        levelIconPath = R.images.gui.maps.icons.customization.progression_icons
+                    levelIcon = backport.image(levelIconPath.dyn('level_{}'.format(level))())
+                    if item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+                        icon = item.previewIconUrlByProgressionLevel(level)
+                    else:
+                        icon = item.iconUrlByProgressionLevel(level)
         isAvailableForSell = isCustomizationAvailableForSell(item, vehicleCD)
         isPreviewAvailable = item.itemTypeID == GUI_ITEM_TYPE.STYLE
         vo = createStorageDefVO(itemID=item.intCD, title=title, description=customizationSuitableText, count=count, price=priceVO if isAvailableForSell else None, image=icon, imageAlt='altimage', contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_CUSTOMZIZATION_ITEM, enabled=isAvailableForSell)

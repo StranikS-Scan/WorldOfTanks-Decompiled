@@ -456,6 +456,10 @@ def nyNotEnoughShardsDialogLevel(text):
     return _formatText('nyNotEnoughShardsDialogLevel', text)
 
 
+def discountText(text):
+    return _formatText('discountText', text)
+
+
 def getRawStyles(names):
     return dict(((name, _getStyle(name)) for name in names))
 

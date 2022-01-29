@@ -6,7 +6,7 @@ from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
 class CartSlotModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=18, commands=0):
+    def __init__(self, properties=19, commands=0):
         super(CartSlotModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -103,17 +103,23 @@ class CartSlotModel(ViewModel):
     def setProgressionLevel(self, value):
         self._setNumber(15, value)
 
-    def getIsEdited(self):
+    def getIsProgressionRewindEnabled(self):
         return self._getBool(16)
 
-    def setIsEdited(self, value):
+    def setIsProgressionRewindEnabled(self, value):
         self._setBool(16, value)
 
-    def getIsStyle(self):
+    def getIsEdited(self):
         return self._getBool(17)
 
-    def setIsStyle(self, value):
+    def setIsEdited(self, value):
         self._setBool(17, value)
+
+    def getIsStyle(self):
+        return self._getBool(18)
+
+    def setIsStyle(self, value):
+        self._setBool(18, value)
 
     def _initialize(self):
         super(CartSlotModel, self)._initialize()
@@ -133,5 +139,6 @@ class CartSlotModel(ViewModel):
         self._addBoolProperty('isSpecial', False)
         self._addBoolProperty('showUnsupportedAlert', False)
         self._addNumberProperty('progressionLevel', 0)
+        self._addBoolProperty('isProgressionRewindEnabled', False)
         self._addBoolProperty('isEdited', False)
         self._addBoolProperty('isStyle', False)

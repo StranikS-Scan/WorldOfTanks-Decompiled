@@ -213,7 +213,7 @@ def getStyleProgressionOutfit(outfit, toLevel=0, season=None):
     allLevels = styleProgression.keys()
     if not season:
         season = _currentMapSeason()
-    if toLevel not in allLevels:
+    if allLevels and toLevel not in allLevels:
         _logger.error('Get style progression outfit: incorrect level given: %d', toLevel)
         toLevel = 1
     resOutfit = outfit.copy()

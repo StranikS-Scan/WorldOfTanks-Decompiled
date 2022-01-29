@@ -7,7 +7,7 @@ from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
-from gui.Scaleform.framework.entities.View import View, ViewKey
+from gui.Scaleform.framework.entities.View import View, ViewKey, ViewKeyDynamic
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
@@ -15,6 +15,7 @@ from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.events import LoadViewEvent, ViewEventType
@@ -54,9 +55,12 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
      VIEW_ALIAS.BATTLE_QUEUE,
      VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE,
      RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS)
+    __SUB_WULF_VIEWS = (R.views.lobby.lunar_ny.LunarNewYear(),)
 
     def __init__(self):
-        super(_LobbySubViewsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in self.__SUB_VIEWS ])
+        viewKeys = [ ViewKey(alias) for alias in self.__SUB_VIEWS ]
+        viewKeys.extend([ ViewKeyDynamic(alias) for alias in self.__SUB_WULF_VIEWS ])
+        super(_LobbySubViewsLifecycleHandler, self).__init__(viewKeys)
         self.__loadingSubViews = set()
         self.__isWaitingVisible = False
 

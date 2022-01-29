@@ -7,6 +7,7 @@ import typing
 import BigWorld
 import Event
 from constants import RentType, SEASON_NAME_BY_TYPE, IS_RENTALS_ENABLED
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.money import Money
 from helpers import dependency
@@ -37,7 +38,7 @@ class RentalsController(IRentalsController):
 
     def onLobbyInited(self, event):
         if self.isEnabled():
-            self.itemsCache.onSyncCompleted += self._update
+            self.itemsCache.onSyncCompleted += self.__onSyncCompleted
             self.epicController.onUpdated += self._update
             if self.__rentNotifyTimeCallback is None:
                 self.__startRentTimeNotifyCallback()
@@ -57,7 +58,7 @@ class RentalsController(IRentalsController):
         if self.isEnabled():
             self.__clearRentTimeNotifyCallback()
             self.__vehiclesForUpdate = None
-            self.itemsCache.onSyncCompleted -= self._update
+            self.itemsCache.onSyncCompleted -= self.__onSyncCompleted
             self.epicController.onUpdated -= self._update
         return
 
@@ -143,6 +144,10 @@ class RentalsController(IRentalsController):
                 filteredPackages[packageID] = package
 
         return filteredPackages
+
+    def __onSyncCompleted(self, _, diff):
+        if GUI_ITEM_TYPE.VEHICLE in diff:
+            self._update()
 
     def __startRentTimeNotifyCallback(self):
         if not self.itemsCache.isSynced():

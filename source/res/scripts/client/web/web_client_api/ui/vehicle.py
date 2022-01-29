@@ -21,7 +21,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showStylePreview, showHangar, showBlueprintsSalePage, showBlueprintsExchangeStylePreview
+from gui.shared.event_dispatcher import showStylePreview, showHangar, showBlueprintsSalePage, showProgressionStylesStylePreview, showBlueprintsExchangeStylePreview, showMarathonRewardScreen
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -347,6 +347,10 @@ class _VehicleCustomizationPreviewSchema(W2CSchema):
     style_id = Field(required=True, type=int)
 
 
+class _MarathonRewardScreen(W2CSchema):
+    marathon_prefix = Field(required=True, type=basestring)
+
+
 class VehicleSellWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -436,7 +440,7 @@ class VehiclePreviewWebApiMixin(object):
     @w2c(_VehicleMarathonStylePreviewSchema, 'marathon_vehicle_style_preview')
     def openMarathonVehicleStylePreview(self, cmd):
         cmd.back_url = partial(showMissionsMarathon, cmd.marathon_prefix)
-        return self._openVehicleStylePreview(cmd)
+        return self._openVehicleStylePreview(cmd, isSpecialPreview=True)
 
     @w2c(_VehicleListStylePreviewSchema, 'vehicle_list_style_preview')
     def openVehicleListStylePreview(self, cmd):
@@ -472,17 +476,21 @@ class VehiclePreviewWebApiMixin(object):
                 ctx = self.c11n.getCtx()
                 ctx.changeMode(CustomizationModes.STYLED)
                 slotId = ctx.mode.STYLE_SLOT
-                ctx.installItem(result.style.intCD, slotId)
+                ctx.mode.installItem(result.style.intCD, slotId)
             return
 
         self.c11n.showCustomization(result.vehicle.invID, callback=styleCallback)
         return {'installed': result.canInstall}
 
-    def _openVehicleStylePreview(self, cmd):
+    @w2c(_MarathonRewardScreen, 'marathon_reward_screen')
+    def openMarathonRewardScreen(self, cmd):
+        showMarathonRewardScreen(cmd.marathon_prefix)
+
+    def _openVehicleStylePreview(self, cmd, isSpecialPreview=False):
         if cmd.vehicle_cd:
-            return self.__showStylePreview(cmd.vehicle_cd, cmd)
+            return self.__showStylePreview(cmd.vehicle_cd, cmd, isSpecialPreview)
         styledVehicleCD = self.__getStyledVehicleCD(cmd.style_id)
-        return False if not styledVehicleCD else self.__showStylePreview(styledVehicleCD, cmd)
+        return False if not styledVehicleCD else self.__showStylePreview(styledVehicleCD, cmd, isSpecialPreview)
 
     def __getStyledVehicleCD(self, styleId):
         styledVehicleCD = None
@@ -521,12 +529,14 @@ class VehiclePreviewWebApiMixin(object):
     def _getVehiclePreviewReturnAlias(self, cmd):
         return VIEW_ALIAS.LOBBY_HANGAR
 
-    def __showStylePreview(self, vehicleCD, cmd):
+    def __showStylePreview(self, vehicleCD, cmd, isSpecialPreview=False):
         style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
         vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
         if vehicle is not None and not vehicle.isOutfitLocked and style.mayInstall(vehicle):
             if cmd.back_btn_descr == 'blueprintsExchange':
                 showStyle = showBlueprintsExchangeStylePreview
+            elif isSpecialPreview and style.isProgression:
+                showStyle = showProgressionStylesStylePreview
             else:
                 showStyle = showStylePreview
             showStyle(vehicleCD, style, style.getDescription(), cmd.back_url if isinstance(cmd.back_url, Callable) else self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))

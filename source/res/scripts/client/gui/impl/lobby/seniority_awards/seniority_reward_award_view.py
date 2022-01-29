@@ -23,6 +23,7 @@ from gui.server_events.bonuses import BlueprintsBonusSubtypes
 from gui.impl.auxiliary.rewards_helper import LootRewardDefModelPresenter
 from gui.shared.event_dispatcher import showShop
 from gui.shared.utils.functions import getAbsoluteUrl, stripHTMLTags
+from lunar_ny import ILunarNYController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import IFestivityController
 from skeletons.gui.shared import IItemsCache
@@ -74,6 +75,7 @@ class SeniorityRewardAwardView(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __NYController = dependency.descriptor(IFestivityController)
+    __lunarNYController = dependency.descriptor(ILunarNYController)
 
     def __init__(self, contentResId, *args, **kwargs):
         settings = ViewSettings(contentResId)
@@ -136,7 +138,8 @@ class SeniorityRewardAwardView(ViewImpl):
     @property
     def __needBlockShopTransition(self):
         newYearBlock = self.__NYController.isEnabled() or self.__NYController.isPostEvent()
-        return not self.__specialCurrencies.get(SACOIN) or newYearBlock
+        lunarNYBlock = self.__lunarNYController.isActive()
+        return not self.__specialCurrencies.get(SACOIN) or newYearBlock or lunarNYBlock
 
     def __setRewards(self, viewModel):
         vehiclesList = viewModel.getVehicles()

@@ -29,6 +29,7 @@ if typing.TYPE_CHECKING:
     import skeletons.gui.shared.utils.requesters as requesters
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
+    from lunar_ny.lunar_ny_requester import ILunarNYRequester
 DO_LOG_BROKEN_SYNC = False
 
 def getDiffID(itemdID):
@@ -382,7 +383,7 @@ class ItemsRequester(IItemsRequester):
      'ranked',
      'dogTag'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, giftSystemRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, giftSystemRequester=None, lunarNY=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -401,6 +402,7 @@ class ItemsRequester(IItemsRequester):
         self.__anonymizer = anonymizerRequester
         self.__battlePass = BattlePassRequester()
         self.__giftSystem = giftSystemRequester
+        self.__lunarNY = lunarNY
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__fittingItemRequesters = {self.__inventory,
@@ -482,6 +484,10 @@ class ItemsRequester(IItemsRequester):
     def giftSystem(self):
         return self.__giftSystem
 
+    @property
+    def lunarNY(self):
+        return self.__lunarNY
+
     @async
     @process
     def request(self, callback=None):
@@ -534,11 +540,19 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/giftSystem')
         yield self.__giftSystem.request()
         Waiting.hide('download/giftSystem')
+        if self.__lunarNY is not None:
+            Waiting.show('download/lunarNY')
+            yield self.__lunarNY.request()
+            Waiting.hide('download/lunarNY')
         self.__brokenSyncAlreadyLoggedTypes.clear()
         callback(self)
+        return
 
     def isSynced(self):
-        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__giftSystem.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__battleRoyale.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
+        if self.__blueprints is not None:
+            return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__giftSystem.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__battleRoyale.isSynced() and self.__blueprints.isSynced()
+        else:
+            return False and self.__lunarNY.isSynced() if self.__lunarNY is not None else True
 
     @async
     @process
@@ -594,6 +608,9 @@ class ItemsRequester(IItemsRequester):
         self.__festivity.clear()
         self.__anonymizer.clear()
         self.__giftSystem.clear()
+        if self.__lunarNY is not None:
+            self.__lunarNY.clear()
+        return
 
     def onDisconnected(self):
         self.__tokens.onDisconnected()

@@ -44,7 +44,7 @@ from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDia
 from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import RefillShells, ExitFromShellsConfirm
 from gui.impl.lobby.techtree.techtree_intro_view import TechTreeIntroWindow
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyWindow, LobbyNotificationWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus, money
@@ -66,7 +66,7 @@ from ny_common.settings import NYLootBoxConsts
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IClanNotificationController, IBrowserController, IGiftSystemController
+from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IClanNotificationController, IBrowserController, IGiftSystemController, IMarathonEventsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -454,11 +454,17 @@ def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR
      'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showMarathonVehiclePreview(vehTypeCompDescr, itemsPack=None, title='', marathonPrefix=''):
+def showMarathonVehiclePreview(vehTypeCompDescr, itemsPack=None, title='', marathonPrefix='', backToHangar=False):
+    previewAppearance = None
+    if backToHangar:
+        previewAppearance = HeroTankPreviewAppearance()
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
      'itemsPack': itemsPack,
      'title': title,
-     'marathonPrefix': marathonPrefix}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'marathonPrefix': marathonPrefix,
+     'previewAppearance': previewAppearance,
+     'backToHangar': backToHangar}), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
 
 
 def showConfigurableVehiclePreview(vehTypeCompDescr, previewAlias, previewBackCb, hiddenBlocks, itemPack):
@@ -506,12 +512,23 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
     import BigWorld
     from HeroTank import HeroTank
     from ClientSelectableCameraObject import ClientSelectableCameraObject
+    marathonCtrl = dependency.instance(IMarathonEventsController)
     for entity in BigWorld.entities.values():
         if entity and isinstance(entity, HeroTank):
-            showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb, previousBackAlias=previousBackAlias, hangarVehicleCD=hangarVehicleCD)
+            descriptor = entity.typeDescriptor
+            if descriptor:
+                marathons = marathonCtrl.getMarathons()
+                activeMarathon = next((marathon for marathon in marathons if marathon.vehicleID == descriptor.type.compactDescr), None)
+                if activeMarathon:
+                    title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
+                    showMarathonVehiclePreview(descriptor.type.compactDescr, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
+                else:
+                    showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb, previousBackAlias=previousBackAlias, hangarVehicleCD=hangarVehicleCD)
             ClientSelectableCameraObject.switchCamera(entity)
             entity.onSelect()
             break
+
+    return
 
 
 def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None):
@@ -1659,3 +1676,28 @@ def showWotPlusInfoPage():
 def showVehicleRentalPage():
     url = getRentVehicleUrl()
     showBrowserOverlayView(url, VIEW_ALIAS.VEHICLE_RENTAL_VIEW)
+
+
+def showMarathonRewardScreen(marathonPrefix):
+    from gui.impl.lobby.marathon.marathon_reward_window_view import MarathonRewardWindowView
+    from gui.server_events.bonuses import CustomizationsBonus
+    marathonController = dependency.instance(IMarathonEventsController)
+    marathon = marathonController.getMarathon(marathonPrefix)
+    if not marathon:
+        LOG_WARNING('Could not find marathon with prefix ', marathonPrefix)
+        return
+    currentStage, maxStage = marathon.getMarathonProgress()
+    crewRewards = []
+    if marathon.isPostRewardObtained():
+        remainingRewards = marathon.getStyleQuestReward()
+        remainingRewards = [ reward for reward in remainingRewards if not isinstance(reward, CustomizationsBonus) ]
+    elif currentStage == maxStage:
+        remainingRewards = marathon.getRewardsForQuestNumber(currentStage - 1)
+        crewRewards = marathon.getVehicleCrewReward()
+    else:
+        remainingRewards = marathon.remainingRewards
+        crewRewards = marathon.getVehicleCrewReward()
+    window = LobbyNotificationWindow(content=MarathonRewardWindowView({'rewards': remainingRewards,
+     'crewRewards': crewRewards,
+     'marathonPrefix': marathonPrefix}), layer=WindowLayer.FULLSCREEN_WINDOW)
+    window.load()

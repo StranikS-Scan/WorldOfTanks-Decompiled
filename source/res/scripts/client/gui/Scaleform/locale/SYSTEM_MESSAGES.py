@@ -1238,6 +1238,8 @@ class SYSTEM_MESSAGES(object):
     OFFERS_UNAVAILABLE_ONE = '#system_messages:offers/unavailable_one'
     OFFERS_UNAVAILABLE_MANY = '#system_messages:offers/unavailable_many'
     OFFERS_SERVER_ERROR = '#system_messages:offers/server_error'
+    OFFERS_SERVER_ERROR_COOLDOWN = '#system_messages:offers/server_error/COOLDOWN'
+    OFFERS_SERVER_ERROR_DISABLED = '#system_messages:offers/server_error/DISABLED'
     MISSINGEVENTS_BUTTON = '#system_messages:missingEvents/button'
     MISSINGEVENTS_HEADER = '#system_messages:missingEvents/header'
     MISSINGEVENTS_TEXT = '#system_messages:missingEvents/text'
@@ -2632,6 +2634,8 @@ class SYSTEM_MESSAGES(object):
      OFFERS_UNAVAILABLE_ONE,
      OFFERS_UNAVAILABLE_MANY,
      OFFERS_SERVER_ERROR,
+     OFFERS_SERVER_ERROR_COOLDOWN,
+     OFFERS_SERVER_ERROR_DISABLED,
      MISSINGEVENTS_BUTTON,
      MISSINGEVENTS_HEADER,
      MISSINGEVENTS_TEXT,

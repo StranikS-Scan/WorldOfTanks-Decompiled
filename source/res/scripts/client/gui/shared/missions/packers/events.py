@@ -3,9 +3,9 @@
 import logging
 import typing
 import constants
-from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
+from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.impl.gen.view_models.common.missions.conditions.preformatted_condition_model import PreformattedConditionModel
 from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQuestModel
 from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
@@ -13,9 +13,10 @@ from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.events_helpers import isPremium, isDailyQuest
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker, packBonusModelAndTooltipData
-from gui.shared.missions.packers.conditions import PostBattleConditionPacker
 from gui.shared.missions.packers.conditions import BonusConditionPacker
+from gui.shared.missions.packers.conditions import PostBattleConditionPacker
 from helpers import dependency
+from lunar_ny import ILunarNYController
 from skeletons.gui.server_events import IEventsCache
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
@@ -118,7 +119,9 @@ class PrivateMissionUIDataPacker(_EventUIDataPacker):
 
 class DailyQuestUIDataPacker(BattleQuestUIDataPacker):
     eventsCache = dependency.descriptor(IEventsCache)
+    lunarNYController = dependency.descriptor(ILunarNYController)
     _NY_BONUSES_ORDER = ('battleToken', 'entitlements')
+    _LUNAR_NY_BONUSES_ORDER = ('entitlements',)
 
     def pack(self, model=None):
         if model is not None and not isinstance(model, DailyQuestModel):
@@ -133,11 +136,18 @@ class DailyQuestUIDataPacker(BattleQuestUIDataPacker):
     def _packBonuses(self, model):
         self._tooltipData = {}
         packer = getDefaultBonusPacker()
-        bonuses = sorted(self._event.getBonuses(), key=self.__keySortOrder)
-        packQuestBonusModelAndTooltipData(packer, model.getBonuses(), self._event, self._tooltipData, bonuses)
+        if self.lunarNYController.isActive():
+            bonuses = sorted(self._event.getBonuses(), key=self.__keyLunarNYSortOrder)
+            packQuestBonusModelAndTooltipData(packer, model.getBonuses(), self._event, self._tooltipData, bonuses)
+        else:
+            bonuses = sorted(self._event.getBonuses(), key=self.__keySortOrder)
+            packQuestBonusModelAndTooltipData(packer, model.getBonuses(), self._event, self._tooltipData, bonuses)
 
     def __keySortOrder(self, bonus):
         return self._NY_BONUSES_ORDER.index(bonus.getName()) if bonus.getName() in self._NY_BONUSES_ORDER else len(self._NY_BONUSES_ORDER)
+
+    def __keyLunarNYSortOrder(self, bonus):
+        return self._LUNAR_NY_BONUSES_ORDER.index(bonus.getName()) if bonus.getName() in self._LUNAR_NY_BONUSES_ORDER else len(self._LUNAR_NY_BONUSES_ORDER)
 
     def __resolveQuestIcon(self, model):
         iconId = self._event.getIconID()

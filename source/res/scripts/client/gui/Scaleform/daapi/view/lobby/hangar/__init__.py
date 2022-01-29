@@ -58,6 +58,8 @@ def getViewSettings():
     from gui.impl.lobby.loot_box.loot_box_entry_point import LootboxesEntrancePointInjectWidget
     from gui.Scaleform.daapi.view.lobby.hangar.progressive_reward_widget import ProgressiveRewardWidget
     from gui.Scaleform.daapi.view.lobby.hangar.ammunition_panel_inject import AmmunitionPanelInject
+    from gui.impl.lobby.lunar_ny.envelopes_entry_point import EnvelopesEntrancePointInjectWidget
+    from gui.impl.lobby.lunar_ny.lunar_ny_main_widget import LunarNYMainWidgetInject
     from gui.impl.lobby.battle_pass.battle_pass_entry_point_view import BattlePassEntryPointComponent
     from gui.impl.lobby.battle_pass.battle_pass_secondary_entry_point import BattlePassSecondaryEntryPointWidget
     from gui.Scaleform.daapi.view.lobby.hangar.event_entry_points_container import EventEntryPointsContainer
@@ -104,6 +106,8 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, CraftMachineEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, MapBoxEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.MARATHON_ENTRY_POINT, MarathonEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.ENVELOPES_ENTRANCE_POINT, EnvelopesEntrancePointInjectWidget, None),
+     ComponentSettings(HANGAR_ALIASES.LUNAR_NY_MAIN_WIDGET_UI, LunarNYMainWidgetInject, None),
      ComponentSettings(HANGAR_ALIASES.NY_MAIN_WIDGET_UI, NyMainWidgetInject, None),
      ComponentSettings(HANGAR_ALIASES.LOOTBOXES_ENTRANCE_POINT, LootboxesEntrancePointInjectWidget, None))
 

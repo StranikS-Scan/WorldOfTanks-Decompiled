@@ -15,7 +15,7 @@ from blueprints.FragmentTypes import isUniversalFragment
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS
 from dossiers2.custom.cache import getCache
 from invoices_helpers import checkAccountDossierOperation
-from items import vehicles, tankmen, utils, new_year, collectibles
+from items import vehicles, tankmen, utils, lunar_ny, new_year, collectibles
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.components.ny_constants import YEARS_INFO, TOY_TYPE_IDS_BY_NAME, CurrentNYConstants, YEARS
@@ -999,6 +999,16 @@ def __readBonus_battlePassPoints(bonus, _name, section, eventType, checkLimit):
     bonus['battlePassPoints'] = {'vehicles': {NON_VEH_CD: count}}
 
 
+def __readBonus_Charm(bonus, _name, section, eventType, checkLimit):
+    id = section['id'].asInt
+    cache = lunar_ny.g_cache.charms
+    if id not in cache:
+        raise SoftException('Unknown charm ID: {}'.format(id))
+    count = section['count'].asInt if section.has_key('count') else 0
+    charms = bonus.setdefault('charms', {})
+    charms[id] = {'count': count}
+
+
 def __readBonus_group(config, bonusReaders, bonus, section, eventType):
     limitIDs, subBonus = __readBonusSubSection(config, bonusReaders, section, eventType)
     bonus.setdefault('groups', []).append(subBonus)
@@ -1056,6 +1066,7 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
  'blueprintAny': __readBonus_blueprintAny,
+ 'charm': __readBonus_Charm,
  'currency': __readBonus_currency,
  'ny18Toy': partial(__readBonus_nyToy, year=YEARS.YEAR18),
  'ny19Toy': partial(__readBonus_nyToy, year=YEARS.YEAR19),

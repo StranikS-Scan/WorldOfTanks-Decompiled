@@ -193,6 +193,14 @@ BECOME_ELITE_VEHICLES_WATCHED = 'becomeEliteWatched'
 VPP_ENTRY_POINT_LAST_SEEN_STEP = 'vehiclePostProgressionLastSeenStep'
 CLAN_PREBATTLE_SORTING_KEY = 'ClanPrebattleSortingKey'
 SHOW_DEMO_ACC_REGISTRATION = 'showDemoAccRegistration'
+IS_LUNAR_NY_INTRO_VIEWED = 'lunarNYIntroViewed'
+LUNAR_NY_RECEIVED_ENVELOPES_VIEWED = 'lunarNYReceivedEnvelopesViewed'
+LUNAR_NY_ENTITLEMENTS_VIEWED = 'lunarNYEntitlementsViewed'
+LUNAR_NY_CONGRATULATIONS = 'lunarNYCongratulations'
+IS_LUNAR_NY_INTRO_VIDEO_VIEWED = 'lunarNYIntroVideoViewed'
+IS_OPEN_ENVELOPES_ANIMATION_ENABLED = 'isOpenEnvelopesAnimationEnabled'
+LUNAR_NY_DAILY_QUESTS_VISITED = 'lunarNYDailyQuestsVisited'
+LUNAR_NY_PROGRESSION_TOKENS_VIEWED = 'lunarNYProgressionTokensViewed'
 NY_DAILY_QUESTS_VISITED = 'NYDailyQuestsVisited'
 NY_BONUS_DAILY_QUEST_VISITED = 'NYBonusDailyQuestVisited'
 NY_CELEBRITY_QUESTS_COMPLETED_MASK = 'NYCelebrityQuestsCompletedMask'
@@ -583,7 +591,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_MANUAL: {LOBBY_MENU_TRIGGER_SHOWN: False,
               MANUAL_NEW_CONTENT: {}},
- KEY_SETTINGS: {'unitWindow': {SELECTED_INTRO_VEHICLES_FIELD: []},
+ KEY_SETTINGS: {IS_LUNAR_NY_INTRO_VIEWED: False,
+                IS_LUNAR_NY_INTRO_VIDEO_VIEWED: False,
+                'unitWindow': {SELECTED_INTRO_VEHICLES_FIELD: []},
                 'vehicleSellDialog': {'isOpened': False},
                 KNOWN_SELECTOR_BATTLES: set(),
                 'tankmanDropSkillIdx': 0,
@@ -902,7 +912,13 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 UNLOCK_VEHICLES_IN_BATTLE_HINTS: 5,
                 MODE_SELECTOR_BATTLE_PASS_SHOWN: {},
                 RANKED_LAST_CYCLE_ID: None,
-                SHOW_DEMO_ACC_REGISTRATION: False},
+                SHOW_DEMO_ACC_REGISTRATION: False,
+                LUNAR_NY_RECEIVED_ENVELOPES_VIEWED: {},
+                LUNAR_NY_ENTITLEMENTS_VIEWED: 0,
+                LUNAR_NY_CONGRATULATIONS: {},
+                IS_OPEN_ENVELOPES_ANIMATION_ENABLED: True,
+                LUNAR_NY_DAILY_QUESTS_VISITED: False,
+                LUNAR_NY_PROGRESSION_TOKENS_VIEWED: 0},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},

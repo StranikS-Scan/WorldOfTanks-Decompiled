@@ -1065,6 +1065,13 @@ class BattleResultMarkOfMasteryContext(BattleResultContext):
         return item
 
 
+class LunarNYProgressionContext(BattleResultContext):
+
+    def buildItem(self, block, name, value=0, **kwargs):
+        factory = factories.getAchievementFactory((block, name))
+        return factory.create(value=value) if factory is not None else None
+
+
 class VehicleEliteBonusContext(ToolTipContext):
 
     def __init__(self, fieldsToExclude=None):

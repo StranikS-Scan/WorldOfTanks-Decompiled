@@ -7,9 +7,9 @@ from gui.impl.gen.view_models.views.lobby.missions.lootboxes_intro_model import 
 from gui.impl.gen.view_models.views.lobby.missions.premium_missions_model import PremiumMissionsModel
 
 class DailyQuestsViewModel(ViewModel):
-    __slots__ = ('onClose', 'onReroll', 'onTabClick', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled', 'onLootboxesIntroClosed')
+    __slots__ = ('onClose', 'onReroll', 'onTabClick', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled', 'onLootboxesIntroClosed', 'onLunarNYDailyQuestIntroClosed')
 
-    def __init__(self, properties=12, commands=7):
+    def __init__(self, properties=14, commands=8):
         super(DailyQuestsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -64,17 +64,29 @@ class DailyQuestsViewModel(ViewModel):
     def setIsBattlePassActive(self, value):
         self._setBool(9, value)
 
-    def getIsGiftSystemDisabled(self):
+    def getIsLunarNYActive(self):
         return self._getBool(10)
 
-    def setIsGiftSystemDisabled(self, value):
+    def setIsLunarNYActive(self, value):
         self._setBool(10, value)
 
-    def getIsNewYearAvailable(self):
+    def getIsLunarNYDailyQuestIntroVisible(self):
         return self._getBool(11)
 
-    def setIsNewYearAvailable(self, value):
+    def setIsLunarNYDailyQuestIntroVisible(self, value):
         self._setBool(11, value)
+
+    def getIsGiftSystemDisabled(self):
+        return self._getBool(12)
+
+    def setIsGiftSystemDisabled(self, value):
+        self._setBool(12, value)
+
+    def getIsNewYearAvailable(self):
+        return self._getBool(13)
+
+    def setIsNewYearAvailable(self, value):
+        self._setBool(13, value)
 
     def _initialize(self):
         super(DailyQuestsViewModel, self)._initialize()
@@ -88,6 +100,8 @@ class DailyQuestsViewModel(ViewModel):
         self._addBoolProperty('isLootboxesIntroVisible', False)
         self._addBoolProperty('premMissionsTabDiscovered', False)
         self._addBoolProperty('isBattlePassActive', False)
+        self._addBoolProperty('isLunarNYActive', False)
+        self._addBoolProperty('isLunarNYDailyQuestIntroVisible', False)
         self._addBoolProperty('isGiftSystemDisabled', False)
         self._addBoolProperty('isNewYearAvailable', False)
         self.onClose = self._addCommand('onClose')
@@ -97,3 +111,4 @@ class DailyQuestsViewModel(ViewModel):
         self.onBuyPremiumBtnClick = self._addCommand('onBuyPremiumBtnClick')
         self.onRerollEnabled = self._addCommand('onRerollEnabled')
         self.onLootboxesIntroClosed = self._addCommand('onLootboxesIntroClosed')
+        self.onLunarNYDailyQuestIntroClosed = self._addCommand('onLunarNYDailyQuestIntroClosed')

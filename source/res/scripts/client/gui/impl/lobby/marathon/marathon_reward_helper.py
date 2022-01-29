@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/marathon/marathon_reward_helper.py
 from collections import namedtuple
+import re
 from gui.impl.gen import R
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.shared.gui_items import Vehicle
@@ -40,3 +41,16 @@ def showMarathonReward(vehicleCD, videoShownKey, notificationMgr=None):
             window = MarathonRewardViewWindow(specialRewardData)
             notificationMgr.append(WindowNotificationCommand(window))
     return
+
+
+def getRewardImage(path):
+    return '' if path is None else path.replace('../', 'img://gui/')
+
+
+def getRewardLabel(label):
+    return '' if label is None else re.sub('\\D', '', label)
+
+
+def getRewardOverlayType(overlayType):
+    label = overlayType['big'] if overlayType else ''
+    return label.replace('Big', '')

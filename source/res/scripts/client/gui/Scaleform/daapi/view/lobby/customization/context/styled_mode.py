@@ -21,6 +21,7 @@ from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from skeletons.account_helpers.settings_core import ISettingsCore
 from tutorial.hints_manager import HINT_SHOWN_STATUS
 from vehicle_systems.camouflages import getStyleProgressionOutfit
+from items.customizations import parseCompDescr
 if typing.TYPE_CHECKING:
     from items.customizations import SerializableComponent
     from gui.shared.gui_items.customization.c11n_items import Style, Customization
@@ -142,6 +143,11 @@ class StyledMode(CustomizationMode):
         self.__modifiedStyle = style
         vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
         diffs = self._ctx.stylesDiffsCache.getDiffs(style) if style is not None else {}
+        styleProgressionLevel = 0
+        styleOutfitData = self._itemsCache.items.inventory.getOutfitData(g_currentVehicle.item.descriptor.type.compactDescr, SeasonType.ALL)
+        if styleOutfitData:
+            styledOutfitComponent = parseCompDescr(styleOutfitData)
+            styleProgressionLevel = styledOutfitComponent.styleProgressionLevel
         for season in SeasonType.COMMON_SEASONS:
             if style is None:
                 outfit = self._service.getEmptyOutfit()
@@ -152,6 +158,7 @@ class StyledMode(CustomizationMode):
                     self._removeHiddenFromOutfit(diffOutfit, g_currentVehicle.item.intCD)
                     diff = diffOutfit.pack().makeCompDescr()
                 outfit = style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
+                outfit = getStyleProgressionOutfit(outfit, styleProgressionLevel, season)
             self._originalOutfits[season] = outfit.copy()
             self._modifiedOutfits[season] = outfit.copy()
 
@@ -302,7 +309,7 @@ class StyledMode(CustomizationMode):
             else:
                 originalProgression = originalOutfit.progressionLevel
             isProgressionReachable = self.__modifiedStyle.isProgressionPurchasable(modifiedProgression)
-            isProgressionReachable = isProgressionReachable or modifiedProgression == originalProgression
+            isProgressionReachable = isProgressionReachable or modifiedProgression == originalProgression or self.__modifiedStyle.isProgressionRewindEnabled
             if (not isInstalled or modifiedProgression != originalProgression) and not isProgressionReachable:
                 return False
             if not isInstalled:

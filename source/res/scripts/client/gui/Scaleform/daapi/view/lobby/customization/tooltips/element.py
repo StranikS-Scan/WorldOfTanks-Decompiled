@@ -155,6 +155,7 @@ class ElementTooltip(BlocksTooltipData):
     EDITED_ICON = 'edited'
     EDITABLE_ICON = 'editable'
     NON_EDITABLE_ICON = 'non_editable'
+    PROGRESSION_REWIND_ICON = 'progression_rewind'
 
     def __init__(self, context, tooltipType=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM):
         super(ElementTooltip, self).__init__(context, tooltipType)
@@ -325,7 +326,9 @@ class ElementTooltip(BlocksTooltipData):
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(_ms(backport.text(rCharacteristics.form.text()), value=text_styles.stats(PROJECTION_DECAL_TEXT_FORM_TAG[self._item.formfactor]))), padding=formatters.packPadding(top=-2), icon='form_' + str(PROJECTION_DECAL_FORM_TO_UI_ID[self._item.formfactor]), isWideOffset=isWideOffset))
         if self._item.isProgressive and self.__vehicle is not None:
             currentLevel = self._progressionLevel if self._progressionLevel > 0 else self._item.getLatestOpenedProgressionLevel(self.__vehicle)
-            if currentLevel > 0:
+            if self._item.isProgressionRewindEnabled:
+                blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(rCharacteristics.progressionRewind())), padding=formatters.packPadding(top=-2), icon=self.PROGRESSION_REWIND_ICON, isWideOffset=isWideOffset))
+            elif currentLevel > 0:
                 icon = 'progression_{}'
                 if self._item.itemTypeID == GUI_ITEM_TYPE.STYLE:
                     icon = 'style_progression_{}'

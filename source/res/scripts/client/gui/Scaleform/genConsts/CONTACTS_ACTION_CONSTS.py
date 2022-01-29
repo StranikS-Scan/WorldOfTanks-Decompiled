@@ -11,3 +11,4 @@ class CONTACTS_ACTION_CONSTS(object):
     REMOVE_CONTACT_NOTE = 'removeContactNote'
     REJECT_FRIENDSHIP = 'rejectFriendship'
     NY_SEND_GIFT = 'nySendGift'
+    LUNAR_NY_SEND_GIFT = 'lunarNYSendGift'

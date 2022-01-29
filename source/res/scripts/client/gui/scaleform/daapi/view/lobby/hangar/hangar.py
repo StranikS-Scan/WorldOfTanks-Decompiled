@@ -4,6 +4,7 @@ import logging
 import typing
 from functools import partial
 import BigWorld
+from gui.marathon.marathon_event import MarathonEvent
 from shared_utils import nextTick
 from CurrentVehicle import g_currentVehicle
 from HeroTank import HeroTank
@@ -48,7 +49,8 @@ from helpers.CallbackDelayer import CallbackDelayer
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IIGRController, IBattlePassController, IBattleRoyaleController, IBootcampController, IMapboxController
+from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IIGRController, IBattlePassController, IBattleRoyaleController, IBootcampController, IMapboxController, IMarathonEventsController
+from lunar_ny import ILunarNYController
 from skeletons.gui.game_control import IFestivityController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -98,6 +100,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _festivityController = dependency.descriptor(IFestivityController)
     _offersBannerController = dependency.descriptor(IOffersBannerController)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
+    __lunarNYController = dependency.descriptor(ILunarNYController)
+    __marathonCtrl = dependency.descriptor(IMarathonEventsController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -177,6 +181,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.battlePassController.onSeasonStateChange += self.__switchCarousels
         self.startGlobalListening()
         self.__updateAll()
+        self.__updateEnvelopesEntryPoint()
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
@@ -192,8 +197,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             g_currentVehicle.refreshModel()
         if self.bootcampController.isInBootcamp():
             self.as_setDQWidgetLayoutS(DAILY_QUESTS_WIDGET_CONSTANTS.WIDGET_LAYOUT_SINGLE)
+        self.__lunarNYController.onStatusChange += self.__lunarNYStatusChange
 
     def _dispose(self):
+        self.__lunarNYController.onStatusChange -= self.__lunarNYStatusChange
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
@@ -241,6 +248,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def _updateBattleRoyaleMode(self):
         self.as_toggleBattleRoyaleS(g_currentVehicle.isOnlyForBattleRoyaleBattles())
+
+    def __updateEnvelopesEntryPoint(self):
+        isEnabled = self.__lunarNYController.isActive() and self.__lunarNYController.giftSystem.isGiftEventActive()
+        self.as_setEnvelopesVisibleS(isEnabled and not self.bootcampController.isInBootcamp())
 
     def __updateDogTagsState(self):
         isDogTagsEnabled = self.lobbyContext.getServerSettings().isDogTagEnabled()
@@ -364,7 +375,13 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             if isinstance(entity, HeroTank):
                 descriptor = entity.typeDescriptor
                 if descriptor:
-                    shared_events.showHeroTankPreview(descriptor.type.compactDescr)
+                    marathons = self.__marathonCtrl.getMarathons()
+                    activeMarathon = next((marathon for marathon in marathons if marathon.vehicleID == descriptor.type.compactDescr), None)
+                    if activeMarathon:
+                        title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
+                        shared_events.showMarathonVehiclePreview(descriptor.type.compactDescr, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
+                    else:
+                        shared_events.showHeroTankPreview(descriptor.type.compactDescr)
         self.__checkVehicleCameraState()
         self.__updateState()
         return
@@ -618,6 +635,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__updateDogTagsState()
         if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
             self.__updateWotPlusState()
+        if {Configs.LUNAR_NY_EVENT_CONFIG.value, Configs.GIFTS_CONFIG.value}.intersection(diff):
+            self.__updateEnvelopesEntryPoint()
 
     def __onSettingsChanged(self, diff):
         if SETTINGS_SECTIONS.UI_STORAGE in diff:
@@ -656,3 +675,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __updateFestivityState(self):
         self.as_setLootboxesVisibleS(self._festivityController.isEnabled())
+
+    def __lunarNYStatusChange(self):
+        self.__updateEnvelopesEntryPoint()

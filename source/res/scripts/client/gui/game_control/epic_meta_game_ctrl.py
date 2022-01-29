@@ -159,11 +159,10 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return
 
     def onLobbyInited(self, ctx):
-        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__updateEpicMetaGameSettings
-        g_currentVehicle.onChanged += self.__invalidateBattleAbilities
         self.__itemsCache.onSyncCompleted += self.__invalidateBattleAbilities
-        g_clientUpdateManager.addCallbacks({'epicMetaGame': self.__updateEpic,
-         'inventory': self.__onInventoryUpdate})
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__updateEpicMetaGameSettings
+        g_clientUpdateManager.addCallbacks({'epicMetaGame': self.__updateEpic})
+        g_currentVehicle.onChanged += self.__invalidateBattleAbilities
         self.startGlobalListening()
         self.__setData()
         self.__invalidateBattleAbilities()
@@ -383,8 +382,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def __invalidateBattleAbilities(self, *_):
         if not self.__itemsCache.isSynced():
             return
-        self.__invalidateBattleAbilityItems()
-        self.__invalidateBattleAbilitiesForVehicle()
+        battleAbilities = self.__invalidateBattleAbilityItems()
+        self.__invalidateBattleAbilitiesForVehicle(battleAbilities)
 
     def __setData(self):
         self.__skillData = {}
@@ -479,9 +478,9 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
                         item.isUnlocked = False
             item.isUnlocked = False
 
-        return
+        return data
 
-    def __invalidateBattleAbilitiesForVehicle(self):
+    def __invalidateBattleAbilitiesForVehicle(self, battleAbilities):
         vehicle = g_currentVehicle.item
         if vehicle is None or vehicle.descriptor.type.level not in self.__lobbyContext.getServerSettings().epicBattles.validVehicleLevels or not self.__isInValidPrebattle():
             return
@@ -490,7 +489,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             selectedItems = [None] * amountOfSlots
             skillInfo = self.getAllSkillsInformation()
             selectedSkills = self.getSelectedSkills(vehicle.intCD)
-            battleAbilities = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.EMPTY)
             for item in battleAbilities.values():
                 for index, skillID in enumerate(selectedSkills):
                     if skillID is not None and skillID >= 0:

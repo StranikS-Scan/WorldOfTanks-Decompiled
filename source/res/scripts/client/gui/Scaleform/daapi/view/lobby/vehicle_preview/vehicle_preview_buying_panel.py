@@ -361,7 +361,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         else:
             btnData = self.__getBtnData()
             self._actionType = self.__previewDP.getBuyType(item)
-            if self.__items:
+            if self.__items is not None:
                 buyingPanelData = self.__previewDP.getItemPackBuyingPanelData(btnData, self.__items, self.__couponInfo.selected if self.__couponInfo else False, self.__price.get(Currency.GOLD))
             elif self.__offers:
                 buyingPanelData = self.__previewDP.getOffersBuyingPanelData(btnData)
@@ -647,7 +647,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
     @process
     def __hasExternalLink(self, callback=None):
         url = ''
-        if self._marathonEvent:
+        if self._marathonEvent and not self._marathonEvent.hasIgbLink():
             url = yield self._marathonEvent.getMarathonVehicleUrl()
         elif self.__isHeroTank:
             if not self._heroTanks.isAdventHero() and not self._heroTanks.getCurrentShopUrl():

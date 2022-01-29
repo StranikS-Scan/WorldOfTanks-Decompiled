@@ -166,6 +166,8 @@ def init(preloadEverything, pricesToCollect=None):
     tankmen.init(preloadEverything, pricesToCollect)
     from items import perks
     perks.init(preloadEverything)
+    from items import lunar_ny
+    lunar_ny.init()
     from items import new_year, collectibles
     collectibles.init()
     new_year.init()

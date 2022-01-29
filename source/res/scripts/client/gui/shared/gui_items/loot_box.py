@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/loot_box.py
+from enum import Enum
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items.gui_item import GUIItem
@@ -34,6 +35,14 @@ class EventLootBoxes(CONST_CONTAINER):
     WT_SPECIAL = 'wt_special'
 
 
+class LunarNYLootBoxTypes(Enum):
+    BASE = 'lunar_base'
+    SIMPLE = 'lunar_simple'
+    SPECIAL = 'lunar_special'
+
+
+ALL_LUNAR_NY_LOOT_BOX_TYPES = ('lunar_base', 'lunar_simple', 'lunar_special')
+LUNAR_NY_LOOT_BOXES_CATEGORIES = 'LunarNY'
 SENIORITY_AWARDS_LOOT_BOXES_TYPE = 'seniorityAwards'
 GUI_ORDER = (NewYearLootBoxes.COMMON, NewYearLootBoxes.PREMIUM)
 CATEGORIES_GUI_ORDER = (NewYearCategories.NEWYEAR,

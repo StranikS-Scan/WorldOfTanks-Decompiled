@@ -3,13 +3,14 @@
 import CGF
 from ClientSelectableObject import ClientSelectableObject
 from Math import Vector3
-from cgf_components.client_selectable_components import OnClickComponent
+from cgf_components.client_selectable_components import OnClickComponent, SwitchSelectableStateComponent
 
 class ClientSelectableCGFObject(ClientSelectableObject):
 
     def __init__(self):
         super(ClientSelectableCGFObject, self).__init__()
         self.__gameObject = None
+        self.__switchStateComponent = None
         return
 
     def onEnterWorld(self, prereqs):
@@ -20,6 +21,8 @@ class ClientSelectableCGFObject(ClientSelectableObject):
         return
 
     def onLeaveWorld(self):
+        if self.__switchStateComponent is not None:
+            self.__switchStateComponent.onStateChanged -= self.setEnable
         if self.__gameObject is not None:
             CGF.removeGameObject(self.__gameObject)
         self.__gameObject = None
@@ -35,3 +38,8 @@ class ClientSelectableCGFObject(ClientSelectableObject):
 
     def __onGameObjectLoaded(self, gameObject):
         self.__gameObject = gameObject
+        self.__switchStateComponent = self.__gameObject.findComponentByType(SwitchSelectableStateComponent)
+        if self.__switchStateComponent is not None:
+            self.setEnable(self.__switchStateComponent.selectableEnabled)
+            self.__switchStateComponent.onStateChanged += self.setEnable
+        return

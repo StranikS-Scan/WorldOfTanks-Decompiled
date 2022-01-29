@@ -16,4 +16,5 @@ def getTooltipBuilders():
      builders.DataBuilder(TOOLTIPS_CONSTANTS.MARK_OF_MASTERY, TOOLTIPS_CONSTANTS.MARK_OF_MASTERY_UI, achievement.AchievementTooltipData(contexts.BattleResultMarkOfMasteryContext(fieldsToExclude=('showCondSeparator',)))),
      builders.DataBuilder(TOOLTIPS_CONSTANTS.SHOP_BADGE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, achievement.BadgeTooltipData(contexts.BadgeContext(None))),
      builders.DataBuilder(TOOLTIPS_CONSTANTS.REFERRAL_BADGE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, achievement.BadgeTooltipData(contexts.ReferralProgramBadgeContext(None))),
-     builders.SimpleBuilder('achievementAttr', TOOLTIPS_CONSTANTS.ACHIEVEMENT_UI))
+     builders.SimpleBuilder('achievementAttr', TOOLTIPS_CONSTANTS.ACHIEVEMENT_UI),
+     builders.DataBuilder(TOOLTIPS_CONSTANTS.LUNAR_NY_PROGRESSION_ACHIEVS, TOOLTIPS_CONSTANTS.ACHIEVEMENT_UI, achievement.AchievementTooltipData(contexts.LunarNYProgressionContext())))

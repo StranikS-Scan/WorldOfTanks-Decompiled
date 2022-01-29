@@ -18,7 +18,8 @@ from skeletons.gui.server_events import IEventsCache
 from helpers.time_utils import ONE_DAY, ONE_HOUR
 from gui.impl import backport
 from gui.shared.missions.packers.events import BattleQuestUIDataPacker
-_MARATHON_PREFIX = 'may21_marathon'
+_MARATHON_PREFIX = 'lunar_marathon'
+_POST_TIME_LEFT_LIMIT = ONE_HOUR * 12
 _eventsCache = dependency.descriptor(IEventsCache)
 
 @dependency.replace_none_kwargs(marathonsCtrl=IMarathonEventsController)
@@ -93,6 +94,14 @@ class MarathonEntryPoint(ViewImpl):
                 for quest in currentPostQuest:
                     packer = BattleQuestUIDataPacker(quest)
                     tx.progressPost.addViewModel(packer.pack())
+                    tx.setIsPostQuestDone(quest.isCompleted())
+                    tx.setCurrentPostQuestIndex(marathonEvent.getMarathonPostProgress())
+                    tx.setIsVehicleInHangar(marathonEvent.isRewardObtained())
+                    tx.setIsVehicleStyleInHangar(marathonEvent.isPostRewardObtained())
+                    timeLeftFormatted = ''
+                    if quest.getFinishTimeLeft() < _POST_TIME_LEFT_LIMIT:
+                        timeLeftFormatted = self.__getFormattedTillTimeString(quest.getFinishTimeLeft(), marathonEvent)
+                    tx.setFormattedTimeTillPostQuestFinish(timeLeftFormatted)
 
                 for token in userTokens:
                     tx.getUserTokens().addString(token)
@@ -105,7 +114,8 @@ class MarathonEntryPoint(ViewImpl):
                 tx.setFormattedTimeTillNextState(self.__getFormattedTillTimeString(timeTillNextState, marathonEvent))
                 tx.setCurrentPhase(currentPhase)
                 tx.setRewardObtained(marathonEvent.isRewardObtained())
-                tx.setDiscount(marathonEvent.getMarathonDiscount())
+                discount = marathonEvent.getMarathonDiscount() if not marathonEvent.isRewardObtained() else marathonEvent.getMarathonPostProgressionDiscount()
+                tx.setDiscount(discount)
                 tx.setIsPremShopURL(not marathonEvent.hasIgbLink())
                 tx.setIsPostProgression(marathonEvent.isRewardObtained())
                 tx.setTokenTemplate(marathonEvent.tokenPrefix)
@@ -146,8 +156,8 @@ class MarathonEntryPoint(ViewImpl):
     def __marathonFilterFunc(self, q, postfix=''):
         marathonEvent = self._marathonsCtrl.getMarathon(_MARATHON_PREFIX)
         currentPhase, _ = marathonEvent.getMarathonProgress()
-        return q.getID().startswith('{0}S{1}{2}'.format(marathonEvent.tokenPrefix, currentPhase + 1, postfix))
+        return q.getID().startswith('{0}s{1}{2}'.format(marathonEvent.tokenPrefix, currentPhase + 1, postfix))
 
     def __marathonPostFilterFunc(self, q, postfix=''):
         marathonEvent = self._marathonsCtrl.getMarathon(_MARATHON_PREFIX)
-        return q.getID().startswith('{0}{1}S'.format(marathonEvent.tokenPrefix, postfix)) and q.isAvailable()[0]
+        return q.getID().startswith('{0}{1}s'.format(marathonEvent.tokenPrefix, postfix)) and q.isAvailable()[0]

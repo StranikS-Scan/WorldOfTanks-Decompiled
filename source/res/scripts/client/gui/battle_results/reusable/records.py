@@ -105,6 +105,9 @@ class ReplayRecords(ResultRecord):
      'eventXPFactor100List_ny22battle##xp_freeXP': 'newYearXpFactor',
      'eventCreditsList_ny22battle##credits_gold': 'newYearCredits',
      'eventCreditsFactor1000List_ny22battle##credits_gold': 'newYearCreditsFactor'}
+    __LUNAR_NY_MAP = {'eventXPFactor100List_lunarNewYearBattle##xp_freeXP': 'lunarNYXP',
+     'eventFreeXPFactor100List_lunarNewYearBattle##xp_freeXP': 'lunarNYFreeXP',
+     'eventCreditsFactor1000List_lunarNewYearBattle##credits_gold': 'lunarNYCredits'}
 
     def __init__(self, replay, *last):
         super(ReplayRecords, self).__init__()
@@ -149,10 +152,14 @@ class ReplayRecords(ResultRecord):
         if op in _SUPPORTED_OPS:
             clazz = _SUPPORTED_OPS[op]
             nyName = self.__remapForNewYear(name)
+            nyName = self.__remapForLunarNY(nyName)
             self._records[nyName] = clazz(nyName, value, diff)
 
     def __remapForNewYear(self, name):
         return self.__NEW_YEAR_MAP[name] if name in self.__NEW_YEAR_MAP else name
+
+    def __remapForLunarNY(self, name):
+        return self.__LUNAR_NY_MAP[name] if name in self.__LUNAR_NY_MAP else name
 
 
 class RecordsIterator(ResultRecord):

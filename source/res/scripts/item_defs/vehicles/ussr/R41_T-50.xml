@@ -2991,6 +2991,8 @@
             <collisionModelServer>	vehicles/russian/R41_T-50/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R41_T-50/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3081,6 +3083,8 @@
             <collisionModelServer>	vehicles/russian/R41_T-50/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R41_T-50/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

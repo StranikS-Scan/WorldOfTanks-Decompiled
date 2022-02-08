@@ -81,7 +81,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         if markerID in self.__ids:
             self.__canvas.markerSetActive(markerID, active)
         else:
-            _logger.error('Marker %d is not added by given ID', markerID)
+            _logger.error('Marker %d is not added by given ID. Ids: %s. Active: %d', markerID, self.__ids, active)
 
     def setMarkerSticky(self, markerID, isSticky):
         if self.__isStickyEnabled and self.__isIBCEnabled:
@@ -108,7 +108,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         if markerID in self.__ids:
             self.__canvas.markerSetMatrix(markerID, matrix)
         else:
-            _logger.error('Marker %d is not added by given ID', markerID)
+            _logger.error('Marker %d is not added by given ID. Ids: %s. Matrix: %s', markerID, self.__ids, matrix)
 
     def destroyMarker(self, markerID):
         if self.__canvas:
@@ -116,13 +116,13 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
                 self.__canvas.delMarker(markerID)
                 self.__ids.discard(markerID)
             else:
-                _logger.error('Marker %d is not added by given ID', markerID)
+                _logger.error('Marker %d is not added by given ID. Ids: %s', markerID, self.__ids)
 
     def invokeMarker(self, markerID, *signature):
         if markerID in self.__ids:
             self.__canvas.markerInvoke(markerID, signature)
         else:
-            _logger.error('Marker %d is not added by given ID', markerID)
+            _logger.error('Marker %d is not added by given ID. Ids: %s. Signature: %s', markerID, self.__ids, signature)
 
     def updateCameraAimOffset(self, offset):
         self.__canvas.updateCameraAimOffset(offset)

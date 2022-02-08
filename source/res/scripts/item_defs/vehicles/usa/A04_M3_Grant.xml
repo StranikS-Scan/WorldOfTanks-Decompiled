@@ -3451,6 +3451,8 @@
             <collisionModelServer>	vehicles/american/A04_M3_Grant/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A04_M3_Grant/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3510,6 +3512,8 @@
             <collisionModelServer>	vehicles/american/A04_M3_Grant/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A04_M3_Grant/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

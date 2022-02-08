@@ -6,11 +6,9 @@ from async import async, await
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
 from gui.impl.dialogs.dialogs import showExchangeToBuyItemsDialog
-from gui.game_control import CalendarInvokeOrigin
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from skeletons.gui.game_control import IBrowserController
-from skeletons.gui.game_control import ICalendarController
 from web.web_client_api import W2CSchema, w2c, Field
 from helpers import dependency
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -46,7 +44,6 @@ class HangarTabWebApiMixin(object):
 class HangarWindowsWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
     __browserController = dependency.descriptor(IBrowserController)
-    __calendarCtrl = dependency.descriptor(ICalendarController)
 
     @w2c(_ExchangeWindowSchema, 'currency_exchange')
     def openCurrencyExchangeWindow(self, cmd):
@@ -74,10 +71,6 @@ class HangarWindowsWebApiMixin(object):
     @w2c(W2CSchema, 'show_buy_berth_window')
     def openBuyBerthWindow(self, _):
         ActionsFactory.doAction(ActionsFactory.BUY_BERTHS)
-
-    @w2c(W2CSchema, 'show_advent_calendar')
-    def showAdventCalendar(self, _):
-        self.__calendarCtrl.showCalendar(invokedFrom=CalendarInvokeOrigin.BANNER)
 
     def validateItems(self, itemCD):
         item = self.itemsCache.items.getItemByCD(itemCD)

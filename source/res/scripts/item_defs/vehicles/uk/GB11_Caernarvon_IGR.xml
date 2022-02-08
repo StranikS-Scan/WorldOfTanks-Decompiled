@@ -1101,7 +1101,8 @@
             <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

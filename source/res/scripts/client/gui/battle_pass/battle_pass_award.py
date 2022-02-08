@@ -8,10 +8,10 @@ from shared_utils import findFirst
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import BattlePassSelectTokensBonus
 
-def awardsFactory(items):
+def awardsFactory(items, ctx=None):
     bonuses = []
     for key, value in items.iteritems():
-        bonuses.extend(getNonQuestBonuses(key, value))
+        bonuses.extend(getNonQuestBonuses(key, value, ctx))
 
     return bonuses
 
@@ -24,10 +24,10 @@ class BattlePassAwardsManager(object):
         cls.__bonusesLayoutController.init()
 
     @classmethod
-    def composeBonuses(cls, rewards):
+    def composeBonuses(cls, rewards, ctx=None):
         bonuses = []
         for reward in rewards:
-            bonuses.extend(awardsFactory(reward))
+            bonuses.extend(awardsFactory(reward, ctx))
 
         return cls.sortBonuses(bonuses)
 
@@ -58,7 +58,7 @@ class BattlePassAwardsManager(object):
             if bonus.getName() == BATTLE_PASS_SELECT_BONUS_NAME:
                 result = {}
                 for key, value in bonus.getValue().iteritems():
-                    splitKey = key.rsplit(':', 2)[0]
+                    splitKey = key.rsplit(':', 3)[0]
                     newKey = findFirst(lambda x: x.startswith(splitKey), keys, key)
                     result[newKey] = value
                     if newKey not in keys:

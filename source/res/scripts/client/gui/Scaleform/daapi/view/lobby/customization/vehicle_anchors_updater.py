@@ -93,7 +93,7 @@ class VehicleAnchorsUpdater(object):
             styleSlot = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
             styleAnchorParams = self.__ctx.mode.getAnchorParams(styleSlot)
             for displayObject in displayObjects:
-                if not hasattr(displayObject, 'slotData'):
+                if not hasattr(displayObject, 'slotData') or displayObject.slotData is None:
                     _logger.error('Incorrect anchor displayObject. Missing slotData section. %s', displayObject)
                     continue
                 slotData = displayObject.slotData

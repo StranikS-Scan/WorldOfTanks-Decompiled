@@ -2019,6 +2019,8 @@
             <collisionModelServer>	vehicles/chinese/Ch38_WZ113G_FT/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch38_WZ113G_FT/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

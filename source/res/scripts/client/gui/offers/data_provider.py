@@ -4,24 +4,26 @@ import logging
 from functools import wraps
 import typing
 import adisp
+from Event import Event, EventManager
+from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import OFFERS_DISABLED_MSG_SEEN
 from account_helpers.offers import events_data
-from account_helpers.offers.cache import CdnResourcesCache, CachePrefetchResult
+from account_helpers.offers.cache import CachePrefetchResult, CdnResourcesCache
+from constants import EVENT_CLIENT_DATA, OFFERS_ENABLED_KEY, OFFER_TOKEN_PREFIX
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import SM_TYPE
 from gui.server_events.events_helpers import getEventsData
 from gui.shared.gui_items.processors import makeI18nError
+from gui.shared.utils.requesters.offers_requester import OffersRequester
 from helpers import dependency, isPlayerAccount
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
-from gui.shared.utils.requesters.offers_requester import OffersRequester
-from constants import OFFER_TOKEN_PREFIX, EVENT_CLIENT_DATA
-from Event import Event, EventManager
-from PlayerEvents import g_playerEvents
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from typing import Callable, Optional, Set, Union
 _logger = logging.getLogger(__name__)
 _CDN_SYNC_TIMEOUT = 60.0
 
@@ -64,8 +66,8 @@ def _ifNotSynced(result):
 
 
 class OffersDataProvider(IOffersDataProvider):
-    _itemsCache = dependency.descriptor(IItemsCache)
     _connMgr = dependency.descriptor(IConnectionManager)
+    _itemsCache = dependency.descriptor(IItemsCache)
     _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
@@ -76,10 +78,12 @@ class OffersDataProvider(IOffersDataProvider):
         self._cache = {}
         self._lastAvailableOffers = None
         self._cdnCache = CdnResourcesCache()
+        self._getOffersData = None
         self.onOffersUpdated = Event(self._em)
         return
 
     def init(self):
+        self._getOffersData = _getEventsOffersData
         g_playerEvents.onAccountBecomeNonPlayer += self.stop
         self._connMgr.onConnected += self._onConnected
         self._connMgr.onDisconnected += self._onDisconnected
@@ -87,12 +91,14 @@ class OffersDataProvider(IOffersDataProvider):
         self._lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
 
     def fini(self):
+        self._getOffersData = None
         g_playerEvents.onAccountBecomeNonPlayer -= self.stop
         self._connMgr.onConnected -= self._onConnected
         self._connMgr.onDisconnected -= self._onDisconnected
         self._lobbyContext.onServerSettingsChanged -= self._onServerSettingsChanged
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
         self._em.clear()
+        return
 
     def start(self):
         self._ready = True
@@ -104,7 +110,7 @@ class OffersDataProvider(IOffersDataProvider):
         _logger.debug('[Offers provider] not ready to notify')
 
     def update(self, diff):
-        changed = any((token.startswith(OFFER_TOKEN_PREFIX) for token in diff.get('tokens', {}))) or 'offersData' in diff or 'eventsData' in diff and EVENT_CLIENT_DATA.OFFER in diff['eventsData'] or 'serverSettings' in diff and 'isOffersEnabled' in diff['serverSettings']
+        changed = any((token.startswith(OFFER_TOKEN_PREFIX) for token in diff.get('tokens', {}))) or 'offersData' in diff or 'eventsData' in diff and EVENT_CLIENT_DATA.OFFER in diff['eventsData'] or 'serverSettings' in diff and OFFERS_ENABLED_KEY in diff['serverSettings']
         if changed:
             self._pendingNotify = True
             self._cache.clear()
@@ -138,7 +144,7 @@ class OffersDataProvider(IOffersDataProvider):
     @_ifFeatureDisabled(None)
     @_ifNotSynced(None)
     def getOffer(self, offerID):
-        offerData = _getEventsOffersData().get(offerID)
+        offerData = self._getOffersData().get(offerID)
         return self._makeOffer(offerID, offerData)
 
     @_ifFeatureDisabled(None)
@@ -171,6 +177,15 @@ class OffersDataProvider(IOffersDataProvider):
                 return True
 
         return False
+
+    def getAmountOfGiftsGenerated(self, tokenID, mainTokenCount):
+        offerData = self.getOfferByToken(tokenID)
+        if offerData is not None:
+            if mainTokenCount > 1:
+                return offerData.giftTokenCount
+            return offerData.giftTokenCount * mainTokenCount
+        else:
+            return 0
 
     def _onDisconnected(self):
         self.stop()
@@ -218,7 +233,7 @@ class OffersDataProvider(IOffersDataProvider):
 
     def _onServerSettingsChange(self, *args, **kwargs):
         if not self._lobbyContext.getServerSettings().isOffersEnabled():
-            if not AccountSettings.getNotifications(OFFERS_DISABLED_MSG_SEEN) and _getEventsOffersData():
+            if not AccountSettings.getNotifications(OFFERS_DISABLED_MSG_SEEN) and self._getOffersData():
                 AccountSettings.setNotifications(OFFERS_DISABLED_MSG_SEEN, True)
                 msg = makeI18nError('offers/switch_off/body')
                 SystemMessages.pushMessage(msg.userMsg, msg.sysMsgType)
@@ -226,7 +241,7 @@ class OffersDataProvider(IOffersDataProvider):
             AccountSettings.setNotifications(OFFERS_DISABLED_MSG_SEEN, False)
 
     def _ioffers(self):
-        for offerID, data in _getEventsOffersData().iteritems():
+        for offerID, data in self._getOffersData().iteritems():
             offer = self._makeOffer(offerID, data)
             if offer:
                 yield offer

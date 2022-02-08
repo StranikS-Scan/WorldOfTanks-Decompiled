@@ -8,7 +8,7 @@ from helpers import dependency, time_utils
 import nations
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils.requesters import IStatsRequester
-from web.common import getWalletCurrencyStatuses, getBalance
+from web.common import formatWalletCurrencyStatuses, formatBalance
 from web.web_client_api import W2CSchema, w2c
 _logger = logging.getLogger(__name__)
 
@@ -23,8 +23,8 @@ class BalanceWebApiMixin(object):
             premiumExpireISOTime = time_utils.timestampToISO(premiumExpireLocalTime)
         else:
             premiumExpireISOTime = None
-        response = getBalance(stats)
-        response.update({'walletStatus': getWalletCurrencyStatuses(stats),
+        response = formatBalance(stats)
+        response.update({'walletStatus': formatWalletCurrencyStatuses(stats),
          'premiumExpireDate': premiumExpireISOTime})
         return response
 

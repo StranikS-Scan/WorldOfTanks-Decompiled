@@ -493,6 +493,8 @@
             <collisionModelServer>	vehicles/russian/R08_BT-2/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint></paint>

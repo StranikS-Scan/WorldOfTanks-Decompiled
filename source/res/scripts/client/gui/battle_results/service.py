@@ -3,36 +3,29 @@
 import logging
 import BigWorld
 import Event
+import personal_missions
+from Account import PlayerAccount
 from adisp import async, process
-from constants import PREMIUM_TYPE
+from constants import ARENA_BONUS_TYPE, PREMIUM_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import SystemMessages
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
-from gui.battle_results import composer
-from gui.battle_results import emblems
-from gui.battle_results import context
-from gui.battle_results import reusable
-from gui.battle_results import stored_sorting
+from gui.battle_results import composer, context, emblems, reusable, stored_sorting
+from gui.battle_results.components.progress import VehicleProgressHelper
 from gui.battle_results.composer import StatsComposer
 from gui.battle_results.settings import PREMIUM_STATE
-from gui.shared import event_dispatcher
-from gui.shared import g_eventBus, events
-from gui.shared.utils import decorators
+from gui.shared import event_dispatcher, events, g_eventBus
 from gui.shared.gui_items.processors.common import BattleResultsGetter, PremiumBonusApplier
+from gui.shared.utils import decorators
 from helpers import dependency
+from shared_utils import first
+from shared_utils.account_helpers.battle_results_helpers import getEmptyClientPB20UXStats
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
-import personal_missions
-from gui.battle_results.components.progress import VehicleProgressHelper
-from Account import PlayerAccount
-from constants import ARENA_BONUS_TYPE
+from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from shared_utils import first
-from shared_utils.account_helpers.battle_results_helpers import getEmptyClientPB20UXStats
-from gui.battle_pass.battle_pass_helpers import setInBattleProgress
 _logger = logging.getLogger(__name__)
 
 class BattleResultsService(IBattleResultsService):
@@ -112,7 +105,6 @@ class BattleResultsService(IBattleResultsService):
             return False
         else:
             self.__updateReusableInfo(reusableInfo)
-            self.__updateBattlePassInfo(reusableInfo)
             arenaUniqueID = reusableInfo.arenaUniqueID
             composerObj = composer.createComposer(reusableInfo)
             composerObj.setResults(result, reusableInfo)
@@ -306,7 +298,6 @@ class BattleResultsService(IBattleResultsService):
                 SystemMessages.pushI18nMessage(BATTLE_RESULTS.NODATA, type=SystemMessages.SM_TYPE.Warning)
                 callback(False)
             self.__updateReusableInfo(reusableInfo)
-            self.__updateBattlePassInfo(reusableInfo)
             arenaUniqueID = reusableInfo.arenaUniqueID
             composerObj = composer.createComposer(reusableInfo)
             composerObj.setResults(result, reusableInfo)
@@ -320,14 +311,6 @@ class BattleResultsService(IBattleResultsService):
         reusableInfo.premiumPlusState = self.__makePremiumState(arenaUniqueID, PREMIUM_TYPE.PLUS)
         reusableInfo.isAddXPBonusApplied = self.isAddXPBonusApplied(arenaUniqueID)
         reusableInfo.clientIndex = self.lobbyContext.getClientIDByArenaUniqueID(arenaUniqueID)
-
-    def __updateBattlePassInfo(self, reusableInfo):
-        battlePass = reusableInfo.personal.avatar.extensionInfo
-        basePoints = battlePass.get('basePointsDiff', 0)
-        sumPoints = battlePass.get('sumPoints', 0)
-        hasBattlePass = battlePass.get('hasBattlePass', False)
-        setIfEmpty = reusableInfo.common.arenaBonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE
-        setInBattleProgress(reusableInfo.battlePassProgress, basePoints, sumPoints, hasBattlePass, setIfEmpty, reusableInfo.common.arenaBonusType)
 
     def __onPremiumBought(self, event):
         ctx = event.ctx

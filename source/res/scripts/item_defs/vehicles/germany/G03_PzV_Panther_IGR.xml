@@ -869,7 +869,8 @@
             <maxPitch>	0 8 0.353005 8 0.416667 3 0.583333 3 0.646995 8 1 8	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <effects>	shot_main_mb	</effects>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_04.model	</destroyed>

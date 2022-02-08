@@ -3102,6 +3102,8 @@
             <collisionModelServer>	vehicles/chinese/Ch31_M3G_FT/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch31_M3G_FT/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <recoil>
             <recoilEffect>	medium	</recoilEffect>
             <lodDist>	MEDIUM	</lodDist>
@@ -3443,6 +3445,7 @@
             <amplitude>	0.3	</amplitude>
           </recoil>
           <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

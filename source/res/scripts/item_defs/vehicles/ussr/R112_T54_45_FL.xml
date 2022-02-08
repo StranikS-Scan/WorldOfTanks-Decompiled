@@ -1600,6 +1600,8 @@
             <collisionModelServer>	vehicles/russian/R112_T54_45/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R112_T54_45/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_mainext	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

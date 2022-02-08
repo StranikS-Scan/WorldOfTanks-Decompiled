@@ -2120,6 +2120,8 @@
             <collisionModelServer>	vehicles/czech/Cz16_TNH_T_vz51/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz16_TNH_T_vz51/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2233,6 +2235,8 @@
             <collisionModelServer>	vehicles/czech/Cz16_TNH_T_vz51/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz16_TNH_T_vz51/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2393,6 +2397,7 @@
           </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_large	</effects>
+          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <camouflage>
             <density>	97.9887 97.5409	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -3238,6 +3243,8 @@
             <collisionModelServer>	vehicles/czech/Cz16_TNH_T_vz51/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz16_TNH_T_vz51/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3335,6 +3342,8 @@
             <collisionModelServer>	vehicles/czech/Cz16_TNH_T_vz51/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz16_TNH_T_vz51/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3479,6 +3488,7 @@
           </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_large	</effects>
+          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <camouflage>
             <density>	97.9887 97.5409	</density>
             <aoTextureSize>	512 512	</aoTextureSize>

@@ -2704,6 +2704,8 @@
             <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2827,6 +2829,8 @@
             <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2895,6 +2899,8 @@
             <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

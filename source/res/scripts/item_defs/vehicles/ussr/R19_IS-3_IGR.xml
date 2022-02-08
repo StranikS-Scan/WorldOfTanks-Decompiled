@@ -877,6 +877,8 @@
             <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_08.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

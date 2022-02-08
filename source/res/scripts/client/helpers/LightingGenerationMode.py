@@ -156,7 +156,7 @@ def launch(spaceName):
     guitext = 'Client Lighting Generation Mode\n  entering: %s' % spaceName
     _displayGUI(guitext)
     spaceID = BigWorld.createSpace()
-    visibilityMask = game_mode_emulator.gameModeVisibilityMask()
+    visibilityMask = game_mode_emulator.gameModeVisibilityMask(spaceName)
     BigWorld.addSpaceGeometryMapping(spaceID, None, spaceName, visibilityMask)
     _loadCameraTransforms()
     camera = BigWorld.FreeCamera()

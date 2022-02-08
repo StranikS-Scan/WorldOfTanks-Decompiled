@@ -2055,6 +2055,8 @@
             <collisionModelServer>	vehicles/american/A129_T6_medium_MapsTraining_Dummy_MT_1/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A129_T6_medium_MapsTraining_Dummy_MT_1/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

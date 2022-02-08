@@ -171,8 +171,8 @@ class TestTunableEvent(TunableEventBlock, Example):
         return
 
     def onStartScript(self):
-        from constants import IS_EDITOR
-        if not IS_EDITOR:
+        from constants import IS_VS_EDITOR
+        if not IS_VS_EDITOR:
             self._cbID = BigWorld.callback(self._t.getValue(), self._exec)
 
     def onFinishScript(self):

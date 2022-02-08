@@ -2146,6 +2146,8 @@
             <collisionModelServer>	vehicles/sweden/S23_Strv_81/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S23_Strv_81/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

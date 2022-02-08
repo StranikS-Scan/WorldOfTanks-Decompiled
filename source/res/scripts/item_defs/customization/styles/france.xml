@@ -1163,6 +1163,86 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F88_AMX_13_105	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	547	</id>
+      <texture>	gui/maps/vehicles/styles/F88_AMX_13_105_3DSt_TIR.png	</texture>
+      <modelsSet>	F88_AMX_13_105_3DSt_TIR	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/F88_AMX_13_105_3DSt_TIR	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/F88_AMX_13_105_3DSt_TIR_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 2000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F75_Char_de_25t	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	549	</id>
+      <texture>	gui/maps/vehicles/styles/F75_Char_de_25t_3DSt_TIR.png	</texture>
+      <modelsSet>	F75_Char_de_25t_3DSt_TIR	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/F75_Char_de_25t_3DSt_TIR	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/F75_Char_de_25t_3DSt_TIR_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	2	</historical>

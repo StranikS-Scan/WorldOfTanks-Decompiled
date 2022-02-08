@@ -3,16 +3,13 @@
 import weakref
 from collections import namedtuple
 import typing
-from adisp import process, async as adispasync
-from async import async, await
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.battle_pass.battle_pass_helpers import isBattlePassDailyQuestsIntroShown
-from items import getTypeOfCompactDescr
 import BigWorld
 import Windowing
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import MISSIONS_PAGE, NY_DAILY_QUESTS_VISITED
+from account_helpers.AccountSettings import MISSIONS_PAGE
+from adisp import async as adispasync, process
+from async import async, await
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -24,28 +21,30 @@ from gui.Scaleform.daapi.view.lobby.missions.regular.sound_constants import TASK
 from gui.Scaleform.daapi.view.meta.MissionsListViewBaseMeta import MissionsListViewBaseMeta
 from gui.Scaleform.daapi.view.meta.MissionsPageMeta import MissionsPageMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.BATTLE_PASS import BATTLE_PASS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.battle_pass.battle_pass_helpers import isBattlePassDailyQuestsIntroShown
 from gui.impl import backport
-from gui.marathon.marathon_event_controller import getMarathons
 from gui.impl.gen import R
+from gui.marathon.marathon_event_controller import getMarathons
 from gui.server_events import caches, settings
-from gui.server_events.events_dispatcher import showMissionDetails, hideMissionDetails
+from gui.server_events.events_dispatcher import hideMissionDetails, showMissionDetails
 from gui.server_events.events_helpers import isLinkedSet
-from gui.shared import events, g_eventBus, event_bus_handlers
+from gui.shared import event_bus_handlers, events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import MissionsEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.sounds.ambients import LobbySubViewEnv, BattlePassSoundEnv, MarathonPageSoundEnv
-from gui.sounds.ambients import MissionsPremiumSoundEnv, MissionsCategoriesSoundEnv
+from gui.sounds.ambients import BattlePassSoundEnv, LobbySubViewEnv, MarathonPageSoundEnv, MissionsCategoriesSoundEnv, MissionsEventsSoundEnv, MissionsPremiumSoundEnv
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from items import getTypeOfCompactDescr
+from skeletons.gui.app_loader import GuiGlobalSpaceID, IAppLoader
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IMarathonEventsController, IGameSessionController, IBattleRoyaleController, IRankedBattlesController, IBattlePassController, IUISpamController, IMapboxController
-from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IUISpamController
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -107,6 +106,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
          QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS: group_packers.ElenGroupsBuilder()}
         self.__currentTabAlias = None
         self.__subTab = None
+        self.__ctx = ctx or {}
         self._initialize(ctx)
         return
 
@@ -123,12 +123,14 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__marathonPrefix = prefix
         caches.getNavInfo().setMissionsTab(alias)
         caches.getNavInfo().setMarathonPrefix(prefix)
-        if self.currentTab and self.__currentTabAlias not in NON_FLASH_TABS:
-            self.__updateFilterLabel()
-            self.currentTab.setFilters(self.__filterData)
-            self.currentTab.markVisited()
-        elif self.currentTab and self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
-            self.currentTab.markVisited()
+        if self.currentTab:
+            isSupportFilters = self.__currentTabAlias not in NON_FLASH_TABS
+            isSupportMarkVisited = isSupportFilters or self.__currentTabAlias in (QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS)
+            if isSupportFilters:
+                self.__updateFilterLabel()
+                self.currentTab.setFilters(self.__filterData)
+            if isSupportMarkVisited:
+                self.currentTab.markVisited()
         self.__onPageUpdate()
         self.__fireTabChangedEvent()
         self.__showFilter()
@@ -165,7 +167,9 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             return MissionsPremiumSoundEnv
         if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
             return MarathonPageSoundEnv
-        return MissionsCategoriesSoundEnv if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS else self.__sound_env__
+        if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
+            return MissionsCategoriesSoundEnv
+        return MissionsEventsSoundEnv if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS else self.__sound_env__
 
     def _populate(self):
         super(MissionsPage, self)._populate()
@@ -233,8 +237,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             viewPy.setDefaultTab(self.__subTab)
             self.__subTab = None
         if alias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS:
-            viewPy.setSubTab(self.__subTab)
-            self.__subTab = None
+            viewPy.updateState(**self.__ctx)
         self.__fireTabChangedEvent()
         return
 
@@ -412,8 +415,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                             newEventsCount += 1
                 elif alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS:
                     newEventsCount = self.__mapboxCtrl.getUnseenItemsCount()
-                    if not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED):
-                        newEventsCount += 1
                 elif self.currentTab is not None and self.__currentTabAlias == alias:
                     suitableEvents = [ quest for quest in self.currentTab.getSuitableEvents() if not isLinkedSet(quest.getGroupID()) or quest.isAvailable().isValid ]
                     newEventsCount = len(settings.getNewCommonEvents(suitableEvents))
@@ -585,14 +586,13 @@ class MissionView(MissionViewBase):
         result = []
         self._totalQuestsCount = 0
         self._filteredQuestsCount = 0
-        nyBannerAdded = self._appendNYBanner(result)
         for data in self._builder.getBlocksData(self.__viewQuests, self.__filter):
             self._appendBlockDataToResult(result, data)
             self._totalQuestsCount += self._getQuestTotalCountFromBlockData(data)
             self._filteredQuestsCount += self._getQuestFilteredCountFromBlockData(data)
 
         self._questsDP.buildList(result)
-        if not self._totalQuestsCount and not nyBannerAdded:
+        if not self._totalQuestsCount:
             self.as_showDummyS(self._getDummy())
         else:
             self.as_hideDummyS()
@@ -649,9 +649,6 @@ class MissionView(MissionViewBase):
 
     def __onPremiumTypeChanged(self, newAcctType):
         self.markVisited()
-
-    def _appendNYBanner(self, _):
-        return False
 
 
 class ElenMissionView(MissionViewBase):

@@ -2697,6 +2697,8 @@
             <collisionModelServer>	vehicles/italy/It16_Carro_d_assalto_P88/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/italy/It16_Carro_d_assalto_P88/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN	</paint>
@@ -3365,6 +3367,8 @@
             <collisionModelServer>	vehicles/italy/It16_Carro_d_assalto_P88/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/italy/It16_Carro_d_assalto_P88/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN	</paint>
@@ -3438,6 +3442,8 @@
             <collisionModelServer>	vehicles/italy/It16_Carro_d_assalto_P88/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/italy/It16_Carro_d_assalto_P88/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN	</paint>

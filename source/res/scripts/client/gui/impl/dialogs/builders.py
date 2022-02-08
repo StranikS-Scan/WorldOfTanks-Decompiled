@@ -6,7 +6,6 @@ from typing import Iterable, Any, Optional
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl.lobby.dialogs.contents.checkbox_content import CheckBoxDialogContent
-from gui.impl.pub.ny_info_dialog_window import NYInfoDialogWindow
 from gui.impl.pub.simple_dialog_window import SimpleDialogWindow
 from gui.impl.pub.pure_dialog_window import PureDialogWindow
 from gui.impl.gen import R
@@ -190,14 +189,10 @@ class FormattedSimpleDialogBuilder(SimpleDialogBuilder):
 class ResSimpleDialogBuilder(SimpleDialogBuilder):
 
     def setMessagesAndButtons(self, message, buttons=R.strings.dialogs.common, focused=DialogButtons.SUBMIT, btnDownSounds=None):
-        messageSection = self._getMessageSectionName()
-        self.setMessage(message.dyn(messageSection)())
+        self.setMessage(message.dyn('message')())
         self.setTitle(message.dyn('title')())
         self.setCheckboxLabel(message.dyn('checkboxLabel'))
         _setupButtonsBasedOnRes(self, message, buttons, focused, btnDownSounds)
-
-    def _getMessageSectionName(self):
-        pass
 
 
 class ResPureDialogBuilder(PureDialogBuilder):
@@ -227,10 +222,3 @@ class ErrorDialogBuilder(ResSimpleDialogBuilder):
     def __init__(self):
         super(ErrorDialogBuilder, self).__init__()
         self.setPreset(DialogPresets.ERROR)
-
-
-class NYInfoDialogBuilder(InfoDialogBuilder):
-
-    def __init__(self):
-        super(NYInfoDialogBuilder, self).__init__()
-        self._windowClass = NYInfoDialogWindow

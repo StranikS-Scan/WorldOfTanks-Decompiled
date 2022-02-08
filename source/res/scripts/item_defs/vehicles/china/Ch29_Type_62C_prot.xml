@@ -1864,6 +1864,8 @@
             <collisionModelServer>	vehicles/chinese/Ch29_Type_62C_prot/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch29_Type_62C_prot/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

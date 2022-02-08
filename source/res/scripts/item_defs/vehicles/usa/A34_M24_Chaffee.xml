@@ -3031,6 +3031,8 @@
             <collisionModelServer>	vehicles/american/A34_M24_Chaffee/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A34_M24_Chaffee/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3680,6 +3682,8 @@
             <collisionModelServer>	vehicles/american/A34_M24_Chaffee/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A34_M24_Chaffee/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3801,6 +3805,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/american/A34_M24_Chaffee/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A34_M24_Chaffee/crash/lod0/Gun_03.model	</destroyed>

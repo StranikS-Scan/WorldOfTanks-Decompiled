@@ -8,10 +8,11 @@ from skeletons.gui.game_control import IBattlePassController
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.BATTLE_PASS import BATTLE_PASS
 from gui.impl.lobby.battle_pass.battle_pass_entry_point_view import BaseBattlePassEntryPointView
-_TOOLTIPS = {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): TOOLTIPS_CONSTANTS.BATTLE_PASS_NOT_STARTED,
- R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): TOOLTIPS_CONSTANTS.BATTLE_PASS_COMPLETED,
- R.views.lobby.battle_pass.tooltips.BattlePass3dStyleNotChosenTooltip(): TOOLTIPS_CONSTANTS.BATTLE_PASS_3D_NOT_CHOOSEN,
- R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): TOOLTIPS_CONSTANTS.BATTLE_PASS_IN_PROGRESS}
+_R_TOOLTIPS = R.views.lobby.battle_pass.tooltips
+_TOOLTIPS = {_R_TOOLTIPS.BattlePassNotStartedTooltipView(): TOOLTIPS_CONSTANTS.BATTLE_PASS_NOT_STARTED,
+ _R_TOOLTIPS.BattlePassCompletedTooltipView(): TOOLTIPS_CONSTANTS.BATTLE_PASS_COMPLETED,
+ _R_TOOLTIPS.BattlePassInProgressTooltipView(): TOOLTIPS_CONSTANTS.BATTLE_PASS_IN_PROGRESS,
+ _R_TOOLTIPS.BattlePassNoChapterTooltipView(): TOOLTIPS_CONSTANTS.BATTLE_PASS_NO_CHAPTER}
 
 class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePassEntryPointView):
     __battlePassController = dependency.descriptor(IBattlePassController)
@@ -42,43 +43,47 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
         if self.__arenaBonusType is None:
             return
         else:
-            currentLevel = ''
-            if not self._isCompleted():
-                currentLevel = min(self._widgetLevel + 1, self._battlePassController.getMaxLevel())
-            flagIcon = backport.image(R.images.gui.maps.icons.library.hangarEntryPoints.dyn('chapter_{}'.format(self._widgetChapter), R.images.gui.maps.icons.library.hangarEntryPoints.chapter_1)())
+            flagIcon = backport.image(R.images.gui.maps.icons.library.hangarEntryPoints.battlePass.dyn('flag_chapter_{}'.format(self.chapterID))()) if self.chapterID > 0 else None
             gameModeIsEnabled = self.__battlePassController.isGameModeEnabled(self.__arenaBonusType)
             isEnabled = gameModeIsEnabled and self.__battlePassController.isActive() and self.__battlePassController.isEnabled()
             data = {'flagIcon': flagIcon,
              'icon': self.__getIcon(),
              'altIcon': self.__getAltIcon(isEnabled),
-             'text': str(currentLevel),
+             'text': str(self.level + 1),
              'isEnabled': isEnabled,
-             'isBought': self._isBought(),
-             'is3DStyleChosen': self._is3DStyleChosen()}
+             'isBought': self.isBought,
+             'chapterID': self.chapterID,
+             'points': self.freePoints if self.isCompleted else 0}
             self.__updateTooltipData(data, self.__arenaBonusType, gameModeIsEnabled)
             self.as_setDataS(data)
             if isEnabled:
-                self.as_setCountS(self._getNotChosenRewardCountWith3d())
+                self.as_setCountS(self._getNotChosenRewardCount())
             return
 
     def _getCurrentArenaBonusType(self):
         return self.__arenaBonusType
 
     def __getIcon(self):
-        hangarEntryPoints = R.images.gui.maps.icons.library.hangarEntryPoints
-        if self._isBought() or self._isCompleted():
-            icon = hangarEntryPoints.bp_entry_icon_purple_gold() if self._isCompleted() else hangarEntryPoints.bp_entry_icon_grey_gold()
+        hangarEntryPoints = R.images.gui.maps.icons.library.hangarEntryPoints.battlePass
+        if self.isBought or self.isCompleted:
+            shieldTemplate = 'shield_blue{}{}'
+            color = '_gold' if self.isBought else '_silver'
+            postfix = '_closed' if self.isCompleted and self.freePoints == 0 else ''
+            icon = hangarEntryPoints.dyn(shieldTemplate.format(color, postfix))()
         else:
-            icon = hangarEntryPoints.bp_entry_icon_brown_silver()
+            icon = hangarEntryPoints.shield_silver() if self.chapterID != 0 else hangarEntryPoints.shield_silver_empty()
         return backport.image(icon)
 
     def __getAltIcon(self, isEnabled):
-        altIcon = ''
-        if not self._is3DStyleChosen() and isEnabled:
-            altIcon = backport.image(R.images.gui.maps.icons.library.hangarEntryPoints.c_3dStyles())
-        elif self._isCompleted():
-            altIcon = backport.image(R.images.gui.maps.icons.library.hangarEntryPoints.completedGold())
-        return altIcon
+        hangarEntryPoints = R.images.gui.maps.icons.library.hangarEntryPoints.battlePass
+        if self.chapterID > 0:
+            iconTemplate = 'icon_gold_chapter_{}' if self.isBought else 'icon_silver_chapter_{}'
+            icon = hangarEntryPoints.dyn(iconTemplate.format(self.chapterID))()
+        elif self.isCompleted:
+            icon = hangarEntryPoints.icon_completed_gold() if self.isBought else hangarEntryPoints.icon_completed_silver()
+        else:
+            icon = hangarEntryPoints.icon_chapter_empty()
+        return backport.image(icon)
 
     def __updateTooltipData(self, data, currentArenaBonusType, gameModeIsEnabled):
         if gameModeIsEnabled and self.__battlePassController.isEnabled():

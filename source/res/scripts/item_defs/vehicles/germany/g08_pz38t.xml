@@ -2443,6 +2443,8 @@
             <collisionModelServer>	vehicles/german/G08_Pz38t/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2511,6 +2513,8 @@
             <collisionModelServer>	vehicles/german/G08_Pz38t/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN_2	</paint>
@@ -3155,6 +3159,8 @@
             <collisionModelServer>	vehicles/german/G08_Pz38t/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3224,6 +3230,8 @@
             <collisionModelServer>	vehicles/german/G08_Pz38t/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN_2	</paint>
@@ -3286,6 +3294,8 @@
             <collisionModelServer>	vehicles/german/G08_Pz38t/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G08_Pz38t/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

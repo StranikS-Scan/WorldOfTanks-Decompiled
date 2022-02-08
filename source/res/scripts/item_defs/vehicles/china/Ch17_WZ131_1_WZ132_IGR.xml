@@ -1005,6 +1005,8 @@
             <collisionModelServer>	vehicles/chinese/Ch17_WZ131_1_WZ132/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch17_WZ131_1_WZ132/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_mainext	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

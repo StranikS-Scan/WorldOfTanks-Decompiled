@@ -132,7 +132,7 @@ class SoundModes(object):
             else:
                 defaultNationalPresets = dict(self.__nationalPresets)
                 for modesConfigSection in folderSection.values():
-                    if modesConfigSection.name != SoundModes.__MODES_FILENAME:
+                    if ResMgr.getFilename(modesConfigSection.name) != SoundModes.__MODES_FILENAME:
                         soundModes, nationalPresets = self.__readSoundModesConfig(modesConfigSection, defaultNationalPresets)
                         for mode in soundModes:
                             if self.__modes.has_key(mode.name):

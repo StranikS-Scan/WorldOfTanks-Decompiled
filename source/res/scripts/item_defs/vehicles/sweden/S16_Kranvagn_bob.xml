@@ -1603,6 +1603,8 @@
             <collisionModelServer>	vehicles/sweden/S16_Kranvagn/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S16_Kranvagn/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <drivenJoints>
             <master>
               <node>	Gun	</node>

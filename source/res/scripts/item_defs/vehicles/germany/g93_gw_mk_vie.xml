@@ -3373,6 +3373,8 @@
             <collisionModelServer>	vehicles/german/G93_GW_Mk_VIe/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G93_GW_Mk_VIe/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

@@ -4,10 +4,10 @@ import adisp
 from async import async, await
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.gen import R
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
+from gui.prb_control.entities.base.ctx import LeavePrbAction
+from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.prb_control.entities.base.ctx import LeavePrbAction
 
 class CloseConfirmatorsHelper(object):
     __slots__ = ('__closeConfirmator',)
@@ -27,9 +27,7 @@ class CloseConfirmatorsHelper(object):
          events.PrbActionEvent.LEAVE,
          events.TrainingEvent.RETURN_TO_TRAINING_ROOM,
          events.TrainingEvent.SHOW_TRAINING_LIST,
-         events.CustomizationEvent.SHOW,
-         events.LobbySimpleEvent.SWITCH_NEW_YEAR_VIEW,
-         events.LobbySimpleEvent.SHOW_LOOT_BOX_VIEW]
+         events.CustomizationEvent.SHOW]
 
     def getRestrictedSfViews(self):
         return [VIEW_ALIAS.VEHICLE_COMPARE,
@@ -40,8 +38,7 @@ class CloseConfirmatorsHelper(object):
          VIEW_ALIAS.LOBBY_RESEARCH,
          VIEW_ALIAS.WIKI_VIEW,
          VIEW_ALIAS.BROWSER_VIEW,
-         VIEW_ALIAS.VEHICLE_PREVIEW,
-         VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW]
+         VIEW_ALIAS.VEHICLE_PREVIEW]
 
     def getRestrictedGuiImplViews(self):
         return [R.views.lobby.dog_tags.DogTagsView()]

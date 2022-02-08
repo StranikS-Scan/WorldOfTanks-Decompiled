@@ -2402,6 +2402,8 @@
             <collisionModelServer>	vehicles/british/GB112_Caliban/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB112_Caliban/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

@@ -1,35 +1,34 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
+import operator
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict, namedtuple
 import typing
-import operator
 import constants
 import dossiers2
 import nations
 from account_shared import LayoutIterator
 from adisp import async, process
+from battle_pass_common import BATTLE_PASS_PDATA_KEY
 from constants import CustomizationInvData, SkinInvData
-from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
+from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 from goodies.goodie_constants import GOODIE_STATE
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
-from gui.shared.utils.requesters import vehicle_items_getter
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
-from gui.shared.utils.requesters.battle_pass_requester import BattlePassRequester
+from gui.shared.utils.requesters import vehicle_items_getter
 from helpers import dependency
-from items import vehicles, tankmen, getTypeOfCompactDescr, makeIntCompactDescrByID
-from items.components.c11n_constants import SeasonType, CustomizationDisplayType
+from items import getTypeOfCompactDescr, makeIntCompactDescrByID, tankmen, vehicles
+from items.components.c11n_constants import CustomizationDisplayType, SeasonType
 from items.components.crew_skins_constants import CrewSkinType
-from skeletons.gui.shared import IItemsRequester, IItemsCache
-from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from skeletons.gui.game_control import IVehiclePostProgressionController
-from nation_change.nation_change_helpers import iterVehiclesWithNationGroupInOrder, iterVehTypeCDsInNationGroup, isMainInNationGroupSafe
+from nation_change.nation_change_helpers import isMainInNationGroupSafe, iterVehTypeCDsInNationGroup, iterVehiclesWithNationGroupInOrder
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
+from skeletons.gui.game_control import IVehiclePostProgressionController
+from skeletons.gui.shared import IItemsCache, IItemsRequester
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
 if typing.TYPE_CHECKING:
     import skeletons.gui.shared.utils.requesters as requesters
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
-    from lunar_ny.lunar_ny_requester import ILunarNYRequester
 DO_LOG_BROKEN_SYNC = False
 
 def getDiffID(itemdID):
@@ -243,7 +242,6 @@ class REQ_CRITERIA(object):
         ACTIVE_OR_MAIN_IN_NATION_GROUP = RequestCriteria(PredicateCondition(lambda item: item.activeInNationGroup if item.isInInventory else isMainInNationGroupSafe(item.intCD)))
         FAVORITE = RequestCriteria(PredicateCondition(lambda item: item.isFavorite))
         PREMIUM = RequestCriteria(PredicateCondition(lambda item: item.isPremium))
-        SPECIAL = RequestCriteria(PredicateCondition(lambda item: item.isSpecial))
         READY = RequestCriteria(PredicateCondition(lambda item: item.isReadyToFight))
         OBSERVER = RequestCriteria(PredicateCondition(lambda item: item.isObserver))
         EARN_CRYSTALS = RequestCriteria(PredicateCondition(lambda item: item.isEarnCrystals))
@@ -288,12 +286,11 @@ class REQ_CRITERIA(object):
         CAN_PERSONAL_TRADE_IN_SALE = RequestCriteria(PredicateCondition(lambda item: item.canPersonalTradeInSale))
         CAN_PERSONAL_TRADE_IN_BUY = RequestCriteria(PredicateCondition(lambda item: item.canPersonalTradeInBuy))
         IS_IN_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isInBattle))
-        IS_IN_UNIT = RequestCriteria(PredicateCondition(lambda item: item.isInUnit))
         SECRET = RequestCriteria(PredicateCondition(lambda item: item.isSecret))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
         NAME_VEHICLE_WITH_SHORT = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableShortUserName or nameVehicle in item.searchableUserName)))
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
-        HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: not item.tags.isdisjoint(tags))))
+        HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
         FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
 
     class TANKMAN(object):
@@ -365,7 +362,7 @@ class REQ_CRITERIA(object):
         ONLY_IN_GROUP = staticmethod(lambda group: RequestCriteria(PredicateCondition(lambda item: item.groupUserName == group)))
         DISCLOSABLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.fullInventoryCount(vehicle.intCD) or not item.isHidden)))
         IS_INSTALLED_ON_VEHICLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.installedCount(vehicle.intCD) > 0)))
-        HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: not item.tags.isdisjoint(tags))))
+        HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
         FULL_INVENTORY = RequestCriteria(PredicateCondition(lambda item: item.fullInventoryCount() > 0))
         ON_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.fullCount() > 0))
 
@@ -383,7 +380,7 @@ class ItemsRequester(IItemsRequester):
      'ranked',
      'dogTag'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, giftSystemRequester=None, lunarNY=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -400,9 +397,8 @@ class ItemsRequester(IItemsRequester):
         self.__tokens = tokens
         self.__sessionStats = sessionStatsRequester
         self.__anonymizer = anonymizerRequester
-        self.__battlePass = BattlePassRequester()
+        self.__battlePass = battlePassRequester
         self.__giftSystem = giftSystemRequester
-        self.__lunarNY = lunarNY
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__fittingItemRequesters = {self.__inventory,
@@ -484,10 +480,6 @@ class ItemsRequester(IItemsRequester):
     def giftSystem(self):
         return self.__giftSystem
 
-    @property
-    def lunarNY(self):
-        return self.__lunarNY
-
     @async
     @process
     def request(self, callback=None):
@@ -540,19 +532,11 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/giftSystem')
         yield self.__giftSystem.request()
         Waiting.hide('download/giftSystem')
-        if self.__lunarNY is not None:
-            Waiting.show('download/lunarNY')
-            yield self.__lunarNY.request()
-            Waiting.hide('download/lunarNY')
         self.__brokenSyncAlreadyLoggedTypes.clear()
         callback(self)
-        return
 
     def isSynced(self):
-        if self.__blueprints is not None:
-            return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__giftSystem.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__battleRoyale.isSynced() and self.__blueprints.isSynced()
-        else:
-            return False and self.__lunarNY.isSynced() if self.__lunarNY is not None else True
+        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__giftSystem.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__battleRoyale.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
 
     @async
     @process
@@ -608,9 +592,6 @@ class ItemsRequester(IItemsRequester):
         self.__festivity.clear()
         self.__anonymizer.clear()
         self.__giftSystem.clear()
-        if self.__lunarNY is not None:
-            self.__lunarNY.clear()
-        return
 
     def onDisconnected(self):
         self.__tokens.onDisconnected()
@@ -744,11 +725,11 @@ class ItemsRequester(IItemsRequester):
                     invalidate[GUI_ITEM_TYPE.TANKMAN].add(itemID * -1)
                 invalidate[GUI_ITEM_TYPE.VEHICLE].add(itemID)
 
-        if ('battlePass', '_r') in diff or 'battlePass' in diff:
-            if ('battlePass', '_r') in diff:
-                invalidate['battlePass'] = diff[('battlePass', '_r')]
-            if 'battlePass' in diff:
-                synchronizeDicts(diff['battlePass'], invalidate.setdefault('battlePass', {}))
+        if (BATTLE_PASS_PDATA_KEY, '_r') in diff or BATTLE_PASS_PDATA_KEY in diff:
+            if (BATTLE_PASS_PDATA_KEY, '_r') in diff:
+                invalidate[BATTLE_PASS_PDATA_KEY] = diff[BATTLE_PASS_PDATA_KEY, '_r']
+            if BATTLE_PASS_PDATA_KEY in diff:
+                synchronizeDicts(diff[BATTLE_PASS_PDATA_KEY], invalidate.setdefault(BATTLE_PASS_PDATA_KEY, {}))
         if 'goodies' in diff:
             vehicleDiscounts = self.__shop.getVehicleDiscountDescriptions()
             for goodieID in diff['goodies'].iterkeys():

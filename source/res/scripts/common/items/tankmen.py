@@ -34,7 +34,7 @@ MAX_SKILL_LEVEL = 100
 MIN_ROLE_LEVEL = 50
 SKILL_LEVELS_PER_RANK = 50
 COMMANDER_ADDITION_RATIO = 10
-_MAX_FREE_XP = 2000000000
+_MAX_FREE_XP = 4000000000L
 _LEVELUP_K1 = 50.0
 _LEVELUP_K2 = 100.0
 RECRUIT_TMAN_TOKEN_PREFIX = 'tman_template'
@@ -184,7 +184,7 @@ def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills=(), la
     isFemale = 1 if isFemale else 0
     isPremium = 1 if isPremium else 0
     flags = isFemale | isPremium << 1 | len(freeSkills) << 2
-    cd += pack('<B4Hi', flags, firstNameID, lastNameID, iconID, rank | levelsToNextRank << 5, 0)
+    cd += pack('<B4HI', flags, firstNameID, lastNameID, iconID, rank | levelsToNextRank << 5, 0)
     cd += dossierCompactDescr
     return cd
 
@@ -547,7 +547,7 @@ class TankmanDescr(object):
         isFemale = 1 if self.isFemale else 0
         isPremium = 1 if self.isPremium else 0
         flags = isFemale | isPremium << 1 | self.freeSkillsNumber << 2
-        cd += pack('<B4Hi', flags, self.firstNameID, self.lastNameID, self.iconID, self.__rankIdx & 31 | (self.numLevelsToNextRank & 2047) << 5, self.freeXP)
+        cd += pack('<B4HI', flags, self.firstNameID, self.lastNameID, self.iconID, self.__rankIdx & 31 | (self.numLevelsToNextRank & 2047) << 5, self.freeXP)
         cd += self.dossierCompactDescr
         return cd
 
@@ -592,7 +592,7 @@ class TankmanDescr(object):
                 self.__lastSkillLevel = MAX_SKILL_LEVEL
             cd = cd[1:]
             nationConfig = getNationConfig(nationID)
-            self.firstNameID, self.lastNameID, self.iconID, rank, self.freeXP = unpack('<4Hi', cd[:12].ljust(12, '\x00'))
+            self.firstNameID, self.lastNameID, self.iconID, rank, self.freeXP = unpack('<4HI', cd[:12].ljust(12, '\x00'))
             self.gid, _ = findGroupsByIDs(getNationGroups(nationID, self.isPremium), self.isFemale, self.firstNameID, self.lastNameID, self.iconID).pop(0)
             if battleOnly:
                 del self.freeXP

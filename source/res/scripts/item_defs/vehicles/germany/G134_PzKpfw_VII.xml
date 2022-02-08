@@ -1781,6 +1781,8 @@
             <collisionModelServer>	vehicles/german/G134_PzKpfw_VII/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G134_PzKpfw_VII/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

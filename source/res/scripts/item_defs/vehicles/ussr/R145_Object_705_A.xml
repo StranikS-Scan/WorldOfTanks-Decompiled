@@ -1798,6 +1798,8 @@
             <collisionModelServer>	vehicles/russian/R145_Object_705_A/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R145_Object_705_A/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <drivenJoints>
             <master>
               <node>	Gun	</node>

@@ -1716,6 +1716,8 @@
             <collisionModelServer>	vehicles/russian/R98_T44_85/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R98_T44_85/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>

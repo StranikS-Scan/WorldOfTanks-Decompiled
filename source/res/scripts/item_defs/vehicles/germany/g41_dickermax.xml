@@ -2214,6 +2214,8 @@
             <collisionModelServer>	vehicles/german/G41_DickerMax/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G41_DickerMax/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

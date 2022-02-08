@@ -72,6 +72,13 @@
       <undamaged>	vehicles/german/G114_Skorpian/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G114_Skorpian/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G114_Skorpian/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G114_Skorpian_3DSt_TIR>
+          <undamaged>	vehicles/german/G114_Skorpian/_skins/G114_Skorpian_3DSt_TIR/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G114_Skorpian/_skins/G114_Skorpian_3DSt_TIR/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G114_Skorpian/_skins/G114_Skorpian_3DSt_TIR/crash/lod0/Hull.model	</exploded>
+        </G114_Skorpian_3DSt_TIR>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -869,6 +876,71 @@
         <clipAngle>	0.733068	</clipAngle>
         <anchorShift>	-0.060523	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15060	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	default G114_Skorpian_3DSt_TIR	</compatibleModels>
+        <position>	-1.27027 1.3143 3.17101	</position>
+        <rotation>	0.782181 -0.000489957 3.13953	</rotation>
+        <scale>	0.672831 0.378539 0.672834	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.1106	</clipAngle>
+        <anchorShift>	0.080031	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15061	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	default G114_Skorpian_3DSt_TIR	</compatibleModels>
+        <position>	1.27029 1.31427 3.17101	</position>
+        <rotation>	0.782181 -0.000489956 3.13953	</rotation>
+        <scale>	0.672831 0.378539 0.672834	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.1106	</clipAngle>
+        <anchorShift>	0.080032	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15062	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	default	</compatibleModels>
+        <position>	-0.00218086 1.39879 2.81377	</position>
+        <rotation>	0.585976 -0.00815369 3.0999	</rotation>
+        <scale>	0.813274 0.813274 0.813277	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.1106	</clipAngle>
+        <anchorShift>	0.050230	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15063	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	default G114_Skorpian_3DSt_TIR	</compatibleModels>
+        <position>	0.000022 1.47966 -3.12852	</position>
+        <rotation>	1.04598 0.000018 0.000021	</rotation>
+        <scale>	0.425799 0.110651 0.425802	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorShift>	-0.007741	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15064	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G114_Skorpian_3DSt_TIR	</compatibleModels>
+        <position>	0.0538527 1.41988 2.13709	</position>
+        <rotation>	0.585976 -0.00815368 3.0999	</rotation>
+        <scale>	0.789833 0.789833 0.789837	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.1106	</clipAngle>
+        <anchorShift>	0.430033	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -911,6 +983,13 @@
         <undamaged>	vehicles/german/G114_Skorpian/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G114_Skorpian/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G114_Skorpian/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G114_Skorpian_3DSt_TIR>
+            <undamaged>	vehicles/german/G114_Skorpian/_skins/G114_Skorpian_3DSt_TIR/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G114_Skorpian/_skins/G114_Skorpian_3DSt_TIR/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G114_Skorpian/_skins/G114_Skorpian_3DSt_TIR/crash/lod0/Chassis.model	</exploded>
+          </G114_Skorpian_3DSt_TIR>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1014,7 +1093,7 @@
         <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-7.4	</gravity>
-        <elasticity>	1094	</elasticity>
+        <elasticity>	1294	</elasticity>
         <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
@@ -1089,26 +1168,26 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <forwardElastK>	0.6	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.6	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	0.6	</backwardElastK>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	0.6	</backwardElastK>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -1636,12 +1715,20 @@
             <undamaged>	vehicles/german/G114_Skorpian/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G114_Skorpian/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G114_Skorpian/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G114_Skorpian_3DSt_TIR>
+                <undamaged>	vehicles/german/G114_Skorpian/_skins/G114_Skorpian_3DSt_TIR/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G114_Skorpian/_skins/G114_Skorpian_3DSt_TIR/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G114_Skorpian/_skins/G114_Skorpian_3DSt_TIR/crash/lod0/Gun_01.model	</exploded>
+              </G114_Skorpian_3DSt_TIR>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G114_Skorpian/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G114_Skorpian/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_largeext_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <shotOffset>	-0.000056 0.246870 0.000000	</shotOffset>
           <customizationSlots>
@@ -1688,6 +1775,13 @@
         <undamaged>	vehicles/german/G114_Skorpian/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G114_Skorpian/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G114_Skorpian/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G114_Skorpian_3DSt_TIR>
+            <undamaged>	vehicles/german/G114_Skorpian/_skins/G114_Skorpian_3DSt_TIR/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G114_Skorpian/_skins/G114_Skorpian_3DSt_TIR/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G114_Skorpian/_skins/G114_Skorpian_3DSt_TIR/crash/lod0/Turret_01.model	</exploded>
+          </G114_Skorpian_3DSt_TIR>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G114_Skorpian/collision/Turret_01.model	</collisionModelServer>
@@ -2092,6 +2186,45 @@
           <clipAngle>	1.20166	</clipAngle>
           <hiddenForUser>	true	</hiddenForUser>
           <anchorShift>	-0.013174	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35029	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	default G114_Skorpian_3DSt_TIR	</compatibleModels>
+          <position>	-0.513042 2.44847 0.692906	</position>
+          <rotation>	1.08727 -0.630162 -3.05401	</rotation>
+          <scale>	0.600974 0.14989 0.600986	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.20166	</clipAngle>
+          <anchorShift>	0.100657	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35030	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	default G114_Skorpian_3DSt_TIR	</compatibleModels>
+          <position>	0.513084 2.44845 0.692906	</position>
+          <rotation>	1.08729 0.630047 3.05396	</rotation>
+          <scale>	0.600974 0.14989 0.600986	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.20166	</clipAngle>
+          <anchorShift>	0.100664	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35031	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	default G114_Skorpian_3DSt_TIR	</compatibleModels>
+          <position>	0.000008 2.99949 -0.131823	</position>
+          <rotation>	-0.000004 -0.000008 3.14153	</rotation>
+          <scale>	0.934848 0.2 0.934848	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.13515	</clipAngle>
+          <anchorShift>	0.000138	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

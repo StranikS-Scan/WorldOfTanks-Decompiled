@@ -12,7 +12,7 @@ else:
     from realm_utils import ResMgr
 _g_itemTypes = None
 UNDEFINED_ITEM_CD = 0
-ITEM_TYPE_NAMES = ('_reserved', 'vehicle', 'vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio', 'tankman', 'optionalDevice', 'shell', 'equipment', 'customizationItem', 'crewSkin', 'crewBook', 'customizationProgression')
+ITEM_TYPE_NAMES = ('_reserved', 'vehicle', 'vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio', 'tankman', 'optionalDevice', 'shell', 'equipment', 'customizationItem', 'crewSkin', 'crewBook')
 
 class ITEM_TYPES(dict):
 
@@ -166,11 +166,6 @@ def init(preloadEverything, pricesToCollect=None):
     tankmen.init(preloadEverything, pricesToCollect)
     from items import perks
     perks.init(preloadEverything)
-    from items import lunar_ny
-    lunar_ny.init()
-    from items import new_year, collectibles
-    collectibles.init()
-    new_year.init()
     return
 
 

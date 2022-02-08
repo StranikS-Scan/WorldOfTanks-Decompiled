@@ -128,12 +128,13 @@ class BaseAmmunitionSetupView(ViewImpl):
     @async
     def _onPanelSelected(self, args):
         sectionName, slotID = args.get('selectedSection'), int(args.get('selectedSlot'))
-        switch = yield await(self._tankSetup.switch(sectionName, slotID))
-        if switch and self.viewStatus == ViewStatus.LOADED:
-            if sectionName == TankSetupConstants.OPT_DEVICES:
-                playOptDeviceSlotEnter(self._vehItem.getItem(), slotID)
-            self._ammunitionPanel.changeSelectedSection(sectionName, slotID)
-            self._updateAmmunitionPanel()
+        if sectionName:
+            switch = yield await(self._tankSetup.switch(sectionName, slotID))
+            if switch and self.viewStatus == ViewStatus.LOADED:
+                if sectionName == TankSetupConstants.OPT_DEVICES:
+                    playOptDeviceSlotEnter(self._vehItem.getItem(), slotID)
+                self._ammunitionPanel.changeSelectedSection(sectionName, slotID)
+                self._updateAmmunitionPanel()
 
     def _onPanelSlotClear(self, args):
         slotID = int(args.get('slotId'))

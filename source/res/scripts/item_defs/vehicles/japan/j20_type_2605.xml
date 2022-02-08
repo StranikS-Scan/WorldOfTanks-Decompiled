@@ -1951,7 +1951,8 @@
             <collisionModelServer>	vehicles/japan/J20_Type_2605/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J20_Type_2605/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_superhuge	</effects>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2043,7 +2044,8 @@
             <collisionModelServer>	vehicles/japan/J20_Type_2605/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J20_Type_2605/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_superhuge	</effects>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

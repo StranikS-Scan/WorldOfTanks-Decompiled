@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationListView.py
-import typing
 from debug_utils import LOG_ERROR
-from gifts.gifts_common import GiftEventID
 from gui.Scaleform.daapi.view.meta.NotificationsListMeta import NotificationsListMeta
 from gui.Scaleform.genConsts.NOTIFICATIONS_CONSTANTS import NOTIFICATIONS_CONSTANTS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
@@ -16,14 +14,10 @@ from gui.shared.formatters import icons
 from gui.shared.notifications import NotificationGroup
 from helpers.i18n import makeString as _ms
 from helpers import dependency
-from skeletons.gui.game_control import IGiftSystemController
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.new_year import INewYearController
 
 class NotificationListView(NotificationsListMeta, BaseNotificationView):
     _lobbyContext = dependency.descriptor(ILobbyContext)
-    __giftsController = dependency.descriptor(IGiftSystemController)
-    __nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, _):
         super(NotificationListView, self).__init__()
@@ -69,13 +63,9 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         else:
             self.__currentGroup = NotificationGroup.INFO
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
-        invitesTooltip = TOOLTIPS.NOTIFICATIONSVIEW_TAB_INVITES
-        eventHub = self.__giftsController.getEventHub(GiftEventID.NY_HOLIDAYS)
-        if self.__nyController.isEnabled() and eventHub and not eventHub.getSettings().isDisabled:
-            invitesTooltip = TOOLTIPS.NOTIFICATIONSVIEW_TAB_NYINVITES
         self.as_setInitDataS({'scrollStepFactor': LIST_SCROLL_STEP_FACTOR,
          'btnBarSelectedIdx': NotificationGroup.ALL.index(self.__currentGroup),
-         'tabsData': {'tabs': [self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INFO, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INFORMATION_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INFO), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INVITES, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INVITATIONS_24X16, 24, 16, -5, 0), invitesTooltip), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_OFFERS, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ICON_BELL_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_OFFERS)]}})
+         'tabsData': {'tabs': [self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INFO, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INFORMATION_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INFO), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INVITES, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INVITATIONS_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INVITES), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_OFFERS, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ICON_BELL_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_OFFERS)]}})
         if self._lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled:
             self.as_setProgressiveRewardEnabledS(True)
 
@@ -101,7 +91,7 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self._model.resetNotifiedMessagesCount(self.__currentGroup)
 
     def __getMessagesList(self):
-        filtered = [ item for item in self._model.collection.getListIterator() if item.getGroup() == self.__currentGroup and not item.onlyPopUp() ]
+        filtered = [ item for item in self._model.collection.getListIterator() if item.getGroup() == self.__currentGroup ]
         return [ self.__getListVO(item) for item in filtered ]
 
     def __getEmptyListMsg(self, hasMessages):
@@ -120,8 +110,6 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self.__updateCounters()
 
     def __onNotificationUpdated(self, notification, isStateChanged):
-        if notification.updateCounter():
-            self._model.updateNotifiedMessagesCount(*notification.getCounterInfo())
         if notification.getGroup() == self.__currentGroup:
             if notification.isOrderChanged():
                 self.__setNotificationList()
@@ -134,11 +122,11 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
             self._model.incrementNotifiedMessagesCount(*notification.getCounterInfo())
         self.__updateCounters()
 
-    def __onNotificationRemoved(self, typeID, entityID, groupID, count, resetCounter):
+    def __onNotificationRemoved(self, typeID, entityID, groupID):
         if groupID == self.__currentGroup:
             self.__setNotificationList()
         else:
-            self._model.decrementNotifiedMessagesCount(groupID, typeID, entityID, count, resetCounter)
+            self._model.decrementNotifiedMessagesCount(groupID, typeID, entityID)
         self.__updateCounters()
 
     def __makeTabItemVO(self, tabId, label, tooltip):

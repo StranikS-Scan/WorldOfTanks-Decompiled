@@ -2036,6 +2036,8 @@
             <collisionModelServer>	vehicles/british/GB48_FV215b_183/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB48_FV215b_183/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_superhuge	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

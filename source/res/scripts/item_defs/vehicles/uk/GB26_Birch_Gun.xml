@@ -3015,6 +3015,8 @@
             <collisionModelServer>	vehicles/british/GB26_Birch_Gun/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB26_Birch_Gun/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3298,6 +3300,7 @@
           <aimingTime>	5	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <models>
             <undamaged>	vehicles/british/GB26_Birch_Gun/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/british/GB26_Birch_Gun/crash/lod0/Gun_03.model	</destroyed>

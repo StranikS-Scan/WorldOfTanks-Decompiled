@@ -1452,6 +1452,8 @@
             <collisionModelServer>	vehicles/american/A80_T26_E4_SuperPershing/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A80_T26_E4_SuperPershing/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

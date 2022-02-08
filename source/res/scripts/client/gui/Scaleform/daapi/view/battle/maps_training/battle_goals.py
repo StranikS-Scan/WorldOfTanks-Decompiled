@@ -16,6 +16,7 @@ from skeletons.gui.game_control import IMapsTrainingController
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
+import ArenaType
 
 class MapsTrainingBattleGoals(BattleHintComponent, MapsTrainingGoalsMeta, IArenaVehiclesController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -60,8 +61,9 @@ class MapsTrainingBattleGoals(BattleHintComponent, MapsTrainingGoalsMeta, IArena
     def _setGoals(self):
         if not isPlayerAvatar():
             return
-        mapId = self.sessionProvider.arenaVisitor.type.getID()
-        mapScenarios = self.mapsTrainingController.getConfig()['scenarios'][mapId]
+        typeID = self.sessionProvider.arenaVisitor.type.getID()
+        _, geometryID = ArenaType.parseTypeID(typeID)
+        mapScenarios = self.mapsTrainingController.getConfig()['scenarios'][geometryID]
         playerVehicle = self.sessionProvider.arenaVisitor.vehicles.getVehicleInfo(BigWorld.player().playerVehicleID)
         playerClass = vehicles.getVehicleClassFromVehicleType(playerVehicle['vehicleType'].type)
         playerTeam = playerVehicle['team']

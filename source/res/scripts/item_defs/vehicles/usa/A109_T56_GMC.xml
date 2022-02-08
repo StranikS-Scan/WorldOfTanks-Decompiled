@@ -3591,6 +3591,8 @@
             <collisionModelServer>	vehicles/american/A109_T56_GMC/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A109_T56_GMC/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3712,6 +3714,8 @@
             <collisionModelServer>	vehicles/american/A109_T56_GMC/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A109_T56_GMC/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

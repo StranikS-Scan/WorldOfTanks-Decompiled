@@ -3,7 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.ranked.carousel_data_provider import RankedCarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.ranked.carousel_filter import RankedCarouselFilter
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass.tank_carousel import BattlePassTankCarousel
-from new_year.ny_constants import NY_FILTER
 
 class RankedTankCarousel(BattlePassTankCarousel):
 
@@ -18,4 +17,4 @@ class RankedTankCarousel(BattlePassTankCarousel):
         return filtersVO
 
     def _getFilters(self):
-        return tuple((filterName for filterName in super(RankedTankCarousel, self)._getFilters() if filterName != NY_FILTER)) + ('ranked',)
+        return super(RankedTankCarousel, self)._getFilters() + ('ranked',)

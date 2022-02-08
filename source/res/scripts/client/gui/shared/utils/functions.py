@@ -176,7 +176,7 @@ def getArenaFullName(arenaTypeID):
     return arenaName
 
 
-def getBattleSubTypeWinText(arenaTypeID, teamID, _=False):
+def getBattleSubTypeWinText(arenaTypeID, teamID):
     root = R.strings.arenas.type.dyn(ArenaType.g_cache[arenaTypeID].gameplayName)
     description = root.dyn('description')
     if not description:
@@ -266,17 +266,5 @@ def getImageResourceFromPath(path):
     resource = R.images
     for pathItem in path.split('/'):
         resource = resource.dyn(pathItem)
-
-    return resource
-
-
-def getStringResourceFromPath(path):
-    path = path[1:]
-    path = path.replace(':', '/')
-    resource = R.strings
-    for pathItem in path.split('/'):
-        resource = resource.dyn(pathItem)
-        if not resource:
-            return R.invalid
 
     return resource

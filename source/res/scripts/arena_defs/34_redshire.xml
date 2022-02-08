@@ -4,8 +4,8 @@
   <geometry>	spaces/34_redshire	</geometry>
   <estimatedLoad>	0.3	</estimatedLoad>
   <boundingBox>
-    <bottomLeft>	-500.0 -500.0	</bottomLeft>
-    <upperRight>	500.0 500.0	</upperRight>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/34_redshire/mmap.dds	</minimap>
@@ -31,28 +31,43 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	-3.332001 -426.450775	</position1>
+          <position1>	-3.332001 -426.450806	</position1>
         </team1>
         <team2>
-          <position1>	-0.017403 410.252777	</position1>
+          <position1>	-0.017403 410.252808	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	201.271 -332.916	</position>
+          <position>	201.270996 -332.915985	</position>
         </team1>
         <team2>
-          <position>	138.443 428.573	</position>
+          <position>	138.442993 428.572998	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-199.817245 39.771599	</controlPoint>
+    </domination>
+    <assault>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-426.486 122.517	</position>
+          <position>	-433.925 -130.622	</position>
+        </team1>
+        <team2>
+          <position>	135.415 360.036	</position>
+          <position>	156.713 -358.439	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
-        <team1></team1>
+        <team1>
+          <position1>	-241.644 16.301	</position1>
+        </team1>
         <team2></team2>
       </teamBasePositions>
-      <controlPoint>	-199.817276 39.766937	</controlPoint>
-    </domination>
+    </assault>
   </gameplayTypes>
   <mapActivities>
     <scenario>

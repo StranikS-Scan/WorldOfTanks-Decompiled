@@ -2980,6 +2980,8 @@
             <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3087,6 +3089,8 @@
             <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3185,6 +3189,7 @@
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <aimingTime>	2.7	</aimingTime>
           <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G54_E-50/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G54_E-50/crash/lod0/Gun_03.model	</destroyed>
@@ -3308,6 +3313,8 @@
             <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_09.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3974,6 +3981,8 @@
             <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4081,6 +4090,8 @@
             <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4173,6 +4184,7 @@
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <aimingTime>	2.7	</aimingTime>
           <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G54_E-50/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/german/G54_E-50/crash/lod0/Gun_06.model	</destroyed>
@@ -4296,6 +4308,8 @@
             <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4407,6 +4421,8 @@
             <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_08.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

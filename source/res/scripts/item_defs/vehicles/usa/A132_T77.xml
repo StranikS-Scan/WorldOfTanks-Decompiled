@@ -1573,6 +1573,8 @@
             <collisionModelServer>	vehicles/american/A132_T77/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A132_T77/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

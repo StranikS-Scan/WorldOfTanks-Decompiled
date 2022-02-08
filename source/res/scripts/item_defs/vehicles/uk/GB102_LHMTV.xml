@@ -2722,6 +2722,8 @@
             <collisionModelServer>	vehicles/british/GB102_LHMTV/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB102_LHMTV/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <shotOffset>	0.000000 0.323281 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
@@ -3438,6 +3440,8 @@
             <collisionModelServer>	vehicles/british/GB102_LHMTV/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB102_LHMTV/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <shotOffset>	0.000000 0.270781 0.000000	</shotOffset>
           <customizationSlots>
             <slot>
@@ -4592,7 +4596,8 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
-          <effects>	shot_main_mb	</effects>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

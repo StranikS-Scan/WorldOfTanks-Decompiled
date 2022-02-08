@@ -18,9 +18,3 @@ class MissionsGroupedViewMeta(MissionView):
 
     def onClickButtonDetails(self):
         self._printOverrideError('onClickButtonDetails')
-
-    def onDailyClick(self):
-        self._printOverrideError('onDailyClick')
-
-    def onNYChallengeClick(self):
-        self._printOverrideError('onNYChallengeClick')

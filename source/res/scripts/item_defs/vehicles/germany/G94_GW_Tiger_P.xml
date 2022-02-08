@@ -3548,7 +3548,8 @@
             <maxPitch>	0 2 1 2	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-5 5	</turretYawLimits>
-          <effects>	shot_huge_mb	</effects>
+          <effects>	shot_superhuge	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G94_GW_Tiger_P/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G94_GW_Tiger_P/crash/lod0/Gun_01.model	</destroyed>
@@ -3635,6 +3636,8 @@
             <collisionModelServer>	vehicles/german/G94_GW_Tiger_P/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G94_GW_Tiger_P/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_superhuge	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

@@ -1897,6 +1897,8 @@
             <collisionModelServer>	vehicles/italy/It08_Progetto_M40_mod_65/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/italy/It08_Progetto_M40_mod_65/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

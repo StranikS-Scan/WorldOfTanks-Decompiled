@@ -2108,6 +2108,8 @@
             <collisionModelServer>	vehicles/russian/R116_ISU122C_Berlin/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R116_ISU122C_Berlin/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

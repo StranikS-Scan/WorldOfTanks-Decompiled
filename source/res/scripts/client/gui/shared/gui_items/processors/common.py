@@ -15,10 +15,9 @@ from gui.impl import backport
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
-from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons, getBWFormatter
+from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins
 from gui.shared.money import Money, Currency
-from messenger import g_settings
 from helpers import dependency
 from items.customizations import isEditedStyle
 from skeletons.gui.game_control import IVehicleComparisonBasket
@@ -434,46 +433,3 @@ class VehicleChangeNation(Processor):
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess(sysMsgKey=backport.text(R.strings.system_messages.nation_change.success()), veh_name=self._cvh.userName)
-
-
-class BuyBattlePass(Processor):
-
-    def __init__(self, seasonID, chapter):
-        super(BuyBattlePass, self).__init__()
-        self.__seasonID = seasonID
-        self.__chapter = chapter
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='battlePass_buy/server_error')
-
-    def _successHandler(self, code, ctx=None):
-        itemsCache = dependency.instance(IItemsCache)
-        return makeSuccess(msgType=SM_TYPE.BattlePassBuy, userMsg='', auxData={'header': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP()),
-         'description': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithoutRewards.text(), chapter=backport.text(R.strings.battle_pass.chapter.name.num(self.__chapter)())),
-         'additionalText': self.__makeGoldString(itemsCache.items.shop.getBattlePassCost().get(Currency.GOLD, 0))})
-
-    @staticmethod
-    def __makeGoldString(gold):
-        if not gold:
-            return ''
-        formatter = getBWFormatter(Currency.GOLD)
-        return g_settings.htmlTemplates.format('battlePassGold', {Currency.GOLD: formatter(gold)})
-
-    def _request(self, callback):
-        _logger.debug('Make server request to buy battle pass %d for chapter %d', self.__seasonID, self.__chapter)
-        BigWorld.player().shop.buyBattlePass(self.__seasonID, self.__chapter, lambda resID, code, errStr: self._response(code, callback, errStr))
-
-
-class BuyBattlePassLevels(Processor):
-
-    def __init__(self, seasonID, levels):
-        super(BuyBattlePassLevels, self).__init__()
-        self.__seasonID = seasonID
-        self.__levels = levels
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='battlePassLevels_buy/server_error')
-
-    def _request(self, callback):
-        _logger.debug('Make server request to buy battle pass levels: %d season %d', self.__levels, self.__seasonID)
-        BigWorld.player().shop.buyBattlePassLevels(self.__seasonID, self.__levels, lambda resID, code, errStr: self._response(code, callback, errStr))

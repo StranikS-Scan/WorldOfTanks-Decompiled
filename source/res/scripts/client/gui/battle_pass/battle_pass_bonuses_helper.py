@@ -10,14 +10,12 @@ from gui import makeHtmlString
 from gui.server_events.bonuses import IntelligenceBlueprintBonus, NationalBlueprintBonus, DossierBonus
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.blueprints_requester import getVehicleCDForIntelligence, getVehicleCDForNational
-from gui.battle_pass.battle_pass_consts import BonusesLayoutConsts
+from gui.battle_pass.battle_pass_constants import BonusesLayoutConsts
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus, VehicleBlueprintBonus, ItemsBonus, CustomizationsBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus
 _logger = logging.getLogger(__name__)
-TROPHY_GIFT_TOKEN_BONUS_NAME = 'battlePassTrophyGiftToken'
-NEW_DEVICE_GIFT_TOKEN_BONUS_NAME = 'battlePassNewDeviceGiftToken'
 
 class BonusesHelper(object):
 
@@ -288,10 +286,7 @@ class _StyleProgressTokenTextGetter(_BaseTextGetter):
         chapter = item.getChapter()
         level = item.getLevel()
         style = getStyleForChapter(chapter)
-        if style is not None:
-            text = backport.text(R.strings.battle_pass.styleProgressBonus(), styleName=style.userName, level=level)
-        else:
-            text = backport.text(R.strings.battle_pass.styleProgressBonus.notChosen(), level=level)
+        text = backport.text(R.strings.battle_pass.styleProgressBonus(), styleName=style.userName, level=level)
         return text
 
 

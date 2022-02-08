@@ -38,7 +38,7 @@ class BRUpgradeEffectPlayer(IProgressionListener, IViewComponentsCtrlListener):
                 config = self.__dynObjectsCache.getConfig(self.__sessionProvider.arenaVisitor.getArenaGuiType()).getVehicleUpgradeEffect().effectDescr
                 gameObject = CGF.GameObject(vehicle.appearance.spaceID)
                 gameObject.createComponent(GenericComponents.HierarchyComponent, vehicle.appearance.gameObject)
-                gameObject.createComponent(GenericComponents.ParticleComponent, config.path, config.rate)
+                gameObject.createComponent(GenericComponents.ParticleComponent, config.path, config.rate, True)
                 gameObject.createComponent(GenericComponents.TransformComponent, config.offset)
                 gameObject.activate()
                 gameObject.transferOwnershipToWorld()

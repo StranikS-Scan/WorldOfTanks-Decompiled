@@ -2612,6 +2612,8 @@
             <collisionModelServer>	vehicles/german/G26_VK1602/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G26_VK1602/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2710,6 +2712,8 @@
             <collisionModelServer>	vehicles/german/G26_VK1602/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G26_VK1602/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

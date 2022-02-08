@@ -15,6 +15,9 @@ class BaseHubSubsystem(object):
     def destroy(self):
         pass
 
+    def reset(self):
+        pass
+
     def updateSettings(self, eventSettings):
         self._settings = eventSettings
 

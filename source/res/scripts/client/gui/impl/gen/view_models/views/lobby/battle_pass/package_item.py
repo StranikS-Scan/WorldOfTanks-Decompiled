@@ -1,14 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/package_item.py
+from enum import IntEnum
 from frameworks.wulf import ViewModel
+
+class ChapterStates(IntEnum):
+    ACTIVE = 0
+    PAUSED = 1
+    COMPLETED = 2
+    NOTSTARTED = 3
+
+
+class PackageType(IntEnum):
+    BATTLEPASS = 0
+    ANYLEVELS = 1
+    SHOPOFFER = 2
+
 
 class PackageItem(ViewModel):
     __slots__ = ()
-    BATTLE_PASS_TYPE = 'battlePassType'
-    ANY_LEVELS_TYPE = 'anyLevelsType'
-    SHOP_OFFER_TYPE = 'shopOfferType'
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(PackageItem, self).__init__(properties=properties, commands=commands)
 
     def getPackageID(self):
@@ -36,16 +47,28 @@ class PackageItem(ViewModel):
         self._setBool(3, value)
 
     def getType(self):
-        return self._getString(4)
+        return PackageType(self._getNumber(4))
 
     def setType(self, value):
-        self._setString(4, value)
+        self._setNumber(4, value.value)
 
-    def getChapter(self):
+    def getChapterID(self):
         return self._getNumber(5)
 
-    def setChapter(self, value):
+    def setChapterID(self, value):
         self._setNumber(5, value)
+
+    def getChapterState(self):
+        return ChapterStates(self._getNumber(6))
+
+    def setChapterState(self, value):
+        self._setNumber(6, value.value)
+
+    def getCurrentLevel(self):
+        return self._getNumber(7)
+
+    def setCurrentLevel(self, value):
+        self._setNumber(7, value)
 
     def _initialize(self):
         super(PackageItem, self)._initialize()
@@ -53,5 +76,7 @@ class PackageItem(ViewModel):
         self._addNumberProperty('price', 0)
         self._addBoolProperty('isLocked', False)
         self._addBoolProperty('isBought', False)
-        self._addStringProperty('type', '')
-        self._addNumberProperty('chapter', 0)
+        self._addNumberProperty('type')
+        self._addNumberProperty('chapterID', 0)
+        self._addNumberProperty('chapterState')
+        self._addNumberProperty('currentLevel', 0)

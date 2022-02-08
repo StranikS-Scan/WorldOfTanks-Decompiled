@@ -28,6 +28,7 @@ from gui.shared.gui_items.customization.c11n_items import Customization
 import math_utils
 from helpers import newFakeModel
 from soft_exception import SoftException
+from CurrentVehicle import g_currentVehicle
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 if typing.TYPE_CHECKING:
     from items.components.shared_components import ProjectionDecalSlotDescription
@@ -208,11 +209,24 @@ def prepareBattleOutfit(outfitCD, vehicleDescriptor, vehicleId):
     return Outfit(vehicleCD=vehicleCD) if forceHistorical else outfit
 
 
+def getCurrentLevelForRewindStyle(outfit):
+    itemsCache = dependency.instance(IItemsCache)
+    inventory = itemsCache.items.inventory
+    intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfit.style.id)
+    vehDesc = g_currentVehicle.item.descriptor
+    progressData = inventory.getC11nProgressionData(intCD, vehDesc.type.compactDescr)
+    return progressData.currentLevel if progressData is not None else 1
+
+
 def getStyleProgressionOutfit(outfit, toLevel=0, season=None):
     styleProgression = outfit.style.styleProgressions
     allLevels = styleProgression.keys()
     if not season:
         season = _currentMapSeason()
+    style = outfit.style
+    if toLevel == 0 and style.isProgressionRewindEnabled:
+        _logger.info('Get style progression level for the rewind style with id=%d', style.id)
+        toLevel = getCurrentLevelForRewindStyle(outfit)
     if allLevels and toLevel not in allLevels:
         _logger.error('Get style progression outfit: incorrect level given: %d', toLevel)
         toLevel = 1

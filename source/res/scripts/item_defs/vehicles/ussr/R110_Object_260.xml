@@ -1881,6 +1881,8 @@
             <collisionModelServer>	vehicles/russian/R110_Object_260/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R110_Object_260/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <shotOffset>	0.000000 0.000000 -0.250000	</shotOffset>
           <customizationSlots>

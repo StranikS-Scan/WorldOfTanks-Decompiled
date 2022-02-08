@@ -191,11 +191,26 @@ class StunSN(TimerSN):
 
 
 class CaptureBlockSN(TimerSN):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, updateCallback):
         super(CaptureBlockSN, self).__init__(updateCallback)
         self._vo['title'] = backport.text(R.strings.epic_battle.progress_timers.blocked())
         self._subscribeOnVehControlling()
+        self.__isBlocked = False
+        ctrl = self.__sessionProvider.dynamic.progressTimer
+        if ctrl is not None:
+            ctrl.onVehicleLeft += self.__onVehicleLeft
+            ctrl.onVehicleEntered += self.__onVehicleEntered
+        return
+
+    def destroy(self):
+        ctrl = self.__sessionProvider.dynamic.progressTimer
+        if ctrl is not None:
+            ctrl.onVehicleEntered -= self.__onVehicleEntered
+            ctrl.onVehicleLeft -= self.__onVehicleLeft
+        super(CaptureBlockSN, self).destroy()
+        return
 
     def getItemID(self):
         return VEHICLE_VIEW_STATE.CAPTURE_BLOCKED
@@ -207,9 +222,19 @@ class CaptureBlockSN(TimerSN):
         if duration:
             self._updateTimeParams(duration, 0)
             self._isVisible = True
+            self.__isBlocked = True
             self._sendUpdate()
         else:
+            self.__isBlocked = False
             self._setVisible(False)
+
+    def __onVehicleLeft(self, *_):
+        if self.__isBlocked:
+            self._setVisible(False)
+
+    def __onVehicleEntered(self, *_):
+        if self.__isBlocked:
+            self._setVisible(True)
 
 
 class _DestroyTimerSN(TimerSN):

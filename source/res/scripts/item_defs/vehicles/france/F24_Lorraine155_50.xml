@@ -3176,6 +3176,8 @@
             <collisionModelServer>	vehicles/french/F24_Lorraine155_50/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F24_Lorraine155_50/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3256,6 +3258,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

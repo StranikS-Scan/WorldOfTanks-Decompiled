@@ -67,18 +67,11 @@ def getGameControllersConfig(manager):
     from gui.game_control.overlay import OverlayController as _OverlayController
     from gui.game_control.account_completion import SteamCompletionController as _SteamCompletionController, DemoAccCompletionController as _DemoAccCompletionController
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
-    from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     from gui.game_control.wot_plus_controller import WotPlusNotificationController
     from gui.game_control.telecom_rentals_controller import TelecomRentalsNotificationController
     from gui.game_control.event_battles_controller import EventBattlesController
     from gui.game_control.gift_system_controller import GiftSystemController
-    from gui.game_control.wo_controller import WOController as _WOController
-    from lunar_ny import ILunarNYController
-    from lunar_ny.lunar_ny_controller import LunarNYController
-    from skeletons import new_year as _NYInterface
-    from new_year.ny_jukebox_controller import JukeboxController as _JukeboxController
-    from new_year.celebrity.celebrity_scene_ctrl import CelebritySceneController as _CelebritySceneController
-    from new_year.craft_machine_controller import NewYearCraftMachineController as _NewYearCraftMachineController
+    from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -119,7 +112,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IPlatoonController, _PlatoonController())
     _config(_interface.IMarathonEventsController, _MarathonEventsController())
     _config(_interface.ICalendarController, _Calendar())
-    _config(_interface.IWOController, _WOController())
     _config(_interface.IEpicBattleMetaGameController, _EpicMeta())
     _config(_interface.IBattleRoyaleController, _BattleRoyale())
     _config(_interface.IBattleRoyaleTournamentController, _BRTournament())
@@ -147,11 +139,7 @@ def getGameControllersConfig(manager):
     _config(_interface.ISteamCompletionController, _SteamCompletionController())
     _config(_interface.IDemoAccCompletionController, _DemoAccCompletionController())
     _config(_interface.IVehiclePostProgressionController, VehiclePostProgressionController())
-    _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
     _config(_interface.IWotPlusNotificationController, WotPlusNotificationController())
     _config(_interface.ITelecomRentalsNotificationController, TelecomRentalsNotificationController())
     _config(_interface.IGiftSystemController, GiftSystemController())
-    _config(ILunarNYController, LunarNYController())
-    _config(_NYInterface.IJukeboxController, _JukeboxController())
-    _config(_NYInterface.ICelebritySceneController, _CelebritySceneController())
-    _config(_NYInterface.INewYearCraftMachineController, _NewYearCraftMachineController())
+    _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())

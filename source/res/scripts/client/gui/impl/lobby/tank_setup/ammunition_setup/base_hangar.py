@@ -224,10 +224,10 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
     def __onAnimationEnd(self):
         if self.__blur is not None:
             self.__blur.enable()
-        g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True,
-         'setIdle': True,
-         'setParallax': True}), EVENT_BUS_SCOPE.LOBBY)
         if not self.viewModel.getIsReady():
+            g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True,
+             'setIdle': True,
+             'setParallax': True}), EVENT_BUS_SCOPE.LOBBY)
             self.viewModel.setIsReady(True)
         self.onAnimationEnd()
         return
@@ -284,7 +284,6 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
                 self._vehItem.getItem().optDevices.dynSlotType = g_currentVehicle.item.optDevices.dynSlotType
                 self._tankSetup.update(fullUpdate=True)
             self._tankSetup.currentVehicleUpdated(g_currentVehicle.item)
-            self._vehItem.getItem().setOutfits(g_currentVehicle.item)
             self._updateAmmunitionPanel()
             return
 

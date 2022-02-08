@@ -32,7 +32,9 @@ class HangarCameraYawFilter(object):
         self.__cycled = int(math.degrees(math.fabs(self.__end - self.__start))) >= 359.0
         self.__prevDirection = 0.0
         self.__camSens = camSens
+        self.__yawLimits = None
         self.setConstraints(start, end)
+        return
 
     def setConstraints(self, start, end):
         self.__start = start
@@ -41,6 +43,9 @@ class HangarCameraYawFilter(object):
             self.__start *= 179 / 180.0
         if int(math.fabs(math.degrees(self.__end)) + 0.5) >= 180:
             self.__end *= 179 / 180.0
+
+    def setYawLimits(self, limits):
+        self.__yawLimits = limits
 
     def toLimit(self, inAngle):
         inAngle = math_utils.reduceToPI(inAngle)
@@ -56,9 +61,7 @@ class HangarCameraYawFilter(object):
         return self.__end if math.fabs(delta1) > math.fabs(delta2) else self.__start
 
     def getNextYaw(self, currentYaw, targetYaw, delta):
-        if delta == 0.0:
-            return targetYaw
-        if self.__prevDirection * delta < 0.0:
+        if delta == 0.0 or self.__prevDirection * delta < 0.0:
             targetYaw = currentYaw
         self.__prevDirection = delta
         nextYaw = targetYaw + delta * self.__camSens
@@ -86,6 +89,10 @@ class HangarCameraYawFilter(object):
                 nextYaw = self.__end
             elif delta < 0.0 and nextYaw < self.__start and nextYaw >= self.__end:
                 nextYaw = self.__start
+        if self.__yawLimits is not None:
+            if nextYaw < 0.0:
+                nextYaw += 2.0 * math.pi
+            nextYaw = math_utils.clamp(self.__yawLimits[0], self.__yawLimits[1], nextYaw)
         return nextYaw
 
 
@@ -160,14 +167,12 @@ class HangarCameraManager(object):
 
     def __onSpaceCreated(self):
         self.__cam.isMovementEnabled = True
-        self.__cameraParallax.activate()
         g_mouseEventHandlers.add(self.__handleMouseEvent)
         g_keyEventHandlers.add(self.__handleKeyEvent)
         g_eventBus.addListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
 
     def __onSpaceDestroy(self, inited):
         if inited:
-            self.__cameraParallax.deactivate()
             g_mouseEventHandlers.remove(self.__handleMouseEvent)
             g_keyEventHandlers.remove(self.__handleKeyEvent)
             g_eventBus.removeListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
@@ -203,6 +208,7 @@ class HangarCameraManager(object):
                     camYawConstr = self.__camConstraints[1]
                     startYaw, endYaw = camYawConstr
                     self.__yawCameraFilter.setConstraints(math.radians(startYaw), math.radians(endYaw))
+                    self.__yawCameraFilter.setYawLimits(camYawConstr)
                     yawS = self.__yawCameraFilter.toLimit(yawS)
                 if pitch is not None:
                     camPitchConstr = self.__camConstraints[0]
@@ -244,9 +250,6 @@ class HangarCameraManager(object):
 
     def getCameraPosition(self):
         return self.__cam.position
-
-    def getCameraIdle(self):
-        return self.__cameraIdle
 
     def updateProjection(self):
         BigWorld.callback(0.0, makeCallbackWeak(self.__updateProjection))
@@ -325,6 +328,7 @@ class HangarCameraManager(object):
         camYawConstr = self.__camConstraints[1]
         startYaw, endYaw = camYawConstr
         self.__yawCameraFilter = HangarCameraYawFilter(math.radians(startYaw), math.radians(endYaw), cfg['cam_sens'])
+        self.__yawCameraFilter.setYawLimits(camYawConstr)
         mat = Math.Matrix()
         yaw = self.__yawCameraFilter.toLimit(math.radians(cfg['cam_start_angles'][0]))
         mat.setRotateYPR((yaw, math.radians(cfg['cam_start_angles'][1]), 0.0))

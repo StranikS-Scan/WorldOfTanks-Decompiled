@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/optional_bonuses.py
-import copy
 import random
+import copy
 import time
 from typing import Optional, Dict
 from account_shared import getCustomizationItem
-from items.components.ny_constants import CurrentNYConstants, PREV_NY_TOYS_COLLECTIONS, YEARS_INFO
 from soft_exception import SoftException
+from items import tankmen
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from battle_pass_common import NON_VEH_CD
 
 def _packTrack(track):
@@ -52,16 +53,12 @@ def __mergeItems(total, key, value, isLeaf=False, count=1, *args):
         items[itemCompDescr] = items.get(itemCompDescr, 0) + count * itemCount
 
 
-def __mergeMeta(total, key, value, isLeaf=False, count=1, *args):
-    total[key] = value
-
-
 def __mergeList(total, key, value, count):
     items = total.setdefault(key, [])
     items.extend((value if isinstance(value, list) else [value]) * count)
 
 
-def __mergeVehicles(total, key, value, isLeaf, count=1, *args):
+def __mergeVehicles(total, key, value, isLeaf, count, *args):
     __mergeList(total, key, value, count)
 
 
@@ -178,31 +175,13 @@ def __mergeDogTag(total, key, value, isLeaf=False, count=1, *args):
 def __mergeBattlePassPoints(total, key, value, isLeaf=False, count=1, *args):
     defaultBattlePassPoints = {'vehicles': {NON_VEH_CD: 0}}
     seasonID = value.get('seasonID')
+    chapterID = value.get('chapterID')
     if seasonID:
         defaultBattlePassPoints['seasonID'] = seasonID
+    if chapterID:
+        defaultBattlePassPoints['chapterID'] = chapterID
     battlePass = total.setdefault(key, defaultBattlePassPoints)
     battlePass['vehicles'][NON_VEH_CD] += value.get('vehicles', {}).get(NON_VEH_CD, 0) * count
-
-
-def __mergeCharms(total, key, value, isLeaf=False, count=1, *args):
-    result = total.setdefault(key, {})
-    for charmID, charmData in value.iteritems():
-        charmMerged = result.setdefault(charmID, {})
-        charmMerged['count'] = charmMerged.get('count', 0) + count * charmData.get('count', 0)
-
-
-def __mergeNYToys(total, key, value, isLeaf=False, count=1, *args):
-    result = total.setdefault(key, {})
-    for toyID, toysCount in value.iteritems():
-        toyData = result.setdefault(toyID, {})
-        toyData['count'] = toyData.get('count', 0) + count * toysCount.get('count', 0)
-        toyData['pureCount'] = toyData.get('pureCount', 0) + count * toysCount.get('pureCount', 0)
-        toyData['newCount'] = toyData.get('newCount', 0) or toysCount.get('newCount', 0)
-
-
-def __mergeNYAnyOf(total, key, value, isLeaf=False, count=1, *args):
-    result = total.setdefault(key, [])
-    result.extend(value if isinstance(value, list) else [value])
 
 
 BONUS_MERGERS = {'credits': __mergeValue,
@@ -241,17 +220,10 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'rankedBonusBattles': __mergeValue,
  'dogTagComponents': __mergeDogTag,
  'battlePassPoints': __mergeBattlePassPoints,
- 'meta': __mergeMeta,
- 'charms': __mergeCharms,
- CurrentNYConstants.TOYS: __mergeNYToys,
- CurrentNYConstants.TOY_FRAGMENTS: __mergeValue,
- CurrentNYConstants.ANY_OF: __mergeNYAnyOf,
- CurrentNYConstants.FILLERS: __mergeValue}
-BONUS_MERGERS.update({k:__mergeNYToys for k in PREV_NY_TOYS_COLLECTIONS})
+ 'meta': lambda *args, **kwargs: None}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0 and not account._rent.isVehicleRented(account._inventory.getVehicleInvID(key)),
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
- 'tokens': lambda account, key: account._quests.hasToken(key),
- CurrentNYConstants.TOYS: lambda account, key: account._newYear.isToyPresentInCollection(key, YEARS_INFO.CURRENT_YEAR_STR)}
+ 'tokens': lambda account, key: account._quests.hasToken(key)}
 
 class BonusItemsCache(object):
 
@@ -374,7 +346,7 @@ class BonusNodeAcceptor(object):
 
     def updateBonusCache(self, bonusNode):
         cache = self.__bonusCache
-        for itemType in ('vehicles', 'tokens', CurrentNYConstants.TOYS):
+        for itemType in ('vehicles', 'tokens'):
             if itemType in bonusNode:
                 for itemID in bonusNode[itemType].iterkeys():
                     cache.onItemAccepted(itemType, itemID)
@@ -386,7 +358,7 @@ class BonusNodeAcceptor(object):
 
     def isBonusExists(self, bonusNode):
         cache = self.__bonusCache
-        for itemType in ('vehicles', 'tokens', CurrentNYConstants.TOYS):
+        for itemType in ('vehicles', 'tokens'):
             if itemType in bonusNode:
                 for itemID in bonusNode[itemType].iterkeys():
                     if cache.isItemExists(itemType, itemID):
@@ -497,13 +469,13 @@ class NodeVisitor(object):
         self._mergersArgs = args
 
     def onOneOf(self, storage, values):
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def onAllOf(self, storage, values):
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def onGroup(self, storage, values):
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def onMergeValue(self, storage, name, value, isLeaf):
         self._mergers[name](storage, name, value, isLeaf, *self._mergersArgs)

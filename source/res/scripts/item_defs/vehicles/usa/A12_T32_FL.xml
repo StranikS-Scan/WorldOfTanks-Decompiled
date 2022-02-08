@@ -1818,6 +1818,8 @@
             <collisionModelServer>	vehicles/american/A12_T32/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A12_T32/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

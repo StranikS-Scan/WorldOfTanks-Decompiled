@@ -14,6 +14,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from maps_training_common.maps_training_constants import SCENARIO_INDEXES
 from PlayerEvents import g_playerEvents
+import ArenaType
 _VOICEOVERS = ('vo_mt_loading_first_battle', 'vo_mt_loading_next_battle')
 
 class MapsTrainingPreBattleTimer(MapsTrainingPrebattleTimerMeta):
@@ -41,8 +42,9 @@ class MapsTrainingPreBattleTimer(MapsTrainingPrebattleTimerMeta):
         self.mapsTrainingController.requestInitialDataFromServer(makeCallbackWeak(self.__setGoalsData))
 
     def __setGoalsData(self):
-        mapId = self.sessionProvider.arenaVisitor.type.getID()
-        mapScenarios = self.mapsTrainingController.getConfig()['scenarios'][mapId]
+        typeID = self.sessionProvider.arenaVisitor.type.getID()
+        _, geometryID = ArenaType.parseTypeID(typeID)
+        mapScenarios = self.mapsTrainingController.getConfig()['scenarios'][geometryID]
         goals = mapScenarios[self.__playerTeam][self.__playerClass]['goals']
         text = backport.text(R.strings.maps_training.prebattle.targets(), count=sum(goals.values()))
         self.as_updateS([ {'vehClass': vehCls,

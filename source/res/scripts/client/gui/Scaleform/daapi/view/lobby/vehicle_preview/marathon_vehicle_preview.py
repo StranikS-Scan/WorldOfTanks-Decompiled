@@ -20,7 +20,7 @@ class MarathonVehiclePreview(VehiclePreview):
         self.__backToHangar = ctx.get('backToHangar', False)
 
     def _onRegisterFlashComponent(self, viewPy, alias):
-        if alias == VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS:
+        if alias == VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_PY_ALIAS:
             if self._itemsPack is not None:
                 viewPy.setMarathonEvent(self.__marathonPrefix)
                 viewPy.setInfoTooltip()

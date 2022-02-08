@@ -2769,6 +2769,8 @@
             <collisionModelServer>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3584,6 +3586,8 @@
             <collisionModelServer>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3672,6 +3676,7 @@
             <collisionModelClient>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

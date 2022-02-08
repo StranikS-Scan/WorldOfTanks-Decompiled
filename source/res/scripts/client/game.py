@@ -354,7 +354,7 @@ def handleKeyEvent(event):
         if inputHandler is not None:
             if inputHandler.handleKeyEvent(event):
                 return True
-        for handler in g_keyEventHandlers.copy():
+        for handler in g_keyEventHandlers:
             try:
                 if handler(event):
                     return True

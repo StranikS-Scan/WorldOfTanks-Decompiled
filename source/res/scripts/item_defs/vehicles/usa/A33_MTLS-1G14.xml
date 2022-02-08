@@ -2089,6 +2089,8 @@
             <collisionModelServer>	vehicles/american/A33_MTLS-1G14/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A33_MTLS-1G14/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_MTLS_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

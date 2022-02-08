@@ -1939,6 +1939,8 @@
             <collisionModelServer>	vehicles/british/GB76_Mk_VIC/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB76_Mk_VIC/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_auto	</effects>
+          <reloadEffect>	reload12_25	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN_2	</paint>

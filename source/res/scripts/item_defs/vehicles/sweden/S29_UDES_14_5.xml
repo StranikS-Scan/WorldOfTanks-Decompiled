@@ -2285,6 +2285,7 @@
             </slot>
           </customizationSlots>
           <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <density>	134.763 135.084	</density>
@@ -2374,6 +2375,7 @@
             </slot>
           </customizationSlots>
           <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <density>	124.343 124.889	</density>
@@ -2422,6 +2424,8 @@
             <collisionModelServer>	vehicles/sweden/S29_UDES_14_5/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S29_UDES_14_5/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

@@ -2271,6 +2271,8 @@
             <collisionModelServer>	vehicles/british/GB57_Alecto/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB57_Alecto/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2362,6 +2364,8 @@
             <collisionModelServer>	vehicles/british/GB57_Alecto/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB57_Alecto/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2442,6 +2446,7 @@
           </pitchLimits>
           <turretYawLimits>	-15 15	</turretYawLimits>
           <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/british/GB57_Alecto/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/british/GB57_Alecto/crash/lod0/Gun_04.model	</destroyed>
@@ -2543,6 +2548,8 @@
             <collisionModelServer>	vehicles/british/GB57_Alecto/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB57_Alecto/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

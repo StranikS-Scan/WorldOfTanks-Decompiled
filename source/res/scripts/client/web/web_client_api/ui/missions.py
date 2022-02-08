@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/missions.py
-from helpers import dependency
-from gui.battle_pass.battle_pass_helpers import BattlePassProgressionSubTabs
 from gui.marathon.marathon_event_controller import getMarathons
+from gui.server_events import events_dispatcher as server_events
+from gui.shared.event_dispatcher import showBattlePassBuyLevelWindow, showBattlePassBuyWindow, showShop
+from helpers import dependency
 from personal_missions import PM_BRANCH
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IMarathonEventsController
+from skeletons.gui.game_control import IMarathonEventsController, IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
-from web.web_client_api import w2c, W2CSchema, Field
-from gui.server_events import events_dispatcher as server_events
+from web.web_client_api import Field, W2CSchema, w2c
 
 class _MissionsSchema(W2CSchema):
     tab = Field(required=False, type=basestring, default=None)
@@ -67,15 +67,18 @@ class MissionsWebApiMixin(object):
 
     @w2c(W2CSchema, 'battle_pass_common')
     def openBattlePassMainProgression(self, _):
-        server_events.showMissionsBattlePassCommonProgression()
+        server_events.showMissionsBattlePass()
 
     @w2c(W2CSchema, 'battle_pass_buy:')
     def openBattlePassMainWithBuy(self, _):
-        server_events.showMissionsBattlePassCommonProgression(subTab=BattlePassProgressionSubTabs.BUY_TAB_FOR_SHOP)
+        showBattlePassBuyWindow()
 
     @w2c(W2CSchema, 'battle_pass_levels_buy:')
     def openBattlePassMainWithBuyLevels(self, _):
-        server_events.showMissionsBattlePassCommonProgression(subTab=BattlePassProgressionSubTabs.BUY_LEVELS_TAB_FROM_SHOP)
+        battlePass = dependency.instance(IBattlePassController)
+        if battlePass.hasActiveChapter() and battlePass.isBought():
+            showBattlePassBuyLevelWindow(ctx={'chapterID': battlePass.getCurrentChapterID(),
+             'backCallback': showShop})
 
 
 class PersonalMissionsWebApiMixin(object):

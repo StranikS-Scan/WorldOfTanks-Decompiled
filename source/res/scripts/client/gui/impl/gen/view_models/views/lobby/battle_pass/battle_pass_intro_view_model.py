@@ -4,9 +4,9 @@ from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 
 class BattlePassIntroViewModel(ViewModel):
-    __slots__ = ('onClose', 'onVideo')
+    __slots__ = ('onClose', 'onVideo', 'onViewLoaded')
 
-    def __init__(self, properties=2, commands=2):
+    def __init__(self, properties=2, commands=3):
         super(BattlePassIntroViewModel, self).__init__(properties=properties, commands=commands)
 
     def getPoints(self):
@@ -27,3 +27,4 @@ class BattlePassIntroViewModel(ViewModel):
         self._addArrayProperty('tankNames', Array())
         self.onClose = self._addCommand('onClose')
         self.onVideo = self._addCommand('onVideo')
+        self.onViewLoaded = self._addCommand('onViewLoaded')

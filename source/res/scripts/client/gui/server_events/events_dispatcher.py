@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/events_dispatcher.py
 import constants
+from battle_pass_common import BattlePassConsts
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import parseEventID
@@ -8,25 +9,21 @@ from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionIn
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.impl.lobby.reward_window import GiveAwayRewardWindow, PiggyBankRewardWindow, TwitchRewardWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.server_events import awards, events_helpers, recruit_helper, anniversary_helper
-from gui.server_events.events_helpers import getLootboxesFromBonuses, isCelebrityQuest
-from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showProgressiveItemsView
+from gui.server_events import anniversary_helper, awards, events_helpers, recruit_helper
+from gui.server_events.events_helpers import getLootboxesFromBonuses
+from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
+from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay
 from gui.shared.events import PersonalMissionsEvent
-from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from helpers import dependency
-from new_year.ny_constants import AnchorNames
-from new_year.ny_navigation_helper import switchNewYearView
+from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IMarathonEventsController
-from skeletons.gui.impl import INotificationWindowController
+from skeletons.gui.impl import INotificationWindowController, IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow, LootBoxRewardWindow
-from shared_utils import first
-from battle_pass_common import BattlePassConsts
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
 _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWindow,
@@ -66,16 +63,6 @@ _PIGGY_BANK_EVENT_NAME = 'piggyBank'
 
 def showPQSeasonAwardsWindow(questsType):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW), ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
-
-
-def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True, subTab=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MISSIONS), ctx={'tab': tab,
-     'subTab': subTab,
-     'eventID': missionID,
-     'groupID': groupID,
-     'marathonPrefix': marathonPrefix,
-     'anchor': anchor,
-     'showMissionDetails': showDetails}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def canOpenPMPage(branchID=None, operationID=None, missionID=None):
@@ -160,12 +147,29 @@ def showDailyQuests(subTab):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, subTab=subTab)
 
 
-def showMissionsBattlePassCommonProgression(subTab=None):
-    showMissions(tab=QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, subTab=subTab)
-
-
 def showMissionsMapboxProgression():
     showMissions(tab=QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS)
+
+
+def showMissionsBattlePass(layoutID=None, chapterID=0):
+
+    def __battleQueueViewPredicate(window):
+        return window.content is not None and getattr(window.content, 'alias', None) == VIEW_ALIAS.BATTLE_QUEUE
+
+    guiLoader = dependency.instance(IGuiLoader)
+    if guiLoader.windowsManager.findWindows(__battleQueueViewPredicate):
+        return
+    _showMissions(tab=QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, layoutID=layoutID, chapterID=chapterID)
+
+
+def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True, subTab=None):
+    _showMissions(**{'tab': tab,
+     'subTab': subTab,
+     'eventID': missionID,
+     'groupID': groupID,
+     'marathonPrefix': marathonPrefix,
+     'anchor': anchor,
+     'showMissionDetails': showDetails})
 
 
 def showMissionDetails(missionID, groupID):
@@ -209,15 +213,13 @@ def showMission(eventID, eventType=None):
         vehicle = service.getItemByCD(vehicleIntCD)
         service.showCustomization(vehicle.invID, lambda : showProgressiveItemsView(itemIntCD))
         return
-    elif isCelebrityQuest(eventID):
-        switchNewYearView(AnchorNames.CELEBRITY)
-        return
     else:
         eventsCache = dependency.instance(IEventsCache)
         quests = eventsCache.getQuests()
         quest = quests.get(eventID)
         if eventID == BattlePassConsts.FAKE_QUEST_ID:
-            showMissionsBattlePassCommonProgression()
+            hideWebBrowserOverlay()
+            showMissionsBattlePass()
             return
         if quest is None:
             prefix = events_helpers.getMarathonPrefix(eventID)
@@ -300,8 +302,6 @@ def showMissionAward(quest, ctx):
             lootboxes = getLootboxesFromBonuses(bonuses)
             if lootboxes:
                 for lootboxId, lootboxInfo in lootboxes.iteritems():
-                    if lootboxId in NewYearLootBoxes.ALL():
-                        continue
                     showLootboxesAward(lootboxId=lootboxId, lootboxCount=lootboxInfo['count'], isFree=lootboxInfo['isFree'])
 
             else:
@@ -311,12 +311,7 @@ def showMissionAward(quest, ctx):
 
 
 def showLootboxesAward(lootboxId, lootboxCount, isFree):
-    ctx = {'eventName': recruit_helper.RecruitSourceID.LOOTBOX,
-     'lootboxType': lootboxId,
-     'lootboxesCount': lootboxCount,
-     'isFree': isFree}
-    rewardWindow = LootBoxRewardWindow(ctx)
-    rewardWindow.load()
+    pass
 
 
 def showPiggyBankRewardWindow(creditsValue, isPremActive):
@@ -366,6 +361,5 @@ def showActions(tab=None, anchor=None):
      'anchor': anchor}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showBattlePass3dStyleChoiceWindow():
-    from gui.battle_pass.battle_pass_helpers import BattlePassProgressionSubTabs
-    showMissionsBattlePassCommonProgression(subTab=BattlePassProgressionSubTabs.SELECT_STYLE_TAB)
+def _showMissions(**kwargs):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MISSIONS), ctx=kwargs), scope=EVENT_BUS_SCOPE.LOBBY)

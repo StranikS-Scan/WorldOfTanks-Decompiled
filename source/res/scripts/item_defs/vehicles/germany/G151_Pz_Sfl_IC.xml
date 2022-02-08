@@ -2239,6 +2239,8 @@
             <collisionModelServer>	vehicles/german/G151_Pz_Sfl_IC/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G151_Pz_Sfl_IC/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

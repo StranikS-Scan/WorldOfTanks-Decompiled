@@ -2249,6 +2249,8 @@
             <collisionModelServer>	vehicles/german/G154_Kpz_07_RH/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G154_Kpz_07_RH/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

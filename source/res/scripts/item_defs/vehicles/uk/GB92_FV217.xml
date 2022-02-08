@@ -2405,6 +2405,8 @@
             <collisionModelServer>	vehicles/british/GB92_FV217/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB92_FV217/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

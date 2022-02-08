@@ -42,7 +42,7 @@ class GiftSystemController(IGiftSystemController):
         g_bootcampEvents.onBootcampFinished += self.__onBootcampFinished
 
     def fini(self):
-        g_bootcampEvents.onBootcampFinished += self.__onBootcampFinished
+        g_bootcampEvents.onBootcampFinished -= self.__onBootcampFinished
         self.__historyRequester.destroy()
         self.__webStateRequester.destroy()
         self.__em.clear()
@@ -86,7 +86,7 @@ class GiftSystemController(IGiftSystemController):
 
     def __onBootcampFinished(self):
         for eventHub in self.__eventHubs.itervalues():
-            eventHub.onBootcampFinished()
+            eventHub.reset()
 
     def __onGiftSettingsChanged(self, diff):
         if Configs.GIFTS_CONFIG.value in diff:

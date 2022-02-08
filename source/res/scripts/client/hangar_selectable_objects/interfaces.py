@@ -18,6 +18,9 @@ class ISelectableObject(object):
     def setEnable(self, enabled):
         raise NotImplementedError
 
+    def setHighlight(self, show):
+        raise NotImplementedError
+
     def onMouseDown(self):
         pass
 

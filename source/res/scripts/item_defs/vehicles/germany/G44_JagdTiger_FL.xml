@@ -2650,6 +2650,8 @@
             <collisionModelServer>	vehicles/german/G44_JagdTiger/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G44_JagdTiger/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

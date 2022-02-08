@@ -2,14 +2,13 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 import BigWorld
 import constants
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior, NewYearStorageKeys
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCache
 from skeletons.gui.game_control import IIGRController
-from items.components.ny_constants import NY_BRANCH_MIN_LEVEL
 
 def _initializeDefaultSettings(core, data, initialized):
     LOG_DEBUG('Initializing server settings.')
@@ -141,7 +140,7 @@ def _migrateTo6(core, data, initialized):
     maskOffset = 7168
     currentMask = (storedValue & maskOffset) >> 10
     import ArenaType
-    newMask = currentMask | ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName('nations'))
+    newMask = currentMask | ArenaType.getGameplaysMask(('nations',))
     data['gameplayData'][GAME.GAMEPLAY_MASK] = newMask
     clear = data['clear']
     clear[SETTINGS_SECTIONS.GAME] = clear.get(SETTINGS_SECTIONS.GAME, 0) | maskOffset
@@ -368,8 +367,8 @@ def _migrateTo36(core, data, initialized):
     storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, default)
     currentMask = storedValue & 65535
     import ArenaType
-    newMask = currentMask | ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName('ctf30x30'))
-    newnewMask = newMask | ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName('domination30x30'))
+    newMask = currentMask | ArenaType.getGameplaysMask(('ctf30x30',))
+    newnewMask = newMask | ArenaType.getGameplaysMask(('domination30x30',))
     data['gameplayData'][GAME.GAMEPLAY_MASK] = newnewMask
 
 
@@ -384,10 +383,10 @@ def _migrateTo38(core, data, initialized):
     storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, default)
     currentGameplayMask = storedValue & 65535
     import ArenaType
-    epicCtfEnabled = bool(currentGameplayMask & 1 << ArenaType.getGameplayIDForName('ctf30x30'))
-    dominationEnabled = bool(currentGameplayMask & 1 << ArenaType.getGameplayIDForName('domination'))
+    epicCtfEnabled = bool(currentGameplayMask & ArenaType.getGameplaysMask(('ctf30x30',)))
+    dominationEnabled = bool(currentGameplayMask & ArenaType.getGameplaysMask(('domination',)))
     if not epicCtfEnabled or not dominationEnabled:
-        currentGameplayMask &= ~ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName('domination30x30'))
+        currentGameplayMask &= ~ArenaType.getGameplaysMask(('domination30x30',))
     data['gameplayData'][GAME.GAMEPLAY_MASK] = currentGameplayMask
     data['gameData'][GAME.MINIMAP_ALPHA] = 0
     data['gameExtData'][GAME.MINIMAP_ALPHA_ENABLED] = False
@@ -498,7 +497,6 @@ def _migrateTo55(core, data, initialized):
 def _migrateTo56(core, data, initialized):
     data['battlePassStorage'][BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = False
     data['battlePassStorage'][BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
-    data['battlePassStorage'][BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN] = False
 
 
 def _migrateTo57(core, data, initialized):
@@ -733,25 +731,25 @@ def _migrateTo82(core, data, initialized):
 
 
 def _migrateTo83(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    nyStorageData = data['nyStorage']
-    nyStorageData[NewYearStorageKeys.NY_VEHICLES_LEVEL_UP_ENTRY] = NY_BRANCH_MIN_LEVEL
-    for key in NewYearStorageKeys.BOOL_FLAGS:
-        nyStorageData[key] = False
-
-    clear = data['clear']
-    newYearFilter = 1024
-    clearingBatch = [(SETTINGS_SECTIONS.CAROUSEL_FILTER_2, 'carousel_filter'), (SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_2, 'epicCarouselFilter2'), (SETTINGS_SECTIONS.MAPBOX_CAROUSEL_FILTER_2, 'mapBoxCarouselFilter2')]
-    for section, clearKey in clearingBatch:
-        storedValue = _getSettingsCache().getSectionSettings(section, 0)
-        if storedValue & newYearFilter:
-            clear[clearKey] = clear.get(clearKey, 0) | newYearFilter
+    pass
 
 
 def _migrateTo84(core, data, initialized):
-    onceOnlyHintsData = data['onceOnlyHints2']
-    onceOnlyHintsData[OnceOnlyHints.LUNAR_NY_DROPDOWN_HINT] = False
-    onceOnlyHintsData[OnceOnlyHints.LUNAR_NY_CONGRATULATION_HINT] = False
+    pass
+
+
+def _migrateTo85(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, GUI_START_BEHAVIOR
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GUI_START_BEHAVIOR, 0)
+    settingOffset = 25165824
+    if storedValue & settingOffset:
+        clear = data['clear']
+        clear[GUI_START_BEHAVIOR] = clear.get(SETTINGS_SECTIONS.GUI_START_BEHAVIOR, 0) | settingOffset
+
+
+def _migrateTo86(core, data, initialized):
+    for position in range(2) + range(17, 18):
+        data['clear']['battlePassStorage'] = data['clear'].get('battlePassStorage', 0) | 1 << position
 
 
 _versions = ((1,
@@ -1084,6 +1082,14 @@ _versions = ((1,
   False),
  (84,
   _migrateTo84,
+  False,
+  False),
+ (85,
+  _migrateTo85,
+  False,
+  False),
+ (86,
+  _migrateTo86,
   False,
   False))
 

@@ -11,7 +11,7 @@ from messenger.formatters.users_messages import getUserActionReceivedMessage
 from messenger.gui.Scaleform import channels, FILL_COLORS
 from messenger.gui.Scaleform.data.message_formatters import getMessageFormatter
 from messenger.gui.interfaces import IGUIEntry
-from messenger.m_constants import BATTLE_CHANNEL, PROTO_TYPE
+from messenger.m_constants import BATTLE_CHANNEL, PROTO_TYPE, MESSENGER_COMMAND_TYPE
 from messenger.m_constants import MESSENGER_SCOPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
@@ -213,6 +213,8 @@ class BattleEntry(IGUIEntry):
         controller = self.__channelsCtrl.getController(command.getClientID())
         if controller is None:
             LOG_ERROR('Controller not found', command)
+            return
+        elif command.getCommandType() != MESSENGER_COMMAND_TYPE.BATTLE:
             return
         elif command.isInSilentMode() or not controller.filterMessage(command) or command.isServerCommand():
             return

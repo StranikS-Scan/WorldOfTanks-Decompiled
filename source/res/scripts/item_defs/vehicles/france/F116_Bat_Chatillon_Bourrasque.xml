@@ -1904,6 +1904,8 @@
             <collisionModelServer>	vehicles/french/F116_Bat_Chatillon_Bourrasque/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F116_Bat_Chatillon_Bourrasque/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <recoil>
             <recoilEffect>	medium	</recoilEffect>
             <lodDist>	MEDIUM	</lodDist>

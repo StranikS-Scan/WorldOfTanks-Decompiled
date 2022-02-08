@@ -1651,6 +1651,8 @@
             <collisionModelServer>	vehicles/russian/R95_Object_907A/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R95_Object_907A/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_mainext_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

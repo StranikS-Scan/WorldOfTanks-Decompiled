@@ -473,6 +473,8 @@
             <collisionModelServer>	vehicles/german/G02_Hummel/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G02_Hummel/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_env_artillery	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G02_Hummel/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G02_Hummel/crash/lod0/Gun_03.model	</destroyed>

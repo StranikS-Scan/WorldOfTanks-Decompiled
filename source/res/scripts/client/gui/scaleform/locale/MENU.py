@@ -290,9 +290,6 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY = '#menu:tankCarousel/vehicleStates/inPremiumIgrOnly'
     TANKCAROUSEL_VEHICLESTATES_BUYTANK = '#menu:tankCarousel/vehicleStates/buyTank'
     TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/buyTankEmptyCount'
-    TANKCAROUSEL_VEHICLESTATES_NYTANK = '#menu:tankCarousel/vehicleStates/nyTank'
-    TANKCAROUSEL_VEHICLESTATES_NYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/nyTankEmptyCount'
-    TANKCAROUSEL_VEHICLESTATES_NYTANKSLOTSFULL = '#menu:tankCarousel/vehicleStates/nyTankSlotsFull'
     TANKCAROUSEL_VEHICLESTATES_BUYSLOT = '#menu:tankCarousel/vehicleStates/buySlot'
     TANKCAROUSEL_VEHICLESTATES_RESTORETANK = '#menu:tankCarousel/vehicleStates/restoreTank'
     TANKCAROUSEL_VEHICLESTATES_RESTORETANKCOUNT = '#menu:tankCarousel/vehicleStates/restoreTankCount'
@@ -389,6 +386,8 @@ class MENU(object):
     PRICE_GOLD = '#menu:price/gold'
     PRICE_CRYSTAL = '#menu:price/crystal'
     PRICE_EVENTCOIN = '#menu:price/eventCoin'
+    PRICE_BPCOIN = '#menu:price/bpcoin'
+    PRICE_BPBIT = '#menu:price/bpbit'
     PRICE_SPENT = '#menu:price/spent'
     PRICE_RECEIVED = '#menu:price/received'
     AMMORELOAD_TITLE = '#menu:ammoReload/title'
@@ -1562,7 +1561,6 @@ class MENU(object):
     CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
     CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
-    CONTEXTMENU_NYSENDGIFT = '#menu:contextMenu/nySendGift'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
     CONTEXTMENU_NOTFAIRPLAY = '#menu:contextMenu/notFairPlay'
@@ -2007,16 +2005,6 @@ class MENU(object):
     TECHTREE_PREMIUMPANEL_TITLE = '#menu:techtree/premiumPanel/title'
     TECHTREE_PREMIUMPANEL_BTNLABEL = '#menu:techtree/premiumPanel/btnLabel'
     TECHTREE_PREMIUMPANEL_BTNLABEL_COUNT = '#menu:techtree/premiumPanel/btnLabel/count'
-    TECHTREE_INTRO_TITLE = '#menu:techtree/intro/title'
-    TECHTREE_INTRO_BLOCK0_TITLE = '#menu:techtree/intro/block0/title'
-    TECHTREE_INTRO_BLOCK0_DESC = '#menu:techtree/intro/block0/desc'
-    TECHTREE_INTRO_BLOCK1_TITLE = '#menu:techtree/intro/block1/title'
-    TECHTREE_INTRO_BLOCK1_DESC = '#menu:techtree/intro/block1/desc'
-    TECHTREE_INTRO_BLOCK2_TITLE = '#menu:techtree/intro/block2/title'
-    TECHTREE_INTRO_BLOCK2_DESC = '#menu:techtree/intro/block2/desc'
-    TECHTREE_INTRO_COMPENSATION_TITLE = '#menu:techtree/intro/compensation/title'
-    TECHTREE_INTRO_FOOTER = '#menu:techtree/intro/footer'
-    TECHTREE_INTRO_BTNYES = '#menu:techtree/intro/btnYes'
     CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
     CST_ITEM_CTX_MENU_EXCHANGE = '#menu:cst_item_ctx_menu/exchange'
     CST_ITEM_CTX_MENU_PERSONALTRADEEXCHANGE = '#menu:cst_item_ctx_menu/personalTradeExchange'
@@ -2273,7 +2261,6 @@ class MENU(object):
      CONTEXTMENU_CREATEBATTLEROYALESQUAD,
      CONTEXTMENU_CREATEMAPBOXSQUAD,
      CONTEXTMENU_INVITE,
-     CONTEXTMENU_NYSENDGIFT,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,
      CONTEXTMENU_NOTFAIRPLAY,
@@ -2365,9 +2352,6 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY,
      TANKCAROUSEL_VEHICLESTATES_BUYTANK,
      TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT,
-     TANKCAROUSEL_VEHICLESTATES_NYTANK,
-     TANKCAROUSEL_VEHICLESTATES_NYTANKEMPTYCOUNT,
-     TANKCAROUSEL_VEHICLESTATES_NYTANKSLOTSFULL,
      TANKCAROUSEL_VEHICLESTATES_BUYSLOT,
      TANKCAROUSEL_VEHICLESTATES_RESTORETANK,
      TANKCAROUSEL_VEHICLESTATES_RESTORETANKCOUNT,

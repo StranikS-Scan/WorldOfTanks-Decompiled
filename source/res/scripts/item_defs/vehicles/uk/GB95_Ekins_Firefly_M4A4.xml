@@ -2232,6 +2232,8 @@
             <collisionModelServer>	vehicles/british/GB95_Ekins_Firefly_M4A4/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB95_Ekins_Firefly_M4A4/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <recoil>
             <amplitude>	0.5	</amplitude>
             <recoilEffect>	medium	</recoilEffect>

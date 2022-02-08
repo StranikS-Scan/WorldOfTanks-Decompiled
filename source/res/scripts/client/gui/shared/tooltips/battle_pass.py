@@ -20,11 +20,13 @@ class BattlePassGiftTokenTooltipData(BlocksTooltipData):
         self._setMargins(10, 15)
         self._setWidth(420)
 
-    def _packBlocks(self, tokenID, **kwargs):
+    def _packBlocks(self, tokenID, isReceived=False, **kwargs):
         giftsNames = self.context.buildItem(tokenID, **kwargs)
         isOfferEnabled = self.context.getParams().get('isOfferEnabled', True)
         shortName = tokenID.split(':')[2]
-        items = [self.__packImageBlock(shortName), self.__packGiftNameBlocks(shortName, giftsNames, isOfferEnabled), self.__packFooterBlock(shortName)]
+        items = [self.__packImageBlock(shortName), self.__packGiftNameBlocks(shortName, giftsNames, isOfferEnabled)]
+        if not isReceived:
+            items.append(self.__packFooterBlock(shortName))
         return items
 
     @staticmethod

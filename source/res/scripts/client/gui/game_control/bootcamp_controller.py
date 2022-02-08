@@ -4,6 +4,7 @@ from collections import namedtuple
 from functools import partial
 import AccountCommands
 import BigWorld
+from constants import QUEUE_TYPE
 from async import async, await
 from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
 from account_helpers import isLongDisconnectedFromCenter
@@ -11,9 +12,11 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.bootcamp.bootcamp_exit_view import BootcampExitWindow
+from gui.prb_control.prb_getters import getQueueType
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.bootcamp.disabled_settings import BCDisabledSettings
 from bootcamp.BootCampEvents import g_bootcampEvents
@@ -36,6 +39,7 @@ _REWARD = '\n{}'
 
 class BootcampController(IBootcampController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    lobbyContext = dependency.descriptor(ILobbyContext)
     demoAccController = dependency.descriptor(IDemoAccCompletionController)
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -205,6 +209,10 @@ class BootcampController(IBootcampController):
             DialogsInterface.showI18nInfoDialog('bootcampCenterUnavailable', lambda result: None)
         else:
             self.__doBootcamp(isSkip=False)
+
+    def canRun(self):
+        queueType = getQueueType()
+        return self.lobbyContext.getServerSettings().isBootcampEnabled() and (not queueType or queueType == QUEUE_TYPE.BOOTCAMP)
 
     @prbDispatcherProperty
     def prbDispatcher(self):

@@ -5,7 +5,7 @@ from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, RANKED_MODEL_PRESENTERS
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.ranked.ranked_year_award_model import RankedYearAwardModel
-from gui.ranked_battles.constants import YEAR_AWARDS_ORDER
+from gui.ranked_battles.constants import YEAR_AWARDS_ORDER, YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from gui.ranked_battles.ranked_formatters import getFormattedBonusesForYearAwardsWindow
 from gui.shared import event_dispatcher
 from gui.impl.pub import ViewImpl
@@ -18,7 +18,7 @@ _logger = logging.getLogger(__name__)
 
 class RankedYearAwardView(ViewImpl):
     __rankedController = dependency.descriptor(IRankedBattlesController)
-    __slots__ = ('__items', '__bonuses', '__points', '__vehicleCD')
+    __slots__ = ('__items', '__bonuses', '__points', '__vehicleCD', '__showRemainedSelection')
 
     def __init__(self, contentResId, *args, **kwargs):
         settings = ViewSettings(contentResId)
@@ -30,6 +30,7 @@ class RankedYearAwardView(ViewImpl):
         self.__bonuses = []
         self.__points = None
         self.__vehicleCD = None
+        self.__showRemainedSelection = False
         return
 
     @property
@@ -50,7 +51,7 @@ class RankedYearAwardView(ViewImpl):
         tooltipData = self.__getBackportTooltipData(event)
         return getRewardTooltipContent(event, tooltipData)
 
-    def _initialize(self, rawAwards, points):
+    def _initialize(self, *args):
         super(RankedYearAwardView, self)._initialize()
         self.viewModel.onDestroyEvent += self.__onDestroy
         self.viewModel.onActionBtnClick += self.__onActionButtonClick
@@ -64,10 +65,13 @@ class RankedYearAwardView(ViewImpl):
         RankedSoundManager().setOverlayStateOff()
         super(RankedYearAwardView, self)._finalize()
 
-    def _onLoading(self, rawAwards, points):
+    def _onLoading(self, rawAwards, points, showRemainedSelection):
         super(RankedYearAwardView, self)._onLoading()
-        self.__bonuses = getFormattedBonusesForYearAwardsWindow(rawAwards)
+        selectableRewardCount = self.__rankedController.getYearRewardCount()
+        self.__removeSelectableYearRewards(rawAwards, int(selectableRewardCount == 0))
+        self.__bonuses = getFormattedBonusesForYearAwardsWindow(rawAwards, selectionsLeft=selectableRewardCount)
         self.__points = points
+        self.__showRemainedSelection = showRemainedSelection
         self.__setBonuses(self.__bonuses)
         self.__setViewData(self.__points)
 
@@ -92,6 +96,8 @@ class RankedYearAwardView(ViewImpl):
                 tx.setPointsTotal(points)
                 tx.setPointsCompensated(surplusPoints)
                 tx.setCrystals(rate * surplusPoints)
+            tx.setIsRewardSelected(self.__showRemainedSelection)
+            tx.setRewardsToSelect(self.__rankedController.getYearRewardCount())
         return
 
     def __setBonuses(self, bonuses):
@@ -127,12 +133,24 @@ class RankedYearAwardView(ViewImpl):
         else:
             return self.__items[tooltipId] if tooltipId in self.__items else None
 
+    @staticmethod
+    def __removeSelectableYearRewards(rawAwards, count):
+        selectableTokens = [ token for token in rawAwards.get('tokens', {}) if token.startswith(YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX) ]
+        for token in selectableTokens:
+            rewardCount = rawAwards['tokens'][token].get('count', 0) - count
+            if rewardCount > 0:
+                rawAwards['tokens'][token]['count'] = rewardCount
+            elif rewardCount == 0:
+                rawAwards['tokens'].pop(token)
+            if not rawAwards['tokens']:
+                rawAwards.pop('tokens')
+
 
 class RankedYearAwardWindow(LobbyNotificationWindow):
     __slots__ = ('__args',)
 
-    def __init__(self, rawAwards, points):
-        super(RankedYearAwardWindow, self).__init__(content=RankedYearAwardView(R.views.lobby.ranked.ranked_year_award.RankedYearAward(), rawAwards, points), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN)
+    def __init__(self, rawAwards, points, showRemainedSelection):
+        super(RankedYearAwardWindow, self).__init__(content=RankedYearAwardView(R.views.lobby.ranked.ranked_year_award.RankedYearAward(), rawAwards, points, showRemainedSelection), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN)
         self.__args = (rawAwards, points)
 
     def isParamsEqual(self, *args):

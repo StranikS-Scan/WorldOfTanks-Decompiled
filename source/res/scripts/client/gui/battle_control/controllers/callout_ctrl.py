@@ -21,6 +21,7 @@ from gui.shared.events import GameEvent, ViewEventType
 from gui.shared.events import LoadViewEvent
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
+from messenger.m_constants import MESSENGER_COMMAND_TYPE
 from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
@@ -167,7 +168,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         return
 
     def __onCommandReceived(self, cmd):
-        if not self.__isCalloutEnabled or not self.__isIBCEnabled:
+        if not self.__isCalloutEnabled or not self.__isIBCEnabled or cmd.getCommandType() != MESSENGER_COMMAND_TYPE.BATTLE:
             return
         else:
             vehicleIDToAnswer = self.sessionProvider.getArenaDP().getVehIDBySessionID(cmd.getSenderID())

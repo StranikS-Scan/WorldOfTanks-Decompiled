@@ -1,4 +1,13 @@
 <list.xml>
+  <F03_D2>
+    <id>	1	</id>
+    <userString>	#france_vehicles:D2	</userString>
+    <shortUserString>	#france_vehicles:D2_short	</shortUserString>
+    <description>	#france_vehicles:D2_descr	</description>
+    <price>	42500	</price>
+    <tags>	mediumTank HD collectorVehicle improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <level>	3	</level>
+  </F03_D2>
   <F01_RenaultFT>
     <id>	2	</id>
     <userString>	#france_vehicles:RenaultFT	</userString>
@@ -17,15 +26,6 @@
     <tags>	SPG HD collectorVehicle lightSPG improvedVentilation_class3_user	</tags>
     <level>	2	</level>
   </F20_RenaultBS>
-  <F03_D2>
-    <id>	1	</id>
-    <userString>	#france_vehicles:D2	</userString>
-    <shortUserString>	#france_vehicles:D2_short	</shortUserString>
-    <description>	#france_vehicles:D2_descr	</description>
-    <price>	42500	</price>
-    <tags>	mediumTank HD collectorVehicle improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
-    <level>	3	</level>
-  </F03_D2>
   <F04_B1>
     <id>	4	</id>
     <userString>	#france_vehicles:B1	</userString>
@@ -178,6 +178,15 @@
     <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	7	</level>
   </F16_AMX_13_75>
+  <F75_Char_de_25t>
+    <id>	22	</id>
+    <userString>	#france_vehicles:F75_Char_de_25t	</userString>
+    <shortUserString>	#france_vehicles:F75_Char_de_25t_short	</shortUserString>
+    <description>	#france_vehicles:F75_Char_de_25t_descr	</description>
+    <price>	3450000	</price>
+    <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	9	</level>
+  </F75_Char_de_25t>
   <F13_AMX38>
     <id>	23	</id>
     <userString>	#france_vehicles:AMX38	</userString>
@@ -331,6 +340,15 @@
     <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	3	</level>
   </F44_Somua_S35>
+  <F43_AMC_35_SH>
+    <id>	52	</id>
+    <userString>	#france_vehicles:AMC_35_SH	</userString>
+    <description>	#france_vehicles:AMC_35_SH_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank private HD battle_royale lockOutfit lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret siegeMode dualgun charger	</tags>
+    <level>	1	</level>
+  </F43_AMC_35_SH>
   <F64_AMX_50Fosh_155>
     <id>	54	</id>
     <userString>	#france_vehicles:AMX_50Fosh_155	</userString>
@@ -416,15 +434,6 @@
     <tags>	lightTank HD collectorVehicle improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </F49_RenaultR35>
-  <F75_Char_de_25t>
-    <id>	22	</id>
-    <userString>	#france_vehicles:F75_Char_de_25t	</userString>
-    <shortUserString>	#france_vehicles:F75_Char_de_25t_short	</shortUserString>
-    <description>	#france_vehicles:F75_Char_de_25t_descr	</description>
-    <price>	3450000	</price>
-    <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	9	</level>
-  </F75_Char_de_25t>
   <F81_Char_de_65t>
     <id>	64	</id>
     <userString>	#france_vehicles:F81_Char_de_65t	</userString>
@@ -458,7 +467,7 @@
     <shortUserString>	#france_vehicles:F88_AMX_13_105_short	</shortUserString>
     <description>	#france_vehicles:F88_AMX_13_105_descr	</description>
     <price>	6100000	</price>
-    <tags>	lightTank HD scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user earn_crystals role_LT_universal  NY_style	</tags>
+    <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user earn_crystals	</tags>
     <level>	10	</level>
   </F88_AMX_13_105>
   <F87_Batignolles-Chatillon_12t>
@@ -524,6 +533,113 @@
     <tags>	lightTank role_LT_wheeled HD wheeledVehicle siegeMode scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_light_user earn_crystals	</tags>
     <level>	10	</level>
   </F108_Panhard_EBR_105>
+  <F23_AMX_13F3AM_MapsTraining_Dummy_SPG_2>
+    <id>	110	</id>
+    <userString>	#maps_training:botVehicleType/SPG	</userString>
+    <description>	#maps_training:botVehicleDescription	</description>
+    <price>	935000	</price>
+    <tags>	SPG HD lightSPG tankRammer_class2_user antifragmentationLining_light_user secret maps_training private	</tags>
+    <level>	6	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </F23_AMX_13F3AM_MapsTraining_Dummy_SPG_2>
+  <F117_Alt_Proto_AMX_30>
+    <id>	125	</id>
+    <userString>	#france_vehicles:F117_Alt_Proto_AMX_30	</userString>
+    <shortUserString>	#france_vehicles:F117_Alt_Proto_AMX_30_short	</shortUserString>
+    <description>	#france_vehicles:F117_Alt_Proto_AMX_30_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F117_Alt_Proto_AMX_30_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F117_Alt_Proto_AMX_30_long_special	</longDescriptionSpecial>
+    <price>	8400	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_sniper HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </F117_Alt_Proto_AMX_30>
+  <F36_AMX_AC_Mle1948_IGR>
+    <id>	151	</id>
+    <userString>	#igr_vehicles:AMX_AC_Mle1948_IGR	</userString>
+    <description>	#igr_vehicles:AMX_AC_Mle1948_IGR_descr	</description>
+    <shortUserString>	#igr_vehicles:AMX_AC_Mle1948_IGR_short	</shortUserString>
+    <price>	1	</price>
+    <tags>	AT-SPG private HD secret premiumIGR heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </F36_AMX_AC_Mle1948_IGR>
+  <F17_AMX_13_90_IGR>
+    <id>	152	</id>
+    <userString>	#igr_vehicles:AMX_13_90_IGR	</userString>
+    <shortUserString>	#igr_vehicles:AMX_13_90_IGR_short	</shortUserString>
+    <description>	#igr_vehicles:AMX_13_90_IGR_descr	</description>
+    <price>	1	</price>
+    <tags>	lightTank private HD secret premiumIGR scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <level>	9	</level>
+  </F17_AMX_13_90_IGR>
+  <F08_AMX_50_100_IGR>
+    <id>	153	</id>
+    <userString>	#igr_vehicles:AMX_50_100_IGR	</userString>
+    <shortUserString>	#igr_vehicles:AMX_50_100_IGR_short	</shortUserString>
+    <description>	#igr_vehicles:AMX_50_100_IGR_descr	</description>
+    <price>	1	</price>
+    <tags>	heavyTank private HD secret premiumIGR improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </F08_AMX_50_100_IGR>
+  <F28_105_leFH18B2_IGR>
+    <id>	154	</id>
+    <userString>	#igr_vehicles:_105_leFH18B2_IGR	</userString>
+    <shortUserString>	#igr_vehicles:_105_leFH18B2_IGR_short	</shortUserString>
+    <description>	#igr_vehicles:_105_leFH18B2_IGR_descr	</description>
+    <price>	1	  <gold></gold>
+    </price>
+    <tags>	SPG private HD secret premiumIGR lightSPG tankRammer_class2_user antifragmentationLining_light_user	</tags>
+    <level>	5	</level>
+  </F28_105_leFH18B2_IGR>
+  <F33_S_35CA_IGR>
+    <id>	155	</id>
+    <userString>	#igr_vehicles:S_35CA_IGR	</userString>
+    <shortUserString>	#igr_vehicles:S_35CA_IGR_short	</shortUserString>
+    <description>	#igr_vehicles:S_35CA_IGR_descr	</description>
+    <price>	1	</price>
+    <tags>	AT-SPG private secret premiumIGR lightAT-SPG AT-SPG2 tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_light_user	</tags>
+    <level>	5	</level>
+  </F33_S_35CA_IGR>
+  <F62_ELC_AMX_IGR>
+    <id>	156	</id>
+    <userString>	#igr_vehicles:ELC_AMX_IGR	</userString>
+    <shortUserString>	#igr_vehicles:ELC_AMX_IGR_short	</shortUserString>
+    <description>	#igr_vehicles:ELC_AMX_IGR_descr	</description>
+    <price>	1	</price>
+    <tags>	lightTank private HD secret premiumIGR scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <level>	5	</level>
+  </F62_ELC_AMX_IGR>
+  <F18_Bat_Chatillon25t_IGR>
+    <id>	157	</id>
+    <userString>	#igr_vehicles:Bat_Chatillon25t_IGR	</userString>
+    <shortUserString>	#igr_vehicles:Bat_Chatillon25t_IGR_short	</shortUserString>
+    <description>	#igr_vehicles:Bat_Chatillon25t_IGR_descr	</description>
+    <price>	1	</price>
+    <tags>	mediumTank role_MT_support private HD secret premiumIGR improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <level>	10	</level>
+  </F18_Bat_Chatillon25t_IGR>
+  <F01_RenaultFT_bot>
+    <id>	160	</id>
+    <userString>	#france_vehicles:RenaultFT_bot	</userString>
+    <shortUserString>	#france_vehicles:RenaultFT_bot_short	</shortUserString>
+    <description>	#france_vehicles:RenaultFT_bot_descr	</description>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank private HD secret unrecoverable	</tags>
+    <level>	1	</level>
+  </F01_RenaultFT_bot>
+  <F04_B1_bootcamp>
+    <id>	161	</id>
+    <userString>	#france_vehicles:B1	</userString>
+    <shortUserString>	#france_vehicles:B1_short	</shortUserString>
+    <description>	#france_vehicles:B1_descr	</description>
+    <price>	185000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank private HD secret extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </F04_B1_bootcamp>
   <F115_Lorraine_50t>
     <id>	168	</id>
     <userString>	#france_vehicles:F115_Lorraine_50t	</userString>
@@ -600,7 +716,7 @@
     <price>	7600	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user NY2021_video	</tags>
+    <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </F116_Bat_Chatillon_Bourrasque>
   <F114_Projet_4_1>
@@ -730,20 +846,6 @@
     <tags>	heavyTank role_HT_break HD heavyTank1 improvedVentilation_class1_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </F74_AMX_M4_1949>
-  <F74_AMX_M4_1949_FL>
-    <id>	255	</id>
-    <userString>	#france_vehicles:F74_AMX_M4_1949_FL	</userString>
-    <shortUserString>	#france_vehicles:F74_AMX_M4_1949_FL_short	</shortUserString>
-    <description>	#france_vehicles:F74_AMX_M4_1949_descr	</description>
-    <shortDescriptionSpecial>	#france_vehicles:F74_AMX_M4_1949_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#france_vehicles:F74_AMX_M4_1949_long_special	</longDescriptionSpecial>
-    <price>	10500	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank private HD epic_battles heavyTank1 improvedVentilation_class1_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </F74_AMX_M4_1949_FL>
   <F73_M4A1_Revalorise>
     <id>	246	</id>
     <userString>	#france_vehicles:F73_M4A1_Revalorise	</userString>
@@ -756,33 +858,6 @@
     <tags>	mediumTank role_MT_sniper HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </F73_M4A1_Revalorise>
-  <F117_Alt_Proto_AMX_30>
-    <id>	125	</id>
-    <userString>	#france_vehicles:F117_Alt_Proto_AMX_30	</userString>
-    <shortUserString>	#france_vehicles:F117_Alt_Proto_AMX_30_short	</shortUserString>
-    <description>	#france_vehicles:F117_Alt_Proto_AMX_30_descr	</description>
-    <shortDescriptionSpecial>	#france_vehicles:F117_Alt_Proto_AMX_30_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#france_vehicles:F117_Alt_Proto_AMX_30_long_special	</longDescriptionSpecial>
-    <price>	8400	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </F117_Alt_Proto_AMX_30>
-  <F73_M4A1_Revalorise_FL>
-    <id>	252	</id>
-    <userString>	#france_vehicles:F73_M4A1_Revalorise_FL	</userString>
-    <shortUserString>	#france_vehicles:F73_M4A1_Revalorise_FL_short	</shortUserString>
-    <description>	#france_vehicles:F73_M4A1_Revalorise_descr	</description>
-    <shortDescriptionSpecial>	#france_vehicles:F73_M4A1_Revalorise_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#france_vehicles:F73_M4A1_Revalorise_long_special	</longDescriptionSpecial>
-    <price>	6400	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank private HD epic_battles mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </F73_M4A1_Revalorise_FL>
   <F69_AMX13_57_100_GrandFinal>
     <id>	247	</id>
     <userString>	#france_vehicles:F69_AMX13_57_100_GrandFinal	</userString>
@@ -835,119 +910,6 @@
     <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </F65_FCM_50t>
-  <F10_AMX_50B_fallout>
-    <id>	253	</id>
-    <userString>	#france_vehicles:AMX_50_68t_fallout	</userString>
-    <shortUserString>	#france_vehicles:AMX_50_68t_fallout_short	</shortUserString>
-    <description>	#france_vehicles:AMX_50_68t_fallout_descr	</description>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support private HD secret fallout improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
-    <level>	10	</level>
-  </F10_AMX_50B_fallout>
-  <F36_AMX_AC_Mle1948_IGR>
-    <id>	151	</id>
-    <userString>	#igr_vehicles:AMX_AC_Mle1948_IGR	</userString>
-    <description>	#igr_vehicles:AMX_AC_Mle1948_IGR_descr	</description>
-    <shortUserString>	#igr_vehicles:AMX_AC_Mle1948_IGR_short	</shortUserString>
-    <price>	1	</price>
-    <tags>	AT-SPG private HD secret premiumIGR heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </F36_AMX_AC_Mle1948_IGR>
-  <F17_AMX_13_90_IGR>
-    <id>	152	</id>
-    <userString>	#igr_vehicles:AMX_13_90_IGR	</userString>
-    <shortUserString>	#igr_vehicles:AMX_13_90_IGR_short	</shortUserString>
-    <description>	#igr_vehicles:AMX_13_90_IGR_descr	</description>
-    <price>	1	</price>
-    <tags>	lightTank private HD secret premiumIGR scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
-    <level>	9	</level>
-  </F17_AMX_13_90_IGR>
-  <F08_AMX_50_100_IGR>
-    <id>	153	</id>
-    <userString>	#igr_vehicles:AMX_50_100_IGR	</userString>
-    <shortUserString>	#igr_vehicles:AMX_50_100_IGR_short	</shortUserString>
-    <description>	#igr_vehicles:AMX_50_100_IGR_descr	</description>
-    <price>	1	</price>
-    <tags>	heavyTank private HD secret premiumIGR improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </F08_AMX_50_100_IGR>
-  <F28_105_leFH18B2_IGR>
-    <id>	154	</id>
-    <userString>	#igr_vehicles:_105_leFH18B2_IGR	</userString>
-    <shortUserString>	#igr_vehicles:_105_leFH18B2_IGR_short	</shortUserString>
-    <description>	#igr_vehicles:_105_leFH18B2_IGR_descr	</description>
-    <price>	1	  <gold></gold>
-    </price>
-    <tags>	SPG private HD secret premiumIGR lightSPG tankRammer_class2_user antifragmentationLining_light_user	</tags>
-    <level>	5	</level>
-  </F28_105_leFH18B2_IGR>
-  <F33_S_35CA_IGR>
-    <id>	155	</id>
-    <userString>	#igr_vehicles:S_35CA_IGR	</userString>
-    <shortUserString>	#igr_vehicles:S_35CA_IGR_short	</shortUserString>
-    <description>	#igr_vehicles:S_35CA_IGR_descr	</description>
-    <price>	1	</price>
-    <tags>	AT-SPG private secret premiumIGR lightAT-SPG AT-SPG2 tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_light_user	</tags>
-    <level>	5	</level>
-  </F33_S_35CA_IGR>
-  <F62_ELC_AMX_IGR>
-    <id>	156	</id>
-    <userString>	#igr_vehicles:ELC_AMX_IGR	</userString>
-    <shortUserString>	#igr_vehicles:ELC_AMX_IGR_short	</shortUserString>
-    <description>	#igr_vehicles:ELC_AMX_IGR_descr	</description>
-    <price>	1	</price>
-    <tags>	lightTank private HD secret premiumIGR scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
-    <level>	5	</level>
-  </F62_ELC_AMX_IGR>
-  <F18_Bat_Chatillon25t_IGR>
-    <id>	157	</id>
-    <userString>	#igr_vehicles:Bat_Chatillon25t_IGR	</userString>
-    <shortUserString>	#igr_vehicles:Bat_Chatillon25t_IGR_short	</shortUserString>
-    <description>	#igr_vehicles:Bat_Chatillon25t_IGR_descr	</description>
-    <price>	1	</price>
-    <tags>	mediumTank role_MT_support private HD secret premiumIGR improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
-    <level>	10	</level>
-  </F18_Bat_Chatillon25t_IGR>
-  <F01_RenaultFT_bot>
-    <id>	160	</id>
-    <userString>	#france_vehicles:RenaultFT_bot	</userString>
-    <shortUserString>	#france_vehicles:RenaultFT_bot_short	</shortUserString>
-    <description>	#france_vehicles:RenaultFT_bot_descr	</description>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret unrecoverable	</tags>
-    <level>	1	</level>
-  </F01_RenaultFT_bot>
-  <F04_B1_bootcamp>
-    <id>	161	</id>
-    <userString>	#france_vehicles:B1	</userString>
-    <shortUserString>	#france_vehicles:B1_short	</shortUserString>
-    <description>	#france_vehicles:B1_descr	</description>
-    <price>	185000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank private HD secret extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </F04_B1_bootcamp>
-  <F43_AMC_35_SH>
-    <id>	52	</id>
-    <userString>	#france_vehicles:AMC_35_SH	</userString>
-    <description>	#france_vehicles:AMC_35_SH_descr	</description>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank private HD battle_royale lockOutfit lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret siegeMode dualgun charger	</tags>
-    <level>	1	</level>
-  </F43_AMC_35_SH>
-  <F23_AMX_13F3AM_MapsTraining_Dummy_SPG_2>
-    <id>	110	</id>
-    <userString>	#maps_training:botVehicleType/SPG	</userString>
-    <description>	#maps_training:botVehicleDescription	</description>
-    <price>	935000	</price>
-    <tags>	SPG HD lightSPG tankRammer_class2_user antifragmentationLining_light_user secret maps_training private	</tags>
-    <level>	6	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </F23_AMX_13F3AM_MapsTraining_Dummy_SPG_2>
   <F83_AMX_M4_Mle1949_Bis_FL>
     <id>	251	</id>
     <userString>	#france_vehicles:F83_AMX_M4_Mle1949_Bis_FL	</userString>
@@ -960,4 +922,42 @@
     <tags>	heavyTank HD heavyTank1 epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user private	</tags>
     <level>	9	</level>
   </F83_AMX_M4_Mle1949_Bis_FL>
+  <F73_M4A1_Revalorise_FL>
+    <id>	252	</id>
+    <userString>	#france_vehicles:F73_M4A1_Revalorise_FL	</userString>
+    <shortUserString>	#france_vehicles:F73_M4A1_Revalorise_FL_short	</shortUserString>
+    <description>	#france_vehicles:F73_M4A1_Revalorise_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F73_M4A1_Revalorise_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F73_M4A1_Revalorise_long_special	</longDescriptionSpecial>
+    <price>	6400	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank private HD epic_battles mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </F73_M4A1_Revalorise_FL>
+  <F10_AMX_50B_fallout>
+    <id>	253	</id>
+    <userString>	#france_vehicles:AMX_50_68t_fallout	</userString>
+    <shortUserString>	#france_vehicles:AMX_50_68t_fallout_short	</shortUserString>
+    <description>	#france_vehicles:AMX_50_68t_fallout_descr	</description>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_support private HD secret fallout improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	10	</level>
+  </F10_AMX_50B_fallout>
+  <F74_AMX_M4_1949_FL>
+    <id>	255	</id>
+    <userString>	#france_vehicles:F74_AMX_M4_1949_FL	</userString>
+    <shortUserString>	#france_vehicles:F74_AMX_M4_1949_FL_short	</shortUserString>
+    <description>	#france_vehicles:F74_AMX_M4_1949_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F74_AMX_M4_1949_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F74_AMX_M4_1949_long_special	</longDescriptionSpecial>
+    <price>	10500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank private HD epic_battles heavyTank1 improvedVentilation_class1_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </F74_AMX_M4_1949_FL>
 </list.xml>

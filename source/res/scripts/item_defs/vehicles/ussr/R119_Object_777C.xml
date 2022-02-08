@@ -1647,6 +1647,8 @@
             <collisionModelServer>	vehicles/russian/R119_Object_777C/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R119_Object_777C/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <shotOffset>	0.015131 0.179004 0.000000	</shotOffset>
           <customizationSlots>

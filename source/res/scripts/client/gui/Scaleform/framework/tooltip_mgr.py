@@ -11,7 +11,6 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared import events
 from gui.shared.tooltips import builders
 from helpers import dependency, uniprof
-from helpers.gui_utils import getMousePosition
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
 from soft_exception import SoftException
@@ -47,12 +46,7 @@ class ToolTip(ToolTipMgrMeta):
     def show(self, data, linkage):
         self.as_showS(data, linkage, self.__fastRedraw)
 
-    def showWulfTooltip(self, toolType, args):
-        mouseX, mouseY = getMousePosition()
-        self.onCreateWulfTooltip(toolType, args, mouseX, mouseY)
-
     def hide(self):
-        self.__destroyTooltipWindow()
         self.as_hideS()
 
     def handleKeyEvent(self, event):

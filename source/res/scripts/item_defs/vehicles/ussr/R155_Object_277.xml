@@ -79,6 +79,11 @@
           <destroyed>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Hull.model	</exploded>
         </R155_Object_277_3Dst>
+        <R155_Object_277_3DSt_TIR>
+          <undamaged>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3DSt_TIR/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3DSt_TIR/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3DSt_TIR/crash/lod0/Hull.model	</exploded>
+        </R155_Object_277_3DSt_TIR>
       </sets>
     </models>
     <swinging>
@@ -936,20 +941,20 @@
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15066	</slotId>
-        <compatibleModels>	R155_Object_277_3Dst	</compatibleModels>
-        <position>	0.353991 1.0912 3.28412	</position>
-        <rotation>	0.341094 0.0132215 -3.11436	</rotation>
-        <scale>	0.453835 0.453835 0.453835	</scale>
+        <compatibleModels>	R155_Object_277_3Dst R155_Object_277_3DSt_TIR	</compatibleModels>
+        <position>	0.355336 1.03563 3.26437	</position>
+        <rotation>	0.414736 0.0154113 -3.11355	</rotation>
+        <scale>	0.453835 0.05 0.453835	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.769876	</clipAngle>
         <tags>	formfactor_square	</tags>
-        <anchorShift>	-0.000005	</anchorShift>
+        <anchorShift>	0.039995	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15067	</slotId>
-        <compatibleModels>	R155_Object_277_3Dst	</compatibleModels>
+        <compatibleModels>	R155_Object_277_3Dst R155_Object_277_3DSt_TIR	</compatibleModels>
         <position>	-1.81751 0.886634 2.48712	</position>
         <rotation>	1.63501 1.28302 -0.315711	</rotation>
         <scale>	0.471588 0.471588 0.471589	</scale>
@@ -962,7 +967,7 @@
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15068	</slotId>
-        <compatibleModels>	R155_Object_277_3Dst	</compatibleModels>
+        <compatibleModels>	R155_Object_277_3Dst R155_Object_277_3DSt_TIR	</compatibleModels>
         <position>	-1.82464 0.889329 0.314745	</position>
         <rotation>	1.635 1.28302 -0.315712	</rotation>
         <scale>	0.471588 0.471588 0.471588	</scale>
@@ -975,7 +980,7 @@
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15069	</slotId>
-        <compatibleModels>	R155_Object_277_3Dst	</compatibleModels>
+        <compatibleModels>	R155_Object_277_3Dst R155_Object_277_3DSt_TIR	</compatibleModels>
         <position>	1.81693 0.897788 0.490241	</position>
         <rotation>	1.50514 -1.29928 0.317105	</rotation>
         <scale>	0.450019 0.45002 0.45002	</scale>
@@ -988,7 +993,7 @@
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15070	</slotId>
-        <compatibleModels>	R155_Object_277_3Dst	</compatibleModels>
+        <compatibleModels>	R155_Object_277_3Dst R155_Object_277_3DSt_TIR	</compatibleModels>
         <position>	1.78447 0.884377 2.50898	</position>
         <rotation>	1.50514 -1.29928 0.317105	</rotation>
         <scale>	0.465698 0.465699 0.465699	</scale>
@@ -1098,6 +1103,11 @@
             <destroyed>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Chassis.model	</exploded>
           </R155_Object_277_3Dst>
+          <R155_Object_277_3DSt_TIR>
+            <undamaged>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3DSt_TIR/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3DSt_TIR/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3DSt_TIR/crash/lod0/Chassis.model	</exploded>
+          </R155_Object_277_3DSt_TIR>
         </sets>
       </models>
       <traces>
@@ -1871,12 +1881,19 @@
                 <destroyed>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Gun_01.model	</exploded>
               </R155_Object_277_3Dst>
+              <R155_Object_277_3DSt_TIR>
+                <undamaged>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3DSt_TIR/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3DSt_TIR/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3DSt_TIR/crash/lod0/Gun_01.model	</exploded>
+              </R155_Object_277_3DSt_TIR>
             </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R155_Object_277/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R155_Object_277/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>
@@ -1947,6 +1964,11 @@
             <destroyed>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Turret_01.model	</exploded>
           </R155_Object_277_3Dst>
+          <R155_Object_277_3DSt_TIR>
+            <undamaged>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3DSt_TIR/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3DSt_TIR/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3DSt_TIR/crash/lod0/Turret_01.model	</exploded>
+          </R155_Object_277_3DSt_TIR>
         </sets>
       </models>
       <hitTester>
@@ -2418,7 +2440,7 @@
         <slot>
           <slotType>	projectionDecal	</slotType>
           <slotId>	35033	</slotId>
-          <compatibleModels>	R155_Object_277_3Dst	</compatibleModels>
+          <compatibleModels>	R155_Object_277_3Dst R155_Object_277_3DSt_TIR	</compatibleModels>
           <position>	0.278526 2.22697 1.01362	</position>
           <rotation>	-0.0243315 0.00376466 3.087	</rotation>
           <scale>	0.524503 0.524505 0.524506	</scale>
@@ -2518,6 +2540,32 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
           <anchorShift>	0.270918	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35041	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R155_Object_277_3DSt_TIR	</compatibleModels>
+          <position>	1.23024 1.77845 0.333403	</position>
+          <rotation>	2.38062 -1.56333 0.0590668	</rotation>
+          <scale>	0.566708 0.0899998 0.566711	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.741275	</clipAngle>
+          <anchorShift>	0.079996	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35042	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R155_Object_277_3DSt_TIR	</compatibleModels>
+          <position>	-1.1688 1.8295 0.579253	</position>
+          <rotation>	0.762637 -1.51636 3.12536	</rotation>
+          <scale>	0.566707 0.0899996 0.56671	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.741275	</clipAngle>
+          <anchorShift>	0.079996	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

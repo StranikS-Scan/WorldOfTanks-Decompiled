@@ -23,14 +23,15 @@ _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
 class BattlePassHowToEarnPointsView(ViewImpl):
-    __slots__ = ()
+    __slots__ = ('__chapterID',)
     __itemsCache = dependency.descriptor(IItemsCache)
     __battlePassController = dependency.descriptor(IBattlePassController)
 
-    def __init__(self, layoutID):
+    def __init__(self, layoutID, chapterID):
         settings = ViewSettings(layoutID)
         settings.flags = ViewFlags.LOBBY_SUB_VIEW
         settings.model = BattlePassHowToEarnPointsViewModel()
+        self.__chapterID = chapterID
         super(BattlePassHowToEarnPointsView, self).__init__(settings)
 
     @property
@@ -55,6 +56,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
                 tx.gameModes.addViewModel(self.__createGameModel(supportedArenaType))
 
             tx.setSyncInitiator((tx.getSyncInitiator() + 1) % 1000)
+            tx.setChapterID(self.__chapterID)
 
     def __createGameModel(self, gameType):
         viewModel = self.__createViewHeader(gameType)
@@ -243,5 +245,5 @@ class BattlePassHowToEarnPointsView(ViewImpl):
 class BattlePassHowToEarnPointsWindow(WindowImpl):
     __slots__ = ()
 
-    def __init__(self, parent=None):
-        super(BattlePassHowToEarnPointsWindow, self).__init__(WindowFlags.WINDOW, content=BattlePassHowToEarnPointsView(R.views.lobby.battle_pass.BattlePassHowToEarnPointsView()), parent=parent)
+    def __init__(self, parent=None, chapterID=0):
+        super(BattlePassHowToEarnPointsWindow, self).__init__(WindowFlags.WINDOW, content=BattlePassHowToEarnPointsView(R.views.lobby.battle_pass.BattlePassHowToEarnPointsView(), chapterID), parent=parent)

@@ -33,6 +33,11 @@ class GiftEventDevHub(GiftEventBaseHub, IDevMessagesPusher):
         self._pushClientMessage('{}\nis destroyed'.format(self))
         super(GiftEventDevHub, self).destroy()
 
+    def reset(self):
+        _logger.info('%s is reset', self)
+        self._pushClientMessage('{}\nis reset'.format(self))
+        super(GiftEventDevHub, self).reset()
+
     def _createGifter(self, eventSettings):
         return GiftEventDevGifter(eventSettings, self._onGifterResponse)
 

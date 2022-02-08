@@ -1137,22 +1137,22 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	styles 4000g notInShop	</priceGroup>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	germany:G92_VK7201	</vehicles>
+        <vehicles>	germany:G42_Maus	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	430	</id>
-      <texture>	gui/maps/vehicles/styles/G92_VK7201_3Dst.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:main_style/G92_VK7201_3Dst_desc/long	</longDescriptionSpecial>
-      <modelsSet>	G92_VK7201_3Dst	</modelsSet>
+      <id>	429	</id>
+      <texture>	gui/maps/vehicles/styles/G42_Maus_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/G42_Maus_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G42_Maus_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:main_style/G92_VK7201_3Dst	</userString>
+      <userString>	#vehicle_customization:unique_style/G42_Maus_3Dst	</userString>
       <tags>	NY_style progression_required	</tags>
       <outfits>
         <outfit>
@@ -1177,23 +1177,23 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <priceGroup>	styles 4000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	germany:G42_Maus	</vehicles>
+        <vehicles>	germany:G92_VK7201	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	429	</id>
-      <texture>	gui/maps/vehicles/styles/G42_Maus_3Dst.png	</texture>
-      <longDescriptionSpecial>	#vehicle_customization:unique_style/G42_Maus_3Dst_desc/long	</longDescriptionSpecial>
-      <modelsSet>	G42_Maus_3Dst	</modelsSet>
+      <id>	430	</id>
+      <texture>	gui/maps/vehicles/styles/G92_VK7201_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/G92_VK7201_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G92_VK7201_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:unique_style/G42_Maus_3Dst	</userString>
-      <tags>	progression_required NY_style	</tags>
+      <userString>	#vehicle_customization:main_style/G92_VK7201_3Dst	</userString>
+      <tags>	progression_required	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1547,6 +1547,232 @@
               <id>	18	</id>
             </item>
           </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 2500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G114_Skorpian	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	593	</id>
+      <texture>	gui/maps/vehicles/styles/G114_Skorpian_3DSt_TIR.png	</texture>
+      <modelsSet>	G114_Skorpian_3DSt_TIR	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/igelschnauzchen	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/igelschnauzchen_description/long	</longDescriptionSpecial>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G97_Waffentrager_IV	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	590	</id>
+      <texture>	gui/maps/vehicles/styles/G97_Waffentrager_IV_3DSt_TIR.png	</texture>
+      <modelsSet>	G97_Waffentrager_IV_3DSt_TIR	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/igelschnauzchen	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/igelschnauzchen_description/long	</longDescriptionSpecial>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 2000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G99_RhB_Waffentrager	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	591	</id>
+      <texture>	gui/maps/vehicles/styles/G99_RhB_Waffentrager_3DSt_TIR.png	</texture>
+      <modelsSet>	G99_RhB_Waffentrager_3DSt_TIR	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/igelschnauzchen	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/igelschnauzchen_description/long	</longDescriptionSpecial>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G89_Leopard1	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	595	</id>
+      <texture>	gui/maps/vehicles/styles/G89_Leopard1_BVII_3DSt.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G89_Leopard1_BVII_3DSt_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G89_Leopard1_BVII_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G89_Leopard1_BVII_3DSt	</userString>
+      <tags>	styleProgression progression_required	</tags>
+      <styleProgressions>
+        <stage>
+          <materials>	tank_upgrade_01	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <paints>
+                <item>
+                  <id>	242	</id>
+                  <appliedTo>	30583	</appliedTo>
+                </item>
+              </paints>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_02 tank_upgrade_02_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <paints>
+                <item>
+                  <id>	242	</id>
+                  <appliedTo>	30583	</appliedTo>
+                </item>
+              </paints>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_03 tank_upgrade_03_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <paints>
+                <item>
+                  <id>	242	</id>
+                  <appliedTo>	30583	</appliedTo>
+                </item>
+              </paints>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_04 tank_upgrade_04_skinned tank_net	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <camouflages>
+                <item>
+                  <id>	388	</id>
+                  <appliedTo>	4368	</appliedTo>
+                  <patternSize>	1	</patternSize>
+                  <palette>	0	</palette>
+                </item>
+              </camouflages>
+              <paints>
+                <item>
+                  <id>	243	</id>
+                  <appliedTo>	30583	</appliedTo>
+                </item>
+              </paints>
+            </outfit>
+          </outfits>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
         </outfit>
       </outfits>
       <itemFilters>

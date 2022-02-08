@@ -7,12 +7,11 @@ from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
 from gui.Scaleform.daapi.view.meta.BrowserScreenMeta import BrowserScreenMeta
-from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.view_helpers.blur_manager import CachedBlur
-from helpers import dependency
-from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController
 from gui.sounds.ambients import HangarOverlayEnv
+from helpers import dependency
+from skeletons.gui.game_control import IBrowserController
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers import ContainerManager
 _logger = logging.getLogger(__name__)
@@ -20,8 +19,7 @@ _logger.addHandler(logging.NullHandler())
 BROWSER_LOAD_CALLBACK_DELAY = 0.01
 
 class WebView(BrowserScreenMeta):
-    browserCtrl = dependency.descriptor(IBrowserController)
-    __appLoader = dependency.descriptor(IAppLoader)
+    __browserCtrl = dependency.descriptor(IBrowserController)
 
     def __init__(self, ctx=None):
         super(WebView, self).__init__(ctx)
@@ -29,12 +27,16 @@ class WebView(BrowserScreenMeta):
         self.__hasFocus = False
         self.__browserId = 0
         self.__loadBrowserCbID = None
-        self.__ctx = ctx
+        self.__ctx = ctx or {}
         self._url = ctx.get('url') if ctx else None
         self._forcedSkipEscape = ctx.get('forcedSkipEscape', False) if ctx else False
         self._browserParams = (ctx or {}).get('browserParams', makeBrowserParams())
         self.__callbackOnLoad = ctx.get('callbackOnLoad', None) if ctx else None
         return
+
+    @property
+    def webHandlersReplacements(self):
+        return None
 
     def onEscapePress(self):
         if not self._browserParams.get('isHidden'):
@@ -55,8 +57,8 @@ class WebView(BrowserScreenMeta):
         return self.__browser
 
     def webHandlers(self):
-        from gui.Scaleform.daapi.view.lobby.shared.web_handlers import createBrowserOverlayWebHandlers
-        return createBrowserOverlayWebHandlers()
+        from gui.Scaleform.daapi.view.lobby.shared.web_handlers import createWebHandlers
+        return createWebHandlers(self.webHandlersReplacements)
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         webHandlers = self.webHandlers()
@@ -82,8 +84,7 @@ class WebView(BrowserScreenMeta):
         super(WebView, self)._dispose()
         self.removeListener(events.HideWindowEvent.HIDE_OVERLAY_BROWSER_VIEW, self.__handleBrowserClose, scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__browserId:
-            self.browserCtrl.delBrowser(self.__browserId)
-        self.__appLoader.getApp().getToolTipMgr().hide()
+            self.__browserCtrl.delBrowser(self.__browserId)
 
     def _refresh(self):
         self.__browser.refresh()
@@ -91,22 +92,18 @@ class WebView(BrowserScreenMeta):
     def _onError(self):
         self.__updateSkipEscape(True)
 
-    def __getFromCtx(self, name, default=None):
-        ctx = self.__ctx
-        return ctx.get(name, default) if ctx else default
-
     @process
     def __loadBrowser(self, width, height):
         url = self._getUrl()
         if url is not None:
-            self.__browserId = yield self.browserCtrl.load(url=url, useBrowserWindow=False, browserSize=(width, height), showBrowserCallback=self.__showBrowser, browserID=self.alias)
-            self.__browser = self.browserCtrl.getBrowser(self.__browserId)
+            self.__browserId = yield self.__browserCtrl.load(url=url, useBrowserWindow=False, browserSize=(width, height), showBrowserCallback=self.__showBrowser, browserID=self.alias)
+            self.__browser = self.__browserCtrl.getBrowser(self.__browserId)
             if self.__browser:
-                self.__browser.allowRightClick = self.__getFromCtx('allowRightClick', True)
-                self.__browser.useSpecialKeys = self.__getFromCtx('useSpecialKeys', False)
-                self.__browser.ignoreAltKey = self.__getFromCtx('ignoreAltKey', True)
-                self.__browser.ignoreCtrlClick = self.__getFromCtx('ignoreCtrlClick', True)
-                self.__browser.ignoreShiftClick = self.__getFromCtx('ignoreShiftClick', True)
+                self.__browser.allowRightClick = self.__ctx.get('allowRightClick', True)
+                self.__browser.useSpecialKeys = self.__ctx.get('useSpecialKeys', False)
+                self.__browser.ignoreAltKey = self.__ctx.get('ignoreAltKey', True)
+                self.__browser.ignoreCtrlClick = self.__ctx.get('ignoreCtrlClick', True)
+                self.__browser.ignoreShiftClick = self.__ctx.get('ignoreShiftClick', True)
             self.__updateSkipEscape(not self.__hasFocus)
         else:
             _logger.error('ERROR: Browser could not be opened. Invalid URL!')

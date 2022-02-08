@@ -3,8 +3,8 @@
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.block import Block
 from visual_script.misc import errorVScript
-from constants import IS_EDITOR
-if not IS_EDITOR:
+from constants import IS_VS_EDITOR
+if not IS_VS_EDITOR:
     from HintManager import HintManager
 
 class ProcessHint(Block):
@@ -19,7 +19,7 @@ class ProcessHint(Block):
         pass
 
     def __execute(self):
-        if not IS_EDITOR:
+        if not IS_VS_EDITOR:
             hintId = self._id.getValue()
             hint = HintManager.hintManager().getHint(hintId)
             if hint is not None:

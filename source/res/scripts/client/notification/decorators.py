@@ -1,38 +1,28 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/decorators.py
-from collections import namedtuple
 import typing
 import BigWorld
 from debug_utils import LOG_ERROR
-from gifts.gifts_common import GiftEventID, GiftEventState
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.locale.INVITES import INVITES
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsSteelHunter
-from gui.clans.formatters import ClanSingleNotificationHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanAppActionHtmlTextFormatter, getClanAbbrevString
+from gui.clans.formatters import ClanSingleNotificationHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanAppActionHtmlTextFormatter
 from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.gift_system.constants import HubUpdateReason
-from gui.gift_system.mixins import GiftEventHubWatcher
-from gui.impl.new_year.new_year_helper import getGiftSystemCongratulationText
 from gui.prb_control import prbInvitesProperty
-from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ViewEventType, HangarSpacesSwitcherEvent
-from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.loot_box import NewYearCategories, ALL_LUNAR_NY_LOOT_BOX_TYPES, LunarNYLootBoxTypes
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
 from gui.shared.utils.functions import makeTooltip
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
 from helpers import dependency
 from helpers import i18n
 from helpers import time_utils
-from lunar_ny import ILunarNYController
-from lunar_ny.lunar_ny_constants import ENVELOPE_TYPE_TO_NOTIFICATIONS_CONSTANTS, ALL_ENVELOPE_TYPES, LOOT_BOX_TYPE_TO_ENVELOPE_TYPE
 from messenger import g_settings
 from messenger.formatters.users_messages import makeFriendshipRequestText
 from messenger.m_constants import PROTO_TYPE
@@ -40,12 +30,9 @@ from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.settings import makePathToIcon
-from shared_utils import first
-from skeletons.gui.game_control import IGiftSystemController
-from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-from skeletons.new_year import INewYearController
 if typing.TYPE_CHECKING:
     from gui.shared.events import LoadViewEvent
 
@@ -67,17 +54,16 @@ class _NotificationDecorator(object):
         self._isOrderChanged = False
         self._entityID = entityID
         self._entity = entity
-        self._settings = settings
         self._make(entity, settings)
 
     def __repr__(self):
         return '{0:>s}(typeID = {1:n}, entityID = {2:n})'.format(self.__class__.__name__, self.getType(), self.getID())
 
     def __cmp__(self, other):
-        return cmp(self.getOrder(), other.getOrder()) if isinstance(other, _NotificationDecorator) else -1
+        return cmp(self.getOrder(), other.getOrder())
 
     def __eq__(self, other):
-        return isinstance(other, _NotificationDecorator) and self.getType() == other.getType() and self.getID() == other.getID()
+        return self.getType() == other.getType() and self.getID() == other.getID()
 
     def clear(self):
         self._entityID = 0
@@ -124,18 +110,6 @@ class _NotificationDecorator(object):
         result = False
         if self._settings:
             result = self._settings.isNotify
-        return result
-
-    def onlyNCList(self):
-        result = False
-        if self._settings:
-            result = self._settings.onlyNCList
-        return result
-
-    def onlyPopUp(self):
-        result = False
-        if self._settings:
-            result = self._settings.onlyPopUp
         return result
 
     def showAt(self):
@@ -186,26 +160,10 @@ class _NotificationDecorator(object):
         self._settings = settings
 
     def getCounterInfo(self):
-        return (self.getGroup(),
-         self.getType(),
-         self.getID(),
-         self.getCount(),
-         self.resetCounter())
+        return (self.getGroup(), self.getType(), self.getID())
 
     def decrementCounterOnHidden(self):
         return True
-
-    def resetCounter(self):
-        return True
-
-    def getCount(self):
-        pass
-
-    def updateCounter(self):
-        return False
-
-    def onHidden(self):
-        pass
 
 
 class SearchCriteria(_NotificationDecorator):
@@ -252,7 +210,7 @@ class MessageDecorator(_NotificationDecorator):
                 self._settings.showAt = _makeShowTime()
         message = formatted.copy() if formatted else {}
         for key in _ICONS_FIELDS:
-            if key in message:
+            if key in formatted:
                 message[key] = makePathToIcon(message[key])
             message[key] = ''
 
@@ -260,18 +218,6 @@ class MessageDecorator(_NotificationDecorator):
          'entityID': self.getID(),
          'message': message,
          'notify': self.isNotify()}
-
-
-class ChoosingDevicesMessageDecorator(MessageDecorator):
-
-    def getType(self):
-        return NOTIFICATION_TYPE.CHOOSING_DEVICES
-
-    def getGroup(self):
-        return NotificationGroup.OFFER
-
-    def getSavedData(self):
-        return self._vo['message'].get('savedData', {})
 
 
 class RecruitReminderMessageDecorator(MessageDecorator):
@@ -920,540 +866,62 @@ class MissingEventsDecorator(_NotificationDecorator):
          'auxData': []}
 
 
-class GiftSystemOperationDecorator(MessageDecorator):
+class BattlePassSwitchChapterReminderDecorator(MessageDecorator):
 
-    def __init__(self, entityID, entity=None, settings=None, model=None, ctx=None):
-        super(GiftSystemOperationDecorator, self).__init__(entityID, entity, settings, model)
-        self._userID, self._userName, self._clanAbbrev, self._ctx = (None,
-         '',
-         '',
-         ctx)
-        return
+    def __init__(self, entityID, message):
+        super(BattlePassSwitchChapterReminderDecorator, self).__init__(entityID, self.__makeEntity(message), self.__makeSettings())
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
 
     def getType(self):
-        return NOTIFICATION_TYPE.GIFT_SYSTEM_OPERATION
+        return NOTIFICATION_TYPE.BATTLE_PASS_SWITCH_CHAPTER_REMINDER
 
-    def getUserID(self):
-        return self._userID
+    def __makeEntity(self, message):
+        return g_settings.msgTemplates.format('BattlePassSwitchChapterReminder', ctx={'text': message})
 
-    def initUserInfo(self, userName, clanAbbrev):
-        self._userName, self._clanAbbrev = userName, clanAbbrev
-        self.update(self._makeEntity(self._ctx, bool(self._userName)))
-
-    def setUserInfo(self, userName):
-        self._userName = userName
-        self._entity = self._makeEntity(self._ctx, bool(self._userName))
-
-    def _makeEntity(self, ctx, userResolved=False):
-        raise NotImplementedError
-
-    def _makeSettings(self, template):
-        return NotificationGuiSettings(isNotify=True, priorityLevel=g_settings.msgTemplates.priority(template))
+    def __makeSettings(self):
+        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)
 
 
-class NYGiftOpenedDecorator(GiftSystemOperationDecorator):
-    _DEFAULT_TEMPLATE = 'LootBoxRewardsSysMessage'
-    _GIFT_TEMPLATE = 'GiftLootBoxRewardsSysMessage'
-
-    def __init__(self, entityID, model, ctx):
-        self.__lootbox, self.__template = ctx['lootbox'], self.__getTemplateByCtx(ctx)
-        entity, settings = self._makeEntity(ctx), self._makeSettings(self.__template)
-        super(NYGiftOpenedDecorator, self).__init__(entityID, entity, settings, model, ctx)
-        self._userID = ctx['giftsInfo'][0].senderID
-
-    def clear(self):
-        self.__lootbox = None
-        return
-
-    def _makeEntity(self, ctx, userResolved=False):
-        text = ctx['fmtBonuses']
-        if self.__template == self._GIFT_TEMPLATE:
-            text = self.__wrapWithGiftCongrats(text, ctx['giftsInfo'][0], userResolved)
-        return g_settings.msgTemplates.format(self.__template, ctx={'text': text})
-
-    def __getTemplateByCtx(self, ctx):
-        giftsInfo = ctx['giftsInfo']
-        return self._GIFT_TEMPLATE if len(giftsInfo) == 1 else self._DEFAULT_TEMPLATE
-
-    def __wrapWithGiftCongrats(self, text, giftInfo, userResolved):
-        lootboxType = self.__lootbox.getType()
-        resourceShortcut = R.strings.ny.giftSystem.notification.congrats
-        congratsText = text_styles.warning(getGiftSystemCongratulationText(giftInfo.metaInfo.get('message_id', 0)))
-        if userResolved:
-            clanAbbrev = getClanAbbrevString(self._clanAbbrev) if self._clanAbbrev else ''
-            user = text_styles.warning(text_styles.concatStylesWithSpace(self._userName, clanAbbrev))
-            giftMessage = backport.text(resourceShortcut.withName.dyn(lootboxType)(), name=user, text=congratsText)
-        else:
-            giftMessage = backport.text(resourceShortcut.empty.dyn(lootboxType)(), text=congratsText)
-        return text_styles.concatStylesToMultiLine(giftMessage, '', text)
-
-
-class NYGiftSentDecorator(GiftSystemOperationDecorator):
-    _TEMPLATE = 'GiftSendSysMessage'
-
-    def __init__(self, entityID, model, ctx):
-        entity, settings = self._makeEntity(ctx), self._makeSettings(self._TEMPLATE)
-        super(NYGiftSentDecorator, self).__init__(entityID, entity, settings, model)
-        self._userID = ctx['userID']
-
-    def _makeEntity(self, _, userResolved=False):
-        if userResolved:
-            clanAbbrev = getClanAbbrevString(self._clanAbbrev) if self._clanAbbrev else ''
-            user = text_styles.warning(text_styles.concatStylesWithSpace(self._userName, clanAbbrev))
-            text = backport.text(R.strings.ny.giftSystem.notification.sent.withName(), name=user)
-        else:
-            text = backport.text(R.strings.ny.giftSystem.notification.sent.empty())
-        return g_settings.msgTemplates.format(self._TEMPLATE, ctx={'text': text})
-
-
-class GiftSystemOperationsFactory(object):
-    __giftsController = dependency.descriptor(IGiftSystemController)
-    __OPENED_DECORATORS = {GiftEventID.NY_HOLIDAYS: NYGiftOpenedDecorator}
-    __SENT_DECORATORS = {GiftEventID.NY_HOLIDAYS: NYGiftSentDecorator}
-
-    @classmethod
-    def createGiftOpenedDecorator(cls, clientID, model, ctx):
-        lootboxID = ctx['lootbox'].getID()
-        eventID = cls.__giftsController.getSettings().itemToEventID.get(lootboxID, GiftEventID.UNKNOWN)
-        return cls.__OPENED_DECORATORS.get(eventID, cls.__createNothing)(clientID, model, ctx)
-
-    @classmethod
-    def createGiftSentDecorator(cls, clientID, model, ctx):
-        return cls.__SENT_DECORATORS.get(ctx['eventID'], cls.__createNothing)(clientID, model, ctx)
-
-    @classmethod
-    def __createNothing(cls, *_):
-        return None
-
-
-class PrbMessageButtonDecorator(MessageDecorator, IGlobalListener):
+class BattlePassLockButtonDecorator(MessageDecorator):
+    __battlePassController = dependency.descriptor(IBattlePassController)
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
-        super(PrbMessageButtonDecorator, self).__init__(entityID, entity, settings, model)
-        self.startGlobalListening()
+        super(BattlePassLockButtonDecorator, self).__init__(entityID, entity, settings, model)
+        self.__battlePassController.onBattlePassSettingsChange += self.__update
+        self.__battlePassController.onSeasonStateChange += self.__update
 
     def clear(self):
-        self.stopGlobalListening()
-        super(PrbMessageButtonDecorator, self).clear()
-
-    def onEnqueued(self, queueType, *args):
-        self._doUpdateButtons()
-
-    def onDequeued(self, queueType, *args):
-        self._doUpdateButtons()
-
-    def onUnitFlagsChanged(self, flags, timeLeft):
-        self._doUpdateButtons()
+        self.__battlePassController.onBattlePassSettingsChange -= self.__update
+        self.__battlePassController.onSeasonStateChange -= self.__update
+        super(BattlePassLockButtonDecorator, self).clear()
 
     def _make(self, formatted=None, settings=None):
-        self._updateEntityButtons()
-        super(PrbMessageButtonDecorator, self)._make(formatted, settings)
+        self.__updateEntityButtons()
+        super(BattlePassLockButtonDecorator, self)._make(formatted, settings)
 
-    def _updateEntityButtons(self):
+    def __updateEntityButtons(self):
         if self._entity is None:
             return
         else:
             buttonsLayout = self._entity.get('buttonsLayout')
             if not buttonsLayout:
                 return
+            if self.__battlePassController.isActive():
+                state, tooltip = NOTIFICATION_BUTTON_STATE.DEFAULT, ''
+            else:
+                state = NOTIFICATION_BUTTON_STATE.VISIBLE
+                tooltip = makeTooltip(body=backport.text(R.strings.system_messages.battlePass.switch_pause.body()))
             buttonsStates = self._entity.get('buttonsStates')
-            state, tooltip = self._getButtonState()
+            if buttonsStates is None:
+                return
             buttonsStates['submit'] = state
             buttonsLayout[0]['tooltip'] = tooltip
             return
 
-    def _getButtonState(self):
-        state, tooltip = NOTIFICATION_BUTTON_STATE.DEFAULT, ''
-        bodyId = None
-        if self.prbEntity is not None and self.prbEntity.isInQueue():
-            state = NOTIFICATION_BUTTON_STATE.VISIBLE
-            bodyId = R.strings.system_messages.queue.isInQueue()
-        if bodyId:
-            tooltip = makeTooltip(body=backport.text(bodyId))
-        return (state, tooltip)
-
-    def _updateButtons(self):
+    def __update(self, *_):
+        self.__updateEntityButtons()
         if self._model is not None:
             self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
         return
-
-    def _isButtonEnabled(self):
-        return True
-
-    def _doUpdateButtons(self):
-        self._updateEntityButtons()
-        self._updateButtons()
-
-
-class NyMessageButtonDecorator(PrbMessageButtonDecorator):
-    _nyController = dependency.descriptor(INewYearController)
-
-    def __init__(self, entityID, entity=None, settings=None, model=None):
-        super(NyMessageButtonDecorator, self).__init__(entityID, entity, settings, model)
-        self._nyController.onStateChanged += self._doUpdateButtons
-
-    def clear(self):
-        self._nyController.onStateChanged -= self._doUpdateButtons
-        super(NyMessageButtonDecorator, self).clear()
-
-    def _getButtonState(self):
-        state, tooltip = NOTIFICATION_BUTTON_STATE.DEFAULT, ''
-        bodyId = None
-        if self.prbEntity is not None and self.prbEntity.isInQueue():
-            state = NOTIFICATION_BUTTON_STATE.VISIBLE
-            bodyId = R.strings.system_messages.queue.isInQueue()
-        elif not self._isButtonEnabled():
-            state = NOTIFICATION_BUTTON_STATE.VISIBLE
-            if self._nyController.isSuspended():
-                bodyId = R.strings.ny.notification.suspend()
-            elif self._nyController.isPostEvent():
-                bodyId = R.strings.ny.notification.postEvent()
-            elif self._nyController.isFinished():
-                bodyId = R.strings.ny.notification.finish()
-        if bodyId:
-            tooltip = makeTooltip(body=backport.text(bodyId))
-        return (state, tooltip)
-
-    def _isButtonEnabled(self):
-        return self._nyController.isEnabled()
-
-
-class NyCelebrityRewardDecorator(NyMessageButtonDecorator):
-
-    def _isButtonEnabled(self):
-        return self._nyController.isVehicleBranchEnabled()
-
-
-class NySpecialBoxesLockDecorator(NyMessageButtonDecorator):
-
-    def _getGiftEventState(self):
-        raise NotImplementedError
-
-    def _getButtonState(self):
-        if not self._canButtonBeDisabledByGiftState():
-            return super(NySpecialBoxesLockDecorator, self)._getButtonState()
-        else:
-            state, tooltip = NOTIFICATION_BUTTON_STATE.DEFAULT, ''
-            bodyId = None
-            giftEventState = self._getGiftEventState()
-            if self.prbEntity is not None and self.prbEntity.isInQueue():
-                state = NOTIFICATION_BUTTON_STATE.VISIBLE
-                bodyId = R.strings.system_messages.queue.isInQueue()
-            elif giftEventState == GiftEventState.SUSPENDED:
-                state = NOTIFICATION_BUTTON_STATE.VISIBLE | NOTIFICATION_BUTTON_STATE.WARNING
-                bodyId = R.strings.ny.giftSystem.notification.specialLootBoxes.disabledTooltip()
-            elif giftEventState == GiftEventState.DISABLED:
-                state = NOTIFICATION_BUTTON_STATE.HIDDEN
-            if bodyId:
-                tooltip = makeTooltip(body=backport.text(bodyId))
-            return (state, tooltip)
-
-    def _canButtonBeDisabledByGiftState(self):
-        return True
-
-
-class NyLootBoxesReceivedDecorator(NySpecialBoxesLockDecorator, GiftEventHubWatcher):
-    _GIFT_EVENT_ID = GiftEventID.NY_HOLIDAYS
-
-    def __init__(self, entityID, entity=None, settings=None, model=None):
-        super(NyLootBoxesReceivedDecorator, self).__init__(entityID, entity, settings, model)
-        self.catchGiftEventHub()
-
-    def clear(self):
-        self.releaseGiftEventHub()
-        super(NyLootBoxesReceivedDecorator, self).clear()
-
-    def _canButtonBeDisabledByGiftState(self):
-        return self._entity and self._entity.get('nyData', {}).get('category', '') == NewYearCategories.SPECIAL
-
-    def _getGiftEventState(self):
-        return self.getGiftEventState(isCached=False)
-
-    def _onGiftHubUpdate(self, reason, extra=None):
-        if reason == HubUpdateReason.SETTINGS and self._canButtonBeDisabledByGiftState():
-            self._updateEntityButtons()
-            self._updateButtons()
-
-
-class WinterOfferDecorator(MessageDecorator, IGlobalListener):
-
-    def __init__(self, entityID, entity=None, settings=None, model=None):
-        super(WinterOfferDecorator, self).__init__(entityID, entity, settings, model)
-        self.startGlobalListening()
-
-    def clear(self):
-        self.stopGlobalListening()
-        super(WinterOfferDecorator, self).clear()
-
-    def onEnqueued(self, queueType, *args):
-        self._updateButtons()
-
-    def onDequeued(self, queueType, *args):
-        self._updateButtons()
-
-    def onUnitFlagsChanged(self, flags, timeLeft):
-        self._updateButtons()
-
-    def _make(self, formatted=None, settings=None):
-        self._updateEntityButtons()
-        super(WinterOfferDecorator, self)._make(formatted, settings)
-
-    def _updateEntityButtons(self):
-        if self._entity is None:
-            return
-        else:
-            buttonsLayout = self._entity.get('buttonsLayout')
-            if not buttonsLayout:
-                return
-            buttonsStates = self._entity.get('buttonsStates')
-            if self.prbEntity is not None and self.prbEntity.isInQueue():
-                state = NOTIFICATION_BUTTON_STATE.VISIBLE
-            else:
-                state = NOTIFICATION_BUTTON_STATE.DEFAULT
-            buttonsStates['submit'] = state
-            return
-
-    def _updateButtons(self):
-        self._updateEntityButtons()
-        if self._model is not None:
-            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
-        return
-
-
-class NySpecialBoxesEntryDecorator(NySpecialBoxesLockDecorator):
-    __TEMPLATE = 'NYSpecialLootBoxesMessage'
-
-    def __init__(self, entityID, count, giftEventState, model=None):
-        self.__count, self.__giftEventState = count, giftEventState
-        entity, settings = self.__makeEntity(), self.__makeSettings()
-        super(NySpecialBoxesEntryDecorator, self).__init__(entityID, entity, settings, model)
-
-    @staticmethod
-    def isPinned():
-        return True
-
-    def getCount(self):
-        return self.__count if self.__giftEventState == GiftEventState.ENABLED else 0
-
-    def getType(self):
-        return NOTIFICATION_TYPE.NEW_YEAR_SPECIAL_LOOTBOXES
-
-    def getGiftEventState(self):
-        return self.__giftEventState
-
-    def setExternalInfo(self, count, giftEventState):
-        self.__count, self.__giftEventState = count, giftEventState
-        self._entity = self.__makeEntity()
-
-    def decrementCounterOnHidden(self):
-        return False
-
-    def resetCounter(self):
-        return not self.getCount()
-
-    def updateCounter(self):
-        return True
-
-    def _getGiftEventState(self):
-        return self.__giftEventState
-
-    def __makeEntity(self):
-        ctx = {'header': backport.text(R.strings.ny.notification.lootBox.header.newYear_special()),
-         'body': text_styles.neutral(backport.text(R.strings.ny.notification.lootBox.body.newYear_special()))}
-        data = {'savedData': {'category': NewYearCategories.SPECIAL,
-                       'count': self.__count}}
-        return g_settings.msgTemplates.format(self.__TEMPLATE, ctx=ctx, data=data)
-
-    def __makeSettings(self):
-        return NotificationGuiSettings(isNotify=True, groupID=NotificationGroup.INVITE, onlyNCList=True)
-
-
-class LunarNYEnvelopesDecorator(PrbMessageButtonDecorator):
-    _TEMPLATE = 'LunarNYReceivedEnvelopes'
-    __lunarNYController = dependency.descriptor(ILunarNYController)
-
-    def __init__(self, entityID, count, model=None):
-        self.__count = count
-        entity = self.__makeEntity()
-        settings = NotificationGuiSettings(isNotify=True, groupID=NotificationGroup.INVITE, onlyNCList=True)
-        super(LunarNYEnvelopesDecorator, self).__init__(entityID, entity, settings, model=model)
-
-    @staticmethod
-    def isPinned():
-        return True
-
-    def getType(self):
-        return NOTIFICATION_TYPE.LUNAR_NY_ENVELOPES_RECEIVED
-
-    def getCount(self):
-        return self.__count
-
-    def setCount(self, count):
-        self.__count = count
-        self._entity = self.__makeEntity()
-
-    def decrementCounterOnHidden(self):
-        return False
-
-    def resetCounter(self):
-        return not self.getCount()
-
-    def updateCounter(self):
-        return True
-
-    def __makeEntity(self):
-        resShortCut = R.strings.lunar_ny.systemMessage
-        resHeader = resShortCut.envelopesReceived.header if self.__count > 1 else resShortCut.envelopeReceived.header
-        ctx = {'header': backport.text(resHeader()),
-         'body': backport.text(resShortCut.envelopesReceived.body())}
-        data = {'lunarNYData': {'count': self.__count,
-                         'envelopeTypes': self.__getCurrentInventoryEnvelopeTypes()}}
-        return g_settings.msgTemplates.format(self._TEMPLATE, ctx=ctx, data=data)
-
-    def __getCurrentInventoryEnvelopeTypes(self):
-        res = []
-        if self.__count > 0:
-            for eType in ALL_ENVELOPE_TYPES:
-                lootBox = self.__lunarNYController.receivedEnvelopes.getLootBoxByEnvelopeType(eType)
-                if lootBox is not None and lootBox.getInventoryCount() > 0:
-                    res.append(ENVELOPE_TYPE_TO_NOTIFICATIONS_CONSTANTS[eType])
-
-        return res
-
-
-_LunarNYNewReceivedEnvelopesSettingsAuxData = namedtuple('_LunarNYNewReceivedEnvelopesSettingsAuxData', ('timeoutMS',))
-
-class LunarNYNewReceivedEnvelopesDecorator(PrbMessageButtonDecorator):
-    _TEMPLATE = 'LunarNYReceivedNewEnvelopes'
-    _BODY_WITH_NAME = 'lunarNYReceivedEnvelopesBodyWithSender'
-    _SIMPLE_BODY = 'lunarNYReceivedEnvelopesBody'
-    _VIEW_TIMEOUT = 5000
-    _MAX_NICK_NAME_SIZE = 22
-    __lunarNYController = dependency.descriptor(ILunarNYController)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def __init__(self, entityID, count, senderIDs, senderName, giftIDs, model=None):
-        self.__count = count
-        self.__senderIDs = senderIDs
-        self.__senderName = senderName
-        self.__giftIds = giftIDs
-        entity = self.__makeEntity()
-        settings = NotificationGuiSettings(isNotify=True, onlyPopUp=True, priorityLevel=NotificationPriorityLevel.HIGH, auxData=_LunarNYNewReceivedEnvelopesSettingsAuxData(timeoutMS=self._VIEW_TIMEOUT))
-        super(LunarNYNewReceivedEnvelopesDecorator, self).__init__(entityID, entity, settings, model=model)
-
-    def getType(self):
-        return NOTIFICATION_TYPE.LUNAR_NY_NEW_ENVELOPES_RECEIVED
-
-    def getDataCount(self):
-        return self.__count
-
-    def isOneSender(self):
-        return len(self.__senderIDs) == 1
-
-    def setExtData(self, count, senderIDs, senderName, giftIDs):
-        self.__count += count
-        self.__senderIDs.update(senderIDs)
-        self.__senderName = senderName
-        self.__giftIds.update(giftIDs)
-        self._entity = self.__makeEntity()
-
-    def setNames(self, names):
-        if self.isOneSender() and first(self.__senderIDs) in names:
-            self.__senderName = names[first(self.__senderIDs)]
-            self._entity = self.__makeEntity()
-
-    def onHidden(self):
-        self.__count = 0
-        self.__senderIDs.clear()
-        self.__senderName = ''
-        self.__giftIds.clear()
-
-    def __makeEntity(self):
-        bodyR = R.strings.lunar_ny.systemMessage.newEnvelopesReceived.body
-        bodyCtx = {}
-        if self.isOneSender() and self.__senderName:
-            bodyTemplate = self._BODY_WITH_NAME
-            bodyCtx['name'] = self.__formatName()
-        else:
-            bodyTemplate = self._SIMPLE_BODY
-        if not self.isOneSender():
-            bodyCtx['body'] = backport.text(bodyR.envelopesSeveralSender())
-        elif self.isOneSender() and self.__senderName and self.__count > 1:
-            bodyCtx['body'] = backport.text(bodyR.envelopesWithName())
-        elif self.isOneSender() and self.__senderName:
-            bodyCtx['body'] = backport.text(bodyR.envelopeWithName())
-        elif self.__count > 1:
-            bodyCtx['body'] = backport.text(bodyR.envelopes())
-        else:
-            bodyCtx['body'] = backport.text(bodyR.envelope())
-        ctx = {'body': g_settings.htmlTemplates.format(bodyTemplate, ctx=bodyCtx)}
-        data = {'savedData': {'senderIDs': self.__senderIDs,
-                       'envelopeTypes': self.__getEnvelopeTypes()},
-         'lunarNYData': {'count': self.__count,
-                         'envelopeTypes': [ ENVELOPE_TYPE_TO_NOTIFICATIONS_CONSTANTS[e] for e in self.__getEnvelopeTypes() ]}}
-        return g_settings.msgTemplates.format(self._TEMPLATE, ctx=ctx, data=data)
-
-    def __getEnvelopeTypes(self):
-        config = self.__lobbyContext.getServerSettings().getSettings().get('lootBoxes_config', {})
-        return {LOOT_BOX_TYPE_TO_ENVELOPE_TYPE[LunarNYLootBoxTypes(config[giftID]['type'])] for giftID in self.__giftIds if config.get(giftID, None) is not None and config[giftID]['type'] in ALL_LUNAR_NY_LOOT_BOX_TYPES}
-
-    def __formatName(self):
-        return self.__senderName[:self._MAX_NICK_NAME_SIZE - 2] + '...' if len(self.__senderName) > self._MAX_NICK_NAME_SIZE else self.__senderName
-
-
-class LunarNYNewReceivedEnvelopesSimpleDecorator(MessageDecorator):
-    _TEMPLATE = 'LunarNYReceivedNewEnvelopesSimple'
-    _SENDER = 'envelopeSender'
-    _BR = '<br/>'
-    __lunarNYController = dependency.descriptor(ILunarNYController)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def __init__(self, entityID, count, senderName='', giftIDs=None, model=None):
-        self.__count = count
-        self.__senderName = senderName
-        self.__giftIDs = giftIDs
-        entity = self.__makeEntity()
-        settings = NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)
-        super(LunarNYNewReceivedEnvelopesSimpleDecorator, self).__init__(entityID, entity, settings, model=model)
-
-    def getGiftIDs(self):
-        return self.__giftIDs
-
-    def setGiftIDs(self, giftIDs):
-        self.__giftIDs = giftIDs
-
-    def getType(self):
-        return NOTIFICATION_TYPE.LUNAR_NY_NEW_ENVELOPES_RECEIVED_SIMPLE
-
-    def getDataCount(self):
-        return self.__count
-
-    def setDataCount(self, count):
-        self.__count = count
-
-    def hasSenderName(self):
-        return bool(self.__senderName)
-
-    def setSenderName(self, senderName):
-        self.__senderName = senderName
-        self._entity = self.__makeEntity()
-
-    def __makeEntity(self):
-        bodyR = R.strings.lunar_ny.systemMessage.newEnvelopesReceived.simple
-        body = ''
-        if self.__count == 1:
-            envelopeType = next(iter(self.__getEnvelopeTypes()), None)
-            if envelopeType is not None:
-                envelopeName = backport.text(R.strings.lunar_ny.systemMessage.sendEnvelope.dyn(envelopeType.name)())
-            else:
-                envelopeName = ''
-            body += backport.text(bodyR.envelopeType()) + envelopeName + self._BR
-            if self.__senderName:
-                body += g_settings.htmlTemplates.format(self._SENDER, ctx={'sender': self.__senderName})
-        else:
-            body += backport.text(bodyR.envelopesBody()) + backport.getIntegralFormat(self.__count)
-        return g_settings.msgTemplates.format(self._TEMPLATE, ctx={'body': body}, data={'icon': 'MessageIcon'})
-
-    def __getEnvelopeTypes(self):
-        config = self.__lobbyContext.getServerSettings().getSettings().get('lootBoxes_config', {})
-        return {LOOT_BOX_TYPE_TO_ENVELOPE_TYPE[LunarNYLootBoxTypes(config[giftID]['type'])] for giftID in self.__giftIDs if config.get(giftID, None) is not None and config[giftID]['type'] in ALL_LUNAR_NY_LOOT_BOX_TYPES}

@@ -1905,6 +1905,8 @@
             <collisionModelServer>	vehicles/german/G56_E-100/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G56_E-100/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>
@@ -2022,6 +2024,8 @@
             <collisionModelServer>	vehicles/german/G56_E-100/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G56_E-100/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

@@ -1881,7 +1881,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeHollowCharge	</effects>
+    <effects>	mainHollowCharge	</effects>
     <damage>
       <armor>	320	</armor>
       <devices>	135	</devices>
@@ -1897,7 +1897,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeHollowCharge	</effects>
+    <effects>	mainHollowCharge	</effects>
     <damage>
       <armor>	320	</armor>
       <devices>	135	</devices>
@@ -1913,7 +1913,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeHollowCharge	</effects>
+    <effects>	mainHollowCharge	</effects>
     <damage>
       <armor>	320	</armor>
       <devices>	135	</devices>
@@ -2110,7 +2110,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeHollowCharge	</effects>
+    <effects>	mainHollowCharge	</effects>
     <damage>
       <armor>	320	</armor>
       <devices>	135	</devices>
@@ -2164,7 +2164,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeHollowCharge	</effects>
+    <effects>	mainHollowCharge	</effects>
     <damage>
       <armor>	250	</armor>
       <devices>	135	</devices>
@@ -2612,7 +2612,7 @@
     <caliber>	122	</caliber>
     <explosionRadius>	2.75	</explosionRadius>
     <isTracer>	true	</isTracer>
-    <effects>	mainSH	</effects>
+    <effects>	largeSH	</effects>
     <damage>
       <armor>	500	</armor>
       <devices>	83	</devices>
@@ -2651,7 +2651,7 @@
     <caliber>	122	</caliber>
     <explosionRadius>	2.49	</explosionRadius>
     <isTracer>	true	</isTracer>
-    <effects>	mainSH	</effects>
+    <effects>	largeSH	</effects>
     <damage>
       <armor>	420	</armor>
       <devices>	165	</devices>
@@ -2666,7 +2666,7 @@
     <caliber>	122	</caliber>
     <explosionRadius>	2.49	</explosionRadius>
     <isTracer>	true	</isTracer>
-    <effects>	mainSH	</effects>
+    <effects>	largeSH	</effects>
     <damage>
       <armor>	300	</armor>
       <devices>	165	</devices>
@@ -2743,6 +2743,36 @@
       </damage>
     </armorSpalls>
   </_122mm_UOF-472>
+  <_122mm_BR-471D_P>
+    <id>	298	</id>
+    <userString>	#ussr_vehicles:_122mm_BR-471D_P	</userString>
+    <icon>	ap	</icon>
+    <price>	1065	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_BR-471D_P>
+  <_122mm_BM11_P>
+    <id>	299	</id>
+    <userString>	#ussr_vehicles:_122mm_BM11_P	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_122mm_BM11_P>
   <_122mm_OF-462>
     <id>	120	</id>
     <userString>	#ussr_vehicles:_122mm_OF-462	</userString>
@@ -2752,7 +2782,7 @@
     <caliber>	122	</caliber>
     <explosionRadius>	2.49	</explosionRadius>
     <isTracer>	true	</isTracer>
-    <effects>	mainSH	</effects>
+    <effects>	largeSH	</effects>
     <damage>
       <armor>	465	</armor>
       <devices>	165	</devices>
@@ -3554,7 +3584,7 @@
     <isTracer>	true	</isTracer>
     <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	490	</armor>
+      <armor>	530	</armor>
       <devices>	180	</devices>
     </damage>
   </_130mm_3VBR_CH>
@@ -3569,7 +3599,7 @@
     <isTracer>	true	</isTracer>
     <effects>	largeAPCR	</effects>
     <damage>
-      <armor>	490	</armor>
+      <armor>	530	</armor>
       <devices>	180	</devices>
     </damage>
   </_130mm_3VBM_CH>
@@ -4233,7 +4263,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	122	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainHollowCharge	</effects>
+    <effects>	BRlargeHollowCharge	</effects>
     <damage>
       <armor>	230	</armor>
       <devices>	23	</devices>
@@ -4283,7 +4313,7 @@
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeAPCR	</effects>
+    <effects>	BRmainAPCR	</effects>
     <damage>
       <armor>	220	</armor>
       <devices>	32	</devices>
@@ -4299,7 +4329,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	122	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainHollowCharge	</effects>
+    <effects>	BRlargeHollowCharge	</effects>
     <damage>
       <armor>	410	</armor>
       <devices>	41	</devices>
@@ -4331,7 +4361,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	122	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainHollowCharge	</effects>
+    <effects>	BRlargeHollowCharge	</effects>
     <damage>
       <armor>	450	</armor>
       <devices>	45	</devices>
@@ -4381,7 +4411,7 @@
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	107	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeAPCR	</effects>
+    <effects>	BRmainAPCR	</effects>
     <damage>
       <armor>	390	</armor>
       <devices>	55	</devices>
@@ -4397,7 +4427,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	130	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainHollowCharge	</effects>
+    <effects>	BRlargeHollowCharge	</effects>
     <damage>
       <armor>	650	</armor>
       <devices>	65	</devices>

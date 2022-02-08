@@ -2377,6 +2377,8 @@
             <collisionModelServer>	vehicles/russian/R118_T28_F30/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R118_T28_F30/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

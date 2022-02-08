@@ -911,6 +911,8 @@
             <collisionModelServer>	vehicles/german/G12_Ltraktor/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G12_Ltraktor/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_KwK_L46	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint></paint>

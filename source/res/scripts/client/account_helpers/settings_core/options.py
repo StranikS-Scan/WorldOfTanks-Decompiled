@@ -751,7 +751,7 @@ class GameplaySetting(StorageAccountSetting):
     def __init__(self, settingName, gameplayName, storage, delegate=lambda : True):
         super(GameplaySetting, self).__init__(settingName, storage)
         self.gameplayName = gameplayName
-        self.bit = ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName(self.gameplayName))
+        self.bit = ArenaType.getGameplaysMask((gameplayName,))
         self.__callable = delegate
 
     def _get(self):

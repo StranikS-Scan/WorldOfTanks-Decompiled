@@ -79,9 +79,9 @@ class CarouselCache(object):
     def fini(self):
         self.invalidateItemsData()
         self.invalidateCarouselData()
+        self.__invalidateEditableStyleCache()
         self.__createFilterCriteria = None
         self.__createSortCriteria = None
-        self.__cachedEditableStyleId = 0
         self.__ctx = None
         return
 
@@ -244,6 +244,14 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self.__carouselCache = CarouselCache(createFilterCriteria=self.__createFilterCriteria, createSortCriteria=self.__createSortCriteria)
         self.setItemWrapper(carouselItemWrapper)
         self.__initFilters()
+
+    def _dispose(self):
+        self.__carouselCache.fini()
+        self.__carouselCache = None
+        self.__ctx = None
+        self.__carouselData = None
+        super(CustomizationCarouselDataProvider, self)._dispose()
+        return
 
     @property
     def collection(self):
@@ -429,13 +437,6 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
             _logger.error('Invalid filterType: %s', filterType)
             return False
         return self.__carouselFilters[filterType].isApplied(*alias)
-
-    def _dispose(self):
-        self.__carouselCache.fini()
-        self.__carouselCache = None
-        self.__ctx = None
-        super(CustomizationCarouselDataProvider, self)._dispose()
-        return
 
     def __initFilters(self):
         self.__carouselFilters[FilterTypes.HISTORIC] = DisjunctionCarouselFilter(criteria={FilterAliases.HISTORIC: REQ_CRITERIA.CUSTOMIZATION.HISTORICAL,

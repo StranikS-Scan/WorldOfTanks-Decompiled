@@ -1407,6 +1407,8 @@
             <collisionModelServer>	vehicles/french/F65_FCM_50t/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F65_FCM_50t/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

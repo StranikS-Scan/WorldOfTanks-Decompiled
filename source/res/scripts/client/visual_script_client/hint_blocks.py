@@ -6,9 +6,9 @@ from bootcamp.BootcampConstants import HINT_NAMES, HINT_TYPE
 from visual_script.block import Block, Meta, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT, errorVScript
-from constants import IS_EDITOR
+from constants import IS_VS_EDITOR
 from hint_common import ProcessHint
-if not IS_EDITOR:
+if not IS_VS_EDITOR:
     from HintManager import HintManager
     from frameworks.wulf import WindowLayer
     from gui.Scaleform.daapi.settings.views import VIEW_ALIAS

@@ -7,7 +7,7 @@ from frameworks.wulf import ViewModel
 class RankedYearAwardModel(ViewModel):
     __slots__ = ('onActionBtnClick', 'onDestroyEvent')
 
-    def __init__(self, properties=7, commands=2):
+    def __init__(self, properties=9, commands=2):
         super(RankedYearAwardModel, self).__init__(properties=properties, commands=commands)
 
     def getAwardType(self):
@@ -52,6 +52,18 @@ class RankedYearAwardModel(ViewModel):
     def setCrystals(self, value):
         self._setNumber(6, value)
 
+    def getIsRewardSelected(self):
+        return self._getBool(7)
+
+    def setIsRewardSelected(self, value):
+        self._setBool(7, value)
+
+    def getRewardsToSelect(self):
+        return self._getNumber(8)
+
+    def setRewardsToSelect(self, value):
+        self._setNumber(8, value)
+
     def _initialize(self):
         super(RankedYearAwardModel, self)._initialize()
         self._addStringProperty('awardType', '')
@@ -61,5 +73,7 @@ class RankedYearAwardModel(ViewModel):
         self._addNumberProperty('pointsTotal', 0)
         self._addNumberProperty('pointsCompensated', 0)
         self._addNumberProperty('crystals', 0)
+        self._addBoolProperty('isRewardSelected', False)
+        self._addNumberProperty('rewardsToSelect', 0)
         self.onActionBtnClick = self._addCommand('onActionBtnClick')
         self.onDestroyEvent = self._addCommand('onDestroyEvent')

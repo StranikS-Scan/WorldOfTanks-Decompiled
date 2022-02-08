@@ -1,5 +1,16 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <Pl03_PzV_Poland>
+    <id>	0	</id>
+    <userString>	#poland_vehicles:Pl03_PzV_Poland	</userString>
+    <shortUserString>	#poland_vehicles:Pl03_PzV_Poland_short	</shortUserString>
+    <description>	#poland_vehicles:Pl03_PzV_Poland_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl03_PzV_Poland_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl03_PzV_Poland_long_special	</longDescriptionSpecial>
+    <price>	3200	  <gold></gold>
+    </price>
+    <tags>	mediumTank role_MT_universal HD lockExceptProgression beast improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	6	</level>
+  </Pl03_PzV_Poland>
   <Pl01_TKS_20mm>
     <id>	1	</id>
     <userString>	#poland_vehicles:Pl01_TKS_20mm	</userString>
@@ -13,18 +24,6 @@
     <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </Pl01_TKS_20mm>
-  <Pl03_PzV_Poland>
-    <id>	0	</id>
-    <userString>	#poland_vehicles:Pl03_PzV_Poland	</userString>
-    <shortUserString>	#poland_vehicles:Pl03_PzV_Poland_short	</shortUserString>
-    <description>	#poland_vehicles:Pl03_PzV_Poland_descr	</description>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl03_PzV_Poland_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl03_PzV_Poland_long_special	</longDescriptionSpecial>
-    <price>	3200	  <gold></gold>
-    </price>
-    <tags>	mediumTank role_MT_universal HD lockExceptProgression beast improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	6	</level>
-  </Pl03_PzV_Poland>
   <Pl08_50TP_prototyp>
     <id>	3	</id>
     <userString>	#poland_vehicles:Pl08_50TP_prototyp	</userString>
@@ -124,7 +123,7 @@
     <shortUserString>	#poland_vehicles:Pl15_60TP_Lewandowskiego_short	</shortUserString>
     <description>	#poland_vehicles:Pl15_60TP_Lewandowskiego_descr	</description>
     <price>	6100000	</price>
-    <tags>	heavyTank role_HT_break HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals NY_style	</tags>
+    <tags>	heavyTank role_HT_break HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </Pl15_60TP_Lewandowskiego>
   <Pl17_DS_PZlnz>
@@ -154,15 +153,6 @@
     <tags>	mediumTank role_MT_universal improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user antifragmentationLining_medium_user HD	</tags>
     <level>	7	</level>
   </Pl20_CS_44>
-  <Pl21_CS_63>
-    <id>	20	</id>
-    <userString>	#poland_vehicles:Pl21_CS_63	</userString>
-    <description>	#poland_vehicles:Pl21_CS_63_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl21_CS_63_short	</shortUserString>
-    <price>	6100000	</price>
-    <tags>	mediumTank role_MT_sniper mediumTank1 siegeMode turboshaftEngine HD earn_crystals improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	10	</level>
-  </Pl21_CS_63>
   <Pl23_CS_53>
     <id>	17	</id>
     <userString>	#poland_vehicles:Pl23_CS_53	</userString>
@@ -172,6 +162,15 @@
     <tags>	mediumTank role_MT_universal improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD	</tags>
     <level>	8	</level>
   </Pl23_CS_53>
+  <Pl21_CS_63>
+    <id>	20	</id>
+    <userString>	#poland_vehicles:Pl21_CS_63	</userString>
+    <description>	#poland_vehicles:Pl21_CS_63_descr	</description>
+    <shortUserString>	#poland_vehicles:Pl21_CS_63_short	</shortUserString>
+    <price>	6100000	</price>
+    <tags>	mediumTank role_MT_sniper mediumTank1 siegeMode turboshaftEngine HD earn_crystals improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	10	</level>
+  </Pl21_CS_63>
   <Pl22_CS_59>
     <id>	31	</id>
     <userString>	#poland_vehicles:Pl22_CS_59	</userString>
@@ -181,19 +180,6 @@
     <tags>	mediumTank role_MT_universal improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD	</tags>
     <level>	9	</level>
   </Pl22_CS_59>
-  <Pl16_T34_85_Rudy>
-    <id>	200	</id>
-    <userString>	#poland_vehicles:Pl16_T34_85_Rudy	</userString>
-    <description>	#poland_vehicles:Pl16_T34_85_Rudy_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl16_T34_85_Rudy_short	</shortUserString>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl16_T34_85_Rudy_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl16_T34_85_Rudy_long_special	</longDescriptionSpecial>
-    <price>	3100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD dog improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
-    <level>	6	</level>
-  </Pl16_T34_85_Rudy>
   <Pl19_CS_52_LIS>
     <id>	199	</id>
     <userString>	#poland_vehicles:Pl19_CS_52_LIS	</userString>
@@ -207,4 +193,17 @@
     <tags>	mediumTank role_MT_universal improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user aimingStabilizer_class1_user HD	</tags>
     <level>	8	</level>
   </Pl19_CS_52_LIS>
+  <Pl16_T34_85_Rudy>
+    <id>	200	</id>
+    <userString>	#poland_vehicles:Pl16_T34_85_Rudy	</userString>
+    <description>	#poland_vehicles:Pl16_T34_85_Rudy_descr	</description>
+    <shortUserString>	#poland_vehicles:Pl16_T34_85_Rudy_short	</shortUserString>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl16_T34_85_Rudy_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl16_T34_85_Rudy_long_special	</longDescriptionSpecial>
+    <price>	3100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD dog improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
+    <level>	6	</level>
+  </Pl16_T34_85_Rudy>
 </list.xml>

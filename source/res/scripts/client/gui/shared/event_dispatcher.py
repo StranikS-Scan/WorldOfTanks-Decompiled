@@ -1,30 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 import logging
-from collections import namedtuple
 from operator import attrgetter
 import typing
 from BWUtil import AsyncReturn
-from helpers.aop import pointcutable
 import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
 from async import async, await
-from constants import RentType, GameSeasonType
+from constants import GameSeasonType, RentType
 from debug_utils import LOG_WARNING
-from frameworks.wulf import ViewFlags, ViewStatus, WindowLayer
-from frameworks.wulf import Window
-from frameworks.wulf import WindowFlags, WindowStatus
-from gifts.gifts_common import GiftEventID
-from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
+from frameworks.wulf import ViewFlags, Window, WindowFlags, WindowLayer, WindowStatus
+from gui import DialogsInterface, GUI_SETTINGS, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
+from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID, I18nConfirmDialogMeta, I18nInfoDialogMeta
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL, getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx, getRentVehicleUrl, getTelecomRentVehicleUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx, getRentVehicleUrl, getShopURL, getTelecomRentVehicleUrl
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.entities.sf_window import SFWindow
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams, GuiImplViewLoadParams
+from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams, SFViewLoadParams
 from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
@@ -42,41 +37,39 @@ from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
 from gui.impl.lobby.maps_training.maps_training_queue_view import MapsTrainingQueueView
 from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDialog, TankSetupExitConfirmDialog
 from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
-from gui.impl.lobby.tank_setup.dialogs.refill_shells import RefillShells, ExitFromShellsConfirm
-from gui.impl.lobby.techtree.techtree_intro_view import TechTreeIntroWindow
-from gui.impl.pub.lobby_window import LobbyWindow, LobbyNotificationWindow
+from gui.impl.lobby.tank_setup.dialogs.refill_shells import ExitFromShellsConfirm, RefillShells
+from gui.impl.pub.lobby_window import LobbyNotificationWindow, LobbyWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
-from gui.shared import events, g_eventBus, money
+from gui.shared import events, g_eventBus
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from gui.shared.gui_items.Vehicle import getUserName
 from gui.shared.gui_items.processors.goodies import BoosterActivator
-from gui.shared.money import Currency
+from gui.shared.money import Currency, MONEY_UNDEFINED
 from gui.shared.utils import isPopupsWindowsOpenDisabled
-from gui.shared.utils.functions import getViewName, getUniqueViewName
+from gui.shared.utils.functions import getUniqueViewName, getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shop import showBuyGoldForRentWebOverlay, showBluprintsExchangeOverlay
-from gui.shop import showBuyVehicleOverlay
+from gui.shop import showBlueprintsExchangeOverlay, showBuyGoldForRentWebOverlay, showBuyProductOverlay
 from helpers import dependency
-from items import vehicles as vehicles_core, parseIntCompactDescr, ITEM_TYPES
-from ny_common.settings import NYLootBoxConsts
+from helpers.aop import pointcutable
+from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IClanNotificationController, IBrowserController, IGiftSystemController, IMarathonEventsController
+from skeletons.gui.game_control import IBrowserController, IClanNotificationController, IHeroTankController, IMarathonEventsController, IReferralProgramController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from skeletons.new_year import INewYearController
 from soft_exception import SoftException
 from uilogging.veh_post_progression.loggers import VehPostProgressionEntryPointLogger
 if typing.TYPE_CHECKING:
+    from typing import Callable, Dict, Generator, Iterable, List
+    from gui.marathon.marathon_event import MarathonEvent
     from gui.Scaleform.framework.managers import ContainerManager
-    from typing import Callable, Generator
+    from gui.shared.money import Money
 _logger = logging.getLogger(__name__)
 
 class SettingsTabIndex(object):
@@ -189,7 +182,7 @@ def _doPurchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, re
     requestConfirmed = yield DialogsInterface.showDialog(meta=RentConfirmDialogMeta(vehicleCD, rentType, nums, price, seasonType, renew))
     if requestConfirmed:
         if mayObtainForMoney(price):
-            showBuyVehicleOverlay(buyParams)
+            showBuyProductOverlay(buyParams)
         else:
             _purchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, renew)
 
@@ -475,7 +468,7 @@ def showConfigurableVehiclePreview(vehTypeCompDescr, previewAlias, previewBackCb
      'itemsPack': itemPack}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None):
+def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None):
     heroTankController = dependency.instance(IHeroTankController)
     heroTankCD = heroTankController.getCurrentTankCD()
     isHeroTank = heroTankCD and heroTankCD == vehTypeCompDescr
@@ -525,7 +518,6 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
                 else:
                     showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb, previousBackAlias=previousBackAlias, hangarVehicleCD=hangarVehicleCD)
             ClientSelectableCameraObject.switchCamera(entity)
-            entity.onSelect()
             break
 
     return
@@ -743,103 +735,6 @@ def showBubbleTooltip(msg):
     g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, msg), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext, nyCtrl=INewYearController)
-def showLootBoxEntry(lootBoxType=NewYearLootBoxes.PREMIUM, category='', lobbyCtx=None, nyCtrl=None):
-    enabled = lobbyCtx.getServerSettings().isLootBoxesEnabled() and nyCtrl.isEnabled()
-    if not enabled:
-        if nyCtrl.isSuspended():
-            from gui.impl.lobby.loot_box.loot_box_helper import showRestrictedSysMessage
-            showRestrictedSysMessage()
-        else:
-            nyCtrl.showStateMessage()
-        return
-    else:
-        uiLoader = dependency.instance(IGuiLoader)
-        contentResId = R.views.lobby.new_year.views.NyLootBoxMainView()
-        lootBoxEntryView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
-        if lootBoxEntryView is not None:
-            lootBoxEntryView.externalSelectTab(lootBoxType, category)
-            return
-        from gui.impl.lobby.loot_box.loot_box_entry_video_view import LootBoxEntryVideoWindow
-        from gui.impl.lobby.new_year.ny_loot_box_main_view import NyLootBoxMainViewWindow
-        uiWindow = NyLootBoxMainViewWindow(lootBoxType, category)
-        videoWindow = LootBoxEntryVideoWindow(parent=uiWindow)
-        videoWindow.load()
-        uiWindow.load()
-        return
-
-
-@adisp.process
-@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
-def showLootBoxBuyWindow(category='', lobbyCtx=None):
-    if not lobbyCtx.getServerSettings().isLootBoxesEnabled():
-        _logger.error('LootBoxes are disabled on server. Nothing will be shown!')
-        return
-    shopConfig = lobbyCtx.getServerSettings().getLootBoxShop()
-    rawUrl = shopConfig.get(NYLootBoxConsts.URL, '')
-    if not rawUrl:
-        _logger.error('No Loot Box Shop URL is specified. Nothing will be shown!')
-        return
-    source = shopConfig.get(NYLootBoxConsts.SOURCE, NYLootBoxConsts.IGB)
-    url = yield URLMacros().parse(rawUrl)
-    if source == NYLootBoxConsts.IGB:
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOOT_BOX_SHOP_OVERLAY), ctx={'url': url,
-         'category': category}), EVENT_BUS_SCOPE.LOBBY)
-    elif source == NYLootBoxConsts.EXTERNAL:
-        g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url))
-    else:
-        _logger.error('Invalid source is specified. Can not open loot box buy window!')
-
-
-def showLootBoxGuaranteedRewardsInfo():
-    showLootBoxExternalLink(linkName=NYLootBoxConsts.GUARANTEED_REWARD_INFO_URL)
-
-
-def showLootBoxOpeningStream():
-    showLootBoxExternalLink(linkName=NYLootBoxConsts.LOOT_BOX_OPENING_STREAM_URL)
-
-
-@adisp.process
-@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
-def showLootBoxExternalLink(linkName, lobbyCtx=None):
-    shopConfig = lobbyCtx.getServerSettings().getLootBoxShop()
-    rawUrl = shopConfig.get(linkName, '')
-    if not rawUrl:
-        _logger.error('No %s URL is specified. Nothing will be shown!', linkName)
-        return
-    url = yield URLMacros().parse(rawUrl)
-    g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url))
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showLootBoxAutoOpenWindow(rewards, boxes, notificationMgr=None):
-    from gui.impl.lobby.loot_box.loot_box_auto_open_view import LootBoxAutoOpenWindow
-    window = LootBoxAutoOpenWindow(rewards, boxes)
-    notificationMgr.append(WindowNotificationCommand(window))
-
-
-def showNYLevelUpWindow(useQueue=True, *args, **kwargs):
-    from gui.impl.lobby.new_year.atmosphere_level_up.ny_level_up_view import NyLevelUpWindow
-    newYearLevelUpWindow = findAndLoadWindow(useQueue, NyLevelUpWindow, *args, **kwargs)
-    levelUpView = newYearLevelUpWindow.content
-    if levelUpView is not None and levelUpView.viewStatus in (ViewStatus.CREATED, ViewStatus.LOADING, ViewStatus.LOADED):
-        levelUpView.appendRewards(*args, **kwargs)
-    return
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showNyCollectionCongratsWindow(context, notificationMgr=None):
-    from gui.impl.new_year.views.new_year_style_reward_view import NewYearStyleRewardWindow
-    window = NewYearStyleRewardWindow(context)
-    notificationMgr.append(WindowNotificationCommand(window))
-
-
-def showVideoView(videoResID, onVideoStarted=None, onVideoStopped=None, onVideoClosed=None, isAutoClose=False, soundControl=None):
-    from gui.impl.lobby.video.video_view import VideoViewWindow
-    window = VideoViewWindow(videoResID, onVideoStarted=onVideoStarted, onVideoStopped=onVideoStopped, onVideoClosed=onVideoClosed, isAutoClose=isAutoClose, soundControl=soundControl)
-    window.load()
-
-
 def showReferralProgramWindow(url=None):
     referralController = dependency.instance(IReferralProgramController)
     if url is None:
@@ -860,7 +755,7 @@ def showTankPremiumAboutPage():
     url = GUI_SETTINGS.premiumInfo.get('baseURL')
     if url is None:
         _logger.error('premiumInfo.baseURL is missed')
-    showBrowserOverlayView(url, alias=VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW)
+    showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
     return
 
 
@@ -880,16 +775,19 @@ def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=N
     return
 
 
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showProgressiveRewardWindow(notificationMgr=None):
+def showProgressiveRewardWindow():
     lobbyContext = dependency.instance(ILobbyContext)
     if not lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled:
         SystemMessages.pushMessage(backport.text(R.strings.system_messages.progressiveReward.error()), type=SystemMessages.SM_TYPE.Error)
         return
-    from gui.impl.lobby.progressive_reward.progressive_reward_view import ProgressiveRewardWindow
-    contentResId = R.views.lobby.progressive_reward.progressive_reward_view.ProgressiveRewardView()
-    window = ProgressiveRewardWindow(contentResId)
-    notificationMgr.append(WindowNotificationCommand(window))
+    else:
+        from gui.impl.lobby.progressive_reward.progressive_reward_view import ProgressiveRewardWindow
+        uiLoader = dependency.instance(IGuiLoader)
+        contentResId = R.views.lobby.progressive_reward.progressive_reward_view.ProgressiveRewardView()
+        if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+            window = ProgressiveRewardWindow(contentResId)
+            window.load()
+        return
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
@@ -919,16 +817,14 @@ def showSeniorityAwardsNotificationWindow():
     return
 
 
-def showBattlePassAwardsWindow(bonuses, data, callback=None):
+def showBattlePassAwardsWindow(bonuses, data, useQueue=False):
     from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardWindow
-    wndFlags = WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN
-    window = BattlePassAwardWindow(bonuses, data, callback, wndFlags=wndFlags)
-    window.load()
+    findAndLoadWindow(useQueue, BattlePassAwardWindow, bonuses, data)
 
 
-def showBattlePassHowToEarnPointsView(parent=None):
+def showBattlePassHowToEarnPointsView(parent=None, chapterID=0):
     from gui.impl.lobby.battle_pass.battle_pass_how_to_earn_points_view import BattlePassHowToEarnPointsWindow
-    window = BattlePassHowToEarnPointsWindow(parent=parent if parent is not None else getParentWindow())
+    window = BattlePassHowToEarnPointsWindow(parent=parent if parent is not None else getParentWindow(), chapterID=chapterID)
     window.load()
     return
 
@@ -955,28 +851,42 @@ def isViewLoaded(layoutID):
         return view is not None
 
 
-def showProgressionStylesStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel='', styleLevel=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.PROGRESSION_STYLES_STYLE_PREVIEW), ctx={'itemCD': vehCD,
+def showStylePreview(vehCD, style, descr, backCallback, backBtnDescrLabel='', *args, **kwargs):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STYLE_PREVIEW), ctx={'itemCD': vehCD,
      'style': style,
-     'styleDescr': styleDescr,
+     'styleDescr': descr,
      'backCallback': backCallback,
-     'backBtnDescrLabel': backBtnDescrLabel,
-     'styleLevel': styleLevel}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showStylePreview(vehCD, style, styleDescr, backCallback, destoryCallback=None, backBtnDescrLabel='', alias=VIEW_ALIAS.STYLE_PREVIEW):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx={'itemCD': vehCD,
-     'style': style,
-     'styleDescr': styleDescr,
-     'backCallback': backCallback,
-     'destroyCallback': destoryCallback,
      'backBtnDescrLabel': backBtnDescrLabel}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showTechTreeIntro(parent=None, blueprints=None):
-    window = TechTreeIntroWindow(parent=parent, convertedBlueprints=blueprints if blueprints is not None else {})
-    window.load()
-    return
+def showStyleProgressionPreview(vehCD, style, descr, backCallback, backBtnDescrLabel='', *args, **kwargs):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STYLE_PROGRESSION_PREVIEW), ctx={'itemCD': vehCD,
+     'style': style,
+     'styleDescr': descr,
+     'backCallback': backCallback,
+     'backBtnDescrLabel': backBtnDescrLabel,
+     'styleLevel': kwargs.get('styleLevel')}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBattlePassStyleProgressionPreview(vehCD, style, descr, backCallback, backBtnDescrLabel='', *args, **kwargs):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STYLE_PROGRESSION_PREVIEW), ctx={'itemCD': vehCD,
+     'style': style,
+     'styleDescr': descr,
+     'backCallback': backCallback,
+     'backBtnDescrLabel': backBtnDescrLabel,
+     'styleLevel': kwargs.get('styleLevel'),
+     'chapterId': kwargs.get('chapterId')}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showStyleBuyingPreview(vehCD, style, descr, backCallback, backBtnDescrLabel='', *args, **kwargs):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STYLE_BUYING_PREVIEW), ctx={'itemCD': vehCD,
+     'style': style,
+     'styleDescr': descr,
+     'backCallback': backCallback,
+     'backBtnDescrLabel': backBtnDescrLabel,
+     'styleLevel': kwargs.get('styleLevel'),
+     'price': kwargs.get('price'),
+     'buyParams': kwargs.get('buyParams')}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showRankedSeasonCompleteView(ctx, useQueue=False):
@@ -984,9 +894,9 @@ def showRankedSeasonCompleteView(ctx, useQueue=False):
     findAndLoadWindow(useQueue, SFWindow, params, EVENT_BUS_SCOPE.LOBBY, ctx=ctx)
 
 
-def showRankedYearAwardWindow(rawAwards, points, useQueue=False):
+def showRankedYearAwardWindow(rawAwards, points, useQueue=False, showRemainedSelection=False):
     from gui.impl.lobby.ranked.ranked_year_award_view import RankedYearAwardWindow
-    findAndLoadWindow(useQueue, RankedYearAwardWindow, rawAwards, points)
+    findAndLoadWindow(useQueue, RankedYearAwardWindow, rawAwards, points, showRemainedSelection)
 
 
 def showRankedYearLBAwardWindow(playerPosition, rewardsData, useQueue=False):
@@ -1107,39 +1017,6 @@ def tryToShowReplaceExistingStyleDialog(parent=None):
         serverSettings.saveInUIStorage({UI_STORAGE_KEYS.DISABLE_EDITABLE_STYLE_REWRITE_WARNING: True})
     raise AsyncReturn(result)
     return
-
-
-NYViewCtx = namedtuple('NYViewCtx', ('menuName', 'tabName', 'args', 'kwargs'))
-NYTabCtx = namedtuple('NYTabCtx', ('tabName', 'menuName'))
-
-def showNewYearMainView(menuName, tabName=None, *args, **kwargs):
-    from gui.impl.lobby.new_year.main_view import MainView
-    ctx = NYViewCtx(menuName=menuName, tabName=tabName, args=args, kwargs=kwargs)
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.lobby.new_year.MainView()
-    mainView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
-    if mainView is not None:
-        event = events.NewYearEvent(events.NewYearEvent.ON_PRE_SWITCH_VIEW, ctx=ctx)
-        g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
-    else:
-        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, MainView, ScopeTemplates.LOBBY_SUB_SCOPE), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
-    return
-
-
-@dependency.replace_none_kwargs(nyController=INewYearController, giftsController=IGiftSystemController)
-def showNewYearVehiclesView(nyController=None, giftsController=None, **kwargs):
-    if not nyController.isVehicleBranchEnabled():
-        nyController.showStateMessage()
-        return
-    eventHub = giftsController.getEventHub(GiftEventID.NY_HOLIDAYS)
-    isVehiclesViewAllowed = eventHub and not eventHub.getSettings().isDisabled
-    if nyController.isEnabled() and 'backCallback' not in kwargs and isVehiclesViewAllowed:
-        from new_year.ny_navigation_helper import externalSwitchToVehiclesView
-        externalSwitchToVehiclesView(**kwargs)
-    else:
-        from gui.impl.lobby.new_year.vehicles.ny_vehicles_view import NyVehiclesWindow
-        window = NyVehiclesWindow(**kwargs)
-        window.load()
 
 
 @async
@@ -1356,11 +1233,7 @@ def showBattleAbilitiesConfirmDialog(items, withInstall=None, parent=None):
 
 
 def showBlueprintsSalePage(url=None):
-    showBluprintsExchangeOverlay(url=url)
-
-
-def showBlueprintsExchangeStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel=''):
-    showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel, VIEW_ALIAS.BLUEPRINTS_EXCHANGE_STYLE_PREVIEW)
+    showBlueprintsExchangeOverlay(url=url)
 
 
 @async
@@ -1372,15 +1245,6 @@ def showActiveTestConfirmDialog(startTime, finishTime, link, parent=None):
     raise AsyncReturn(isOK)
 
 
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController, nyController=INewYearController)
-def showCelebrityChallengeReward(questID, notificationMgr=None, nyController=None):
-    if not nyController.isEnabled():
-        return
-    from gui.impl.lobby.new_year.challenge_reward_view import ChallengeRewardViewWindow
-    window = ChallengeRewardViewWindow(questID)
-    notificationMgr.append(WindowNotificationCommand(window))
-
-
 def showBattlePassDailyQuestsIntroWindow(parent=None):
     from gui.impl.lobby.battle_pass.battle_pass_daily_quests_intro_view import BattlePassDailyQuestsIntroWindow
     window = BattlePassDailyQuestsIntroWindow(parent=parent if parent is not None else getParentWindow())
@@ -1388,10 +1252,42 @@ def showBattlePassDailyQuestsIntroWindow(parent=None):
     return
 
 
-def showBattlePassRewardChoiceWindow():
-    from gui.impl.lobby.battle_pass.battle_pass_reward_choice_view import BattlePassRewardChoiceWindow
-    window = BattlePassRewardChoiceWindow()
+def showBattlePassRewardsSelectionWindow(chapterID=0, level=0, onRewardsReceivedCallback=None, onCloseCallback=None):
+    from gui.impl.lobby.battle_pass.rewards_selection_view import RewardsSelectionWindow
+    window = RewardsSelectionWindow(chapterID, level, onRewardsReceivedCallback, onCloseCallback)
     window.load()
+
+
+@async
+def showBattlePassActivateChapterConfirmDialog(chapterID, callback):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.battle_pass.activate_chapter_confirm_dialog import ActivateChapterConfirmDialog
+    result = yield await(dialogs.showSingleDialogWithResultData(chapterID=chapterID, layoutID=ActivateChapterConfirmDialog.LAYOUT_ID, wrappedViewClass=ActivateChapterConfirmDialog))
+    if result.busy:
+        callback((False, {}))
+    else:
+        isOK, data = result.result
+        callback((isOK, data))
+
+
+@dependency.replace_none_kwargs(guiLoader=IGuiLoader)
+def showBattlePassBuyWindow(ctx=None, parent=None, guiLoader=None):
+    from gui.impl.lobby.battle_pass.battle_pass_buy_view import BattlePassBuyWindow
+    view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.battle_pass.BattlePassBuyView())
+    if view is None:
+        window = BattlePassBuyWindow(ctx or {}, parent or getParentWindow())
+        window.load()
+    return
+
+
+@dependency.replace_none_kwargs(guiLoader=IGuiLoader)
+def showBattlePassBuyLevelWindow(ctx=None, parent=None, guiLoader=None):
+    from gui.impl.lobby.battle_pass.battle_pass_buy_levels_view import BattlePassBuyLevelWindow
+    view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.battle_pass.BattlePassBuyView())
+    if view is None:
+        window = BattlePassBuyLevelWindow(ctx or {}, parent or getParentWindow())
+        window.load()
+    return
 
 
 @async
@@ -1700,4 +1596,10 @@ def showMarathonRewardScreen(marathonPrefix):
     window = LobbyNotificationWindow(content=MarathonRewardWindowView({'rewards': remainingRewards,
      'crewRewards': crewRewards,
      'marathonPrefix': marathonPrefix}), layer=WindowLayer.FULLSCREEN_WINDOW)
+    window.load()
+
+
+def showRankedSelectableReward(rewards=None):
+    from gui.impl.lobby.ranked.ranked_selectable_reward_view import RankedSelectableRewardWindow
+    window = RankedSelectableRewardWindow(rewards)
     window.load()

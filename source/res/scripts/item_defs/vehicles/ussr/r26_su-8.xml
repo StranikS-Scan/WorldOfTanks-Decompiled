@@ -3331,6 +3331,8 @@
             <collisionModelServer>	vehicles/russian/R26_SU-8/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R26_SU-8/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>
@@ -3460,6 +3462,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <drivenJoints>
             <master>
               <node>	Gun	</node>

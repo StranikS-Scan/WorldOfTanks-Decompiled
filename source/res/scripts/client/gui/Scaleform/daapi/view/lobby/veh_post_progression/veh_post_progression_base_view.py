@@ -87,8 +87,9 @@ class VehiclePostProgressionBaseView(VehiclePostProgressionViewBaseMeta):
     def _removeListeners(self):
         self.__itemsCache.onSyncCompleted -= self._onSyncCompleted
         progressionInjectView = self._progressionInject.getInjectView()
-        progressionInjectView.onViewRendered -= self.__onViewRendered
-        progressionInjectView.onCustomProgressionState -= self.__onCustomProgressionState
+        if progressionInjectView:
+            progressionInjectView.onViewRendered -= self.__onViewRendered
+            progressionInjectView.onCustomProgressionState -= self.__onCustomProgressionState
 
     def _onExit(self):
         raise NotImplementedError

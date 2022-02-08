@@ -2981,6 +2981,8 @@
             <collisionModelServer>	vehicles/german/G09_Hetzer/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G09_Hetzer/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3035,6 +3037,7 @@
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <turretYawLimits>	-5 15	</turretYawLimits>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G09_Hetzer/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G09_Hetzer/crash/lod0/Gun_02.model	</destroyed>
@@ -3107,6 +3110,8 @@
             <collisionModelServer>	vehicles/german/G09_Hetzer/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G09_Hetzer/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

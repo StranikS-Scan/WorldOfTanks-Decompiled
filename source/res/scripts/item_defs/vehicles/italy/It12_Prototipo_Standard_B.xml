@@ -3264,6 +3264,8 @@
             <collisionModelServer>	vehicles/italy/It12_Prototipo_Standard_B/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3374,6 +3376,7 @@
             <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_large_mb	</effects>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4126,6 +4129,8 @@
             <collisionModelServer>	vehicles/italy/It12_Prototipo_Standard_B/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4232,6 +4237,7 @@
             <collisionModelClient>	vehicles/italy/It12_Prototipo_Standard_B/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_large_mb	</effects>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

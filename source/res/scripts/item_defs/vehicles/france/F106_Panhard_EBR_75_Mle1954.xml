@@ -1194,6 +1194,8 @@
             <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

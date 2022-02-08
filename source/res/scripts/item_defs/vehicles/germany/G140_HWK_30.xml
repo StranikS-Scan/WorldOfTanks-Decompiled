@@ -1909,6 +1909,8 @@
             <collisionModelServer>	vehicles/german/G140_HWK_30/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G140_HWK_30/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

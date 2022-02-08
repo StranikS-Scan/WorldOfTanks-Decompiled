@@ -12,6 +12,8 @@ g_destructibleEntitiesCache = None
 
 class DESTRUCTIBLE_ENTITY_TYPES:
     EPIC_HEADQUARTER = 2
+    EPIC_HEADQUARTER89 = 3
+    EPIC_HEADQUARTERS = (EPIC_HEADQUARTER, EPIC_HEADQUARTER89)
 
 
 class DestructibleEntitiesCache(object):

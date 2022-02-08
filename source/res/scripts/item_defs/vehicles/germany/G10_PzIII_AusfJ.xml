@@ -2713,6 +2713,8 @@
             <collisionModelServer>	vehicles/german/G10_PzIII_AusfJ/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G10_PzIII_AusfJ/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_KwK_L46	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2766,6 +2768,7 @@
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G10_PzIII_AusfJ/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G10_PzIII_AusfJ/crash/lod0/Gun_03.model	</destroyed>
@@ -2837,6 +2840,8 @@
             <collisionModelServer>	vehicles/german/G10_PzIII_AusfJ/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G10_PzIII_AusfJ/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN_2	</paint>
@@ -2883,6 +2888,7 @@
           <reloadTime>	2.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G10_PzIII_AusfJ/normal/lod0/Gun_09.model	</undamaged>
             <destroyed>	vehicles/german/G10_PzIII_AusfJ/crash/lod0/Gun_09.model	</destroyed>
@@ -3491,6 +3497,8 @@
             <collisionModelServer>	vehicles/german/G10_PzIII_AusfJ/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G10_PzIII_AusfJ/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_KwK_L46	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3548,6 +3556,7 @@
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G10_PzIII_AusfJ/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/german/G10_PzIII_AusfJ/crash/lod0/Gun_07.model	</destroyed>
@@ -3623,6 +3632,8 @@
             <collisionModelServer>	vehicles/german/G10_PzIII_AusfJ/collision/Gun_08.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G10_PzIII_AusfJ/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN_2	</paint>
@@ -3677,6 +3688,7 @@
           <reloadTime>	2.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G10_PzIII_AusfJ/normal/lod0/Gun_11.model	</undamaged>
             <destroyed>	vehicles/german/G10_PzIII_AusfJ/crash/lod0/Gun_11.model	</destroyed>
@@ -3752,6 +3764,8 @@
             <collisionModelServer>	vehicles/german/G10_PzIII_AusfJ/collision/Gun_10.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G10_PzIII_AusfJ/collision_client/Gun_10.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

@@ -191,11 +191,25 @@ def writeSplineDesc(splineDesc, section, cache):
             _xml.rewriteInt(section, 'atlas/VTiles', item.atlasVTiles)
             return
 
+        def writeModelSets(item, section):
+            if len(item.segmentModelSets) < 2:
+                return
+            modelSetsSection = section.createSection('modelSets')
+            for modelSetName, modelSet in item.segmentModelSets.iteritems():
+                if modelSetName == 'default':
+                    continue
+                currentModelSetSection = modelSetsSection.createSection(modelSetName)
+                _xml.rewriteString(currentModelSetSection, 'segmentModelLeft', modelSet.editorLeft)
+                _xml.rewriteString(currentModelSetSection, 'segmentModelRight', modelSet.editorRight)
+                _xml.rewriteString(currentModelSetSection, 'segment2ModelLeft', modelSet.editorSecondLeft)
+                _xml.rewriteString(currentModelSetSection, 'segment2ModelRight', modelSet.editorSecondRight)
+
         if section.has_key('splineDesc'):
             section.deleteSection('splineDesc')
         newSection = section.createSection('splineDesc')
         for trackPair in splineDesc.trackPairs.values():
-            writeTrackPairParams(trackPair, newSection.createSection('trackPair'))
+            writeTrackPairParams(trackPair, newSection)
+            writeModelSets(trackPair, newSection)
 
         shared_writers.writeLodDist(splineDesc.lodDist, newSection, 'lodDist', cache)
         return

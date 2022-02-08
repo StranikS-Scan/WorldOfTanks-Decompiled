@@ -3605,6 +3605,8 @@
             <collisionModelServer>	vehicles/american/A32_M12/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A32_M12/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>
@@ -3796,6 +3798,8 @@
             <collisionModelServer>	vehicles/american/A32_M12/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A32_M12/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>

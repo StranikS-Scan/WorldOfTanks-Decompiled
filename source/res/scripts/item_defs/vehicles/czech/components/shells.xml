@@ -597,7 +597,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeHollowCharge	</effects>
+    <effects>	mainHollowCharge	</effects>
     <damage>
       <armor>	250	</armor>
       <devices>	135	</devices>
@@ -628,6 +628,36 @@
       </damage>
     </armorSpalls>
   </_100mm_JOF>
+  <_100mm_Prurazny_412>
+    <id>	58	</id>
+    <userString>	#czech_vehicles:_100mm_Prurazny_412	</userString>
+    <icon>	ap	</icon>
+    <price>	890	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_Prurazny_412>
+  <_100mm_Prupalny_s_53>
+    <id>	59	</id>
+    <userString>	#czech_vehicles:_100mm_Prupalny_s_53	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_100mm_Prupalny_s_53>
   <_100mm_Prurazny_vz_49>
     <id>	36	</id>
     <userString>	#czech_vehicles:_100mm_Prurazny_vz_49	</userString>
@@ -704,7 +734,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeHollowCharge	</effects>
+    <effects>	mainHollowCharge	</effects>
     <damage>
       <armor>	320	</armor>
       <devices>	135	</devices>

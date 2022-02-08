@@ -905,6 +905,8 @@
             <collisionModelServer>	vehicles/russian/R22_T-46/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R22_T-46/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint></paint>

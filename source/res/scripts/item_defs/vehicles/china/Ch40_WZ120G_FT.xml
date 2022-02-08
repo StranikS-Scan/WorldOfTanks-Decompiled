@@ -2640,6 +2640,8 @@
             <collisionModelServer>	vehicles/chinese/Ch40_WZ120G_FT/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch40_WZ120G_FT/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

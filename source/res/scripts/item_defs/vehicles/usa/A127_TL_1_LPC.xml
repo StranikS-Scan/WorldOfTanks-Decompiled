@@ -1949,6 +1949,8 @@
             <collisionModelServer>	vehicles/american/A127_TL_1_LPC/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A127_TL_1_LPC/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <shotOffset>	0.000329 -0.114700 0.000000	</shotOffset>
           <customizationSlots>
             <slot>

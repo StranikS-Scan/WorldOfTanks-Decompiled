@@ -78,6 +78,11 @@
           <destroyed>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/crash/lod0/Hull.model	</exploded>
         </R90_IS_4M_3Dst_BP>
+        <R90_IS_4M_3DSt_TIR>
+          <undamaged>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/crash/lod0/Hull.model	</exploded>
+        </R90_IS_4M_3DSt_TIR>
       </sets>
     </models>
     <swinging>
@@ -750,6 +755,45 @@
         <clipAngle>	0.525538	</clipAngle>
         <anchorShift>	0.58783	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15051	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R90_IS_4M_3DSt_TIR	</compatibleModels>
+        <position>	0.0204252 1.01828 2.94428	</position>
+        <rotation>	0.576628 -0.000015 3.14154	</rotation>
+        <scale>	0.644896 0.1 0.644884	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.2973	</clipAngle>
+        <anchorShift>	0.072227	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15052	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R90_IS_4M_3DSt_TIR	</compatibleModels>
+        <position>	-1.72073 0.927278 2.55143	</position>
+        <rotation>	1.72551 1.53807 -0.058428	</rotation>
+        <scale>	0.393915 0.1 0.393915	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.38017	</clipAngle>
+        <anchorShift>	0.041482	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15053	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R90_IS_4M_3DSt_TIR	</compatibleModels>
+        <position>	1.73237 0.926387 2.54355	</position>
+        <rotation>	1.725 -1.53339 0.0584903	</rotation>
+        <scale>	0.393915 0.1 0.393915	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.38017	</clipAngle>
+        <anchorShift>	0.041482	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -797,6 +841,11 @@
             <destroyed>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/crash/lod0/Chassis.model	</exploded>
           </R90_IS_4M_3Dst_BP>
+          <R90_IS_4M_3DSt_TIR>
+            <undamaged>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/crash/lod0/Chassis.model	</exploded>
+          </R90_IS_4M_3DSt_TIR>
         </sets>
       </models>
       <traces>
@@ -1520,12 +1569,19 @@
                 <destroyed>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/crash/lod0/Gun_01.model	</exploded>
               </R90_IS_4M_3Dst_BP>
+              <R90_IS_4M_3DSt_TIR>
+                <undamaged>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/crash/lod0/Gun_01.model	</exploded>
+              </R90_IS_4M_3DSt_TIR>
             </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R90_IS_4M/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R90_IS_4M/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>
@@ -1611,12 +1667,19 @@
                 <destroyed>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/crash/lod0/Gun_02.model	</destroyed>
                 <exploded>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/crash/lod0/Gun_02.model	</exploded>
               </R90_IS_4M_3Dst_BP>
+              <R90_IS_4M_3DSt_TIR>
+                <undamaged>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/crash/lod0/Gun_02.model	</exploded>
+              </R90_IS_4M_3DSt_TIR>
             </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R90_IS_4M/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R90_IS_4M/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>
@@ -1645,7 +1708,7 @@
               <slotId>	49000	</slotId>
               <rayStart>	-0.001754 -0.016401 3.529	</rayStart>
               <rayEnd>	0.380024 -0.0610315 3.55999	</rayEnd>
-              <rayUp>	0.137967 0.000000 0.000000	</rayUp>
+              <rayUp>	0.144967 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.558065	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -1675,6 +1738,11 @@
             <destroyed>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/crash/lod0/Turret_01.model	</exploded>
           </R90_IS_4M_3Dst_BP>
+          <R90_IS_4M_3DSt_TIR>
+            <undamaged>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/crash/lod0/Turret_01.model	</exploded>
+          </R90_IS_4M_3DSt_TIR>
         </sets>
       </models>
       <hitTester>
@@ -2268,8 +2336,8 @@
           <slotType>	projectionDecal	</slotType>
           <slotId>	35043	</slotId>
           <tags>	formfactor_square	</tags>
-          <compatibleModels>	R90_IS_4M_3Dst_BP	</compatibleModels>
-          <position>	0.000053 2.37767 1.43369	</position>
+          <compatibleModels>	R90_IS_4M_3Dst_BP R90_IS_4M_3DSt_TIR	</compatibleModels>
+          <position>	0.000049 2.32168 1.42802	</position>
           <rotation>	0.101002 -0.000001 3.14152	</rotation>
           <scale>	0.491463 0.1 0.491466	</scale>
           <doubleSided>	false	</doubleSided>
@@ -2281,7 +2349,7 @@
           <slotType>	projectionDecal	</slotType>
           <slotId>	35044	</slotId>
           <tags>	formfactor_square	</tags>
-          <compatibleModels>	R90_IS_4M_3Dst_BP	</compatibleModels>
+          <compatibleModels>	R90_IS_4M_3Dst_BP R90_IS_4M_3DSt_TIR	</compatibleModels>
           <position>	0.275243 2.33303 0.123061	</position>
           <rotation>	3.14177 -0.0121245 -0.000021	</rotation>
           <scale>	0.420126 0.275396 0.42013	</scale>

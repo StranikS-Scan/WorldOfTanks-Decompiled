@@ -358,9 +358,6 @@ class GiftSystemAccessor(BaseAccessor):
     def post_gift_system_gift(self, callback, entitlementCode, receiverID, metaInfo):
         return self._data_source.post_gift_system_gift(callback, entitlementCode, receiverID, metaInfo)
 
-    def post_secret_santa_gift(self, callback, entitlementCode, metaInfo):
-        return self._data_source.post_secret_santa_gift(callback, entitlementCode, metaInfo)
-
 
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,

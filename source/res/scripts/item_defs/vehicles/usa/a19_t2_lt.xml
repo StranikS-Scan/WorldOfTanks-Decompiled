@@ -1965,6 +1965,8 @@
             <collisionModelServer>	vehicles/american/A19_T2_lt/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A19_T2_lt/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

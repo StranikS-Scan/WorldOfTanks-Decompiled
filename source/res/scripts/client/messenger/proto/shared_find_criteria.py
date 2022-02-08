@@ -56,12 +56,6 @@ class UserTagsFindCriteria(OnlineFindCriteria):
         return user.getTags() & self._tags and self._checkOnlineMode(user)
 
 
-class AnySubFindCriteria(IEntityFindCriteria):
-
-    def filter(self, user):
-        return user.isAnySub()
-
-
 class FriendsFindCriteria(UserTagsFindCriteria):
 
     def __init__(self, onlineMode=None):

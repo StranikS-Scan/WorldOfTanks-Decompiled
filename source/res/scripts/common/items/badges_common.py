@@ -15,7 +15,7 @@ class BadgesCommon(object):
 
     @staticmethod
     def getExtraInfo(account):
-        battlePassLevel = min(account._battlePass.level, battle_pass_common.MAX_BADGE_LEVEL)
+        battlePassLevel = 0
         extraInfo = [battlePassLevel]
         return extraInfo
 

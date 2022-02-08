@@ -1,43 +1,35 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/missions/daily_quests_view.py
-import logging
 import typing
-from shared_utils import first
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import NY_DAILY_QUESTS_VISITED, NY_BONUS_DAILY_QUEST_VISITED, LUNAR_NY_DAILY_QUESTS_VISITED
+import logging
 from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG
 from frameworks.wulf import Array, ViewFlags, ViewSettings
-from gifts.gifts_common import GiftEventID
-from gui import SystemMessages
-from gui.gift_system.constants import HubUpdateReason
-from gui.gift_system.mixins import GiftEventHubWatcher
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.battle_pass.battle_pass_helpers import showBattlePassDailyQuestsIntro
+from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
+from gui.shared.event_dispatcher import showShop
+from shared_utils import first
+from gui import SystemMessages
 from gui.impl.backport.backport_tooltip import BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.missions.daily_quests_view_model import DailyQuestsViewModel
-from gui.impl.gui_decorators import args2params
-from gui.impl.lobby.lunar_ny.tooltips.envelope_tooltip import EnvelopeTooltip
-from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
 from gui.impl.lobby.reroll_tooltip import RerollTooltip
 from gui.impl.pub import ViewImpl
+from gui.impl.gui_decorators import args2params
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events import settings, daily_quests
 from gui.server_events.events_helpers import premMissionsSortFunc, dailyQuestsSortFunc, isPremiumQuestsEnable, isDailyQuestsEnable, isRerollEnabled, isEpicQuestEnabled, EventInfoModel, getRerollTimeout
 from gui.shared import events
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showShop
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 from gui.shared.missions.packers.events import getEventUIDataPacker, packQuestBonusModelAndTooltipData
 from gui.shared.utils import decorators
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from helpers import dependency, time_utils
-from lunar_ny import ILunarNYController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IGameSessionController, IBattlePassController, IFestivityController
-from skeletons.new_year import INewYearController
+from skeletons.gui.game_control import IGameSessionController, IBattlePassController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Optional, List
@@ -60,16 +52,12 @@ def _isPremiumPlusAccount(itemsCache=None):
     return itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
 
 
-class DailyQuestsView(ViewImpl, GiftEventHubWatcher):
+class DailyQuestsView(ViewImpl):
     eventsCache = dependency.descriptor(IEventsCache)
     gameSession = dependency.descriptor(IGameSessionController)
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     battlePassController = dependency.descriptor(IBattlePassController)
-    __lunarNYController = dependency.descriptor(ILunarNYController)
-    _GIFT_EVENT_ID = GiftEventID.NY_HOLIDAYS
-    __festivityController = dependency.descriptor(IFestivityController)
-    __nyController = dependency.descriptor(INewYearController)
     __slots__ = ('__tooltipData', '__proxyMissionsPage')
 
     def __init__(self, layoutID=R.views.lobby.missions.Daily()):
@@ -83,33 +71,11 @@ class DailyQuestsView(ViewImpl, GiftEventHubWatcher):
     def viewModel(self):
         return super(DailyQuestsView, self).getViewModel()
 
-    def getTooltipData(self, event):
-        missionParam = event.getArgument('tooltipID', '')
-        if not missionParam:
-            return super(DailyQuestsView, self).createToolTip(event)
-        else:
-            missionParams = missionParam.rsplit(':', 1)
-            if len(missionParams) != 2:
-                _logger.error('TooltipID argument has invalid format.')
-                return None
-            missionId, tooltipId = missionParams
-            _logger.debug('CreateTooltip: %s, %s', missionId, tooltipId)
-            tooltipsData = self.__tooltipData.get(missionId, {})
-            tooltipData = tooltipsData.get(int(tooltipId))
-            return tooltipData
-
     def createToolTipContent(self, event, contentID):
         _logger.debug('DailyQuests::createToolTipContent')
         if contentID == R.views.lobby.missions.RerollTooltip():
             return RerollTooltip(self.__getCountdown(), getRerollTimeout())
-        if contentID == R.views.lobby.missions.RerollTooltipWithCountdown():
-            return RerollTooltip(self.__getCountdown(), getRerollTimeout(), True)
-        if contentID == R.views.lobby.lunar_ny.tooltips.EnvelopeTooltip():
-            return EnvelopeTooltip(envelopeType=self.__getEnvelopeType(event))
-        if contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
-            from gui.impl.backport.backport_tooltip import createBackportTooltipContent
-            return createBackportTooltipContent(tooltipData=self.getTooltipData(event))
-        return super(DailyQuestsView, self).createToolTipContent(event=event, contentID=contentID)
+        return RerollTooltip(self.__getCountdown(), getRerollTimeout(), True) if contentID == R.views.lobby.missions.RerollTooltipWithCountdown() else super(DailyQuestsView, self).createToolTipContent(event=event, contentID=contentID)
 
     def createToolTip(self, event):
         missionParam = event.getArgument('tooltipId', '')
@@ -162,28 +128,12 @@ class DailyQuestsView(ViewImpl, GiftEventHubWatcher):
 
     def _onLoading(self, *args, **kwargs):
         _logger.info('DailyQuestsView::_onLoading')
-        self.catchGiftEventHub(autoSub=False)
         with self.viewModel.transaction() as tx:
-            if not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED) and self.__festivityController.isEnabled():
-                self._updateLootboxesIntro(tx)
-            if not AccountSettings.getUIFlag(LUNAR_NY_DAILY_QUESTS_VISITED) and self.__lunarNYController.isEnabled():
-                self._updateLunarNYDailyQuestIntro(tx)
             self._updateQuestsTitles(tx)
             self._updateModel(tx)
             self._updateCountDowns(tx)
             tx.setPremMissionsTabDiscovered(settings.getDQSettings().premMissionsTabDiscovered)
             tx.setIsBattlePassActive(self.battlePassController.isActive())
-            tx.setIsGiftSystemDisabled(self.isGiftEventDisabled())
-            tx.setIsNewYearAvailable(self.__nyController.isEnabled())
-            tx.setIsLunarNYActive(self.__lunarNYController.isActive())
-
-    @staticmethod
-    def _updateLootboxesIntro(model):
-        model.setIsLootboxesIntroVisible(True)
-
-    @staticmethod
-    def _updateLunarNYDailyQuestIntro(model):
-        model.setIsLunarNYDailyQuestIntroVisible(True)
 
     def _onLoaded(self, *args, **kwargs):
         showBattlePassDailyQuestsIntro()
@@ -218,18 +168,6 @@ class DailyQuestsView(ViewImpl, GiftEventHubWatcher):
             self.__updateQuestsInModel(tx.getQuests(), quests)
             self.__updateMissionVisitedArray(tx.getMissionsCompletedVisited(), quests)
             tx.setBonusMissionVisited(not newBonusQuests)
-            if self.__lunarNYController.isEnabled():
-                if not AccountSettings.getUIFlag(LUNAR_NY_DAILY_QUESTS_VISITED):
-                    tx.setPlayLunarNYQuestEnvelopeAnimation(True)
-                    AccountSettings.setUIFlag(LUNAR_NY_DAILY_QUESTS_VISITED, True)
-            if self.__festivityController.isEnabled():
-                if not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED):
-                    tx.setPlayNYQuestLootboxAnimation(True)
-                    AccountSettings.setUIFlag(NY_DAILY_QUESTS_VISITED, True)
-                if not AccountSettings.getUIFlag(NY_BONUS_DAILY_QUEST_VISITED) and not tx.getBonusMissionVisited():
-                    tx.setPlayNYBonusQuestLootboxAnimation(True)
-                    AccountSettings.setUIFlag(NY_DAILY_QUESTS_VISITED, True)
-                    AccountSettings.setUIFlag(NY_BONUS_DAILY_QUEST_VISITED, True)
 
     def _updateEpicQuestModel(self, model, fullUpdate=False):
         _logger.debug('DailyQuestsView::_updateEpicQuestModel')
@@ -280,10 +218,6 @@ class DailyQuestsView(ViewImpl, GiftEventHubWatcher):
                 return
             self.__updateQuestsInModel(missionsModel, quests)
             self.__updateMissionVisitedArray(tx.getMissionsCompletedVisited(), quests)
-
-    def _onGiftHubUpdate(self, reason, _=None):
-        if reason == HubUpdateReason.SETTINGS:
-            self.viewModel.setIsGiftSystemDisabled(self.isGiftEventDisabled())
 
     def _onPremiumTypeChanged(self, _):
         with self.viewModel.transaction() as tx:
@@ -431,43 +365,27 @@ class DailyQuestsView(ViewImpl, GiftEventHubWatcher):
     def __onRerollEnabled(self):
         self.viewModel.dailyQuests.setRerollCountDown(0)
 
-    def __onLootboxesIntroClosed(self):
-        self.viewModel.setIsLootboxesIntroVisible(False)
-
-    def __onLunarNYDailyQuestIntroClosed(self):
-        self.viewModel.setIsLunarNYDailyQuestIntroVisible(False)
-
     def __addListeners(self):
-        self.catchGiftEventHub()
         self.viewModel.onBuyPremiumBtnClick += self.__onBuyPremiumBtn
         self.viewModel.onTabClick += self.__onTabClick
         self.viewModel.onInfoToggle += self.__onInfoToggle
         self.viewModel.onClose += self.__onCloseView
         self.viewModel.onReroll += self.__onReRoll
         self.viewModel.onRerollEnabled += self.__onRerollEnabled
-        self.viewModel.onLootboxesIntroClosed += self.__onLootboxesIntroClosed
-        self.viewModel.onLunarNYDailyQuestIntroClosed += self.__onLunarNYDailyQuestIntroClosed
         self.eventsCache.onSyncCompleted += self._onSyncCompleted
         self.gameSession.onPremiumTypeChanged += self._onPremiumTypeChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChanged
-        self.__nyController.onStateChanged += self.__onNYStateChanged
-        self.__lunarNYController.onStatusChange += self._onLunarNYStatusChange
 
     def __removeListeners(self):
-        self.releaseGiftEventHub()
         self.viewModel.onBuyPremiumBtnClick -= self.__onBuyPremiumBtn
         self.viewModel.onTabClick -= self.__onTabClick
         self.viewModel.onInfoToggle -= self.__onInfoToggle
         self.viewModel.onClose -= self.__onCloseView
         self.viewModel.onReroll -= self.__onReRoll
         self.viewModel.onRerollEnabled -= self.__onRerollEnabled
-        self.viewModel.onLootboxesIntroClosed -= self.__onLootboxesIntroClosed
-        self.viewModel.onLunarNYDailyQuestIntroClosed -= self.__onLunarNYDailyQuestIntroClosed
         self.eventsCache.onSyncCompleted -= self._onSyncCompleted
         self.gameSession.onPremiumTypeChanged -= self._onPremiumTypeChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChanged
-        self.__nyController.onStateChanged -= self.__onNYStateChanged
-        self.__lunarNYController.onStatusChange -= self._onLunarNYStatusChange
 
     def __updateQuestsInModel(self, questsInModelToUpdate, sortedNewQuests):
         _logger.debug('DailyQuestsView::__updateQuestsInModel')
@@ -493,28 +411,3 @@ class DailyQuestsView(ViewImpl, GiftEventHubWatcher):
             missionVisitedArray.addBool(missionCompletedVisited)
 
         missionVisitedArray.invalidate()
-
-    def __onNYStateChanged(self, *args):
-        with self.viewModel.transaction() as model:
-            model.setIsNewYearAvailable(self.__nyController.isEnabled())
-            model.setIsLootboxesIntroVisible(self.__nyController.isEnabled())
-
-    def _onLunarNYStatusChange(self):
-        with self.viewModel.transaction() as model:
-            model.setIsLunarNYActive(self.__lunarNYController.isActive())
-            model.setIsLunarNYDailyQuestIntroVisible(self.__lunarNYController.isActive())
-
-    def __getEnvelopeType(self, event):
-        missionParam = event.getArgument('tooltipID', '')
-        if not missionParam:
-            _logger.error('Mission param was not passed.')
-            return None
-        else:
-            missionParams = missionParam.rsplit(':', 1)
-            if len(missionParams) != 2:
-                _logger.error('TooltipID argument has invalid format.')
-                return None
-            missionId, tooltipId = missionParams
-            tooltipsData = self.__tooltipData.get(missionId, {})
-            tooltipData = tooltipsData.get(int(tooltipId))
-            return tooltipData.specialArgs[0]

@@ -1,20 +1,10 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
-  <Observer>
-    <id>	255	</id>
-    <userString>	#ussr_vehicles:Observer	</userString>
-    <description>	#ussr_vehicles:Observer_descr	</description>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	observer private secret lightTank improvedVentilation_class1_user unrecoverable	</tags>
-    <level>	1	</level>
-  </Observer>
   <R04_T-34>
     <id>	0	</id>
     <userString>	#ussr_vehicles:T-34	</userString>
     <description>	#ussr_vehicles:T-34_descr	</description>
     <price>	356700	</price>
-    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
   </R04_T-34>
   <R02_SU-85>
@@ -95,17 +85,17 @@
     <userString>	#ussr_vehicles:T-34-85	</userString>
     <description>	#ussr_vehicles:T-34-85_descr	</description>
     <price>	915000	</price>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
   </R07_T-34-85>
-  <R13_KV-1s>
-    <id>	73	</id>
-    <userString>	#ussr_vehicles:KV-1s	</userString>
-    <description>	#ussr_vehicles:KV-1s_descr	</description>
-    <price>	910000	</price>
-    <tags>	heavyTank role_HT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+  <R106_KV85>
+    <id>	11	</id>
+    <userString>	#ussr_vehicles:R106_KV85	</userString>
+    <description>	#ussr_vehicles:R106_KV85_descr	</description>
+    <price>	900000	</price>
+    <tags>	heavyTank role_HT_universal HD collectorVehicle improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
-  </R13_KV-1s>
+  </R106_KV85>
   <R22_T-46>
     <id>	12	</id>
     <userString>	#ussr_vehicles:T-46	</userString>
@@ -114,14 +104,6 @@
     <tags>	lightTank HD collectorVehicle improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	3	</level>
   </R22_T-46>
-  <R17_SU-100>
-    <id>	14	</id>
-    <userString>	#ussr_vehicles:SU-100	</userString>
-    <description>	#ussr_vehicles:SU-100_descr	</description>
-    <price>	908900	</price>
-    <tags>	AT-SPG role_ATSPG_support HD mediumAT-SPG AT-SPG2 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
-    <level>	6	</level>
-  </R17_SU-100>
   <R11_MS-1>
     <id>	13	</id>
     <userString>	#ussr_vehicles:MS-1	</userString>
@@ -130,6 +112,14 @@
     <tags>	lightTank HD	</tags>
     <level>	1	</level>
   </R11_MS-1>
+  <R17_SU-100>
+    <id>	14	</id>
+    <userString>	#ussr_vehicles:SU-100	</userString>
+    <description>	#ussr_vehicles:SU-100_descr	</description>
+    <price>	908900	</price>
+    <tags>	AT-SPG role_ATSPG_support HD mediumAT-SPG AT-SPG2 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
+    <level>	6	</level>
+  </R17_SU-100>
   <R16_SU-18>
     <id>	15	</id>
     <userString>	#ussr_vehicles:SU-18	</userString>
@@ -154,20 +144,6 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </R20_T-44>
-  <R20_T-44_FL>
-    <id>	172	</id>
-    <userString>	#ussr_vehicles:T-44_FL	</userString>
-    <shortUserString>	#ussr_vehicles:T-44_FL_short	</shortUserString>
-    <description>	#ussr_vehicles:T-44_descr	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:R20_T-44_FL_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R20_T-44_FL_long_special	</longDescriptionSpecial>
-    <price>	1	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank private HD epic_battles improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </R20_T-44_FL>
   <R09_T-26>
     <id>	18	</id>
     <userString>	#ussr_vehicles:T-26	</userString>
@@ -326,20 +302,6 @@
     <tags>	heavyTank role_HT_break HD sinai improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </R61_Object252>
-  <R61_Object252_FL>
-    <id>	170	</id>
-    <userString>	#ussr_vehicles:IS-6_FL	</userString>
-    <shortUserString>	#ussr_vehicles:IS-6_FL_short	</shortUserString>
-    <description>	#ussr_vehicles:IS-6_descr	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:IS-6_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:IS-6_long_special	</longDescriptionSpecial>
-    <price>	10600	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank private HD sinai epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </R61_Object252_FL>
   <R41_T-50>
     <id>	37	</id>
     <userString>	#ussr_vehicles:T-50	</userString>
@@ -450,6 +412,15 @@
     <tags>	mediumTank role_MT_assault HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	7	</level>
   </R59_A44>
+  <R46_KV-13_SH>
+    <id>	51	</id>
+    <userString>	#ussr_vehicles:KV-13_SH	</userString>
+    <description>	#ussr_vehicles:KV-13_SH_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank private HD battle_royale lockOutfit lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret siegeMode dualgun charger	</tags>
+    <level>	1	</level>
+  </R46_KV-13_SH>
   <R60_Object416>
     <id>	52	</id>
     <userString>	#ussr_vehicles:Object416	</userString>
@@ -554,7 +525,7 @@
     <description>	#ussr_vehicles:Object_140_descr	</description>
     <shortUserString>	#ussr_vehicles:Object_140_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals NY_style	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </R97_Object_140>
   <R96_Object_430B>
@@ -593,6 +564,14 @@
     <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	8	</level>
   </R107_LTB>
+  <R13_KV-1s>
+    <id>	73	</id>
+    <userString>	#ussr_vehicles:KV-1s	</userString>
+    <description>	#ussr_vehicles:KV-1s_descr	</description>
+    <price>	910000	</price>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	6	</level>
+  </R13_KV-1s>
   <R132_VNII_100LT>
     <id>	75	</id>
     <userString>	#ussr_vehicles:R132_VNII_100LT	</userString>
@@ -611,14 +590,6 @@
     <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	7	</level>
   </R131_Tank_Gavalov>
-  <R106_KV85>
-    <id>	11	</id>
-    <userString>	#ussr_vehicles:R106_KV85	</userString>
-    <description>	#ussr_vehicles:R106_KV85_descr	</description>
-    <price>	900000	</price>
-    <tags>	heavyTank role_HT_universal HD collectorVehicle improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	6	</level>
-  </R106_KV85>
   <R151_Object_257_2>
     <id>	77	</id>
     <userString>	#ussr_vehicles:R151_Object_257_2	</userString>
@@ -634,7 +605,7 @@
     <description>	#ussr_vehicles:R148_Object_430_U_descr	</description>
     <shortUserString>	#ussr_vehicles:R148_Object_430_U_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	mediumTank role_MT_assault HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals NY_style	</tags>
+    <tags>	mediumTank role_MT_assault HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </R148_Object_430_U>
   <R149_Object_268_4>
@@ -643,7 +614,7 @@
     <description>	#ussr_vehicles:R149_Object_268_4_descr	</description>
     <shortUserString>	#ussr_vehicles:R149_Object_268_4_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	AT-SPG role_ATSPG_assault HD sinai heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals NY_style	</tags>
+    <tags>	AT-SPG role_ATSPG_assault HD sinai heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
   </R149_Object_268_4>
   <R139_IS_M>
@@ -715,7 +686,7 @@
     <description>	#ussr_vehicles:R169_ST_II_descr	</description>
     <shortUserString>	#ussr_vehicles:R169_ST_II_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	heavyTank role_HT_assault HD siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals NY_style	</tags>
+    <tags>	heavyTank role_HT_assault HD siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </R169_ST_II>
   <R171_IS_3_II>
@@ -744,19 +715,170 @@
     <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	3	</level>
   </R174_BT-5>
-  <R38_KV-220_beta>
-    <id>	200	</id>
-    <userString>	#ussr_vehicles:KV-220_test	</userString>
-    <description>	#ussr_vehicles:KV-220_descr	</description>
-    <shortUserString>	#ussr_vehicles:KV-220_test_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R38_KV-220_beta_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R38_KV-220_beta_long_special	</longDescriptionSpecial>
-    <price>	1500	  <gold></gold>
+  <R44_T80_MapsTraining_Dummy_LT_1>
+    <id>	110	</id>
+    <userString>	#maps_training:botVehicleType/lightTank	</userString>
+    <description>	#maps_training:botVehicleDescription	</description>
+    <price>	140000	</price>
+    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user secret maps_training private	</tags>
+    <level>	4	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </R44_T80_MapsTraining_Dummy_LT_1>
+  <R14_SU-5_MapsTraining_Dummy_SPG_1>
+    <id>	111	</id>
+    <userString>	#maps_training:botVehicleType/SPG	</userString>
+    <description>	#maps_training:botVehicleDescription	</description>
+    <price>	147000	</price>
+    <tags>	SPG HD lightSPG secret maps_training private	</tags>
+    <level>	4	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </R14_SU-5_MapsTraining_Dummy_SPG_1>
+  <R04_T-34_MapsTraining_Player_MT_1>
+    <id>	112	</id>
+    <userString>	#ussr_vehicles:T-34_MapsTraining_Player_MT_1	</userString>
+    <description>	#ussr_vehicles:T-34_descr_MapsTraining_Player_MT_1	</description>
+    <price>	356700	</price>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user secret maps_training private	</tags>
+    <level>	5	</level>
+    <clone_tags>	cloned cloned_localization	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </R04_T-34_MapsTraining_Player_MT_1>
+  <R23_T-43_MapsTraining_Player_MT_2>
+    <id>	113	</id>
+    <userString>	#ussr_vehicles:T-43_MapsTraining_Player_MT_2	</userString>
+    <description>	#ussr_vehicles:T-43_descr_MapsTraining_Player_MT_2	</description>
+    <price>	1355000	</price>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret maps_training private	</tags>
+    <level>	7	</level>
+    <clone_tags>	cloned cloned_localization	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </R23_T-43_MapsTraining_Player_MT_2>
+  <R72_T150_MapsTraining_Dummy_HT_2>
+    <id>	114	</id>
+    <userString>	#maps_training:botVehicleType/heavyTank	</userString>
+    <description>	#maps_training:botVehicleDescription	</description>
+    <price>	880000	</price>
+    <tags>	heavyTank HD heavyTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret maps_training private	</tags>
+    <level>	6	</level>
+    <clone_tags>	cloned	</clone_tags>
+    <notInShop>	True	</notInShop>
+  </R72_T150_MapsTraining_Dummy_HT_2>
+  <R172_Object_752>
+    <id>	119	</id>
+    <userString>	#ussr_vehicles:R172_Object_752	</userString>
+    <description>	#ussr_vehicles:R172_Object_752_descr	</description>
+    <shortUserString>	#ussr_vehicles:R172_Object_752_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R172_Object_752_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R172_Object_752_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	5	</level>
-  </R38_KV-220_beta>
+    <tags>	heavyTank role_HT_universal HD secret special heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	9	</level>
+  </R172_Object_752>
+  <R165_Object_703_II_2>
+    <id>	120	</id>
+    <userString>	#ussr_vehicles:R165_Object_703_II_2	</userString>
+    <description>	#ussr_vehicles:R165_Object_703_II_2_descr	</description>
+    <shortUserString>	#ussr_vehicles:R165_Object_703_II_2_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R165_Object_703_II_2_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R165_Object_703_II_2_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank private HD secret testTank siegeMode dualgun charger heavyTank1 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </R165_Object_703_II_2>
+  <R173_K_91_2>
+    <id>	121	</id>
+    <userString>	#ussr_vehicles:R173_K_91_2	</userString>
+    <description>	#ussr_vehicles:R173_K_91_2_descr	</description>
+    <shortUserString>	#ussr_vehicles:R173_K_91_2_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R173_K_91_2_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R173_K_91_2_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD secret improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </R173_K_91_2>
+  <R175_IS_2_screen>
+    <id>	122	</id>
+    <userString>	#ussr_vehicles:R175_IS_2_screen	</userString>
+    <shortUserString>	#ussr_vehicles:R175_IS_2_screen_short	</shortUserString>
+    <description>	#ussr_vehicles:R175_IS_2_screen_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:R175_IS_2_screen_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R175_IS_2_screen_long_special	</longDescriptionSpecial>
+    <price>	5400	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD sinai improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	7	</level>
+  </R175_IS_2_screen>
+  <R155_Object_277_bob>
+    <id>	123	</id>
+    <userString>	#ussr_vehicles:R155_Object_277_bob	</userString>
+    <description>	#ussr_vehicles:R155_Object_277_descr	</description>
+    <shortUserString>	#ussr_vehicles:R155_Object_277_bob_short	</shortUserString>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_break private HD secret bob cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	10	</level>
+  </R155_Object_277_bob>
+  <R177_ISU_152K_BL10>
+    <id>	124	</id>
+    <userString>	#ussr_vehicles:R177_ISU_152K_BL10	</userString>
+    <description>	#ussr_vehicles:R177_ISU_152K_BL10_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:R177_ISU_152K_BL10_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R177_ISU_152K_BL10_long_special	</longDescriptionSpecial>
+    <price>	8700	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_support HD sinai heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </R177_ISU_152K_BL10>
+  <R178_Object_780>
+    <id>	125	</id>
+    <userString>	#ussr_vehicles:R178_Object_780	</userString>
+    <description>	#ussr_vehicles:R178_Object_780_descr	</description>
+    <shortUserString>	#ussr_vehicles:R178_Object_780_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R178_Object_780_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R178_Object_780_long_special	</longDescriptionSpecial>
+    <price>	22500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break private HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals	</tags>
+    <level>	10	</level>
+  </R178_Object_780>
+  <R180_Object_274_A>
+    <id>	126	</id>
+    <userString>	#ussr_vehicles:R180_Object_274_A	</userString>
+    <description>	#ussr_vehicles:R180_Object_274_A_descr	</description>
+    <shortUserString>	#ussr_vehicles:R180_Object_274_A_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R180_Object_274_A_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R180_Object_274_A_long_special	</longDescriptionSpecial>
+    <price>	8600	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </R180_Object_274_A>
+  <R183_K_91_PT>
+    <id>	128	</id>
+    <userString>	#ussr_vehicles:R183_K_91_PT	</userString>
+    <shortUserString>	#ussr_vehicles:R183_K_91_PT_short	</shortUserString>
+    <description>	#ussr_vehicles:R183_K_91_PT_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:R183_K_91_PT_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R183_K_91_PT_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_universal mediumAT-SPG HD special improvedVentilation_class2_user tankRammer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user builtinRepairkit_user	</tags>
+    <level>	9	</level>
+  </R183_K_91_PT>
   <R186_KV_1_Screened>
     <id>	129	</id>
     <userString>	#ussr_vehicles:R186_KV_1_Screened	</userString>
@@ -770,6 +892,70 @@
     <tags>	heavyTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
   </R186_KV_1_Screened>
+  <R185_T_34_L_11_1941>
+    <id>	130	</id>
+    <userString>	#ussr_vehicles:R185_T_34_L_11_1941	</userString>
+    <description>	#ussr_vehicles:R185_T_34_L_11_1941_descr	</description>
+    <shortUserString>	#ussr_vehicles:R185_T_34_L_11_1941_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R185_T_34_L_11_1941_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R185_T_34_L_11_1941_long_special	</longDescriptionSpecial>
+    <price>	1200	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank HD lockExceptProgression improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <level>	4	</level>
+  </R185_T_34_L_11_1941>
+  <R187_Object_590>
+    <id>	132	</id>
+    <userString>	#ussr_vehicles:R187_Object_590	</userString>
+    <description>	#ussr_vehicles:R187_Object_590_descr	</description>
+    <shortUserString>	#ussr_vehicles:R187_Object_590_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R187_Object_590_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R187_Object_590_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank HD mediumTank2 special role_MT_universal improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	9	</level>
+  </R187_Object_590>
+  <R97_Object_140_cl>
+    <id>	133	</id>
+    <userString>	#ussr_vehicles:R97_Object_140_cl	</userString>
+    <description>	#ussr_vehicles:Object_140_descr	</description>
+    <shortUserString>	#ussr_vehicles:R97_Object_140_cl_short	</shortUserString>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank HD clanWarsBattles special cannot_be_sold improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user role_MT_universal	</tags>
+    <level>	10	</level>
+  </R97_Object_140_cl>
+  <R193_M4A2_T_34>
+    <id>	134	</id>
+    <userString>	#ussr_vehicles:R193_M4A2_T_34	</userString>
+    <description>	#ussr_vehicles:R193_M4A2_T_34_descr	</description>
+    <shortUserString>	#ussr_vehicles:R193_M4A2_T_34_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R193_M4A2_T_34_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R193_M4A2_T_34_long_special	</longDescriptionSpecial>
+    <price>	1500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	5	</level>
+  </R193_M4A2_T_34>
+  <R192_K_2>
+    <id>	135	</id>
+    <userString>	#ussr_vehicles:R192_K_2	</userString>
+    <shortUserString>	#ussr_vehicles:R192_K_2_short	</shortUserString>
+    <description>	#ussr_vehicles:R192_K_2_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:R192_K_2_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R192_K_2_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD sinai improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
+    <level>	8	</level>
+  </R192_K_2>
   <R195_T34M_54>
     <id>	137	</id>
     <userString>	#ussr_vehicles:R195_T34M_54	</userString>
@@ -783,6 +969,567 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
     <level>	7	</level>
   </R195_T34M_54>
+  <R47_ISU-152_IGR>
+    <id>	151	</id>
+    <userString>	#igr_vehicles:ISU-152_IGR	</userString>
+    <description>	#igr_vehicles:ISU-152_IGR_descr	</description>
+    <price>	1	</price>
+    <tags>	AT-SPG private HD secret premiumIGR sinai heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </R47_ISU-152_IGR>
+  <R20_T-44_IGR>
+    <id>	152	</id>
+    <userString>	#igr_vehicles:T-44_IGR	</userString>
+    <description>	#igr_vehicles:T-44_IGR_descr	</description>
+    <price>	1	</price>
+    <tags>	mediumTank private HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </R20_T-44_IGR>
+  <R19_IS-3_IGR>
+    <id>	153	</id>
+    <userString>	#igr_vehicles:IS-3_IGR	</userString>
+    <description>	#igr_vehicles:IS-3_IGR_descr	</description>
+    <price>	1	</price>
+    <tags>	heavyTank private HD secret premiumIGR sinai improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </R19_IS-3_IGR>
+  <R106_KV85_IGR>
+    <id>	154	</id>
+    <userString>	#igr_vehicles:R106_KV85_IGR	</userString>
+    <description>	#igr_vehicles:R106_KV85_IGR_descr	</description>
+    <price>	1	</price>
+    <tags>	heavyTank private HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	6	</level>
+  </R106_KV85_IGR>
+  <R77_KV2_IGR>
+    <id>	155	</id>
+    <userString>	#igr_vehicles:KV2_IGR	</userString>
+    <description>	#igr_vehicles:KV2_IGR_descr	</description>
+    <price>	1	</price>
+    <tags>	heavyTank private HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	6	</level>
+  </R77_KV2_IGR>
+  <R18_SU-152_IGR>
+    <id>	156	</id>
+    <userString>	#igr_vehicles:SU-152_IGR	</userString>
+    <description>	#igr_vehicles:SU-152_IGR_descr	</description>
+    <price>	1	</price>
+    <tags>	AT-SPG private HD secret premiumIGR heavyAT-SPG AT-SPG2 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	7	</level>
+  </R18_SU-152_IGR>
+  <R54_KV-5_IGR>
+    <id>	157	</id>
+    <userString>	#igr_vehicles:KV-5_IGR	</userString>
+    <description>	#igr_vehicles:KV-5_IGR_descr	</description>
+    <price>	1	  <gold></gold>
+    </price>
+    <tags>	heavyTank private HD secret premiumIGR improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user	</tags>
+    <level>	8	</level>
+  </R54_KV-5_IGR>
+  <R31_Valentine_LL_IGR>
+    <id>	158	</id>
+    <userString>	#igr_vehicles:Valentine_LL_IGR	</userString>
+    <description>	#igr_vehicles:Valentine_LL_IGR_descr	</description>
+    <price>	1	  <gold></gold>
+    </price>
+    <tags>	lightTank private HD secret premiumIGR improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <level>	4	</level>
+  </R31_Valentine_LL_IGR>
+  <R45_IS-7_IGR>
+    <id>	159	</id>
+    <userString>	#igr_vehicles:IS-7_IGR	</userString>
+    <description>	#igr_vehicles:IS-7_IGR_descr	</description>
+    <price>	1	</price>
+    <tags>	heavyTank role_HT_break private HD secret premiumIGR sinai improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	10	</level>
+  </R45_IS-7_IGR>
+  <R11_MS-1_bot>
+    <id>	160	</id>
+    <userString>	#ussr_vehicles:MS-1_bot	</userString>
+    <description>	#ussr_vehicles:MS-1_bot_descr	</description>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank private HD secret unrecoverable	</tags>
+    <level>	1	</level>
+  </R11_MS-1_bot>
+  <R09_T-26_bot>
+    <id>	161	</id>
+    <userString>	#ussr_vehicles:T-26_bot	</userString>
+    <description>	#ussr_vehicles:T-26_bot_descr	</description>
+    <price>	3700	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank private HD secret unrecoverable improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </R09_T-26_bot>
+  <R86_LTP_bootcamp>
+    <id>	162	</id>
+    <userString>	#ussr_vehicles:LTP_bootcamp	</userString>
+    <shortUserString>	#ussr_vehicles:LTP_bootcamp_short	</shortUserString>
+    <description>	#ussr_vehicles:LTP_bootcamp_descr	</description>
+    <price>	850	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </R86_LTP_bootcamp>
+  <R50_SU76I_bootcamp>
+    <id>	163	</id>
+    <userString>	#ussr_vehicles:SU76I_bootcamp	</userString>
+    <shortUserString>	#ussr_vehicles:SU76I_bootcamp_short	</shortUserString>
+    <description>	#ussr_vehicles:SU76I_bootcamp_descr	</description>
+    <price>	1000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG private HD secret mediumAT-SPG extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </R50_SU76I_bootcamp>
+  <R08_BT-2_bootcamp>
+    <id>	164	</id>
+    <userString>	#ussr_vehicles:BT-2_bootcamp	</userString>
+    <shortUserString>	#ussr_vehicles:BT-2_bootcamp_short	</shortUserString>
+    <description>	#ussr_vehicles:BT-2_bootcamp_descr	</description>
+    <price>	3500	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </R08_BT-2_bootcamp>
+  <R03_BT-7_bootcamp>
+    <id>	165	</id>
+    <userString>	#ussr_vehicles:BT-7	</userString>
+    <description>	#ussr_vehicles:BT-7_descr	</description>
+    <price>	37000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </R03_BT-7_bootcamp>
+  <R06_T-28_bootcamp>
+    <id>	166	</id>
+    <userString>	#ussr_vehicles:T-28	</userString>
+    <description>	#ussr_vehicles:T-28_descr	</description>
+    <price>	135000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank private HD secret extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </R06_T-28_bootcamp>
+  <R07_T-34-85_bootcamp>
+    <id>	167	</id>
+    <userString>	#ussr_vehicles:T-34-85	</userString>
+    <description>	#ussr_vehicles:T-34-85_descr	</description>
+    <price>	915000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank private HD secret extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </R07_T-34-85_bootcamp>
+  <R22_T-46_bootcamp>
+    <id>	168	</id>
+    <userString>	#ussr_vehicles:T-46	</userString>
+    <description>	#ussr_vehicles:T-46_descr	</description>
+    <price>	38500	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </R22_T-46_bootcamp>
+  <R43_T-70_bootcamp>
+    <id>	169	</id>
+    <userString>	#ussr_vehicles:T-70	</userString>
+    <description>	#ussr_vehicles:T-70_descr	</description>
+    <price>	39300	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </R43_T-70_bootcamp>
+  <R61_Object252_FL>
+    <id>	170	</id>
+    <userString>	#ussr_vehicles:IS-6_FL	</userString>
+    <shortUserString>	#ussr_vehicles:IS-6_FL_short	</shortUserString>
+    <description>	#ussr_vehicles:IS-6_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:IS-6_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:IS-6_long_special	</longDescriptionSpecial>
+    <price>	10600	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank private HD sinai epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </R61_Object252_FL>
+  <R112_T54_45_FL>
+    <id>	171	</id>
+    <userString>	#ussr_vehicles:R112_T54_45_FL	</userString>
+    <description>	#ussr_vehicles:R112_T54_45_descr	</description>
+    <shortUserString>	#ussr_vehicles:R112_T54_45_FL_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R112_T54_45_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R112_T54_45_long_special	</longDescriptionSpecial>
+    <price>	7800	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank private HD epic_battles mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </R112_T54_45_FL>
+  <R20_T-44_FL>
+    <id>	172	</id>
+    <userString>	#ussr_vehicles:T-44_FL	</userString>
+    <shortUserString>	#ussr_vehicles:T-44_FL_short	</shortUserString>
+    <description>	#ussr_vehicles:T-44_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:R20_T-44_FL_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R20_T-44_FL_long_special	</longDescriptionSpecial>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank private HD epic_battles improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </R20_T-44_FL>
+  <R165_Object_703_II>
+    <id>	173	</id>
+    <userString>	#ussr_vehicles:R165_Object_703_II	</userString>
+    <description>	#ussr_vehicles:R165_Object_703_II_descr	</description>
+    <shortUserString>	#ussr_vehicles:R165_Object_703_II_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R165_Object_703_II_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R165_Object_703_II_long_special	</longDescriptionSpecial>
+    <price>	10300	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD siegeMode dualgun charger heavyTank1 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </R165_Object_703_II>
+  <R119_Object_777>
+    <id>	174	</id>
+    <userString>	#ussr_vehicles:R119_Object_777	</userString>
+    <description>	#ussr_vehicles:R119_Object_777_descr	</description>
+    <shortUserString>	#ussr_vehicles:R119_Object_777_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R119_Object_777_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R119_Object_777_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD special builtinRepairkit_user improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	9	</level>
+  </R119_Object_777>
+  <R161_T_116>
+    <id>	175	</id>
+    <userString>	#ussr_vehicles:R161_T_116	</userString>
+    <description>	#ussr_vehicles:R161_T_116_descr	</description>
+    <shortUserString>	#ussr_vehicles:R161_T_116_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R161_T_116_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R161_T_116_long_special	</longDescriptionSpecial>
+    <price>	500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <level>	3	</level>
+  </R161_T_116>
+  <R159_SU_130PM>
+    <id>	176	</id>
+    <userString>	#ussr_vehicles:R159_SU_130PM	</userString>
+    <description>	#ussr_vehicles:R159_SU_130PM_descr	</description>
+    <shortUserString>	#ussr_vehicles:R159_SU_130PM_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R159_SU_130PM_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R159_SU_130PM_long_special	</longDescriptionSpecial>
+    <price>	9800	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG AT-SPG1 tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </R159_SU_130PM>
+  <R160_T_50_2>
+    <id>	177	</id>
+    <userString>	#ussr_vehicles:R160_T_50_2	</userString>
+    <description>	#ussr_vehicles:R160_T_50_2_descr	</description>
+    <shortUserString>	#ussr_vehicles:R160_T_50_2_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R160_T_50_2_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R160_T_50_2_long_special	</longDescriptionSpecial>
+    <price>	2900	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank role_LT_universal HD special scout improvedVentilation_class3_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <level>	6	</level>
+  </R160_T_50_2>
+  <R158_LT_432>
+    <id>	178	</id>
+    <userString>	#ussr_vehicles:R158_LT_432	</userString>
+    <description>	#ussr_vehicles:R158_LT_432_descr	</description>
+    <shortUserString>	#ussr_vehicles:R158_LT_432_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R158_LT_432_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R158_LT_432_long_special	</longDescriptionSpecial>
+    <price>	5800	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <level>	8	</level>
+  </R158_LT_432>
+  <R115_IS-3_auto_test>
+    <id>	179	</id>
+    <userString>	#ussr_vehicles:R115_IS-3_auto_test	</userString>
+    <description>	#ussr_vehicles:R115_IS-3_auto_test_descr	</description>
+    <shortUserString>	#ussr_vehicles:R115_IS-3_auto_test_short	</shortUserString>
+    <price>	100	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank private HD secret sinai unrecoverable improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </R115_IS-3_auto_test>
+  <R127_T44_100_K>
+    <id>	180	</id>
+    <userString>	#ussr_vehicles:R127_T44_100_K	</userString>
+    <description>	#ussr_vehicles:R127_T44_100_K_descr	</description>
+    <shortUserString>	#ussr_vehicles:R127_T44_100_K_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R122_T44_100_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R122_T44_100_long_special	</longDescriptionSpecial>
+    <price>	100	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal private HD telecom cannot_be_sold disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret unrecoverable	</tags>
+    <level>	8	</level>
+  </R127_T44_100_K>
+  <R127_T44_100_U>
+    <id>	181	</id>
+    <userString>	#ussr_vehicles:R127_T44_100_U	</userString>
+    <description>	#ussr_vehicles:R127_T44_100_U_descr	</description>
+    <shortUserString>	#ussr_vehicles:R127_T44_100_U_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R122_T44_100_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R122_T44_100_long_special	</longDescriptionSpecial>
+    <price>	100	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal private HD telecom cannot_be_sold disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret unrecoverable	</tags>
+    <level>	8	</level>
+  </R127_T44_100_U>
+  <R127_T44_100_I>
+    <id>	150	</id>
+    <userString>	#ussr_vehicles:R127_T44_100_I	</userString>
+    <description>	#ussr_vehicles:R127_T44_100_I_descr	</description>
+    <shortUserString>	#ussr_vehicles:R127_T44_100_I_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R122_T44_100_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R122_T44_100_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal private HD telecom cannot_be_sold disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </R127_T44_100_I>
+  <R156_IS_2M>
+    <id>	182	</id>
+    <userString>	#ussr_vehicles:R156_IS_2M	</userString>
+    <description>	#ussr_vehicles:R156_IS_2M_descr	</description>
+    <shortUserString>	#ussr_vehicles:R156_IS_2M_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R156_IS_2M_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R156_IS_2M_long_special	</longDescriptionSpecial>
+    <price>	5400	  <gold></gold>
+    </price>
+    <tags>	heavyTank role_HT_break HD sinai improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	7	</level>
+  </R156_IS_2M>
+  <R157_Object_279R>
+    <id>	183	</id>
+    <userString>	#ussr_vehicles:R157_Object_279R	</userString>
+    <description>	#ussr_vehicles:R157_Object_279R_descr	</description>
+    <shortUserString>	#ussr_vehicles:R157_Object_279R_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R157_Object_279R_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R157_Object_279R_long_special	</longDescriptionSpecial>
+    <price>	22500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD special heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	10	</level>
+  </R157_Object_279R>
+  <R154_T_34E_1943>
+    <id>	184	</id>
+    <userString>	#ussr_vehicles:R154_T_34E_1943	</userString>
+    <description>	#ussr_vehicles:R154_T_34E_1943_descr	</description>
+    <shortUserString>	#ussr_vehicles:R154_T_34E_1943_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R154_T_34E_1943_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R154_T_34E_1943_long_special	</longDescriptionSpecial>
+    <price>	2200	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
+    <level>	5	</level>
+  </R154_T_34E_1943>
+  <R146_STG_Tday>
+    <id>	185	</id>
+    <userString>	#ussr_vehicles:R146_STG_Tday	</userString>
+    <description>	#ussr_vehicles:R146_STG_Tday_descr	</description>
+    <shortUserString>	#ussr_vehicles:R146_STG_Tday_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R146_STG_Tday_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R146_STG_Tday_long_special	</longDescriptionSpecial>
+    <price>	8700	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_sniper HD lockExceptProgression improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </R146_STG_Tday>
+  <R146_STG>
+    <id>	186	</id>
+    <userString>	#ussr_vehicles:R146_STG	</userString>
+    <description>	#ussr_vehicles:R146_STG_descr	</description>
+    <shortUserString>	#ussr_vehicles:R146_STG_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R146_STG_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R146_STG_long_special	</longDescriptionSpecial>
+    <price>	8700	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_sniper HD improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </R146_STG>
+  <R143_T_29>
+    <id>	187	</id>
+    <userString>	#ussr_vehicles:R143_T_29	</userString>
+    <description>	#ussr_vehicles:R143_T_29_descr	</description>
+    <shortUserString>	#ussr_vehicles:R143_T_29_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R143_T_29_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R143_T_29_long_special	</longDescriptionSpecial>
+    <price>	5	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <level>	3	</level>
+  </R143_T_29>
+  <R140_M4_Loza>
+    <id>	188	</id>
+    <userString>	#ussr_vehicles:R140_M4_Loza	</userString>
+    <description>	#ussr_vehicles:R140_M4_Loza_descr	</description>
+    <shortUserString>	#ussr_vehicles:R140_M4_Loza_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R140_M4_Loza_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R140_M4_Loza_long_special	</longDescriptionSpecial>
+    <price>	3300	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	6	</level>
+  </R140_M4_Loza>
+  <R135_T_103>
+    <id>	189	</id>
+    <userString>	#ussr_vehicles:R135_T_103	</userString>
+    <description>	#ussr_vehicles:R135_T_103_descr	</description>
+    <shortUserString>	#ussr_vehicles:R135_T_103_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R135_T_103_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R135_T_103_long_special	</longDescriptionSpecial>
+    <price>	6400	  <gold></gold>
+    </price>
+    <tags>	AT-SPG role_ATSPG_sniper HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </R135_T_103>
+  <R134_Object_252K>
+    <id>	190	</id>
+    <userString>	#ussr_vehicles:R134_Object_252K	</userString>
+    <description>	#ussr_vehicles:R134_Object_252K_descr	</description>
+    <shortUserString>	#ussr_vehicles:R134_Object_252K_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R134_Object_252K_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R134_Object_252K_long_special	</longDescriptionSpecial>
+    <price>	9800	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD lockExceptProgression sinai heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </R134_Object_252K>
+  <R122_T44_100B>
+    <id>	191	</id>
+    <userString>	#ussr_vehicles:R122_T44_100B	</userString>
+    <description>	#ussr_vehicles:R122_T44_100B_descr	</description>
+    <shortUserString>	#ussr_vehicles:R122_T44_100B_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R122_T44_100_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R122_T44_100_long_special	</longDescriptionSpecial>
+    <price>	100	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal private HD telecom cannot_be_sold disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret unrecoverable	</tags>
+    <level>	8	</level>
+  </R122_T44_100B>
+  <R127_T44_100_M>
+    <id>	192	</id>
+    <userString>	#ussr_vehicles:R127_T44_100_M	</userString>
+    <description>	#ussr_vehicles:R127_T44_100_M_descr	</description>
+    <shortUserString>	#ussr_vehicles:R127_T44_100_M_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R122_T44_100_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R122_T44_100_long_special	</longDescriptionSpecial>
+    <price>	100	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD telecom cannot_be_sold disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user private secret unrecoverable	</tags>
+    <level>	8	</level>
+  </R127_T44_100_M>
+  <R61_Object252_BF>
+    <id>	193	</id>
+    <userString>	#ussr_vehicles:IS-6_BF	</userString>
+    <description>	#ussr_vehicles:IS-6_BF_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:IS-6_BF_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:IS-6_BF_long_special	</longDescriptionSpecial>
+    <price>	10600	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD sinai improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </R61_Object252_BF>
+  <R134_Object_252U>
+    <id>	194	</id>
+    <userString>	#ussr_vehicles:R134_Object_252U	</userString>
+    <description>	#ussr_vehicles:R134_Object_252U_descr	</description>
+    <shortUserString>	#ussr_vehicles:R134_Object_252U_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R134_Object_252U_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R134_Object_252U_long_special	</longDescriptionSpecial>
+    <price>	9800	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD sinai heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </R134_Object_252U>
+  <R133_KV_122>
+    <id>	195	</id>
+    <userString>	#ussr_vehicles:R133_KV_122	</userString>
+    <description>	#ussr_vehicles:R133_KV_122_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:R133_KV_122_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R133_KV_122_long_special	</longDescriptionSpecial>
+    <price>	5300	  <gold></gold>
+    </price>
+    <tags>	heavyTank role_HT_break HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	7	</level>
+  </R133_KV_122>
+  <R129_Object_257>
+    <id>	197	</id>
+    <userString>	#ussr_vehicles:R129_Object_257_cn	</userString>
+    <description>	#ussr_vehicles:R129_Object_257_cn_descr	</description>
+    <shortUserString>	#ussr_vehicles:R129_Object_257_cn_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R129_Object_257_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R129_Object_257_long_special	</longDescriptionSpecial>
+    <price>	5	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break private HD secret special sinai heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	10	</level>
+  </R129_Object_257>
+  <R126_Object_730_5>
+    <id>	198	</id>
+    <userString>	#ussr_vehicles:R126_Object_730_5	</userString>
+    <description>	#ussr_vehicles:R126_Object_730_5_descr	</description>
+    <shortUserString>	#ussr_vehicles:R126_Object_730_5_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R126_Object_730_5_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R126_Object_730_5_long_special	</longDescriptionSpecial>
+    <price>	5	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_universal HD special sinai heavyAT-SPG AT-SPG1 improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	10	</level>
+  </R126_Object_730_5>
+  <R125_T_45>
+    <id>	199	</id>
+    <userString>	#ussr_vehicles:R125_T_45	</userString>
+    <description>	#ussr_vehicles:R125_T_45_descr	</description>
+    <shortUserString>	#ussr_vehicles:R125_T_45_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R125_T_45_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R125_T_45_long_special	</longDescriptionSpecial>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </R125_T_45>
+  <R38_KV-220_beta>
+    <id>	200	</id>
+    <userString>	#ussr_vehicles:KV-220_test	</userString>
+    <description>	#ussr_vehicles:KV-220_descr	</description>
+    <shortUserString>	#ussr_vehicles:KV-220_test_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R38_KV-220_beta_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R38_KV-220_beta_long_special	</longDescriptionSpecial>
+    <price>	1500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	5	</level>
+  </R38_KV-220_beta>
   <R32_Matilda_II_LL>
     <id>	201	</id>
     <userString>	#ussr_vehicles:Matilda_II_LL	</userString>
@@ -953,7 +1700,7 @@
     <description>	#ussr_vehicles:T-34-85_descr	</description>
     <price>	5000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank private HD secret unrecoverable t34_disclaimer	</tags>
+    <tags>	mediumTank private HD secret unrecoverable	</tags>
     <level>	1	</level>
   </R07_T-34-85_training>
   <R86_LTP>
@@ -1005,6 +1752,17 @@
     <tags>	lightTank role_LT_universal private HD secret scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	8	</level>
   </R98_T44_85M>
+  <R40_T-54_FL>
+    <id>	225	</id>
+    <userString>	#ussr_vehicles:T-54_FL	</userString>
+    <description>	#ussr_vehicles:T-54_descr	</description>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank HD epic_battles mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user private	</tags>
+    <level>	9	</level>
+  </R40_T-54_FL>
   <R108_T34_85M>
     <id>	227	</id>
     <userString>	#ussr_vehicles:R108_T34_85M	</userString>
@@ -1013,7 +1771,7 @@
     <longDescriptionSpecial>	#ussr_vehicles:R108_T34_85M_long_special	</longDescriptionSpecial>
     <price>	3300	  <gold></gold>
     </price>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
   </R108_T34_85M>
   <R110_Object_260>
@@ -1076,7 +1834,7 @@
     <price>	3100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD dog improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
+    <tags>	mediumTank role_MT_universal HD dog improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
   </R117_T34_85_Rudy>
   <R116_ISU122C_Berlin>
@@ -1103,20 +1861,6 @@
     <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </R112_T54_45>
-  <R112_T54_45_FL>
-    <id>	171	</id>
-    <userString>	#ussr_vehicles:R112_T54_45_FL	</userString>
-    <description>	#ussr_vehicles:R112_T54_45_descr	</description>
-    <shortUserString>	#ussr_vehicles:R112_T54_45_FL_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R112_T54_45_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R112_T54_45_long_special	</longDescriptionSpecial>
-    <price>	7800	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank private HD epic_battles mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </R112_T54_45_FL>
   <R114_Object_244>
     <id>	235	</id>
     <userString>	#ussr_vehicles:R114_Object_244	</userString>
@@ -1182,19 +1926,6 @@
     <tags>	heavyTank role_HT_break private HD secret inGame improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </R119_Object_777C>
-  <R119_Object_777>
-    <id>	174	</id>
-    <userString>	#ussr_vehicles:R119_Object_777	</userString>
-    <description>	#ussr_vehicles:R119_Object_777_descr	</description>
-    <shortUserString>	#ussr_vehicles:R119_Object_777_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R119_Object_777_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R119_Object_777_long_special	</longDescriptionSpecial>
-    <price>	17500	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD special builtinRepairkit_user improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	9	</level>
-  </R119_Object_777>
   <R118_T28_F30>
     <id>	240	</id>
     <userString>	#ussr_vehicles:R118_T28_F30	</userString>
@@ -1257,7 +1988,7 @@
     <price>	9600	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD secret sinai improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank role_HT_break HD sinai improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </R123_Kirovets_1>
   <R127_T44_100_P>
@@ -1267,10 +1998,9 @@
     <shortUserString>	#ussr_vehicles:R127_T44_100_P_short	</shortUserString>
     <shortDescriptionSpecial>	#ussr_vehicles:R122_T44_100_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#ussr_vehicles:R122_T44_100_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
+    <price>	100	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal private HD telecom cannot_be_sold disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_universal private HD telecom cannot_be_sold disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret unrecoverable	</tags>
     <level>	8	</level>
   </R127_T44_100_P>
   <R128_KV4_Kreslavskiy>
@@ -1286,465 +2016,6 @@
     <tags>	heavyTank role_HT_break HD heavyTank1 improvedVentilation_class1_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user	</tags>
     <level>	8	</level>
   </R128_KV4_Kreslavskiy>
-  <R125_T_45>
-    <id>	199	</id>
-    <userString>	#ussr_vehicles:R125_T_45	</userString>
-    <description>	#ussr_vehicles:R125_T_45_descr	</description>
-    <shortUserString>	#ussr_vehicles:R125_T_45_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R125_T_45_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R125_T_45_long_special	</longDescriptionSpecial>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </R125_T_45>
-  <R126_Object_730_5>
-    <id>	198	</id>
-    <userString>	#ussr_vehicles:R126_Object_730_5	</userString>
-    <description>	#ussr_vehicles:R126_Object_730_5_descr	</description>
-    <shortUserString>	#ussr_vehicles:R126_Object_730_5_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R126_Object_730_5_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R126_Object_730_5_long_special	</longDescriptionSpecial>
-    <price>	5	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_universal HD special sinai heavyAT-SPG AT-SPG1 improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
-    <level>	10	</level>
-  </R126_Object_730_5>
-  <R129_Object_257>
-    <id>	197	</id>
-    <userString>	#ussr_vehicles:R129_Object_257_cn	</userString>
-    <description>	#ussr_vehicles:R129_Object_257_cn_descr	</description>
-    <shortUserString>	#ussr_vehicles:R129_Object_257_cn_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R129_Object_257_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R129_Object_257_long_special	</longDescriptionSpecial>
-    <price>	5	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break private HD secret special sinai heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
-    <level>	10	</level>
-  </R129_Object_257>
-  <R133_KV_122>
-    <id>	195	</id>
-    <userString>	#ussr_vehicles:R133_KV_122	</userString>
-    <description>	#ussr_vehicles:R133_KV_122_descr	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:R133_KV_122_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R133_KV_122_long_special	</longDescriptionSpecial>
-    <price>	5300	  <gold></gold>
-    </price>
-    <tags>	heavyTank role_HT_break HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	7	</level>
-  </R133_KV_122>
-  <R134_Object_252U>
-    <id>	194	</id>
-    <userString>	#ussr_vehicles:R134_Object_252U	</userString>
-    <description>	#ussr_vehicles:R134_Object_252U_descr	</description>
-    <shortUserString>	#ussr_vehicles:R134_Object_252U_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R134_Object_252U_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R134_Object_252U_long_special	</longDescriptionSpecial>
-    <price>	9800	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD sinai heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </R134_Object_252U>
-  <R61_Object252_BF>
-    <id>	193	</id>
-    <userString>	#ussr_vehicles:IS-6_BF	</userString>
-    <description>	#ussr_vehicles:IS-6_BF_descr	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:IS-6_BF_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:IS-6_BF_long_special	</longDescriptionSpecial>
-    <price>	10600	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD sinai improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </R61_Object252_BF>
-  <R122_T44_100B>
-    <id>	191	</id>
-    <userString>	#ussr_vehicles:R122_T44_100B	</userString>
-    <description>	#ussr_vehicles:R122_T44_100B_descr	</description>
-    <shortUserString>	#ussr_vehicles:R122_T44_100B_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R122_T44_100_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R122_T44_100_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal private HD telecom cannot_be_sold disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </R122_T44_100B>
-  <R134_Object_252K>
-    <id>	190	</id>
-    <userString>	#ussr_vehicles:R134_Object_252K	</userString>
-    <description>	#ussr_vehicles:R134_Object_252K_descr	</description>
-    <shortUserString>	#ussr_vehicles:R134_Object_252K_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R134_Object_252K_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R134_Object_252K_long_special	</longDescriptionSpecial>
-    <price>	9800	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD lockExceptProgression sinai heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </R134_Object_252K>
-  <R135_T_103>
-    <id>	189	</id>
-    <userString>	#ussr_vehicles:R135_T_103	</userString>
-    <description>	#ussr_vehicles:R135_T_103_descr	</description>
-    <shortUserString>	#ussr_vehicles:R135_T_103_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R135_T_103_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R135_T_103_long_special	</longDescriptionSpecial>
-    <price>	6400	  <gold></gold>
-    </price>
-    <tags>	AT-SPG role_ATSPG_sniper HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </R135_T_103>
-  <R140_M4_Loza>
-    <id>	188	</id>
-    <userString>	#ussr_vehicles:R140_M4_Loza	</userString>
-    <description>	#ussr_vehicles:R140_M4_Loza_descr	</description>
-    <shortUserString>	#ussr_vehicles:R140_M4_Loza_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R140_M4_Loza_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R140_M4_Loza_long_special	</longDescriptionSpecial>
-    <price>	3300	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	6	</level>
-  </R140_M4_Loza>
-  <R143_T_29>
-    <id>	187	</id>
-    <userString>	#ussr_vehicles:R143_T_29	</userString>
-    <description>	#ussr_vehicles:R143_T_29_descr	</description>
-    <shortUserString>	#ussr_vehicles:R143_T_29_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R143_T_29_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R143_T_29_long_special	</longDescriptionSpecial>
-    <price>	5	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
-    <level>	3	</level>
-  </R143_T_29>
-  <R146_STG>
-    <id>	186	</id>
-    <userString>	#ussr_vehicles:R146_STG	</userString>
-    <description>	#ussr_vehicles:R146_STG_descr	</description>
-    <shortUserString>	#ussr_vehicles:R146_STG_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R146_STG_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R146_STG_long_special	</longDescriptionSpecial>
-    <price>	8700	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </R146_STG>
-  <R146_STG_Tday>
-    <id>	185	</id>
-    <userString>	#ussr_vehicles:R146_STG_Tday	</userString>
-    <description>	#ussr_vehicles:R146_STG_Tday_descr	</description>
-    <shortUserString>	#ussr_vehicles:R146_STG_Tday_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R146_STG_Tday_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R146_STG_Tday_long_special	</longDescriptionSpecial>
-    <price>	8700	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD lockExceptProgression improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </R146_STG_Tday>
-  <R154_T_34E_1943>
-    <id>	184	</id>
-    <userString>	#ussr_vehicles:R154_T_34E_1943	</userString>
-    <description>	#ussr_vehicles:R154_T_34E_1943_descr	</description>
-    <shortUserString>	#ussr_vehicles:R154_T_34E_1943_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R154_T_34E_1943_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R154_T_34E_1943_long_special	</longDescriptionSpecial>
-    <price>	2200	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
-    <level>	5	</level>
-  </R154_T_34E_1943>
-  <R157_Object_279R>
-    <id>	183	</id>
-    <userString>	#ussr_vehicles:R157_Object_279R	</userString>
-    <description>	#ussr_vehicles:R157_Object_279R_descr	</description>
-    <shortUserString>	#ussr_vehicles:R157_Object_279R_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R157_Object_279R_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R157_Object_279R_long_special	</longDescriptionSpecial>
-    <price>	22500	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD special heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
-    <level>	10	</level>
-  </R157_Object_279R>
-  <R156_IS_2M>
-    <id>	182	</id>
-    <userString>	#ussr_vehicles:R156_IS_2M	</userString>
-    <description>	#ussr_vehicles:R156_IS_2M_descr	</description>
-    <shortUserString>	#ussr_vehicles:R156_IS_2M_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R156_IS_2M_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R156_IS_2M_long_special	</longDescriptionSpecial>
-    <price>	5400	  <gold></gold>
-    </price>
-    <tags>	heavyTank role_HT_break HD sinai improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	7	</level>
-  </R156_IS_2M>
-  <R127_T44_100_U>
-    <id>	181	</id>
-    <userString>	#ussr_vehicles:R127_T44_100_U	</userString>
-    <description>	#ussr_vehicles:R127_T44_100_U_descr	</description>
-    <shortUserString>	#ussr_vehicles:R127_T44_100_U_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R122_T44_100_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R122_T44_100_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal private HD telecom cannot_be_sold disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </R127_T44_100_U>
-  <R127_T44_100_K>
-    <id>	180	</id>
-    <userString>	#ussr_vehicles:R127_T44_100_K	</userString>
-    <description>	#ussr_vehicles:R127_T44_100_K_descr	</description>
-    <shortUserString>	#ussr_vehicles:R127_T44_100_K_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R122_T44_100_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R122_T44_100_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal private HD telecom cannot_be_sold disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </R127_T44_100_K>
-  <R127_T44_100_M>
-    <id>	192	</id>
-    <userString>	#ussr_vehicles:R127_T44_100_M	</userString>
-    <description>	#ussr_vehicles:R127_T44_100_M_descr	</description>
-    <shortUserString>	#ussr_vehicles:R127_T44_100_M_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R122_T44_100_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R122_T44_100_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD telecom cannot_be_sold disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user private	</tags>
-    <level>	8	</level>
-  </R127_T44_100_M>
-  <R115_IS-3_auto_test>
-    <id>	179	</id>
-    <userString>	#ussr_vehicles:R115_IS-3_auto_test	</userString>
-    <description>	#ussr_vehicles:R115_IS-3_auto_test_descr	</description>
-    <shortUserString>	#ussr_vehicles:R115_IS-3_auto_test_short	</shortUserString>
-    <price>	100	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank private HD secret sinai unrecoverable improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </R115_IS-3_auto_test>
-  <R158_LT_432>
-    <id>	178	</id>
-    <userString>	#ussr_vehicles:R158_LT_432	</userString>
-    <description>	#ussr_vehicles:R158_LT_432_descr	</description>
-    <shortUserString>	#ussr_vehicles:R158_LT_432_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R158_LT_432_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R158_LT_432_long_special	</longDescriptionSpecial>
-    <price>	5800	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
-    <level>	8	</level>
-  </R158_LT_432>
-  <R160_T_50_2>
-    <id>	177	</id>
-    <userString>	#ussr_vehicles:R160_T_50_2	</userString>
-    <description>	#ussr_vehicles:R160_T_50_2_descr	</description>
-    <shortUserString>	#ussr_vehicles:R160_T_50_2_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R160_T_50_2_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R160_T_50_2_long_special	</longDescriptionSpecial>
-    <price>	2900	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank role_LT_universal HD special scout improvedVentilation_class3_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
-    <level>	6	</level>
-  </R160_T_50_2>
-  <R159_SU_130PM>
-    <id>	176	</id>
-    <userString>	#ussr_vehicles:R159_SU_130PM	</userString>
-    <description>	#ussr_vehicles:R159_SU_130PM_descr	</description>
-    <shortUserString>	#ussr_vehicles:R159_SU_130PM_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R159_SU_130PM_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R159_SU_130PM_long_special	</longDescriptionSpecial>
-    <price>	9800	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG AT-SPG1 tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </R159_SU_130PM>
-  <R161_T_116>
-    <id>	175	</id>
-    <userString>	#ussr_vehicles:R161_T_116	</userString>
-    <description>	#ussr_vehicles:R161_T_116_descr	</description>
-    <shortUserString>	#ussr_vehicles:R161_T_116_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R161_T_116_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R161_T_116_long_special	</longDescriptionSpecial>
-    <price>	500	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
-    <level>	3	</level>
-  </R161_T_116>
-  <R165_Object_703_II>
-    <id>	173	</id>
-    <userString>	#ussr_vehicles:R165_Object_703_II	</userString>
-    <description>	#ussr_vehicles:R165_Object_703_II_descr	</description>
-    <shortUserString>	#ussr_vehicles:R165_Object_703_II_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R165_Object_703_II_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R165_Object_703_II_long_special	</longDescriptionSpecial>
-    <price>	10300	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD siegeMode dualgun charger heavyTank1 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </R165_Object_703_II>
-  <R172_Object_752>
-    <id>	119	</id>
-    <userString>	#ussr_vehicles:R172_Object_752	</userString>
-    <description>	#ussr_vehicles:R172_Object_752_descr	</description>
-    <shortUserString>	#ussr_vehicles:R172_Object_752_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R172_Object_752_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R172_Object_752_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD secret special heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	9	</level>
-  </R172_Object_752>
-  <R165_Object_703_II_2>
-    <id>	120	</id>
-    <userString>	#ussr_vehicles:R165_Object_703_II_2	</userString>
-    <description>	#ussr_vehicles:R165_Object_703_II_2_descr	</description>
-    <shortUserString>	#ussr_vehicles:R165_Object_703_II_2_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R165_Object_703_II_2_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R165_Object_703_II_2_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank private HD secret testTank siegeMode dualgun charger heavyTank1 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </R165_Object_703_II_2>
-  <R173_K_91_2>
-    <id>	121	</id>
-    <userString>	#ussr_vehicles:R173_K_91_2	</userString>
-    <description>	#ussr_vehicles:R173_K_91_2_descr	</description>
-    <shortUserString>	#ussr_vehicles:R173_K_91_2_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R173_K_91_2_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R173_K_91_2_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD secret improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </R173_K_91_2>
-  <R175_IS_2_screen>
-    <id>	122	</id>
-    <userString>	#ussr_vehicles:R175_IS_2_screen	</userString>
-    <shortUserString>	#ussr_vehicles:R175_IS_2_screen_short	</shortUserString>
-    <description>	#ussr_vehicles:R175_IS_2_screen_descr	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:R175_IS_2_screen_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R175_IS_2_screen_long_special	</longDescriptionSpecial>
-    <price>	5400	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD sinai improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	7	</level>
-  </R175_IS_2_screen>
-  <R177_ISU_152K_BL10>
-    <id>	124	</id>
-    <userString>	#ussr_vehicles:R177_ISU_152K_BL10	</userString>
-    <description>	#ussr_vehicles:R177_ISU_152K_BL10_descr	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:R177_ISU_152K_BL10_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R177_ISU_152K_BL10_long_special	</longDescriptionSpecial>
-    <price>	8700	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_support HD sinai heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user NY2021_video	</tags>
-    <level>	8	</level>
-  </R177_ISU_152K_BL10>
-  <R178_Object_780>
-    <id>	125	</id>
-    <userString>	#ussr_vehicles:R178_Object_780	</userString>
-    <description>	#ussr_vehicles:R178_Object_780_descr	</description>
-    <shortUserString>	#ussr_vehicles:R178_Object_780_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R178_Object_780_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R178_Object_780_long_special	</longDescriptionSpecial>
-    <price>	22500	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break private HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals	</tags>
-    <level>	10	</level>
-  </R178_Object_780>
-  <R180_Object_274_A>
-    <id>	126	</id>
-    <userString>	#ussr_vehicles:R180_Object_274_A	</userString>
-    <description>	#ussr_vehicles:R180_Object_274_A_descr	</description>
-    <shortUserString>	#ussr_vehicles:R180_Object_274_A_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R180_Object_274_A_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R180_Object_274_A_long_special	</longDescriptionSpecial>
-    <price>	8600	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </R180_Object_274_A>
-  <R183_K_91_PT>
-    <id>	128	</id>
-    <userString>	#ussr_vehicles:R183_K_91_PT	</userString>
-    <shortUserString>	#ussr_vehicles:R183_K_91_PT_short	</shortUserString>
-    <description>	#ussr_vehicles:R183_K_91_PT_descr	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:R183_K_91_PT_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R183_K_91_PT_long_special	</longDescriptionSpecial>
-    <price>	17500	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_universal mediumAT-SPG HD special improvedVentilation_class2_user tankRammer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user builtinRepairkit_user	</tags>
-    <level>	9	</level>
-  </R183_K_91_PT>
-  <R185_T_34_L_11_1941>
-    <id>	130	</id>
-    <userString>	#ussr_vehicles:R185_T_34_L_11_1941	</userString>
-    <description>	#ussr_vehicles:R185_T_34_L_11_1941_descr	</description>
-    <shortUserString>	#ussr_vehicles:R185_T_34_L_11_1941_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R185_T_34_L_11_1941_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R185_T_34_L_11_1941_long_special	</longDescriptionSpecial>
-    <price>	1200	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD lockExceptProgression improvedVentilation_class3_user extraHealthReserve_class3_user t34_disclaimer	</tags>
-    <level>	4	</level>
-  </R185_T_34_L_11_1941>
-  <R187_Object_590>
-    <id>	132	</id>
-    <userString>	#ussr_vehicles:R187_Object_590	</userString>
-    <description>	#ussr_vehicles:R187_Object_590_descr	</description>
-    <shortUserString>	#ussr_vehicles:R187_Object_590_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R187_Object_590_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R187_Object_590_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD mediumTank2 special role_MT_universal improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
-    <level>	9	</level>
-  </R187_Object_590>
-  <R193_M4A2_T_34>
-    <id>	134	</id>
-    <userString>	#ussr_vehicles:R193_M4A2_T_34	</userString>
-    <description>	#ussr_vehicles:R193_M4A2_T_34_descr	</description>
-    <shortUserString>	#ussr_vehicles:R193_M4A2_T_34_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R193_M4A2_T_34_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R193_M4A2_T_34_long_special	</longDescriptionSpecial>
-    <price>	1500	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user t34_disclaimer	</tags>
-    <level>	5	</level>
-  </R193_M4A2_T_34>
   <R87_T62A_fallout>
     <id>	249	</id>
     <userString>	#ussr_vehicles:T62A_fallout	</userString>
@@ -1764,196 +2035,6 @@
     <tags>	heavyTank role_HT_break private HD secret fallout improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </R45_IS-7_fallout>
-  <R155_Object_277_bob>
-    <id>	123	</id>
-    <userString>	#ussr_vehicles:R155_Object_277_bob	</userString>
-    <description>	#ussr_vehicles:R155_Object_277_descr	</description>
-    <shortUserString>	#ussr_vehicles:R155_Object_277_bob_short	</shortUserString>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank role_HT_break private HD secret bob cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	10	</level>
-  </R155_Object_277_bob>
-  <R97_Object_140_cl>
-    <id>	133	</id>
-    <userString>	#ussr_vehicles:R97_Object_140_cl	</userString>
-    <description>	#ussr_vehicles:Object_140_descr	</description>
-    <shortUserString>	#ussr_vehicles:R97_Object_140_cl_short	</shortUserString>
-    <price>	1	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank HD clanWarsBattles special cannot_be_sold improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user role_MT_universal	</tags>
-    <level>	10	</level>
-  </R97_Object_140_cl>
-  <R47_ISU-152_IGR>
-    <id>	151	</id>
-    <userString>	#igr_vehicles:ISU-152_IGR	</userString>
-    <description>	#igr_vehicles:ISU-152_IGR_descr	</description>
-    <price>	1	</price>
-    <tags>	AT-SPG private HD secret premiumIGR sinai heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </R47_ISU-152_IGR>
-  <R20_T-44_IGR>
-    <id>	152	</id>
-    <userString>	#igr_vehicles:T-44_IGR	</userString>
-    <description>	#igr_vehicles:T-44_IGR_descr	</description>
-    <price>	1	</price>
-    <tags>	mediumTank private HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </R20_T-44_IGR>
-  <R19_IS-3_IGR>
-    <id>	153	</id>
-    <userString>	#igr_vehicles:IS-3_IGR	</userString>
-    <description>	#igr_vehicles:IS-3_IGR_descr	</description>
-    <price>	1	</price>
-    <tags>	heavyTank private HD secret premiumIGR sinai improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </R19_IS-3_IGR>
-  <R106_KV85_IGR>
-    <id>	154	</id>
-    <userString>	#igr_vehicles:R106_KV85_IGR	</userString>
-    <description>	#igr_vehicles:R106_KV85_IGR_descr	</description>
-    <price>	1	</price>
-    <tags>	heavyTank private HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	6	</level>
-  </R106_KV85_IGR>
-  <R77_KV2_IGR>
-    <id>	155	</id>
-    <userString>	#igr_vehicles:KV2_IGR	</userString>
-    <description>	#igr_vehicles:KV2_IGR_descr	</description>
-    <price>	1	</price>
-    <tags>	heavyTank private HD secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	6	</level>
-  </R77_KV2_IGR>
-  <R18_SU-152_IGR>
-    <id>	156	</id>
-    <userString>	#igr_vehicles:SU-152_IGR	</userString>
-    <description>	#igr_vehicles:SU-152_IGR_descr	</description>
-    <price>	1	</price>
-    <tags>	AT-SPG private HD secret premiumIGR heavyAT-SPG AT-SPG2 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	7	</level>
-  </R18_SU-152_IGR>
-  <R54_KV-5_IGR>
-    <id>	157	</id>
-    <userString>	#igr_vehicles:KV-5_IGR	</userString>
-    <description>	#igr_vehicles:KV-5_IGR_descr	</description>
-    <price>	1	  <gold></gold>
-    </price>
-    <tags>	heavyTank private HD secret premiumIGR improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user	</tags>
-    <level>	8	</level>
-  </R54_KV-5_IGR>
-  <R31_Valentine_LL_IGR>
-    <id>	158	</id>
-    <userString>	#igr_vehicles:Valentine_LL_IGR	</userString>
-    <description>	#igr_vehicles:Valentine_LL_IGR_descr	</description>
-    <price>	1	  <gold></gold>
-    </price>
-    <tags>	lightTank private HD secret premiumIGR improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
-    <level>	4	</level>
-  </R31_Valentine_LL_IGR>
-  <R45_IS-7_IGR>
-    <id>	159	</id>
-    <userString>	#igr_vehicles:IS-7_IGR	</userString>
-    <description>	#igr_vehicles:IS-7_IGR_descr	</description>
-    <price>	1	</price>
-    <tags>	heavyTank role_HT_break private HD secret premiumIGR sinai improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
-    <level>	10	</level>
-  </R45_IS-7_IGR>
-  <R11_MS-1_bot>
-    <id>	160	</id>
-    <userString>	#ussr_vehicles:MS-1_bot	</userString>
-    <description>	#ussr_vehicles:MS-1_bot_descr	</description>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret unrecoverable	</tags>
-    <level>	1	</level>
-  </R11_MS-1_bot>
-  <R09_T-26_bot>
-    <id>	161	</id>
-    <userString>	#ussr_vehicles:T-26_bot	</userString>
-    <description>	#ussr_vehicles:T-26_bot_descr	</description>
-    <price>	3700	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret unrecoverable improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </R09_T-26_bot>
-  <R86_LTP_bootcamp>
-    <id>	162	</id>
-    <userString>	#ussr_vehicles:LTP_bootcamp	</userString>
-    <shortUserString>	#ussr_vehicles:LTP_bootcamp_short	</shortUserString>
-    <description>	#ussr_vehicles:LTP_bootcamp_descr	</description>
-    <price>	850	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </R86_LTP_bootcamp>
-  <R50_SU76I_bootcamp>
-    <id>	163	</id>
-    <userString>	#ussr_vehicles:SU76I_bootcamp	</userString>
-    <shortUserString>	#ussr_vehicles:SU76I_bootcamp_short	</shortUserString>
-    <description>	#ussr_vehicles:SU76I_bootcamp_descr	</description>
-    <price>	1000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG private HD secret mediumAT-SPG extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </R50_SU76I_bootcamp>
-  <R08_BT-2_bootcamp>
-    <id>	164	</id>
-    <userString>	#ussr_vehicles:BT-2_bootcamp	</userString>
-    <shortUserString>	#ussr_vehicles:BT-2_bootcamp_short	</shortUserString>
-    <description>	#ussr_vehicles:BT-2_bootcamp_descr	</description>
-    <price>	3500	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </R08_BT-2_bootcamp>
-  <R03_BT-7_bootcamp>
-    <id>	165	</id>
-    <userString>	#ussr_vehicles:BT-7	</userString>
-    <description>	#ussr_vehicles:BT-7_descr	</description>
-    <price>	37000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </R03_BT-7_bootcamp>
-  <R06_T-28_bootcamp>
-    <id>	166	</id>
-    <userString>	#ussr_vehicles:T-28	</userString>
-    <description>	#ussr_vehicles:T-28_descr	</description>
-    <price>	135000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank private HD secret extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </R06_T-28_bootcamp>
-  <R07_T-34-85_bootcamp>
-    <id>	167	</id>
-    <userString>	#ussr_vehicles:T-34-85	</userString>
-    <description>	#ussr_vehicles:T-34-85_descr	</description>
-    <price>	915000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank private HD secret extraHealthReserve_class3_user t34_disclaimer	</tags>
-    <level>	2	</level>
-  </R07_T-34-85_bootcamp>
-  <R22_T-46_bootcamp>
-    <id>	168	</id>
-    <userString>	#ussr_vehicles:T-46	</userString>
-    <description>	#ussr_vehicles:T-46_descr	</description>
-    <price>	38500	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </R22_T-46_bootcamp>
-  <R43_T-70_bootcamp>
-    <id>	169	</id>
-    <userString>	#ussr_vehicles:T-70	</userString>
-    <description>	#ussr_vehicles:T-70_descr	</description>
-    <price>	39300	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </R43_T-70_bootcamp>
   <R152_KV2_W>
     <id>	253	</id>
     <userString>	#ussr_vehicles:KV2_W	</userString>
@@ -1966,74 +2047,13 @@
     <tags>	heavyTank role_HT_support HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
   </R152_KV2_W>
-  <R46_KV-13_SH>
-    <id>	51	</id>
-    <userString>	#ussr_vehicles:KV-13_SH	</userString>
-    <description>	#ussr_vehicles:KV-13_SH_descr	</description>
-    <price>	1	</price>
+  <Observer>
+    <id>	255	</id>
+    <userString>	#ussr_vehicles:Observer	</userString>
+    <description>	#ussr_vehicles:Observer_descr	</description>
+    <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank private HD battle_royale lockOutfit lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret siegeMode dualgun charger	</tags>
+    <tags>	observer private secret lightTank improvedVentilation_class1_user unrecoverable	</tags>
     <level>	1	</level>
-  </R46_KV-13_SH>
-  <R44_T80_MapsTraining_Dummy_LT_1>
-    <id>	110	</id>
-    <userString>	#maps_training:botVehicleType/lightTank	</userString>
-    <description>	#maps_training:botVehicleDescription	</description>
-    <price>	140000	</price>
-    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user secret maps_training private	</tags>
-    <level>	4	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R44_T80_MapsTraining_Dummy_LT_1>
-  <R14_SU-5_MapsTraining_Dummy_SPG_1>
-    <id>	111	</id>
-    <userString>	#maps_training:botVehicleType/SPG	</userString>
-    <description>	#maps_training:botVehicleDescription	</description>
-    <price>	147000	</price>
-    <tags>	SPG HD lightSPG secret maps_training private	</tags>
-    <level>	4	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R14_SU-5_MapsTraining_Dummy_SPG_1>
-  <R04_T-34_MapsTraining_Player_MT_1>
-    <id>	112	</id>
-    <userString>	#ussr_vehicles:T-34_MapsTraining_Player_MT_1	</userString>
-    <description>	#ussr_vehicles:T-34_descr_MapsTraining_Player_MT_1	</description>
-    <price>	356700	</price>
-    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user secret maps_training private t34_disclaimer	</tags>
-    <level>	5	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R04_T-34_MapsTraining_Player_MT_1>
-  <R23_T-43_MapsTraining_Player_MT_2>
-    <id>	113	</id>
-    <userString>	#ussr_vehicles:T-43_MapsTraining_Player_MT_2	</userString>
-    <description>	#ussr_vehicles:T-43_descr_MapsTraining_Player_MT_2	</description>
-    <price>	1355000	</price>
-    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret maps_training private	</tags>
-    <level>	7	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R23_T-43_MapsTraining_Player_MT_2>
-  <R72_T150_MapsTraining_Dummy_HT_2>
-    <id>	114	</id>
-    <userString>	#maps_training:botVehicleType/heavyTank	</userString>
-    <description>	#maps_training:botVehicleDescription	</description>
-    <price>	880000	</price>
-    <tags>	heavyTank HD heavyTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret maps_training private	</tags>
-    <level>	6	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R72_T150_MapsTraining_Dummy_HT_2>
-  <R40_T-54_FL>
-    <id>	225	</id>
-    <userString>	#ussr_vehicles:T-54_FL	</userString>
-    <description>	#ussr_vehicles:T-54_descr	</description>
-    <price>	1	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank HD epic_battles mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user private	</tags>
-    <level>	9	</level>
-  </R40_T-54_FL>
+  </Observer>
 </list.xml>

@@ -1979,6 +1979,8 @@
             <collisionModelServer>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

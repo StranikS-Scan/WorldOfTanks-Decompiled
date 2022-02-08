@@ -1723,6 +1723,8 @@
             <collisionModelServer>	vehicles/russian/R20_T-44/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R20_T-44/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_mainext_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

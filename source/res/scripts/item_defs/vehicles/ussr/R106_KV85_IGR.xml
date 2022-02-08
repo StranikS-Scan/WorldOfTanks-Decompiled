@@ -922,6 +922,8 @@
             <collisionModelServer>	vehicles/russian/R106_KV85/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R106_KV85/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_mainext	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

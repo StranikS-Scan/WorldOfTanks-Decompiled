@@ -3554,6 +3554,8 @@
             <collisionModelServer>	vehicles/british/GB42_Valentine_AT/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB42_Valentine_AT/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3624,6 +3626,8 @@
             <collisionModelServer>	vehicles/british/GB42_Valentine_AT/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB42_Valentine_AT/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3686,6 +3690,7 @@
           </pitchLimits>
           <turretYawLimits>	-15 15	</turretYawLimits>
           <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/british/GB42_Valentine_AT/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/british/GB42_Valentine_AT/crash/lod0/Gun_04.model	</destroyed>

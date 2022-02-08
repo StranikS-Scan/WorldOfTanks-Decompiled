@@ -1379,6 +1379,8 @@
             <collisionModelServer>	vehicles/american/A148_Convertible_Medium_Tank_T3/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A148_Convertible_Medium_Tank_T3/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

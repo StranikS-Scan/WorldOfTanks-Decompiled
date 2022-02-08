@@ -1732,6 +1732,8 @@
             <collisionModelServer>	vehicles/german/G105_T-55_NVA_DDR/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G105_T-55_NVA_DDR/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_mainext	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

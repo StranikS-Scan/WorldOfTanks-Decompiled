@@ -137,46 +137,46 @@ def getRankedMainSeasonAllItems(isRankedShop, yearLBState, yearLBSize):
 
 def getRankedMainSeasonOnHeader(season, itemID):
     title = backport.text(R.strings.ranked_battles.rankedBattle.title())
-    leftSideText = ''
-    rightSideText = ''
+    mainDescr = ''
+    extraDescr = ''
     tooltip = TOOLTIPS_CONSTANTS.RANKED_CALENDAR_DAY_INFO
     if itemID in _EMPTY_WEB_PAGES:
         title = ''
         tooltip = ''
     elif itemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID:
-        leftSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.infoPage.header())
+        mainDescr = backport.text(R.strings.ranked_battles.rankedBattleMainView.infoPage.header())
         tooltip = ''
     elif season is not None:
         startDate = season.getStartDate()
         endDate = season.getEndDate()
         timeDelta = time_utils.getTimeDeltaFromNowInLocal(time_utils.makeLocalServerTime(endDate))
         if timeDelta > time_utils.ONE_WEEK:
-            leftSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.date.period(), start=backport.getLongDateFormat(startDate), finish=backport.getLongDateFormat(endDate))
+            extraDescr = backport.text(R.strings.ranked_battles.rankedBattleMainView.date.period(), start=backport.getLongDateFormat(startDate), finish=backport.getLongDateFormat(endDate))
         else:
-            leftSideText = backport.getTillTimeStringByRClass(timeDelta, R.strings.ranked_battles.rankedBattleMainView.date)
-        rightSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.season(), season=season.getUserName())
+            extraDescr = backport.getTillTimeStringByRClass(timeDelta, R.strings.ranked_battles.rankedBattleMainView.date)
+        mainDescr = backport.text(R.strings.ranked_battles.rankedBattleMainView.season(), season=season.getUserName())
     return {'title': title,
-     'leftSideText': leftSideText,
-     'rightSideText': rightSideText,
+     'mainDescr': mainDescr,
+     'extraDescr': extraDescr,
      'tooltip': tooltip}
 
 
 def getRankedMainSeasonOffHeader(prevSeason, nextSeason, isYearGap, itemID):
     title = backport.text(R.strings.ranked_battles.rankedBattle.title())
-    leftSideText = ''
-    rightSideText = ''
+    mainDescr = ''
+    extraDescr = ''
     if itemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID and isYearGap:
-        rightSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.yearGap.header())
+        mainDescr = backport.text(R.strings.ranked_battles.rankedBattleMainView.yearGap.header())
     elif itemID in _EMPTY_WEB_PAGES:
         title = ''
     elif itemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID:
-        rightSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.infoPage.header())
+        mainDescr = backport.text(R.strings.ranked_battles.rankedBattleMainView.infoPage.header())
     else:
-        rightSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonCompleteSingle(), season=prevSeason.getUserName())
+        mainDescr = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonCompleteSingle(), season=prevSeason.getUserName())
         if nextSeason is not None:
-            rightSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonComplete(), season=prevSeason.getUserName())
-            leftSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap(), newSeason=nextSeason.getUserName(), date=backport.getLongDateFormat(nextSeason.getStartDate()))
+            mainDescr = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonComplete(), season=prevSeason.getUserName())
+            extraDescr = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap(), newSeason=nextSeason.getUserName(), date=backport.getLongDateFormat(nextSeason.getStartDate()))
     return {'title': title,
-     'leftSideText': leftSideText,
-     'rightSideText': rightSideText,
+     'mainDescr': mainDescr,
+     'extraDescr': extraDescr,
      'tooltip': ''}

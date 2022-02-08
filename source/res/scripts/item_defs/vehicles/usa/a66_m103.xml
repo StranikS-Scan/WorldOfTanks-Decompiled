@@ -2822,6 +2822,8 @@
             <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A66_M103/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2923,6 +2925,7 @@
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <models>
             <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_02.model	</destroyed>
@@ -3949,6 +3952,8 @@
             <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A66_M103/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4026,6 +4031,7 @@
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <models>
             <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_04.model	</destroyed>
@@ -4147,6 +4153,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN	</paint>

@@ -1509,6 +1509,8 @@
             <collisionModelServer>	vehicles/german/G120_M41_90/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G120_M41_90/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

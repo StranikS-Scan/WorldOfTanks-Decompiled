@@ -3145,6 +3145,8 @@
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3252,6 +3254,8 @@
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3354,6 +3358,8 @@
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3938,6 +3944,8 @@
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4063,6 +4071,7 @@
             <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4188,6 +4197,8 @@
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4309,6 +4320,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_06.model	</destroyed>

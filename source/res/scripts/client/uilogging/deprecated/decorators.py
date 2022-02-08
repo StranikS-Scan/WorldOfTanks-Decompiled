@@ -3,7 +3,7 @@
 from functools import wraps
 from uilogging.deprecated.base.loggers import BaseLogger, isUILoggingEnabled
 from uilogging.deprecated.logging_constants import KEYS_MAPPING
-__all__ = ('loggerTarget', 'loggerEntry', 'simpleLog', 'logOnMatch', 'logOnCondition', 'settingsLog', 'logProperty')
+__all__ = ('loggerTarget', 'loggerEntry', 'simpleLog', 'logOnMatch', 'logOnCondition', 'settingsLog')
 
 def loggerTarget(logKey, loggerCls):
 
@@ -62,7 +62,7 @@ def simpleLog(action=None, resetTime=True, logOnce=False, kwargsKey=None, argsIn
     return wrapper
 
 
-def logOnMatch(resetTime=True, logOnce=False, objProperty=None, matches=None, matchesKey=None, restrictions=None, validate=True, needCall=False):
+def logOnMatch(resetTime=True, logOnce=False, objProperty=None, matches=None, matchesKey=None, restrictions=None, validate=True):
 
     def wrapper(method):
 
@@ -75,8 +75,6 @@ def logOnMatch(resetTime=True, logOnce=False, objProperty=None, matches=None, ma
                     valuesMap = matches[key]
                 if objProperty and valuesMap:
                     actionValue = getattr(self, objProperty)
-                    if needCall and callable(actionValue):
-                        actionValue = actionValue()
                     if actionValue in matches:
                         self.logStatistic(action=matches[actionValue], resetTime=resetTime, logOnce=logOnce, restrictions=restrictions, validate=validate)
             return method(self, *method_args, **method_kwargs)
@@ -123,27 +121,6 @@ def settingsLog(argsIndex, argMap, preProcessAction):
                     return method(self, *methodArgs, **methodKwargs)
                 self.logStatistic(action=name, resetTime=False, logOnce=False, restrictions=None, validate=False, action_value=KEYS_MAPPING.get(value, value))
             return method(self, *methodArgs, **methodKwargs)
-
-        _impl.__name__ = method.__name__
-        return _impl
-
-    return wrapper
-
-
-def logProperty(resetTime=True, logOnce=False, objProperty=None, needCall=False, restrictions=None, validate=True, postProcessAction=lambda x: x):
-
-    def wrapper(method):
-
-        @wraps(method)
-        def _impl(self, *method_args, **method_kwargs):
-            if issubclass(self.__class__, BaseLogger) and isUILoggingEnabled(self.feature):
-                if objProperty:
-                    actionValue = getattr(self, objProperty)
-                    if needCall and callable(actionValue):
-                        actionValue = actionValue()
-                    actionValue = postProcessAction(actionValue)
-                    self.logStatistic(action=actionValue, resetTime=resetTime, logOnce=logOnce, restrictions=restrictions, validate=validate)
-            return method(self, *method_args, **method_kwargs)
 
         _impl.__name__ = method.__name__
         return _impl

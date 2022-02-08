@@ -1036,6 +1036,8 @@
             <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint></paint>

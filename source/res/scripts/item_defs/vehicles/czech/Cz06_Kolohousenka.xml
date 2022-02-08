@@ -2221,6 +2221,8 @@
             <collisionModelServer>	vehicles/czech/Cz06_Kolohousenka/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz06_Kolohousenka/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2311,6 +2313,8 @@
             <collisionModelServer>	vehicles/czech/Cz06_Kolohousenka/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz06_Kolohousenka/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN_2	</paint>

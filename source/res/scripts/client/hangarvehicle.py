@@ -6,7 +6,6 @@ from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
-from gui.impl.new_year.navigation import NewYearNavigation
 
 class HangarVehicle(ClientSelectableCameraVehicle):
     hangarSpace = dependency.descriptor(IHangarSpace)
@@ -47,13 +46,6 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         g_eventBus.removeListener(events.HangarCustomizationEvent.CHANGE_VEHICLE_MODEL_TRANSFORM, self.__changeVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM, self.__resetVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
         super(HangarVehicle, self).onLeaveWorld()
-
-    def onSelect(self):
-        if NewYearNavigation.getCurrentObject() is not None:
-            NewYearNavigation.closeMainView(False, False)
-        else:
-            super(HangarVehicle, self).onSelect()
-        return
 
     def __onSpaceCreated(self):
         self.setEnable(False)

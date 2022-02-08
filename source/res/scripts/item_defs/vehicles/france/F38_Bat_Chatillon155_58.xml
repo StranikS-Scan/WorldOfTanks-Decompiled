@@ -1526,6 +1526,8 @@
             <collisionModelServer>	vehicles/french/F38_Bat_Chatillon155_58/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F38_Bat_Chatillon155_58/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload_automat_reloading_155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

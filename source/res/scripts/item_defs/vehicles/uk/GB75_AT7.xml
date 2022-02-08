@@ -3187,6 +3187,7 @@
             <collisionModelClient>	vehicles/british/GB75_AT7/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
+          <effects>	shot_medium	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3275,6 +3276,8 @@
             <collisionModelServer>	vehicles/british/GB75_AT7/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB75_AT7/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3365,6 +3368,8 @@
             <collisionModelServer>	vehicles/british/GB75_AT7/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB75_AT7/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3449,6 +3454,8 @@
             <collisionModelServer>	vehicles/british/GB75_AT7/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB75_AT7/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

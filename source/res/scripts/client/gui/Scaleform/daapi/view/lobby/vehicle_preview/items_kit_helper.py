@@ -117,10 +117,7 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_MODULE,
  ItemPackType.BLUEPRINT_ANY: TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_INFO,
  ItemPackType.REFERRAL_AWARDS: TOOLTIPS_CONSTANTS.REFERRAL_AWARDS,
  ItemPackType.DEMOUNT_KIT: TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT,
- ItemPackType.CUSTOM_BATTLE_PASS_POINTS: TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS,
- ItemPackType.LUNAR_NY_ENVELOPE: TOOLTIPS_CONSTANTS.SHOP_LUNAR_NY_ENVELOPE,
- ItemPackType.LUNAR_NY_PREREQUISITE: TOOLTIPS_CONSTANTS.SHOP_LUNAR_NY_PREREQUISITE}
-WULF_TOOLTIP_TYPES = (TOOLTIPS_CONSTANTS.SHOP_LUNAR_NY_ENVELOPE, TOOLTIPS_CONSTANTS.SHOP_LUNAR_NY_PREREQUISITE)
+ ItemPackType.CUSTOM_BATTLE_PASS_POINTS: TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS}
 _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_WINTER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_SUMMER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
@@ -346,13 +343,9 @@ def getItemTooltipType(rawItem, item):
 def showItemTooltip(toolTipMgr, rawItem, item):
     tooltipType = getItemTooltipType(rawItem, item)
     if tooltipType is not None:
-        if tooltipType in WULF_TOOLTIP_TYPES:
-            buildArgs = [rawItem.id, rawItem.count]
-            toolTipMgr.showWulfTooltip(tooltipType, buildArgs)
-        else:
-            defaults = toolTipMgr.getTypedTooltipDefaultBuildArgs(tooltipType)
-            buildArgs = [ rawItem.extra.get(argName, defaultValue) for argName, defaultValue in defaults ]
-            toolTipMgr.onCreateTypedTooltip(tooltipType, [rawItem.id] + buildArgs[1:], 'INFO')
+        defaults = toolTipMgr.getTypedTooltipDefaultBuildArgs(tooltipType)
+        buildArgs = [ rawItem.extra.get(argName, defaultValue) for argName, defaultValue in defaults ]
+        toolTipMgr.onCreateTypedTooltip(tooltipType, [rawItem.id] + buildArgs[1:], 'INFO')
     else:
         header = getItemTitle(rawItem, item)
         body = getItemDescription(rawItem, item)

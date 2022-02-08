@@ -4,7 +4,7 @@ import typing
 import ResMgr
 from items import _xml
 from gui.battle_pass.battle_pass_bonuses_helper import BonusesHelper
-from gui.battle_pass.battle_pass_consts import BonusesLayoutConsts
+from gui.battle_pass.battle_pass_constants import BonusesLayoutConsts
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus
 _PRIORITY_CONFIG_FILE = 'gui/battle_pass_bonuses_layout.xml'

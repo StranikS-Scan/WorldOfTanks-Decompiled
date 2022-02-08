@@ -117,8 +117,6 @@ class ItemPackType(CONST_CONTAINER):
     BLUEPRINT_ANY = 'blueprint/any'
     DEMOUNT_KIT = 'demountKit'
     REFERRAL_AWARDS = 'referral_awards'
-    LUNAR_NY_ENVELOPE = 'lunarNY_envelop'
-    LUNAR_NY_PREREQUISITE = 'lunarNY_prerequisite'
 
 
 class ItemPackTypeGroup(CONST_CONTAINER):

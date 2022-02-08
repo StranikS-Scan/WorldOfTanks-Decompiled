@@ -1794,6 +1794,8 @@
             <collisionModelServer>	vehicles/russian/R159_SU_130PM/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R159_SU_130PM/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <shotOffset>	0.169464 0.116070 0.000000	</shotOffset>
           <customizationSlots>
             <slot>

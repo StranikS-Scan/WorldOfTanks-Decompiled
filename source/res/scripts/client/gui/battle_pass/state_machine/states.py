@@ -2,17 +2,16 @@
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/states.py
 from functools import partial
 import typing
-from battle_pass_common import get3DStyleProgressToken, BattlePassRewardReason
-from frameworks.state_machine import ConditionTransition, StringEventTransition
-from frameworks.state_machine import State, StateFlags, StateEvent
-from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter, showVideo, BattlePassProgressionSubTabs
+from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
+from frameworks.state_machine import ConditionTransition, State, StateEvent, StateFlags
+from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter, showVideo, getStyleForChapter
 from gui.battle_pass.state_machine import lockNotificationManager
-from gui.battle_pass.state_machine.state_machine_helpers import isProgressionComplete, packToken
+from gui.battle_pass.state_machine.state_machine_helpers import isProgressionComplete, packToken, processRewardsToChoose
 from gui.impl.gen import R
-from gui.impl.lobby.battle_pass.battle_pass_buy_view import g_BPBuyViewStates, WINDOW_IS_NOT_OPENED
-from gui.server_events.events_dispatcher import showBattlePass3dStyleChoiceWindow, showMissionsBattlePassCommonProgression
+from gui.impl.lobby.battle_pass.battle_pass_buy_view import WINDOW_IS_NOT_OPENED, g_BPBuyViewStates
+from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
-from gui.shared.event_dispatcher import showBattlePassRewardChoiceWindow, showBattlePassAwardsWindow
+from gui.shared.event_dispatcher import showBattlePassAwardsWindow, showBattlePassBuyWindow, showBattlePassRewardsSelectionWindow
 from gui.shared.events import LobbySimpleEvent
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
@@ -74,8 +73,8 @@ class LobbyState(State):
     def _onEntered(self):
         lockNotificationManager(False, notificationManager=self.__notificationManager)
         self.__battlePass.onRewardSelectChange()
-        if g_BPBuyViewStates.chapter != WINDOW_IS_NOT_OPENED:
-            showMissionsBattlePassCommonProgression(BattlePassProgressionSubTabs.BUY_TAB)
+        if g_BPBuyViewStates.chapterID != WINDOW_IS_NOT_OPENED:
+            showBattlePassBuyWindow()
 
     def _onExited(self):
         lockNotificationManager(True, notificationManager=self.__notificationManager)
@@ -91,30 +90,9 @@ class ChoiceState(State):
     def choiceItem(self):
         return self.getChildByIndex(0)
 
-    @property
-    def choiceStyle(self):
-        return self.getChildByIndex(1)
-
-    @property
-    def previewScreen(self):
-        return self.getChildByIndex(2)
-
     def configure(self):
         choiceItem = ChoiceItemState()
-        choiceStyle = ChoiceStyleState()
-        preview = PreviewState()
-        choiceStyle.addTransition(StringEventTransition(StateMachineEventID.OPEN_PREVIEW, priority=2), target=preview)
-        preview.addTransition(StringEventTransition(StateMachineEventID.CLOSE_PREVIEW, priority=1), target=choiceStyle)
         self.addChildState(choiceItem)
-        self.addChildState(choiceStyle)
-        self.addChildState(preview)
-
-    def _onExited(self):
-        machine = self.getMachine()
-        if machine is not None:
-            if machine.getChosenStyleChapter() is None and machine.hasStyleToChoose():
-                machine.clearStylesToChoose()
-        return
 
 
 class ChoiceItemState(State):
@@ -126,8 +104,16 @@ class ChoiceItemState(State):
     def _onEntered(self):
         machine = self.getMachine()
         if machine is not None:
+            _, data = machine.getRewardsData()
             if machine.hasRewardToChoose():
-                showBattlePassRewardChoiceWindow()
+
+                def onCloseCallback():
+                    for token, isTaken in processRewardsToChoose(machine.getRewardsToChoose()).iteritems():
+                        machine.removeRewardToChoose(token, isTaken)
+
+                    machine.post(StateEvent())
+
+                showBattlePassRewardsSelectionWindow(chapterID=data.get('chapter', 0), level=data.get('level', 0), onRewardsReceivedCallback=machine.extendRewards, onCloseCallback=onCloseCallback)
             else:
                 machine.post(StateEvent())
         return
@@ -140,7 +126,7 @@ class ChoiceStyleState(State):
         super(ChoiceStyleState, self).__init__(stateID=BattlePassRewardStateID.CHOICE_STYLE)
 
     def _onEntered(self):
-        showBattlePass3dStyleChoiceWindow()
+        pass
 
 
 class PreviewState(State):
@@ -214,29 +200,20 @@ class RewardStyleState(State):
         if machine is None:
             return
         else:
-            chapter = machine.getChosenStyleChapter()
-            _, machineData = machine.getRewardsData()
-            if machineData is not None:
-                oldLevel = machineData['prevLevel']
-                newLevel = machineData['newLevel']
-                oldChapter = self.__battlePass.getChapterByLevel(oldLevel)
-                newChapter = self.__battlePass.getChapterByLevel(newLevel)
-                isMaxLevel = newLevel == self.__battlePass.getMaxLevel()
-                if chapter >= oldChapter and (oldChapter != newChapter or isMaxLevel):
-                    machine.post(StateEvent())
-                    return
-            chapter = machine.getChosenStyleChapter()
-            _, level = getStyleInfoForChapter(chapter)
-            if level is None:
+            chapterID = machine.getChosenStyleChapter()
+            _, level = getStyleInfoForChapter(chapterID)
+            style = getStyleForChapter(chapterID)
+            if style is not None and style.getProgressionLevel() == style.getMaxProgressionLevel():
                 machine.post(StateEvent())
                 return
-            prevLevel, _ = self.__battlePass.getChapterLevelInterval(chapter)
-            data = {'reason': BattlePassRewardReason.SELECT_STYLE,
+            prevLevel, _ = self.__battlePass.getChapterLevelInterval(chapterID)
+            data = {'reason': BattlePassRewardReason.STYLE_UPGRADE,
+             'chapter': chapterID,
              'prevLevel': prevLevel,
              'callback': partial(machine.post, StateEvent())}
-            styleToken = get3DStyleProgressToken(self.__battlePass.getSeasonID(), chapter, level)
+            styleToken = get3DStyleProgressToken(self.__battlePass.getSeasonID(), chapterID, level)
             rewards = packToken(styleToken)
-            machine.clearChosenStyle()
+            machine.clearChapterStyle()
             showBattlePassAwardsWindow([rewards], data)
             return
 
@@ -259,23 +236,14 @@ class RewardAnyState(State):
                 machine.post(StateEvent())
                 return
             if data is None:
-                data = {'reason': BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS,
-                 'prevLevel': self.__battlePass.getCurrentLevel()}
-            data['callback'] = partial(machine.post, StateEvent())
+                data = {'reason': BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS}
+            data['callback'] = partial(self.__onAwardClose, data.get('chapter'), data.get('reason'))
             chapter = machine.getChosenStyleChapter()
-            _, level = getStyleInfoForChapter(chapter)
-            chosenStyleLevel = level
-            if chapter is None:
-                chapter = self.__battlePass.getChapterByLevel(data['prevLevel'])
-                if 'newLevel' in data:
-                    newLevel = data['newLevel'] + 1
-                    if chosenStyleLevel is None and newLevel > self.__battlePass.getChapterLevelInterval(chapter)[1]:
-                        level = self.__battlePass.getChapterStyleProgress(chapter)
-            if level is not None:
+            if chapter is not None:
+                _, level = getStyleInfoForChapter(chapter)
                 styleToken = get3DStyleProgressToken(self.__battlePass.getSeasonID(), chapter, level)
                 rewards.append(packToken(styleToken))
-                if chosenStyleLevel is not None:
-                    machine.clearChosenStyle()
+                machine.clearChapterStyle()
             if not rewards:
                 machine.clearSelf()
                 machine.post(StateEvent())
@@ -288,6 +256,18 @@ class RewardAnyState(State):
         if machine is None:
             return
         else:
-            if not machine.hasStyleToChoose():
+            chapterID = self.__battlePass.getCurrentChapterID()
+            currentLevel = self.__battlePass.getCurrentLevel()
+            if self.__battlePass.isFinalLevel(chapterID, currentLevel):
                 machine.clearSelf()
+                showMissionsBattlePass(layoutID=R.views.lobby.battle_pass.ChapterChoiceView())
+            machine.clearManualFlow()
             return
+
+    def __onAwardClose(self, chapterID, reason):
+        machine = self.getMachine()
+        if machine is not None:
+            machine.post(StateEvent())
+        if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
+            showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), chapterID)
+        return

@@ -2970,6 +2970,7 @@
             <collisionModelClient>	vehicles/japan/J28_O_I_100/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3055,6 +3056,7 @@
             <collisionModelClient>	vehicles/japan/J28_O_I_100/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3135,6 +3137,8 @@
             <collisionModelServer>	vehicles/japan/J28_O_I_100/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J28_O_I_100/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

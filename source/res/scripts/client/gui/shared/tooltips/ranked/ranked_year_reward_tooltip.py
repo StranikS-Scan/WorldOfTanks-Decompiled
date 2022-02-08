@@ -5,13 +5,13 @@ from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS as _RBC
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter, rankedYearAwardsSortFunction
+from gui.selectable_reward.constants import SELECTABLE_BONUS_NAME
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
-from shared_utils import findFirst
+from shared_utils import findFirst, first
 from skeletons.gui.game_control import IRankedBattlesController
 from gui.server_events.awards_formatters import AWARDS_SIZES
 _TOOLTIP_MIN_WIDTH = 442
@@ -38,9 +38,10 @@ class RankedYearReward(BlocksTooltipData):
         listData = getRankedAwardsFormatter().getFormattedBonuses(bonuses, size=AWARDS_SIZES.BIG, compareMethod=rankedYearAwardsSortFunction)
         if listData:
             items.append(self.__packAwardBlock(listData))
-        selectableDevice = findFirst(lambda b: YEAR_AWARD_SELECTABLE_OPT_DEVICE in getattr(b, 'getTokens', lambda : {})(), bonuses)
+        selectableDevice = findFirst(lambda b: b.getName() == SELECTABLE_BONUS_NAME, bonuses)
         if selectableDevice is not None:
-            items.append(self.__packEquipmentChoiceBlock(selectableDevice.getTokens()[YEAR_AWARD_SELECTABLE_OPT_DEVICE].count))
+            selectableRewardsLeft = int(first(selectableDevice.getTokens()).split(':')[-1])
+            items.append(self.__packEquipmentChoiceBlock(selectableRewardsLeft))
         items.append(self.__packStatusBlock(status))
         return items
 
@@ -62,7 +63,7 @@ class RankedYearReward(BlocksTooltipData):
     def __packEquipmentChoiceBlock(self, equipmentCount):
         equipmentChoiceDyn = R.strings.ranked_battles.yearRewards.tooltip.equipmentChoice
         header = formatters.packImageTextBlockData(title=text_styles.middleTitle(backport.text(equipmentChoiceDyn.title())), desc=text_styles.main(backport.text(equipmentChoiceDyn.description.num(equipmentCount)())), padding=formatters.packPadding(top=-20))
-        descr = formatters.packItemTitleDescBlockData(desc=text_styles.main(backport.text(equipmentChoiceDyn.list())), img=backport.image(R.images.gui.maps.icons.rankedBattles.delux_gift()), imgAtLeft=False, imgPadding=formatters.packPadding(top=20, right=-10), padding=formatters.packPadding(top=5))
+        descr = formatters.packItemTitleDescBlockData(desc=text_styles.main(backport.text(equipmentChoiceDyn.list())), img=backport.image(R.images.gui.maps.icons.rankedBattles.deluxe_gift()), imgAtLeft=False, imgPadding=formatters.packPadding(top=20, right=-10), padding=formatters.packPadding(top=5))
         return formatters.packBuildUpBlockData([header, descr])
 
     def __packStatusBlock(self, status):
@@ -71,10 +72,10 @@ class RankedYearReward(BlocksTooltipData):
         statusStr = backport.text(statusDyn.title())
         if status in (_RBC.YEAR_REWARD_STATUS_PASSED, _RBC.YEAR_REWARD_STATUS_PASSED_FINAL):
             statusStr = text_styles.warning(statusStr)
-        elif status in (_RBC.YEAR_REWARD_STATUS_CURRENT, _RBC.YEAR_REWARD_STATUS_CURRENT_FINAL):
+        elif status in _RBC.YEAR_REWARD_SELECTED_STATUSES:
             statusStr = text_styles.statInfo(statusStr)
         else:
             statusStr = text_styles.critical(statusStr)
-        statusBlock.append(formatters.packAlignedTextBlockData(statusStr, BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-4)))
+        statusBlock.append(formatters.packAlignedTextBlockData(statusStr, BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-4, right=14, left=14)))
         statusBlock.append(formatters.packAlignedTextBlockData(text_styles.main(backport.text(statusDyn.description())), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=2, bottom=-2)))
         return formatters.packBuildUpBlockData(statusBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)

@@ -3300,6 +3300,8 @@
             <collisionModelServer>	vehicles/french/F37_AMX50_Foch/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F37_AMX50_Foch/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

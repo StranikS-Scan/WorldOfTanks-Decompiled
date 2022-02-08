@@ -960,6 +960,8 @@
             <collisionModelServer>	vehicles/russian/R146_STG_Tday/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R146_STG_Tday/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

@@ -2150,6 +2150,8 @@
             <collisionModelServer>	vehicles/sweden/S15_L_60/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S15_L_60/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN_2	</paint>

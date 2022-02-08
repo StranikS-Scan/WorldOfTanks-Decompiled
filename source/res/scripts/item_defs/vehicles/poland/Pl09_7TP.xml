@@ -2844,7 +2844,8 @@
             <collisionModelServer>	vehicles/poland/Pl09_7TP/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl09_7TP/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_small_mb	</effects>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2910,6 +2911,8 @@
             <collisionModelServer>	vehicles/poland/Pl09_7TP/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl09_7TP/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3442,7 +3445,8 @@
             <collisionModelServer>	vehicles/poland/Pl09_7TP/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl09_7TP/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_small_mb	</effects>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3556,6 +3560,8 @@
             <collisionModelServer>	vehicles/poland/Pl09_7TP/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl09_7TP/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3662,6 +3668,7 @@
             <collisionModelClient>	vehicles/poland/Pl09_7TP/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

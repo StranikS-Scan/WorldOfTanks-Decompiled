@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/cgf_script/managers_registrator.py
+import sys
 import CGF
 from cgf_script.component_meta_class import CGFComponent
 from soft_exception import SoftException
@@ -92,6 +93,8 @@ def autoregister(presentInAllWorlds=False, category='', presentInEditor=False):
 
     def manager_registrator(cls):
         CGF.registerManager(cls, presentInAllWorlds, presentInEditor)
+        modulePath = sys.modules[cls.__module__].__file__ if cls.__module__ != '__builtin__' else '__builtin__'
+        CGF.registerModulePath(cls, modulePath)
         if presentInAllWorlds is False:
             generateRule(cls, category)
         return cls

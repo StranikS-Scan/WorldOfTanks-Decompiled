@@ -2769,6 +2769,8 @@
             <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G55_E-75/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2850,6 +2852,7 @@
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_02.model	</destroyed>
@@ -2936,6 +2939,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_03.model	</destroyed>
@@ -3609,6 +3613,8 @@
             <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G55_E-75/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3682,6 +3688,7 @@
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_06.model	</destroyed>
@@ -3768,6 +3775,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_03.model	</destroyed>
@@ -3864,6 +3872,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_largeext_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

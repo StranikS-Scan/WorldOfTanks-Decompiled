@@ -11,7 +11,7 @@ from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared.event_dispatcher import hideVehiclePreview
 from helpers import dependency
-from gui import SystemMessages
+from gui import SystemMessages, g_tankActiveCamouflage
 from gui.Scaleform.daapi.view.lobby.customization.context.context import CustomizationContext
 from gui.customization.shared import C11N_ITEM_TYPE_MAP, HighlightingMode, C11nId
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
@@ -31,6 +31,7 @@ from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
 from items.components.c11n_constants import SeasonType, ApplyArea, CUSTOM_STYLE_POOL_ID, OUTFIT_POOL_EMPTY_STUB
 from vehicle_systems.stricted_loading import makeCallbackWeak
+from vehicle_systems.camouflages import getStyleProgressionOutfit
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 if typing.TYPE_CHECKING:
     from gui.customization.constants import CustomizationModeSource
@@ -521,12 +522,17 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             outfit = entity.appearance.outfit
             if not outfit.style or not outfit.style.isProgression:
                 return 1
-            outfit.setProgressionLevel(level)
-            self.tryOnOutfit(outfit)
-            if self.__customizationCtx is not None:
-                slotID = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
-                self.__customizationCtx.events.onComponentChanged(slotID, True)
-            return outfit.progressionLevel
+            if g_currentPreviewVehicle.isPresent():
+                vehicle = g_currentPreviewVehicle.item
+                if vehicle:
+                    season = g_tankActiveCamouflage.get(vehicle.intCD, vehicle.getAnyOutfitSeason())
+                    resOutfit = getStyleProgressionOutfit(outfit, level, season)
+                    self.tryOnOutfit(resOutfit)
+                    if self.__customizationCtx is not None:
+                        slotID = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
+                        self.__customizationCtx.events.onComponentChanged(slotID, True)
+                    return resOutfit.progressionLevel
+            return 1
 
     def getCurrentProgressionStyleLevel(self):
         entity = self.hangarSpace.getVehicleEntity()

@@ -159,10 +159,11 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return
 
     def onLobbyInited(self, ctx):
-        self.__itemsCache.onSyncCompleted += self.__invalidateBattleAbilities
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__updateEpicMetaGameSettings
-        g_clientUpdateManager.addCallbacks({'epicMetaGame': self.__updateEpic})
         g_currentVehicle.onChanged += self.__invalidateBattleAbilities
+        self.__itemsCache.onSyncCompleted += self.__invalidateBattleAbilities
+        g_clientUpdateManager.addCallbacks({'epicMetaGame': self.__updateEpic,
+         'inventory': self.__onInventoryUpdate})
         self.startGlobalListening()
         self.__setData()
         self.__invalidateBattleAbilities()
@@ -351,8 +352,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return BigWorld.player().epicMetaGame.getStoredDiscount()
 
     def getEventTimeLeft(self):
-        if not self.isEnabled():
-            return 0
         timeLeft = self.getSeasonTimeRange()[1] - time_utils.getCurrentLocalServerTimestamp()
         return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
 
@@ -382,8 +381,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def __invalidateBattleAbilities(self, *_):
         if not self.__itemsCache.isSynced():
             return
-        battleAbilities = self.__invalidateBattleAbilityItems()
-        self.__invalidateBattleAbilitiesForVehicle(battleAbilities)
+        self.__invalidateBattleAbilityItems()
+        self.__invalidateBattleAbilitiesForVehicle()
 
     def __setData(self):
         self.__skillData = {}
@@ -478,9 +477,9 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
                         item.isUnlocked = False
             item.isUnlocked = False
 
-        return data
+        return
 
-    def __invalidateBattleAbilitiesForVehicle(self, battleAbilities):
+    def __invalidateBattleAbilitiesForVehicle(self):
         vehicle = g_currentVehicle.item
         if vehicle is None or vehicle.descriptor.type.level not in self.__lobbyContext.getServerSettings().epicBattles.validVehicleLevels or not self.__isInValidPrebattle():
             return
@@ -489,6 +488,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             selectedItems = [None] * amountOfSlots
             skillInfo = self.getAllSkillsInformation()
             selectedSkills = self.getSelectedSkills(vehicle.intCD)
+            battleAbilities = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.EMPTY)
             for item in battleAbilities.values():
                 for index, skillID in enumerate(selectedSkills):
                     if skillID is not None and skillID >= 0:

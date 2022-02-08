@@ -68,16 +68,10 @@ def get_gift_system_state(req_event_ids):
      'expiration_time': current_time + time_utils.ONE_MINUTE,
      'expiration_delta': 5 * time_utils.ONE_MINUTE,
      'state': []}
-    return {str(event_id):event_stub for event_id in req_event_ids}
+    return {event_id:event_stub for event_id in req_event_ids}
 
 
 def post_gift_system_gift(*_):
-    current_time = int(time.time())
-    response_stub = {'execution_time': current_time - time_utils.ONE_SECOND}
-    return response_stub
-
-
-def post_secret_santa_gift(*_):
     current_time = int(time.time())
     response_stub = {'execution_time': current_time - time_utils.ONE_SECOND}
     return response_stub
@@ -683,8 +677,3 @@ class FakeDataAccessor(base.BaseDataAccessor):
     def post_gift_system_gift(self, *_):
         self._storage.get('post_gift_system_gift', {}).clear()
         return self._request_data('post_gift_system_gift', None)
-
-    @fake_method(example=post_secret_santa_gift)
-    def post_secret_santa_gift(self, *_):
-        self._storage.get('post_secret_santa_gift', {}).clear()
-        return self._request_data('post_secret_santa_gift', None)

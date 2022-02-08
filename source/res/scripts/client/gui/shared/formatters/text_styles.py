@@ -56,15 +56,9 @@ __all__ = ('standard',
  'grandTitle',
  'grandTitleYellow',
  'grandTitleTK',
- 'nyVehicleTitle',
- 'nyVehicleSmallTitle',
- 'nyVehicleMain',
- 'nyVehicleSmallMain',
  'textEpic',
  'yellowText',
- 'greenText',
- 'nyNotEnoughShardsDialogCostBlock',
- 'nyNotEnoughShardsDialogLevel')
+ 'greenText')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -306,10 +300,6 @@ def tutorial(text):
     return _formatText('tutorialText', text)
 
 
-def tutorialBig(text):
-    return _formatText('tutorialTextBig', text)
-
-
 def playerOnline(text):
     return _formatText('playerOnline', text)
 
@@ -426,34 +416,6 @@ def yellowText(text):
 
 def greenText(text):
     return _formatText('greenText', text)
-
-
-def nyVehicleTitle(text):
-    return _formatText('nyVehicleTitle', text)
-
-
-def nyVehicleSmallTitle(text):
-    return _formatText('nyVehicleSmallTitle', text)
-
-
-def nyVehicleMain(text):
-    return _formatText('nyVehicleMain', text)
-
-
-def nyVehicleSmallMain(text):
-    return _formatText('nyVehicleSmallMain', text)
-
-
-def vehicleNameNY(text):
-    return _formatText('vehicleNameNY', text)
-
-
-def nyNotEnoughShardsDialogCostBlock(text):
-    return _formatText('nyNotEnoughShardsDialogCostBlock', text)
-
-
-def nyNotEnoughShardsDialogLevel(text):
-    return _formatText('nyNotEnoughShardsDialogLevel', text)
 
 
 def discountText(text):

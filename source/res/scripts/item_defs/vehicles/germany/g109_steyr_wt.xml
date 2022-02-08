@@ -1940,6 +1940,8 @@
             <collisionModelServer>	vehicles/german/G109_Steyr_WT/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G109_Steyr_WT/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

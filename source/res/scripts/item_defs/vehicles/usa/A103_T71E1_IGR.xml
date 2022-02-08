@@ -850,6 +850,8 @@
             <collisionModelServer>	vehicles/american/A103_T71E1/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A103_T71E1/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

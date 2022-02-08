@@ -4,12 +4,12 @@ from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.missions.regular.daily_quests_injector_view import DailyQuestsInjectorView
 from gui.Scaleform.daapi.view.lobby.missions.regular.missions_tab_bar import MissionsTabBarComponent
-from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ScopeTemplates, ComponentSettings
+from gui.Scaleform.framework import ComponentSettings, GroupedViewSettings, ScopeTemplates, ViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.app_loader import settings as app_settings
-from gui.impl.lobby.battle_pass.battle_pass_progressions_view import BattlePassProgressionsComponent
+from gui.impl.lobby.battle_pass.battle_pass_view import BattlePassViewsHolderComponent
 from gui.impl.lobby.mapbox.mapbox_progression_view import MapboxProgressionsComponent
 from gui.shared import EVENT_BUS_SCOPE
 
@@ -44,7 +44,7 @@ def getViewSettings():
      ComponentSettings(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, MissionsGroupedView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, DailyQuestsInjectorView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, MissionsMarathonView, ScopeTemplates.VIEW_SCOPE),
-     ComponentSettings(QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, BattlePassProgressionsComponent, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, BattlePassViewsHolderComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS, MapboxProgressionsComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, MissionsEventBoardsView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, MissionsCategoriesView, ScopeTemplates.VIEW_SCOPE),
@@ -75,10 +75,11 @@ class MissionsPackageBusinessHandler(PackageBusinessHandler):
 
     def __loadMissionsPageOrUpdateCurrentTab(self, event):
         subView = self.findViewByAlias(WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_MISSIONS)
-        if subView and subView.getCurrentTabAlias() == event.ctx.get('tab') and 'subTab' in event.ctx:
-            if subView.getCurrentTabAlias() == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
+        if subView and subView.getCurrentTabAlias() == event.ctx.get('tab'):
+            tabAlias = subView.getCurrentTabAlias()
+            if tabAlias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS and 'subTab' in event.ctx:
                 subView.currentTab.setDefaultTab(event.ctx['subTab'])
-            elif subView.getCurrentTabAlias() == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS:
-                subView.currentTab.setSubTab(event.ctx['subTab'])
+            elif tabAlias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS:
+                subView.currentTab.updateState(**event.ctx)
         else:
             self.loadViewByCtxEvent(event)

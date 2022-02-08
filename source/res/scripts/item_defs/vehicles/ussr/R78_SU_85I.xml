@@ -2318,6 +2318,8 @@
             <collisionModelServer>	vehicles/russian/R78_SU_85I/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R78_SU_85I/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

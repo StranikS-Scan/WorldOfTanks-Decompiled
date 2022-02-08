@@ -1933,6 +1933,8 @@
             <collisionModelServer>	vehicles/russian/R72_T150_MapsTraining_Dummy_HT_2/collision/Gun_09.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R72_T150_MapsTraining_Dummy_HT_2/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

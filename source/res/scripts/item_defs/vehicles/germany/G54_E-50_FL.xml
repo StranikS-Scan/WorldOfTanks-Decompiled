@@ -2162,6 +2162,8 @@
             <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_08.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

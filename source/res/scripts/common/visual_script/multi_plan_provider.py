@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/visual_script/multi_plan_provider.py
 import VSE
 from context import VScriptContext
-from misc import preloadPlanXml
+from misc import PlanNameAndParams, preloadPlanXml
 from typing import Iterable, Any
 from debug_utils import LOG_ERROR
 from plan_tags import PlanTags
@@ -10,7 +10,7 @@ from constants import IS_DEVELOPMENT
 from soft_exception import SoftException
 
 class PlanHolder(object):
-    __slots__ = ('plan', 'loadState', 'autoStart', '__inputParamCache')
+    __slots__ = ('plan', 'loadState', 'autoStart', '__inputParamCache', 'params')
     INACTIVE = 0
     LOADING = 1
     LOADED = 2
@@ -22,6 +22,7 @@ class PlanHolder(object):
         self.loadState = state
         self.autoStart = auto
         self.__inputParamCache = {}
+        self.params = {}
 
     @property
     def isLoaded(self):
@@ -50,8 +51,12 @@ class PlanHolder(object):
                     self.plan.setOptionalInputParam(name, value)
 
                 self.__inputParamCache.clear()
-            if self.isLoaded and self.autoStart:
-                self.plan.start()
+            if self.autoStart:
+                self.start()
+
+    def start(self):
+        if self.isLoaded:
+            self.plan.start(self.params)
 
     def setOptionalInputParam(self, name, value):
         if self.isLoaded:
@@ -87,7 +92,7 @@ class MultiPlanProvider(object):
     def start(self):
         for holder in self._plans.itervalues():
             if holder.isLoaded:
-                holder.plan.start()
+                holder.plan.start(holder.params)
             holder.autoStart = True
 
     def stop(self):
@@ -100,7 +105,7 @@ class MultiPlanProvider(object):
         for holder in self._plans.itervalues():
             if holder.isLoaded:
                 holder.plan.stop()
-                holder.plan.start()
+                holder.plan.start(holder.params)
 
     def pause(self):
         map(lambda holder: holder.plan.pause() if holder.isLoaded else None, self._plans.itervalues())
@@ -113,11 +118,13 @@ class MultiPlanProvider(object):
 
     def load(self, planNames, autoStart=False):
         self.reset()
-        for planName in planNames:
-            self._loadPlan(planName)
+        for entry in planNames:
+            if isinstance(entry, PlanNameAndParams):
+                self._loadPlan(entry.name, dict(entry.params))
+            self._loadPlan(entry)
 
-    def startPlan(self, planName):
-        self._loadPlan(planName, True)
+    def startPlan(self, planName, params={}):
+        self._loadPlan(planName, params, True)
 
     def setOptionalInputParam(self, name, value):
         for holder in self._plans.itervalues():
@@ -129,8 +136,9 @@ class MultiPlanProvider(object):
 
         self._context = context
 
-    def _loadPlan(self, planName, autoStart=False):
+    def _loadPlan(self, planName, params={}, autoStart=False):
         holder = PlanHolder(VSE.Plan(), PlanHolder.LOADING, autoStart)
+        holder.params = params
         if self._context is not None:
             holder.plan.setContext(self._context)
         holder.load(planName, self._aspect, self._planTags.tags)
@@ -140,12 +148,14 @@ class MultiPlanProvider(object):
 
 class CallableProviderType:
     ARENA = 'ARENA'
+    HANGAR = 'HANGAR'
 
 
 if IS_DEVELOPMENT:
 
     class CallablePlanProvider(MultiPlanProvider):
-        providers = {CallableProviderType.ARENA: set()}
+        providers = {CallableProviderType.ARENA: set(),
+         CallableProviderType.HANGAR: set()}
         plansOnLoad = dict()
 
         def __init__(self, aspect, name, arenaBonusType=0):
@@ -160,18 +170,18 @@ if IS_DEVELOPMENT:
             super(CallablePlanProvider, self).load(planNames, autoStart)
             if self._name in self.plansOnLoad:
                 for planName in self.plansOnLoad[self._name]:
-                    self._loadPlan(planName, autoStart)
+                    self._loadPlan(planName, {}, autoStart)
 
 
     def setPlansOnLoad(name, planNames):
         CallablePlanProvider.plansOnLoad[name] = planNames
 
 
-    def startPlan(name, planName):
+    def startPlan(name, planName, params={}):
         if name not in CallablePlanProvider.providers:
             raise SoftException('Wrong provider name')
         for provider in CallablePlanProvider.providers[name]:
-            provider.startPlan(planName)
+            provider.startPlan(planName, params)
 
 
 def makeMultiPlanProvider(aspect, name, arenaBonusType=0):

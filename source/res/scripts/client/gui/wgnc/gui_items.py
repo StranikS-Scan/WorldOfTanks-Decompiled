@@ -274,7 +274,3 @@ class GUIHolder(object):
             return
         for _, item in self.__items.iteritems():
             item.validate(actionsHolder)
-
-
-def createPopUpItem(body, topic, priority, buttons, icon, bg, group, isNotify):
-    return PopUpItem(body, topic, priority, buttons, icon, bg, group, isNotify)

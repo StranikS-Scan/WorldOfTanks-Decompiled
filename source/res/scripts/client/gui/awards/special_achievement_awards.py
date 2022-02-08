@@ -14,7 +14,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import sortCrew
 from gui.impl.gen import R
 from gui.impl import backport
-from helpers import dependency, i18n
+from helpers import dependency, i18n, int2roman
 from nations import NAMES
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -271,24 +271,23 @@ class TelecomAward(AwardAbstract):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, vehicleDesrs, hasCrew, hasBrotherhood):
+    def __init__(self, vehicleDesrs, telecomBundleId, hasCrew, hasBrotherhood):
         super(TelecomAward, self).__init__()
         self.__vehicleDesrs = vehicleDesrs
-        self.__provider = ''
+        self.__provider = self.__getProvider(telecomBundleId)
         self.__hasCrew = hasCrew
         self.__hasBrotherhood = hasBrotherhood
 
-    def __getProvider(self):
-        if not self.__provider and self.__vehicleDesrs:
-            telecomConfig = self.lobbyContext.getServerSettings().telecomConfig
-            self.__provider = telecomConfig.getInternetProvider(self.__vehicleDesrs[0])
-        return self.__provider
+    def __getProvider(self, telecomBundleId):
+        telecomConfig = self.lobbyContext.getServerSettings().telecomConfig
+        return telecomConfig.getInternetProvider(telecomBundleId)
 
     def __getVehicleDetails(self, vehicleCD):
         details = {}
         item = self.itemsCache.items.getItemByCD(vehicleCD)
         details['type'] = item.typeUserName
         details['nation'] = backport.text(R.strings.menu.nations.dyn(item.nationName)())
+        details['level'] = int2roman(item.level)
         details['vehicle'] = item.userName
         return details
 
@@ -318,7 +317,7 @@ class TelecomAward(AwardAbstract):
                 descriptionRes = R.strings.menu.awardWindow.telecomAward.description.full
         else:
             descriptionRes = R.strings.menu.awardWindow.telecomAward.description.withoutCrew
-        providerLocRes = R.strings.menu.internet_provider.dyn(self.__getProvider())
+        providerLocRes = R.strings.menu.internet_provider.dyn(self.__provider)
         premText = text_styles.neutral(backport.text(self.__addProviderToRes(R.strings.menu.awardWindow.telecomAward.description.prem)()))
         description = backport.text(self.__addProviderToRes(descriptionRes)(), tariff=backport.text(providerLocRes.tariff()) if providerLocRes else '', vehicles=vehicles, prem=premText)
         return text_styles.main(description)
@@ -339,7 +338,7 @@ class TelecomAward(AwardAbstract):
         shared_events.showHangar()
 
     def __addProviderToRes(self, res):
-        return res.dyn(self.__getProvider(), res.default)
+        return res.dyn(self.__provider, res.default)
 
 
 class RecruiterAward(ExplosionBackAward):

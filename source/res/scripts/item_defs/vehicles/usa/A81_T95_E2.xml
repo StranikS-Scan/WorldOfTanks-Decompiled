@@ -1727,6 +1727,8 @@
             <collisionModelServer>	vehicles/american/A81_T95_E2/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A81_T95_E2/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <shotOffset>	0.000000 -0.110224 0.000000	</shotOffset>
           <customizationSlots>

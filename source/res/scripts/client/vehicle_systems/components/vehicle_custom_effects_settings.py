@@ -2,9 +2,11 @@
 # Embedded file name: scripts/client/vehicle_systems/components/vehicle_custom_effects_settings.py
 import CGF
 import Vehicular
-from CustomEffectManager import CustomEffectManager
 from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
 from cgf_script.managers_registrator import onAddedQuery, autoregister
+from constants import IS_CGF_DUMP
+if not IS_CGF_DUMP:
+    from CustomEffectManager import CustomEffectManager
 
 class VehicleCustomEffectsSettings(CGFComponent):
     category = 'Vehicle'

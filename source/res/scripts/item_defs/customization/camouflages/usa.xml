@@ -6788,4 +6788,45 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A83_T110E4	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	389	</id>
+      <texture>	vehicles/russian/Camouflage/BVII_3DSt.dds	</texture>
+      <description>	#vehicle_customization:camouflage/A83_T110E4_BVII_3DSt/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/A83_T110E4_BVII_3DSt/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	53 53 53 255	</c0>
+          <c1>	2 2 2 255	</c1>
+          <c2>	23 23 23 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	1	</HULL>
+        <TURRET>	1	</TURRET>
+        <GUN>	1	</GUN>
+      </rotation>
+      <tiling>
+        <usa:A100_T497>	1 1 1 1	</usa:A100_T497>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1 1	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
 </usa.xml>

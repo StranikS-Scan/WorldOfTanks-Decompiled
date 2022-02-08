@@ -3092,6 +3092,8 @@
             <collisionModelServer>	vehicles/russian/R53_Object_704/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R53_Object_704/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3199,6 +3201,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3305,6 +3308,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

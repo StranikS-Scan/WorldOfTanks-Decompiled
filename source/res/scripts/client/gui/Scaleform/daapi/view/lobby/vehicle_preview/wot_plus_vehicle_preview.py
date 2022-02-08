@@ -3,7 +3,7 @@
 import BigWorld
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VehiclePreview
-from gui.Scaleform.daapi.view.meta.VehiclePreviewWotPlusPanelMeta import VehiclePreviewWotPlusPanelMeta
+from gui.Scaleform.daapi.view.meta.VehiclePreviewBottomPanelWotPlusMeta import VehiclePreviewBottomPanelWotPlusMeta
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
@@ -11,18 +11,18 @@ import async as future_async
 from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatDate
 from gui.shared.event_dispatcher import showWotPlusRentDialog
 from gui.shared.gui_items.Vehicle import getIconResourceName, getNationLessName
-from gui.shop import showRentVehicleOverlay
+from gui.shop import showRentProductOverlay
 
 class WotPlusVehiclePreview(VehiclePreview):
 
     def setBottomPanel(self):
-        self.as_setBottomPanelS(VEHPREVIEW_CONSTANTS.WOT_PLUS_PANEL_LINKAGE)
+        self.as_setBottomPanelS(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_WOT_PLUS_LINKAGE)
 
 
-class VPWotPlusPanel(VehiclePreviewWotPlusPanelMeta):
+class VehiclePreviewBottomPanelWotPlus(VehiclePreviewBottomPanelWotPlusMeta):
 
     def _populate(self):
-        super(VPWotPlusPanel, self)._populate()
+        super(VehiclePreviewBottomPanelWotPlus, self)._populate()
         self.as_setDataS({'rentButtonLabel': backport.text(R.strings.subscription.rentButton.label()),
          'isRentButtonEnable': True})
 
@@ -36,7 +36,7 @@ class VPWotPlusPanel(VehiclePreviewWotPlusPanelMeta):
     def __purchaseSubRent(self):
 
         def successCallback():
-            showRentVehicleOverlay(self.__buyParams)
+            showRentProductOverlay(self.__buyParams)
 
         title = backport.text(R.strings.dialogs.wotPlusRental.title())
         vehicleName = g_currentPreviewVehicle.item.userName

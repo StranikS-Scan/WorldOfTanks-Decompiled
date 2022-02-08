@@ -343,7 +343,7 @@ class CustomizationCartView(ViewImpl):
     @adisp_process
     def __onBuyConfirmed(self, isOk):
         if isOk:
-            yield self.__ctx.applyItems(self.__purchaseItems)
+            yield self.__c11nView.applyItems(self.__purchaseItems)
             self.destroyWindow()
 
     def __onSelectAutoRent(self, _=None):

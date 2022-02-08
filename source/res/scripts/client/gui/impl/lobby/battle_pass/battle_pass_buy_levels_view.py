@@ -4,12 +4,13 @@ import logging
 import SoundGroups
 from battle_pass_common import BattlePassState
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
+from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.battle_pass.battle_pass_decorators import createTooltipContentDecorator, createBackportTooltipDecorator
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_rewards_view_model import PackageType
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_view_model import BattlePassBuyViewModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import PackageItem
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.battle_pass.battle_pass_buyer import BattlePassBuyer
@@ -25,20 +26,20 @@ _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
 class BattlePassBuyLevelView(ViewImpl):
-    __slots__ = ('__package', '__tooltipItems', '__backCallback', '__backBtnDescrLabel', '__tooltipWindow', '__chapter')
+    __slots__ = ('__package', '__tooltipItems', '__backCallback', '__backBtnDescrLabel', '__tooltipWindow', '__chapterID')
     __battlePassController = dependency.descriptor(IBattlePassController)
     __wallet = dependency.descriptor(IWalletController)
     __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, layoutID, wsFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, viewModelClazz=BattlePassBuyViewModel, ctx=None):
+    def __init__(self, layoutID, ctx, wsFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, viewModelClazz=BattlePassBuyViewModel):
         settings = ViewSettings(layoutID)
         settings.flags = wsFlags
         settings.model = viewModelClazz()
-        self.__backCallback = None if ctx is None else ctx.get('backCallback')
+        self.__backCallback = ctx.get('backCallback')
         self.__tooltipItems = {}
         self.__tooltipWindow = None
-        self.__chapter = self.__battlePassController.getCurrentChapter()
-        self.__package = PackageAnyLevels()
+        self.__chapterID = ctx.get('chapterID')
+        self.__package = PackageAnyLevels(self.__chapterID)
         super(BattlePassBuyLevelView, self).__init__(settings)
         return
 
@@ -96,8 +97,9 @@ class BattlePassBuyLevelView(ViewImpl):
         return
 
     def __showConfirmAny(self):
-        self.__setConfirmAnyNumberModel()
-        self.viewModel.setState(self.viewModel.CONFIRM_ANY_NUMBER_STATE)
+        with self.viewModel.transaction() as model:
+            self.__setConfirmAnyNumberModel(model=model.confirmAnyNumber)
+            model.setState(model.CONFIRM_ANY_NUMBER_STATE)
         SoundGroups.g_instance.playSound2D(BattlePassSounds.CONFIRM_BUY)
 
     def __showRewards(self):
@@ -147,29 +149,30 @@ class BattlePassBuyLevelView(ViewImpl):
             showHangar()
 
     def __onWalletChanged(self, _):
-        self.viewModel.setIsWalletAvailable(self.__wallet.isAvailable)
+        with self.viewModel.transaction() as model:
+            model.setIsWalletAvailable(self.__wallet.isAvailable)
 
     def __updateState(self):
-        if self.__isFinishedProgression() or self.__isChangedChapter():
+        if self.__isFinishedProgression() or self.__isChapterCompleted():
             self.destroyWindow()
             return
-        if self.viewModel.getState() == self.viewModel.CONFIRM_ANY_NUMBER_STATE:
-            battlePassController, model = self.__battlePassController, self.viewModel
-            levelsDelta = battlePassController.getCurrentLevel() - model.confirmAnyNumber.getLevelsPassed()
+        model = self.viewModel
+        if model.getState() == model.CONFIRM_ANY_NUMBER_STATE:
+            levelsDelta = self.__package.getCurrentLevel() - model.confirmAnyNumber.getLevelsPassed()
             packageLevelsCount = self.__package.getLevelsCount()
             if levelsDelta and packageLevelsCount > 1:
                 self.__package.setLevels(packageLevelsCount - levelsDelta)
-            self.__setConfirmAnyNumberModel()
-        elif self.viewModel.getState() == self.viewModel.REWARDS_STATE:
+            with model.confirmAnyNumber.transaction() as tx:
+                self.__setConfirmAnyNumberModel(tx)
+        elif model.getState() == model.REWARDS_STATE:
             self.__updateDetailRewards()
 
-    def __setConfirmAnyNumberModel(self):
-        with self.viewModel.confirmAnyNumber.transaction() as tx:
-            startLevel, endLevel = self.__battlePassController.getChapterLevelInterval(self.__chapter)
-            tx.setLevelsTotal(endLevel)
-            tx.setLevelsStart(startLevel - 1)
-            tx.setChapter(self.__chapter)
-            tx.setLevelsPassed(self.__battlePassController.getCurrentLevel())
+    def __setConfirmAnyNumberModel(self, model):
+        startLevel, endLevel = self.__battlePassController.getChapterLevelInterval(self.__chapterID)
+        model.setLevelsTotal(endLevel)
+        model.setLevelsStart(startLevel - 1)
+        model.setChapterID(self.__chapterID)
+        model.setLevelsPassed(self.__package.getCurrentLevel())
         self.__updateConfirmAnyNumberModel(self.__package.getLevelsCount())
 
     def __updateConfirmAnyNumberModel(self, count):
@@ -177,27 +180,26 @@ class BattlePassBuyLevelView(ViewImpl):
         self.__clearTooltips()
         with self.viewModel.confirmAnyNumber.transaction() as tx:
             tx.setPrice(self.__package.getPrice())
-            tx.setLevelsSelected(self.__package.getLevelsCount() + self.__battlePassController.getCurrentLevel())
+            tx.setLevelsSelected(self.__package.getLevelsCount() + self.__package.getCurrentLevel())
             tx.rewards.clearItems()
             packBonusModelAndTooltipData(self.__package.getNowAwards(), tx.rewards, self.__tooltipItems)
         self.__updateDetailRewards()
 
     def __updateDetailRewards(self):
-        curLevel = self.__battlePassController.getCurrentLevel()
+        curLevel = self.__package.getCurrentLevel()
         fromLevel = curLevel
         toLevel = curLevel + self.__package.getLevelsCount()
         with self.viewModel.rewards.transaction() as tx:
             tx.nowRewards.clearItems()
-            tx.futureRewards.clearItems()
             tx.setFromLevel(fromLevel + 1)
             tx.setToLevel(toLevel)
-            tx.setStatePackage(PackageItem.ANY_LEVELS_TYPE)
-            tx.setChapter(self.__chapter)
+            tx.setPackageState(PackageType.ANYLEVELS)
+            tx.setChapterID(self.__chapterID)
         packBonusModelAndTooltipData(self.__package.getNowAwards(), self.viewModel.rewards.nowRewards, self.__tooltipItems)
 
     def __onBuyBattlePassClick(self):
         self.__battlePassController.onLevelUp -= self.__onLevelUp
-        BattlePassBuyer.buyLevels(self.__package.getSeasonID(), self.__package.getLevelsCount(), onBuyCallback=self.__onBuyLevelsCallback)
+        BattlePassBuyer.buyLevels(self.__package.getSeasonID(), self.__package.getChapterID(), self.__package.getLevelsCount(), onBuyCallback=self.__onBuyLevelsCallback)
 
     def __onBuyLevelsCallback(self, result):
         if not result:
@@ -209,8 +211,8 @@ class BattlePassBuyLevelView(ViewImpl):
     def __isFinishedProgression(self):
         return self.__battlePassController.getState() == BattlePassState.COMPLETED
 
-    def __isChangedChapter(self):
-        return self.__chapter != self.__battlePassController.getCurrentChapter()
+    def __isChapterCompleted(self):
+        return self.__package.getChapterState() == ChapterState.COMPLETED
 
 
 class BattlePassBuyLevelWindow(LobbyWindow):

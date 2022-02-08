@@ -52,6 +52,8 @@ class TelecomRentalsNotificationController(ITelecomRentalsNotificationController
                     self._showNotification(SystemMessages.SM_TYPE.WarningHeader, backport.text(R.strings.system_messages.telecom_rentals.switch_off.title()), backport.text(R.strings.system_messages.telecom_rentals.switch_off.body()))
                 else:
                     self._showNotification(SystemMessages.SM_TYPE.FeatureSwitcherOn, backport.text(R.strings.system_messages.telecom_rentals.switch_on.title()), '')
+            elif not dt.isTelecomRentalsBlocked and isBlocked and dt.isTelecomRentalsEnabled and not isEnabled:
+                self._showNotification(SystemMessages.SM_TYPE.WarningHeader, backport.text(R.strings.system_messages.telecom_rentals.switch_off.title()), backport.text(R.strings.system_messages.telecom_rentals.switch_off.body()))
             dt.setTelecomRentalsEnabledState(isEnabled)
             dt.setTelecomRentalsBlockedState(isBlocked)
 

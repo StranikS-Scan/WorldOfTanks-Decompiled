@@ -1196,6 +1196,8 @@
             <collisionModelServer>	vehicles/british/GB23_Centurion/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB23_Centurion/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

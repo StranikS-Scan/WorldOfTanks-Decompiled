@@ -1871,6 +1871,8 @@
             <collisionModelServer>	vehicles/american/A44_M4A2E4/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A44_M4A2E4/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

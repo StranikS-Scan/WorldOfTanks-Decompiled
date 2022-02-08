@@ -43,7 +43,7 @@ class OfferGiftVehiclePreview(VehiclePreview):
         addBuiltInEquipment(self.__itemsPack, self.__itemsCache, self._vehicleCD)
 
     def setBottomPanel(self):
-        self.as_setBottomPanelS(VEHPREVIEW_CONSTANTS.OFFER_GIFT_BUYING_PANEL_LINKAGE)
+        self.as_setBottomPanelS(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_OFFER_GIFT_LINKAGE)
 
     def _generateItemsPack(self):
         itemsPack = []
@@ -57,7 +57,7 @@ class OfferGiftVehiclePreview(VehiclePreview):
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(OfferGiftVehiclePreview, self)._onRegisterFlashComponent(viewPy, alias)
-        if alias == VEHPREVIEW_CONSTANTS.OFFER_GIFT_BUYING_PANEL_PY_ALIAS:
+        if alias == VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_OFFER_GIFT_PY_ALIAS:
             itemsData = getDataOneVehicle(itemsPack=self.__itemsPack, vehicle=g_currentPreviewVehicle.item, vehicleGroupId=1)
             for item in self.__itemsPack:
                 if item.type in ItemPackTypeGroup.CREW:

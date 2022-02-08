@@ -3269,6 +3269,8 @@
             <collisionModelServer>	vehicles/british/GB29_Crusader_5inch/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB29_Crusader_5inch/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3439,6 +3441,8 @@
             <collisionModelServer>	vehicles/british/GB29_Crusader_5inch/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB29_Crusader_5inch/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>

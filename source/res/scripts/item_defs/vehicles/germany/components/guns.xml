@@ -468,7 +468,7 @@
         <recoilEffect>	auto	</recoilEffect>
       </recoil>
       <effects>	shot_Breda_auto	</effects>
-      <reloadEffect>	reload20_45	</reloadEffect>
+      <reloadEffect>	reload12_25	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -30.0 1.0 -30.0	</minPitch>
         <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
@@ -8258,187 +8258,6 @@
         </_150mmGr_39H1A_L>
       </shots>
     </_150mm_sIG33L11>
-    <_170mm_K72_Sf_>
-      <userString>	#germany_vehicles:_170mm_K72_Sf_	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	140000	</price>
-      <impulse>	0.72	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.6	</amplitude>
-        <recoilEffect>	huge	</recoilEffect>
-      </recoil>
-      <effects>	shot_huge	</effects>
-      <reloadEffect>	reload155_170	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
-        <maxPitch>	0.0 0.0 1.0 0.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	20.0	</rotationSpeed>
-      <reloadTime>	31.2	</reloadTime>
-      <maxAmmo>	21	</maxAmmo>
-      <aimingTime>	6.85714285714286	</aimingTime>
-      <weight>	6750	</weight>
-      <maxHealth>	230	</maxHealth>
-      <maxRegenHealth>	115	</maxRegenHealth>
-      <repairCost>	14	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.46857142857143	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.48	</turretRotation>
-        <afterShot>	6.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_170mm_Sprg18>
-          <defaultPortion>	0.5	</defaultPortion>
-          <speed>	510	</speed>
-          <gravity>	180	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
-          <maxHeight>	452	</maxHeight>
-        </_170mm_Sprg18>
-        <_170mm_Sprg18_Ausf_G>
-          <defaultPortion>	0.3	</defaultPortion>
-          <speed>	546	</speed>
-          <gravity>	180	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	55 55	</piercingPower>
-          <maxHeight>	517	</maxHeight>
-        </_170mm_Sprg18_Ausf_G>
-        <_170mm_Pzgr_73>
-          <defaultPortion>	0.2	</defaultPortion>
-          <speed>	612	</speed>
-          <gravity>	180	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	268 252	</piercingPower>
-          <maxHeight>	651	</maxHeight>
-        </_170mm_Pzgr_73>
-      </shots>
-    </_170mm_K72_Sf_>
-    <_210mm_Morser_21>
-      <userString>	#germany_vehicles:_210mm_Morser_21	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	245000	</price>
-      <impulse>	0.72	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.4	</amplitude>
-        <recoilEffect>	huge	</recoilEffect>
-      </recoil>
-      <effects>	shot_superhuge	</effects>
-      <reloadEffect>	reload155_170	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
-        <maxPitch>	0.0 0.0 1.0 0.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	17.5	</rotationSpeed>
-      <reloadTime>	40.2285714285714	</reloadTime>
-      <maxAmmo>	15	</maxAmmo>
-      <aimingTime>	7.42857142857143	</aimingTime>
-      <weight>	5900	</weight>
-      <maxHealth>	280	</maxHealth>
-      <maxRegenHealth>	140	</maxRegenHealth>
-      <repairCost>	15	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.59428571428571	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.5	</turretRotation>
-        <afterShot>	6.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_210mm_Sprg18>
-          <defaultPortion>	0.5	</defaultPortion>
-          <speed>	435	</speed>
-          <gravity>	142	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	53 53	</piercingPower>
-          <maxHeight>	417	</maxHeight>
-        </_210mm_Sprg18>
-        <_210mm_Sprg18_Ausf_G>
-          <defaultPortion>	0.3	</defaultPortion>
-          <speed>	465	</speed>
-          <gravity>	142	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	66 66	</piercingPower>
-          <maxHeight>	477	</maxHeight>
-        </_210mm_Sprg18_Ausf_G>
-        <_210mm_Gr.18Be>
-          <defaultPortion>	0.2	</defaultPortion>
-          <speed>	522	</speed>
-          <gravity>	142	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	296 278	</piercingPower>
-          <maxHeight>	600	</maxHeight>
-        </_210mm_Gr.18Be>
-      </shots>
-    </_210mm_Morser_21>
-    <_210mm_Morser_18>
-      <userString>	#germany_vehicles:_210mm_Morser_18	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	340000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.72	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.48	</amplitude>
-        <recoilEffect>	huge	</recoilEffect>
-      </recoil>
-      <effects>	shot_superhuge	</effects>
-      <reloadEffect>	reload155_170	</reloadEffect>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <pitchLimits>
-        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
-        <maxPitch>	0.0 3.0 1.0 3.0	</maxPitch>
-      </pitchLimits>
-      <rotationSpeed>	17.5	</rotationSpeed>
-      <reloadTime>	37.2571428571429	</reloadTime>
-      <maxAmmo>	15	</maxAmmo>
-      <aimingTime>	6.85714285714286	</aimingTime>
-      <weight>	5900	</weight>
-      <maxHealth>	300	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	15	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.56	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.5	</turretRotation>
-        <afterShot>	6.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_210mm_Sprg18>
-          <defaultPortion>	0.5	</defaultPortion>
-          <speed>	435	</speed>
-          <gravity>	142	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	53 53	</piercingPower>
-          <maxHeight>	417	</maxHeight>
-        </_210mm_Sprg18>
-        <_210mm_Sprg18_Ausf_G>
-          <defaultPortion>	0.3	</defaultPortion>
-          <speed>	465	</speed>
-          <gravity>	142	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	66 66	</piercingPower>
-          <maxHeight>	477	</maxHeight>
-        </_210mm_Sprg18_Ausf_G>
-        <_210mm_Gr.18Be>
-          <defaultPortion>	0.2	</defaultPortion>
-          <speed>	522	</speed>
-          <gravity>	142	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	372 350	</piercingPower>
-          <maxHeight>	600	</maxHeight>
-        </_210mm_Gr.18Be>
-      </shots>
-    </_210mm_Morser_18>
     <_150mm_KwK44_L38>
       <userString>	#germany_vehicles:_150mm_KwK44_L38	</userString>
       <tags></tags>
@@ -8726,6 +8545,187 @@
         </_150mm_Sprgr>
       </shots>
     </_150mm_Pak_L63>
+    <_170mm_K72_Sf_>
+      <userString>	#germany_vehicles:_170mm_K72_Sf_	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	140000	</price>
+      <impulse>	0.72	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.6	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
+        <maxPitch>	0.0 0.0 1.0 0.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20.0	</rotationSpeed>
+      <reloadTime>	31.2	</reloadTime>
+      <maxAmmo>	21	</maxAmmo>
+      <aimingTime>	6.85714285714286	</aimingTime>
+      <weight>	6750	</weight>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	14	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.46857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.48	</turretRotation>
+        <afterShot>	6.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_170mm_Sprg18>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	510	</speed>
+          <gravity>	180	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	44 44	</piercingPower>
+          <maxHeight>	452	</maxHeight>
+        </_170mm_Sprg18>
+        <_170mm_Sprg18_Ausf_G>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	546	</speed>
+          <gravity>	180	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	55 55	</piercingPower>
+          <maxHeight>	517	</maxHeight>
+        </_170mm_Sprg18_Ausf_G>
+        <_170mm_Pzgr_73>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	612	</speed>
+          <gravity>	180	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	268 252	</piercingPower>
+          <maxHeight>	651	</maxHeight>
+        </_170mm_Pzgr_73>
+      </shots>
+    </_170mm_K72_Sf_>
+    <_210mm_Morser_21>
+      <userString>	#germany_vehicles:_210mm_Morser_21	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	245000	</price>
+      <impulse>	0.72	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_superhuge	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
+        <maxPitch>	0.0 0.0 1.0 0.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	17.5	</rotationSpeed>
+      <reloadTime>	40.2285714285714	</reloadTime>
+      <maxAmmo>	15	</maxAmmo>
+      <aimingTime>	7.42857142857143	</aimingTime>
+      <weight>	5900	</weight>
+      <maxHealth>	280	</maxHealth>
+      <maxRegenHealth>	140	</maxRegenHealth>
+      <repairCost>	15	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.59428571428571	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.5	</turretRotation>
+        <afterShot>	6.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_210mm_Sprg18>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	435	</speed>
+          <gravity>	142	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+          <maxHeight>	417	</maxHeight>
+        </_210mm_Sprg18>
+        <_210mm_Sprg18_Ausf_G>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	465	</speed>
+          <gravity>	142	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	66 66	</piercingPower>
+          <maxHeight>	477	</maxHeight>
+        </_210mm_Sprg18_Ausf_G>
+        <_210mm_Gr.18Be>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	522	</speed>
+          <gravity>	142	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	296 278	</piercingPower>
+          <maxHeight>	600	</maxHeight>
+        </_210mm_Gr.18Be>
+      </shots>
+    </_210mm_Morser_21>
+    <_210mm_Morser_18>
+      <userString>	#germany_vehicles:_210mm_Morser_18	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	340000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.72	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.48	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_superhuge	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
+        <maxPitch>	0.0 3.0 1.0 3.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	17.5	</rotationSpeed>
+      <reloadTime>	37.2571428571429	</reloadTime>
+      <maxAmmo>	15	</maxAmmo>
+      <aimingTime>	6.85714285714286	</aimingTime>
+      <weight>	5900	</weight>
+      <maxHealth>	300	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	15	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.56	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.5	</turretRotation>
+        <afterShot>	6.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_210mm_Sprg18>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	435	</speed>
+          <gravity>	142	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+          <maxHeight>	417	</maxHeight>
+        </_210mm_Sprg18>
+        <_210mm_Sprg18_Ausf_G>
+          <defaultPortion>	0.3	</defaultPortion>
+          <speed>	465	</speed>
+          <gravity>	142	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	66 66	</piercingPower>
+          <maxHeight>	477	</maxHeight>
+        </_210mm_Sprg18_Ausf_G>
+        <_210mm_Gr.18Be>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	522	</speed>
+          <gravity>	142	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	372 350	</piercingPower>
+          <maxHeight>	600	</maxHeight>
+        </_210mm_Gr.18Be>
+      </shots>
+    </_210mm_Morser_18>
     <_170mm_PaK_K72>
       <userString>	#germany_vehicles:_170mm_PaK_K72	</userString>
       <tags></tags>

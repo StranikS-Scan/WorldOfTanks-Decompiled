@@ -2571,6 +2571,7 @@
             </slot>
           </customizationSlots>
           <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <camouflage>
             <density>	107.223 109.5	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -2672,6 +2673,7 @@
             </slot>
           </customizationSlots>
           <effects>	shot_mainext_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <camouflage>
             <density>	119.287 119.651	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -3415,6 +3417,7 @@
             </slot>
           </customizationSlots>
           <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <camouflage>
             <density>	107.223 109.5	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -3498,6 +3501,7 @@
             </slot>
           </customizationSlots>
           <effects>	shot_mainext_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	false	</animateEmblemSlots>
           <camouflage>
             <density>	119.287 119.651	</density>
@@ -3544,6 +3548,8 @@
             <collisionModelServer>	vehicles/czech/Cz19_Vz_44_1/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz19_Vz_44_1/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

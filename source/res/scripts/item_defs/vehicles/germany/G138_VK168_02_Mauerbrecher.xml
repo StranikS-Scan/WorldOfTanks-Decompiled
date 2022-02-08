@@ -1216,6 +1216,8 @@
             <collisionModelServer>	vehicles/german/G138_VK168_02_Mauerbrecher/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G138_VK168_02_Mauerbrecher/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

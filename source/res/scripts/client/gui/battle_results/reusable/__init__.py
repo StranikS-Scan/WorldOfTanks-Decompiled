@@ -5,20 +5,21 @@ import typing
 from account_helpers import getAccountDatabaseID
 from constants import ARENA_BONUS_TYPE
 from debug_utils import LOG_WARNING
+from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import BattlePassProgress
 from gui.battle_control.arena_info import squad_finder
 from gui.battle_results.reusable import sort_keys
 from gui.battle_results.reusable.avatars import AvatarsInfo
 from gui.battle_results.reusable.common import CommonInfo
 from gui.battle_results.reusable.personal import PersonalInfo
 from gui.battle_results.reusable.players import PlayersInfo
-from gui.battle_results.reusable.shared import VehicleDetailedInfo, TeamBasesInfo
-from gui.battle_results.reusable.shared import VehicleSummarizeInfo
+from gui.battle_results.reusable.shared import TeamBasesInfo, VehicleDetailedInfo, VehicleSummarizeInfo
 from gui.battle_results.reusable.vehicles import VehiclesInfo
-from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD, PREMIUM_STATE
-from gui.battle_results.settings import PLAYER_TEAM_RESULT as _TEAM_RESULT
+from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD, PLAYER_TEAM_RESULT as _TEAM_RESULT, PREMIUM_STATE
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from typing import Dict, Iterator, Optional, Tuple
 
 def _fetchRecord(results, recordName):
     if recordName in results:
@@ -96,7 +97,7 @@ class _ReusableInfo(object):
         self.__avatars = avatars
         self.__squadFinder = squad_finder.createSquadFinder(self.__common.arenaVisitor)
         self.__findSquads()
-        self.__battlePassProgress = {}
+        self.__battlePassProgress = BattlePassProgress(self.__common.arenaBonusType, **self.__personal.avatar.extensionInfo)
 
     @property
     def arenaUniqueID(self):
@@ -197,10 +198,6 @@ class _ReusableInfo(object):
     @property
     def battlePassProgress(self):
         return self.__battlePassProgress
-
-    @battlePassProgress.setter
-    def battlePassProgress(self, progress):
-        self.__battlePassProgress = progress
 
     def getAvatarInfo(self, dbID=0):
         if not dbID:

@@ -2682,6 +2682,8 @@
             <collisionModelServer>	vehicles/american/A21_T14/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A21_T14/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

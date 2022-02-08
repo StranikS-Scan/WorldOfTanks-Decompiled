@@ -4,7 +4,7 @@ import logging
 import random
 from functools import partial
 from itertools import chain
-from typing import Optional, List
+import typing
 import nations
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
@@ -12,34 +12,36 @@ from goodies.goodie_constants import GOODIE_STATE
 from gui import g_htmlTemplates
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU as _MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.event_dispatcher import showStylePreview, showProgressionStylesStylePreview, showStorage
-from gui.shared.formatters import text_styles, getItemPricesVO, icons, getMoneyVO
+from gui.shared.event_dispatcher import showStorage, showStylePreview, showStyleProgressionPreview
+from gui.shared.formatters import getItemPricesVO, getMoneyVO, icons, text_styles
+from gui.shared.gui_items import GUI_ITEM_TYPE, KPI, getKpiValueString
+from gui.shared.gui_items.Vehicle import Vehicle, getTypeUserName, getVehicleStateIcon
 from gui.shared.gui_items.customization.c11n_items import Customization
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
-from gui.shared.utils.functions import makeTooltip
-from helpers.i18n import makeString as _ms
-from gui.shared.money import Currency
-from gui.shared.gui_items import GUI_ITEM_TYPE, getKpiValueString, KPI
-from gui.shared.gui_items.Vehicle import getTypeUserName, getVehicleStateIcon, Vehicle
 from gui.shared.items_parameters import params_helper
+from gui.shared.money import Currency
+from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from helpers import i18n, dependency, int2roman, time_utils, func_utils
+from helpers import dependency, func_utils, i18n, int2roman, time_utils
+from helpers.i18n import makeString as _ms
 from helpers.time_utils import getCurrentTimestamp
-from skeletons.gui.lobby_context import ILobbyContext
 from items import vehicles
+from items.components.supply_slot_categories import SlotCategories
 from items.vehicles import makeVehicleTypeCompDescrByName
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from items.components.supply_slot_categories import SlotCategories
+if typing.TYPE_CHECKING:
+    from typing import List, Optional
 _logger = logging.getLogger(__name__)
 _MAX_COMPATIBLE_VEHS_COUNT = 5
 _MAX_COMPATIBLE_GUNS_COUNT = 2
@@ -339,13 +341,10 @@ def getVehicleCDForStyle(item, itemsCache=None):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def customizationPreview(itemCD, itemsCache=None, vehicleCD=None):
-    item = itemsCache.items.getItemByCD(itemCD)
+    styleInfo = itemsCache.items.getItemByCD(itemCD)
     if vehicleCD is None:
-        vehicleCD = getVehicleCDForStyle(item, itemsCache=itemsCache)
-    showStylePreviewFunc = showStylePreview
-    if item.isProgression:
-        showStylePreviewFunc = showProgressionStylesStylePreview
-    showStylePreviewFunc(vehicleCD, item, item.getDescription(), partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.storage()))
+        vehicleCD = getVehicleCDForStyle(styleInfo, itemsCache=itemsCache)
+    (showStyleProgressionPreview if styleInfo.isProgression else showStylePreview)(vehicleCD, styleInfo, styleInfo.getDescription(), partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION), backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.storage()))
     return
 
 

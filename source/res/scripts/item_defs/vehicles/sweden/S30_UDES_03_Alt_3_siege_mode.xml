@@ -1807,6 +1807,8 @@
             <collisionModelServer>	vehicles/sweden/S30_UDES_03_Alt_3/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S30_UDES_03_Alt_3/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

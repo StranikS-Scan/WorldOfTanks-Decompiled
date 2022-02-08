@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/game_settings_blocks.py
-from constants import IS_EDITOR
+from constants import IS_VS_EDITOR
 from visual_script import ASPECT
 from visual_script.block import Block, Meta, EDITOR_TYPE, InitParam, buildStrKeysValue
 from visual_script.misc import errorVScript
 from visual_script.slot_types import SLOT_TYPE, arrayOf
 from visual_script.tunable_event_block import TunableEventBlock
-if not IS_EDITOR:
+if not IS_VS_EDITOR:
     from helpers import dependency
     from skeletons.account_helpers.settings_core import ISettingsCore
 
@@ -30,7 +30,7 @@ class GameSettingsMeta(Meta):
 
 
 class GetGameSetting(Block, GameSettingsMeta):
-    settingsCore = dependency.descriptor(ISettingsCore) if not IS_EDITOR else None
+    settingsCore = dependency.descriptor(ISettingsCore) if not IS_VS_EDITOR else None
     _settingTypes = {'bool': SLOT_TYPE.BOOL,
      'int': SLOT_TYPE.INT,
      'str': SLOT_TYPE.STR}
@@ -56,7 +56,7 @@ class GetGameSetting(Block, GameSettingsMeta):
 
 class OnGameSettingsChanged(TunableEventBlock, GameSettingsMeta):
     _EVENT_SLOT_NAMES = ['onChanged']
-    settingsCore = dependency.descriptor(ISettingsCore) if not IS_EDITOR else None
+    settingsCore = dependency.descriptor(ISettingsCore) if not IS_VS_EDITOR else None
 
     def __init__(self, *args, **kwargs):
         super(OnGameSettingsChanged, self).__init__(*args, **kwargs)

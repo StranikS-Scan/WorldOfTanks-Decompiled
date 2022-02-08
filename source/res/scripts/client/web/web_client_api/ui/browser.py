@@ -2,16 +2,16 @@
 # Embedded file name: scripts/client/web/web_client_api/ui/browser.py
 from adisp import process
 from frameworks.wulf import WindowLayer
-from gui.shop import showBuyGoldWebOverlay
-from gui.shared.event_dispatcher import showBrowserOverlayView
-from helpers import dependency
-from gui.game_control.links import URLMacros
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.game_control.links import URLMacros
+from gui.shared.event_dispatcher import showBrowserOverlayView
 from gui.shared.utils.functions import getViewName
+from gui.shop import showBuyGoldWebOverlay
+from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController, IExternalLinksController
-from web.web_client_api import WebCommandException, w2c, W2CSchema, Field
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA, ExternalCriteria
+from web.web_client_api import Field, W2CSchema, WebCommandException, w2c
 
 class _OpenBrowserWindowSchema(W2CSchema):
     url = Field(required=True, type=basestring)
@@ -62,16 +62,6 @@ class OpenBrowserWindowWebApiMixin(object):
         return
 
 
-class BrowserSearchCriteria(ExternalCriteria):
-
-    def __init__(self, neededAlias):
-        super(BrowserSearchCriteria, self).__init__()
-        self.__neededAlias = neededAlias
-
-    def find(self, view, browserWindow):
-        return getattr(browserWindow, 'uniqueBrowserName', 0) == self.__neededAlias
-
-
 class CloseBrowserWindowWebApiMixin(object):
 
     @w2c(W2CSchema, 'browser')
@@ -88,15 +78,9 @@ class CloseBrowserWindowWebApiMixin(object):
                  WindowLayer.TOP_SUB_VIEW)
                 browserWindow = None
                 for layer in supportedBrowserLayers:
-                    browserWindow = app.containerManager.getView(layer, criteria=BrowserSearchCriteria(windowAlias))
+                    browserWindow = app.containerManager.getView(layer, criteria={POP_UP_CRITERIA.UNIQUE_NAME: windowAlias})
                     if browserWindow is not None:
                         break
-
-                if not browserWindow:
-                    for layer in supportedBrowserLayers:
-                        browserWindow = app.containerManager.getView(layer, criteria={POP_UP_CRITERIA.UNIQUE_NAME: windowAlias})
-                        if browserWindow is not None:
-                            break
 
                 if browserWindow is not None:
                     browserWindow.destroy()
@@ -138,7 +122,7 @@ class OpenBrowserOverlayWebApiMixin(object):
 
     @w2c(_OpenBrowserOverlaySchema, 'browser_overlay')
     def openBrowserOverlay(self, cmd):
-        showBrowserOverlayView(cmd.url, alias=VIEW_ALIAS.WEB_VIEW_TRANSPARENT if cmd.blur_bg else VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW, browserParams={'isCloseBtnVisible': cmd.is_client_close_control}, forcedSkipEscape=cmd.is_client_close_control)
+        showBrowserOverlayView(cmd.url, alias=VIEW_ALIAS.WEB_VIEW_TRANSPARENT if cmd.blur_bg else VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, browserParams={'isCloseBtnVisible': cmd.is_client_close_control}, forcedSkipEscape=cmd.is_client_close_control)
 
 
 class OpenBuyGoldWebApiMixin(object):

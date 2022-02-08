@@ -3412,6 +3412,8 @@
             <collisionModelServer>	vehicles/german/G101_StuG_III/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G101_StuG_III/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3496,6 +3498,8 @@
             <collisionModelServer>	vehicles/german/G101_StuG_III/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G101_StuG_III/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3573,6 +3577,8 @@
             <collisionModelServer>	vehicles/german/G101_StuG_III/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G101_StuG_III/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3659,6 +3665,8 @@
             <collisionModelServer>	vehicles/german/G101_StuG_III/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G101_StuG_III/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

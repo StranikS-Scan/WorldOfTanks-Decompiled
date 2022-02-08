@@ -9,7 +9,6 @@ from items.vehicles import stripOptionalDeviceFromVehicleCompactDescr
 from vehicle_systems.tankStructure import ModelStates
 from vehicle_systems.tankStructure import TankPartIndexes
 from gui.ClientHangarSpace import hangarCFG
-from new_year.cgf_components.highlight_manager import IsHighlighted
 _VehicleTransformParams = namedtuple('_VehicleTransformParams', ('targetPos', 'rotateYPR', 'shadowModelYOffset'))
 
 class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
@@ -59,7 +58,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
 
     def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None, outfit=None):
         self._isVehicleLoaded = False
-        self.entityGameObject.removeComponentByType(IsHighlighted)
+        self.setHighlight(False)
         if typeDescriptor is not None:
             self.typeDescriptor = typeDescriptor
         self.__onLoadedCallback = callback
@@ -72,7 +71,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         return
 
     def removeVehicle(self):
-        self.entityGameObject.removeComponentByType(IsHighlighted)
+        self.setHighlight(False)
         self._isVehicleLoaded = False
         if self.__vAppearance:
             self.__vAppearance.remove()
@@ -148,6 +147,14 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         self.__vehicleTransform = None
         self.teleport(self.__defaultPos, self.__defaultYPR)
         return
+
+    def _addEdgeDetect(self):
+        if self.__isHighlightable():
+            super(ClientSelectableCameraVehicle, self)._addEdgeDetect()
+
+    def _delEdgeDetect(self):
+        if self.__isHighlightable():
+            super(ClientSelectableCameraVehicle, self)._delEdgeDetect()
 
     def __isHighlightable(self):
         return self.__vAppearance is not None and not self.__vAppearance.isVehicleDestroyed

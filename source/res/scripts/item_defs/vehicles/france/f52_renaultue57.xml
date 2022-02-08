@@ -2515,6 +2515,8 @@
             <collisionModelServer>	vehicles/french/F52_RenaultUE57/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F52_RenaultUE57/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2578,6 +2580,8 @@
             <collisionModelServer>	vehicles/french/F52_RenaultUE57/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F52_RenaultUE57/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

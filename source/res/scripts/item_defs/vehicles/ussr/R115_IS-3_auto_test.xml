@@ -1696,6 +1696,8 @@
             <collisionModelServer>	vehicles/russian/R115_IS-3_auto/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R115_IS-3_auto/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

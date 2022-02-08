@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_page.py
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import GUI_START_BEHAVIOR, RANKED_AWARDS_COUNTER, RANKED_INFO_COUNTER, RANKED_SHOP_COUNTER, RANKED_YEAR_RATING_COUNTER, RANKED_AWARDS_BUBBLE_YEAR_REACHED, RANKED_ENTITLEMENT_EVENTS_AMOUNT
+from account_helpers.AccountSettings import GUI_START_BEHAVIOR, RANKED_AWARDS_COUNTER, RANKED_INFO_COUNTER, RANKED_SHOP_COUNTER, RANKED_YEAR_RATING_COUNTER, RANKED_AWARDS_BUBBLE_YEAR_REACHED, RANKED_ENTITLEMENT_EVENTS_AMOUNT, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_MAIN_PAGE_SOUND_SPACE
 from gui.ranked_battles.constants import RankedDossierKeys
@@ -139,24 +139,29 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
         if currEventsCount > oldEventsCount:
             AccountSettings.setCounters(RANKED_SHOP_COUNTER, 1)
             self.__resetCounters(self._selectedItemID)
-            self.__updateCounters()
 
     def __onYearAwardPointsUpdate(self):
+        isNeedToReset = False
         if not AccountSettings.getSettings(RANKED_AWARDS_BUBBLE_YEAR_REACHED):
-            points = self.__rankedController.getYearRewardPoints()
+            completedYearQuest = self.__rankedController.getCompletedYearQuest()
+            receivedPoints = completedYearQuest.keys()[0] if completedYearQuest else 0
+            points = self.__rankedController.getYearRewardPoints() or receivedPoints
             for minPoints, maxPoints in self.__rankedController.getYearAwardsPointsMap().itervalues():
                 if maxPoints >= points >= minPoints:
-                    AccountSettings.setCounters(RANKED_AWARDS_COUNTER, 1)
-                    AccountSettings.setSettings(RANKED_AWARDS_BUBBLE_YEAR_REACHED, True)
-                    self.__resetCounters(self._selectedItemID)
-                    self.__updateCounters()
+                    counter = self.__rankedController.getYearRewardCount() or 1
+                    AccountSettings.setCounters(RANKED_AWARDS_COUNTER, counter)
+                    isNeedToReset = True
                     break
 
+        elif not AccountSettings.getSettings(RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED):
+            counter = self.__rankedController.getYearRewardCount()
+            AccountSettings.setCounters(RANKED_AWARDS_COUNTER, counter)
+            isNeedToReset = True
+        if isNeedToReset:
+            self.__resetCounters(self._selectedItemID)
+
     def __resetCounters(self, selectedItemID):
-        if selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_ID:
-            if AccountSettings.getCounters(RANKED_AWARDS_COUNTER) > 0:
-                AccountSettings.setCounters(RANKED_AWARDS_COUNTER, 0)
-        elif selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID:
+        if selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID:
             AccountSettings.setCounters(RANKED_INFO_COUNTER, 0)
         elif selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID:
             AccountSettings.setCounters(RANKED_YEAR_RATING_COUNTER, 0)
@@ -174,7 +179,7 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
         self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
 
     def __updateCounters(self):
-        awardsCounter = main_page_vos.getBubbleLabel(AccountSettings.getCounters(RANKED_AWARDS_COUNTER))
+        awardsCounter = main_page_vos.getBubbleLabel(AccountSettings.getCounters(RANKED_AWARDS_COUNTER) * int(not AccountSettings.getSettings(RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED) or not AccountSettings.getSettings(RANKED_AWARDS_BUBBLE_YEAR_REACHED)))
         infoCounter = main_page_vos.getBubbleLabel(AccountSettings.getCounters(RANKED_INFO_COUNTER))
         yearRatingCounter = main_page_vos.getBubbleLabel(AccountSettings.getCounters(RANKED_YEAR_RATING_COUNTER))
         shopCounter = main_page_vos.getBubbleLabel(AccountSettings.getCounters(RANKED_SHOP_COUNTER))

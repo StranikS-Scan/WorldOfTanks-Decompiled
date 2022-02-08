@@ -3,7 +3,7 @@
 from collections import defaultdict
 from realm_utils import ResMgr
 from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH, ARENA_GUI_TYPE_LABEL
-from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, IS_DEVELOPMENT
+from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, HAS_DEV_RESOURCES
 from constants import IS_CELLAPP, IS_BASEAPP
 from constants import CHAT_COMMAND_FLAGS
 from coordinate_system import AXIS_ALIGNED_DIRECTION
@@ -14,7 +14,8 @@ from typing import Dict
 from soft_exception import SoftException
 from collections import defaultdict
 from data_structures import DictObj
-from visual_script.misc import ASPECT, VisualScriptTag
+from visual_script.misc import ASPECT, VisualScriptTag, readVisualScriptPlanParams, readVisualScriptPlans
+from SpaceVisibilityFlags import SpaceVisibilityFlagsFactory, SpaceVisibilityFlags
 from Math import Vector2
 if IS_CLIENT:
     from helpers import i18n
@@ -25,12 +26,19 @@ if IS_CELLAPP or IS_BASEAPP:
     from server_constants import ARENA_ESTIMATED_LOAD_DEFAULT
 g_cache = {}
 g_geometryCache = {}
+g_spaceCache = {}
 g_geometryNamesToIDs = {}
 g_gameplayNames = set()
 g_gameplaysMask = 0
 
-def getVisibilityMask(gameplayID):
-    return 1 << gameplayID
+def getVisibilityMask(typeID):
+    global g_spaceCache
+    gameplayID, geometryID = parseTypeID(typeID)
+    return g_spaceCache[geometryID][SpaceVisibilityFlags.FLAGS_CONFIG_SECTION].getMaskForGameplayID(gameplayID)
+
+
+def getCompositeVisibilityMask(geometryID, gameplayIDs):
+    return g_spaceCache[geometryID][SpaceVisibilityFlags.FLAGS_CONFIG_SECTION].getMaskForGameplayIDs(gameplayIDs)
 
 
 def getGameplaysMask(gameplayNames):
@@ -60,7 +68,7 @@ def buildArenaTypeID(gameplayID, geometryID):
 _LIST_XML = ARENA_TYPE_XML_PATH + '_list_.xml'
 _DEFAULT_XML = ARENA_TYPE_XML_PATH + '_default_.xml'
 
-def init():
+def init(isFullCache=True):
     global g_gameplayNames
     global g_cache
     global g_geometryNamesToIDs
@@ -76,11 +84,13 @@ def init():
         raise SoftException("No defaults for 'gameplayTypes'")
     geometriesSet = set()
     for key, value in rootSection.items():
+        isDevelopmentArena = value.readBool('isDevelopment')
         geometryID = value.readInt('id')
         if geometryID in geometriesSet:
             raise SoftException('Geometry ID=%d is not unique' % geometryID)
-        geometriesSet.add(geometryID)
-        __buildCache(geometryID, value.readString('name'), defaultXml)
+        buildResult = __buildCache(geometryID, value.readString('name'), defaultXml, isFullCache, isDevelopmentArena)
+        if buildResult:
+            geometriesSet.add(geometryID)
 
     ResMgr.purge(_LIST_XML, True)
     ResMgr.purge(_DEFAULT_XML, True)
@@ -156,25 +166,27 @@ class GeometryType(_BonusTypeOverridesMixin):
         return value if value is not None else self.__cfg.get(name)
 
 
-def __buildCache(geometryID, geometryName, defaultXml):
+def __buildCache(geometryID, geometryName, defaultXml, isFullCache, isDevelopmentArena=False):
     global g_geometryCache
     sectionName = ARENA_TYPE_XML_PATH + geometryName + '.xml'
     section = ResMgr.openSection(sectionName)
     if section is None:
+        if isDevelopmentArena:
+            return False
         raise SoftException("Can't open '%s'" % sectionName)
     geometryCfg = __readGeometryCfg(geometryID, geometryName, section, defaultXml)
-    if geometryCfg['isDevelopment'] and not IS_DEVELOPMENT:
-        return
-    else:
-        geometryType = GeometryType(geometryCfg)
-        g_geometryCache[geometryID] = __addBonusTypeOverrides(geometryType, section, defaultXml)
-        for gameplayCfg in __readGameplayCfgs(geometryName, section, defaultXml, geometryCfg):
-            arenaType = ArenaType(geometryType, gameplayCfg)
-            g_cache[arenaType.id] = arenaType
-            g_gameplayNames.add(arenaType.gameplayName)
+    geometryType = GeometryType(geometryCfg)
+    g_geometryCache[geometryID] = __addBonusTypeOverrides(geometryType, section, defaultXml)
+    if isFullCache:
+        spaceData = __readSpaceCfg(geometryName)
+        g_spaceCache[geometryID] = spaceData
+    for gameplayCfg in __readGameplayCfgs(geometryName, section, defaultXml, geometryCfg):
+        arenaType = ArenaType(geometryType, gameplayCfg)
+        g_cache[arenaType.id] = arenaType
+        g_gameplayNames.add(arenaType.gameplayName)
 
-        ResMgr.purge(sectionName, True)
-        return
+    ResMgr.purge(sectionName, True)
+    return True
 
 
 def __addBonusTypeOverrides(overridable, section, defaultXml):
@@ -471,6 +483,12 @@ def __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml):
     return outcome
 
 
+def __readSpaceCfg(geometryName):
+    cfg = {}
+    cfg[SpaceVisibilityFlags.FLAGS_CONFIG_SECTION] = SpaceVisibilityFlagsFactory.create(geometryName)
+    return cfg
+
+
 def __hasKey(key, xml, defaultXml):
     return xml.has_key(key) or defaultXml.has_key(key)
 
@@ -547,17 +565,21 @@ def _readFloatArray(key, tag, xml, defaultXml, defaultValue=None):
         return
 
 
-def _readVisualScriptAspect(section, aspect, default):
+def _readVisualScriptAspect(section, aspect, commonParams):
+    plans = []
     if section.has_key(aspect):
-        return [ value.asString for name, value in section[aspect].items() if name == 'plan' ]
-    return default
+        plans = readVisualScriptPlans(section[aspect], commonParams)
+    return plans
 
 
 def _readVisualScript(section):
     if section.has_key(VisualScriptTag):
         vseSection = section[VisualScriptTag]
-        return {ASPECT.CLIENT: _readVisualScriptAspect(vseSection, ASPECT.CLIENT.lower(), []),
-         ASPECT.SERVER: _readVisualScriptAspect(vseSection, ASPECT.SERVER.lower(), [])}
+        commonParams = {}
+        if vseSection.has_key('common'):
+            commonParams = readVisualScriptPlanParams(vseSection['common'])
+        return {ASPECT.CLIENT: _readVisualScriptAspect(vseSection, ASPECT.CLIENT.lower(), commonParams),
+         ASPECT.SERVER: _readVisualScriptAspect(vseSection, ASPECT.SERVER.lower(), commonParams)}
     return {ASPECT.CLIENT: [],
      ASPECT.SERVER: []}
 

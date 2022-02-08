@@ -2994,6 +2994,8 @@
             <collisionModelServer>	vehicles/french/F17_AMX_13_90/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F17_AMX_13_90/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3631,6 +3633,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+          <effects>	shot_main_mb	</effects>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

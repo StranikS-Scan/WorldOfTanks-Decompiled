@@ -68,7 +68,7 @@ class EULADispatcher(EventSystemEntity):
         self.isShow = False
         xmlVersion = self.EULAVersion.xmlVersion
         EULASettings = self.lobbyContext.getServerSettings().eula
-        if self.serverVersion != xmlVersion and xmlVersion != 0 and EULASettings.isEnabled() and (not self._demoAccController.isDemoAccount or EULASettings.isDemoAccEnabled()) and (not self._steamRegistrationCtrl.isSteamAccount or EULASettings.isSteamAccEnabled()):
+        if self.serverVersion != xmlVersion and xmlVersion != 0 and EULASettings.isEnabled() and (not self._demoAccController.isDemoAccountOnce or EULASettings.isDemoAccEnabled()) and (not self._steamRegistrationCtrl.isSteamAccount or EULASettings.isSteamAccEnabled()):
             self.isShow = True
         if self.isShow:
             Waiting.close()

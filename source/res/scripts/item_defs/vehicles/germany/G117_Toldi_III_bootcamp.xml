@@ -855,7 +855,8 @@
             <collisionModelServer>	vehicles/german/G117_Toldi_III/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G117_Toldi_III/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_medium_mb	</effects>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint></paint>

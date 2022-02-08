@@ -78,6 +78,11 @@
           <destroyed>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_3Dst_10_additional_FULL3D/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_3Dst_10_additional_FULL3D/crash/lod0/Hull.model	</exploded>
         </S16_Kranvagn_3Dst_10_additional_FULL3D>
+        <S16_Kranvagn_BVII_3DSt>
+          <undamaged>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_BVII_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_BVII_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_BVII_3DSt/crash/lod0/Hull.model	</exploded>
+        </S16_Kranvagn_BVII_3DSt>
       </sets>
     </models>
     <swinging>
@@ -102,9 +107,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.565394 0.306621 2.39414	</rayStart>
-        <rayEnd>	-0.513967 0.125366 2.32704	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayStart>	0.575933 0.443247 2.04735	</rayStart>
+        <rayEnd>	0.517313 0.267046 1.97307	</rayEnd>
+        <rayUp>	-0.0926861 0.028845 -0.995277	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -749,6 +754,32 @@
         <clipAngle>	1.1396	</clipAngle>
         <anchorShift>	-0.189375	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15051	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	S16_Kranvagn_BVII_3DSt	</compatibleModels>
+        <position>	0.0242231 1.11064 2.68734	</position>
+        <rotation>	0.334878 -0.0338514 3.13433	</rotation>
+        <scale>	0.370021 0.37002 0.370021	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.0852921	</clipAngle>
+        <anchorShift>	0.176574	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15052	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	S16_Kranvagn_BVII_3DSt	</compatibleModels>
+        <position>	0.000012 1.40871 -1.4086	</position>
+        <rotation>	3.11416 0.000000 -0.000034	</rotation>
+        <scale>	0.906657 0.386971 0.90664	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.215835	</clipAngle>
+        <anchorShift>	0.095701	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -797,6 +828,11 @@
             <destroyed>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_3Dst_10_additional_FULL3D/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_3Dst_10_additional_FULL3D/crash/lod0/Chassis.model	</exploded>
           </S16_Kranvagn_3Dst_10_additional_FULL3D>
+          <S16_Kranvagn_BVII_3DSt>
+            <undamaged>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_BVII_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_BVII_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_BVII_3DSt/crash/lod0/Chassis.model	</exploded>
+          </S16_Kranvagn_BVII_3DSt>
         </sets>
       </models>
       <traces>
@@ -1599,12 +1635,19 @@
                 <destroyed>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_3Dst_10_additional_FULL3D/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_3Dst_10_additional_FULL3D/crash/lod0/Gun_01.model	</exploded>
               </S16_Kranvagn_3Dst_10_additional_FULL3D>
+              <S16_Kranvagn_BVII_3DSt>
+                <undamaged>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_BVII_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_BVII_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_BVII_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </S16_Kranvagn_BVII_3DSt>
             </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/sweden/S16_Kranvagn/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S16_Kranvagn/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <drivenJoints>
             <master>
               <node>	Gun	</node>
@@ -1863,11 +1906,25 @@
               <anchorShift>	0.192983	</anchorShift>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45017	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	S16_Kranvagn_BVII_3DSt	</compatibleModels>
+              <position>	0.000000 2.31049 -1.30699	</position>
+              <rotation>	3.14159 -0.000002 -0.000033	</rotation>
+              <scale>	0.828168 0.680915 0.828168	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.09576	</clipAngle>
+              <anchorShift>	0.320112	</anchorShift>
+              <verticalMirror>	true	</verticalMirror>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.000314857 0.228077 3.15207	</rayStart>
               <rayEnd>	0.384548 0.102102 3.15067	</rayEnd>
-              <rayUp>	0.102 0.000000 0.000000	</rayUp>
+              <rayUp>	0.12 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -1897,6 +1954,11 @@
             <destroyed>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_3Dst_10_additional_FULL3D/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_3Dst_10_additional_FULL3D/crash/lod0/Turret_01.model	</exploded>
           </S16_Kranvagn_3Dst_10_additional_FULL3D>
+          <S16_Kranvagn_BVII_3DSt>
+            <undamaged>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_BVII_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_BVII_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/sweden/S16_Kranvagn/_skin/S16_Kranvagn_BVII_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </S16_Kranvagn_BVII_3DSt>
         </sets>
       </models>
       <hitTester>
@@ -2501,6 +2563,19 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.556965	</clipAngle>
           <anchorShift>	-0.493602	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35044	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	S16_Kranvagn_BVII_3DSt	</compatibleModels>
+          <position>	0.000220693 2.43343 0.468166	</position>
+          <rotation>	0.000017 -0.0186422 3.14153	</rotation>
+          <scale>	0.425599 0.349925 0.4256	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.09576	</clipAngle>
+          <anchorShift>	0.207572	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

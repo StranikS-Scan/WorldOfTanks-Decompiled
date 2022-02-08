@@ -2078,6 +2078,8 @@
             <collisionModelServer>	vehicles/sweden/S05_Strv_M21_29/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S05_Strv_M21_29/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2151,6 +2153,8 @@
             <collisionModelServer>	vehicles/sweden/S05_Strv_M21_29/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S05_Strv_M21_29/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN_2	</paint>

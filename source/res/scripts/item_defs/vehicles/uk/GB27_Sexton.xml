@@ -3407,7 +3407,8 @@
           <aimingTime>	5.5	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <turretYawLimits>	-25 15	</turretYawLimits>
-          <effects>	shot_main	</effects>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB27_Sexton/crash/lod0/Gun_01.model	</destroyed>
@@ -3546,6 +3547,7 @@
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <turretYawLimits>	-25 15	</turretYawLimits>
           <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <models>
             <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/british/GB27_Sexton/crash/lod0/Gun_02.model	</destroyed>

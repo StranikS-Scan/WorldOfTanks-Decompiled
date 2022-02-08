@@ -1110,7 +1110,8 @@
             <collisionModelServer>	vehicles/german/G05_StuG_40_AusfG/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G05_StuG_40_AusfG/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_main	</effects>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

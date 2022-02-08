@@ -44,10 +44,10 @@ class BattlePassBuyConfirmAnyNumberViewModel(ViewModel):
     def setLevelsSelected(self, value):
         self._setNumber(5, value)
 
-    def getChapter(self):
+    def getChapterID(self):
         return self._getNumber(6)
 
-    def setChapter(self, value):
+    def setChapterID(self, value):
         self._setNumber(6, value)
 
     def getBackBtnText(self):
@@ -64,7 +64,7 @@ class BattlePassBuyConfirmAnyNumberViewModel(ViewModel):
         self._addNumberProperty('levelsPassed', 0)
         self._addNumberProperty('levelsTotal', 0)
         self._addNumberProperty('levelsSelected', 0)
-        self._addNumberProperty('chapter', 0)
+        self._addNumberProperty('chapterID', 0)
         self._addStringProperty('backBtnText', '')
         self.onCloseClick = self._addCommand('onCloseClick')
         self.onBuyClick = self._addCommand('onBuyClick')

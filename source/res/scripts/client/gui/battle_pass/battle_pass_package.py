@@ -1,22 +1,28 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_package.py
+from collections import OrderedDict
+import typing
 from battle_pass_common import BattlePassConsts
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
+from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator
 from helpers import dependency
 from helpers.dependency import replace_none_kwargs
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.battle_pass.battle_pass_constants import ChapterState
+    from gui.server_events.bonuses import SimpleBonus
 
 class BattlePassPackage(object):
-    __slots__ = ('__seasonID', '__chapter')
+    __slots__ = ('__seasonID', '__chapterID')
     _eventsCache = dependency.descriptor(IEventsCache)
     _itemsCache = dependency.descriptor(IItemsCache)
     _battlePassController = dependency.descriptor(IBattlePassController)
 
-    def __init__(self, chapter=None):
+    def __init__(self, chapterID):
         self.__seasonID = self._battlePassController.getSeasonID()
-        self.__chapter = chapter
+        self.__chapterID = chapterID
 
     def getPrice(self):
         bpCost = self._itemsCache.items.shop.getBattlePassCost()
@@ -25,20 +31,24 @@ class BattlePassPackage(object):
     def getLevelsCount(self):
         pass
 
+    def getCurrentLevel(self):
+        return self._battlePassController.getLevelInChapter(chapterID=self.__chapterID)
+
     def getNowAwards(self):
-        fromLevel, maxLevelInChapter = self._battlePassController.getChapterLevelInterval(self.__chapter)
-        curLevel = min(maxLevelInChapter, self._getBPCurrentLevel())
+        fromLevel = 1
+        curLevel = self.getCurrentLevel()
         bonuses = []
         if self.hasBattlePass():
-            bonuses.extend(self._battlePassController.getPackedAwardsInterval(fromLevel, curLevel, awardType=BattlePassConsts.REWARD_PAID))
+            bonuses.extend(self._battlePassController.getPackedAwardsInterval(self.__chapterID, fromLevel, curLevel, awardType=BattlePassConsts.REWARD_PAID))
         bonuses = BattlePassAwardsManager.uniteTokenBonuses(bonuses)
         return BattlePassAwardsManager.sortBonuses(bonuses)
 
     def getFutureAwards(self):
         bonuses = []
         if self.hasBattlePass():
-            fromLevel = self._getBPCurrentLevel() + self.getLevelsCount()
-            bonuses.extend(self._battlePassController.getPackedAwardsInterval(fromLevel + 1, self._battlePassController.getChapterLevelInterval(self.__chapter)[1], awardType=BattlePassConsts.REWARD_PAID))
+            fromLevel = self.getCurrentLevel() + 1
+            toLevel = self._getMaxLevel()
+            bonuses.extend(self._battlePassController.getPackedAwardsInterval(self.__chapterID, fromLevel, toLevel, awardType=BattlePassConsts.REWARD_PAID))
         bonuses = BattlePassAwardsManager.uniteTokenBonuses(bonuses)
         return BattlePassAwardsManager.sortBonuses(bonuses)
 
@@ -52,7 +62,7 @@ class BattlePassPackage(object):
         return True
 
     def isLocked(self):
-        return self.getChapter() > self._battlePassController.getCurrentChapter()
+        return False
 
     def hasBattlePass(self):
         return True
@@ -60,14 +70,17 @@ class BattlePassPackage(object):
     def setLevels(self, value):
         pass
 
-    def getChapter(self):
-        return self.__chapter
+    def getChapterID(self):
+        return self.__chapterID
+
+    def getChapterState(self):
+        return self._battlePassController.getChapterState(chapterID=self.__chapterID)
 
     def isBought(self):
-        return self._battlePassController.isBought(chapter=self.__chapter)
+        return self._battlePassController.isBought(chapterID=self.__chapterID)
 
-    def _getBPCurrentLevel(self):
-        return self._battlePassController.getCurrentLevel()
+    def _getMaxLevel(self):
+        return self._battlePassController.getMaxLevelInChapter(self.__chapterID)
 
     def __getPriceBP(self, battlePassCost):
         currency = battlePassCost.getCurrency()
@@ -81,25 +94,26 @@ class BattlePassPackage(object):
 class PackageAnyLevels(BattlePassPackage):
     __slots__ = ('__dynamicLevelsCount',)
 
-    def __init__(self):
+    def __init__(self, chapterID):
         self.__dynamicLevelsCount = 1
-        super(PackageAnyLevels, self).__init__()
+        super(PackageAnyLevels, self).__init__(chapterID)
 
     def setLevels(self, value):
         self.__dynamicLevelsCount = value
 
     def getLevelsCount(self):
-        maxLevelCount = max(self._battlePassController.getMaxLevel() - self._battlePassController.getCurrentLevel(), 0)
+        maxLevelCount = max(self._getMaxLevel() - self.getCurrentLevel(), 0)
         return min(maxLevelCount, self.__dynamicLevelsCount)
 
     def isLocked(self):
-        return not self._battlePassController.isBought()
+        chapterID = self.getChapterID()
+        return not (self._battlePassController.isBought(chapterID) and self._battlePassController.isChapterActive(chapterID))
 
     def isDynamic(self):
         return True
 
     def isBought(self):
-        return self._battlePassController.getMaxLevel() < self._battlePassController.getCurrentLevel()
+        return self._getMaxLevel() <= self.getCurrentLevel()
 
     def isVisible(self):
         return True
@@ -112,25 +126,20 @@ class PackageAnyLevels(BattlePassPackage):
         return self.__getLevelsPrice(levelCost)
 
     def getNowAwards(self):
-        curLevel = self._getBPCurrentLevel()
+        curLevel = self.getCurrentLevel()
         toLevel = curLevel + self.getLevelsCount()
         bonuses = []
         if self.getLevelsCount():
-            bonuses.extend(self._battlePassController.getPackedAwardsInterval(curLevel + 1, toLevel, awardType=BattlePassConsts.REWARD_BOTH))
+            bonuses.extend(self._battlePassController.getPackedAwardsInterval(self.getChapterID(), curLevel + 1, toLevel, awardType=BattlePassConsts.REWARD_BOTH))
         bonuses = BattlePassAwardsManager.uniteTokenBonuses(bonuses)
         return BattlePassAwardsManager.sortBonuses(bonuses)
 
     def __getLevelsPrice(self, levelCost):
         currency = levelCost.getCurrency()
         levelsCount = self.getLevelsCount()
-        if levelsCount:
-            value = levelCost.get(currency) * levelsCount
-        else:
-            value = 0
-        return value
+        return levelCost.get(currency, 0) * levelsCount
 
 
 @replace_none_kwargs(battlePass=IBattlePassController)
 def generatePackages(battlePass=None):
-    packages = [ BattlePassPackage(chapter) for chapter, _ in enumerate(battlePass.getChapterConfig(), BattlePassConsts.MINIMAL_CHAPTER_NUMBER) ]
-    return packages
+    return OrderedDict(sorted(((chapterID, BattlePassPackage(chapterID)) for chapterID in battlePass.getChapterIDs()), cmp=lambda first, second: chaptersIDsComparator(first[0], second[0])))

@@ -2765,6 +2765,8 @@
             <collisionModelServer>	vehicles/american/A141_M_IV_Y/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A141_M_IV_Y/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

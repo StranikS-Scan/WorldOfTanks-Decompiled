@@ -3,12 +3,13 @@
 import typing
 from battle_pass_common import BattlePassRewardReason as BPReason
 from frameworks.state_machine import StringEvent, StateEvent
-from gui.battle_pass.state_machine.state_machine_helpers import separateRewards, getStylesToChooseUntilChapter
+from gui.battle_pass.state_machine.state_machine_helpers import separateRewards
 from gui.battle_pass.state_machine.states import StateMachineEventID
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
+    from typing import Dict, Iterable, Optional
     from gui.battle_pass.state_machine.machine import BattlePassStateMachine
 
 class BattlePassRewardLogic(object):
@@ -35,26 +36,19 @@ class BattlePassRewardLogic(object):
         self.__startAfterTurningOnMachine = False
 
     def startRewardFlow(self, rewards, data):
-        newLevel = data.get('newLevel', 0) if data is not None else 0
-        reason = data.get('reason', BPReason.DEFAULT) if data is not None else BPReason.DEFAULT
-        if self.__battlePassController.isFinalLevel(newLevel) and reason not in (BPReason.PURCHASE_BATTLE_PASS, BPReason.PURCHASE_BATTLE_PASS_MULTIPLE):
-            chapter = self.__battlePassController.getChapterByLevel(newLevel)
-            if newLevel == self.__battlePassController.getMaxLevel():
-                chapter += 1
-            stylesToChoose = getStylesToChooseUntilChapter(chapter)
-        else:
-            stylesToChoose = []
-        rewardsToChoose, defaultRewards, chosenStyle = separateRewards(rewards, battlePass=self.__battlePassController)
-        rewardsToChoose = self.__validateRewardsToChoose(rewardsToChoose)
-        self.__machine.saveRewards(rewardsToChoose, stylesToChoose, defaultRewards, chosenStyle, data)
+        rewardsToChoose, defaultRewards, chapterStyle = separateRewards(rewards, battlePass=self.__battlePassController)
+        rewardsToChoose = self.__getValidRewardsToChoose(rewardsToChoose)
+        self.__machine.saveRewards(rewardsToChoose, defaultRewards, chapterStyle, data)
         if not self.__machine.isRunning():
             self.__startAfterTurningOnMachine = True
         else:
             self.postStateEvent()
-        return
 
-    def startManualFlow(self, rewardsToChoose, stylesToChoose):
-        self.__machine.saveRewards(rewardsToChoose, stylesToChoose, None, None, None)
+    def startManualFlow(self, rewardsToChoose, chapterID=None, level=0):
+        data = {'chapter': self.__getChapterFromRewardsToChoose(rewardsToChoose) if chapterID is None else chapterID,
+         'level': level,
+         'reason': BPReason.SELECT_REWARD}
+        self.__machine.saveRewards(rewardsToChoose, None, None, data)
         self.__machine.setManualFlow()
         if not self.__machine.isRunning():
             self.__startAfterTurningOnMachine = True
@@ -71,23 +65,17 @@ class BattlePassRewardLogic(object):
     def getLeftRewardsCount(self):
         return self.__machine.getLeftRewardsCount()
 
-    def getNextRewardToChoose(self):
-        return self.__machine.getNextRewardToChoose()
+    def getRewardsToChoose(self):
+        return self.__machine.getRewardsToChoose()
 
-    def removeRewardToChoose(self, tokenID, isTaken):
-        self.__machine.removeRewardToChoose(tokenID, isTaken)
-
-    def addRewards(self, rewards):
-        self.__machine.addRewards(rewards)
+    def extendRewards(self, rewards):
+        self.__machine.extendRewards(rewards)
 
     def getChosenStyleChapter(self):
         self.__machine.getChosenStyleChapter()
 
-    def markStyleChosen(self, chapter):
-        self.__machine.markStyleChosen(chapter)
-
-    def addStyleToChoose(self, chapter):
-        self.__machine.addStyleToChoose(chapter)
+    def setChapterForStyle(self, chapter):
+        self.__machine.setChapterForStyle(chapter)
 
     def postPreviewOpen(self):
         self.postStringEvent(StateMachineEventID.OPEN_PREVIEW)
@@ -103,6 +91,10 @@ class BattlePassRewardLogic(object):
         if self.__machine.isRunning():
             self.__machine.post(StateEvent(**kwargs))
 
-    def __validateRewardsToChoose(self, rewardsToChoose):
-        result = [ token for token in rewardsToChoose if bool(self.__itemsCache.items.tokens.getToken(token)) ]
-        return result
+    def __getValidRewardsToChoose(self, rewardsToChoose):
+        return [ token for token in rewardsToChoose if bool(self.__itemsCache.items.tokens.getToken(token)) ]
+
+    @staticmethod
+    def __getChapterFromRewardsToChoose(rewardsToChoose):
+        chapters = set((int(reward.split(':')[-2]) for reward in rewardsToChoose))
+        return next(iter(chapters)) if len(chapters) == 1 else 0

@@ -6,7 +6,11 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.bootcamp.bootcamp_exit_model import BootcampExitModel
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
+from gui.shared import g_eventBus, events
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.view_helpers.blur_manager import CachedBlur
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from bootcamp.Bootcamp import g_bootcamp
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
@@ -69,12 +73,13 @@ class BootcampExitView(ViewImpl):
 
     @uiBootcampLogger.dLog(BCLogActions.CLOSE.value)
     def _finalize(self):
-        if self.__blur:
-            self.__blur.fini()
         self.viewModel.onLeaveBootcamp -= self.__onLeave
         if self.__isInBattle:
             app = self.__appLoader.getApp()
             app.leaveGuiControlMode(self.uniqueID)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
+        if self.__blur:
+            self.__blur.fini()
         super(BootcampExitView, self)._finalize()
 
     @uiBootcampLogger.dLog(BCLogActions.LEAVE.value)

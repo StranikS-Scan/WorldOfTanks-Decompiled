@@ -939,6 +939,8 @@
             <collisionModelServer>	vehicles/british/GB01_Medium_Mark_I/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB01_Medium_Mark_I/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint></paint>

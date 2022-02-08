@@ -3408,6 +3408,7 @@
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/american/A09_T1_hvy/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A09_T1_hvy/crash/lod0/Gun_02.model	</destroyed>
@@ -3870,6 +3871,7 @@
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/american/A09_T1_hvy/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A09_T1_hvy/crash/lod0/Gun_04.model	</destroyed>
@@ -3951,6 +3953,8 @@
             <collisionModelServer>	vehicles/american/A09_T1_hvy/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A09_T1_hvy/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

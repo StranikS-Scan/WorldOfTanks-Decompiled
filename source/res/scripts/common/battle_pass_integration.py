@@ -9,7 +9,6 @@ from debug_utils import LOG_WARNING
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Type, Union
-CHECK_POINTS_LIMIT = False
 NON_VEH_CD = 0
 BpPointsSettings = namedtuple('BpPointsSettings', 'vehTypeCompDescr, isWinner, rank')
 
@@ -38,36 +37,25 @@ class BattlePassIntegrationRandom(BattlePassIntegrationInterface):
         return self.teamSize
 
     def validatePoints(self, season):
-        capBonuses = season['capBonuses']
         points = season['points'][self.bonusType]
-        pointsLimit = min(self._makePointsPerLevel(season['base']))
-        maxCapBonus = max(capBonuses)
         winPoints = points['win']
         losePoints = points['lose']
 
-        def checkPointsList(pointsList, pointsLimit, capBonusPoints, path):
+        def checkPointsList(pointsList, path):
             if len(pointsList) != self.getTeamSize():
                 raise SoftException('BattlePass len(season/points/{}) {} != {}'.format(path, len(pointsList), self.getTeamSize()))
-            if max(pointsList) + capBonusPoints > pointsLimit:
-                msg = 'BattlePass season/points/{} max valid points + capBonus={} is {}'.format(path, maxCapBonus, pointsLimit)
-                if CHECK_POINTS_LIMIT:
-                    raise SoftException(msg)
-                else:
-                    LOG_WARNING(msg)
 
-        checkPointsList(winPoints, pointsLimit, maxCapBonus, '{}/win'.format(self.bonusTypeName))
-        checkPointsList(losePoints, pointsLimit, maxCapBonus, '{}/lose'.format(self.bonusTypeName))
+        checkPointsList(winPoints, '{}/win'.format(self.bonusTypeName))
+        checkPointsList(losePoints, '{}/lose'.format(self.bonusTypeName))
         for key, value in points.iteritems():
             if key != 'win' and key != 'lose' and key != 'enabled':
                 vehCD = key
                 if not vehicles.g_list.isVehicleExistingByCD(vehCD):
                     raise SoftException('BattlePass wrong vehCD={}'.format(vehCD))
-                vehLevel = vehicles.getVehicleType(vehCD).level
                 winPoints = points[vehCD]['win']
                 losePoints = points[vehCD]['lose']
-                capBonusAtLevel = capBonuses[vehLevel - 1]
-                checkPointsList(winPoints, pointsLimit, capBonusAtLevel, '{}/{}/win'.format(self.bonusTypeName, str(vehCD)))
-                checkPointsList(losePoints, pointsLimit, capBonusAtLevel, '{}/{}/lose'.format(self.bonusTypeName, str(vehCD)))
+                checkPointsList(winPoints, '{}/{}/win'.format(self.bonusTypeName, str(vehCD)))
+                checkPointsList(losePoints, '{}/{}/lose'.format(self.bonusTypeName, str(vehCD)))
 
     @staticmethod
     def _makePointsPerLevel(progression):

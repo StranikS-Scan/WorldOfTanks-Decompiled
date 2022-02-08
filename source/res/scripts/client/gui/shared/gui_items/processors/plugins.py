@@ -1,19 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/plugins.py
 import logging
-import typing
 from collections import namedtuple
 from functools import partial
-import adisp
-import async
-from account_helpers.AccountSettings import AccountSettings
+import typing
+import async as future_async
 from account_helpers import isLongDisconnectedFromCenter
-from constants import IS_EDITOR
-from gui import DialogsInterface
-from gui import makeHtmlString
+from account_helpers.AccountSettings import AccountSettings
+from adisp import async, process
+from gui import DialogsInterface, makeHtmlString
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view import dialogs
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta
+from gui.Scaleform.daapi.view.dialogs import CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta, DIALOG_BUTTON_ID, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, I18nConfirmDialogMeta, I18nInfoDialogMeta, IconDialogMeta, IconPriceDialogMeta, PMConfirmationDialogMeta, TankmanOperationDialogMeta
 from gui.Scaleform.daapi.view.dialogs.missions_dialogs_meta import UseAwardSheetDialogMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.game_control import restore_contoller
@@ -21,7 +19,7 @@ from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
-from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.gui_items.artefacts import OptionalDevice
 from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
@@ -40,8 +38,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-if not IS_EDITOR:
-    from gui.impl.pub.dialog_window import DialogResult, DialogButtons
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from post_progression_common import ACTION_TYPES
@@ -91,13 +87,13 @@ class AsyncValidator(ProcessorPlugin):
     def __init__(self, isEnabled=True):
         super(AsyncValidator, self).__init__(self.TYPE.VALIDATOR, True, isEnabled=isEnabled)
 
-    @adisp.async
-    @adisp.process
+    @async
+    @process
     def validate(self, callback):
         result = yield self._validate()
         callback(result)
 
-    @adisp.async
+    @async
     def _validate(self, callback):
         callback(makeSuccess())
 
@@ -107,13 +103,13 @@ class AsyncConfirmator(ProcessorPlugin):
     def __init__(self, isEnabled=True):
         super(AsyncConfirmator, self).__init__(self.TYPE.CONFIRMATOR, True, isEnabled=isEnabled)
 
-    @adisp.async
-    @adisp.process
+    @async
+    @process
     def confirm(self, callback):
         result = yield self._confirm()
         callback(result)
 
-    @adisp.async
+    @async
     def _confirm(self, callback):
         callback(makeSuccess())
 
@@ -123,14 +119,14 @@ class AwaitConfirmator(ProcessorPlugin):
     def __init__(self, isEnabled=True):
         super(AwaitConfirmator, self).__init__(self.TYPE.CONFIRMATOR, isAsync=True, isEnabled=isEnabled)
 
-    @adisp.async
-    @async.async
+    @async
+    @future_async.async
     def confirm(self, callback):
         Waiting.suspend(lockerID=id(self))
-        yield async.await(self._confirm(callback))
+        yield future_async.await(self._confirm(callback))
         Waiting.resume(lockerID=id(self))
 
-    @async.async
+    @future_async.async
     def _confirm(self, callback):
         callback(makeSuccess())
 
@@ -433,7 +429,7 @@ class DialogAbstractConfirmator(AsyncConfirmator):
     def _gfMakeMeta(self):
         return None
 
-    @adisp.async
+    @async
     def _showDialog(self, callback):
         callback(None)
         return
@@ -441,8 +437,8 @@ class DialogAbstractConfirmator(AsyncConfirmator):
     def _activeHandler(self):
         return self.activeHandler()
 
-    @adisp.async
-    @adisp.process
+    @async
+    @process
     def _confirm(self, callback):
         yield lambda callback: callback(None)
         if self._activeHandler():
@@ -541,8 +537,8 @@ class TankmanOperationConfirmator(I18nMessageAbstractConfirmator):
         self.__previousPrice, _ = restore_contoller.getTankmenRestoreInfo(tankman)
         return
 
-    @adisp.async
-    @adisp.process
+    @async
+    @process
     def _confirm(self, callback):
         if self._activeHandler():
             isOk = yield DialogsInterface.showDialog(meta=self._makeMeta())
@@ -758,8 +754,8 @@ class CheckBoxConfirmator(DialogAbstractConfirmator):
     def _activeHandler(self):
         return self._getSetting().get(self.settingFieldName)
 
-    @adisp.async
-    @adisp.process
+    @async
+    @process
     def _confirm(self, callback):
         yield lambda callback: callback(None)
         if self._activeHandler():
@@ -956,40 +952,6 @@ class BattleBoosterValidator(SyncValidator):
 
     def _validate(self):
         return makeError('disabledService') if self.boosters and not self.__lobbyContext.getServerSettings().isBattleBoostersEnabled() else makeSuccess()
-
-
-class AsyncDialogConfirmator(AsyncConfirmator):
-
-    def __init__(self, dialogMethod, *args, **kwargs):
-        super(AsyncDialogConfirmator, self).__init__()
-        self.__dialogMethod = dialogMethod
-        self.__dialogArgs = args
-        self.__dialogKwargs = kwargs
-        self.__dialogResult = None
-        return
-
-    def getResult(self):
-        return self.__dialogResult
-
-    @adisp.async
-    def _confirm(self, callback):
-        self._makeConfirm(callback)
-
-    @async.async
-    def _makeConfirm(self, callback):
-        Waiting.suspend()
-        self.__dialogResult = yield async.await(self.__dialogMethod(*self.__dialogArgs, **self.__dialogKwargs))
-        Waiting.resume()
-        if isinstance(self.__dialogResult, DialogResult):
-            result = self.__dialogResult.result in DialogButtons.ACCEPT_BUTTONS
-        elif isinstance(self.__dialogResult, tuple):
-            result, _ = self.__dialogResult
-        else:
-            result = self.__dialogResult
-        if result:
-            callback(makeSuccess())
-            return
-        callback(makeError())
 
 
 class DismountForDemountKitValidator(SyncValidator):

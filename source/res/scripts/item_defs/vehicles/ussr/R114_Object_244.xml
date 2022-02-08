@@ -2045,6 +2045,8 @@
             <collisionModelServer>	vehicles/russian/R114_Object_244/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R114_Object_244/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

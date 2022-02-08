@@ -2058,6 +2058,8 @@
             <collisionModelServer>	vehicles/russian/R56_T-127/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R56_T-127/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

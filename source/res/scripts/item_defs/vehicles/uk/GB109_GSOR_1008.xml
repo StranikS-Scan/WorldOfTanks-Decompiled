@@ -2215,6 +2215,8 @@
             <collisionModelServer>	vehicles/british/GB109_GSOR_1008/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB109_GSOR_1008/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

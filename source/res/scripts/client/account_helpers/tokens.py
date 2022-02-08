@@ -6,11 +6,12 @@ from shared_utils.account_helpers.diff_utils import synchronizeDicts
 
 class Tokens(object):
 
-    def __init__(self, syncData, commandProxy):
+    def __init__(self, syncData):
+        self.__account = None
         self.__syncData = syncData
-        self.__commandProxy = commandProxy
         self.__cache = {}
         self.__ignore = True
+        return
 
     def onAccountBecomePlayer(self):
         self.__ignore = False
@@ -18,10 +19,13 @@ class Tokens(object):
     def onAccountBecomeNonPlayer(self):
         self.__ignore = True
 
+    def setAccount(self, account):
+        self.__account = account
+
     def synchronize(self, isFullSync, diff):
         if isFullSync:
             self.__cache.clear()
-        for item in ('tokens', 'lootBoxes'):
+        for item in ('tokens',):
             itemDiff = diff.get(item, None)
             if itemDiff is not None:
                 synchronizeDicts(itemDiff, self.__cache.setdefault(item, {}))
@@ -29,27 +33,14 @@ class Tokens(object):
         return
 
     def getCache(self, callback=None):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER, None)
-        else:
-            self.__syncData.waitForSync(partial(self.__onGetCacheResponse, callback))
-        return
+        self.__syncData.waitForSync(partial(self.__onGetCacheResponse, callback))
 
     def openLootBox(self, boxID, count, callback):
         if callback is not None:
-            proxy = lambda requestID, resultID, errorStr, ext=None: callback(resultID, errorStr, ext)
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
         else:
             proxy = None
-        self.__commandProxy.perform(AccountCommands.CMD_LOOTBOX_OPEN, boxID, count, proxy)
-        return
-
-    def openLootBoxBySender(self, boxID, count, senderID, callback):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorStr, ext=None: callback(resultID, errorStr, ext)
-        else:
-            proxy = None
-        self.__commandProxy.perform(AccountCommands.CMD_LOOTBOX_OPEN_BY_SENDER, boxID, count, senderID, proxy)
+        self.__account._doCmdInt2(AccountCommands.CMD_LOOTBOX_OPEN, boxID, count, proxy)
         return
 
     def __onGetCacheResponse(self, callback, resultID):

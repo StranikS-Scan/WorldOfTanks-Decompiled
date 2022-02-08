@@ -2018,6 +2018,8 @@
             <collisionModelServer>	vehicles/british/GB13_FV215b/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB13_FV215b/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

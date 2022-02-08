@@ -1773,6 +1773,8 @@
             <collisionModelServer>	vehicles/german/G121_Grille_15_L63/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G121_Grille_15_L63/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

@@ -3424,6 +3424,8 @@
             <collisionModelServer>	vehicles/chinese/Ch33_60G_FT/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch33_60G_FT/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <drivenJoints>
             <master>
               <node>	Gun	</node>
@@ -3545,6 +3547,8 @@
             <collisionModelServer>	vehicles/chinese/Ch33_60G_FT/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch33_60G_FT/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <drivenJoints>
             <master>
               <node>	Gun	</node>

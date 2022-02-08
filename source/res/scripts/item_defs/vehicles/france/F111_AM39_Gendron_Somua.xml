@@ -1694,6 +1694,8 @@
             <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

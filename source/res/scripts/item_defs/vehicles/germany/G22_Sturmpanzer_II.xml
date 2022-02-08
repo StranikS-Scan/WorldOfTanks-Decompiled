@@ -2841,6 +2841,8 @@
             <collisionModelServer>	vehicles/german/G22_Sturmpanzer_II/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G22_Sturmpanzer_II/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

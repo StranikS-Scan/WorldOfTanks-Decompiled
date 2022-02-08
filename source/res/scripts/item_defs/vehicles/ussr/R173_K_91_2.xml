@@ -2109,6 +2109,8 @@
             <collisionModelServer>	vehicles/russian/R173_K_91_2/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R173_K_91_2/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_mainext_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <drivenJoints>
             <master>
               <node>	Gun	</node>

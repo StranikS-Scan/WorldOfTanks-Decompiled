@@ -1866,6 +1866,8 @@
             <collisionModelServer>	vehicles/chinese/Ch46_113_140/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch46_113_140/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_mainext_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <shotOffset>	0.000000 0.000000 0.000000	</shotOffset>
           <customizationSlots>

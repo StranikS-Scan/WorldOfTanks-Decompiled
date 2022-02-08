@@ -1146,6 +1146,8 @@
             <collisionModelServer>	vehicles/german/G42_Maus/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G42_Maus/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

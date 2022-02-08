@@ -3293,6 +3293,8 @@
             <collisionModelServer>	vehicles/sweden/S02_Strv_M42/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S02_Strv_M42/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3992,6 +3994,8 @@
             <collisionModelServer>	vehicles/sweden/S02_Strv_M42/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S02_Strv_M42/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4077,6 +4081,7 @@
             <collisionModelClient>	vehicles/sweden/S02_Strv_M42/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

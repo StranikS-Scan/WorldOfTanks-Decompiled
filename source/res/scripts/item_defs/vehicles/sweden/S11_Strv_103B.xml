@@ -1475,12 +1475,12 @@
             <sync>
               <name>	WD_L3	</name>
               <startAngle>	3.04734	</startAngle>
-              <teethCount>	6	</teethCount>
+              <teethCount>	14	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
               <startAngle>	0.240281	</startAngle>
-              <teethCount>	6	</teethCount>
+              <teethCount>	14	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>
@@ -1629,12 +1629,12 @@
             <sync>
               <name>	WD_R3	</name>
               <startAngle>	3.04736	</startAngle>
-              <teethCount>	6	</teethCount>
+              <teethCount>	14	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
               <startAngle>	0.240239	</startAngle>
-              <teethCount>	6	</teethCount>
+              <teethCount>	14	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>
@@ -1770,6 +1770,8 @@
             <collisionModelServer>	vehicles/sweden/S11_Strv_103B/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S11_Strv_103B/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

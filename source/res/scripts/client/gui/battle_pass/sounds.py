@@ -7,6 +7,15 @@ from gui.impl.lobby.video.video_sound_manager import IVideoSoundManager, SoundMa
 from helpers import getClientLanguage
 from math_utils import clamp
 from shared_utils import CONST_CONTAINER
+from sound_gui_manager import CommonSoundSpaceSettings
+
+class SOUNDS(CONST_CONTAINER):
+    ACTIVATE_CHAPTER_STATE = 'STATE_overlay_hangar_general'
+    ACTIVATE_CHAPTER_STATE_ON = 'STATE_overlay_hangar_general_on'
+    ACTIVATE_CHAPTER_STATE_OFF = 'STATE_overlay_hangar_general_off'
+
+
+ACTIVATE_CHAPTER_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.ACTIVATE_CHAPTER_STATE, entranceStates={SOUNDS.ACTIVATE_CHAPTER_STATE: SOUNDS.ACTIVATE_CHAPTER_STATE_ON}, exitStates={SOUNDS.ACTIVATE_CHAPTER_STATE: SOUNDS.ACTIVATE_CHAPTER_STATE_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
 
 class BattlePassSounds(CONST_CONTAINER):
     _OVERLAY = 'bp_overlay'

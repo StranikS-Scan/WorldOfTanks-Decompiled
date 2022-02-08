@@ -1923,6 +1923,8 @@
             <collisionModelServer>	vehicles/sweden/S25_EMIL_51/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S25_EMIL_51/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

@@ -2041,6 +2041,8 @@
             <collisionModelServer>	vehicles/chinese/Ch41_WZ_111_5A/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch41_WZ_111_5A/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

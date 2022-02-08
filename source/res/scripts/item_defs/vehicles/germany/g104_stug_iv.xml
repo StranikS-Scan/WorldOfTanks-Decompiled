@@ -2592,6 +2592,8 @@
             <collisionModelServer>	vehicles/german/G104_Stug_IV/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G104_Stug_IV/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

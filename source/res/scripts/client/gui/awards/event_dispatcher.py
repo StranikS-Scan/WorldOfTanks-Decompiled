@@ -30,8 +30,8 @@ def showClanJoinAward(clanAbbrev, clanName, clanDbID):
     showAwardWindow(specialAwards.ClanJoinAward(clanAbbrev, clanName, clanDbID))
 
 
-def showTelecomAward(vehicleDesrs, hasCrew, hasBrotherhood):
-    showAwardWindow(specialAwards.TelecomAward(vehicleDesrs, hasCrew, hasBrotherhood))
+def showTelecomAward(vehicleDesrs, bundleID, hasCrew, hasBrotherhood):
+    showAwardWindow(specialAwards.TelecomAward(vehicleDesrs, bundleID, hasCrew, hasBrotherhood))
 
 
 def showRecruiterAward():

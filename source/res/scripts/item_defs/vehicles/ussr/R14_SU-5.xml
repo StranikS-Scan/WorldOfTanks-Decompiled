@@ -3442,6 +3442,8 @@
             <collisionModelServer>	vehicles/russian/R14_SU-5/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R14_SU-5/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3560,6 +3562,8 @@
             <collisionModelServer>	vehicles/russian/R14_SU-5/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R14_SU-5/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3670,6 +3674,7 @@
           <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
           <turretYawLimits>	-6 6	</turretYawLimits>
           <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <models>
             <undamaged>	vehicles/russian/R14_SU-5/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R14_SU-5/crash/lod0/Gun_03.model	</destroyed>
@@ -3793,6 +3798,8 @@
             <collisionModelServer>	vehicles/russian/R14_SU-5/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R14_SU-5/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

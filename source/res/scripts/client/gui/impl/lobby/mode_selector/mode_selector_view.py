@@ -16,7 +16,6 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_model import ModeSelectorModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_window_states import ModeSelectorWindowStates
 from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_tooltips_constants import ModeSelectorTooltipsConstants
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_3d_style_not_chosen_tooltip import BattlePass3dStyleNotChosenTooltip
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
@@ -61,8 +60,7 @@ class ModeSelectorView(ViewImpl):
     __gui = dependency.descriptor(IGuiLoader)
     __tooltipByContentID = {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
-     R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS),
-     R.views.lobby.battle_pass.tooltips.BattlePass3dStyleNotChosenTooltip(): BattlePass3dStyleNotChosenTooltip}
+     R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS)}
     layoutID = R.views.lobby.mode_selector.ModeSelectorView()
     _areWidgetsVisible = False
 
@@ -155,8 +153,7 @@ class ModeSelectorView(ViewImpl):
         self.__updateViewModel(self.viewModel)
         self.__blur = CachedBlur(enabled=True, ownLayer=WindowLayer.MARKER)
         g_eventBus.handleEvent(events.GameEvent(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS), scope=EVENT_BUS_SCOPE.GLOBAL)
-        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING,
-         'alias': self.layoutID}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), scope=EVENT_BUS_SCOPE.LOBBY)
         app = self.__appLoader.getApp()
         self.__prevAppBackgroundAlpha = app.getBackgroundAlpha()
         app.setBackgroundAlpha(_BACKGROUND_ALPHA)

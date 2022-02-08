@@ -2051,6 +2051,8 @@
             <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

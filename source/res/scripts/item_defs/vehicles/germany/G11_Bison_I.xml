@@ -3194,6 +3194,8 @@
             <collisionModelServer>	vehicles/german/G11_Bison_I/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G11_Bison_I/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

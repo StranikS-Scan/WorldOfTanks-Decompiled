@@ -3,14 +3,14 @@
 import logging
 import SoundGroups
 from PlayerEvents import g_playerEvents
-from battle_pass_common import BattlePassState
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyBattlePassUrl
+from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.battle_pass.battle_pass_decorators import createTooltipContentDecorator, createBackportTooltipDecorator
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_view_model import BattlePassBuyViewModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import PackageItem
+from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import PackageItem, PackageType, ChapterStates
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
@@ -24,20 +24,23 @@ from helpers import dependency
 from skeletons.gui.game_control import IWalletController, IBattlePassController
 from skeletons.gui.shared import IItemsCache
 WINDOW_IS_NOT_OPENED = -1
-_NO_CHAPTER_CHOSEN = 0
+_CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
+ ChapterState.COMPLETED: ChapterStates.COMPLETED,
+ ChapterState.PAUSED: ChapterStates.PAUSED,
+ ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED}
 
 class BattlePassBuyViewStates(object):
 
     def __init__(self):
-        self.chapter = WINDOW_IS_NOT_OPENED
+        self.chapterID = WINDOW_IS_NOT_OPENED
         g_playerEvents.onDisconnected += self.reset
         g_playerEvents.onAccountBecomePlayer += self.reset
 
     def reset(self):
-        self.chapter = WINDOW_IS_NOT_OPENED
+        self.chapterID = WINDOW_IS_NOT_OPENED
 
     def getPackageID(self):
-        return self.chapter - 1
+        return self.chapterID
 
 
 g_BPBuyViewStates = BattlePassBuyViewStates()
@@ -54,7 +57,7 @@ class BattlePassBuyView(ViewImpl):
         settings.flags = wsFlags
         settings.model = viewModelClazz()
         self.__backCallback = None if ctx is None else ctx.get('backCallback')
-        self.__packages = []
+        self.__packages = {}
         self.__selectedPackage = None
         self.__tooltipItems = {}
         self.__tooltipWindow = None
@@ -83,7 +86,7 @@ class BattlePassBuyView(ViewImpl):
         self.__packages = generatePackages(battlePass=self.__battlePassController)
         self.__setGeneralFields()
         self.__setPackages()
-        if g_BPBuyViewStates.chapter != WINDOW_IS_NOT_OPENED:
+        if g_BPBuyViewStates.chapterID != WINDOW_IS_NOT_OPENED:
             self.__choosePackage({'packageID': g_BPBuyViewStates.getPackageID()})
         g_BPBuyViewStates.reset()
         switchHangarOverlaySoundFilter(on=True)
@@ -170,15 +173,6 @@ class BattlePassBuyView(ViewImpl):
 
     def __onLevelUp(self):
         self.__updateState()
-        if self.__battlePassController.isFinalLevel(self.__battlePassController.getCurrentLevel()):
-            self.__onChapterChange()
-
-    def __onChapterChange(self):
-        if self.__selectedPackage is not None:
-            g_BPBuyViewStates.chapter = self.__selectedPackage.getChapter()
-        else:
-            g_BPBuyViewStates.chapter = _NO_CHAPTER_CHOSEN
-        return
 
     def __onSettingsChange(self, *_):
         if self.__battlePassController.isVisible() and not self.__battlePassController.isPaused():
@@ -198,7 +192,6 @@ class BattlePassBuyView(ViewImpl):
             self.__updateDetailRewards()
         else:
             self.__setPackages()
-            self.viewModel.packages.invalidate()
 
     def __choosePackage(self, args):
         packageID = int(args.get('packageID'))
@@ -210,31 +203,31 @@ class BattlePassBuyView(ViewImpl):
             return
         else:
             self.__clearTooltips()
-            chapter = self.__selectedPackage.getChapter()
             self.viewModel.confirm.setPrice(self.__selectedPackage.getPrice())
-            self.viewModel.confirm.setChapter(chapter)
-            self.viewModel.confirm.setIsChapterStarted(self.__isChapterStarted(chapter))
-            self.viewModel.confirm.setIsChapterFinished(self.__isChapterFinished(chapter))
+            self.viewModel.confirm.setChapterID(self.__selectedPackage.getChapterID())
+            isChapterActive = self.__selectedPackage.getChapterState() in (ChapterState.ACTIVE, ChapterState.COMPLETED)
+            self.viewModel.confirm.setIsActive(isChapterActive)
             self.__updateDetailRewards()
             return
 
     def __updateDetailRewards(self):
-        fromLevel, maxLevelInChapter = self.__battlePassController.getChapterLevelInterval(self.__selectedPackage.getChapter())
-        toLevel = min(maxLevelInChapter, self.__battlePassController.getCurrentLevel())
+        chapterID = self.__selectedPackage.getChapterID()
+        fromLevel = 1
+        toLevel = self.__selectedPackage.getCurrentLevel()
         with self.viewModel.rewards.transaction() as tx:
             tx.nowRewards.clearItems()
             tx.futureRewards.clearItems()
             tx.setFromLevel(fromLevel)
             tx.setToLevel(toLevel)
-            tx.setChapter(self.__selectedPackage.getChapter())
-            tx.setStatePackage(PackageItem.BATTLE_PASS_TYPE)
+            tx.setChapterID(chapterID)
+            tx.setPackageState(PackageType.BATTLEPASS)
         packBonusModelAndTooltipData(self.__selectedPackage.getNowAwards(), self.viewModel.rewards.nowRewards, self.__tooltipItems)
         packBonusModelAndTooltipData(self.__selectedPackage.getFutureAwards(), self.viewModel.rewards.futureRewards, self.__tooltipItems)
 
     def __onBuyBattlePassClick(self):
         if self.__selectedPackage is not None:
             self.__battlePassController.onLevelUp -= self.__onLevelUp
-            BattlePassBuyer.buyBP(self.__selectedPackage.getSeasonID(), chapter=self.__selectedPackage.getChapter(), onBuyCallback=self.__onBuyBPCallback)
+            BattlePassBuyer.buyBP(self.__selectedPackage.getSeasonID(), chapterID=self.__selectedPackage.getChapterID(), onBuyCallback=self.__onBuyBPCallback)
         return
 
     def __onBuyBPCallback(self, result):
@@ -245,20 +238,8 @@ class BattlePassBuyView(ViewImpl):
             self.__setGeneralFields()
             g_eventBus.addListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
 
-    def __isChapterStarted(self, chapter):
-        startLevelInChapter = self.__battlePassController.getChapterLevelInterval(chapter)[0]
-        return self.__battlePassController.getCurrentLevel() > startLevelInChapter
-
-    def __isChapterFinished(self, chapter):
-        endLevelInChapter = self.__battlePassController.getChapterLevelInterval(chapter)[1]
-        return self.__battlePassController.getState() == BattlePassState.COMPLETED or self.__battlePassController.getCurrentLevel() > endLevelInChapter
-
     def __isShopOfferAvailable(self):
-        for package in self.__packages:
-            if package.isBought():
-                return False
-
-        return True
+        return not any((package.isBought() for package in self.__packages.itervalues()))
 
     def __onShopOfferClick(self):
         showShop(getBuyBattlePassUrl())
@@ -267,17 +248,21 @@ class BattlePassBuyView(ViewImpl):
     @replaceNoneKwargsModel
     def __setPackages(self, model=None):
         model.packages.clearItems()
-        for packageID, package in enumerate(self.__packages):
+        for packageID, package in self.__packages.iteritems():
             if not package.isVisible():
                 continue
             item = PackageItem()
             item.setPackageID(packageID)
             item.setPrice(package.getPrice())
             item.setIsBought(package.isBought())
-            item.setType(PackageItem.BATTLE_PASS_TYPE)
+            item.setType(PackageType.BATTLEPASS)
             item.setIsLocked(package.isLocked())
-            item.setChapter(package.getChapter())
+            item.setChapterID(package.getChapterID())
+            item.setChapterState(_CHAPTER_STATES.get(package.getChapterState()))
+            item.setCurrentLevel(package.getCurrentLevel() + 1)
             model.packages.addViewModel(item)
+
+        model.packages.invalidate()
 
 
 class BattlePassBuyWindow(LobbyWindow):

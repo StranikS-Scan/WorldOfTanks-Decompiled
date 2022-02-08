@@ -1939,6 +1939,8 @@
             <collisionModelServer>	vehicles/german/G40_Nashorn_MapsTraining_Dummy_ATSPG_2/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G40_Nashorn_MapsTraining_Dummy_ATSPG_2/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

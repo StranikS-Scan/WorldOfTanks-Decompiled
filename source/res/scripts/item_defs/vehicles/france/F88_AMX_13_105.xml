@@ -72,6 +72,11 @@
           <destroyed>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Hull.model	</exploded>
         </F88_AMX_13_105_3Dst>
+        <F88_AMX_13_105_3DSt_TIR>
+          <undamaged>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3DSt_TIR/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3DSt_TIR/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3DSt_TIR/crash/lod0/Hull.model	</exploded>
+        </F88_AMX_13_105_3DSt_TIR>
       </sets>
     </models>
     <swinging>
@@ -99,8 +104,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	1.05545 0.412479 1.9221	</rayStart>
-        <rayEnd>	1.05548 0.0126026 1.93181	</rayEnd>
+        <rayStart>	1.06416 0.343716 2.39598	</rayStart>
+        <rayEnd>	1.06416 0.010582 2.17458	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -1281,6 +1286,45 @@
         <clipAngle>	0.0226129	</clipAngle>
         <anchorShift>	0.081656	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15093	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F88_AMX_13_105_3DSt_TIR	</compatibleModels>
+        <position>	-1.05908 1.13951 2.27964	</position>
+        <rotation>	0.291888 -0.000003 3.14159	</rotation>
+        <scale>	0.333406 0.2616 0.333413	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.846202	</clipAngle>
+        <anchorShift>	0.027111	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15094	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F88_AMX_13_105_3DSt_TIR	</compatibleModels>
+        <position>	-1.33871 0.921405 1.42165	</position>
+        <rotation>	1.4991 -1.02367 -2.63033	</rotation>
+        <scale>	0.39082 0.2 0.39082	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.04127	</clipAngle>
+        <anchorShift>	0.000000	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15095	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F88_AMX_13_105_3DSt_TIR	</compatibleModels>
+        <position>	1.3387 0.921352 1.42166	</position>
+        <rotation>	1.49913 1.0233 2.63006	</rotation>
+        <scale>	0.39082 0.2 0.39082	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.04127	</clipAngle>
+        <anchorShift>	0.000000	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1329,6 +1373,11 @@
             <destroyed>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Chassis.model	</exploded>
           </F88_AMX_13_105_3Dst>
+          <F88_AMX_13_105_3DSt_TIR>
+            <undamaged>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3DSt_TIR/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3DSt_TIR/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3DSt_TIR/crash/lod0/Chassis.model	</exploded>
+          </F88_AMX_13_105_3DSt_TIR>
         </sets>
       </models>
       <traces>
@@ -1698,7 +1747,7 @@
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-601.617	</startAngle>
+              <startAngle>	-601.05	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
           </teethSyncs>
@@ -1945,7 +1994,7 @@
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-601.987	</startAngle>
+              <startAngle>	-601.05	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
           </teethSyncs>
@@ -2154,6 +2203,11 @@
                 <destroyed>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Gun_01.model	</exploded>
               </F88_AMX_13_105_3Dst>
+              <F88_AMX_13_105_3DSt_TIR>
+                <undamaged>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3DSt_TIR/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3DSt_TIR/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3DSt_TIR/crash/lod0/Gun_01.model	</exploded>
+              </F88_AMX_13_105_3DSt_TIR>
             </sets>
           </models>
           <hitTester>
@@ -2162,6 +2216,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2413,6 +2468,79 @@
               <anchorShift>	1.05024	</anchorShift>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45017	</slotId>
+              <rayStart>	0.000044 0.000218323 4.09731	</rayStart>
+              <rayEnd>	-0.0128293 0.0049236 3.27018	</rayEnd>
+              <rayUp>	0.075 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F88_AMX_13_105_3DSt_TIR	</compatibleModels>
+              <position>	-0.708958 1.68222 -0.788345	</position>
+              <rotation>	1.5691 1.5684 -0.000546188	</rotation>
+              <scale>	0.28553 0.0708626 0.28553	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.21541	</clipAngle>
+              <anchorShift>	0.080020	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45018	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F88_AMX_13_105_3DSt_TIR	</compatibleModels>
+              <position>	0.708165 1.73242 -1.24624	</position>
+              <rotation>	1.56914 -1.56859 0.000349708	</rotation>
+              <scale>	0.381222 0.0946115 0.381222	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.21541	</clipAngle>
+              <anchorShift>	0.060020	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45019	</slotId>
+              <rayStart>	0.000044 0.000218323 4.09731	</rayStart>
+              <rayEnd>	-0.0128293 0.0049236 3.27018	</rayEnd>
+              <rayUp>	0.075 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F88_AMX_13_105_3DSt_TIR	</compatibleModels>
+              <position>	-0.303642 1.81604 -0.193222	</position>
+              <rotation>	0.721963 -0.0664379 3.09312	</rotation>
+              <scale>	0.305216 0.0757483 0.305215	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.21541	</clipAngle>
+              <anchorShift>	0.080026	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45020	</slotId>
+              <rayStart>	0.000044 0.000218323 4.09731	</rayStart>
+              <rayEnd>	-0.0128293 0.0049236 3.27018	</rayEnd>
+              <rayUp>	0.075 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F88_AMX_13_105_3DSt_TIR	</compatibleModels>
+              <position>	0.466543 1.9704 -1.16048	</position>
+              <rotation>	3.1416 -0.000494003 -0.000109673	</rotation>
+              <scale>	0.320868 0.112179 0.320869	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.567878	</clipAngle>
+              <anchorShift>	0.056727	</anchorShift>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	0.000044 0.000218323 4.09731	</rayStart>
@@ -2447,6 +2575,11 @@
             <destroyed>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Turret_01.model	</exploded>
           </F88_AMX_13_105_3Dst>
+          <F88_AMX_13_105_3DSt_TIR>
+            <undamaged>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3DSt_TIR/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3DSt_TIR/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3DSt_TIR/crash/lod0/Turret_01.model	</exploded>
+          </F88_AMX_13_105_3DSt_TIR>
         </sets>
       </models>
       <hitTester>

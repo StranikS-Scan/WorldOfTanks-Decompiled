@@ -17,6 +17,7 @@ from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from math_utils import createTranslationMatrix
+from messenger.m_constants import MESSENGER_COMMAND_TYPE
 from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
@@ -332,6 +333,8 @@ class AvatarChatKeyHandling(object):
             return
 
     def __onCommandReceived(self, cmd):
+        if cmd.getCommandType() != MESSENGER_COMMAND_TYPE.BATTLE:
+            return
         commandName = _ACTIONS.battleChatCommandFromActionID(cmd.getID()).name
         if commandName in _SKIP_ON_COMMAND_RECEIVED:
             return

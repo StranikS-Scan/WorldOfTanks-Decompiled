@@ -26,47 +26,67 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	228.220047 -341.927887	</position1>
+          <position1>	228.220032 -341.927856	</position1>
         </team1>
         <team2>
-          <position1>	-88.818558 361.861755	</position1>
+          <position1>	-88.818535 361.898010	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	-146.583 -367.165	</position>
+          <position>	-146.582993 -367.165009	</position>
         </team1>
         <team2>
-          <position>	-436.242 187.123	</position>
+          <position>	-436.242004 187.123001	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	386.097382 213.927444	</controlPoint>
+    </domination>
+    <assault>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <teamSpawnPoints>
+        <team1></team1>
+        <team2>
+          <position>	243.66 322.173	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
-        <team1></team1>
-        <team2></team2>
+        <team1>
+          <position1>	-246.673 -362.041	</position1>
+        </team1>
       </teamBasePositions>
-      <controlPoint>	386.097 213.892	</controlPoint>
-    </domination>
+    </assault>
     <assault2>
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	120.676 445.208	</position>
+          <position>	120.676003 445.208008	</position>
         </team1>
         <team2>
-          <position>	-123.873 -350.678	</position>
+          <position>	-123.873001 -350.678009	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-244.550812 245.040634	</position1>
-          <position2>	278.233734 150.823257	</position2>
+          <position1>	-244.550827 245.040649	</position1>
+          <position2>	278.233765 150.823273	</position2>
         </team1>
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <maps_training>
+      <teamBasePositions>
+        <team1>
+          <position1>	228.220032 -341.927856	</position1>
+        </team1>
+        <team2>
+          <position1>	-88.818535 361.898010	</position1>
+        </team2>
+      </teamBasePositions>
+    </maps_training>
   </gameplayTypes>
   <mapActivities>
     <scenario>

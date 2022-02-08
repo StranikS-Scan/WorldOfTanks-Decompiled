@@ -6,7 +6,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items.processors import makeSuccess, makeError
 from gui.shared.notifications import NotificationPriorityLevel
-from gui.shared.formatters.ext_currency import formatExtendedCurrencyValue
+from gui.veh_post_progression.formatters.ext_currency import formatExtendedCurrencyValue
 from gui.veh_post_progression.models.ext_money import ExtendedCurrency
 from post_progression_common import ACTION_TYPES
 _SPENT_MESSAGES = {ExtendedCurrency.VEH_XP: R.strings.system_messages.vehiclePostProgression.experienceSpent(),

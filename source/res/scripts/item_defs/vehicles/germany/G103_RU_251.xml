@@ -3143,6 +3143,8 @@
             <collisionModelServer>	vehicles/german/G103_RU_251/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G103_RU_251/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

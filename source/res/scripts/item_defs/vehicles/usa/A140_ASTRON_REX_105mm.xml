@@ -1479,6 +1479,8 @@
             <collisionModelServer>	vehicles/american/A140_ASTRON_REX_105mm/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A140_ASTRON_REX_105mm/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <shotOffset>	0.000000 0.000000 0.000000	</shotOffset>
           <customization>

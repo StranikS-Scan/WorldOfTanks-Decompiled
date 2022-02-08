@@ -213,6 +213,10 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         self.__viewEventsListener.destroy()
         self.removeListener(GameEvent.CHANGE_APP_RESOLUTION, self.__onAppResolutionChanged, scope=EVENT_BUS_SCOPE.GLOBAL)
         self._removeGameCallbacks()
+        if self.__mainWnd is not None:
+            self.__mainWnd.onStatusChanged -= self.__onMainWindowStatusChanged
+            self.__mainWnd.destroy()
+            self.__mainWnd = None
         if self._containerMgr is not None:
             self._containerMgr.destroy()
             self._containerMgr = None
@@ -255,29 +259,25 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         if self._cursorMgr is not None:
             self._cursorMgr.destroy()
             self._cursorMgr = None
-        if self._utilsMgr is not None:
-            self._utilsMgr.destroy()
-            self._utilsMgr = None
         if self._tutorialMgr is not None:
             self._tutorialMgr.destroy()
             self._tutorialMgr = None
         if self._uiLoggerMgr is not None:
             self._uiLoggerMgr.destroy()
             self._uiLoggerMgr = None
-        if self.__daapiBridge is not None:
-            self.__daapiBridge.clear()
-            self.__daapiBridge = None
         if self._imageManager is not None:
             self._imageManager.destroy()
             self._imageManager = None
         if self._graphicsOptimizationMgr is not None:
             self._graphicsOptimizationMgr.destroy()
             self._graphicsOptimizationMgr = None
-        if self.__mainWnd is not None:
-            self.__mainWnd.onStatusChanged -= self.__onMainWindowStatusChanged
-            self.__mainWnd.destroy()
-            self.__mainWnd = None
+        if self._utilsMgr is not None:
+            self._utilsMgr.destroy()
+            self._utilsMgr = None
         super(AppEntry, self).beforeDelete()
+        if self.__daapiBridge is not None:
+            self.__daapiBridge.clear()
+            self.__daapiBridge = None
         self.proxy = None
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.DESTROYED))
         return
@@ -423,14 +423,14 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
     def getBackgroundAlpha(self):
         return self.movie.backgroundAlpha
 
+    def printObjectsReport(self, gc=True, flags=16655, movieName=''):
+        return self.movie.printObjectsReport(gc, flags, movieName)
+
     def blurBackgroundViews(self, ownLayer, blurAnimRepeatCount):
         self.as_blurBackgroundViewsS(ownLayer, blurAnimRepeatCount)
 
     def unblurBackgroundViews(self):
         self.as_unblurBackgroundViewsS()
-
-    def setMouseEventsEnabled(self, enabled):
-        self.as_setMouseEventsEnabledS(enabled)
 
     def _createManagers(self):
         self._loaderMgr = self._createLoaderManager()

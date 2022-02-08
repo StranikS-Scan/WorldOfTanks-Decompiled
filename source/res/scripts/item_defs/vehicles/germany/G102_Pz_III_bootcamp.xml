@@ -869,6 +869,8 @@
             <collisionModelServer>	vehicles/german/G102_Pz_III/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G102_Pz_III/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_KwK_L46	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint></paint>

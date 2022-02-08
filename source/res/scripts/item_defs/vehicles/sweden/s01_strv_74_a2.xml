@@ -2001,6 +2001,8 @@
             <collisionModelServer>	vehicles/sweden/S01_Strv_74_A2/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S01_Strv_74_A2/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

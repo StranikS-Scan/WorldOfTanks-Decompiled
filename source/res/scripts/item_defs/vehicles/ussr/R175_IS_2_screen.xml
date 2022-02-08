@@ -1769,6 +1769,8 @@
             <collisionModelServer>	vehicles/russian/R175_IS_2_screen/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R175_IS_2_screen/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

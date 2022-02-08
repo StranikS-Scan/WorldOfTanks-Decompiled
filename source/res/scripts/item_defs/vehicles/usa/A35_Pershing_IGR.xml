@@ -854,6 +854,8 @@
             <collisionModelServer>	vehicles/american/A35_Pershing/collision/Gun_09.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

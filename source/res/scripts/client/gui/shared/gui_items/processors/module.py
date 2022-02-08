@@ -268,7 +268,7 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         removedItems = []
         for eqKd in ctx.get('incompatibleEqs', []):
             item = self.itemsCache.items.getItemByCD(eqKd)
-            removedItems.append(item.name)
+            removedItems.append(item.userName)
 
         if removedItems:
             additionalMessages.append(makeI18nSuccess(self._formMessage('incompatibleEqs'), items="', '".join(removedItems), type=SM_TYPE.Information))

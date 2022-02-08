@@ -2874,6 +2874,8 @@
             <collisionModelServer>	vehicles/russian/R15_S-51/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R15_S-51/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3009,6 +3011,8 @@
             <collisionModelServer>	vehicles/russian/R15_S-51/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R15_S-51/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_superhuge	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

@@ -937,6 +937,8 @@
             <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

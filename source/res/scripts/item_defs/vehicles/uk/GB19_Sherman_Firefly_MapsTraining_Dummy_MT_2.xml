@@ -2156,6 +2156,8 @@
             <collisionModelServer>	vehicles/british/GB19_Sherman_Firefly_MapsTraining_Dummy_MT_2/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB19_Sherman_Firefly_MapsTraining_Dummy_MT_2/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

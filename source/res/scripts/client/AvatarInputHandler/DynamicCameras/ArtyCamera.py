@@ -77,6 +77,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
     def __init__(self, dataSec):
         super(ArtyCamera, self).__init__()
         CallbackDelayer.__init__(self)
+        self.isAimOffsetEnabled = True
         self.__positionOscillator = None
         self.__positionNoiseOscillator = None
         self.__switchers = CameraSwitcherCollection(cameraSwitchers=[CameraSwitcher(switchType=SwitchTypes.FROM_TRANSITION_DIST_AS_MAX, switchToName=CTRL_MODE_NAME.STRATEGIC, switchToPos=0.0)], isEnabled=True)
@@ -247,6 +248,8 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.__positionNoiseOscillator.applyImpulse(noiseImpulse)
 
     def __calculateAimOffset(self, aimWorldPos):
+        if not self.isAimOffsetEnabled:
+            return Vector2(0.0, 0.0)
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
             aimOffset = replayCtrl.getAimClipPosition()

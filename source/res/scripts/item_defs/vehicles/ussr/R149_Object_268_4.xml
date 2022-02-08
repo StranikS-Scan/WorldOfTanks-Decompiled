@@ -2233,6 +2233,8 @@
             <collisionModelServer>	vehicles/russian/R149_Object_268_4/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R149_Object_268_4/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

@@ -59,8 +59,8 @@ class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
 
     def __update(self, _=None):
         headerData = {'title': backport.text(R.strings.ranked_battles.rankedBattle.title()),
-         'leftSideText': backport.text(R.strings.ranked_battles.introPage.description()),
-         'rightSideText': None,
+         'mainDescr': backport.text(R.strings.ranked_battles.introPage.description()),
+         'extraDescr': None,
          'tooltip': None}
         blocksData = []
         for index in range(BLOCKS_COUNT):

@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -175,7 +175,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
@@ -316,7 +316,37 @@
           <name>	music_interactive.bnk	</name>
         </bank>
         <bank>
-          <name>	music_interactive.pck	</name>
+          <name>	music_interactive_part_01.pck	</name>
+        </bank>
+        <bank>
+          <name>	music_interactive_part_02.pck	</name>
+        </bank>
+        <bank>
+          <name>	music_interactive_part_03.pck	</name>
+        </bank>
+        <bank>
+          <name>	music_interactive_part_04.pck	</name>
+        </bank>
+        <bank>
+          <name>	music_interactive_part_05.pck	</name>
+        </bank>
+        <bank>
+          <name>	music_interactive_part_06.pck	</name>
+        </bank>
+        <bank>
+          <name>	music_interactive_part_07.pck	</name>
+        </bank>
+        <bank>
+          <name>	music_interactive_part_08.pck	</name>
+        </bank>
+        <bank>
+          <name>	music_interactive_part_09.pck	</name>
+        </bank>
+        <bank>
+          <name>	music_interactive_part_10.pck	</name>
+        </bank>
+        <bank>
+          <name>	music_interactive_part_11.pck	</name>
         </bank>
         <bank>
           <name>	wheel_vehicle_GUI.pck	</name>
@@ -394,21 +424,6 @@
         </bank>
         <bank>
           <name>	cn_wot_plus.bnk	</name>
-        </bank>
-        <bank>
-          <name>	ev_winter_offer.bnk	</name>
-        </bank>
-        <bank>
-          <name>	ev_winter_offer.pck	</name>
-        </bank>
-        <bank>
-          <name>	cn_lny_2022.bnk	</name>
-        </bank>
-        <bank>
-          <name>	cn_lny_2022.pck	</name>
-        </bank>
-        <bank>
-          <name>	ev_marathon.bnk	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>

@@ -2701,6 +2701,8 @@
             <collisionModelServer>	vehicles/japan/J11_Chi_Ri/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J11_Chi_Ri/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2782,6 +2784,8 @@
             <collisionModelServer>	vehicles/japan/J11_Chi_Ri/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J11_Chi_Ri/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3499,6 +3503,8 @@
             <collisionModelServer>	vehicles/japan/J11_Chi_Ri/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J11_Chi_Ri/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3576,6 +3582,8 @@
             <collisionModelServer>	vehicles/japan/J11_Chi_Ri/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J11_Chi_Ri/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3663,6 +3671,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
+          <effects>	shot_medium	</effects>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

@@ -2898,6 +2898,8 @@
             <collisionModelServer>	vehicles/german/G90_DW_II/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2951,6 +2953,7 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G90_DW_II/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G90_DW_II/crash/lod0/Gun_01.model	</destroyed>
@@ -3556,6 +3559,8 @@
             <collisionModelServer>	vehicles/german/G90_DW_II/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3619,6 +3624,7 @@
           </shotDispersionFactors>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G90_DW_II/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G90_DW_II/crash/lod0/Gun_03.model	</destroyed>

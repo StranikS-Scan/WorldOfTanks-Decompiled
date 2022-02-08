@@ -863,7 +863,7 @@
       </slot>
     </customizationSlots>
     <camouflage>
-      <density>	106.286 106.071	</density>
+      <density>	107.114 107.21	</density>
       <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
@@ -1800,7 +1800,8 @@
             <collisionModelServer>	vehicles/czech/Cz14_Skoda_T-56/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz14_Skoda_T-56/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_large	</effects>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1843,8 +1844,8 @@
             </slot>
           </customizationSlots>
           <camouflage>
-            <density>	112.377 114.424	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
+            <density>	98.2536 99.1124	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_130mm_Skoda_R_14>
       </guns>
@@ -2490,8 +2491,8 @@
         </slot>
       </customizationSlots>
       <camouflage>
-        <density>	121.555 121.428	</density>
-        <aoTextureSize>	1024 1024	</aoTextureSize>
+        <density>	119.741 118.858	</density>
+        <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
     </Turret_1_Cz14_Skoda_T-56>
   </turrets0>

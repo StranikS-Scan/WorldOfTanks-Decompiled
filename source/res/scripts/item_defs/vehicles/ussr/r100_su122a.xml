@@ -2923,6 +2923,7 @@
             <recoilEffect>	large	</recoilEffect>
           </recoil>
           <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <models>
             <undamaged>	vehicles/russian/R100_SU122A/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R100_SU122A/crash/lod0/Gun_01.model	</destroyed>
@@ -3009,7 +3010,8 @@
             <amplitude>	0.22	</amplitude>
             <recoilEffect>	huge	</recoilEffect>
           </recoil>
-          <effects>	shot_large_mb	</effects>
+          <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <models>
             <undamaged>	vehicles/russian/R100_SU122A/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/russian/R100_SU122A/crash/lod0/Gun_02.model	</destroyed>

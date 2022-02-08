@@ -57,7 +57,7 @@ class GiftEventBaseGifter(IGiftEventGifter):
     @process
     def sendGift(self, entitlementCode, receiverID, metaInfo, callback=None):
         requestCtx = GiftSystemSendGiftCtx(entitlementCode, receiverID, metaInfo)
-        responseData = yield self._doExternalRequest(requestCtx)
+        responseData = yield self.__doExternalRequest(requestCtx)
         if callback is not None:
             callback(responseData)
         return
@@ -65,12 +65,9 @@ class GiftEventBaseGifter(IGiftEventGifter):
     def _isRequestsEnabled(self):
         return self._settings.isEnabled
 
-    def _getWebResultState(self, result):
-        return GifterResponseState.WEB_SUCCESS if result.isSuccess() else GifterResponseState.WEB_FAILURE
-
     @async
     @process
-    def _doExternalRequest(self, requestCtx, callback):
+    def __doExternalRequest(self, requestCtx, callback):
         clientRestriction = self.getRequestRestriction()
         if clientRestriction is not None:
             callback(requestCtx.getDataObj(clientRestriction))
@@ -78,7 +75,7 @@ class GiftEventBaseGifter(IGiftEventGifter):
         else:
             self.__requestCtx = requestCtx
             result = yield self.__webController.sendRequest(requestCtx)
-            resultState = self._getWebResultState(result)
+            resultState = GifterResponseState.WEB_SUCCESS if result.isSuccess() else GifterResponseState.WEB_FAILURE
             resultData = requestCtx.getDataObj(resultState, result.data)
             self.__requestCtx = None
             callback(resultData)

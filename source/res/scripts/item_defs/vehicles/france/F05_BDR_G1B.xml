@@ -103,8 +103,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.554138 0.352755 1.584	</rayStart>
-        <rayEnd>	0.554138 0.0732931 1.29782	</rayEnd>
+        <rayStart>	-0.318859 0.061945 1.86802	</rayStart>
+        <rayEnd>	-0.318859 -0.21753 1.58186	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.22	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -3429,6 +3429,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3510,6 +3511,8 @@
             <collisionModelServer>	vehicles/french/F05_BDR_G1B/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F05_BDR_G1B/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4059,6 +4062,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -4143,6 +4147,8 @@
             <collisionModelServer>	vehicles/french/F05_BDR_G1B/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F05_BDR_G1B/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4228,6 +4234,8 @@
             <collisionModelServer>	vehicles/french/F05_BDR_G1B/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F05_BDR_G1B/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

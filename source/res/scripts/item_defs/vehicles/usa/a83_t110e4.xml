@@ -78,6 +78,11 @@
           <destroyed>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Hull.model	</exploded>
         </NY_3Dst>
+        <A83_T110E4_BVII_3DSt>
+          <undamaged>	vehicles/american/A83_T110E4/_skins/A83_T110E4_BVII_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A83_T110E4/_skins/A83_T110E4_BVII_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A83_T110E4/_skins/A83_T110E4_BVII_3DSt/crash/lod0/Hull.model	</exploded>
+        </A83_T110E4_BVII_3DSt>
       </sets>
     </models>
     <swinging>
@@ -658,6 +663,45 @@
         <clipAngle>	0.607796	</clipAngle>
         <anchorShift>	0.358679	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15043	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	-1.27578 1.53405 1.98688	</position>
+        <rotation>	-0.000000 0.000000 3.13277	</rotation>
+        <scale>	0.498114 0.2 0.498125	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.421788	</clipAngle>
+        <anchorShift>	0.002935	</anchorShift>
+        <compatibleModels>	A83_T110E4_BVII_3DSt	</compatibleModels>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15044	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A83_T110E4_BVII_3DSt	</compatibleModels>
+        <position>	0.332153 2.02619 -2.90221	</position>
+        <rotation>	3.05448 -0.00458717 -0.00928092	</rotation>
+        <scale>	0.298181 0.408263 0.298187	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.421788	</clipAngle>
+        <anchorShift>	0.039996	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15045	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	1.27579 1.53403 1.74329	</position>
+        <rotation>	-0.000000 0.000000 3.13277	</rotation>
+        <scale>	0.498114 0.2 0.498125	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.421788	</clipAngle>
+        <anchorShift>	0.002935	</anchorShift>
+        <compatibleModels>	A83_T110E4_BVII_3DSt	</compatibleModels>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -706,6 +750,11 @@
             <destroyed>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Chassis.model	</exploded>
           </NY_3Dst>
+          <A83_T110E4_BVII_3DSt>
+            <undamaged>	vehicles/american/A83_T110E4/_skins/A83_T110E4_BVII_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A83_T110E4/_skins/A83_T110E4_BVII_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A83_T110E4/_skins/A83_T110E4_BVII_3DSt/crash/lod0/Chassis.model	</exploded>
+          </A83_T110E4_BVII_3DSt>
         </sets>
       </models>
       <traces>
@@ -1675,13 +1724,13 @@
           <slotType>	paint	</slotType>
           <slotId>	21000	</slotId>
           <anchorPosition>	-1.86639 0.670972 0.0581651	</anchorPosition>
-          <anchorDirection>	-0.940632 0.33816 0.0293143	</anchorDirection>
+          <anchorDirection>	-0.940632 0.33816 0.0293144	</anchorDirection>
         </slot>
         <slot>
           <slotType>	style	</slotType>
           <slotId>	29000	</slotId>
           <anchorPosition>	0.000057 2.48268 0.357079	</anchorPosition>
-          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
       <repairTime>	6.85714293	</repairTime>
@@ -1762,18 +1811,25 @@
                 <destroyed>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Gun_01.model	</exploded>
               </NY_3Dst>
+              <A83_T110E4_BVII_3DSt>
+                <undamaged>	vehicles/american/A83_T110E4/_skins/A83_T110E4_BVII_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A83_T110E4/_skins/A83_T110E4_BVII_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A83_T110E4/_skins/A83_T110E4_BVII_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </A83_T110E4_BVII_3DSt>
             </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A83_T110E4/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A83_T110E4/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
-              <anchorPosition>	0.00028827 0.00191223 2.4224	</anchorPosition>
+              <anchorPosition>	0.00028827 0.00191224 2.4224	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
@@ -1787,7 +1843,7 @@
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
-              <anchorPosition>	0.00028827 0.00191223 2.4224	</anchorPosition>
+              <anchorPosition>	0.00028827 0.00191224 2.4224	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
@@ -1796,7 +1852,7 @@
               <slotId>	49000	</slotId>
               <rayStart>	0.000576541 0.00382458 2.36373	</rayStart>
               <rayEnd>	-0.141338 -0.238259 2.35922	</rayEnd>
-              <rayUp>	0.144 0.000000 0.000000	</rayUp>
+              <rayUp>	0.16 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.8	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -1826,6 +1882,11 @@
             <destroyed>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Turret_01.model	</exploded>
           </NY_3Dst>
+          <A83_T110E4_BVII_3DSt>
+            <undamaged>	vehicles/american/A83_T110E4/_skins/A83_T110E4_BVII_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A83_T110E4/_skins/A83_T110E4_BVII_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A83_T110E4/_skins/A83_T110E4_BVII_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </A83_T110E4_BVII_3DSt>
         </sets>
       </models>
       <hitTester>
@@ -2393,6 +2454,59 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.09426	</clipAngle>
           <anchorShift>	0.177098	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35041	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A83_T110E4_BVII_3DSt	</compatibleModels>
+          <position>	0.353491 2.36578 1.38736	</position>
+          <rotation>	0.0264657 0.000006 3.14156	</rotation>
+          <scale>	0.421688 0.201388 0.421703	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	4352	</showOn>
+          <clipAngle>	0.277384	</clipAngle>
+          <anchorShift>	0.073451	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35042	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A83_T110E4_BVII_3DSt	</compatibleModels>
+          <position>	-0.995953 1.94162 1.58583	</position>
+          <rotation>	1.04929 -0.542632 3.09742	</rotation>
+          <scale>	0.278446 0.132976 0.278449	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.24072	</clipAngle>
+          <anchorShift>	0.106201	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35043	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A83_T110E4_BVII_3DSt	</compatibleModels>
+          <position>	0.995971 1.94161 1.58582	</position>
+          <rotation>	1.04923 0.542565 -3.09747	</rotation>
+          <scale>	0.278446 0.132976 0.278449	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.24072	</clipAngle>
+          <anchorShift>	0.116201	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35044	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A83_T110E4_BVII_3DSt	</compatibleModels>
+          <position>	0.0715516 2.3849 0.114171	</position>
+          <rotation>	0.0456333 0.000005 3.14157	</rotation>
+          <scale>	0.605962 0.289395 0.605984	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.569411	</clipAngle>
+          <anchorShift>	0.18002	</anchorShift>
+          <verticalMirror>	true	</verticalMirror>
         </slot>
       </customizationSlots>
       <customization>

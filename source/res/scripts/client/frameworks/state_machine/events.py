@@ -15,9 +15,6 @@ class StateEvent(object):
     def getArgument(self, name, default=None):
         return self.__arguments.get(name, default)
 
-    def getArguments(self):
-        return self.__arguments
-
 
 class StringEvent(StateEvent):
     __slots__ = ('__token',)

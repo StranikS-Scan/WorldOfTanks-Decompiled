@@ -1717,6 +1717,8 @@
             <collisionModelServer>	vehicles/sweden/S32_Bofors_Tornvagn/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S32_Bofors_Tornvagn/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

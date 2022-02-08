@@ -942,6 +942,8 @@
             <collisionModelServer>	vehicles/poland/Pl03_PzV_Poland/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl03_PzV_Poland/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

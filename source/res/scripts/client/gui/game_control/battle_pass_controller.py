@@ -1,35 +1,35 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/battle_pass_controller.py
+import bisect
 import logging
 from collections import namedtuple
 from itertools import groupby
-import typing
-import constants
 from Event import Event, EventManager
-from battle_pass_common import BattlePassConsts, getBattlePassPassTokenName, getLevel, BATTLE_PASS_CONFIG_NAME, BattlePassConfig, BattlePassStatsCommon, BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER_2020, BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER_2020, BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, getMaxAvalable3DStyleProgressInChapter, BATTLE_PASS_OFFER_TOKEN_PREFIX
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.battle_pass.battle_pass_award import awardsFactory, BattlePassAwardsManager
-from gui.battle_pass.battle_pass_helpers import getLevelProgression, getPointsInfoStringID, getOfferTokenByGift
+from PlayerEvents import g_playerEvents
+from adisp import process
+from battle_pass_common import BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_CONFIG_NAME, BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_PDATA_KEY, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BattlePassConfig, BattlePassConsts, BattlePassState, BattlePassStatsCommon, getBattlePassPassTokenName, getMaxAvalable3DStyleProgressInChapter
+from constants import ARENA_BONUS_TYPE, OFFERS_ENABLED_KEY, QUEUE_TYPE
+from gui.battle_pass.battle_pass_award import BattlePassAwardsManager, awardsFactory
+from gui.battle_pass.battle_pass_constants import ChapterState
+from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getPointsInfoStringID
 from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
 from gui.battle_pass.state_machine.machine import BattlePassStateMachine
-from gui.battle_pass.non_selected_trophy_devices_notifier import NonSelectedOldTrophyDeviceNotifier
-from gui.battle_pass.state_machine.state_machine_helpers import getStylesToChooseUntilChapter
+from gui.shared.gui_items.processors.battle_pass import BattlePassActivateChapterProcessor
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency, time_utils
+from helpers.events_handler import EventsHandler
+from helpers.server_settings import serverSettingsChangeListener
 from shared_utils import first
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
-if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import TokensBonus, BattlePassStyleProgressTokenBonus
-    from account_helpers.offers.events_data import OfferEventData, OfferGift
 _logger = logging.getLogger(__name__)
 TopPoints = namedtuple('TopPoints', ['label', 'winPoint', 'losePoint'])
 BattleRoyaleTopPoints = namedtuple('BattleRoyaleTopPoints', ['label', 'points'])
 PointsDifference = namedtuple('PointsDifference', ['bonus', 'top', 'textID'])
 
-class BattlePassController(IBattlePassController):
+class BattlePassController(IBattlePassController, EventsHandler):
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __offersProvider = dependency.descriptor(IOffersDataProvider)
@@ -43,26 +43,24 @@ class BattlePassController(IBattlePassController):
         self.onPointsUpdated = Event(self.__eventsManager)
         self.onLevelUp = Event(self.__eventsManager)
         self.onBattlePassIsBought = Event(self.__eventsManager)
+        self.onSelectTokenUpdated = Event(self.__eventsManager)
         self.onSeasonStateChange = Event(self.__eventsManager)
         self.onBattlePassSettingsChange = Event(self.__eventsManager)
         self.onFinalRewardStateChange = Event(self.__eventsManager)
-        self.onDeviceSelectChange = Event(self.__eventsManager)
         self.onOffersUpdated = Event(self.__eventsManager)
         self.onRewardSelectChange = Event(self.__eventsManager)
-        self.__nonSelectedOldTrophyDeviceNotifier = NonSelectedOldTrophyDeviceNotifier(self)
+        self.onChapterChanged = Event(self.__eventsManager)
         self.__rewardLogic = None
         return
 
     def init(self):
         super(BattlePassController, self).init()
-        g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
+        g_playerEvents.onClientUpdated += self.__onTokensUpdate
         self.__rewardLogic = BattlePassRewardLogic(BattlePassStateMachine())
         BattlePassAwardsManager.init()
 
     def onLobbyInited(self, event):
-        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
-        self.__itemsCache.onSyncCompleted += self.__onSyncCompleted
-        self.__offersProvider.onOffersUpdated += self.__onOffersUpdated
+        self._subscribe()
         self.__seasonChangeNotifier.startNotification()
         self.__rewardLogic.start()
         if self.__currentMode is None:
@@ -70,7 +68,6 @@ class BattlePassController(IBattlePassController):
         else:
             self.onBattlePassSettingsChange(self.__getConfig().mode, self.__currentMode)
             self.__currentMode = self.__getConfig().mode
-        self.__nonSelectedOldTrophyDeviceNotifier.start()
         return
 
     def onAvatarBecomePlayer(self):
@@ -86,19 +83,24 @@ class BattlePassController(IBattlePassController):
         self.__rewardLogic.stop()
         self.__clearFields()
         self.__eventsManager.clear()
-        g_clientUpdateManager.removeObjectCallbacks(self)
+        g_playerEvents.onClientUpdated -= self.__onTokensUpdate
         super(BattlePassController, self).fini()
 
-    def isBought(self, seasonID=None, chapter=None):
+    def isBought(self, seasonID=None, chapterID=None):
+
+        def getTokens(season, chapter):
+            return self.__itemsCache.items.tokens.getTokens().get(getBattlePassPassTokenName(season, chapter))
+
         if seasonID is None:
             seasonID = self.getSeasonID()
-        if chapter is None:
-            chapter = self.getCurrentChapter()
-        tokenForAllBP = self.__itemsCache.items.tokens.getTokens().get(getBattlePassPassTokenName(seasonID, 0))
-        if tokenForAllBP is not None:
+        if all((getTokens(seasonID, chapterID) for chapterID in self.getChapterIDs())) or bool(getTokens(seasonID, 0)):
             return True
         else:
-            token = self.__itemsCache.items.tokens.getTokens().get(getBattlePassPassTokenName(seasonID, chapter))
+            if chapterID is None:
+                chapterID = self.getCurrentChapterID()
+                if not chapterID:
+                    return False
+            token = getTokens(seasonID, chapterID)
             return token is not None
 
     def isOfferEnabled(self):
@@ -129,41 +131,42 @@ class BattlePassController(IBattlePassController):
         return self.__getConfig().seasonFinish <= time_utils.getServerUTCTime()
 
     def isValidBattleType(self, prbEntity):
-        return prbEntity.getQueueType() in (constants.QUEUE_TYPE.RANDOMS, constants.QUEUE_TYPE.MAPBOX)
+        return prbEntity.getQueueType() in (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.MAPBOX)
 
     def isGameModeEnabled(self, arenaBonusType):
         return self.__getConfig().isGameModeEnabled(arenaBonusType)
 
+    def isCompleted(self):
+        return self.getState() == BattlePassState.COMPLETED
+
     def getSupportedArenaBonusTypes(self):
         return [ arenaBonusType for arenaBonusType in self.__getConfig().points ]
 
-    def getMaxLevel(self):
-        return self.__getConfig().maxBaseLevel
+    def getMaxLevelInChapter(self, chapterId=None):
+        if chapterId is None:
+            chapterId = first(self.getChapterIDs())
+        return self.__getConfig().getMaxChapterLevel(chapterId)
 
-    def isRareLevel(self, level):
-        realLevel = min(level, self.getMaxLevel())
-        tags = self.__getConfig().getTags(realLevel, BattlePassConsts.REWARD_PAID)
+    def getChapterIDs(self):
+        return self.__getConfig().getChapterIds()
+
+    def isRareLevel(self, chapterID, level):
+        realLevel = min(level, self.getMaxLevelInChapter(chapterID))
+        tags = self.__getConfig().getTags(chapterID, realLevel, BattlePassConsts.REWARD_PAID)
         return BattlePassConsts.RARE_REWARD_TAG in tags
 
-    def isFinalLevel(self, level):
-        realLevel = min(level, self.getMaxLevel())
-        return realLevel in self.getChapterConfig()
-
-    def getOldTrophySelectTokensCount(self):
-        return self.__itemsCache.items.tokens.getTokenCount(BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER_2020)
-
-    def getOldNewDeviceSelectTokensCount(self):
-        return self.__itemsCache.items.tokens.getTokenCount(BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER_2020)
+    def isFinalLevel(self, chapterID, level):
+        return level >= self.getMaxLevelInChapter(chapterID)
 
     def getRewardLogic(self):
         return self.__rewardLogic
 
-    def getSingleAward(self, level, awardType=BattlePassConsts.REWARD_FREE, needSort=True):
+    def getSingleAward(self, chapterId, level, awardType=BattlePassConsts.REWARD_FREE, needSort=True):
         reward = {}
         if awardType in (BattlePassConsts.REWARD_FREE, BattlePassConsts.REWARD_PAID):
-            reward = self.__getConfig().getRewardByType(level, awardType)
+            reward = self.__getConfig().getRewardByType(chapterId, level, awardType)
         elif awardType == BattlePassConsts.REWARD_BOTH:
-            rewards = [self.__getConfig().getFreeReward(level), self.__getConfig().getPaidReward(level)]
+            rewards = [self.__getConfig().getFreeReward(chapterId, level), self.__getConfig().getPaidReward(chapterId, level)]
             return BattlePassAwardsManager.hideInvisible(BattlePassAwardsManager.composeBonuses(rewards))
         if needSort:
             rewards = BattlePassAwardsManager.composeBonuses([reward])
@@ -171,27 +174,27 @@ class BattlePassController(IBattlePassController):
             rewards = awardsFactory(reward)
         return BattlePassAwardsManager.hideInvisible(rewards, needSplit=not needSort)
 
-    def getAwardsInterval(self, fromLevel, toLevel, awardType=BattlePassConsts.REWARD_FREE):
+    def getAwardsInterval(self, chapterId, fromLevel, toLevel, awardType=BattlePassConsts.REWARD_FREE):
         result = {}
         for level in range(fromLevel, toLevel + 1):
-            result[level] = self.getSingleAward(level, awardType, True)
+            result[level] = self.getSingleAward(chapterId, level, awardType, True)
 
         return result
 
-    def getPackedAwardsInterval(self, fromLevel, toLevel, awardType=BattlePassConsts.REWARD_FREE):
+    def getPackedAwardsInterval(self, chapterId, fromLevel, toLevel, awardType=BattlePassConsts.REWARD_FREE):
         result = []
         for level in range(fromLevel, toLevel + 1):
-            result.extend(self.getSingleAward(level, awardType, False))
+            result.extend(self.getSingleAward(chapterId, level, awardType, False))
 
         return BattlePassAwardsManager.sortBonuses(result)
 
-    def isNeedToTakeReward(self, awardType, level):
-        bonuses = self.getSingleAward(level, awardType)
-        if level > self.getCurrentLevel():
+    def isNeedToTakeReward(self, chapterId, awardType, level):
+        bonuses = self.getSingleAward(chapterId, level, awardType)
+        if level > self.getLevelInChapter(chapterId):
             return False
         else:
             for bonus in bonuses:
-                if bonus.getName() in (BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME):
+                if bonus.getName() == BATTLE_PASS_SELECT_BONUS_NAME:
                     for tokenID in bonus.getTokens().iterkeys():
                         if self.__itemsCache.items.tokens.getToken(tokenID) is not None:
                             return True
@@ -202,6 +205,7 @@ class BattlePassController(IBattlePassController):
         result = []
         for bonus in bonuses:
             if bonus.getName() == BATTLE_PASS_SELECT_BONUS_NAME:
+                bonus.updateContext({'isReceived': False})
                 hasGift = False
                 for tokenID in bonus.getTokens().iterkeys():
                     offerToken = getOfferTokenByGift(tokenID)
@@ -222,14 +226,12 @@ class BattlePassController(IBattlePassController):
 
         return result
 
-    def isChooseRewardEnabled(self, awardType, level):
-        if level > self.getCurrentLevel():
+    def isChooseRewardEnabled(self, awardType, chapterId, level):
+        if level > self.getLevelInChapter(chapterId):
             return False
         else:
-            bonuses = self.getSingleAward(level, awardType)
+            bonuses = self.getSingleAward(chapterId, level, awardType)
             for bonus in bonuses:
-                if bonus.getName() == BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME:
-                    return True
                 if bonus.getName() == BATTLE_PASS_SELECT_BONUS_NAME:
                     for tokenID in bonus.getTokens().iterkeys():
                         if self.__itemsCache.items.tokens.getToken(tokenID) is not None:
@@ -238,31 +240,39 @@ class BattlePassController(IBattlePassController):
             return False
 
     def canChooseAnyReward(self):
-        return False if not self.isOfferEnabled() else any((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys() if self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None))
+        return self.isOfferEnabled() and any((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys() if self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None))
 
-    def getLevelsConfig(self):
-        return self.__getConfig().basePoints
+    def getChapterIndex(self, chapterID):
+        sortedChapterIDs = sorted(self.getChapterIDs())
+        return sortedChapterIDs.index(chapterID)
 
-    def getFinalRewards(self):
-        return {}
+    def getLevelsConfig(self, chapterID):
+        return self.__getConfig().getChapterLevels(chapterID)
 
-    def getFreeFinalRewardDict(self):
-        return self.__getConfig().getRewardByType(self.getMaxLevel(), BattlePassConsts.REWARD_FREE)
+    def getPointsInChapter(self, chapterID):
+        return self.__itemsCache.items.battlePass.getPointsByChapterID(chapterID)
 
-    def getCurrentPoints(self):
-        return self.__itemsCache.items.battlePass.getPoints()
-
-    def getMaxPoints(self):
-        return self.__getConfig().maxBasePoints
+    def getLevelInChapter(self, chapterID):
+        return self.__itemsCache.items.battlePass.getCurrentLevelByChapterID(chapterID)
 
     def getCurrentLevel(self):
-        return self.__itemsCache.items.battlePass.getCurrentLevel()
+        return self.getLevelInChapter(self.getCurrentChapterID())
 
-    def getCurrentChapter(self):
-        return self.__getConfig().getChapter(self.getCurrentLevel())
+    def getCurrentChapterID(self):
+        return self.__itemsCache.items.battlePass.getActiveChapterID()
+
+    def hasActiveChapter(self):
+        return bool(self.getCurrentChapterID())
+
+    @process
+    def activateChapter(self, chapterID, seasonID=None):
+        yield BattlePassActivateChapterProcessor(chapterID, seasonID or self.getSeasonID()).request()
 
     def getChapterByLevel(self, level):
         return self.__getConfig().getChapter(level)
+
+    def getFreePoints(self):
+        return self.__itemsCache.items.battlePass.getNonChapterPoints()
 
     def getState(self):
         return self.__itemsCache.items.battlePass.getState()
@@ -283,51 +293,61 @@ class BattlePassController(IBattlePassController):
         return allSeasonStats[-1]
 
     def getSeasonsHistory(self):
-        return self.__getConfig().seasonsHistory
+        return {}
 
-    def getLevelPoints(self, level):
-        levelsConfig = self.getLevelsConfig()
+    def getLevelPoints(self, chapterID, level):
+        levelsConfig = self.getLevelsConfig(chapterID)
         return levelsConfig[0] if level <= 0 else levelsConfig[level] - levelsConfig[level - 1]
 
-    def getFullChapterPoints(self, chapter, includeCurrent):
-        levelsConfig = self.getLevelsConfig()
-        minLevel, maxLevel = self.getChapterLevelInterval(chapter)
-        if minLevel == maxLevel == 0:
-            return 0
-        if includeCurrent:
-            return levelsConfig[maxLevel - 1]
-        return 0 if minLevel <= 1 else levelsConfig[minLevel - 2]
+    def getChapterState(self, chapterID):
+        if self.getLevelInChapter(chapterID) >= self.getMaxLevelInChapter(chapterID):
+            state = ChapterState.COMPLETED
+        elif self.getCurrentChapterID() is not None and self.getCurrentChapterID() == chapterID:
+            state = ChapterState.ACTIVE
+        elif chapterID in self.__itemsCache.items.battlePass.getChapterStats():
+            state = ChapterState.PAUSED
+        else:
+            state = ChapterState.NOT_STARTED
+        return state
 
-    def getLevelProgression(self):
+    def isChapterActive(self, chapterID):
+        return self.getChapterState(chapterID) == ChapterState.ACTIVE
+
+    def isChapterCompleted(self, chapterID):
+        return self.getChapterState(chapterID) == ChapterState.COMPLETED
+
+    def getFullChapterPoints(self, chapterID):
+        levelsConfig = self.getLevelsConfig(chapterID)
+        _, maxLevel = self.getChapterLevelInterval(chapterID)
+        return levelsConfig[maxLevel - 1]
+
+    def getLevelProgression(self, chapterID):
         if self.isDisabled():
             return (0, 0)
-        level = self.getCurrentLevel()
-        if level >= self.getMaxLevel():
-            levelsConfig = self.getLevelsConfig()
+        if not chapterID:
+            return (0, 0)
+        level = self.getLevelInChapter(chapterID)
+        points = self.getPointsInChapter(chapterID)
+        return self.getProgressionByPoints(chapterID, points, level)
+
+    def getLevelByPoints(self, chapterID, points):
+        return self.getMaxLevelInChapter(chapterID) if points >= self.getLevelsConfig(chapterID)[-1] else bisect.bisect_right(self.getLevelsConfig(chapterID), points)
+
+    def getProgressionByPoints(self, chapterID, points, level):
+        levelsConfig = self.getLevelsConfig(chapterID)
+        if level >= self.getMaxLevelInChapter():
             points = levelsConfig[-1] - levelsConfig[-2]
             return (points, points)
-        points = self.getCurrentPoints()
-        levelsConfig = self.getLevelsConfig()
-        return getLevelProgression(level, points, levelsConfig)
-
-    def getLevelByPoints(self, points):
-        if points >= self.getMaxPoints():
-            level = self.getMaxLevel()
+        if level <= 0:
+            basePoints = 0
+            limitPoints = levelsConfig[0]
         else:
-            levelsConfig = self.getLevelsConfig()
-            level = getLevel(curPoints=points, levelPoints=levelsConfig)
-        chapter = self.__getConfig().getChapter(level)
-        return (chapter, level)
+            basePoints = levelsConfig[level - 1]
+            limitPoints = levelsConfig[level] - basePoints
+        levelPoints = points - basePoints
+        return (levelPoints, limitPoints)
 
-    def getProgressionByPoints(self, points, level):
-        levelsConfig = self.getLevelsConfig()
-        if level >= self.getMaxLevel():
-            levelPoints = fullLevelPoints = levelsConfig[-1] - levelsConfig[-2]
-        else:
-            levelPoints, fullLevelPoints = getLevelProgression(level, points, levelsConfig)
-        return (levelPoints, fullLevelPoints)
-
-    def getPerBattlePoints(self, gameMode=constants.ARENA_BONUS_TYPE.REGULAR, vehCompDesc=None):
+    def getPerBattlePoints(self, gameMode=ARENA_BONUS_TYPE.REGULAR, vehCompDesc=None):
         winList = self.__getPackedBonusPointsList(vehTypeCompDescr=vehCompDesc, gameMode=gameMode)
         lostList = self.__getPackedBonusPointsList(vehTypeCompDescr=vehCompDesc, isWinner=False, gameMode=gameMode)
         count = 0
@@ -342,7 +362,7 @@ class BattlePassController(IBattlePassController):
 
         return result
 
-    def getPerBattleRoyalePoints(self, gameMode=constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, vehCompDesc=None):
+    def getPerBattleRoyalePoints(self, gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, vehCompDesc=None):
         winList = self.__getPackedBonusPointsList(vehTypeCompDescr=vehCompDesc, gameMode=gameMode)
         pointList = self.__getPackedBonusPointsList(vehTypeCompDescr=vehCompDesc, isWinner=False, gameMode=gameMode)
         count = 0
@@ -360,15 +380,10 @@ class BattlePassController(IBattlePassController):
         return result
 
     def getChapterConfig(self):
-        return self.__getConfig().finalLevelsInChapter
+        return [ self.getMaxLevelInChapter(chapter) for chapter in self.getChapterIDs() ]
 
-    def getChapterLevelInterval(self, chapter):
-        chapterConfig = self.getChapterConfig()
-        if chapter < BattlePassConsts.MINIMAL_CHAPTER_NUMBER or chapter > len(chapterConfig):
-            return (0, 0)
-        fromLevel = 1 if chapter == BattlePassConsts.MINIMAL_CHAPTER_NUMBER else chapterConfig[chapter - 2] + 1
-        toLevel = chapterConfig[chapter - 1]
-        return (fromLevel, toLevel)
+    def getChapterLevelInterval(self, chapterID):
+        return self.__getConfig().getChapterBorders(chapterID)
 
     def isSpecialVehicle(self, intCD):
         return self.__getConfig().isSpecialVehicle(intCD)
@@ -376,7 +391,7 @@ class BattlePassController(IBattlePassController):
     def getSpecialVehicles(self):
         return self.__getConfig().getSpecialVehicles()
 
-    def getPointsDiffForVehicle(self, intCD, gameMode=constants.ARENA_BONUS_TYPE.REGULAR):
+    def getPointsDiffForVehicle(self, intCD, gameMode=ARENA_BONUS_TYPE.REGULAR):
         defaultWinList = self.__getPackedBonusPointsList(gameMode=gameMode)
         diffWinList = self.__getPackedBonusPointsList(vehTypeCompDescr=intCD, isDiff=True, gameMode=gameMode)
         if not defaultWinList or not diffWinList:
@@ -395,15 +410,10 @@ class BattlePassController(IBattlePassController):
 
     def getVehicleCapBonus(self, intCD):
         vehicle = self.__itemsCache.items.getItemByCD(intCD)
-        if vehicle is None:
-            return 0
-        else:
-            bonus = self.__getConfig().capBonus(vehicle.level)
-            return bonus
+        return 0 if vehicle is None else self.__getConfig().capBonus(vehicle.level)
 
     def getCapacityList(self):
-        capacities = self.__getConfig().capacityList()
-        return enumerate(capacities, 1)
+        return enumerate(self.__getConfig().capacityList(), 1)
 
     def getSeasonTimeLeft(self):
         return max(0, self.getSeasonFinishTime() - time_utils.getServerUTCTime())
@@ -422,8 +432,7 @@ class BattlePassController(IBattlePassController):
         return currentPoints >= limitPoints > 0
 
     def isProgressionOnVehiclePossible(self, intCD):
-        cap = self.__getConfig().vehicleCapacity(intCD)
-        return cap > 0
+        return self.__getConfig().vehicleCapacity(intCD) > 0
 
     def getSeasonID(self):
         return self.__itemsCache.items.battlePass.getSeasonID()
@@ -435,8 +444,7 @@ class BattlePassController(IBattlePassController):
         return self.__getConfig().finalOfferTime
 
     def getStylesConfig(self):
-        rewards = self.__getConfig().selectedReward
-        return BattlePassAwardsManager.composeBonuses([rewards]) if rewards else BattlePassAwardsManager.composeBonuses([])
+        return {chapterID:chapterInfo.get('styleId') for chapterID, chapterInfo in self.__getConfig().chapters.iteritems()}
 
     def getNotChosenRewardCount(self):
         return sum((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys() if self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None))
@@ -444,12 +452,11 @@ class BattlePassController(IBattlePassController):
     def hasAnyOfferGiftToken(self):
         return any((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys()))
 
-    def takeRewardForLevel(self, level):
-        chapter = self.getChapterByLevel(level - 1)
-        isBought = self.isBought(chapter=chapter)
+    def takeRewardForLevel(self, chapterID, level):
+        isBought = self.isBought(chapterID=chapterID)
         awardType = BattlePassConsts.REWARD_BOTH if isBought else BattlePassConsts.REWARD_FREE
         isOfferEnabled = self.isOfferEnabled()
-        bonuses = self.getSingleAward(level, awardType)
+        bonuses = self.getSingleAward(chapterID, level, awardType)
         rewardsToChoose = []
         stylesToChoose = []
         for bonus in bonuses:
@@ -467,7 +474,7 @@ class BattlePassController(IBattlePassController):
                             stylesToChoose.append(chapter)
 
         rewardsToChoose.sort(key=lambda x: (int(x.split(':')[-1]), x.split(':')[-2]))
-        self.getRewardLogic().startManualFlow(rewardsToChoose, stylesToChoose)
+        self.getRewardLogic().startManualFlow(rewardsToChoose, chapterID, level)
         return
 
     def takeAllRewards(self):
@@ -476,32 +483,36 @@ class BattlePassController(IBattlePassController):
             rewardsToChoose.sort(key=lambda x: (int(x.split(':')[-1]), x.split(':')[-2]))
         else:
             rewardsToChoose = []
-        chapter = self.getCurrentChapter()
-        stylesToChoose = getStylesToChooseUntilChapter(chapter + 1)
-        self.getRewardLogic().startManualFlow(rewardsToChoose, stylesToChoose)
+        self.getRewardLogic().startManualFlow(rewardsToChoose, 0)
         return
 
     def getChapterStyleProgress(self, chapter):
         return getMaxAvalable3DStyleProgressInChapter(self.getSeasonID(), chapter, self.__itemsCache.items.tokens.getTokens().keys())
 
+    def _getEvents(self):
+        return ((self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onConfigChanged),
+         (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onOffersStateChanged),
+         (self.__itemsCache.onSyncCompleted, self.__onSyncCompleted),
+         (self.__offersProvider.onOffersUpdated, self.__onOffersUpdated))
+
     def __stop(self):
         self.__seasonChangeNotifier.stopNotification()
-        self.__itemsCache.onSyncCompleted -= self.__onSyncCompleted
-        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
-        self.__offersProvider.onOffersUpdated -= self.__onOffersUpdated
-        self.__nonSelectedOldTrophyDeviceNotifier.stop()
+        self._unsubscribe()
 
     def __getConfig(self):
         return self.__lobbyContext.getServerSettings().getBattlePassConfig()
 
-    def __onTokensUpdate(self, diff):
-        for chapter, _ in enumerate(self.getChapterConfig(), BattlePassConsts.MINIMAL_CHAPTER_NUMBER):
-            if getBattlePassPassTokenName(self.getSeasonID(), chapter) in diff:
+    def __onTokensUpdate(self, diff, _):
+        tokens = diff.get('tokens', {})
+        if not tokens:
+            return
+        for chapter in self.getChapterIDs():
+            if getBattlePassPassTokenName(self.getSeasonID(), chapter) in tokens:
                 self.onBattlePassIsBought()
                 break
 
-        if BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER_2020 in diff or BATTLE_PASS_TOKEN_NEW_DEVICE_GIFT_OFFER_2020 in diff:
-            self.onDeviceSelectChange()
+        if any((tokenID.startswith(BATTLE_PASS_OFFER_TOKEN_PREFIX) for tokenID, token in tokens.iteritems())):
+            self.onSelectTokenUpdated()
 
     def __getTimeUntilStart(self):
         return max(0, self.__getConfig().seasonStart - time_utils.getServerUTCTime())
@@ -516,30 +527,36 @@ class BattlePassController(IBattlePassController):
     def __onNotifySeasonChange(self):
         self.onSeasonStateChange()
 
-    def __onServerSettingsChange(self, diff):
-        if BATTLE_PASS_CONFIG_NAME in diff:
-            self.__seasonChangeNotifier.startNotification()
-            newMode = None
-            oldMode = self.__currentMode
-            if 'mode' in diff[BATTLE_PASS_CONFIG_NAME]:
-                newMode = diff[BATTLE_PASS_CONFIG_NAME]['mode']
-                self.__currentMode = newMode
-            self.onBattlePassSettingsChange(newMode, oldMode)
-        if 'isOffersEnabled' in diff:
-            self.__onOffersUpdated()
-            self.onDeviceSelectChange()
+    @serverSettingsChangeListener(BATTLE_PASS_CONFIG_NAME)
+    def __onConfigChanged(self, diff):
+        config = diff[BATTLE_PASS_CONFIG_NAME]
+        self.__seasonChangeNotifier.startNotification()
+        newMode = None
+        oldMode = self.__currentMode
+        if 'mode' in config:
+            newMode = config['mode']
+            self.__currentMode = newMode
+        self.onBattlePassSettingsChange(newMode, oldMode)
         return
 
+    @serverSettingsChangeListener(OFFERS_ENABLED_KEY)
+    def __onOffersStateChanged(self, diff):
+        self.__onOffersUpdated()
+
     def __onSyncCompleted(self, _, diff):
-        if 'battlePass' in diff:
-            newPoints = diff['battlePass'].get('sumPoints', self.__oldPoints)
-            newLevel = diff['battlePass'].get('level', self.__oldLevel)
-            if newPoints != self.__oldPoints:
-                self.onPointsUpdated()
-            if newLevel != self.__oldLevel:
-                self.onLevelUp()
-            self.__oldPoints = newPoints
-            self.__oldLevel = newLevel
+        if BATTLE_PASS_PDATA_KEY not in diff:
+            return
+        data = diff[BATTLE_PASS_PDATA_KEY]
+        newPoints = data.get('sumPoints', self.__oldPoints)
+        newLevel = data.get('level', self.__oldLevel)
+        if newPoints != self.__oldPoints:
+            self.onPointsUpdated()
+        if newLevel != self.__oldLevel:
+            self.onLevelUp()
+        self.__oldPoints = newPoints
+        self.__oldLevel = newLevel
+        if 'chapterID' in data:
+            self.onChapterChanged()
 
     def __onOffersUpdated(self):
         self.__validateOffers()
@@ -564,11 +581,11 @@ class BattlePassController(IBattlePassController):
             return [ a - b for a, b in zip(specialPoints, defaultPoints) ]
         return defaultDiff
 
-    def __getPackedBonusPointsList(self, vehTypeCompDescr=None, isWinner=True, isDiff=False, gameMode=constants.ARENA_BONUS_TYPE.REGULAR):
+    def __getPackedBonusPointsList(self, vehTypeCompDescr=None, isWinner=True, isDiff=False, gameMode=ARENA_BONUS_TYPE.REGULAR):
         if isDiff:
-            pointsList = self.__bonusPointsDiffList(vehTypeCompDescr=vehTypeCompDescr, config=self.__getConfig(), gameMode=gameMode)
+            pointsList = self.__bonusPointsDiffList(vehTypeCompDescr, self.__getConfig(), gameMode)
         else:
-            pointsList = self.__getConfig().bonusPointsList(vehTypeCompDescr=vehTypeCompDescr, isWinner=isWinner, gameMode=gameMode)
+            pointsList = self.__getConfig().bonusPointsList(vehTypeCompDescr, isWinner, gameMode)
         return [ (key, len(list(group))) for key, group in groupby(pointsList) ]
 
     @staticmethod

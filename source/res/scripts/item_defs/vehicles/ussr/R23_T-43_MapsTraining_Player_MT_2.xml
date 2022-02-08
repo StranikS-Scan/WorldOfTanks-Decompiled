@@ -1780,6 +1780,8 @@
             <collisionModelServer>	vehicles/russian/R23_T-43/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R23_T-43/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

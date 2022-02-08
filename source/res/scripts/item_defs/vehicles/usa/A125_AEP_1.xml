@@ -2511,6 +2511,8 @@
             <collisionModelServer>	vehicles/american/A125_AEP_1/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A125_AEP_1/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

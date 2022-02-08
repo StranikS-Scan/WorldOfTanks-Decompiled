@@ -16,6 +16,7 @@ from gui.shared.tooltips.ranked.league_tooltip import EfficiencyTooltipData
 from gui.shared.tooltips.ranked.league_tooltip import PositionTooltipData
 from gui.shared.tooltips.ranked.ranked_year_reward_tooltip import RankedYearReward
 from gui.shared.tooltips.ranked.ranked_quests_preview_tooltip import RankedQuestsPreviewTooltip
+from gui.shared.tooltips.ranked.ranked_selectable_reward_tooltip import RankedSelectableRewardTooltip
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
@@ -31,4 +32,5 @@ def getTooltipBuilders():
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.RANKED_UNAVAILABLE_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedUnavailableTooltip(contexts.ToolTipContext(None)), advanced.RankedAdvanced(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.RANKED_DIVISION_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedDivisionTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.RANKED_BATTLES_YEAR_REWARD, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedYearReward(contexts.ToolTipContext(None))),
-     DataBuilder(TOOLTIPS_CONSTANTS.RANKED_QUESTS_PREVIEW, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedQuestsPreviewTooltip(contexts.QuestsBoosterContext())))
+     DataBuilder(TOOLTIPS_CONSTANTS.RANKED_QUESTS_PREVIEW, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedQuestsPreviewTooltip(contexts.QuestsBoosterContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.RANKED_BATTLES_SELECTABLE_REWARD, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RankedSelectableRewardTooltip(contexts.ToolTipContext(None))))

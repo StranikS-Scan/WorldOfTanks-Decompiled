@@ -7,7 +7,7 @@ from account_helpers import AccountSettings
 from account_helpers.counter_settings import getCountNewSettings
 from adisp import process
 from async import async, await
-from gui import DialogsInterface
+from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
 from gui.Scaleform.genConsts.MENU_CONSTANTS import MENU_CONSTANTS
@@ -97,7 +97,11 @@ class LobbyMenu(LobbyMenuMeta):
         self.__updateNewSettingsCount()
 
     def bootcampClick(self):
-        self.bootcamp.runBootcamp()
+        if not self.bootcamp.canRun():
+            SystemMessages.pushI18nMessage('#system_messages:prebattle/bootcamp/inOtherQueue', type=SystemMessages.SM_TYPE.Warning)
+            self.destroy()
+        else:
+            self.bootcamp.runBootcamp()
 
     def manualClick(self):
         if self.manualController.isActivated():

@@ -4,14 +4,14 @@ import logging
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from sound_constants import SHOP_SOUND_SPACE
-from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
@@ -67,21 +67,6 @@ class ShopView(LobbySubView, ShopBase):
 
 class ShopOverlay(_ShopOverlayBase):
 
-    def __init__(self, *args):
-        super(ShopOverlay, self).__init__(*args)
-        self.__uniqueBrowserName = VIEW_ALIAS.OVERLAY_WEB_STORE
-
-    @property
-    def uniqueBrowserName(self):
-        return self.__uniqueBrowserName
-
     def onEscapePress(self):
         if not self._browserParams.get('isHidden'):
             self.destroy()
-
-
-class PremContentPageOverlay(WebView):
-
-    def webHandlers(self):
-        from gui.Scaleform.daapi.view.lobby.shared.web_handlers import createPremAccWebHandlers
-        return createPremAccWebHandlers()

@@ -800,6 +800,8 @@
             <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_08.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

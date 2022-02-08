@@ -2581,6 +2581,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2671,6 +2672,8 @@
             <collisionModelServer>	vehicles/german/G115_Typ_205_4_Jun/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G115_Typ_205_4_Jun/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

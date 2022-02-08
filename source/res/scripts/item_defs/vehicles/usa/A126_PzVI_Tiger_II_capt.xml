@@ -1142,6 +1142,8 @@
             <collisionModelServer>	vehicles/american/A126_PzVI_Tiger_II_capt/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A126_PzVI_Tiger_II_capt/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

@@ -1020,6 +1020,8 @@
             <collisionModelServer>	vehicles/russian/R134_Object_252K/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R134_Object_252K/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>

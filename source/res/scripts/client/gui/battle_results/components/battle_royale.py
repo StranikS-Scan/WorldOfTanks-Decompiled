@@ -2,7 +2,8 @@
 # Embedded file name: scripts/client/gui/battle_results/components/battle_royale.py
 import logging
 from collections import defaultdict
-from constants import DEATH_REASON_ALIVE, ARENA_BONUS_TYPE
+import typing
+from constants import ARENA_BONUS_TYPE, DEATH_REASON_ALIVE
 from gui.battle_control.battle_constants import WinStatus
 from gui.battle_results.components import base
 from gui.battle_results.components.personal import PersonalVehiclesBlock
@@ -11,13 +12,15 @@ from gui.battle_results.reusable import sort_keys
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events import IEventsCache
-from gui.server_events.battle_royale_formatters import StatsItemType, SOLO_ITEMS_ORDER, SQUAD_ITEMS_ORDER
+from gui.server_events.battle_royale_formatters import SOLO_ITEMS_ORDER, SQUAD_ITEMS_ORDER, StatsItemType
 from gui.server_events.events_helpers import isBattleRoyale
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IBattleRoyaleController, IBattlePassController
-from battle_pass_common import BattlePassConsts
+from skeletons.gui.game_control import IBattleRoyaleController
+if typing.TYPE_CHECKING:
+    from typing import Dict
+    from gui.battle_results.reusable import _ReusableInfo
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 _THE_BEST_RANK = 1
@@ -302,7 +305,6 @@ class BattleRoyaleRewardsBlock(base.StatsBlock):
 
 class BattlePassBlock(base.StatsBlock):
     __slots__ = ('currentLevel', 'maxPoints', 'earnedPoints', 'currentLevelPoints', 'isDone')
-    __battlePassController = dependency.descriptor(IBattlePassController)
 
     def __init__(self, meta=None, field='', *path):
         super(BattlePassBlock, self).__init__(meta, field, *path)
@@ -313,15 +315,14 @@ class BattlePassBlock(base.StatsBlock):
         self.isDone = False
 
     def setRecord(self, result, reusable):
-        if reusable.battlePassProgress is not None:
-            progressionInfo = reusable.battlePassProgress.get(BattlePassConsts.PROGRESSION_INFO, reusable.battlePassProgress.get(BattlePassConsts.PROGRESSION_INFO_PREV))
-            if progressionInfo is not None:
-                self.currentLevel = progressionInfo.level
-                self.maxPoints = progressionInfo.pointsTotal
-                self.earnedPoints = progressionInfo.pointsBattleDiff
-                self.currentLevelPoints = progressionInfo.pointsNew
-                self.isDone = progressionInfo.isDone
-        return
+        hasProgress = reusable.battlePassProgress.hasProgress
+        showIfEmpty = reusable.common.arenaBonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE
+        if hasProgress or showIfEmpty:
+            self.currentLevel = reusable.battlePassProgress.level
+            self.maxPoints = reusable.battlePassProgress.pointsMax
+            self.earnedPoints = reusable.battlePassProgress.pointsAdd
+            self.currentLevelPoints = reusable.battlePassProgress.pointsNew
+            self.isDone = reusable.battlePassProgress.isDone
 
 
 class BattleRoyalePlayerBlock(base.StatsBlock):

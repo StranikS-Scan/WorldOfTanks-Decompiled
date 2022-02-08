@@ -24,12 +24,10 @@ from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_ROLES_LABE
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from new_year.ny_constants import NY_FILTER
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
-from skeletons.new_year import INewYearController
 from uilogging.veh_post_progression.constants import LogGroups, ParentScreens
 from uilogging.veh_post_progression.loggers import VehPostProgressionLogger
 if typing.TYPE_CHECKING:
@@ -258,7 +256,6 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
 
 
 class TankCarouselFilterPopover(VehiclesFilterPopover):
-    _nyController = dependency.descriptor(INewYearController)
     __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx):
@@ -282,12 +279,7 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
         super(TankCarouselFilterPopover, self)._update(isInitial)
         self._carousel.updateHotFilters()
 
-    def _populate(self):
-        super(TankCarouselFilterPopover, self)._populate()
-        self._nyController.onStateChanged += self.__onNyStateChanged
-
     def _dispose(self):
-        self._nyController.onStateChanged -= self.__onNyStateChanged
         self.__settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, {settings_constants.GAME.CAROUSEL_TYPE: self.__carouselRowCount})
         super(TankCarouselFilterPopover, self)._dispose()
 
@@ -306,8 +298,6 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
             mapping[_SECTION.SPECIALS].append('clanRented')
         if kwargs.get('isRanked', False):
             mapping[_SECTION.SPECIALS].append('ranked')
-        elif cls._nyController.isVehicleBranchEnabled():
-            mapping[_SECTION.SPECIALS].append(NY_FILTER)
         return mapping
 
     @classmethod
@@ -317,9 +307,6 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
          'premium',
          'elite',
          'crystals']
-
-    def __onNyStateChanged(self):
-        self.destroy()
 
 
 class BattlePassCarouselFilterPopover(TankCarouselFilterPopover):

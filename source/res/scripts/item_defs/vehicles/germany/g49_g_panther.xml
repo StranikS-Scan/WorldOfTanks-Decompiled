@@ -2715,6 +2715,8 @@
             <collisionModelServer>	vehicles/german/G49_G_Panther/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G49_G_Panther/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2786,6 +2788,7 @@
           </shotDispersionFactors>
           <turretYawLimits>	-26 26	</turretYawLimits>
           <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G49_G_Panther/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G49_G_Panther/crash/lod0/Gun_02.model	</destroyed>

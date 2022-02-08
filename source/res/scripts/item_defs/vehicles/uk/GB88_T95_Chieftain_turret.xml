@@ -1679,6 +1679,8 @@
             <collisionModelServer>	vehicles/british/GB88_T95_Chieftain_turret/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB88_T95_Chieftain_turret/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

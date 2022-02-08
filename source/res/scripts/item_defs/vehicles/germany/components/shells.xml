@@ -42,34 +42,6 @@
       <devices>	17	</devices>
     </damage>
   </_7.92mm_APCR>
-  <_20mm_Pzgr39>
-    <id>	0	</id>
-    <userString>	#germany_vehicles:_20mm_Pzgr39	</userString>
-    <icon>	ap	</icon>
-    <price>	3	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	20	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	autoArmorPiercing	</effects>
-    <damage>
-      <armor>	11	</armor>
-      <devices>	27	</devices>
-    </damage>
-  </_20mm_Pzgr39>
-  <_20mm_Pzgr39_S>
-    <id>	208	</id>
-    <userString>	#germany_vehicles:_20mm_Pzgr39_S	</userString>
-    <icon>	ap	</icon>
-    <price>	3	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	20	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	autoArmorPiercing	</effects>
-    <damage>
-      <armor>	13	</armor>
-      <devices>	27	</devices>
-    </damage>
-  </_20mm_Pzgr39_S>
   <_20cm_Pzgr40_S>
     <id>	209	</id>
     <userString>	#germany_vehicles:_20cm_Pzgr40_S	</userString>
@@ -154,7 +126,7 @@
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	30	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing	</effects>
+    <effects>	autoArmorPiercing	</effects>
     <damage>
       <armor>	30	</armor>
       <devices>	40	</devices>
@@ -169,7 +141,7 @@
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	30	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	smallAPCR	</effects>
+    <effects>	autoAPCR	</effects>
     <damage>
       <armor>	30	</armor>
       <devices>	40	</devices>
@@ -185,7 +157,7 @@
     <caliber>	30	</caliber>
     <explosionRadius>	0.21	</explosionRadius>
     <isTracer>	true	</isTracer>
-    <effects>	smallHighExplosive	</effects>
+    <effects>	autoHighExplosive	</effects>
     <damage>
       <armor>	40	</armor>
       <devices>	40	</devices>
@@ -199,6 +171,34 @@
       </damage>
     </armorSpalls>
   </_30mm_M>
+  <_20mm_Pzgr39>
+    <id>	0	</id>
+    <userString>	#germany_vehicles:_20mm_Pzgr39	</userString>
+    <icon>	ap	</icon>
+    <price>	3	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	11	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_20mm_Pzgr39>
+  <_20mm_Pzgr39_S>
+    <id>	208	</id>
+    <userString>	#germany_vehicles:_20mm_Pzgr39_S	</userString>
+    <icon>	ap	</icon>
+    <price>	3	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	13	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_20mm_Pzgr39_S>
   <_37mm_Pzgr36>
     <id>	2	</id>
     <userString>	#germany_vehicles:_37mm_Pzgr36	</userString>
@@ -818,7 +818,7 @@
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	75	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
+    <effects>	mediumArmorPiercing	</effects>
     <damage>
       <armor>	110	</armor>
       <devices>	100	</devices>
@@ -832,7 +832,7 @@
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	75	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
+    <effects>	mediumArmorPiercing	</effects>
     <damage>
       <armor>	110	</armor>
       <devices>	100	</devices>
@@ -1993,7 +1993,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	90	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeHollowCharge	</effects>
+    <effects>	mainHollowCharge	</effects>
     <damage>
       <armor>	200	</armor>
       <devices>	122	</devices>
@@ -2047,7 +2047,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeHollowCharge	</effects>
+    <effects>	mainHollowCharge	</effects>
     <damage>
       <armor>	320	</armor>
       <devices>	135	</devices>
@@ -2353,7 +2353,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeHollowCharge	</effects>
+    <effects>	mainHollowCharge	</effects>
     <damage>
       <armor>	390	</armor>
       <devices>	150	</devices>
@@ -3938,7 +3938,7 @@
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeAPCR	</effects>
+    <effects>	BRmainAPCR	</effects>
     <damage>
       <armor>	190	</armor>
       <devices>	25	</devices>
@@ -3971,7 +3971,7 @@
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeAPCR	</effects>
+    <effects>	BRmainAPCR	</effects>
     <damage>
       <armor>	240	</armor>
       <devices>	34	</devices>
@@ -3987,7 +3987,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	128	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainHollowCharge	</effects>
+    <effects>	BRlargeHollowCharge	</effects>
     <damage>
       <armor>	490	</armor>
       <devices>	49	</devices>
@@ -4037,7 +4037,7 @@
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeAPCR	</effects>
+    <effects>	BRmainAPCR	</effects>
     <damage>
       <armor>	265	</armor>
       <devices>	37.5	</devices>
@@ -4053,7 +4053,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	128	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainHollowCharge	</effects>
+    <effects>	BRlargeHollowCharge	</effects>
     <damage>
       <armor>	515	</armor>
       <devices>	51.5	</devices>
@@ -4086,7 +4086,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	150	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainHollowCharge	</effects>
+    <effects>	BRlargeHollowCharge	</effects>
     <damage>
       <armor>	765	</armor>
       <devices>	76.5	</devices>

@@ -1862,6 +1862,8 @@
             <collisionModelServer>	vehicles/poland/Pl15_60TP_Lewandowskiego/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl15_60TP_Lewandowskiego/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <drivenJoints>
             <master>
               <node>	Gun	</node>

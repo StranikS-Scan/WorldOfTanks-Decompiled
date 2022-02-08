@@ -1999,6 +1999,8 @@
             <collisionModelServer>	vehicles/german/G108_PzKpfwII_AusfD/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G108_PzKpfwII_AusfD/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

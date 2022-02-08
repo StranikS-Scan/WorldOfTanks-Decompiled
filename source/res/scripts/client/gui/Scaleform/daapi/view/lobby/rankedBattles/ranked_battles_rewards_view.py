@@ -3,7 +3,7 @@
 import logging
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import RANKED_STYLED_VEHICLES_POOL
+from account_helpers.AccountSettings import RANKED_STYLED_VEHICLES_POOL, RANKED_AWARDS_COUNTER, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED, RANKED_AWARDS_BUBBLE_YEAR_REACHED
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_page import IResetablePage
 from gui.Scaleform.daapi.view.meta.RankedBattlesRewardsLeaguesMeta import RankedBattlesRewardsLeaguesMeta
 from gui.Scaleform.daapi.view.meta.RankedBattlesRewardsMeta import RankedBattlesRewardsMeta
@@ -11,24 +11,25 @@ from gui.Scaleform.daapi.view.meta.RankedBattlesRewardsRanksMeta import RankedBa
 from gui.Scaleform.daapi.view.meta.RankedBattlesRewardsYearMeta import RankedBattlesRewardsYearMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS as _RBC
-from gui.ranked_battles.constants import YEAR_AWARDS_ORDER, STANDARD_POINTS_COUNT, FINAL_QUEST_PATTERN
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.ranked_battles.constants import FINAL_QUEST_PATTERN, STANDARD_POINTS_COUNT, YEAR_AWARDS_ORDER
 from gui.ranked_battles.ranked_builders import rewards_vos
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.ranked_battles.ranked_helpers import getDataFromFinalTokenQuestID
 from gui.ranked_battles.ranked_helpers.sound_manager import AmbientType
-from gui.shared.event_dispatcher import showStylePreview
-from gui.shared.utils.scheduled_notifications import AcyclicNotifier
-from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.impl import backport
-from gui.impl.gen import R
+from gui.shared.event_dispatcher import showStylePreview, showRankedSelectableReward
 from gui.shared.formatters import text_styles
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.utils.scheduled_notifications import AcyclicNotifier
 from helpers import dependency, time_utils
 from items import parseIntCompactDescr
 from items.vehicles import VehicleDescriptor, getVehicleType
-from shared_utils import first, findFirst
-from skeletons.gui.server_events import IEventsCache
+from shared_utils import findFirst, first
 from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui.ranked_battles.ranked_builders import main_page_vos
 _logger = logging.getLogger(__name__)
 _REWARDS_COMPONENTS = (RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI, RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI, RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI)
 
@@ -39,6 +40,9 @@ class RankedBattlesRewardsView(RankedBattlesRewardsMeta, IResetablePage):
         super(RankedBattlesRewardsView, self).__init__()
         self._selectedViewID = None
         return
+
+    def reset(self):
+        pass
 
     def onTabChanged(self, viewId):
         self._selectedViewID = viewId
@@ -55,6 +59,8 @@ class RankedBattlesRewardsView(RankedBattlesRewardsMeta, IResetablePage):
         super(RankedBattlesRewardsView, self)._populate()
         self.__rankedController.onUpdated += self._update
         self.setActiveTab()
+        self.as_setCountersS([{'componentId': _RBC.RANKED_BATTLES_REWARDS_YEAR_ID,
+          'count': main_page_vos.getBubbleLabel(AccountSettings.getCounters(RANKED_AWARDS_COUNTER))}])
 
     def _dispose(self):
         self.__rankedController.onUpdated -= self._update
@@ -66,6 +72,24 @@ class RankedBattlesRewardsView(RankedBattlesRewardsMeta, IResetablePage):
     def _updateSounds(self):
         raise NotImplementedError()
 
+    def _updateYearRewardCounters(self):
+        isNeedUpdate = False
+        if AccountSettings.getCounters(RANKED_AWARDS_COUNTER) > 0:
+            AccountSettings.setCounters(RANKED_AWARDS_COUNTER, 0)
+            isNeedUpdate = True
+        if not AccountSettings.getSettings(RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED):
+            AccountSettings.setSettings(RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED, True)
+            isNeedUpdate = True
+        if not AccountSettings.getSettings(RANKED_AWARDS_BUBBLE_YEAR_REACHED):
+            AccountSettings.setSettings(RANKED_AWARDS_BUBBLE_YEAR_REACHED, True)
+            isNeedUpdate = True
+        if isNeedUpdate:
+            self._updateCounters()
+
+    def _updateCounters(self):
+        self.as_setCountersS([{'componentId': _RBC.RANKED_BATTLES_REWARDS_YEAR_ID,
+          'count': main_page_vos.getBubbleLabel(AccountSettings.getCounters(RANKED_AWARDS_COUNTER))}])
+
 
 class RankedRewardsSeasonOffView(RankedBattlesRewardsView):
     __rankedController = dependency.descriptor(IRankedBattlesController)
@@ -74,6 +98,7 @@ class RankedRewardsSeasonOffView(RankedBattlesRewardsView):
         self._updateSounds()
 
     def setActiveTab(self, linkage=None):
+        self._updateYearRewardCounters()
         tabs = rewards_vos.getSeasonOffTabs(self.__rankedController.isYearRewardEnabled())
         self.as_setTabsDataS(tabs)
 
@@ -123,6 +148,11 @@ class RankedRewardsSeasonOnView(RankedBattlesRewardsView):
         else:
             soundManager.setAmbient()
             soundManager.setProgressSound(self.__rankedController.getCurrentDivision().getUserID())
+
+    def onTabChanged(self, viewId):
+        if viewId == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI:
+            self._updateYearRewardCounters()
+        super(RankedRewardsSeasonOnView, self).onTabChanged(viewId)
 
 
 class RankedBattlesRewardsRanksView(RankedBattlesRewardsRanksMeta, IResetablePage):
@@ -229,8 +259,8 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
         result = []
         formatter = getRankedAwardsFormatter()
 
-        def findAndPreformatBonus(awards, bonusName):
-            bonus = findFirst(lambda x: x.getName() == bonusName, awards)
+        def findAndPreformatBonus(awardsList, bonusName):
+            bonus = findFirst(lambda x: x.getName() == bonusName, awardsList)
             if bonus is not None:
                 bonus = first(formatter.getPreformattedBonuses([bonus]))
             return bonus
@@ -296,15 +326,20 @@ class RankedBattlesRewardsYearView(RankedBattlesRewardsYearMeta, IResetablePage)
     def reset(self):
         pass
 
+    def onChooseRewardBtnClick(self):
+        showRankedSelectableReward()
+
     def _populate(self):
         super(RankedBattlesRewardsYearView, self)._populate()
         self.__rankedController.onYearPointsChanges += self.__update
+        self.__rankedController.onSelectableRewardsChanged += self.__update
         self.__acyclicNotifier = AcyclicNotifier(self.__getTillUpdateTime, self.__update)
         self.__update()
         self.__acyclicNotifier.startNotification()
 
     def _dispose(self):
         self.__rankedController.onYearPointsChanges -= self.__update
+        self.__rankedController.onSelectableRewardsChanged -= self.__update
         self.__acyclicNotifier.stopNotification()
         self.__acyclicNotifier.clear()
         super(RankedBattlesRewardsYearView, self)._dispose()
@@ -343,7 +378,12 @@ class RankedBattlesRewardsYearView(RankedBattlesRewardsYearMeta, IResetablePage)
             if points > maxPoints:
                 status = _RBC.YEAR_REWARD_STATUS_PASSED_FINAL if rewardingComplete else _RBC.YEAR_REWARD_STATUS_PASSED
             elif maxPoints >= points >= minPoints:
-                if rewardingComplete:
+                selectableRewardsCount = self.__rankedController.getYearRewardCount()
+                if selectableRewardsCount:
+                    status = _RBC.YEAR_REWARD_STATUS_CURRENT_CHOOSE
+                    statusText = backport.text(R.strings.ranked_battles.rewardsView.tabs.year.currentChoose())
+                    self.as_setChooseRewardBtnCounterS(str(selectableRewardsCount))
+                elif rewardingComplete:
                     status = _RBC.YEAR_REWARD_STATUS_CURRENT_FINAL
                     statusText = text_styles.statInfo(backport.text(R.strings.ranked_battles.rewardsView.tabs.year.currentFinal()))
                 else:

@@ -18,17 +18,7 @@ _TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.LootBoxTokenQuestFormat
  token_quest_subformatters.SeniorityAwardsFormatter(),
  token_quest_subformatters.PersonalMissionsTokenQuestsFormatter(),
  token_quest_subformatters.BattlePassDefaultAwardsFormatter(),
- token_quest_subformatters.WotPlusDirectivesFormatter(),
- token_quest_subformatters.LunarNYProgressionFormatter(),
- token_quest_subformatters.NewYearCollectionRewardFormatter(),
- token_quest_subformatters.NewYearCollectionMegaRewardFormatter(),
- token_quest_subformatters.NewYearLevelUpRewardFormatter(),
- token_quest_subformatters.NewYearOldCollectionRewardFormatter(),
- token_quest_subformatters.NewYearCelebrityQuestRewardFormatter(),
- token_quest_subformatters.NewYearCelebrityMarathonRewardFormatter(),
- token_quest_subformatters.NewYearGiftSystemSubProgressRewardFormatter(),
- token_quest_subformatters.NewYearGiftSystemProgressionRewardFormatter(),
- token_quest_subformatters.WOAnnouncementFormatter())
+ token_quest_subformatters.WotPlusDirectivesFormatter())
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),
@@ -85,9 +75,9 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.enhancementsWiped.index(): _sc.EnhancementsWipedFormatter(),
  _SM_TYPE.battlePassReward.index(): _sc.BattlePassRewardFormatter(),
  _SM_TYPE.battlePassReachedCap.index(): _sc.BattlePassReachedCapFormatter(),
- _SM_TYPE.battlePassStyleChoiceAvailable.index(): _sc.BattlePassStyleChoiceAvailableFormatter(),
- _SM_TYPE.battlePassStyleChosen.index(): _sc.BattlePassStyleChosenFormatter(),
+ _SM_TYPE.battlePassStyleRecieved.index(): _sc.BattlePassStyleReceivedFormatter(),
  _SM_TYPE.battlePassSeasonEnd.index(): _sc.BattlePassSeasonEndFormatter(),
+ _SM_TYPE.battlePassUseNonChapterPoints.index(): _sc.BattlePassFreePointsUsedFormatter(),
  _SM_TYPE.badges.index(): _sc.BadgesFormatter(),
  _SM_TYPE.collectibleVehiclesUnlocked.index(): _sc.CollectibleVehiclesUnlockedFormatter(),
  _SM_TYPE.customizationProgress.index(): _sc.CustomizationProgressFormatter(),
@@ -106,7 +96,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.wotPlusRentEnd.index(): _wotPlusFormatters.RentEnd(),
  _SM_TYPE.wotPlusNoRentSelected.index(): _wotPlusFormatters.SimpleFormatter('WotPlusRentNoRentSelectedMessage'),
  _SM_TYPE.giftSystemMessage.index(): GiftSystemMessagesProxy(),
- _SM_TYPE.giftSystemReturnGift.index(): _sc.LunarReturnEnvelopeFormatter()}
+ _SM_TYPE.telecomMergeResults.index(): _sc.TelecomMergeResultsFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),
@@ -126,7 +116,4 @@ CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageForma
  SCH_CLIENT_MSG_TYPE.WOTPLUS_TANKRENTAL_ENABLED: _wotPlusFormatters.SimpleFormatter('TankRentalEnabledMessage'),
  SCH_CLIENT_MSG_TYPE.WOTPLUS_TANKRENTAL_DISABLED: _wotPlusFormatters.SimpleFormatter('TankRentalDisabledMessage'),
  SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_ENABLED: _wotPlusFormatters.SimpleFormatter('FreeDirectivesEnabledMessage'),
- SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_DISABLED: _wotPlusFormatters.SimpleFormatter('FreeDirectivesDisabledMessage'),
- SCH_CLIENT_MSG_TYPE.NEW_NY_LOOT_BOXES: _sc.NewNYLootBoxesFormatter(),
- SCH_CLIENT_MSG_TYPE.WO_NOTIFICATION: _sc.WinterOfferFormatter(),
- SCH_CLIENT_MSG_TYPE.NY_EVENT_BUTTON_MESSAGE: _sc.NewNYEventFormatter()}
+ SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_DISABLED: _wotPlusFormatters.SimpleFormatter('FreeDirectivesDisabledMessage')}

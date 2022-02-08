@@ -2024,6 +2024,8 @@
             <collisionModelServer>	vehicles/british/GB91_Super_Conqueror/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB91_Super_Conqueror/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

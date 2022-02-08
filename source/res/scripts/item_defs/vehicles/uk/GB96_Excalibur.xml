@@ -1976,6 +1976,8 @@
             <collisionModelServer>	vehicles/british/GB96_Excalibur/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB96_Excalibur/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <drivenJoints>
             <master>
               <node>	Gun	</node>

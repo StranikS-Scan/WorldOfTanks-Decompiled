@@ -50,6 +50,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
     def __init__(self, dataSec):
         super(StrategicCamera, self).__init__()
         CallbackDelayer.__init__(self)
+        self.isAimOffsetEnabled = True
         self.__positionOscillator = None
         self.__positionNoiseOscillator = None
         self.__activeDistRangeSettings = None
@@ -342,6 +343,8 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__smoothingPivotDelta += smoothingPivotDeltaDy
 
     def __calcAimOffset(self):
+        if not self.isAimOffsetEnabled:
+            return Vector2(0.0, 0.0)
         aimWorldPos = self.__aimingSystem.matrix.applyPoint(Vector3(0, -self.__aimingSystem.height, 0))
         aimOffset = cameras.projectPoint(aimWorldPos)
         return Vector2(math_utils.clamp(-0.95, 0.95, aimOffset.x), math_utils.clamp(-0.95, 0.95, aimOffset.y))

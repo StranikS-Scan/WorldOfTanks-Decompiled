@@ -1674,6 +1674,8 @@
             <collisionModelServer>	vehicles/russian/R44_T80_MapsTraining_Dummy_LT_1/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R44_T80_MapsTraining_Dummy_LT_1/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_TNSH_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

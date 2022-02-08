@@ -75,6 +75,13 @@
       <undamaged>	vehicles/american/A128_concept_1b/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A128_concept_1b/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A128_concept_1b/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <A128_Concept_1b_007_3DSt>
+          <undamaged>	vehicles/american/A128_Concept_1b/_skins/A128_Concept_1b_007_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A128_Concept_1b/_skins/A128_Concept_1b_007_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A128_Concept_1b/_skins/A128_Concept_1b_007_3DSt/crash/lod0/Hull.model	</exploded>
+        </A128_Concept_1b_007_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -104,10 +111,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.501029 0.376098 2.90068	</rayStart>
-        <rayEnd>	0.501029 0.20625 2.79507	</rayEnd>
+        <rayStart>	0.52314 0.634723 3.04377	</rayStart>
+        <rayEnd>	0.536857 -0.0808291 2.68629	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.25	</size>
+        <size>	0.22	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -917,6 +924,40 @@
         <hiddenForUser>	true	</hiddenForUser>
         <anchorShift>	0.112644	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15064	</slotId>
+        <position>	0.00178661 1.01835 3.20894	</position>
+        <rotation>	0.599218 -0.00119812 3.13947	</rotation>
+        <compatibleModels>	A128_Concept_1b_007_3DSt	</compatibleModels>
+        <tags>	formfactor_square	</tags>
+        <scale>	0.417146 0.0983717 0.417145	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.436442	</clipAngle>
+        <anchorShift>	0.08264	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15065	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A128_Concept_1b_007_3DSt	</compatibleModels>
+        <position>	0.189098 1.52002 -2.54566	</position>
+        <rotation>	3.10989 -0.00143933 -0.00144434	</rotation>
+        <scale>	0.797441 0.188054 0.797442	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.436442	</clipAngle>
+        <anchorShift>	0.062641	</anchorShift>
+        <verticalMirror>	true	</verticalMirror>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	A128_Concept_1b_007_3DSt	</compatibleModels>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	117.694 117.053	</density>
@@ -953,6 +994,13 @@
         <undamaged>	vehicles/american/A128_concept_1b/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A128_concept_1b/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A128_concept_1b/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A128_Concept_1b_007_3DSt>
+            <undamaged>	vehicles/american/A128_Concept_1b/_skins/A128_Concept_1b_007_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A128_Concept_1b/_skins/A128_Concept_1b_007_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A128_Concept_1b/_skins/A128_Concept_1b_007_3DSt/crash/lod0/Chassis.model	</exploded>
+          </A128_Concept_1b_007_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1083,6 +1131,14 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <A128_Concept_1b_007_3DSt>
+            <segmentModelLeft>	vehicles/american/A128_concept_1b/_skins/A128_Concept_1b_007_3DSt/track/segment_L_01.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/american/A128_concept_1b/_skins/A128_Concept_1b_007_3DSt/track/segment_R_01.model	</segmentModelRight>
+            <segment2ModelLeft>	vehicles/american/A128_concept_1b/_skins/A128_Concept_1b_007_3DSt/track/segment_L_02.model	</segment2ModelLeft>
+            <segment2ModelRight>	vehicles/american/A128_concept_1b/_skins/A128_Concept_1b_007_3DSt/track/segment_R_02.model	</segment2ModelRight>
+          </A128_Concept_1b_007_3DSt>
+        </modelSets>
       </splineDesc>
       <trackThickness>	-0.024537	</trackThickness>
       <trackNodes>
@@ -1202,6 +1258,12 @@
             <model>	vehicles/american/A128_concept_1b/track/segment_2.model	</model>
             <length>	0.0787252	</length>
           </secSegment>
+          <modelSets>
+            <A128_Concept_1b_007_3DSt>
+              <mainSegmentModel>	vehicles/american/A128_concept_1b/_skins/A128_Concept_1b_007_3DSt/track/segment_L_01.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A128_concept_1b/_skins/A128_Concept_1b_007_3DSt/track/segment_L_02.model	</secSegmentModel>
+            </A128_Concept_1b_007_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1474,6 +1536,12 @@
             <model>	vehicles/american/A128_concept_1b/track/segment_2.model	</model>
             <length>	0.078725	</length>
           </secSegment>
+          <modelSets>
+            <A128_Concept_1b_007_3DSt>
+              <mainSegmentModel>	vehicles/american/A128_concept_1b/_skins/A128_Concept_1b_007_3DSt/track/segment_R_01.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A128_concept_1b/_skins/A128_Concept_1b_007_3DSt/track/segment_R_02.model	</secSegmentModel>
+            </A128_Concept_1b_007_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1817,6 +1885,13 @@
             <undamaged>	vehicles/american/A128_concept_1b/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A128_concept_1b/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A128_concept_1b/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <A128_Concept_1b_007_3DSt>
+                <undamaged>	vehicles/american/A128_Concept_1b/_skins/A128_Concept_1b_007_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A128_Concept_1b/_skins/A128_Concept_1b_007_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A128_Concept_1b/_skins/A128_Concept_1b_007_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </A128_Concept_1b_007_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A128_concept_1b/collision/Gun_01.model	</collisionModelServer>
@@ -1862,8 +1937,21 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.000000 0.000000 3.38769	</rayStart>
+              <rayEnd>	-0.449745 -0.279125 3.27491	</rayEnd>
+              <rayUp>	0.108257 0.000000 0.000000	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <size>	0.546875	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <compatibleModels>	A128_Concept_1b_007_3DSt	</compatibleModels>
+            </slot>
           </customizationSlots>
           <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <camouflage>
             <density>	108.023 108.657	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
@@ -1875,6 +1963,13 @@
         <undamaged>	vehicles/american/A128_concept_1b/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A128_concept_1b/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A128_concept_1b/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <A128_Concept_1b_007_3DSt>
+            <undamaged>	vehicles/american/A128_Concept_1b/_skins/A128_Concept_1b_007_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A128_Concept_1b/_skins/A128_Concept_1b_007_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A128_Concept_1b/_skins/A128_Concept_1b_007_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </A128_Concept_1b_007_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A128_concept_1b/collision/Turret_01.model	</collisionModelServer>
@@ -1894,13 +1989,13 @@
         <slot>
           <slotType>	paint	</slotType>
           <slotId>	31000	</slotId>
-          <anchorPosition>	0.000000 1.05228 0.000000	</anchorPosition>
+          <anchorPosition>	-0.000000 1.05228 -0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
           <slotId>	32000	</slotId>
-          <anchorPosition>	0.000000 1.05228 0.000000	</anchorPosition>
+          <anchorPosition>	-0.000000 1.05228 -0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
@@ -2694,6 +2789,46 @@
           <showOn>	4368	</showOn>
           <clipAngle>	1.09003	</clipAngle>
           <anchorShift>	0.472874	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35061	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A128_Concept_1b_007_3DSt	</compatibleModels>
+          <position>	0.581906 1.86265 -0.60697	</position>
+          <rotation>	1.53532 -2.0645 -0.47936	</rotation>
+          <scale>	0.461487 0.137152 0.461485	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.931862	</clipAngle>
+          <anchorShift>	0.012641	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35062	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A128_Concept_1b_007_3DSt	</compatibleModels>
+          <position>	-0.587857 2.09321 -0.515765	</position>
+          <rotation>	1.53533 2.06467 0.479568	</rotation>
+          <scale>	0.350898 0.104285 0.350897	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.931862	</clipAngle>
+          <anchorShift>	0.012641	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35063	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A128_Concept_1b_007_3DSt	</compatibleModels>
+          <position>	0.00439853 2.50767 -1.91735	</position>
+          <rotation>	-3.14086 -0.00721693 -0.00176048	</rotation>
+          <scale>	0.859137 0.202603 0.859138	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.872009	</clipAngle>
+          <anchorShift>	0.049978	</anchorShift>
+          <verticalMirror>	true	</verticalMirror>
         </slot>
       </customizationSlots>
       <camouflage>

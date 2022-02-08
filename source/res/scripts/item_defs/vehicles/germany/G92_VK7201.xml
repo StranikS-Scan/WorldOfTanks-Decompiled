@@ -1669,6 +1669,8 @@
             <collisionModelServer>	vehicles/german/G92_VK7201/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G92_VK7201/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <shotOffset>	0.000000 0.000000 -0.656849	</shotOffset>
           <customizationSlots>

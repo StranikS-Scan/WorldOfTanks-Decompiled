@@ -49,6 +49,10 @@ class GammaWizardView(LayerVisibilityMixin, GammaWizardViewMeta):
 
     def _populate(self):
         super(GammaWizardView, self)._populate()
+        if self.app is not None:
+            self._savedBackgroundAlpha = self.app.getBackgroundAlpha()
+            self.app.setBackgroundAlpha(0)
+            self.addListener(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, self.__onExternalBackgroundAlphaChange, EVENT_BUS_SCOPE.GLOBAL)
         self._currentGammaValue = self._changeGammaValue = self._gammaWizard.gamma
         self.as_initDataS({'title': text_styles.superPromoTitle(SETTINGS.GAMMAWIZARD_TITLE),
          'header': text_styles.highlightText(SETTINGS.GAMMAWIZARD_HEADER),
@@ -61,9 +65,18 @@ class GammaWizardView(LayerVisibilityMixin, GammaWizardViewMeta):
          'minValue': self.MIN_VALUE,
          'maxValue': self.MAX_VALUE,
          'defaultValue': self.DEFAULT_VALUE})
+        return
 
     def _dispose(self):
         self._gammaWizard.gamma = self._changeGammaValue
         self._gammaWizard.enable = False
+        self.removeListener(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, self.__onExternalBackgroundAlphaChange, EVENT_BUS_SCOPE.GLOBAL)
+        if self.app is not None:
+            self.app.setBackgroundAlpha(self._savedBackgroundAlpha)
         self.fireEvent(GameEvent(GameEvent.SHOW_EXTERNAL_COMPONENTS), scope=EVENT_BUS_SCOPE.GLOBAL)
         super(GammaWizardView, self)._dispose()
+        return
+
+    def __onExternalBackgroundAlphaChange(self, event):
+        self._savedBackgroundAlpha = event.ctx['alpha']
+        self.app.setBackgroundAlpha(0, notSilentChange=False)

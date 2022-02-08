@@ -2980,6 +2980,8 @@
             <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3093,6 +3095,8 @@
             <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3205,6 +3209,8 @@
             <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_11.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_11.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3830,6 +3836,8 @@
             <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3921,6 +3929,8 @@
             <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4012,6 +4022,8 @@
             <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_12.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_12.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4092,6 +4104,7 @@
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/german/G64_Panther_II/crash/lod0/Gun_06.model	</destroyed>
@@ -4198,6 +4211,8 @@
             <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_13.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_13.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

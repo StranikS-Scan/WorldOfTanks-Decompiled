@@ -140,13 +140,17 @@ class CrewBooksDialog(Window):
 
     def __onUseBtnClick(self):
         if self.windowStatus == WindowStatus.LOADED:
-            factory.doAction(factory.USE_CREW_BOOK, self.__selectedBook.intCD, self.__vehicle.invID, self.__tankmanInvID)
-            if not self.__lobbyContext.getServerSettings().isCrewBooksEnabled():
-                self.__result = DialogButtons.CANCEL
-                self.__event.set()
+            if self.__result is None:
+                factory.doAction(factory.USE_CREW_BOOK, self.__selectedBook.intCD, self.__vehicle.invID, self.__tankmanInvID)
+                if not self.__lobbyContext.getServerSettings().isCrewBooksEnabled():
+                    self.__result = DialogButtons.CANCEL
+                    self.__event.set()
+                else:
+                    self.__result = DialogButtons.SUBMIT
+                    self.__startUseModelUpdate()
             else:
-                self.__result = DialogButtons.SUBMIT
-                self.__startUseModelUpdate()
+                self.__onClosed()
+        return
 
     def __onClosed(self, _=None):
         if self.__result is None:

@@ -1,38 +1,41 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/customization/c11n_items.py
+import logging
 import os
 import urllib
-import typing
-import logging
 from copy import deepcopy
+import typing
 import Math
 import ResMgr
 from CurrentVehicle import g_currentVehicle
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
-from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
-from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.customization import directionByTag
+from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
+from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY, ItemPrice
 from gui.shared.image_helper import getTextureLinkByID
 from gui.shared.money import Money
 from gui.shared.utils.functions import getImageResourceFromPath
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from helpers import dependency
 from items import makeIntCompactDescrByID
+from items.components import c11n_components as cc
 from items.components.c11n_components import EditingStyleReason
-from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalFormTags, UNBOUND_VEH_KEY, ImageOptions, EDITING_STYLE_REASONS, CustomizationType
-from items.customizations import parseCompDescr, isEditedStyle, createNationalEmblemComponents, parseOutfitDescr
+from items.components.c11n_constants import CustomizationType, EDITING_STYLE_REASONS, ImageOptions, ItemTags, ProjectionDecalFormTags, SeasonType, UNBOUND_VEH_KEY
+from items.customizations import createNationalEmblemComponents, isEditedStyle, parseCompDescr, parseOutfitDescr
 from items.vehicles import VehicleDescr
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from items.components import c11n_components as cc
 from vehicle_outfit.outfit import Outfit
 if typing.TYPE_CHECKING:
+    from typing import Dict, List, Optional, Set, Tuple
     from items.components.c11n_components import ProgressForCustomization
+    from items.components.c11n_constants import ModificationType
+    from items.customizations import CustomizationOutfit
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
 _CAMO_ICON_TEMPLATE = 'img://camouflage,{width},{height},{options},"{texture}","{background}",{colors},{weights}'
@@ -1098,11 +1101,11 @@ class Style(Customization):
             component.styleProgressionLevel = self.getLatestOpenedProgressionLevel(vehicle)
             if self.isProgressionRewindEnabled:
                 component.styleProgressionLevel = self.maxProgressionLevel
-            styleOutfitData = self._itemsCache.items.inventory.getOutfitData(vehDescr.type.compactDescr, SeasonType.ALL)
-            if styleOutfitData:
-                styledOutfitComponent = parseCompDescr(styleOutfitData)
-                outfitLvl = styledOutfitComponent.styleProgressionLevel
-                component.styleProgressionLevel = outfitLvl if outfitLvl else 1
+                styleOutfitData = self._itemsCache.items.inventory.getOutfitData(vehDescr.type.compactDescr, SeasonType.ALL)
+                if styleOutfitData:
+                    styledOutfitComponent = parseCompDescr(styleOutfitData)
+                    outfitLvl = styledOutfitComponent.styleProgressionLevel
+                    component.styleProgressionLevel = outfitLvl if outfitLvl else 1
         if diff is not None:
             diffComponent = parseCompDescr(diff)
             if component.styleId != diffComponent.styleId:

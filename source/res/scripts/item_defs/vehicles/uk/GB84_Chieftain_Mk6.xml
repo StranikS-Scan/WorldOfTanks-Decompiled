@@ -1762,6 +1762,8 @@
             <collisionModelServer>	vehicles/british/GB84_Chieftain_Mk6/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB84_Chieftain_Mk6/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

@@ -26,7 +26,7 @@ if typing.TYPE_CHECKING:
     from account_helpers.offers.events_data import OfferEventData, OfferGift
 _logger = logging.getLogger(__name__)
 
-def getBattlePassBonusPackersMap():
+def getBattlePassBonusPacker():
     mapping = getDefaultBonusPackersMap()
     mapping.update({'tmanToken': TmanTemplateBonusPacker(),
      'customizations': BattlePassCustomizationsBonusPacker(),
@@ -40,11 +40,6 @@ def getBattlePassBonusPackersMap():
      BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME: BattlePassStyleProgressTokenBonusPacker(),
      BATTLE_PASS_SELECT_BONUS_NAME: SelectBonusPacker(),
      Currency.BPCOIN: CoinBonusPacker()})
-    return mapping
-
-
-def getBattlePassBonusPacker():
-    mapping = getBattlePassBonusPackersMap()
     return BonusUIPacker(mapping)
 
 
@@ -103,7 +98,7 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
         result = []
         for tokenID in bonus.getTokens().iterkeys():
             if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
-                packed = cls._packTmanTemplateToken(tokenID, bonus)
+                packed = cls.__packTmanTemplateToken(tokenID, bonus)
                 if packed is None:
                     _logger.error('Received wrong tman_template token from server: %s', tokenID)
                 else:
@@ -112,7 +107,7 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
         return result
 
     @classmethod
-    def _packTmanTemplateToken(cls, tokenID, bonus):
+    def __packTmanTemplateToken(cls, tokenID, bonus):
         recruitInfo = getRecruitInfo(tokenID)
         if recruitInfo is None:
             return
@@ -170,8 +165,7 @@ class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
             iconName = 'style_3d'
         model.setValue(str(data.get('value', '')))
         model.setIcon(iconName)
-        model.setUserName(cls._getUserName(customizationItem))
-        model.setLabel(cls._getLabel(customizationItem))
+        model.setUserName(customizationItem.userName)
         if customizationItem.itemTypeName == 'style':
             bigIcon = iconName
         else:
@@ -199,14 +193,6 @@ class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
                 result.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return result
-
-    @classmethod
-    def _getLabel(cls, customizationItem):
-        return customizationItem.userName
-
-    @classmethod
-    def _getUserName(cls, customizationItem):
-        return customizationItem.userName
 
 
 class BattlePassPremiumDaysPacker(BaseBonusUIPacker):
@@ -295,7 +281,7 @@ class SelectBonusPacker(BaseBonusUIPacker):
     def _getToolTip(cls, bonus):
         tooltipData = []
         for tokenID in bonus.getTokens().iterkeys():
-            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_GIFT_TOKEN, specialArgs=[tokenID]))
+            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_GIFT_TOKEN, specialArgs=[tokenID] + [bonus.getContext().get('isReceived', True)]))
 
         return tooltipData
 

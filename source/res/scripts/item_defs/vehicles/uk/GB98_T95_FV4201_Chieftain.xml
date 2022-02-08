@@ -1971,6 +1971,8 @@
             <collisionModelServer>	vehicles/british/GB98_T95_FV4201_Chieftain/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB98_T95_FV4201_Chieftain/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

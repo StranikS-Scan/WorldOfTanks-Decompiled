@@ -4419,6 +4419,8 @@
             <collisionModelServer>	vehicles/american/A40_T95/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A40_T95/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4500,6 +4502,8 @@
             <collisionModelServer>	vehicles/american/A40_T95/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A40_T95/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4575,6 +4579,8 @@
             <collisionModelServer>	vehicles/american/A40_T95/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A40_T95/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

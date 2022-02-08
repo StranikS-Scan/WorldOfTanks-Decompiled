@@ -361,7 +361,7 @@
     <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	ussr:R127_T44_100_P	</vehicles>
+        <vehicles>	ussr:R127_T44_100_I	</vehicles>
       </include>
     </vehicleFilter>
     <style>
@@ -1206,7 +1206,7 @@
     <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	ussr:R127_T44_100_P	</vehicles>
+        <vehicles>	ussr:R127_T44_100_I	</vehicles>
       </include>
     </vehicleFilter>
     <style>
@@ -2366,6 +2366,56 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 4500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R45_IS-7	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	552	</id>
+      <texture>	gui/maps/vehicles/styles/R45_IS_7_3DSt_HW_21.png	</texture>
+      <modelsSet>	R45_IS_7_3DSt_HW_21	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/R45_IS_7_3DSt_HW_21	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R45_IS_7_3DSt_HW_21_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <sequences>
+            <item>
+              <id>	27	</id>
+              <slotId>	18000	</slotId>
+            </item>
+            <item>
+              <id>	28	</id>
+              <slotId>	38000	</slotId>
+            </item>
+          </sequences>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
     <historical>	0	</historical>
     <priceGroup>	styles 5000g notInShop	</priceGroup>
     <vehicleFilter>
@@ -2404,22 +2454,62 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	2	</historical>
-    <priceGroup>	styles 4500g notInShop	</priceGroup>
+    <historical>	0	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	ussr:R45_IS-7	</vehicles>
+        <vehicles>	ussr:R155_Object_277	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	552	</id>
-      <texture>	gui/maps/vehicles/styles/R45_IS_7_3DSt_HW_21.png	</texture>
-      <modelsSet>	R45_IS_7_3DSt_HW_21	</modelsSet>
+      <id>	597	</id>
+      <texture>	gui/maps/vehicles/styles/R155_Object_277_3DSt_TIR.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/granit_TIR_desc/long	</longDescriptionSpecial>
+      <modelsSet>	R155_Object_277_3DSt_TIR	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/R45_IS_7_3DSt_HW_21	</userString>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/R45_IS_7_3DSt_HW_21_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:main_style/granit_TIR	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R90_IS_4M	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	598	</id>
+      <texture>	gui/maps/vehicles/styles/R90_IS_4M_3DSt_TIR.png	</texture>
+      <modelsSet>	R90_IS_4M_3DSt_TIR	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/granit_TIR	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/granit_TIR_desc/long	</longDescriptionSpecial>
       <tags>	progression_required	</tags>
       <outfits>
         <outfit>
@@ -2432,16 +2522,46 @@
               <palette>	0	</palette>
             </item>
           </camouflages>
-          <sequences>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R169_ST_II	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	599	</id>
+      <texture>	gui/maps/vehicles/styles/R169_ST_II_3DSt_TIR.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/granit_TIR_desc/long	</longDescriptionSpecial>
+      <modelsSet>	R169_ST_II_3DSt_TIR	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/granit_TIR	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
             <item>
-              <id>	27	</id>
-              <slotId>	18000	</slotId>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
             </item>
-            <item>
-              <id>	28	</id>
-              <slotId>	38000	</slotId>
-            </item>
-          </sequences>
+          </camouflages>
         </outfit>
       </outfits>
       <itemFilters>

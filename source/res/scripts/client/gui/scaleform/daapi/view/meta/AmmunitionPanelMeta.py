@@ -16,9 +16,6 @@ class AmmunitionPanelMeta(BaseDAAPIComponent):
     def showChangeNation(self):
         self._printOverrideError('showChangeNation')
 
-    def onNYBonusPanelClicked(self):
-        self._printOverrideError('onNYBonusPanelClicked')
-
     def as_setWarningStateS(self, stateWarning):
         return self.flashObject.as_setWarningState(stateWarning) if self._isDAAPIInited() else None
 

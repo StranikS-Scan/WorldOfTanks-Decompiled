@@ -1679,6 +1679,8 @@
             <collisionModelServer>	vehicles/british/GB101_FV1066_Senlac/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB101_FV1066_Senlac/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

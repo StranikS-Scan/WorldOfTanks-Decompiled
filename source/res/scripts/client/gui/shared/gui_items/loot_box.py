@@ -18,11 +18,6 @@ class NewYearCategories(CONST_CONTAINER):
     CHRISTMAS = 'Christmas'
     ORIENTAL = 'Oriental'
     FAIRYTALE = 'Fairytale'
-    SPECIAL = 'Special'
-    SETTINGS = (NEWYEAR,
-     CHRISTMAS,
-     ORIENTAL,
-     FAIRYTALE)
 
 
 class EventCategories(CONST_CONTAINER):
@@ -112,7 +107,5 @@ class LootBox(GUIItem):
         for limitName, limit in limitsCfg.iteritems():
             if 'useBonusProbabilityAfter' in limit:
                 return (limitName, limit['useBonusProbabilityAfter'] + 1)
-            if 'guaranteedFrequency' in limit:
-                return (limitName, limit['guaranteedFrequency'])
 
         return (None, 0)

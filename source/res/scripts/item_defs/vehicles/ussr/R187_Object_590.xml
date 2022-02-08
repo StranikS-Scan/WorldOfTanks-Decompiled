@@ -1870,6 +1870,8 @@
             <collisionModelServer>	vehicles/russian/R187_Object_590/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R187_Object_590/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_mainext_mb	</effects>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <drivenJoints>
             <master>
               <node>	Gun	</node>

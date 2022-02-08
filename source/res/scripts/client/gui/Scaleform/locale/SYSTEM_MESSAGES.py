@@ -96,6 +96,7 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_TEAMINVALID_LIMITS_LEVEL = '#system_messages:prebattle/teamInvalid/limits/level'
     PREBATTLE_TEAMINVALID_OBSERVERS = '#system_messages:prebattle/teamInvalid/observers'
     PREBATTLE_HASLOCKEDSTATE = '#system_messages:prebattle/hasLockedState'
+    PREBATTLE_BOOTCAMP_INOTHERQUEUE = '#system_messages:prebattle/bootcamp/inOtherQueue'
     PREBATTLE_INVITES_SENDINVITE_NAME = '#system_messages:prebattle/invites/sendInvite/name'
     PREBATTLE_INVITES_SENDINVITE = '#system_messages:prebattle/invites/sendInvite'
     ARENA_START_ERRORS_KICK_ARENA_CREATION_FAILURE = '#system_messages:arena_start_errors/kick/ARENA_CREATION_FAILURE'
@@ -1069,6 +1070,7 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATIONS_QUALIFICATIONFINISH = '#system_messages:ranked/notifications/qualificationFinish'
     RANKED_NOTIFICATIONS_SINGLERANK_TEXT = '#system_messages:ranked/notifications/singleRank/text'
     RANKED_NOTIFICATIONS_BONUSNAME_YEARPOINTS = '#system_messages:ranked/notifications/bonusName/yearPoints'
+    RANKED_NOTIFICATIONS_BONUSNAME_SELECTABLEREWARD = '#system_messages:ranked/notifications/bonusName/selectableReward'
     RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL = '#system_messages:ranked/notifications/bonusName/crystal'
     RANKED_NOTIFICATIONS_BONUSNAME_EVENTCOIN = '#system_messages:ranked/notifications/bonusName/eventCoin'
     RANKED_NOTIFICATIONS_BONUSNAME_CREDITS = '#system_messages:ranked/notifications/bonusName/credits'
@@ -1166,27 +1168,6 @@ class SYSTEM_MESSAGES(object):
     NATION_CHANGE_FAILED = '#system_messages:nation_change/FAILED'
     NATION_CHANGE_WRONG_ARG_VALUE = '#system_messages:nation_change/WRONG_ARG_VALUE'
     NATION_CHANGE_ERROR = '#system_messages:nation_change/error'
-    NEWYEAR_CRAFTTOY_SERVER_ERROR = '#system_messages:newYear/craftToy/server_error'
-    NEWYEAR_BUYTOY_SERVER_ERROR = '#system_messages:newYear/buyToy/server_error'
-    NEWYEAR_BUYMEGATOY_SERVER_ERROR = '#system_messages:newYear/buyMegaToy/server_error'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SUCCESS = '#system_messages:newYear/applyVehicleDiscount/success'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR = '#system_messages:newYear/applyVehicleDiscount/server_error'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTS = '#system_messages:newYear/applyVehicleDiscount/server_error/noDiscounts'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYACTIVE = '#system_messages:newYear/applyVehicleDiscount/server_error/alreadyActive'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYBOUGHT = '#system_messages:newYear/applyVehicleDiscount/server_error/alreadyBought'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTFORVEHICLE = '#system_messages:newYear/applyVehicleDiscount/server_error/noDiscountForVehicle'
-    NEWYEAR_HANGTOY_SERVER_ERROR = '#system_messages:newYear/hangToy/server_error'
-    NEWYEAR_BREAKTOYS_SERVER_ERROR = '#system_messages:newYear/breakToys/server_error'
-    NEWYEAR_SETVEHICLEBRANCH_SERVER_ERROR = '#system_messages:newYear/setVehicleBranch/server_error'
-    NEWYEAR_BUYCOLLECTION_SERVER_ERROR = '#system_messages:newYear/buyCollection/server_error'
-    NEWYEAR_SETVEHICLEBRANCHSLOTBONUS_SERVER_ERROR = '#system_messages:newYear/setVehicleBranchSlotBonus/server_error'
-    NEWYEAR_RESETLOOTBOXSTATISTICS_SERVER_ERROR_HEADER = '#system_messages:newYear/resetLootboxStatistics/server_error/header'
-    NEWYEAR_RESETLOOTBOXSTATISTICS_SERVER_ERROR = '#system_messages:newYear/resetLootboxStatistics/server_error'
-    NEWYEAR_CELEBRITYCHALLENGE_CONGRATULATIONS = '#system_messages:newYear/celebrityChallenge/congratulations'
-    NEWYEAR_CELEBRITYCHALLENGE_SIMPLIFICATION_TITLE = '#system_messages:newYear/celebrityChallenge/simplification/title'
-    NEWYEAR_CELEBRITYCHALLENGE_SIMPLIFICATION_MESSAGE = '#system_messages:newYear/celebrityChallenge/simplification/message'
-    NEWYEAR_CELEBRITYCHALLENGE_PROGRESSREWARD = '#system_messages:newYear/celebrityChallenge/progressReward'
-    NEWYEAR_CELEBRITYCHALLENGE_QUESTREWARD = '#system_messages:newYear/celebrityChallenge/questReward'
     DEMOUNTKIT_RESTORED_SWITCHEDON = '#system_messages:demountKit_restored/switchedOn'
     DEMOUNTKIT_FAILED_SWITCHEDOFF = '#system_messages:demountKit_failed/switchedOff'
     DAILY_QUESTS_SWITCH_OFF_TITLE = '#system_messages:daily_quests/switch_off/title'
@@ -1205,7 +1186,7 @@ class SYSTEM_MESSAGES(object):
     BATTLEPASS_SWITCH_PAUSE_BODY = '#system_messages:battlePass/switch_pause/body'
     BATTLEPASS_SWITCH_DISABLE_TITLE = '#system_messages:battlePass/switch_disable/title'
     BATTLEPASS_SWITCH_DISABLE_BODY = '#system_messages:battlePass/switch_disable/body'
-    BATTLEPASS_SWITCH_DISABLE_BODY_INCOMPLETESTYLE = '#system_messages:battlePass/switch_disable/body/incompleteStyle'
+    BATTLEPASS_SWITCH_DISABLE_INCOMPLETESTYLE = '#system_messages:battlePass/switch_disable/incompleteStyle'
     BATTLEPASS_SWITCH_ENABLED_BODY = '#system_messages:battlePass/switch_enabled/body'
     BATTLEPASS_SWITCH_DISABLE_BATTLE_ROYALE_BODY = '#system_messages:battlePass/switch_disable/battle_royale/body'
     BATTLEPASS_SWITCH_ENABLED_RANKED_BODY = '#system_messages:battlePass/switch_enabled/ranked/body'
@@ -1226,6 +1207,10 @@ class SYSTEM_MESSAGES(object):
     BATTLEPASS_SEASONEND_REWARDS_DEVICE = '#system_messages:battlePass/seasonEnd/rewards/device'
     BATTLEPASS_SEASONEND_REWARDS_TROPHY = '#system_messages:battlePass/seasonEnd/rewards/trophy'
     BATTLEPASS_SEASONEND_REWARDS_BLUEPRINTS = '#system_messages:battlePass/seasonEnd/rewards/blueprints'
+    BATTLEPASS_SWITCHCHAPTER_ERROR = '#system_messages:battlePass/switchChapter/error'
+    BATTLEPASS_SWITCHCHAPTER_SUCCESS = '#system_messages:battlePass/switchChapter/success'
+    BATTLEPASS_SWITCHCHAPTER_REMINDER = '#system_messages:battlePass/switchChapter/reminder'
+    BATTLEPASS_ACTIVATECHAPTER_SUCCESS = '#system_messages:battlePass/activateChapter/success'
     COLLECTORVEHICLE_SWITCH_OFF_TITLE = '#system_messages:collectorVehicle/switch_off/title'
     COLLECTORVEHICLE_SWITCH_OFF_BODY = '#system_messages:collectorVehicle/switch_off/body'
     COLLECTORVEHICLE_SWITCH_ON_TITLE = '#system_messages:collectorVehicle/switch_on/title'
@@ -1237,9 +1222,9 @@ class SYSTEM_MESSAGES(object):
     OFFERS_SWITCH_OFF_BODY = '#system_messages:offers/switch_off/body'
     OFFERS_UNAVAILABLE_ONE = '#system_messages:offers/unavailable_one'
     OFFERS_UNAVAILABLE_MANY = '#system_messages:offers/unavailable_many'
-    OFFERS_SERVER_ERROR = '#system_messages:offers/server_error'
     OFFERS_SERVER_ERROR_COOLDOWN = '#system_messages:offers/server_error/COOLDOWN'
     OFFERS_SERVER_ERROR_DISABLED = '#system_messages:offers/server_error/DISABLED'
+    OFFERS_SERVER_ERROR_MULTI_ERROR = '#system_messages:offers/server_error/MULTI_ERROR'
     MISSINGEVENTS_BUTTON = '#system_messages:missingEvents/button'
     MISSINGEVENTS_HEADER = '#system_messages:missingEvents/header'
     MISSINGEVENTS_TEXT = '#system_messages:missingEvents/text'
@@ -1280,6 +1265,21 @@ class SYSTEM_MESSAGES(object):
     VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_SINGLE_BODY = '#system_messages:vehiclePostProgression/vehiclesUnlockPostProgression/single/body'
     VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_WELCOMEUNLOCK_BODY = '#system_messages:vehiclePostProgression/vehiclesUnlockPostProgression/welcomeUnlock/body'
     VEHICLEPOSTPROGRESSION_DISCARDALLPAIRSMODIFICATION_BODY = '#system_messages:vehiclePostProgression/discardAllPairsModification/body'
+    TELECOMMERGERESULTS_TITLE = '#system_messages:telecomMergeResults/title'
+    TELECOMMERGERESULTS_BODY_LISTSEPARATOR = '#system_messages:telecomMergeResults/body/listSeparator'
+    TELECOMMERGERESULTS_BODY_ACCRUALMSG = '#system_messages:telecomMergeResults/body/accrualMsg'
+    TELECOMMERGERESULTS_BODY_STATISTICMOVEDMSG = '#system_messages:telecomMergeResults/body/statisticMovedMsg'
+    TELECOMMERGERESULTS_BODY_EQUIPANDSTATISTICMOVEDMSG = '#system_messages:telecomMergeResults/body/equipAndStatisticMovedMsg'
+    TELECOMMERGERESULTS_BODY_CREWRETRAININGMSG = '#system_messages:telecomMergeResults/body/crewRetrainingMsg'
+    TELECOMMERGERESULTS_BODY_BATTLEQUESTSMSG = '#system_messages:telecomMergeResults/body/battleQuestsMsg'
+    TELECOMMERGERESULTS_BODY_DEMOUNTMSG = '#system_messages:telecomMergeResults/body/demountMsg'
+    TELECOMMERGERESULTS_BODY_TANKXPMSG = '#system_messages:telecomMergeResults/body/tankXPMsg'
+    TELECOMMERGERESULTS_BODY_POSTPROGRESSIONMSG = '#system_messages:telecomMergeResults/body/postprogressionMsg'
+    TELECOMMERGERESULTS_BODY_FREEXP = '#system_messages:telecomMergeResults/body/freeXP'
+    TELECOMMERGERESULTS_BODY_CREDITS = '#system_messages:telecomMergeResults/body/credits'
+    TELECOMMERGERESULTS_BODY_CONJUNCTION = '#system_messages:telecomMergeResults/body/conjunction'
+    TELECOMMERGERESULTS_BODY_PROGRESSDECALESCOMPENS = '#system_messages:telecomMergeResults/body/progressDecalesCompens'
+    TELECOMMERGERESULTS_BODY_WISHMSG = '#system_messages:telecomMergeResults/body/wishMsg'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1385,6 +1385,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_REQUEST_NAME_CHANGE_FALLOUT_QUEUE_TYPE,
      PREBATTLE_REQUEST_NAME_AUTO_SEARCH)
     RANKED_NOTIFICATIONSALL_BONUSNAME_ENUM = (RANKED_NOTIFICATIONS_BONUSNAME_YEARPOINTS,
+     RANKED_NOTIFICATIONS_BONUSNAME_SELECTABLEREWARD,
      RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL,
      RANKED_NOTIFICATIONS_BONUSNAME_EVENTCOIN,
      RANKED_NOTIFICATIONS_BONUSNAME_CREDITS,
@@ -1492,6 +1493,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_TEAMINVALID_LIMITS_LEVEL,
      PREBATTLE_TEAMINVALID_OBSERVERS,
      PREBATTLE_HASLOCKEDSTATE,
+     PREBATTLE_BOOTCAMP_INOTHERQUEUE,
      PREBATTLE_INVITES_SENDINVITE_NAME,
      PREBATTLE_INVITES_SENDINVITE,
      ARENA_START_ERRORS_KICK_ARENA_CREATION_FAILURE,
@@ -2465,6 +2467,7 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATIONS_QUALIFICATIONFINISH,
      RANKED_NOTIFICATIONS_SINGLERANK_TEXT,
      RANKED_NOTIFICATIONS_BONUSNAME_YEARPOINTS,
+     RANKED_NOTIFICATIONS_BONUSNAME_SELECTABLEREWARD,
      RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL,
      RANKED_NOTIFICATIONS_BONUSNAME_EVENTCOIN,
      RANKED_NOTIFICATIONS_BONUSNAME_CREDITS,
@@ -2562,27 +2565,6 @@ class SYSTEM_MESSAGES(object):
      NATION_CHANGE_FAILED,
      NATION_CHANGE_WRONG_ARG_VALUE,
      NATION_CHANGE_ERROR,
-     NEWYEAR_CRAFTTOY_SERVER_ERROR,
-     NEWYEAR_BUYTOY_SERVER_ERROR,
-     NEWYEAR_BUYMEGATOY_SERVER_ERROR,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SUCCESS,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTS,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYACTIVE,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYBOUGHT,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTFORVEHICLE,
-     NEWYEAR_HANGTOY_SERVER_ERROR,
-     NEWYEAR_BREAKTOYS_SERVER_ERROR,
-     NEWYEAR_SETVEHICLEBRANCH_SERVER_ERROR,
-     NEWYEAR_BUYCOLLECTION_SERVER_ERROR,
-     NEWYEAR_SETVEHICLEBRANCHSLOTBONUS_SERVER_ERROR,
-     NEWYEAR_RESETLOOTBOXSTATISTICS_SERVER_ERROR_HEADER,
-     NEWYEAR_RESETLOOTBOXSTATISTICS_SERVER_ERROR,
-     NEWYEAR_CELEBRITYCHALLENGE_CONGRATULATIONS,
-     NEWYEAR_CELEBRITYCHALLENGE_SIMPLIFICATION_TITLE,
-     NEWYEAR_CELEBRITYCHALLENGE_SIMPLIFICATION_MESSAGE,
-     NEWYEAR_CELEBRITYCHALLENGE_PROGRESSREWARD,
-     NEWYEAR_CELEBRITYCHALLENGE_QUESTREWARD,
      DEMOUNTKIT_RESTORED_SWITCHEDON,
      DEMOUNTKIT_FAILED_SWITCHEDOFF,
      DAILY_QUESTS_SWITCH_OFF_TITLE,
@@ -2601,7 +2583,7 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASS_SWITCH_PAUSE_BODY,
      BATTLEPASS_SWITCH_DISABLE_TITLE,
      BATTLEPASS_SWITCH_DISABLE_BODY,
-     BATTLEPASS_SWITCH_DISABLE_BODY_INCOMPLETESTYLE,
+     BATTLEPASS_SWITCH_DISABLE_INCOMPLETESTYLE,
      BATTLEPASS_SWITCH_ENABLED_BODY,
      BATTLEPASS_SWITCH_DISABLE_BATTLE_ROYALE_BODY,
      BATTLEPASS_SWITCH_ENABLED_RANKED_BODY,
@@ -2622,6 +2604,10 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASS_SEASONEND_REWARDS_DEVICE,
      BATTLEPASS_SEASONEND_REWARDS_TROPHY,
      BATTLEPASS_SEASONEND_REWARDS_BLUEPRINTS,
+     BATTLEPASS_SWITCHCHAPTER_ERROR,
+     BATTLEPASS_SWITCHCHAPTER_SUCCESS,
+     BATTLEPASS_SWITCHCHAPTER_REMINDER,
+     BATTLEPASS_ACTIVATECHAPTER_SUCCESS,
      COLLECTORVEHICLE_SWITCH_OFF_TITLE,
      COLLECTORVEHICLE_SWITCH_OFF_BODY,
      COLLECTORVEHICLE_SWITCH_ON_TITLE,
@@ -2633,9 +2619,9 @@ class SYSTEM_MESSAGES(object):
      OFFERS_SWITCH_OFF_BODY,
      OFFERS_UNAVAILABLE_ONE,
      OFFERS_UNAVAILABLE_MANY,
-     OFFERS_SERVER_ERROR,
      OFFERS_SERVER_ERROR_COOLDOWN,
      OFFERS_SERVER_ERROR_DISABLED,
+     OFFERS_SERVER_ERROR_MULTI_ERROR,
      MISSINGEVENTS_BUTTON,
      MISSINGEVENTS_HEADER,
      MISSINGEVENTS_TEXT,
@@ -2675,7 +2661,22 @@ class SYSTEM_MESSAGES(object):
      VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_TITLE,
      VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_SINGLE_BODY,
      VEHICLEPOSTPROGRESSION_VEHICLESUNLOCKPOSTPROGRESSION_WELCOMEUNLOCK_BODY,
-     VEHICLEPOSTPROGRESSION_DISCARDALLPAIRSMODIFICATION_BODY)
+     VEHICLEPOSTPROGRESSION_DISCARDALLPAIRSMODIFICATION_BODY,
+     TELECOMMERGERESULTS_TITLE,
+     TELECOMMERGERESULTS_BODY_LISTSEPARATOR,
+     TELECOMMERGERESULTS_BODY_ACCRUALMSG,
+     TELECOMMERGERESULTS_BODY_STATISTICMOVEDMSG,
+     TELECOMMERGERESULTS_BODY_EQUIPANDSTATISTICMOVEDMSG,
+     TELECOMMERGERESULTS_BODY_CREWRETRAININGMSG,
+     TELECOMMERGERESULTS_BODY_BATTLEQUESTSMSG,
+     TELECOMMERGERESULTS_BODY_DEMOUNTMSG,
+     TELECOMMERGERESULTS_BODY_TANKXPMSG,
+     TELECOMMERGERESULTS_BODY_POSTPROGRESSIONMSG,
+     TELECOMMERGERESULTS_BODY_FREEXP,
+     TELECOMMERGERESULTS_BODY_CREDITS,
+     TELECOMMERGERESULTS_BODY_CONJUNCTION,
+     TELECOMMERGERESULTS_BODY_PROGRESSDECALESCOMPENS,
+     TELECOMMERGERESULTS_BODY_WISHMSG)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

@@ -3040,6 +3040,7 @@
             <amplitude>	0.3	</amplitude>
           </recoil>
           <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3107,6 +3108,7 @@
             <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3696,6 +3698,8 @@
             <collisionModelServer>	vehicles/italy/It07_P26_40/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3759,6 +3763,7 @@
             <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3826,6 +3831,7 @@
             <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

@@ -2526,6 +2526,8 @@
             <collisionModelServer>	vehicles/british/GB78_Sexton_I/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB78_Sexton_I/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

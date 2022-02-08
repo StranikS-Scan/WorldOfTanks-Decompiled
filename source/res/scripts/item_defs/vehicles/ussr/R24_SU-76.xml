@@ -3204,6 +3204,8 @@
             <collisionModelServer>	vehicles/russian/R24_SU-76/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R24_SU-76/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3294,6 +3296,7 @@
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-15 15	</turretYawLimits>
           <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/russian/R24_SU-76/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R24_SU-76/crash/lod0/Gun_03.model	</destroyed>
@@ -3444,6 +3447,8 @@
             <collisionModelServer>	vehicles/russian/R24_SU-76/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R24_SU-76/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

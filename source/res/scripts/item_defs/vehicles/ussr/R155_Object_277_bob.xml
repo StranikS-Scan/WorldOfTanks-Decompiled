@@ -1875,6 +1875,8 @@
             <collisionModelServer>	vehicles/russian/R155_Object_277/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R155_Object_277/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

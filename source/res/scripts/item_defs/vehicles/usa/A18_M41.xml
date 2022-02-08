@@ -3240,6 +3240,8 @@
             <collisionModelServer>	vehicles/american/A18_M41/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A18_M41/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

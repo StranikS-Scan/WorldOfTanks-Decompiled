@@ -262,6 +262,9 @@ class NationalBlueprintOfferBonus(OfferBonusMixin, NationalBlueprintBonus):
     def getGiftCount(self):
         return self.getCount()
 
+    def getInventoryCount(self):
+        return self.itemsCache.items.blueprints.getNationalFragments(self._getFragmentCD())
+
 
 class IntelligenceBlueprintOfferBonus(OfferBonusMixin, IntelligenceBlueprintBonus):
     CAN_BE_SHOWN = False

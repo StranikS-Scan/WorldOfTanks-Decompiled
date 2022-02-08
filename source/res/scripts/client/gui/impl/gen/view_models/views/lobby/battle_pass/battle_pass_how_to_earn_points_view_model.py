@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_model import Gam
 class BattlePassHowToEarnPointsViewModel(ViewModel):
     __slots__ = ('onLinkClick',)
 
-    def __init__(self, properties=2, commands=1):
+    def __init__(self, properties=3, commands=1):
         super(BattlePassHowToEarnPointsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -20,8 +20,15 @@ class BattlePassHowToEarnPointsViewModel(ViewModel):
     def setSyncInitiator(self, value):
         self._setNumber(1, value)
 
+    def getChapterID(self):
+        return self._getNumber(2)
+
+    def setChapterID(self, value):
+        self._setNumber(2, value)
+
     def _initialize(self):
         super(BattlePassHowToEarnPointsViewModel, self)._initialize()
         self._addViewModelProperty('gameModes', UserListModel())
         self._addNumberProperty('syncInitiator', 0)
+        self._addNumberProperty('chapterID', 0)
         self.onLinkClick = self._addCommand('onLinkClick')

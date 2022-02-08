@@ -913,6 +913,8 @@
             <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

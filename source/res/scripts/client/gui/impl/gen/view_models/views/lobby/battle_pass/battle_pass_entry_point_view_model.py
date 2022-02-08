@@ -5,12 +5,13 @@ from frameworks.wulf import ViewModel
 
 class AnimationState(Enum):
     NORMAL = 'normal'
-    SHOW_NEW_LEVEL = 'showNewLevel'
-    SHOW_BUY_BP = 'showBuyBP'
-    SHOW_NOT_TAKEN_REWARDS = 'showNotTakenRewards'
-    SHOW_PROGRESSION_COMPLETED = 'showProgressionCompleted'
-    SHOW_NEW_CHAPTER = 'showNewChapter'
-    SHOW_CHANGE_PROGRESS = 'showChangeProgress'
+    NEW_LEVEL = 'newLevel'
+    BUY_BATTLE_PASS = 'buyBattlePass'
+    NOT_TAKEN_REWARDS = 'notTakenRewards'
+    PROGRESSION_COMPLETED = 'progressionCompleted'
+    NEW_CHAPTER = 'newChapter'
+    CHANGE_PROGRESS = 'changeProgress'
+    CHAPTER_NOT_CHOSEN = 'chapterNotChosen'
 
 
 class BPState(Enum):
@@ -23,7 +24,7 @@ class BPState(Enum):
 class BattlePassEntryPointViewModel(ViewModel):
     __slots__ = ('onClick',)
 
-    def __init__(self, properties=16, commands=1):
+    def __init__(self, properties=18, commands=1):
         super(BattlePassEntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
     def getPrevLevel(self):
@@ -98,22 +99,22 @@ class BattlePassEntryPointViewModel(ViewModel):
     def setHasBattlePass(self, value):
         self._setBool(11, value)
 
-    def getIs3DStyleChosen(self):
-        return self._getBool(12)
-
-    def setIs3DStyleChosen(self, value):
-        self._setBool(12, value)
-
     def getNotChosenRewardCount(self):
-        return self._getNumber(13)
+        return self._getNumber(12)
 
     def setNotChosenRewardCount(self, value):
+        self._setNumber(12, value)
+
+    def getPreviousChapterID(self):
+        return self._getNumber(13)
+
+    def setPreviousChapterID(self, value):
         self._setNumber(13, value)
 
-    def getChapterNumber(self):
+    def getChapterID(self):
         return self._getNumber(14)
 
-    def setChapterNumber(self, value):
+    def setChapterID(self, value):
         self._setNumber(14, value)
 
     def getBattleType(self):
@@ -121,6 +122,18 @@ class BattlePassEntryPointViewModel(ViewModel):
 
     def setBattleType(self, value):
         self._setString(15, value)
+
+    def getIsChapterChosen(self):
+        return self._getBool(16)
+
+    def setIsChapterChosen(self, value):
+        self._setBool(16, value)
+
+    def getFreePoints(self):
+        return self._getNumber(17)
+
+    def setFreePoints(self, value):
+        self._setNumber(17, value)
 
     def _initialize(self):
         super(BattlePassEntryPointViewModel, self)._initialize()
@@ -136,8 +149,10 @@ class BattlePassEntryPointViewModel(ViewModel):
         self._addNumberProperty('animStateKey', 0)
         self._addBoolProperty('isProgressionCompleted', False)
         self._addBoolProperty('hasBattlePass', False)
-        self._addBoolProperty('is3DStyleChosen', False)
         self._addNumberProperty('notChosenRewardCount', 0)
-        self._addNumberProperty('chapterNumber', 0)
+        self._addNumberProperty('previousChapterID', 0)
+        self._addNumberProperty('chapterID', 0)
         self._addStringProperty('battleType', '')
+        self._addBoolProperty('isChapterChosen', False)
+        self._addNumberProperty('freePoints', 0)
         self.onClick = self._addCommand('onClick')

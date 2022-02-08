@@ -15,10 +15,6 @@ from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass.carousel_data_p
 class RankedCarouselDataProvider(BattlePassCarouselDataProvider):
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
-    @staticmethod
-    def _isSuitableForQueue(vehicle):
-        return True
-
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):
         return (not cls._isSuitableForQueue(vehicle),
@@ -33,16 +29,9 @@ class RankedCarouselDataProvider(BattlePassCarouselDataProvider):
          tuple(vehicle.buyPrices.itemPrice.price.iterallitems(byWeight=True)),
          vehicle.userName)
 
-    def _getBeforeAdditionalItemsIndexes(self):
-        return []
-
     def _buildVehicle(self, vehicle):
         result = super(RankedCarouselDataProvider, self)._buildVehicle(vehicle)
-        labelStyle = text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName
         result['hasRankedBonus'] = self.__rankedController.hasVehicleRankedBonus(vehicle.intCD)
-        result['label'] = labelStyle(vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName)
-        result['nyBonusValue'] = result['nyBonusIcon'] = ''
-        result['hasNyBonus'] = False
         state, _ = vehicle.getState()
         suitResult = self.__rankedController.isSuitableVehicle(vehicle)
         if suitResult is not None:
@@ -66,3 +55,7 @@ class RankedCarouselDataProvider(BattlePassCarouselDataProvider):
             result['clickEnabled'] = True
             result['hasRankedBonus'] = False
         return result
+
+    @staticmethod
+    def _isSuitableForQueue(vehicle):
+        return True

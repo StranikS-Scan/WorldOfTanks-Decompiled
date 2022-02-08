@@ -117,14 +117,16 @@ class VehicleInfoWindow(VehicleInfoMeta):
         super(VehicleInfoWindow, self)._populate()
         self._comparisonBasket.onChange += self.__onVehCompareBasketChanged
         self._comparisonBasket.onSwitchChange += self.__updateCompareButtonState
-        self._itemsCache.onSyncCompleted += self.__onCacheResync
+        self._itemsCache.onSyncCompleted += self.__updateNationChangeBtn
+        self._lobbyContext.getServerSettings().onServerSettingsChange += self.__updateNationChangeBtn
         self.__updateCompareButtonState()
         self.__updateChangeNationButtonState()
 
     def _dispose(self):
         self._comparisonBasket.onSwitchChange -= self.__updateCompareButtonState
         self._comparisonBasket.onChange -= self.__onVehCompareBasketChanged
-        self._itemsCache.onSyncCompleted -= self.__onCacheResync
+        self._itemsCache.onSyncCompleted -= self.__updateNationChangeBtn
+        self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__updateNationChangeBtn
         super(VehicleInfoWindow, self)._dispose()
 
     def __packParams(self, paramsList):
@@ -161,5 +163,5 @@ class VehicleInfoWindow(VehicleInfoMeta):
          'label': backport.text(R.strings.menu.vehicleInfo.nationChangeBtn.label()),
          'isNew': not AccountSettings.getSettings(NATION_CHANGE_VIEWED)})
 
-    def __onCacheResync(self, reason, diff):
+    def __updateNationChangeBtn(self, *args, **kwargs):
         self.__updateChangeNationButtonState()

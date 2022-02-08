@@ -2838,7 +2838,8 @@
             <collisionModelServer>	vehicles/poland/Pl06_10TP/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl06_10TP/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_small_mb	</effects>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2915,6 +2916,8 @@
             <collisionModelServer>	vehicles/poland/Pl06_10TP/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl06_10TP/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

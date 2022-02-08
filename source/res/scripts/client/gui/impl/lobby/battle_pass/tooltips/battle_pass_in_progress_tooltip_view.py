@@ -41,10 +41,7 @@ class BattlePassInProgressTooltipView(ViewImpl):
         if prbDispatcher is None:
             return
         else:
-            if self.__battleType is not None:
-                battleType = self.__battleType
-            else:
-                battleType = prbDispatcher.getEntity().getQueueType()
+            battleType = self.__battleType or prbDispatcher.getEntity().getQueueType()
             with self.getViewModel().transaction() as model:
                 if self.__battleRoyaleController.isBattleRoyaleMode():
                     self.__updateBattleRoyalePoints(model)
@@ -59,11 +56,11 @@ class BattlePassInProgressTooltipView(ViewImpl):
                         items.addViewModel(item)
 
                 curLevel = self.__battlePassController.getCurrentLevel()
-                currentChapter = self.__battlePassController.getCurrentChapter()
-                curPoints, limitPoints = self.__battlePassController.getLevelProgression()
-                isBattlePassPurchased = self.__battlePassController.isBought(chapter=currentChapter)
+                chapterID = self.__battlePassController.getCurrentChapterID()
+                curPoints, limitPoints = self.__battlePassController.getLevelProgression(chapterID)
+                isBattlePassPurchased = self.__battlePassController.isBought(chapterID=chapterID)
                 model.setLevel(curLevel)
-                model.setChapter(currentChapter)
+                model.setChapter(chapterID)
                 model.setCurrentPoints(curPoints)
                 model.setMaxPoints(limitPoints)
                 model.setIsBattlePassPurchased(isBattlePassPurchased)
@@ -73,12 +70,12 @@ class BattlePassInProgressTooltipView(ViewImpl):
                 if isSeasonEndingSoon() and not isBattlePassPurchased:
                     timeTillEnd = getFormattedTimeLeft(self.__battlePassController.getSeasonTimeLeft())
                 model.setTimeTillEnd(timeTillEnd)
-                self.__getAwards(model.rewardsCommon, curLevel, BattlePassConsts.REWARD_FREE)
-                self.__getAwards(model.rewardsElite, curLevel, BattlePassConsts.REWARD_PAID)
+                self.__getAwards(chapterID, model.rewardsCommon, curLevel, BattlePassConsts.REWARD_FREE)
+                self.__getAwards(chapterID, model.rewardsElite, curLevel, BattlePassConsts.REWARD_PAID)
             return
 
-    def __getAwards(self, rewardsList, level, bonusType):
-        bonuses = self.__battlePassController.getSingleAward(level + 1, bonusType)
+    def __getAwards(self, chapterID, rewardsList, level, bonusType):
+        bonuses = self.__battlePassController.getSingleAward(chapterID, level + 1, bonusType)
         packBonusModelAndTooltipData(bonuses, rewardsList)
 
     def __updateBattleRoyalePoints(self, model):

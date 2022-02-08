@@ -21,7 +21,7 @@ from cgf_obsolete_script.auto_properties import AutoProperty
 from vehicle_systems import model_assembler
 from vehicle_systems import camouflages
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
-from vehicle_systems.tankStructure import VehiclePartsTuple, ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes, TankNodeNames, TankRenderMode
+from vehicle_systems.tankStructure import VehiclePartsTuple, ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes, TankNodeNames, TankRenderMode, CgfTankNodes
 from vehicle_systems.components.CrashedTracks import CrashedTrackController
 from vehicle_systems.components.vehicleDecal import VehicleDecal
 from vehicle_systems.components.siegeEffectsController import SiegeEffectsController
@@ -31,7 +31,7 @@ from vehicle_outfit.outfit import Outfit
 from items.battle_royale import isSpawnedBot
 from helpers import isPlayerAvatar
 from ModelHitTester import ModelStatus
-from vehicle_systems.components import debris_crashed_tracks
+from vehicle_systems.components.debris_crashed_tracks import TrackCrashWithDebrisComponent
 _logger = logging.getLogger(__name__)
 DEFAULT_STICKERS_ALPHA = 1.0
 MATKIND_COUNT = 3
@@ -125,7 +125,7 @@ class CommonTankAppearance(ScriptGameObject):
     flagComponent = ComponentDescriptor()
 
     def __init__(self, spaceID):
-        ScriptGameObject.__init__(self, spaceID, 'Tank.Root')
+        ScriptGameObject.__init__(self, spaceID, CgfTankNodes.TANK_ROOT)
         self._vehicle = None
         self.__wheelsGameObject = ScriptGameObject(spaceID, 'Tank.Wheels.Root')
         self.__filter = None
@@ -804,7 +804,7 @@ class CommonTankAppearance(ScriptGameObject):
             return
         else:
             track = self.tracks.getTrackGameObject(isLeft, pairIndex)
-            debris = track.createComponent(debris_crashed_tracks.TrackCrashWithDebrisComponent, isLeft, pairIndex, self.typeDescriptor, self.gameObject, self.boundEffects)
+            debris = track.createComponent(TrackCrashWithDebrisComponent, isLeft, pairIndex, self.typeDescriptor, self.gameObject, self.boundEffects)
             debris.isTopPriority = self._vehicle.isPlayerVehicle
             debris.isPlayer = self._vehicle.isPlayerVehicle
             debris.isFlying = isSideFlying
@@ -819,7 +819,7 @@ class CommonTankAppearance(ScriptGameObject):
             return
         else:
             track = self.tracks.getTrackGameObject(isLeft, pairIndex)
-            debris = track.findComponentByType(debris_crashed_tracks.TrackCrashWithDebrisComponent)
+            debris = track.findComponentByType(TrackCrashWithDebrisComponent)
             if debris is not None:
                 debris.markAsRepaired()
                 track.removeComponent(debris)

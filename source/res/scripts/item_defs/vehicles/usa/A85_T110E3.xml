@@ -2147,6 +2147,8 @@
             <collisionModelServer>	vehicles/american/A85_T110E3/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A85_T110E3/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

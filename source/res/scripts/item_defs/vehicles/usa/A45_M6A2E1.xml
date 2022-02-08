@@ -2457,6 +2457,8 @@
             <collisionModelServer>	vehicles/american/A45_M6A2E1/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A45_M6A2E1/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

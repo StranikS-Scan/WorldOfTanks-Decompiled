@@ -6,7 +6,7 @@ import time
 from math import cos, radians
 from time import time as timestamp
 from collections import namedtuple
-from itertools import izip
+from itertools import izip, chain
 from realm import CURRENT_REALM
 try:
     import BigWorld
@@ -18,11 +18,13 @@ except ImportError:
 
 IS_CLIENT = BigWorld.component == 'client'
 IS_EDITOR = BigWorld.component == 'editor'
+IS_VS_EDITOR = BigWorld.component == 'vs_editor'
 IS_BOT = BigWorld.component == 'bot'
 IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
+IS_CGF_DUMP = BigWorld.component == 'client_cgf_dump'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -155,8 +157,22 @@ class WOT_GAMEPLAY:
     ON = 1
 
 
-ARENA_GAMEPLAY_NAMES = ('ctf', 'domination', 'assault', 'nations', 'ctf2', 'domination2', 'assault2', 'fallout', 'fallout2', 'fallout3', 'fallout4', 'ctf30x30', 'domination30x30', 'sandbox', 'bootcamp', 'epic')
+ARENA_GAMEPLAY_NAMES = ('ctf', 'domination', 'assault', 'nations', 'ctf2', 'domination2', 'assault2', 'fallout', 'fallout2', 'fallout3', 'fallout4', 'ctf30x30', 'domination30x30', 'sandbox', 'bootcamp', 'epic', 'maps_training')
+if IS_EDITOR:
+    ARENA_GAMEPLAY_READABLE_NAMES = ('Capture The Flag', 'Domination', 'Assault', 'Nations', 'Capture The Flag 2', 'Domination 2', 'Assault 2', 'Fallout Bomb', 'Fallout 2 Flag', 'Fallout 3', 'Fallout 4', 'Capture The Flag 30 vs 30', 'Domination 30 vs 30', 'Sandbox', 'Bootcamp', 'Epic', 'Maps Training')
 ARENA_GAMEPLAY_IDS = dict(((value, index) for index, value in enumerate(ARENA_GAMEPLAY_NAMES)))
+ARENA_GAMEPLAY_MASK_DEFAULT = 1048575
+
+class HANGAR_VISIBILITY_TAGS:
+    LAYERS = ('1', '2', '3', '4', '5', '6', '7')
+    FIRST_BIT_RANKED = len(LAYERS)
+    RANKED_TAGS = ('R_ON', 'R_GAP', 'R_OFF')
+    FIRST_BIT_REGIONS = 16
+    REGIONS = ('NA', 'ASIA', 'EU', 'RU')
+    IDS = dict(((value, index) for index, value in chain(enumerate(LAYERS), enumerate(RANKED_TAGS, FIRST_BIT_RANKED), enumerate(REGIONS, FIRST_BIT_REGIONS))))
+    NAMES = dict(((index, value) for index, value in chain(enumerate(LAYERS), enumerate(RANKED_TAGS, FIRST_BIT_RANKED), enumerate(REGIONS, FIRST_BIT_REGIONS))))
+    ALL_BITS_DEFAULT = (1 << len(LAYERS)) - 1 | sum((1 << key for key in NAMES.iterkeys()))
+
 
 class ARENA_GUI_TYPE:
     UNKNOWN = 0
@@ -329,7 +345,7 @@ ARENA_BONUS_TYPE_IDS = dict([ (v, k) for k, v in ARENA_BONUS_TYPE_NAMES.iteritem
 
 class ARENA_BONUS_MASK:
     TYPE_BITS = dict(((name, 2 ** id) for id, name in enumerate(ARENA_BONUS_TYPE.RANGE[1:])))
-    ANY = 8589934591L
+    ANY = sum((1 << index for index in xrange(len(TYPE_BITS))))
 
     @staticmethod
     def mask(*args):
@@ -811,13 +827,13 @@ ACTIVE_TEST_CONFIRMATION_CONFIG = 'active_test_confirmation_config'
 MISC_GUI_SETTINGS = 'misc_gui_settings'
 META_GAME_SETTINGS = 'meta_game_settings'
 MAPS_TRAINING_ENABLED_KEY = 'isMapsTrainingEnabled'
+OFFERS_ENABLED_KEY = 'isOffersEnabled'
 
 class Configs(enum.Enum):
     BATTLE_ROYALE_CONFIG = 'battle_royale_config'
     EPIC_CONFIG = 'epic_config'
     MAPBOX_CONFIG = 'mapbox_config'
     GIFTS_CONFIG = 'gifts_config'
-    LUNAR_NY_EVENT_CONFIG = 'lunar_ny_event_config'
 
 
 class RESTRICTION_TYPE:
@@ -848,6 +864,7 @@ class SPA_ATTRS:
     LOGGING_ENABLED = '/wot/game/logging_enabled/'
     BOOTCAMP_VIDEO_DISABLED = '/wot/game/bc_video_disabled/'
     STEAM_ALLOW = '/wot/steam/allow/'
+    RSS = '/wot/game/service/rss/'
 
     @staticmethod
     def toClientAttrs():
@@ -1538,7 +1555,7 @@ class REQUEST_COOLDOWN:
     SEND_INVITATION_COOLDOWN = 1.0
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
-    LOOTBOX = 0.5
+    LOOTBOX = 1.0
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
@@ -1557,19 +1574,6 @@ class REQUEST_COOLDOWN:
     ANONYMIZER = 1.0
     UPDATE_IN_BATTLE_PLAYER_RELATIONS = 1.0
     FLUSH_RELATIONS = 1.0
-    NEW_YEAR_SLOT_FILL = 0.4
-    NEW_YEAR_CRAFT = 0.5
-    NEW_YEAR_CRAFT_OLD_TOYS = 0.5
-    NEW_YEAR_BREAK_TOYS = 1.0
-    NEW_YEAR_SEE_INVENTORY_TOYS = 0.5
-    NEW_YEAR_SEE_COLLECTION_TOYS = 0.5
-    NEW_YEAR_SELECT_DISCOUNT = 1.0
-    NEW_YEAR_VIEW_ALBUM = 0.5
-    NEW_YEAR_CONVERT_FILLERS = 1.0
-    NEW_YEAR_FILL_OLD_COLLECTION = 0.5
-    NEW_YEAR_SET_NY_VEHICLE = 0.5
-    NEW_YEAR_SIMPLIFY_CELEBRITY_QUEST = 1.0
-    NEW_YEAR_CHOOSE_SLOT_BONUS = 0.5
     EQUIP_ENHANCEMENT = 1.0
     DISMOUNT_ENHANCEMENT = 1.0
     BUY_BATTLE_PASS = 1.0
@@ -1579,6 +1583,7 @@ class REQUEST_COOLDOWN:
     CUSTOMIZATION_NOVELTY = 0.5
     REPAIR_VEHICLE = 0.5
     RECEIVE_OFFER_GIFT = 1.0
+    RECEIVE_OFFER_GIFT_MULTIPLE = 1.0
     SET_OFFER_BANNER_SEEN = 0.3
     EQUIP_OPTDEV = 1.0
     CHANGE_EVENT_ENQUEUE_DATA = 1.0
@@ -1589,9 +1594,6 @@ class REQUEST_COOLDOWN:
     POST_PROGRESSION_BASE = 1.0
     POST_PROGRESSION_CELL = 0.5
     SYNC_GIFTS = 0.5
-    GIFTS_HISTORY_PAGE = 1.0
-    GIFTS_HISTORY_LOAD = 1.0
-    LUNAR_NEW_YEAR = 0.4
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1910,10 +1912,6 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
- 92: 'Oriental loot box last viewed count',
- 93: 'New year loot box last viewed count',
- 94: 'Fairytale loot box last viewed count',
- 95: 'Christmas loot box last viewed count',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
  98: 'Battle Pass Storage',
@@ -1922,9 +1920,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  101: 'Battle Royale carousel filter 2',
  USER_SERVER_SETTINGS.GAME_EXTENDED_2: 'Game extended section settings 2',
  103: 'Mapbox carousel filter 1',
- 104: 'Mapbox carousel filter 2',
- 105: 'New Year settings storage',
- 106: 'Common loot box last viewed count'}
+ 104: 'Mapbox carousel filter 2'}
 
 class WG_GAMES:
     TANKS = 'wot'

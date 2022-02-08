@@ -1516,6 +1516,8 @@
             <collisionModelServer>	vehicles/american/A106_M48A2_120/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A106_M48A2_120/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

@@ -720,6 +720,8 @@
             <collisionModelServer>	vehicles/russian/R11_MS-1/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R11_MS-1/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_Gochkins_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint></paint>

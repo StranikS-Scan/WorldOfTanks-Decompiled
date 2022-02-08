@@ -2993,6 +2993,7 @@
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G80_Pz_IV_AusfD/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G80_Pz_IV_AusfD/crash/lod0/Gun_01.model	</destroyed>
@@ -3053,6 +3054,7 @@
           <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G80_Pz_IV_AusfD/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G80_Pz_IV_AusfD/crash/lod0/Gun_02.model	</destroyed>
@@ -3126,6 +3128,8 @@
             <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3717,6 +3721,7 @@
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G80_Pz_IV_AusfD/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/german/G80_Pz_IV_AusfD/crash/lod0/Gun_04.model	</destroyed>
@@ -3782,6 +3787,7 @@
           <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
           <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G80_Pz_IV_AusfD/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/german/G80_Pz_IV_AusfD/crash/lod0/Gun_05.model	</destroyed>
@@ -3855,6 +3861,8 @@
             <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3919,6 +3927,8 @@
             <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

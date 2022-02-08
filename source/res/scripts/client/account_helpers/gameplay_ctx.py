@@ -13,19 +13,15 @@ if constants.IS_DEVELOPMENT:
 ENABLED_ARENA_EPIC_NAMES = (constants.ARENA_GAMEPLAY_NAMES[15],)
 
 def getDefaultMask():
-
-    def getValue(name):
-        return ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName(name))
-
-    return sum(map(getValue, ENABLED_ARENA_GAMEPLAY_NAMES))
+    return ArenaType.getGameplaysMask(ENABLED_ARENA_GAMEPLAY_NAMES)
 
 
 def getMask():
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     settingsCore = dependency.instance(ISettingsCore)
     settingsMask = userMask = settingsCore.serverSettings.getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, 'gameplayMask', getDefaultMask())
-    ctfMask = 1 << constants.ARENA_GAMEPLAY_IDS['ctf']
-    nationsMask = 1 << constants.ARENA_GAMEPLAY_IDS['nations']
+    ctfMask = ArenaType.getGameplaysMask(('ctf',))
+    nationsMask = ArenaType.getGameplaysMask(('nations',))
     if not userMask:
         LOG_WARNING('Gameplay is not defined', userMask)
     else:

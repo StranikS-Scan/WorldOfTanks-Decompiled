@@ -1740,6 +1740,8 @@
             <collisionModelServer>	vehicles/british/GB87_Chieftain_T95_turret/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB87_Chieftain_T95_turret/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

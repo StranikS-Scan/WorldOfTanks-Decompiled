@@ -67,6 +67,8 @@ class CustomPopover(CustomizationItemsPopoverMeta):
             self.__ctx.events.onItemInstalled -= self.__update
             self.__ctx.events.onSeasonChanged -= self.__update
             self.__ctx.events.onCacheResync -= self.__update
+        self._assignedDP.fini()
+        self._assignedDP = None
         self.__ctx = None
         super(CustomPopover, self)._dispose()
         return
@@ -150,7 +152,7 @@ class CustomPopoverDataProvider(SortableDAAPIDataProvider):
     def fini(self):
         self.__ctx = None
         self.clear()
-        self._dispose()
+        self.destroy()
         return
 
     def setNonHistoric(self, isNonHistoric):

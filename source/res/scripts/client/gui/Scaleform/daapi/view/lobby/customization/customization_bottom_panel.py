@@ -81,7 +81,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         BigWorld.callback(0.0, lambda : self.__onTabChanged(self.__ctx.mode.tabId))
 
     def _dispose(self):
-        super(CustomizationBottomPanel, self)._dispose()
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__ctx.events.onComponentChanged -= self.__onComponentChanged
         self.__ctx.events.onChangesCanceled -= self.__onChangesCanceled
@@ -100,11 +99,13 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.events.onFilterPopoverClosed -= self.__onFilterPopoverClosed
         self.__ctx.events.onGetItemBackToHand -= self.__onGetItemBackToHand
         g_currentVehicle.onChanged -= self.__onVehicleChanged
+        self._carouselDP._dispose()
         self._carouselDP = None
         self.__ctx = None
         self._selectedItem = None
         self.__c11nSettings = None
         self.__serverSettings = None
+        super(CustomizationBottomPanel, self)._dispose()
         return
 
     def getDp(self):

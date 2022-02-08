@@ -2069,6 +2069,8 @@
             <collisionModelServer>	vehicles/russian/R121_KV4_KTT/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R121_KV4_KTT/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

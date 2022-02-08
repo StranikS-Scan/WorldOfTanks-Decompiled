@@ -15,8 +15,10 @@ class StatusEventsManager(object):
         self._events = {}
 
     def subscribe(self, statusType, handler, context=DEFAULT_CONTEXT):
-        event = self._events.setdefault(context, {}).setdefault(statusType, Event.SafeEvent(self._em))
-        event += handler
+        events = self._events.setdefault(context, {})
+        if statusType not in events:
+            events[statusType] = Event.SafeEvent(self._em)
+        events[statusType] += handler
         self._logger.debug('Subscribed to (%s|%s|%s).', context, statusType, handler)
 
     def unsubscribe(self, statusType, handler, context=DEFAULT_CONTEXT):

@@ -1819,6 +1819,8 @@
             <collisionModelServer>	vehicles/russian/R11_MS-1/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R11_MS-1/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_Gochkins_auto	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -1889,6 +1891,8 @@
             <collisionModelServer>	vehicles/russian/R11_MS-1/collision/Gun_09.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R11_MS-1/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

@@ -2267,6 +2267,8 @@
             <collisionModelServer>	vehicles/italy/It15_Rinoceronte/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/italy/It15_Rinoceronte/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

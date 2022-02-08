@@ -31,38 +31,39 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	0.000000 -349.999725	</position1>
+          <position1>	0.000000 -349.999756	</position1>
         </team1>
         <team2>
-          <position1>	-0.561653 350.284058	</position1>
+          <position1>	-0.561653 350.284088	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	350 -450	</position>
+          <position>	350.000000 -450.000000	</position>
         </team1>
         <team2>
-          <position>	350 450	</position>
+          <position>	350.000000 450.000000	</position>
         </team2>
       </teamSpawnPoints>
-      <controlPoint>	-0.000069 0.000015	</controlPoint>
+      <controlPoint>	-0.000137 0.000015	</controlPoint>
     </domination>
     <assault>
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <teamSpawnPoints>
         <team1>
-          <position>	380 0	</position>
+          <position>	380.000000 0.000000	</position>
         </team1>
         <team2>
-          <position>	-410 0	</position>
+          <position>	-410.000000 0.000000	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	191.677185 0.737327	</position1>
+          <position1>	112.008011 0.086000	</position1>
         </team1>
+        <team2></team2>
       </teamBasePositions>
     </assault>
     <assault2>
@@ -70,17 +71,18 @@
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	-315.682 121.161	</position>
+          <position>	-315.682007 121.161003	</position>
         </team1>
         <team2>
-          <position>	315.682 -121.161	</position>
+          <position>	315.682007 -121.161003	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	53.463394 292.177002	</position1>
-          <position2>	-0.000015 0.000000	</position2>
+          <position1>	53.463375 292.176880	</position1>
+          <position2>	-0.000046 0.000000	</position2>
         </team1>
+        <team2></team2>
       </teamBasePositions>
     </assault2>
   </gameplayTypes>

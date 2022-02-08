@@ -2999,6 +2999,7 @@
           </drivenJoints>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3751,6 +3752,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <drivenJoints>
             <master>
               <node>	Gun	</node>
@@ -3881,6 +3883,8 @@
             <collisionModelServer>	vehicles/poland/Pl13_53TP_Markowskiego/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl13_53TP_Markowskiego/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>
@@ -4012,6 +4016,8 @@
             <collisionModelServer>	vehicles/poland/Pl13_53TP_Markowskiego/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/poland/Pl13_53TP_Markowskiego/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>

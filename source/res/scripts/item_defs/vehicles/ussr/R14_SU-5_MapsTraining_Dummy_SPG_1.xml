@@ -2328,6 +2328,8 @@
             <collisionModelServer>	vehicles/russian/R14_SU-5_MapsTraining_Dummy_SPG_1/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R14_SU-5_MapsTraining_Dummy_SPG_1/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

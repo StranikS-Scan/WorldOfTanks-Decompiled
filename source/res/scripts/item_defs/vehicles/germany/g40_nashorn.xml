@@ -2829,7 +2829,8 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <effects>	shot_main	</effects>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G40_Nashorn/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G40_Nashorn/crash/lod0/Gun_02.model	</destroyed>
@@ -2948,6 +2949,7 @@
           <turretYawLimits>	-15 15	</turretYawLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <models>
             <undamaged>	vehicles/german/G40_Nashorn/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G40_Nashorn/crash/lod0/Gun_01.model	</destroyed>
@@ -3073,6 +3075,8 @@
             <collisionModelServer>	vehicles/german/G40_Nashorn/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G40_Nashorn/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

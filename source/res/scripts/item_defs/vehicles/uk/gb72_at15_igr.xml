@@ -1039,6 +1039,8 @@
             <collisionModelServer>	vehicles/british/GB72_AT15/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB72_AT15/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

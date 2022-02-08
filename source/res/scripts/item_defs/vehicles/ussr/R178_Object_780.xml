@@ -1085,7 +1085,7 @@
       </armor>
       <weight>	9000	</weight>
       <maxLoad>	55000	</maxLoad>
-      <terrainResistance>	1.3 1.8 3.1	</terrainResistance>
+      <terrainResistance>	1.3 1.7 2.5	</terrainResistance>
       <brakeForce>	49800	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
@@ -2327,6 +2327,7 @@
           </customization>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <camouflage>
             <density>	106.158 106.223	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -3058,13 +3059,13 @@
         <Chassis_R178_Object_780>
           <grounds>
             <soft>
-              <rollingFriction>	0.15295	</rollingFriction>
+              <rollingFriction>	0.20125	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.13685	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

@@ -3148,6 +3148,8 @@
             <collisionModelServer>	vehicles/french/F36_AMX_AC_Mle1948/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F36_AMX_AC_Mle1948/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3262,6 +3264,8 @@
             <collisionModelServer>	vehicles/french/F36_AMX_AC_Mle1948/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F36_AMX_AC_Mle1948/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_mainext_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3382,6 +3386,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_large	</effects>
+          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

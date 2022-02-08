@@ -1853,6 +1853,8 @@
             <collisionModelServer>	vehicles/american/A63_M46_Patton/collision/Gun_08.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A63_M46_Patton/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

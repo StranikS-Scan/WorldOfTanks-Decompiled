@@ -114,6 +114,15 @@ class GiftEventBaseKeeper(IGiftEventKeeper, Notifiable):
         self._processMessagesQueue()
         self.startNotification()
 
+    def reset(self):
+        super(GiftEventBaseKeeper, self).reset()
+        self.stopNotification()
+        self.__clearAllRelations()
+        self._clearMessagesQueue()
+        self.__expireDelta = self.__expireTime = None
+        self.__currentTimeInterval = _ENDLESS_INTERVAL
+        return
+
     def updateSettings(self, eventSettings):
         super(GiftEventBaseKeeper, self).updateSettings(eventSettings)
         if not self.isMessagesEnabled():

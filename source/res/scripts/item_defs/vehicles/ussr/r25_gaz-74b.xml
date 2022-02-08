@@ -3269,6 +3269,7 @@
             <collisionModelClient>	vehicles/russian/R25_GAZ-74b/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3335,6 +3336,8 @@
             <collisionModelServer>	vehicles/russian/R25_GAZ-74b/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R25_GAZ-74b/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3405,6 +3408,8 @@
             <collisionModelServer>	vehicles/russian/R25_GAZ-74b/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R25_GAZ-74b/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3472,6 +3477,7 @@
             <collisionModelClient>	vehicles/russian/R25_GAZ-74b/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

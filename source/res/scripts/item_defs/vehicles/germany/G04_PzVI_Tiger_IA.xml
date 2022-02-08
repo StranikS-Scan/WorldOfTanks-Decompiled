@@ -1171,6 +1171,8 @@
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

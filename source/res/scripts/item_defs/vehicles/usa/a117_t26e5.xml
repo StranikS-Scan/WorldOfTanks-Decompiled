@@ -1725,6 +1725,8 @@
             <collisionModelServer>	vehicles/american/A117_T26E5/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A117_T26E5/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

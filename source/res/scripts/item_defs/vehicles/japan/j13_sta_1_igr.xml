@@ -1200,6 +1200,8 @@
             <collisionModelServer>	vehicles/japan/J13_STA_1/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J13_STA_1/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

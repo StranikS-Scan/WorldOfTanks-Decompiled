@@ -5,7 +5,9 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	STRING	</Arg>
     </accountAvatar_onAvatarCreated>
-    <accountAvatar_onAvatarCreationFailure></accountAvatar_onAvatarCreationFailure>
+    <accountAvatar_onAvatarCreationFailure>
+      <Arg>	MAILBOX	</Arg>
+    </accountAvatar_onAvatarCreationFailure>
     <accountAvatar_onAvatarLeftArena>
       <Arg>	MAILBOX	</Arg>
       <Arg>	BOOL	</Arg>

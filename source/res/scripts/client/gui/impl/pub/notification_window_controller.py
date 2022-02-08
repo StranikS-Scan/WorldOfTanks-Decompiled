@@ -125,14 +125,13 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__activeQueue.append(command)
         self.__tryProcess()
 
-    def releasePostponed(self, fireReleased=True):
+    def releasePostponed(self):
         _logger.debug('Releasing the postponed queue.')
         if self.isEnabled():
             self.__activeQueue.extend(self.__postponedQueue)
             del self.__postponedQueue[:]
-            if fireReleased:
-                self.__destroyCurrentWindow()
-                self.__processNext()
+            self.__destroyCurrentWindow()
+            self.__processNext()
             self.__notifyWithPostponedQueueCount()
         else:
             _logger.error('Queue is currently disabled.')
@@ -201,7 +200,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
 
     def __processNext(self):
         self.__processAfterWaiting = True
-        if self.__callbackID is None and self.__activeQueue and not self.__isWaitingShown:
+        if self.__callbackID is None:
             self.__callbackID = BigWorld.callback(0, self.__processNextCallback)
         return
 

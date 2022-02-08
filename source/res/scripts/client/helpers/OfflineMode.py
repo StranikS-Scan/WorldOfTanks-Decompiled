@@ -150,7 +150,7 @@ def launch(spaceName):
     BigWorld.worldDrawEnabled(False)
     _displayGUI(spaceName)
     spaceID = BigWorld.createSpace()
-    visibilityMask = game_mode_emulator.gameModeVisibilityMask()
+    visibilityMask = game_mode_emulator.gameModeVisibilityMask(spaceName)
     BigWorld.addSpaceGeometryMapping(spaceID, None, spaceName, visibilityMask)
     _loadCameraTransforms()
     camera = BigWorld.FreeCamera()

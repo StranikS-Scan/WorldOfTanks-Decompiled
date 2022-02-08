@@ -82,8 +82,9 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
         self.__cmpBasket.onSwitchChange -= self._updateData
         self.__cmpBasket.onChange -= self.__onCmpBasketChange
         progressionInjectView = self._progressionInject.getInjectView()
-        progressionInjectView.onResearchAction -= self.__onResearchAction
-        progressionInjectView.onGoBackAction -= self.__onGoBackAction
+        if progressionInjectView:
+            progressionInjectView.onResearchAction -= self.__onResearchAction
+            progressionInjectView.onGoBackAction -= self.__onGoBackAction
         super(VehiclePostProgressionCfgView, self)._removeListeners()
 
     def _onExit(self):

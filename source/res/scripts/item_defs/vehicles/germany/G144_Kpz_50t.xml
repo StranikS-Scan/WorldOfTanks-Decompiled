@@ -2068,23 +2068,20 @@
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
-              <anchorPosition>	-0.00427483 -0.0211184 3.18378	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <anchorPosition>	-0.00427483 -0.0211186 3.18378	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
-              <anchorPosition>	-0.00427483 -0.0211184 3.18379	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <anchorPosition>	-0.00427483 -0.0211186 3.18379	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <position>	0.000000 0.000000 0.000000	</position>
-              <rotation>	0.000000 0.000000 0.000000	</rotation>
-              <attachNode>	HP_FX_gun	</attachNode>
               <rayStart>	-0.013 -0.04 3.18756	</rayStart>
               <rayEnd>	0.609222 -0.986744 3.16777	</rayEnd>
               <rayUp>	0.0925 0.000000 0.000000	</rayUp>
@@ -2095,6 +2092,7 @@
             </slot>
           </customizationSlots>
           <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <density>	154.492 138.889	</density>
@@ -2133,13 +2131,13 @@
           <slotType>	paint	</slotType>
           <slotId>	31000	</slotId>
           <anchorPosition>	0.000000 0.690777 0.000000	</anchorPosition>
-          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
           <slotId>	32000	</slotId>
           <anchorPosition>	0.000000 0.690777 0.000000	</anchorPosition>
-          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	player	</slotType>

@@ -1369,6 +1369,8 @@
             <collisionModelServer>	vehicles/british/GB37_Valliant/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB37_Valliant/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN	</paint>

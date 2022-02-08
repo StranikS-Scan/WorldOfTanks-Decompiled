@@ -2225,6 +2225,8 @@
             <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

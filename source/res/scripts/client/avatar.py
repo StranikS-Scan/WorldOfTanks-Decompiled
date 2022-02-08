@@ -370,7 +370,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             uniprof.exitFromRegion('avatar.entering')
             from battleground.location_point_manager import g_locationPointManager
             g_locationPointManager.activate()
-            BigWorld.target.isFastPicking = False
             return
 
     def loadPrerequisites(self, prereqs):
@@ -536,7 +535,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     BigWorld.callback(0, partial(self.set_playerVehicleID, 0))
             self.__consistentMatrices.notifyEnterWorld(self)
             AvatarObserver.onEnterWorld(self)
-            BigWorld.enableLowFrequencyAnimation(self.spaceID, False)
             return
 
     def onLeaveWorld(self):
@@ -2509,8 +2507,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.inputHandler.detachCursor(value, enableAiming)
 
     __cantMoveCriticals = {'engine_destroyed': 'cantMoveEngineDamaged',
-     'leftTrack_destroyed': 'cantMoveChassisDamaged',
-     'rightTrack_destroyed': 'cantMoveChassisDamaged',
+     'leftTrack0_destroyed': 'cantMoveChassisDamaged',
+     'rightTrack0_destroyed': 'cantMoveChassisDamaged',
      'vehicle_destroyed': 'cantMoveVehicleDestroyed',
      'crew_destroyed': 'cantMoveCrewInactive'}
 

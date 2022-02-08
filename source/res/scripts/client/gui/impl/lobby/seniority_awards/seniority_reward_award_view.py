@@ -23,9 +23,7 @@ from gui.server_events.bonuses import BlueprintsBonusSubtypes
 from gui.impl.auxiliary.rewards_helper import LootRewardDefModelPresenter
 from gui.shared.event_dispatcher import showShop
 from gui.shared.utils.functions import getAbsoluteUrl, stripHTMLTags
-from lunar_ny import ILunarNYController
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.game_control import IFestivityController
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPlayerSeniorityAwardsUrl
 _logger = logging.getLogger(__name__)
@@ -74,8 +72,6 @@ class SeniorityRewardAwardView(ViewImpl):
     __slots__ = ('__bonuses', '__vehicles', '__specialCurrencies', '__tooltipData')
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
-    __NYController = dependency.descriptor(IFestivityController)
-    __lunarNYController = dependency.descriptor(ILunarNYController)
 
     def __init__(self, contentResId, *args, **kwargs):
         settings = ViewSettings(contentResId)
@@ -106,7 +102,8 @@ class SeniorityRewardAwardView(ViewImpl):
         tooltipData = self.__getBackportTooltipData(event)
         return getRewardTooltipContent(event, tooltipData)
 
-    def _onLoading(self, questID, data):
+    def _onLoading(self, questID, data, *args, **kwargs):
+        super(SeniorityRewardAwardView, self)._onLoading(*args, **kwargs)
         questYearsType = None
         seniorityLvlSearch = re.search(REG_EXP_QUEST_SUBTYPE, questID) if questID else None
         if seniorityLvlSearch is not None:
@@ -137,9 +134,7 @@ class SeniorityRewardAwardView(ViewImpl):
 
     @property
     def __needBlockShopTransition(self):
-        newYearBlock = self.__NYController.isEnabled() or self.__NYController.isPostEvent()
-        lunarNYBlock = self.__lunarNYController.isActive()
-        return not self.__specialCurrencies.get(SACOIN) or newYearBlock or lunarNYBlock
+        return bool(not self.__specialCurrencies.get(SACOIN))
 
     def __setRewards(self, viewModel):
         vehiclesList = viewModel.getVehicles()

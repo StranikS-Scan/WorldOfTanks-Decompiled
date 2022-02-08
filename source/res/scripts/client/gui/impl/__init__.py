@@ -14,8 +14,6 @@ def getGuiImplConfig(manager):
     from gui.impl.pub.notification_window_controller import NotificationWindowController
     from gui.impl.gen.view_models.common.tutorial.tutorial_model import TutorialModel
     from gui.impl.gen.view_models.common.ui_logger_model import UiLoggerModel
-    from gui.impl.pub.lobby_overlay_mgr import LobbyOverlaysManager
-    from skeletons.gui.impl import IOverlaysManager
     loader = GuiLoader()
     loader.init(TutorialModel(), UiLoggerModel())
     manager.addInstance(IGuiLoader, loader, finalizer='fini')
@@ -31,6 +29,3 @@ def getGuiImplConfig(manager):
     fullscreen = FullscreenManager()
     fullscreen.init()
     manager.addInstance(IFullscreenManager, fullscreen, finalizer='fini')
-    overlays = LobbyOverlaysManager()
-    overlays.init()
-    manager.addInstance(IOverlaysManager, overlays, finalizer='fini')

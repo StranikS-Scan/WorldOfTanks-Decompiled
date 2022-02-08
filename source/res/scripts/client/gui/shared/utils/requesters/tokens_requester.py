@@ -102,15 +102,15 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
         return self.__lootBoxCache.get(LOOTBOX_TOKEN_PREFIX + str(boxID))
 
     def getAttemptsAfterGuaranteedRewards(self, box):
-        boxesHistory = self.getCacheValue('lootBoxes', {}).get('history', {})
+        boxesHistory = self.getCacheValue('lootBoxes').get('history', {})
         historyName, guaranteedFrequencyName = box.getHistoryName(), box.getGuaranteedFrequencyName()
         if historyName not in boxesHistory:
             return 0
         _, limits, _ = boxesHistory[historyName]
-        return 0 if guaranteedFrequencyName not in limits else limits[guaranteedFrequencyName][1] or limits[guaranteedFrequencyName][2]
-
-    def getLootBoxesStats(self):
-        return self.getCacheValue('lootBoxes', {}).get('stats')
+        if guaranteedFrequencyName not in limits:
+            return 0
+        _, _, attempts = limits[guaranteedFrequencyName]
+        return attempts
 
     def getLastViewedProgress(self, tokenId):
         return self.__tokensProgressDelta.getPrevValue(tokenId)

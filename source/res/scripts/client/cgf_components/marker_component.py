@@ -4,16 +4,18 @@ import typing
 import logging
 import CGF
 import Event
-from CurrentVehicle import g_currentPreviewVehicle
 from GenericComponents import TransformComponent, EntityGOSync
 from cache import cached_property
 from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework.entities.View import ViewKey
-from gui.app_loader.settings import APP_NAME_SPACE
 from helpers import dependency
-from skeletons.gui.app_loader import IAppLoader
+from constants import IS_CLIENT, IS_CGF_DUMP
+if IS_CLIENT:
+    from CurrentVehicle import g_currentPreviewVehicle
+    from skeletons.gui.app_loader import IAppLoader
+    from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+    from gui.Scaleform.framework.entities.View import ViewKey
+    from gui.app_loader.settings import APP_NAME_SPACE
 if typing.TYPE_CHECKING:
     import BigWorld
 _logger = logging.getLogger(__name__)
@@ -30,7 +32,8 @@ class LobbyFlashMarkerVisibility(CGFComponent):
 
 @autoregister(presentInAllWorlds=False, category='lobby')
 class LobbyMarkersManager(CGF.ComponentManager):
-    __appLoader = dependency.descriptor(IAppLoader)
+    if not IS_CGF_DUMP:
+        __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, *args):
         super(LobbyMarkersManager, self).__init__(*args)

@@ -30,6 +30,13 @@ class BLOCK_MODE(object):
     DEV = 64
 
 
+class PlanNameAndParams(object):
+
+    def __init__(self):
+        self.name = ''
+        self.params = {}
+
+
 def makePlanPath(planName):
     return 'vscript/plans/{}.xml'.format(planName)
 
@@ -58,3 +65,30 @@ def preloadPlanXml(func):
 def errorVScript(owner, msg):
     LOG_ERROR('[VScript] %s : %s', owner.__class__.__name__, msg)
     owner._writeLog('%s : %s' % (owner.__class__.__name__, msg))
+
+
+def readVisualScriptPlanParams(section, commonParams={}):
+    params = dict(commonParams.items())
+    if section.has_key('params'):
+        for name, subsection in section['params'].items():
+            if subsection.has_key('item'):
+                params[name] = [ value.asString for idx, value in subsection.items() ]
+            params[name] = subsection.asString
+
+    return params
+
+
+def readVisualScriptPlans(section, commonParams={}):
+    plans = []
+    for name, subsection in section.items():
+        if name == 'plan':
+            planDef = PlanNameAndParams()
+            if subsection.has_key('name'):
+                planDef.name = subsection['name'].asString
+                planDef.params = readVisualScriptPlanParams(subsection, commonParams)
+            else:
+                planDef.name = subsection.asString
+                planDef.params = dict(commonParams)
+            plans.append(planDef)
+
+    return plans

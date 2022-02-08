@@ -56,6 +56,10 @@ class OfferEventData(object):
         return self._data.get('giftToken')
 
     @property
+    def giftTokenCount(self):
+        return self._data.get('giftTokenCount')
+
+    @property
     def showBanner(self):
         return self._data.get('showBanner')
 

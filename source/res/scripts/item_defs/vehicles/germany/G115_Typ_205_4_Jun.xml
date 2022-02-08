@@ -1759,6 +1759,8 @@
             <collisionModelServer>	vehicles/german/G115_Typ_205_4_Jun/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G115_Typ_205_4_Jun/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

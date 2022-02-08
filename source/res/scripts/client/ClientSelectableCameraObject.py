@@ -116,7 +116,6 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
 
     def onMouseClick(self):
         ClientSelectableCameraObject.switchCamera(self)
-        self.onSelect()
         return self.state != CameraMovementStates.FROM_OBJECT
 
     @classmethod
@@ -128,18 +127,19 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
                 clickedObject = cls.hangarSpace.space.getVehicleEntity()
             if clickedObject is None:
                 return
+            if clickedObject.state != CameraMovementStates.FROM_OBJECT:
+                return
             for cameraObject in ClientSelectableCameraObject.allCameraObjects:
-                if cameraObject.state != CameraMovementStates.FROM_OBJECT and cameraObject != clickedObject:
+                if cameraObject.state != CameraMovementStates.FROM_OBJECT:
                     cameraObject.onDeselect(clickedObject)
 
             hangarCameraMgr = cls.hangarSpace.space.getCameraManager()
             isCustomDistance = clickedObject.camDistState == CameraDistanceModes.CUSTOM
             hangarCameraMgr.setAllowCustomCamDistance(isCustomDistance)
+            clickedObject.onSelect()
             return
 
     def onSelect(self):
-        if self.state != CameraMovementStates.FROM_OBJECT:
-            return
         self.setEnable(False)
         self.setState(CameraMovementStates.MOVING_TO_OBJECT)
         self._startCameraMovement()
@@ -244,6 +244,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.__curTime += self.measureDeltaTime() / self.cameraUpcomingDuration
         isCameraDone = self.__curTime >= 1.0
         if isCameraDone:
+            self.stopCallback(self.__update)
             self._finishCameraMovement()
         else:
             self.__updateCameraLocation()
@@ -268,7 +269,6 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         return math_utils.easeOutQuad(time, easedInValue - startValue, self.__easeInDuration) + startValue if time < self.__easeInDuration else angleCalculation(currentPosition, goalPosition)
 
     def _finishCameraMovement(self):
-        self.stopCallback(self.__update)
         self.setState(CameraMovementStates.ON_OBJECT)
         self.__camera.disable()
         BigWorld.camera(self.hangarSpace.space.camera)

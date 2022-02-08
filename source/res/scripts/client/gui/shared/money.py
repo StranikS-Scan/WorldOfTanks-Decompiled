@@ -5,7 +5,6 @@ from shared_utils import CONST_CONTAINER
 from soft_exception import SoftException
 
 class Currency(CONST_CONTAINER):
-    FREE_XP = 'freeXP'
     CREDITS = 'credits'
     GOLD = 'gold'
     CRYSTAL = 'crystal'
@@ -16,7 +15,6 @@ class Currency(CONST_CONTAINER):
      CRYSTAL,
      EVENT_COIN,
      BPCOIN)
-    EXTENDED = ALL + (FREE_XP,)
     BY_WEIGHT = (GOLD,
      CRYSTAL,
      CREDITS,
@@ -27,8 +25,7 @@ class Currency(CONST_CONTAINER):
      GOLD: 'gold',
      CRYSTAL: 'crystal',
      EVENT_COIN: 'event_coin',
-     BPCOIN: 'bpcoin',
-     FREE_XP: 'free_xp'}
+     BPCOIN: 'bpcoin'}
     _CURRENCY_INTERNAL_MAP = {external:internal for internal, external in _CURRENCY_EXTERNAL_MAP.iteritems()}
 
     @classmethod

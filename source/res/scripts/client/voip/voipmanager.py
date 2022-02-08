@@ -383,12 +383,12 @@ class VOIPManager(VOIPHandler):
         self.__user = ['', '']
 
     def __onChatActionMute(self, dbid, muted):
-        _logger.error('OnChatActionMute: dbID = %d, muted = %r', dbid, muted)
+        _logger.debug('OnChatActionMute: dbID = %d, muted = %r', dbid, muted)
         if dbid in self.__channelUsers and self.__channelUsers[dbid]['muted'] != muted:
             self.__muteParticipantForMe(dbid, muted)
 
     def __muteParticipantForMe(self, dbid, mute):
-        _logger.error('MuteParticipantForMe: %d, %s', dbid, str(mute))
+        _logger.debug('MuteParticipantForMe: %d, %s', dbid, str(mute))
         self.__channelUsers[dbid]['muted'] = mute
         uri = self.__channelUsers[dbid]['uri']
         cmd = {VOIPCommon.KEY_COMMAND: VOIPCommon.CMD_SET_PARTICIPANT_MUTE,

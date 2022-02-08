@@ -1631,6 +1631,8 @@
             <collisionModelServer>	vehicles/czech/Cz17_Vz_55/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz17_Vz_55/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1809,6 +1811,8 @@
             <collisionModelServer>	vehicles/czech/Cz17_Vz_55/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz17_Vz_55/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

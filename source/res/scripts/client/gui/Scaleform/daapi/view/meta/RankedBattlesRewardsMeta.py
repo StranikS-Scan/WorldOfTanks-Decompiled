@@ -9,3 +9,6 @@ class RankedBattlesRewardsMeta(BaseDAAPIComponent):
 
     def as_setTabsDataS(self, tabs):
         return self.flashObject.as_setTabsData(tabs) if self._isDAAPIInited() else None
+
+    def as_setCountersS(self, countersData):
+        return self.flashObject.as_setCounters(countersData) if self._isDAAPIInited() else None

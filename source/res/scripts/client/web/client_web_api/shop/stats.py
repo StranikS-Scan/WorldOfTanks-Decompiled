@@ -6,7 +6,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.shared import IItemsCache
 from web.client_web_api.api import C2WHandler, c2w
-from web.common import getWalletCurrencyStatuses, getBalance
+from web.common import formatWalletCurrencyStatuses, formatBalance
 
 class BalanceEventHandler(C2WHandler):
     __walletController = dependency.descriptor(IWalletController)
@@ -15,7 +15,7 @@ class BalanceEventHandler(C2WHandler):
     def init(self):
         super(BalanceEventHandler, self).init()
         self.__walletController.onWalletStatusChanged += self.__onWalletUpdate
-        g_clientUpdateManager.addCallbacks({'stats.{}'.format(c):self.__onBalanceUpdate for c in Currency.EXTENDED})
+        g_clientUpdateManager.addCallbacks({'stats.{}'.format(c):self.__onBalanceUpdate for c in Currency.ALL})
         g_clientUpdateManager.addCallbacks({'cache.dynamicCurrencies': self.__onBalanceUpdate})
 
     def fini(self):
@@ -25,8 +25,8 @@ class BalanceEventHandler(C2WHandler):
 
     @c2w(name='balance_update')
     def __onBalanceUpdate(self, *_):
-        return getBalance(self.__itemsCache.items.stats)
+        return formatBalance(self.__itemsCache.items.stats)
 
     @c2w(name='wallet_update')
     def __onWalletUpdate(self, *_):
-        return getWalletCurrencyStatuses(self.__itemsCache.items.stats)
+        return formatWalletCurrencyStatuses(self.__itemsCache.items.stats)

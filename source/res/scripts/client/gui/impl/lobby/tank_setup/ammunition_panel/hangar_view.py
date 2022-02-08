@@ -10,10 +10,8 @@ from gui.impl.lobby.tank_setup.ammunition_panel.base_view import BaseAmmunitionP
 from gui.impl.lobby.tank_setup.intro_ammunition_setup_view import showIntro
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
-from new_year.ny_constants import SyncDataKeys
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IUISpamController
-from skeletons.new_year import INewYearController
 from uilogging.veh_post_progression.loggers import VehPostProgressionSpecSlotLogger
 _logger = logging.getLogger(__name__)
 _AMMUNITION_PANEL_HINTS = {OnceOnlyHints.AMMUNITION_PANEL_HINT: UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN,
@@ -22,7 +20,6 @@ _AMMUNITION_PANEL_HINTS = {OnceOnlyHints.AMMUNITION_PANEL_HINT: UI_STORAGE_KEYS.
 class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     _settingsCore = dependency.descriptor(ISettingsCore)
     _uiSpamController = dependency.descriptor(IUISpamController)
-    _nyController = dependency.descriptor(INewYearController)
     _uiLogger = VehPostProgressionSpecSlotLogger()
 
     def update(self, fullUpdate=True):
@@ -36,15 +33,11 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
         super(HangarAmmunitionPanelView, self)._addListeners()
         self.viewModel.ammunitionPanel.onChangeSetupIndex += self._onChangeSetupIndex
         self.viewModel.onEscKeyDown += self.__onEscKeyDown
-        self._nyController.onDataUpdated += self.__onDataUpdated
-        self._nyController.onStateChanged += self.__onStateChanged
 
     def _removeListeners(self):
         super(HangarAmmunitionPanelView, self)._removeListeners()
         self.viewModel.ammunitionPanel.onChangeSetupIndex -= self._onChangeSetupIndex
         self.viewModel.onEscKeyDown -= self.__onEscKeyDown
-        self._nyController.onDataUpdated -= self.__onDataUpdated
-        self._nyController.onStateChanged -= self.__onStateChanged
 
     def _onLoading(self, *args, **kwargs):
         super(HangarAmmunitionPanelView, self)._onLoading(*args, **kwargs)
@@ -82,11 +75,3 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
 
     def __onEscKeyDown(self):
         self.onEscKeyDown()
-
-    def __onDataUpdated(self, keys):
-        vehicleBranchChanged = SyncDataKeys.VEHICLE_BRANCH in keys
-        if vehicleBranchChanged:
-            self.update(fullUpdate=True)
-
-    def __onStateChanged(self):
-        self.update(fullUpdate=True)

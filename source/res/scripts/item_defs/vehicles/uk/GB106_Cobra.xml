@@ -1,9 +1,8 @@
 <GB106_Cobra.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman
-			loader	</commander>
-    <gunner></gunner>
+    <commander>	radioman	</commander>
+    <gunner>	loader	</gunner>
     <driver></driver>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
@@ -989,8 +988,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	55	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1710,7 +1709,7 @@
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -1742,14 +1741,14 @@
             </armor_16>
             <gun>	45	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	50	</reloadTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	60	</reloadTime>
           <clip>
             <count>	4	</count>
-            <rate>	45	</rate>
+            <rate>	30	</rate>
           </clip>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	5.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1764,6 +1763,8 @@
             <collisionModelServer>	vehicles/british/GB106_Cobra/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB106_Cobra/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

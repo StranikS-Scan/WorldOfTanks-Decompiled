@@ -2165,6 +2165,8 @@
             <collisionModelServer>	vehicles/british/GB86_Centurion_Action_X/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB86_Centurion_Action_X/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

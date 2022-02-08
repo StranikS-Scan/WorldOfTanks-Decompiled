@@ -72,6 +72,13 @@
       <undamaged>	vehicles/american/A89_T54E1/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A89_T54E1/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A89_T54E1/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <A89_T54E1_3DSt_TIR>
+          <undamaged>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/crash/lod0/Hull.model	</exploded>
+        </A89_T54E1_3DSt_TIR>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -902,6 +909,58 @@
         <clipAngle>	0.965516	</clipAngle>
         <anchorShift>	0.631834	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15062	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A89_T54E1_3DSt_TIR	</compatibleModels>
+        <position>	0.000009 1.56203 2.80797	</position>
+        <rotation>	0.41944 -0.000003 3.1326	</rotation>
+        <scale>	0.546671 0.353746 0.546662	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.221834	</clipAngle>
+        <anchorShift>	-0.066829	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15063	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A89_T54E1_3DSt_TIR	</compatibleModels>
+        <position>	1.39808 1.39101 3.31551	</position>
+        <rotation>	0.451636 -0.00157255 3.13247	</rotation>
+        <scale>	0.522628 0.338191 0.522622	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.948745	</clipAngle>
+        <anchorShift>	0.046809	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15064	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A89_T54E1_3DSt_TIR	</compatibleModels>
+        <position>	-1.35622 1.47986 1.935	</position>
+        <rotation>	0.0891896 -0.000001 3.13335	</rotation>
+        <scale>	0.632978 0.0937821 0.632973	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.221834	</clipAngle>
+        <anchorShift>	0.07317	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15065	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A89_T54E1_3DSt_TIR	</compatibleModels>
+        <position>	-1.36351 1.56234 -3.18174	</position>
+        <rotation>	2.91163 -0.000020 -0.000076	</rotation>
+        <scale>	0.617209 0.386541 0.617209	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.67506	</clipAngle>
+        <anchorShift>	-0.003788	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	0.94 0.94 0.49 0.000000	</tiling>
@@ -941,6 +1000,13 @@
         <undamaged>	vehicles/american/A89_T54E1/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A89_T54E1/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A89_T54E1/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A89_T54E1_3DSt_TIR>
+            <undamaged>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/crash/lod0/Chassis.model	</exploded>
+          </A89_T54E1_3DSt_TIR>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -3063,11 +3129,20 @@
             <undamaged>	vehicles/american/A89_T54E1/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A89_T54E1/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A89_T54E1/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <A89_T54E1_3DSt_TIR>
+                <undamaged>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/crash/lod0/Gun_01.model	</exploded>
+              </A89_T54E1_3DSt_TIR>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A89_T54E1/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A89_T54E1/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3638,6 +3713,39 @@
               <hiddenForUser>	true	</hiddenForUser>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45043	</slotId>
+              <rayStart>	-0.000773127 -0.14623 3.67249	</rayStart>
+              <rayEnd>	-0.077545 -0.161677 3.67225	</rayEnd>
+              <rayUp>	0.102 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	A89_T54E1_3DSt_TIR	</compatibleModels>
+              <position>	0.000006 2.5737 1.10501	</position>
+              <rotation>	0.202754 0.000001 3.14159	</rotation>
+              <scale>	0.72275 0.372077 0.722764	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.20925	</clipAngle>
+              <anchorShift>	0.182008	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45044	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	A89_T54E1_3DSt_TIR	</compatibleModels>
+              <position>	0.422383 2.49871 -1.72576	</position>
+              <rotation>	1.68342 -0.000151396 -0.00014472	</rotation>
+              <scale>	0.407224 0.220817 0.407236	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.0750646	</clipAngle>
+              <anchorShift>	0.049887	</anchorShift>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.000773127 -0.14623 3.67249	</rayStart>
@@ -3700,11 +3808,20 @@
             <undamaged>	vehicles/american/A89_T54E1/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A89_T54E1/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A89_T54E1/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <A89_T54E1_3DSt_TIR>
+                <undamaged>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/crash/lod0/Gun_02.model	</exploded>
+              </A89_T54E1_3DSt_TIR>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A89_T54E1/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A89_T54E1/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4297,6 +4414,13 @@
         <undamaged>	vehicles/american/A89_T54E1/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A89_T54E1/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A89_T54E1/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <A89_T54E1_3DSt_TIR>
+            <undamaged>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A89_T54E1/_skins/A89_T54E1_3DSt_TIR/crash/lod0/Turret_01.model	</exploded>
+          </A89_T54E1_3DSt_TIR>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A89_T54E1/collision/Turret_01.model	</collisionModelServer>
@@ -4468,6 +4592,32 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.19818	</clipAngle>
           <hiddenForUser>	true	</hiddenForUser>
+          <anchorShift>	0.081307	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35010	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A89_T54E1_3DSt_TIR	</compatibleModels>
+          <position>	-1.36762 2.18389 0.583703	</position>
+          <rotation>	1.07642 -1.52302 3.12517	</rotation>
+          <scale>	0.426679 0.346919 0.426694	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.0295	</clipAngle>
+          <anchorShift>	0.0813	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35011	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A89_T54E1_3DSt_TIR	</compatibleModels>
+          <position>	1.41212 2.09708 0.627	</position>
+          <rotation>	1.07643 1.52297 3.12519	</rotation>
+          <scale>	0.505959 0.41138 0.505976	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.19818	</clipAngle>
           <anchorShift>	0.081307	</anchorShift>
         </slot>
       </customizationSlots>

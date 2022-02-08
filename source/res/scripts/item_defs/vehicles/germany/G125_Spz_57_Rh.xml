@@ -2139,6 +2139,8 @@
             <collisionModelServer>	vehicles/german/G125_Spz_57_Rh/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G125_Spz_57_Rh/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <drivenJoints>
             <master>
               <node>	Gun	</node>

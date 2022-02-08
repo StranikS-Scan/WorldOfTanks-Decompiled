@@ -3353,6 +3353,8 @@
             <collisionModelServer>	vehicles/american/A31_M36_Slagger/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A31_M36_Slagger/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3463,6 +3465,8 @@
             <collisionModelServer>	vehicles/american/A31_M36_Slagger/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A31_M36_Slagger/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4054,6 +4058,8 @@
             <collisionModelServer>	vehicles/american/A31_M36_Slagger/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A31_M36_Slagger/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4152,6 +4158,7 @@
             <maxPitch>	0 10 0.353005 10 0.416667 7 0.583333 7 0.646995 10 1 10	</maxPitch>
           </pitchLimits>
           <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <models>
             <undamaged>	vehicles/american/A31_M36_Slagger/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A31_M36_Slagger/crash/lod0/Gun_04.model	</destroyed>

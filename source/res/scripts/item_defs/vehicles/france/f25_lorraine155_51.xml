@@ -2912,6 +2912,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2990,6 +2991,8 @@
             <collisionModelServer>	vehicles/french/F25_Lorraine155_51/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F25_Lorraine155_51/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

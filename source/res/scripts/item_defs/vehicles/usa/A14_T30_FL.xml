@@ -2012,6 +2012,8 @@
             <collisionModelServer>	vehicles/american/A14_T30/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A14_T30/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge_mb	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

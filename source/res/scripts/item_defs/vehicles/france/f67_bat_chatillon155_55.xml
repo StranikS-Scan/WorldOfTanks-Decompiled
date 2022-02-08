@@ -2874,6 +2874,8 @@
             <collisionModelServer>	vehicles/french/F67_Bat_Chatillon155_55/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F67_Bat_Chatillon155_55/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3826,6 +3828,7 @@
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <reloadEffect>	reload155_170	</reloadEffect>
+          <effects>	shot_huge	</effects>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

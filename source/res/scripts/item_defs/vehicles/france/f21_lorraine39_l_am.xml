@@ -3383,6 +3383,8 @@
             <collisionModelServer>	vehicles/french/F21_Lorraine39_L_AM/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F21_Lorraine39_L_AM/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -3562,6 +3564,8 @@
             <collisionModelServer>	vehicles/french/F21_Lorraine39_L_AM/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F21_Lorraine39_L_AM/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

@@ -2098,6 +2098,8 @@
             <collisionModelServer>	vehicles/american/A38_T92/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A38_T92/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_superhuge	</effects>
+          <reloadEffect>	reload155_170	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <shotOffset>	-0.000007 0.156961 0.000000	</shotOffset>
           <customizationSlots>

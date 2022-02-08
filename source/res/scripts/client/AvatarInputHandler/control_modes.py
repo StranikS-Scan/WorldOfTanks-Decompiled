@@ -705,10 +705,14 @@ class _TrajectoryControlMode(_GunControlMode):
         self._cam.create(self.onChangeControlModeByScroll)
         super(_TrajectoryControlMode, self).create()
         self.__initTrajectoryDrawer()
+        self.__interpolator.onInterpolationStart += self.__onInterpolationStart
+        self.__interpolator.onInterpolationStop += self.__onInterpolationStop
 
     def destroy(self):
         self.disable()
         self.__delTrajectoryDrawer()
+        self.__interpolator.onInterpolationStart -= self.__onInterpolationStart
+        self.__interpolator.onInterpolationStop -= self.__onInterpolationStop
         super(_TrajectoryControlMode, self).destroy()
 
     def enable(self, **args):
@@ -820,6 +824,12 @@ class _TrajectoryControlMode(_GunControlMode):
 
     def getCamDistRange(self):
         return self._cam.getCamDistRange()
+
+    def __onInterpolationStart(self):
+        self._cam.isAimOffsetEnabled = False
+
+    def __onInterpolationStop(self):
+        self._cam.isAimOffsetEnabled = True
 
     def __switchToNextControlMode(self, switchToPos=None, switchToPlace=None):
         if GUI_SETTINGS.spgAlternativeAimingCameraEnabled:

@@ -1,15 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_page.py
-import datetime
 from logging import getLogger
 import Keys
 import nations
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import GUI_START_BEHAVIOR, TECHTREE_INTRO_BLUEPRINTS
-from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
 from blueprints.BlueprintTypes import BlueprintTypes
 from constants import IS_DEVELOPMENT
-from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys
@@ -35,7 +30,6 @@ from gui.shared.utils.vehicle_collector_helper import hasCollectibleVehicles
 from gui.shop import canBuyGoldForVehicleThroughWeb
 from gui.ui_spam.custom_aliases import TECH_TREE_EVENT
 from helpers import dependency
-from helpers import time_utils
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IUISpamController, IBootcampController
@@ -223,17 +217,7 @@ class TechTree(TechTreeMeta):
         self.__disableBlueprintsSwitchButton(isBlueprintsEnabled)
         self.__setVehicleCollectorState()
         self.__addListeners()
-        self._populateAfter()
         return
-
-    def _populateAfter(self):
-        blueprints = {}
-        defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-        settings = self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
-        if self.__needShowTechTreeIntro(settings):
-            if settings[GuiSettingsBehavior.TECHTREE_INTRO_BLUEPRINTS_RECEIVED]:
-                blueprints = AccountSettings.getSettings(TECHTREE_INTRO_BLUEPRINTS)
-            shared_events.showTechTreeIntro(parent=self.getParentWindow(), blueprints=blueprints)
 
     def _dispose(self):
         if IS_DEVELOPMENT:
@@ -310,15 +294,6 @@ class TechTree(TechTreeMeta):
 
     def __updateBlueprintBalance(self):
         self.as_setBlueprintBalanceS(self.__formatBlueprintBalance())
-
-    def __needShowTechTreeIntro(self, settings):
-        isShowed = settings[GuiSettingsBehavior.TECHTREE_INTRO_SHOWED]
-        startTime = datetime.date(GUI_SETTINGS.techTreeIntroStartDate.get('year'), GUI_SETTINGS.techTreeIntroStartDate.get('month'), GUI_SETTINGS.techTreeIntroStartDate.get('day'))
-        endTime = startTime + datetime.timedelta(seconds=time_utils.ONE_YEAR)
-        registrationTime = self._itemsCache.items.getAccountDossier().getGlobalStats().getCreationTime()
-        isOverdue = time_utils.getCurrentLocalServerTimestamp() >= time_utils.getTimestampFromLocal(endTime.timetuple())
-        isNewPlayer = registrationTime >= time_utils.getTimestampFromLocal(startTime.timetuple())
-        return not (isShowed or isOverdue or isNewPlayer)
 
     def __setVehicleCollectorState(self):
         isVehicleCollectorEnabled = self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()

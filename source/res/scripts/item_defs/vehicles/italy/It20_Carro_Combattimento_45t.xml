@@ -1884,6 +1884,8 @@
             <collisionModelServer>	vehicles/italy/It20_Carro_Combattimento_45t/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/italy/It20_Carro_Combattimento_45t/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

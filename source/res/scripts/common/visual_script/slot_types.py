@@ -26,6 +26,7 @@ class SLOT_TYPE(object):
     TRIGGER_VEHICLE_AREA = 'TriggerVehicleArea'
     CONTROL_POINT = 'ControlPoint'
     SOUND = 'Sound'
+    GAME_OBJECT = 'GameObject'
     E_MODULE_STATE = 'EModuleState'
     E_VEHICLE_DEVICE = 'EVehicleDevice'
     E_VEHICLE_TANKMAN = 'EVehicleTankman'

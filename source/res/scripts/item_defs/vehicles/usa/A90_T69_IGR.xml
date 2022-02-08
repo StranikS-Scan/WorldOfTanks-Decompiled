@@ -802,6 +802,8 @@
             <collisionModelServer>	vehicles/american/A90_T69/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A90_T69/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

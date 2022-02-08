@@ -918,6 +918,8 @@
             <collisionModelServer>	vehicles/german/G119_Pz58_Mutz/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G119_Pz58_Mutz/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>

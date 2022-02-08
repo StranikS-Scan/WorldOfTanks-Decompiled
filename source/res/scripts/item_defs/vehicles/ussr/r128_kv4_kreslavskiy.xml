@@ -1755,6 +1755,8 @@
             <collisionModelServer>	vehicles/russian/R128_KV4_Kreslavskiy/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R128_KV4_Kreslavskiy/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_large	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>

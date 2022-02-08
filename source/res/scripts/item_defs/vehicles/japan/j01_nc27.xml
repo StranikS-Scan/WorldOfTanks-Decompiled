@@ -1735,6 +1735,8 @@
             <collisionModelServer>	vehicles/japan/J01_NC27/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J01_NC27/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_auto	</effects>
+          <reloadEffect>	reload12_25	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN_2	</paint>
@@ -1824,6 +1826,8 @@
             <collisionModelServer>	vehicles/japan/J01_NC27/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J01_NC27/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>

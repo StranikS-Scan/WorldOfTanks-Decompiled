@@ -42,9 +42,8 @@ class BadgesController(IBadgesController, Notifiable):
         self.__clear()
 
     def onLobbyStarted(self, ctx):
-        badges = self.itemsCache.items.getBadges()
-        self.__initCurrentBadges(badges)
-        self.__badgesProcessing(badges)
+        self.__initCurrentBadges()
+        self.__badgesProcessing()
         g_clientUpdateManager.addCallbacks({'badges': self.__updateBadges})
         self.itemsCache.onSyncCompleted += self.__onSyncCompleted
 
@@ -70,9 +69,8 @@ class BadgesController(IBadgesController, Notifiable):
         if self.__pendingBadges is not None:
             return
         else:
-            badges = self.itemsCache.items.getBadges()
-            self.__initCurrentBadges(badges)
-            self.__badgesProcessing(badges)
+            self.__initCurrentBadges()
+            self.__badgesProcessing()
             self.onUpdated()
             return
 
@@ -80,10 +78,10 @@ class BadgesController(IBadgesController, Notifiable):
         if updateReason in (CACHE_SYNC_REASON.DOSSIER_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
             self.__updateBadges()
 
-    def __initCurrentBadges(self, badges):
+    def __initCurrentBadges(self):
         self.__currentSelectedPrefix = None
         self.__currentSelectedSuffix = None
-        for badge in badges.itervalues():
+        for badge in self.itemsCache.items.getBadges().itervalues():
             if badge.isSelected:
                 if badge.isPrefixLayout() and badge.isAchieved:
                     self.__currentSelectedPrefix = badge
@@ -125,15 +123,14 @@ class BadgesController(IBadgesController, Notifiable):
         if result and result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
         else:
-            badges = self.itemsCache.items.getBadges()
-            self.__initCurrentBadges(badges)
+            self.__initCurrentBadges()
         self.__pendingBadges = None
         self.onUpdated()
         return
 
-    def __badgesProcessing(self, badges):
+    def __badgesProcessing(self):
         currentSelectedPrefix = self.__currentSelectedPrefix
-        for badge in badges.itervalues():
+        for badge in self.itemsCache.items.getBadges().itervalues():
             if self.__tutorStorage is not None and badge.isNew() and badge.isAchieved:
                 if badge.isPrefixLayout():
                     self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_BADGE, True)

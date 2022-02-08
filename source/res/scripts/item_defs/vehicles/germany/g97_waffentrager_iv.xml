@@ -74,6 +74,13 @@
       <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G97_Waffentrager_IV_3DSt_TIR>
+          <undamaged>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Hull.model	</exploded>
+        </G97_Waffentrager_IV_3DSt_TIR>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -970,6 +977,45 @@
         <hiddenForUser>	true	</hiddenForUser>
         <anchorShift>	1.368	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15067	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G97_Waffentrager_IV_3DSt_TIR	</compatibleModels>
+        <position>	1.33092 1.16054 2.64309	</position>
+        <rotation>	0.274528 0.000459578 3.13986	</rotation>
+        <scale>	0.345982 0.170769 0.345982	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.679263	</clipAngle>
+        <anchorShift>	0.103985	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15068	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G97_Waffentrager_IV_3DSt_TIR	</compatibleModels>
+        <position>	-1.33091 1.16058 2.64309	</position>
+        <rotation>	0.274528 -0.000527853 3.13986	</rotation>
+        <scale>	0.345982 0.170769 0.345981	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.679263	</clipAngle>
+        <anchorShift>	0.103985	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15069	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G97_Waffentrager_IV_3DSt_TIR	</compatibleModels>
+        <position>	0.00539313 1.0247 -2.40531	</position>
+        <rotation>	3.08658 -0.00469279 -0.000341892	</rotation>
+        <scale>	0.505127 0.0822517 0.505126	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.55567	</clipAngle>
+        <anchorShift>	0.083976	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
@@ -1009,6 +1055,13 @@
         <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G97_Waffentrager_IV_3DSt_TIR>
+            <undamaged>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Chassis.model	</exploded>
+          </G97_Waffentrager_IV_3DSt_TIR>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1727,6 +1780,13 @@
         <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G97_Waffentrager_IV_3DSt_TIR>
+            <undamaged>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Chassis.model	</exploded>
+          </G97_Waffentrager_IV_3DSt_TIR>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -2476,11 +2536,20 @@
             <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G97_Waffentrager_IV_3DSt_TIR>
+                <undamaged>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Gun_01.model	</exploded>
+              </G97_Waffentrager_IV_3DSt_TIR>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2592,11 +2661,20 @@
             <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <G97_Waffentrager_IV_3DSt_TIR>
+                <undamaged>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Gun_02.model	</exploded>
+              </G97_Waffentrager_IV_3DSt_TIR>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2687,6 +2765,13 @@
         <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G97_Waffentrager_IV_3DSt_TIR>
+            <undamaged>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Turret_01.model	</exploded>
+          </G97_Waffentrager_IV_3DSt_TIR>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Turret_01.model	</collisionModelServer>
@@ -3006,6 +3091,32 @@
           <hiddenForUser>	true	</hiddenForUser>
           <anchorShift>	-0.006016	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35021	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G97_Waffentrager_IV_3DSt_TIR	</compatibleModels>
+          <position>	-0.819484 2.1916 -0.946511	</position>
+          <rotation>	0.606687 -0.00788814 -2.86313	</rotation>
+          <scale>	0.798425 0.325026 0.798426	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.51985	</clipAngle>
+          <anchorShift>	-0.006017	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35022	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G97_Waffentrager_IV_3DSt_TIR	</compatibleModels>
+          <position>	0.530758 2.17567 -0.955284	</position>
+          <rotation>	0.606687 0.00784461 3.0701	</rotation>
+          <scale>	0.51856 0.211097 0.51856	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.51985	</clipAngle>
+          <anchorShift>	0.058188	</anchorShift>
+        </slot>
       </customizationSlots>
       <camouflage>
         <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
@@ -3067,11 +3178,20 @@
             <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <G97_Waffentrager_IV_3DSt_TIR>
+                <undamaged>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Gun_03.model	</exploded>
+              </G97_Waffentrager_IV_3DSt_TIR>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3112,6 +3232,18 @@
               <size>	0.531	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0.000007 0.0455442 3.79675	</rayStart>
+              <rayEnd>	-0.0300422 0.0968443 3.7961	</rayEnd>
+              <rayUp>	0.103 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.531	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <compatibleModels>	G97_Waffentrager_IV_3DSt_TIR	</compatibleModels>
             </slot>
           </customizationSlots>
           <drivenJoints>
@@ -3190,11 +3322,20 @@
             <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_04.model	</exploded>
+            <sets>
+              <G97_Waffentrager_IV_3DSt_TIR>
+                <undamaged>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Gun_04.model	</exploded>
+              </G97_Waffentrager_IV_3DSt_TIR>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_huge	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3296,6 +3437,13 @@
         <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Turret_02.model	</destroyed>
         <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Turret_02.model	</exploded>
+        <sets>
+          <G97_Waffentrager_IV_3DSt_TIR>
+            <undamaged>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/german/G97_Waffentrager_IV/_skins/G97_Waffentrager_IV_3DSt_TIR/crash/lod0/Turret_02.model	</exploded>
+          </G97_Waffentrager_IV_3DSt_TIR>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Turret_02.model	</collisionModelServer>
@@ -3626,6 +3774,32 @@
           <clipAngle>	1.51985	</clipAngle>
           <hiddenForUser>	true	</hiddenForUser>
           <anchorShift>	0.023985	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35022	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G97_Waffentrager_IV_3DSt_TIR	</compatibleModels>
+          <position>	-0.997491 2.1588 -1.34307	</position>
+          <rotation>	1.07817 -1.01037 3.13467	</rotation>
+          <scale>	0.943928 0.180535 0.943928	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.51985	</clipAngle>
+          <anchorShift>	0.023989	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35023	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G97_Waffentrager_IV_3DSt_TIR	</compatibleModels>
+          <position>	1.03702 2.15184 -1.5054	</position>
+          <rotation>	1.07819 1.01036 3.13462	</rotation>
+          <scale>	0.729079 0.139443 0.729079	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.51985	</clipAngle>
+          <anchorShift>	0.063989	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

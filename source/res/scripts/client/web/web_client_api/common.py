@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/web/web_client_api/common.py
 import itertools
 from collections import namedtuple
+from enum import Enum, unique
 from gui.shared.money import MONEY_UNDEFINED
 from shared_utils import CONST_CONTAINER
 SPA_ID_TYPES = (int, long)
@@ -28,8 +29,30 @@ ItemPackEntry.__new__.__defaults__ = (None,
  '',
  {})
 
+class _Enum(Enum):
+
+    @classmethod
+    def hasValue(cls, value):
+        return value in cls._value2member_map_
+
+
+@unique
+class TManLocation(_Enum):
+    NEWBIES = 'newbies'
+    BARRACKS = 'barracks'
+    TANKS = 'tanks'
+    DEMOBILIZED = 'demobilized'
+
+
+@unique
+class TManGender(_Enum):
+    MALE = 'male'
+    FEMALE = 'female'
+
+
 class ShopItemType(CONST_CONTAINER):
     VEHICLE = 'vehicle'
+    CREW = 'crew'
     EQUIPMENT = 'equipment'
     DEVICE = 'device'
     BOOSTER = 'booster'

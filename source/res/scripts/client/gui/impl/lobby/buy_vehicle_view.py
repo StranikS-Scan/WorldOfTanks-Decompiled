@@ -10,7 +10,6 @@ from CurrentVehicle import g_currentPreviewVehicle
 from constants import QUEUE_TYPE
 from gui.impl import backport
 from gui.impl.pub.lobby_window import LobbyWindow
-from gui.veh_post_progression.models.progression import PostProgressionCompletion
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.base.listener import IPrbListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -551,7 +550,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             operations.append('equipments')
         if vehicle.hasOptionalDevices:
             operations.append('optionalDevices')
-        if vehicle.postProgression.getCompletion() != PostProgressionCompletion.EMPTY:
+        if vehicle.postProgressionAvailability(unlockOnly=True).result:
             operations.append('pairModifications')
         if operations:
             operationsStr = [ backport.text(R.strings.dialogs.tradeInConfirmation.message.dyn(o)()) for o in operations ]

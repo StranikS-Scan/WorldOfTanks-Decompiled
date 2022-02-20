@@ -162,6 +162,7 @@ if IS_EDITOR:
     ARENA_GAMEPLAY_READABLE_NAMES = ('Capture The Flag', 'Domination', 'Assault', 'Nations', 'Capture The Flag 2', 'Domination 2', 'Assault 2', 'Fallout Bomb', 'Fallout 2 Flag', 'Fallout 3', 'Fallout 4', 'Capture The Flag 30 vs 30', 'Domination 30 vs 30', 'Sandbox', 'Bootcamp', 'Epic', 'Maps Training')
 ARENA_GAMEPLAY_IDS = dict(((value, index) for index, value in enumerate(ARENA_GAMEPLAY_NAMES)))
 ARENA_GAMEPLAY_MASK_DEFAULT = 1048575
+VALID_TRAINING_ARENA_GAMEPLAY_IDS = frozenset((ARENA_GAMEPLAY_IDS[gameplayName] for gameplayName in ('ctf', 'domination', 'assault', 'nations', 'ctf2', 'domination2', 'assault2', 'epic', 'sandbox', 'bootcamp', 'ctf30x30', 'domination30x30')))
 
 class HANGAR_VISIBILITY_TAGS:
     LAYERS = ('1', '2', '3', '4', '5', '6', '7')

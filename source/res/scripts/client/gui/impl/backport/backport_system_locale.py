@@ -40,3 +40,11 @@ def getYearMonthFormat(value):
 
 def getDateTimeFormat(value):
     return '{0:>s} {1:>s}'.format(wulf.getDateFormat(value, wulf.DateFormatType.LONG_FORMAT), wulf.getTimeFormat(value, wulf.TimeFormatType.SHORT_FORMAT))
+
+
+def upper(value):
+    return wulf.caseMap(value, wulf.CaseType.UPPERCASE)
+
+
+def lower(value):
+    return wulf.caseMap(value, wulf.CaseType.LOWERCASE)

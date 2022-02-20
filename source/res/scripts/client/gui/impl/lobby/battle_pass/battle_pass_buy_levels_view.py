@@ -90,11 +90,7 @@ class BattlePassBuyLevelView(ViewImpl):
         return
 
     def __onBackClick(self):
-        if self.__backCallback is not None:
-            self.__backCallback()
-        else:
-            self.destroyWindow()
-        return
+        self.destroyWindow()
 
     def __showConfirmAny(self):
         with self.viewModel.transaction() as model:

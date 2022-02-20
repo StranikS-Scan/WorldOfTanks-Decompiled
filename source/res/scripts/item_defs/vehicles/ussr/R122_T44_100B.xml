@@ -1728,7 +1728,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_100mm_LB-1A>	shared	  <maxAmmo>	56	</maxAmmo>
+        <Gun_01_KV>	shared	  <maxAmmo>	56	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -23 1 -23	</minPitch>
             <maxPitch>	0 7 0.380783 7 0.444444 5 0.555556 5 0.619218 7 1 7	</maxPitch>
@@ -1833,7 +1833,7 @@
             <density>	141.317 146.217	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_100mm_LB-1A>
+        </Gun_01_KV>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R127_T44_100_P/normal/lod0/Turret_01.model	</undamaged>
@@ -2286,21 +2286,21 @@
     </Turret_1_R122_T44_100B>
   </turrets0>
   <engines>
-    <V-44>	shared	</V-44>
+    <Engine_01_KV>	shared	</Engine_01_KV>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <_9RSA>	shared	</_9RSA>
+    <Radio_01_KV>	shared	</Radio_01_KV>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <V-44>
+        <Engine_01_KV>
           <smplEnginePower>	760	</smplEnginePower>
           <smplFwMaxSpeed>	52	</smplFwMaxSpeed>
-        </V-44>
+        </Engine_01_KV>
       </engines>
       <chassis>
         <Chassis_R122_T44_100B>

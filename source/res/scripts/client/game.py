@@ -508,4 +508,4 @@ def checkBotNet():
     g_pathManager.setPathes()
     from scenario_player import g_scenarioPlayer
     rpycPort = sys.argv[sys.argv.index(botArg) + 1]
-    g_scenarioPlayer.setRpycConection(rpycPort)
+    g_scenarioPlayer.initScenarioPlayer(rpycPort)

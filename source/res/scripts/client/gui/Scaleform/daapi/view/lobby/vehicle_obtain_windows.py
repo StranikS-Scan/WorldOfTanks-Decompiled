@@ -377,6 +377,8 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
                 operations.append('equipments')
             if tradeOffVehicle.hasOptionalDevices:
                 operations.append('optionalDevices')
+            if tradeOffVehicle.postProgressionAvailability(unlockOnly=True).result:
+                operations.append('pairModifications')
             if operations:
                 operationsStr = [ i18n.makeString('#dialogs:%s/message/%s' % (confirmationType, o)) for o in operations ]
                 addition = i18n.makeString('#dialogs:%s/message/addition' % confirmationType, operations=', '.join(operationsStr))

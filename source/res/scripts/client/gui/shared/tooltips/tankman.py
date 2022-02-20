@@ -338,7 +338,8 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
         innerBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': backport.text(R.strings.tooltips.hangar.crew.assignedTo())})))
 
     def _createVehicleBlock(self, innerBlock, vehicle):
-        innerBlock.append(formatters.packImageTextBlockData(img=vehicle.iconContour, txtGap=-4, padding=formatters.packPadding(bottom=0, top=10, left=0), title=text_styles.stats(vehicle.shortUserName), desc=text_styles.stats(backport.text(R.strings.menu.header.vehicleType.dyn(vehicle.type)())), flipHorizontal=True))
+        vehicleType = vehicle.type.replace('-', '_')
+        innerBlock.append(formatters.packImageTextBlockData(img=vehicle.iconContour, txtGap=-4, padding=formatters.packPadding(bottom=0, top=10, left=0), title=text_styles.stats(vehicle.shortUserName), desc=text_styles.stats(backport.text(R.strings.menu.header.vehicleType.dyn(vehicleType)())), flipHorizontal=True))
 
     def _createBlockForNewSkills(self, items):
         field = TankmanNewSkillCountField(self, '')

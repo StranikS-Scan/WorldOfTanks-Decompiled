@@ -2,23 +2,30 @@
 # Embedded file name: scripts/client/web/web_client_api/shop/formatters.py
 import re
 from collections import namedtuple
+import typing
+import nations
 from constants import RentType
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.game_control.veh_comparison_basket import isValidVehicleForComparing
-from gui.shop import SHOP_RENT_SEASON_TYPE_MAP, SHOP_RENT_TYPE_MAP
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.gui_items import KPI, CREW_SKILL_TO_KPI_NAME_MAP, GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import Vehicle, getUserName, getShortUserName
+from gui.shared.gui_items import CREW_SKILL_TO_KPI_NAME_MAP, GUI_ITEM_TYPE, KPI
+from gui.shared.gui_items.Vehicle import Vehicle, getShortUserName, getUserName
+from gui.shop import SHOP_RENT_SEASON_TYPE_MAP, SHOP_RENT_TYPE_MAP
 from helpers import dependency, i18n, time_utils
 from items.components.skills_constants import PERKS
 from items.components.supply_slot_categories import SlotCategories
+from items.vehicles import VEHICLE_CLASS_TAGS, g_list
+from nation_change.nation_change_helpers import getGroupByVehTypeCompactDescr, iterVehTypeCDsInNationGroup
 from rent_common import SeasonRentDuration
+from shared_utils import first
 from skeletons.gui.shared import IItemsCache
-from items.vehicles import g_list
-from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup, getGroupByVehTypeCompactDescr
-import nations
+if typing.TYPE_CHECKING:
+    from typing import Dict, Union
+    from gui.shared.gui_items.Tankman import Tankman
+    from web.web_client_api.shop.crew import _ShopTankman, _ShopRecruit
+    AnyTankman = Union[Tankman, _ShopTankman, _ShopRecruit]
 COLOR_TAG_OPEN = '{colorTagOpen}'
 COLOR_TAG_CLOSE = '{colorTagClose}'
 _WHITESPACE_RE = re.compile('\\s+')
@@ -301,6 +308,55 @@ def makeVehicleFormatter(includeInventoryFields=False):
          readinessField,
          isFavoriteField])
     return Formatter(fields)
+
+
+def makeShopTankmanFormatter():
+    return Formatter((Field('groupName', lambda i: i.groupName),
+     Field('location', lambda i: i.location.value),
+     Field('role', _formatTankmanRole),
+     Field('rank', _formatTankmanRank),
+     Field('vehicle', _formatVehicleInfo),
+     Field('name', _formatTankmanNames),
+     Field('isPremium', lambda i: i.isPremium),
+     Field('gender', lambda i: i.gender.value),
+     Field('nation', _formatTankmanNationInfo),
+     Field('icons', _formatTankmanIcons)))
+
+
+def _formatTankmanRole(crewItem):
+    return {'id': crewItem.roleID,
+     'name': crewItem.roleName,
+     'userName': crewItem.roleUserName}
+
+
+def _formatTankmanRank(crewItem):
+    return {'id': crewItem.rankID,
+     'userName': crewItem.rankUserName}
+
+
+def _formatVehicleInfo(crewItem):
+    return {vType:{'id': descr.type.compactDescr,
+     'type': first((t for t in VEHICLE_CLASS_TAGS if t in descr.type.tags)),
+     'name': descr.type.userString,
+     'nation': nations.MAP[descr.type.id[0]]} for vType, descr in (('current', crewItem.vehicleDescr), ('native', crewItem.vehicleNativeDescr)) if descr is not None}
+
+
+def _formatTankmanNames(crewItem):
+    return {'first': crewItem.firstUserName,
+     'last': crewItem.lastUserName,
+     'full': crewItem.fullUserName}
+
+
+def _formatTankmanNationInfo(crewItem):
+    return {'id': crewItem.nationID,
+     'name': crewItem.nationName,
+     'userName': crewItem.nationUserName}
+
+
+def _formatTankmanIcons(crewItem):
+    return {'person': crewItem.icon,
+     'role': crewItem.iconRole,
+     'rank': crewItem.iconRank}
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)

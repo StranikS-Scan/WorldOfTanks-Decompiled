@@ -2416,63 +2416,6 @@
           <offset>	-0.037	</offset>
         </node>
       </trackNodes>
-      <trackNodes>
-        <enable>	true	</enable>
-        <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.107	</maxAmplitude>
-        <maxOffset>	0.107	</maxOffset>
-        <gravity>	-9.8	</gravity>
-        <elasticity>	1100	</elasticity>
-        <damping>	2	</damping>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	1.65	</forwardElastK>
-          <backwardElastK>	0.9	</backwardElastK>
-          <offset>	-0.041	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <forwardElastK>	1.65	</forwardElastK>
-          <backwardElastK>	0.9	</backwardElastK>
-          <offset>	-0.04	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.31	</backwardElastK>
-          <offset>	-0.02	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.31	</backwardElastK>
-          <offset>	-0.02	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <offset>	-0.017	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-          <offset>	-0.017	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
-          <offset>	-0.037	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-          <offset>	-0.037	</offset>
-        </node>
-      </trackNodes>
       <physicalTracks>
         <left>
           <segmentsCount>	172	</segmentsCount>

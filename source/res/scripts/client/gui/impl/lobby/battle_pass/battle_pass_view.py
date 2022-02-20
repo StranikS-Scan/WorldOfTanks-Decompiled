@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_view.py
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
-from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.view.meta.MissionsBattlePassViewMeta import MissionsBattlePassViewMeta
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
@@ -21,7 +20,7 @@ _VIEWS = {_R_VIEWS.BattlePassIntroView(): IntroView,
  _R_VIEWS.ChapterChoiceView(): ChapterChoiceView,
  _R_VIEWS.BattlePassProgressionsView(): BattlePassProgressionsView}
 
-class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassViewMeta, LobbySubView):
+class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassViewMeta):
     __slots__ = ()
     __battlePassController = dependency.descriptor(IBattlePassController)
     __settingsCore = dependency.descriptor(ISettingsCore)

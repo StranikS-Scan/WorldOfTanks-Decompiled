@@ -66,7 +66,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from uilogging.veh_post_progression.loggers import VehPostProgressionEntryPointLogger
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, Generator, Iterable, List
+    from typing import Callable, Dict, Generator, Iterable, List, Union
     from gui.marathon.marathon_event import MarathonEvent
     from gui.Scaleform.framework.managers import ContainerManager
     from gui.shared.money import Money
@@ -355,8 +355,11 @@ def showHangar():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showBarracks():
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_BARRACKS)), scope=EVENT_BUS_SCOPE.LOBBY)
+def showBarracks(location=None, nationID=None, tankType=None, role=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_BARRACKS), ctx={'location': location,
+     'nationID': nationID,
+     'tankType': tankType,
+     'role': role}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBadges(backViewName=''):
@@ -486,6 +489,10 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
             viewAlias = VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW
         else:
             viewAlias = VIEW_ALIAS.VEHICLE_PREVIEW
+        app = dependency.instance(IAppLoader).getApp()
+        view = app.containerManager.getViewByKey(ViewKey(viewAlias))
+        if view is not None:
+            view.destroy()
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(viewAlias), ctx={'itemCD': vehTypeCompDescr,
          'previewAlias': previewAlias,
          'vehicleStrCD': vehStrCD,
@@ -499,6 +506,7 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
          'endTime': endTime,
          'buyParams': buyParams,
          'vehParams': vehParams}), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
 
 
 def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previewBackCb=None, previousBackAlias=None, hangarVehicleCD=None):
@@ -1457,6 +1465,7 @@ def showMapsTrainingPage(ctx):
 
 
 def showMapsTrainingQueue():
+    _killOldView(R.views.lobby.maps_training.MapsTrainingQueue())
     g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.maps_training.MapsTrainingQueue(), MapsTrainingQueueView, ScopeTemplates.DEFAULT_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 

@@ -64,7 +64,7 @@ class BadgesPage(BadgesPageMeta):
         self.as_setStaticDataS({'header': {'backBtnLabel': backport.text(R.strings.badge.badgesPage.header.backBtn.label()),
                     'backBtnDescrLabel': self.__backViewName,
                     'descrTf': text_styles.main(BADGE.BADGESPAGE_HEADER_DESCR),
-                    'playerText': text_styles.grandTitle(self.lobbyContext.getPlayerFullName(userName))}})
+                    'playerText': self.lobbyContext.getPlayerFullName(userName)}})
         self.__updateBadges()
         if self.__tutorStorage is not None:
             hasNewBadges = self.__checkNewSuffixBadges()

@@ -249,6 +249,7 @@ class DailyQuestsView(ViewImpl):
                     self._updateDailyQuestModel(tx)
                     if not dqDiff['enabled']:
                         self.__setCurrentTab(DailyTabs.PREMIUM_MISSIONS, tx)
+                self.__triggerSyncInitiator(self.viewModel.dailyQuests)
         if PremiumConfigs.PREM_QUESTS in diff:
             premDiff = diff[PremiumConfigs.PREM_QUESTS]
             stateChanged = 'enabled' in premDiff and premDiff['enabled'] is not self.viewModel.premiumMissions.getIsEnabled()
@@ -257,6 +258,10 @@ class DailyQuestsView(ViewImpl):
                     self._updatePremiumMissionsModel(tx)
                     if not premDiff['enabled']:
                         self.__setCurrentTab(DailyTabs.QUESTS, tx)
+                    self.__triggerSyncInitiator(self.viewModel.premiumMissions)
+
+    def __triggerSyncInitiator(self, model):
+        model.setSyncInitiator((model.getSyncInitiator() + 1) % 1000)
 
     def _updateQuestsTitles(self, model):
         model.premiumMissions.setTitle(R.strings.quests.premiumQuests.header.title())

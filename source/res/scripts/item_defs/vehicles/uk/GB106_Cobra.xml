@@ -988,8 +988,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	55	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1102,16 +1102,6 @@
       <topRightCarryingPoint>	1.20369 2.05302	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.290760 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.509640 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.049040	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <splineDesc>
         <segmentModelLeft>	vehicles/british/GB106_Cobra/track/segment_01.model	</segmentModelLeft>
         <segmentModelRight>	vehicles/british/GB106_Cobra/track/segment_01.model	</segmentModelRight>
@@ -1745,7 +1735,7 @@
           <reloadTime>	60	</reloadTime>
           <clip>
             <count>	4	</count>
-            <rate>	30	</rate>
+            <rate>	26.09	</rate>
           </clip>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>

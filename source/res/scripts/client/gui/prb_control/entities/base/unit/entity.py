@@ -1452,7 +1452,7 @@ class UnitEntity(_UnitEntity):
     def _resetPlayerReadiness(self, ctx, callback=None):
         pInfo = self.getPlayerInfo()
         if not pInfo.isInSlot:
-            LOG_ERROR('Player is not in slot', ctx)
+            LOG_DEBUG('Player is not in slot', ctx)
             if callback:
                 callback(False)
             return

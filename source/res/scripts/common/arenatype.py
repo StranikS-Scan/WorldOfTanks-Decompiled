@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ArenaType.py
 from collections import defaultdict
+import os
 from realm_utils import ResMgr
 from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH, ARENA_GUI_TYPE_LABEL
 from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, HAS_DEV_RESOURCES
@@ -178,7 +179,8 @@ def __buildCache(geometryID, geometryName, defaultXml, isFullCache, isDevelopmen
     geometryType = GeometryType(geometryCfg)
     g_geometryCache[geometryID] = __addBonusTypeOverrides(geometryType, section, defaultXml)
     if isFullCache:
-        spaceData = __readSpaceCfg(geometryName)
+        spaceName = os.path.basename(geometryCfg['geometry'])
+        spaceData = __readSpaceCfg(spaceName)
         g_spaceCache[geometryID] = spaceData
     for gameplayCfg in __readGameplayCfgs(geometryName, section, defaultXml, geometryCfg):
         arenaType = ArenaType(geometryType, gameplayCfg)

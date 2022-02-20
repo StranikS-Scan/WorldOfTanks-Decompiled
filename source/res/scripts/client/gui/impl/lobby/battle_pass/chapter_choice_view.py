@@ -18,7 +18,6 @@ from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared.event_dispatcher import hideVehiclePreview, showBattlePassBuyWindow, showBattlePassHowToEarnPointsView, showBrowserOverlayView, showShop, showStyleProgressionPreview, showHangar
-from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
@@ -67,7 +66,7 @@ class ChapterChoiceView(ViewImpl):
          (g_playerEvents.onClientUpdated, self.__onBpBitUpdated))
 
     def _getCallbacks(self):
-        return ((Currency.BPCOIN, self.__updateBalance),)
+        return (('stats.bpcoin', self.__updateBalance),)
 
     def _fillModel(self):
         with self.viewModel.transaction() as model:

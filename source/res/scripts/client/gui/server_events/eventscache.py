@@ -10,18 +10,17 @@ import nations
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import async, process
-from constants import EVENT_TYPE, EVENT_CLIENT_DATA, LOOTBOX_TOKEN_PREFIX, TWITCH_TOKEN_PREFIX, OFFER_TOKEN_PREFIX
+from constants import EVENT_CLIENT_DATA, EVENT_TYPE, LOOTBOX_TOKEN_PREFIX, OFFER_TOKEN_PREFIX, TWITCH_TOKEN_PREFIX
 from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
-from gui.server_events.event_items import createQuest, createAction, MotiveQuest, ServerEventAbstract, Quest
-from gui.server_events.events_helpers import isMarathon, isLinkedSet, isPremium, isRankedPlatform, isRankedDaily, isDailyEpic, isBattleRoyale, isMapsTraining
-from gui.server_events.events_helpers import getRerollTimeout, getEventsData
+from gui.server_events.event_items import MotiveQuest, Quest, ServerEventAbstract, createAction, createQuest
+from gui.server_events.events_helpers import getEventsData, getRerollTimeout, isBattleRoyale, isDailyEpic, isLinkedSet, isMapsTraining, isMarathon, isPremium, isRankedDaily, isRankedPlatform
 from gui.server_events.formatters import getLinkedActionID
-from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE, clearModifiersCache
+from gui.server_events.modifiers import ACTION_MODIFIER_TYPE, ACTION_SECTION_TYPE, clearModifiersCache
 from gui.server_events.personal_missions_cache import PersonalMissionsCache
 from gui.server_events.prefetcher import Prefetcher
-from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM as aei
+from gui.shared.gui_items import ACTION_ENTITY_ITEM as aei, GUI_ITEM_TYPE
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from helpers import dependency, time_utils
 from items import getTypeOfCompactDescr
@@ -29,14 +28,14 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import first
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IBattleRoyaleController
+from skeletons.gui.game_control import IBattleRoyaleController, IEpicBattleMetaGameController, IRankedBattlesController
+from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared.utils import IRaresCache
-from skeletons.gui.linkedset import ILinkedSetController
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Callable, Union
-    from gui.server_events.event_items import DailyEpicTokenQuest, DailyQuest, PremiumQuest
+    from gui.server_events.event_items import DailyEpicTokenQuest, DailyQuest
 NOT_FOR_PERSONAL_MISSIONS_TOKENS = (LOOTBOX_TOKEN_PREFIX,
  RECRUIT_TMAN_TOKEN_PREFIX,
  TWITCH_TOKEN_PREFIX,

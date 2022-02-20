@@ -41,6 +41,12 @@ class ILinkedSetController(object):
     def isBootcampQuest(self, quest):
         raise NotImplementedError
 
+    def isLinkedSetQuest(self, questID):
+        raise NotImplementedError
+
+    def isLinkedSetQuestWithAwards(self, questID):
+        raise NotImplementedError
+
     def getInitialMissionID(self):
         raise NotImplementedError
 
@@ -51,4 +57,7 @@ class ILinkedSetController(object):
         raise NotImplementedError
 
     def getLinkedSetQuests(self, filterFunc=None):
+        raise NotImplementedError
+
+    def showAwardView(self, questIDs):
         raise NotImplementedError

@@ -21,7 +21,6 @@ class MISSIONS_ALIASES(object):
     TOKEN_CONDITION = 'MissionDetailsTokenRendererUI'
     VEHICLE_ITEM_RENDERER = 'MissionVehicleItemRendererUI'
     VEHICLE_TYPE_RENDERER = 'MissionVehicleTypeRendererUI'
-    BATTLE_PASS_PROGRESSIONS_VIEW_COMPONENT = 'BattlePassProgressionsComponent'
     NONE = 'oneOff'
     CUMULATIVE = 'accumulative'
     ACHIEVEMENT = 'achievement'

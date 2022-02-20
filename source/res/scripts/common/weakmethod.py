@@ -61,6 +61,9 @@ class WeakMethodProxy(object):
         method = self._methodRef()
         return method(*args, **kwargs)
 
+    def __nonzero__(self):
+        return self._methodRef() is not None
+
     def __eq__(self, other):
         return self._methodRef == other._methodRef if isinstance(other, WeakMethodProxy) else False
 

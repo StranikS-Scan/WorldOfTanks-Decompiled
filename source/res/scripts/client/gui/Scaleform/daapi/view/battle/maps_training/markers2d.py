@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/maps_training/markers2d.py
+from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from gui.battle_control import avatar_getter
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins, vehicle_plugins, MarkersManager
 
@@ -46,6 +47,14 @@ class _MapsTrainingVehicleMarkerPlugin(vehicle_plugins.VehicleMarkerPlugin):
 class MapsTrainingAreaStaticMarkerPlugin(plugins.AreaStaticMarkerPlugin):
     __slots__ = ()
 
+    def start(self):
+        super(MapsTrainingAreaStaticMarkerPlugin, self).start()
+        self.settingsCore.onSettingsChanged += self.__onSettingsChange
+
+    def stop(self):
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChange
+        super(MapsTrainingAreaStaticMarkerPlugin, self).stop()
+
     def _onReplyFeedbackReceived(self, targetID, replierID, markerType, oldReplyCount, newReplyCount):
         marker = self._getMarkerFromTargetID(targetID, markerType)
         if replierID == self.sessionProvider.arenaVisitor.getArenaUniqueID() or marker is None:
@@ -53,6 +62,16 @@ class MapsTrainingAreaStaticMarkerPlugin(plugins.AreaStaticMarkerPlugin):
         else:
             self._setMarkerRepliesAndCheckState(marker, newReplyCount, replierID == avatar_getter.getPlayerVehicleID())
             return
+
+    def __onSettingsChange(self, diff):
+        if BattleCommStorageKeys.SHOW_STICKY_MARKERS in diff.keys():
+            for marker in self._markers.values():
+                self.__updateMarkerIsSticky(marker)
+
+    def __updateMarkerIsSticky(self, marker):
+        markerID = marker.getMarkerID()
+        if marker.getIsSticky():
+            self._setMarkerSticky(markerID, True)
 
 
 class MapsTrainingMarkersManager(MarkersManager):

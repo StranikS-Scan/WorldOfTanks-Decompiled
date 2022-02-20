@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/recruit_helper.py
+import typing
 from constants import ENDLESS_TOKEN_TIME
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
@@ -20,6 +21,8 @@ from account_helpers.AccountSettings import AccountSettings, RECRUIT_NOTIFICATIO
 from soft_exception import SoftException
 from shared_utils import first, findFirst
 from .events_helpers import getTankmanRewardQuests
+if typing.TYPE_CHECKING:
+    from typing import List, Union
 
 class RecruitSourceID(object):
     TANKWOMAN = 'tankwoman'
@@ -101,9 +104,9 @@ _TANKWOMAN_LEARNT_SKILLS = ['brotherhood']
 _INCREASE_LIMIT_LOGIN = 5
 
 class _BaseRecruitInfo(object):
-    __slots__ = ('_recruitID', '_expiryTime', '_nations', '_learntSkills', '_freeXP', '_roleLevel', '_lastSkillLevel', '_roles', '_firstName', '_lastName', '_icon', '_sourceID', '_isFemale', '_hasNewSkill', '_tankmanSkill')
+    __slots__ = ('_recruitID', '_expiryTime', '_nations', '_learntSkills', '_freeXP', '_roleLevel', '_lastSkillLevel', '_roles', '_firstName', '_lastName', '_icon', '_sourceID', '_isPremium', '_isFemale', '_hasNewSkill', '_tankmanSkill')
 
-    def __init__(self, recruitID, expiryTime, nations, learntSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, roles, icon, sourceID, isFemale, hasNewSkill):
+    def __init__(self, recruitID, expiryTime, nations, learntSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, roles, icon, sourceID, isPremium, isFemale, hasNewSkill):
         self._recruitID = recruitID
         self._expiryTime = expiryTime
         self._nations = nations
@@ -116,6 +119,7 @@ class _BaseRecruitInfo(object):
         self._roles = roles
         self._icon = icon
         self._sourceID = sourceID
+        self._isPremium = isPremium
         self._isFemale = isFemale
         self._hasNewSkill = hasNewSkill
         self._tankmanSkill = self._getTankmanSkill()
@@ -140,6 +144,9 @@ class _BaseRecruitInfo(object):
 
     def getLastName(self):
         return self._lastName
+
+    def getIsPremium(self):
+        return self._isPremium
 
     def getRoleLevel(self):
         return self._roleLevel
@@ -229,7 +236,7 @@ class _QuestRecruitInfo(_BaseRecruitInfo):
     __slots__ = ('__operationName',)
 
     def __init__(self, questID, operationName):
-        super(_QuestRecruitInfo, self).__init__(recruitID=questID, expiryTime=0, nations=NationNames, learntSkills=_TANKWOMAN_LEARNT_SKILLS, freeXP=0, roleLevel=_TANKWOMAN_ROLE_LEVEL, lastSkillLevel=0, firstName=_ms(QUESTS.BONUSES_ITEM_TANKWOMAN), lastName=EMPTY_STRING, roles=[], icon=_TANKWOMAN_ICON, sourceID=RecruitSourceID.TANKWOMAN, isFemale=True, hasNewSkill=True)
+        super(_QuestRecruitInfo, self).__init__(recruitID=questID, expiryTime=0, nations=NationNames, learntSkills=_TANKWOMAN_LEARNT_SKILLS, freeXP=0, roleLevel=_TANKWOMAN_ROLE_LEVEL, lastSkillLevel=0, firstName=_ms(QUESTS.BONUSES_ITEM_TANKWOMAN), lastName=EMPTY_STRING, roles=[], icon=_TANKWOMAN_ICON, sourceID=RecruitSourceID.TANKWOMAN, isPremium=True, isFemale=True, hasNewSkill=True)
         self.__operationName = operationName
 
     def getEventName(self):
@@ -249,11 +256,11 @@ class _QuestRecruitInfo(_BaseRecruitInfo):
 
 
 class _TokenRecruitInfo(_BaseRecruitInfo):
-    __slots__ = ('__isPremium', '__group', '__freeSkills')
+    __slots__ = ('__group', '__freeSkills')
 
     def __init__(self, tokenName, expiryTime, nations, isPremium, group, freeSkills, skills, freeXP, lastSkillLevel, roleLevel, sourceID, roles):
+        self._isPremium = isPremium
         self.__group = group
-        self.__isPremium = isPremium
         self.__freeSkills = freeSkills
         learntSkills = freeSkills + skills
         nationNames = [ NationNames[i] for i in nations ]
@@ -267,7 +274,7 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
                     raise SoftException('Requested role (%s) is not in the list of allowed roles (%s)' % (skills_constants.SKILL_NAMES[role], ', '.join(map(str, allowedRoles))))
 
             allowedRoles = [ skills_constants.SKILL_NAMES[role] for role in roles ]
-        super(_TokenRecruitInfo, self).__init__(tokenName, expiryTime, nationNames, learntSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, allowedRoles, icon, sourceID, isFemale, hasNewSkill)
+        super(_TokenRecruitInfo, self).__init__(tokenName, expiryTime, nationNames, learntSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, allowedRoles, icon, sourceID, isPremium, isFemale, hasNewSkill)
 
     def getEventName(self):
         eventName = TOOLTIPS.getNotRecruitedTankmanEventName(self._sourceID)
@@ -354,12 +361,12 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
              nationGroup.isFemales)
 
     def __getNationGroup(self, nationID):
-        groups = tankmen.getNationGroups(nationID, self.__isPremium)
+        groups = tankmen.getNationGroups(nationID, self._isPremium)
         group = findFirst(lambda g: g.name == self.__group, groups.itervalues())
         return group
 
     def __hasTagInTankmenGroup(self, nationID, group, tag):
-        return tankmen.hasTagInTankmenGroup(nationID, group.groupID, self.__isPremium, tag)
+        return tankmen.hasTagInTankmenGroup(nationID, group.groupID, self._isPremium, tag)
 
 
 def _getRecruitInfoFromQuest(questID):

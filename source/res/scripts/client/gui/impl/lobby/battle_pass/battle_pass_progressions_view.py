@@ -29,7 +29,6 @@ from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showBattlePassBuyLevelWindow, showBattlePassBuyWindow, showBattlePassHowToEarnPointsView, showBattlePassStyleProgressionPreview, showBrowserOverlayView, showHangar, showShop
-from gui.shared.money import Currency
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier, SimpleNotifier
 from helpers import dependency, int2roman, time_utils
 from shared_utils import first
@@ -122,7 +121,7 @@ class BattlePassProgressionsView(ViewImpl):
          (events.BattlePassEvent.BUYING_THINGS, self.__updateBuyButtonState, EVENT_BUS_SCOPE.LOBBY))
 
     def _getCallbacks(self):
-        return ((Currency.BPCOIN, self.__updateBalance),)
+        return (('stats.bpcoin', self.__updateBalance),)
 
     def _onLoading(self, *args, **kwargs):
         super(BattlePassProgressionsView, self)._onLoading()

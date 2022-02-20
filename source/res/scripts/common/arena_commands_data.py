@@ -18,7 +18,7 @@ class ArenaCommandData(namedtuple('ArenaCommandData', ['commandName',
     @staticmethod
     def getCommandData(*args, **kwargs):
         if kwargs:
-            data = ArenaCommandData(kwargs.get('commandName', 'PREBATTLE_WAYPOINT'), kwargs.get('position', (0.0, 0.0, 0.0)), kwargs.get('team', 'both'), kwargs.get('name', '') or kwargs.get('locationName', 'ERROR'), kwargs.get('state', 'IDLE'))
+            data = ArenaCommandData(kwargs.get('commandName', 'PREBATTLE_WAYPOINT'), kwargs.get('position', (0.0, 0.0, 0.0)), kwargs.get('team', '') or kwargs.get('teams', 'both'), kwargs.get('name', '') or kwargs.get('locationName', 'ERROR'), kwargs.get('state', 'IDLE'))
             return (getHashCode(kwargs['position']), data)
         else:
             return None

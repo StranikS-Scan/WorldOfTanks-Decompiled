@@ -1002,20 +1002,20 @@ class Vehicle(FittingItem):
         return not self.descriptor.isWeightConsistent()
 
     @property
-    def hasShells(self):
-        return sum((s.count for s in self.shells.installed.getItems())) > 0
-
-    @property
     def hasCrew(self):
         return findFirst(lambda x: x[1] is not None, self.crew) is not None
 
     @property
+    def hasShells(self):
+        return self.shells.setupLayouts.isAmmoFull(minAmmo=1)
+
+    @property
     def hasConsumables(self):
-        return findFirst(None, self.consumables.installed) is not None
+        return bool(self.consumables.setupLayouts.getUniqueItems())
 
     @property
     def hasOptionalDevices(self):
-        return findFirst(None, self.optDevices.installed) is not None
+        return bool(self.optDevices.setupLayouts.getUniqueItems())
 
     @property
     def modelState(self):

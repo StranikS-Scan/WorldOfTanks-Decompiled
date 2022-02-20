@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/progression_styles/stage_switcher.py
 import logging
+from CurrentVehicle import g_currentVehicle
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.StageSwitcherMeta import StageSwitcherMeta
 from gui.customization.constants import CustomizationModes
@@ -62,23 +63,19 @@ class StageSwitcherView(ViewImpl):
                 tx.setSelectedLevel(self.__ctx.mode.getStyleProgressionLevel())
         return
 
-    def __onItemInstalled(self, *_):
-        if self.__ctx is not None and self.__ctx.modeId == CustomizationModes.STYLED:
-            style = self.__ctx.mode.modifiedStyle
-            if not style.isProgressionRewindEnabled:
-                return
-            level = self.__ctx.mode.getStyleProgressionLevel()
+    def __onItemInstalled(self, item, *_):
+        if self.__ctx is not None and self.__ctx.modeId == CustomizationModes.STYLED and item is not None:
             with self.viewModel.transaction() as tx:
-                tx.setSelectedLevel(level)
-                tx.setCurrentLevel(level)
-                self.__setAdditionalStyleInfo(tx)
+                style = self.__ctx.mode.modifiedStyle
+                tx.setSelectedLevel(self.__ctx.mode.getStyleProgressionLevel())
+                tx.setCurrentLevel(style.getLatestOpenedProgressionLevel(g_currentVehicle.item))
         return
 
     def __onChange(self, *args):
         if args and args[0]['selectedLevel'] is not None:
             selectedLevel = int(args[0]['selectedLevel'])
             with self.viewModel.transaction() as tx:
-                tx.setSelectedLevel(args[0]['selectedLevel'])
+                tx.setSelectedLevel(selectedLevel)
             if self.__ctx is not None and self.__ctx.modeId == CustomizationModes.STYLED:
                 self.__ctx.mode.changeStyleProgressionLevel(selectedLevel)
             else:

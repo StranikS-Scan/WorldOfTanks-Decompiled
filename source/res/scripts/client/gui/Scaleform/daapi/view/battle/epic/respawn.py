@@ -168,27 +168,24 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
         return
 
     def setRespawnInfo(self, respawnInfo):
-        self.__lastRespawnPositions = respawnInfo.respawnZones
+        self.__lastRespawnPositions = respawnInfo.respawnZones if respawnInfo else []
         width, height = self.__mapDim
-        if self.__lastRespawnPositions is None or width * height == 0:
+        if width * height == 0:
             return
-        else:
 
-            def convert(val, dim):
-                return val / dim + 0.5
+        def convert(val, dim):
+            return val / dim + 0.5
 
-            def getX(p):
-                return convert(p[0], width)
+        def getX(p):
+            return convert(p[0], width)
 
-            def getY(p):
-                return convert(p[2], height)
+        def getY(p):
+            return convert(p[2], height)
 
-            self.as_setRespawnLocationsS([ self.__makePointVO(getX(point['position']), getY(point['position']), bool(point['isEnemyNear'])) for point in self.__lastRespawnPositions ])
-            positions = [ point['position'] for point in self.__lastRespawnPositions ]
-            if respawnInfo.chosenRespawnZone in positions:
-                self.__selectedPointID = positions.index(respawnInfo.chosenRespawnZone)
-                self.as_setSelectedLocationS(self.__selectedPointID)
-            return
+        self.as_setRespawnLocationsS([ self.__makePointVO(getX(point['position']), getY(point['position']), bool(point['isEnemyNear'])) for point in self.__lastRespawnPositions ])
+        positions = [ point['position'] for point in self.__lastRespawnPositions ]
+        self.__selectedPointID = positions.index(respawnInfo.chosenRespawnZone) if respawnInfo and respawnInfo.chosenRespawnZone in positions else -1
+        self.as_setSelectedLocationS(self.__selectedPointID)
 
     def setRespawnInfoExt(self, vehInfo, setupIndexes):
         self.__ammunitionPanel.setRespawnInfoExt(vehInfo, setupIndexes)

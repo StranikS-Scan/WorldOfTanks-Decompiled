@@ -79,6 +79,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, IMapboxController, IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
+from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 from skeletons.gui.server_events import IEventsCache
@@ -190,7 +191,8 @@ class AwardController(IAwardController, IGlobalListener):
          BadgesInvoiceHandler(self),
          MapboxProgressionRewardHandler(self),
          PurchaseHandler(self),
-         RenewableSubscriptionHandler(self)]
+         RenewableSubscriptionHandler(self),
+         LinkedSetQuestsHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -1449,6 +1451,8 @@ class BattlePassRewardHandler(ServiceChannelHandler):
         if 'reason' not in data:
             _logger.error('Invalid Battle Pass Reward data received! "reward" key missing!')
             return
+        elif data.get('reason') == BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE:
+            return
         else:
             for key in ('newLevel', 'prevLevel', 'chapter'):
                 if key not in data:
@@ -1705,3 +1709,25 @@ class PurchaseHandler(ServiceChannelHandler):
                         _logger.info('Reward list is empty, multiple awards window will not be shown for purchase %s', productCode)
             else:
                 _logger.debug('Product code is empty! Awards Window will not be shown!')
+
+
+class LinkedSetQuestsHandler(MultiTypeServiceChannelHandler):
+    __linkedSetCtrl = dependency.descriptor(ILinkedSetController)
+
+    def __init__(self, awardCtrl):
+        super(LinkedSetQuestsHandler, self).__init__((SYS_MESSAGE_TYPE.hangarQuests.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        quests = self.__getCompletedQuests(message.data)
+        self.__linkedSetCtrl.showAwardView(quests)
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        if not super(LinkedSetQuestsHandler, self)._needToShowAward(ctx):
+            return False
+        data = message.data
+        return self.__getCompletedQuests(data)
+
+    def __getCompletedQuests(self, data):
+        return [ qID for qID in data.get('completedQuestIDs', set()) if self.__linkedSetCtrl.isLinkedSetQuestWithAwards(qID) ]

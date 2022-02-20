@@ -32,12 +32,13 @@ class EpicRespawnsController(RespawnsController):
     def startControl(self):
         super(EpicRespawnsController, self).startControl()
         playerDataComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
-        if playerDataComp is not None:
+        if playerDataComp is None:
+            LOG_ERROR('Expected PlayerDataComponent not present!')
+            return
+        else:
             playerDataComp.onPlayerRespawnLaneUpdated += self.__onPlayerRespawnLaneUpdated
             playerDataComp.onPlayerGroupsChanged += self.__onPlayerGroupsChanged
-        else:
-            LOG_ERROR('Expected PlayerDataComponent not present!')
-        return
+            return
 
     def stopControl(self):
         super(EpicRespawnsController, self).stopControl()
@@ -49,12 +50,11 @@ class EpicRespawnsController(RespawnsController):
 
     def updateVehicleLimits(self, limits):
         super(EpicRespawnsController, self).updateVehicleLimits(limits)
-        self.__onPlayerGroupsChanged(None)
-        return
+        self.__onRespawnInfoUpdated()
 
     def updateRespawnInfo(self, respawnInfo):
         super(EpicRespawnsController, self).updateRespawnInfo(respawnInfo)
-        self.__onRespawnInfoUpdated(self.respawnInfo)
+        self.__onRespawnInfoUpdated()
 
     @staticmethod
     def requestLaneForRespawn(laneID):
@@ -68,39 +68,27 @@ class EpicRespawnsController(RespawnsController):
         super(EpicRespawnsController, self)._show()
         playerDataComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
         if playerDataComp is not None:
-            self.__onRespawnInfoUpdated(self.respawnInfo)
             self.__onPlayerRespawnLaneUpdated(playerDataComp.respawnLane)
-            self.__onPlayerGroupsChanged(None)
         return
 
     def __onPlayerRespawnLaneUpdated(self, laneID):
         for viewCmp in self._viewComponents:
             viewCmp.setSelectedLane(laneID)
 
-        self.__onPlayerGroupsChanged(None)
-        return
+        self.__onRespawnInfoUpdated()
 
-    def __onRespawnInfoUpdated(self, respawnInfo):
-        if not self.isRespawnVisible():
+    def __onPlayerGroupsChanged(self, _):
+        self.__onRespawnInfoUpdated()
+
+    def __onRespawnInfoUpdated(self):
+        arena = avatar_getter.getArena()
+        playerDataComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
+        if not arena or not playerDataComp or not self.isRespawnVisible():
             return
         else:
             for viewCmp in self._viewComponents:
-                viewCmp.setRespawnInfo(respawnInfo)
+                viewCmp.setRespawnInfo(self.respawnInfo)
 
-            self.__onPlayerGroupsChanged(None)
-            return
-
-    def __onPlayerGroupsChanged(self, _):
-        if not self.isRespawnVisible():
-            return
-        else:
-            arena = avatar_getter.getArena()
-            if arena is None:
-                return
-            playerDataComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
-            if playerDataComp is None:
-                LOG_ERROR('Expected PlayerDataComponent not present!')
-                return
             vehicleLimits = self.getLimits()
             limit = arena.arenaType.playerGroupLimit
             selectedVehicleID = 0

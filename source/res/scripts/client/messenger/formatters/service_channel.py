@@ -3724,15 +3724,16 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                     if not rewards:
                         callback([])
                     header, description, priorityLevel, additionalText = self.__makeAfterBattlePassPurchase(ctx)
-                elif reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE:
-                    template = 'BattlePassBuyMultipleMessage'
-                    header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyMultiple.text())
-                elif reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS:
-                    header, description, priorityLevel, additionalText = self.__makeAfterLevelsPurchase(ctx)
-                elif reason == BattlePassRewardReason.SELECT_CHAPTER:
-                    description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.activateChapter.text())
-                elif reason in (BattlePassRewardReason.INVOICE, BattlePassRewardReason.BATTLE):
-                    description, template, priorityLevel, additionalText, savedData = self.__makeAfterBattle(ctx)
+                else:
+                    if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE:
+                        callback([])
+                        return
+                    if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS:
+                        header, description, priorityLevel, additionalText = self.__makeAfterLevelsPurchase(ctx)
+                    elif reason == BattlePassRewardReason.SELECT_CHAPTER:
+                        description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.activateChapter.text())
+                    elif reason in (BattlePassRewardReason.INVOICE, BattlePassRewardReason.BATTLE):
+                        description, template, priorityLevel, additionalText, savedData = self.__makeAfterBattle(ctx)
                 formattedBonuses = BattlePassQuestAchievesFormatter.formatQuestAchieves(rewards, False)
                 if formattedBonuses is None:
                     formattedBonuses = ''
@@ -3812,6 +3813,24 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
             return ''
         formatter = getBWFormatter(Currency.GOLD)
         return g_settings.htmlTemplates.format(self.__GOLD_TEMPLATE_KEY, {Currency.GOLD: formatter(gold)})
+
+
+class BattlePassBoughtFormatter(WaitItemsSyncFormatter):
+
+    @async
+    @process
+    def format(self, message, callback=None):
+        isSynced = yield self._waitForSyncItems()
+        resultMessage = MessageData(None, None)
+        if message.data and isSynced and message.data.get('chapter') == 0:
+            template = 'BattlePassBuyMultipleMessage'
+            header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyMultiple.text())
+            formatted = g_settings.msgTemplates.format(template, ctx={'header': header})
+            settings = self._getGuiSettings(message, template)
+            settings.showAt = BigWorld.time()
+            resultMessage = MessageData(formatted, settings)
+        callback([resultMessage])
+        return
 
 
 class BattlePassReachedCapFormatter(WaitItemsSyncFormatter):

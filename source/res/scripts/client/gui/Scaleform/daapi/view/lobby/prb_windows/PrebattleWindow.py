@@ -55,14 +55,8 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
         self.destroy()
 
     def onSourceLoaded(self):
-        dispatcher = self.prbDispatcher
-        if dispatcher is not None:
-            state = dispatcher.getFunctionalState()
-            if not state.isInLegacy():
-                self.destroy()
-        else:
+        if not self._isInLegacyPreBattle():
             self.destroy()
-        return
 
     @storage_getter('users')
     def usersStorage(self):
@@ -119,7 +113,8 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
         return not (entity.getTeamState().isInQueue() and entity.getPlayerInfo().isReady() and assigned)
 
     def startListening(self):
-        self.startPrbListening()
+        if self._isInLegacyPreBattle():
+            self.startPrbListening()
         g_currentVehicle.onChanged += self._handleCurrentVehicleChanged
         g_messengerEvents.users.onUserActionReceived += self._onUserActionReceived
 
@@ -197,6 +192,10 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
             if window is not None:
                 window.destroy()
         return
+
+    def _isInLegacyPreBattle(self):
+        dispatcher = self.prbDispatcher
+        return dispatcher is not None and dispatcher.getFunctionalState().isInLegacy()
 
     def _setRosterList(self, rosters):
         raise NotImplementedError

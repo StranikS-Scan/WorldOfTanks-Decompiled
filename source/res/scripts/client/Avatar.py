@@ -662,16 +662,22 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         return True
                     if key == Keys.KEY_7:
                         self.base.setDevelopmentFeature(0, 'destroy_self', 0, '')
+                        return True
                     if key == Keys.KEY_8:
                         self.base.setDevelopmentFeature(0, 'kill_engine', 0, '')
+                        return True
                     if key == Keys.KEY_9:
                         self.base.setDevelopmentFeature(0, 'damage_device', 500, 'ammoBayHealth')
+                        return True
                     if key == Keys.KEY_0:
                         self.base.setDevelopmentFeature(0, 'damage_device', 500, 'fuelTankHealth')
+                        return True
                     if key == Keys.KEY_MINUS:
                         self.base.setDevelopmentFeature(0, 'damage_device', 500, 'engineHealth')
+                        return True
                     if key == Keys.KEY_F9:
                         self.__makeScreenShot()
+                        return True
                     if key == Keys.KEY_F:
                         vehicle = BigWorld.entity(self.playerVehicleID)
                         vehicle.filter.enableClientFilters = not vehicle.filter.enableClientFilters
@@ -711,6 +717,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         return True
                     if key == Keys.KEY_PAUSE:
                         self.base.setDevelopmentFeature(0, 'togglePauseAI', 0, '')
+                        return True
                     if key == Keys.KEY_Y:
                         ctrl = self.guiSessionProvider.shared.areaMarker
                         if ctrl:
@@ -730,6 +737,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         return True
                     if key == Keys.KEY_BACKSLASH:
                         self.base.setDevelopmentFeature(0, 'killEnemyTeam', 0, '')
+                        return True
                 if constants.HAS_DEV_RESOURCES and cmdMap.isFired(CommandMapping.CMD_SWITCH_SERVER_MARKER, key) and isDown:
                     self.gunRotator.showServerMarker = not self.gunRotator.showServerMarker
                     return True

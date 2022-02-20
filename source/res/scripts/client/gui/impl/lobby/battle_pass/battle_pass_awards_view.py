@@ -151,7 +151,11 @@ class BattlePassAwardsView(ViewImpl):
 
 
 class BattlePassAwardWindow(LobbyNotificationWindow):
-    __slots__ = ()
+    __slots__ = ('__params',)
 
     def __init__(self, bonuses, data):
-        super(BattlePassAwardWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattlePassAwardsView(bonuses=bonuses, data=data))
+        self.__params = dict(bonuses=bonuses, data=data)
+        super(BattlePassAwardWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattlePassAwardsView(**self.__params))
+
+    def isParamsEqual(self, *args, **kwargs):
+        return all((pValue in args or kwargs.get(pName) == pValue for pName, pValue in self.__params.iteritems()))

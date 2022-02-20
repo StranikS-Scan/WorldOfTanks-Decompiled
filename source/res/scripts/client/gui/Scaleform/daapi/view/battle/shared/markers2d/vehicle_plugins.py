@@ -330,8 +330,9 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             if isBerserk:
                 self.__updateMarkerTimer(vehicleID, handle, duration, BATTLE_MARKER_STATES.BERSERKER_STATE, showCountdown=False)
                 return
-        statusID = BATTLE_MARKER_STATES.INSPIRING_STATE if isSourceVehicle else BATTLE_MARKER_STATES.INSPIRED_STATE
-        if isInactivation is not None:
+        vehicle = BigWorld.entities.get(vehicleID)
+        if vehicle and vehicle.isAlive() and isInactivation is not None:
+            statusID = BATTLE_MARKER_STATES.INSPIRING_STATE if isSourceVehicle else BATTLE_MARKER_STATES.INSPIRED_STATE
             if isSourceVehicle:
                 hideStatusID = BATTLE_MARKER_STATES.INSPIRED_STATE
                 self.__updateMarkerTimer(vehicleID, handle, duration, statusID)
@@ -341,6 +342,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             self._updateStatusMarkerState(vehicleID, True, handle, statusID, duration, animated, isSourceVehicle)
         else:
             self._updateStatusMarkerState(vehicleID, False, handle, BATTLE_MARKER_STATES.INSPIRED_STATE, 0, animated, False)
+            self.__updateMarkerTimer(vehicleID, handle, 0, BATTLE_MARKER_STATES.INSPIRING_STATE)
             self._updateStatusMarkerState(vehicleID, False, handle, BATTLE_MARKER_STATES.INSPIRING_STATE, 0, animated, False)
             self._updateStatusMarkerState(vehicleID, False, handle, BATTLE_MARKER_STATES.BERSERKER_STATE, 0, animated, False)
         return

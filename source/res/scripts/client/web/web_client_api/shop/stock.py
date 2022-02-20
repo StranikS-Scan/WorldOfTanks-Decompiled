@@ -1,22 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/shop/stock.py
+import itertools
 from collections import namedtuple
 from functools import partial
 from WeakMethod import WeakMethodProxy
-from gui.Scaleform import MENU
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.server_events.recruit_helper import getAllRecruitsInfo
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Money
-from helpers import dependency, i18n
-from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA, RequestCriteria, PredicateCondition
-from soft_exception import SoftException
+from gui.shared.utils.requesters.ItemsRequester import PredicateCondition, REQ_CRITERIA, RequestCriteria
+from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
-from web.web_client_api import w2c, W2CSchema, Field
-from web.web_client_api.shop import formatters
+from soft_exception import SoftException
+from web.web_client_api import Field, W2CSchema, w2c
 from web.web_client_api.common import ShopItemType
+from web.web_client_api.shop import formatters
+from web.web_client_api.shop.crew import ShopCrewCriteria, makeTankman
 
-class PremiumPack(object):
+class _PremiumPack(object):
 
     def __init__(self, duration, cost, defCost):
         self.__duration = duration
@@ -36,15 +40,15 @@ class PremiumPack(object):
 
     @property
     def userName(self):
-        return i18n.makeString('#menu:premium/packet/days%s' % self.__duration)
+        return backport.text(R.strings.menu.premium.packet.dyn('days{}'.format(self.__duration))())
 
     @property
     def shortDescriptionSpecial(self):
-        return i18n.makeString(MENU.PREMIUM_PACKET_SHORTDESCRIPTIONSPECIAL)
+        return backport.text(R.strings.menu.premium.packet.shortDescriptionSpecial())
 
     @property
     def longDescriptionSpecial(self):
-        return i18n.makeString(MENU.PREMIUM_PACKET_LONGDESCRIPTIONSPECIAL)
+        return backport.text(R.strings.menu.premium.packet.longDescriptionSpecial())
 
 
 _InventoryEnhancements = namedtuple('_InventoryEnhancements', ('id', 'count'))
@@ -76,6 +80,7 @@ _ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: {'inventory': REQ_CRITERIA.INVENTOR
                         'skip_multinational_copies': REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP,
                         'collectible': REQ_CRITERIA.COLLECTIBLE,
                         'earn_crystals': REQ_CRITERIA.VEHICLE.EARN_CRYSTALS},
+ ShopItemType.CREW: {'premium': ShopCrewCriteria.PREMIUM},
  ShopItemType.EQUIPMENT: {'inventory': REQ_CRITERIA.INVENTORY,
                           'secret': REQ_CRITERIA.SECRET,
                           'hidden': REQ_CRITERIA.HIDDEN,
@@ -110,8 +115,13 @@ _ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: {'inventory': REQ_CRITERIA.INVENTOR
 
 class IdInListCriteria(RequestCriteria):
 
-    def __call__(self, idList):
-        self._conditions = (PredicateCondition(lambda x: not idList or x.intCD in idList),)
+    def __call__(self, idList, itemType=None):
+        getValue = (lambda item: item.groupName) if itemType == ShopItemType.CREW else (lambda item: item.intCD)
+
+        def isValidItem(item):
+            return not idList or getValue(item) in idList
+
+        self._conditions = (PredicateCondition(isValidItem),)
         return self
 
 
@@ -129,7 +139,7 @@ def _parseCriteriaSpec(itemType, spec, idList=None):
     typeCriteria = _ITEMS_CRITERIA_MAP[itemType]
     ids = sorted([ val.strip() for val in spec ] if spec else [])
     normalizedIds = [ i.replace('!', '') for i in ids ]
-    compoundCriteria = REQ_CRITERIA.EMPTY | ID_IN_LIST(idList) if idList else REQ_CRITERIA.EMPTY
+    compoundCriteria = REQ_CRITERIA.EMPTY | ID_IN_LIST(idList, itemType) if idList else REQ_CRITERIA.EMPTY
     for critId, normalizedCritId in zip(ids, normalizedIds):
         try:
             criteria = typeCriteria[normalizedCritId]
@@ -145,13 +155,13 @@ def _parseCriteriaSpec(itemType, spec, idList=None):
 class _GetItemsSchema(W2CSchema):
     type = Field(required=True, type=basestring, validator=lambda value, data: ShopItemType.hasValue(value))
     criteria = Field(required=False, type=list, validator=lambda value, data: _parseCriteriaSpec(data['type'], value))
-    fields = Field(required=False, type=list, validator=None)
-    id_list = Field(required=False, type=list, validator=None)
+    fields = Field(required=False, type=list)
+    id_list = Field(required=False, type=list)
 
 
 class ItemsWebApiMixin(object):
-    itemsCache = dependency.descriptor(IItemsCache)
-    goodiesCache = dependency.descriptor(IGoodiesCache)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self):
         super(ItemsWebApiMixin, self).__init__()
@@ -161,8 +171,7 @@ class ItemsWebApiMixin(object):
     def getItems(self, cmd):
         criteria = _parseCriteriaSpec(cmd.type, cmd.criteria, cmd.id_list)
         allowedFields = set(cmd.fields) if cmd.fields else None
-        result = [ self.__getFormatter(cmd.type, criteria).format(item, allowedFields) for item in self.__collectItems(cmd.type, criteria) ]
-        return result
+        return [ self.__getFormatter(cmd.type, criteria).format(item, allowedFields) for item in self.__collectItems(cmd.type, criteria) ]
 
     def __getFormatter(self, itemType, criteria):
         key = self.__makeFormatterKey(itemType, criteria)
@@ -172,6 +181,8 @@ class ItemsWebApiMixin(object):
         else:
             if itemType == ShopItemType.VEHICLE:
                 fmt = formatters.makeVehicleFormatter(criteria.lookInInventory())
+            elif itemType == ShopItemType.CREW:
+                fmt = formatters.makeShopTankmanFormatter()
             elif itemType == ShopItemType.EQUIPMENT:
                 fmt = formatters.makeEquipmentFormatter(partial(WeakMethodProxy(self.__getFittedVehicles), ShopItemType.EQUIPMENT))
             elif itemType == ShopItemType.DEVICE:
@@ -210,6 +221,8 @@ class ItemsWebApiMixin(object):
         return ','.join(entries)
 
     def __collectItems(self, itemType, criteria):
+        if itemType == ShopItemType.CREW:
+            return self.__collectCrew(criteria)
         if itemType == ShopItemType.BOOSTER:
             return self.__collectBoosters(criteria)
         if itemType == ShopItemType.PREMIUM:
@@ -221,43 +234,46 @@ class ItemsWebApiMixin(object):
         return self.__collectGuiItems(itemType, criteria)
 
     def __collectBoosters(self, criteria):
-        return self.goodiesCache.getBoosters(criteria=criteria).itervalues()
+        return self.__goodiesCache.getBoosters(criteria=criteria).itervalues()
 
     def __collectGuiItems(self, itemType, criteria):
-        return self.itemsCache.items.getItems(_GUI_ITEMS_TYPE_MAP[itemType], criteria).itervalues()
+        return self.__itemsCache.items.getItems(_GUI_ITEMS_TYPE_MAP[itemType], criteria).itervalues()
 
     def __collectPremiumPacks(self):
-        shop = self.itemsCache.items.shop
+        shop = self.__itemsCache.items.shop
         defaultPrem = shop.defaults.premiumCost
         discountedPrem = shop.getPremiumCostWithDiscount()
-        return [ PremiumPack(duration, discountedPrem.get(duration, cost), cost) for duration, cost in defaultPrem.iteritems() ]
+        return (_PremiumPack(duration, discountedPrem.get(duration, cost), cost) for duration, cost in defaultPrem.iteritems())
 
     def __collectInventoryEnhancements(self):
-        inventory = self.itemsCache.items.inventory
+        inventory = self.__itemsCache.items.inventory
         fromInventory = inventory.getInventoryEnhancements()
         inventoryEnhancements = {}
         for enhancements in fromInventory.itervalues():
             for enhancementID, count in enhancements.iteritems():
                 inventoryEnhancements[enhancementID] = count
 
-        return [ _InventoryEnhancements(enhancementID, count) for enhancementID, count in inventoryEnhancements.iteritems() ]
+        return (_InventoryEnhancements(enhancementID, count) for enhancementID, count in inventoryEnhancements.iteritems())
 
     def __collectInstalledEnhancements(self):
-        inventory = self.itemsCache.items.inventory
+        inventory = self.__itemsCache.items.inventory
         fromVehicles = inventory.getInstalledEnhancements()
         installedEnhancements = {}
         for vehs in fromVehicles.itervalues():
             for vehInvID, enhancements in vehs.iteritems():
-                vehInfo = self.itemsCache.items.getVehicle(vehInvID)
+                vehInfo = self.__itemsCache.items.getVehicle(vehInvID)
                 if vehInfo:
                     installedEnhancements[vehInfo.intCD] = enhancements
 
-        return [ _InstalledEnhancements(vehIntCD, enhancements) for vehIntCD, enhancements in installedEnhancements.iteritems() ]
+        return (_InstalledEnhancements(vehIntCD, enhancements) for vehIntCD, enhancements in installedEnhancements.iteritems())
+
+    def __collectCrew(self, criteria):
+        return (tankman for tankman in (makeTankman(crewItem) for crewItem in itertools.chain(self.__itemsCache.items.getTankmen().itervalues(), self.__itemsCache.items.getDismissedTankmen().itervalues(), getAllRecruitsInfo())) if criteria(tankman))
 
     def __getCompatVehicles(self, itemType, itemID):
-        cache = self.itemsCache.compatVehiclesCache.getCompatCache(self.itemsCache)
+        cache = self.__itemsCache.compatVehiclesCache.getCompatCache(self.__itemsCache)
         return cache[_GUI_ITEMS_TYPE_MAP[itemType]][itemID]
 
     def __getFittedVehicles(self, itemType, itemID):
-        cache = self.itemsCache.compatVehiclesCache.getFittedCache(self.itemsCache)
+        cache = self.__itemsCache.compatVehiclesCache.getFittedCache(self.__itemsCache)
         return cache[_GUI_ITEMS_TYPE_MAP[itemType]][itemID]

@@ -141,7 +141,9 @@ class _StyleBuyingPanelView(ViewImpl):
 
     def __applyStyle(self):
         if self.__level:
-            self.__customizationService.changeStyleProgressionLevelPreview(self.__level)
+            res = self.__customizationService.changeStyleProgressionLevelPreview(self.__level)
+            if res != self.__level:
+                self.__onVehicleChanged()
 
     def __onBuy(self, *_):
         if self.__dynPrice:

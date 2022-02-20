@@ -129,3 +129,8 @@ class DateFormatType(CONST_CONTAINER):
     SHORT_FORMAT = 0
     LONG_FORMAT = 1
     YEAR_MONTH = 2
+
+
+class CaseType(CONST_CONTAINER):
+    UPPERCASE = 0
+    LOWERCASE = 1

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/Tankman.py
 from helpers import i18n
 from items import tankmen, vehicles, ITEM_TYPE_NAMES, special_crew
-from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT
+from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT, makeHtmlString
 from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS
 from gui.shared.utils.functions import getShortDescr
 from gui.shared.gui_items import ItemsCollection, GUI_ITEM_TYPE
@@ -518,20 +518,15 @@ class TankmanSkill(GUIItem):
 
     @property
     def userName(self):
-        if self.name == BROTHERHOOD_SKILL_NAME:
-            if self.isPermanent:
-                return i18n.makeString('#item_types:tankman/skills/brotherhood_permanent')
         return getSkillUserName(self.name)
 
     @property
     def description(self):
-        if self.name == BROTHERHOOD_SKILL_NAME:
-            if self.isFemale:
-                return i18n.makeString('#item_types:tankman/skills/brotherhood_female_descr')
-            if self.isPermanent:
-                return i18n.makeString('#item_types:tankman/skills/brotherhood_permanent_descr')
-        elif self.name == 'commander_sixthSense' and self.isPermanent:
-            return i18n.makeString('#item_types:tankman/skills/commander_sixthSense_permanent_descr')
+        if self.name == BROTHERHOOD_SKILL_NAME and self.isFemale:
+            return backport.text(R.strings.item_types.tankman.skills.brotherhood_female_descr())
+        if self.isPermanent:
+            permanentDescr = makeHtmlString('html_templates:lobby/tooltips', 'skill_permanent', {'body': backport.text(R.strings.item_types.tankman.skills.permanent_descr())})
+            return getSkillUserDescription(self.name) + permanentDescr
         return getSkillUserDescription(self.name)
 
     @property

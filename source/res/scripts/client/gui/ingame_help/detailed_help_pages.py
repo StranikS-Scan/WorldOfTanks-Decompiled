@@ -153,7 +153,7 @@ def buildSPGPagesForOtherVehicle(headerTitle, tempPagesSettings):
      'tracers',
      'lamp',
      'intuition']
-    _addSimplePages(headerTitle, pagesPathName='spgRework', pages=pages, pageNames=pageNames, overrideTitle=backport.text(R.strings.ingame_help.detailsHelp.spgReworkTitle()))
+    _addSimplePages(headerTitle, pagesPathName='spgRework', pages=pages, pageNames=pageNames)
     tempPagesSettings[SPG_HELP_PAGES_LEFT_TO_SHOW] = max(0, tempPagesLeftToShow - 1)
     AccountSettings.setSettings(IN_GAME_HELP_PAGE_SECTION, tempPagesSettings)
     return pages
@@ -170,11 +170,9 @@ def _addPage(datailedList, headerTitle, title, descr, buttons, image, roleImage=
     datailedList.append(data)
 
 
-def _addSimplePages(headerTitle, pagesPathName, pages, pageNames, overrideTitle=None):
+def _addSimplePages(headerTitle, pagesPathName, pages, pageNames):
     textPath = R.strings.ingame_help.detailsHelp.dyn(pagesPathName)
     imagePath = R.images.gui.maps.icons.battleHelp.dyn(pagesPathName)
     if textPath and imagePath:
         for pageName in pageNames:
-            _addPage(pages, headerTitle, backport.text(textPath.dyn(pageName).title()) if overrideTitle is None else overrideTitle, backport.text(textPath.dyn(pageName).description()), [], backport.image(imagePath.dyn(pageName)()))
-
-    return
+            _addPage(pages, headerTitle, backport.text(textPath.dyn(pageName).title()), backport.text(textPath.dyn(pageName).description()), [], backport.image(imagePath.dyn(pageName)()))

@@ -27,3 +27,6 @@ class SystemLocale(PyObjectEntity):
 
     def getDateFormat(self, value, formatType=DateFormatType.SHORT_FORMAT):
         return self.proxy.getDateFormat(value, formatType)
+
+    def caseMap(self, value, caseType):
+        return self.proxy.caseMap(value, caseType)

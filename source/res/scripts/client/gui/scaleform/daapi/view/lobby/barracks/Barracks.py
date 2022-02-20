@@ -16,19 +16,19 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import recruit_helper
 from gui.server_events.events_dispatcher import showRecruitWindow
-from gui.shared import events, event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.formatters import text_styles, icons, moneyWithIcon
+from gui.shared.formatters import icons, moneyWithIcon, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmenComparator
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
-from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRestore
+from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanRestore, TankmanUnload
 from gui.shared.utils import decorators, flashObject2Dict
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shop import showBuyGoldForBerth
 from gui.sounds.ambients import LobbySubViewEnv
-from helpers import time_utils, dependency
+from helpers import dependency, time_utils
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.server_events import IEventsCache
@@ -180,10 +180,19 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         return
 
     def __updateLocationFilter(self, ctx):
-        if ctx is not None:
-            location = ctx.get('location', None)
-            if location is not None:
-                self.filter['location'] = location
+        data = ctx or {}
+        location = data.get('location')
+        if location is not None:
+            self.filter['location'] = location
+        nationID = data.get('nationID')
+        if nationID is not None:
+            self.filter['nationID'] = nationID
+        tankType = data.get('tankType')
+        if tankType is not None:
+            self.filter['tankType'] = tankType
+        role = data.get('role')
+        if role is not None:
+            self.filter['role'] = role
         return
 
     def __updateTanksList(self):

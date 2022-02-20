@@ -10,6 +10,7 @@ class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_DESCRLABEL_SHOP = '#vehicle_preview:header/backBtn/descrLabel/shop'
     HEADER_BACKBTN_DESCRLABEL_STORAGE = '#vehicle_preview:header/backBtn/descrLabel/storage'
     HEADER_BACKBTN_DESCRLABEL_ADVENTCALENDAR = '#vehicle_preview:header/backBtn/descrLabel/adventCalendar'
+    HEADER_BACKBTN_DESCRLABEL_EVENT = '#vehicle_preview:header/backBtn/descrLabel/event'
     HEADER_BACKBTN_DESCRLABEL_HANGAR = '#vehicle_preview:header/backBtn/descrLabel/hangar'
     HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE = '#vehicle_preview:header/backBtn/descrLabel/vehicleCompare'
     HEADER_BACKBTN_DESCRLABEL_REFERRALPROGRAM = '#vehicle_preview:header/backBtn/descrLabel/referralProgram'
@@ -113,6 +114,7 @@ class VEHICLE_PREVIEW(object):
      HEADER_BACKBTN_DESCRLABEL_SHOP,
      HEADER_BACKBTN_DESCRLABEL_STORAGE,
      HEADER_BACKBTN_DESCRLABEL_ADVENTCALENDAR,
+     HEADER_BACKBTN_DESCRLABEL_EVENT,
      HEADER_BACKBTN_DESCRLABEL_HANGAR,
      HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE,
      HEADER_BACKBTN_DESCRLABEL_REFERRALPROGRAM,

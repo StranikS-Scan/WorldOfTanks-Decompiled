@@ -118,6 +118,10 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_MODULE,
  ItemPackType.REFERRAL_AWARDS: TOOLTIPS_CONSTANTS.REFERRAL_AWARDS,
  ItemPackType.DEMOUNT_KIT: TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT,
  ItemPackType.CUSTOM_BATTLE_PASS_POINTS: TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS,
+ ItemPackType.SHOP_SALES_CURRENT_DISCOUNT: TOOLTIPS_CONSTANTS.CURRENT_DISCOUNT_INFO,
+ ItemPackType.SHOP_SALES_FREE_SHUFFLE: TOOLTIPS_CONSTANTS.SHOP_SALES_FREE_SHUFFLE_INFO,
+ ItemPackType.SHOP_SALES_PAID_SHUFFLE: TOOLTIPS_CONSTANTS.SHOP_SALES_PAID_SHUFFLE_INFO,
+ ItemPackType.SHOP_SALES_VOTE_FOR_DISCOUNT: TOOLTIPS_CONSTANTS.SHOP_SALES_VOTE_FOR_DISCOUNT,
  ItemPackType.LUNAR_NY_ENVELOPE: TOOLTIPS_CONSTANTS.SHOP_LUNAR_NY_ENVELOPE,
  ItemPackType.LUNAR_NY_PREREQUISITE: TOOLTIPS_CONSTANTS.SHOP_LUNAR_NY_PREREQUISITE}
 WULF_TOOLTIP_TYPES = (TOOLTIPS_CONSTANTS.SHOP_LUNAR_NY_ENVELOPE, TOOLTIPS_CONSTANTS.SHOP_LUNAR_NY_PREREQUISITE)
@@ -358,6 +362,34 @@ def showItemTooltip(toolTipMgr, rawItem, item):
         body = getItemDescription(rawItem, item)
         tooltip = makeTooltip(header, body)
         toolTipMgr.onCreateComplexTooltip(tooltip, 'INFO')
+    return
+
+
+def showCurrentDiscountTooltip(toolTipMgr, itemType, currentDiscount):
+    tooltipType = _TOOLTIP_TYPE.get(itemType)
+    if tooltipType is not None:
+        toolTipMgr.onCreateTypedTooltip(tooltipType, [currentDiscount], 'INFO')
+    return
+
+
+def showFreeShuffleTooltip(toolTipMgr, itemType, maxNumber, paidShuffleCost):
+    tooltipType = _TOOLTIP_TYPE.get(itemType)
+    if tooltipType is not None:
+        toolTipMgr.onCreateTypedTooltip(tooltipType, [maxNumber, paidShuffleCost], 'INFO')
+    return
+
+
+def showPaidShuffleTooltip(toolTipMgr, itemType):
+    tooltipType = _TOOLTIP_TYPE.get(itemType)
+    if tooltipType is not None:
+        toolTipMgr.onCreateTypedTooltip(tooltipType, [], 'INFO')
+    return
+
+
+def showVoteForDiscountTooltip(toolTipMgr, itemType, maxNumber, available):
+    tooltipType = _TOOLTIP_TYPE.get(itemType)
+    if tooltipType is not None:
+        toolTipMgr.onCreateTypedTooltip(tooltipType, [maxNumber, available], 'INFO')
     return
 
 

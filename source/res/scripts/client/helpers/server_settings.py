@@ -749,6 +749,30 @@ class _MapboxConfig(namedtuple('_MapboxConfig', ('isEnabled',
         return cls()
 
 
+class _ShopSalesEventConfig(namedtuple('_ShopSalesEventConfig', ('enabled',
+ 'url',
+ 'periodicRenewalPeriod',
+ 'periodicRenewalStartTime',
+ 'activePhaseStartTime',
+ 'activePhaseFinishTime',
+ 'eventFinishTime',
+ 'rerollPrice'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(enabled=False, url='', periodicRenewalStartTime=0, periodicRenewalPeriod=86400, activePhaseStartTime=0, activePhaseFinishTime=0, eventFinishTime=0, rerollPrice={})
+        defaults.update(kwargs)
+        return super(_ShopSalesEventConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
 class VehiclePostProgressionConfig(namedtuple('_VehiclePostProgression', ('isPostProgressionEnabled',
  'enabledFeatures',
  'forbiddenVehicles',
@@ -954,6 +978,7 @@ class ServerSettings(object):
         self.__vehiclePostProgressionConfig = VehiclePostProgressionConfig()
         self.__eventBattlesConfig = _EventBattlesConfig()
         self.__giftSystemConfig = GiftSystemConfig()
+        self.__shopSalesEventConfig = _ShopSalesEventConfig()
         self.__lunarNYEventConfig = _LunarNYEventConfig()
         self.set(serverSettings)
 
@@ -1055,6 +1080,8 @@ class ServerSettings(object):
             self.__eventBattlesConfig = _EventBattlesConfig.defaults()
         if Configs.GIFTS_CONFIG.value in self.__serverSettings:
             self.__giftSystemConfig = makeTupleByDict(GiftSystemConfig, {'events': self.__serverSettings[Configs.GIFTS_CONFIG.value]})
+        if constants.SHOP_SALES_CONFIG in self.__serverSettings:
+            self.__shopSalesEventConfig = makeTupleByDict(_ShopSalesEventConfig, self.__serverSettings[constants.SHOP_SALES_CONFIG])
         self.__updateLunarNYEventConfig(self.__serverSettings)
         self.onServerSettingsChange(serverSettings)
 
@@ -1130,6 +1157,9 @@ class ServerSettings(object):
             self.__updateGiftSystemConfig(serverSettingsDiff)
         self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
+        if constants.SHOP_SALES_CONFIG in serverSettingsDiff:
+            self.__updateShopSalesEvent(serverSettingsDiff)
+            self.__serverSettings[constants.SHOP_SALES_CONFIG] = serverSettingsDiff[constants.SHOP_SALES_CONFIG]
         self.__updateLunarNYEventConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
@@ -1242,6 +1272,10 @@ class ServerSettings(object):
     @property
     def giftSystemConfig(self):
         return self.__giftSystemConfig
+
+    @property
+    def shopSalesEventConfig(self):
+        return self.__shopSalesEventConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -1672,6 +1706,9 @@ class ServerSettings(object):
 
     def __updateGiftSystemConfig(self, serverSettingsDiff):
         self.__giftSystemConfig = self.__giftSystemConfig.replace({'events': serverSettingsDiff[Configs.GIFTS_CONFIG.value]})
+
+    def __updateShopSalesEvent(self, targetSettings):
+        self.__shopSalesEventConfig = self.__shopSalesEventConfig.replace(targetSettings[constants.SHOP_SALES_CONFIG])
 
 
 def serverSettingsChangeListener(*configKeys):

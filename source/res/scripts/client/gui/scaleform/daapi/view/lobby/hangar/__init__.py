@@ -66,6 +66,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.craftmachine_entry_point import CraftMachineEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.mapbox_entry_point import MapBoxEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.marathon_entry_point import MarathonEntryPoint
+    from gui.impl.lobby.shop_sales.entry_point import ShopSalesEntryPointInject
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', WindowLayer.SUB_VIEW, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STRONGHOLD_ADS, StrongholdAdsView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.STRONGHOLD_ADS, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -109,7 +110,8 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.ENVELOPES_ENTRANCE_POINT, EnvelopesEntrancePointInjectWidget, None),
      ComponentSettings(HANGAR_ALIASES.LUNAR_NY_MAIN_WIDGET_UI, LunarNYMainWidgetInject, None),
      ComponentSettings(HANGAR_ALIASES.NY_MAIN_WIDGET_UI, NyMainWidgetInject, None),
-     ComponentSettings(HANGAR_ALIASES.LOOTBOXES_ENTRANCE_POINT, LootboxesEntrancePointInjectWidget, None))
+     ComponentSettings(HANGAR_ALIASES.LOOTBOXES_ENTRANCE_POINT, LootboxesEntrancePointInjectWidget, None),
+     ComponentSettings(HANGAR_ALIASES.SHOP_SALES_ENTRY_POINT, ShopSalesEntryPointInject, None))
 
 
 def getBusinessHandlers():

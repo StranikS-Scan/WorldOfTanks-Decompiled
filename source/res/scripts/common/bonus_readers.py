@@ -861,9 +861,12 @@ def __readBonus_optionalData(config, bonusReaders, section, eventType):
         properties['compensation'] = section['compensation'].asBool
     if section.has_key('shouldCompensated'):
         properties['shouldCompensated'] = section['shouldCompensated'].asBool
-    if IS_DEVELOPMENT:
-        if section.has_key('name'):
-            properties['name'] = section['name'].asString
+    if section.has_key('name'):
+        properties['name'] = section['name'].asString
+    if section.has_key('isAvailable'):
+        properties['isAvailable'] = section['isAvailable'].asBool
+    if section.has_key('playerMaxLimit'):
+        properties['playerMaxLimit'] = section['playerMaxLimit'].asInt
     if section.has_key('limitID'):
         limitID = section['limitID'].asString
         limitConfig = config.get('limits', {}).get(limitID, {})
@@ -1087,7 +1090,9 @@ _RESERVED_NAMES = frozenset(['config',
  'name',
  'shouldCompensated',
  'probabilityStageDependence',
- 'bonusProbability'])
+ 'bonusProbability',
+ 'isAvailable',
+ 'playerMaxLimit'])
 SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
 __SORTED_BONUSES = sorted(SUPPORTED_BONUSES)
 SUPPORTED_BONUSES_IDS = dict(((n, i) for i, n in enumerate(__SORTED_BONUSES)))

@@ -53,3 +53,4 @@ class HANGAR_ALIASES(object):
     POST_PROGRESSION_CMP_INJECT = 'PostProgressionCmpInject'
     POST_PROGRESSION_VIEW = 'VehPostProgressionView'
     POST_PROGRESSION_VEHICLE_PARAMS = 'PostProgressionVehicleParams'
+    SHOP_SALES_ENTRY_POINT = 'shopSalesEntryPoint'

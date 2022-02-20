@@ -236,6 +236,8 @@ CMD_LOOTBOX_OPEN_BY_SENDER = 20091
 CMD_TELECOM_RENTALS_VEHICLE_RENT_AMOUNT = 10091
 CMD_TELECOM_RENTALS_TOGGLE_ACTIVE = 10092
 CMD_TELECOM_RENTALS_RENT_TANK = 10093
+CMD_BUNDLE_GET = 10094
+CMD_BUNDLE_REROLL = 10095
 CMD_NEW_YEAR_SLOT_FILL = 20161
 CMD_NEW_YEAR_CRAFT = 20162
 CMD_NEW_YEAR_BREAK_TOYS = 20163
@@ -256,6 +258,10 @@ CMD_LOOTBOX_RESET_STATS = 20178
 CMD_NEW_YEAR_ADD_TOY_FRAGMENTS_DEV = 20179
 PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
+if not KEYS_ARE_UNIQUE:
+    from collections import Counter
+    sorted_commands = Counter((key for key in globals() if key.startswith('CMD_')))
+    duplicates = set((key for key in globals() if key.startswith('CMD_'))) - set((v for v in PLAYER_CMD_NAMES.values()))
 
 class LOCK_REASON:
     NONE = 0

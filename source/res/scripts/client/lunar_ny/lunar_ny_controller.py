@@ -4,6 +4,8 @@ import Event
 import Settings
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import IS_LUNAR_NY_INTRO_VIEWED, IS_LUNAR_NY_INTRO_VIDEO_VIEWED
+from adisp import process, async
+from gui.game_control.links import URLMacros
 from gui.impl.gen import R
 from gui.impl.lobby.lunar_ny.lunar_ny_helpers import showLunarNYIntroWindow, showVideoViewWithNotificationManager
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
@@ -19,7 +21,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from lunar_ny.lunar_ny_sounds import LunarNYVideoStartStopHandler, PausedSoundManager
 
 class LunarNYController(ILunarNYController):
-    __slots__ = ('__statusChangeNotifier', '__eManager', '__giftSystem', '__receivedEnvelopes', '__charms', '__progression', 'onStatusChange')
+    __slots__ = ('__statusChangeNotifier', '__eManager', '__giftSystem', '__receivedEnvelopes', '__charms', '__progression', '__urlMacros', 'onStatusChange')
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
@@ -32,8 +34,10 @@ class LunarNYController(ILunarNYController):
         self.__charms = CharmsSubController()
         self.__progression = ProgressionSubController(self.__eManager)
         self.__videoStartStopHandler = LunarNYVideoStartStopHandler()
+        self.__urlMacros = URLMacros()
 
     def fini(self):
+        self.__urlMacros.clear()
         self.__stop()
 
     def onDisconnected(self):
@@ -81,8 +85,13 @@ class LunarNYController(ILunarNYController):
     def getInfoVideoURL(self):
         return self.__getConfig().infoVideoURL
 
-    def getEnvelopesExternalShopURL(self):
-        return self.__getConfig().envelopesExternalShopURL
+    @async
+    @process
+    def getEnvelopesExternalShopURL(self, callback=None):
+        url = yield self.__urlMacros.parse(self.__getConfig().envelopesExternalShopURL)
+        if callback is not None:
+            callback(url)
+        return
 
     def getEnvelopePurchasesLimit(self):
         return self.__getConfig().envelopePurchasesLimit

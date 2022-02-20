@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/lunar_ny/lunar_ny_info_view.py
+from adisp import process
 from gui.impl.gen.view_models.views.lobby.lunar_ny.main_view.info.info_model import InfoModel, Link
 from gui.impl.lobby.lunar_ny.lunar_ny_base_main_view_component import BaseLunarNYViewComponent
 from gui.shared import g_eventBus
@@ -31,12 +32,14 @@ class LunarNYInfoView(BaseLunarNYViewComponent[InfoModel]):
     def _removeListeners(self):
         self._viewModel.onLinkClick -= self.__onLinkClick
 
+    @process
     def __onLinkClick(self, args):
         link = args.get('link', None)
         if link == Link.LUNARRULES:
             g_eventBus.handleEvent(OpenLinkEvent(OpenLinkEvent.SPECIFIED, self.__lunarNYController.getEventRulesURL()))
         elif link == Link.ENVELOPESSHOP:
-            g_eventBus.handleEvent(OpenLinkEvent(OpenLinkEvent.SPECIFIED, self.__lunarNYController.getEnvelopesExternalShopURL()))
+            url = yield self.__lunarNYController.getEnvelopesExternalShopURL()
+            g_eventBus.handleEvent(OpenLinkEvent(OpenLinkEvent.SPECIFIED, url))
         elif link == Link.INFOVIDEO:
             showBrowserOverlayView(self.__lunarNYController.getInfoVideoURL())
         return

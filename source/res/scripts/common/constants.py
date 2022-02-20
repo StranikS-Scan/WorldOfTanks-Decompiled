@@ -811,6 +811,7 @@ ACTIVE_TEST_CONFIRMATION_CONFIG = 'active_test_confirmation_config'
 MISC_GUI_SETTINGS = 'misc_gui_settings'
 META_GAME_SETTINGS = 'meta_game_settings'
 MAPS_TRAINING_ENABLED_KEY = 'isMapsTrainingEnabled'
+SHOP_SALES_CONFIG = 'shop_sales_event_config'
 
 class Configs(enum.Enum):
     BATTLE_ROYALE_CONFIG = 'battle_royale_config'
@@ -1592,6 +1593,7 @@ class REQUEST_COOLDOWN:
     GIFTS_HISTORY_PAGE = 1.0
     GIFTS_HISTORY_LOAD = 1.0
     LUNAR_NEW_YEAR = 0.4
+    BUNDLE = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2854,13 +2856,6 @@ BATTLE_MODE_VEHICLE_TAGS = {'event_battles',
  'battle_royale',
  'clanWarsBattles'}
 
-@enum.unique
-class EventPhase(enum.Enum):
-    NOT_STARTED = 0
-    IN_PROGRESS = 1
-    FINISHED = 2
-
-
 class ACCOUNT_KICK_REASONS(object):
     UNKNOWN = 0
     LOGIN_TO_OTHER_GAME = 1
@@ -2904,3 +2899,10 @@ class BATTLE_MODE_LOCK_MASKS(object):
     @staticmethod
     def getUnpackedVehLockMode(vehLockMode, vehType):
         return BATTLE_MODE_LOCK_MASKS.getClanRentedVehLockMode(vehLockMode) if 'clanWarsBattles' in vehType.tags else BATTLE_MODE_LOCK_MASKS.getCommonVehLockMode(vehLockMode)
+
+
+@enum.unique
+class EventPhase(enum.Enum):
+    NOT_STARTED = 0
+    IN_PROGRESS = 1
+    FINISHED = 2

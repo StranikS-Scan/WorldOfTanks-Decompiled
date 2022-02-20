@@ -117,6 +117,10 @@ class ItemPackType(CONST_CONTAINER):
     BLUEPRINT_ANY = 'blueprint/any'
     DEMOUNT_KIT = 'demountKit'
     REFERRAL_AWARDS = 'referral_awards'
+    SHOP_SALES_CURRENT_DISCOUNT = 'shop_sales/current_discount'
+    SHOP_SALES_FREE_SHUFFLE = 'shop_sales/free_shuffle'
+    SHOP_SALES_PAID_SHUFFLE = 'shop_sales/paid_shuffle'
+    SHOP_SALES_VOTE_FOR_DISCOUNT = 'shop_sales/vote_for_discount'
     LUNAR_NY_ENVELOPE = 'lunarNY_envelop'
     LUNAR_NY_PREREQUISITE = 'lunarNY_prerequisite'
 

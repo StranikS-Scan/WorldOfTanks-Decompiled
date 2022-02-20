@@ -69,6 +69,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
     from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     from gui.game_control.wot_plus_controller import WotPlusNotificationController
+    from gui.game_control.shop_sales_event_controller import ShopSalesEventController as _ShopSalesController
     from gui.game_control.telecom_rentals_controller import TelecomRentalsNotificationController
     from gui.game_control.event_battles_controller import EventBattlesController
     from gui.game_control.gift_system_controller import GiftSystemController
@@ -155,3 +156,4 @@ def getGameControllersConfig(manager):
     _config(_NYInterface.IJukeboxController, _JukeboxController())
     _config(_NYInterface.ICelebritySceneController, _CelebritySceneController())
     _config(_NYInterface.INewYearCraftMachineController, _NewYearCraftMachineController())
+    _config(_interface.IShopSalesEventController, _ShopSalesController())

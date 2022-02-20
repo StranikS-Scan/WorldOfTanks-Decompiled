@@ -13,6 +13,8 @@ from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass import BattlePa
 from gui.Scaleform.daapi.view.meta.TankCarouselFilterPopoverMeta import TankCarouselFilterPopoverMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
+from gui.shared import g_eventBus
+from gui.shared.events import CarouselEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.impl import backport
@@ -269,6 +271,7 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
     def switchCarouselType(self, selected):
         setting = self.__settingsCore.options.getSetting(settings_constants.GAME.CAROUSEL_TYPE)
         self.__carouselRowCount = setting.CAROUSEL_TYPES.index(setting.OPTIONS.DOUBLE if selected else setting.OPTIONS.SINGLE)
+        g_eventBus.handleEvent(CarouselEvent(eventType=CarouselEvent.CAROUSEL_TYPE_WAS_CHANGED, ctx={CarouselEvent.CAROUSEL_TYPE_ARG: setting.CAROUSEL_TYPES[self.__carouselRowCount]}))
         self._carousel.setRowCount(self.__carouselRowCount + 1)
 
     def _getInitialVO(self, filters, xpRateMultiplier):

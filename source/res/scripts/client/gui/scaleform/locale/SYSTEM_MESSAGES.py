@@ -1134,6 +1134,9 @@ class SYSTEM_MESSAGES(object):
     MAPS_BLACK_LIST_SWITCH_OFF_BODY = '#system_messages:maps_black_list/switch_off/body'
     MAPS_BLACK_LIST_SWITCH_ON_TITLE = '#system_messages:maps_black_list/switch_on/title'
     MAPS_BLACK_LIST_SWITCH_ON_BODY = '#system_messages:maps_black_list/switch_on/body'
+    SHOP_SALES_EVENT_SUCCESS_FREE = '#system_messages:shop_sales_event/success_free'
+    SHOP_SALES_EVENT_SUCCESS = '#system_messages:shop_sales_event/success'
+    SHOP_SALES_EVENT_ERROR = '#system_messages:shop_sales_event/error'
     PREMIUM_QUESTS_SWITCH_OFF_TITLE = '#system_messages:premium_quests/switch_off/title'
     PREMIUM_QUESTS_SWITCH_OFF_BODY = '#system_messages:premium_quests/switch_off/body'
     PREMIUM_QUESTS_SWITCH_ON_TITLE = '#system_messages:premium_quests/switch_on/title'
@@ -2530,6 +2533,9 @@ class SYSTEM_MESSAGES(object):
      MAPS_BLACK_LIST_SWITCH_OFF_BODY,
      MAPS_BLACK_LIST_SWITCH_ON_TITLE,
      MAPS_BLACK_LIST_SWITCH_ON_BODY,
+     SHOP_SALES_EVENT_SUCCESS_FREE,
+     SHOP_SALES_EVENT_SUCCESS,
+     SHOP_SALES_EVENT_ERROR,
      PREMIUM_QUESTS_SWITCH_OFF_TITLE,
      PREMIUM_QUESTS_SWITCH_OFF_BODY,
      PREMIUM_QUESTS_SWITCH_ON_TITLE,

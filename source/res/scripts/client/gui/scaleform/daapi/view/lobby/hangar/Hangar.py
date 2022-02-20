@@ -49,7 +49,7 @@ from helpers.CallbackDelayer import CallbackDelayer
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IIGRController, IBattlePassController, IBattleRoyaleController, IBootcampController, IMapboxController, IMarathonEventsController
+from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IIGRController, IBattlePassController, IBattleRoyaleController, IBootcampController, IMapboxController, IShopSalesEventController, IMarathonEventsController
 from lunar_ny import ILunarNYController
 from skeletons.gui.game_control import IFestivityController
 from skeletons.gui.impl import IGuiLoader
@@ -100,6 +100,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _festivityController = dependency.descriptor(IFestivityController)
     _offersBannerController = dependency.descriptor(IOffersBannerController)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
+    __shopSales = dependency.descriptor(IShopSalesEventController)
     __lunarNYController = dependency.descriptor(ILunarNYController)
     __marathonCtrl = dependency.descriptor(IMarathonEventsController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
@@ -168,6 +169,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.epicController.onPrimeTimeStatusUpdated += self.__onEpicBattleUpdated
         self.epicController.onGameModeStatusTick += self.__updateAlertMessage
         self._promoController.onNewTeaserReceived += self.__onTeaserReceived
+        self.__shopSales.onStateChanged += self.__updateShopSalesEventEntryPoint
+        self.__shopSales.onPhaseChanged += self.__updateShopSalesEventEntryPoint
         self.hangarSpace.setVehicleSelectable(True)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         g_playerEvents.onPrebattleInvitationAccepted += self.__onPrebattleInvitationAccepted
@@ -181,6 +184,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.battlePassController.onSeasonStateChange += self.__switchCarousels
         self.startGlobalListening()
         self.__updateAll()
+        self.__updateShopSalesEventEntryPoint()
         self.__updateEnvelopesEntryPoint()
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -220,6 +224,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.epicController.onPrimeTimeStatusUpdated -= self.__onEpicBattleUpdated
         self.epicController.onGameModeStatusTick -= self.__updateAlertMessage
         self._promoController.onNewTeaserReceived -= self.__onTeaserReceived
+        self.__shopSales.onPhaseChanged -= self.__updateShopSalesEventEntryPoint
+        self.__shopSales.onStateChanged -= self.__updateShopSalesEventEntryPoint
         if self.__teaser is not None:
             self.__teaser.stop()
             self.__teaser = None
@@ -675,6 +681,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __updateFestivityState(self):
         self.as_setLootboxesVisibleS(self._festivityController.isEnabled())
+
+    def __updateShopSalesEventEntryPoint(self):
+        isEnabled = self.__shopSales.isInEvent and not self.bootcampController.isInBootcamp()
+        self.as_setShopSalesVisibleS(isEnabled)
 
     def __lunarNYStatusChange(self):
         self.__updateEnvelopesEntryPoint()

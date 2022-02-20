@@ -1051,6 +1051,12 @@ class MESSENGER(object):
     PLATFORMCURRENCYMSG_CURRENCYUPDATE_DEBITED_SACOIN = '#messenger:platformCurrencyMsg/currencyUpdate/debited/sacoin'
     PLATFORMCURRENCYMSG_INVOICE_ACCRUED_SACOIN = '#messenger:platformCurrencyMsg/invoice/accrued/sacoin'
     PLATFORMCURRENCYMSG_INVOICE_DEBITED_SACOIN = '#messenger:platformCurrencyMsg/invoice/debited/sacoin'
+    SERVICECHANNELMESSAGES_SHOPSALESEVENT_DISABLEDBYSWITCH = '#messenger:serviceChannelMessages/shopSalesEvent/disabledBySwitch'
+    SERVICECHANNELMESSAGES_SHOPSALESEVENT_ENABLEDBYSWITCH = '#messenger:serviceChannelMessages/shopSalesEvent/enabledBySwitch'
+    SERVICECHANNELMESSAGES_SHOPSALESEVENT_ACTIVEPHASESTARTED = '#messenger:serviceChannelMessages/shopSalesEvent/activePhaseStarted'
+    SERVICECHANNELMESSAGES_SHOPSALESEVENT_ACTIVEPHASEFINISHED = '#messenger:serviceChannelMessages/shopSalesEvent/activePhaseFinished'
+    SERVICECHANNELMESSAGES_SHOPSALESEVENT_EVENTFINISHED = '#messenger:serviceChannelMessages/shopSalesEvent/eventFinished'
+    SERVICECHANNELMESSAGES_GOTOEVENTBUTTON = '#messenger:serviceChannelMessages/goToEventButton'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

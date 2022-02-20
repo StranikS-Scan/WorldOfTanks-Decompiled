@@ -7,6 +7,8 @@ from typing import Optional, Dict
 from account_shared import getCustomizationItem
 from items.components.ny_constants import CurrentNYConstants, PREV_NY_TOYS_COLLECTIONS, YEARS_INFO
 from soft_exception import SoftException
+from items import tankmen
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from battle_pass_common import NON_VEH_CD
 
 def _packTrack(track):
@@ -305,7 +307,7 @@ class BonusItemsCache(object):
 
 class BonusNodeAcceptor(object):
 
-    def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None, probabilityStage=0, logTracker=None, shouldResetUsedLimits=True):
+    def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None, probabilityStage=0, logTracker=None, shouldResetUsedLimits=True, namesBlackList=None, customIsAcceptableCheckers=None):
         self.__account = account
         self.__limitsConfig = bonusConfig.get('limits', None) if bonusConfig else None
         self.__maxStage = bonusConfig.get('probabilityStageCount', 1) - 1 if bonusConfig else 0
@@ -323,6 +325,8 @@ class BonusNodeAcceptor(object):
         self.__logTracker = logTracker
         self.__usedLimits = set()
         self.__shouldResetUsedLimits = shouldResetUsedLimits
+        self.__namesBlackList = namesBlackList if namesBlackList else set()
+        self.__customIsAcceptableCheckers = customIsAcceptableCheckers if customIsAcceptableCheckers else []
         self.__initCounters(counters or {})
         return
 
@@ -354,9 +358,24 @@ class BonusNodeAcceptor(object):
         return self.__bonusCache
 
     def isAcceptable(self, bonusNode, checkInventory=True):
+        return self._isNodeAcceptable(bonusNode, checkInventory)
+
+    def _isNodeAcceptable(self, bonusNode, checkInventory):
         if self.isLimitReached(bonusNode):
             return False
-        return False if checkInventory and self.isBonusExists(bonusNode) else True
+        elif checkInventory and self.isBonusExists(bonusNode):
+            return False
+        elif not self.isAvailable(bonusNode):
+            return False
+        else:
+            nodeName = bonusNode.get('properties', {}).get('name', None)
+            if nodeName and nodeName in self.__namesBlackList:
+                return False
+            for check in self.__customIsAcceptableCheckers:
+                if not check(bonusNode):
+                    return False
+
+            return True
 
     def getNodesForVisit(self, ids):
         return self.__shouldVisitNodes.intersection(ids) if ids and self.__shouldVisitNodes else None
@@ -399,6 +418,9 @@ class BonusNodeAcceptor(object):
                     return True
 
         return False
+
+    def isAvailable(self, bonusNode):
+        return bonusNode.get('properties', {}).get('isAvailable', True)
 
     def getProbabilityStages(self):
         return self.__probabilitiesStage
@@ -562,12 +584,18 @@ class ProbabilityVisitor(NodeVisitor):
         super(ProbabilityVisitor, self).__init__(BONUS_MERGERS, args)
         self.__bonusTrack = []
         self.__nodeAcceptor = nodeAcceptor
+        self.__oneOfSelectedOptionalName = None
+        return
 
     def getBonusTrack(self):
         return _packTrack(self.__bonusTrack)
 
+    def getOneOfSelectedName(self):
+        return self.__oneOfSelectedOptionalName
+
     def onOneOf(self, storage, values):
         rand = random.random()
+        self.__oneOfSelectedOptionalName = None
         limitIDs, bonusNodes = values
         acceptor = self.__nodeAcceptor
         shouldVisitNodes = acceptor.getNodesForVisit(limitIDs)
@@ -635,7 +663,11 @@ class ProbabilityVisitor(NodeVisitor):
 
         self.__trackChoice(True)
         acceptor.accept(selectedValue)
+        optionalName = selectedValue.get('properties', {}).get('name', None)
+        if optionalName:
+            self.__oneOfSelectedOptionalName = optionalName
         self._walkSubsection(storage, selectedValue)
+        return
 
     def onAllOf(self, storage, values):
         acceptor = self.__nodeAcceptor
@@ -711,3 +743,47 @@ class StripVisitor(NodeVisitor):
             strippedValues.append(stippedValue)
 
         storage['groups'] = strippedValues
+
+
+class AdvancedBonusNodeAcceptor(BonusNodeAcceptor):
+    MAX_RECURSION_DEPTH = 3
+
+    def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None, probabilityStage=0, logTracker=None, shouldResetUsedLimits=True, namesBlackList=None, customIsAcceptableCheckers=None):
+        self.__acceptProcessors = {'oneof': self._isOneOfAcceptable,
+         'allof': self._isAllOfAcceptable,
+         'groups': self._isGroupAcceptable}
+        super(AdvancedBonusNodeAcceptor, self).__init__(account, bonusConfig, counters, bonusCache, probabilityStage, logTracker, shouldResetUsedLimits, namesBlackList, customIsAcceptableCheckers)
+
+    def isAcceptable(self, bonusNode, checkInventory=True):
+        return self._isAcceptable(bonusNode, checkInventory)
+
+    def _isAcceptable(self, bonusNode, checkInventory, currentRecursionDepth=0):
+        if currentRecursionDepth > self.MAX_RECURSION_DEPTH:
+            return False
+        if not self._isNodeAcceptable(bonusNode, checkInventory):
+            return False
+        currentRecursionDepth += 1
+        acceptProcessors = self.__acceptProcessors
+        return all((acceptProcessors[bonusName](bonusValue, checkInventory, currentRecursionDepth) for bonusName, bonusValue in bonusNode.iteritems() if bonusName in acceptProcessors))
+
+    def _isOneOfAcceptable(self, values, checkInventory, currentRecursionDepth):
+        _, values = values
+        for _, _, _, bonusValue in values:
+            if self._isAcceptable(bonusValue, checkInventory, currentRecursionDepth):
+                return True
+
+        return False
+
+    def _isAllOfAcceptable(self, values, checkInventory, currentRecursionDepth):
+        for _, _, _, bonusValue in values:
+            if not self._isAcceptable(bonusValue, checkInventory, currentRecursionDepth):
+                return False
+
+        return True
+
+    def _isGroupAcceptable(self, values, checkInventory, currentRecursionDepth):
+        for bonusValue in values:
+            if not self._isAcceptable(bonusValue, checkInventory, currentRecursionDepth):
+                return False
+
+        return True

@@ -21,6 +21,7 @@ from web.web_client_api.ui.missions import MissionsWebApiMixin, PersonalMissions
 from web.web_client_api.ui.notification import NotificationWebApiMixin
 from web.web_client_api.ui.premium import PremiumViewsWebApiMixin
 from web.web_client_api.ui.profile import ProfileTabWebApiMixin, ProfileWindowWebApiMixin
+from web.web_client_api.ui.shop_sales_event import OpenShopSalesEventViewWebApiMixin
 from web.web_client_api.ui.squad import SquadWebApiMixin
 from web.web_client_api.ui.storage import StorageWebApiMixin
 from web.web_client_api.ui.strongholds import StrongholdsWebApiMixin
@@ -37,7 +38,7 @@ from web.web_client_api.ui.frontline import OpenFrontLinePagesMixin
 from web.web_client_api.ui.referral import ReferralProgramPagesMixin
 
 @w2capi(name='open_window', key='window_id')
-class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin, DialogsWebApiMixin, OpenRankedPagesMixin):
+class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin, DialogsWebApiMixin, OpenRankedPagesMixin, OpenShopSalesEventViewWebApiMixin):
     pass
 
 

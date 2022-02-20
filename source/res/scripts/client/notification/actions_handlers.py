@@ -7,6 +7,7 @@ from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from adisp import process
 from async import async, await
+from constants import EventPhase
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gifts.gifts_common import GiftEventID
 from gui import DialogsInterface, makeHtmlString, SystemMessages
@@ -61,7 +62,7 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, IBattlePassController, IGiftSystemController, IWOController
+from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, IBattlePassController, IGiftSystemController, IShopSalesEventController, IWOController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
@@ -1223,6 +1224,23 @@ class _NewYearCollectionCompleteHandler(_ActionHandler):
         return
 
 
+class _OpenShopSalesEventMainView(_NavigationDisabledActionHandler):
+    __shopSales = dependency.descriptor(IShopSalesEventController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        canShow = self.__shopSales.isEnabled and self.__shopSales.isInEvent and self.__shopSales.currentEventPhase != EventPhase.NOT_STARTED
+        if canShow:
+            self.__shopSales.openMainView()
+
+
 class _WinterOfferToAuctionHandler(_NavigationDisabledActionHandler):
     __woController = dependency.descriptor(IWOController)
 
@@ -1289,6 +1307,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _NewYearOpenSpecialBoxPopUpHandler,
  _NewYearOpenSpecialBoxEntryHandler,
  _NewYearCollectionCompleteHandler,
+ _OpenShopSalesEventMainView,
  _WinterOfferToAuctionHandler,
  _OpenEnvelopesStorage,
  _OpenEnvelopesStorageBySender,

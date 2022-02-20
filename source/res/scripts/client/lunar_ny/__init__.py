@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/lunar_ny/__init__.py
 import typing
+from adisp import process, async
 from skeletons.gui.game_control import IGameController
 if typing.TYPE_CHECKING:
     from lunar_ny.lunar_ny_charm import LunarNYCharm
@@ -52,7 +53,9 @@ class ILunarNYController(IGameController):
     def getInfoVideoURL(self):
         raise NotImplementedError
 
-    def getEnvelopesExternalShopURL(self):
+    @async
+    @process
+    def getEnvelopesExternalShopURL(self, callback=None):
         raise NotImplementedError
 
     def getEnvelopePurchasesLimit(self):

@@ -262,7 +262,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__magneticAutoAimTags = self.lobbyContext.getServerSettings().getMagneticAutoAimConfig().get('enableForTags', set())
         self.__isAimingEnded = False
         self.__vehiclesWaitedInfo = {}
-        self.__isVehicleSwitching = False
         self.__isVehicleMoving = False
         return
 
@@ -304,7 +303,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__firstHealthUpdate = True
             self.__deadOnLoading = False
             self.__isRespawnAvailable = False
-            self.__isVehicleSwitching = False
             self.__ownVehicleStabMProv = Math.WGAdaptiveMatrixProvider()
             self.__ownVehicleStabMProv.setStaticTransform(Math.Matrix())
             self.__aimingInfo = [0.0,
@@ -545,7 +543,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def onVehicleChanged(self):
         LOG_DEBUG('Avatar vehicle has changed to %s' % self.vehicle)
         AvatarObserver.onVehicleChanged(self)
-        self.__isVehicleSwitching = False
         if self.vehicle is not None:
             self.__consistentMatrices.notifyVehicleChanged(self)
             ctrl = self.guiSessionProvider.shared.vehicleState
@@ -1128,7 +1125,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if vehicleID != -1:
             staticPosition = None
         self.consistentMatrices.notifyViewPointChanged(self, staticPosition)
-        self.__isVehicleSwitching = True
         return
 
     def onAutoAimVehicleLost(self, lossReasonFlags):
@@ -1503,7 +1499,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             extra = typeDescr.extras[extraIndex] if extraIndex != 0 else None
             if vehicleID == self.playerVehicleID or vehicleID == observedVehID or not self.__isVehicleAlive and vehicleID == self.inputHandler.ctrl.curVehicleID:
                 self.__showDamageIconAndPlaySound(damageCode, extra, vehicleID)
-            if damageCode not in self.__damageInfoNoNotification and not self.__isVehicleSwitching:
+            if damageCode not in self.__damageInfoNoNotification:
                 self.guiSessionProvider.shared.messages.showVehicleDamageInfo(self, damageCode, vehicleID, entityID, extra, equipmentID)
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_RECEIVE_DAMAGE, attackerId=entityID)
             return
@@ -2623,7 +2619,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             sound = extra.sounds.get(soundType)
             if sound in self._muteSounds:
                 sound = None
-            if sound is not None and not self.__isVehicleSwitching:
+            if sound is not None:
                 self.soundNotifications.play(sound, checkFn=soundNotificationCheckFn)
         return
 

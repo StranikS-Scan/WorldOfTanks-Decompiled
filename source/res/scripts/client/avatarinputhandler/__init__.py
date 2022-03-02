@@ -311,7 +311,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                     return True
 
             if self.__isStarted and self.__isDetached:
-                if self.__curCtrl.alwaysReceiveKeyEvents(isDown=isDown) and not self.isObserverFPV or CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
+                if self.__curCtrl.alwaysReceiveKeyEvents(isDown=isDown) and not self.isObserverFPV or CommandMapping.g_instance.isFiredList((CommandMapping.CMD_CM_LOCK_TARGET, CommandMapping.CMD_CM_FREE_CAMERA), key):
                     self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
                 for command in self.__detachedCommands:
                     if command.handleKeyEvent(isDown, key, mods, event):

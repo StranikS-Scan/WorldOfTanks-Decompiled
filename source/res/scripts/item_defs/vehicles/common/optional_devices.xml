@@ -1148,6 +1148,120 @@
       </aggregateMul>
     </kpi>
   </trophyUpgradedAdditionalInvisibilityDevice>
+  <trophyBasicTurbocharger>
+    <id>	115	</id>
+    <userString>	#artefacts:trophyBasicTurbocharger/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicTurbocharger/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:trophyBasicTurbocharger/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/turbocharger.png 0 0	</icon>
+    <groupName>	turbocharger	</groupName>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	turbocharger trophyBasic	</tags>
+    <incompatibleTags>
+      <installed>	turbocharger	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/enginePowerFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.075	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	4	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	2	</valueByLevel>
+        </factor>
+      </factors>
+      <upgradeInfo>
+        <upgradedCompDescr>	29945	</upgradedCompDescr>
+        <price>	3000000	</price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.075	</value>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	4	</value>
+      </add>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </trophyBasicTurbocharger>
+  <trophyUpgradedTurbocharger>
+    <id>	116	</id>
+    <userString>	#artefacts:trophyUpgradedTurbocharger/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicTurbocharger/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:trophyBasicTurbocharger/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/turbocharger.png 0 0	</icon>
+    <groupName>	turbocharger	</groupName>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	turbocharger trophyUpgraded	</tags>
+    <incompatibleTags>
+      <installed>	turbocharger	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/enginePowerFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.12	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	3	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.12	</value>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	5	</value>
+      </add>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	3	</value>
+      </add>
+    </kpi>
+  </trophyUpgradedTurbocharger>
   <improvedConfiguration_tier2>
     <id>	61	</id>
     <userString>	#artefacts:improvedConfiguration_tier2/name	</userString>

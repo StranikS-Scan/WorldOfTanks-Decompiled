@@ -143,7 +143,7 @@ def makeTankman(crewItem):
 
 
 def _recruit(recruitInfo):
-    iterNationGroups = ((nationID, set(_iterNationGroups(config, recruitInfo.getIsPremium(), recruitInfo.getSourceID()))) for nationID, config in _iterNationsConfigs())
+    iterNationGroups = ((nationID, set(_iterNationGroups(config, recruitInfo.getIsPremium(), recruitInfo.getGroupName()))) for nationID, config in _iterNationsConfigs())
     currentNationGroup = first(((nationID, first(nationGroups)) for nationID, nationGroups in iterNationGroups if nationGroups))
     return Tankman(TankmanDescr(generateCompactDescr(passport=_makePassport(recruitInfo, currentNationGroup), vehicleTypeID=VEHICLE_TYPES_ORDER_INDICES[VEHICLE_CLASS_NAME.MEDIUM_TANK], role=Tankman.ROLES.COMMANDER, roleLevel=recruitInfo.getRoleLevel(), skills=[ s for s in recruitInfo.getLearntSkills() if s != _NEW_SKILL ], lastSkillLevel=recruitInfo.getLastSkillLevel())).makeCompactDescr())
 

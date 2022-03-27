@@ -8,7 +8,7 @@ from GoodieResources import Gold, Credits, Experience, CrewExperience, FreeExper
 from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, FreeExperienceConversion, BuyVehicle, EpicMeta, DemountOptionalDevice, EpicPostBattle
 from GoodieValue import GoodieValue
 from Goodies import GoodieException
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from goodie_constants import GOODIE_TARGET_TYPE, GOODIE_CONDITION_TYPE, GOODIE_RESOURCE_TYPE
 GoodieData = namedtuple('GoodieData', 'variety target enabled lifetime useby counter autostart condition resource')
 _CONDITIONS = {GOODIE_CONDITION_TYPE.MAX_VEHICLE_LEVEL: MaxVehicleLevel}
@@ -111,6 +111,7 @@ def loadPdata(pdataGoodies, goodies, logID):
         try:
             goodies.load(uid, goodie[0], goodie[1], goodie[2])
         except GoodieException as detail:
+            LOG_CURRENT_EXCEPTION()
             LOG_ERROR('Cannot load a goodie', detail, logID)
 
 

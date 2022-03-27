@@ -1038,7 +1038,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 52
+    version = 53
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1576,6 +1576,12 @@ class AccountSettings(object):
 
             if currVersion < 52:
                 AccountSettings.setSettings(LAST_BATTLE_PASS_POINTS_SEEN, {})
+            if currVersion < 53:
+                for key, section in _filterAccountSection(ads):
+                    keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if LAST_BATTLE_PASS_POINTS_SEEN in keySettings.keys():
+                        keySettings.write(LAST_BATTLE_PASS_POINTS_SEEN, _pack({}))
+
         return
 
     @staticmethod

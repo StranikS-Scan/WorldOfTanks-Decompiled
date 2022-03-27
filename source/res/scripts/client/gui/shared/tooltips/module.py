@@ -131,7 +131,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
             items.append(formatters.packBuildUpBlockData(statusBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=statusTopPadding, bottom=-15)))
         if bonus_helper.isSituationalBonus(module.name):
             items.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(backport.text(R.strings.tooltips.vehicleParams.bonus.situational())), img=backport.image(R.images.gui.maps.icons.tooltip.asterisk_optional()), imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=_DEFAULT_PADDING)))
-        if itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle) and module.hasSimilarDevicesInstalled(statsConfig.vehicle):
+        if itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle) and module.hasSimilarDevicesInstalled(statsConfig.vehicle) and not module.mayInstall(statsConfig.vehicle, statusConfig.slotIdx)[0]:
             items.append(formatters.packBuildUpBlockData(blocks=[formatters.packTitleDescBlock(title=text_styles.critical(backport.text(R.strings.tooltips.moduleFits.duplicated.header())), gap=0, desc=text_styles.standard(backport.text(R.strings.tooltips.moduleFits.duplicated.note())))], padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=-13), stretchBg=False))
         if statsConfig.isStaticInfoOnly:
             lastItem = items[-1]
@@ -432,7 +432,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                     needValue = None
                 block.append(makePriceBlock(value, CURRENCY_SETTINGS.getUpgradableSetting(currency), needValue, defValue if defValue > 0 else None, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14))
             isComplexDevice = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not module.isRemovable
-            if isComplexDevice and not self.configuration.isAwardWindow:
+            if isComplexDevice and not (self.configuration.isAwardWindow or self.configuration.isRTS):
                 removalPrice = module.getRemovalPrice(self.itemsCache.items)
                 removalPriceCurrency = removalPrice.getCurrency()
                 value = removalPrice.price.getSignValue(removalPriceCurrency)
@@ -714,7 +714,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
     def construct(self):
         if self.configuration.isResearchPage:
             return self._getResearchPageStatus()
-        if self.configuration.isAwardWindow:
+        if self.configuration.isAwardWindow or self.configuration.isRTS:
             return []
         return [] if self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn else self._getStatus()
 

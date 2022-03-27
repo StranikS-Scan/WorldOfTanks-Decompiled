@@ -27,11 +27,13 @@ from gui.shared.items_parameters import params_helper, bonus_helper
 from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
+from gui.impl.lobby.rts.vehicle_specs.rts_vehicle_builder import RtsVehicleBuilder
+from gui.impl.lobby.rts.vehicle_specs.rts_roster_vehicle import g_rtsRosterVehicle
 from helpers import dependency
 from helpers.i18n import makeString
 from rent_common import RENT_TYPE_TO_DURATION
 from shared_utils import findFirst, first
-from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController
+from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IRTSBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
@@ -40,6 +42,7 @@ from skeletons.gui.shared.gui_items import IGuiItemsFactory
 if typing.TYPE_CHECKING:
     from account_helpers.offers.events_data import OfferGift, OfferEventData
     from gui.shared.gui_items.dossier.stats import AccountTotalStatsBlock
+    from gui.shared.gui_items.Vehicle import Vehicle
 
 def _getCmpVehicle():
     return cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
@@ -50,7 +53,7 @@ def _getCmpInitialVehicle():
 
 
 class StatsConfiguration(object):
-    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle', 'showCompatibles', 'withSlots', 'isStaticInfoOnly')
+    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle', 'showCompatibles', 'withSlots', 'isStaticInfoOnly', 'showCrystals', 'isRTS')
 
     def __init__(self):
         self.vehicle = None
@@ -73,11 +76,13 @@ class StatsConfiguration(object):
         self.showCompatibles = False
         self.withSlots = False
         self.isStaticInfoOnly = False
+        self.showCrystals = True
+        self.isRTS = False
         return
 
 
 class StatusConfiguration(object):
-    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare', 'eqSetupIDx')
+    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare', 'eqSetupIDx', 'isRTS')
 
     def __init__(self):
         self.vehicle = None
@@ -93,6 +98,7 @@ class StatusConfiguration(object):
         self.withSlots = False
         self.isCompare = False
         self.eqSetupIDx = None
+        self.isRTS = False
         return
 
 
@@ -401,6 +407,7 @@ class ModuleInfoContext(ToolTipContext):
 
 class CarouselContext(InventoryContext):
     __rankedController = dependency.descriptor(IRankedBattlesController)
+    __rtsController = dependency.descriptor(IRTSBattlesController)
 
     def __init__(self, fieldsToExclude=None):
         super(InventoryContext, self).__init__(fieldsToExclude)
@@ -417,6 +424,9 @@ class CarouselContext(InventoryContext):
             suitResult = self.__rankedController.isSuitableVehicle(item)
             hasRankedBonus = self.__rankedController.hasVehicleRankedBonus(item.intCD)
             value.showRankedBonusBattle = hasRankedBonus and suitResult is None
+        elif self.__rtsController.isPrbActive():
+            value.dailyXP = False
+            value.showCrystals = False
         value.rentals = True
         value.buyPrice = True
         return value
@@ -522,6 +532,36 @@ class CmpParamContext(HangarParamContext):
 
     def getComparator(self):
         return params_helper.vehiclesComparator(_getCmpVehicle(), _getCmpInitialVehicle()[0])
+
+
+class RtsSelectedVehicleParametersContext(HangarParamContext):
+
+    def __init__(self):
+        super(RtsSelectedVehicleParametersContext, self).__init__()
+        self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
+
+    def getComparator(self):
+        return params_helper.idealCrewComparator(self.buildItem())
+
+    def buildItem(self, *args, **kwargs):
+        return g_rtsRosterVehicle.item
+
+
+class RtsCarouselContext(CarouselContext):
+
+    def buildItem(self, intCD):
+        return RtsVehicleBuilder().createVehicle(int(intCD))
+
+    def getStatusConfiguration(self, item):
+        value = super(RtsCarouselContext, self).getStatusConfiguration(item)
+        value.isRTS = True
+        return value
+
+    def getStatsConfiguration(self, item):
+        value = super(RtsCarouselContext, self).getStatsConfiguration(item)
+        value.rentals = False
+        value.buyPrice = False
+        return value
 
 
 class TankSetupParamContext(HangarParamContext):
@@ -661,6 +701,36 @@ class PreviewContext(HangarContext):
 
     def getVehicle(self):
         return g_currentPreviewVehicle.item
+
+
+class RtsRosterContext(HangarContext):
+
+    def getVehicle(self):
+        return g_rtsRosterVehicle.item
+
+    def getStatusConfiguration(self, item):
+        value = super(RtsRosterContext, self).getStatusConfiguration(item)
+        value.isRTS = True
+        return value
+
+    def getStatsConfiguration(self, item):
+        value = super(RtsRosterContext, self).getStatsConfiguration(item)
+        value.isRTS = True
+        value.xp = False
+        value.sellPrice = False
+        value.buyPrice = False
+        value.vehiclesCount = False
+        value.inventoryCount = False
+        return value
+
+
+class RtsRosterTankmanContext(RtsRosterContext):
+
+    def buildItem(self, role, *args, **kwargs):
+        vehicle = self.getVehicle()
+        for tman in vehicle.crew:
+            if tman[1].role == role:
+                return tman[1]
 
 
 class VehCmpConfigurationContext(HangarContext):

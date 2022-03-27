@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/model_assembler.py
+import typing
 import math
 from collections import namedtuple
 import logging
@@ -20,6 +21,8 @@ from items.components import shared_components, component_constants
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
 from vehicle_systems.tankStructure import getPartModelsFromDesc, getCollisionModelsFromDesc, TankNodeNames, TankPartNames, TankPartIndexes, TankRenderMode, TankCollisionPartNames
 from vehicle_systems.components.hull_aiming_controller import HullAimingController
+if typing.TYPE_CHECKING:
+    from items.vehicles import VehicleDescrType
 _logger = logging.getLogger(__name__)
 DEFAULT_MAX_LOD_PRIORITY = None
 _INFINITY = 10000
@@ -30,6 +33,8 @@ _SPLINE_TRACKS_MAX_COUNT = 5
 _AREA_LOD_FOR_NONSIMPLE_TRACKS = 50
 _WHEEL_TO_TRACE_RATIO = 0.75
 _DEFAULT_LOD_INDEX = 0
+_PLAYER_UPDATE_PERIOD = 0.1
+_NPC_UPDATE_PERIOD = 0.25
 
 def __getWheelsRiseTime(vehicleDesc):
     wheelsRiseTime = 0.0
@@ -42,21 +47,20 @@ def __getWheelsRiseTime(vehicleDesc):
 
 
 def prepareCollisionAssembler(vehicleDesc, isTurretDetached, worldID):
-    hitTestersByPart = {TankPartNames.CHASSIS: vehicleDesc.chassis.hitTester,
-     TankPartNames.HULL: vehicleDesc.hull.hitTester}
+    hitTestersByPart = {TankPartNames.CHASSIS: vehicleDesc.hitTesters.chassis,
+     TankPartNames.HULL: vehicleDesc.hitTesters.hull}
     if not isTurretDetached:
-        hitTestersByPart[TankPartNames.TURRET] = vehicleDesc.turret.hitTester
-        hitTestersByPart[TankPartNames.GUN] = vehicleDesc.gun.hitTester
+        hitTestersByPart[TankPartNames.TURRET] = vehicleDesc.hitTesters.turret
+        hitTestersByPart[TankPartNames.GUN] = vehicleDesc.hitTesters.gun
     bspModels = []
     for partName, hitTester in hitTestersByPart.iteritems():
-        partId = TankPartNames.getIdx(partName)
-        bspModel = (partId, hitTester.bspModelName)
-        bspModels.append(bspModel)
+        if hitTester.bspModelName is not None:
+            partId = TankPartNames.getIdx(partName)
+            bspModel = (partId, hitTester.bspModelName, (0.0, 0.0, 0.0))
+            bspModels.append(bspModel)
 
-    trackPairs = vehicleDesc.chassis.trackPairs[1:]
-    for idx, trackPair in enumerate(trackPairs):
-        totalDefaultParts = len(TankPartNames.ALL)
-        bspModels.append((totalDefaultParts + idx, trackPair.hitTester.bspModelName))
+    for idx in range(1, len(vehicleDesc.chassis.trackPairs)):
+        bspModels.append((trackPairIdxToCollisionIdx(idx), vehicleDesc.hitTesters.trackPairs(idx).bspModelName))
 
     assembler = BigWorld.CollisionAssembler(tuple(bspModels), worldID)
     return assembler
@@ -69,14 +73,14 @@ def collisionIdxToTrackPairIdx(collisionIdx, typeDesc):
 
 
 def trackPairIdxToCollisionIdx(trackPairIdx):
-    return len(TankPartNames.ALL) + trackPairIdx
+    return TankPartNames.getIdx(TankPartNames.CHASSIS) if trackPairIdx == 0 else len(TankPartNames.ALL) - 1 + trackPairIdx
 
 
 def setupCollisions(vehicleDesc, collisions):
-    hitTestersByPart = {TankPartNames.CHASSIS: vehicleDesc.chassis.hitTester,
-     TankPartNames.HULL: vehicleDesc.hull.hitTester,
-     TankPartNames.TURRET: vehicleDesc.turret.hitTester,
-     TankPartNames.GUN: vehicleDesc.gun.hitTester}
+    hitTestersByPart = {TankPartNames.CHASSIS: vehicleDesc.hitTesters.chassis,
+     TankPartNames.HULL: vehicleDesc.hitTesters.hull,
+     TankPartNames.TURRET: vehicleDesc.hitTesters.turret,
+     TankPartNames.GUN: vehicleDesc.hitTesters.gun}
     for partName, hitTester in hitTestersByPart.iteritems():
         partID = TankPartNames.getIdx(partName)
         hitTester.bbox = collisions.getBoundingBox(partID)
@@ -84,9 +88,10 @@ def setupCollisions(vehicleDesc, collisions):
             _logger.error("Couldn't find bounding box for the part '%s' (collisions=%s)", partName, collisions)
 
     trackPairs = vehicleDesc.chassis.trackPairs[1:]
-    for idx, trackPair in enumerate(trackPairs):
-        trackPair.hitTester.bbox = collisions.getBoundingBox(trackPairIdxToCollisionIdx(idx))
-        if not trackPair.hitTester.bbox:
+    for idx, _ in enumerate(trackPairs, 1):
+        trackHitTester = vehicleDesc.hitTesters.trackPairs(idx)
+        trackHitTester.bbox = collisions.getBoundingBox(trackPairIdxToCollisionIdx(idx))
+        if not trackHitTester.bbox:
             _logger.error("Couldn't find bounding box for the track pair '%i' (collisions=%s)", idx, collisions)
 
 
@@ -129,8 +134,8 @@ def attachModels(assembler, vehicleDesc, modelsSetParams, isTurretDetached, rend
         assembler.addPart(chassis, TankPartNames.CHASSIS, TankCollisionPartNames.CHASSIS)
     if collisionState:
         trackPairs = vehicleDesc.chassis.trackPairs[1:]
-        for idx, trackPair in enumerate(trackPairs):
-            assembler.addPart(trackPair.hitTester.bspModelName, partNames.CHASSIS, 'trackPair' + str(idx + 1))
+        for idx, trackPair in enumerate(trackPairs, 1):
+            assembler.addPart(trackPair.hitTester.bspModelName, partNames.CHASSIS, 'trackPair' + str(idx))
 
     if collisionState and vehicleDesc.isWheeledVehicle:
         for i, wheel in enumerate(vehicleDesc.chassis.wheels.wheels):
@@ -430,7 +435,7 @@ def assembleHullAimingController(appearance):
     appearance.hullAimingController = HullAimingController()
 
 
-def assembleSuspensionSound(appearance, lodLink, isPlayer):
+def assembleSuspensionSound(appearance, lodLink, isPlayer, isControllableVehicle):
     if not WWISE.WW_isInitialised():
         return
     elif not appearance.typeDescriptor.hasSiegeMode:
@@ -448,11 +453,16 @@ def assembleSuspensionSound(appearance, lodLink, isPlayer):
         hullNode = model.node(TankPartNames.HULL)
         if hullNode is None:
             return
-        suspensionSound = appearance.createComponent(Vehicular.SuspensionSound, appearance.id)
-        for sound in suspensionSoundParams.sounds:
-            if isPlayer:
-                suspensionSound.setSoundsForState(sound.state, sound.underLimitSounds.PC, sound.overLimitSounds.PC)
-            suspensionSound.setSoundsForState(sound.state, sound.underLimitSounds.NPC, sound.overLimitSounds.NPC)
+        suspensionSound = appearance.createComponent(Vehicular.SuspensionSound, appearance.id, isPlayer, isControllableVehicle)
+        if not isPlayer and isControllableVehicle:
+            for sound in suspensionSoundParams.sounds:
+                suspensionSound.setSoundsForStateControllableVehicle(sound.state, sound.underLimitSounds.PC, sound.overLimitSounds.PC, sound.underLimitSounds.NPC, sound.overLimitSounds.NPC)
+
+        else:
+            for sound in suspensionSoundParams.sounds:
+                if isPlayer:
+                    suspensionSound.setSoundsForState(sound.state, sound.underLimitSounds.PC, sound.overLimitSounds.PC)
+                suspensionSound.setSoundsForState(sound.state, sound.underLimitSounds.NPC, sound.overLimitSounds.NPC)
 
         suspensionSound.bodyMatrix = None
         suspensionSound.angleLimitValue = suspensionSoundParams.angleLimitValue
@@ -481,9 +491,7 @@ def assembleTerrainMatKindSensor(appearance, lodStateLink, spaceID):
     sensor.setLodSettings(shared_components.LodSettings(TERRAIN_MAT_KIND_SENSOR_LOD_DIST, TERRAIN_MAT_KIND_SENSOR_MAX_PRIORITY))
 
 
-def assembleVehicleAudition(isPlayer, appearance):
-    PLAYER_UPDATE_PERIOD = 0.1
-    NPC_UPDATE_PERIOD = 0.25
+def assembleVehicleAudition(isPlayer, isControllableVehicle, appearance):
     typeDescriptor = appearance.typeDescriptor
     engineEventName = typeDescriptor.engine.sounds.getEvents()
     chassisEventName = typeDescriptor.chassis.sounds.getEvents()
@@ -510,15 +518,15 @@ def assembleVehicleAudition(isPlayer, appearance):
          ('brakedown_treads',),
          '',
          '')
-    vehicleAudition = appearance.createComponent(Vehicular.VehicleAudition, appearance.id, isPlayer, vehicleData)
+    vehicleAudition = appearance.createComponent(Vehicular.VehicleAudition, appearance.id, isPlayer, isControllableVehicle, vehicleData)
     vehicleAudition.setEffectMaterialsInfo(lambda : appearance.terrainEffectMaterialNames)
     vehicleAudition.setSpeedInfo(lambda : appearance.filter.angularSpeed, lambda : appearance.filter.strafeSpeed)
     vehicleAudition.setTracksInfo(lambda : appearance.transmissionScroll, lambda : appearance.transmissionSlip, lambda : appearance.getWheelsSteeringMax(), DataLinks.createBoolLink(appearance.flyingInfoProvider, 'isFlying'))
     if typeDescriptor.type.siegeModeParams is not None:
         soundStateChange = typeDescriptor.type.siegeModeParams['soundStateChange']
-        vehicleAudition.setSiegeSoundEvents(soundStateChange.isEngine, soundStateChange.on if isPlayer else soundStateChange.npcOn, soundStateChange.off if isPlayer else soundStateChange.npcOff)
+        vehicleAudition.setSiegeSoundEvents(soundStateChange.isEngine, soundStateChange.on, soundStateChange.npcOn, soundStateChange.off, soundStateChange.npcOff)
     vehicleAudition.setDetailedEngineState(appearance.detailedEngineState)
-    vehicleAudition.setUpdatePeriod(PLAYER_UPDATE_PERIOD if isPlayer else NPC_UPDATE_PERIOD)
+    vehicleAudition.setUpdatePeriod(_NPC_UPDATE_PERIOD)
     appearance.engineAudition = vehicleAudition
     return
 
@@ -635,11 +643,9 @@ def assembleWaterSensor(vehicleDesc, appearance, lodStateLink, spaceID):
     return sensor
 
 
-def assembleDrivetrain(appearance, isPlayerVehicle):
+def assembleDrivetrain(appearance, isPlayerVehicle, isControllableVehicle):
     vehicleFilter = appearance.filter
     typeDescriptor = appearance.typeDescriptor
-    PLAYER_UPDATE_PERIOD = 0.1
-    NPC_UPDATE_PERIOD = 0.25
     engineState = appearance.createComponent(Vehicular.DetailedEngineState)
     engineState.vehicleSpeedLink = DataLinks.createFloatLink(vehicleFilter, 'averageSpeed')
     engineState.rotationSpeedLink = DataLinks.createFloatLink(vehicleFilter, 'averageRotationSpeed')
@@ -654,7 +660,7 @@ def assembleDrivetrain(appearance, isPlayerVehicle):
     wheeledVehicle = False
     if typeDescriptor.chassis.generalWheelsAnimatorConfig is not None:
         wheeledVehicle = typeDescriptor.chassis.generalWheelsAnimatorConfig.isWheeledVehicle()
-    if wheeledVehicle and isPlayerVehicle:
+    if wheeledVehicle and (isPlayerVehicle or isControllableVehicle):
         gearShiftMap = (((1e-05, rpm_min * 1.2, rpm_max * 0.98),
           (0.15 * speed_limits_0, rpm_min * 1.7, rpm_max * 0.98),
           (0.5 * speed_limits_0, rpm_min * 2.2, rpm_max * 0.98),
@@ -665,7 +671,7 @@ def assembleDrivetrain(appearance, isPlayerVehicle):
         gearbox.flyingLink = DataLinks.createBoolLink(appearance.flyingInfoProvider, 'isFlying')
     else:
         gearbox = None
-    if isPlayerVehicle:
+    if isPlayerVehicle or isControllableVehicle:
         if gearbox is not None:
             engineState.physicRPMLink = lambda : gearbox.rpm
             engineState.physicGearLink = lambda : gearbox.gear
@@ -676,7 +682,7 @@ def assembleDrivetrain(appearance, isPlayerVehicle):
     else:
         engineState.physicRPMLink = None
         engineState.physicGearLink = None
-    engineState.updatePeriod = PLAYER_UPDATE_PERIOD if isPlayerVehicle else NPC_UPDATE_PERIOD
+    engineState.updatePeriod = _NPC_UPDATE_PERIOD
     return (engineState, gearbox)
 
 

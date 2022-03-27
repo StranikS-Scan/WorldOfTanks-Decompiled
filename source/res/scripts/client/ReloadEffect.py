@@ -198,6 +198,9 @@ class _GunReload(CallbackDelayer):
             else:
                 _logger.warning('Reload time(%s) is less than gun rammer effect time(GUN_RAMMER_TIME-%s)', reloadTime, GUN_RAMMER_TIME)
 
+    def _stopGunRammerEffect(self):
+        self.stopCallback(_playGunRammerEffect)
+
 
 class SimpleReload(_GunReload):
 
@@ -234,6 +237,7 @@ class SimpleReload(_GunReload):
             self._sound.stop()
             self._sound = None
         self.stopCallback(self.__playSound)
+        self._stopGunRammerEffect()
         return
 
     def reloadEnd(self):
@@ -305,6 +309,7 @@ class BarrelReload(SimpleReload):
         if BARREL_DEBUG_ENABLED:
             LOG_DEBUG('!!! Stop Loop = {0}'.format(self._desc.stopLoop))
         self.stopCallback(self._startOneShoot)
+        self._stopGunRammerEffect()
         self.__reloadSequence.stop()
 
     def reloadEnd(self):
@@ -482,6 +487,7 @@ class AutoReload(_GunReload):
         self.stopCallback(self.__onShellInTheBarrel)
         self.stopCallback(self.__onClipShellLoad)
         self.stopCallback(self.__onAlmostComplete)
+        self._stopGunRammerEffect()
         self._almostCompleteSnd = None
         return
 
@@ -582,6 +588,7 @@ class DualGunReload(_GunReload):
         self.__ammoLowSound = None
         self.stopCallback(self.__onReloadStart)
         self.stopCallback(self.__onAmmoLow)
+        self._stopGunRammerEffect()
         return
 
     def reloadEnd(self):

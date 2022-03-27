@@ -3,13 +3,13 @@
 import typing
 from constants import ARENA_BONUS_TYPE
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, Iterable, Iterator, List, Optional, Set, Tuple, Union
+    from typing import Callable, Dict, Iterable, Iterator, List, Optional, Set, Tuple, Union, Sequence
     from Event import Event
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import EpicBattleScreens
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
     from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
     from gui.game_control.mapbox_controller import ProgressionData
-    from gui.game_control.trade_in import TradeInInfo
+    from gui.game_control.trade_in import TradeInDiscounts
     from gui.gift_system.hubs.base.hub_core import IGiftEventHub
     from gui.periodic_battles.models import AlertData, PeriodInfo, PrimeTime
     from gui.prb_control.items import ValidationResult
@@ -52,6 +52,12 @@ class IGameController(object):
         pass
 
     def onAccountBecomeNonPlayer(self):
+        pass
+
+    def onServerReplayEntering(self):
+        pass
+
+    def onServerReplayExiting(self):
         pass
 
     def onLobbyInited(self, event):
@@ -133,6 +139,9 @@ class ISeasonProvider(object):
         raise NotImplementedError
 
     def hasPrimeTimesLeftForCurrentCycle(self):
+        raise NotImplementedError
+
+    def hasPrimeTimesPassedForCurrentCycle(self):
         raise NotImplementedError
 
     def getPreviousSeason(self, now=None):
@@ -709,75 +718,55 @@ class IChinaController(IGameController):
 
 class ITradeInController(IGameController):
 
-    def getActiveTradeOffVehicle(self):
+    def getAllPossibleVehiclesToSell(self):
         raise NotImplementedError
 
-    def getActiveTradeOffVehicleCD(self):
+    def getAllPossibleVehiclesToBuy(self):
         raise NotImplementedError
 
-    def setActiveTradeOffVehicleCD(self, value):
+    def getPossibleVehiclesToBuy(self):
         raise NotImplementedError
 
-    def getActiveTradeOffVehicleState(self):
+    def selectVehicleToBuy(self, vehCD):
         raise NotImplementedError
 
-    def getTradeInInfo(self, item):
+    def getSelectedVehicleToBuy(self):
         raise NotImplementedError
 
-    def getStartEndTimestamps(self):
+    def selectVehicleToSell(self, vehCD):
         raise NotImplementedError
 
-    def getMinAcceptableSellPrice(self):
-        raise NotImplementedError
-
-    def getAllowedVehicleLevels(self, maxLevel=None):
-        raise NotImplementedError
-
-    def getTradeOffVehicles(self, maxLevel=None):
-        raise NotImplementedError
-
-    def tradeOffSelectedApplicableForLevel(self, maxLevel):
+    def getSelectedVehicleToSell(self):
         raise NotImplementedError
 
     def isEnabled(self):
+        raise NotImplementedError
+
+    def hasAvailableOffer(self):
+        raise NotImplementedError
+
+    def getExpirationTime(self):
+        raise NotImplementedError
+
+    def getVehiclesToSell(self, respectSelectedVehicleToBuy):
+        raise NotImplementedError
+
+    def getVehiclesToBuy(self, respectSelectedVehicleToSell):
+        raise NotImplementedError
+
+    def getConfig(self):
+        raise NotImplementedError
+
+    def getTradeInDiscounts(self, item):
+        raise NotImplementedError
+
+    def validatePossibleVehicleToBuy(self, vehicle):
         raise NotImplementedError
 
     def getTradeInPrice(self, vehicle):
         raise NotImplementedError
 
     def addTradeInPriceIfNeeded(self, vehicle, money):
-        raise NotImplementedError
-
-
-class IPersonalTradeInController(IGameController):
-    onActiveSaleVehicleChanged = None
-    onActiveBuyVehicleChanged = None
-
-    def getSaleVehicleCDs(self):
-        raise NotImplementedError
-
-    def getBuyVehicleCDs(self):
-        raise NotImplementedError
-
-    def getActiveTradeInSaleVehicleCD(self):
-        raise NotImplementedError
-
-    def getActiveTradeInSaleVehicle(self):
-        raise NotImplementedError
-
-    def setActiveTradeInSaleVehicleCD(self, value):
-        raise NotImplementedError
-
-    def getActiveTradeInBuyVehicleCD(self):
-        raise NotImplementedError
-
-    def setActiveTradeInBuyVehicleCD(self, value):
-        raise NotImplementedError
-
-    def getActiveTradeInBuyVehicle(self):
-        raise NotImplementedError
-
-    def getPersonalTradeInPrice(self, veh):
         raise NotImplementedError
 
 
@@ -1111,6 +1100,9 @@ class IBootcampController(IGameController):
     def runBootcamp(self):
         raise NotImplementedError
 
+    def canRun(self):
+        raise NotImplementedError
+
 
 class IMarathonEventsController(IGameController):
     onFlagUpdateNotify = None
@@ -1251,6 +1243,9 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def getAbilitySlotsOrder(self, vehicleType):
+        raise NotImplementedError
+
+    def getAbilitySlotsUnlockOrder(self, vehicleType):
         raise NotImplementedError
 
     def getCurrentCycleInfo(self):
@@ -1416,6 +1411,12 @@ class IManualController(IGameController):
     def pageFilter(self, pageType):
         raise NotImplementedError
 
+    def show(self, lessonID=None):
+        raise NotImplementedError
+
+    def getView(self):
+        raise NotImplementedError
+
 
 class ICraftmachineController(IGameController):
 
@@ -1513,6 +1514,7 @@ class IBattlePassController(IGameController):
     onRewardSelectChange = None
     onOffersUpdated = None
     onChapterChanged = None
+    onExtraChapterExpired = None
 
     def isEnabled(self):
         raise NotImplementedError
@@ -1521,9 +1523,6 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def isVisible(self):
-        raise NotImplementedError
-
-    def isOffSeasonEnable(self):
         raise NotImplementedError
 
     def isDisabled(self):
@@ -1553,7 +1552,25 @@ class IBattlePassController(IGameController):
     def getMaxLevelInChapter(self, chapterId):
         raise NotImplementedError
 
+    def hasExtra(self):
+        raise NotImplementedError
+
+    def getExtraChapterID(self):
+        raise NotImplementedError
+
+    def isChapterExists(self, chapterID):
+        raise NotImplementedError
+
     def getChapterIDs(self):
+        raise NotImplementedError
+
+    def isExtraChapter(self, chapterID):
+        raise NotImplementedError
+
+    def getChapterExpiration(self, chapterID):
+        raise NotImplementedError
+
+    def getChapterRemainingTime(self, chapterID):
         raise NotImplementedError
 
     def getLevelInChapter(self, chapterID):
@@ -1574,7 +1591,7 @@ class IBattlePassController(IGameController):
     def getState(self):
         raise NotImplementedError
 
-    def isBought(self, seasonID=None, chapterID=None):
+    def isBought(self, chapterID, seasonID=None):
         raise NotImplementedError
 
     def isOfferEnabled(self):
@@ -1694,9 +1711,6 @@ class IBattlePassController(IGameController):
     def getSeasonNum(self):
         raise NotImplementedError
 
-    def getCapacityList(self):
-        raise NotImplementedError
-
     def getFinalOfferTime(self):
         raise NotImplementedError
 
@@ -1713,9 +1727,6 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def getNotChosenRewardCount(self):
-        raise NotImplementedError
-
-    def getChapterByLevel(self, level):
         raise NotImplementedError
 
     def getFreePoints(self):
@@ -1761,6 +1772,160 @@ class IReactiveCommunicationService(IGameController):
 
     def getChannelStatus(self, name):
         raise NotImplementedError
+
+
+class IRTSBattlesController(IGameController, ISeasonProvider):
+    onUpdated = None
+    onRosterUpdated = None
+    onControlModeChanged = None
+    onGameModeChanged = None
+    onGameModeStatusTick = None
+    onGameModeStatusUpdated = None
+    onCommanderInvitation = None
+    onIsPrbActive = None
+    onRtsTutorialBannerUpdate = None
+
+    def getAlertBlock(self):
+        raise NotImplementedError
+
+    def isCommander(self):
+        raise NotImplementedError
+
+    def isTankistEnabled(self):
+        raise NotImplementedError
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isSubmodeEnabled(self, bonusType):
+        raise NotImplementedError
+
+    def isPrbActive(self):
+        raise NotImplementedError
+
+    def isWarmup(self):
+        raise NotImplementedError
+
+    def isBattlesPossible(self):
+        raise NotImplementedError
+
+    def doSelectPrb(self, callback):
+        raise NotImplementedError
+
+    def isVisible(self):
+        raise NotImplementedError
+
+    def getCommanderInvitation(self, bonusType, includeMargin=True):
+        raise NotImplementedError
+
+    def hasEnoughCurrency(self, bonusType):
+        raise NotImplementedError
+
+    def hasSuitableVehicle(self):
+        raise NotImplementedError
+
+    def getBattleMode(self):
+        raise NotImplementedError
+
+    @property
+    def bonusTypesWithCurrency(self):
+        raise NotImplementedError
+
+    def getAvailableCurrencies(self):
+        raise NotImplementedError
+
+    def getCurrency(self, bonusType):
+        raise NotImplementedError
+
+    def getSettings(self):
+        raise NotImplementedError
+
+    def getRoster(self, bonusType):
+        raise NotImplementedError
+
+    def getRosterConfig(self, bonusType):
+        raise NotImplementedError
+
+    def getSoundManager(self):
+        raise NotImplementedError
+
+    def getUnsuitableRosterCriteria(self, bonusType):
+        raise NotImplementedError
+
+    def getUnsuitableVehicleCriteria(self, bonusType):
+        raise NotImplementedError
+
+    def getLockedEndDate(self):
+        raise NotImplementedError
+
+    def changeControlMode(self, isCommander):
+        raise NotImplementedError
+
+    def runRTSQueue(self):
+        raise NotImplementedError
+
+    def enterRTSPrebattle(self):
+        raise NotImplementedError
+
+    def runRTSBootcamp(self):
+        raise NotImplementedError
+
+    def returnFromRTSBootcamp(self):
+        raise NotImplementedError
+
+    def showRTSInfoPage(self):
+        raise NotImplementedError
+
+    def updateRTSTutorialBanner(self):
+        raise NotImplementedError
+
+    def canShowRTSBootcampBanner(self):
+        raise NotImplementedError
+
+    def setShowBootcampDeserted(self):
+        raise NotImplementedError
+
+    def getBattleEconomics(self):
+        raise NotImplementedError
+
+
+class IRTSProgressionController(IGameController):
+    onUpdated = None
+    onProgressUpdated = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def getConfig(self):
+        raise NotImplementedError
+
+    def getCollection(self):
+        raise NotImplementedError
+
+    def getCollectionSize(self):
+        raise NotImplementedError
+
+    def getCollectionProgress(self):
+        raise NotImplementedError
+
+    def getProgressLeftToNextStage(self):
+        raise NotImplementedError
+
+    def getQuestRewards(self, questID):
+        raise NotImplementedError
+
+    def getQuests(self, isCommander=None, includeFuture=True):
+        raise NotImplementedError
+
+    def hasCurrentProgressRewards(self):
+        raise NotImplementedError
+
+    def getItemsProgression(self):
+        raise NotImplementedError
+
+
+class IRTSNotificationsController(IGameController):
+    pass
 
 
 class IUISpamController(IGameController):

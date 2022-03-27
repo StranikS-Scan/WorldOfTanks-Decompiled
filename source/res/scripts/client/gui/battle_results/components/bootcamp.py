@@ -96,7 +96,7 @@ class StatsBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        info = reusable.getPersonalVehiclesInfo(result['personal'])
+        info = reusable.getPersonalVehiclesInfo(result)
         teamResult = reusable.getPersonalTeamResult()
         if teamResult == PLAYER_TEAM_RESULT.WIN:
             battleStats = g_bootcamp.getBattleStatsLessonWin()

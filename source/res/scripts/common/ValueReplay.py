@@ -40,8 +40,7 @@ class ValueReplayConnector(object):
     def __contains__(self, item):
         subitems = self.__splitName(item)
         cont = self._battleResults
-        length = len(subitems)
-        if length == 2:
+        if len(subitems) == 2:
             f, s = subitems
             if f not in cont:
                 return False
@@ -50,9 +49,8 @@ class ValueReplayConnector(object):
 
     def __getitem__(self, item):
         subitems = self.__splitName(item)
-        length = len(subitems)
         cont = self._battleResults
-        if length == 2:
+        if len(subitems) == 2:
             f, s = subitems
             if f not in cont:
                 raise KeyError(item)
@@ -61,9 +59,8 @@ class ValueReplayConnector(object):
 
     def __setitem__(self, item, value):
         subitems = self.__splitName(item)
-        length = len(subitems)
         cont = self._battleResults
-        if length == 2:
+        if len(subitems) == 2:
             f, s = subitems
             if f not in cont:
                 raise KeyError(item)
@@ -74,33 +71,32 @@ class ValueReplayConnector(object):
 
     def index(self, item, item2=None):
         subitems = self.__splitName(item)
-        length = len(subitems)
-        secondIndex = 0 if item2 is None else self._battleResultsStruct.indexOf(item2)
-        if length == 2:
+        battleResultsStruct = self._battleResultsStruct
+        secondIndex = 0 if item2 is None else battleResultsStruct.indexOf(item2)
+        if len(subitems) == 2:
             f, s = subitems
-            index = self._battleResultsStruct.indexOf(f)
+            index = battleResultsStruct.indexOf(f)
             subIndex = self.__getSecondValueByName(self._battleResults[f], s)[0][0] + 1
             return ValueReplayConnector.makeIndex(index, subIndex, secondIndex)
         else:
-            return ValueReplayConnector.makeIndex(self._battleResultsStruct.indexOf(subitems[0]), 0, secondIndex)
+            return ValueReplayConnector.makeIndex(battleResultsStruct.indexOf(subitems[0]), 0, secondIndex)
 
     def indexToNames(self, idx):
         index, subIndex, secondIndex = ValueReplayConnector.parseIndex(idx)
-        subname1 = self._battleResultsStruct.nameOf(index)
-        secondName = self._battleResultsStruct.nameOf(secondIndex)
+        battleResultsStruct = self._battleResultsStruct
+        subname1 = battleResultsStruct.nameOf(index)
+        secondName = battleResultsStruct.nameOf(secondIndex)
         if subIndex > 0:
             subIndex -= 1
             subname2 = self.__getSecondValueByIndex(self._battleResults[subname1], subIndex)[0][1][0]
-            return ('_'.join([subname1, subname2]), secondName)
+            return (subname1 + '_' + subname2, secondName)
         return (subname1, secondName)
 
     def __splitName(self, item):
-        pos = item.find('_')
-        if pos == -1:
-            subitems = [item]
-        else:
-            subitems = [item[:pos], item[pos + 1:]]
-        return subitems
+        if '_' in item:
+            pos = item.find('_')
+            return (item[:pos], item[pos + 1:])
+        return (item,)
 
     def __getSecondValueByName(self, cont, name):
         return [ (i, v) for i, v in enumerate(cont) if v[0] == name ]
@@ -127,7 +123,8 @@ class ValueReplay:
         self.__overiddenValues = {}
         self.__packed = replay
         self.__replay = [] if replay is None else self.unpack()
-        self.__appliedValues = set([ self.parseStepCompDescr(step)[1] for step in self.__replay ] if self.__replay else [])
+        parseStepCompDescr = self.parseStepCompDescr
+        self.__appliedValues = set([ parseStepCompDescr(step)[1] for step in self.__replay ] if self.__replay else [])
         self.__tags = {}
         if startRecordName is None:
             return
@@ -273,22 +270,27 @@ class ValueReplay:
             raise SoftException('Invalid usage %s. Cannot apply wrapped value to itself.' % (param,))
 
     def __validate(self, param1, param2=None, initial=False):
-        self.__checkParam(param1)
-        self.__checkParam(param2)
-        if not initial and not self.__appliedValues:
+        checkParam = self.__checkParam
+        checkParam(param1)
+        checkParam(param2)
+        appliedValues = self.__appliedValues
+        if not initial and not appliedValues:
             raise SoftException('Invalid usage %s. Call __setInitial before.' % (param1,))
         idx = self.__connector.index(param1, param2)
-        if idx in self.__appliedValues:
+        if idx in appliedValues:
             raise SoftException('Unexpected arg (%s,%s). Argument has been already applied.' % (param1, param2))
         return idx
 
     def __setInitial(self, other):
         idx = self.__validate(other, initial=True)
-        if self.__appliedValues or self.__replay:
+        appliedValues = self.__appliedValues
+        replay = self.__replay
+        if appliedValues or replay:
             raise SoftException('Invalid usage %s' % (other,))
-        self.__appliedValues.add(idx)
-        self.__connector[self.__recordName] = self.__OPERATORS[self.SET](self, other, None)
-        self.__replay.append(ValueReplay.makeStepCompDescr(self.SET, idx))
+        appliedValues.add(idx)
+        selfSET = self.SET
+        self.__connector[self.__recordName] = self.__OPERATORS[selfSET](self, other, None)
+        replay.append(ValueReplay.makeStepCompDescr(selfSET, idx))
         return
 
     def __getFactorValue(self, other):
@@ -338,11 +340,11 @@ class ValueReplay:
         return x + int(round(value * next(self.__tags.itervalues())))
 
     def __addCoeffImpl(self, initial, value, coeff, op):
+        connector = self.__connector
         if initial is None:
-            initial = self.__connector[self.__recordName]
-        value = self.__overiddenValues.get(value, self.__connector[value])
-        coeff = self.__overiddenValues.get(coeff, self.__connector[coeff]) / self.__getFactorValue(coeff)
-        return op(initial, int(round(value * coeff)))
+            initial = connector[self.__recordName]
+        overiddenValues = self.__overiddenValues
+        return op(initial, int(round(overiddenValues.get(value, connector[value]) * overiddenValues.get(coeff, connector[coeff]) / self.__getFactorValue(coeff))))
 
     def __opAddCoeff(self, other, coeff, x=None):
         return self.__addCoeffImpl(x, other, coeff, lambda a, b: a + b)

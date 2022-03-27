@@ -40,32 +40,35 @@ class VehiclePreviewModulesTab(VehiclePreviewModulesTabMeta):
         pass
 
     def update(self):
-        self.updateStatus()
+        self.as_setStatusInfoS(*self.__makeStatusInfo())
 
-    def updateStatus(self):
+    @classmethod
+    def __makeStatusInfo(cls):
+        textRes = R.strings.vehicle_preview.modulesPanel
+        iconRes = R.images.gui.maps.icons.library
         if g_currentPreviewVehicle.hasModulesToSelect():
             if g_currentPreviewVehicle.isModified():
-                icon = icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.info_yellow()), 24, 24, -7, -4)
-                text = text_styles.neutral('%s%s' % (backport.text(R.strings.vehicle_preview.modulesPanel.status.text()), icon))
+                makeTextData = (textRes.status.text, iconRes.info_yellow, text_styles.neutral)
             else:
-                icon = icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.info()), 24, 24, -7, -4)
-                text = text_styles.stats('%s%s' % (backport.text(R.strings.vehicle_preview.modulesPanel.Label()), icon))
+                makeTextData = (textRes.Label, iconRes.info, text_styles.stats)
             tooltip = TOOLTIPS.VEHICLEPREVIEW_MODULS
         else:
-            icon = icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.info()), 24, 24, -7, -4)
-            text = text_styles.stats('%s%s' % (backport.text(R.strings.vehicle_preview.modulesPanel.noModulesOptions()), icon))
+            makeTextData = (textRes.noModulesOptions, iconRes.info, text_styles.stats)
             tooltip = TOOLTIPS.VEHICLEPREVIEW_MODULSNOMODULES
-        self.as_setStatusInfoS(text, tooltip, g_currentPreviewVehicle.getVehiclePreviewType(), needToShowAnim=self.__showAnimation())
+        return (_makeStatusText(*makeTextData),
+         tooltip,
+         g_currentPreviewVehicle.getVehiclePreviewType(),
+         cls.__needToShowAnim())
 
     @staticmethod
-    def __showAnimation():
+    def __needToShowAnim():
         vehicle = g_currentPreviewVehicle.item
         return not wasModulesAnimationShown() if vehicle is not None and vehicle.isCollectible and vehicle.hasModulesToSelect else False
 
 
 class ModulesPanel(ModulesPanelMeta):
-    itemsCache = dependency.descriptor(IItemsCache)
-    settingsCore = dependency.descriptor(ISettingsCore)
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(ModulesPanel, self).__init__()
@@ -76,13 +79,13 @@ class ModulesPanel(ModulesPanelMeta):
         super(ModulesPanel, self)._populate()
         g_currentPreviewVehicle.onComponentInstalled += self.update
         g_currentPreviewVehicle.onChanged += self.update
-        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.update()
 
     def _dispose(self):
         g_currentPreviewVehicle.onComponentInstalled -= self.update
         g_currentPreviewVehicle.onChanged -= self.update
-        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(ModulesPanel, self)._dispose()
 
     def update(self, *args):
@@ -99,13 +102,13 @@ class ModulesPanel(ModulesPanelMeta):
             devices = []
             self.as_setVehicleHasTurretS(vehicle.hasTurrets)
             for slotType in _MODULE_SLOTS:
-                data = self.itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[slotType], REQ_CRITERIA.CUSTOM(lambda item: item.isInstalled(vehicle))).values()
+                data = self.__itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[slotType], REQ_CRITERIA.CUSTOM(lambda item: item.isInstalled(vehicle))).values()
                 devices.append(FittingSlotVO(data, vehicle, slotType))
 
             self.__setHasCounter(devices)
             modulesEnabled = self.__hasCounter or vehicle.hasModulesToSelect
-            for item in devices:
-                item['isDisabledBgVisible'] = modulesEnabled
+            for device in devices:
+                device['isDisabledBgVisible'] = modulesEnabled
 
             self.as_setDataS({'devices': devices})
 
@@ -122,3 +125,11 @@ class ModulesPanel(ModulesPanelMeta):
         if SETTINGS_SECTIONS.UI_STORAGE not in diff:
             return
         self._update()
+
+
+def _makeStatusText(textRes, iconRes, style):
+    return style(''.join((backport.text(textRes()), _makeStatusIcon(iconRes))))
+
+
+def _makeStatusIcon(iconRes):
+    return icons.makeImageTag(backport.image(iconRes()), 24, 24, -7, -4)

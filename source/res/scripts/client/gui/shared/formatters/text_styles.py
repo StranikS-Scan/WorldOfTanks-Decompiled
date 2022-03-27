@@ -184,6 +184,10 @@ def bonusLocalText(text):
     return _formatText('bonusLocalText', text)
 
 
+def bonusLocalTextGold(text):
+    return _formatText('bonusLocalTextGold', text)
+
+
 def bonusLocalInfoTipText(text):
     return _formatText('bonusLocalInfoTipText', text)
 

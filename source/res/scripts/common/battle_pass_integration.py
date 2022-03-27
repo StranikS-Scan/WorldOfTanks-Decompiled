@@ -57,14 +57,6 @@ class BattlePassIntegrationRandom(BattlePassIntegrationInterface):
                 checkPointsList(winPoints, '{}/{}/win'.format(self.bonusTypeName, str(vehCD)))
                 checkPointsList(losePoints, '{}/{}/lose'.format(self.bonusTypeName, str(vehCD)))
 
-    @staticmethod
-    def _makePointsPerLevel(progression):
-        result = copy(progression)
-        for i in xrange(1, len(progression)):
-            result[i] -= progression[i - 1]
-
-        return result
-
     def calculatePointsSettings(self, storage):
         vehTypeCompDescr, results = storage['tempResults'].items()[0]
         rank = storage['avatarResults'].get('fareTeamXPPosition', 0)
@@ -128,7 +120,7 @@ class BattlePassIntegrationBattleRoyale(BattlePassIntegrationRandom):
     def _checkBattleRoyalePointsSequence(points, thresholdTargetCount):
         if any((point != 0 for point in points['win'][1:])):
             return False
-        mergedPoints = copy(points['lose'])
+        mergedPoints = list(points['lose'])
         mergedPoints[0] = points['win'][0]
         sortedMergedPoints = copy(mergedPoints)
         sortedMergedPoints.sort(reverse=True)

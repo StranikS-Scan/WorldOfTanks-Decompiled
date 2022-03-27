@@ -3,6 +3,8 @@
 
 
 class DAMAGE_LOG_SHELL_BG_TYPES(object):
-    GOLD = 'gold'
-    WHITE = 'white'
     EMPTY = 'empty'
+    DEFAULT = 'white'
+    GOLD = 'gold'
+    SPG_HE_NO_STUN = 'spgHENoStun'
+    SPG = 'spg'

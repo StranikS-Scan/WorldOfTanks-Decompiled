@@ -11,3 +11,5 @@ class BATTLE_MINIMAP_CONSTS(object):
     STATE_DEFAULT = 'default'
     STATE_IDLE = 'idle'
     STATE_ATTACK = 'attack'
+    CURSOR_ENTRY_BASE_DEFEND = 0
+    CURSOR_ENTRY_BASE_ATTACK = 1

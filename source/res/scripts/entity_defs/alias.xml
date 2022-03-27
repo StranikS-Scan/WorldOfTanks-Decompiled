@@ -370,6 +370,39 @@
       </queues>
     </Properties>
   </MAPS_TRAINING_QUEUE_INFO>
+  <RTS_SPAWN_POINT_DATA>	FIXED_DICT	  <Properties>
+      <guid>
+        <Type>	STRING	</Type>
+      </guid>
+      <position>
+        <Type>	VECTOR2	</Type>
+      </position>
+      <vehicleTag>
+        <Type>	STRING	</Type>
+      </vehicleTag>
+      <vehiclePreferableType>
+        <Type>	STRING	</Type>
+      </vehiclePreferableType>
+      <yaw>
+        <Type>	FLOAT32	</Type>
+      </yaw>
+    </Properties>
+  </RTS_SPAWN_POINT_DATA>
+  <RTS_CHOSEN_SPAWN_POINT_DATA>	FIXED_DICT	  <Properties>
+      <entityID>
+        <Type>	OBJECT_ID	</Type>
+      </entityID>
+      <guid>
+        <Type>	STRING	</Type>
+      </guid>
+      <position>
+        <Type>	VECTOR2	</Type>
+      </position>
+      <yaw>
+        <Type>	FLOAT32	</Type>
+      </yaw>
+    </Properties>
+  </RTS_CHOSEN_SPAWN_POINT_DATA>
   <PUBLIC_ARENA_INFO>	FIXED_DICT	  <Properties>
       <id>
         <Type>	OBJECT_ID	</Type>
@@ -826,6 +859,15 @@
       <commandercam>
         <Type>	BOOL	</Type>
       </commandercam>
+      <contour>
+        <Type>	BOOL	</Type>
+      </contour>
+      <contourPenetrableZone>
+        <Type>	UINT8	</Type>
+      </contourPenetrableZone>
+      <contourImpenetrableZone>
+        <Type>	UINT8	</Type>
+      </contourImpenetrableZone>
     </Properties>
   </USER_EXTRA_SETTINGS>
   <ARENA_ADDPLAYER_INFO>	FIXED_DICT	  <Properties>
@@ -927,6 +969,12 @@
       <userExtraSettings>
         <Type>	USER_EXTRA_SETTINGS	</Type>
       </userExtraSettings>
+      <isSsrRecordEnabled>
+        <Type>	BOOL	</Type>
+      </isSsrRecordEnabled>
+      <isSsrPlayEnabled>
+        <Type>	BOOL	</Type>
+      </isSsrPlayEnabled>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -994,7 +1042,7 @@
         <Type>	UINT16	</Type>
       </attackerMasterVehID>
       <needsCount>
-        <Type>	BOOL	</Type>
+        <Type>	UINT8	</Type>
       </needsCount>
     </Properties>
   </ATTACKER_INFO>
@@ -1201,6 +1249,9 @@
     <Properties>	&gt;	  <damage>
         <Type>	UINT32	</Type>
       </damage>
+      <damageSupply>
+        <Type>	UINT32	</Type>
+      </damageSupply>
       <trackAssist>
         <Type>	UINT32	</Type>
       </trackAssist>
@@ -1573,7 +1624,7 @@
   <SMOKE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <smokeID>
-        <Type>	UINT16	</Type>
+        <Type>	FLOAT64	</Type>
       </smokeID>
       <equipmentID>
         <Type>	UINT16	</Type>
@@ -1584,6 +1635,9 @@
       <team>
         <Type>	UINT8	</Type>
       </team>
+      <expiring>
+        <Type>	BOOL	</Type>
+      </expiring>
     </Properties>
   </SMOKE_INFO>
   <VEHICLE_DETECTOR_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1703,6 +1757,9 @@
       <customRoleSlotTypeId>
         <Type>	UINT8	</Type>
       </customRoleSlotTypeId>
+      <isGodModeActive>
+        <Type>	BOOL	</Type>
+      </isGodModeActive>
     </Properties>
   </CLIENT_VEHICLE_PUBLIC_INFO>
   <PLAY_LIMITS>	FIXED_DICT	  <Properties>
@@ -1756,6 +1813,9 @@
   </VEHICLE_MARKER_DATA>
   <VEHICLE_IN_DEATHZONE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
+      <vehicleId>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleId>
       <nextStrikeTime>
         <Type>	FLOAT32	</Type>
       </nextStrikeTime>
@@ -1841,6 +1901,42 @@
       </isRespawnActive>
     </Properties>
   </VEHICLE_HEALTH_INFO>
+  <RTS_ORDER_UPDATE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <order>
+        <Type>	INT8	</Type>
+      </order>
+      <manner>
+        <Type>	INT8	</Type>
+      </manner>
+      <position>
+        <Type>	VECTOR3	</Type>
+      </position>
+      <isPositionModified>
+        <Type>	INT8	</Type>
+      </isPositionModified>
+      <target>
+        <Type>	OBJECT_ID	</Type>
+      </target>
+      <heading>
+        <Type>	VECTOR3	</Type>
+      </heading>
+      <baseID>
+        <Type>	INT8	</Type>
+      </baseID>
+      <baseTeam>
+        <Type>	INT8	</Type>
+      </baseTeam>
+      <companions>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+          <size>	7	</size>
+        </Type>
+      </companions>
+    </Properties>
+  </RTS_ORDER_UPDATE>
   <GUN_MARKER>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <gunPosition>
@@ -1882,6 +1978,50 @@
       </attackReasonID>
     </Properties>
   </VEHICLE_HIT_DIRECTION>
+  <RTS_GROUP_UPDATE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <groupID>
+        <Type>	INT8	</Type>
+      </groupID>
+    </Properties>
+  </RTS_GROUP_UPDATE>
+  <RTS_QUERY>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <queryID>
+        <Type>	UINT32	</Type>
+      </queryID>
+      <queryType>
+        <Type>	INT8	</Type>
+      </queryType>
+      <packedPosition>
+        <Type>	VECTOR3	</Type>
+      </packedPosition>
+      <companions>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+          <size>	7	</size>
+        </Type>
+      </companions>
+    </Properties>
+  </RTS_QUERY>
+  <RTS_QUERY_RESULT>	FIXED_DICT	  <AllowNone>	false	</AllowNone>
+    <Properties>
+      <queryID>
+        <Type>	UINT32	</Type>
+      </queryID>
+      <resultCode>
+        <Type>	UINT8	</Type>
+      </resultCode>
+      <packedPosition>
+        <Type>	VECTOR3	</Type>
+      </packedPosition>
+    </Properties>
+  </RTS_QUERY_RESULT>
   <VEHICLE_CLIP_RELOAD_TIME>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <endTime>
@@ -2095,14 +2235,6 @@
       </sectorID>
     </Properties>
   </SECTOR_SHOOTING>
-  <SMOKE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <smokeInfos>
-        <Type>	ARRAY	  <of>	SMOKE_INFO	</of>
-        </Type>
-      </smokeInfos>
-    </Properties>
-  </SMOKE>
   <PLANE_TRAJECTORY>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <equipmentID>
@@ -2134,4 +2266,23 @@
       </isEndOfFlight>
     </Properties>
   </PLANE_TRAJECTORY>
+  <FIRE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <deviceExtraIndex>
+        <Type>	EXTRA_ID	</Type>
+      </deviceExtraIndex>
+      <notificationIndex>
+        <Type>	UINT8	</Type>
+      </notificationIndex>
+      <attackerID>
+        <Type>	OBJECT_ID	</Type>
+      </attackerID>
+      <equipmentID>
+        <Type>	UINT16	</Type>
+      </equipmentID>
+      <startTime>
+        <Type>	FLOAT64	</Type>
+      </startTime>
+    </Properties>
+  </FIRE_INFO>
 </alias.xml>

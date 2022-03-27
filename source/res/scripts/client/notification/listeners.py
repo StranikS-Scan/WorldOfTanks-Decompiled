@@ -8,7 +8,7 @@ from collections import defaultdict
 from PlayerEvents import g_playerEvents
 from constants import ARENA_BONUS_TYPE, MAPS_TRAINING_ENABLED_KEY
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED
+from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, IS_BATTLE_PASS_EXTRA_STARTED
 from adisp import process
 from async import async, await
 from chat_shared import SYS_MESSAGE_TYPE
@@ -67,6 +67,8 @@ class _FeatureState(object):
 
 _FUNCTION = 'function'
 SERVER_CMD_BP_GAMEMODE_ENABBLED = 'cmd_bp_gamemode_enabled'
+SERVER_CMD_BP_EXTRA_FINISH = 'cmd_bp_extra_finish'
+SERVER_CMD_BP_EXTRA_WILL_END_SOON = 'cmd_bp_extra_will_end_soon'
 
 class _StateExtractor(object):
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -981,24 +983,64 @@ class BattlePassListener(_NotificationListener):
             return
         for eventNotification in added:
             msgType = eventNotification.eventType
-            if msgType != SERVER_CMD_BP_GAMEMODE_ENABBLED:
-                continue
-            arenaBonusType = eventNotification.data
-            header = backport.text(R.strings.system_messages.battlePass.gameModeEnabled.header(), seasonNum=self.__battlePassController.getSeasonNum())
-            textRes = R.strings.system_messages.battlePass.gameModeEnabled.body.num(arenaBonusType)
-            if not textRes.exists():
-                _logger.warning('There is no text for given arenaBonusType: %d', arenaBonusType)
-                return
-            text = backport.text(textRes())
-            SystemMessages.pushMessage(text=text, type=SystemMessages.SM_TYPE.BattlePassGameModeEnabled, messageData={'header': header})
+            if msgType == SERVER_CMD_BP_GAMEMODE_ENABBLED:
+                self.__notifyGamemodeEnabled(eventNotification)
+            if msgType == SERVER_CMD_BP_EXTRA_FINISH:
+                self.__notifyFinishExtra(eventNotification.data)
+            if msgType == SERVER_CMD_BP_EXTRA_WILL_END_SOON:
+                self.__notifyExtraWillEndSoon(eventNotification.data)
 
     def __onBattlePassSettingsChange(self, newMode, oldMode):
         self.__checkAndNotify(oldMode, newMode)
         if self.__battlePassController.isEnabled() and newMode == oldMode:
             self.__checkAndNotifyOtherBattleTypes()
+        if self.__battlePassController.hasExtra() and not AccountSettings.getSettings(IS_BATTLE_PASS_EXTRA_STARTED) and self.__battlePassController.isActive():
+            AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_STARTED, True)
+            chapterID = self.__battlePassController.getExtraChapterID()
+            if chapterID:
+                self.__notifyStartExtra(chapterID)
 
     def __onSeasonStateChange(self):
         self.__checkAndNotify()
+
+    def __notifyGamemodeEnabled(self, eventNotification):
+        arenaBonusType = eventNotification.data
+        header = backport.text(R.strings.system_messages.battlePass.gameModeEnabled.header(), seasonNum=self.__battlePassController.getSeasonNum())
+        textRes = R.strings.system_messages.battlePass.gameModeEnabled.body.num(arenaBonusType)
+        if not textRes.exists():
+            _logger.warning('There is no text for given arenaBonusType: %d', arenaBonusType)
+            return
+        text = backport.text(textRes())
+        SystemMessages.pushMessage(text=text, type=SystemMessages.SM_TYPE.BattlePassGameModeEnabled, messageData={'header': header})
+
+    @staticmethod
+    def __notifyStartExtra(chapterID):
+        header = backport.text(R.strings.system_messages.battlePass.extraStarted.header())
+        chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.extraStarted.body(), name=chapterName), priority=NotificationPriorityLevel.HIGH, type=SM_TYPE.BattlePassExtraStart, messageData={'header': header})
+
+    @staticmethod
+    def __notifyFinishExtra(chapterID):
+        chapterID = int(chapterID)
+        textRes = R.strings.battle_pass.chapter.fullName.num(chapterID)
+        if not textRes.exists():
+            _logger.warning('There is no text for given chapterID: %d', chapterID)
+            return
+        chapterName = backport.text(textRes())
+        header = backport.text(R.strings.system_messages.battlePass.extraFinish.header(), name=chapterName)
+        text = backport.text(R.strings.system_messages.battlePass.extraFinish.body(), name=chapterName)
+        SystemMessages.pushMessage(text=text, type=SM_TYPE.BattlePassExtraFinish, messageData={'header': header})
+
+    def __notifyExtraWillEndSoon(self, chapterID):
+        chapterID = int(chapterID)
+        textRes = R.strings.battle_pass.chapter.fullName.num(chapterID)
+        if not textRes.exists() or not self.__battlePassController.isChapterExists(chapterID):
+            _logger.warning('There is no text or config for given chapterID: %d', chapterID)
+            return
+        chapterName = backport.text(textRes())
+        header = backport.text(R.strings.system_messages.battlePass.extraWillEndSoon.header(), name=chapterName)
+        text = backport.text(R.strings.system_messages.battlePass.extraWillEndSoon.body(), name=chapterName)
+        SystemMessages.pushMessage(text=text, type=SM_TYPE.BattlePassExtraWillEndSoon, messageData={'header': header})
 
     def __checkAndNotifyOtherBattleTypes(self):
         supportedTypes = self.__battlePassController.getSupportedArenaBonusTypes()

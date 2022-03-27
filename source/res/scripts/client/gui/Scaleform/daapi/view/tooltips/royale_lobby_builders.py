@@ -37,7 +37,7 @@ class _BattleRoyaleHangarVehInfoContext(contexts.HangarContext):
         hangarVehConfigurator = self.app.containerManager.getContainer(WindowLayer.SUB_VIEW).getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: BATTLEROYALE_ALIASES.HANGAR_VEH_INFO_VIEW})
         return hangarVehConfigurator.getSelectedVehicle()
 
-    def buildItem(self, intCD, slotIdx=0, historicalBattleID=-1):
+    def buildItem(self, intCD, slotIdx=0, historicalBattleID=-1, vehicle=None):
         self._vehicle = self.getVehicle()
         vDescr = self._vehicle.descriptor
         module = self.itemsCache.items.getItemByCD(intCD)

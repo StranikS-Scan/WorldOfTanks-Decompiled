@@ -1,0 +1,18 @@
+<extension.xml>
+  <FeatureName>	server_side_replay	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Components>
+    <StaticComponents>
+      <ServerReplayConnectionComponent></ServerReplayConnectionComponent>
+      <ServerReplayArenaComponent></ServerReplayArenaComponent>
+    </StaticComponents>
+  </Components>
+  <Entities>
+    <ClientServerEntities>
+      <ReplayConnectionHandler></ReplayConnectionHandler>
+    </ClientServerEntities>
+    <ServerOnlyEntities>
+      <RecorderEntity></RecorderEntity>
+    </ServerOnlyEntities>
+  </Entities>
+</extension.xml>

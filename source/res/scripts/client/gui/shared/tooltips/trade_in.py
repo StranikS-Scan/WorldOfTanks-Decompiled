@@ -4,12 +4,11 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
-from gui.shared.formatters.ranges import toRomanRangeString
+from gui.shared.formatters.time_formatters import getDueDateOrTimeStr
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips import formatters, TOOLTIP_TYPE, ToolTipBaseData
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
-from helpers.time_utils import getDateTimeInLocal
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.server_events import IEventsCache
 
@@ -22,21 +21,20 @@ class TradeInInfoTooltipData(BlocksTooltipData):
         self._setContentMargin(right=62)
 
     def _packBlocks(self, *args, **kwargs):
-        return [formatters.packBuildUpBlockData(blocks=self.__getHeader(), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL), formatters.packBuildUpBlockData(blocks=self.__getInfo(levels=args[0]), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE), formatters.packBuildUpBlockData(blocks=self.__getFooter(), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL)]
+        return [formatters.packBuildUpBlockData(blocks=self.__getHeader(), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL), formatters.packBuildUpBlockData(blocks=self.__getInfo(), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE), formatters.packBuildUpBlockData(blocks=self.__getFooter(), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL)]
 
     @staticmethod
     def __getHeader():
         return [formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.tradeIn.trade_in_icon()), title=text_styles.highTitle(backport.text(R.strings.tooltips.tradeInInfo.header())), imgPadding=formatters.packPadding(left=2, top=4), txtPadding=formatters.packPadding(left=14, top=12))]
 
     @staticmethod
-    def __getInfo(levels):
-        romanLevels = text_styles.neutral(toRomanRangeString(sequence=levels, rangeDelimiter=backport.text(R.strings.menu.rangeDelimiter())))
-        levelsText = backport.text(R.strings.tooltips.tradeInInfo.tradeOffLevels()).format(levels=romanLevels)
-        return [formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.prem_small_icon()), imgPadding=formatters.packPadding(top=4), title=text_styles.main(levelsText), txtPadding=formatters.packPadding(left=3), padding=formatters.packPadding(left=62, bottom=18)), formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.discount()), imgPadding=formatters.packPadding(top=-1), title=text_styles.main(backport.text(R.strings.tooltips.tradeInInfo.discount())), padding=formatters.packPadding(left=60))]
+    def __getInfo():
+        offerText = backport.text(R.strings.tooltips.tradeInInfo.tradeOffOffer())
+        return [formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.prem_small_icon()), imgPadding=formatters.packPadding(top=4), title=text_styles.main(offerText), txtPadding=formatters.packPadding(left=3), padding=formatters.packPadding(left=62, bottom=18)), formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.discount()), imgPadding=formatters.packPadding(top=-1), title=text_styles.main(backport.text(R.strings.tooltips.tradeInInfo.discount())), padding=formatters.packPadding(left=60))]
 
     @staticmethod
     def __getFooter():
-        return [formatters.packAlignedTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.tradeInInfo.actionTime())), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(left=34)), formatters.packAlignedTextBlockData(text=text_styles.neutral(_withTradeInFromTo()), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(left=34))]
+        return [formatters.packAlignedTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.tradeInInfo.actionTime())), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(left=34)), formatters.packAlignedTextBlockData(text=text_styles.neutral(_withTradeInUntil()), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(left=34))]
 
 
 class TradeInInfoNotAvailableData(ToolTipBaseData):
@@ -51,7 +49,7 @@ class TradeInInfoNotAvailableData(ToolTipBaseData):
             body = backport.text(R.strings.tooltips.tradeInExpired.body())
         else:
             header = backport.text(R.strings.tooltips.tradeInNoVehicles.header())
-            body = backport.text(R.strings.tooltips.tradeInNoVehicles.body()).format(range=_withTradeInFromTo())
+            body = backport.text(R.strings.tooltips.tradeInNoVehicles.body()).format(range=_withTradeInUntil())
         return {'header': header,
          'body': body}
 
@@ -76,10 +74,6 @@ class TradeInStateNotAvailableData(ToolTipBaseData):
 
 
 @dependency.replace_none_kwargs(tradeIn=ITradeInController)
-def _withTradeInFromTo(tradeIn=None):
-    startTimestamp, endTimestamp = tradeIn.getStartEndTimestamps()
-    if 0 == endTimestamp == startTimestamp:
-        return backport.text(R.strings.menu.dateTime.unlimited())
-    start = getDateTimeInLocal(startTimestamp)
-    end = getDateTimeInLocal(endTimestamp)
-    return backport.text(R.strings.menu.dateTime.fromToWithYear()).format(fromDay=start.day, fromMonth=backport.text(R.strings.menu.dateTime.months.num(start.month)()), toDay=end.day, toMonth=backport.text(R.strings.menu.dateTime.months.num(end.month)()), toYear=end.year)
+def _withTradeInUntil(tradeIn=None):
+    endTimestamp = tradeIn.getExpirationTime()
+    return backport.text(R.strings.menu.dateTime.trade_in.undefined()) if endTimestamp == 0 else getDueDateOrTimeStr(endTimestamp)

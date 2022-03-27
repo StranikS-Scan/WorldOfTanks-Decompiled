@@ -591,6 +591,9 @@ class SoundGroups(object):
             traceback.print_stack()
         return WWISE.WW_getSoundPos(eventName, objectName, position)
 
+    def WWsetRTCPGlobal(self, eventName, value):
+        WWISE.WW_setRTCPGlobal(eventName, value)
+
     def changePlayMode(self, mode):
         __ceilLess = None
         if BigWorld.player().getVehicleAttached() is not None:

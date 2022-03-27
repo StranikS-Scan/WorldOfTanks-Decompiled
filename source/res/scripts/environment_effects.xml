@@ -2023,7 +2023,7 @@
     <model>
       <modelName>	vegetation/Broadleaves/DryTree_Autumn/DryTree_Autumn_01.srt	</modelName>
       <offset>	0.000000 5.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
+      <wwsound>	ambient_trees_yellow_soft_comb_mid_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/DryTree_Autumn/DryTree_Autumn_6m.srt	</modelName>
@@ -2038,22 +2038,22 @@
     <model>
       <modelName>	vegetation/Broadleaves/Maple_Autumn_Fallen/Maple_Autumn_Fallen_4-5m_dry.srt	</modelName>
       <offset>	0.000000 2.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_yellow_soft_comb_small_01	</wwsound>
+      <wwsound>	ambient_trees_without_foliage_bush_big_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Maple_Autumn_Fallen/Maple_Autumn_Fallen_4m_dry.srt	</modelName>
       <offset>	0.000000 2.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_yellow_soft_comb_small_01	</wwsound>
+      <wwsound>	ambient_trees_without_foliage_bush_big_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Maple_Autumn_Fallen/Maple_Autumn_Fallen_12m.srt	</modelName>
       <offset>	0.000000 4.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_yellow_dry_comb_big_01	</wwsound>
+      <wwsound>	ambient_trees_yellow_soft_comb_big_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Maple_Autumn_Fallen/Maple_Autumn_Fallen_21m.srt	</modelName>
       <offset>	0.000000 5.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_yellow_dry_comb_big_02	</wwsound>
+      <wwsound>	ambient_trees_yellow_soft_comb_big_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn_Fallen/Bush_Wild_Autumn_Fallen_5m.srt	</modelName>
@@ -2068,12 +2068,12 @@
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn_Autumn_Fallen/Hawthorn_Autumn_Fallen_01.srt	</modelName>
       <offset>	0.000000 2.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
+      <wwsound>	ambient_bush_yellow_dry_big_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn_Autumn_Fallen/Hawthorn_Autumn_Fallen_05.srt	</modelName>
       <offset>	0.000000 1.500000 0.000000	</offset>
-      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
+      <wwsound>	ambient_bush_yellow_dry_big_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Aucuba/Aucuba_5m.srt	</modelName>
@@ -2144,6 +2144,16 @@
       <modelName>	vegetation/Broadleaves/DryTree_Frost_Light/DryTree_Frost_Light_Bush_var1.srt	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	content/Decor/hd_dec_UNI_015_Oilcloth/normal/lod0/hd_dec_UNI_015_Oilcloth_Damaged01_anim.model	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	amb_map_06_ensk_flag	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Maple/Maple_33m.srt	</modelName>
+      <offset>	0.000000 25.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_big_02	</wwsound>
     </model>
   </lightSounds>
   <birds>
@@ -5108,12 +5118,12 @@
         <wwsoundName>	hangar_h04_remday_cannonade	</wwsoundName>
       </channel0>
       <point>
-        <position>	-149.415619 6.347349 247.047638	</position>
+        <position>	-60.373898 6.347350 246.837204	</position>
         <speed0>	3.8	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-50.688725 5.692511 247.525436	</position>
+        <position>	50.807899 5.692504 246.127869	</position>
         <speed0>	3.8	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -11537,5 +11547,3142 @@
         <animAction></animAction>
       </point>
     </IL2_drown_center>
+    <m209_IL2_plane_attack_W01>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	2.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_west_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_west_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-799.910889 91.227783 -2679.999756	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-782.927246 85.372269 -1257.355835	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	1.000000 0.750000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-838.933655 81.062691 -1054.439453	</position>
+        <speed0>	95.000000	</speed0>
+        <oscillation0>	4.000000 4.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-989.109314 86.609108 -760.285278	</position>
+        <speed0>	95.000000	</speed0>
+        <oscillation0>	4.000000 5.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1135.977905 64.043251 -683.944092	</position>
+        <speed0>	95.000000	</speed0>
+        <oscillation0>	2.000000 1.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1234.628418 78.710564 -588.547913	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	1.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1323.620483 116.951424 -499.650635	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	3.000000 1.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1473.989502 113.772812 -407.001801	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	5.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1601.794067 72.054642 -390.467072	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	4.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1776.927612 -18.069965 -253.495544	</position>
+        <speed0>	160.000000	</speed0>
+        <oscillation0>	5.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_attack_W01>
+    <m209_IL2_plane_attack_W02>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	2.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_not_gun_yak_3_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-874.715820 92.682938 -2697.049316	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-822.550415 99.754791 -1337.787476	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-967.341309 114.587639 -876.893005	</position>
+        <speed0>	95.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1249.279419 122.926453 -690.380066	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1617.250488 90.230873 -642.072571	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1926.716187 126.599586 -746.229309	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-2814.295166 62.930515 -967.396057	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_attack_W02>
+    <m209_IL2_plane_attack_W03>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	2.500000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_west_02.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_west_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-1432.391113 134.188400 -2736.009277	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1273.705200 129.858093 -1451.734009	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1056.517456 113.934303 -1052.112305	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	4.000000 0.750000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-764.380371 101.126610 -1067.286011	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	3.000000 6.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-603.121033 77.663887 -1398.606934	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	4.000000 4.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-490.195587 102.312065 -1845.423340	</position>
+        <speed0>	160.000000	</speed0>
+        <oscillation0>	6.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-423.410339 17.152578 -2326.753906	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	6.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_attack_W03>
+    <m209_IL2_plane_attack_W04>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	2.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	49	</tesselationFactor>
+        <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_not_gun_mustang_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-1378.072876 143.090347 -2777.773438	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1063.251953 133.271591 -1156.649658	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-907.658936 134.651779 -940.918945	</position>
+        <speed0>	95.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-716.097412 128.069031 -830.636902	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-523.251953 115.565079 -949.398926	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-382.954956 166.224945 -1155.219849	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-85.694504 125.430466 -2756.649414	</position>
+        <speed0>	200.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_attack_W04>
+    <m209_IL2_plane_explosion_W01>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_crash_west_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-1776.730469 -18.041552 -253.465942	</position>
+        <speed0>	0.500000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1786.786255 -24.907650 -243.640396	</position>
+        <speed0>	0.500000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_explosion_W01>
+    <m209_IL2_plane_explosion_W03>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_crash_west_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-422.769562 17.096060 -2326.607178	</position>
+        <speed0>	0.200000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-421.725922 11.366065 -2342.265137	</position>
+        <speed0>	0.200000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_explosion_W03>
+    <m209_IL2_plane_smoke_W01>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_smoke_east_01.eff	</effectName>
+      </channel0>
+      <point>
+        <position>	-1775.313354 -18.087891 -256.194550	</position>
+        <speed0>	0.250000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1780.956665 -21.243177 -250.243805	</position>
+        <speed0>	0.250000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_smoke_W01>
+    <m209_IL2_AAD_W01>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	0	</rollMagnitude>
+        <rollRelaxation>	0	</rollRelaxation>
+        <oscillationFreqHorz>	0	</oscillationFreqHorz>
+        <oscillationFreqVert>	0	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_air_defence.eff	</effectName>
+      </channel0>
+      <point>
+        <position>	-1110.908936 121.118874 -1468.588501	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1129.604858 103.064545 -1324.693604	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1162.138550 121.648628 -1224.840820	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1189.581299 110.553902 -1130.214233	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_AAD_W01>
+    <m209_IL2_AAD_W02>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	0	</rollMagnitude>
+        <rollRelaxation>	0	</rollRelaxation>
+        <oscillationFreqHorz>	0	</oscillationFreqHorz>
+        <oscillationFreqVert>	0	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_air_defence.eff	</effectName>
+      </channel0>
+      <point>
+        <position>	-881.201477 86.506218 -1525.856323	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-829.998596 83.623100 -1438.857910	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-795.449280 98.285599 -1345.833618	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-800.024048 106.759743 -1213.070801	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_AAD_W02>
+    <m209_IL2_plane_attack_C01>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_center_02.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_center_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-351.283875 104.842484 -2553.447021	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-327.364014 122.459000 -1140.930054	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-272.970612 140.417908 -951.597229	</position>
+        <speed0>	95.000000	</speed0>
+        <oscillation0>	10.000000 5.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-219.712982 100.017616 -772.120605	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	6.000000 0.750000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-236.599121 67.707352 -577.173767	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	10.000000 6.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-292.731201 69.437813 -424.269989	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	10.000000 6.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-343.799927 81.807007 -326.411835	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	9.000000 5.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-412.366516 76.078712 -265.500610	</position>
+        <speed0>	140.000000	</speed0>
+        <oscillation0>	5.000000 3.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-533.710571 45.408871 -219.469574	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	6.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-775.665222 24.619045 -131.212585	</position>
+        <speed0>	140.000000	</speed0>
+        <oscillation0>	8.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_attack_C01>
+    <m209_IL2_plane_attack_C02>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	2.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_center_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_center_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-261.046600 100.661980 -2634.938477	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-241.071426 99.901596 -1760.519897	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	1.000000 0.750000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-224.738525 84.866791 -1432.399902	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	1.000000 1.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-202.908463 95.367195 -1094.573364	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	1.000000 1.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-42.790134 118.103706 -999.982239	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	6.000000 4.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	189.587784 63.999611 -1114.569214	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	6.000000 4.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	242.168655 103.013626 -1372.573608	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	6.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	273.157074 58.896187 -1702.489624	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	3.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	272.723114 101.256821 -1891.689453	</position>
+        <speed0>	140.000000	</speed0>
+        <oscillation0>	5.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	342.714630 43.608940 -2350.933350	</position>
+        <speed0>	160.000000	</speed0>
+        <oscillation0>	8.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_attack_C02>
+    <m209_IL2_plane_attack_C03>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_not_gun_yak_3_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	103.271835 118.707932 -2547.600830	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	11.677772 116.368088 -1152.629517	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	34.471226 115.695221 -869.589722	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	284.741241 122.044907 -702.122253	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	525.725586 142.781418 -821.025818	</position>
+        <speed0>	115.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	713.907471 114.946846 -1155.987793	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	755.782410 148.670547 -2552.349609	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_attack_C03>
+    <m209_IL2_plane_attack_C04>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_not_gun_mustang_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	192.711044 135.303085 -2524.938477	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	132.803818 101.358047 -1158.259766	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	157.495987 103.315727 -924.717957	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	429.410370 78.991150 -791.990601	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	689.282043 107.143341 -882.263855	</position>
+        <speed0>	115.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	835.716431 174.863846 -1166.616455	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	656.531311 148.789200 -2523.119385	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_attack_C04>
+    <m209_IL2_plane_explosion_C01>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_crash_center_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-775.967224 24.527462 -131.241470	</position>
+        <speed0>	0.500000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-787.089661 24.180891 -127.887581	</position>
+        <speed0>	0.500000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_explosion_C01>
+    <m209_IL2_plane_explosion_C02>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
+        <wwsoundName>	BF_eb_plane_hits_water	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	347.821564 40.669510 -2373.149170	</position>
+        <speed0>	0.200000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	342.753632 43.687809 -2350.984375	</position>
+        <speed0>	0.250000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_explosion_C02>
+    <m209_IL2_plane_smoke_C01>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_smoke_east_01.eff	</effectName>
+      </channel0>
+      <point>
+        <position>	-781.210754 24.786367 -129.343674	</position>
+        <speed0>	0.250000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-788.094360 23.991190 -126.993301	</position>
+        <speed0>	0.250000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_smoke_C01>
+    <m209_IL2_plane_smoke_C02>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_smoke_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_smoke_center_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	344.664490 38.999905 -2361.957520	</position>
+        <speed0>	0.150000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	347.472168 39.387310 -2374.124512	</position>
+        <speed0>	0.150000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_smoke_C02>
+    <m209_IL2_AAD_C01>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	0	</rollMagnitude>
+        <rollRelaxation>	0	</rollRelaxation>
+        <oscillationFreqHorz>	0	</oscillationFreqHorz>
+        <oscillationFreqVert>	0	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_air_defence.eff	</effectName>
+      </channel0>
+      <point>
+        <position>	-318.798218 113.302467 -1335.034912	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-302.331757 110.933617 -1186.959473	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-278.016449 110.914177 -1097.133789	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-232.576797 108.760307 -970.791321	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_AAD_C01>
+    <m209_IL2_AAD_C02>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	0	</rollMagnitude>
+        <rollRelaxation>	0	</rollRelaxation>
+        <oscillationFreqHorz>	0	</oscillationFreqHorz>
+        <oscillationFreqVert>	0	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_air_defence.eff	</effectName>
+      </channel0>
+      <point>
+        <position>	129.695175 85.360222 -1359.966187	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	179.379868 86.400566 -1223.747070	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	174.262497 90.755730 -1063.316040	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	110.052223 84.104393 -954.923767	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_AAD_C02>
+    <m209_IL2_plane_attack_E01>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_east_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	1121.099976 91.544296 -2440.219971	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1126.963867 102.711105 -1332.112549	</position>
+        <speed0>	115.000000	</speed0>
+        <oscillation0>	1.000000 0.750000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1139.789917 112.982002 -1073.409912	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	1.000000 0.750000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1152.532959 108.198792 -993.629395	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	6.000000 0.750000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1151.738281 94.819839 -914.513367	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	6.000000 0.750000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1224.417114 97.782089 -734.393738	</position>
+        <speed0>	95.000000	</speed0>
+        <oscillation0>	6.000000 0.750000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1283.798218 95.270958 -614.991333	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	2.000000 1.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1337.439453 116.768013 -538.688110	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	1.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1449.604736 108.928528 -463.007050	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	8.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1537.018921 97.220078 -361.396210	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	8.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1601.845215 67.063759 -229.905884	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	8.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1694.147705 12.648238 -64.602303	</position>
+        <speed0>	160.000000	</speed0>
+        <oscillation0>	8.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_attack_E01>
+    <m209_IL2_plane_attack_E02>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_not_gun_mustang_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	1058.945923 97.448685 -2430.689453	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1054.973267 144.093918 -1793.669189	</position>
+        <speed0>	115.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	994.521545 99.692337 -1156.649902	</position>
+        <speed0>	115.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	991.138916 115.445206 -918.431885	</position>
+        <speed0>	95.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1106.048706 112.472336 -815.867249	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1267.355591 111.143730 -850.455261	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1443.650269 107.857918 -1155.216187	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1849.447876 94.974197 -2050.968994	</position>
+        <speed0>	160.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_attack_E02>
+    <m209_IL2_plane_attack_E03>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_east_02.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_east_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	721.593018 100.760002 -2390.040039	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	719.623718 111.106850 -1140.927856	</position>
+        <speed0>	115.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	741.954224 142.738373 -913.568848	</position>
+        <speed0>	112.000000	</speed0>
+        <oscillation0>	10.000000 5.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	840.342224 132.403595 -811.539063	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	10.000000 5.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1027.154663 89.962471 -932.729858	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	2.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1047.682495 103.262718 -1062.599731	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	10.000000 6.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1098.039795 81.760460 -1218.741455	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	9.000000 5.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1122.380737 70.036469 -1440.355957	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	5.000000 3.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1181.419800 77.021584 -1632.053345	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	6.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1296.485962 17.526575 -1863.044067	</position>
+        <speed0>	160.000000	</speed0>
+        <oscillation0>	8.000000 2.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_attack_E03>
+    <m209_IL2_plane_attack_E04>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_not_gun_yak_3_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	806.862000 98.703300 -2422.139893	</position>
+        <speed0>	180.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	797.845825 108.721115 -1090.989868	</position>
+        <speed0>	115.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	863.555969 122.349144 -869.589966	</position>
+        <speed0>	95.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1019.477295 126.308830 -804.907898	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1178.284546 126.139862 -916.814148	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1302.908447 123.470299 -1155.989014	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1677.883423 116.359535 -2057.331543	</position>
+        <speed0>	160.000000	</speed0>
+        <oscillation0>	1.000000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_attack_E04>
+    <m209_IL2_plane_explosion_E01>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_crash_east_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	1693.988647 13.666271 -64.945511	</position>
+        <speed0>	0.300000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1699.991943 12.346354 -54.049911	</position>
+        <speed0>	0.300000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_explosion_E01>
+    <m209_IL2_plane_explosion_E03>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_crash_east_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	1301.221924 16.563923 -1873.432495	</position>
+        <speed0>	0.750000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1296.443359 17.425783 -1863.091431	</position>
+        <speed0>	0.500000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_explosion_E03>
+    <m209_IL2_plane_smoke_E03>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_smoke_east_01.eff	</effectName>
+      </channel0>
+      <point>
+        <position>	1297.493774 17.403337 -1865.661011	</position>
+        <speed0>	0.200000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1302.704346 16.874250 -1876.837280	</position>
+        <speed0>	0.200000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_plane_smoke_E03>
+    <m209_IL2_AAD_E01>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	0	</rollMagnitude>
+        <rollRelaxation>	0	</rollRelaxation>
+        <oscillationFreqHorz>	0	</oscillationFreqHorz>
+        <oscillationFreqVert>	0	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_air_defence.eff	</effectName>
+      </channel0>
+      <point>
+        <position>	787.901428 99.441429 -1309.183594	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	780.851624 125.566673 -1210.475464	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	900.873047 135.977036 -1106.855103	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	991.642334 96.211037 -991.504028	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_AAD_E01>
+    <m209_IL2_AAD_E02>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	0	</rollMagnitude>
+        <rollRelaxation>	0	</rollRelaxation>
+        <oscillationFreqHorz>	0	</oscillationFreqHorz>
+        <oscillationFreqVert>	0	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/208_air_defence.eff	</effectName>
+      </channel0>
+      <point>
+        <position>	1076.211670 66.834335 -1392.060425	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1128.953369 104.761322 -1259.759521	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1083.717896 91.670601 -1165.869385	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1084.369507 129.087814 -971.422241	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_IL2_AAD_E02>
+    <m209_zone_destr_CZ1_planes_01>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-1.738930 68.420189 -2431.343262	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	35.752556 115.443748 -1454.110352	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	85.042702 101.044998 -961.828003	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	112.639259 86.583191 -644.814392	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	140.211227 73.345200 -513.762695	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	204.591415 77.497810 -424.024658	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	281.413361 75.350189 -393.387146	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	406.033142 73.184998 -441.742798	</position>
+        <speed0>	75.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	503.023804 66.547813 -581.952942	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	563.423157 65.101616 -789.913574	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	654.588440 89.562279 -1040.453735	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1097.783447 95.414856 -2439.945557	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_CZ1_planes_01>
+    <m209_zone_destr_CZ1_planes_02>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_03	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-104.229362 62.772190 -2425.377930	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-58.484303 141.383087 -1424.563354	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-21.278837 109.445419 -980.034302	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	12.291777 98.745087 -672.478699	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	57.585957 95.041298 -485.122131	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	115.861534 97.837875 -423.592590	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	200.419189 100.764229 -398.567749	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	354.569000 93.023720 -464.702301	</position>
+        <speed0>	75.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	436.768646 84.730652 -605.586182	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	482.179199 98.100548 -801.982910	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	566.488037 111.231422 -1031.921265	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1060.732788 137.405304 -2448.760254	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_CZ1_planes_02>
+    <m209_zone_destr_CZ1_planes_03>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_04	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-317.250488 75.525154 -2420.859619	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-225.806183 137.512115 -1473.599731	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-170.019302 141.669449 -980.035400	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-108.481079 116.989670 -673.181641	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-35.060364 85.820618 -489.022156	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	19.871742 79.421997 -430.818817	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	108.149750 83.074799 -406.314789	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	243.701065 73.215515 -462.386169	</position>
+        <speed0>	75.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	330.977356 82.739807 -604.300537	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	384.909302 94.073509 -815.262329	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	396.423615 96.993446 -995.143494	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	886.108154 84.858795 -2445.256348	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_CZ1_planes_03>
+    <m209_zone_destr_CZ1_planes_04>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-396.729919 89.188629 -2417.067627	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-296.743256 158.981766 -1416.082397	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-268.533081 105.765373 -969.476868	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-202.088028 93.356216 -653.677979	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-149.651947 106.817841 -529.119812	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-87.678513 116.717712 -456.263306	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	21.871300 119.441994 -421.208496	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	164.168152 98.115944 -483.952789	</position>
+        <speed0>	75.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	270.175568 89.785683 -630.682434	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	321.447540 109.258400 -825.244324	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	345.051880 130.959488 -1046.588013	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	727.887268 77.959908 -2442.794434	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_CZ1_planes_04>
+    <m209_zone_destr_CZ2_planes_01>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-73.146675 39.569473 -2244.369873	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	54.908772 115.443748 -424.361908	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	71.619087 85.292397 -50.014816	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.400000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	123.180321 118.422539 431.455200	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	3.000000 1.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	307.647400 91.826164 554.000183	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	500.772095 90.279778 477.513641	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	597.800964 95.113625 261.986694	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	639.775085 82.114296 -20.902739	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	632.400757 93.419792 -431.491241	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	955.778870 99.658096 -2432.349609	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_CZ2_planes_01>
+    <m209_zone_destr_CZ2_planes_02>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_03	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-127.327179 40.699825 -2225.564453	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-72.447334 140.463074 -407.934784	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	39.367352 170.943924 -124.804115	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	82.330864 254.250351 251.535934	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	89.508110 236.805145 432.059540	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	200.418991 175.495239 609.496338	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	420.636200 142.304886 524.308105	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	599.308899 126.096672 255.321762	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	647.795410 118.882500 -28.019651	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	594.553711 102.940552 -430.807770	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	823.152954 87.974846 -2423.898926	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_CZ2_planes_02>
+    <m209_zone_destr_CZ2_planes_03>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_04	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-286.637268 66.734360 -2289.001221	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-223.414963 123.032997 -964.106506	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-88.480797 123.113235 -399.608032	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-169.908478 111.975365 -52.314865	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-167.656281 119.378746 300.964722	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-111.585663 100.612938 454.643951	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	108.149696 93.409317 550.898865	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	243.700974 109.924980 461.208099	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	371.350189 146.517685 252.621353	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	417.052551 149.997009 -43.240627	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	416.947571 134.774765 -432.661560	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	639.152405 104.067566 -2351.082764	</position>
+        <speed0>	160.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_CZ2_planes_03>
+    <m209_zone_destr_CZ2_planes_04>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-334.718933 78.463371 -2305.112061	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-315.632935 166.672699 -514.478882	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-196.464005 200.150681 -44.447849	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-202.553009 142.654739 295.535950	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-152.670654 142.976624 498.101013	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	37.959435 163.776642 591.235901	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	233.967911 176.635895 498.830139	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	319.797821 181.332672 247.693939	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	349.113068 161.730118 -116.220772	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	318.387939 108.188026 -430.204132	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	606.329773 91.839699 -2372.132568	</position>
+        <speed0>	160.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_CZ2_planes_04>
+    <m209_zone_destr_EZ1_planes_01>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	1205.417725 140.637573 -2654.447021	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1268.010010 115.443779 -1536.952026	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1185.655884 79.181061 -968.307190	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1241.410645 90.545982 -672.437195	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1369.292969 94.635887 -416.294586	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1579.115479 145.118027 -347.169312	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1698.188721 173.459091 -411.242645	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1769.291992 176.720886 -602.218933	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1748.374268 171.693008 -860.921082	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.300000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1719.861694 184.269440 -1129.278564	</position>
+        <speed0>	125.000000	</speed0>
+        <oscillation0>	0.200000 0.300000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1739.936890 71.227806 -2578.432373	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_EZ1_planes_01>
+    <m209_zone_destr_EZ1_planes_02>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_03	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	1171.735352 159.219910 -2651.009033	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1226.223267 147.843292 -1614.659180	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1177.538452 171.291977 -1393.815430	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.400000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1098.999023 120.883369 -993.384338	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1150.526855 123.291466 -693.588806	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1205.315552 120.252892 -545.088013	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1308.640503 109.341209 -435.702209	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1463.857178 125.252235 -403.053741	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1642.653687 129.887100 -502.499542	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1742.902466 129.083054 -642.423767	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.100000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1815.527588 120.161636 -934.175049	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1807.855103 146.820877 -1214.619629	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1792.446655 104.143524 -2544.712646	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_EZ1_planes_02>
+    <m209_zone_destr_EZ1_planes_03>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_04	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	780.973267 119.898682 -2563.815186	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	977.858398 112.424774 -1450.781738	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	993.271118 94.087997 -1037.190186	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1039.635742 90.118851 -724.169006	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1117.199585 96.692245 -529.826111	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1214.945557 115.313286 -450.835907	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1348.229492 129.088516 -432.975372	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1511.649780 128.526199 -556.828247	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1643.083496 123.990486 -927.048096	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1652.169678 134.582291 -1132.439209	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	2054.239990 73.488251 -2585.992432	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_EZ1_planes_03>
+    <m209_zone_destr_EZ1_planes_04>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	768.829895 165.339737 -2563.159668	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	941.084351 144.612625 -1470.576416	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	935.945374 137.515610 -1092.833618	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	933.566650 101.039070 -806.614868	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	976.701172 79.705544 -587.047852	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1132.769409 81.806976 -441.663300	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1366.858398 89.770088 -474.682770	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1497.645264 91.484451 -663.411316	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1554.901489 110.345383 -892.019104	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1559.718506 165.180420 -1143.017700	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	2033.682983 102.255798 -2582.545410	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_EZ1_planes_04>
+    <m209_zone_destr_EZ2_planes_01>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	1118.178223 146.846313 -2467.715576	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1176.337524 121.418434 -424.361725	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1179.365356 105.666145 -50.014828	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1246.834473 96.039299 319.656525	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1480.972412 90.498161 532.148315	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1691.207153 137.340195 552.333801	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1972.064209 181.702240 397.115875	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	2209.558838 210.483322 147.658371	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	2925.813477 178.331665 -656.708008	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_EZ2_planes_01>
+    <m209_zone_destr_EZ2_planes_02>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_03	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	1088.329590 192.450439 -2503.626953	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1108.757568 170.121445 -407.934479	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1110.572388 148.691315 -0.201912	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1145.668823 140.210159 323.303070	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1239.997803 116.477394 524.278503	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1390.373535 122.545952 633.090698	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1618.600830 126.475212 664.816956	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1909.355347 150.097610 522.860352	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	2234.947021 160.203232 249.258102	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	3018.579834 57.121422 -467.974854	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_EZ2_planes_02>
+    <m209_zone_destr_EZ2_planes_03>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_04	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	765.413147 161.864044 -2511.899170	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	857.031677 120.762352 -463.862671	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	891.811157 109.895691 -52.314846	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	941.731323 101.951668 300.964539	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1014.133789 93.625328 454.644012	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1172.118164 86.299034 602.107544	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1329.463501 78.902672 682.916138	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1565.335938 90.439537 724.257690	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1864.145264 107.526482 693.420654	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	2295.536865 184.940994 454.950165	</position>
+        <speed0>	125.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	2940.132813 162.506271 223.901505	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_EZ2_planes_03>
+    <m209_zone_destr_EZ2_planes_04>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	827.550659 180.917221 -2513.309570	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	886.677185 172.094025 -384.733215	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	861.576538 141.603043 -44.447849	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	853.580444 108.872055 295.536102	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	934.826660 127.805557 491.314270	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1145.817383 108.890953 683.149414	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1310.196167 97.676506 752.253845	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1557.531494 101.396111 799.313354	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	1892.231079 159.740326 736.272461	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	2337.948975 171.696075 508.344971	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	2969.065186 120.502296 287.273346	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_EZ2_planes_04>
+    <m209_zone_destr_WZ1_planes_01>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-888.368164 65.658234 -2872.921631	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-917.268005 132.413208 -1446.269165	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-906.561890 130.798660 -961.827759	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-952.685242 135.913910 -644.813843	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-881.425232 109.341515 -495.729187	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-681.983337 151.581985 -387.057373	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-453.296783 138.419312 -500.476257	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-323.227692 105.720253 -777.794250	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-252.127930 135.619522 -1088.306641	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	32.054211 137.376816 -2405.244141	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_WZ1_planes_01>
+    <m209_zone_destr_WZ1_planes_02>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_03	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-988.035217 61.924049 -2883.916748	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-990.746765 121.775627 -1414.684082	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1006.936279 106.553383 -980.034058	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1016.125183 86.685158 -672.478333	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-971.242981 88.232872 -486.733124	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-775.298523 95.062355 -404.901672	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-545.742798 118.983147 -557.514587	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-401.500031 90.649345 -792.326721	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-250.432419 97.478783 -1138.645874	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	130.004501 123.283440 -2420.914795	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_WZ1_planes_02>
+    <m209_zone_destr_WZ1_planes_03>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_04	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-1176.452271 53.805199 -3303.031494	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1077.167969 163.408493 -1413.445313	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1121.741089 127.443565 -980.035400	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1151.445190 142.261703 -673.181519	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1095.025024 121.193535 -489.021942	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-957.435730 114.370415 -406.314636	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-729.534058 81.719719 -569.211975	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-458.698700 130.886703 -1120.380737	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-185.116226 131.978851 -2408.651367	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_WZ1_planes_03>
+    <m209_zone_destr_WZ1_planes_04>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-1259.591797 83.994720 -3280.925537	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1204.717163 139.021576 -1416.082520	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1234.089600 116.341797 -969.476929	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1259.031006 90.823471 -653.677979	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1201.004272 98.865936 -489.472076	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1036.234985 94.155533 -411.322723	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-799.297852 103.392815 -559.945984	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-533.393555 103.298027 -1107.036377	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-118.527397 120.502190 -2414.783936	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_WZ1_planes_04>
+    <m209_zone_destr_WZ2_planes_01>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_02	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-880.572083 61.274754 -3208.299316	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-926.096008 107.649956 -424.361755	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-914.130371 92.830040 -50.014858	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-872.074646 105.794060 301.599426	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-801.042053 126.070518 446.036774	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-613.038574 160.398468 554.000000	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-380.774811 154.184952 468.446472	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-210.166458 110.200455 261.986603	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-71.978226 89.177269 -20.902754	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-25.193113 149.076431 -431.491058	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	482.862701 159.673950 -2658.914307	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_WZ2_planes_01>
+    <m209_zone_destr_WZ2_planes_02>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_03	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-937.928528 81.248344 -3198.647705	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-993.062805 135.794632 -407.934814	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-962.799316 123.616203 -56.039577	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-973.567261 112.369164 320.904388	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-797.502136 100.348534 534.110535	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-515.570984 93.171989 478.790161	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-350.370453 139.788956 255.321762	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-228.232300 140.035034 -28.019667	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-46.147778 87.814568 -430.807526	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	630.663635 183.648605 -2614.786865	</position>
+        <speed0>	160.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_WZ2_planes_02>
+    <m209_zone_destr_WZ2_planes_03>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_04	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-1095.399536 71.093063 -3567.731689	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1115.182495 129.781540 -399.607849	</position>
+        <speed0>	135.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1137.767578 114.700859 -52.314877	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1079.533691 116.190239 365.497955	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-784.501343 108.054726 502.110352	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-612.169800 134.113235 347.800842	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-501.269257 162.916565 -43.240639	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-435.382813 117.116379 -432.661316	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	141.040924 186.151093 -2713.818604	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_WZ2_planes_03>
+    <m209_zone_destr_WZ2_planes_04>
+      <channel0>
+        <modelName>	content/Environment/env715_IL2_2/normal/lod0/env715_IL2_2.model	</modelName>
+        <rollMagnitude>	5.000000	</rollMagnitude>
+        <rollRelaxation>	10.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_01	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-1209.326904 61.657497 -3607.402588	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.250000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1203.252075 164.072495 -407.771057	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1206.843262 163.203903 -44.447899	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.150000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-1183.354858 190.367264 391.253479	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-915.835938 132.434418 552.310181	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-496.244659 98.618263 328.109009	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-302.932556 95.220085 -53.611248	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.000000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-272.353943 132.171310 -595.647339	</position>
+        <speed0>	130.000000	</speed0>
+        <oscillation0>	0.200000 0.150000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	327.601349 172.491669 -2694.512451	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.200000 0.200000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </m209_zone_destr_WZ2_planes_04>
   </mapActivities>
 </environment_effects.xml>

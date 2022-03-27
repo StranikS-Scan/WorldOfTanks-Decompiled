@@ -844,7 +844,7 @@ class ComingSoonActionInfo(ActionInfo):
 
     def _getParamName(self):
         paramName = self.__name
-        if 'Economics' in paramName or 'set_TradeInParams' in paramName:
+        if 'Economics' in paramName:
             paramName = self.__params[0] if self.__params else ''
         for cur in Currency.ALL:
             if paramName.endswith(cur.capitalize()):
@@ -1003,7 +1003,6 @@ _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'set_EconomicsParams': EconomicsActionsInfo,
  'mul_EconomicsPrices': EconomicsActionsInfo,
  'set_EconomicsPrices': EconomicsActionsInfo,
- 'set_TradeInParams': EconomicsActionsInfo,
  'set_VehPrice': VehPriceActionInfo,
  'mul_VehPriceNation': VehPriceActionInfo,
  'mul_VehPriceAll': VehPriceActionInfo,

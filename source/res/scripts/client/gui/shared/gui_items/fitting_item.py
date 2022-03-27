@@ -266,6 +266,10 @@ class FittingItem(GUIItem):
         return False
 
     @property
+    def isSupply(self):
+        return False
+
+    @property
     def isPremium(self):
         return self.buyPrices.hasPriceIn(Currency.GOLD)
 

@@ -6,8 +6,9 @@ import logging
 import BigWorld
 from aih_constants import CTRL_MODE_NAME
 from client_arena_component_system import ClientArenaComponent
-from constants import ARENA_SYNC_OBJECTS, ARENA_GUI_TYPE
+from constants import ARENA_SYNC_OBJECTS
 from debug_utils import LOG_ERROR_DEV
+from dyn_objects_cache import CommonForBattleRoyaleAndEpicBattleDynObjects, BattleRoyaleDynObjects
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, FEEDBACK_EVENT_ID
 from gui.battle_control.matrix_factory import makeVehicleEntityMP
@@ -156,9 +157,10 @@ class ArenaEquipmentComponent(ClientArenaComponent, CallbackDelayer):
         self.addSyncDataCallback(ARENA_SYNC_OBJECTS.SMOKE, '', self.__onSmokeScreenUpdated)
         dynamicObjects = self.__dynamicObjectsCache.getConfig(BigWorld.player().arenaGuiType)
         if dynamicObjects is not None:
-            self.__inspiringEffect = Effect('inspire', InspireArgsAdapter, VEHICLE_VIEW_STATE.INSPIRE, FEEDBACK_EVENT_ID.VEHICLE_INSPIRE, dynamicObjects.getInspiringEffect())
-            self.__healingEffect = Effect('healPoint', HealPointArgsAdapter, VEHICLE_VIEW_STATE.HEALING, FEEDBACK_EVENT_ID.VEHICLE_HEAL_POINT, dynamicObjects.getHealPointEffect())
-            if BigWorld.player().arenaGuiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
+            if isinstance(dynamicObjects, CommonForBattleRoyaleAndEpicBattleDynObjects):
+                self.__inspiringEffect = Effect('inspire', InspireArgsAdapter, VEHICLE_VIEW_STATE.INSPIRE, FEEDBACK_EVENT_ID.VEHICLE_INSPIRE, dynamicObjects.getInspiringEffect())
+                self.__healingEffect = Effect('healPoint', HealPointArgsAdapter, VEHICLE_VIEW_STATE.HEALING, FEEDBACK_EVENT_ID.VEHICLE_HEAL_POINT, dynamicObjects.getHealPointEffect())
+            if isinstance(dynamicObjects, BattleRoyaleDynObjects):
                 self.__repairPointEffect = Effect('repairPoint', HealPointArgsAdapter, VEHICLE_VIEW_STATE.REPAIR_POINT, FEEDBACK_EVENT_ID.VEHICLE_REPAIR_POINT, dynamicObjects.getRepairPointEffect())
         self.__subscribe()
         return
@@ -417,6 +419,6 @@ class ArenaEquipmentComponent(ClientArenaComponent, CallbackDelayer):
         if avatar is None or aih is None or aih.ctrlModeName == CTRL_MODE_NAME.DEATH_FREE_CAM:
             SmokeScreen.enableSmokePostEffect(enabled=False)
         else:
-            smokeInfos = avatar.lastSmokeInfos
-            SmokeScreen.enableSmokePostEffect(enabled=bool(smokeInfos), smokeInfos=smokeInfos)
+            smokeInfo = avatar.lastSmokeInfo
+            SmokeScreen.enableSmokePostEffect(enabled=bool(smokeInfo), smokeInfos=smokeInfo)
         return

@@ -147,6 +147,8 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         if ctrl is not None:
             ctrl.onShowDeathScreen += self.__onShowDeathScreen
         g_playerEvents.onAvatarVehicleLeaveWorld += self.__onVehicleLeaveWorld
+        self._setColor()
+        self.showTotalTime()
         return
 
     def _dispose(self):

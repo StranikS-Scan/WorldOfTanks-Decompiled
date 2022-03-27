@@ -46,8 +46,9 @@ class DynSquadArenaController(object):
     def __init__(self):
         super(DynSquadArenaController, self).__init__()
         invitesManager = self.prbInvites
-        invitesManager.onReceivedInviteListModified += self.__onReceivedInviteModified
-        invitesManager.onSentInviteListModified += self.__onSentInviteListModified
+        if invitesManager is not None:
+            invitesManager.onReceivedInviteListModified += self.__onReceivedInviteModified
+            invitesManager.onSentInviteListModified += self.__onSentInviteListModified
         self.__sentOwnJoinMessage = False
         self.__sentOwnCreateMessage = False
         self.__sentEnemyCreatePlatoons = []
@@ -55,6 +56,7 @@ class DynSquadArenaController(object):
         self.__squadMembersAlly = {}
         self.__squadMembersEnemy = {}
         g_eventBus.addListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
+        return
 
     @prbInvitesProperty
     def prbInvites(self):
@@ -123,9 +125,11 @@ class DynSquadArenaController(object):
 
     def destroy(self):
         invitesManager = self.prbInvites
-        invitesManager.onReceivedInviteListModified -= self.__onReceivedInviteModified
-        invitesManager.onSentInviteListModified -= self.__onSentInviteListModified
+        if invitesManager is not None:
+            invitesManager.onReceivedInviteListModified -= self.__onReceivedInviteModified
+            invitesManager.onSentInviteListModified -= self.__onSentInviteListModified
         g_eventBus.removeListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
+        return
 
     def _inviteReceived(self, invite):
         LOG_DEBUG('Handler: Invite received', invite)

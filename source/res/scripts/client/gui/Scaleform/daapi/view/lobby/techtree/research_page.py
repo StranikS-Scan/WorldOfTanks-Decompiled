@@ -418,12 +418,12 @@ class Research(ResearchMeta):
         return result
 
     def __getIsInteractive(self, root, rootNode):
-        return self.__tradeIn.getActiveTradeOffVehicle() is None or self.__tradeIn.tradeOffSelectedApplicableForLevel(root.level) if NODE_STATE.canTradeIn(rootNode.getState()) else True
+        return self.__tradeIn.getSelectedVehicleToSell() is None or self.__tradeIn.validatePossibleVehicleToBuy(root) if NODE_STATE.canTradeIn(rootNode.getState()) else True
 
     def __getDiscountBannerStr(self, root, rootNode):
         htmlStr = ''
         nodeState = rootNode.getState()
-        if NODE_STATE.canTradeIn(nodeState) and self.__tradeIn.tradeOffSelectedApplicableForLevel(root.level):
+        if NODE_STATE.canTradeIn(nodeState) and self.__tradeIn.validatePossibleVehicleToBuy(root):
             return htmlStr
         if NODE_STATE.isRestoreAvailable(nodeState):
             restoreDueDate = getDueDateOrTimeStr(rootNode.getRestoreFinishTime())
@@ -476,7 +476,7 @@ class Research(ResearchMeta):
             btnLabel = R.strings.menu.research.labels.button.restore()
         elif NODE_STATE.inInventory(rootNode.getState()) and not rootItem.isRented or rootItem.isHidden:
             btnLabel = R.strings.menu.research.labels.button.showInHangar()
-        elif NODE_STATE.canTradeIn(rootNode.getState()) and self.__tradeIn.getActiveTradeOffVehicle() is not None:
+        elif NODE_STATE.canTradeIn(rootNode.getState()) and self.__tradeIn.getSelectedVehicleToSell() is not None:
             btnLabel = R.strings.menu.research.labels.button.trade_in()
         else:
             btnLabel = R.strings.menu.research.labels.button.buy()

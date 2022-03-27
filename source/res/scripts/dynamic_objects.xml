@@ -62,7 +62,7 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <file>	particles/environment/interior/208_smokescreen_allies_lev1.eff	</file>
+          <file>	particles/environment/interior/208_fl22_smokescreen_allies_lev1.eff	</file>
           <force>	1	</force>
           <position>	HP_module_0	</position>
         </pixie>
@@ -81,7 +81,7 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <file>	particles/environment/interior/208_smokescreen_enemy_lev1.eff	</file>
+          <file>	particles/environment/interior/208_fl22_smokescreen_enemy_lev1.eff	</file>
           <force>	1	</force>
           <position>	HP_module_0	</position>
         </pixie>
@@ -102,7 +102,7 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <file>	particles/environment/interior/208_smokescreen_allies_lev2.eff	</file>
+          <file>	particles/environment/interior/208_fl22_smokescreen_allies_lev2.eff	</file>
           <force>	1	</force>
           <position>	HP_module_0	</position>
         </pixie>
@@ -121,7 +121,7 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <file>	particles/environment/interior/208_smokescreen_enemy_lev2.eff	</file>
+          <file>	particles/environment/interior/208_fl22_smokescreen_enemy_lev2.eff	</file>
           <force>	1	</force>
           <position>	HP_module_0	</position>
         </pixie>
@@ -142,7 +142,7 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <file>	particles/environment/interior/208_smokescreen_allies_lev3.eff	</file>
+          <file>	particles/environment/interior/208_fl22_smokescreen_allies_lev3.eff	</file>
           <force>	1	</force>
           <position>	HP_module_0	</position>
         </pixie>
@@ -161,7 +161,7 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <file>	particles/environment/interior/208_smokescreen_enemy_lev3.eff	</file>
+          <file>	particles/environment/interior/208_fl22_smokescreen_enemy_lev3.eff	</file>
           <force>	1	</force>
           <position>	HP_module_0	</position>
         </pixie>
@@ -301,6 +301,9 @@
       <overTerrainHeight>	0.5	</overTerrainHeight>
     </ally>
   </InspireAreaVisual>
+  <CommanderHoverCircle>
+    <modelPath>	content/Interface/Hover/HoverCircle.model	</modelPath>
+  </CommanderHoverCircle>
   <HealPointVisual>
     <ally>
       <visual>	content/Interface/TargetPoint/inspire.model	</visual>
@@ -700,4 +703,97 @@
       <path>	particles/eff_sequence/maps_training_laser_e_staticBright_1.seq	</path>
     </effect>
   </mapsTrainingBotsLazer>
+  <RTSBaseHightlight>
+    <ally>	particles/content_deferred/GFX_models/commander_mode/atb_base_hightlight/ally.ssm	</ally>
+    <enemy>	particles/content_deferred/GFX_models/commander_mode/atb_base_hightlight/enemy.ssm	</enemy>
+    <neutral>	particles/eff_sequence/atb_base_hightlight_prototype/neutral.ssm	</neutral>
+  </RTSBaseHightlight>
+  <RTSReplayCursor>
+    <path>	gui/maps/icons/replay/arrowReplay.cur	</path>
+  </RTSReplayCursor>
+  <RTSGhostModel>
+    <modelPath>	content/Interface/Ghost/normal/lod0/ghost.model	</modelPath>
+    <arrowModelPath>	content/Interface/Ghost/normal/lod0/arrow.model	</arrowModelPath>
+    <enabledTexture>	content/Interface/Ghost/Ghost_enabled_AM.dds	</enabledTexture>
+    <disabledTexture>	content/Interface/Ghost/Ghost_disabled_AM.dds	</disabledTexture>
+  </RTSGhostModel>
+  <RTSMarkers>
+    <markerLine01>	content\Interface\Marker_line\Marker_line_01.model	</markerLine01>
+    <markerLine02>	content\Interface\Marker_line\Marker_line_02.model	</markerLine02>
+    <markerLine03>	content\Interface\Marker_line\Marker_line_03.model	</markerLine03>
+    <markerLine01DDS>	content\Interface\Marker_line\Marker_line_01_AM.dds	</markerLine01DDS>
+    <marker01>	content\Interface\Marker\Marker_01.model	</marker01>
+    <marker02>	content\Interface\Marker\Marker_02.model	</marker02>
+    <marker03>	content\Interface\Marker\Marker_03.model	</marker03>
+    <marker01DDS>	content\Interface\Marker\Marker_01.dds	</marker01DDS>
+    <marker03DDS>	content\Interface\Marker\Marker_03_AM.dds	</marker03DDS>
+    <hitDirectionMarker>
+      <hit>	content/Interface/Hit_direction_marker/Hit_direction_maker_01_RTS.model	</hit>
+      <blocked>	content/Interface/Hit_direction_marker/Hit_direction_maker_01_resist_RTS.model	</blocked>
+      <scaleChangeMin>	0.05	</scaleChangeMin>
+      <overTerrainOffset>	1.2	</overTerrainOffset>
+      <size>	1.0 4.5	</size>
+      <fadingOutDuration>	1.0	</fadingOutDuration>
+      <markerPositionOffsetScale>	5.0	</markerPositionOffsetScale>
+      <cutoffDelta>	2.5	</cutoffDelta>
+      <cutoffHeight>	5.0	</cutoffHeight>
+      <isCutoffEnabled>	True	</isCutoffEnabled>
+      <isRelativeProjection>	False	</isRelativeProjection>
+      <isOnlyProjectUpwards>	True	</isOnlyProjectUpwards>
+      <isTerrainOnly>	False	</isTerrainOnly>
+    </hitDirectionMarker>
+    <vehicleDirectionMarker>
+      <visualPath>	content/Interface/Marker/Marker_arrow_02.visual	</visualPath>
+    </vehicleDirectionMarker>
+    <invalidPositionMarker>
+      <visualPath>	content/Interface/Hover/HoverCircle.visual	</visualPath>
+    </invalidPositionMarker>
+    <overwatchSector>
+      <model>	content/Interface/Hit_direction_marker/R4_overwatchSector.model	</model>
+    </overwatchSector>
+    <LineStyles>
+      <PathMarker>
+        <markerScale>	1.0 1.0 1.0	</markerScale>
+        <terrainOffset>	0.0 0.0 0.0	</terrainOffset>
+        <lineModelPath>	content/Interface/Marker/Marker_06.model	</lineModelPath>
+        <lineScale>	0.075 0.075 0.5	</lineScale>
+        <lineRotation>	0.0 0.0 0.0	</lineRotation>
+        <lineIntervalLength>	300.0	</lineIntervalLength>
+        <isStretchLine>	True	</isStretchLine>
+        <intersectionModelPath>	content/Interface/Marker/Marker_05.model	</intersectionModelPath>
+        <intersectionScale>	0.3 0.3 0.3	</intersectionScale>
+      </PathMarker>
+      <AttackMarker>
+        <markerScale>	1.0 1.0 1.0	</markerScale>
+        <terrainOffset>	0.0 0.75 0.0	</terrainOffset>
+        <lineModelPath>	content/Interface/Marker/AttackLine.model	</lineModelPath>
+        <lineScale>	0.075 0.075 0.5	</lineScale>
+        <lineRotation>	0.0 0.0 0.0	</lineRotation>
+        <lineIntervalLength>	300.0	</lineIntervalLength>
+        <isStretchLine>	True	</isStretchLine>
+      </AttackMarker>
+    </LineStyles>
+    <OperationCircle>
+      <visualPath>	content/Interface/TargetPoint/R4_DashedCircle.model	</visualPath>
+      <overTerrainHeight>	0.5	</overTerrainHeight>
+      <operationRadius>	25	</operationRadius>
+    </OperationCircle>
+  </RTSMarkers>
+  <RTSDestroyedSupplyHavokModels>
+    <havokSetting>
+      <name>	supply_WatchTower	</name>
+      <modelPath>	content/Environment/Pl203_WatchTower1_RTS/normal/lod0/Pl203_WatchTower1_RTS.havok	</modelPath>
+      <havokModule>	n_wood0	</havokModule>
+    </havokSetting>
+    <havokSetting>
+      <name>	supply_ATgun	</name>
+      <modelPath>	content/Environment/Pl201Gun_D_74_RTS/normal/lod0/Pl201Gun_D_74_RTS_01.havok	</modelPath>
+      <havokModule>	n_metal0	</havokModule>
+    </havokSetting>
+    <havokSetting>
+      <name>	supply_Mortar	</name>
+      <modelPath>	content/Environment/Pl207_Mortar_RTS/normal/lod0/Pl207_Mortar_RTS.havok	</modelPath>
+      <havokModule>	n_metal0	</havokModule>
+    </havokSetting>
+  </RTSDestroyedSupplyHavokModels>
 </dynamic_objects.xml>

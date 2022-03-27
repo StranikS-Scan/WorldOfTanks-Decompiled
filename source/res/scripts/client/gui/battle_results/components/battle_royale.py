@@ -145,9 +145,9 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         avatarInfo = result['personal']['avatar']
-        self.credits = avatarInfo['credits']
-        self.xp = avatarInfo['xp']
-        self.crystal = avatarInfo['crystal']
+        self.credits = avatarInfo['credits'] + avatarInfo['eventCredits']
+        self.xp = avatarInfo['xp'] + avatarInfo['eventXP']
+        self.crystal = avatarInfo['crystal'] + avatarInfo['eventCrystal']
 
 
 class BattleRoyaleStatsItemBlock(base.StatsBlock):
@@ -184,7 +184,7 @@ class SimpleEfficiencyParameter(BattleRoyaleStatsItemBlock):
     __slots__ = ()
 
     def _getValue(self, result, reusable):
-        personalInfo = reusable.getPersonalVehiclesInfo(result['personal'])
+        personalInfo = reusable.getPersonalVehiclesInfo(result)
         return getattr(personalInfo, self.type)
 
     def _isTop(self, result, reusable):
@@ -202,7 +202,7 @@ class PlaceParameter(BattleRoyaleStatsItemBlock):
     __slots__ = ()
 
     def _getValue(self, result, reusable):
-        personalInfo = reusable.getPersonalVehiclesInfo(result['personal'])
+        personalInfo = reusable.getPersonalVehiclesInfo(result)
         avatar = personalInfo.avatar
         return avatar.extensionInfo.get('playerRank', 0)
 

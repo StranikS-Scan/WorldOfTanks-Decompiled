@@ -35,7 +35,7 @@ EPIC_COMMON_STATS_BLOCK.addComponent(10, personal.EpicVehiclesBlock(base.ListMet
 EPIC_COMMON_STATS_BLOCK.addComponent(11, EPIC_TIME_STATS_BLOCK.clone())
 EPIC_COMMON_STATS_BLOCK.addNextComponent(shared.WasInEpicBattleItem('epicMode'))
 EPIC_PERSONAL_STATS_BLOCK = regular.REGULAR_PERSONAL_STATS_BLOCK.clone(8)
-EPIC_PERSONAL_STATS_BLOCK.addComponent(8, vehicles.PersonalVehiclesEpicStatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
+EPIC_PERSONAL_STATS_BLOCK.addComponent(8, vehicles.PersonalVehiclesEpicStatsBlock(base.ListMeta(), 'statValues'))
 EPIC_PERSONAL_STATS_BLOCK.addNextComponent(personal.PlayerRank('playerRank'))
 EPIC_TEAM_ITEM_VO_META = regular.TEAM_ITEM_VO_META.replace(('statValues', vehicles.AllEpicVehicleStatValuesBlock(base.ListMeta(), 'statValues'), 'statValues'))
 EPIC_TEAM_ITEM_VO_META.bind(vehicles.EpicVehicleStatsBlock)

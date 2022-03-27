@@ -19,7 +19,7 @@ from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.veh_post_progression.models.ext_money import ExtendedMoney
 from helpers import i18n, dependency
 from nation_change.nation_change_helpers import iterVehiclesWithNationGroupInOrder
-from skeletons.gui.game_control import IVehicleComparisonBasket, IIGRController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IIGRController, IRTSBattlesController
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.context import GLOBAL_FLAG
 if typing.TYPE_CHECKING:
@@ -29,6 +29,7 @@ class ResearchPanel(ResearchPanelMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     igrCtrl = dependency.descriptor(IIGRController)
+    __rtsBattlesController = dependency.descriptor(IRTSBattlesController)
 
     def __init__(self):
         super(ResearchPanel, self).__init__()
@@ -41,12 +42,16 @@ class ResearchPanel(ResearchPanelMeta):
         self.onCurrentVehicleChanged()
         self.comparisonBasket.onChange += self.__onCompareBasketChanged
         self.comparisonBasket.onSwitchChange += self.onCurrentVehicleChanged
+        self.__rtsBattlesController.onUpdated += self.__handleRtsUpdate
+        self.__rtsBattlesController.onIsPrbActive += self.__handleRtsUpdate
 
     def _dispose(self):
         super(ResearchPanel, self)._dispose()
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.comparisonBasket.onChange -= self.__onCompareBasketChanged
         self.comparisonBasket.onSwitchChange -= self.onCurrentVehicleChanged
+        self.__rtsBattlesController.onUpdated -= self.__handleRtsUpdate
+        self.__rtsBattlesController.onIsPrbActive -= self.__handleRtsUpdate
 
     def setNavigationEnabled(self, isEnabled):
         if self.__isNavigationEnabled != isEnabled:
@@ -72,6 +77,7 @@ class ResearchPanel(ResearchPanelMeta):
             xps = self.itemsCache.items.stats.vehiclesXPs
             vehicle = g_currentVehicle.item
             xp = xps.get(vehicle.intCD, 0)
+            self._controlProgressionHint()
             self.as_updateCurrentVehicleS({'earnedXP': xp,
              'isElite': vehicle.isElite,
              'vehCompareData': self.__getVehCompareData(vehicle),
@@ -114,6 +120,23 @@ class ResearchPanel(ResearchPanelMeta):
             if vehCD in elite:
                 self.as_setEliteS(True)
 
+    def _controlProgressionHint(self):
+        if not g_currentVehicle.isPresent():
+            return
+        else:
+            vehicle = g_currentVehicle.item
+            isHintEnabled = False
+            isAvailable = vehicle.postProgressionAvailability(unlockOnly=True).result
+            rtsCommanderMode = self.__rtsBattlesController.isPrbActive() and self.__rtsBattlesController.isCommander()
+            if vehicle.xp > 0 and isAvailable and not rtsCommanderMode:
+                purchasableStep = vehicle.postProgression.getFirstPurchasableStep(ExtendedMoney(xp=vehicle.xp))
+                if purchasableStep is not None:
+                    isHintEnabled = purchasableStep.stepID == vehicle.postProgression.getRawTree().rootStep
+            tutorialStorage = getTutorialGlobalStorage()
+            if tutorialStorage is not None:
+                tutorialStorage.setValue(GLOBAL_FLAG.VEH_POST_PROGRESSION_PURCHASABLE, isHintEnabled)
+            return
+
     def __onCompareBasketChanged(self, changedData):
         if changedData.isFullChanged:
             self.onCurrentVehicleChanged()
@@ -125,15 +148,9 @@ class ResearchPanel(ResearchPanelMeta):
          'btnTooltip': tooltip}
 
     def __getVehPostProgressionData(self, vehicle):
-        isHintEnabled = False
-        isAvailable = vehicle.postProgressionAvailability(unlockOnly=True).result
-        if vehicle.xp > 0 and isAvailable:
-            purchasableStep = vehicle.postProgression.getFirstPurchasableStep(ExtendedMoney(xp=vehicle.xp))
-            if purchasableStep is not None:
-                isHintEnabled = purchasableStep.stepID == vehicle.postProgression.getRawTree().rootStep
-        tutorialStorage = getTutorialGlobalStorage()
-        if tutorialStorage is not None:
-            tutorialStorage.setValue(GLOBAL_FLAG.VEH_POST_PROGRESSION_PURCHASABLE, isHintEnabled)
         return {'showCounter': needToShowCounter(vehicle),
-         'btnEnabled': isAvailable,
+         'btnEnabled': vehicle.postProgressionAvailability(unlockOnly=True).result,
          'btnVisible': vehicle.isPostProgressionExists}
+
+    def __handleRtsUpdate(self, *args, **kwargs):
+        self._controlProgressionHint()

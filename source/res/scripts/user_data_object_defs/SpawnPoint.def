@@ -5,8 +5,13 @@
     <team>
       <Type>	UINT8	</Type>
       <Editable>	true	</Editable>
-      <Default>	0	</Default>
+      <Default></Default>
     </team>
+    <tag>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+      <Default></Default>
+    </tag>
     <preferableType>
       <Type>	STRING	</Type>
       <Editable>	true	</Editable>
@@ -33,6 +38,16 @@
       <Editable>	true	</Editable>
       <Default>	0	</Default>
     </spawnPointGroup>
+    <extrudeRadius>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+      <Default>	0	</Default>
+    </extrudeRadius>
+    <maxPointsToSpawn>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <Default>	0	</Default>
+    </maxPointsToSpawn>
     <groupName>
       <Type>	STRING	</Type>
       <Editable>	true	</Editable>

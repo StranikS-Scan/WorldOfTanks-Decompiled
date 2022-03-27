@@ -6,6 +6,11 @@ from PlayerEvents import g_playerEvents
 from Account import PlayerAccount
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+_DEFAULT_OVERLAY_COLOR = Math.Vector4(1, 1, 1, 1)
+_OVERLAY_SOLID_KEYS = ('overlay', 'destructible')
+_OVERLAY_PATTERN_KEYS = ('overlayForeground', 'overlay', 'destructibleForeground', 'destructible')
+_OVERLAY_TARGET_INDEXES = {'enemy': 1,
+ 'friend': 2}
 g_instance = None
 
 class EdgeDetectColorController(object):
@@ -14,8 +19,8 @@ class EdgeDetectColorController(object):
     def __init__(self, dataSec):
         self.__colors = {'common': dict(),
          'colorBlind': dict()}
-        self.__readColors(self.__colors['common'], 'common', dataSec)
-        self.__readColors(self.__colors['colorBlind'], 'colorBlind', dataSec)
+        self.__readColors(self.__colors, 'common', dataSec)
+        self.__readColors(self.__colors, 'colorBlind', dataSec)
 
     def updateColors(self):
         self.__changeColor({'isColorBlind': self.settingsCore.getSetting('isColorBlind')})
@@ -28,13 +33,29 @@ class EdgeDetectColorController(object):
         self.settingsCore.onSettingsChanged -= self.__changeColor
         g_playerEvents.onAccountShowGUI -= self.__onAccountShowGUI
 
-    def __readColors(self, out, cType, section):
-        cName = '%s/' % cType
-        out['self'] = section.readVector4(cName + 'self', Math.Vector4(0.2, 0.2, 0.2, 0.5))
-        out['enemy'] = section.readVector4(cName + 'enemy', Math.Vector4(1, 0, 0, 0.5))
-        out['friend'] = section.readVector4(cName + 'friend', Math.Vector4(0, 1, 0, 0.5))
-        out['flag'] = section.readVector4(cName + 'flag', Math.Vector4(1, 1, 1, 1))
-        out['hangar'] = section.readVector4(cName + 'hangar', Math.Vector4(1, 1, 0, 1))
+    def __readColors(self, colors, cType, section):
+        cName = '{}/'.format(cType)
+        out, common = colors[cType], colors['common']
+        out['self'] = section.readVector4(cName + 'self', common.get('self', Math.Vector4(0.2, 0.2, 0.2, 0.5)))
+        out['enemy'] = section.readVector4(cName + 'enemy', common.get('enemy', Math.Vector4(1, 0, 0, 0.5)))
+        out['friend'] = section.readVector4(cName + 'friend', common.get('friend', Math.Vector4(0, 1, 0, 0.5)))
+        out['flag'] = section.readVector4(cName + 'flag', common.get('flag', Math.Vector4(1, 1, 1, 1)))
+        out['hangar'] = section.readVector4(cName + 'hangar', common.get('hangar', Math.Vector4(1, 1, 0, 1)))
+        out['rtsFocus'] = section.readVector4(cName + 'rtsFocus', Math.Vector4(0.66, 0.78, 0.52, 1))
+        self.__readOverlayColors(out, common, cType, 'overlaySolidColors', _OVERLAY_SOLID_KEYS, section)
+        self.__readOverlayColors(out, common, cType, 'overlayPatternColors', _OVERLAY_PATTERN_KEYS, section)
+
+    def __readOverlayColors(self, out, common, cType, overlayType, keys, section):
+        targets = ['enemy', 'friend']
+        common, out[overlayType] = common.get(overlayType) or {}, {}
+        for target in targets:
+            commonTarget, out[overlayType][target] = common.get(target) or {}, {}
+            targetPath = '/'.join([cType, overlayType, target]) + '/'
+            for key in keys:
+                color = section.readVector4(targetPath + key, commonTarget.get(key, _DEFAULT_OVERLAY_COLOR))
+                out[overlayType][target][key] = color
+
+            out[overlayType][target]['packed'] = [ out[overlayType][target][key] for key in keys ]
 
     def __onAccountShowGUI(self, ctx):
         self.updateColors()
@@ -42,11 +63,19 @@ class EdgeDetectColorController(object):
     def __changeColor(self, diff):
         if 'isColorBlind' not in diff:
             return
-        cType = 'colorBlind' if diff['isColorBlind'] else 'common'
         isHangar = isinstance(BigWorld.player(), PlayerAccount)
+        cType = 'colorBlind' if diff['isColorBlind'] else 'common'
         colors = self.__colors[cType]
         colorsSet = (colors['hangar'] if isHangar else colors['self'],
          colors['enemy'],
          colors['friend'],
-         colors['flag'])
-        BigWorld.wgSetEdgeDetectColors(colorsSet)
+         colors['flag'],
+         colors['rtsFocus'])
+        i = 0
+        for c in colorsSet:
+            BigWorld.wgSetEdgeDetectEdgeColor(i, c)
+            i += 1
+
+        for target, idx in _OVERLAY_TARGET_INDEXES.iteritems():
+            BigWorld.wgSetEdgeDetectSolidColors(idx, *colors['overlaySolidColors'][target]['packed'])
+            BigWorld.wgSetEdgeDetectPatternColors(idx, *colors['overlayPatternColors'][target]['packed'])

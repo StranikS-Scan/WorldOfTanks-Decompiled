@@ -55,7 +55,11 @@ class _C11nSerializationTypes(object):
     ATTACHMENT = 10
 
 
-FieldType = namedtuple('FieldType', 'type default flags')
+if IS_EDITOR:
+    FieldType = namedtuple('FieldType', 'type default flags saveTag')
+    FieldType.__new__.func_defaults = (None,) * len(FieldType._fields)
+else:
+    FieldType = namedtuple('FieldType', 'type default flags')
 
 def arrayField(itemType, default=None, flags=FieldFlags.NONE):
     return FieldType(FieldTypes.TYPED_ARRAY | itemType, default or [], flags)
@@ -126,12 +130,13 @@ class SerializableComponent(object):
     def __eq(self, o, ignoreFlags):
         if self.__class__ != o.__class__:
             return False
+        typedArray = FieldTypes.TYPED_ARRAY
         for fname, ftype in self.fields.iteritems():
             if ftype.flags & ignoreFlags:
                 continue
             v1 = getattr(self, fname)
             v2 = getattr(o, fname)
-            if ftype.type & FieldTypes.TYPED_ARRAY:
+            if ftype.type & typedArray:
                 v1 = set(v1)
                 v2 = set(v2)
             if v1 != v2:
@@ -147,13 +152,12 @@ class SerializableComponent(object):
 
     def __hash__(self):
         result = 17
+        deprecated = FieldFlags.DEPRECATED
         for name, ftype in self.fields.iteritems():
-            if ftype.flags & FieldFlags.DEPRECATED:
+            if ftype.flags & deprecated:
                 continue
             v1 = getattr(self, name)
-            if isinstance(v1, list):
-                v1 = tuple(v1)
-            if isinstance(v1, Math.Vector2) or isinstance(v1, Math.Vector3) or isinstance(v1, Math.Vector4):
+            if isinstance(v1, list) or isinstance(v1, Math.Vector2) or isinstance(v1, Math.Vector3) or isinstance(v1, Math.Vector4):
                 v1 = tuple(v1)
             result = (result * 31 + hash(v1)) % 18446744073709551616L
 
@@ -207,6 +211,8 @@ class ComponentBinSerializer(object):
         hasValue = 0
         offset = 1
         result = ['\x00']
+        serialize = self.__serialize
+        encode = varint.encode
         for fieldName, fieldInfo in obj.fields.iteritems():
             if fieldInfo.flags & FieldFlags.DEPRECATED:
                 offset <<= 1
@@ -216,14 +222,15 @@ class ComponentBinSerializer(object):
             value = getattr(obj, fieldName)
             if value != fieldInfo.default:
                 hasValue |= offset
-                result.append(self.__serialize(value, fieldInfo.type))
+                result.append(serialize(value, fieldInfo.type))
             offset <<= 1
 
-        result[0] = varint.encode(hasValue)
+        result[0] = encode(hasValue)
         return ''.join(result)
 
     def __serializeArray(self, value, itemType):
-        result = [ self.__serialize(item, itemType) for item in value ]
+        serialize = self.__serialize
+        result = [ serialize(item, itemType) for item in value ]
         return varint.encode(len(value)) + ''.join(result)
 
     def __serializeString(self, value):
@@ -283,7 +290,8 @@ class ComponentBinDeserializer(object):
             obj = None
         fields = cls.fields
         io = self.__stream
-        valueMap = varint.decode_stream(io)
+        decode_stream = varint.decode_stream
+        valueMap = decode_stream(io)
         offset = 1
         for k, t in fields.iteritems():
             if t.flags & FieldFlags.NON_BIN:
@@ -292,13 +300,13 @@ class ComponentBinDeserializer(object):
             if valueMap & offset:
                 ftype = t.type
                 if ftype == FieldTypes.VARINT:
-                    value = varint.decode_stream(io)
+                    value = decode_stream(io)
                 elif ftype == FieldTypes.STRING:
                     value = self.__decodeString()
                 elif ftype == FieldTypes.APPLY_AREA_ENUM:
-                    value = varint.decode_stream(io)
+                    value = decode_stream(io)
                 elif ftype == FieldTypes.OPTIONS_ENUM:
-                    value = varint.decode_stream(io)
+                    value = decode_stream(io)
                 elif ftype & FieldTypes.TYPED_ARRAY:
                     value = self.__decodeArray(ftype ^ FieldTypes.TYPED_ARRAY, k, path, next, wanted)
                 elif ftype >= FieldTypes.CUSTOM_TYPE_OFFSET:
@@ -316,15 +324,17 @@ class ComponentBinDeserializer(object):
 
     def __decodeArray(self, itemType, k, path, next, wanted):
         io = self.__stream
-        n = varint.decode_stream(io)
+        decode_stream = varint.decode_stream
+        n = decode_stream(io)
         if itemType == FieldTypes.VARINT:
-            array = [ varint.decode_stream(io) for _ in xrange(n) ]
+            array = [ decode_stream(io) for _ in xrange(n) ]
             if path and path[1] is None and path[0] == k and wanted in array:
                 raise FoundItemException()
             return array
         elif itemType >= FieldTypes.CUSTOM_TYPE_OFFSET:
             customType = itemType / FieldTypes.CUSTOM_TYPE_OFFSET
-            return [ self.__decodeCustomType(customType, next, wanted) for _ in xrange(n) ]
+            decodeCustomType = self.__decodeCustomType
+            return [ decodeCustomType(customType, next, wanted) for _ in xrange(n) ]
         else:
             raise SerializationException('Unsupported item type')
             return
@@ -622,10 +632,12 @@ class CustomizationOutfit(SerializableComponent):
     def makeCompDescr(self):
         if not self:
             return ''
+        applyAreaBitmaskToDict = CustomizationOutfit.applyAreaBitmaskToDict
+        shrinkAreaBitmask = CustomizationOutfit.shrinkAreaBitmask
         for typeId in CustomizationType.APPLIED_TO_TYPES:
             componentsAttrName = '{}s'.format(lower(CustomizationTypeNames[typeId]))
-            components = CustomizationOutfit.applyAreaBitmaskToDict(getattr(self, componentsAttrName))
-            setattr(self, componentsAttrName, CustomizationOutfit.shrinkAreaBitmask(components))
+            components = applyAreaBitmaskToDict(getattr(self, componentsAttrName))
+            setattr(self, componentsAttrName, shrinkAreaBitmask(components))
 
         return makeCompDescr(self)
 
@@ -642,7 +654,10 @@ class CustomizationOutfit(SerializableComponent):
                 if c.appliedTo & i:
                     cpy = c.copy()
                     cpy.appliedTo = 0
-                    res.setdefault(i, []).append(cpy)
+                    if i not in res:
+                        res[i] = [cpy]
+                    else:
+                        res[i].append(cpy)
                 i *= 2
 
         return res
@@ -654,7 +669,9 @@ class CustomizationOutfit(SerializableComponent):
             cpy = c.copy()
             slotId = cpy.slotId
             cpy.slotId = 0
-            res.setdefault(slotId, []).append(cpy)
+            if slotId not in res:
+                res[slotId] = [cpy]
+            res[slotId].append(cpy)
 
         return res
 
@@ -663,12 +680,15 @@ class CustomizationOutfit(SerializableComponent):
         grouped = {}
         for at, lst in components.iteritems():
             for i in lst:
-                grouped.setdefault(i, []).append(at)
+                if i not in grouped:
+                    grouped[i] = [at]
+                grouped[i].append(at)
 
         res = []
+        orOp = int.__or__
         for item, group in grouped.iteritems():
             curItem = item.copy()
-            curItem.appliedTo = reduce(int.__or__, group, 0)
+            curItem.appliedTo = reduce(orOp, group, 0)
             res.append(curItem)
 
         return res
@@ -801,16 +821,18 @@ class CustomizationOutfit(SerializableComponent):
         toMove = NamedVector()
         projectionDecals = self.projection_decals
         differPartNames = _getDifferVehiclePartNames(vehDescr, oldVehDescr)
+        getVehicleProjectionDecalSlotParams = cn.getVehicleProjectionDecalSlotParams
         if differPartNames:
             newProjectionDecals = []
             for projectionDecal in projectionDecals:
-                if not cn.getVehicleProjectionDecalSlotParams(oldVehDescr, projectionDecal.slotId, differPartNames):
+                if not getVehicleProjectionDecalSlotParams(oldVehDescr, projectionDecal.slotId, differPartNames):
                     newProjectionDecals.append(projectionDecal)
                     continue
                 toMove[(CustomizationType.PROJECTION_DECAL, projectionDecal.id)] += 1
 
             if toMove:
                 self.projection_decals = newProjectionDecals
+        dismountComponents = self.dismountComponents
         for regionValue, vehiclePart in ((ApplyArea.HULL_REGIONS_VALUE, vehDescr.hull),
          (ApplyArea.CHASSIS_REGIONS_VALUE, vehDescr.chassis),
          (ApplyArea.TURRET_REGIONS_VALUE, vehDescr.turret),
@@ -827,7 +849,7 @@ class CustomizationOutfit(SerializableComponent):
                     dismountArea = appliedTo & ~(area & appliedTo)
                     if not dismountArea:
                         continue
-                    toMove += self.dismountComponents(dismountArea, (componentType,))
+                    toMove += dismountComponents(dismountArea, (componentType,))
 
         return dict(toMove)
 
@@ -1060,37 +1082,43 @@ def parseBattleOutfit(outfit, cache, arenaKind):
 class OutfitLogEntry(object):
 
     def __init__(self, outfit):
+        applyAreaBitmaskToDict = CustomizationOutfit.applyAreaBitmaskToDict
+        getPaintCd = self.__getPaintCd
+        getCamouflageCd = self.__getCamouflageCd
+        getDecalCd = self.__getDecalCd
+        getPersonalNumberData = self.__getPersonalNumberData
         self.style_cd = cn.StyleItem.makeIntDescr(outfit.styleId) if outfit.styleId else 0
         self.modification_cd = cn.ModificationItem.makeIntDescr(outfit.modifications[0]) if outfit.modifications else 0
-        self._paints = CustomizationOutfit.applyAreaBitmaskToDict(outfit.paints)
-        self._decals = CustomizationOutfit.applyAreaBitmaskToDict(outfit.decals)
+        self._paints = applyAreaBitmaskToDict(outfit.paints)
+        self._decals = applyAreaBitmaskToDict(outfit.decals)
         self._projection_decals = outfit.projection_decals
-        self._camouflages = CustomizationOutfit.applyAreaBitmaskToDict(outfit.camouflages)
-        self._personal_numbers = CustomizationOutfit.applyAreaBitmaskToDict(outfit.personal_numbers)
-        self.chassis_paint_cd = self.__getPaintCd(ApplyArea.CHASSIS)
-        self.hull_paint_cd = self.__getPaintCd(ApplyArea.HULL)
-        self.turret_paint_cd = self.__getPaintCd(ApplyArea.TURRET)
-        self.gun_paint_cd0 = self.__getPaintCd(ApplyArea.GUN)
-        self.gun_paint_cd1 = self.__getPaintCd(ApplyArea.GUN_1)
-        self.hull_camouflage_cd = self.__getCamouflageCd(ApplyArea.HULL)
-        self.turret_camouflage_cd = self.__getCamouflageCd(ApplyArea.TURRET)
-        self.gun_camouflage_cd = self.__getCamouflageCd(ApplyArea.GUN)
-        self.hull_decal_cd0, self.hull_decal_progression_level0 = self.__getDecalCd(ApplyArea.HULL)
-        self.hull_decal_cd1, self.hull_decal_progression_level1 = self.__getDecalCd(ApplyArea.HULL_1)
-        self.hull_decal_cd2, self.hull_decal_progression_level2 = self.__getDecalCd(ApplyArea.HULL_2)
-        self.hull_decal_cd3, self.hull_decal_progression_level3 = self.__getDecalCd(ApplyArea.HULL_3)
-        self.turret_decal_cd0, self.turret_decal_progression_level0 = self.__getDecalCd(ApplyArea.TURRET)
-        self.turret_decal_cd1, self.turret_decal_progression_level1 = self.__getDecalCd(ApplyArea.TURRET_1)
-        self.turret_decal_cd2, self.turret_decal_progression_level2 = self.__getDecalCd(ApplyArea.TURRET_2)
-        self.turret_decal_cd3, self.turret_decal_progression_level3 = self.__getDecalCd(ApplyArea.TURRET_3)
-        self.hull_personal_number0 = self.__getPersonalNumberData(ApplyArea.HULL_2)
-        self.hull_personal_number1 = self.__getPersonalNumberData(ApplyArea.HULL_3)
-        self.turret_personal_number0 = self.__getPersonalNumberData(ApplyArea.TURRET_2)
-        self.turret_personal_number1 = self.__getPersonalNumberData(ApplyArea.TURRET_3)
-        self.gun_personal_number0 = self.__getPersonalNumberData(ApplyArea.GUN_2)
-        self.gun_personal_number1 = self.__getPersonalNumberData(ApplyArea.GUN_3)
+        self._camouflages = applyAreaBitmaskToDict(outfit.camouflages)
+        self._personal_numbers = applyAreaBitmaskToDict(outfit.personal_numbers)
+        self.chassis_paint_cd = getPaintCd(ApplyArea.CHASSIS)
+        self.hull_paint_cd = getPaintCd(ApplyArea.HULL)
+        self.turret_paint_cd = getPaintCd(ApplyArea.TURRET)
+        self.gun_paint_cd0 = getPaintCd(ApplyArea.GUN)
+        self.gun_paint_cd1 = getPaintCd(ApplyArea.GUN_1)
+        self.hull_camouflage_cd = getCamouflageCd(ApplyArea.HULL)
+        self.turret_camouflage_cd = getCamouflageCd(ApplyArea.TURRET)
+        self.gun_camouflage_cd = getCamouflageCd(ApplyArea.GUN)
+        self.hull_decal_cd0, self.hull_decal_progression_level0 = getDecalCd(ApplyArea.HULL)
+        self.hull_decal_cd1, self.hull_decal_progression_level1 = getDecalCd(ApplyArea.HULL_1)
+        self.hull_decal_cd2, self.hull_decal_progression_level2 = getDecalCd(ApplyArea.HULL_2)
+        self.hull_decal_cd3, self.hull_decal_progression_level3 = getDecalCd(ApplyArea.HULL_3)
+        self.turret_decal_cd0, self.turret_decal_progression_level0 = getDecalCd(ApplyArea.TURRET)
+        self.turret_decal_cd1, self.turret_decal_progression_level1 = getDecalCd(ApplyArea.TURRET_1)
+        self.turret_decal_cd2, self.turret_decal_progression_level2 = getDecalCd(ApplyArea.TURRET_2)
+        self.turret_decal_cd3, self.turret_decal_progression_level3 = getDecalCd(ApplyArea.TURRET_3)
+        self.hull_personal_number0 = getPersonalNumberData(ApplyArea.HULL_2)
+        self.hull_personal_number1 = getPersonalNumberData(ApplyArea.HULL_3)
+        self.turret_personal_number0 = getPersonalNumberData(ApplyArea.TURRET_2)
+        self.turret_personal_number1 = getPersonalNumberData(ApplyArea.TURRET_3)
+        self.gun_personal_number0 = getPersonalNumberData(ApplyArea.GUN_2)
+        self.gun_personal_number1 = getPersonalNumberData(ApplyArea.GUN_3)
+        getProjectionDecalData = self.__getProjectionDecalData
         for number in xrange(0, MAX_USERS_PROJECTION_DECALS):
-            setattr(self, 'projection_decal{0}'.format(number), self.__getProjectionDecalData(number))
+            setattr(self, 'projection_decal{}'.format(number), getProjectionDecalData(number))
 
         self.style_progression_level = outfit.styleProgressionLevel
 
@@ -1181,8 +1209,12 @@ class NamedVector(defaultdict):
 
 
 def makeLogOutfitValues(outfitDescr):
-    outfit = parseOutfitDescr(outfitDescr)
-    return OutfitLogEntry(outfit).toDict()
+    return OutfitLogEntry(parseOutfitDescr(outfitDescr)).toDict()
+
+
+def getHullCamouflageCd(outfitDescr):
+    i = CustomizationOutfit.applyAreaBitmaskToDict(parseOutfitDescr(outfitDescr).camouflages).get(ApplyArea.HULL)
+    return 0 if not i else cn.CamouflageItem.makeIntDescr(i[0].id)
 
 
 def getVehicleOutfit(outfits, vehTypeDescr, outfitType):

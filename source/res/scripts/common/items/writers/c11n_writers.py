@@ -10,9 +10,9 @@ from string import lower, upper
 import items.vehicles as iv
 from items import _xml, parseIntCompactDescr
 from soft_exception import SoftException
-from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType, CustomizationTypeNames, DEFAULT_SCALE_FACTOR_ID
+from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType, CustomizationTypeNames, DEFAULT_SCALE_FACTOR_ID, DEFAULT_GLOSS, DEFAULT_METALLIC
 from items.components.c11n_components import StyleItem, ApplyArea
-from items.customizations import FieldTypes, FieldFlags, FieldType, SerializableComponent, SerializationException
+from items.customizations import FieldTypes, FieldFlags, FieldType, SerializableComponent, SerializationException, _C11nSerializationTypes
 from items.type_traits import equalComparator
 from nations import NAMES
 from items.utils import getDefaultGlossTexture
@@ -42,7 +42,7 @@ def resizeSection(section, newSize, newName):
 
 
 def saveCustomizationItems(cache, folder):
-    writeItemType(PaintXmlWriter(), cache, folder, 'paint')
+    writeItemType(PaintXmlWriter(), cache, folder, 'paint', PaintXmlWriter.EndGroupWriter())
     writeItemType(DecalXmlWriter(), cache, folder, 'decal')
     writeItemType(ProjectionDecalXmlWriter(), cache, folder, 'projection_decal')
     writeItemType(CamouflageXmlWriter(), cache, folder, 'camouflage')
@@ -50,9 +50,9 @@ def saveCustomizationItems(cache, folder):
     writeItemType(StyleXmlWriter(), cache, folder, 'style')
     writeItemType(PersonalNumberXmlWriter(), cache, folder, 'personal_number')
     writeItemType(InsigniaXmlWriter(), cache, folder, 'insignia')
+    writeFontType(FontXmlWriter(), cache, folder, 'font')
     writeItemType(SequenceXmlWriter(), cache, folder, 'sequence')
     writeItemType(AttachmentXmlWriter(), cache, folder, 'attachment')
-    writeFontType(FontXmlWriter(), cache, folder, 'font')
 
 
 class GroupSectionPicker(object):
@@ -86,7 +86,7 @@ class GroupSectionPicker(object):
             return
 
 
-def writeItemType(writer, cache, folder, itemName):
+def writeItemType(writer, cache, folder, itemName, endGroupWriter=None):
     refsections = {}
     changedRefs = set()
     fileListRewriters = {}
@@ -106,7 +106,7 @@ def writeItemType(writer, cache, folder, itemName):
         if listRewriter is None:
             raise SoftException('Group {} sourceXml not found in fileListRewriters'.format(group.name))
         groupSection = listRewriter.next(sectionPicker=GroupSectionPicker(group))
-        changed = writeGroup(writer, group, groupSection, itemName)
+        changed = writeGroup(writer, group, groupSection, itemName, endGroupWriter)
         if changed:
             changedRefs.add(sourceXml)
 
@@ -123,18 +123,20 @@ def writeItemType(writer, cache, folder, itemName):
     return
 
 
-def writeGroup(itemWriter, group, groupSection, itemName):
+def writeGroup(itemWriter, group, groupSection, itemName, endGroupWriter=None):
     prototype = group.itemPrototype
-    changed = itemWriter.write(prototype, groupSection)
-    changed |= _xml.rewriteString(groupSection, 'name', group.name, defaultValue='')
+    changed = _xml.rewriteString(groupSection, 'name', group.name, defaultValue='')
+    changed |= itemWriter.write(prototype, groupSection, None)
     listRewriter = _xml.ListRewriter(groupSection, itemName)
     for itemRef in group.editorData.itemRefs:
         item = itemRef()
         if item.id == EMPTY_ITEM_ID:
             continue
         itemSection = listRewriter.next(lambda s, i=item: s['id'].asInt == i.id)
-        changed |= itemWriter.write(item, itemSection)
+        changed |= itemWriter.write(item, itemSection, prototype)
 
+    if endGroupWriter:
+        endGroupWriter.write(groupSection)
     changed |= listRewriter.flush()
     return changed
 
@@ -231,12 +233,15 @@ class VehicleFilterNationConvertor(object):
 class VehicleFilterVehicleConvertor(object):
 
     def convertToString(self, valuesList):
-        from items.vehicles import g_cache, g_list
+        from items.vehicles import g_list
 
         def getTankName(vehCompactDesc):
-            itemTypeID, nationId, vehId = parseIntCompactDescr(vehCompactDesc)
-            tank = g_cache.vehicle(nationId, vehId)
-            return tank.name
+            tankName = ''
+            _, nationId, vehId = parseIntCompactDescr(vehCompactDesc)
+            basicInfo = g_list.getList(nationId)[vehId]
+            if basicInfo is not None:
+                tankName = basicInfo.name
+            return tankName
 
         result = ' '.join(natsorted(map(lambda item: getTankName(item), valuesList)))
         return result
@@ -276,16 +281,16 @@ class ItemsFilterDecalTypeConvertor(object):
         return result
 
 
-Description = namedtuple('FiltedFiels', ('section', 'attributeName', 'convertor'))
-VEHICLE_FILTER_VALUE_DESCRIPTION = (Description('nations', 'nations', VehicleFilterNationConvertor()),
- Description('levels', 'levels', VehicleFilterLevelConvertor()),
- Description('tags', 'tags', VehicleFilterTagsConvertor()),
- Description('vehicles', 'vehicles', VehicleFilterVehicleConvertor()))
-ITEMS_FILTER_VALUE_DESCRIPTION = (Description('tags', 'tags', StringFilterConvertor()),
- Description('id', 'ids', IntegerFilterConvertor()),
- Description('itemGroupName', 'itemGroupNames', StringFilterConvertor()),
- Description('type', 'types', ItemsFilterDecalTypeConvertor()),
- Description('historical', 'edCustomizationDisplayTypes', IntegerFilterConvertor()))
+Description = namedtuple('FiltedFiels', ('section', 'attributeName', 'convertor', 'defaultValue'))
+VEHICLE_FILTER_VALUE_DESCRIPTION = (Description('nations', 'nations', VehicleFilterNationConvertor(), ''),
+ Description('tags', 'tags', VehicleFilterTagsConvertor(), ''),
+ Description('levels', 'levels', VehicleFilterLevelConvertor(), ''),
+ Description('vehicles', 'vehicles', VehicleFilterVehicleConvertor(), ''))
+ITEMS_FILTER_VALUE_DESCRIPTION = (Description('id', 'ids', IntegerFilterConvertor(), '0'),
+ Description('itemGroupName', 'itemGroupNames', StringFilterConvertor(), ''),
+ Description('tags', 'tags', StringFilterConvertor(), ''),
+ Description('type', 'types', ItemsFilterDecalTypeConvertor(), '-1'),
+ Description('historical', 'edCustomizationDisplayTypes', IntegerFilterConvertor(), '0'))
 FILTER_ID_NAME = {CustomizationType.PROJECTION_DECAL: 'projection_decal',
  CustomizationType.PERSONAL_NUMBER: 'personal_number',
  CustomizationType.DECAL: 'decal'}
@@ -310,6 +315,8 @@ CUSTOMIZATION_ITEMS_NAME_TO_TYPE = {v:k for k, v in CUSTOMIZATION_ITEMS_TYPE_TO_
 
 def saveItemFilter(filter, section, filterName, valueDescription):
     changed = False
+    includeCount = len(filter.include)
+    excludeCount = len(filter.exclude)
     filterSection = findOrCreate(section, filterName)
 
     def countFilters(filterSection):
@@ -324,7 +331,7 @@ def saveItemFilter(filter, section, filterName, valueDescription):
         return (includeCount, excludeCount)
 
     includeSectCnt, excludeSectCnt = countFilters(filterSection)
-    if includeSectCnt != len(filter.include) or excludeSectCnt != len(filter.exclude):
+    if includeSectCnt != includeCount or excludeSectCnt != excludeCount:
         changed = True
         while len(filterSection) > 0:
             lastSection = filterSection.child(len(filterSection) - 1)
@@ -335,8 +342,8 @@ def saveItemFilter(filter, section, filterName, valueDescription):
                 parentSection.createSection(sectionName)
                 count -= 1
 
-        createSections(filterSection, 'include', len(filter.include))
-        createSections(filterSection, 'exclude', len(filter.exclude))
+        createSections(filterSection, 'include', includeCount)
+        createSections(filterSection, 'exclude', excludeCount)
 
     def saveFilter(filterSection, filterName, filters, valueDescription):
         if len(filters) == 0:
@@ -344,8 +351,8 @@ def saveItemFilter(filter, section, filterName, valueDescription):
         changed = False
         index = 0
 
-        def saveFilterValue(subFilterSection, valueSectionName, valueHolder, atrributeListName, convertor):
-            listOfValues = getattr(valueHolder, atrributeListName)
+        def saveFilterValue(subFilterSection, valueSectionName, valueHolder, valuedescr):
+            listOfValues = getattr(valueHolder, valuedescr.attributeName)
             if listOfValues is None:
                 return False
             else:
@@ -359,17 +366,17 @@ def saveItemFilter(filter, section, filterName, valueDescription):
                         subFilterSection.deleteSection(valueSectionName)
                         return True
                 else:
-                    strValue = convertor.convertToString(listOfValues)
+                    strValue = valuedescr.convertor.convertToString(listOfValues)
                     if strValue is None:
                         return False
-                    return _xml.rewriteString(subFilterSection, valueSectionName, strValue)
+                    return _xml.rewriteString(subFilterSection, valueSectionName, strValue, valuedescr.defaultValue)
                 return False
 
         for iname, isection in filterSection.items():
             if iname == filterName:
                 filterValue = filters[index]
                 for valuedescr in valueDescription:
-                    changed |= saveFilterValue(isection, valuedescr.section, filterValue, valuedescr.attributeName, valuedescr.convertor)
+                    changed |= saveFilterValue(isection, valuedescr.section, filterValue, valuedescr)
 
                 index += 1
 
@@ -382,59 +389,94 @@ def saveItemFilter(filter, section, filterName, valueDescription):
 
 class BaseCustomizationItemXmlWriter(object):
 
-    def write(self, item, section):
+    def writeBase(self, item, section):
         changed = False
         changed |= rewriteInt(section, 'id', item, 'id')
-        changed |= rewriteInt(section, 'historical', item, 'customizationDisplayType')
-        changed |= rewriteString(section, 'priceGroup', item, 'priceGroup', '')
-        changed |= rewriteString(section, 'requiredToken', item, 'requiredToken', '')
         changed |= rewriteString(section, 'texture', item, 'texture', '')
-        changed |= rewriteInt(section, 'maxNumber', item, 'maxNumber', 0)
-        changed |= rewriteTags(section, item)
+        changed |= rewriteString(section, 'description', item, 'i18n.descriptionKey', '')
+        return changed
+
+    def writeBaseGroup(self, item, section):
+        changed = False
+        changed |= rewriteString(section, 'userString', item, 'i18n.userKey', '')
         if _needWrite(item, 'season'):
             enumValue = encodeEnum(SeasonType, item.season)
             if enumValue is None:
                 enumValue = encodeFlagEnum(SeasonType, item.season)
+            if enumValue == 'all':
+                enumValue = enumValue.upper()
             changed |= _xml.rewriteString(section, 'season', enumValue, 'undefined')
         else:
             section.deleteSection('season')
-        changed |= rewriteString(section, 'userString', item, 'i18n.userKey', '')
-        changed |= rewriteString(section, 'description', item, 'i18n.descriptionKey', '')
+        changed |= rewriteInt(section, 'historical', item, 'customizationDisplayType', -1)
+        changed |= rewriteTags(section, item)
+        changed |= rewriteString(section, 'priceGroup', item, 'priceGroup', '')
         if not _needWrite(item, 'filter'):
             changed |= section.deleteSection('filter')
         else:
-            changed |= saveItemFilter(item.filter, section, 'vehicleFilter', VEHICLE_FILTER_VALUE_DESCRIPTION)
+            includeCount = len(item.filter.include)
+            excludeCount = len(item.filter.exclude)
+            needWriteFilter = True
+            if includeCount == 0 and excludeCount == 0:
+                needWriteFilter = False
+                if section.has_key('vehicleFilter'):
+                    section.deleteSection('vehicleFilter')
+            if needWriteFilter:
+                changed |= saveItemFilter(item.filter, section, 'vehicleFilter', VEHICLE_FILTER_VALUE_DESCRIPTION)
+        changed |= rewriteString(section, 'requiredToken', item, 'requiredToken', '')
+        changed |= rewriteInt(section, 'maxNumber', item, 'maxNumber', 0)
         return changed
 
 
 class PaintXmlWriter(BaseCustomizationItemXmlWriter):
 
-    def write(self, item, section):
-        changed = super(PaintXmlWriter, self).write(item, section)
-        changed |= rewriteFloat(section, 'gloss', item, 'gloss', 0.0)
-        changed |= rewriteFloat(section, 'metallic', item, 'metallic', 0.0)
-        color = item.color
-        c_a, c_r, c_g, c_b = (0, 0, 0, 0)
-        if color > 0:
-            c_a = color >> 24 & 255
-            c_r = color >> 16 & 255
-            c_g = color >> 8 & 255
-            c_b = color & 255
-        color = Math.Vector4(c_b, c_g, c_r, c_a)
-        if _needWrite(item, 'color'):
-            changed |= _xml.rewriteVector4(section, 'color', color)
-        else:
-            changed |= section.deleteSection('color')
+    def write(self, item, section, group=None):
+        changed = self.writeBase(item, section)
+        if group:
+            color = item.color
+            c_a, c_r, c_g, c_b = (0, 0, 0, 0)
+            if color > 0:
+                c_a = color >> 24 & 255
+                c_r = color >> 16 & 255
+                c_g = color >> 8 & 255
+                c_b = color & 255
+            color = Math.Vector4(c_b, c_g, c_r, c_a)
+            if _needWrite(item, 'color'):
+                changed |= _xml.rewriteVector4(section, 'color', color)
+            else:
+                changed |= section.deleteSection('color')
+            changed |= rewriteFloat(section, 'gloss', item, 'gloss', 0.0)
+            changed |= rewriteFloat(section, 'metallic', item, 'metallic', 0.0)
+        changed |= self.writeBaseGroup(item, section)
         return changed
+
+    class EndGroupWriter(object):
+
+        def write(self, section):
+            changed = False
+            if not section.has_key('usages'):
+                section = section.createSection('usages')
+                section = section.createSection('item')
+                section.writeString('componentType', 'ALL')
+                section.writeInt('cost', 1)
+                changed = True
+            return changed
 
 
 class DecalXmlWriter(BaseCustomizationItemXmlWriter):
 
-    def write(self, item, section):
-        changed = super(DecalXmlWriter, self).write(item, section)
+    def write(self, item, section, group=None):
+        changed = self.writeBase(item, section)
         changed |= rewriteBool(section, 'mirror', item, 'canBeMirrored')
+        changed |= self.writeBaseGroup(item, section)
         if _needWrite(item, 'type'):
-            changed |= _xml.rewriteString(section, 'type', encodeEnum(DecalType, item.type))
+            if group:
+                if group.type != item.type:
+                    changed |= _xml.rewriteString(section, 'type', encodeEnum(DecalType, item.type))
+                else:
+                    changed |= section.deleteSection('type')
+            else:
+                changed |= _xml.rewriteString(section, 'type', encodeEnum(DecalType, item.type))
         else:
             changed |= section.deleteSection('type')
         return changed
@@ -442,25 +484,29 @@ class DecalXmlWriter(BaseCustomizationItemXmlWriter):
 
 class ProjectionDecalXmlWriter(BaseCustomizationItemXmlWriter):
 
-    def write(self, item, section):
-        changed = super(ProjectionDecalXmlWriter, self).write(item, section)
+    def write(self, item, section, group=None):
+        changed = self.writeBase(item, section)
         changed |= rewriteBool(section, 'mirror', item, 'canBeMirroredHorizontally')
         changed |= rewriteString(section, 'glossTexture', item, 'glossTexture', getDefaultGlossTexture())
         changed |= rewriteInt(section, 'scaleFactorId', item, 'scaleFactorId', DEFAULT_SCALE_FACTOR_ID)
+        changed |= self.writeBaseGroup(item, section)
         return changed
 
 
 class CamouflageXmlWriter(BaseCustomizationItemXmlWriter):
 
-    def write(self, item, section):
-        changed = super(CamouflageXmlWriter, self).write(item, section)
-        changed |= rewriteFloat(section, 'invisibilityFactor', item, 'invisibilityFactor', 1.0)
-        changed |= rewritePalettes(section, item)
-        changed |= rewriteCamouflageRotation(section, item)
-        changed |= rewriteCamouflageScales(section, item)
-        changed |= rewriteCamouflageTiling(section, item)
-        changed |= rewriteCamouflageTilingSettings(section, item)
-        changed |= rewriteCamouflageGlossMetallicSettings(section, item)
+    def write(self, item, section, group=None):
+        changed = self.writeBase(item, section)
+        if group:
+            changed |= rewriteCamouflageScales(section, item)
+        changed |= self.writeBaseGroup(item, section)
+        if group:
+            changed |= rewriteFloat(section, 'invisibilityFactor', item, 'invisibilityFactor', 1.0)
+            changed |= rewritePalettes(section, item)
+            changed |= rewriteCamouflageRotation(section, item)
+            changed |= rewriteCamouflageTiling(section, item)
+            changed |= rewriteCamouflageTilingSettings(section, item)
+            changed |= rewriteCamouflageGlossMetallicSettings(section, item)
         return changed
 
 
@@ -500,9 +546,11 @@ def rewriteEffects(item, section):
 
 class ModificationXmlWriter(BaseCustomizationItemXmlWriter):
 
-    def write(self, item, section):
-        changed = super(ModificationXmlWriter, self).write(item, section)
-        changed |= rewriteEffects(item, section)
+    def write(self, item, section, group=None):
+        changed = self.writeBase(item, section)
+        if group:
+            changed |= rewriteEffects(item, section)
+        changed |= self.writeBaseGroup(item, section)
         return changed
 
 
@@ -511,10 +559,10 @@ class ComponentXmlSerializer(object):
     def __init__(self):
         super(ComponentXmlSerializer, self).__init__()
 
-    def encode(self, section, target):
-        return self.__encodeCustomType(section, None, target)
+    def encode(self, section, target, defaultValuesDict=None, deprecatedFieldsToWrite=None):
+        return self.__encodeCustomType(section, None, target, defaultValuesDict, deprecatedFieldsToWrite)
 
-    def __encodeCustomType(self, section, key, obj):
+    def __encodeCustomType(self, section, key, obj, defaultValuesDict=None, deprecatedFieldsToWrite=None, valueType=0):
         changed = False
         if key is None:
             objSection = section
@@ -529,13 +577,16 @@ class ComponentXmlSerializer(object):
             if fieldType.flags & FieldFlags.NON_XML:
                 continue
             value = getattr(obj, fieldName)
-            if value is not None:
-                changed |= self.__encodeValue(objSection, fieldName, value, fieldType)
+            lenght = 1
+            if hasattr(value, '__len__'):
+                lenght = len(value)
+            if value is not None and lenght > 0:
+                changed |= self.__encodeValue(objSection, fieldName, value, fieldType, defaultValuesDict, deprecatedFieldsToWrite, obj.customType)
             changed |= objSection.deleteSection(fieldName)
 
         return changed
 
-    def __encodeArray(self, section, key, value, fieldType):
+    def __encodeArray(self, section, key, value, fieldType, defaultValuesDict=None, deprecatedFieldsToWrite=None, valueType=0):
         changed = False
         if key is None:
             array = section
@@ -544,13 +595,13 @@ class ComponentXmlSerializer(object):
             if array is None:
                 array = section.createSection(key)
                 changed = True
-        for name, child in array.items():
-            if name != 'item':
+        for index, (name, child) in list(enumerate(array.items())):
+            if name != 'item' or IS_EDITOR and fieldType.saveTag and name != fieldType.saveTag.format(index):
                 array.deleteSection(child)
                 changed = True
 
         with _xml.ListRewriter(array, 'item') as children:
-            for item in value:
+            for index, item in enumerate(value):
                 preferred = None
                 try:
                     if 'id' in item:
@@ -558,51 +609,66 @@ class ComponentXmlSerializer(object):
                 except TypeError:
                     pass
 
-                child = children.next(preferred)
-                changed |= self.__encodeValue(child, None, item, fieldType)
+                tagPath = fieldType.saveTag.format(index) if IS_EDITOR and fieldType.saveTag else None
+                child = children.next(preferred, path=tagPath)
+                changed |= self.__encodeValue(child, None, item, fieldType, defaultValuesDict, deprecatedFieldsToWrite, valueType)
 
         return changed
 
-    def __encodeValue(self, section, key, value, fieldType):
+    def __encodeValue(self, section, key, value, fieldType, defaultValuesDict=None, deprecatedFieldsToWrite=None, valueType=0):
+        if deprecatedFieldsToWrite:
+            deprecatedFields = deprecatedFieldsToWrite.get(valueType)
+            if deprecatedFields and key in deprecatedFields:
+                return False
+        defaultValue = None
+        if defaultValuesDict:
+            defaultValue = defaultValuesDict.get(key)
         if fieldType.type == FieldTypes.VARINT:
-            return _xml.rewriteInt(section, key, value)
-        if fieldType.type == FieldTypes.FLOAT:
-            return _xml.rewriteFloat(section, key, value)
-        if fieldType.type == FieldTypes.APPLY_AREA_ENUM:
+            return _xml.rewriteInt(section, key, value, defaultValue)
+        elif fieldType.type == FieldTypes.FLOAT:
+            return _xml.rewriteFloat(section, key, value, defaultValue)
+        elif fieldType.type == FieldTypes.APPLY_AREA_ENUM:
             if fieldType.flags & FieldFlags.SAVE_AS_STRING:
-                return _xml.rewriteString(section, key, encodeFlagEnum(ApplyArea, value).upper())
-            return _xml.rewriteInt(section, key, value)
-        if fieldType.type == FieldTypes.TAGS:
-            return _xml.rewriteString(section, key, ' '.join(value))
-        if fieldType.type == FieldTypes.STRING:
-            return _xml.rewriteString(section, key, value)
-        if fieldType.type == FieldTypes.OPTIONS_ENUM:
-            return _xml.rewriteInt(section, key, value)
-        if fieldType.type & FieldTypes.TYPED_ARRAY:
+                return _xml.rewriteString(section, key, encodeFlagEnum(ApplyArea, value).upper(), defaultValue)
+            return _xml.rewriteInt(section, key, value, defaultValue)
+        elif fieldType.type == FieldTypes.TAGS:
+            return _xml.rewriteString(section, key, ' '.join(value), defaultValue)
+        elif fieldType.type == FieldTypes.STRING:
+            return _xml.rewriteString(section, key, value, defaultValue)
+        elif fieldType.type == FieldTypes.OPTIONS_ENUM:
+            return _xml.rewriteInt(section, key, value, defaultValue)
+        elif fieldType.type & FieldTypes.TYPED_ARRAY:
             ft = fieldType._asdict()
             ft['type'] ^= FieldTypes.TYPED_ARRAY
-            return self.__encodeArray(section, key, value, FieldType(**ft))
-        if fieldType.type >= FieldTypes.CUSTOM_TYPE_OFFSET:
-            return self.__encodeCustomType(section, key, value)
-        raise SerializationException('Unsupported field type %d' % (fieldType.type,))
+            return self.__encodeArray(section, key, value, FieldType(**ft), defaultValuesDict, deprecatedFieldsToWrite, valueType)
+        elif fieldType.type >= FieldTypes.CUSTOM_TYPE_OFFSET:
+            return self.__encodeCustomType(section, key, value, defaultValuesDict, deprecatedFieldsToWrite, valueType)
+        else:
+            raise SerializationException('Unsupported field type %d' % (fieldType.type,))
+            return
 
 
 class StyleXmlWriter(BaseCustomizationItemXmlWriter):
     __outfitSerializer = ComponentXmlSerializer()
 
-    def write(self, item, section):
-        changed = super(StyleXmlWriter, self).write(item, section)
-        changed |= rewriteBool(section, 'isRent', item, 'isRent')
-        if item.isRent:
-            changed |= rewriteInt(section, 'rentCount', item, 'rentCount', RENT_DEFAULT_BATTLES)
-        else:
-            changed |= section.deleteSection('rentCount')
-        changed |= rewriteString(section, 'modelsSet', item, 'modelsSet', 'default')
-        changed |= self.__writeOutfits(item.outfits, section)
-        changed |= self.__writeFiltersItems(item.itemsFilters, section)
-        changed |= self.__writeAlternateItems(item.alternateItems, section)
-        changed |= self.__writeDependencies(item.dependencies, section)
-        changed |= self.__write3dProgression(item.styleProgressions, section)
+    def write(self, item, section, group=None):
+        changed = self.writeBase(item, section)
+        if group:
+            changed |= rewriteBool(section, 'isRent', item, 'isRent')
+            if item.isRent:
+                changed |= rewriteInt(section, 'rentCount', item, 'rentCount', RENT_DEFAULT_BATTLES)
+            else:
+                changed |= section.deleteSection('rentCount')
+            if item.modelsSet is None or item.modelsSet == '':
+                changed |= section.deleteSection('modelsSet')
+            else:
+                changed |= rewriteString(section, 'modelsSet', item, 'modelsSet', 'default')
+            changed |= self.__writeOutfits(item.outfits, section)
+            changed |= self.__writeFiltersItems(item.itemsFilters, section)
+            changed |= self.__writeAlternateItems(item.alternateItems, section)
+            changed |= self.__writeDependencies(item.dependencies, section)
+            changed |= self.__write3dProgression(item.styleProgressions, section)
+        changed |= self.writeBaseGroup(item, section)
         return changed
 
     def __writeOutfits(self, outfits, section):
@@ -646,7 +712,15 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
             projectionDecal.doubleSided = None
             projectionDecal.showOn = None
 
-        changed |= self.__outfitSerializer.encode(oSection, outfit)
+        defaultValuesDict = {'styleProgressionLevel': 0,
+         'slotId': 0,
+         'scaleFactorId': DEFAULT_SCALE_FACTOR_ID,
+         'options': 0}
+        deprecatedFieldsToWrite = {_C11nSerializationTypes.SEQUENCE: ('position', 'rotation'),
+         _C11nSerializationTypes.ATTACHMENT: ('position', 'rotation'),
+         _C11nSerializationTypes.PROJECTION_DECAL: ('tintColor', 'preview', 'progressionLevel'),
+         _C11nSerializationTypes.DECAL: 'progressionLevel'}
+        changed |= self.__outfitSerializer.encode(oSection, outfit, defaultValuesDict, deprecatedFieldsToWrite)
         return changed
 
     def __writeAlternateItems(self, alterItems, isection):
@@ -761,41 +835,49 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
 
 class PersonalNumberXmlWriter(BaseCustomizationItemXmlWriter):
 
-    def write(self, item, section):
-        changed = super(PersonalNumberXmlWriter, self).write(item, section)
-        changed |= rewriteInt(section, 'digitsCount', item, 'digitsCount')
-        changed |= rewriteString(section, 'preview_texture', item, 'previewTexture')
+    def write(self, item, section, group=None):
+        changed = self.writeBase(item, section)
+        if group:
+            changed |= rewriteInt(section, 'digitsCount', item, 'digitsCount')
+            changed |= rewriteString(section, 'preview_texture', item, 'previewTexture')
+        changed |= self.writeBaseGroup(item, section)
         return changed
 
 
 class InsigniaXmlWriter(BaseCustomizationItemXmlWriter):
 
-    def write(self, item, section):
-        changed = super(InsigniaXmlWriter, self).write(item, section)
-        changed |= rewriteString(section, 'atlas', item, 'atlas', '')
-        changed |= rewriteString(section, 'alphabet', item, 'alphabet', '')
-        changed |= rewriteBool(section, 'canBeMirrored', item, 'canBeMirrored', False)
+    def write(self, item, section, group=None):
+        changed = self.writeBase(item, section)
+        if group:
+            changed |= rewriteString(section, 'atlas', item, 'atlas', '')
+            changed |= rewriteString(section, 'alphabet', item, 'alphabet', '')
+            changed |= rewriteBool(section, 'canBeMirrored', item, 'canBeMirrored', False)
+        changed |= self.writeBaseGroup(item, section)
         return changed
 
 
 class AttachmentXmlWriter(BaseCustomizationItemXmlWriter):
 
-    def write(self, item, section):
-        changed = super(AttachmentXmlWriter, self).write(item, section)
-        changed |= rewriteString(section, 'name', item, 'name', '')
-        changed |= rewriteInt(section, 'sequenceId', item, 'sequenceId', -1)
-        changed |= rewriteString(section, 'modelName', item, 'modelName', '')
-        changed |= rewriteString(section, 'attachmentLogic', item, 'attachmentLogic', '')
-        changed |= rewriteBool(section, 'initialVisibility', item, 'initialVisibility', False)
+    def write(self, item, section, group=None):
+        changed = self.writeBase(item, section)
+        if group:
+            changed |= rewriteString(section, 'name', item, 'name', '')
+            changed |= rewriteInt(section, 'sequenceId', item, 'sequenceId', -1)
+            changed |= rewriteString(section, 'modelName', item, 'modelName', '')
+            changed |= rewriteString(section, 'attachmentLogic', item, 'attachmentLogic', '')
+            changed |= rewriteBool(section, 'initialVisibility', item, 'initialVisibility', False)
+        changed |= self.writeBaseGroup(item, section)
         return changed
 
 
 class SequenceXmlWriter(BaseCustomizationItemXmlWriter):
 
-    def write(self, item, section):
-        changed = super(SequenceXmlWriter, self).write(item, section)
-        changed |= rewriteString(section, 'name', item, 'name', '')
-        changed |= rewriteString(section, 'sequenceName', item, 'sequenceName', '')
+    def write(self, item, section, group=None):
+        changed = self.writeBase(item, section)
+        if group:
+            changed |= rewriteString(section, 'name', item, 'name', '')
+            changed |= rewriteString(section, 'sequenceName', item, 'sequenceName', '')
+        changed |= self.writeBaseGroup(item, section)
         return changed
 
 
@@ -827,10 +909,13 @@ def writeFontAlphabet(item):
 
 class FontXmlWriter(object):
 
-    def write(self, item, section):
+    def write(self, item, section, group=None):
         changed = _xml.rewriteString(section, 'texture', item.texture)
         changed |= _xml.rewriteString(section, 'alphabet', item.alphabet)
-        changed |= _xml.rewriteString(section, 'name', 'font_' + str(item.id))
+        extname = ''
+        if item.id < 10:
+            extname = '0'
+        changed |= _xml.rewriteString(section, 'name', 'font_' + extname + str(item.id))
         writeFontAlphabet(item)
         return changed
 
@@ -933,12 +1018,15 @@ def rewriteCamouflageRotation(section, camouflageItem):
     turretRotation = camouflageItem.rotation['turret']
 
     def rewritePartRotation(section, partName, value):
-        return _xml.rewriteFloat(section, partName, value)
+        return _xml.rewriteFloat(section, partName, value, 0)
 
     rotationSection = findOrCreate(section, 'rotation')
     changed |= rewritePartRotation(rotationSection, 'HULL', hullRotation)
     changed |= rewritePartRotation(rotationSection, 'TURRET', turretRotation)
     changed |= rewritePartRotation(rotationSection, 'GUN', gunRotation)
+    if hullRotation == 0 and turretRotation == 0 and gunRotation == 0:
+        if section.has_key('rotation'):
+            return section.deleteSection('rotation')
     return changed
 
 
@@ -975,7 +1063,13 @@ def rewriteCamouflageTiling(section, camouflageItem):
             changed |= _xml.rewriteVector4(tilingSection, correctedTankName, tilingRes)
 
         for iname, isection in tilingSection.items():
-            if iname not in camouflageItem.editorData.tilingName.values():
+            found = False
+            for tankTilingName in camouflageItem.editorData.tilingName.values():
+                if tankTilingName.find(iname) != -1:
+                    found = True
+                    break
+
+            if not found:
                 tilingSection.deleteSection(iname)
                 changed = True
 
@@ -1009,9 +1103,11 @@ def rewriteCamouflageTilingSettings(section, camouflageItem):
 def rewriteCamouflageGlossMetallicSettings(section, camouflageItem):
     changed = False
     if camouflageItem.editorData.glossMetallicSettingsType == 0:
+        defaultGloss = Math.Vector4(DEFAULT_GLOSS, DEFAULT_GLOSS, DEFAULT_GLOSS, DEFAULT_GLOSS)
+        defaultMetallic = Math.Vector4(DEFAULT_METALLIC, DEFAULT_METALLIC, DEFAULT_METALLIC, DEFAULT_METALLIC)
         changed |= section.deleteSection('glossMetallicMap')
-        changed |= _xml.rewriteVector4(section, 'gloss', camouflageItem.glossMetallicSettings['gloss'])
-        changed |= _xml.rewriteVector4(section, 'metallic', camouflageItem.glossMetallicSettings['metallic'])
+        changed |= _xml.rewriteVector4(section, 'gloss', camouflageItem.glossMetallicSettings['gloss'], defaultGloss)
+        changed |= _xml.rewriteVector4(section, 'metallic', camouflageItem.glossMetallicSettings['metallic'], defaultMetallic)
     elif camouflageItem.editorData.glossMetallicSettingsType == 1:
         changed |= section.deleteSection('gloss')
         changed |= section.deleteSection('metallic')

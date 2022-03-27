@@ -6,59 +6,67 @@ from items.components import shared_components, component_constants, c11n_consta
 from items.components.component_constants import ALLOWED_PROJECTION_DECALS_ANCHORS, ALLOWED_SLOTS_ANCHORS, ALLOWED_EMBLEM_SLOTS, ALLOWED_MISC_SLOTS
 from items import _xml
 import typing
+from constants import IS_EDITOR
+if IS_EDITOR:
+    from combined_data_section import CombinedDataSection
+
+def getPrecedingSectionIndex(sectionItems, beforeSubsectionName):
+    precedingSectionIndex = None
+    for index in [ index for index, item in enumerate(sectionItems) if item[0] == beforeSubsectionName ]:
+        precedingSectionIndex = index - 1
+        break
+
+    return precedingSectionIndex
+
 
 def writeProjectionSlots(slotDS, slot):
-    slotDS.write('compatibleModels', ' '.join(slot.compatibleModels))
+    if slot.type == 'projectionDecal':
+        slotDS.write('tags', ' '.join(slot.tags))
+    if len(slot.compatibleModels) == 1 and slot.compatibleModels[0] == 'default':
+        slotDS.deleteSection('compatibleModels')
+    else:
+        slotDS.write('compatibleModels', ' '.join(slot.compatibleModels))
     slotDS.write('position', slot.position)
     slotDS.write('rotation', slot.rotation)
     slotDS.write('scale', slot.scale)
-    slotDS.write('showOn', slot.showOn)
-    if slot.type != 'fixedProjectionDecal':
-        slotDS.write('verticalMirror', slot.canBeMirroredVertically)
     _xml.rewriteBool(slotDS, 'doubleSided', slot.doubleSided, False)
     _xml.rewriteBool(slotDS, 'hiddenForUser', slot.hiddenForUser, False)
-    _xml.rewriteFloat(slotDS, 'clipAngle', slot.clipAngle, 0.0)
+    slotDS.write('showOn', slot.showOn)
+    _xml.rewriteFloat(slotDS, 'clipAngle', slot.clipAngle, None)
+    _xml.rewriteBool(slotDS, 'verticalMirror', slot.canBeMirroredVertically, False)
     if slot.type == 'projectionDecal':
-        writeProjectionSlotsNotFixed(slotDS, slot)
+        slotDS.write('anchorShift', slot.anchorShift)
     elif slot.type == 'fixedProjectionDecal':
-        writeProjectionSlotsFixed(slotDS, slot)
-
-
-def writeProjectionSlotsFixed(slotDS, slot):
-    slotDS.write('itemId', slot.itemId)
-    slotDS.write('options', slot.options)
-
-
-def writeProjectionSlotsNotFixed(slotDS, slot):
-    slotDS.write('anchorShift', slot.anchorShift)
-    slotDS.write('tags', ' '.join(slot.tags))
+        slotDS.write('itemId', slot.itemId)
+        slotDS.write('options', slot.options)
+    return
 
 
 def writeAnchorSlots(slotDS, slot):
     slotDS.deleteSection('tags')
-    if slot.applyTo is not None:
-        slotDS.write('applyTo', slot.applyTo)
     if slot.anchorPosition is not None:
         slotDS.write('anchorPosition', slot.anchorPosition)
     if slot.anchorDirection is not None:
         slotDS.write('anchorDirection', slot.anchorDirection)
+    if slot.applyTo is not None:
+        slotDS.write('applyTo', slot.applyTo)
     return
 
 
 def writeEmblemSlots(slotDS, slot):
-    slotDS.write('rayStart', slot.rayStart)
-    slotDS.write('rayEnd', slot.rayEnd)
-    slotDS.write('rayUp', slot.rayUp)
-    if slot.type == 'insigniaOnGun':
-        _xml.rewriteBool(slotDS, 'applyToFabric', slot.applyToFabric, True)
-    else:
+    if slot.type not in ('attachment', 'sequence', 'paint', 'camouflage', 'style', 'effect', 'projectionDecal', 'fixedProjectionDecal'):
         _xml.rewriteBool(slotDS, 'isMirrored', slot.isMirrored, False)
+        slotDS.write('rayStart', slot.rayStart)
+        slotDS.write('rayEnd', slot.rayEnd)
+        slotDS.write('rayUp', slot.rayUp)
     if slot.type in ('fixedEmblem', 'fixedInscription'):
         slotDS.write('emblemId', slot.emblemId)
+    if slot.type == 'insigniaOnGun':
+        _xml.rewriteBool(slotDS, 'applyToFabric', slot.applyToFabric, True)
     slotDS.write('size', slot.size)
     _xml.rewriteBool(slotDS, 'hideIfDamaged', slot.hideIfDamaged, False)
-    _xml.rewriteBool(slotDS, 'isUVProportional', slot.isUVProportional, True)
-    _xml.rewriteBool(slotDS, 'isMirrored', slot.isMirrored, False)
+    _xml.rewriteBool(slotDS, 'isUVProportional', slot.isUVProportional, None)
+    return
 
 
 def writeMiscSlots(slotDS, slot):
@@ -75,20 +83,33 @@ def writeCustomizationSlots(slots, section, subsectionName):
     section.deleteSection(subsectionName)
     if not slots:
         return
-    subsection = section.createSection(subsectionName)
-    for slot in slots:
-        slotDS = subsection.createSection('slot')
-        slotDS.write('slotType', slot.type)
-        slotDS.write('slotId', slot.slotId)
-        if slot.type in ALLOWED_PROJECTION_DECALS_ANCHORS:
-            writeProjectionSlots(slotDS, slot)
-        if slot.type in ALLOWED_SLOTS_ANCHORS:
-            writeAnchorSlots(slotDS, slot)
-        if slot.type in ALLOWED_EMBLEM_SLOTS:
-            writeEmblemSlots(slotDS, slot)
-        if slot.type in component_constants.ALLOWED_MISC_SLOTS:
-            writeMiscSlots(slotDS, slot)
-        LOG_ERROR('unexpected slot type: {}'.format(slot.type))
+    else:
+        sectionItems = section.items()
+        precedingSectionIndex = getPrecedingSectionIndex(sectionItems, 'customization')
+        if precedingSectionIndex is not None:
+            newSection = ResMgr.DataSection().createSection(subsectionName)
+            baseSection = section
+            if isinstance(section, CombinedDataSection):
+                baseSection = section.getPrioritySection()
+            subsection = baseSection.insertSection(newSection, sectionItems[precedingSectionIndex][1])
+        else:
+            subsection = section.createSection(subsectionName)
+        slots.sort(key=lambda x: x.slotId)
+        for slot in slots:
+            slotDS = subsection.createSection('slot')
+            slotDS.write('slotType', slot.type)
+            slotDS.write('slotId', slot.slotId)
+            if slot.type in ALLOWED_PROJECTION_DECALS_ANCHORS:
+                writeProjectionSlots(slotDS, slot)
+            if slot.type in ALLOWED_SLOTS_ANCHORS:
+                writeAnchorSlots(slotDS, slot)
+            if slot.type in ALLOWED_EMBLEM_SLOTS:
+                writeEmblemSlots(slotDS, slot)
+            if slot.type in component_constants.ALLOWED_MISC_SLOTS:
+                writeMiscSlots(slotDS, slot)
+            LOG_ERROR('unexpected slot type: {}'.format(slot.type))
+
+        return
 
 
 def writeModelsSets(item, section):

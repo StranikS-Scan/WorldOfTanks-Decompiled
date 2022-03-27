@@ -9,8 +9,6 @@ from gui.shared.gui_items.processors.module import ModuleBuyer
 from gui.shared.gui_items.processors.vehicle import VehicleBuyer, showVehicleReceivedResultMessages
 from gui.shared.money import Currency
 from helpers import dependency
-from helpers.time_utils import timestampToISO
-from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
@@ -44,10 +42,6 @@ def _currencyExchangeValidator(_, data):
     return all((v > 0 and c in _EXCHANGER.iterkeys() for c, v in data.get('currencies', {}).iteritems()))
 
 
-class _SetTradeOffSelectedSchema(W2CSchema):
-    id = Field(required=False, type=int)
-
-
 class _BuyItemsSchema(W2CSchema):
     items = Field(required=True, type=list, validator=lambda value, _: itemsSpecValidator(value))
 
@@ -59,26 +53,6 @@ class _CurrencyExchangeSchema(W2CSchema):
 class TradeWebApiMixin(object):
     _goodiesCache = dependency.descriptor(IGoodiesCache)
     _itemsCache = dependency.descriptor(IItemsCache)
-    _tradeIn = dependency.descriptor(ITradeInController)
-
-    @w2c(W2CSchema, 'get_trade_in_info')
-    def getTradeInInfo(self, _):
-        start, end = self._tradeIn.getStartEndTimestamps()
-        return {'allowedVehicleLevels': self._tradeIn.getAllowedVehicleLevels(),
-         'startDate': timestampToISO(start),
-         'endDate': timestampToISO(end)} if self._tradeIn.isEnabled() else None
-
-    @w2c(W2CSchema, 'get_trade_off_selected')
-    def getTradeOffVehicleCD(self, _):
-        tradeOffVehicleCD = self._tradeIn.getActiveTradeOffVehicleCD()
-        vehicleState, vehicleStateLevel = self._tradeIn.getActiveTradeOffVehicleState()
-        return {'id': tradeOffVehicleCD,
-         'state': vehicleState,
-         'level': vehicleStateLevel}
-
-    @w2c(_SetTradeOffSelectedSchema, 'set_trade_off_selected')
-    def setTradeOffVehicleCD(self, cmd):
-        self._tradeIn.setActiveTradeOffVehicleCD(cmd.id)
 
     @w2c(_CurrencyExchangeSchema, 'exchange')
     def exchange(self, cmd):

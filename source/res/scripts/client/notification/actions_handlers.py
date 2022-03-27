@@ -38,7 +38,7 @@ from notification.tutorial_helper import TUTORIAL_GLOBAL_VAR, TutorialGlobalStor
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattleRoyaleController, IBrowserController, IMapboxController, IRankedBattlesController
+from skeletons.gui.game_control import IBattleRoyaleController, IBrowserController, IMapboxController, IRankedBattlesController, IBattlePassController, IRTSBattlesController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.web import IWebController
@@ -911,6 +911,37 @@ class _OpenBattlePassProgressionView(_NavigationDisabledActionHandler):
         return
 
 
+class _OpenBattlePassChapterChoiceView(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+
+
+class _OpenBPExtraWillEndSoon(_NavigationDisabledActionHandler):
+    __battlePassController = dependency.descriptor(IBattlePassController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        chapterID = self.__battlePassController.getExtraChapterID()
+        if chapterID:
+            showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), chapterID)
+
+
 class _OpentBlueprintsConvertSale(_NavigationDisabledActionHandler):
 
     @classmethod
@@ -990,6 +1021,38 @@ class _OpenChapterChoiceView(_OpenBattlePassProgressionView):
         return NOTIFICATION_TYPE.BATTLE_PASS_SWITCH_CHAPTER_REMINDER
 
 
+class _RTSEventHandler(_NavigationDisabledActionHandler):
+    _rtsCtrl = dependency.descriptor(IRTSBattlesController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    def _canNavigate(self):
+        result = super(_RTSEventHandler, self)._canNavigate()
+        return self._rtsCtrl.isEnabled() and result
+
+
+class _OpenRTSEventHandler(_RTSEventHandler):
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        self._rtsCtrl.doSelectPrb(lambda : None)
+
+
+class _OpenRTSCollectionHandler(_RTSEventHandler):
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        self._rtsCtrl.doSelectPrb(shared_events.showRTSMetaRootWindow)
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -1025,6 +1088,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenProgressiveRewardView,
  ProlongStyleRent,
  _OpenBattlePassProgressionView,
+ _OpenBattlePassChapterChoiceView,
+ _OpenBPExtraWillEndSoon,
  _OpenMissingEventsHandler,
  _OpenNotrecruitedSysMessageHandler,
  _OpentBlueprintsConvertSale,
@@ -1033,7 +1098,9 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenMapboxSurvey,
  _OpenPsaShop,
  _OpenBattlePassPointsShop,
- _OpenChapterChoiceView)
+ _OpenChapterChoiceView,
+ _OpenRTSEventHandler,
+ _OpenRTSCollectionHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

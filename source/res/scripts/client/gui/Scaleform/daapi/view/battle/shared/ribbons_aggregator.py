@@ -754,6 +754,24 @@ class _EpicDestructibleDamaged(_Ribbon):
         self._damagePoints += ribbon.getExtraValue()
 
 
+class _RTSSupplyDestroyed(_SingleVehicleDamageRibbon):
+    __slots__ = ()
+
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, event):
+        return cls(ribbonID, event.getTargetID(), False, event.getRole(), cls._extractExtraValue(event))
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.SUPPLY_DESTRUCTION
+
+    @classmethod
+    def _extractExtraValue(cls, event):
+        pass
+
+    def _canAggregate(self, ribbon):
+        return self.getVehicleID() == ribbon.getVehicleID() and self.isRoleBonus() == ribbon.isRoleBonus()
+
+
 _RIBBON_TYPES_AGGREGATED_WITH_KILL_RIBBON = (BATTLE_EFFICIENCY_TYPES.DAMAGE,
  BATTLE_EFFICIENCY_TYPES.BURN,
  BATTLE_EFFICIENCY_TYPES.RAM,
@@ -781,7 +799,9 @@ _FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY = {FEEDBACK_EVENT_ID.PLAYER_CAPTURED_BASE:
  FEEDBACK_EVENT_ID.DESTRUCTIBLES_DEFENDED: _RibbonSingleClassFactory(_EpicDestructiblesDefended),
  FEEDBACK_EVENT_ID.DEFENDER_BONUS: _RibbonSingleClassFactory(_EpicDefenderBonus),
  FEEDBACK_EVENT_ID.SMOKE_ASSIST: _RibbonSingleClassFactory(_EpicAbilityAssist),
- FEEDBACK_EVENT_ID.INSPIRE_ASSIST: _RibbonSingleClassFactory(_EpicAbilityAssist)}
+ FEEDBACK_EVENT_ID.INSPIRE_ASSIST: _RibbonSingleClassFactory(_EpicAbilityAssist),
+ FEEDBACK_EVENT_ID.PLAYER_DAMAGED_SUPPLY_ENEMY: _DamageRibbonClassFactory(damageCls=_CausedDamageRibbon, fireCls=_FireHitRibbon, ramCls=_RamHitRibbon, wcCls=_WorldCollisionHitRibbon, artDmgCls=_ArtilleryHitRibbon, bombDmgCls=_BombersHitRibbon, artFireCls=_ArtilleryFireHitRibbon, bombFireCls=_BombersFireHitRibbon, recoveryCls=_EpicRecoveryRibbon, deathZoneCls=_DeathZoneRibbon, berserker=_ReceivedBerserkerHitRibbon, spawnedBotDmgCls=_SpawnedBotCausedDamageRibbon, minefieldDamageCls=_MinefieldDamageRibbon, damagedBySmoke=_ReceivedByDamagingSmokeRibbon),
+ FEEDBACK_EVENT_ID.PLAYER_DESTROYED_SUPPLY_ENEMY: _RibbonSingleClassFactory(_RTSSupplyDestroyed)}
 _FEEDBACK_EVENTS_TO_IGNORE = (FEEDBACK_EVENT_ID.EQUIPMENT_TIMER_EXPIRED,)
 
 def _isRoleBonus(event):
@@ -932,10 +952,12 @@ class RibbonsAggregator(object):
     def __onRespawnBaseMoving(self):
         self.__isInPostmortemMode = False
 
-    def _onPlayerFeedbackReceived(self, events):
+    def _onPlayerFeedbackReceived(self, vehicleID, events):
 
-        def _ribbonsGenerator(events):
-            for e in events:
+        def _ribbonsGenerator(ribbonsEvents):
+            for e in ribbonsEvents:
+                if avatar_getter.getPlayerVehicleID() != vehicleID:
+                    return
                 r = _createRibbonFromPlayerFeedbackEvent(self.__idGenerator.next(), e)
                 if r is not None:
                     yield r
@@ -1026,6 +1048,7 @@ class RibbonsAggregator(object):
         sortedRibons = []
         if ribbons:
             killRibbons = ribbons.pop(BATTLE_EFFICIENCY_TYPES.DESTRUCTION, None)
+            supplyDestructionRibbons = ribbons.pop(BATTLE_EFFICIENCY_TYPES.SUPPLY_DESTRUCTION, None)
             detectionRibbons = ribbons.pop(BATTLE_EFFICIENCY_TYPES.DETECTION, None)
             if detectionRibbons is not None:
                 sortedRibons.extend(sorted(detectionRibbons, key=_sortKey))
@@ -1034,6 +1057,8 @@ class RibbonsAggregator(object):
                 remaningRibbons.extend(newRibbons)
 
             sortedRibons.extend(sorted(remaningRibbons, key=_sortKey))
+            if supplyDestructionRibbons is not None:
+                sortedRibons.extend(sorted(supplyDestructionRibbons, key=_sortKey))
             if killRibbons is not None:
                 sortedRibons.extend(sorted(killRibbons, key=_sortKey))
         return sortedRibons
@@ -1041,12 +1066,12 @@ class RibbonsAggregator(object):
 
 class RibbonsAggregatorPlayer(RibbonsAggregator):
 
-    def _onPlayerFeedbackReceived(self, events):
+    def _onPlayerFeedbackReceived(self, _, events):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             self.suspend()
         else:
             self.resume()
-        super(RibbonsAggregatorPlayer, self)._onPlayerFeedbackReceived(events)
+        super(RibbonsAggregatorPlayer, self)._onPlayerFeedbackReceived(_, events)
 
     def _aggregateRibbons(self, ribbons):
         replayRibbons = []

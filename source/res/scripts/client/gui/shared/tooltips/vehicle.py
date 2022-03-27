@@ -169,7 +169,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             headerBlockItems.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
         self.__createStatusBlock(vehicle, headerBlockItems, statsConfig, paramsConfig, valueWidth)
         items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-8)))
-        if vehicle.isEarnCrystals:
+        if statsConfig.showCrystals and vehicle.isEarnCrystals:
             crystalBlock, linkage = CrystalBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
             if crystalBlock:
                 items.append(formatters.packBuildUpBlockData(crystalBlock, linkage=linkage, padding=leftRightPadding))
@@ -652,12 +652,12 @@ class VehicleTradeInTooltipData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         vehicle = self.context.buildItem(*args, **kwargs)
-        tradeInInfo = self.tradeIn.getTradeInInfo(vehicle)
-        if tradeInInfo is None:
+        tradeInDiscounts = self.tradeIn.getTradeInDiscounts(vehicle)
+        if tradeInDiscounts is None:
             discount = i18n.makeString(TOOLTIPS.TRADE_NODISCOUNT)
         else:
-            discountValue = moneyWithIcon(tradeInInfo.maxDiscountPrice, currType=Currency.GOLD)
-            if tradeInInfo.hasMultipleTradeOffs:
+            discountValue = moneyWithIcon(tradeInDiscounts.maxDiscountPrice, currType=Currency.GOLD)
+            if tradeInDiscounts.hasMultipleTradeOffs:
                 discountValue = i18n.makeString(TOOLTIPS.TRADE_SEVERALDISCOUNTS, discountValue=discountValue)
             discount = i18n.makeString(TOOLTIPS.TRADE_DISCOUNT, discountValue=discountValue)
         return {'header': i18n.makeString(TOOLTIPS.TRADE_HEADER),
@@ -1111,6 +1111,8 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                 result = self.__getTechTreeVehicleStatus(self.configuration, self.vehicle)
             elif self.configuration.isAwardWindow:
                 result = None
+            elif self.configuration.isRTS:
+                result = None
             else:
                 result = self.__getVehicleStatus(self.configuration.showCustomStates, self.vehicle)
             if result is not None:
@@ -1123,7 +1125,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                     headerFormatter = text_styles.warning
                 elif statusLevel == Vehicle.VEHICLE_STATE_LEVEL.ATTENTION:
                     headerFormatter = text_styles.statusAttention
-                elif statusLevel in (Vehicle.VEHICLE_STATE_LEVEL.RENTED, Vehicle.VEHICLE_STATE_LEVEL.RENTABLE):
+                elif statusLevel == Vehicle.VEHICLE_STATE_LEVEL.RENTABLE:
                     headerFormatter = text_styles.warning
                 else:
                     _logger.error('Unknown status type "%s"!', statusLevel)

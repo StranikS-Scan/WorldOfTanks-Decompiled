@@ -523,10 +523,10 @@ class AmmoController(MethodsRules, ViewComponentsController):
             self.__shellChangeTime = baseTime
         interval = self.__gunSettings.clip.interval
         self.triggerReloadEffect(timeLeft, baseTime)
-        if interval > 0 and self.__currShellCD in self.__ammo:
+        interval = self.__gunSettings.clip.interval
+        if self.__currShellCD in self.__ammo:
             shellsInClip = self.__ammo[self.__currShellCD][1]
-            if not (shellsInClip == 1 and timeLeft == 0 and not self.__gunSettings.hasAutoReload() or shellsInClip == 0 and timeLeft != 0):
-                baseTime = interval
+            baseTime = self.correctGunReloadBaseTime(interval, shellsInClip, timeLeft, baseTime, self.__gunSettings.hasAutoReload())
         isIgnored = False
         if CommandMapping.g_instance.isActive(CommandMapping.CMD_CM_SHOOT):
             isIgnored = self.__autoShoots.process(timeLeft, self._reloadingState.getActualValue())
@@ -537,6 +537,13 @@ class AmmoController(MethodsRules, ViewComponentsController):
             self.onGunReloadTimeSet(self.__currShellCD, self._reloadingState.getSnapshot(), skipAutoLoader)
         if self.__quickChangerActive:
             self.onQuickShellChangerUpdated(self.canQuickShellChange(), self.getQuickShellChangeTime())
+
+    @staticmethod
+    def correctGunReloadBaseTime(interval, shellsInClip, timeLeft, baseTime, isAutoReloaded):
+        if interval > 0:
+            if not (shellsInClip == 1 and timeLeft == 0 and not isAutoReloaded or shellsInClip == 0 and timeLeft != 0):
+                return interval
+        return baseTime
 
     def setGunAutoReloadTime(self, timeLeft, baseTime, firstClipBaseTime, isSlowed, isBoostApplicable):
         self._autoReloadingState.setTimes(timeLeft, baseTime)
@@ -626,6 +633,10 @@ class AmmoController(MethodsRules, ViewComponentsController):
             return result
         else:
             return quantity
+
+    def getAllShellsQuantityLeft(self):
+        quantity = self.getShellsQuantityLeft()
+        return sum((quantity for quantity, _ in self.__ammo.itervalues())) if quantity == 0 else quantity
 
     @MethodsRules.delayable('setGunSettings')
     def setShells(self, intCD, quantity, quantityInClip):

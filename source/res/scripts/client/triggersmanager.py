@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/TriggersManager.py
+from typing import TYPE_CHECKING
 import math
 import BigWorld
 import Math
@@ -7,6 +8,9 @@ import PlayerEvents
 from constants import ARENA_PERIOD
 from debug_utils import LOG_CURRENT_EXCEPTION
 from helpers import isPlayerAvatar
+if TYPE_CHECKING:
+    from typing import List, Dict, Any, Tuple
+    from Vehicle import Vehicle
 
 class TRIGGER_TYPE(object):
     AIM = 0
@@ -30,6 +34,7 @@ class TRIGGER_TYPE(object):
     VEHICLE_VISUAL_VISIBILITY_CHANGED = 19
     PLAYER_DEVICE_CRITICAL = 20
     PLAYER_MOVE = 21
+    TANKMAN_MODE = 22
 
 
 class ITriggerListener(object):
@@ -163,76 +168,49 @@ class TriggersManager(object):
         self.__cbID = BigWorld.callback(self.UPDATE_PERIOD, self.update)
         if not self.isActive:
             return
-        else:
-            player = BigWorld.player()
-            if not isPlayerAvatar():
-                return
-            camPos = BigWorld.camera().position
-            camDir = BigWorld.camera().direction
-            vehicle = BigWorld.entities.get(player.playerVehicleID)
-            try:
-                for tType, data in self.__pendingManualTriggers.iteritems():
-                    for isTwoState, args in data:
-                        params = dict(args)
-                        params['type'] = tType
+        player = BigWorld.player()
+        if not isPlayerAvatar():
+            return
+        camPos = BigWorld.camera().position
+        camDir = BigWorld.camera().direction
+        vehicles = player.findControlledVehicles()
+        try:
+            for tType, data in self.__pendingManualTriggers.iteritems():
+                for isTwoState, args in data:
+                    params = dict(args)
+                    params['type'] = tType
+                    for listener in self.__listeners:
+                        listener.onTriggerActivated(params)
+
+                    if isTwoState:
+                        self.__activeManualTriggers[tType] = params
+
+            self.__pendingManualTriggers = {}
+            for tID, params in self.__autoTriggers.iteritems():
+                wasActive = tID in self.__activeAutoTriggers
+                isActive = False
+                distance = -1.0
+                tType = params['type']
+                if tType == TRIGGER_TYPE.AREA and vehicles:
+                    isActive, distance = self.__isInArea(vehicles, wasActive, params)
+                elif tType == TRIGGER_TYPE.AIM:
+                    isActive, distance = self.__isInAim(vehicles, camPos, camDir, params)
+                params['distance'] = distance
+                if wasActive != isActive:
+                    if isActive:
+                        self.__activeAutoTriggers.add(tID)
                         for listener in self.__listeners:
                             listener.onTriggerActivated(params)
 
-                        if isTwoState:
-                            self.__activeManualTriggers[tType] = params
+                    else:
+                        self.__activeAutoTriggers.discard(tID)
+                        for listener in self.__listeners:
+                            listener.onTriggerDeactivated(params)
 
-                self.__pendingManualTriggers = {}
-                for tID, params in self.__autoTriggers.iteritems():
-                    wasActive = tID in self.__activeAutoTriggers
-                    isActive = False
-                    distance = -1.0
-                    tType = params['type']
-                    if tType == TRIGGER_TYPE.AREA and vehicle is not None:
-                        scale = Math.Vector3(params['scale'])
-                        if scale == Math.Vector3(1, 1, 1):
-                            triggerRadius = params['radius']
-                            if wasActive:
-                                triggerRadius = triggerRadius + params['exitInterval']
-                            offset = vehicle.position - Math.Vector3(params['position'])
-                            offset.y = 0
-                            distance = offset.length
-                            isActive = distance < triggerRadius
-                        else:
-                            targetMatrix = Math.Matrix()
-                            targetMatrix.setRotateY(-params['direction'].z)
-                            offset = vehicle.position - Math.Vector3(params['position'])
-                            offset.y = 0
-                            offset = targetMatrix.applyPoint(offset)
-                            originalSize = 5.0
-                            isActive = -scale.x * originalSize < offset.x < scale.x * originalSize and -scale.z * originalSize < offset.z < scale.z * originalSize
-                    if tType == TRIGGER_TYPE.AIM:
-                        camToTrigger = Math.Vector3(params['position']) - camPos
-                        vehicleToTrigger = Math.Vector3(params['position']) - vehicle.position
-                        distance = camToTrigger.length
-                        if distance <= params['maxDistance'] and vehicleToTrigger.dot(camToTrigger) > 0.0:
-                            camToTrigger.normalise()
-                            dp = camToTrigger.dot(camDir)
-                            if dp > 0.0:
-                                sinAngle = math.sqrt(1.0 - dp * dp)
-                                isActive = sinAngle * distance < params['radius']
-                    params['distance'] = distance
-                    if wasActive != isActive:
-                        if isActive:
-                            self.__activeAutoTriggers.add(tID)
-                            for listener in self.__listeners:
-                                listener.onTriggerActivated(params)
-
-                        else:
-                            self.__activeAutoTriggers.discard(tID)
-                            for listener in self.__listeners:
-                                listener.onTriggerDeactivated(params)
-
-                self.__explodePoints = []
-                self.__shotPoints = []
-            except Exception:
-                LOG_CURRENT_EXCEPTION()
-
-            return
+            self.__explodePoints = []
+            self.__shotPoints = []
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
 
     def getTriggerPosition(self, tType, name):
         for params in self.__autoTriggers.itervalues():
@@ -260,6 +238,53 @@ class TriggersManager(object):
         if not isOnArena and self.__isOnArena:
             self.clearTriggers(False)
         self.__isOnArena = isOnArena
+
+    @staticmethod
+    def __isInArea(vehicles, wasActive, params):
+        scale = Math.Vector3(params['scale'])
+        if scale == Math.Vector3(1, 1, 1):
+            triggerRadius = params['radius']
+            if wasActive:
+                triggerRadius = triggerRadius + params['exitInterval']
+            for veh in vehicles:
+                offset = veh.position - Math.Vector3(params['position'])
+                offset.y = 0
+                distance = offset.length
+                isInArea = distance < triggerRadius
+                if isInArea:
+                    return (True, distance)
+
+        else:
+            targetMatrix = Math.Matrix()
+            targetMatrix.setRotateY(-params['direction'].z)
+            for veh in vehicles:
+                offset = veh.position - Math.Vector3(params['position'])
+                offset.y = 0
+                distance = offset.length
+                offset = targetMatrix.applyPoint(offset)
+                originalSize = 5.0
+                isInArea = -scale.x * originalSize < offset.x < scale.x * originalSize and -scale.z * originalSize < offset.z < scale.z * originalSize
+                if isInArea:
+                    return (True, distance)
+
+        return (False, -1)
+
+    @staticmethod
+    def __isInAim(vehicles, camPos, camDir, params):
+        camToTrigger = Math.Vector3(params['position']) - camPos
+        isActive = False
+        distance = -1
+        for veh in vehicles:
+            vehicleToTrigger = Math.Vector3(params['position']) - veh.position
+            distance = camToTrigger.length
+            if distance <= params['maxDistance'] and vehicleToTrigger.dot(camToTrigger) > 0.0:
+                camToTrigger.normalise()
+                dp = camToTrigger.dot(camDir)
+                if dp > 0.0:
+                    sinAngle = math.sqrt(1.0 - dp * dp)
+                    isActive = sinAngle * distance < params['radius']
+
+        return (isActive, distance)
 
 
 g_manager = None

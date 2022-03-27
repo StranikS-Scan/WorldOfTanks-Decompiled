@@ -22,10 +22,10 @@ class RequestResultsContext(object):
         return self.__arenaBonusType
 
     def needToShowImmediately(self):
-        return self.__showImmediately and self.__arenaBonusType not in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE and self.__arenaBonusType != ARENA_BONUS_TYPE.MAPS_TRAINING
+        return self.__showImmediately and self.__arenaBonusType not in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE and self.__arenaBonusType != ARENA_BONUS_TYPE.MAPS_TRAINING and self.__arenaBonusType != ARENA_BONUS_TYPE.RTS_BOOTCAMP
 
     def needToShowIfPosted(self):
-        return self.__showIfPosted
+        return self.__showIfPosted or self.__arenaBonusType == ARENA_BONUS_TYPE.RTS_BOOTCAMP
 
     def resetCache(self):
         return self.__resetCache

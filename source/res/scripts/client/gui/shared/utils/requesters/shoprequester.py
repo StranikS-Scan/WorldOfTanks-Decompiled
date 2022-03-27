@@ -27,14 +27,6 @@ _TankmenRestoreConfig = namedtuple('_TankmenRestoreConfig', 'freeDuration billab
 _TargetData = namedtuple('_TargetData', 'targetType, targetValue, limit')
 _ResourceData = namedtuple('_ResourceData', 'resourceType, value, isPercentage')
 _ConditionData = namedtuple('_ConditionData', 'conditionType, value')
-_TradeInData = namedtuple('_TradeInData', ['sellPriceFactor',
- 'allowedVehicleLevels',
- 'forbiddenVehicles',
- 'minAcceptableSellPrice'])
-_TradeInData.__new__.__defaults__ = (0,
- (),
- (),
- 0)
 
 class _NamedGoodieData(GoodieData):
 
@@ -44,14 +36,6 @@ class _NamedGoodieData(GoodieData):
 
     def getTargetValue(self):
         return int(self.target.targetValue.split('_')[1]) if self.target.targetType == GOODIE_TARGET_TYPE.ON_BUY_PREMIUM else self.target.targetValue
-
-
-class TradeInData(_TradeInData):
-    __slots__ = ()
-
-    @property
-    def isEnabled(self):
-        return self.sellPriceFactor > 0
 
 
 class ShopCommonStats(IShopCommonStats):
@@ -333,15 +317,6 @@ class ShopCommonStats(IShopCommonStats):
 
     def getEmblemCost(self, days=0):
         return self.playerEmblemCost.get(days)
-
-    @property
-    def tradeIn(self):
-        tradeInData = self.getValue('tradeIn')
-        return TradeInData(**tradeInData) if tradeInData is not None else TradeInData()
-
-    @property
-    def personalTradeIn(self):
-        return self.getValue('personalTradeIn')
 
     def __getRestoreConfig(self):
         return self.getValue('restore_config', {})

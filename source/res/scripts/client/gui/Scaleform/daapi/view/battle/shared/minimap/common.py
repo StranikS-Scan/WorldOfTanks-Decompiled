@@ -49,6 +49,9 @@ class SimplePlugin(IPlugin):
     def onMinimapClicked(self, x, y, buttonIdx, minimapScaleIndex):
         pass
 
+    def onHoverEntry(self, entry):
+        pass
+
     def applyNewSize(self, sizeIndex):
         pass
 

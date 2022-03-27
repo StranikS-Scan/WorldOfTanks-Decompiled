@@ -365,7 +365,13 @@ class AccountSetting(SettingAbstract):
         return AccountSettings.getSettings(self.key)
 
     def _get(self):
-        return self._getSettings() if self.subKey is None else self._getSettings().get(self.subKey)
+        if self.subKey is None:
+            value = self._getSettings()
+        else:
+            value = self._getSettings().get(self.subKey)
+        if value is None:
+            value = self.getDefaultValue()
+        return value
 
     def _save(self, value):
         settings = value
@@ -1404,6 +1410,57 @@ class SPGAimSetting(StorageDumpSetting):
 
     def getDefaultValue(self):
         return AccountSettings.getSettingsDefault('spgAim').get(self.settingName, None)
+
+
+class _BaseAimContourSetting(StorageDumpSetting):
+    _RES_ROOT = None
+    _OPTIONS_NUMBER = None
+
+    def getDefaultValue(self):
+        return AccountSettings.getSettingsDefault('contour').get(self.settingName, None)
+
+    def setSystemValue(self, value):
+        raise NotImplementedError
+
+    def pack(self):
+        return {'current': self._get(),
+         'options': self._getOptions()}
+
+    def _getOptions(self):
+        return [ {'data': value,
+         'label': backport.text(self._RES_ROOT.dyn('type{}'.format(value))())} for value in xrange(self._OPTIONS_NUMBER) ]
+
+
+class ContourSetting(_BaseAimContourSetting):
+    _RES_ROOT = R.strings.settings.cursor.contour
+    _OPTIONS_NUMBER = 2
+
+    def setSystemValue(self, value):
+        BigWorld.enableEdgeDrawerVisual(not value)
+
+    def getExtraData(self):
+        return [ {'tooltip': makeTooltip(body=backport.text(self._RES_ROOT.dyn('type{}'.format(value)).tooltip()))} for value in xrange(self._OPTIONS_NUMBER) ]
+
+    def pack(self):
+        return {'current': self._get(),
+         'options': self._getOptions(),
+         'extraData': self.getExtraData()}
+
+
+class ContourPenetratableZoneSetting(_BaseAimContourSetting):
+    _RES_ROOT = R.strings.settings.cursor.contourPenetrableZone
+    _OPTIONS_NUMBER = 3
+
+    def setSystemValue(self, value):
+        BigWorld.setEdgeDrawerPenetratableZoneOverlay(value)
+
+
+class ContourImpenetratableZoneSetting(_BaseAimContourSetting):
+    _RES_ROOT = R.strings.settings.cursor.contourImpenetrableZone
+    _OPTIONS_NUMBER = 3
+
+    def setSystemValue(self, value):
+        BigWorld.setEdgeDrawerImpenetratableZoneOverlay(value)
 
 
 class SPGStrategicCamMode(StorageDumpSetting):

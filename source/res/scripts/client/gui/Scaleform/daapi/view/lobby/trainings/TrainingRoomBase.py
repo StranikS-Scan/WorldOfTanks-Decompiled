@@ -21,7 +21,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.entities.base.legacy.ctx import SetTeamStateCtx, AssignLegacyCtx, SwapTeamsCtx, SetPlayerStateCtx
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener
-from gui.prb_control.entities.epic_battle_training.ctx import SetPlayerObserverStateCtx, ChangeArenaVoipCtx
+from gui.prb_control.entities.training.legacy.ctx import SetPlayerObserverStateCtx, ChangeArenaVoipCtx
 from gui.prb_control.items.prb_items import getPlayersComparator
 from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME
 from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
@@ -41,6 +41,7 @@ from skeletons.helpers.statistics import IStatisticsCollector
 from helpers.statistics import HANGAR_LOADING_STATE
 from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES, PREBATTLE_ERRORS, PREBATTLE_TYPE
 from gui.shared.events import CoolDownEvent
+from constants import IS_DEVELOPMENT
 BATTLE_TYPES_ICONS = {PREBATTLE_TYPE.TRAINING: BATTLE_TYPES.TRAINING,
  PREBATTLE_TYPE.EPIC_TRAINING: BATTLE_TYPES.EPIC_TRAINING}
 
@@ -330,7 +331,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
 
     def _isObserverModeEnabled(self):
         minCount = self.prbEntity.getSettings().getTeamLimits(1)['minCount']
-        return GUI_SETTINGS.trainingObserverModeEnabled and minCount > 0
+        return GUI_SETTINGS.trainingObserverModeEnabled and (minCount > 0 or IS_DEVELOPMENT)
 
     def _updateTrainingRoom(self, event):
         self.__changeTrainingRoomSettings(event.ctx.get('settings', None))

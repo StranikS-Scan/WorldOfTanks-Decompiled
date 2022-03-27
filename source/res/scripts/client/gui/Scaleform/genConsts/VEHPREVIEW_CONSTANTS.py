@@ -4,11 +4,11 @@
 
 class VEHPREVIEW_CONSTANTS(object):
     CREW_INFO_LINKAGE = 'VehPreviewCrewInfoUI'
+    TOP_PANEL_TABS_LINKAGE = 'VehiclePreviewTopPanelTabsUI'
     BOTTOM_PANEL_LINKAGE = 'VehiclePreviewBottomPanelUI'
     BOTTOM_PANEL_STYLE_PROGRESSION_LINKAGE = 'VehiclePreviewBottomPanelStyleProgressionUI'
     BOTTOM_PANEL_STYLE_BUYING_LINKAGE = 'VehiclePreviewBottomPanelStyleBuyingUI'
     BOTTOM_PANEL_TRADE_IN_LINKAGE = 'VehiclePreviewBottomPanelTradeInUI'
-    BOTTOM_PANEL_TRADE_IN_PERSONAL_LINKAGE = 'VehiclePreviewBottomPanelTradeInPersonalUI'
     BOTTOM_PANEL_WOT_PLUS_LINKAGE = 'VehiclePreviewBottomPanelWotPlusUI'
     BOTTOM_PANEL_OFFER_GIFT_LINKAGE = 'VehiclePreviewBottomPanelOfferGiftUI'
     FACT_SHEET_LINKAGE = 'VehPreviewFactSheetUI'
@@ -21,11 +21,11 @@ class VEHPREVIEW_CONSTANTS(object):
     ELITE_FACT_SHEET_DATA_CLASS_NAME = 'net.wg.gui.lobby.vehiclePreview.data.VehPreviewEliteFactSheetVO'
     MODULES_PY_ALIAS = 'vehPreviewModules'
     PARAMETERS_PY_ALIAS = 'vehPreviewParams'
+    TOP_PANEL_TABS_PY_ALIAS = 'vehPreviewTopPanelTabs'
     BOTTOM_PANEL_PY_ALIAS = 'vehPreviewBottomPanel'
     BOTTOM_PANEL_STYLE_PROGRESSION_PY_ALIAS = 'vehPreviewBottomPanelStyleProgression'
     BOTTOM_PANEL_STYLE_BUYING_PY_ALIAS = 'vehPreviewBottomPanelStyleBuying'
     BOTTOM_PANEL_TRADE_IN_PY_ALIAS = 'vehPreviewBottomPanelTradeIn'
-    BOTTOM_PANEL_TRADE_IN_PERSONAL_PY_ALIAS = 'vehPreviewBottomPanelTradeInPersonal'
     BOTTOM_PANEL_OFFER_GIFT_PY_ALIAS = 'vehPreviewBottomPanelOfferGift'
     TRADE_OFF_WIDGET_ALIAS = 'vehPreviewTradeOffWidget'
     CREW_BONUS = 0

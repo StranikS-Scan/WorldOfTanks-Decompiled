@@ -14,11 +14,14 @@ class EpicQuestProgressView(EpicQuestProgressInfoMeta):
          'eventType': eventType}))
 
     def updateQuestsInfo(self, arenaUniqueID):
-        battleResultsVO = self.__battleResults.getResultsVO(arenaUniqueID).get('battlePass')
+        battleResultsVO = self.__battleResults.getResultsVO(arenaUniqueID)
         if not battleResultsVO:
             return
+        quests = []
+        quests.extend(battleResultsVO.get('battlePass', []))
+        quests.extend(battleResultsVO.get('quests', []))
         questsArray = []
-        for quest in battleResultsVO:
+        for quest in quests:
             questInfo = quest['questInfo']
             questModel = {'id': questInfo['questID'],
              'eventType': questInfo['eventType'],

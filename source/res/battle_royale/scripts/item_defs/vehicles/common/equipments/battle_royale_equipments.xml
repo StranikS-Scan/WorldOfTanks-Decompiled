@@ -330,6 +330,7 @@
     <description>	#artefacts:br_bomber/descr	</description>
     <icon>	bomber 0 0	</icon>
     <soundNotification>	br_ability	</soundNotification>
+    <playerMessagesKey>	BOMBER	</playerMessagesKey>
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -452,6 +453,7 @@
     <description>	#artefacts:br_smoke/descr	</description>
     <icon>	smoke 0 0	</icon>
     <soundNotification>	br_ability	</soundNotification>
+    <playerMessagesKey>	SMOKE	</playerMessagesKey>
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -488,7 +490,12 @@
       <totalDuration>	20.	</totalDuration>
       <randomizeDuration>	0	</randomizeDuration>
       <smokeOpacity>	10.	</smokeOpacity>
-      <visionRadiusFactor>	0.66	</visionRadiusFactor>
+      <attrFactorMods>
+        <circularVisionRadius>
+          <value>	-0.33	</value>
+          <ignoreAllies>	True	</ignoreAllies>
+        </circularVisionRadius>
+      </attrFactorMods>
       <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
       <areaLength>	50	</areaLength>
       <areaWidth>	50	</areaWidth>
@@ -549,7 +556,12 @@
       <totalDuration>	20.	</totalDuration>
       <randomizeDuration>	0	</randomizeDuration>
       <smokeOpacity>	10.	</smokeOpacity>
-      <visionRadiusFactor>	0.66	</visionRadiusFactor>
+      <attrFactorMods>
+        <circularVisionRadius>
+          <value>	-0.33	</value>
+          <ignoreAllies>	True	</ignoreAllies>
+        </circularVisionRadius>
+      </attrFactorMods>
       <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
       <areaLength>	50	</areaLength>
       <areaWidth>	50	</areaWidth>

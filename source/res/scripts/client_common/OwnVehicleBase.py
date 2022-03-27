@@ -39,6 +39,8 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
     @noexcept
     def update_vehicleAmmoList(self, ammoList):
         avatar = self._avatar()
+        if not avatar:
+            return
         for vehicleAmmo in ammoList:
             timeRemainig = vehicleAmmo.endTime
             if timeRemainig > 0:
@@ -47,25 +49,39 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
 
     @noexcept
     def update_syncVehicleAttrs(self, syncVehicleAttrs):
-        self._avatar().syncVehicleAttrs(syncVehicleAttrs)
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.syncVehicleAttrs(syncVehicleAttrs, self.entity.id)
 
     @noexcept
     def update_vehicleGunReloadTime(self, prop):
+        avatar = self._avatar()
+        if not avatar:
+            return
         timeLeft, timeBase = self.__getTimeLeftBaseTime(prop)
-        self._avatar().updateVehicleGunReloadTime(self.entity.id, timeLeft, timeBase)
+        avatar.updateVehicleGunReloadTime(self.entity.id, timeLeft, timeBase)
 
     @noexcept
     def update_vehicleClipReloadTime(self, prop):
+        avatar = self._avatar()
+        if not avatar:
+            return
         timeLeft, timeBase = self.__getTimeLeftBaseTime(prop)
-        self._avatar().updateVehicleClipReloadTime(self.entity.id, timeLeft, timeBase, prop.firstTime, prop.stunned, prop.isBoostApplicable)
+        avatar.updateVehicleClipReloadTime(self.entity.id, timeLeft, timeBase, prop.firstTime, prop.stunned, prop.isBoostApplicable)
 
     @noexcept
     def update_vehicleSettings(self, prop):
-        self._avatar().updateVehicleSettings(prop)
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.updateVehicleSettings(prop)
 
     @noexcept
     def update_destroyedDevicesIsRepairing(self, deviceList):
         avatar = self._avatar()
+        if not avatar:
+            return
         for device in deviceList:
             timeLeft = self.__getTimeLeft(device)
             avatar.updateDestroyedDevicesIsRepairing(self.entity.id, device.extraIndex, device.progress, timeLeft, device.repairMode)
@@ -75,6 +91,8 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         if not damageInfoList:
             return
         avatar = self._avatar()
+        if not avatar:
+            return
         for damage in damageInfoList:
             damageIndex = damage.damageIndex
             if self.__isAttachingToVehicle:
@@ -86,11 +104,13 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
                     damageIndex = DAMAGE_INFO_INDICES['DEVICE_CRITICAL']
                 if DAMAGE_INFO_CODES[damageIndex].startswith('DEVICE_DESTROYED'):
                     damageIndex = DAMAGE_INFO_INDICES['DEVICE_DESTROYED']
-            avatar.showVehicleDamageInfo(self.entity.id, damageIndex, damage.extraIndex, damage.entityID, damage.equipmentID)
+            avatar.showVehicleDamageInfo(self.entity.id, damageIndex, damage.extraIndex, damage.entityID, damage.equipmentID, self.__isAttachingToVehicle)
 
     @noexcept
     def update_vehicleOptionalDeviceStatusList(self, deviceList):
         avatar = self._avatar()
+        if not avatar:
+            return
         for optDevStatus in deviceList:
             avatar.updateVehicleOptionalDeviceStatus(self.entity.id, optDevStatus.deviceID, optDevStatus.isOn)
 
@@ -100,6 +120,8 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             return
         else:
             avatar = self._avatar()
+            if not avatar:
+                return
             cooldowns = []
             useEndTime = self.__isAttachingToVehicle
             for cd in dualGunState.cooldowns:
@@ -113,6 +135,8 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
     @noexcept
     def update_dualGunStatus(self, dualGunStatus):
         avatar = self._avatar()
+        if not avatar:
+            return
         if not dualGunStatus or not avatar.userSeesWorld():
             return
         times = dualGunStatus.times
@@ -121,96 +145,150 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
 
     @noexcept
     def update_siegeStateStatus(self, siegeStateStatus):
+        avatar = self._avatar()
+        if not avatar:
+            return
         timeLeft = self.__getTimeLeft(siegeStateStatus)
-        self._avatar().updateSiegeStateStatus(self.entity.id, siegeStateStatus.status, timeLeft)
+        avatar.updateSiegeStateStatus(self.entity.id, siegeStateStatus.status, timeLeft)
 
     @noexcept
     def update_burnoutWarning(self, burnoutWarning):
-        self._avatar().updateBurnoutWarning(self.entity.id, burnoutWarning.status)
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.updateBurnoutWarning(self.entity.id, burnoutWarning.status)
 
     @noexcept
     def update_burnoutUnavailable(self, burnoutUnavailable):
         avatar = self._avatar()
+        if not avatar:
+            return
         avatar.updateBurnoutUnavailable(self.entity.id, burnoutUnavailable.status)
 
     @noexcept
     def update_drownLevel(self, drownLevel):
-        self._avatar().updateDrownLevel(self.entity.id, drownLevel.level, self.__getDestroyTimes(drownLevel.times))
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.updateDrownLevel(self.entity.id, drownLevel.level, self.__getDestroyTimes(drownLevel.times))
 
     @noexcept
     def update_isOtherVehicleDamagedDevicesVisible(self, isOtherVehicleDamagedDevicesVisible):
-        self._avatar().updateIsOtherVehicleDamagedDevicesVisible(self.entity.id, isOtherVehicleDamagedDevicesVisible.status)
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.updateIsOtherVehicleDamagedDevicesVisible(self.entity.id, isOtherVehicleDamagedDevicesVisible.status)
 
     @noexcept
     def update_overturnLevel(self, overturnLevel):
-        self._avatar().updateOverturnLevel(self.entity.id, overturnLevel.level, self.__getDestroyTimes(overturnLevel.times))
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.updateOverturnLevel(self.entity.id, overturnLevel.level, self.__getDestroyTimes(overturnLevel.times))
 
     @noneAccepted
     @noexcept
-    def update_smoke(self, smoke):
-        smokeInfos = smoke.smokeInfos if smoke is not None else None
-        self._avatar().onSmoke(smokeInfos)
-        return
+    def update_smokeInfo(self, smokeInfo):
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.onSmoke(smokeInfo)
 
     @noexcept
     def update_targetVehicleID(self, targetVehicleID):
-        self._avatar().updateTargetVehicleID(targetVehicleID.targetID)
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.updateTargetVehicleID(self.entity.id, targetVehicleID.targetID)
 
     @noexcept
     def update_targetingInfo(self, data):
-        self._avatar().updateTargetingInfo(self.entity.id, data.turretYaw, data.gunPitch, data.maxTurretRotationSpeed, data.maxGunRotationSpeed, data.shotDispMultiplierFactor, data.gunShotDispersionFactorsTurretRotation, data.chassisShotDispersionFactorsMovement, data.chassisShotDispersionFactorsRotation, data.aimingTime)
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.updateTargetingInfo(self.entity.id, data.turretYaw, data.gunPitch, data.maxTurretRotationSpeed, data.maxGunRotationSpeed, data.shotDispMultiplierFactor, data.gunShotDispersionFactorsTurretRotation, data.chassisShotDispersionFactorsMovement, data.chassisShotDispersionFactorsRotation, data.aimingTime)
 
     @noexcept
     def update_vehicleHealthInfo(self, data):
-        self._avatar().updateVehicleHealth(self.entity.id, data.health, data.deathReasonID, data.isCrewActive, data.isRespawnActive)
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.updateVehicleHealth(self.entity.id, data.health, data.deathReasonID, data.isCrewActive, data.isRespawnActive)
 
     @noexcept
     def update_welcomeToSector(self, data):
-        self._avatar().welcomeToSector(data.sectorID, data.groupID, data.groupState, data.goodGroup, data.actionTime, data.actionDuration)
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.welcomeToSector(data.sectorID, data.groupID, data.groupState, data.goodGroup, data.actionTime, data.actionDuration)
 
     @noexcept
     def update_battleEventsSummary(self, data):
-        self._avatar().battleEventsSummary(data)
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.battleEventsSummary(self.entity.id, data)
 
     @noexcept
     def update_deathZonesStatus(self, data):
-        self._avatar().updateDeathZonesStatus(self.entity.id, data)
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.updateDeathZonesStatus(self.entity.id, data)
 
-    def onBattleEvents(self, battleEvents):
+    def onBattleEvents(self, vehicleID, battleEvents):
+        avatar = self._avatar()
+        if not avatar:
+            return
         if _DO_LOG:
-            self._doLog('onBattleEvents {}'.format(battleEvents))
-        self._avatar().onBattleEvents(battleEvents)
+            self._doLog('onBattleEvents {}, {}'.format(vehicleID, battleEvents))
+        avatar.onBattleEvents(vehicleID, battleEvents)
 
     def onObservedByEnemy(self):
+        avatar = self._avatar()
+        if not avatar:
+            return
         if _DO_LOG:
             self._doLog('onObservedByEnemy')
-        self._avatar().onObservedByEnemy(self.entity.id)
+        avatar.onObservedByEnemy(self.entity.id)
 
     def onSectorShooting(self, sectorID):
+        avatar = self._avatar()
+        if not avatar:
+            return
         if _DO_LOG:
             self._doLog('onSectorShooting {}'.format(sectorID))
-        self._avatar().onSectorShooting(sectorID)
+        avatar.onSectorShooting(sectorID)
 
     def beforeSetupUpdate(self):
-        self._avatar().beforeSetupUpdate(self.entity.id)
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.beforeSetupUpdate(self.entity.id)
 
     def showOwnVehicleHitDirection(self, data):
+        avatar = self._avatar()
+        if not avatar:
+            return
         if _DO_LOG:
             self._doLog('showOwnVehicleHitDirection {}'.format(data))
-        self._avatar().showOwnVehicleHitDirection(data.hitDirYaw, data.attackerID, data.damage, data.crits, data.isBlocked, data.isShellHE, data.damagedID, data.attackReasonID)
+        avatar.showOwnVehicleHitDirection(data.hitDirYaw, data.attackerID, data.damage, data.crits, data.isBlocked, data.isShellHE, data.damagedID, data.attackReasonID)
 
     def getReloadTime(self):
         return self.__getTimeLeftBaseTime(self.vehicleGunReloadTime, True) if self.vehicleGunReloadTime else (0, 0)
 
     def setNested_vehicleAmmoList(self, path, prev):
+        avatar = self._avatar()
+        if not avatar:
+            return
         changedAmmo = self.vehicleAmmoList[path[0]]
         if changedAmmo.compactDescr != prev.compactDescr:
-            self._avatar().resetVehicleAmmo(prev.compactDescr, changedAmmo.compactDescr, changedAmmo.quantity, changedAmmo.previousStage, changedAmmo.endTime, changedAmmo.totalTime)
+            avatar.resetVehicleAmmo(prev.compactDescr, changedAmmo.compactDescr, changedAmmo.quantity, changedAmmo.previousStage, changedAmmo.endTime, changedAmmo.totalTime)
         else:
             self.__setNested(self.update_vehicleAmmoList, 'vehicleAmmoList', path, prev)
 
     def __getDestroyTimes(self, times):
-        startTime = BigWorld.serverTime() if self.__isAttachingToVehicle else times[0]
+        startTime = self._serverTime() if self.__isAttachingToVehicle else times[0]
         return (startTime, max(times[1] - startTime, 0.0))
 
     def __getTimeLeft(self, data, useEndTime=None):
@@ -275,14 +353,17 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         self.set_dualGunStatus()
         self.set_burnoutWarning()
         self.set_burnoutUnavailable()
+        self.set_drownLevel()
         self.set_isOtherVehicleDamagedDevicesVisible()
         self.set_overturnLevel()
-        self.set_smoke()
+        self.set_smokeInfo()
         self.set_targetVehicleID()
         self.set_targetingInfo()
         self.set_vehicleHealthInfo()
         self.set_welcomeToSector()
         self.set_siegeStateStatus()
+        if self.entity.isOnFire():
+            self.entity.fire.triggerFireUIandSound()
 
     def __getattr__(self, item):
         if _DO_LOG:

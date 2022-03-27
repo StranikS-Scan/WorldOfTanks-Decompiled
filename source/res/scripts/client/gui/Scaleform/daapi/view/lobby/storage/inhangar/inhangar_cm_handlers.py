@@ -3,7 +3,7 @@
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import ContextMenu, option, CMLabel
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import enoughCreditsForRestore, getVehicleRestoreInfo
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeInVehiclesUrl, getPersonalTradeInVehiclesUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeInVehiclesUrl
 from gui.Scaleform.framework.managers.context_menu import CM_BUY_COLOR
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.shared import event_dispatcher as shared_events
@@ -11,7 +11,8 @@ from gui.shared.event_dispatcher import showShop
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
-from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController, IPersonalTradeInController
+from items import UNDEFINED_ITEM_CD
+from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from account_helpers import AccountSettings
@@ -22,18 +23,15 @@ class VehiclesRegularCMHandler(ContextMenu):
     __itemsCache = dependency.descriptor(IItemsCache)
     __comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     __tradeInController = dependency.descriptor(ITradeInController)
-    __personalTradeInController = dependency.descriptor(IPersonalTradeInController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     @option(__sqGen.next(), CMLabel.EXCHANGE)
     def exchange(self):
-        self.__tradeInController.setActiveTradeOffVehicleCD(self._id)
-        showShop(getTradeInVehiclesUrl(), isClientCloseControl=True)
-
-    @option(__sqGen.next(), CMLabel.PERSONAL_EXCHANGE)
-    def personalTradeExchange(self):
-        self.__personalTradeInController.setActiveTradeInSaleVehicleCD(self._id)
-        showShop(getPersonalTradeInVehiclesUrl(), isClientCloseControl=True)
+        oldSellVeh = self.__tradeInController.getSelectedVehicleToSell()
+        self.__tradeInController.selectVehicleToSell(self._id)
+        if not oldSellVeh or oldSellVeh.intCD != self._id:
+            self.__tradeInController.selectVehicleToBuy(UNDEFINED_ITEM_CD)
+        showShop(getTradeInVehiclesUrl())
 
     @option(__sqGen.next(), CMLabel.INFORMATION)
     def showInfo(self):
@@ -70,10 +68,6 @@ class VehiclesRegularCMHandler(ContextMenu):
             optionData.visible = self.__canTradeOff()
             optionData.enabled = self.__isReadyToTradeOff()
             optionData.textColor = CM_BUY_COLOR
-        elif label in CMLabel.PERSONAL_EXCHANGE:
-            optionData.visible = self.__canPersonalTradeIn()
-            optionData.enabled = self.__isReadyToPersonalTradeIn()
-            optionData.textColor = CM_BUY_COLOR
         elif label == CMLabel.STATS:
             optionData.enabled = _canGoToStats(self._id)
         elif label == CMLabel.GO_TO_COLLECTION:
@@ -96,15 +90,6 @@ class VehiclesRegularCMHandler(ContextMenu):
     def __isReadyToTradeOff(self):
         vehicle = self.__itemsCache.items.getItemByCD(self._id)
         return vehicle is not None and vehicle.isReadyToTradeOff
-
-    def __canPersonalTradeIn(self):
-        vehicle = self.__itemsCache.items.getItemByCD(self._id)
-        buyVehicleCDs = self.__personalTradeInController.getBuyVehicleCDs()
-        return vehicle is not None and vehicle.canPersonalTradeInSale and bool(buyVehicleCDs)
-
-    def __isReadyToPersonalTradeIn(self):
-        vehicle = self.__itemsCache.items.getItemByCD(self._id)
-        return vehicle is not None and vehicle.isReadyPersonalTradeInSale
 
     def __canSell(self):
         vehicle = self.__itemsCache.items.getItemByCD(self._id)

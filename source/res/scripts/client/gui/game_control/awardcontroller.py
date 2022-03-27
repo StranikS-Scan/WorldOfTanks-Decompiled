@@ -56,10 +56,10 @@ from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from gui.server_events import awards, events_dispatcher as quests_events, recruit_helper
 from gui.server_events.bonuses import getServiceBonuses
 from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, showLootboxesAward, showMissionsBattlePass, showPiggyBankRewardWindow, showSubscriptionAwardWindow
-from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest
+from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest, isRtsProgressionQuest
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showRTSRewardsWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -81,11 +81,12 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
+from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
+from skeletons.gui.game_control import IRTSProgressionController
 if typing.TYPE_CHECKING:
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
 _logger = logging.getLogger(__name__)
@@ -132,6 +133,14 @@ def _showACEmailConfirmedRewardScreen(quest, context):
     else:
         _logger.warning('Empty mission [%s] awards.', quest.getID())
     return
+
+
+@dependency.replace_none_kwargs(progressionCtrl=IRTSProgressionController)
+def _showRtsProgressionRewardScreen(quest, context, progressionCtrl=None):
+    if progressionCtrl.hasCurrentProgressRewards():
+        showRTSRewardsWindow()
+    else:
+        _logger.warning('No rewards for the current RTS progression stage after completing the %s quest.', quest.getID())
 
 
 def _getBlueprintActualBonus(data, quest):
@@ -389,6 +398,8 @@ class PunishWindowHandler(ServiceChannelHandler):
                 penaltyType = 'warning'
                 violation = fairplayViolations[0]
             violationName = getFairPlayViolationName(violation)
+            if violationName == 'rts_quick_destruction':
+                return
             msgID = 'punishmentWindow/reason/%s' % violationName
             showDialog(I18PunishmentDialogMeta('punishmentWindow', None, {'penaltyType': penaltyType,
              'arenaName': i18n.makeString(arenaType.name),
@@ -474,6 +485,8 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
                 _showDailyQuestEpicRewardScreen(quest, context)
             if isACEmailConfirmationQuest(quest.getID()):
                 _showACEmailConfirmedRewardScreen(quest, context)
+            if isRtsProgressionQuest(quest.getID()):
+                _showRtsProgressionRewardScreen(quest, context)
             self._showWindow(quest, context)
 
     @staticmethod
@@ -822,6 +835,8 @@ class BattleQuestsAutoWindowHandler(MultiTypeServiceChannelHandler):
         for quest, context in values:
             if isDailyQuest(str(quest.getID())):
                 _showDailyQuestEpicRewardScreen(quest, context)
+            if isRtsProgressionQuest(str(quest.getID())):
+                _showRtsProgressionRewardScreen(quest, context)
             self._showWindow(quest, context)
 
     @staticmethod

@@ -1,0 +1,18 @@
+<ServerReplayConnectionComponent.def>
+  <ClientMethods></ClientMethods>
+  <BaseMethods>
+    <releaseClientForLogin>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </releaseClientForLogin>
+    <kickSelf>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	UINT32	</Arg>
+    </kickSelf>
+  </BaseMethods>
+  <ofEntity>
+    <Account></Account>
+  </ofEntity>
+</ServerReplayConnectionComponent.def>

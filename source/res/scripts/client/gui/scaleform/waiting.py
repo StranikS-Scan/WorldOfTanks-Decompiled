@@ -91,5 +91,9 @@ class Waiting(object):
         cls.__getWaiting().cancelCallback()
 
     @classmethod
+    def snapshort(cls):
+        return cls.__getWaiting().snapshort()
+
+    @classmethod
     def __getWaiting(cls):
         return cls.__appLoader.getWaitingWorker()

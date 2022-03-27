@@ -61,6 +61,8 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             if self._hangarSpace.space.getCameraManager() is not None:
                 self.__hangarCameraManager = self._hangarSpace.space.getCameraManager()
                 self.__initCameras()
+                if self.__hangarCameraManager is not None:
+                    self.__hangarCameraManager.setC11nDistMode(True)
             g_eventBus.addListener(events.HangarCameraManagerEvent.ON_CREATE, self.__onCreateHangarCameraManager, scope=EVENT_BUS_SCOPE.LOBBY)
             g_eventBus.addListener(events.HangarCameraManagerEvent.ON_DESTROY, self.__onDestroyHangarCameraManager, scope=EVENT_BUS_SCOPE.LOBBY)
         g_guiResetters.add(self.__projectionChangeHandler)
@@ -339,6 +341,7 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             hangarCamera.movementHalfLife = cfg['cam_fluency']
             BigWorld.camera(hangarCamera)
         if self.__hangarCameraManager is not None:
+            self.__hangarCameraManager.setC11nDistMode(False)
             self.__hangarCameraManager.handleInactiveCamera = False
         self.__c11nCamera = None
         self.__hangarCameraManager = None
@@ -350,6 +353,8 @@ class C11nHangarCameraManager(TimeDeltaMeter):
                 return
             self.__hangarCameraManager = event.ctx['hangarCameraManager']
             self.__initCameras()
+            if self.__hangarCameraManager is not None:
+                self.__hangarCameraManager.setC11nDistMode(True)
         return
 
     def __onDestroyHangarCameraManager(self, _):

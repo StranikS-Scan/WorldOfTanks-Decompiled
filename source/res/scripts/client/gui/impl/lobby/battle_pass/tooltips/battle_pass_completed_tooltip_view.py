@@ -22,6 +22,8 @@ class BattlePassCompletedTooltipView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(BattlePassCompletedTooltipView, self)._onLoading(*args, **kwargs)
+        bpController = self.__battlePassController
+        isBought = all((bpController.isBought(chapterID=chapter) for chapter in bpController.getChapterIDs()))
         with self.getViewModel().transaction() as model:
-            model.setIsBattlePassPurchased(self.__battlePassController.isBought())
+            model.setIsBattlePassPurchased(isBought)
             model.setNotChosenRewardCount(self.__battlePassController.getNotChosenRewardCount())

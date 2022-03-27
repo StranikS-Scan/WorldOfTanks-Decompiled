@@ -14,8 +14,8 @@
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.163	</moving>
-    <still>	0.271	</still>
+    <moving>	0.169	</moving>
+    <still>	0.282	</still>
     <camouflageBonus>	0.04	</camouflageBonus>
     <firePenalty>	0.407	</firePenalty>
   </invisibility>
@@ -1640,8 +1640,8 @@
             <maxPitch>	0 6 0.344444 6 0.388889 4 0.569444 4 0.625 6 1 6	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	6	</reloadTime>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <reloadTime>	5.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1759,6 +1759,7 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <density>	105.439 105.118	</density>
             <aoTextureSize>	512 512	</aoTextureSize>

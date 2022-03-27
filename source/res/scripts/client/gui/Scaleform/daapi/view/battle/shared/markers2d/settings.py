@@ -8,6 +8,11 @@ MARKERS_MANAGER_SWF = 'battleVehicleMarkersApp.swf'
 MARKERS_COLOR_SCHEME_PREFIX = 'vm_'
 
 class MARKER_SYMBOL_NAME(object):
+    RTS_VEHICLE_MARKER = 'RTSVehicleMarker'
+    RTS_CONTROLLABLE_VEHICLE_MARKER = 'RTSControllableVehicleMarker'
+    RTS_TANKMAN_VEHICLE_MARKER = 'RTSTankmanVehicleMarker'
+    COMMANDER_SUPPLY_MARKER = 'CommanderSupplyMarkerUI'
+    RTS_ORDER_MARKER = 'RTSOrderMarkerUI'
     VEHICLE_MARKER = 'VehicleMarker'
     TARGET_MARKER = 'TargetMarker'
     EQUIPMENT_MARKER = 'FortConsumablesMarker'

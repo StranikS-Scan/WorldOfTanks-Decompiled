@@ -37,6 +37,7 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_no_chapter_tooltip_view imp
 from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
+from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
@@ -69,6 +70,9 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.techtree_events import ITechTreeEventsListener
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
+from gui.impl.lobby.rts.tooltips.rts_currency_tooltip_view import RTSCurrencyTooltipView
+from gui.impl.gen.view_models.views.lobby.rts.rts_currency_view_model import CurrencyTypeEnum
+from gui.impl.pub.tooltip_window import ToolTipWindow
 _logger = logging.getLogger(__name__)
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
 _PARENTHESES_OPEN = '('
@@ -963,6 +967,18 @@ class SettingsShowLocationMarkers(BlocksTooltipData):
         return tooltipBlocks
 
 
+class SquadRestrictionsInfo(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SquadRestrictionsInfo, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+        self._setWidth(width=400)
+
+    def _packBlocks(self, *args, **kwargs):
+        tooltipBlocks = super(SquadRestrictionsInfo, self)._packBlocks()
+        tooltipBlocks.append(formatters.packBuildUpBlockData([formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_HEADER), text_styles.main(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_BODY)), formatters.packTextBlockData(text_styles.neutral(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_BODYFOOTER), padding={'bottom': -15})]))
+        return tooltipBlocks
+
+
 _CurrencySetting = namedtuple('_CurrencySetting', ('text', 'icon', 'textStyle', 'frame'))
 
 class CURRENCY_SETTINGS(object):
@@ -1403,6 +1419,19 @@ class BattleTraining(BlocksTooltipData):
         return items
 
 
+class RtsCurrencyTooltipData(BlocksTooltipData):
+
+    def __init__(self, ctx):
+        super(RtsCurrencyTooltipData, self).__init__(ctx, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI)
+
+    def getDisplayableData(self, *args):
+        contentID = R.views.lobby.rts.StrategistCurrencyTooltip()
+        currencyType = CurrencyTypeEnum(args[0])
+        content = RTSCurrencyTooltipView(contentID, currencyType)
+        window = ToolTipWindow(None, content, content.getParentWindow())
+        return window
+
+
 class SquadBonusTooltipWindowData(ToolTipBaseData):
 
     def __init__(self, context):
@@ -1538,3 +1567,12 @@ class WotPlusTooltipContentWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, perkID, *args, **kwargs):
         return DecoratedTooltipWindow(WotPlusTooltip(), useDecorator=False)
+
+
+class AdditionalRewardsTooltipContentWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(AdditionalRewardsTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.ADDITIONAL_REWARDS)
+
+    def getDisplayableData(self, bonuses, bonusPacker=None, *args, **kwargs):
+        return DecoratedTooltipWindow(AdditionalRewardsTooltip(bonuses, bonusPacker), useDecorator=False)

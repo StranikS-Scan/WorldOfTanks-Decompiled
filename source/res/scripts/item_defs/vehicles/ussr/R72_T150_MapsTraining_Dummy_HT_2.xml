@@ -83,8 +83,8 @@
       <turret>	0.000000 0.557076 0.427876	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModelServer>	vehicles/russian/R72_T150_MapsTraining_Dummy_HT_2/collision/Hull.model	</collisionModelServer>
-      <collisionModelClient>	vehicles/russian/R72_T150_MapsTraining_Dummy_HT_2/collision_client/Hull.model	</collisionModelClient>
+      <collisionModelServer>	vehicles/russian/R72_T150/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R72_T150/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <hangarShadowTexture>	vehicles/russian/R72_T150/T150_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
@@ -1164,8 +1164,8 @@
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.06693 0.000000	</hullPosition>
       <hitTester>
-        <collisionModelServer>	vehicles/russian/R72_T150_MapsTraining_Dummy_HT_2/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/russian/R72_T150_MapsTraining_Dummy_HT_2/collision_client/Chassis.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/russian/R72_T150/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R72_T150/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.30926 2.16387	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -1930,8 +1930,8 @@
             <exploded>	vehicles/russian/R72_T150_MapsTraining_Dummy_HT_2/crash/lod0/Gun_09.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/russian/R72_T150_MapsTraining_Dummy_HT_2/collision/Gun_09.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R72_T150_MapsTraining_Dummy_HT_2/collision_client/Gun_09.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/russian/R72_T150/collision/Gun_09.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R72_T150/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_large	</effects>
           <reloadEffect>	reload85_107	</reloadEffect>
@@ -2014,8 +2014,8 @@
         <exploded>	vehicles/russian/R72_T150_MapsTraining_Dummy_HT_2/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/russian/R72_T150_MapsTraining_Dummy_HT_2/collision/Turret_02.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/russian/R72_T150_MapsTraining_Dummy_HT_2/collision_client/Turret_02.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/russian/R72_T150/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R72_T150/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.583112 1.1046	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>

@@ -15,12 +15,8 @@ from skeletons.connection_mgr import DisconnectReason
 from skeletons.gui.shared.utils import IHangarSpace
 _REASON = DisconnectReason
 
-def _enableTimeWrapInReplay():
-    BattleReplay.g_replayCtrl.enableTimeWrap()
-
-
-def _disableTimeWrapInReplay():
-    BattleReplay.g_replayCtrl.disableTimeWrap()
+def _disableTimeWarpInReplay():
+    BattleReplay.g_replayCtrl.disableTimeWarp()
 
 
 def _acceptVersionDiffering():
@@ -29,6 +25,10 @@ def _acceptVersionDiffering():
 
 def _stopBattleReplay():
     BattleReplay.g_replayCtrl.stop()
+
+
+def _onReplayBattleLoadingFinished():
+    BattleReplay.g_replayCtrl.onBattleLoadingFinished()
 
 
 @ReprInjector.simple()
@@ -186,7 +186,7 @@ class BattleLoadingSpace(_ArenaSpace):
 
     def hideGUI(self, appFactory, newState):
         if newState.getSpaceID() == _SPACE_ID.BATTLE:
-            _enableTimeWrapInReplay()
+            _onReplayBattleLoadingFinished()
         else:
             appFactory.hideBattle()
             appFactory.reloadLobbyPackages()
@@ -218,7 +218,7 @@ class ReplayLoadingSpace(BattleLoadingSpace):
             appFactory.goToBattleLoading(appNS)
 
     def hideGUI(self, appFactory, newState):
-        _enableTimeWrapInReplay()
+        _onReplayBattleLoadingFinished()
 
 
 @ReprInjector.simple()
@@ -238,4 +238,4 @@ class ReplayBattleSpace(BattleSpace):
     __slots__ = ()
 
     def hideGUI(self, appFactory, newState):
-        _disableTimeWrapInReplay()
+        _disableTimeWarpInReplay()

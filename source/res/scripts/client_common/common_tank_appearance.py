@@ -12,6 +12,7 @@ import DataLinks
 import Vehicular
 import NetworkFilters
 import material_kinds
+import Ballistics
 from constants import IS_EDITOR, VEHICLE_SIEGE_STATE
 from CustomEffectManager import CustomEffectManager, EffectSettings
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
@@ -30,7 +31,6 @@ from helpers import bound_effects, gEffectsDisabled
 from vehicle_outfit.outfit import Outfit
 from items.battle_royale import isSpawnedBot
 from helpers import isPlayerAvatar
-from ModelHitTester import ModelStatus
 from vehicle_systems.components.debris_crashed_tracks import TrackCrashWithDebrisComponent
 _logger = logging.getLogger(__name__)
 DEFAULT_STICKERS_ALPHA = 1.0
@@ -42,6 +42,11 @@ TANK_FRICTION_EVENT = 'collision_tank_friction_pc'
 PERIODIC_UPDATE_TIME = 0.25
 _LOD_DISTANCE_EXHAUST = 200.0
 _LOD_DISTANCE_TRAIL_PARTICLES = 100.0
+
+class PartProperties(object):
+    HIGHLIGHTABLE = 1
+    HIGHLIGHTBYVISUAL = 2
+
 
 class CommonTankAppearance(ScriptGameObject):
     compoundModel = property(lambda self: self._compoundModel)
@@ -123,6 +128,7 @@ class CommonTankAppearance(ScriptGameObject):
     waterSensor = ComponentDescriptor()
     wheelsAnimator = ComponentDescriptor()
     flagComponent = ComponentDescriptor()
+    trajectoryDrawer = ComponentDescriptor()
 
     def __init__(self, spaceID):
         ScriptGameObject.__init__(self, spaceID, CgfTankNodes.TANK_ROOT)
@@ -173,7 +179,6 @@ class CommonTankAppearance(ScriptGameObject):
         self.__typeDesc = typeDescriptor
         self.__vID = vID
         self._isTurretDetached = isTurretDetached
-        self.__updateModelStatus()
         self.__outfit = self._prepareOutfit(outfitCD)
         if self.damageState.isCurrentModelUndamaged:
             self.__attachments = camouflages.getAttachments(self.outfit, self.typeDescriptor)
@@ -202,11 +207,14 @@ class CommonTankAppearance(ScriptGameObject):
 
         return prereqs
 
-    def construct(self, isPlayer, resourceRefs):
+    def construct(self, isPlayer, isControllableVehicle, resourceRefs):
         self.__isObserver = 'observer' in self.typeDescriptor.type.tags
         self._compoundModel = resourceRefs[self.typeDescriptor.name]
         if not self._compoundModel.isValid():
             _logger.error('compoundModel is not valid')
+        if self.typeDescriptor.gun.edgeByVisualModel:
+            self._compoundModel.setPartProperties(TankPartIndexes.GUN, PartProperties.HIGHLIGHTABLE | PartProperties.HIGHLIGHTBYVISUAL)
+        self._compoundModel.setPartProperties(TankPartIndexes.CHASSIS, PartProperties.HIGHLIGHTABLE | PartProperties.HIGHLIGHTBYVISUAL)
         self.__boundEffects = bound_effects.ModelBoundEffects(self.compoundModel)
         isCurrentModelDamaged = self.damageState.isCurrentModelDamaged
         fashions = camouflages.prepareFashions(isCurrentModelDamaged)
@@ -231,12 +239,12 @@ class CommonTankAppearance(ScriptGameObject):
         self.__filter = model_assembler.createVehicleFilter(self.typeDescriptor)
         compoundModel = self.compoundModel
         if self.isAlive:
-            self.detailedEngineState, self.gearbox = model_assembler.assembleDrivetrain(self, isPlayer)
+            self.detailedEngineState, self.gearbox = model_assembler.assembleDrivetrain(self, isPlayer, isControllableVehicle)
             if not gEffectsDisabled():
                 self.customEffectManager = CustomEffectManager(self)
                 if self.typeDescriptor.hasSiegeMode:
                     self.siegeEffects = SiegeEffectsController(self, isPlayer)
-                model_assembler.assembleVehicleAudition(isPlayer, self)
+                model_assembler.assembleVehicleAudition(isPlayer, isControllableVehicle, self)
                 self.detailedEngineState.onEngineStart = self._onEngineStart
                 self.detailedEngineState.onStateChanged = self.engineAudition.onEngineStateChanged
             if isPlayer:
@@ -247,7 +255,7 @@ class CommonTankAppearance(ScriptGameObject):
                 gunRotatorAudition.maxTurretRotationSpeed = lambda : self.maxTurretRotationSpeed()
                 self.gunRotatorAudition = gunRotatorAudition
                 self.frictionAudition = self.createComponent(Vehicular.FrictionAudition, TANK_FRICTION_EVENT)
-        isLodTopPriority = isPlayer
+        isLodTopPriority = isPlayer or isControllableVehicle
         lodCalcInst = self.createComponent(Vehicular.LodCalculator, DataLinks.linkMatrixTranslation(compoundModel.matrix), True, VEHICLE_PRIORITY_GROUP, isLodTopPriority)
         self.lodCalculator = lodCalcInst
         self.allLodCalculators.append(lodCalcInst)
@@ -261,7 +269,7 @@ class CommonTankAppearance(ScriptGameObject):
             changeCamera = BigWorld.player().inputHandler.onCameraChanged
         self.shadowManager = VehicleShadowManager(compoundModel, matrixBinding, changeCamera)
         if not self.damageState.isCurrentModelDamaged:
-            self.__assembleNonDamagedOnly(resourceRefs, isPlayer, lodLink, lodStateLink)
+            self.__assembleNonDamagedOnly(resourceRefs, isPlayer, isControllableVehicle, lodLink, lodStateLink)
             dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in self.typeDescriptor.type.tags
             if dirtEnabled and self.fashions is not None:
                 dirtHandlers = [BigWorld.PyDirtHandler(True, compoundModel.node(TankPartNames.CHASSIS).position.y),
@@ -568,23 +576,14 @@ class CommonTankAppearance(ScriptGameObject):
 
     def _onRequestModelsRefresh(self):
         self.flagComponent = None
-        self.__updateModelStatus()
         return
-
-    def __updateModelStatus(self):
-        if self.damageState.isCurrentModelUndamaged:
-            modelStatus = ModelStatus.NORMAL
-        else:
-            modelStatus = ModelStatus.CRASHED
-        for htManager in self.typeDescriptor.getHitTesterManagers():
-            htManager.setStatus(modelStatus)
 
     def _onEngineStart(self):
         if self.engineAudition is not None:
             self.engineAudition.onEngineStart()
         return
 
-    def __assembleNonDamagedOnly(self, resourceRefs, isPlayer, lodLink, lodStateLink):
+    def __assembleNonDamagedOnly(self, resourceRefs, isPlayer, isControllableVehicle, lodLink, lodStateLink):
         model_assembler.assembleTerrainMatKindSensor(self, lodStateLink, self.spaceID)
         model_assembler.assembleRecoil(self, lodLink)
         model_assembler.assembleMultiGunRecoil(self, lodLink)
@@ -625,7 +624,7 @@ class CommonTankAppearance(ScriptGameObject):
         model_assembler.assembleLeveredSuspensionIfNeed(self, suspensionLodLink)
         self.__assembleSwinging(lodLink)
         model_assembler.assembleBurnoutProcessor(self)
-        model_assembler.assembleSuspensionSound(self, lodLink, isPlayer)
+        model_assembler.assembleSuspensionSound(self, lodLink, isPlayer, isControllableVehicle)
         model_assembler.assembleHullAimingController(self)
         self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self, self.typeDescriptor, lodStateLink)
         model_assembler.assembleTracks(resourceRefs, self.typeDescriptor, self, self.splineTracks, False, lodStateLink)
@@ -824,3 +823,7 @@ class CommonTankAppearance(ScriptGameObject):
                 debris.markAsRepaired()
                 track.removeComponent(debris)
             return
+
+    def initTrajectoryDrawer(self):
+        if not self.trajectoryDrawer:
+            self.trajectoryDrawer = self.createComponent(Ballistics.TrajectoryToPointDrawer)

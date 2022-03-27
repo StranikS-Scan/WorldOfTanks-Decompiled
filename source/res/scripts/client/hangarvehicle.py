@@ -27,8 +27,8 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         self.pitchLimitMin = 0.0
         self.pitchLimitMax = 0.0
         self.movementYDelta = 0.0
-        self.cameraBackwardDuration = 10.0
-        self.cameraUpcomingDuration = 10.0
+        self.cameraBackwardDuration = 2.5
+        self.cameraUpcomingDuration = 2.5
         super(HangarVehicle, self).__init__()
         self.camDistState = CameraDistanceModes.CUSTOM
         return

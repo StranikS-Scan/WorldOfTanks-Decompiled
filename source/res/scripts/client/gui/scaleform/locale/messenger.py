@@ -957,6 +957,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLEPASSREWARD_BUY_GOLD = '#messenger:serviceChannelMessages/battlePassReward/buy/gold'
     SERVICECHANNELMESSAGES_BATTLEPASSREWARD_BUTTON = '#messenger:serviceChannelMessages/battlePassReward/button'
     SERVICECHANNELMESSAGES_BATTLEPASSREWARD_TMAN = '#messenger:serviceChannelMessages/battlePassReward/tman'
+    SERVICECHANNELMESSAGES_BATTLEPASSEXTRASTART_BUTTON = '#messenger:serviceChannelMessages/battlePassExtraStart/button'
+    SERVICECHANNELMESSAGES_BATTLEPASSEXTRAWILLENDSOON_BUTTON = '#messenger:serviceChannelMessages/battlePassExtraWillEndSoon/button'
     SERVICECHANNELMESSAGES_BATTLEPASS_REACHEDCAP_HEADER = '#messenger:serviceChannelMessages/battlePass/reachedCap/header'
     SERVICECHANNELMESSAGES_BATTLEPASS_REACHEDCAP_TEXT = '#messenger:serviceChannelMessages/battlePass/reachedCap/text'
     SERVICECHANNELMESSAGES_BATTLEPASS_BADGES_HEADER_REMOVE = '#messenger:serviceChannelMessages/battlePass/badges/header/remove'
@@ -1045,6 +1047,10 @@ class MESSENGER(object):
     PLATFORMCURRENCYMSG_DEBITED_SACOIN = '#messenger:platformCurrencyMsg/debited/sacoin'
     PLATFORMCURRENCYMSG_RECEIVED_BPBIT = '#messenger:platformCurrencyMsg/received/bpbit'
     PLATFORMCURRENCYMSG_DEBITED_BPBIT = '#messenger:platformCurrencyMsg/debited/bpbit'
+    SERVICECHANNELMESSAGES_RTS_PASSACCURED = '#messenger:serviceChannelMessages/RTS/passAccured'
+    SERVICECHANNELMESSAGES_RTS_RTS1X7CURRENCYDEBITED = '#messenger:serviceChannelMessages/RTS/rts1x7CurrencyDebited'
+    SERVICECHANNELMESSAGES_RTS_RTS1X1CURRENCYDEBITED = '#messenger:serviceChannelMessages/RTS/rts1x1CurrencyDebited'
+    SERVICECHANNELMESSAGES_RTS_RTS1X7PASSDEBITED = '#messenger:serviceChannelMessages/RTS/rts1x7PassDebited'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

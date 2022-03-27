@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_extras.py
-import random
-import weakref
 from functools import partial
 from vehicle_systems.stricted_loading import makeCallbackWeak
 import BigWorld
@@ -20,7 +18,6 @@ from helpers.EntityExtra import EntityExtra
 from helpers.laser_sight_matrix_provider import LaserSightMatrixProvider
 from constants import IS_EDITOR, CollisionFlags
 import Projectiles
-import Health
 from vehicle_extras_battle_royale import AfterburningBattleRoyale
 
 def reload():
@@ -273,95 +270,6 @@ class TrackWithinTrackHealth(TrackHealth):
         resource = R.strings.ingame_gui.devices.track
         typeTxt = backport.text(resource.main() if self._trackPairIndex == MAIN_TRACK_PAIR_IDX else resource.outer())
         return backport.text(resource(), type=typeTxt)
-
-
-class Fire(EntityExtra):
-    __slots__ = ('sounds',)
-
-    def _readConfig(self, dataSection, containerName):
-        self.sounds = {}
-        startSound = dataSection.readString('sounds/fireStarted')
-        if startSound:
-            self.sounds['critical'] = startSound
-            self.sounds['destroyed'] = startSound
-        else:
-            self._raiseWrongConfig('sounds/fireStarted', containerName)
-        stopSound = dataSection.readString('sounds/fireStopped')
-        if stopSound:
-            self.sounds['fixed'] = stopSound
-        else:
-            self._raiseWrongConfig('sounds/fireStopped', containerName)
-
-    def _start(self, data, args):
-        data['_isStarted'] = False
-        vehicle = data['entity']
-        fire = vehicle.appearance.findComponentByType(Health.FireComponent)
-        if fire is None:
-            vehicle.appearance.createComponent(Health.FireComponent)
-        isUnderwater = vehicle.appearance.isUnderwater
-        if not isUnderwater:
-            self.__playEffect(data)
-        data['_isStarted'] = True
-        data['_invokeTime'] = BigWorld.time()
-        return
-
-    def _update(self, data, args):
-        if not data['_isStarted']:
-            return
-        else:
-            currTime = BigWorld.time()
-            if args and currTime - data.get('_invokeTime', currTime) > args:
-                effectsListPlayer = self.__getEffectsListPlayer(data)
-                if effectsListPlayer is None:
-                    return
-                effectsListPlayer.stop(forceCallback=True)
-                data['_isStarted'] = False
-                vehicle = data['entity']
-                if vehicle.health > 0:
-                    isUnderwater = vehicle.appearance.isUnderwater
-                    if not isUnderwater:
-                        self.__playEffect(data)
-                    data['_isStarted'] = True
-                    data['_invokeTime'] = BigWorld.time()
-            return
-
-    def _cleanup(self, data):
-        if not data['_isStarted']:
-            return
-        else:
-            vehicle = data['entity']
-            vehicle.appearance.removeComponentByType(Health.FireComponent)
-            effectsListPlayer = self.__getEffectsListPlayer(data)
-            if effectsListPlayer is not None:
-                if vehicle.health <= 0:
-                    effectsListPlayer.stop(forceCallback=True)
-                    return
-                effectsListPlayer.keyOff()
-            return
-
-    def __getEffectsListPlayer(self, data):
-        effectsListPlayerRef = data.get('_effectsPlayer', None)
-        return effectsListPlayerRef() if effectsListPlayerRef is not None else None
-
-    def __playEffect(self, data):
-        vehicle = data['entity']
-        stages, effects, _ = random.choice(vehicle.typeDescriptor.type.effects['flaming'])
-        data['entity_id'] = vehicle.id
-        waitForKeyOff = True
-        effectListPlayer = vehicle.appearance.boundEffects.addNew(None, effects, stages, waitForKeyOff, **data)
-        data['_effectsPlayer'] = weakref.ref(effectListPlayer)
-        return
-
-    def checkUnderwater(self, vehicle, isVehicleUnderwater):
-        data = vehicle.extras[self.index]
-        if isVehicleUnderwater:
-            effectsListPlayer = self.__getEffectsListPlayer(data)
-            if effectsListPlayer is not None:
-                effectsListPlayer.stop(forceCallback=True)
-                del data['_effectsPlayer']
-        if not isVehicleUnderwater:
-            self.__playEffect(data)
-        return
 
 
 class TankmanHealth(DamageMarker):

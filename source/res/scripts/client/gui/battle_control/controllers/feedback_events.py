@@ -3,7 +3,7 @@
 import logging
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET, NONE_SHELL_TYPE
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET
-from constants import ATTACK_REASON, ATTACK_REASONS, SHELL_TYPES_LIST, ROLE_TYPE, ROLE_TYPE_TO_LABEL
+from constants import ATTACK_REASON, ATTACK_REASONS, BATTLE_LOG_SHELL_TYPES, ROLE_TYPE, ROLE_TYPE_TO_LABEL
 _logger = logging.getLogger(__name__)
 
 def _unpackInteger(packedData):
@@ -49,7 +49,9 @@ _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {_BET.KILL: _FET.PLAYER_KILLED_ENEMY,
  _BET.SMOKE_ASSIST: _FET.SMOKE_ASSIST,
  _BET.INSPIRE_ASSIST: _FET.INSPIRE_ASSIST,
  _BET.MULTI_STUN: _FET.PLAYER_STUN_ENEMIES,
- _BET.EQUIPMENT_TIMER_EXPIRED: _FET.EQUIPMENT_TIMER_EXPIRED}
+ _BET.EQUIPMENT_TIMER_EXPIRED: _FET.EQUIPMENT_TIMER_EXPIRED,
+ _BET.SUPPLY_DAMAGE: _FET.PLAYER_DAMAGED_SUPPLY_ENEMY,
+ _BET.SUPPLY_DESTROYED: _FET.PLAYER_DESTROYED_SUPPLY_ENEMY}
 _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackDamage,
  _FET.PLAYER_ASSIST_TO_KILL_ENEMY: _unpackDamage,
  _FET.PLAYER_CAPTURED_BASE: _unpackInteger,
@@ -67,10 +69,11 @@ _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackD
  _FET.SMOKE_ASSIST: _unpackDamage,
  _FET.INSPIRE_ASSIST: _unpackDamage,
  _FET.PLAYER_SPOTTED_ENEMY: _unpackVisibility,
- _FET.PLAYER_STUN_ENEMIES: _unpackMultiStun}
+ _FET.PLAYER_STUN_ENEMIES: _unpackMultiStun,
+ _FET.PLAYER_DAMAGED_SUPPLY_ENEMY: _unpackDamage}
 
 def _getShellType(shellTypeID):
-    return None if shellTypeID == NONE_SHELL_TYPE else SHELL_TYPES_LIST[shellTypeID]
+    return None if shellTypeID == NONE_SHELL_TYPE else BATTLE_LOG_SHELL_TYPES(shellTypeID)
 
 
 class _DamageExtra(object):
@@ -275,7 +278,7 @@ class _FeedbackEvent(object):
 
 
 class PlayerFeedbackEvent(_FeedbackEvent):
-    __slots__ = ('__battleEventType', '__targetID', '__count', '__extra', '__attackReasonID', '__isBurst', '__role')
+    __slots__ = ('__battleEventType', '__targetID', '__count', '__extra', '__role')
 
     def __init__(self, feedbackEventType, eventType, targetID, count, role, extra):
         super(PlayerFeedbackEvent, self).__init__(feedbackEventType)
@@ -319,19 +322,20 @@ class PlayerFeedbackEvent(_FeedbackEvent):
 
 
 class BattleSummaryFeedbackEvent(_FeedbackEvent):
-    __slots__ = ('__damage', '__trackAssistDamage', '__radioAssistDamage', '__blockedDamage', '__stunAssist')
+    __slots__ = ('__damage', '__trackAssistDamage', '__radioAssistDamage', '__blockedDamage', '__stunAssist', '__damageSupply')
 
-    def __init__(self, damage, trackAssist, radioAssist, tankings, stunAssist):
+    def __init__(self, damage, trackAssist, radioAssist, tankings, stunAssist, damageSupply):
         super(BattleSummaryFeedbackEvent, self).__init__(_FET.DAMAGE_LOG_SUMMARY)
         self.__damage = damage
         self.__trackAssistDamage = trackAssist
         self.__radioAssistDamage = radioAssist
         self.__blockedDamage = tankings
         self.__stunAssist = stunAssist
+        self.__damageSupply = damageSupply
 
     @staticmethod
     def fromDict(summaryData, additionalData=None):
-        return BattleSummaryFeedbackEvent(damage=summaryData['damage'], trackAssist=summaryData['trackAssist'], radioAssist=summaryData['radioAssist'], tankings=summaryData['tankings'], stunAssist=summaryData['stunAssist'])
+        return BattleSummaryFeedbackEvent(damage=summaryData['damage'], trackAssist=summaryData['trackAssist'], radioAssist=summaryData['radioAssist'], tankings=summaryData['tankings'], stunAssist=summaryData['stunAssist'], damageSupply=summaryData['damageSupply'])
 
     def getTotalDamage(self):
         return self.__damage
@@ -344,6 +348,9 @@ class BattleSummaryFeedbackEvent(_FeedbackEvent):
 
     def getTotalStunDamage(self):
         return self.__stunAssist
+
+    def getTotalDamageSupply(self):
+        return self.__damageSupply
 
 
 class PostmortemSummaryEvent(_FeedbackEvent):

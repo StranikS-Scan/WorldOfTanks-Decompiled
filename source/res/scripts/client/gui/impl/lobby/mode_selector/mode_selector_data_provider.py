@@ -13,6 +13,7 @@ from gui.impl.lobby.mode_selector.items.items_constants import CustomModeName
 from gui.impl.lobby.mode_selector.items.mapbox_mode_selector_item import MapboxModeSelectorItem
 from gui.impl.lobby.mode_selector.items.random_mode_selector_item import RandomModeSelectorItem
 from gui.impl.lobby.mode_selector.items.ranked_mode_selector_item import RankedModeSelectorItem
+from gui.impl.lobby.mode_selector.items.rts_mode_selector_item import RTSModeSelectorItem
 from gui.impl.lobby.mode_selector.items.spec_mode_selector_item import SpecModeSelectorItem
 from gui.impl.lobby.mode_selector.items.strongholds_mode_selector_item import StrongholdsModeSelectorItem
 from gui.impl.lobby.mode_selector.items.trainings_mode_selector_item import TrainingsModeSelectorItem
@@ -31,7 +32,8 @@ _modeSelectorLegacyItemByModeName = {PREBATTLE_ACTION_NAME.RANDOM: RandomModeSel
  PREBATTLE_ACTION_NAME.TRAININGS_LIST: TrainingsModeSelectorItem,
  PREBATTLE_ACTION_NAME.MAPBOX: MapboxModeSelectorItem,
  PREBATTLE_ACTION_NAME.EPIC: EpicModeSelectorItem,
- CustomModeName.BOOTCAMP: BootcampModeSelectorItem}
+ CustomModeName.BOOTCAMP: BootcampModeSelectorItem,
+ PREBATTLE_ACTION_NAME.RTS: RTSModeSelectorItem}
 _additionalItems = {CustomModeName.BOOTCAMP: None}
 
 class ModeSelectorDataProvider(IGlobalListener):
@@ -85,13 +87,25 @@ class ModeSelectorDataProvider(IGlobalListener):
         self.__createItems(items)
         for nameItem in self._items:
             if nameItem not in items:
-                self._items.pop(nameItem).dispose()
+                self._clearItem(self._items.pop(nameItem))
 
+        self.updateItems()
+
+    def _onCardChangeHandler(self, *args, **kwargs):
+        self._updateItemsForce()
+
+    def _updateItemsForce(self):
+        self._clearItems()
+        self.__createItems(self.__getItems())
         self.updateItems()
 
     def _clearItems(self):
         for key in self._items:
-            self._items.pop(key).dispose()
+            self._clearItem(self._items.pop(key))
+
+    def _clearItem(self, item):
+        item.onCardChange -= self._onCardChangeHandler
+        item.dispose()
 
     def _initializeModeSelectorItems(self):
         self.__createItems(self.__getItems())
@@ -142,9 +156,13 @@ class ModeSelectorDataProvider(IGlobalListener):
                 item = self._getModeSelectorLegacyItem(modeName, items[modeName])
                 if item is not None:
                     self._items[modeName] = item
-                    item.initialize()
+                    self.__initializeItem(item)
 
         return
+
+    def __initializeItem(self, item):
+        item.initialize()
+        item.onCardChange += self._onCardChangeHandler
 
     @staticmethod
     def __getItems():

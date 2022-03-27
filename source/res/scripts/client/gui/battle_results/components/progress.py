@@ -234,10 +234,12 @@ class VehicleProgressBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
+        xpEarnings = reusable.personal.xpProgress
         for intCD, data in reusable.personal.getVehicleCDsIterator(result):
-            vehicleBattleXp = data.get('xp', 0)
+            xpEarningsForVehicle = xpEarnings.get(intCD, {})
+            vehicleBattleXp = xpEarningsForVehicle.get('xp', 0)
+            tmenXps = dict(xpEarningsForVehicle.get('xpByTmen', []))
             pureCreditsReceived = data.get('pureCreditsReceived', 0)
-            tmenXps = dict(data.get('xpByTmen', []))
             helper = VehicleProgressHelper(intCD)
             progress = helper.getProgressList(vehicleBattleXp, pureCreditsReceived, tmenXps)
             for item in progress:

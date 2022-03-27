@@ -2864,7 +2864,7 @@
         <armor_6>	10	</armor_6>
         <armor_7>	10	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	25	</armor_9>
+        <armor_9>	10	</armor_9>
         <armor_10>	25	</armor_10>
         <armor_11>	60	</armor_11>
         <armor_12>	25	</armor_12>
@@ -2942,6 +2942,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
             <density>	148.514 151.348	</density>
@@ -3514,11 +3515,10 @@
         <armor_3>	35	</armor_3>
         <armor_4>	25	</armor_4>
         <armor_5>	10	</armor_5>
-        <armor_6>	25	</armor_6>
+        <armor_6>	10	</armor_6>
         <armor_7>	10	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	25	</armor_9>
-        <armor_10>	10	</armor_10>
+        <armor_9>	10	</armor_9>
         <armor_11>	25	</armor_11>
         <armor_12>	50	</armor_12>
         <armor_13>	50	</armor_13>
@@ -3545,10 +3545,10 @@
       <guns>
         <_47mm_Gun_Type1>	shared	  <maxAmmo>	210	</maxAmmo>
           <armor>
-            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
             <gun>	10	</gun>
           </armor>
           <pitchLimits>
@@ -3603,6 +3603,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
             <density>	148.514 151.348	</density>
@@ -3611,10 +3612,10 @@
         </_47mm_Gun_Type1>
         <_75mm_Gun_Type_99>	shared	  <maxAmmo>	95	</maxAmmo>
           <armor>
-            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
             <gun>	20	</gun>
           </armor>
           <pitchLimits>
@@ -3665,6 +3666,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.295 0.295 0.000000 0.000000	</tiling>
             <density>	148.335 151.061	</density>
@@ -3677,10 +3679,10 @@
             </vehicle>
           </unlocks>
           <armor>
-            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
             <gun>	15	</gun>
           </armor>
           <pitchLimits>
@@ -3736,6 +3738,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
             <density>	148.473 151.509	</density>

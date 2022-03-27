@@ -334,27 +334,36 @@ class HangarVehicleAppearance(ScriptGameObject):
          TankPartNames.TURRET: vDesc.turret.hitTesterManager,
          TankPartNames.GUN: vDesc.gun.hitTesterManager}
         bspModels = ()
-        crashedBspModels = ()
+        crashedBspModels = []
+        useCrashedModels = False
         for partName, htManager in hitTesterManagers.iteritems():
             partId = TankPartNames.getIdx(partName)
             bspModel = (partId, htManager.modelHitTester.bspModelName)
             bspModels = bspModels + (bspModel,)
             if htManager.crashedModelHitTester:
-                crashedBspModel = (partId, htManager.crashedModelHitTester.bspModelName)
-                crashedBspModels = crashedBspModels + (crashedBspModel,)
+                useCrashedModels = True
+                if htManager.crashedModelHitTester.bspModelName:
+                    crashedBspModel = (partId, htManager.crashedModelHitTester.bspModelName)
+                    crashedBspModels.append(crashedBspModel)
 
         bspModels = bspModels + ((TankPartNames.getIdx(TankPartNames.GUN) + 1, vDesc.hull.hitTesterManager.modelHitTester.bspModelName, capsuleScale), (TankPartNames.getIdx(TankPartNames.GUN) + 2, vDesc.turret.hitTesterManager.modelHitTester.bspModelName, capsuleScale), (TankPartNames.getIdx(TankPartNames.GUN) + 3, vDesc.gun.hitTesterManager.modelHitTester.bspModelName, gunScale))
         if vDesc.hull.hitTesterManager.crashedModelHitTester:
-            crashedBspModels = crashedBspModels + ((TankPartNames.getIdx(TankPartNames.GUN) + 1, vDesc.hull.hitTesterManager.crashedModelHitTester.bspModelName, capsuleScale),)
+            useCrashedModels = True
+            if vDesc.hull.hitTesterManager.crashedModelHitTester.bspModelName is not None:
+                crashedBspModels.append((TankPartNames.getIdx(TankPartNames.GUN) + 1, vDesc.hull.hitTesterManager.crashedModelHitTester.bspModelName, capsuleScale))
         if vDesc.turret.hitTesterManager.crashedModelHitTester:
-            crashedBspModels = crashedBspModels + ((TankPartNames.getIdx(TankPartNames.GUN) + 2, vDesc.turret.hitTesterManager.crashedModelHitTester.bspModelName, capsuleScale),)
+            useCrashedModels = True
+            if vDesc.turret.hitTesterManager.crashedModelHitTester.bspModelName:
+                crashedBspModels.append((TankPartNames.getIdx(TankPartNames.GUN) + 2, vDesc.turret.hitTesterManager.crashedModelHitTester.bspModelName, capsuleScale))
         if vDesc.gun.hitTesterManager.crashedModelHitTester:
-            crashedBspModels = crashedBspModels + ((TankPartNames.getIdx(TankPartNames.GUN) + 3, vDesc.gun.hitTesterManager.crashedModelHitTester.bspModelName, gunScale),)
+            useCrashedModels = True
+            if vDesc.gun.hitTesterManager.crashedModelHitTester.bspModelName:
+                crashedBspModels.append((TankPartNames.getIdx(TankPartNames.GUN) + 3, vDesc.gun.hitTesterManager.crashedModelHitTester.bspModelName, gunScale))
         modelCA = BigWorld.CollisionAssembler(bspModels, self.__spaceId)
         modelCA.name = 'ModelCollisions'
         resources.append(modelCA)
-        if crashedBspModels:
-            crashedModelCA = BigWorld.CollisionAssembler(crashedBspModels, self.__spaceId)
+        if useCrashedModels:
+            crashedModelCA = BigWorld.CollisionAssembler(tuple(crashedBspModels), self.__spaceId)
             crashedModelCA.name = 'CrashedModelCollisions'
             resources.append(crashedModelCA)
         physicalTracksBuilders = vDesc.chassis.physicalTracks

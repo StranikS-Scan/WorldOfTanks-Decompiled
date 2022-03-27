@@ -20,6 +20,7 @@ _INVALIDATE_OP = settings.INVALIDATE_OP
 _VEHICLE_STATUS = settings.VEHICLE_STATUS
 _PLAYER_STATUS = settings.PLAYER_STATUS
 _DELIVERY_STATUS = settings.INVITATION_DELIVERY_STATUS
+DEFAULT_VEHICLE_GROUP = -1
 _DEFAULT_PLAYER_GROUP = 1
 _DEFAULT_PLAYER_RANK = 0
 _DEFAULT_PHYSICAL_SECTOR = 1
@@ -67,17 +68,32 @@ class EPIC_BATTLE_KEYS(object):
         return [EPIC_BATTLE_KEYS.RANK] if not static else []
 
 
+class RtsKeys(object):
+    VEHICLE_GROUP = 'vehicleGroup'
+
+    @staticmethod
+    def getKeys(static=True):
+        return [(RtsKeys.VEHICLE_GROUP, DEFAULT_VEHICLE_GROUP)]
+
+    @staticmethod
+    def getSortingKeys(static=True):
+        return [RtsKeys.VEHICLE_GROUP]
+
+
 GAMEMODE_SPECIFIC_KEYS = {ARENA_GUI_TYPE.EPIC_RANDOM: EPIC_RANDOM_KEYS,
  ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: EPIC_RANDOM_KEYS,
  ARENA_GUI_TYPE.EPIC_BATTLE: EPIC_BATTLE_KEYS,
  ARENA_GUI_TYPE.EPIC_TRAINING: EPIC_BATTLE_KEYS,
- ARENA_GUI_TYPE.BATTLE_ROYALE: BattleRoyaleKeys}
+ ARENA_GUI_TYPE.BATTLE_ROYALE: BattleRoyaleKeys,
+ ARENA_GUI_TYPE.RTS: RtsKeys,
+ ARENA_GUI_TYPE.RTS_BOOTCAMP: RtsKeys}
 
 class GameModeDataVO(object):
     __slots__ = ('__internalData', '__sortingKeys')
 
     def __init__(self, gameMode, static=True):
         self.__internalData = {}
+        self.__sortingKeys = {}
         if gameMode in GAMEMODE_SPECIFIC_KEYS:
             keys = GAMEMODE_SPECIFIC_KEYS[gameMode]
             for key, defaultValue in keys.getKeys(static):
@@ -100,8 +116,16 @@ class GameModeDataVO(object):
         return self.__internalData[key] if key in self.__internalData else None
 
 
+def isSupply(tags):
+    return VEHICLE_TAGS.SUPPLY in tags
+
+
 def isObserver(tags):
     return VEHICLE_TAGS.OBSERVER in tags
+
+
+def isCommander(tags):
+    return VEHICLE_TAGS.COMMANDER in tags
 
 
 def isPremium(tags):
@@ -170,7 +194,7 @@ class PlayerInfoVO(object):
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'strCompactDescr', 'isOnlyForBattleRoyaleBattles', 'tags', 'chassisType')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isCommander', 'isDualGunVehicle', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'strCompactDescr', 'isOnlyForBattleRoyaleBattles', 'tags', 'chassisType', 'isSupply')
 
     def __init__(self, vehicleType=None, maxHealth=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -180,6 +204,9 @@ class VehicleTypeInfoVO(object):
         return 'VehicleTypeInfoVO(compactDescr = {0:n})'.format(self.compactDescr)
 
     def __cmp__(self, other):
+        result = cmp(self.isSupply, other.isSupply)
+        if result:
+            return result
         result = cmp(other.level, self.level)
         if result:
             return result
@@ -206,7 +233,9 @@ class VehicleTypeInfoVO(object):
             tags = vehicleType.tags
             self.tags = tags
             self.classTag = Vehicle.getVehicleClassTag(tags)
+            self.isSupply = isSupply(tags)
             self.isObserver = isObserver(tags)
+            self.isCommander = isCommander(tags)
             self.isPremiumIGR = isPremiumIGR(tags)
             self.turretYawLimits = vehicle_getter.getYawLimits(vehicleDescr)
             self.isDualGunVehicle = vehicleDescr.isDualgunVehicle
@@ -228,7 +257,9 @@ class VehicleTypeInfoVO(object):
             self.compactDescr = 0
             self.strCompactDescr = ''
             self.classTag = None
+            self.isSupply = False
             self.isObserver = False
+            self.isCommander = False
             self.isPremiumIGR = False
             self.turretYawLimits = None
             self.shortName = vehicleName
@@ -256,14 +287,14 @@ class VehicleTypeInfoVO(object):
 class VehicleArenaInfoVO(object):
     __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge', 'dogTag')
 
-    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, **kwargs):
+    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, isGodModeActive=False, **kwargs):
         super(VehicleArenaInfoVO, self).__init__()
         self.vehicleID = vehicleID
         self.team = team
         self.player = PlayerInfoVO(forbidInBattleInvitations=forbidInBattleInvitations, **kwargs)
         self.vehicleType = VehicleTypeInfoVO(**kwargs)
         self.prebattleID = prebattleID
-        self.vehicleStatus = self.__getVehicleStatus(isAlive, isAvatarReady)
+        self.vehicleStatus = self.__getVehicleStatus(isAlive, isAvatarReady, isGodModeActive=isGodModeActive)
         self.playerStatus = self.__getPlayerStatus(isTeamKiller)
         self.invitationDeliveryStatus = self.__getInvitationStatus(forbidInBattleInvitations)
         self.events = events or {}
@@ -309,8 +340,8 @@ class VehicleArenaInfoVO(object):
         else:
             return None
 
-    def updateVehicleStatus(self, invalidate=_INVALIDATE_OP.NONE, isAlive=None, isAvatarReady=None, stopRespawn=False, **kwargs):
-        prev, self.vehicleStatus = self.vehicleStatus, self.__getVehicleStatus(isAlive, isAvatarReady, stopRespawn)
+    def updateVehicleStatus(self, invalidate=_INVALIDATE_OP.NONE, isAlive=None, isAvatarReady=None, stopRespawn=False, isGodModeActive=False, **kwargs):
+        prev, self.vehicleStatus = self.vehicleStatus, self.__getVehicleStatus(isAlive, isAvatarReady, stopRespawn, isGodModeActive)
         diff = self.vehicleStatus ^ prev
         if diff:
             invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_STATUS)
@@ -413,8 +444,17 @@ class VehicleArenaInfoVO(object):
     def isReady(self):
         return self.vehicleStatus & _VEHICLE_STATUS.IS_READY > 0
 
+    def isGodModeActive(self):
+        return self.vehicleStatus & _VEHICLE_STATUS.IS_GOD_MODE_ACTIVE > 0
+
+    def isSupply(self):
+        return self.vehicleType.isSupply
+
     def isObserver(self):
         return self.vehicleType.isObserver
+
+    def isCommander(self):
+        return self.vehicleType.isCommander
 
     def isSPG(self):
         return self.vehicleType.classTag == VEHICLE_CLASS_NAME.SPG
@@ -431,7 +471,11 @@ class VehicleArenaInfoVO(object):
         if not (self.player.avatarSessionID or isEvent):
             if isAlly:
                 return True
-            if arena is None or arena.guiType not in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.TRAINING, ARENA_GUI_TYPE.EPIC_BATTLE):
+            arena = avatar_getter.getArena()
+            if arena is None or arena.guiType not in (ARENA_GUI_TYPE.RANDOM,
+             ARENA_GUI_TYPE.RTS,
+             ARENA_GUI_TYPE.TRAINING,
+             ARENA_GUI_TYPE.EPIC_BATTLE):
                 return True
         return False
 
@@ -450,7 +494,7 @@ class VehicleArenaInfoVO(object):
         return igrLabel
 
     @staticmethod
-    def __getVehicleStatus(isAlive=None, isAvatarReady=None, stopRespawn=False):
+    def __getVehicleStatus(isAlive=None, isAvatarReady=None, stopRespawn=False, isGodModeActive=False):
         vehicleStatus = _VEHICLE_STATUS.DEFAULT
         if isAlive:
             vehicleStatus |= _VEHICLE_STATUS.IS_ALIVE
@@ -460,6 +504,8 @@ class VehicleArenaInfoVO(object):
             vehicleStatus = _VEHICLE_STATUS.NOT_AVAILABLE
         if stopRespawn:
             vehicleStatus |= _VEHICLE_STATUS.STOP_RESPAWN
+        if isGodModeActive:
+            vehicleStatus |= _VEHICLE_STATUS.IS_GOD_MODE_ACTIVE
         return vehicleStatus
 
     def __getPlayerStatus(self, isTeamKiller=None):

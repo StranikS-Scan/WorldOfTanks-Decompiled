@@ -140,6 +140,24 @@ class ConfirmCancelDialogBuilder(BaseDialogBuilder):
         self.getButton(DialogButtons.CANCEL).label = text
 
 
+class ChooseOrCancelDialogBuilder(BaseDialogBuilder):
+    __slots__ = ()
+    PRIMARY = 'primary'
+    SECONDARY = 'secondary'
+
+    def __init__(self, uniqueID=None):
+        super(ChooseOrCancelDialogBuilder, self).__init__(uniqueID)
+        self.addButton(ButtonPresenter(R.strings.dialogs.dialogTemplates.ok(), ChooseOrCancelDialogBuilder.PRIMARY))
+        self.setFocusedButtonID(ChooseOrCancelDialogBuilder.PRIMARY)
+        self.addButton(ButtonPresenter(R.strings.dialogs.dialogTemplates.cancel(), ChooseOrCancelDialogBuilder.SECONDARY))
+
+    def setPrimaryButtonLabel(self, text):
+        self.getButton(ChooseOrCancelDialogBuilder.PRIMARY).label = text
+
+    def setSecondaryButtonLabel(self, text):
+        self.getButton(ChooseOrCancelDialogBuilder.SECONDARY).label = text
+
+
 class AlertBuilder(BaseDialogBuilder):
     __slots__ = ()
 

@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.view.battle.battle_royale.page import BattleRoyalePage
 from gui.Scaleform.daapi.view.battle.battle_royale.radar import RadarButton
 from gui.Scaleform.daapi.view.battle.battle_royale.status_notifications.panel import StatusNotificationTimerPanel
 from gui.Scaleform.daapi.view.battle.battle_royale.player_stats_in_battle import BattleRoyalePlayerStats
+from gui.Scaleform.daapi.view.battle.shared.indicators import SixthSenseIndicator
 from gui.Scaleform.daapi.view.battle.shared.page import BattlePageBusinessHandler
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
@@ -57,6 +58,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL, BattleLevelPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL, battle_royale_players_panel.PlayersPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN, SelectRespawnComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.SIXTH_SENSE, SixthSenseIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BR_PLAYER_STATS_IN_BATTLE, BattleRoyalePlayerStats, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYERS_PANEL, observer_players_panel.ObserverPlayersPanel, ScopeTemplates.DEFAULT_SCOPE))
 

@@ -81,7 +81,7 @@ def _validateVehiclesCDList(vehiclesCDs):
     return all((_doesVehicleCDExist(vehicleCD) for vehicleCD in vehiclesCDs))
 
 
-def _validateItemsPack(items):
+def _validateItemsPack(items, *_):
     _validateItemsRequiredFields(items)
     _validateItemsPackTypes(items)
     _validateItemsCompensationRequiredFields(items)
@@ -251,6 +251,8 @@ def _parseRent(offer):
 def _getOfferCrew(offer):
     if offer.get('event_type', '') in _CUSTOM_CREW_KEYS:
         crew = ItemPackType.CREW_CUSTOM
+    elif offer.get('crewLvl', None) is not None:
+        crew = offer['crewLvl']
     elif Money(**offer.get('buy_price', MONEY_UNDEFINED)).gold:
         crew = ItemPackType.CREW_100
     else:
@@ -268,7 +270,7 @@ class _VehicleSchema(W2CSchema):
     vehicle_id = Field(required=True, type=int)
 
 
-def _buyPriceValidator(value):
+def _buyPriceValidator(value, *_):
     value = value.copy()
     _validatePrice(value)
     value.pop('discount', None)
@@ -287,15 +289,15 @@ def _validatePrice(tData, errorStr=''):
     return
 
 
-def _validateHiddenBlocks(hiddenBlocks):
+def _validateBlocks(_, hiddenBlocks):
     return all((block in OptionalBlocks.ALL for block in hiddenBlocks))
 
 
 class _VehiclePreviewSchema(W2CSchema):
     vehicle_id = Field(required=True, type=int)
     back_url = Field(required=False, type=basestring)
-    items = Field(required=False, type=list, validator=lambda value, _: _validateItemsPack(value))
-    hidden_blocks = Field(required=False, type=list, default=None, validator=lambda hiddenBlocks, _: _validateHiddenBlocks(hiddenBlocks))
+    items = Field(required=False, type=list, validator=_validateItemsPack)
+    hidden_blocks = Field(required=False, type=list, default=None, validator=_validateBlocks)
 
 
 class _VehicleOffersPreviewSchema(W2CSchema):
@@ -308,15 +310,15 @@ class _VehicleOffersPreviewSchema(W2CSchema):
 class _VehiclePackPreviewSchema(W2CSchema):
     title = Field(required=True, type=basestring)
     end_date = Field(required=False, type=basestring)
-    buy_price = Field(required=True, type=dict, validator=lambda value, _: _buyPriceValidator(value))
-    items = Field(required=True, type=(list, NoneType), validator=lambda value, _: _validateItemsPack(value))
+    buy_price = Field(required=True, type=dict, validator=_buyPriceValidator)
+    items = Field(required=True, type=(list, NoneType), validator=_validateItemsPack)
     back_url = Field(required=False, type=basestring)
     buy_params = Field(required=False, type=dict)
 
 
 class _MarathonVehiclePackPreviewSchema(W2CSchema):
     title = Field(required=True, type=basestring)
-    items = Field(required=True, type=(list, NoneType), validator=lambda value, _: _validateItemsPack(value))
+    items = Field(required=True, type=(list, NoneType), validator=_validateItemsPack)
     marathon_prefix = Field(required=True, type=basestring)
 
 

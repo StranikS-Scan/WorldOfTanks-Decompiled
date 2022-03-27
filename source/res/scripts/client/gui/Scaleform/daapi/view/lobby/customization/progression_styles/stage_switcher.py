@@ -47,13 +47,18 @@ class StageSwitcherView(ViewImpl):
         with self.getViewModel().transaction() as model:
             model.setCurrentLevel(progressionLevel)
             model.setSelectedLevel(progressionLevel)
-            self.__setAdditionalStyleInfo(model)
+            style = self.__ctx.mode.modifiedStyle
+            if style.isProgressionRewindEnabled:
+                model.setNumberOfBullets(style.maxProgressionLevel)
+                model.setIsBulletsBeforeCurrentDisabled(False)
+                model.setSwitcherType(SwitcherType.TEXT)
+                model.setStyleID(style.id)
 
     def _finalize(self):
         super(StageSwitcherView, self)._finalize()
         self.viewModel.onChange -= self.__onChange
-        self.__ctx.events.onItemsRemoved -= self.__onItemsRemoved
         self.__ctx.events.onItemInstalled -= self.__onItemInstalled
+        self.__ctx.events.onItemsRemoved -= self.__onItemsRemoved
         self.__ctx = None
         return
 
@@ -80,13 +85,4 @@ class StageSwitcherView(ViewImpl):
                 self.__ctx.mode.changeStyleProgressionLevel(selectedLevel)
             else:
                 self.__customizationService.changeStyleProgressionLevelPreview(selectedLevel)
-        return
-
-    def __setAdditionalStyleInfo(self, model):
-        style = self.__ctx.mode.modifiedStyle
-        if style is not None and style.isProgressionRewindEnabled:
-            model.setNumberOfBullets(style.maxProgressionLevel)
-            model.setIsBulletsBeforeCurrentDisabled(False)
-            model.setSwitcherType(SwitcherType.TEXT)
-            model.setStyleID(style.id)
         return

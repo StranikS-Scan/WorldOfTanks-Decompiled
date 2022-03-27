@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/__init__.py
 import types
+import weakref
 import BigWorld
 import ResMgr
 import Settings
@@ -214,3 +215,7 @@ class ClanQuestButtonHandler(object):
         url = value.get('action_url', '') if isinstance(value, dict) else ''
         showClanQuestWindow(getClanQuestURL() + url)
         return
+
+
+def weakProxy(obj):
+    return weakref.proxy(obj) if type(obj).__name__ != 'weakproxy' else obj

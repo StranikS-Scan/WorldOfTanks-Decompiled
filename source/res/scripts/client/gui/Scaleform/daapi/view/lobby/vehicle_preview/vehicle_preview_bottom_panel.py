@@ -42,7 +42,7 @@ from gui.shop import canBuyGoldForVehicleThroughWeb, showBuyGoldForBundle, showB
 from helpers import dependency, int2roman, time_utils
 from helpers.i18n import makeString as _ms
 from items_kit_helper import BOX_TYPE, OFFER_CHANGED_EVENT, getActiveOffer, lookupItem, mayObtainForMoney, mayObtainWithMoneyExchange, showItemTooltip
-from shared_utils import findFirst, first
+from shared_utils import findFirst
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import ICalendarController, IExternalLinksController, IHeroTankController, IMarathonEventsController, IRestoreController, ITradeInController, IVehicleComparisonBasket
 from skeletons.gui.goodies import IGoodiesCache
@@ -436,6 +436,14 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buyItemPack())
         elif self.__offers and self.__currentOffer:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.rent())
+            currentOffer = self.__currentOffer
+            price = currentOffer.buyParams['priceAmount']
+            priceCode = currentOffer.buyParams['priceCode']
+            defPrice = currentOffer.buyPrice.get(priceCode)
+            if price != defPrice:
+                self.__oldPrice = Money(**{priceCode: defPrice})
+                self.__price = Money(**{priceCode: price})
+                itemPrices = ItemPrice(price=self.__price, defPrice=self.__oldPrice)
             self.__title = self.__getCurrentOfferTitle()
         else:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy())
@@ -536,10 +544,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
     def __getCurrentOfferTitle(self):
         if self.__offers and self.__currentOffer:
             if self.__currentOffer.eventType == 'frontline':
-                firstRent = first(self.__currentOffer.rent)
-                if len(self.__offers) > 1 or firstRent and firstRent.get('season') is not None:
-                    return _ms(backport.text(R.strings.vehicle_preview.buyingPanel.offer.rent.title.frontline.ordinal()))
-                return _ms(backport.text(R.strings.vehicle_preview.buyingPanel.offer.rent.title.frontline.single_cycle()), cycles=self.__currentOffer.name)
+                return _ms(backport.text(R.strings.vehicle_preview.buyingPanel.offer.rent.title.frontline.ordinal()))
         return self.__title
 
     def __getCurrentOfferDescription(self):

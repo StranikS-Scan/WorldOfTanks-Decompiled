@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/app_loader/observers.py
 import weakref
 import typing
+import BattleReplay
 from constants import ARENA_GUI_TYPE, ACCOUNT_KICK_REASONS
 from frameworks.state_machine import SingleStateObserver
 from frameworks.state_machine import BaseStateObserver
@@ -15,7 +16,33 @@ from skeletons.connection_mgr import DisconnectReason
 from skeletons.gui.app_loader import GuiGlobalSpaceID
 from skeletons.gameplay import GameplayStateID, IGameplayLogic
 
-class AppLoaderObserver(SingleStateObserver):
+def makePredicatedObservers(predicate, *observers):
+    for observer in observers:
+        observer.addPredicate(predicate)
+
+    return observers
+
+
+class PredicativeSingleStateObserver(SingleStateObserver):
+    __slots__ = ('_predicates',)
+
+    def __init__(self, stateID):
+        super(PredicativeSingleStateObserver, self).__init__(stateID)
+        self._predicates = set()
+
+    def addPredicate(self, predicate):
+        self._predicates.add(predicate)
+
+    def removePredicate(self, predicate):
+        self._predicates.discard(predicate)
+
+    def onStateChanged(self, stateID, flag, event=None):
+        if not all((p() for p in self._predicates)):
+            return
+        super(PredicativeSingleStateObserver, self).onStateChanged(stateID, flag, event)
+
+
+class AppLoaderObserver(PredicativeSingleStateObserver):
     __slots__ = ('_proxy',)
 
     def __init__(self, stateID, proxy):
@@ -26,6 +53,21 @@ class AppLoaderObserver(SingleStateObserver):
         self._proxy = None
         super(AppLoaderObserver, self).clear()
         return
+
+
+class BattleStateResetObserver(AppLoaderObserver):
+
+    def getStateIDs(self):
+        return super(BattleStateResetObserver, self).getStateIDs() + (GameplayStateID.ACCOUNT,)
+
+    def onStateChanged(self, stateID, flag, event=None):
+        if stateID == GameplayStateID.ACCOUNT:
+            self.resetBattleState()
+        else:
+            super(BattleStateResetObserver, self).onStateChanged(stateID, flag, event)
+
+    def resetBattleState(self):
+        pass
 
 
 class WaitingObserver(AppLoaderObserver):
@@ -74,7 +116,7 @@ class LobbyObserver(AppLoaderObserver):
         self._proxy.changeSpace(spaces.LobbySpace())
 
 
-class SwitchToBattleObserver(AppLoaderObserver):
+class SwitchToBattleObserver(BattleStateResetObserver):
     __slots__ = ()
 
     def onEnterState(self, event=None):
@@ -87,7 +129,7 @@ class SwitchToBattleObserver(AppLoaderObserver):
         return
 
 
-class BattleLoadingObserver(AppLoaderObserver):
+class BattleLoadingObserver(BattleStateResetObserver):
     __slots__ = ()
 
     def onEnterState(self, event=None):
@@ -133,6 +175,22 @@ class SwitchToLobbyObserver(AppLoaderObserver):
             self._proxy.createLobby()
 
 
+class ReplayEnteringOnlineObserver(AppLoaderObserver):
+    __slots__ = ()
+
+    def onEnterState(self, event=None):
+        print 'ReplayEnteringOnlineObserver.onEnterState: event=%s' % str(event)
+        self._proxy.destroyLobby()
+
+
+class ReplayExitingOnlineObserver(AppLoaderObserver):
+    __slots__ = ()
+
+    def onEnterState(self, event=None):
+        print 'ReplayExitingOnlineObserver.onEnterState: event=%s' % str(event)
+        self._proxy.destroyBattle()
+
+
 class ReplayVersionDiffersObserver(AppLoaderObserver):
     __slots__ = ()
 
@@ -146,6 +204,9 @@ class ReplayCreateBattleObserver(SwitchToBattleObserver):
 
     def __init__(self, stateID, proxy):
         super(ReplayCreateBattleObserver, self).__init__(stateID, proxy)
+        self.__isInvoked = False
+
+    def resetBattleState(self):
         self.__isInvoked = False
 
     def onEnterState(self, event=None):
@@ -164,6 +225,9 @@ class ReplayBattleLoadingObserver(BattleLoadingObserver):
 
     def getStateIDs(self):
         return super(ReplayBattleLoadingObserver, self).getStateIDs() + (self.__toggleID,)
+
+    def resetBattleState(self):
+        self.__isToggled = False
 
     def onStateChanged(self, stateID, flag, event=None):
         if self.__toggleID == stateID:
@@ -196,7 +260,7 @@ class ReplayBattlePageObserver(AppLoaderObserver):
         return
 
 
-class ReplayFinishObserver(SingleStateObserver):
+class ReplayFinishObserver(PredicativeSingleStateObserver):
     __slots__ = ()
 
     def onEnterState(self, event=None):
@@ -223,7 +287,16 @@ class NormalAppTracker(StateObserversContainer):
     __slots__ = ()
 
     def __init__(self, proxy):
-        super(NormalAppTracker, self).__init__(CreateLobbyObserver(GameplayStateID.OFFLINE, proxy), IntroVideoObserver(GameplayStateID.INTRO_VIDEO, proxy), LoginObserver(GameplayStateID.LOGIN, proxy), LobbyObserver(GameplayStateID.ACCOUNT_SHOW_GUI, proxy), SwitchToBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), BattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, proxy), BattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, proxy), BattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), SwitchToLobbyObserver(GameplayStateID.ACCOUNT_ENTERING, GameplayStateID.AVATAR_EXITING, proxy))
+        common = (CreateLobbyObserver(GameplayStateID.OFFLINE, proxy),
+         IntroVideoObserver(GameplayStateID.INTRO_VIDEO, proxy),
+         LoginObserver(GameplayStateID.LOGIN, proxy),
+         LobbyObserver(GameplayStateID.ACCOUNT_SHOW_GUI, proxy),
+         ReplayEnteringOnlineObserver(GameplayStateID.SERVER_REPLAY_ENTERING, proxy),
+         ReplayExitingOnlineObserver(GameplayStateID.SERVER_REPLAY_EXITING, proxy))
+        battle = makePredicatedObservers(lambda : not BattleReplay.isPlaying(), SwitchToBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), BattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, proxy), BattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, proxy), BattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), SwitchToLobbyObserver(GameplayStateID.ACCOUNT_ENTERING, GameplayStateID.AVATAR_EXITING, proxy))
+        replay = makePredicatedObservers(BattleReplay.isPlaying, ReplayCreateBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayBattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayFinishObserver(GameplayStateID.BATTLE_REPLAY_FINISHED), ReplayRewindObserver(GameplayStateID.BATTLE_REPLAY_REWIND, proxy))
+        observers = common + battle + replay
+        super(NormalAppTracker, self).__init__(*observers)
 
 
 class ReplayAppTracker(StateObserversContainer):

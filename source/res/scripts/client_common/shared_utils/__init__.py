@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/__init__.py
 import collections
+import inspect
+import time
 import itertools
 import logging
 import types
 import weakref
-from functools import partial
+from functools import partial, wraps
 import typing
 import BigWorld
 from adisp import async
@@ -103,6 +105,24 @@ def allEqual(sequence, accessor=None):
         return True
 
     return all((accessor(first_) == accessor(rest) for rest in iterable)) if accessor else all((first_ == rest for rest in iterable))
+
+
+def unwrap(obj):
+    if isinstance(obj, type):
+        return obj
+    closure = obj.func_closure
+    if closure:
+        for cell in closure:
+            contents = cell.cell_contents
+            if contents is obj:
+                continue
+            isDecorator = inspect.isfunction(contents) or inspect.ismethod(contents) or inspect.isclass(contents)
+            if isDecorator:
+                unwrapped = unwrap(contents)
+                if unwrapped:
+                    return unwrapped
+
+    return obj
 
 
 class CONST_CONTAINER(object):
@@ -270,3 +290,16 @@ def nextTick(func):
 def awaitNextFrame(callback):
     BigWorld.callback(0.0, partial(callback, None))
     return
+
+
+def timeit(method):
+
+    def timed(*args, **kw):
+        ts = time.time()
+        result = method(*args, **kw)
+        te = time.time()
+        rt = te - ts
+        _logger.info('%s elapsed time: %s sec', method.__name__, rt)
+        return result
+
+    return timed

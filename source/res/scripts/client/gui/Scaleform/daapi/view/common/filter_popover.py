@@ -7,6 +7,7 @@ import constants
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from gui import GUI_NATIONS
+from gui.rts_battles.rts_constants import RTS_CAROUSEL_FILTER_KEY
 from gui.Scaleform import getNationsFilterAssetPath, getVehicleTypeAssetPath, getLevelsAssetPath, getButtonsAssetPath
 from gui.Scaleform.daapi.view.common.filter_contexts import FilterSetupContext, getFilterPopoverSetupContexts
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass import BattlePassFilterConsts
@@ -210,7 +211,7 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
     @classmethod
     def _generateMapping(cls, hasRented, hasEvent, hasRoles, **kwargs):
         mapping = {_SECTION.NATIONS: GUI_NATIONS,
-         _SECTION.VEHICLE_TYPES: VEHICLE_TYPES_ORDER,
+         _SECTION.VEHICLE_TYPES: [ vType for vType in VEHICLE_TYPES_ORDER ],
          _SECTION.LEVELS: _VEHICLE_LEVEL_FILTERS,
          _SECTION.SPECIALS: [],
          _SECTION.HIDDEN: [],
@@ -335,6 +336,18 @@ class BattleRoyaleCarouselFilterPopover(TankCarouselFilterPopover):
          'elite']
 
 
+class RTSCarouselFilterPopover(TankCarouselFilterPopover):
+
+    @classmethod
+    def _getBaseSpecialSection(cls):
+        return ['favorite', 'premium', 'elite']
+
+    def _generateMapping(self, hasRented, hasEvent, hasRoles, **kwargs):
+        mapping = super(RTSCarouselFilterPopover, self)._generateMapping(hasRented, hasEvent, hasRoles, **kwargs)
+        mapping[_SECTION.HIDDEN].append(RTS_CAROUSEL_FILTER_KEY)
+        return mapping
+
+
 class BattleTankCarouselFilterPopover(TankCarouselFilterPopover):
 
     def _getInitialVO(self, filters, xpRateMultiplier):
@@ -377,3 +390,34 @@ class StorageBlueprintsFilterPopover(VehiclesFilterPopover):
         mapping = super(StorageBlueprintsFilterPopover, self)._generateMapping(hasRented, hasEvent, hasRoles, **kwargs)
         mapping[_SECTION.HIDDEN].append('unlock_available')
         return mapping
+
+
+class RTSRosterFilterPopover(TankCarouselFilterPopover):
+    __slots__ = ('_tankCarousel', '_vehicleTypesFilter')
+
+    @classmethod
+    def _getBaseSpecialSection(cls):
+        return []
+
+    def __init__(self, ctx):
+        super(RTSRosterFilterPopover, self).__init__(ctx)
+        self._vehicleTypesFilter = []
+        self._tankCarousel = ctx['data']
+
+    def _generateMapping(self, hasRented, hasEvent, hasRoles, **kwargs):
+        mapping = super(RTSRosterFilterPopover, self)._generateMapping(hasRented, hasEvent, hasRoles, **kwargs)
+        mapping[_SECTION.LEVELS] = []
+        mapping[_SECTION.TEXT_SEARCH] = []
+        return mapping
+
+    def _getInitialVO(self, filters, xpRateMultiplier):
+        vo = super(RTSRosterFilterPopover, self)._getInitialVO(filters, xpRateMultiplier)
+        vo['searchSectionVisible'] = False
+        vo['specialSectionVisible'] = False
+        vo['hiddenSectionVisible'] = False
+        vo['levelsLabel'] = ''
+        return vo
+
+    def _populate(self):
+        super(RTSRosterFilterPopover, self)._populate()
+        self.setTankCarousel(self._tankCarousel)

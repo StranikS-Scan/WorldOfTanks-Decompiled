@@ -158,6 +158,7 @@
     <areaBorderModel>	system/models/fx_area_border.model	</areaBorderModel>
     <projDecalDefaultGM>	system/maps/projection_decal_default_GM.dds	</projDecalDefaultGM>
     <areaBorderModelSmall>	system/models/fx_area_border_small.model	</areaBorderModelSmall>
+    <tankPathUVSpeed>	1.0	</tankPathUVSpeed>
   </gameplay>
   <asset_pipeline>
     <havok_processor>
@@ -170,6 +171,7 @@
       <module>	client.cgf_components.marker_component	</module>
       <module>	client.vehicle_systems.components.debris_crashed_tracks	</module>
       <module>	client.vehicle_systems.components.vehicle_custom_effects_settings	</module>
+      <module>	client.rts.base_highlight	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>

@@ -172,7 +172,7 @@ class ClientHangarSpace(object):
         BigWorld.worldDrawEnabled(False)
         BigWorld.wg_setSpecialFPSMode()
         self.__onLoadedCallback = onSpaceLoadedCallback
-        self.__spaceId = BigWorld.createSpace()
+        self.__spaceId = BigWorld.createSpace(True)
         isIGR = self.igrCtrl.getRoomType() == constants.IGR_TYPE.PREMIUM
         spacePath = _getHangarPath(isPremium, isIGR)
         spaceType = _getHangarType(isPremium)
@@ -420,10 +420,9 @@ class _ClientHangarSpacePathOverride(object):
             try:
                 data = json.loads(notification['data'])
                 path = data['hangar']
+                visibilityMask = getHangarFullVisibilityMask(path)
                 if 'visibilityMask' in data:
                     visibilityMask = int(data['visibilityMask'], 16)
-                else:
-                    visibilityMask = getHangarFullVisibilityMask(path)
             except Exception:
                 path = notification['data']
                 visibilityMask = getHangarFullVisibilityMask(path)

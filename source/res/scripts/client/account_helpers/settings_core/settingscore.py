@@ -6,7 +6,7 @@ from InterfaceScaleManager import InterfaceScaleManager
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager, SETTINGS_SECTIONS
-from account_helpers.settings_core.settings_constants import SPGAim
+from account_helpers.settings_core.settings_constants import SPGAim, CONTOUR
 from adisp import process
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.locale.SETTINGS import SETTINGS
@@ -80,6 +80,7 @@ class SettingsCore(ISettingsCore):
         DOG_TAGS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.DOG_TAGS)
         BATTLE_HUD_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_HUD)
         SPG_AIM_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.SPG_AIM)
+        CONTOUR_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.CONTOUR)
         MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(GAME_SETTINGS_STORAGE)
         EXTENDED_MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(EXTENDED_GAME_SETTINGS_STORAGE)
         self.__storages = {'game': GAME_SETTINGS_STORAGE,
@@ -105,7 +106,8 @@ class SettingsCore(ISettingsCore):
          'battleComm': BATTLE_COMM_SETTINGS_STORAGE,
          'battleHud': BATTLE_HUD_SETTINGS_STORAGE,
          'dogTags': DOG_TAGS_SETTINGS_STORAGE,
-         'spgAim': SPG_AIM_SETTINGS_STORAGE}
+         'spgAim': SPG_AIM_SETTINGS_STORAGE,
+         'contour': CONTOUR_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
         graphicSettings = tuple(((settingName, options.GraphicSetting(settingName, settingName == GRAPHICS.COLOR_GRADING_TECHNIQUE)) for settingName in BigWorld.generateGfxSettings()))
@@ -176,6 +178,7 @@ class SettingsCore(ISettingsCore):
          (GAME.MINIMAP_ALPHA_ENABLED, options.StorageAccountSetting(GAME.MINIMAP_ALPHA_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.MINIMAP_MIN_SPOTTING_RANGE, options.StorageAccountSetting(GAME.MINIMAP_MIN_SPOTTING_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.SWITCH_SETUPS_IN_LOADING, options.SwitchSetupsInLoadingSetting(GAME.SWITCH_SETUPS_IN_LOADING)),
+         (GAME.SCROLL_SMOOTHING, options.StorageAccountSetting(GAME.SCROLL_SMOOTHING, storage=EXTENDED_GAME_2_SETTINGS_STORAGE)),
          (GRAPHICS.MONITOR, options.MonitorSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.WINDOW_SIZE, options.WindowSizeSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.RESOLUTION, options.ResolutionSetting(storage=VIDEO_SETTINGS_STORAGE)),
@@ -255,7 +258,9 @@ class SettingsCore(ISettingsCore):
          (SPGAim.SPG_STRATEGIC_CAM_MODE, options.SPGStrategicCamMode(SPGAim.SPG_STRATEGIC_CAM_MODE, storage=SPG_AIM_SETTINGS_STORAGE)),
          (SPGAim.AUTO_CHANGE_AIM_MODE, options.SPGAimSetting(SPGAim.AUTO_CHANGE_AIM_MODE, storage=SPG_AIM_SETTINGS_STORAGE)),
          (SPGAim.AIM_ENTRANCE_MODE, options.SPGAimEntranceMode(SPGAim.AIM_ENTRANCE_MODE, storage=SPG_AIM_SETTINGS_STORAGE)),
-         (SPGAim.SCROLL_SMOOTHING_ENABLED, options.SPGAimSetting(SPGAim.SCROLL_SMOOTHING_ENABLED, storage=SPG_AIM_SETTINGS_STORAGE)),
+         (CONTOUR.ENHANCED_CONTOUR, options.ContourSetting(CONTOUR.ENHANCED_CONTOUR, storage=CONTOUR_SETTINGS_STORAGE)),
+         (CONTOUR.CONTOUR_PENETRABLE_ZONE, options.ContourPenetratableZoneSetting(CONTOUR.CONTOUR_PENETRABLE_ZONE, storage=CONTOUR_SETTINGS_STORAGE)),
+         (CONTOUR.CONTOUR_IMPENETRABLE_ZONE, options.ContourImpenetratableZoneSetting(CONTOUR.CONTOUR_IMPENETRABLE_ZONE, storage=CONTOUR_SETTINGS_STORAGE)),
          (MARKERS.ENEMY, options.VehicleMarkerSetting(MARKERS.ENEMY, storage=MARKERS_SETTINGS_STORAGE)),
          (MARKERS.DEAD, options.VehicleMarkerSetting(MARKERS.DEAD, storage=MARKERS_SETTINGS_STORAGE)),
          (MARKERS.ALLY, options.VehicleMarkerSetting(MARKERS.ALLY, storage=MARKERS_SETTINGS_STORAGE)),

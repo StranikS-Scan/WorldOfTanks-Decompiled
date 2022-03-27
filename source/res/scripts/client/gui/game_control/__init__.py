@@ -38,7 +38,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.veh_comparison_basket import VehComparisonBasket as _VehComparison
     from gui.game_control.wallet import WalletController as _Wallet
     from gui.game_control.trade_in import TradeInController as _TradeIn
-    from gui.game_control.personal_trade_in import PersonalTradeInController as _PersonalTradeIn
     from gui.game_control.quests_controller import QuestsController as _Quests
     from gui.game_control.ranked_battles_controller import RankedBattlesController as _Ranked
     from gui.game_control.hangar_loading_controller import HangarLoadingController as _HangarLoading
@@ -72,6 +71,9 @@ def getGameControllersConfig(manager):
     from gui.game_control.event_battles_controller import EventBattlesController
     from gui.game_control.gift_system_controller import GiftSystemController
     from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
+    from gui.game_control.rts_battles_controller import RTSBattlesController
+    from gui.game_control.rts_progression_controller import RTSProgressionController
+    from gui.rts_battles.rts_notifications import RTSEventNotifications
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -103,7 +105,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IClanLockController, _ClanLocks())
     _config(_interface.IVehicleComparisonBasket, _VehComparison())
     _config(_interface.ITradeInController, _TradeIn())
-    _config(_interface.IPersonalTradeInController, _PersonalTradeIn())
     _config(_interface.IQuestsController, _Quests())
     _config(_interface.IBootcampController, _Bootcamp())
     _config(_interface.IRankedBattlesController, _Ranked())
@@ -143,3 +144,6 @@ def getGameControllersConfig(manager):
     _config(_interface.ITelecomRentalsNotificationController, TelecomRentalsNotificationController())
     _config(_interface.IGiftSystemController, GiftSystemController())
     _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
+    _config(_interface.IRTSBattlesController, RTSBattlesController())
+    _config(_interface.IRTSProgressionController, RTSProgressionController())
+    _config(_interface.IRTSNotificationsController, RTSEventNotifications())

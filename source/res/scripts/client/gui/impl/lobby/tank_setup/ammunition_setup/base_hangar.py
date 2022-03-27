@@ -275,7 +275,6 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
                     self._tankSetup.resetVehicle(self._vehItem)
                     self._tankSetup.update(fullUpdate=True)
                 else:
-                    print '_resetVehicleSetups__________'
                     self._resetVehicleSetups()
                     self._vehItem.getItem().settings = g_currentVehicle.item.settings
                 self._ammunitionPanel.updateVehicle(self._vehItem.getItem())

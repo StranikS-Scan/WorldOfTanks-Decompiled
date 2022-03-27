@@ -45,10 +45,10 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         else:
             quest = self.__quests.get(eventID)
             detailedData = missions_helper.getDetailedMissionData(quest)
-            criteria, extraConditions, isForBattleRoyale = detailedData.getVehicleRequirementsCriteria()
+            criteria, extraConditions, hideVehicleSelection = detailedData.getVehicleRequirementsCriteria()
             vehicleSelector.as_closeS()
             if criteria and not quest.isCompleted():
-                vehicleSelector.setCriteria(criteria, extraConditions, isForBattleRoyale)
+                vehicleSelector.setCriteria(criteria, extraConditions, hideVehicleSelection)
             else:
                 vehicleSelector.as_hideSelectedVehicleS()
             return

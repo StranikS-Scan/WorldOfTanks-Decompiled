@@ -44,7 +44,7 @@ class VehiclePreviewBottomPanelStyleProgression(VehiclePreviewBottomPanelStylePr
 
 
 class ProgressionStylesBuyingPanelView(ViewImpl):
-    __slots__ = ('__styleLevel', '__ctx', '__availableLevel')
+    __slots__ = ('__styleLevel', '__availableLevel', '__ctx')
     __customizationService = dependency.descriptor(ICustomizationService)
     __hangarSpace = dependency.descriptor(IHangarSpace)
 

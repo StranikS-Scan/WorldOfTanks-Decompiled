@@ -10,7 +10,8 @@ class DualGunHelper(object):
     def updateGunReloadTime(self, avatar, vehicleID, activeGun, gunStates, cooldownTimes, ammoCtrl=None):
 
         def __callReloadTimeWrapper(leftTime, baseTime):
-            avatar.updateVehicleGunReloadTime(vehicleID, -1, baseTime)
+            if leftTime > 0 and leftTime == baseTime:
+                avatar.updateVehicleGunReloadTime(vehicleID, -1, baseTime / 10.0)
             avatar.updateVehicleGunReloadTime(vehicleID, leftTime / 10.0, baseTime / 10.0)
 
         if activeGun == DUAL_GUN.ACTIVE_GUN.LEFT:

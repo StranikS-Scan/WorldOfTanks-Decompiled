@@ -2,10 +2,12 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/appearance_cache_ctrls/__init__.py
 import BigWorld
 from items import vehicles
+from ModelHitTester import ModelHitStatus
 
 def getWholeVehModels(vDesc):
     nationID, vehicleTypeID = vehicles.g_list.getIDsByName(vDesc.name)
     vType = vehicles.g_cache.vehicle(nationID, vehicleTypeID)
+    hitTesters = vDesc.hitTesters
     prereqs = set(vDesc.prerequisites())
     bspModels = set()
     index = 0
@@ -19,22 +21,22 @@ def getWholeVehModels(vDesc):
                 prereqs.add(splinePairDesc.segment2ModelLeft())
                 prereqs.add(splinePairDesc.segment2ModelRight())
 
-        bspModels.add((index, chassie.hitTester.bspModelName))
+        bspModels.add((index, hitTesters.chassis.bspModelName))
         index += 1
 
     for hull in vType.hulls:
         prereqs.add(hull.models.undamaged)
-        bspModels.add((index, hull.hitTester.bspModelName))
+        bspModels.add((index, hitTesters.hull.bspModelName))
         index += 1
 
     for turrets in vType.turrets:
         for turret in turrets:
             prereqs.add(turret.models.undamaged)
-            bspModels.add((index, turret.hitTester.bspModelName))
+            bspModels.add((index, hitTesters.turret.bspModelName))
             index += 1
             for gun in turret.guns:
                 prereqs.add(gun.models.undamaged)
-                bspModels.add((index, gun.hitTester.bspModelName))
+                bspModels.add((index, hitTesters.gun.bspModelName))
                 index += 1
 
     prereqs.add(BigWorld.CollisionAssembler(tuple(bspModels), BigWorld.player().spaceID))

@@ -5,7 +5,6 @@ from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tooltips.additional_rewards_tooltip_model import AdditionalRewardsTooltipModel
 from gui.impl.pub import ViewImpl
-from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus
     from gui.shared.missions.packers.bonus import BonusUIPacker
@@ -20,7 +19,8 @@ class AdditionalRewardsTooltip(ViewImpl):
         settings.kwargs = kwargs
         super(AdditionalRewardsTooltip, self).__init__(settings)
         self.__bonuses = bonuses
-        self.__bonusPackers = bonusPacker or getDefaultBonusPacker()
+        from gui.impl.lobby.awards.packers import getAdditionalAwardsBonusPacker
+        self.__bonusPackers = bonusPacker or getAdditionalAwardsBonusPacker()
 
     @property
     def viewModel(self):

@@ -7,8 +7,59 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import PREBATTLE_RESTRICTION
 from helpers import dependency
 from skeletons.tutorial import ITutorialLoader
+from gui.shared.gui_items.Vehicle import Vehicle
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
+
+class _VehicleProxy(object):
+
+    def __init__(self, vehicle):
+        self.__vehicle = vehicle
+
+    def isUnsuitableToQueue(self):
+        state, _ = self.__vehicle.getState()
+        return state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
+
+    def isReadyToFight(self):
+        return self.__vehicle.isReadyToFight
+
+    def isPresent(self):
+        return True
+
+    def isInBattle(self):
+        return self.__vehicle.isInBattle
+
+    def isDisabled(self):
+        return self.__vehicle.isDisabled
+
+    def isTooHeavy(self):
+        return self.__vehicle.isTooHeavy
+
+    def isCrewFull(self):
+        return self.__vehicle.isCrewFull
+
+    def isBroken(self):
+        return self.__vehicle.isBroken
+
+    def isDisabledInRoaming(self):
+        return self.__vehicle.isDisabledInRoaming
+
+    def isDisabledInPremIGR(self):
+        return self.__vehicle.isDisabledInPremIGR
+
+    def isDisabledInRent(self):
+        return self.__vehicle.rentalIsOver
+
+    def isRotationGroupLocked(self):
+        return self.__vehicle.isRotationGroupLocked
+
+    def isPremiumIGR(self):
+        return self.__vehicle.isPremiumIGR
+
+    def hasInvalidState(self, invalidStates):
+        state, _ = self.__vehicle.getState()
+        return state in invalidStates
+
 
 class IActionsValidator(object):
 
@@ -38,33 +89,40 @@ class BaseActionsValidator(IActionsValidator):
         return True
 
 
-class CurrentVehicleActionsValidator(BaseActionsValidator):
+class BaseVehicleActionsValidator(BaseActionsValidator):
 
-    def _validate(self):
+    def _validate(self, vehicles=None, invalidStates=None):
         if g_currentPreviewVehicle.isPresent():
             return ValidationResult(False, PREBATTLE_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT)
-        if not g_currentVehicle.isReadyToFight():
-            if not g_currentVehicle.isPresent():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT)
-            if g_currentVehicle.isInBattle() or g_currentVehicle.isDisabled():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IN_BATTLE)
-            if g_currentVehicle.isTooHeavy():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_TOO_HEAVY)
-            if not g_currentVehicle.isCrewFull():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.CREW_NOT_FULL)
-            if g_currentVehicle.isBroken():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_BROKEN)
-            if g_currentVehicle.isDisabledInRoaming():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ROAMING)
-            if g_currentVehicle.isDisabledInPremIGR():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IN_PREMIUM_IGR_ONLY)
-            if g_currentVehicle.isDisabledInRent():
-                if g_currentVehicle.isPremiumIGR():
-                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IGR_RENTALS_IS_OVER)
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER)
-            if g_currentVehicle.isRotationGroupLocked():
-                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)
-        return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED) if g_currentVehicle.isUnsuitableToQueue() else super(CurrentVehicleActionsValidator, self)._validate()
+        vehiclesProxies = [ _VehicleProxy(vehicle) for vehicle in vehicles ] if vehicles else [g_currentVehicle]
+        for vehicleProxy in vehiclesProxies:
+            if vehicleProxy.isUnsuitableToQueue():
+                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
+            if vehicleProxy.hasInvalidState(invalidStates if invalidStates else ()):
+                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ADDITIONAL_INVALID)
+            if not vehicleProxy.isReadyToFight():
+                if not vehicleProxy.isPresent():
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT)
+                if vehicleProxy.isInBattle() or vehicleProxy.isDisabled():
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IN_BATTLE)
+                if vehicleProxy.isTooHeavy():
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_TOO_HEAVY)
+                if not vehicleProxy.isCrewFull():
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.CREW_NOT_FULL)
+                if vehicleProxy.isBroken():
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_BROKEN)
+                if vehicleProxy.isDisabledInRoaming():
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ROAMING)
+                if vehicleProxy.isDisabledInPremIGR():
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IN_PREMIUM_IGR_ONLY)
+                if vehicleProxy.isDisabledInRent():
+                    if vehicleProxy.isPremiumIGR():
+                        return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IGR_RENTALS_IS_OVER)
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER)
+                if vehicleProxy.isRotationGroupLocked():
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)
+
+        return super(BaseVehicleActionsValidator, self)._validate()
 
 
 class TutorialActionsValidator(BaseActionsValidator):

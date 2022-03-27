@@ -43,6 +43,7 @@
     <physicsMode>
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </physicsMode>
     <siegeState>
       <Type>	UINT8	</Type>
@@ -53,6 +54,7 @@
       <Flags>	ALL_CLIENTS	</Flags>
       <IsReliable>	false	</IsReliable>
       <SendLatestOnly>	true	</SendLatestOnly>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </gunAnglesPacked>
     <publicInfo>
       <Type>	PUBLIC_VEHICLE_INFO	</Type>
@@ -61,6 +63,7 @@
     <health>
       <Type>	INT16	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </health>
     <isCrewActive>
       <Type>	BOOL	</Type>
@@ -71,6 +74,7 @@
         <size>	2	</size>
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </engineMode>
     <damageStickers>
       <Type>	ARRAY	  <of>	UINT64	</of>
@@ -179,6 +183,10 @@
       <Type>	MAILBOX	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </avatar>
+    <avatarID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </avatarID>
     <arenaBase>
       <Type>	MAILBOX	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -204,16 +212,18 @@
       <Flags>	ALL_CLIENTS	</Flags>
     </masterVehID>
     <needsCount>
-      <Type>	BOOL	</Type>
+      <Type>	UINT8	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </needsCount>
     <arenaTypeID>
       <Type>	INT32	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
+      <Flags>	OWN_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </arenaTypeID>
     <arenaBonusType>
       <Type>	UINT8	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
+      <Flags>	OWN_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </arenaBonusType>
     <tkillRating>
       <Type>	FLOAT	</Type>
@@ -225,7 +235,8 @@
     </cp>
     <arenaUniqueID>
       <Type>	UINT64	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
+      <Flags>	OWN_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </arenaUniqueID>
     <accountDBID>
       <Type>	DB_ID	</Type>
@@ -319,6 +330,7 @@
     <_harm></_harm>
     <_inspireController></_inspireController>
     <_healPointController></_healPointController>
+    <_watchTowerVisibility></_watchTowerVisibility>
     <_entityExtraUserData></_entityExtraUserData>
     <_extras></_extras>
     <attrs></attrs>
@@ -444,10 +456,21 @@
     <setAvatar>
       <Arg>	MAILBOX	</Arg>
     </setAvatar>
+    <uncontrolFromAI>
+      <Arg>	MAILBOX	</Arg>
+    </uncontrolFromAI>
+    <getBackToAI></getBackToAI>
+    <onAimAtVehicle>
+      <Exposed></Exposed>
+      <Arg>	OBJECT_ID	</Arg>
+    </onAimAtVehicle>
     <registerObserver>
       <Arg>	MAILBOX	</Arg>
       <Arg>	BOOL	</Arg>
     </registerObserver>
+    <onCommanderReady>
+      <Arg>	MAILBOX	</Arg>
+    </onCommanderReady>
     <onClientConnected>
       <Arg>	BOOL	</Arg>
     </onClientConnected>
@@ -480,14 +503,6 @@
       <Arg>	OBJECT_ID	</Arg>
     </onConcealedFromEnemy>
     <onStopObservationByEnemy></onStopObservationByEnemy>
-    <updateVehicleAmmo>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT16	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	INT16	</Arg>
-      <Arg>	INT16	</Arg>
-    </updateVehicleAmmo>
     <onFlagAction>
       <Arg>	UINT8	</Arg>
       <Arg>	PYTHON	</Arg>

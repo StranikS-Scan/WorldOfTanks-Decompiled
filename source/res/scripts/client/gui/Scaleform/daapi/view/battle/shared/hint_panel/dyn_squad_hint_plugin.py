@@ -11,7 +11,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
-from gui.shared.utils.key_mapping import getReadableKey
+from gui.shared.utils.key_mapping import getReadableKey, getVirtualKey
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -95,9 +95,10 @@ class DynSquadHintPlugin(HintPanelPlugin):
 
     def _getHint(self):
         keyName = getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE)
+        key = getVirtualKey(CommandMapping.CMD_VOICECHAT_ENABLE)
         hintTextLeft = backport.text(R.strings.ingame_gui.dynamicSquad.hint.voipToggleKeyLeft())
         hintTextRight = backport.text(R.strings.ingame_gui.dynamicSquad.hint.voipToggleKeyRight())
-        return HintData(keyName, hintTextLeft, hintTextRight, 0, 0, HintPriority.DYN_SQUAD, False)
+        return HintData(key, keyName, hintTextLeft, hintTextRight, 0, 0, HintPriority.DYN_SQUAD, False)
 
     def __onToggleVoipChannel(self, *args, **kwargs):
         self._updateCounterOnUsed(self.__settings)

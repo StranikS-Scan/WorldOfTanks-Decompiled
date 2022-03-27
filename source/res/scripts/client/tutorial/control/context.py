@@ -155,6 +155,7 @@ class GLOBAL_FLAG(object):
     VEH_POST_PROGRESSION_ENABLED = '_VehPostProgressionEnabled'
     VEH_POST_PROGRESSION_PURCHASABLE = '_VehPostProgressionPurchasable'
     WOTPLUS_ENABLED = '_WotPlusEnabled'
+    RTS_SELECTOR_ENABLED = '_RTSSelectorEnabled'
     ALL = (IS_FLAGS_RESET,
      SHOW_HISTORY,
      HISTORY_NOT_AVAILABLE,
@@ -167,7 +168,8 @@ class GLOBAL_FLAG(object):
      CREW_BOOKS_ENABLED,
      COLLECTIBLE_VEHICLE_PREVIEW_ENABLED,
      DOGTAGS_ENABLED,
-     WOTPLUS_ENABLED)
+     WOTPLUS_ENABLED,
+     RTS_SELECTOR_ENABLED)
 
 
 class GlobalStorage(object):

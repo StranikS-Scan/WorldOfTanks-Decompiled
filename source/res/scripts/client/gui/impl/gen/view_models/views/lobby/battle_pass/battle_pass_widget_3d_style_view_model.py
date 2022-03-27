@@ -4,9 +4,9 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
 
 class BattlePassWidget3DStyleViewModel(ViewModel):
-    __slots__ = ('onPreviewClick',)
+    __slots__ = ('onPreviewClick', 'onExtraPreviewClick')
 
-    def __init__(self, properties=3, commands=1):
+    def __init__(self, properties=3, commands=2):
         super(BattlePassWidget3DStyleViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -31,3 +31,4 @@ class BattlePassWidget3DStyleViewModel(ViewModel):
         self._addStringProperty('styleName', '')
         self._addNumberProperty('styleId', 0)
         self.onPreviewClick = self._addCommand('onPreviewClick')
+        self.onExtraPreviewClick = self._addCommand('onExtraPreviewClick')

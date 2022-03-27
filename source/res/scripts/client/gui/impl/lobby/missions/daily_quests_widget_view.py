@@ -14,19 +14,18 @@ from gui.impl.lobby.missions.daily_quests_view import DailyTabs
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.main_wnd_state_watcher import ClientMainWindowStateWatcher
-from gui.shared.missions.packers.events import getEventUIDataPacker, findFirstConditionModel
+from gui.shared.missions.packers.events import getEventUIDataPacker
 from gui.shared.events import LobbySimpleEvent
 from gui.server_events.events_dispatcher import showDailyQuests
 from gui.server_events.events_helpers import dailyQuestsSortFunc, EventInfoModel
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.impl import IGuiLoader
+from gui.impl.gen.view_models.views.lobby.rts.rts_quest_model import RtsQuestModel
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
     from gui.server_events.event_items import ServerEventAbstract, DailyQuest
-    from typing import Optional, Any
-    from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQuestModel
-    from gui.impl.gen.view_models.common.missions.conditions.preformatted_condition_model import PreformattedConditionModel
+    from typing import Any
 MOUSE_BUTTON_RIGHT = 2
 MOUSE_BUTTON_LEFT = 0
 LARGE_WIDGET_LAYOUT_ID = 0
@@ -42,9 +41,9 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
     eventsCache = dependency.descriptor(IEventsCache)
     __gui = dependency.descriptor(IGuiLoader)
 
-    def __init__(self):
+    def __init__(self, event_settings=None):
         settings = ViewSettings(R.views.lobby.missions.DailyQuestsWidget(), ViewFlags.COMPONENT, DailyQuestsWidgetViewModel())
-        super(DailyQuestsWidgetView, self).__init__(settings)
+        super(DailyQuestsWidgetView, self).__init__(event_settings or settings)
         self.__parentId = None
         self.__tooltipEnabled = True
         self.__layout = 0
@@ -62,7 +61,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         else:
             if contentID == R.views.lobby.missions.DailyQuestsTooltip():
                 missionId = event.getArgument('missionId')
-                quests = self.eventsCache.getDailyQuests().values()
+                quests = self._getQuests()
                 for quest in quests:
                     if quest.getID() == missionId:
                         questUIPacker = getEventUIDataPacker(quest)
@@ -86,7 +85,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
             return
         with self.getViewModel().transaction() as tx:
             if value:
-                quests = sorted(self.eventsCache.getDailyQuests().values(), key=dailyQuestsSortFunc)
+                quests = sorted(self._getQuests(), key=dailyQuestsSortFunc)
                 self.__updateQuestsToBeIndicatedCompleted(tx, quests, True)
             tx.setVisible(value)
 
@@ -103,16 +102,10 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         if self.__markVisitedCallbackID != 0:
             BigWorld.cancelCallback(self.__markVisitedCallbackID)
 
-    @classmethod
-    def _getFirstConditionModelFromQuestModel(cls, dailyQuestModel):
-        postBattleModel = findFirstConditionModel(dailyQuestModel.postBattleCondition)
-        bonusConditionModel = findFirstConditionModel(dailyQuestModel.bonusCondition)
-        return postBattleModel if postBattleModel else bonusConditionModel
-
     def _updateViewModel(self):
         _logger.debug('DailyQuests::UpdatingViewModel')
         newCountdownVal = EventInfoModel.getDailyProgressResetTimeDelta()
-        quests = sorted(self.eventsCache.getDailyQuests().values(), key=dailyQuestsSortFunc)
+        quests = sorted(self._getQuests(), key=dailyQuestsSortFunc)
         if not needToUpdateQuestsInModel(quests, self.getViewModel().getQuests()):
             return
         else:
@@ -125,15 +118,19 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
                     questUIPacker = getEventUIDataPacker(quest)
                     fullQuestModel = questUIPacker.pack()
                     questModel = WidgetQuestModel()
-                    preFormattedConditionModel = self._getFirstConditionModelFromQuestModel(fullQuestModel)
-                    if preFormattedConditionModel is not None:
-                        questModel.setCurrentProgress(preFormattedConditionModel.getCurrent())
-                        questModel.setTotalProgress(preFormattedConditionModel.getTotal())
-                        questModel.setEarned(preFormattedConditionModel.getEarned())
-                        questModel.setDescription(preFormattedConditionModel.getDescrData())
+                    conditionModel = questUIPacker.getFirstAvailableCondition(fullQuestModel)
+                    if conditionModel is not None:
+                        questModel.setCurrentProgress(conditionModel.getCurrent())
+                        questModel.setTotalProgress(conditionModel.getTotal())
+                        questModel.setEarned(conditionModel.getEarned())
+                        description = conditionModel.getDescrData() or conditionModel.getTitleData()
+                        questModel.setDescription(description)
                     questModel.setId(fullQuestModel.getId())
                     questModel.setIcon(fullQuestModel.getIcon())
                     questModel.setCompleted(fullQuestModel.getStatus() == MISSIONS_STATES.COMPLETED)
+                    questModel.setCompletedCount(fullQuestModel.getCompletedCount())
+                    questModel.setTotalCount(fullQuestModel.getTotalCount())
+                    questModel.setIsRTS(isinstance(fullQuestModel, RtsQuestModel))
                     modelQuests.addViewModel(questModel)
                     fullQuestModel.unbind()
 
@@ -143,7 +140,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
 
     def _markVisited(self):
         if self.__layout == LARGE_WIDGET_LAYOUT_ID:
-            for quest in self.eventsCache.getDailyQuests().values():
+            for quest in self._getQuests():
                 self._scheduleMarkVisited(quest.getID())
 
     def _executeMarkVisited(self):
@@ -165,7 +162,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
                 newCountdownVal = EventInfoModel.getDailyProgressResetTimeDelta()
                 tx.setCountdown(newCountdownVal)
 
-    def __onQuestClick(self):
+    def _onQuestClick(self):
         showDailyQuests(subTab=DailyTabs.QUESTS)
 
     def __onHelpLayoutShow(self, _):
@@ -190,18 +187,21 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
             questCompletionChanged = self.eventsCache.questsProgress.getQuestCompletionChanged(quest.getID())
             if questCompletionChanged and markViewed:
                 self._scheduleMarkVisited(quest.getID())
-            indicateCompleteQuests.addBool(questCompletionChanged)
+            indicateCompleteQuests.addBool(quest.isCompleted())
 
         indicateCompleteQuests.invalidate()
 
     def __addListeners(self):
         self.eventsCache.onSyncCompleted += self.__onSyncCompleted
-        self.viewModel.onQuestClick += self.__onQuestClick
+        self.viewModel.onQuestClick += self._onQuestClick
         g_eventBus.addListener(LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__onHelpLayoutHide, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(LobbySimpleEvent.SHOW_HELPLAYOUT, self.__onHelpLayoutShow, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __removeListeners(self):
         self.eventsCache.onSyncCompleted -= self.__onSyncCompleted
-        self.viewModel.onQuestClick -= self.__onQuestClick
+        self.viewModel.onQuestClick -= self._onQuestClick
         g_eventBus.removeListener(LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__onHelpLayoutHide, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(LobbySimpleEvent.SHOW_HELPLAYOUT, self.__onHelpLayoutShow, scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def _getQuests(self):
+        return self.eventsCache.getDailyQuests().values()

@@ -18,6 +18,7 @@
     <Interface>	TriggersController_Avatar	</Interface>
     <Interface>	AvatarEpic	</Interface>
   </Implements>
+  <shouldRecordInServerReplays>	false	</shouldRecordInServerReplays>
   <Volatile>
     <position></position>
   </Volatile>
@@ -29,6 +30,7 @@
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </name>
     <sessionID>
       <Type>	STRING	</Type>
@@ -65,6 +67,7 @@
     <arenaUniqueID>
       <Type>	UINT64	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </arenaUniqueID>
     <syncData>
       <Type>	PYTHON	</Type>
@@ -73,6 +76,7 @@
     <arenaTypeID>
       <Type>	INT32	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </arenaTypeID>
     <accountDBID>
       <Type>	INT64	</Type>
@@ -81,19 +85,23 @@
     <arenaBonusType>
       <Type>	UINT8	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </arenaBonusType>
     <arenaGuiType>
       <Type>	UINT8	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </arenaGuiType>
     <arenaExtraData>
       <Type>	PYTHON	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
       <AllowUnsafeData>	true	</AllowUnsafeData>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </arenaExtraData>
     <weatherPresetID>
       <Type>	UINT8	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </weatherPresetID>
     <denunciationsLeft>
       <Type>	INT16	</Type>
@@ -102,6 +110,7 @@
     <clientCtx>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </clientCtx>
     <tkillIsSuspected>
       <Type>	BOOL	</Type>
@@ -114,6 +123,7 @@
     <team>
       <Type>	UINT8	</Type>
       <Flags>	OWN_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </team>
     <playerVehicleBase>
       <Type>	MAILBOX	</Type>
@@ -122,6 +132,7 @@
     <playerVehicleID>
       <Type>	OBJECT_ID	</Type>
       <Flags>	OWN_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </playerVehicleID>
     <playerVehicleTypeCompDescr>
       <Type>	UINT16	</Type>
@@ -130,6 +141,7 @@
     <isObserverBothTeams>
       <Type>	BOOL	</Type>
       <Flags>	OWN_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </isObserverBothTeams>
     <observableTeamID>
       <Type>	UINT8	</Type>
@@ -138,16 +150,19 @@
     <isGunLocked>
       <Type>	BOOL	</Type>
       <Flags>	OWN_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </isGunLocked>
     <ownVehicleGear>
       <Type>	UINT8	</Type>
       <Flags>	OWN_CLIENT	</Flags>
       <SendLatestOnly>	true	</SendLatestOnly>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </ownVehicleGear>
     <ownVehicleAuxPhysicsData>
       <Type>	UINT64	</Type>
       <Flags>	OWN_CLIENT	</Flags>
       <SendLatestOnly>	true	</SendLatestOnly>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </ownVehicleAuxPhysicsData>
     <ammo>
       <Type>	ARRAY	  <of>	INT32	</of>
@@ -216,7 +231,20 @@
     <playLimits>
       <Type>	PLAY_LIMITS	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </playLimits>
+    <aiRosterVehicles>
+      <Type>	LIST_OF_COMP_DESCRS	</Type>
+      <Flags>	BASE_AND_CLIENT	</Flags>
+    </aiRosterVehicles>
+    <isAICommander>
+      <Type>	BOOL	</Type>
+      <Flags>	BASE_AND_CLIENT	</Flags>
+    </isAICommander>
+    <commanderVehicleID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	BASE	</Flags>
+    </commanderVehicleID>
   </Properties>
   <TempProperties>
     <_Avatar__p></_Avatar__p>
@@ -246,11 +274,15 @@
     <onAutoAimVehicleLost>
       <Arg>	UINT8	</Arg>
     </onAutoAimVehicleLost>
+    <stopVehicleControl></stopVehicleControl>
+    <onStartVehicleControlFailed></onStartVehicleControlFailed>
     <receiveAccountStats>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	UINT32	</Arg>
       <Arg>	STRING	</Arg>
     </receiveAccountStats>
     <updateVehicleHealth>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	INT16	</Arg>
       <Arg>	INT8	</Arg>
@@ -258,6 +290,7 @@
       <Arg>	BOOL	</Arg>
     </updateVehicleHealth>
     <updateVehicleAmmo>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	UINT16	</Arg>
@@ -275,11 +308,13 @@
       </Arg>
     </onBootcampEvent>
     <updateVehicleSetting>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
     </updateVehicleSetting>
     <updateTargetingInfo>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
@@ -292,8 +327,10 @@
     </updateTargetingInfo>
     <updateTargetVehicleID>
       <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
     </updateTargetVehicleID>
     <showOwnVehicleHitDirection>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	FLOAT32	</Arg>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT16	</Arg>
@@ -304,6 +341,7 @@
       <Arg>	UINT8	</Arg>
     </showOwnVehicleHitDirection>
     <showOtherVehicleDamagedDevices>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	ARRAY	  <of>	EXTRA_ID	</of>
       </Arg>
@@ -311,6 +349,7 @@
       </Arg>
     </showOtherVehicleDamagedDevices>
     <showShotResults>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	ARRAY	  <of>	UINT64	</of>
       </Arg>
     </showShotResults>
@@ -319,18 +358,21 @@
       <Arg>	STRING	</Arg>
     </showDevelopmentInfo>
     <showHittingArea>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	UINT16	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT64	</Arg>
     </showHittingArea>
     <showCarpetBombing>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	UINT16	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT64	</Arg>
     </showCarpetBombing>
     <showTracer>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	SHOT_ID	</Arg>
       <Arg>	BOOL	</Arg>
@@ -342,10 +384,12 @@
       <Arg>	UINT8	</Arg>
     </showTracer>
     <stopTracer>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	SHOT_ID	</Arg>
       <Arg>	VECTOR3	</Arg>
     </stopTracer>
     <explodeProjectile>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	SHOT_ID	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
@@ -355,20 +399,27 @@
       </Arg>
     </explodeProjectile>
     <onRoundFinished>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	INT8	</Arg>
       <Arg>	UINT8	</Arg>
     </onRoundFinished>
     <onKickedFromArena>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	UINT8	</Arg>
     </onKickedFromArena>
     <onBattleEvents>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
+      <Arg>	OBJECT_ID	</Arg>
       <Arg>	ARRAY	  <of>	BATTLE_EVENT	</of>
       </Arg>
     </onBattleEvents>
     <battleEventsSummary>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
+      <Arg>	OBJECT_ID	</Arg>
       <Arg>	BATTLE_EVENTS_SUMMARY	</Arg>
     </battleEventsSummary>
     <updateArena>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	UINT8	</Arg>
       <Arg>	STRING	</Arg>
       <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
@@ -392,11 +443,13 @@
       </Arg>
     </updateCarriedFlagPositions>
     <receiveNotification>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	STRING	</Arg>
       <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
       </VariableLengthHeaderSize>
     </receiveNotification>
     <onRepairPointAction>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	FLOAT32	</Arg>
@@ -405,26 +458,29 @@
       <Arg>	STRING	</Arg>
     </updateAvatarPrivateStats>
     <updateResourceAmount>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT32	</Arg>
     </updateResourceAmount>
     <updateGasAttackState>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	UINT8	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
     </updateGasAttackState>
     <onFrictionWithVehicle>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	UINT8	</Arg>
     </onFrictionWithVehicle>
     <onCollisionWithVehicle>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
     </onCollisionWithVehicle>
     <onSmoke>
-      <Arg>	ARRAY	  <of>	SMOKE_INFO	</of>
-      </Arg>
+      <Arg>	SMOKE_INFO	</Arg>
     </onSmoke>
     <onCombatEquipmentShotLaunched>
       <Arg>	UINT16	</Arg>
@@ -446,8 +502,39 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR3	</Arg>
     </enemySPGShotSound>
+    <onRTSEvent>
+      <Arg>	UINT8	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	VECTOR3	</Arg>
+    </onRTSEvent>
+    <onRTSQueryResult>
+      <Arg>	ARRAY	  <of>	RTS_QUERY_RESULT	</of>
+      </Arg>
+    </onRTSQueryResult>
   </ClientMethods>
   <CellMethods>
+    <updateRTSOrder>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	ARRAY	  <of>	RTS_ORDER_UPDATE	</of>
+        <size>	7	</size>
+      </Arg>
+    </updateRTSOrder>
+    <queryRTSData>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	ARRAY	  <of>	RTS_QUERY	</of>
+        <size>	7	</size>
+      </Arg>
+    </queryRTSData>
+    <toggleRTSSpeedSync>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	BOOL	</Arg>
+    </toggleRTSSpeedSync>
+    <updateRTSGroup>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	ARRAY	  <of>	RTS_GROUP_UPDATE	</of>
+        <size>	7	</size>
+      </Arg>
+    </updateRTSGroup>
     <autoAim>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	OBJECT_ID	</Arg>
@@ -461,6 +548,14 @@
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	OBJECT_ID	</Arg>
     </bindToVehicle>
+    <captureVehicleControl>
+      <Arg>	OBJECT_ID	</Arg>
+    </captureVehicleControl>
+    <releaseVehicleControl>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </releaseVehicleControl>
+    <requestControlledVehicleState></requestControlledVehicleState>
     <monitorVehicleDamagedDevices>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	OBJECT_ID	</Arg>
@@ -483,7 +578,7 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
-      <Arg>	BOOL	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
     </receiveVisibilityUpdate>
     <receiveVisibilityLists>
       <Arg>	OBJECT_ID	</Arg>
@@ -598,6 +693,13 @@
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
     </vehicle_changeSetting>
+    <autoChoosePoints>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	BOOL	</Arg>
+    </autoChoosePoints>
+    <onClientConnected>
+      <Arg>	BOOL	</Arg>
+    </onClientConnected>
   </CellMethods>
   <BaseMethods>
     <onCreateCellSuccess></onCreateCellSuccess>
@@ -669,6 +771,29 @@
       <Arg>	ARRAY	  <of>	FLOAT32	</of>
       </Arg>
     </updatePositions>
+    <startVehicleControl>
+      <Exposed></Exposed>
+      <Arg>	OBJECT_ID	</Arg>
+    </startVehicleControl>
+    <onStartVehicleControlFailed></onStartVehicleControlFailed>
+    <onStartVehicleControl>
+      <Arg>	OBJECT_ID	</Arg>
+    </onStartVehicleControl>
+    <onVehicleControlStarted>
+      <Arg>	MAILBOX	</Arg>
+    </onVehicleControlStarted>
+    <onVehicleControlStopped>
+      <Arg>	MAILBOX	</Arg>
+    </onVehicleControlStopped>
+    <onInitialBindToVehicleFinished>
+      <Arg>	MAILBOX	</Arg>
+    </onInitialBindToVehicleFinished>
+    <requestControlledVehicleState>
+      <Exposed></Exposed>
+    </requestControlledVehicleState>
+    <stopVehicleControl>
+      <Exposed></Exposed>
+    </stopVehicleControl>
     <vehicle_teleport>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
@@ -739,6 +864,12 @@
       <Exposed></Exposed>
       <Arg>	CLIENT_STATUS_STATISTICS	</Arg>
     </reportClientStats>
+    <reportAPM>
+      <Exposed></Exposed>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT16	</Arg>
+    </reportAPM>
     <setAvatarClient></setAvatarClient>
     <leaveArenaByAccount>
       <Arg>	BOOL	</Arg>
@@ -749,5 +880,9 @@
     <removeSyncData>
       <Arg>	PYTHON	</Arg>
     </removeSyncData>
+    <initialBindToVehicle>
+      <Exposed></Exposed>
+      <Arg>	OBJECT_ID	</Arg>
+    </initialBindToVehicle>
   </BaseMethods>
 </Avatar.def>

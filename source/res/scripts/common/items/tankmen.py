@@ -17,7 +17,7 @@ from items.readers import tankmen_readers
 from items.readers.crewSkins_readers import readCrewSkinsCacheFromXML
 from items.readers.crewBooks_readers import readCrewBooksCacheFromXML
 from items.passports import PassportCache, passport_generator, maxAttempts, distinctFrom, acceptOn
-from vehicles import VEHICLE_CLASS_TAGS
+from vehicles import VEHICLE_CLASS_TAGS, VEHICLE_TAGS
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from constants import ITEM_DEFS_PATH
 from account_shared import AmmoIterator

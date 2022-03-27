@@ -8,7 +8,8 @@ from gui.battle_control.controllers.repositories import EpicControllersRepositor
 from gui.battle_control.controllers.repositories import EventControllerRepository
 from gui.battle_control.controllers.repositories import SharedControllersRepository
 from gui.battle_control.controllers.repositories import BattleRoyaleControllersRepository
-from gui.battle_control.controllers.repositories import MapsTrainingControllerRepository
+from gui.battle_control.controllers.repositories import MapsTrainingControllerRepository, RTSControllersRepository
+from gui.battle_control.controllers.repositories import RTS1x1ControllersRepository
 __all__ = ('createShared', 'createDynamic', 'BattleSessionSetup', 'SharedControllersLocator', 'DynamicControllersLocator')
 
 def createShared(setup):
@@ -25,6 +26,10 @@ def createDynamic(setup):
         repository = EventControllerRepository.create(setup)
     elif guiVisitor.isMapsTraining():
         repository = MapsTrainingControllerRepository.create(setup)
+    elif guiVisitor.isAnyRTSBattle():
+        repository = RTSControllersRepository.create(setup)
+    elif guiVisitor.isRTS1x1Battle():
+        repository = RTS1x1ControllersRepository.create(setup)
     elif not guiVisitor.isTutorialBattle():
         repository = ClassicControllersRepository.create(setup)
     else:

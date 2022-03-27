@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/manual_controller.py
 import logging
-from account_helpers.AccountSettings import AccountSettings
+from account_helpers.AccountSettings import AccountSettings, LOBBY_MENU_MANUAL_TRIGGER_SHOWN
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.doc_loaders.manual_xml_data_reader import ManualPageTypes
@@ -126,7 +126,7 @@ class ManualController(IManualController):
 
     def getNewContentCount(self):
         number = self.countNewContent()
-        return number if number and AccountSettings.isLobbyMenuTriggerShown() else 0
+        return number if number and AccountSettings.getManualData(LOBBY_MENU_MANUAL_TRIGGER_SHOWN) else 0
 
     def __isBootcampEnabled(self):
         return self.lobbyContext.getServerSettings().isBootcampEnabled()

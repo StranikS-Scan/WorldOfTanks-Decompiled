@@ -25,6 +25,7 @@ from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelecto
 from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBattlePopover
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
 from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView
+from gui.impl.lobby.rts.tooltips.widget_tooltip_view import WidgetTooltipView as RTSWidgetTooltipView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -60,7 +61,8 @@ class ModeSelectorView(ViewImpl):
     __gui = dependency.descriptor(IGuiLoader)
     __tooltipByContentID = {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
-     R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS)}
+     R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS),
+     R.views.lobby.rts.tooltips.WidgetTooltipView(): RTSWidgetTooltipView}
     layoutID = R.views.lobby.mode_selector.ModeSelectorView()
     _areWidgetsVisible = False
 
@@ -83,7 +85,7 @@ class ModeSelectorView(ViewImpl):
     @property
     def inputManager(self):
         app = self.__appLoader.getApp()
-        return app.gameInputManager
+        return app.gameInputManager if app else None
 
     def createToolTip(self, event):
         if event.contentID == _R_BACKPORT_TOOLTIP():
@@ -106,7 +108,8 @@ class ModeSelectorView(ViewImpl):
              ModeSelectorTooltipsConstants.RANKED_BATTLES_POSITION_TOOLTIP,
              ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
              ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
-             ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP]:
+             ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
+             ModeSelectorTooltipsConstants.RTS_CALENDAR_TOOLTIP]:
                 return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=(None,))
             if tooltipId == ModeSelectorTooltipsConstants.RANKED_BATTLES_RANK_TOOLTIP:
                 rankID = int(event.getArgument('rankID'))
@@ -172,7 +175,8 @@ class ModeSelectorView(ViewImpl):
     def _finalize(self):
         self.uiBootcampLogger.logOnlyFromBootcamp(LOG_ACTIONS.CLOSED)
         self.__gui.windowsManager.onWindowStatusChanged -= self.__windowStatusChanged
-        self.inputManager.removeEscapeListener(self.__handleEscape)
+        if self.inputManager:
+            self.inputManager.removeEscapeListener(self.__handleEscape)
         self.__lobbyContext.deleteHeaderNavigationConfirmator(self.__handleHeaderNavigation)
         self.viewModel.onItemClicked -= self.__itemClickHandler
         self.viewModel.onShowMapSelectionClicked -= self.__showMapSelectionClickHandler

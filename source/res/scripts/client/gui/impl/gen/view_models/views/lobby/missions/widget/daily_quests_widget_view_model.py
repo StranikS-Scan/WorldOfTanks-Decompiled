@@ -5,9 +5,9 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.missions.widget.widget_quest_model import WidgetQuestModel
 
 class DailyQuestsWidgetViewModel(ViewModel):
-    __slots__ = ('onQuestClick', 'onDisappear')
+    __slots__ = ('onQuestClick', 'onDisappear', 'onAppear')
 
-    def __init__(self, properties=4, commands=2):
+    def __init__(self, properties=4, commands=3):
         super(DailyQuestsWidgetViewModel, self).__init__(properties=properties, commands=commands)
 
     def getQuests(self):
@@ -42,3 +42,4 @@ class DailyQuestsWidgetViewModel(ViewModel):
         self._addArrayProperty('indicateCompleteQuests', Array())
         self.onQuestClick = self._addCommand('onQuestClick')
         self.onDisappear = self._addCommand('onDisappear')
+        self.onAppear = self._addCommand('onAppear')

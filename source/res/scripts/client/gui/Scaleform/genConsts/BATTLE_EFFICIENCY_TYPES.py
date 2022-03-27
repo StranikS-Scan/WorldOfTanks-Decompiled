@@ -39,3 +39,4 @@ class BATTLE_EFFICIENCY_TYPES(object):
     RECEIVED_BY_MINEFIELD = 'receivedByMinefield'
     DAMAGE_BY_MINEFIELD = 'damageByMinefield'
     RECEIVED_BY_SMOKE = 'receivedBySmoke'
+    SUPPLY_DESTRUCTION = 'playerDestroyedSupply'

@@ -20,6 +20,12 @@
     <_130mm_R_14_wz_56>	22	</_130mm_R_14_wz_56>
     <_152mm_J_2>	23	</_152mm_J_2>
     <_85mm_ZiS_S-53_B>	24	</_85mm_ZiS_S-53_B>
+    <Gun_1_Pl201_Gun_D_74_RTS>	20200	</Gun_1_Pl201_Gun_D_74_RTS>
+    <Gun_1_Pl203_WatchTower1_RTS>	23300	</Gun_1_Pl203_WatchTower1_RTS>
+    <Gun_1_Pl205_203mm50_Mle_1924_RTS>	23400	</Gun_1_Pl205_203mm50_Mle_1924_RTS>
+    <Gun_Pl208_Pillbox_SPM_4_RTS>	23500	</Gun_Pl208_Pillbox_SPM_4_RTS>
+    <Gun_1_Pl207_Mortar_RTS>	23600	</Gun_1_Pl207_Mortar_RTS>
+    <Gun_Pl206_Firedot_RTS>	23700	</Gun_Pl206_Firedot_RTS>
     <_105mm_wz_52>	25	</_105mm_wz_52>
     <_105mm_armata_wz_64>	26	</_105mm_armata_wz_64>
     <_100mm_haubica_wz_14_19>	27	</_100mm_haubica_wz_14_19>
@@ -1752,5 +1758,291 @@
         </_152mm_pocisk_wybuchowy>
       </shots>
     </_152mm_J_2>
+    <Gun_1_Pl201_Gun_D_74_RTS>
+      <userString>	#poland_vehicles:Gun_1_Pl201_Gun_D_74_RTS	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	30750	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <turretYawLimits>	-50 50	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0 -20 1 -20	</minPitch>
+        <maxPitch>	0 10 1 10	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	8.0	</rotationSpeed>
+      <reloadTime>	9.3	</reloadTime>
+      <maxAmmo>	1000	</maxAmmo>
+      <aimingTime>	2.0	</aimingTime>
+      <weight>	1	</weight>
+      <maxHealth>	1000	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.5	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.15	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.001	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_shot_1_Pl201_Gun_D_74_RTS>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	1500	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	270 250	</piercingPower>
+        </_shot_1_Pl201_Gun_D_74_RTS>
+      </shots>
+    </Gun_1_Pl201_Gun_D_74_RTS>
+    <Gun_1_Pl203_WatchTower1_RTS>
+      <userString>	#poland_vehicles:Gun_1_Pl203_WatchTower1_RTS	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	30750	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	8.0	</rotationSpeed>
+      <reloadTime>	360	</reloadTime>
+      <maxAmmo>	87	</maxAmmo>
+      <aimingTime>	2.0	</aimingTime>
+      <weight>	1	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.15	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.001	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_shot_Pl205_203mm50_Mle_1924_RTS>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	0	</maxDistance>
+          <piercingPower>	32 13	</piercingPower>
+          <maxHeight>	200	</maxHeight>
+        </_shot_Pl205_203mm50_Mle_1924_RTS>
+      </shots>
+    </Gun_1_Pl203_WatchTower1_RTS>
+    <Gun_1_Pl205_203mm50_Mle_1924_RTS>
+      <userString>	#poland_vehicles:Gun_1_Pl205_203mm50_Mle_1924_RTS	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	2750	</price>
+      <notInShop>	true	</notInShop>
+      <models>
+        <undamaged>	vehicles/poland/Pl205_203mm50_Mle_1924_RTS/normal/lod0/Gun_01.model	</undamaged>
+        <destroyed>	vehicles/poland/Pl205_203mm50_Mle_1924_RTS/crash/lod0/Gun_01.model	</destroyed>
+        <exploded>	vehicles/poland/Pl205_203mm50_Mle_1924_RTS/crash/lod0/Gun_01.model	</exploded>
+      </models>
+      <impulse>	0.000000	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.48	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_superhuge	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0 -30 1 -30	</minPitch>
+        <maxPitch>	0.0 3.0 1.0 3.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	4.0	</rotationSpeed>
+      <reloadTime>	15.0	</reloadTime>
+      <maxAmmo>	1000	</maxAmmo>
+      <aimingTime>	1.5	</aimingTime>
+      <weight>	5900	</weight>
+      <maxHealth>	300	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	15	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.85	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.4	</turretRotation>
+        <afterShot>	2.0	</afterShot>
+        <whileGunDamaged>	1.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_shot_Pl205_203mm50_Mle_1924_RTS>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	400	</speed>
+          <gravity>	50	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	66 66	</piercingPower>
+        </_shot_Pl205_203mm50_Mle_1924_RTS>
+      </shots>
+    </Gun_1_Pl205_203mm50_Mle_1924_RTS>
+    <Gun_Pl206_Firedot_RTS>
+      <userString>	#poland_vehicles:Pl206_Firedot_RTS	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	2750	</price>
+      <notInShop>	true	</notInShop>
+      <models>
+        <undamaged>	vehicles/poland/Pl206_Firedot_RTS/normal/lod0/Gun_01.model	</undamaged>
+        <destroyed>	vehicles/poland/Pl206_Firedot_RTS/crash/lod0/Gun_01.model	</destroyed>
+        <exploded>	vehicles/poland/Pl206_Firedot_RTS/crash/lod0/Gun_01.model	</exploded>
+      </models>
+      <impulse>	0.01	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.6	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_flamethrower	</effects>
+      <groundWave></groundWave>
+      <pitchLimits>
+        <minPitch>	0.0 -22.0 1.0 -22.0	</minPitch>
+        <maxPitch>	0.0 15.0 1.0 15.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40.0	</rotationSpeed>
+      <reloadTime>	10.0	</reloadTime>
+      <maxAmmo>	1000	</maxAmmo>
+      <aimingTime>	1.2	</aimingTime>
+      <weight>	1	</weight>
+      <maxHealth>	30	</maxHealth>
+      <maxRegenHealth>	14	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.7	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	0.016	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_shot_Pl206_Firedot_RTS>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	75	</speed>
+          <gravity>	4.0	</gravity>
+          <maxDistance>	100	</maxDistance>
+          <piercingPower>	1000 1000	</piercingPower>
+        </_shot_Pl206_Firedot_RTS>
+      </shots>
+    </Gun_Pl206_Firedot_RTS>
+    <Gun_1_Pl207_Mortar_RTS>
+      <userString>	#poland_vehicles:Gun_1_Pl207_Mortar_RTS	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	2750	</price>
+      <notInShop>	true	</notInShop>
+      <models>
+        <undamaged>	vehicles/poland/Pl205_203mm50_Mle_1924_RTS/normal/lod0/Gun_01.model	</undamaged>
+        <destroyed>	vehicles/poland/Pl205_203mm50_Mle_1924_RTS/crash/lod0/Gun_01.model	</destroyed>
+        <exploded>	vehicles/poland/Pl205_203mm50_Mle_1924_RTS/crash/lod0/Gun_01.model	</exploded>
+      </models>
+      <impulse>	0.2	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.48	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_mortal	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -50.0 1.0 -50.0	</minPitch>
+        <maxPitch>	0.0 -9.0 1.0 -9.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	20.0	</rotationSpeed>
+      <reloadTime>	30	</reloadTime>
+      <maxAmmo>	10000	</maxAmmo>
+      <aimingTime>	1.0	</aimingTime>
+      <weight>	10	</weight>
+      <maxHealth>	30	</maxHealth>
+      <maxRegenHealth>	14	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	5.0	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	0.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_shot_Pl207_Mortar_RTS>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	200	</speed>
+          <gravity>	40	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	49 49	</piercingPower>
+        </_shot_Pl207_Mortar_RTS>
+      </shots>
+    </Gun_1_Pl207_Mortar_RTS>
+    <Gun_Pl208_Pillbox_SPM_4_RTS>
+      <userString>	#poland_vehicles:Gun_Pl208_Pillbox_SPM_4_RTS	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	2750	</price>
+      <notInShop>	true	</notInShop>
+      <models>
+        <undamaged>	vehicles/poland/Pl208_Pillbox_SPM_4_RTS/normal/lod0/Gun_01.model	</undamaged>
+        <destroyed>	vehicles/poland/Pl208_Pillbox_SPM_4_RTS/crash/lod0/Gun_01.model	</destroyed>
+        <exploded>	vehicles/poland/Pl208_Pillbox_SPM_4_RTS/crash/lod0/Gun_01.model	</exploded>
+      </models>
+      <impulse>	0.000000	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.015000	</amplitude>
+        <backoffTime>	0.090000	</backoffTime>
+        <returnTime>	0.100000	</returnTime>
+      </recoil>
+      <effects>	shot_auto	</effects>
+      <groundWave></groundWave>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 15.0 1.0 15.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	70.0	</rotationSpeed>
+      <reloadTime>	2.0	</reloadTime>
+      <maxAmmo>	10000	</maxAmmo>
+      <aimingTime>	1.2	</aimingTime>
+      <weight>	1	</weight>
+      <maxHealth>	1000	</maxHealth>
+      <maxRegenHealth>	14	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	1.0	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	0.01	</afterShot>
+        <whileGunDamaged>	0.1	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_shot_Pl208_Pillbox_SPM_4_RTS>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	700	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	300	</maxDistance>
+          <piercingPower>	160 160	</piercingPower>
+        </_shot_Pl208_Pillbox_SPM_4_RTS>
+      </shots>
+    </Gun_Pl208_Pillbox_SPM_4_RTS>
   </shared>
 </guns.xml>

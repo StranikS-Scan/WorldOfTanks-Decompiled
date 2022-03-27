@@ -22,14 +22,8 @@ class BaseStrategicAimingSystem(IAimingSystem):
         self.__height = height
         self.__heightFromPlane = 0.0
 
-    def destroy(self):
-        pass
-
     def enable(self, targetPos):
         self.updateTargetPos(targetPos)
-
-    def disable(self):
-        pass
 
     def getDesiredShotPoint(self, terrainOnlyCheck=False):
         return AimingSystems.getDesiredShotPoint(self._matrix.translation, Vector3(0, -1, 0), True, True, terrainOnlyCheck)

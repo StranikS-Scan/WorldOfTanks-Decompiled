@@ -4,7 +4,7 @@ from PlayerEvents import g_playerEvents
 from battle_pass_common import BattlePassState, CurrencyBP, getPresentLevel
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.BattlePassEntryPointMeta import BattlePassEntryPointMeta
-from gui.battle_pass.battle_pass_helpers import getSupportedCurrentArenaBonusType
+from gui.prb_control.prb_getters import getSupportedCurrentArenaBonusType
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_entry_point_view_model import AnimationState, BPState, BattlePassEntryPointViewModel
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
@@ -29,6 +29,7 @@ class _LastEntryState(object):
     def __init__(self):
         self.isFirstShow = True
         self.isBought = False
+        self.hasExtra = False
         self.chapterID = 0
         self.level = 0
         self.progress = 0
@@ -36,9 +37,10 @@ class _LastEntryState(object):
         self.rewardsCount = 0
         return
 
-    def update(self, isFirstShow=True, isBought=False, chapterID=0, level=0, progress=0, state=None, rewardsCount=0):
+    def update(self, isFirstShow=True, isBought=False, hasExtra=False, chapterID=0, level=0, progress=0, state=None, rewardsCount=0):
         self.isFirstShow = isFirstShow
         self.isBought = isBought
+        self.hasExtra = hasExtra
         self.chapterID = chapterID
         self.level = level
         self.progress = progress
@@ -96,18 +98,24 @@ class BaseBattlePassEntryPointView(IGlobalListener):
 
     @property
     def isBought(self):
-        if self.__battlePassController.isBought():
+        chapterID = self.chapterID
+        if chapterID and self.__battlePassController.isBought(chapterID=chapterID):
             return True
         chapterIDs = self.__battlePassController.getChapterIDs()
-        return self.isCompleted and any((self.__battlePassController.isBought(chapterID=chapter) for chapter in chapterIDs))
+        return all((self.__battlePassController.isBought(chapterID=chapter) for chapter in chapterIDs))
 
     @property
     def isCompleted(self):
-        return self.__battlePassController.isCompleted()
+        chapterIDs = self.__battlePassController.getChapterIDs()
+        return all((self.__battlePassController.isChapterCompleted(chapter) for chapter in chapterIDs))
 
     @property
     def isPaused(self):
         return self.__battlePassController.isPaused() or not self.__battlePassController.isGameModeEnabled(self._getCurrentArenaBonusType())
+
+    @property
+    def hasExtra(self):
+        return self.__battlePassController.hasExtra()
 
     @property
     def battlePassState(self):
@@ -141,7 +149,7 @@ class BaseBattlePassEntryPointView(IGlobalListener):
         pass
 
     def _saveLastState(self):
-        _g_entryLastState.update(False, self.isBought, self.chapterID, self.level, self.progress, self.battlePassState, self.notChosenRewardCount)
+        _g_entryLastState.update(False, self.isBought, self.hasExtra, self.chapterID, self.level, self.progress, self.battlePassState, self.notChosenRewardCount)
 
     def _onClick(self):
         showMissionsBattlePass()
@@ -267,6 +275,8 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
         with self.getViewModel().transaction() as tx:
             tx.setIsSmall(self.__isSmall)
             tx.setTooltipID(self._getTooltip())
+            tx.setPrevHasExtra(_g_entryLastState.hasExtra)
+            tx.setHasExtra(self.hasExtra)
             tx.setPrevLevel(getPresentLevel(_g_entryLastState.level))
             tx.setLevel(getPresentLevel(self.level))
             tx.setChapterID(self.chapterID)

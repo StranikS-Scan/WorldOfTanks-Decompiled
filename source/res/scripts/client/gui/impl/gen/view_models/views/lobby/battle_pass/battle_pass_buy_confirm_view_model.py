@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class BattlePassBuyConfirmViewModel(ViewModel):
     __slots__ = ('onCloseClick', 'onBuyClick', 'onShowRewardsClick')
 
-    def __init__(self, properties=3, commands=3):
+    def __init__(self, properties=4, commands=3):
         super(BattlePassBuyConfirmViewModel, self).__init__(properties=properties, commands=commands)
 
     def getPrice(self):
@@ -20,16 +20,23 @@ class BattlePassBuyConfirmViewModel(ViewModel):
     def setChapterID(self, value):
         self._setNumber(1, value)
 
-    def getIsActive(self):
+    def getIsExtra(self):
         return self._getBool(2)
 
-    def setIsActive(self, value):
+    def setIsExtra(self, value):
         self._setBool(2, value)
+
+    def getIsActive(self):
+        return self._getBool(3)
+
+    def setIsActive(self, value):
+        self._setBool(3, value)
 
     def _initialize(self):
         super(BattlePassBuyConfirmViewModel, self)._initialize()
         self._addNumberProperty('price', 0)
         self._addNumberProperty('chapterID', 0)
+        self._addBoolProperty('isExtra', False)
         self._addBoolProperty('isActive', False)
         self.onCloseClick = self._addCommand('onCloseClick')
         self.onBuyClick = self._addCommand('onBuyClick')

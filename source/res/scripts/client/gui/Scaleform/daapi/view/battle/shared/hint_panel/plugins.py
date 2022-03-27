@@ -4,20 +4,20 @@ import logging
 import BigWorld
 import CommandMapping
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, SPG_HELP_SCREEN_HINT_SECTION, IN_GAME_HELP_PAGE_SECTION, SPG_HELP_PAGES_LEFT_TO_SHOW, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION
+from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE, ROLE_TYPE
 from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.battle_control.controllers.radar_ctrl import IRadarListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent, ViewEventType, LoadViewEvent
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
-from gui.shared.utils.key_mapping import getReadableKey
+from gui.shared.utils.key_mapping import getReadableKey, getVirtualKey
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from items import makeIntCompactDescrByID
@@ -207,12 +207,13 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
     def _getHint(self):
         hintTextLeft = ''
         keyName = getReadableKey(CommandMapping.CMD_CM_TRAJECTORY_VIEW)
+        key = getVirtualKey(CommandMapping.CMD_CM_TRAJECTORY_VIEW)
         if keyName:
             hintTextLeft = backport.text(R.strings.ingame_gui.trajectoryView.hint.alternateModeLeft())
             hintTextRight = backport.text(R.strings.ingame_gui.trajectoryView.hint.alternateModeRight())
         else:
             hintTextRight = backport.text(R.strings.ingame_gui.trajectoryView.hint.noBindingKey())
-        return HintData(keyName, hintTextLeft, hintTextRight, _TRAJECTORY_VIEW_HINT_POSITION[0], _TRAJECTORY_VIEW_HINT_POSITION[1], HintPriority.TRAJECTORY, False)
+        return HintData(key, keyName, hintTextLeft, hintTextRight, _TRAJECTORY_VIEW_HINT_POSITION[0], _TRAJECTORY_VIEW_HINT_POSITION[1], HintPriority.TRAJECTORY, False)
 
 
 class SiegeIndicatorHintPlugin(HintPanelPlugin):
@@ -383,6 +384,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
 
     def _getHint(self):
         keyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+        key = getVirtualKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
         pressText = ''
         if keyName:
             pressText = backport.text(R.strings.ingame_gui.siegeMode.hint.press())
@@ -395,7 +397,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
                 hintText = backport.text(hintTextID()) if hintTextID.exists() else None
         else:
             hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.noBinding())
-        return HintData(keyName, pressText, hintText, 0, 0, HintPriority.SIEGE, False)
+        return HintData(key, keyName, pressText, hintText, 0, 0, HintPriority.SIEGE, False)
 
     def __areOtherIndicatorsShown(self):
         return self._isUnderFire or self._isInRecovery or self._isInProgressCircle
@@ -497,13 +499,14 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
 
     def _getHint(self):
         keyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR)
+        key = getVirtualKey(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR)
         pressText = ''
         if keyName:
             pressText = backport.text(R.strings.battle_royale.radar.hint.press())
             hintText = backport.text(R.strings.battle_royale.radar.hint.text())
         else:
             hintText = backport.text(R.strings.battle_royale.radar.hint.noBinding())
-        return HintData(keyName, pressText, hintText, 0, 0, HintPriority.RADAR, False)
+        return HintData(key, keyName, pressText, hintText, 0, 0, HintPriority.RADAR, False)
 
     def __showHint(self):
         _logger.debug('Showing radar hint')
@@ -572,7 +575,7 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
 
 
 class PreBattleHintPlugin(HintPanelPlugin):
-    __slots__ = ('__isActive', '__hintInQueue', '__callbackDelayer', '__questHintSettings', '__helpHintSettings', '__battleComHintSettings', '__spgHelpHintSettings', '__isInDisplayPeriod', '__haveReqLevel', '__vehicleId', '__hasTempSPGScreens', '__isSPG')
+    __slots__ = ('__isActive', '__hintInQueue', '__callbackDelayer', '__questHintSettings', '__helpHintSettings', '__battleComHintSettings', '__isInDisplayPeriod', '__haveReqLevel', '__vehicleId')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -584,12 +587,9 @@ class PreBattleHintPlugin(HintPanelPlugin):
         self.__questHintSettings = {}
         self.__helpHintSettings = {}
         self.__battleComHintSettings = {}
-        self.__spgHelpHintSettings = {}
         self.__isInDisplayPeriod = False
         self.__haveReqLevel = False
         self.__vehicleId = None
-        self.__hasTempSPGScreens = False
-        self.__isSPG = False
         return
 
     @classmethod
@@ -601,9 +601,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         prbSettings = dict(AccountSettings.getSettings(PRE_BATTLE_HINT_SECTION))
         self.__questHintSettings = prbSettings[QUEST_PROGRESS_HINT_SECTION]
         self.__helpHintSettings = prbSettings[HELP_SCREEN_HINT_SECTION]
-        self.__spgHelpHintSettings = prbSettings[SPG_HELP_SCREEN_HINT_SECTION]
         self.__battleComHintSettings = prbSettings[IBC_HINT_SECTION]
-        self.__hasTempSPGScreens = AccountSettings.getSettings(IN_GAME_HELP_PAGE_SECTION)[SPG_HELP_PAGES_LEFT_TO_SHOW] > 0
         HintPanelPlugin._updateCounterOnStart(self.__questHintSettings, PRBSettings.HINT_DAY_COOLDOWN, PRBSettings.HINT_BATTLES_COOLDOWN)
         self.__isActive = True
         g_eventBus.addListener(GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -630,7 +628,6 @@ class PreBattleHintPlugin(HintPanelPlugin):
             prbHintSettings[QUEST_PROGRESS_HINT_SECTION] = self.__questHintSettings
             prbHintSettings[HELP_SCREEN_HINT_SECTION] = self.__helpHintSettings
             prbHintSettings[IBC_HINT_SECTION] = self.__battleComHintSettings
-            prbHintSettings[SPG_HELP_SCREEN_HINT_SECTION] = self.__spgHelpHintSettings
             AccountSettings.setSettings(PRE_BATTLE_HINT_SECTION, prbHintSettings)
             return
 
@@ -650,26 +647,26 @@ class PreBattleHintPlugin(HintPanelPlugin):
     def _getHint(self):
         if self.__hintInQueue is CommandMapping.CMD_SHOW_HELP:
             keyName = getReadableKey(CommandMapping.CMD_SHOW_HELP)
+            key = getVirtualKey(CommandMapping.CMD_SHOW_HELP)
             pressText = backport.text(R.strings.ingame_gui.helpScreen.hint.press())
-            if self.__canDisplaySPGHelpHint() and not self.__isSPG:
-                hintText = backport.text(R.strings.ingame_gui.helpScreen.spgHint.description())
-            else:
-                hintText = backport.text(R.strings.ingame_gui.helpScreen.hint.description())
-            return HintData(keyName, pressText, hintText, 0, 0, HintPriority.HELP, False)
+            hintText = backport.text(R.strings.ingame_gui.helpScreen.hint.description())
+            return HintData(key, keyName, pressText, hintText, 0, 0, HintPriority.HELP, False)
         if self.__hintInQueue is CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND:
             keyName = getReadableKey(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND)
+            key = getVirtualKey(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND)
             pressText = backport.text(R.strings.ingame_gui.battleCommunication.hint.press())
             hintText = backport.text(R.strings.ingame_gui.battleCommunication.hint.description())
-            return HintData(keyName, pressText, hintText, 0, 0, HintPriority.BATTLE_COMMUNICATION, False)
+            return HintData(key, keyName, pressText, hintText, 0, 0, HintPriority.BATTLE_COMMUNICATION, False)
         if self.__hintInQueue is CommandMapping.CMD_QUEST_PROGRESS_SHOW:
             if self.lobbyContext.getServerSettings().isPersonalMissionsEnabled():
                 keyName = getReadableKey(CommandMapping.CMD_QUEST_PROGRESS_SHOW)
+                key = getVirtualKey(CommandMapping.CMD_QUEST_PROGRESS_SHOW)
                 pressText = ''
                 hintText = backport.text(R.strings.ingame_gui.battleProgress.hint.noBindingKey())
                 if keyName:
                     pressText = backport.text(R.strings.ingame_gui.battleProgress.hint.press())
                     hintText = backport.text(R.strings.ingame_gui.battleProgress.hint.description())
-                return HintData(keyName, pressText, hintText, 0, 0, HintPriority.QUESTS, False)
+                return HintData(key, keyName, pressText, hintText, 0, 0, HintPriority.QUESTS, False)
 
     def _canDisplayCustomHelpHint(self):
         return False
@@ -682,12 +679,9 @@ class PreBattleHintPlugin(HintPanelPlugin):
             vehicleType = vTypeDesc.type.id
             self.__vehicleId = makeIntCompactDescrByID('vehicle', vehicleType[0], vehicleType[1])
             self.__haveReqLevel = vTypeDesc.level >= _HINT_MIN_VEHICLE_LEVEL
-            self.__isSPG = vTypeDesc.type.getVehicleClass() == VEHICLE_CLASS_NAME.SPG
             if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vehicle.isTrackWithinTrack:
                 self.__updateHintCounterOnStart(self.__vehicleId, vehicle, self.__helpHintSettings)
-            if self.__needSPGHelpHintShow():
-                self.__updateHintCounterOnStart(self.__getSPGHintSection(), vehicle, self.__spgHelpHintSettings)
-            if self.__canDisplayVehicleHelpHint(vTypeDesc) or self.__canDisplaySPGHelpHint() or self._canDisplayCustomHelpHint():
+            if self.__canDisplayVehicleHelpHint(vTypeDesc) or self._canDisplayCustomHelpHint():
                 self.__displayHint(CommandMapping.CMD_SHOW_HELP)
                 return
             if self.__canDisplayBattleCommunicationHint():
@@ -724,10 +718,9 @@ class PreBattleHintPlugin(HintPanelPlugin):
     def __canDisplayVehicleHelpHint(self, typeDescriptor):
         return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
 
-    def __canDisplaySPGHelpHint(self):
-        return self.__needSPGHelpHintShow() and self.__isInDisplayPeriod and self._haveHintsLeft(self.__spgHelpHintSettings[self.__getSPGHintSection()])
-
     def __canDisplayBattleCommunicationHint(self):
+        if avatar_getter.isCommanderCtrlMode():
+            return False
         settingsCore = dependency.instance(ISettingsCore)
         battleCommunicationIsEnabled = bool(settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
         return self.__isInDisplayPeriod and self._haveHintsLeft(self.__battleComHintSettings) and self.sessionProvider.arenaVisitor.getArenaGuiType() != ARENA_GUI_TYPE.BOOTCAMP and battleCommunicationIsEnabled
@@ -763,11 +756,6 @@ class PreBattleHintPlugin(HintPanelPlugin):
                 self.__callbackDelayer.delayCallback(_HINT_COOLDOWN, self.__onHintTimeCooldown, self.__hintInQueue)
                 self.__hintInQueue = None
             viewCtx = event.kwargs.get('ctx', {})
-            if self.__needSPGHelpHintShow():
-                section = self.__getSPGHintSection()
-                hintStats = self.__spgHelpHintSettings[section]
-                self.__spgHelpHintSettings[section] = self._updateCounterOnUsed(hintStats)
-                self.__hasTempSPGScreens = AccountSettings.getSettings(IN_GAME_HELP_PAGE_SECTION)[SPG_HELP_PAGES_LEFT_TO_SHOW] > 0
             if viewCtx.get('hasUniqueVehicleHelpScreen', False):
                 hintStats = self.__helpHintSettings[self.__vehicleId]
                 self.__helpHintSettings[self.__vehicleId] = self._updateCounterOnUsed(hintStats)
@@ -779,14 +767,6 @@ class PreBattleHintPlugin(HintPanelPlugin):
             self.__hintInQueue = None
         self.__questHintSettings = self._updateCounterOnUsed(self.__questHintSettings)
         return
-
-    def __needSPGHelpHintShow(self):
-        guiType = self.sessionProvider.arenaVisitor.getArenaGuiType()
-        isRandomOrTraining = guiType in (ARENA_GUI_TYPE.TRAINING,) + ARENA_GUI_TYPE.RANDOM_RANGE
-        return (self.__isSPG or self.__hasTempSPGScreens) and isRandomOrTraining
-
-    def __getSPGHintSection(self):
-        return 'SPG' if self.__isSPG else 'other'
 
 
 class RoleHelpPlugin(HintPanelPlugin):
@@ -858,9 +838,10 @@ class RoleHelpPlugin(HintPanelPlugin):
 
     def _getHint(self):
         keyName = getReadableKey(CommandMapping.CMD_SHOW_HELP)
+        key = getVirtualKey(CommandMapping.CMD_SHOW_HELP)
         pressText = backport.text(R.strings.ingame_gui.helpScreen.hint.press())
         hintText = backport.text(R.strings.ingame_gui.helpScreen.hint.description())
-        return HintData(keyName, pressText, hintText, 0, 0, HintPriority.HELP, False)
+        return HintData(key, keyName, pressText, hintText, 0, 0, HintPriority.HELP, False)
 
     @classmethod
     def isAvailableInSettings(cls, vehCD):
@@ -922,7 +903,7 @@ class CommanderCameraHintPlugin(HintPanelPlugin, CallbackDelayer):
         super(CommanderCameraHintPlugin, self).__init__(parentObj)
         CallbackDelayer.__init__(self)
         strings = R.strings.ingame_gui
-        self.__hintData = {'hintData': HintData(getReadableKey(CommandMapping.CMD_COMMANDER_CAM), '', backport.text(strings.commanderCam.hint.description()), 0, 0, HintPriority.HELP, reducedPanning=True),
+        self.__hintData = {'hintData': HintData(getVirtualKey(CommandMapping.CMD_COMMANDER_CAM), getReadableKey(CommandMapping.CMD_COMMANDER_CAM), '', backport.text(strings.commanderCam.hint.description()), 0, 0, HintPriority.HELP, reducedPanning=True),
          'btnID': CommandMapping.CMD_COMMANDER_CAM}
         self.__currPeriod = None
         self.__settings = {}
@@ -981,7 +962,7 @@ class MapsTrainingHelpHintPlugin(PreBattleHintPlugin):
         return cls.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.MAPS_TRAINING
 
     def _getHint(self):
-        return HintData(getReadableKey(CommandMapping.CMD_SHOW_HELP), backport.text(R.strings.maps_training.helpScreen.hint.press()), backport.text(R.strings.maps_training.helpScreen.hint.description()), 0, 0, HintPriority.HELP, False)
+        return HintData(getVirtualKey(CommandMapping.CMD_SHOW_HELP), getReadableKey(CommandMapping.CMD_SHOW_HELP), backport.text(R.strings.maps_training.helpScreen.hint.press()), backport.text(R.strings.maps_training.helpScreen.hint.description()), 0, 0, HintPriority.HELP, False)
 
     def _canDisplayCustomHelpHint(self):
         return True

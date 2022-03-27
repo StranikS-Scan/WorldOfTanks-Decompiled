@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/battle_loading.py
+from functools import partial
 import BattleReplay
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.options import BattleLoadingTipSetting
@@ -9,20 +10,24 @@ from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.arena_info.settings import SMALL_MAP_IMAGE_SF_PATH
 from gui.shared.formatters import text_styles
 from gui.Scaleform.daapi.view.meta.BaseBattleLoadingMeta import BaseBattleLoadingMeta
+from ReplayEvents import g_replayEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
-__bBattleLoadingShowed = False
-
-def isBattleLoadingShowed():
-    global __bBattleLoadingShowed
-    return __bBattleLoadingShowed if BattleReplay.isPlaying() else False
-
+_bBattleReplayLoadingShowed = False
 
 def _setBattleLoading(value):
-    global __bBattleLoadingShowed
-    __bBattleLoadingShowed = value
+    global _bBattleReplayLoadingShowed
+    _bBattleReplayLoadingShowed = value and BattleReplay.isPlaying()
+
+
+def _isBattleLoadingShowed():
+    if BattleReplay.isPlaying():
+        if _setBattleLoading not in g_replayEvents.onReplayTerminated:
+            g_replayEvents.onReplayTerminated += partial(_setBattleLoading, False)
+        return _bBattleReplayLoadingShowed
+    return False
 
 
 DEFAULT_BATTLES_COUNT = 100
@@ -74,7 +79,7 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
     def _setTipsInfo(self):
         arenaDP = self._battleCtx.getArenaDP()
         battlesCount = DEFAULT_BATTLES_COUNT
-        if not isBattleLoadingShowed():
+        if not _isBattleLoadingShowed():
             if self.lobbyContext.getBattlesCount() is not None:
                 battlesCount = self._getBattlesCount()
             criteria = tips.getTipsCriteria(self._arenaVisitor)

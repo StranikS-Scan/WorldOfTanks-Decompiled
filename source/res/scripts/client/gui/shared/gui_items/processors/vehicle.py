@@ -32,7 +32,7 @@ from gui.shared.utils.requesters.recycle_bin_requester import VehicleRestoreInfo
 from helpers import time_utils, dependency
 from gui.shared.gui_items.gui_item_economics import ItemPrice, getVehicleBattleBoostersLayoutPrice, getVehicleConsumablesLayoutPrice, getVehicleOptionalDevicesLayoutPrice, getVehicleShellsLayoutPrice
 from helpers.i18n import makeString
-from skeletons.gui.game_control import IRestoreController, ITradeInController, IEpicBattleMetaGameController, IPersonalTradeInController
+from skeletons.gui.game_control import IRestoreController, ITradeInController, IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from rent_common import parseRentID
@@ -128,7 +128,9 @@ class VehicleBuyer(VehicleReceiveProcessor):
         return makeI18nSuccess(sysMsgKey='vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price, useStyle=True), type=self._getSysMsgType(), auxData={'additionalMessages': [makeVehiclePostProgressionUnlockMsg(self._getActualVehicle())]})
 
     def _getSysMsgType(self):
-        return CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.getCurrency(byWeight=False), SM_TYPE.Information)
+        mainCurrency = self.item.buyPrices.itemPrice.getCurrency(byWeight=False)
+        allCurrencies = self.price.getSetCurrencies(byWeight=True)
+        return SM_TYPE.PurchaseForGoldAndCredits if mainCurrency == Currency.CREDITS and Currency.GOLD in allCurrencies else CURRENCY_TO_SM_TYPE.get(mainCurrency, SM_TYPE.Information)
 
     def _request(self, callback):
         _logger.debug('Make request to buy vehicle: %s, %s, %s, %s', self.item, self.crewType, self.buyShell, self.price)
@@ -260,20 +262,6 @@ class VehicleTradeInProcessor(VehicleTradeInProcessorBase):
 
     def _getPluginsList(self):
         return super(VehicleTradeInProcessor, self)._getPluginsList() + (proc_plugs.VehicleTradeInValidator(self.item, self.itemToTradeOff),)
-
-
-class VehiclePersonalTradeInProcessor(VehicleTradeInProcessorBase):
-    __personalTradeIn = dependency.descriptor(IPersonalTradeInController)
-
-    def _getPrice(self):
-        price = self.__personalTradeIn.getPersonalTradeInPrice(self.item).price
-        return getCrewAndShellsSumPrice(price, self.item, self.crewType, self.buyShell)
-
-    def _getBuyingFunc(self):
-        return BigWorld.player().shop.personalTradeInVehicle
-
-    def _getPluginsList(self):
-        return super(VehiclePersonalTradeInProcessor, self)._getPluginsList() + (proc_plugs.VehiclePersonalTradeInValidator(self.item, self.itemToTradeOff),)
 
 
 class VehicleSlotBuyer(Processor):

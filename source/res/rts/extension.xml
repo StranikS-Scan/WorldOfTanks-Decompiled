@@ -1,0 +1,18 @@
+<extension.xml>
+  <FeatureName>	RTS	</FeatureName>
+  <Components>
+    <StaticComponents>
+      <RTSComponent></RTSComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <RTSSpawnKeyPointController></RTSSpawnKeyPointController>
+      <RTSSpawnKeyPointAvatar></RTSSpawnKeyPointAvatar>
+    </DynamicComponents>
+  </Components>
+  <IsEnabled>	True	</IsEnabled>
+  <Entities>
+    <ClientServerEntities></ClientServerEntities>
+    <ServerOnlyEntities></ServerOnlyEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+</extension.xml>

@@ -15,7 +15,8 @@ class SettingsParams(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __settingsDiffPreprocessing(self, diff):
-        for option in chain(settings_constants.FEEDBACK.ALL(), (settings_constants.AIM.SPG,)):
+        extendedOptions = chain(settings_constants.FEEDBACK.ALL(), (settings_constants.AIM.SPG, settings_constants.AIM.CONTOUR))
+        for option in extendedOptions:
             feedbackTab = diff.pop(option, None)
             if feedbackTab is not None:
                 diff.update(feedbackTab)
@@ -61,6 +62,7 @@ class SettingsParams(object):
     def getAimSettings(self):
         settings = {settings_constants.AIM.SPG: self.settingsCore.packSettings(settings_constants.SPGAim.ALL())}
         settings.update(self.settingsCore.packSettings(settings_constants.AIM.ALL()))
+        settings[settings_constants.CONTOUR.ENHANCED_CONTOUR] = self.settingsCore.packSettings(settings_constants.CONTOUR.ALL())
         return settings
 
     def getControlsSettings(self):

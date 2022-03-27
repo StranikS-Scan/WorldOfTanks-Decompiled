@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/reusable/__init__.py
 import weakref
+from collections import namedtuple
 import typing
 from account_helpers import getAccountDatabaseID
 from constants import ARENA_BONUS_TYPE
@@ -9,10 +10,10 @@ from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import BattlePa
 from gui.battle_control.arena_info import squad_finder
 from gui.battle_results.reusable import sort_keys
 from gui.battle_results.reusable.avatars import AvatarsInfo
-from gui.battle_results.reusable.common import CommonInfo
-from gui.battle_results.reusable.personal import PersonalInfo
+from gui.battle_results.reusable.common import CommonInfo, RTSCommonInfo
+from gui.battle_results.reusable.personal import PersonalInfo, RTSPersonalInfo
 from gui.battle_results.reusable.players import PlayersInfo
-from gui.battle_results.reusable.shared import TeamBasesInfo, VehicleDetailedInfo, VehicleSummarizeInfo
+from gui.battle_results.reusable.shared import VehicleDetailedInfo, TeamBasesInfo, SummarizeTeamBasesInfo, VehicleSummarizeInfo, SupplySummarizeInfo
 from gui.battle_results.reusable.vehicles import VehiclesInfo
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD, PLAYER_TEAM_RESULT as _TEAM_RESULT, PREMIUM_STATE
 from helpers import dependency
@@ -20,6 +21,11 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Dict, Iterator, Optional, Tuple
+_Reusables = namedtuple('_Reusables', ('common', 'personal', 'players', 'vehicles', 'avatars'))
+_ReusableTypes = {ARENA_BONUS_TYPE.REGULAR: _Reusables(CommonInfo, PersonalInfo, PlayersInfo, VehiclesInfo, AvatarsInfo),
+ ARENA_BONUS_TYPE.RTS: _Reusables(RTSCommonInfo, RTSPersonalInfo, PlayersInfo, VehiclesInfo, AvatarsInfo),
+ ARENA_BONUS_TYPE.RTS_1x1: _Reusables(RTSCommonInfo, RTSPersonalInfo, PlayersInfo, VehiclesInfo, AvatarsInfo),
+ ARENA_BONUS_TYPE.RTS_BOOTCAMP: _Reusables(RTSCommonInfo, RTSPersonalInfo, PlayersInfo, VehiclesInfo, AvatarsInfo)}
 
 def _fetchRecord(results, recordName):
     if recordName in results:
@@ -31,6 +37,16 @@ def _fetchRecord(results, recordName):
         LOG_WARNING('Record is not found in the results', recordName, results.keys())
         return
         return
+
+
+def _allies(allies, sortKey):
+    for ally in sorted(allies, key=sortKey):
+        yield ally
+
+
+def _enemies(enemies, sortKey):
+    for enemy in sorted(enemies, key=sortKey):
+        yield enemy
 
 
 def createReusableInfo(results):
@@ -48,27 +64,29 @@ def createReusableInfo(results):
 
     record = _fetchRecord(results, _RECORD.COMMON)
     if record is not None:
-        commonInfo = _checkInfo(CommonInfo(vehicles=results[_RECORD.VEHICLES], **record), _RECORD.COMMON)
+        bonusType = record['bonusType']
+        reusableTypes = _ReusableTypes.get(bonusType, _ReusableTypes[ARENA_BONUS_TYPE.REGULAR])
+        commonInfo = _checkInfo(reusableTypes.common(vehicles=results[_RECORD.VEHICLES], personalAvatar=results.get(_RECORD.PERSONAL, {}).get(_RECORD.PERSONAL_AVATAR), players=results.get(_RECORD.PLAYERS), **record), _RECORD.COMMON)
     else:
         return
     record = _fetchRecord(results, _RECORD.PERSONAL)
     if record is not None:
-        personalInfo = _checkInfo(PersonalInfo(record), _RECORD.PERSONAL)
+        personalInfo = _checkInfo(reusableTypes.personal(record), _RECORD.PERSONAL)
     else:
         return
     record = _fetchRecord(results, _RECORD.PLAYERS)
     if record is not None:
-        playersInfo = _checkInfo(PlayersInfo(record), _RECORD.PLAYERS)
+        playersInfo = _checkInfo(reusableTypes.players(record), _RECORD.PLAYERS)
     else:
         return
     record = _fetchRecord(results, _RECORD.VEHICLES)
     if record is not None:
-        vehiclesInfo = _checkInfo(VehiclesInfo(record), _RECORD.VEHICLES)
+        vehiclesInfo = _checkInfo(reusableTypes.vehicles(record), _RECORD.VEHICLES)
     else:
         return
     record = _fetchRecord(results, _RECORD.AVATARS)
     if record is not None:
-        avatarsInfo = _checkInfo(AvatarsInfo(record), _RECORD.AVATARS)
+        avatarsInfo = _checkInfo(reusableTypes.avatars(record), _RECORD.AVATARS)
     else:
         return
     if not unpackedRecords:
@@ -102,6 +120,10 @@ class _ReusableInfo(object):
     @property
     def arenaUniqueID(self):
         return self.__arenaUniqueID
+
+    @property
+    def arenaBonusType(self):
+        return self.__common.arenaBonusType
 
     @property
     def clientIndex(self):
@@ -241,9 +263,10 @@ class _ReusableInfo(object):
             dbID = getAccountDatabaseID()
         return self.__players.getPlayerInfo(dbID).wasInBattle
 
-    def getPersonalDetailsIterator(self, result):
-        totalSortable = {}
-        totalBases = []
+    def getPersonalDetailsIterator(self, result, onlySummary=False):
+        totalSortableVehicles = {}
+        totalSortableSupplies = {}
+        totalBases = SummarizeTeamBasesInfo(result)
         playerTeam = self.__personal.avatar.team
         playerDBID = self.__personal.avatar.accountDBID
         getVehicleInfo = self.__vehicles.getVehicleInfo
@@ -251,9 +274,11 @@ class _ReusableInfo(object):
         getPlayerInfo = self.__players.getPlayerInfo
         makePlayerInfo = self.__players.makePlayerInfo
         getItemByCD = self.itemsCache.items.getItemByCD
+        sortVehicleKey = sort_keys.VehicleInfoSortKey
         for _, vData in self.__personal.getVehicleCDsIterator(result):
+            vehicles = []
+            supplies = []
             details = vData.get('details', {})
-            enemies = []
             for (vehicleID, _), data in details.iteritems():
                 vehicleInfo = getVehicleInfo(vehicleID)
                 intCD = None
@@ -270,27 +295,33 @@ class _ReusableInfo(object):
                     botInfo = getBotInfo(vehicleID)
                     botName = botInfo.realName if botInfo else ''
                     playerInfo = makePlayerInfo(realName=botName, fakeName=botName)
-                vehicle = getItemByCD(intCD) if intCD else None
-                sortable = VehicleDetailedInfo.makeForEnemy(vehicleID, vehicle, playerInfo, data, vehicleInfo.deathReason, vehicleInfo.isTeamKiller)
-                if not sortable.haveInteractionDetails():
+                item = getItemByCD(intCD) if intCD else None
+                sortable = VehicleDetailedInfo.makeForEnemy(vehicleID, item, playerInfo, data, vehicleInfo.deathReason, vehicleInfo.isTeamKiller)
+                if not item or not sortable.haveInteractionDetails():
                     continue
-                if (vehicleID, intCD) not in totalSortable:
-                    totalSortable[vehicleID, intCD] = VehicleSummarizeInfo(vehicleID, playerInfo)
-                totalSortable[vehicleID, intCD].addVehicleInfo(sortable)
-                enemies.append(sortable)
+                if item.isSupply:
+                    supplies.append(sortable)
+                    totalSortableItems, itemKey = totalSortableSupplies, intCD
+                else:
+                    vehicles.append(sortable)
+                    totalSortableItems, itemKey = totalSortableVehicles, (vehicleID, intCD)
+                if itemKey not in totalSortableItems:
+                    totalSortableItems[itemKey] = VehicleSummarizeInfo(vehicleID, playerInfo)
+                totalSortableItems[itemKey].addVehicleInfo(sortable)
 
             bases = TeamBasesInfo(vData.get('capturePoints', 0), vData.get('droppedCapturePoints', 0))
-            totalBases.append(bases)
-            yield ((bases,), sorted(enemies, key=sort_keys.VehicleInfoSortKey))
+            totalBases.addBasesInfo(bases)
+            if not onlySummary:
+                yield ((bases,), sorted(vehicles, key=sortVehicleKey), sorted(supplies))
 
-        yield (totalBases, sorted(totalSortable.itervalues(), key=sort_keys.VehicleInfoSortKey))
+        yield ((totalBases,), sorted(totalSortableVehicles.itervalues(), key=sortVehicleKey), sorted(totalSortableSupplies.itervalues(), key=sortVehicleKey))
         return
 
-    def getPersonalVehiclesInfo(self, result):
+    def getPersonalVehiclesInfo(self, result, reusable=None):
         player = weakref.proxy(self.getPlayerInfo())
         info = VehicleSummarizeInfo(0, player)
         getItemByCD = self.itemsCache.items.getItemByCD
-        for intCD, records in self.__personal.getVehicleCDsIterator(result):
+        for intCD, records in self.__personal.getVehicleCDsIterator(result, reusable):
             critsRecords = []
             if 'details' in records:
                 playerTeam = self.__personal.avatar.team
@@ -329,6 +360,8 @@ class _ReusableInfo(object):
     def getBiDirectionTeamsIterator(self, result, sortKey=sort_keys.TeamItemSortKey):
         allies = []
         enemies = []
+        enemySupplies = {}
+        allySupplies = {}
         playerTeam = self.__personal.avatar.team
         getAvatarInfo = self.__avatars.getAvatarInfo
         for dbID, player in self.__players.getPlayerInfoIterator():
@@ -340,20 +373,22 @@ class _ReusableInfo(object):
 
         bots = self.__common.getBots()
         for bot in bots.iteritems():
-            info = self.__vehicles.getAIBotVehicleSummarizeInfo(bot[0], bot[1], result)
-            if playerTeam == bot[1].team:
+            botVehicleID, botPlayerInfo = bot[0], bot[1]
+            isAlly = botPlayerInfo.team == playerTeam
+            info = self.__vehicles.getAIBotVehicleSummarizeInfo(botVehicleID, botPlayerInfo, result)
+            supplyCD = self.__common.getSupplyCD(botVehicleID)
+            if supplyCD is not None:
+                totalSortableItems = allySupplies if isAlly else enemySupplies
+                if supplyCD not in totalSortableItems:
+                    totalSortableItems[supplyCD] = SupplySummarizeInfo(botVehicleID, botPlayerInfo)
+                totalSortableItems[supplyCD].addVehicleInfo(info)
+            if isAlly:
                 allies.append(info)
             enemies.append(info)
 
-        def __allies():
-            for ally in sorted(allies, key=sortKey):
-                yield ally
-
-        def __enemies():
-            for enemy in sorted(enemies, key=sortKey):
-                yield enemy
-
-        return (__allies(), __enemies())
+        allies.extend(allySupplies.values())
+        enemies.extend(enemySupplies.values())
+        return (_allies(allies, sortKey), _enemies(enemies, sortKey))
 
     def getPersonalSquadFlags(self):
         playerInfo = self.getPlayerInfo()
@@ -362,6 +397,9 @@ class _ReusableInfo(object):
         if showSquadLabels:
             showSquadLabels, squadHasBonus = self.__personal.avatar.getPersonalSquadFlags(self.__vehicles)
         return (showSquadLabels, squadHasBonus)
+
+    def updateXPEarnings(self, additionalXPValues):
+        self.__personal.updateXPEarnings(additionalXPValues)
 
     def __findSquads(self):
         getVehicleID = self.__vehicles.getVehicleID

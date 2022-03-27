@@ -3,7 +3,7 @@
 from io import BufferedIOBase, TextIOWrapper
 from functools import wraps
 from ResMgr import DataSection
-from constants import ARENA_GUI_TYPE, MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
+from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, ARENA_BONUS_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.impl import backport
 from helpers.i18n import makeString as _ms
@@ -59,7 +59,8 @@ class _ObjectiveTask(_Task):
 
     def getTooltip(self):
         parameter = self._event.getObjectiveParameter()
-        return makeTooltip(body=self._tooltipParameterMap[parameter])
+        pVal = self._tooltipParameterMap.get(parameter)
+        return makeTooltip(body=self._tooltipParameterMap[parameter]) if pVal else ''
 
 
 class _SelectionTask(_Task):
@@ -139,7 +140,7 @@ class _BattleTypeCondition(_Condition):
         return text_styles.main('{0}. {1}'.format(cType, squadInfo))
 
     def getTooltip(self):
-        return makeTooltip(body=TOOLTIPS.ELEN_CONDITION_BATTLETYPE_RANDOM) if self._event.getBattleType() == ARENA_GUI_TYPE.RANDOM else makeTooltip(body=TOOLTIPS.ELEN_CONDITION_BATTLETYPE_NOTRANDOM)
+        return makeTooltip(body=TOOLTIPS.ELEN_CONDITION_BATTLETYPE_RANDOM) if self._event.getBattleType() == ARENA_BONUS_TYPE.REGULAR else makeTooltip(body=TOOLTIPS.ELEN_CONDITION_BATTLETYPE_NOTRANDOM)
 
 
 class _PrimeTimeCondition(_Condition):
@@ -531,7 +532,7 @@ class EventInfo(object):
     def __getConditionIcon(self, iconNum):
         if iconNum == 1:
             bt = self._event.getBattleType()
-            if bt == ARENA_GUI_TYPE.RANKED:
+            if bt == ARENA_BONUS_TYPE.RANKED:
                 return RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGICONS_CONDITIONS_RANKED_BATTLE
             return RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGICONS_CONDITIONS_RANDOM_BATTLE
         elif iconNum == 2:

@@ -42,6 +42,12 @@ class GameStateTracker(IGameStateTracker):
     def onLobbyInited(self, event):
         self._invoke('onLobbyInited', event)
 
+    def onServerReplayEntering(self):
+        self._invoke('onServerReplayEntering')
+
+    def onServerReplayExiting(self):
+        self._invoke('onServerReplayExiting')
+
     def addController(self, controller):
         if not isinstance(controller, IGameController):
             print 'Controller should implements IGameController'

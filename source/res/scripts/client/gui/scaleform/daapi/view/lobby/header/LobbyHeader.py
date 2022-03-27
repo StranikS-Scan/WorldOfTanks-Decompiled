@@ -79,7 +79,7 @@ from shared_utils import CONST_CONTAINER, BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.demount_kit import IDemountKitNovelty
-from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBoostersController, IBootcampController, IChinaController, IEpicBattleMetaGameController, IGameSessionController, IIGRController, IRankedBattlesController, IServerStatsController, IWalletController, IClanNotificationController, IBattleRoyaleController, IUISpamController, IPlatoonController, IMapboxController, IMapsTrainingController, ISteamCompletionController, IEventBattlesController
+from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBoostersController, IBootcampController, IChinaController, IEpicBattleMetaGameController, IGameSessionController, IIGRController, IRankedBattlesController, IServerStatsController, IWalletController, IClanNotificationController, IBattleRoyaleController, IUISpamController, IPlatoonController, IMapboxController, IMapsTrainingController, ISteamCompletionController, IEventBattlesController, IRTSBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.linkedset import ILinkedSetController
@@ -240,6 +240,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     linkedSetController = dependency.descriptor(ILinkedSetController)
     rankedController = dependency.descriptor(IRankedBattlesController)
+    rtsController = dependency.descriptor(IRTSBattlesController)
     clanNotificationCtrl = dependency.descriptor(IClanNotificationController)
     serverStats = dependency.descriptor(IServerStatsController)
     settingsCore = dependency.descriptor(ISettingsCore)
@@ -522,6 +523,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.boosters.onReserveTimerTick += self.__onUpdateGoodies
         self.rankedController.onUpdated += self.__updateRanked
         self.rankedController.onGameModeStatusUpdated += self.__updateRanked
+        self.rtsController.onUpdated += self.__updateRTS
         self.epicController.onUpdated += self.__updateEpic
         self.epicController.onEventEnded += self.__updateEpic
         self.epicController.onPrimeTimeStatusUpdated += self.__updateEpic
@@ -614,6 +616,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.linkedSetController.onStateChanged -= self.__onLinkedSetStateChanged
         self.rankedController.onUpdated -= self.__updateRanked
         self.rankedController.onGameModeStatusUpdated -= self.__updateRanked
+        self.rtsController.onUpdated -= self.__updateRTS
         self.epicController.onUpdated -= self.__updateEpic
         self.epicController.onEventEnded -= self.__updateEpic
         self.epicController.onPrimeTimeStatusUpdated -= self.__updateEpic
@@ -1071,6 +1074,39 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             return ''
         return makeTooltip(header, body)
 
+    def __getRtsFightBtnTooltipData(self, result, isRts1x1):
+        header = None
+        state = result.restriction
+        resShortCut = R.strings.menu.headerButtons.fightBtn.tooltip
+        if state == PRE_QUEUE_RESTRICTION.RTS_SUBMODE_NOT_AVAILABLE:
+            body = backport.text(resShortCut.rtsSubmodeNotAvailable.body())
+        elif state == PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE:
+            body = backport.text(resShortCut.rtsNotAvailable.body())
+        elif state == PRE_QUEUE_RESTRICTION.MODE_NO_BATTLES:
+            header = backport.text(resShortCut.rtsNoBattles.header())
+            body = backport.text(resShortCut.rtsNoBattles.body())
+        elif state == PRE_QUEUE_RESTRICTION.MODE_NOT_SET:
+            header = backport.text(resShortCut.rtsNotSet.header())
+            body = backport.text(resShortCut.rtsNotSet.body())
+        elif state == PREBATTLE_RESTRICTION.RTS_NOT_ENOUGH_CURRENCY:
+            if isRts1x1:
+                body = backport.text(resShortCut.rtsNoCurrency1x1.body())
+            else:
+                body = backport.text(resShortCut.rtsNoCurrency1x7.body())
+        elif state == PREBATTLE_RESTRICTION.AI_ROSTER_NOT_SET:
+            body = backport.text(resShortCut.aiRosterNotSet.body())
+        elif state == PREBATTLE_RESTRICTION.LIMIT_VEHICLES:
+            body = backport.text(resShortCut.rtsNoVehicleWithLevel.body())
+        elif state == PREBATTLE_RESTRICTION.LIMIT_LEVEL or state == PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED:
+            body = backport.text(resShortCut.rtsUnsuitableVehicleLevel.body())
+        elif state == PREBATTLE_RESTRICTION.CREW_NOT_FULL or state == PREBATTLE_RESTRICTION.LIMIT_AMMO or state == PREBATTLE_RESTRICTION.VEHICLE_BROKEN:
+            body = backport.text(resShortCut.rtsVehicleNotReady.body())
+        elif state == PREBATTLE_RESTRICTION.RTS_NOT_ELIGIBLE:
+            body = backport.text(resShortCut.rtsSubmodeNotEligible.body())
+        else:
+            return ''
+        return makeTooltip(header, body)
+
     def __getEpicFightBtnTooltipData(self, result):
         state = result.restriction
         if state == PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE:
@@ -1146,7 +1182,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         state = self.prbDispatcher.getFunctionalState()
         selected = items.update(state)
         squadSelected = squadItems.update(state)
-        hasNew = not self.bootcampController.isInBootcamp() and items.hasNewVisible()
+        isNewbie = self.uiSpamController.shouldBeHidden('ModeSelectorWidgetsBtnHint')
+        hasNew = not self.bootcampController.isInBootcamp() and items.hasNewVisible() and not isNewbie
         result = self.prbEntity.canPlayerDoAction()
         canDo, canDoMsg = result.isValid, result.restriction
         playerInfo = self.prbDispatcher.getPlayerInfo()
@@ -1158,6 +1195,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.as_doDisableHeaderButtonS(self.BUTTONS.SQUAD, self.prbDispatcher.getEntity().getPermissions().canCreateSquad())
         isNavigationEnabled = not state.isNavigationDisabled()
         isEvent = state.isInPreQueue(constants.QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(constants.PREBATTLE_TYPE.EVENT)
+        isRts = state.isInPreQueue(constants.QUEUE_TYPE.RTS)
+        isRts1x1 = state.isInPreQueue(constants.QUEUE_TYPE.RTS_1x1)
         isRanked = state.isInPreQueue(constants.QUEUE_TYPE.RANKED)
         isSandbox = state.isInPreQueue(constants.QUEUE_TYPE.SANDBOX)
         isEpic = state.isInPreQueue(constants.QUEUE_TYPE.EPIC) or state.isInUnit(constants.PREBATTLE_TYPE.EPIC)
@@ -1178,6 +1217,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                     tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_MAPBOXSQUAD
             elif isInSquad or isEvent:
                 tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_INSQUAD
+            elif isRts:
+                tooltip = TOOLTIPS.HEADER_RTSSQUAD_HEADER
             elif isRanked:
                 tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_RANKEDSQUAD
             elif isRoyale or isRoyaleTournament:
@@ -1195,6 +1236,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 tooltipData = self.__getSandboxTooltipData(result)
             elif isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
                 tooltipData = self.__getEventTooltipData()
+            elif isRts or isRts1x1:
+                tooltipData = self.__getRtsFightBtnTooltipData(result, isRts1x1)
             elif g_currentVehicle.isTooHeavy():
                 tooltipData = makeTooltip(body=backport.text(R.strings.tooltips.hangar.startBtn.vehicleToHeavy.body()))
             elif g_currentVehicle.isOnlyForEpicBattles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
@@ -1219,7 +1262,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.as_disableFightButtonS(self.__isFightBtnDisabled)
         self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
         if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.BATTLE_SELECTOR):
-            eventEnabled = self.isEventEnabled
+            eventEnabled = self.isEventEnabled and not isNewbie
             self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), selected.isSelectorBtnEnabled(), self.__SELECTOR_TOOLTIP_TYPE, TOOLTIP_TYPES.COMPLEX, selected.getData(), eventEnabled, eventEnabled and not WWISE.WG_isMSR(), self.lobbyContext.getServerSettings().isLegacyModeSelectorEnabled(), hasNew)
         else:
             self.as_updateBattleTypeS('', '', False, '', TOOLTIP_TYPES.NONE, '', False, False, False, False)
@@ -1351,6 +1394,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __updateRanked(self, *_):
         self._updatePrebattleControls()
         self._updateTabCounters()
+
+    def __updateRTS(self, *_):
+        self._updatePrebattleControls()
 
     def __updateEpic(self, *_):
         self._updatePrebattleControls()

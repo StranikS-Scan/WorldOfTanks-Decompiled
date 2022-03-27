@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/artefacts.py
+import typing
 from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
@@ -20,6 +21,8 @@ from items.tankmen import PERKS
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
 TAG_NOT_FOR_SALE = 'notForSale'
 TAG_TRIGGER = 'trigger'
 TAG_CREW_BATTLE_BOOSTER = 'crewSkillBattleBooster'

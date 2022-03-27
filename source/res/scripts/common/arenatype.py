@@ -1,10 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ArenaType.py
-from collections import defaultdict
 import os
 from realm_utils import ResMgr
-from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH, ARENA_GUI_TYPE_LABEL
-from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, HAS_DEV_RESOURCES
+from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH
+from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, HAS_DEV_RESOURCES, ARENA_GAMEPLAY_COMMANDER_IDS
 from constants import IS_CELLAPP, IS_BASEAPP
 from constants import CHAT_COMMAND_FLAGS
 from coordinate_system import AXIS_ALIGNED_DIRECTION
@@ -64,6 +63,10 @@ def parseTypeID(typeID):
 
 def buildArenaTypeID(gameplayID, geometryID):
     return geometryID | gameplayID << 16
+
+
+def isCommanderGameplay(arenaTypeID):
+    return parseTypeID(arenaTypeID)[0] in ARENA_GAMEPLAY_COMMANDER_IDS
 
 
 _LIST_XML = ARENA_TYPE_XML_PATH + '_list_.xml'
@@ -165,6 +168,36 @@ class GeometryType(_BonusTypeOverridesMixin):
     def __getattr__(self, name):
         value = super(GeometryType, self).__getattr__(name)
         return value if value is not None else self.__cfg.get(name)
+
+
+class _DroneSettingHolder(object):
+
+    def __init__(self):
+        super(_DroneSettingHolder, self).__init__()
+        self.__defaultValue = None
+        self.__specificValues = {}
+        return
+
+    def setValue(self, arenaTypeLabel, value):
+        self.__specificValues[arenaTypeLabel] = value
+        return self
+
+    def getValue(self, arenaTypeLabel):
+        value = self.__specificValues.get(arenaTypeLabel)
+        return value if value is not None else self.__defaultValue
+
+    def setDefault(self, value):
+        self.__defaultValue = value
+        return self
+
+    def getDefault(self):
+        return self.__defaultValue
+
+    def getSpecificItemsCount(self):
+        return len(self.__specificValues)
+
+    def __getitem__(self, key):
+        return self.getValue(key)
 
 
 def __buildCache(geometryID, geometryName, defaultXml, isFullCache, isDevelopmentArena=False):
@@ -270,7 +303,11 @@ def __readGameplayCfgs(geometryName, section, defaultXml, geometryCfg):
             defaultSubsection = defaultGameplayTypesXml[name]
             if defaultSubsection is None:
                 raise SoftException("no defaults for '%s'" % name)
-            cfgs.append(__readGameplayCfg(name, subsection, defaultSubsection, geometryCfg))
+            gameplayCfg = __readGameplayCfg(name, subsection, defaultSubsection, geometryCfg)
+            if IS_CLIENT or IS_WEB:
+                wwmusicDroneSetup = 'wwmusicDroneSetup'
+                gameplayCfg[wwmusicDroneSetup] = __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml, name)
+            cfgs.append(gameplayCfg)
 
     except Exception as e:
         LOG_CURRENT_EXCEPTION()
@@ -326,8 +363,14 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['artilleryPreparationChance'] = _readFloat('artilleryPreparationChance', section, defaultXml)
     if raiseIfMissing or section.has_key('mapActivities'):
         cfg['mapActivitiesTimeframes'] = __readMapActivitiesTimeframes(section)
+    if raiseIfMissing or section.has_key('capturedCount'):
+        cfg['capturedCount'] = _readInt('capturedCount', section, defaultXml, 1)
     if raiseIfMissing or section.has_key('boundingBox'):
         cfg['boundingBox'] = _readBoundingBox(section)
+    if raiseIfMissing or section.has_key('boundingBoxExtension'):
+        cfg['boundingBoxExtension'] = _readInt('boundingBoxExtension', section, defaultXml, 0)
+    if raiseIfMissing or section.has_key('rtsMinMaxCameraHeightOffset'):
+        cfg['rtsMinMaxCameraHeightOffset'] = _readInt('rtsMinMaxCameraHeightOffset', section, defaultXml, 0)
     maxTeamsInArena = cfg.get('maxTeamsInArena', geometryCfg.get('maxTeamsInArena', None))
     cfg.update(__readWinPoints(section))
     cfg.update(__readGameplayPoints(section, geometryCfg))
@@ -341,6 +384,8 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['playerGroupLimit'] = _readInt('playerGroupLimit', section, defaultXml, 0)
     if raiseIfMissing or __hasKey('respawnType', section, defaultXml):
         cfg['respawnType'] = _readString('respawnType', section, defaultXml, '')
+    if raiseIfMissing or __hasKey('spawnRoster', section, defaultXml):
+        cfg['spawnRoster'] = _readString('spawnRoster', section, defaultXml, '')
     if raiseIfMissing or __hasKey('unlockUnusedVehiclesOnLeave', section, defaultXml):
         cfg['unlockUnusedVehiclesOnLeave'] = __readBool('unlockUnusedVehiclesOnLeave', section, defaultXml, False)
     if raiseIfMissing or __hasKey('numDestructiblesToDestroyForWin', section, defaultXml):
@@ -395,9 +440,6 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
             musicSetup = __readWWmusicSection(section, defaultXml)
         if musicSetup is not None:
             cfg['wwmusicSetup'] = musicSetup
-        wwmusicDroneSetup = 'wwmusicDroneSetup'
-        if raiseIfMissing or __hasKey(wwmusicDroneSetup, section, defaultXml):
-            cfg[wwmusicDroneSetup] = __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml)
         if raiseIfMissing or __hasKey('wwbattleCountdownTimerSound', section, defaultXml):
             cfg['battleCountdownTimerSound'] = _readString('wwbattleCountdownTimerSound', section, defaultXml)
         if raiseIfMissing or section.has_key('mapActivities'):
@@ -449,12 +491,12 @@ def __readNotificationsRemappingSection(section, defaultXml):
     return notificationsRemapping
 
 
-def __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml):
+def __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml, gameplayName):
     if section.has_key(wwmusicDroneSetup):
         dataSection = section
     else:
         dataSection = defaultXml
-    outcome = defaultdict(dict)
+    outcome = defaultdict(_DroneSettingHolder)
     droneChildren = sorted(_xml.getChildren(defaultXml, dataSection, wwmusicDroneSetup), key=lambda item: len(item[1].items()))
     valueTag = 'value'
     for settingName, settingChildren in droneChildren:
@@ -462,24 +504,15 @@ def __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml):
             settingValue = settingChildren.readInt(valueTag)
             if settingChildren.has_key('arena_type_label'):
                 if settingChildren.has_key('gameplay_name'):
-                    gameplayType = settingChildren.readString('gameplay_name')
-                    arenaTypeLabel = settingChildren.readString('arena_type_label')
-                    outcome[settingName][arenaTypeLabel, gameplayType] = settingValue
+                    if gameplayName == settingChildren.readString('gameplay_name'):
+                        outcome[settingName].setValue(settingChildren.readString('arena_type_label'), settingValue)
                 else:
-                    arenaTypeLabel = settingChildren.readString('arena_type_label')
-                    for gameplayType in ARENA_GAMEPLAY_NAMES:
-                        outcome[settingName][arenaTypeLabel, gameplayType] = settingValue
-
+                    outcome[settingName].setValue(settingChildren.readString('arena_type_label'), settingValue)
             elif settingChildren.has_key('gameplay_name'):
-                gameplayType = settingChildren.readString('gameplay_name')
-                for arenaTypeLabel in ARENA_GUI_TYPE_LABEL.LABELS.itervalues():
-                    outcome[settingName][arenaTypeLabel, gameplayType] = settingValue
-
+                if gameplayName == settingChildren.readString('gameplay_name'):
+                    outcome[settingName].setDefault(settingValue)
             else:
-                for arenaTypeLabel in ARENA_GUI_TYPE_LABEL.LABELS.itervalues():
-                    for gameplayType in ARENA_GAMEPLAY_NAMES:
-                        outcome[settingName][arenaTypeLabel, gameplayType] = settingValue
-
+                outcome[settingName].setDefault(settingValue)
         raise SoftException('"{}" section missed the key "{}"!'.format(settingName, valueTag))
 
     return outcome

@@ -4,6 +4,7 @@ from items import _xml
 from . import shared_writers
 from items.components import component_constants
 from Math import Vector3
+import ResMgr
 
 def writeWheelsAndGroups(wheelsConfig, section):
     wheelId = 0
@@ -13,8 +14,8 @@ def writeWheelsAndGroups(wheelsConfig, section):
         if sname == 'group':
             group = wheelsConfig.groups[groupId]
             _xml.rewriteString(subsection, 'template', group.template)
-            _xml.rewriteInt(subsection, 'count', group.count, 1)
-            _xml.rewriteInt(subsection, 'startIndex', group.startIndex, 0)
+            _xml.rewriteInt(subsection, 'count', group.count)
+            _xml.rewriteInt(subsection, 'startIndex', group.startIndex)
             _xml.rewriteFloat(subsection, 'radius', group.radius)
             groupId += 1
         if sname == 'wheel':
@@ -124,6 +125,8 @@ def writeTrackNodes(nodes, section):
             _xml.rewriteString(curSection, 'rightSibling', curNode.rightNodeName)
 
     if len(nodes) == 0:
+        if section.has_key('trackNodes'):
+            section.deleteSection('trackNodes')
         return
     else:
         sectionParent = section['trackNodes'] if section.has_key('trackNodes') else section.createSection('trackNodes')
@@ -151,19 +154,22 @@ def writeGroundNodes(groups, section):
         _xml.rewriteFloat(curSection, 'minOffset', curGroup.minOffset)
         _xml.rewriteFloat(curSection, 'maxOffset', curGroup.maxOffset)
 
-    sectionParent = section['groundNodes'] if section.has_key('groundNodes') else section.createSection('groundNodes')
-    sectionToSave = None
-    for node in groups:
-        for childSectionName, childSection in sectionParent.items():
-            if childSectionName == 'group' and node.nodesTemplate == childSection.readString('template'):
-                sectionToSave = childSection
-                break
-        else:
-            sectionToSave = sectionParent.createSection('group')
+    if len(groups) == 0:
+        return
+    else:
+        sectionParent = section['groundNodes'] if section.has_key('groundNodes') else section.createSection('groundNodes')
+        sectionToSave = None
+        for node in groups:
+            for childSectionName, childSection in sectionParent.items():
+                if childSectionName == 'group' and node.nodesTemplate == childSection.readString('template'):
+                    sectionToSave = childSection
+                    break
+            else:
+                sectionToSave = sectionParent.createSection('group')
 
-        writeGroundNode(node, sectionToSave)
+            writeGroundNode(node, sectionToSave)
 
-    return
+        return
 
 
 def writeSplineDesc(splineDesc, section, cache):
@@ -174,7 +180,7 @@ def writeSplineDesc(splineDesc, section, cache):
         def writeTrackPairParams(item, section):
             segment2ModelLeft = item.segment2ModelLeft()
             segment2ModelRight = item.segment2ModelRight()
-            _xml.rewriteInt(section, 'trackPairIdx', item.trackPairIdx)
+            _xml.rewriteInt(section, 'trackPairIdx', item.trackPairIdx, 0)
             _xml.rewriteString(section, 'segmentModelLeft', item.segmentModelLeft())
             _xml.rewriteString(section, 'segmentModelRight', item.segmentModelRight())
             if segment2ModelLeft is not None:
@@ -206,12 +212,24 @@ def writeSplineDesc(splineDesc, section, cache):
 
         if section.has_key('splineDesc'):
             section.deleteSection('splineDesc')
-        newSection = section.createSection('splineDesc')
+        prioritySection = section.getPrioritySection()
+        sectionItems = prioritySection.items()
+        precedingSectionIndex = shared_writers.getPrecedingSectionIndex(sectionItems, 'physicalTracks')
+        newSplineDescSection = None
+        if precedingSectionIndex is not None:
+            newSection = ResMgr.DataSection().createSection('splineDesc')
+            newSplineDescSection = prioritySection.insertSection(newSection, sectionItems[precedingSectionIndex][1])
+        else:
+            newSplineDescSection = section.createSection('splineDesc')
+        newTrackPairsSection = True
+        if len(splineDesc.trackPairs) == 1:
+            newTrackPairsSection = False
         for trackPair in splineDesc.trackPairs.values():
-            writeTrackPairParams(trackPair, newSection)
-            writeModelSets(trackPair, newSection)
+            pairSection = newSplineDescSection.createSection('trackPair') if newTrackPairsSection else newSplineDescSection
+            writeTrackPairParams(trackPair, pairSection)
+            writeModelSets(trackPair, pairSection)
 
-        shared_writers.writeLodDist(splineDesc.lodDist, newSection, 'lodDist', cache)
+        shared_writers.writeLodDist(splineDesc.lodDist, newSplineDescSection, 'lodDist', cache)
         return
 
 

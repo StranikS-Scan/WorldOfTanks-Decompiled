@@ -10,7 +10,7 @@ from gui.impl.gen import R
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
-from helpers import dependency, int2roman, time_utils
+from helpers import dependency, time_utils
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 
 class EpicBattleWidgetTooltip(BlocksTooltipData):
@@ -43,15 +43,7 @@ class EpicBattleWidgetTooltip(BlocksTooltipData):
         items = []
         currentLevel, levelProgress = self.__epicController.getPlayerLevelInfo()
         cycleNumber = self.__epicController.getCurrentOrNextActiveCycleNumber(season)
-        if season.isSingleCycleSeason():
-            infoStrResID = R.strings.menu.headerButtons.battle.types.epic.extra.currentSeason()
-            seasonResID = R.strings.epic_battle.season.num(season.getSeasonID())
-            name = backport.text(seasonResID.name()) if seasonResID else None
-        else:
-            infoStrResID = R.strings.epic_battle.tooltips.common.titleWithCycle()
-            name = int2roman(cycleNumber)
-        seasonDescr = text_styles.middleTitle(backport.text(infoStrResID, season=name))
-        items.append(formatters.packTextBlockData(text=seasonDescr, padding=formatters.packPadding(left=20, right=20)))
+        items.append(formatters.packTextBlockData(text=text_styles.middleTitle(backport.text(R.strings.epic_battle.tooltips.common.title())), padding=formatters.packPadding(left=20, right=20)))
         currentCycle = season.getCycleInfo()
         tDiff = currentCycle.endDate - time_utils.getCurrentLocalServerTimestamp() if currentCycle is not None else 0
         timeLeft = text_styles.main(getTimeToEndStr(tDiff))

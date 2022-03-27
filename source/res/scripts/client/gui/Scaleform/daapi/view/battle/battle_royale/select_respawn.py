@@ -170,4 +170,4 @@ class SelectRespawnView(ViewImpl):
     def __onCompleteBtnClick(self):
         spawnCtrl = self.__sessionProvider.dynamic.spawn
         if spawnCtrl:
-            spawnCtrl.placeVehicle()
+            spawnCtrl.applySelection()

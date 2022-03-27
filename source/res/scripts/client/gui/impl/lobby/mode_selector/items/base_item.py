@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/mode_selector/items/base_item.py
 from abc import ABCMeta, abstractmethod
 import typing
+import Event
 from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -13,7 +14,7 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_reward_mod
 from gui.impl.lobby.mode_selector.items.items_constants import CustomModeName, COLUMN_SETTINGS, DEFAULT_PRIORITY, DEFAULT_COLUMN, ModeSelectorRewardID
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency, i18n
-from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBootcampController, IUISpamController
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from typing import Callable, Optional, Type, Union
@@ -33,6 +34,7 @@ class ModeSelectorItem(object):
     _VIEW_MODEL = None
     _CARD_VISUAL_TYPE = ModeSelectorCardTypes.DEFAULT
     _bootcamp = dependency.descriptor(IBootcampController)
+    _uiSpamController = dependency.descriptor(IUISpamController)
 
     def __init__(self):
         super(ModeSelectorItem, self).__init__()
@@ -105,8 +107,9 @@ class ModeSelectorItem(object):
 
     def _onInitializing(self):
         isInBootcamp = self._bootcamp.isInBootcamp()
+        isNewbie = self._uiSpamController.shouldBeHidden('ModeSelectorWidgetsBtnHint')
         self.viewModel.setIsDisabled(self._getIsDisabled() or isInBootcamp)
-        self.viewModel.setIsNew(self._getIsNew() and not isInBootcamp)
+        self.viewModel.setIsNew(self._getIsNew() and not isInBootcamp and not isNewbie)
         self.viewModel.setIsInfoIconVisible(self._isInfoIconVisible())
         self.viewModel.setModeName(self.modeName)
         self.viewModel.setType(self._CARD_VISUAL_TYPE)
@@ -132,6 +135,10 @@ class ModeSelectorItem(object):
 
 class ModeSelectorNormalCardItem(ModeSelectorItem):
     _VIEW_MODEL = ModeSelectorNormalCardModel
+
+    def __init__(self):
+        super(ModeSelectorNormalCardItem, self).__init__()
+        self.onCardChange = Event.Event()
 
     @property
     def modeName(self):

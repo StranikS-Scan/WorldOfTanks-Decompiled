@@ -37,7 +37,6 @@ class RANKEDBATTLES_ALIASES(object):
     RANKED_AWARD_RENDERER_ALIAS = 'AwardItemRendererExUI'
     RANKED_SEASON_AWARDS_RENDERER_ALIAS = 'SeasonAwardsRendererUI'
     SOUND_WIDGET_OVER = 'highlight'
-    SOUND_RANK_BLINK = 'gui_rb_rank_flicker'
     SOUND_RANK_FIRST_RECEIVE = 'gui_rb_rank_up_initial_first_hangar'
     SOUND_RANK_RECEIVE = 'gui_rb_rank_up_first_hangar'
     SOUND_RANK_LAST_RECEIVE = 'gui_rb_rank_up_last_first_hangar'

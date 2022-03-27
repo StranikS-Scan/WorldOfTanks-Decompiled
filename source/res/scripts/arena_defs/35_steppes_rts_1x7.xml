@@ -1,0 +1,131 @@
+<35_steppes_rts_1x7.xml>
+  <name>	#arenas:35_steppes_rts_1x7/name	</name>
+  <description>	#arenas:35_steppes/description	</description>
+  <geometry>	spaces/35_steppes_rts_1x7	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
+  </boundingBox>
+  <boundingBoxExtension>	70	</boundingBoxExtension>
+  <rtsMinMaxCameraHeightOffset>	0	</rtsMinMaxCameraHeightOffset>
+  <minimap>	spaces/35_steppes_rts_1x7/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_steppes_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_steppes_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_steppes_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_steppes_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_steppes_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_steppes_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_35_steppes_wind_summer	</wwambientSound>
+  <wwmusicDroneSetup>
+    <timeRemained>
+      <value>	900	</value>
+      <arena_type_label>	rts_commander	</arena_type_label>
+      <gameplay_name>	rts	</gameplay_name>
+    </timeRemained>
+    <timeRemained>
+      <value>	180	</value>
+      <arena_type_label>	rts_tankman	</arena_type_label>
+      <gameplay_name>	rts	</gameplay_name>
+    </timeRemained>
+    <hpPercentRemained>
+      <value>	100	</value>
+      <arena_type_label>	rts_commander	</arena_type_label>
+      <gameplay_name>	rts	</gameplay_name>
+    </hpPercentRemained>
+    <hpPercentRemained>
+      <value>	15	</value>
+      <arena_type_label>	rts_tankman	</arena_type_label>
+      <gameplay_name>	rts	</gameplay_name>
+    </hpPercentRemained>
+    <vehiclesRemained>
+      <value>	21	</value>
+      <arena_type_label>	rts_commander	</arena_type_label>
+      <gameplay_name>	rts	</gameplay_name>
+    </vehiclesRemained>
+    <vehiclesRemained>
+      <value>	2	</value>
+      <arena_type_label>	rts_tankman	</arena_type_label>
+      <gameplay_name>	rts	</gameplay_name>
+    </vehiclesRemained>
+    <capturedPoints>
+      <value>	101	</value>
+      <arena_type_label>	rts_commander	</arena_type_label>
+      <gameplay_name>	rts	</gameplay_name>
+    </capturedPoints>
+    <capturedPoints>
+      <value>	15	</value>
+      <arena_type_label>	rts_tankman	</arena_type_label>
+      <gameplay_name>	rts	</gameplay_name>
+    </capturedPoints>
+    <musicStopPredelay>
+      <value>	10	</value>
+    </musicStopPredelay>
+  </wwmusicDroneSetup>
+  <gameplayTypes>
+    <rts>
+      <winnerIfTimeout>	0	</winnerIfTimeout>
+      <teamBasePositions>
+        <team1>
+          <position1>	228.220032 -341.927856	</position1>
+        </team1>
+        <team2>
+          <position1>	-88.818535 361.898010	</position1>
+        </team2>
+      </teamBasePositions>
+    </rts>
+  </gameplayTypes>
+  <mapActivities>
+    <scenario>
+      <startTime>	30.000000 30.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <interval>	80.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	stepps_bomber	</name>
+      <trajectories>
+        <warplane>
+          <preset>	stepps_bomber_line_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	stepps_bomber_line_2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	stepps_bomber_line_3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	stepps_bomber_line_4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	stepps_bomber_line_5	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</35_steppes_rts_1x7.xml>

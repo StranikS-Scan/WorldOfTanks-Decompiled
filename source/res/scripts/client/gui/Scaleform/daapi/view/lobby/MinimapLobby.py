@@ -93,4 +93,9 @@ class MinimapLobby(MinimapPresentationMeta):
         if self.__cfg['controlPoints']:
             for index, controlPoint in enumerate(self.__cfg['controlPoints'], 2):
                 posX, posY = _normalizePoint(controlPoint[0], controlPoint[1])
-                self.as_addPointS(posX, posY, 'control', 'empty', index if len(self.__cfg['controlPoints']) > 1 else 1)
+                arenyType = ArenaType.g_cache[self.__arenaTypeID]
+                if arenyType.gameplayName == 'rts':
+                    controlEntry = 'rtsControl'
+                else:
+                    controlEntry = 'control'
+                self.as_addPointS(posX, posY, controlEntry, 'empty', index if len(self.__cfg['controlPoints']) > 1 else 1)

@@ -14,7 +14,7 @@ from gui.impl.lobby.awards import SupportedTokenTypes
 from gui.impl.lobby.awards.prefetch import TokenDataPrefetcher
 from gui.impl.lobby.awards.tooltip import VEH_FOR_CHOOSE_ID
 from gui.shared.gui_items.Vehicle import getNationLessName, getIconResourceName
-from gui.shared.missions.packers.bonus import VehiclesBonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, AsyncBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, Customization3Dand2DbonusUIPacker
+from gui.shared.missions.packers.bonus import VehiclesBonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, AsyncBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, Customization3Dand2DbonusUIPacker, CustomizationBonusUIPacker, BonusUIPacker
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, int2roman
 from skeletons.gui.offers import IOffersDataProvider
@@ -236,3 +236,19 @@ def getMultipleAwardsBonusPacker(productCode):
      SupportedTokenTypes.TOKENS: tokenBonus,
      SupportedTokenTypes.PROGRESSION_XP_TOKEN: tokenBonus})
     return AsyncBonusUIPacker(mapping)
+
+
+class _AdditionalCustomizationBonusUIPacker(CustomizationBonusUIPacker):
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, item, label):
+        model = super(_AdditionalCustomizationBonusUIPacker, cls)._packSingleBonus(bonus, item, label)
+        customization = bonus.getC11nItem(item)
+        model.setLabel(customization.userName)
+        return model
+
+
+def getAdditionalAwardsBonusPacker():
+    mapping = getDefaultBonusPackersMap()
+    mapping.update({'customizations': _AdditionalCustomizationBonusUIPacker()})
+    return BonusUIPacker(mapping)

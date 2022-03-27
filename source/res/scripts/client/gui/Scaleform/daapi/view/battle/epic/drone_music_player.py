@@ -224,12 +224,12 @@ class _EpicEnemyBaseCaptureCondition(_EpicBaseCaptureCondition):
 
 
 class EpicDroneMusicPlayer(DroneMusicPlayer):
-    _SETTING_TO_CONDITION_MAPPING = {'timeRemained': (lambda player: True, (_EpicTimeRemainedCondition,), lambda name, key, data: (data[name][key], data['musicStopPredelay'][key])),
-     'capturedPoints': (lambda player: True, (_EpicAlliedBaseCaptureCondition, _EpicEnemyBaseCaptureCondition), lambda name, key, data: (data[name][key], data['musicStopPredelay'][key])),
-     'epicRespawnView': (lambda player: True, (_EpicRespawnViewCondition,), lambda name, key, data: data[name][key]),
-     'epicMainObjectivesTotalHealth': (lambda player: True, (_EpicMainObjectivesTotalHealthCondition,), lambda name, key, data: data[name][key]),
-     'epicMainObjectivesNumDestroyed': (lambda player: True, (_EpicMainObjectivesNumDestroyedCondition,), lambda name, key, data: data[name][key]),
-     'epicZoneTransition': (lambda player: True, (_EpicZoneTransitionCondition,), lambda name, key, data: data[name][key])}
+    _SETTING_TO_CONDITION_MAPPING = {'timeRemained': (lambda player: True, (_EpicTimeRemainedCondition,), lambda name, key, data: (data[name].getValue(key), data['musicStopPredelay'].getValue(key))),
+     'capturedPoints': (lambda player: True, (_EpicAlliedBaseCaptureCondition, _EpicEnemyBaseCaptureCondition), lambda name, key, data: (data[name].getValue(key), data['musicStopPredelay'].getValue(key))),
+     'epicRespawnView': (lambda player: True, (_EpicRespawnViewCondition,), lambda name, key, data: data[name].getValue(key)),
+     'epicMainObjectivesTotalHealth': (lambda player: True, (_EpicMainObjectivesTotalHealthCondition,), lambda name, key, data: data[name].getValue(key)),
+     'epicMainObjectivesNumDestroyed': (lambda player: True, (_EpicMainObjectivesNumDestroyedCondition,), lambda name, key, data: data[name].getValue(key)),
+     'epicZoneTransition': (lambda player: True, (_EpicZoneTransitionCondition,), lambda name, key, data: data[name].getValue(key))}
 
     def __init__(self):
         super(EpicDroneMusicPlayer, self).__init__()

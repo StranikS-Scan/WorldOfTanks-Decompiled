@@ -2224,6 +2224,14 @@
       <metallic>	0.3	</metallic>
       <userString>	#vehicle_customization:repaint/cerberus	</userString>
     </paint>
+    <paint>
+      <id>	249	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
+      <color>	7 38 63 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/northern_warriors	</userString>
+    </paint>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
@@ -2930,6 +2938,48 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	R4	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	205	</id>
+      <texture>	gui/maps/vehicles/repaints/china_color_05.png	</texture>
+      <color>	179.000000 158.000000 125.000000 255.000000	</color>
+      <gloss>	0.509000	</gloss>
+      <metallic>	0.230000	</metallic>
+      <userString>	#vehicle_customization:repaint/r4_arrows	</userString>
+    </paint>
+    <paint>
+      <id>	206	</id>
+      <texture>	gui/maps/vehicles/repaints/primer_marmot_01.png	</texture>
+      <color>	48.000000 23.000000 9.000000 255.000000	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.360000	</metallic>
+      <userString>	#vehicle_customization:repaint/r4_hammered	</userString>
+    </paint>
+    <paint>
+      <id>	207	</id>
+      <texture>	gui/maps/vehicles/repaints/poland_color_07.png	</texture>
+      <color>	118.000000 131.000000 135.000000 255.000000	</color>
+      <gloss>	0.509000	</gloss>
+      <metallic>	0.230000	</metallic>
+      <userString>	#vehicle_customization:repaint/r4_allies	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	Lunar NY 2022	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -3056,6 +3106,47 @@
     </paint>
   </itemGroup>
   <itemGroup>
+    <name>	China Labor Day	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	248	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_13.png	</texture>
+      <color>	152 137 113 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/cn_labor_day_2022	</userString>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	Cosmonautics Day 2022	</name>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	252	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_28.png	</texture>
+      <color>	6 3 33 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/cosmonautics_day_2022	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+  </itemGroup>
+  <itemGroup>
     <name>	theboys	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -3172,6 +3263,33 @@
       <gloss>	0.6	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/yandex	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Streamline	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	253	</id>
+      <texture>	gui/maps/vehicles/repaints/poland_color_05.png	</texture>
+      <color>	54 54 74 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/twitch_drops	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
     <usages>

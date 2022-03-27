@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class WidgetQuestModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(WidgetQuestModel, self).__init__(properties=properties, commands=commands)
 
     def getId(self):
@@ -50,6 +50,24 @@ class WidgetQuestModel(ViewModel):
     def setDescription(self, value):
         self._setString(6, value)
 
+    def getCompletedCount(self):
+        return self._getNumber(7)
+
+    def setCompletedCount(self, value):
+        self._setNumber(7, value)
+
+    def getTotalCount(self):
+        return self._getNumber(8)
+
+    def setTotalCount(self, value):
+        self._setNumber(8, value)
+
+    def getIsRTS(self):
+        return self._getBool(9)
+
+    def setIsRTS(self, value):
+        self._setBool(9, value)
+
     def _initialize(self):
         super(WidgetQuestModel, self)._initialize()
         self._addStringProperty('id', '')
@@ -59,3 +77,6 @@ class WidgetQuestModel(ViewModel):
         self._addNumberProperty('totalProgress', 0)
         self._addNumberProperty('earned', 0)
         self._addStringProperty('description', '')
+        self._addNumberProperty('completedCount', 0)
+        self._addNumberProperty('totalCount', 1)
+        self._addBoolProperty('isRTS', False)

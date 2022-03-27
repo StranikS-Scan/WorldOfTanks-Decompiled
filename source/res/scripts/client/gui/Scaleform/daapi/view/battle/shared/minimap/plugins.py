@@ -482,7 +482,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
     def _onVehicleFeedbackReceived(self, eventID, _, __):
         if eventID == FEEDBACK_EVENT_ID.VEHICLE_ATTRS_CHANGED and self.__circlesVisibilityState & settings.CIRCLE_TYPE.VIEW_RANGE:
             self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_UPDATE_DYN_CIRCLE, self._getViewRangeRadius())
-        if eventID == FEEDBACK_EVENT_ID.VEHICLE_DEAD and self.__isObserver:
+        if eventID == FEEDBACK_EVENT_ID.VEHICLE_DEAD and self.__isObserver and not BattleReplay.isServerSideReplay():
             self.__removeAllCircles()
             self.__hideDirectionLine()
 
@@ -887,7 +887,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                 break
 
         self.__replayRegistrator.registerHideVehicle(vehicleToHideID)
-        if isDeactivate:
+        if isDeactivate or BattleReplay.g_replayCtrl.isVehicleChanging():
             self.__setActive(entry, False)
         return
 
@@ -985,17 +985,18 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             return
 
     def __onMinimapVehicleRemoved(self, vehicleID):
-        if vehicleID == self.__playerVehicleID or vehicleID not in self._entries:
+        replayCtrl = BattleReplay.g_replayCtrl
+        if vehicleID == self.__playerVehicleID or vehicleID not in self._entries or replayCtrl.isServerSideReplay and replayCtrl.isAllyToObservedVehicle(vehicleID):
             return
         entry = self._entries[vehicleID]
         if entry.getLocation() == VEHICLE_LOCATION.AOI:
-            if not minimap_utils.isVehicleInAOI(entry.getMatrix()):
+            if replayCtrl.isServerSideReplay and replayCtrl.isVehicleChanging() or minimap_utils.isVehicleInAOI(entry.getMatrix()):
+                self._hideVehicle(entry)
+                self._notifyVehicleRemoved(vehicleID)
+            else:
                 matrix = matrix_factory.makeVehicleMPByLocation(vehicleID, VEHICLE_LOCATION.AOI_TO_FAR, {})
                 self.__setLocationAndMatrix(entry, VEHICLE_LOCATION.AOI_TO_FAR, matrix)
                 self.__setAoIToFarCallback(vehicleID)
-            else:
-                self._hideVehicle(entry)
-                self._notifyVehicleRemoved(vehicleID)
         else:
             LOG_DEBUG('Location of vehicle entry is not in AoI', entry)
 
@@ -1162,7 +1163,7 @@ class SimpleMinimapPingPlugin(common.IntervalPlugin):
 
     def start(self):
         super(SimpleMinimapPingPlugin, self).start()
-        self._setupKeyBindingEvents(False)
+        self._setupKeyBindingEvents(isStrategicSPG=False)
 
     def stop(self):
         super(SimpleMinimapPingPlugin, self).stop()
@@ -1178,7 +1179,7 @@ class SimpleMinimapPingPlugin(common.IntervalPlugin):
     def _processCommandByPosition(self, commands, locationCommand, position, mapScaleIndex):
         raise NotImplementedError('must be implemented')
 
-    def _setupKeyBindingEvents(self, isSPGAndStrategicView):
+    def _setupKeyBindingEvents(self, isStrategicSPG):
         self._mouseKeyEventHandler[_EMinimapMouseKey.KEY_MBL.value] = self._make3DAttentionToPing
 
     def _getTerrainHeightAt(self, spaceID, x, z):
@@ -1246,12 +1247,13 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
         self.__isHintPanelEnabled = False
         self.parentObj.as_disableHintPanelS()
 
-    def updateControlMode(self, crtlMode, vehicleID):
-        super(MinimapPingPlugin, self).updateControlMode(crtlMode, vehicleID)
-        isSPGAndStrategicView = True if crtlMode in (aih_constants.CTRL_MODE_NAME.STRATEGIC, aih_constants.CTRL_MODE_NAME.ARTY, aih_constants.CTRL_MODE_NAME.MAP_CASE) else False
+    def updateControlMode(self, ctrlMode, vehicleID):
+        super(MinimapPingPlugin, self).updateControlMode(ctrlMode, vehicleID)
+        isStrategic = ctrlMode in (_CTRL_MODE.STRATEGIC, _CTRL_MODE.ARTY, _CTRL_MODE.MAP_CASE)
+        isSPG = self.sessionProvider.getArenaDP().getVehicleInfo().isSPG()
         if self.__isHintPanelEnabled:
-            self.parentObj.as_updateHintPanelDataS(isSPGAndStrategicView, self.sessionProvider.getArenaDP().getVehicleInfo().isSPG())
-        self._setupKeyBindingEvents(isSPGAndStrategicView and self.sessionProvider.getArenaDP().getVehicleInfo().isSPG())
+            self.parentObj.as_updateHintPanelDataS(isStrategic, isSPG)
+        self._setupKeyBindingEvents(isStrategic and isSPG)
 
     def onMinimapClicked(self, x, y, buttonIdx, mapScaleIndex):
         if buttonIdx in self._mouseKeyEventHandler:
@@ -1314,12 +1316,9 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
                 self._make3DGoingToPing(x, y, mapScaleIndex)
             return
 
-    def _setupKeyBindingEvents(self, isSPGAndStrategicView):
+    def _setupKeyBindingEvents(self, isStrategicSPG):
         self._mouseKeyEventHandler[_EMinimapMouseKey.KEY_MBR.value] = self._specialMinimapCommand
-        if isSPGAndStrategicView:
-            self._mouseKeyEventHandler[_EMinimapMouseKey.KEY_MBL.value] = self._make3DSPGAimArea
-        else:
-            self._mouseKeyEventHandler[_EMinimapMouseKey.KEY_MBL.value] = self._make3DAttentionToPing
+        self._mouseKeyEventHandler[_EMinimapMouseKey.KEY_MBL.value] = self._make3DSPGAimArea if isStrategicSPG else self._make3DAttentionToPing
 
     def _make3DGoingToPing(self, x, y, mapScaleIndex):
         self._make3DPing(x, y, BATTLE_CHAT_COMMAND_NAMES.GOING_THERE, mapScaleIndex)
@@ -1338,6 +1337,9 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
             commands.sendCommand(ONE_SHOT_COMMANDS_TO_REPLIES[commandKey])
             return
         commands.sendReplyChatCommand(uniqueId, commandKey)
+
+    def handleMouseOverUIMinimap(self, isMouseOver):
+        pass
 
 
 class _ReplayRegistrator(object):

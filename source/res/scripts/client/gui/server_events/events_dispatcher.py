@@ -151,6 +151,11 @@ def showMissionsMapboxProgression():
     showMissions(tab=QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS)
 
 
+def showRTSQuests():
+    from gui.impl.gen.view_models.views.lobby.rts.meta_tab_model import Tabs
+    shared_events.showRTSMetaRootWindow(tabId=Tabs.QUESTS.value)
+
+
 def showMissionsBattlePass(layoutID=None, chapterID=0):
 
     def __battleQueueViewPredicate(window):
@@ -243,6 +248,10 @@ def showMission(eventID, eventType=None):
                 showDailyQuests(subTab=DailyTabs.QUESTS)
             elif events_helpers.isPremium(quest.getID()):
                 showDailyQuests(subTab=DailyTabs.PREMIUM_MISSIONS)
+            elif events_helpers.isRTSStrategistQuest(quest.getID()):
+                showRTSQuests()
+            elif events_helpers.isRTSTankerQuest(quest.getID()):
+                showRTSQuests()
             else:
                 showMissionsCategories(missionID=quest.getID(), groupID=quest.getGroupID(), anchor=quest.getGroupID())
         return

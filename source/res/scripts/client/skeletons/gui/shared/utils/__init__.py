@@ -76,6 +76,14 @@ class IItemsRequester(requesters.IRequester):
     def giftSystem(self):
         raise NotImplementedError
 
+    @property
+    def rtsStatistics(self):
+        raise NotImplementedError
+
+    @property
+    def aiRosters(self):
+        raise NotImplementedError
+
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 
@@ -119,6 +127,9 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     def getItems(self, itemTypeID=None, criteria=None, nationID=None, onlyWithPrices=True):
+        raise NotImplementedError
+
+    def getItemsAsync(self, itemTypeID=None, criteria=None, nationID=None, onlyWithPrices=True, callback=None):
         raise NotImplementedError
 
     def getVehicles(self, criteria=None):

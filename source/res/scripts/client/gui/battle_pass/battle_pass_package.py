@@ -79,6 +79,12 @@ class BattlePassPackage(object):
     def isBought(self):
         return self._battlePassController.isBought(chapterID=self.__chapterID)
 
+    def isExtra(self):
+        return self._battlePassController.isExtraChapter(chapterID=self.__chapterID)
+
+    def getExpireTime(self):
+        return self._battlePassController.getChapterExpiration(self.__chapterID)
+
     def _getMaxLevel(self):
         return self._battlePassController.getMaxLevelInChapter(self.__chapterID)
 
@@ -107,7 +113,7 @@ class PackageAnyLevels(BattlePassPackage):
 
     def isLocked(self):
         chapterID = self.getChapterID()
-        return not (self._battlePassController.isBought(chapterID) and self._battlePassController.isChapterActive(chapterID))
+        return not (self._battlePassController.isBought(chapterID=chapterID) and self._battlePassController.isChapterActive(chapterID))
 
     def isDynamic(self):
         return True

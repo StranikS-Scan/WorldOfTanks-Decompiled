@@ -164,6 +164,10 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_24 = '#menu:loading/battleTypes/desc/24'
     LOADING_BATTLETYPES_25 = '#menu:loading/battleTypes/25'
     LOADING_BATTLETYPES_DESC_25 = '#menu:loading/battleTypes/desc/25'
+    LOADING_BATTLETYPES_26 = '#menu:loading/battleTypes/26'
+    LOADING_BATTLETYPES_DESC_26 = '#menu:loading/battleTypes/desc/26'
+    LOADING_BATTLETYPES_28 = '#menu:loading/battleTypes/28'
+    LOADING_BATTLETYPES_DESC_28 = '#menu:loading/battleTypes/desc/28'
     LOADING_TEAM1 = '#menu:loading/team1'
     LOADING_TEAM2 = '#menu:loading/team2'
     LOADING_TEAMS_ALLIES = '#menu:loading/teams/allies'
@@ -678,6 +682,13 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_MIN = '#menu:headerButtons/battle/types/ranked/availability/min'
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_LESSMIN = '#menu:headerButtons/battle/types/ranked/availability/lessMin'
     HEADERBUTTONS_BATTLE_TYPES_RANKEDLEAVE_DESCR = '#menu:headerButtons/battle/types/rankedLeave/descr'
+    HEADERBUTTONS_BATTLE_TYPES_RTS = '#menu:headerButtons/battle/types/rts'
+    PREBATTLE_RTS_TANKLABEL = '#menu:prebattle/rts/tankLabel'
+    HEADERBUTTONS_BATTLE_TYPES_RTS_AVAILABILITY_DEFAULT = '#menu:headerButtons/battle/types/rts/availability/default'
+    HEADERBUTTONS_BATTLE_TYPES_RTS_AVAILABILITY_AFTERCYCLE = '#menu:headerButtons/battle/types/rts/availability/afterCycle'
+    HEADERBUTTONS_BATTLE_TYPES_RTS_AVAILABILITY_FROZEN = '#menu:headerButtons/battle/types/rts/availability/frozen'
+    HEADERBUTTONS_BATTLE_TYPES_RTS_AVAILABILITY_BEFORECYCLE = '#menu:headerButtons/battle/types/rts/availability/beforeCycle'
+    HEADERBUTTONS_BATTLE_TYPES_RTS_AVAILABILITY_BETWEENCYCLES = '#menu:headerButtons/battle/types/rts/availability/betweenCycles'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD = '#menu:headerButtons/battle/types/squad'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCRIPTION = '#menu:headerButtons/battle/types/squad/description'
     HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
@@ -778,6 +789,20 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSSUBMODENOTAVAILABLE_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsSubmodeNotAvailable/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSSUBMODENOTELIGIBLE_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsSubmodeNotEligible/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOTAVAILABLE_HEADER = '#menu:headerButtons/fightBtn/tooltip/rtsNotAvailable/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOTAVAILABLE_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNotAvailable/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOBATTLES_HEADER = '#menu:headerButtons/fightBtn/tooltip/rtsNoBattles/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOBATTLES_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNoBattles/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/rtsNotSet/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNotSet/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOCURRENCY1X7_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNoCurrency1x7/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOCURRENCY1X1_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNoCurrency1x1/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_AIROSTERNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/aiRosterNotSet/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSVEHICLENOTREADY_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsVehicleNotReady/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSUNSUITABLEVEHICLELEVEL_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsUnsuitableVehicleLevel/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOVEHICLEWITHLEVEL_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNoVehicleWithLevel/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_BATTLEROYALEDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/battleRoyaleDisabled/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_BATTLEROYALEDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/battleRoyaleDisabled/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_UNSUTABLETOBATTLEROYALE_HEADER = '#menu:headerButtons/fightBtn/tooltip/unsutableToBattleRoyale/header'
@@ -1392,10 +1417,9 @@ class MENU(object):
     VEHICLE_RENTLEFT_HOURS = '#menu:vehicle/rentLeft/hours'
     VEHICLE_RENTLEFT_BATTLES = '#menu:vehicle/rentLeft/battles'
     VEHICLE_RENTLEFT_WINS = '#menu:vehicle/rentLeft/wins'
+    VEHICLE_RENTLEFT_EPIC_BASE = '#menu:vehicle/rentLeft/epic/base'
     VEHICLE_RENTLEFT_EPIC_SEASON = '#menu:vehicle/rentLeft/epic/season'
     VEHICLE_RENTLEFT_EPIC_DAYS = '#menu:vehicle/rentLeft/epic/days'
-    VEHICLE_RENTLEFT_EPIC_CYCLE = '#menu:vehicle/rentLeft/epic/cycle'
-    VEHICLE_RENTLEFT_EPIC_CYCLES = '#menu:vehicle/rentLeft/epic/cycles'
     VEHICLE_RESTORELEFT_DISABLEDBYRENT = '#menu:vehicle/restoreLeft/disabledByRent'
     VEHICLE_RESTORELEFT_UNLIM = '#menu:vehicle/restoreLeft/unlim'
     VEHICLE_RESTORELEFT_DAYS = '#menu:vehicle/restoreLeft/days'
@@ -1504,7 +1528,6 @@ class MENU(object):
     CUSTOMIZATION_TITLE = '#menu:customization/title'
     SCREENSHOT_SAVE = '#menu:screenshot/save'
     CONTEXTMENU_EXCHANGE = '#menu:contextMenu/exchange'
-    CONTEXTMENU_PERSONALTRADEEXCHANGE = '#menu:contextMenu/personalTradeExchange'
     CONTEXTMENU_VEHICLEINFO = '#menu:contextMenu/vehicleInfo'
     CONTEXTMENU_VEHICLEINFOEX = '#menu:contextMenu/vehicleInfoEx'
     CONTEXTMENU_GOTONATIONTREE = '#menu:contextMenu/goToNationTree'
@@ -1688,6 +1711,9 @@ class MENU(object):
     BONUSTYPE_29 = '#menu:bonusType/29'
     BONUSTYPE_37 = '#menu:bonusType/37'
     BONUSTYPE_38 = '#menu:bonusType/38'
+    BONUSTYPE_39 = '#menu:bonusType/39'
+    BONUSTYPE_40 = '#menu:bonusType/40'
+    BONUSTYPE_41 = '#menu:bonusType/41'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
@@ -1740,6 +1766,7 @@ class MENU(object):
     DATETIME_FROMTOWITHYEAR = '#menu:dateTime/fromToWithYear'
     DATETIME_ORDER = '#menu:dateTime/order'
     DATETIME_UNLIMITED = '#menu:dateTime/unlimited'
+    DATETIME_TRADE_IN_UNDEFINED = '#menu:dateTime/trade_in/undefined'
     DATETIME_MONTHS_SHORT_1 = '#menu:dateTime/months/short/1'
     DATETIME_MONTHS_SHORT_2 = '#menu:dateTime/months/short/2'
     DATETIME_MONTHS_SHORT_3 = '#menu:dateTime/months/short/3'
@@ -1973,8 +2000,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_EPIC = '#menu:headerButtons/battle/types/epic'
     HEADERBUTTONS_BATTLE_TYPES_EPIC_DESCR = '#menu:headerButtons/battle/types/epic/descr'
     HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_STARTSAT = '#menu:headerButtons/battle/types/epic/extra/startsAt'
-    HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_CURRENTCYCLE = '#menu:headerButtons/battle/types/epic/extra/currentCycle'
-    HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_CURRENTSEASON = '#menu:headerButtons/battle/types/epic/extra/currentSeason'
     HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_FROZEN = '#menu:headerButtons/battle/types/epic/extra/frozen'
     RANGEDELIMITER = '#menu:rangeDelimiter'
     ONLINECOUNTER_TOTAL = '#menu:onlineCounter/total'
@@ -2007,7 +2032,6 @@ class MENU(object):
     TECHTREE_PREMIUMPANEL_BTNLABEL_COUNT = '#menu:techtree/premiumPanel/btnLabel/count'
     CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
     CST_ITEM_CTX_MENU_EXCHANGE = '#menu:cst_item_ctx_menu/exchange'
-    CST_ITEM_CTX_MENU_PERSONALTRADEEXCHANGE = '#menu:cst_item_ctx_menu/personalTradeExchange'
     CST_ITEM_CTX_MENU_BUYMORE = '#menu:cst_item_ctx_menu/buyMore'
     CST_ITEM_CTX_MENU_SELL = '#menu:cst_item_ctx_menu/sell'
     CST_ITEM_CTX_MENU_NATIONCHANGE = '#menu:cst_item_ctx_menu/nationChange'
@@ -2203,8 +2227,23 @@ class MENU(object):
     CRYSTALS_INFO_TAB_SPEND_CARD_PRICE = '#menu:crystals/info/tab/spend/card/price'
     BADGE_NEW = '#menu:badge/new'
     BADGE_CONFIRM = '#menu:badge/confirm'
+    TANK_PARAMS_SUPPLY_AVGDAMAGE = '#menu:tank_params/supply_avgDamage'
+    TANK_PARAMS_SUPPLY_BARRICADESDAMAGE = '#menu:tank_params/supply_barricadesDamage'
+    TANK_PARAMS_SUPPLY_FLAMETHROWERDAMAGE = '#menu:tank_params/supply_flamethrowerDamage'
+    TANK_PARAMS_SUPPLY_AVGPIERCINGPOWER = '#menu:tank_params/supply_avgPiercingPower'
+    TANK_PARAMS_SUPPLY_RELOADTIMESECS = '#menu:tank_params/supply_reloadTimeSecs'
+    TANK_PARAMS_SUPPLY_PILLBOXCLIPFIRERATE = '#menu:tank_params/supply_pillboxClipFireRate'
+    TANK_PARAMS_SUPPLY_BUNKERCLIPFIRERATE = '#menu:tank_params/supply_bunkerClipFireRate'
+    TANK_PARAMS_SUPPLY_MORTARCLIPFIRERATE = '#menu:tank_params/supply_mortarClipFireRate'
+    TANK_PARAMS_SUPPLY_FLAMETHROWERCLIPFIRERATE = '#menu:tank_params/supply_flamethrowerClipFireRate'
+    TANK_PARAMS_SUPPLY_MAXHEALTH = '#menu:tank_params/supply_maxHealth'
+    TANK_PARAMS_SUPPLY_ARMOR = '#menu:tank_params/supply_armor'
+    TANK_PARAMS_SUPPLY_TURRETARMOR = '#menu:tank_params/supply_turretArmor'
+    TANK_PARAMS_SUPPLY_AIMINGTIME = '#menu:tank_params/supply_aimingTime'
+    TANK_PARAMS_SUPPLY_CIRCULARVISIONRADIUS = '#menu:tank_params/supply_circularVisionRadius'
+    TANK_PARAMS_SUPPLY_SHOTDISPERSIONANGLE = '#menu:tank_params/supply_shotDispersionAngle'
+    TANK_PARAMS_SUPPLY_STUNDURATION = '#menu:tank_params/supply_stunDuration'
     CONTEXTMENU_ENUM = (CONTEXTMENU_EXCHANGE,
-     CONTEXTMENU_PERSONALTRADEEXCHANGE,
      CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
      CONTEXTMENU_GOTONATIONTREE,
@@ -2626,7 +2665,23 @@ class MENU(object):
      TANK_PARAMS_CHARGETIME,
      TANK_PARAMS_NO_BRACKETS_KG,
      TANK_PARAMS_NO_BRACKETS_S,
-     TANK_PARAMS_NO_BRACKETS_MM)
+     TANK_PARAMS_NO_BRACKETS_MM,
+     TANK_PARAMS_SUPPLY_AVGDAMAGE,
+     TANK_PARAMS_SUPPLY_BARRICADESDAMAGE,
+     TANK_PARAMS_SUPPLY_FLAMETHROWERDAMAGE,
+     TANK_PARAMS_SUPPLY_AVGPIERCINGPOWER,
+     TANK_PARAMS_SUPPLY_RELOADTIMESECS,
+     TANK_PARAMS_SUPPLY_PILLBOXCLIPFIRERATE,
+     TANK_PARAMS_SUPPLY_BUNKERCLIPFIRERATE,
+     TANK_PARAMS_SUPPLY_MORTARCLIPFIRERATE,
+     TANK_PARAMS_SUPPLY_FLAMETHROWERCLIPFIRERATE,
+     TANK_PARAMS_SUPPLY_MAXHEALTH,
+     TANK_PARAMS_SUPPLY_ARMOR,
+     TANK_PARAMS_SUPPLY_TURRETARMOR,
+     TANK_PARAMS_SUPPLY_AIMINGTIME,
+     TANK_PARAMS_SUPPLY_CIRCULARVISIONRADIUS,
+     TANK_PARAMS_SUPPLY_SHOTDISPERSIONANGLE,
+     TANK_PARAMS_SUPPLY_STUNDURATION)
     BROWSER_CUSTOMTITLE_ENUM = (BROWSER_CUSTOMTITLE_FORT_OFFENSIVERESULT, BROWSER_CUSTOMTITLE_FORT_CONGRATULATION)
     LOADING_BATTLETYPES_DESC_ENUM = (LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_DESC_1,
@@ -2651,7 +2706,9 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_22,
      LOADING_BATTLETYPES_DESC_23,
      LOADING_BATTLETYPES_DESC_24,
-     LOADING_BATTLETYPES_DESC_25)
+     LOADING_BATTLETYPES_DESC_25,
+     LOADING_BATTLETYPES_DESC_26,
+     LOADING_BATTLETYPES_DESC_28)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_1,
@@ -2699,10 +2756,13 @@ class MENU(object):
      LOADING_BATTLETYPES_24,
      LOADING_BATTLETYPES_DESC_24,
      LOADING_BATTLETYPES_25,
-     LOADING_BATTLETYPES_DESC_25)
+     LOADING_BATTLETYPES_DESC_25,
+     LOADING_BATTLETYPES_26,
+     LOADING_BATTLETYPES_DESC_26,
+     LOADING_BATTLETYPES_28,
+     LOADING_BATTLETYPES_DESC_28)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
      CST_ITEM_CTX_MENU_EXCHANGE,
-     CST_ITEM_CTX_MENU_PERSONALTRADEEXCHANGE,
      CST_ITEM_CTX_MENU_BUYMORE,
      CST_ITEM_CTX_MENU_SELL,
      CST_ITEM_CTX_MENU_NATIONCHANGE,

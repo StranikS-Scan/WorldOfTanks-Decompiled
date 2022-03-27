@@ -13,7 +13,7 @@ from UnitRoster import BaseUnitRosterSlot, _BAD_CLASS_INDEX, buildNamesDict, rep
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
-from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster, BattleRoyaleRoster, MapBoxRoster
+from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster, BattleRoyaleRoster, MapBoxRoster, RtsRoster
 if TYPE_CHECKING:
     from typing import List as TList, Tuple as TTuple, Dict as TDict
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
@@ -351,6 +351,7 @@ class UNIT_MGR_FLAGS:
     TOURNAMENT = 8192
     BATTLE_ROYALE = 16384
     MAPBOX = 32768
+    RTS = 65536
 
 
 class UnitAssemblerSearchFlags(object):
@@ -434,6 +435,8 @@ def _prebattleTypeFromFlags(flags):
         return PREBATTLE_TYPE.BATTLE_ROYALE
     elif flags & UNIT_MGR_FLAGS.MAPBOX:
         return PREBATTLE_TYPE.MAPBOX
+    elif flags & UNIT_MGR_FLAGS.RTS:
+        return PREBATTLE_TYPE.RTS
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return PREBATTLE_TYPE.SQUAD
     elif flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
@@ -453,6 +456,8 @@ def _entityNameFromFlags(flags):
         return 'FalloutUnitMgr'
     elif flags & UNIT_MGR_FLAGS.EVENT:
         return 'EventUnitMgr'
+    elif flags & UNIT_MGR_FLAGS.RTS:
+        return 'RtsUnitMgr'
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return 'SquadUnitMgr'
     elif flags & UNIT_MGR_FLAGS.STRONGHOLD:
@@ -508,10 +513,11 @@ class ROSTER_TYPE:
     EVENT_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EVENT
     STRONGHOLD_ROSTER = UNIT_MGR_FLAGS.STRONGHOLD
     TOURNAMENT_ROSTER = UNIT_MGR_FLAGS.TOURNAMENT
+    RTS_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.RTS
     EPIC_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EPIC
     BATTLE_ROYALE_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.BATTLE_ROYALE
     MAPBOX_ROSTER = UNIT_MGR_FLAGS.MAPBOX | UNIT_MGR_FLAGS.SQUAD
-    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE | UNIT_MGR_FLAGS.MAPBOX
+    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.RTS | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE | UNIT_MGR_FLAGS.MAPBOX
 
 
 class EXTRAS_HANDLER_TYPE:
@@ -559,7 +565,8 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.TOURNAMENT_ROSTER: SpecRoster,
  ROSTER_TYPE.EPIC_ROSTER: EpicRoster,
  ROSTER_TYPE.BATTLE_ROYALE_ROSTER: BattleRoyaleRoster,
- ROSTER_TYPE.MAPBOX_ROSTER: MapBoxRoster}
+ ROSTER_TYPE.MAPBOX_ROSTER: MapBoxRoster,
+ ROSTER_TYPE.RTS_ROSTER: RtsRoster}
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler,
  EXTRAS_HANDLER_TYPE.SPEC_BATTLE: ClanBattleExtrasHandler,

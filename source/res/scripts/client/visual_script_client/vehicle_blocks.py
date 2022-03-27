@@ -8,6 +8,8 @@ from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT, errorVScript
 from visual_script.tunable_event_block import TunableEventBlock
 from visual_script.vehicle_blocks import VehicleMeta
+from visual_script.dependency import dependencyImporter
+vehicles = dependencyImporter('items.vehicles')
 
 class GetVehicleLabel(Block, VehicleMeta):
 
@@ -130,10 +132,7 @@ class IsVehicleBurning(Block, VehicleMeta):
 
     def _exec(self):
         v = self._vehicle.getValue()
-        extra = v.typeDescriptor.extrasDict['fire']
-        res = extra is not None and extra.isRunningFor(v)
-        self._res.setValue(res)
-        return
+        self._res.setValue(v.isOnFire())
 
     @classmethod
     def blockAspects(cls):
@@ -165,10 +164,9 @@ class GetNearestAliveVehicle(Block, VehicleMeta):
 
     def _execute(self):
         player = BigWorld.player()
-        vehicles = (v for v in player.vehicles if self.__checkVehicle(v))
         vehicle = None
         minDist = 99999
-        for v in vehicles:
+        for v in (v for v in player.vehicles if self.__checkVehicle(v)):
             dist = player.vehicle.position.distTo(v.position)
             if dist < minDist:
                 vehicle = v
@@ -206,10 +204,26 @@ class GetAnyVehicle(Block, VehicleMeta):
 
     def _execute(self):
         player = BigWorld.player()
-        vehicles = [ v for v in player.vehicles if self.__checkVehicle(v) ]
-        vehicle = random.choice(vehicles) if vehicles else None
+        vehs = [ v for v in player.vehicles if self.__checkVehicle(v) ]
+        vehicle = random.choice(vehs) if vehs else None
         self._vehicle.setValue(weakref.proxy(vehicle) if vehicle else None)
         return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class GetVehicleType(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetVehicleType, self).__init__(*args, **kwargs)
+        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+        self._type = self._makeDataOutputSlot('type', SLOT_TYPE.STR, self._execute)
+
+    def _execute(self):
+        vehicleDescr = self._vehicle.getValue().typeDescriptor.type.compactDescr
+        self._type.setValue(vehicles.getVehicleClass(vehicleDescr))
 
     @classmethod
     def blockAspects(cls):

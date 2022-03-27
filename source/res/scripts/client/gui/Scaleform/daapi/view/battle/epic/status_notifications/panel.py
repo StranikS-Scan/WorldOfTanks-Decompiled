@@ -58,6 +58,7 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
          sn_items.ResupplyTimerSN,
          sn_items.StunSN,
          sn_items.EnemySmokeSN,
+         sn_items.EnemySmokePostEffectSN,
          sn_items.SmokeSN,
          sn_items.StealthSN,
          sn_items.StealthInactiveSN,

@@ -65,10 +65,10 @@
       <Type>	OVERTURN_LEVEL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </overturnLevel>
-    <smoke>
-      <Type>	SMOKE	</Type>
+    <smokeInfo>
+      <Type>	SMOKE_INFO	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
-    </smoke>
+    </smokeInfo>
     <targetVehicleID>
       <Type>	TARGET_VEHICLE_ID	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -97,6 +97,7 @@
   <CellMethods></CellMethods>
   <ClientMethods>
     <onBattleEvents>
+      <Arg>	OBJECT_ID	</Arg>
       <Arg>	ARRAY	  <of>	BATTLE_EVENT	</of>
       </Arg>
     </onBattleEvents>

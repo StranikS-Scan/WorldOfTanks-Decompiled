@@ -120,7 +120,7 @@ class AS3_AppFactory(IAppFactory):
     def showLobby(self):
         _logger.debug('Shows lobby application')
         self._setActive(_SPACE.SF_LOBBY, True)
-        BattleReplay.g_replayCtrl.disableTimeWrap()
+        BattleReplay.g_replayCtrl.disableTimeWarp()
 
     def hideLobby(self):
         _logger.debug('Hides lobby application')
@@ -146,7 +146,7 @@ class AS3_AppFactory(IAppFactory):
                 packages = sf_config.BATTLE_PACKAGES_BY_DEFAULT
             self.__packages[_SPACE.SF_BATTLE] = packages
             self.__importer.load(battle.proxy, sf_config.COMMON_PACKAGES + packages)
-        BattleReplay.g_replayCtrl.enableTimeWrap()
+        BattleReplay.g_replayCtrl.onBattleLoadingFinished()
         BattleReplay.g_replayCtrl.loadServerSettings()
         battle.active(True)
         battle.setVisible(False)
@@ -299,6 +299,10 @@ class AS3_AppFactory(IAppFactory):
             event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EVENT_BATTLE_PAGE))
         elif arenaGuiType == ARENA_GUI_TYPE.MAPS_TRAINING:
             event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.MAPS_TRAINING_PAGE))
+        elif arenaGuiType == ARENA_GUI_TYPE.RTS:
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.COMMANDER_BATTLE_PAGE))
+        elif arenaGuiType == ARENA_GUI_TYPE.RTS_BOOTCAMP:
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.COMMANDER_BOOTCAMP_BATTLE_PAGE))
         else:
             event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.CLASSIC_BATTLE_PAGE))
         g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)

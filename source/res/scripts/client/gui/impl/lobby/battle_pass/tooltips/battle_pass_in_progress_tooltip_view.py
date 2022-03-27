@@ -10,9 +10,10 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_by_
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_model import RewardPointsModel
 from gui.impl.pub import ViewImpl
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
-from gui.battle_pass.battle_pass_helpers import isSeasonEndingSoon, getFormattedTimeLeft, getSupportedCurrentArenaBonusType
+from gui.battle_pass.battle_pass_helpers import isSeasonEndingSoon, getFormattedTimeLeft
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.formatters.invites import getPreQueueName
+from gui.prb_control.prb_getters import getSupportedCurrentArenaBonusType
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -66,6 +67,8 @@ class BattlePassInProgressTooltipView(ViewImpl):
                 model.setIsBattlePassPurchased(isBattlePassPurchased)
                 model.setBattleType(getPreQueueName(battleType).lower())
                 model.setNotChosenRewardCount(self.__battlePassController.getNotChosenRewardCount())
+                model.setExpireTime(self.__battlePassController.getChapterRemainingTime(chapterID))
+                model.setIsExtra(self.__battlePassController.isExtraChapter(chapterID))
                 timeTillEnd = ''
                 if isSeasonEndingSoon() and not isBattlePassPurchased:
                     timeTillEnd = getFormattedTimeLeft(self.__battlePassController.getSeasonTimeLeft())

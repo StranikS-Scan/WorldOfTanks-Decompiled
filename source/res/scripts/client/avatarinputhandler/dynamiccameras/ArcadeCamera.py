@@ -198,8 +198,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
             else:
                 pass
         self.setCameraDistance(self._cfg['startDist'])
-        self._ArcadeCamera__aimingSystem.pitch = self._cfg['startAngle']
-        self._ArcadeCamera__aimingSystem.yaw = Math.Matrix(targetMat).yaw
+        self.setYawPitch(Math.Matrix(targetMat).yaw, self._cfg['startAngle'])
         self._ArcadeCamera__aimingSystem.cursorShouldCheckCollisions(True)
         self._ArcadeCamera__updateAngles(0, 0)
         cameraPosProvider = Math.Vector4Translation(self._ArcadeCamera__aimingSystem.matrix)
@@ -279,8 +278,8 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
             self._ArcadeCamera__aimingSystem.aimMatrix = self._ArcadeCamera__calcAimMatrix()
         if self._ArcadeCamera__postmortemMode:
             if postmortemParams is not None:
-                self._ArcadeCamera__aimingSystem.yaw = postmortemParams[0][0]
-                self._ArcadeCamera__aimingSystem.pitch = postmortemParams[0][1]
+                yawPitch = postmortemParams[0]
+                self.setYawPitch(yawPitch[0], yawPitch[1])
                 camDist = postmortemParams[1]
             else:
                 camDist = self._ArcadeCamera__distRange.max
@@ -509,6 +508,8 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         matInv = Matrix(self._ArcadeCamera__aimingSystem.matrix)
         matInv.invert()
         self._ArcadeCamera__inputInertia.glide(matInv.applyVector(worldDeltaPos), duration = duration, easing = easing)
+        if not self._ArcadeCamera__isSettingsEnabled(GAME.SCROLL_SMOOTHING):
+            self._ArcadeCamera__inputInertia.update(duration)
 
     def __checkNewDistance(self, newDistance):
         distMinMax = self._ArcadeCamera__distRange

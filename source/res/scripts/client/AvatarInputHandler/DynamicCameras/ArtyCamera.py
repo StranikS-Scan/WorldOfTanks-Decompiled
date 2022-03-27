@@ -13,7 +13,7 @@ from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, Camer
 from AvatarInputHandler.DynamicCameras.camera_switcher import CameraSwitcher, SwitchTypes, CameraSwitcherCollection, SwitchToPlaces, TRANSITION_DIST_HYSTERESIS
 from AvatarInputHandler.cameras import readFloat, readVec2, ImpulseReason
 from ProjectileMover import collideDynamicAndStatic
-from account_helpers.settings_core.settings_constants import SPGAim
+from account_helpers.settings_core.settings_constants import GAME, SPGAim
 from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_WARNING
 from helpers.CallbackDelayer import CallbackDelayer
@@ -385,12 +385,13 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
 
     def __interpolateStates(self, deltaTime, rotation, desiredDistance, collisionDist):
         lerpParam = math_utils.clamp(0.0, 1.0, deltaTime * self._cfg['interpolationSpeed'])
+        collisionLerpParam = math_utils.clamp(0.0, 1.0, deltaTime * self._cfg['distInterpolationSpeed'])
         self.__sourceMatrix = slerp(self.__sourceMatrix, rotation, lerpParam)
         camDirection = Vector3()
         camDirection.setPitchYaw(-self.__sourceMatrix.pitch, self.__sourceMatrix.yaw)
         camDirection.normalise()
         self.__camViewPoint = math_utils.lerp(self.__camViewPoint, self.__aimingSystem.aimPoint, lerpParam)
-        self.__collisionDist = math_utils.lerp(self.__collisionDist, collisionDist, lerpParam)
+        self.__collisionDist = math_utils.lerp(self.__collisionDist, collisionDist, collisionLerpParam)
         desiredDistance = max(desiredDistance, self.__collisionDist)
         self.__targetMatrix.translation = self.__camViewPoint - camDirection.scale(desiredDistance)
         return (self.__sourceMatrix, self.__targetMatrix)
@@ -456,7 +457,8 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         bcfg['transitionDist'] = readFloat(dataSec, 'transitionDist', 1.0, 10000.0, 60.0)
         bcfg['minimalPitch'] = readFloat(dataSec, 'minimalPitch', pi / 36.0, pi / 3.0, pi / 18.0)
         bcfg['maximalPitch'] = readFloat(dataSec, 'maximalPitch', pi / 6.0, pi / 3.0, pi / 3.5)
-        bcfg['interpolationSpeed'] = readFloat(dataSec, 'interpolationSpeed', 0.0, 10.0, 5.0)
+        bcfg['interpolationSpeed'] = readFloat(dataSec, 'interpolationSpeed', 0.0, 100.0, 5.0)
+        bcfg['distInterpolationSpeed'] = readFloat(dataSec, 'distInterpolationSpeed', 0.0, 10.0, 5.0)
         bcfg['highPitchThreshold'] = readFloat(dataSec, 'highPitchThreshold', 0.1, 10.0, 3.0)
         bcfg['hTimeThreshold'] = readFloat(dataSec, 'hysteresis/timeThreshold', 0.0, 10.0, 0.5)
         bcfg['hPositionThreshold'] = readFloat(dataSec, 'hysteresis/positionThreshold', 0.0, 100.0, 7.0)
@@ -488,6 +490,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         cfg['minimalPitch'] = bcfg['minimalPitch']
         cfg['maximalPitch'] = bcfg['maximalPitch']
         cfg['interpolationSpeed'] = bcfg['interpolationSpeed']
+        cfg['distInterpolationSpeed'] = bcfg['distInterpolationSpeed']
         cfg['highPitchThresholdSq'] = bcfg['highPitchThreshold'] * bcfg['highPitchThreshold']
         cfg['hTimeThreshold'] = bcfg['hTimeThreshold']
         cfg['hPositionThresholdSq'] = bcfg['hPositionThreshold'] * bcfg['hPositionThreshold']
@@ -503,14 +506,14 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         super(ArtyCamera, self)._handleSettingsChange(diff)
         if SPGAim.AUTO_CHANGE_AIM_MODE in diff:
             self.__enableSwitchers()
-        if SPGAim.SCROLL_SMOOTHING_ENABLED in diff:
-            self.__scrollSmoother.setIsEnabled(self.settingsCore.getSetting(SPGAim.SCROLL_SMOOTHING_ENABLED))
+        if GAME.SCROLL_SMOOTHING in diff:
+            self.__scrollSmoother.setIsEnabled(self.settingsCore.getSetting(GAME.SCROLL_SMOOTHING))
 
     def _updateSettingsFromServer(self):
         super(ArtyCamera, self)._updateSettingsFromServer()
         if self.settingsCore.isReady:
             self.__enableSwitchers()
-            self.__scrollSmoother.setIsEnabled(self.settingsCore.getSetting(SPGAim.SCROLL_SMOOTHING_ENABLED))
+            self.__scrollSmoother.setIsEnabled(self.settingsCore.getSetting(GAME.SCROLL_SMOOTHING))
 
     def __enableSwitchers(self, updateTransitionEnabled=True):
         if updateTransitionEnabled and self.__desiredCamDist - TRANSITION_DIST_HYSTERESIS >= self._cfg['transitionDist']:

@@ -9,7 +9,12 @@ _logger = logging.getLogger(__name__)
 class OwnVehicle(OwnVehicleBase):
 
     def _avatar(self):
-        return BigWorld.player()
+        avatar = BigWorld.player()
+        if avatar.isObserver():
+            attachedVehicle = avatar.getVehicleAttached()
+            if not attachedVehicle or attachedVehicle.id != self.entity.id:
+                return None
+        return avatar
 
     def _doLog(self, msg):
         _logger.info(msg)

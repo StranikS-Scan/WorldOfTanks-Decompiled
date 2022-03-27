@@ -1,21 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/player_messages.py
 import logging
+from typing import TYPE_CHECKING
 from constants import EQUIPMENT_STAGES
 from gui.battle_royale.constants import BR_EQUIPMENTS_WITH_MESSAGES
 from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from items import vehicles
+if TYPE_CHECKING:
+    from items.artefacts import Equipment
 _logger = logging.getLogger(__name__)
 _ID_TO_DESTRUCTIBLE_ENTITY_NAME = {1: '1',
  2: '2',
  3: '3',
  4: '4',
  5: '5'}
-_EQUIPMENT_NAME_TO_POSTFIX_KEY = {'arcade_bomber_battle_royale': 'BOMBER',
- 'arcade_smoke_battle_royale': 'SMOKE',
- 'fl_regenerationKit': 'REGENERATION_KIT_EPIC',
- 'arcade_minefield_epic_battle': 'MINEFIELD_EPIC',
- 'stealth_radar': 'STEALTH_RADAR'}
 
 class PlayerMessages(fading_messages.FadingMessages):
 
@@ -80,7 +78,7 @@ class PlayerMessages(fading_messages.FadingMessages):
                 return
             self.showMessage('COMBAT_BR_EQUIPMENT_READY', {'equipment': itemDescriptor.userString})
         else:
-            self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=self.__getPostfixFromEquipmentName(itemDescriptor.name))
+            self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=self.__getPostfixFromEquipment(itemDescriptor))
 
     def __onCombatEquipmentUsed(self, shooterID, eqID):
         battleCxt = self.sessionProvider.getCtx()
@@ -89,15 +87,12 @@ class PlayerMessages(fading_messages.FadingMessages):
             getFullName = battleCxt.getPlayerFullName
             if equipment is None:
                 return
-            self.showMessage('COMBAT_EQUIPMENT_USED', {'player': getFullName(shooterID, showClan=False)}, extra=(('player', shooterID),), postfix=self.__getPostfixFromEquipmentName(equipment.name))
+            self.showMessage('COMBAT_EQUIPMENT_USED', {'player': getFullName(shooterID, showClan=False)}, extra=(('player', shooterID),), postfix=self.__getPostfixFromEquipment(equipment))
         return
 
     @staticmethod
-    def __getPostfixFromEquipmentName(name):
-        if 'level' in name:
-            postfix = _EQUIPMENT_NAME_TO_POSTFIX_KEY.get(name.partition('level')[0].rstrip('_'))
-        else:
-            postfix = _EQUIPMENT_NAME_TO_POSTFIX_KEY.get(name)
+    def __getPostfixFromEquipment(equipment):
+        postfix = equipment.playerMessagesKey
         if postfix is None:
-            postfix = name.split('_')[0].upper()
+            postfix = equipment.name.split('_')[0].upper()
         return postfix

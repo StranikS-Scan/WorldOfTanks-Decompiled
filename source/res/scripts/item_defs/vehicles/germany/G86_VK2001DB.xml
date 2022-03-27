@@ -2570,6 +2570,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.55 0.55 0.000000 0.000000	</tiling>
             <density>	142.291 139.593	</density>
@@ -2658,6 +2659,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.625 0.625 0.000000 0.000000	</tiling>
             <density>	144.118 154.176	</density>
@@ -2676,7 +2678,7 @@
       </hitTester>
       <gunPosition>	-0.000000 0.28928 0.736404	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.981 0.000 1.000 0.000 0.432 0.133 0.418 1.000 0.500 0.500 0.455 0.500 0.196 0.588 0.135	</physicsShape>
+      <physicsShape>	0.981 -0.029 1.014 0.000 0.543 0.058 0.418 1.000 0.243 0.500 0.339 0.500 0.196 0.588 0.135	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <customization>
         <customizableVehicleAreas>
@@ -3176,32 +3178,18 @@
             <maxPitch>	0 10 0.344444 10 0.347222 0 0.652778 0 0.655556 10 1 10	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	37	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	37	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	18	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	18	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_6>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_13>
             <gun>	10	</gun>
           </armor>
           <reloadTime>	2.5	</reloadTime>
@@ -3252,6 +3240,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.565 0.565 0.000000 0.000000	</tiling>
             <density>	142.291 139.593	</density>
@@ -3265,32 +3254,18 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
           <armor>
-            <armor_1>	37	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	37	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	18	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	18	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_6>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_13>
             <gun>	10	</gun>
           </armor>
           <reloadTime>	2.5	</reloadTime>
@@ -3340,6 +3315,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
             <density>	144.118 154.176	</density>
@@ -3352,32 +3328,18 @@
             <maxPitch>	0 10 0.344444 10 0.347222 0 0.652778 0 0.655556 10 1 10	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	37	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	37	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	18	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	18	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_6>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_13>
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.55	</shotDispersionRadius>
@@ -3429,6 +3391,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.565 0.565 0.000000 0.000000	</tiling>
             <density>	137.629 135.634	</density>
@@ -3447,7 +3410,7 @@
       </hitTester>
       <gunPosition>	-0.000000 0.28928 0.736404	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.159 -0.205 1.014 0.000 0.473 0.086 0.500 1.000 0.500 0.500 0.298 0.500 0.000 0.100 0.123	</physicsShape>
+      <physicsShape>	0.981 -0.029 1.014 0.000 0.543 0.058 0.418 1.000 0.243 0.500 0.339 0.500 0.196 0.588 0.135	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <customization>
         <customizableVehicleAreas>

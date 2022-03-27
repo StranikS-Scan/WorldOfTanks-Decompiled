@@ -378,6 +378,10 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         vehClass = getVehicleClassFromVehicleType(vehicleType)
         return self.__metaSettings.slots.get(vehClass, (0, 0, 0))
 
+    def getAbilitySlotsUnlockOrder(self, vehicleType):
+        vehClass = getVehicleClassFromVehicleType(vehicleType)
+        return self.__metaSettings.inBattleReservesByRank.get('slotActions').get(vehClass, [[0], [0], [0]])
+
     def __invalidateBattleAbilities(self, *_):
         if not self.__itemsCache.isSynced():
             return

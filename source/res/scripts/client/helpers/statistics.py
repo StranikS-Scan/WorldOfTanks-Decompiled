@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/statistics.py
+import typing
 import BigWorld
 import ResMgr
 import Settings
@@ -8,11 +9,14 @@ from account_helpers.settings_core.settings_constants import GRAPHICS
 from gui.shared.utils import monitor_settings
 from debug_utils import LOG_DEBUG, LOG_NOTE
 from helpers import dependency, isPlayerAvatar
+from helpers.actions_per_minute import ActionsPerMinute
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
+if typing.TYPE_CHECKING:
+    from skeletons.helpers.statistics import IActionsPerMinute
 STATISTICS_VERSION = '0.0.2'
 
 class _STATISTICS_STATE(object):
@@ -105,7 +109,6 @@ class StatisticsCollector(IStatisticsCollector):
         self.__hangarLoaded = False
         self.__invalidStats = 0
         self.__dynEvents = []
-        self.reset()
         self.__needCollectSystemData = False
         self.__needCollectSessionData = False
         self.__hangarWasLoadedOnce = False
@@ -116,6 +119,12 @@ class StatisticsCollector(IStatisticsCollector):
         self.__lastArenaUniqueID = 0
         self.__lastArenaTypeID = 0
         self.__lastArenaTeam = 0
+        self.__apm = ActionsPerMinute()
+        self.reset()
+
+    @property
+    def apm(self):
+        return self.__apm
 
     def init(self):
         self.connectionMgr.onDisconnected += self.__onClientDisconnected
@@ -132,6 +141,7 @@ class StatisticsCollector(IStatisticsCollector):
         self.stop()
         self.reset()
         self.__state = _STATISTICS_STATE.STARTED
+        self.__apm.start()
 
     def stop(self):
         if self.__state != _STATISTICS_STATE.STOPPED:
@@ -141,11 +151,13 @@ class StatisticsCollector(IStatisticsCollector):
             ctrl = self.sessionProvider.shared.drrScale
             if ctrl is not None:
                 ctrl.onDRRChanged -= self.__onDRRChanged
+            self.__apm.stop()
         return
 
     def reset(self):
         self.__invalidStats = 0
         self.__updateFunc = self.__updateIdle
+        self.__apm.reset()
 
     def needCollectSystemData(self, value):
         self.__needCollectSystemData = value

@@ -26,13 +26,14 @@ class CombatSelectedArea(object):
         self.__enableConstrainToArenaBounds = enableConstrainToArenaBounds
         return
 
-    def setup(self, position, direction, size, visualPath, color, marker):
+    def setup(self, position, direction, size, visualPath, color, marker, doYCutOff=True):
         self.__fakeModel = model = BigWorld.Model('')
         rootNode = model.node('')
         self.__terrainSelectedArea = area = BigWorld.PyTerrainSelectedArea()
         area.setup(visualPath, size, self.__overTerrainHeight, color)
         area.enableAccurateCollision(True)
         area.setYCutOffDistance(MARKER_HEIGHT)
+        area.doYCutOff(doYCutOff)
         rootNode.attach(area)
         self.__size = size
         self.__color = color
@@ -61,6 +62,7 @@ class CombatSelectedArea(object):
             area.setup(DEFAULT_ROTATE_MODEL, objectSize, self.__overTerrainHeight, self.__color)
             area.enableAccurateCollision(True)
             area.setYCutOffDistance(MARKER_HEIGHT)
+            area.doYCutOff(True)
             self.__rotateModelNode.attach(area)
         elif not value and self.__terrainRotatedArea is not None:
             self.__rotateModelNode.detach(self.__terrainRotatedArea)

@@ -46,7 +46,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
     def __isMarkerHoveringEnabled(self):
         sessionProvider = dependency.instance(IBattleSessionProvider)
         arenaVisitor = sessionProvider.arenaVisitor
-        return self.__isIBCEnabled and not (arenaVisitor.gui.isBootcampBattle() or sessionProvider.getCtx().isPlayerObserver() or arenaVisitor.gui.isBattleRoyale())
+        return self.__isIBCEnabled and not (arenaVisitor.gui.isBootcampBattle() or sessionProvider.getCtx().isPlayerObserver() or arenaVisitor.gui.isBattleRoyale() or sessionProvider.getCtx().isPlayerCommander())
 
     def setScaleProps(self, minScale=40, maxScale=100, defScale=100, speed=3.0):
         self.__canvas.scaleProperties = (minScale,

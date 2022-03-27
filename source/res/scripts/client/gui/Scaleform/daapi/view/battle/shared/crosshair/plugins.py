@@ -474,7 +474,7 @@ class AmmoPlugin(CrosshairPlugin):
             ctrl.onShellsUpdated -= self.__onShellsUpdated
             ctrl.onCurrentShellChanged -= self.__onCurrentShellChanged
             ctrl.onCurrentShellReset -= self.__onCurrentShellReset
-            g_replayEvents.onPause -= self.__onReplayPaused
+        g_replayEvents.onPause -= self.__onReplayPaused
         if vehStateCtrl is not None:
             vehStateCtrl.onVehicleControlling -= self.__onVehicleControlling
         return
@@ -537,7 +537,7 @@ class AmmoPlugin(CrosshairPlugin):
                 self.__autoReloadCallbackID = BigWorld.callback(actualTime, self.__autoReloadFirstShellCallback)
                 self.__scaledInterval = clipInterval
             else:
-                self.__reloadAnimator.setClipAutoLoading(actualTime, self.__reCalcFirstShellAutoReload(baseTime), isRedText=True)
+                self.__reloadAnimator.setClipAutoLoading(actualTime, self.__reCalcFirstShellAutoReload(baseTime), isTimerOn=True, isRedText=True)
                 actualTime = baseTime = 0
             self.__autoReloadSnapshot = state
         self.__reloadAnimator.setShellLoading(actualTime, baseTime)
@@ -1105,6 +1105,8 @@ class SpeedometerWheeledTech(CrosshairPlugin):
     def stop(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         crosshairCtrl = self.sessionProvider.shared.crosshair
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart -= self.__onReplayTimeWarpStart
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling

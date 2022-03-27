@@ -64,12 +64,20 @@
       <id>	TechTreeEvent	</id>
       <rule>	unlockedTank5Level	</rule>
     </alias>
+    <alias>
+      <id>	DogTagHangarHint	</id>
+      <rule>	player100Battles	</rule>
+    </alias>
+    <alias>
+      <id>	ModeSelectorWidgetsBtnHint	</id>
+      <rule>	player10Battles	</rule>
+    </alias>
   </aliases>
   <rules>
     <rule>
       <id>	newPlayer	</id>
       <condition>
-        <battlesCount>	0	</battlesCount>
+        <battlesCount>	1	</battlesCount>
       </condition>
     </rule>
     <rule>
@@ -100,6 +108,12 @@
       <id>	player20Battles	</id>
       <condition>
         <battlesCount>	20	</battlesCount>
+      </condition>
+    </rule>
+    <rule>
+      <id>	player10Battles	</id>
+      <condition>
+        <battlesCount>	10	</battlesCount>
       </condition>
     </rule>
     <rule>

@@ -12,7 +12,7 @@ from gui.impl.gen import R
 from gui.shared.gui_items.gui_item import GUIItem
 from helpers import i18n, dependency
 from shared_utils import CONST_CONTAINER, first
-from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.game_control import IBattlePassController, IRTSBattlesController
 CUSTOM_LOGIC_KEY = 'customLogicImpl'
 
 class BadgeTypes(CONST_CONTAINER):
@@ -89,7 +89,7 @@ class Badge(GUIItem):
         return self.__getIconPath(BADGES_ICONS.X220)
 
     def getBigIcon(self):
-        return self.getBigIconById(self.badgeID)
+        return self.__getIconPath(BADGES_ICONS.X80)
 
     def getIconX110(self):
         return self.__getIconPath(BADGES_ICONS.X110)
@@ -98,7 +98,7 @@ class Badge(GUIItem):
         return self.__getIconPath(BADGES_ICONS.X320)
 
     def getSmallIcon(self):
-        return self.getSmallIconById(self.badgeID)
+        return self.__getIconPath(BADGES_ICONS.X48)
 
     def getThumbnailIcon(self):
         return self.__getIconPath(BADGES_ICONS.X24)
@@ -182,6 +182,16 @@ class Badge(GUIItem):
 
     def __checkLayout(self, badgeLayout):
         return self.data['layout'] & badgeLayout > 0
+
+
+class RTSBadge(Badge):
+    _rtsController = dependency.descriptor(IRTSBattlesController)
+
+    def __init__(self, data, proxy=None, extraData=None):
+        super(RTSBadge, self).__init__(data, proxy)
+
+    def isVisibleAsAchievable(self):
+        return self.isAchievable and self._rtsController.isVisible()
 
 
 class BattlePassBadge(Badge):

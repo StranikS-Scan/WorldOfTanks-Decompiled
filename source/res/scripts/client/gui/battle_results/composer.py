@@ -244,6 +244,53 @@ class MapsTrainingStatsComposer(IStatsComposer):
             MapsTrainingStatsComposer._fromNotifications.remove(arenaUniqueID)
 
 
+class RTSStatsComposer(StatsComposer):
+    __slots__ = ('__teamStats',)
+
+    def __init__(self, reusable):
+        self.__teamStats = teamsStats = templates.RTS_TEAMS_STATS_BLOCK.clone()
+        commanderVehStats = templates.RTS_COMMANDER_VEH_DATA.clone()
+        teamsStats.setEnemyCommanderBlockRef(commanderVehStats)
+        super(RTSStatsComposer, self).__init__(reusable, templates.RTS_COMMON_STATS_BLOCK.clone(), templates.RTS_PERSONAL_STATS_BLOCK.clone(), teamsStats, templates.RTS_TEXT_STATS_BLOCK.clone())
+        self._block.addNextComponent(commanderVehStats)
+
+    def clear(self):
+        self.__teamStats.clearEnemyCommanderBlockRef()
+        self.__teamStats = None
+        super(RTSStatsComposer, self).clear()
+        return
+
+
+class RTSBootcampStatsComposer(IStatsComposer):
+    __slots__ = ('__arenaUniqueID', '__isWin')
+
+    def __init__(self, reusable):
+        self.__arenaUniqueID = reusable.arenaUniqueID
+        self.__isWin = reusable.isPersonalTeamWin()
+
+    def clear(self):
+        self.__arenaUniqueID = None
+        self.__isWin = None
+        return
+
+    def setResults(self, results, reusable):
+        self.__isWin = reusable.isPersonalTeamWin()
+
+    def getVO(self):
+        return {'isWin': self.__isWin}
+
+    def popAnimation(self):
+        pass
+
+    @staticmethod
+    def onResultsPosted(arenaUniqueID):
+        pass
+
+    @staticmethod
+    def onShowResults(arenaUniqueID):
+        event_dispatcher.showRTSBootcampResult(arenaUniqueID)
+
+
 def createComposer(reusable):
     bonusType = reusable.common.arenaBonusType
     if bonusType == ARENA_BONUS_TYPE.CYBERSPORT:
@@ -264,6 +311,10 @@ def createComposer(reusable):
         composer = BattleRoyaleStatsComposer(reusable)
     elif bonusType == ARENA_BONUS_TYPE.MAPS_TRAINING:
         composer = MapsTrainingStatsComposer(reusable)
+    elif bonusType == ARENA_BONUS_TYPE.RTS_BOOTCAMP:
+        composer = RTSBootcampStatsComposer(reusable)
+    elif bonusType in ARENA_BONUS_TYPE.RTS_RANGE:
+        composer = RTSStatsComposer(reusable)
     else:
         composer = RegularStatsComposer(reusable)
     return composer

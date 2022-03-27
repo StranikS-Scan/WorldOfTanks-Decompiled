@@ -7,6 +7,10 @@ import json
 import copy
 import cPickle as pickle
 import logging
+import httplib
+from collections import defaultdict
+from functools import partial
+import typing
 import Math
 import BigWorld
 import ArenaType
@@ -16,10 +20,14 @@ import constants
 import Keys
 import Event
 import AreaDestructibles
+import BWReplay
 import TriggersManager
+from BattleReplayHelpers import BattleReplayPlayersMgr
 from aih_constants import CTRL_MODE_NAME
+import GUI
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import GUI_CTRL_MODE_FLAG
+from gui.SystemMessages import pushI18nMessage, SM_TYPE
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
@@ -35,6 +43,8 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
+if typing.TYPE_CHECKING:
+    from typing import Optional
 g_replayCtrl = None
 REPLAY_FILE_EXTENSION = '.wotreplay'
 AUTO_RECORD_TEMP_FILENAME = 'temp'
@@ -42,10 +52,16 @@ FIXED_REPLAY_FILENAME = 'replay_last_battle'
 REPLAY_TIME_MARK_CLIENT_READY = 2147483648L
 REPLAY_TIME_MARK_REPLAY_FINISHED = 2147483649L
 REPLAY_TIME_MARK_CURRENT_TIME = 2147483650L
+REPLAY_DOWNLOAD_TIMEOUT = 2.0
 FAST_FORWARD_STEP = 20.0
 _BATTLE_SIMULATION_KEY_PATH = 'development/replayBattleSimulation'
 _POSTMORTEM_CTRL_MODES = (CTRL_MODE_NAME.POSTMORTEM, CTRL_MODE_NAME.DEATH_FREE_CAM, CTRL_MODE_NAME.RESPAWN_DEATH)
-_FORWARD_INPUT_CTRL_MODES = (CTRL_MODE_NAME.VIDEO, CTRL_MODE_NAME.CAT, CTRL_MODE_NAME.DEATH_FREE_CAM)
+_FORWARD_INPUT_CTRL_MODES = (CTRL_MODE_NAME.VIDEO,
+ CTRL_MODE_NAME.CAT,
+ CTRL_MODE_NAME.DEATH_FREE_CAM,
+ CTRL_MODE_NAME.RTS_REPLAY_FREE,
+ CTRL_MODE_NAME.COMMANDER,
+ CTRL_MODE_NAME.POSTMORTEM)
 _IGNORED_SWITCHING_CTRL_MODES = (CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.ARCADE,
  CTRL_MODE_NAME.ARTY,
@@ -75,10 +91,96 @@ class CallbackDataNames(object):
     SHOW_AUTO_AIM_MARKER = 'showAutoAimMarker'
     HIDE_AUTO_AIM_MARKER = 'hideAutoAimMarker'
     MT_CONFIG_CALLBACK = 'mapsTrainingConfigurationCallback'
+    SET_CONTROL_VEHICLE_ID = 'setControlVehicleID'
+    REPLAY_MOUSE = 'replayMouse'
+    SET_TRAJECTORY_DRAWERS_VISIBILITY = 'toggleTrajectoryDrawers'
+
+
+class SimulatedAoI(object):
+
+    def __init__(self):
+        self.__aoiMapping = defaultdict(dict)
+        self.__withheld = dict()
+        self.__pending = dict()
+        self.currentVehicleID = None
+        self.currentAvatarID = None
+        self.__controlMode = CTRL_MODE_NAME.POSTMORTEM
+        return
+
+    def changeVehicle(self, vehicleID):
+        if self.currentVehicleID == vehicleID:
+            return
+        else:
+            self.flush(self.__controlMode)
+            self.currentVehicleID = vehicleID
+            priorAvatarID = self.currentAvatarID
+            self.currentAvatarID = None
+            if vehicleID:
+                vehicleEntity = BigWorld.entities.get(vehicleID)
+                if vehicleEntity:
+                    self.currentAvatarID = vehicleEntity.avatarID
+            if priorAvatarID and priorAvatarID in self.__aoiMapping:
+                for entityID, shown in self.__aoiMapping[priorAvatarID].items():
+                    if not shown:
+                        BWReplay.wg_withholdEntity(entityID, False)
+                        self.__withheld[entityID] = False
+
+            currentAoI = None
+            if self.currentAvatarID and self.currentAvatarID in self.__aoiMapping:
+                currentAoI = self.__aoiMapping[self.currentAvatarID]
+            for entityID, isWithheld in self.__withheld.items():
+                shouldSee = currentAoI.get(entityID, False) if currentAoI else True
+                shouldWithhold = not shouldSee
+                if isWithheld != shouldWithhold:
+                    BWReplay.wg_withholdEntity(entityID, shouldWithhold)
+                    self.__withheld[entityID] = shouldWithhold
+
+            return
+
+    def handleAoIEvent(self, witnessID, entityID, hasEnteredAoI):
+        self.__aoiMapping[witnessID][entityID] = hasEnteredAoI
+        isWithheld = self.__withheld.setdefault(entityID, False)
+        isCurrentAvatar = self.currentAvatarID == witnessID
+        if isCurrentAvatar:
+            isWithheld = self.__pending.get(entityID, isWithheld)
+            shouldWithhold = not hasEnteredAoI
+            if isWithheld != shouldWithhold:
+                self.__pending[entityID] = shouldWithhold
+
+    def flush(self, controlMode=CTRL_MODE_NAME.POSTMORTEM):
+        if controlMode == CTRL_MODE_NAME.VIDEO:
+            if self.__controlMode == CTRL_MODE_NAME.VIDEO:
+                return
+            self.__controlMode = CTRL_MODE_NAME.VIDEO
+            for entityID in self.__withheld:
+                BWReplay.wg_withholdEntity(entityID, False)
+
+        else:
+            for entityID, shouldWithhold in self.__pending.items():
+                BWReplay.wg_withholdEntity(entityID, shouldWithhold)
+                self.__withheld[entityID] = shouldWithhold
+
+            if self.__controlMode == CTRL_MODE_NAME.VIDEO:
+                for entityID, shouldWithhold in self.__withheld.items():
+                    if entityID not in self.__pending:
+                        BWReplay.wg_withholdEntity(entityID, shouldWithhold)
+
+            self.__pending.clear()
+            if self.__controlMode != controlMode:
+                self.__controlMode = controlMode
+
+    def reset(self):
+        self.__aoiMapping.clear()
+        self.__withheld.clear()
+        self.__pending.clear()
+        self.currentVehicleID = None
+        self.currentAvatarID = None
+        return
 
 
 class BattleReplay(object):
     isPlaying = property(lambda self: self.__replayCtrl.isPlaying())
+    isServerSideReplay = property(lambda self: self.__replayCtrl.isServerSideReplay)
     isRecording = property(lambda self: self.__replayCtrl.isRecording)
     isClientReady = property(lambda self: self.__replayCtrl.isClientReady)
     isControllingCamera = property(lambda self: self.__replayCtrl.isControllingCamera)
@@ -99,6 +201,7 @@ class BattleReplay(object):
     rewind = property(lambda self: self.__rewind)
     isAutoRecordingEnabled = property(lambda self: self.__isAutoRecordingEnabled)
     arenaInfo = property(lambda self: json.loads(self.__replayCtrl.getArenaInfoStr()))
+    mouseCursor = property(lambda self: self.__replayMouseCursor)
 
     def resetUpdateGunOnTimeWarp(self):
         self.__updateGunOnTimeWarp = False
@@ -120,6 +223,7 @@ class BattleReplay(object):
         self.__fileName = None
         self.__replayCtrl = BigWorld.WGReplayController()
         self.__replayCtrl.replayFinishedCallback = self.onReplayFinished
+        self.__replayCtrl.replayTerminatedCallback = self.onReplayTerminated
         self.__replayCtrl.controlModeChangedCallback = self.onControlModeChanged
         self.__replayCtrl.ammoButtonPressedCallback = self.__onAmmoButtonPressed
         self.__replayCtrl.playerVehicleIDChangedCallback = self.onPlayerVehicleIDChanged
@@ -129,6 +233,8 @@ class BattleReplay(object):
         self.__replayCtrl.equipmentIdCallback = self.onSetEquipmentId
         self.__replayCtrl.warpFinishedCallback = self.__onTimeWarpFinished
         self.__replayCtrl.sniperModeCallback = self.onSniperModeChanged
+        self.__replayCtrl.entityAoIChangedCallback = self.onEntityAoIChangedCallback
+        self.__replayCtrl.postTickCallback = self.onPostTickCallback
         self.__isAutoRecordingEnabled = False
         self.__quitAfterStop = False
         self.__isPlayingPlayList = False
@@ -137,6 +243,11 @@ class BattleReplay(object):
         self.__isMenuShowed = False
         self.__updateGunOnTimeWarp = False
         self.__isBattleSimulation = False
+        self.__lastObservedVehicleID = None
+        self.__aoi = SimulatedAoI()
+        self.__isVehicleChanging = False
+        self.__replayMouseCursor = None
+        self.__replayPlayersMgr = BattleReplayPlayersMgr()
         battleSimulationSection = userPrefs[_BATTLE_SIMULATION_KEY_PATH]
         if battleSimulationSection is not None:
             self.__isBattleSimulation = battleSimulationSection.asBool
@@ -176,6 +287,8 @@ class BattleReplay(object):
             except Exception:
                 pass
 
+        self.__originalPickleLoads = None
+        self.__demandedToWatchFileName = None
         return
 
     def subscribe(self):
@@ -183,6 +296,7 @@ class BattleReplay(object):
         g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete += self.__onBootcampAccountMigrationComplete
+        g_playerEvents.onAvatarObserverVehicleChanged += self.__onAvatarObserverVehicleChanged
         self.settingsCore.onSettingsChanged += self.__onSettingsChanging
 
     def unsubscribe(self):
@@ -190,7 +304,11 @@ class BattleReplay(object):
         g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete -= self.__onBootcampAccountMigrationComplete
+        g_playerEvents.onAvatarObserverVehicleChanged -= self.__onAvatarObserverVehicleChanged
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanging
+
+    def registerPlayer(self, player):
+        self.__replayPlayersMgr.addPlayer(player)
 
     def destroy(self):
         self.stop(isDestroyed=True)
@@ -198,7 +316,12 @@ class BattleReplay(object):
         self.onCommandReceived = None
         self.onAmmoSettingChanged.clear()
         self.onAmmoSettingChanged = None
+        if self.__replayMouseCursor is not None:
+            self.__replayMouseCursor.destroy()
+            self.__replayMouseCursor = None
+        self.__replayPlayersMgr.destroy()
         self.enableAutoRecordingBattles(False)
+        self.__replayCtrl.replayTerminatedCallback = None
         self.__replayCtrl.replayFinishedCallback = None
         self.__replayCtrl.controlModeChangedCallback = None
         self.__replayCtrl.clientVersionDiffersCallback = None
@@ -215,6 +338,15 @@ class BattleReplay(object):
         self.__arenaPeriod = -1
         return
 
+    def testOrCreateReplayDir(self):
+        try:
+            if not os.path.isdir(self.__replayDir):
+                os.makedirs(self.__replayDir)
+            return True
+        except Exception:
+            LOG_ERROR('Failed to create directory for replay files')
+            return False
+
     def record(self, fileName=None):
         if self.isPlaying:
             return False
@@ -225,13 +357,8 @@ class BattleReplay(object):
         useAutoFilename = False
         if fileName is None:
             useAutoFilename = True
-        try:
-            if not os.path.isdir(self.__replayDir):
-                os.makedirs(self.__replayDir)
-        except Exception:
-            LOG_ERROR('Failed to create directory for replay files')
+        if not self.testOrCreateReplayDir():
             return False
-
         success = False
         for i in xrange(100):
             try:
@@ -263,6 +390,7 @@ class BattleReplay(object):
             self.stop()
         import SafeUnpickler
         unpickler = SafeUnpickler.SafeUnpickler()
+        self.__originalPickleLoads = pickle.loads
         pickle.loads = unpickler.loads
         if fileName is not None and fileName.rfind('.wotreplaylist') != -1:
             self.__playList = []
@@ -298,21 +426,90 @@ class BattleReplay(object):
         else:
             self.onStopped()
             wasPlaying = self.isPlaying
+            wasServerReplay = self.isServerSideReplay
             isOffline = self.__replayCtrl.isOfflinePlaybackMode
+            self.__aoi.reset()
+            self.__lastObservedVehicleID = None
             self.__replayCtrl.stop(delete)
             self.__fileName = None
+            self.__isVehicleChanging = False
             if wasPlaying:
                 if isPlayerAvatar():
                     BigWorld.player().onVehicleEnterWorld -= self.__onVehicleEnterWorld
                 if not isOffline and not isDestroyed:
                     self.connectionMgr.onDisconnected += self.__goToNextReplay
-                BigWorld.clearEntitiesAndSpaces()
-                BigWorld.disconnect()
+                if wasServerReplay:
+                    BigWorld.clearAllSpaces()
+                else:
+                    BigWorld.clearEntitiesAndSpaces()
+                    BigWorld.disconnect()
+                g_replayEvents.onReplayTerminated.clear()
                 if self.__quitAfterStop:
+                    if self.__replayMouseCursor is not None:
+                        self.__replayMouseCursor.destroy()
+                        self.__replayMouseCursor = None
                     BigWorld.quit()
                 elif isOffline and not isDestroyed:
                     self.__goToNextReplay()
             return True
+
+    def getDemandedToWatchFileName(self):
+        return self.__demandedToWatchFileName
+
+    def onReplayTerminated(self, reason):
+        _logger.debug('BattleReplay.onReplayTerminated: reason=%r', reason)
+        g_replayEvents.onReplayTerminated()
+        self.__isFinished = False
+        if self.__originalPickleLoads is not None:
+            pickle.loads = self.__originalPickleLoads
+            self.__originalPickleLoads = None
+        return
+
+    def onEntityAoIChangedCallback(self, witnessID, entityID, hasEnteredAoI):
+        _logger.debug('BattleReplay: onEntityAoIChangedCallback: witnessID=%s, entityID=%s, hasEnteredAoI=%s', witnessID, entityID, hasEnteredAoI)
+        self.__aoi.handleAoIEvent(witnessID, entityID, hasEnteredAoI)
+
+    def downloadReplay(self, url, timeout=REPLAY_DOWNLOAD_TIMEOUT, callback=None):
+        if not self.testOrCreateReplayDir():
+            return
+        else:
+            LOG_DEBUG('Starting replay download %s into, timeout %ds' % (url, timeout))
+            BigWorld.fetchURL(url, partial(self.onReplayDownloaded, url=url, callback=callback), None, timeout, 'GET')
+            return
+
+    def onReplayDownloaded(self, response, url='', callback=None):
+        filename = os.path.join(self.__replayDir, url.split('/')[-1])
+        isSuccess = False
+        if response.responseCode != httplib.OK:
+            LOG_ERROR('Replay download error : %d' % response.responseCode)
+        else:
+            try:
+                open(filename, 'wb').write(response.body)
+                LOG_DEBUG('Replay downloaded to file %s' % filename)
+                isSuccess = True
+            except EnvironmentError as error:
+                LOG_ERROR('Replay write to file error : %s' % error)
+
+        if not isSuccess:
+            pushI18nMessage('#system_messages:ssr/unavailable', type=SM_TYPE.Error)
+        if callback is not None:
+            callback(isSuccess, filename)
+        return
+
+    def downloadAndPlayServerSideReplay(self, url):
+        self.downloadReplay(url, REPLAY_DOWNLOAD_TIMEOUT, lambda isSuccess, filename: self.startWatchingServerSideReplay(filename) if isSuccess else None)
+
+    def startWatchingServerSideReplay(self, filename, callback=None):
+        if not filename or not os.path.isfile(filename):
+            LOG_ERROR('Replay file %s is not accessible' % str(filename))
+            return
+        if isPlayerAccount():
+            self.__demandedToWatchFileName = filename
+            if self.isRecording:
+                self.stop(delete=True)
+            BigWorld.player().startWatchingReplay(callback)
+        else:
+            LOG_ERROR('Player is not Account, cannot start watching')
 
     def getAutoStartFileName(self):
         return self.__replayCtrl.getAutoStartFileName()
@@ -326,6 +523,9 @@ class BattleReplay(object):
             else:
                 return True
         return False
+
+    def getSpaceID(self):
+        return BigWorld.player().spaceID
 
     def handleKeyEvent(self, isDown, key, mods, isRepeat, event):
         if not self.isPlaying:
@@ -362,20 +562,32 @@ class BattleReplay(object):
             if self.isPlaying:
                 self.__replayCtrl.onPutScreenshotMark()
                 return True
-        if (key == Keys.KEY_LEFTMOUSE or cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key)) and isDown and not isCursorVisible:
-            if self.isControllingCamera:
-                self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
-                controlMode = self.getControlMode()
-                if controlMode not in _POSTMORTEM_CTRL_MODES:
-                    self.onControlModeChanged('arcade')
-                self.__replayCtrl.isControllingCamera = False
-                self.onControlModeChanged(controlMode)
-                self.__showInfoMessage('replayFreeCameraActivated')
-            else:
-                self.__replayCtrl.isControllingCamera = True
-                self.onControlModeChanged()
-                self.__showInfoMessage('replaySavedCameraActivated')
-            return True
+        if key == Keys.KEY_LEFTMOUSE or cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key):
+            if isDown and not isCursorVisible:
+                if self.isServerSideReplay:
+                    return self.ssrSwitchViewPoint()
+                if self.isControllingCamera:
+                    self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
+                    controlMode = self.getControlMode()
+                    if self.isCommander():
+                        camera = BigWorld.camera()
+                        position = camera.position
+                        direction = camera.direction
+                        self.__replayCtrl.isControllingCamera = False
+                        self.onControlModeChanged(CTRL_MODE_NAME.RTS_REPLAY_FREE)
+                        camera = BigWorld.player().inputHandler.ctrl.camera
+                        camera.enable(position, Math.Vector3(0, -direction.pitch, direction.yaw))
+                    else:
+                        if controlMode not in _POSTMORTEM_CTRL_MODES:
+                            self.onControlModeChanged('arcade')
+                        self.__replayCtrl.isControllingCamera = False
+                        self.onControlModeChanged(controlMode)
+                    self.__showInfoMessage('replayFreeCameraActivated')
+                else:
+                    self.__replayCtrl.isControllingCamera = True
+                    self.onControlModeChanged()
+                    self.__showInfoMessage('replaySavedCameraActivated')
+                return True
         if cmdMap.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and isDown:
             if self.isControllingCamera:
                 return True
@@ -397,9 +609,11 @@ class BattleReplay(object):
             self.__timeWarp(currReplayTime + fastForwardStep)
             return True
         if key == Keys.KEY_LEFTARROW:
+            self.__aoi.reset()
             self.__timeWarp(currReplayTime - fastForwardStep)
             return True
         if key == Keys.KEY_HOME and isDown:
+            self.__aoi.reset()
             self.__timeWarp(0.0)
             return True
         if key == Keys.KEY_END and isDown and not self.__isFinished:
@@ -446,6 +660,30 @@ class BattleReplay(object):
             if dz != 0:
                 return True
         return False
+
+    def ssrSwitchViewPoint(self):
+        if not self.isServerSideReplay:
+            _logger.error('BattleReplay.ssrSwitchViewPoint called but isServerSideReplay==False')
+            return False
+        return self.ssrSwitchToVideoControlMode() if self.getControlMode() == CTRL_MODE_NAME.POSTMORTEM else self.ssrSwitchToPostmortemControlMode()
+
+    def ssrSwitchToVideoControlMode(self):
+        _logger.debug('BattleReplay.ssrSwitchToVideoControlMode')
+        if self.getControlMode() == CTRL_MODE_NAME.VIDEO:
+            return False
+        self.setControlMode(CTRL_MODE_NAME.VIDEO)
+        self.onControlModeChanged(CTRL_MODE_NAME.VIDEO)
+        self.__showInfoMessage('replayFreeCameraActivated')
+        return True
+
+    def ssrSwitchToPostmortemControlMode(self):
+        _logger.debug('BattleReplay.ssrSwitchToPostmortemControlMode')
+        if self.getControlMode() == CTRL_MODE_NAME.POSTMORTEM:
+            return False
+        self.setControlMode(CTRL_MODE_NAME.POSTMORTEM)
+        self.onControlModeChanged(CTRL_MODE_NAME.POSTMORTEM)
+        self.__showInfoMessage('replaySavedCameraActivated')
+        return True
 
     def setGunRotatorTargetPoint(self, value):
         self.__replayCtrl.gunRotatorTargetPoint = value
@@ -523,21 +761,13 @@ class BattleReplay(object):
     def setArenaPeriod(self, period, length):
         if not self.isRecording:
             LOG_ERROR('Replay is not recorded on setArenaPeriod')
-        if period == constants.ARENA_PERIOD.AFTERBATTLE:
-            period = constants.ARENA_PERIOD.BATTLE
         self.__replayCtrl.arenaPeriod = period
         self.__replayCtrl.arenaLength = length
 
     def getArenaPeriod(self):
         if not self.isPlaying:
             raise SoftException('Replay is not playing')
-        ret = self.__replayCtrl.arenaPeriod
-        if ret not in (constants.ARENA_PERIOD.IDLE,
-         constants.ARENA_PERIOD.WAITING,
-         constants.ARENA_PERIOD.PREBATTLE,
-         constants.ARENA_PERIOD.BATTLE):
-            ret = constants.ARENA_PERIOD.WAITING
-        return ret
+        return self.__replayCtrl.arenaPeriod
 
     def getArenaLength(self):
         if not self.isPlaying:
@@ -601,7 +831,12 @@ class BattleReplay(object):
                 AreaDestructibles.g_destructiblesManager.onAfterReplayTimeWarp()
                 if isPlayerAvatar():
                     BigWorld.player().onVehicleEnterWorld += self.__onVehicleEnterWorld
-                self.appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED)
+                    if isServerSideReplay():
+                        BigWorld.player().startServerSideReplay()
+                if not self.isServerSideReplay:
+                    self.appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED)
+                if self.__replayMouseCursor is None:
+                    self.__replayMouseCursor = ReplayMouseCursor()
             if self.isRecording:
                 player = BigWorld.player()
                 arena = player.arena
@@ -643,6 +878,8 @@ class BattleReplay(object):
                     from bootcamp.Bootcamp import g_bootcamp
                     arenaInfo['lessonId'] = g_bootcamp.getLessonNum()
                     arenaInfo['bootcampCtx'] = g_bootcamp.serializeContext()
+                if self.isCommander():
+                    self.setControlMode('commander')
                 self.__replayCtrl.recMapName = arenaName
                 self.__replayCtrl.recPlayerVehicleName = vehicleName
                 self.__replayCtrl.setArenaInfoStr(json.dumps(_JSON_Encode(arenaInfo)))
@@ -652,6 +889,10 @@ class BattleReplay(object):
                     LOG_DEBUG('replayTimeout set for %.2f' % float(self.replayTimeout))
                     BigWorld.callback(float(self.replayTimeout), BigWorld.quit)
             return
+
+    def isCommander(self):
+        player = BigWorld.player()
+        return player is not None and player.isCommander()
 
     @property
     def isNormalSpeed(self):
@@ -671,18 +912,21 @@ class BattleReplay(object):
             return ('undefined', 'undefined') if info is None else (info.branchURL, info.lastChangedRevision)
 
     def __logSVNInfo(self):
-        currentBranch, currentRevision = self.__getBranchAndRevision()
-        replayBranch = self.arenaInfo.get('branchURL')
-        if replayBranch is None:
-            replayBranch = 'undefined'
-        replayRevision = self.arenaInfo.get('lastChangedRevision')
-        if replayRevision is None:
-            replayRevision = 'undefined'
-        _logger.info('Current branch: ' + currentBranch)
-        _logger.info('Current revision: ' + str(currentRevision))
-        _logger.info('Replay branch: ' + replayBranch)
-        _logger.info('Replay revision: ' + str(replayRevision))
-        return
+        if self.isServerSideReplay:
+            return
+        else:
+            currentBranch, currentRevision = self.__getBranchAndRevision()
+            replayBranch = self.arenaInfo.get('branchURL')
+            if replayBranch is None:
+                replayBranch = 'undefined'
+            replayRevision = self.arenaInfo.get('lastChangedRevision')
+            if replayRevision is None:
+                replayRevision = 'undefined'
+            _logger.info('Current branch: ' + currentBranch)
+            _logger.info('Current revision: ' + str(currentRevision))
+            _logger.info('Replay branch: ' + replayBranch)
+            _logger.info('Replay revision: ' + str(replayRevision))
+            return
 
     def __showInfoMessages(self):
         self.__showInfoMessage('replayControlsHelp1')
@@ -706,23 +950,28 @@ class BattleReplay(object):
 
     def loadServerSettings(self):
         if self.isPlaying:
-            self.__serverSettings = dict()
-            try:
-                self.__serverSettings = self.arenaInfo.get('serverSettings')
-            except Exception:
-                LOG_WARNING('There is problem while unpacking server settings from replay')
-                if constants.IS_DEVELOPMENT:
-                    LOG_CURRENT_EXCEPTION()
+            if not self.isServerSideReplay:
+                self.__serverSettings = dict()
+                try:
+                    self.__serverSettings = self.arenaInfo.get('serverSettings')
+                except Exception:
+                    LOG_WARNING('There is problem while unpacking server settings from replay')
+                    if constants.IS_DEVELOPMENT:
+                        LOG_CURRENT_EXCEPTION()
 
             self.lobbyContext.setServerSettings(self.__serverSettings)
 
-    def disableTimeWrap(self):
+    def disableTimeWarp(self):
         self.__enableTimeWarp = False
 
-    def enableTimeWrap(self):
+    def enableTimeWarp(self):
         if self.isPlaying:
             self.__enableTimeWarp = True
-            self.__replayCtrl.onCommonSfwUnloaded()
+
+    def onBattleLoadingFinished(self):
+        self.enableTimeWarp()
+        if self.isPlaying:
+            self.__replayCtrl.onBattleLoadingFinished()
 
     def onReplayFinished(self):
         if not self.scriptModalWindowsEnabled:
@@ -747,6 +996,8 @@ class BattleReplay(object):
                 controlMode = self.getControlMode()
                 if controlMode == CTRL_MODE_NAME.SNIPER:
                     return
+            if not self.isControllingCamera and forceControlMode is None:
+                return
             controlMode = self.getControlMode() if forceControlMode is None else forceControlMode
             if forceControlMode is None and not self.isControllingCamera and controlMode in _IGNORED_SWITCHING_CTRL_MODES:
                 return
@@ -756,12 +1007,40 @@ class BattleReplay(object):
             if controlMode == CTRL_MODE_NAME.MAP_CASE:
                 _, preferredPos, _ = self.getGunMarkerParams(preferredPos, Math.Vector3(0.0, 0.0, 1.0))
             player.inputHandler.onControlModeChanged(controlMode, camMatrix=BigWorld.camera().matrix, preferredPos=preferredPos, saveZoom=False, saveDist=False, equipmentID=self.__equipmentId, curVehicleID=self.__replayCtrl.playerVehicleID)
+            if self.isCommander():
+                self.__replayMouseCursor.setVisible(controlMode == 'commander' and self.isControllingCamera)
             return
 
     def onPlayerVehicleIDChanged(self):
         player = BigWorld.player()
         if self.isPlaying and hasattr(player, 'positionControl'):
             player.inputHandler.ctrl.selectPlayer(self.__replayCtrl.playerVehicleID)
+
+    def __onAvatarObserverVehicleChanged(self, vehID):
+        if self.isServerSideReplay:
+            self.__isVehicleChanging = True
+            if vehID != BigWorld.player().playerVehicleID:
+                self.__lastObservedVehicleID = vehID
+            self.__aoi.changeVehicle(vehID)
+        self.__isVehicleChanging = False
+
+    def getLastObservedVehicleID(self):
+        return self.__lastObservedVehicleID
+
+    def isVehicleChanging(self):
+        return self.__isVehicleChanging
+
+    def isAllyToObservedVehicle(self, vehID):
+        observedVehicleID = self.__aoi.currentVehicleID
+        if not observedVehicleID:
+            return False
+        arenaVehicles = BigWorld.player().arena.vehicles
+        currTeam = arenaVehicles[observedVehicleID]['team']
+        vehTeam = arenaVehicles[vehID]['team']
+        return currTeam == vehTeam
+
+    def onPostTickCallback(self, currentTick, totalTicks):
+        self.__aoi.flush(self.getControlMode())
 
     def setAmmoSetting(self, idx):
         if not isPlayerAvatar():
@@ -850,7 +1129,6 @@ class BattleReplay(object):
         if self.isPlaying:
             return
         if self.isRecording or not isPlayerAccount():
-            BigWorld.callback(0.1, self.__startAutoRecord)
             return
         self.record()
 
@@ -917,29 +1195,34 @@ class BattleReplay(object):
     def __timeWarp(self, time):
         if not self.isPlaying or not self.__enableTimeWarp:
             return
-        g_replayEvents.onTimeWarpStart()
-        if self.__isFinished:
-            self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx)
-        self.__isFinished = False
-        self.__warpTime = time
-        self.__rewind = time < self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
-        AreaDestructibles.g_destructiblesManager.onBeforeReplayTimeWarp(self.__rewind)
-        self.__updateGunOnTimeWarp = True
-        EffectsList.EffectsListPlayer.clear()
-        if self.__rewind:
-            playerControlModeName = BigWorld.player().inputHandler.ctrlModeName
-            self.__wasVideoBeforeRewind = playerControlModeName == CTRL_MODE_NAME.VIDEO
-            self.__videoCameraMatrix.set(BigWorld.camera().matrix)
-            BigWorld.PyGroundEffectManager().stopAll()
-            BigWorld.wg_clearDecals()
-        g_replayEvents.onMuteSound(True)
-        self.__enableInGameEffects(False)
-        if self.__rewind:
-            self.gameplay.postStateEvent(ReplayEventID.REPLAY_REWIND)
-        if not self.__replayCtrl.beginTimeWarp(time):
-            self.__cleanupAfterTimeWarp()
+        else:
+            g_replayEvents.onTimeWarpStart()
+            if self.__isFinished:
+                self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx)
+            self.__isFinished = False
+            self.__warpTime = time
+            self.__rewind = time < self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
+            AreaDestructibles.g_destructiblesManager.onBeforeReplayTimeWarp(self.__rewind)
+            self.__updateGunOnTimeWarp = True
+            EffectsList.EffectsListPlayer.clear()
+            if self.__rewind:
+                playerControlModeName = BigWorld.player().inputHandler.ctrlModeName
+                self.__wasVideoBeforeRewind = playerControlModeName == CTRL_MODE_NAME.VIDEO
+                self.__videoCameraMatrix.set(BigWorld.camera().matrix)
+                BigWorld.PyGroundEffectManager().stopAll()
+                BigWorld.wg_clearDecals()
+                if self.__replayMouseCursor is not None:
+                    self.__replayMouseCursor.destroy()
+                    self.__replayMouseCursor = None
+            g_replayEvents.onMuteSound(True)
+            self.__enableInGameEffects(False)
+            if self.__rewind:
+                self.gameplay.postStateEvent(ReplayEventID.REPLAY_REWIND)
+            if not self.__replayCtrl.beginTimeWarp(time):
+                self.__cleanupAfterTimeWarp()
+                return
+            self.__rewind = False
             return
-        self.__rewind = False
 
     def __enableInGameEffects(self, enable):
         AreaDestructibles.g_destructiblesManager.forceNoAnimation = not enable
@@ -997,6 +1280,8 @@ class BattleReplay(object):
                 self.__perviousPeriod = period
                 self.resetArenaPeriod()
         self.__arenaPeriod = period
+        self.__replayCtrl.arenaPeriod = period
+        self.__replayCtrl.arenaLength = periodLength
 
     def __onBootcampAccountMigrationComplete(self):
         if self.isRecording:
@@ -1036,6 +1321,41 @@ class BattleReplay(object):
         self.__replayCtrl.onRespawnMode(enabled)
 
 
+class ReplayMouseCursor(object):
+    REPLAY_CURSOR = 'gui/maps/icons/replay/arrowReplay.cur'
+
+    def __init__(self):
+        self.__cursor = GUI.Simple(ReplayMouseCursor.REPLAY_CURSOR)
+        self.__cursor.widthMode = self.__cursor.heightMode = 'PIXEL'
+        self.__cursor.size = (32, 32)
+        self.__cursor.position = (0.0, 0.0, 0.0)
+        self.__cursor.visible = False
+        self.__cursor.materialFX = 'BLEND'
+        self.__cursor.filterType = 'LINEAR'
+        GUI.addRoot(self.__cursor)
+
+    @property
+    def position(self):
+        x, y, _ = self.__cursor.position
+        return (x, y)
+
+    def setVisible(self, isVisible):
+        if self.__cursor.visible == isVisible:
+            return
+        replayCallbackOp = g_replayCtrl.setDataCallback if isVisible else g_replayCtrl.delDataCallback
+        replayCallbackOp(CallbackDataNames.REPLAY_MOUSE, self.__moveTo)
+        self.__cursor.visible = isVisible
+
+    def destroy(self):
+        g_replayCtrl.delDataCallback(CallbackDataNames.REPLAY_MOUSE, self.__moveTo)
+        GUI.delRoot(self.__cursor)
+        self.__cursor = None
+        return
+
+    def __moveTo(self, x, y):
+        self.__cursor.position = (x, y, 0)
+
+
 def _JSON_Encode(obj):
     if isinstance(obj, dict):
         newDict = {}
@@ -1061,9 +1381,29 @@ def isPlaying():
     return g_replayCtrl.isPlaying or g_replayCtrl.isTimeWarpInProgress if g_replayCtrl is not None else False
 
 
+def isServerSideReplay():
+    return g_replayCtrl.isServerSideReplay if g_replayCtrl is not None else False
+
+
+def isContollingCamera():
+    return g_replayCtrl.isControllingCamera if g_replayCtrl is not None else False
+
+
 def isLoading():
     return g_replayCtrl is not None and g_replayCtrl.isLoading
 
 
 def isFinished():
     return g_replayCtrl is not None and g_replayCtrl.isFinishedNoPlayCheck()
+
+
+def getSpaceID():
+    return g_replayCtrl.getSpaceID() if g_replayCtrl is not None else BigWorld.player().spaceID
+
+
+def getDemandedToWatchFileName():
+    return g_replayCtrl.getDemandedToWatchFileName() if g_replayCtrl is not None else None
+
+
+def customCallback(result, filename):
+    LOG_DEBUG('Replay Downloaded Custom Callback : result = %d, filename = %s' % (result, filename))

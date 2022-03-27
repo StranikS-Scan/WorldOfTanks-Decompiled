@@ -530,6 +530,9 @@ def rewriteData(section, subsectionName, value, defaultValue, createNew, accessF
         readFunc = getattr(section, 'read' + accessFunSuffix)
         writeFunc = getattr(section, 'write' + accessFunSuffix)
         if section.has_key(subsectionName):
+            if isDefaultValue:
+                section.deleteSection(subsectionName)
+                return True
             if not equal(value, readFunc(subsectionName)):
                 writeFunc(subsectionName, value)
                 return True
@@ -541,7 +544,7 @@ def rewriteData(section, subsectionName, value, defaultValue, createNew, accessF
         if isDefaultValue:
             section.parentSection().deleteSection(section)
             return True
-        if not equal(value, getattr(section, asProp)):
+        if getattr(section, 'asString') == '' or not equal(value, getattr(section, asProp)):
             setattr(section, asProp, value)
             return True
     return False

@@ -59,11 +59,15 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
     BATTLE_ROYALE = 33554432
     MAPBOX = 67108864
     MAPS_TRAINING = 134217728
-    DEFAULT = 268435456
+    RTS = 268435456
+    RTS_1x1 = 536870912
+    RTS_TRAINING = 1073741824
+    RTS_BOOTCAMP = 2147483648L
+    DEFAULT = 4294967296L
     LEGACY_BITMASK = LEGACY_INTRO | LEGACY
     UNIT_BITMASK = UNIT_INTRO | UNIT_BROWSER | UNIT
     PRE_QUEUE_BITMASK = PRE_QUEUE_INTRO | PRE_QUEUE
-    MODES_BITMASK = E_SPORT | TRAINING | BATTLE_SESSION | RANDOM | EVENT | SANDBOX | TUTORIAL | STRONGHOLD | RANKED | BOOTCAMP | EPIC_TRAINING | TOURNAMENT
+    MODES_BITMASK = E_SPORT | TRAINING | BATTLE_SESSION | RANDOM | EVENT | SANDBOX | TUTORIAL | STRONGHOLD | RANKED | BOOTCAMP | EPIC_TRAINING | TOURNAMENT | RTS | RTS_1x1
     SET_GLOBAL_LISTENERS = LEGACY_BITMASK | UNIT_BITMASK | PRE_QUEUE_BITMASK
     RANGE = (UNDEFINED,
      SWITCH,
@@ -89,7 +93,13 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
      RANKED,
      BOOTCAMP,
      EPIC_TRAINING,
-     TOURNAMENT)
+     TOURNAMENT,
+     EPIC,
+     BATTLE_ROYALE,
+     MAPBOX,
+     MAPS_TRAINING,
+     RTS,
+     RTS_1x1)
 
 
 _FUNCTIONAL_FLAG_NAMES = dict([ (k, v) for k, v in FUNCTIONAL_FLAG.__dict__.iteritems() if v in FUNCTIONAL_FLAG.RANGE ])
@@ -165,6 +175,10 @@ class PREBATTLE_ACTION_NAME(object):
     MAPS_TRAINING = 'mapsTraining'
     EVENT_BATTLE = 'event'
     MAPBOX = 'mapbox'
+    RTS = 'rts'
+    RTS_1x1 = 'rts_1x1'
+    RTS_TRAINING_LIST = 'rtsTrainingList'
+    RTS_BOOTCAMP = 'rtsBootcamp'
 
 
 class PREBATTLE_INIT_STEP(object):
@@ -183,6 +197,7 @@ class SELECTOR_BATTLE_TYPES(object):
     MAPBOX = 'mapbox'
     MAPS_TRAINING = 'mapsTraining'
     EVENT = 'event'
+    RTS = 'rts'
 
 
 class REQUEST_TYPE(object):
@@ -262,9 +277,14 @@ class PREBATTLE_RESTRICTION(object):
     UNSUITABLE_VEHICLE_FOR_BATTLE_ROYALE = 'vehicle/notForBattleRoyaleMode'
     VEHICLE_TOO_HEAVY = 'vehicle/tooHeavy'
     VEHICLE_WILL_BE_UNLOCKED = 'vehicle/willBeUnlocked'
+    VEHICLE_ADDITIONAL_INVALID = 'vehicle/additionalInvalidState'
     CREW_NOT_FULL = 'crew/notFull'
     UNIT_NOT_FULL = 'squad/notFull'
     TUTORIAL_NOT_FINISHED = 'tutorial/notFinished'
+    AI_ROSTER_NOT_SET = 'aiRoster/notSet'
+    AI_ROSTER_NOT_READY = 'aiRoster/notReady'
+    RTS_NOT_ENOUGH_CURRENCY = 'rts/notEnoughCurrency'
+    RTS_NOT_ELIGIBLE = 'rts/notEligible'
     SERVER_LIMITS = (LIMIT_MIN_COUNT,
      LIMIT_MAX_COUNT,
      LIMIT_LEVEL,
@@ -363,6 +383,7 @@ class PRE_QUEUE_RESTRICTION(object):
     MODE_NO_BATTLES = 'mode/noBattles'
     MODE_NOT_SET = 'mode/notSet'
     MODE_NOT_AVAILABLE = 'mode/notAvailable'
+    RTS_SUBMODE_NOT_AVAILABLE = 'rts/submodeNotAvailable'
     VEHICLE_WILL_BE_UNLOCKED = 'vehicle/willBeUnlocked'
 
 
@@ -387,7 +408,8 @@ class PREBATTLE_ROSTER(object):
      PREBATTLE_TYPE.TOURNAMENT: ALL,
      PREBATTLE_TYPE.CLAN: ALL,
      PREBATTLE_TYPE.EPIC: ALL,
-     PREBATTLE_TYPE.EPIC_TRAINING: ALL}
+     PREBATTLE_TYPE.EPIC_TRAINING: ALL,
+     PREBATTLE_TYPE.RTS_TRAINING: ALL}
 
     @classmethod
     def getRange(cls, pbType, team=None):

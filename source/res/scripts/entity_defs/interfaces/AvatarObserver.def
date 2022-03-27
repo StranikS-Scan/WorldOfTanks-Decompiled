@@ -3,18 +3,22 @@
     <remoteCamera>
       <Type>	REMOTE_CAMERA_DATA	</Type>
       <Flags>	OWN_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </remoteCamera>
     <isObserverFPV>
       <Type>	BOOL	</Type>
       <Flags>	OWN_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </isObserverFPV>
     <observerFPVControlMode>
       <Type>	UINT8	</Type>
       <Flags>	OWN_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </observerFPVControlMode>
     <numOfObservers>
       <Type>	UINT8	</Type>
       <Flags>	OWN_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </numOfObservers>
   </Properties>
   <CellMethods>

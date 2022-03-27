@@ -10,10 +10,10 @@ def formatInt(value, negativeOrZero=None, formatter=backport.getIntegralFormat):
     return result
 
 
-def makeStringWithThousandSymbol(value, digitLimit=4, formatter=backport.getIntegralFormat):
+def makeStringWithThousandSymbol(value, digitLimit=4, formatter=backport.getIntegralFormat, defNegativeOrZero='-'):
     limitValue = 10 ** digitLimit - 1
     if value > limitValue:
         result = formatter(int(value * 0.001)) + 'K'
     else:
-        result = formatInt(value, '-', formatter)
+        result = formatInt(value, defNegativeOrZero, formatter)
     return result

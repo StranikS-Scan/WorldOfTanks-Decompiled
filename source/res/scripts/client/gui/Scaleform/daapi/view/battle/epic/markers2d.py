@@ -436,6 +436,7 @@ class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             destructibleComponent.onDestructibleEntityRemoved += self.__onDestructibleEntityRemoved
             destructibleComponent.onDestructibleEntityStateChanged += self.__onDestructibleEntityStateChanged
             destructibleComponent.onDestructibleEntityHealthChanged += self.__onDestructibleEntityHealthChanged
+            destructibleComponent.onDestructibleEntityIsActiveChanged += self.__activateDestructibleMarker
             hqs = destructibleComponent.destructibleEntities
             for hq in hqs.itervalues():
                 self.__onDestructibleEntityAdded(hq)
@@ -457,6 +458,7 @@ class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             destructibleComponent.onDestructibleEntityRemoved -= self.__onDestructibleEntityRemoved
             destructibleComponent.onDestructibleEntityStateChanged -= self.__onDestructibleEntityStateChanged
             destructibleComponent.onDestructibleEntityHealthChanged -= self.__onDestructibleEntityHealthChanged
+            destructibleComponent.onDestructibleEntityIsActiveChanged -= self.__activateDestructibleMarker
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived -= self.__onMinimapFeedbackReceived

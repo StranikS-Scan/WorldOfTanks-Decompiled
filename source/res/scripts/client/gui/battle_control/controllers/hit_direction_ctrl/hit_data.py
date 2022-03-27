@@ -125,3 +125,14 @@ class HitData(SimpleHitData):
         if attackReasonID in _NONE_PLAYER_ATTACK_REASON_TAG:
             flags |= HIT_FLAGS.IS_NON_PLAYER_ATTACK_REASON
         return flags
+
+
+class RTSHitData(HitData):
+    __slots__ = ('__damagedID',)
+
+    def __init__(self, yaw=0, attackerID=0, damagedID=0, **kwargs):
+        super(RTSHitData, self).__init__(yaw, attackerID, **kwargs)
+        self.__damagedID = damagedID
+
+    def getDamagedID(self):
+        return self.__damagedID

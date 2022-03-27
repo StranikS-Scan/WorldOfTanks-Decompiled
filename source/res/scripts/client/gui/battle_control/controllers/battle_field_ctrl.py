@@ -3,11 +3,14 @@
 import typing
 import BigWorld
 import Event
+from constants import ATTACK_REASON_INDICES, ATTACK_REASON
 from gui.battle_control.arena_info import vos_collections
 from gui.battle_control.arena_info.interfaces import IBattleFieldController, IVehiclesAndPositionsController
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE, VehicleSpottedStatus, INVALIDATE_OP
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.view_components import ViewComponentsController
+from gui.battle_control import avatar_getter
+from gui.sounds.r4_sound_constants import R4_SOUND
 if typing.TYPE_CHECKING:
     from typing import Dict, Iterator, List
     from Math import Vector3
@@ -29,6 +32,7 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
 
     def __init__(self):
         super(BattleFieldCtrl, self).__init__()
+        self._isEnabled = True
         self.__battleCtx = None
         self._aliveAllies = {}
         self._aliveEnemies = {}
@@ -57,11 +61,12 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
 
     def startControl(self, battleCtx, arenaVisitor):
         self.__battleCtx = battleCtx
+        self._isEnabled = not arenaVisitor.isArenaFogOfWarEnabled()
 
     def stopControl(self):
         super(BattleFieldCtrl, self).stopControl()
         self.clearViewComponents()
-        self.__clear()
+        self._clear()
         if self.__eManager is not None:
             self.__eManager.clear()
             self.__eManager = None
@@ -70,16 +75,19 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
 
     def setViewComponents(self, *components):
         super(BattleFieldCtrl, self).setViewComponents(*components)
-        self.__initializeVehiclesInfo()
+        if self._isEnabled:
+            self.__initializeVehiclesInfo()
 
-    def setVehicleHealth(self, vehicleID, newHealth):
-        self.__changeVehicleHealth(vehicleID, newHealth)
-        self.__updateVehicleHealth(vehicleID)
+    def setVehicleHealth(self, vehicleID, newHealth, attackReasonID=None):
+        if self._isEnabled:
+            self._changeVehicleHealth(vehicleID, newHealth, attackReasonID=attackReasonID)
+            self.__updateVehicleHealth(vehicleID)
 
     def setVehicleVisible(self, vehicleID, health):
-        self.__changeVehicleHealth(vehicleID, health)
-        self.__updateVehicleHealth(vehicleID)
-        self.__updateSpottedStatus(vehicleID, VehicleSpottedStatus.SPOTTED)
+        if self._isEnabled:
+            self._changeVehicleHealth(vehicleID, health)
+            self.__updateVehicleHealth(vehicleID)
+            self.__updateSpottedStatus(vehicleID, VehicleSpottedStatus.SPOTTED)
 
     def updatePositions(self, iterator):
         handled = set()
@@ -105,26 +113,30 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
         self.__updateSpottedStatus(vehicleID, VehicleSpottedStatus.UNSPOTTED)
 
     def addVehicleInfo(self, vInfoVO, arenaDP):
-        if vInfoVO.isAlive():
-            self.__registerAliveVehicle(vInfoVO, arenaDP)
+        if self._isEnabled and vInfoVO.isAlive():
+            self._registerAliveVehicle(vInfoVO, arenaDP)
             self.__updateVehiclesHealth()
 
     def updateVehiclesInfo(self, updated, arenaDP):
-        for _, vInfoVO in updated:
-            if not vInfoVO.isAlive():
-                continue
-            vehicleID = vInfoVO.vehicleID
-            if vehicleID in self._aliveEnemies or vehicleID in self._aliveAllies:
-                self.__changeMaxVehicleHealth(vehicleID, vInfoVO.vehicleType.maxHealth)
-            self.addVehicleInfo(vInfoVO, arenaDP)
+        if self._isEnabled:
+            for _, vInfoVO in updated:
+                if not vInfoVO.isAlive():
+                    continue
+                vehicleID = vInfoVO.vehicleID
+                if vehicleID in self._aliveEnemies or vehicleID in self._aliveAllies:
+                    self.__changeMaxVehicleHealth(vehicleID, vInfoVO.vehicleType.maxHealth)
+                self.addVehicleInfo(vInfoVO, arenaDP)
+
+    def invalidateFogOfWarEnabledFlag(self, flag):
+        self._isEnabled = not flag
 
     def invalidateArenaInfo(self):
-        if self._viewComponents:
+        if self._isEnabled and self._viewComponents:
             self.__initializeVehiclesInfo()
 
     def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
-        if not vInfoVO.isAlive():
-            self.__registerDeadVehicle(vInfoVO, arenaDP)
+        if self._isEnabled and not vInfoVO.isAlive():
+            self._registerDeadVehicle(vInfoVO, arenaDP)
             self.__updateDeadVehicles()
             vehicleId = vInfoVO.vehicleID
             if vehicleId in self._aliveEnemies:
@@ -144,24 +156,24 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
     def __initializeVehiclesInfo(self):
         arenaDP = self.__battleCtx.getArenaDP()
         collection = vos_collections.VehiclesInfoCollection()
-        self.__clear()
+        self._clear()
         for vInfoVO in collection.iterator(arenaDP):
-            if vInfoVO.isObserver():
+            if vInfoVO.isObserver() or vInfoVO.isSupply():
                 continue
             if not vInfoVO.isAlive():
-                self.__registerDeadVehicle(vInfoVO, arenaDP)
-            self.__registerAliveVehicle(vInfoVO, arenaDP)
+                self._registerDeadVehicle(vInfoVO, arenaDP)
+            self._registerAliveVehicle(vInfoVO, arenaDP)
 
         self.__updateDeadVehicles()
         self.__updateVehiclesHealth()
 
-    def __registerDeadVehicle(self, vInfoVO, arenaDP):
+    def _registerDeadVehicle(self, vInfoVO, arenaDP):
         if arenaDP.isEnemyTeam(vInfoVO.team):
             self.__deadEnemies.add(vInfoVO.vehicleID)
         else:
             self.__deadAllies.add(vInfoVO.vehicleID)
 
-    def __registerAliveVehicle(self, vInfoVO, arenaDP):
+    def _registerAliveVehicle(self, vInfoVO, arenaDP):
         maxHealth = vInfoVO.vehicleType.maxHealth
         if maxHealth is None:
             return
@@ -197,7 +209,7 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
             for viewCmp in self._viewComponents:
                 viewCmp.updateVehicleHealth(vehicleID, currH, maxH)
 
-    def __changeVehicleHealth(self, vehicleID, newHealth, needUpdate=True):
+    def _changeVehicleHealth(self, vehicleID, newHealth, needUpdate=True, attackReasonID=None):
         setter = None
         currentHealth = 0
         if vehicleID in self._aliveEnemies:
@@ -235,7 +247,7 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
         if setter is not None and currentMaxHealth != newMaxHealth:
             setter(vehicleID, currentMaxHealth, newMaxHealth)
             if currentHealth == currentMaxHealth:
-                self.__changeVehicleHealth(vehicleID, newMaxHealth, False)
+                self._changeVehicleHealth(vehicleID, newMaxHealth, needUpdate=False)
             self.__updateVehiclesHealth()
         return
 
@@ -269,7 +281,7 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
                 self.onSpottedStatusChanged([(flags, vo)], self.__battleCtx.getArenaDP())
             return
 
-    def __clear(self):
+    def _clear(self):
         self.__deadAllies.clear()
         self.__deadEnemies.clear()
         self._aliveAllies = {}
@@ -278,3 +290,63 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
         self.__enemiesHealth = 0
         self.__totalAlliesHealth = 0
         self.__totalEnemiesHealth = 0
+
+
+class DAMAGE_STATE(object):
+    NO_DAMAGE, FIRST_DAMAGE, MEDIUM_DAMAGE, BIG_DAMAGE = range(1, 5)
+    SOUNDS = {NO_DAMAGE: None,
+     FIRST_DAMAGE: R4_SOUND.R4_ALLY_GET_FIRST_DAMAGE,
+     MEDIUM_DAMAGE: R4_SOUND.R4_ALLY_GET_MEDIUM_DAMAGE,
+     BIG_DAMAGE: R4_SOUND.R4_ALLY_GET_BIG_DAMAGE}
+    ATTACK_REASON_IDS_FOR_SOUND = (ATTACK_REASON_INDICES[ATTACK_REASON.SHOT], ATTACK_REASON_INDICES[ATTACK_REASON.SUPPLY_SHOT])
+
+
+class R4BattleFieldCtrl(BattleFieldCtrl):
+
+    def __init__(self):
+        super(R4BattleFieldCtrl, self).__init__()
+        self.__alliesState = {}
+
+    def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
+        super(R4BattleFieldCtrl, self).invalidateVehicleStatus(flags, vInfoVO, arenaDP)
+        if self._isEnabled and not vInfoVO.isAlive():
+            vehicleId = vInfoVO.vehicleID
+            if vehicleId in self.__alliesState:
+                del self.__alliesState[vehicleId]
+
+    def _registerAliveVehicle(self, vInfoVO, arenaDP):
+        super(R4BattleFieldCtrl, self)._registerAliveVehicle(vInfoVO, arenaDP)
+        if arenaDP.isAllyTeam(vInfoVO.team):
+            self.__alliesState[vInfoVO.vehicleID] = DAMAGE_STATE.NO_DAMAGE
+
+    def _clear(self):
+        super(R4BattleFieldCtrl, self)._clear()
+        self.__alliesState = {}
+
+    def _changeVehicleHealth(self, vehicleID, newHealth, needUpdate=True, attackReasonID=None):
+        super(R4BattleFieldCtrl, self)._changeVehicleHealth(vehicleID, newHealth, needUpdate, attackReasonID)
+        if vehicleID not in self._aliveAllies:
+            return
+        vehicle = BigWorld.entity(vehicleID)
+        vehicleTags = vehicle.typeDescriptor.type.tags
+        if any((tag in vehicleTags for tag in ('observer', 'commander'))):
+            return
+        currentHealth, maxHealth = self._aliveAllies[vehicleID]
+        state = self.__alliesState[vehicleID]
+        currentHealthRatio = float(currentHealth) / maxHealth
+        if currentHealthRatio < 0.3 and state < DAMAGE_STATE.BIG_DAMAGE:
+            state = DAMAGE_STATE.BIG_DAMAGE
+        elif currentHealthRatio < 0.6 and state < DAMAGE_STATE.MEDIUM_DAMAGE:
+            state = DAMAGE_STATE.MEDIUM_DAMAGE
+        elif currentHealthRatio < 1.0 and state < DAMAGE_STATE.FIRST_DAMAGE:
+            state = DAMAGE_STATE.FIRST_DAMAGE
+        else:
+            return
+        self.__alliesState[vehicleID] = state
+        soundNotifications = avatar_getter.getSoundNotifications()
+        if soundNotifications and hasattr(soundNotifications, 'play') and attackReasonID in DAMAGE_STATE.ATTACK_REASON_IDS_FOR_SOUND:
+            soundNotifications.play(DAMAGE_STATE.SOUNDS[state], vehicleID)
+
+
+def createBattleFieldCtrl(setup):
+    return R4BattleFieldCtrl() if avatar_getter.isPlayerCommander() else BattleFieldCtrl()

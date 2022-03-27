@@ -18,6 +18,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.battle_session import IArenaDataProvider
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
+from PlayerEvents import g_playerEvents
 _logger = logging.getLogger(__name__)
 _OP = settings.INVALIDATE_OP
 _INVITATION_STATUS = settings.INVITATION_DELIVERY_STATUS
@@ -189,8 +190,9 @@ class ArenaDataProvider(IArenaDataProvider):
         return len(self.__teamsOnArena) > TEAMS_IN_ARENA.MIN_TEAMS
 
     def switchCurrentTeam(self, team):
+        if self.__playerTeam == team:
+            return
         self.__playerTeam = team
-        from PlayerEvents import g_playerEvents
         g_playerEvents.onTeamChanged(team)
 
     def getMultiTeamsType(self):
@@ -288,6 +290,13 @@ class ArenaDataProvider(IArenaDataProvider):
     def isTeamKiller(self, vID):
         return self.__getStateFlag(vID, 'isTeamKiller', playerTeam=self.__playerTeam)
 
+    def isSupply(self, vID):
+        if vID not in self.__vInfoVOs:
+            _logger.warning('vID not in __vInfoVOs, vID = %s', vID)
+            return None
+        else:
+            return self.__getStateFlag(vID, 'isSupply')
+
     def isObserver(self, vID):
         if vID not in self.__vInfoVOs:
             _logger.warning('vID not in __vInfoVOs, vID = %s', vID)
@@ -301,6 +310,16 @@ class ArenaDataProvider(IArenaDataProvider):
             return None
         else:
             return self.__getStateFlag(self.__playerVehicleID, 'isObserver')
+
+    def isCommander(self, vID):
+        return self.__getStateFlag(vID, 'isCommander')
+
+    def isPlayerCommander(self):
+        if self.__playerVehicleID not in self.__vInfoVOs:
+            _logger.warning('vID not in __vInfoVOs, vID = %s', self.__playerVehicleID)
+            return None
+        else:
+            return self.__getStateFlag(self.__playerVehicleID, 'isCommander')
 
     def getVehIDByAccDBID(self, accDBID):
         try:

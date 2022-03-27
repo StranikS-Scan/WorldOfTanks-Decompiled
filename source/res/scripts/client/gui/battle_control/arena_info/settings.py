@@ -37,6 +37,7 @@ class VEHICLE_STATUS(BitmaskHelper):
     IS_READY = 2
     NOT_AVAILABLE = 4
     STOP_RESPAWN = 8
+    IS_GOD_MODE_ACTIVE = 16
 
 
 class PLAYER_STATUS(BitmaskHelper):

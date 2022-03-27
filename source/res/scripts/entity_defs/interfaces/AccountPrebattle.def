@@ -54,6 +54,12 @@
       <Arg>	STRING	</Arg>
       <Exposed></Exposed>
     </accountPrebattle_createEpicDevPrebattle>
+    <accountPrebattle_createRtsDevPrebattle>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	STRING	</Arg>
+      <Exposed></Exposed>
+    </accountPrebattle_createRtsDevPrebattle>
     <accountPrebattle_sendPrebattleInvites>
       <Arg>	ARRAY	  <of>	INT64	</of>
       </Arg>

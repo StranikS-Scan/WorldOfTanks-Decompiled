@@ -6,10 +6,11 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.common.format_resource_string_arg_model import FormatResourceStringArgModel
 from gui.impl.gen.view_models.views.lobby.research.buy_module_dialog_view_model import BuyModuleDialogViewModel, MountDisabledReason, ModuleType
 from gui.impl.gen.view_models.views.lobby.research.sold_module_info_tooltip_model import SoldModuleInfoTooltipModel
-from gui.shared.gui_items.items_actions.actions import BuyAndInstallWithOptionalSellItemAction as BuyModuleAction
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogView
 from gui.impl.pub import ViewImpl
+from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
+from gui.shared.gui_items.items_actions.actions import BuyAndInstallWithOptionalSellItemAction as BuyModuleAction
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
@@ -66,6 +67,8 @@ class BuyModuleDialogView(FullScreenDialogView):
 
     def _setItemType(self, model):
         moduleTypeName = self._module.itemTypeName
+        if moduleTypeName == FITTING_TYPES.VEHICLE_CHASSIS and self._module.isWheeledChassis():
+            moduleTypeName = FITTING_TYPES.VEHICLE_WHEELED_CHASSIS
         moduleTypeEnum = ModuleType(moduleTypeName)
         model.setModuleType(moduleTypeEnum)
 

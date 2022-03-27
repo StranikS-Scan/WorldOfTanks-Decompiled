@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/common/ammunition_panel/ammunition_panel_blocks.py
 import typing
 from account_helpers.settings_core.options import KeyboardSetting
+from constants import PLAYER_RANK
 from frameworks.wulf import Array
 from gui.impl import backport
 from gui.impl.gen import R
@@ -14,6 +15,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.specialization_model
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.tank_setup_helper import getCategoriesMask, NONE_ID
 from helpers import dependency
+from helpers.epic_game import searchRankForSlot
 from items.components.supply_slot_categories import SlotCategories
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 if typing.TYPE_CHECKING:
@@ -298,6 +300,7 @@ class BattleBoostersBlock(BaseBlock):
 
 
 class BattleAbilitiesBlock(BaseBlock):
+    _RANK = 'list_rank_{}'
     __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
     def createBlock(self, viewModel):
@@ -332,6 +335,16 @@ class BattleAbilitiesBlock(BaseBlock):
         if categoryName:
             model.setCategoryImgSource(R.images.gui.maps.icons.tanksetup.panel.dyn(categoryName)())
         model.setIsInstalled(slotItem in self._getInstalled())
+        self._setRankIcon(model, idx)
+
+    def _setRankIcon(self, model, idx):
+        unlockSlotOrder = self.__epicMetaGameCtrl.getAbilitySlotsUnlockOrder(self._vehicle.descriptor.type)
+        rank = searchRankForSlot(idx, unlockSlotOrder)
+        if rank is not None and rank > 0:
+            rank += 1
+            resource = R.images.gui.maps.icons.library.epicRank.dyn(self._RANK.format(PLAYER_RANK.NAMES[rank]))()
+            model.setRank(resource)
+        return
 
     def _getSlotCategoryName(self, idx):
         slots = self._vehicle.battleAbilities.slots

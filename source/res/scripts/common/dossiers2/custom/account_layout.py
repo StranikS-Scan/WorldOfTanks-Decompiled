@@ -257,7 +257,10 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'wtxBossWins',
  'wtxSpecBossDefeat',
  'whiteTiger2012',
- 'lunarNY2022Progression']
+ 'lunarNY2022Progression',
+ 'oowTankmanWins',
+ 'oowStrategistWins',
+ 'oowCompetetiveWin']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -407,7 +410,10 @@ _achievements15x15PopUps = ['warrior',
  'wtxHunterWins',
  'wtxBossWins',
  'wtxSpecBossDefeat',
- 'lunarNY2022Progression']
+ 'lunarNY2022Progression',
+ 'oowTankmanWins',
+ 'oowStrategistWins',
+ 'oowCompetetiveWin']
 _achievements15x15BlockBuilder = StaticSizeBlockBuilder('achievements', _ACHIEVEMENTS15X15_BLOCK_LAYOUT, ACHIEVEMENT15X15_DEPENDENCIES, _achievements15x15PopUps)
 _STEAM_BLOCK_LAYOUT = ['steamBattleCredits',
  'steamLittleSavingsMedal',
@@ -782,7 +788,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'NY22_AtmsphrLevel',
  'NY22_CelebChallenge',
  'december21',
- 'BattlePassCommonPr_7']
+ 'BattlePassCommonPr_7',
+ 'oowCBTParticipant']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -946,7 +953,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'NY22_AtmsphrLevel',
  'NY22_CelebChallenge',
  'december21',
- 'BattlePassCommonPr_7']
+ 'BattlePassCommonPr_7',
+ 'oowCBTParticipant']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, SINGLE_ACHIEVEMENTS_DEPENDENCIES, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

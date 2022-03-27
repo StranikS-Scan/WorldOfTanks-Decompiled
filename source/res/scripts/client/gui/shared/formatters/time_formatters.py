@@ -4,7 +4,6 @@ import math
 import time
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
-from gui.shared.formatters.ranges import toRomanRangeString
 from helpers import i18n, time_utils
 from rent_common import SeasonRentDuration
 from constants import GameSeasonType
@@ -160,18 +159,10 @@ class RentLeftFormatter(object):
         if rentData.seasonType == GameSeasonType.RANKED:
             identifier, timeLeftString, extraData = self.getRentRankedSeasonLeftStr(rentData, timeStyle)
         if rentData.seasonType == GameSeasonType.EPIC:
-            identifier, timeLeftString, extraData = self.getRentEpicSeasonLeftStr(timeStyle)
-        ctx.update(extraData)
-        return '' if not identifier else formatter(localization % _SEASON_TYPE_KEY[rentData.seasonType] + '/%s', identifier, timeLeftString, ctx)
-
-    def getRentEpicSeasonLeftStr(self, timeStyle):
-        cycles = self.__rentInfo.getRentalPeriodInCycles()
-        if not cycles:
-            return (None, None, {})
+            return i18n.makeString(localization % _SEASON_TYPE_KEY[rentData.seasonType] + '/base')
         else:
-            timeLeftString = toRomanRangeString([ cycle.ordinalNumber for cycle in cycles ])
-            identifier = RentDurationKeys.CYCLES if len(cycles) > 1 else RentDurationKeys.CYCLE
-            return (identifier, timeLeftString, {})
+            ctx.update(extraData)
+            return '' if not identifier else formatter(localization % _SEASON_TYPE_KEY[rentData.seasonType] + '/%s', identifier, timeLeftString, ctx)
 
     def getRentRankedSeasonLeftStr(self, rentData, timeStyle):
         ctx = {}

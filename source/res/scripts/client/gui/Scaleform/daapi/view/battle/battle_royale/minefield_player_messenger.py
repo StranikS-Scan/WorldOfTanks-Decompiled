@@ -46,7 +46,7 @@ class MinefieldPlayerMessenger(IProgressionListener, IViewComponentsCtrlListener
                 self.__sessionProvider.shared.messages.onShowPlayerMessageByKey(self.MINEFIELD_INSTALLED_ID)
             return
 
-    def _onPlayerFeedbackReceived(self, events):
+    def _onPlayerFeedbackReceived(self, _, events):
         for e in events:
             if e.getType() == FEEDBACK_EVENT_ID.EQUIPMENT_TIMER_EXPIRED:
                 itemName = self.__equipmentCtrl.getEquipmentNameByID(e.getTargetID())

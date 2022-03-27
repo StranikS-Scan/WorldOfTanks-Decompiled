@@ -57,7 +57,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         self.nationID = ctx.get('nationID')
         self.inNationID = ctx.get('itemID')
         self.vehicle = None
-        self.tradeOffVehicle = None
+        self.tradeInVehicleToSell = None
         self.__state = VehicleBuyWindowState(False, False, -1, -1)
         if ctx.get('isTradeIn', False):
             self.selectedTab = _TABS.TRADE
@@ -81,7 +81,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         self.__updateButtons()
 
     def onTradeInClearVehicle(self):
-        self.tradeOffVehicle = None
+        self.tradeInVehicleToSell = None
         self.as_setTradeInWarningMessagegeS('')
         return
 
@@ -103,7 +103,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         self.rentals.onRentChangeNotify -= self.__onRentChange
         self.removeListener(VehicleBuyEvent.VEHICLE_SELECTED, self.__setTradeOffVehicle)
         self.vehicle = None
-        self.tradeOffVehicle = None
+        self.tradeInVehicleToSell = None
         super(VehicleBuyWindow, self)._dispose()
         return
 
@@ -140,7 +140,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
          'tradeInVehiclePrices': self._getVehiclePrice(vehicle).price.toMoneyTuple(),
          'tradeInVehiclePricesActionData': self._getItemPriceActionData(vehicle),
          'tradeInStudyLabel': i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_TRADEIN_STUDYLABEL, count=text_styles.stats(str(len(vehicle.crew)))),
-         'hasTradeOffVehicles': self.tradeIn.getTradeInInfo(vehicle) is not None,
+         'hasTradeOffVehicles': self.tradeIn.getTradeInDiscounts(vehicle) is not None,
          'selectedTab': self.selectedTab}
 
     def _isSubmitBtnEnabled(self):
@@ -416,16 +416,16 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         self.as_setCreditsS(credit)
 
     def __setTradeOffVehicle(self, _=None):
-        self.tradeOffVehicle = self.tradeIn.getActiveTradeOffVehicle()
-        tradeOffVehicleHtml = moneyWithIcon(self.tradeOffVehicle.tradeOffPrice, currType=Currency.GOLD)
+        self.tradeInVehicleToSell = self.tradeIn.getSelectedVehicleToSell()
+        tradeOffVehicleHtml = moneyWithIcon(self.tradeInVehicleToSell.tradeOffPrice, currType=Currency.GOLD)
         tradeOffVehicleStatus = i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_TRADEIN_INFO_SAVING, cost=tradeOffVehicleHtml)
-        tradeOffVehicleVo = makeVehicleVO(self.tradeOffVehicle)
-        tradeOffVehicleVo['actionPrice'] = self._getItemPriceActionData(self.tradeOffVehicle)
+        tradeOffVehicleVo = makeVehicleVO(self.tradeInVehicleToSell)
+        tradeOffVehicleVo['actionPrice'] = self._getItemPriceActionData(self.tradeInVehicleToSell)
         tradeOffData = {'vehicleVo': tradeOffVehicleVo,
-         'price': self.tradeOffVehicle.tradeOffPrice.getSignValue(Currency.GOLD),
+         'price': self.tradeInVehicleToSell.tradeOffPrice.getSignValue(Currency.GOLD),
          'status': tradeOffVehicleStatus}
         self.as_updateTradeOffVehicleS(tradeOffData)
-        self.as_setTradeInWarningMessagegeS(i18n.makeString(DIALOGS.TRADEINCONFIRMATION_MESSAGE, vehName=self.tradeOffVehicle.userName, addition=''))
+        self.as_setTradeInWarningMessagegeS(i18n.makeString(DIALOGS.TRADEINCONFIRMATION_MESSAGE, vehName=self.tradeInVehicleToSell.userName, addition=''))
 
 
 class VehicleRestoreWindow(VehicleBuyWindow):

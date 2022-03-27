@@ -20,14 +20,16 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.prb_getters import areSpecBattlesHidden
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from gui.periodic_battles.models import PrimeTimeStatus
+from gui.periodic_battles.models import PeriodType, PrimeTimeStatus
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import time_utils, dependency, int2roman
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IRTSBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
+from tutorial.control.context import GLOBAL_FLAG
 from gui.prb_control import prbEntityProperty
 if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import ISeasonProvider
@@ -229,6 +231,46 @@ class _RandomQueueItem(_SelectorItem):
     def _update(self, state):
         self._isDisabled = state.hasLockedState
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.RANDOMS)
+
+
+class _RTSBattleItem(_SelectorItem):
+    __rtsController = dependency.descriptor(IRTSBattlesController)
+
+    def getFormattedLabel(self):
+        return '{}\n{}'.format(super(_RTSBattleItem, self).getFormattedLabel(), self.__getAvailabilityStr())
+
+    def getSpecialBGIcon(self):
+        specialBGIcon = ''
+        if self.__rtsController.isAvailable() and self.__rtsController.isBattlesPossible():
+            specialBGIcon = backport.image(_R_ICONS.buttons.selectorRendererBGEvent())
+        return specialBGIcon
+
+    def select(self):
+        if self.__rtsController.isAvailable():
+            super(_RTSBattleItem, self).select()
+        if self._isNew:
+            selectorUtils.setBattleTypeAsKnown(self._selectorType)
+
+    def _update(self, state):
+        self._isVisible = self.__rtsController.isVisible()
+        self._isSelected = state.isInPreQueue(QUEUE_TYPE.RTS) or state.isInPreQueue(QUEUE_TYPE.RTS_1x1)
+        self._isDisabled = state.hasLockedState or not self.__rtsController.isAvailable()
+        self._isNew = self._isNew and not self._isDisabled
+        tutorialGlobalStorage = getTutorialGlobalStorage()
+        if tutorialGlobalStorage is not None:
+            hintFlag = not selectorUtils.isKnownBattleType(self._selectorType) and self._isVisible and not self._isDisabled
+            tutorialGlobalStorage.setValue(GLOBAL_FLAG.RTS_SELECTOR_ENABLED, hintFlag)
+        return
+
+    def _doSelect(self, dispatcher):
+        self.__rtsController.enterRTSPrebattle()
+
+    def __getAvailabilityStr(self):
+        periodInfo = self.__rtsController.getPeriodInfo()
+        resShortcut = R.strings.menu.headerButtons.battle.types.rts.availability
+        params = periodInfo.getVO(timeFmt=backport.getShortTimeFormat, dateFmt=backport.getShortDateFormat)
+        text = backport.text(resShortcut.dyn(periodInfo.periodType.value, resShortcut.default)(), **params)
+        return text_styles.error(text) if periodInfo.periodType == PeriodType.FROZEN else text_styles.main(text)
 
 
 class _CommandItem(_SelectorItem):
@@ -795,16 +837,17 @@ class EpicBattleItem(SelectorItem):
     @process
     def _doSelect(self, dispatcher):
         currentSeason = self.__epicController.getCurrentSeason()
+        isEventActive = False
         if currentSeason is not None:
             isActiveCycle = self.__epicController.getCurrentCycleInfo()[1]
             nextCycle = currentSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
             if isActiveCycle or nextCycle:
-                isSuccess = yield dispatcher.doSelectAction(PrbAction(self._data))
-                if isSuccess and self._isNew:
-                    selectorUtils.setBattleTypeAsKnown(self._selectorType)
-                else:
-                    return
-        self.__epicController.openURL()
+                isEventActive = True
+                yield dispatcher.doSelectAction(PrbAction(self._data))
+        if self._isNew or not isEventActive:
+            self.__epicController.openURL()
+            if self._isNew:
+                selectorUtils.setBattleTypeAsKnown(self._selectorType)
         return
 
     def _update(self, state):
@@ -821,13 +864,8 @@ class EpicBattleItem(SelectorItem):
         else:
             currentSeason = self.__epicController.getCurrentSeason()
             if currentSeason:
-                seasonResID = R.strings.epic_battle.season.num(currentSeason.getSeasonID())
-                seasonName = backport.text(seasonResID.name()) if seasonResID else None
                 if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
-                    if currentSeason.isSingleCycleSeason():
-                        scheduleStr = None
-                    else:
-                        scheduleStr = backport.text(R.strings.menu.headerButtons.battle.types.epic.extra.currentCycle(), cycle=int2roman(currentSeason.getCycleInfo().getEpicCycleNumber()), season=seasonName)
+                    scheduleStr = None
                 else:
                     nextCycle = currentSeason.getNextCycleInfo(time_utils.getCurrentLocalServerTimestamp())
                     if nextCycle is None:
@@ -870,7 +908,14 @@ def _createItems(lobbyContext=None):
     isInRoaming = settings.roaming.isInRoaming()
     items = []
     _addRandomBattleType(items)
+    _addRTSBattleType(items)
     _addRankedBattleType(items, settings)
+    _addCommandBattleType(items, settings)
+    _addStrongholdsBattleType(items, isInRoaming)
+    _addTrainingBattleType(items, settings)
+    _addEpicTrainingBattleType(items, settings)
+    if GUI_SETTINGS.specPrebatlesVisible:
+        _addSpecialBattleType(items)
     _addCommandBattleType(items, settings)
     _addStrongholdsBattleType(items, isInRoaming)
     _addTrainingBattleType(items, settings)
@@ -927,6 +972,12 @@ def _addStrongholdsBattleType(items, isInRoaming):
 
 def _addEpicBattleType(items):
     items.append(EpicBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC, PREBATTLE_ACTION_NAME.EPIC, 5, SELECTOR_BATTLE_TYPES.EPIC))
+
+
+def _addRTSBattleType(items, settings=None):
+    visible = settings is not None and settings.getRTSBattlesConfig().isEnabled
+    items.append(_RTSBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_RTS, PREBATTLE_ACTION_NAME.RTS, 2, SELECTOR_BATTLE_TYPES.RTS, isVisible=visible))
+    return
 
 
 def _addMapsTrainingBattleType(items):

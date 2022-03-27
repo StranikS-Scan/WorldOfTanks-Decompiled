@@ -107,3 +107,11 @@ class MapBoxRoster(BaseUnitRoster):
     SLOT_TYPE = MapboxSlot
     DEFAULT_SLOT_PACK = MapboxSlot().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
+
+
+class RtsRoster(BaseUnitRoster):
+    MAX_SLOTS = 3
+    MAX_EMPTY_SLOTS = 2
+    SLOT_TYPE = RosterSlot10
+    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    LIMITS_TYPE = BaseUnitRosterLimits

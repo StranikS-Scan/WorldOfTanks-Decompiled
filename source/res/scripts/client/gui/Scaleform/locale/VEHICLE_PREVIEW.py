@@ -31,7 +31,6 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_UNIQUEVEHICLELABEL = '#vehicle_preview:buyingPanel/uniqueVehicleLabel'
     BUYINGPANEL_TRADEINLABEL = '#vehicle_preview:buyingPanel/tradeInLabel'
     BUYINGPANEL_OFFER_RENT_TITLE_FRONTLINE_ORDINAL = '#vehicle_preview:buyingPanel/offer/rent/title/frontline/ordinal'
-    BUYINGPANEL_OFFER_RENT_TITLE_FRONTLINE_SINGLE_CYCLE = '#vehicle_preview:buyingPanel/offer/rent/title/frontline/single_cycle'
     BUYINGPANEL_OFFER_RENT_FRONTLINE_DESCRIPTION_HEADER = '#vehicle_preview:buyingPanel/offer/rent/frontline/description/header'
     BUYINGPANEL_OFFER_RENT_FRONTLINE_DESCRIPTION_BODY_CREDITS = '#vehicle_preview:buyingPanel/offer/rent/frontline/description/body/credits'
     BUYINGPANEL_OFFER_RENT_FRONTLINE_DESCRIPTION_BODY_GOLD = '#vehicle_preview:buyingPanel/offer/rent/frontline/description/body/gold'
@@ -48,8 +47,9 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_CUSTOMOFFER_BUY = '#vehicle_preview:buyingPanel/customOffer/buy'
     BUYINGPANEL_CUSTOMOFFER_RESEARCH = '#vehicle_preview:buyingPanel/customOffer/research'
     BUYINGPANEL_TRADEIN_TRADEOFFPRICETEXT = '#vehicle_preview:buyingPanel/tradeIn/tradeOffPriceText'
+    BUYINGPANEL_TRADEIN_TRADEOFFPRICEFREETEXT = '#vehicle_preview:buyingPanel/tradeIn/tradeOffPriceFreeText'
     BUYINGPANEL_TRADEIN_PERSONALTRADEOFFPRICETEXT = '#vehicle_preview:buyingPanel/tradeIn/personaltradeOffPriceText'
-    BUYINGPANEL_TRADEIN_AVAILABLELEVELS = '#vehicle_preview:buyingPanel/tradeIn/availableLevels'
+    BUYINGPANEL_TRADEIN_FOOTERNOTE = '#vehicle_preview:buyingPanel/tradeIn/footerNote'
     BUYINGPANEL_TRADEIN_NOTAVAILABLETRADEOFFVEHICLES = '#vehicle_preview:buyingPanel/tradeIn/notAvailableTradeOffVehicles'
     BUYINGPANEL_TRADEIN_EXPIRED = '#vehicle_preview:buyingPanel/tradeIn/expired'
     BUYINGPANEL_TRADEIN_INVALIDTRADEOFFVEHICLE = '#vehicle_preview:buyingPanel/tradeIn/invalidTradeOffVehicle'
@@ -111,6 +111,8 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_STYLE_STATUS_2 = '#vehicle_preview:buyingPanel/style/status/2'
     BUYINGPANEL_STYLE_BUTTON_BUY = '#vehicle_preview:buyingPanel/style/button/buy'
     BUYINGPANEL_STYLE_CAPTION_USERMONEY = '#vehicle_preview:buyingPanel/style/caption/userMoney'
+    TOPPANEL_TAB_VEHICLE = '#vehicle_preview:topPanel/tab/vehicle'
+    TOPPANEL_TAB_STYLE = '#vehicle_preview:topPanel/tab/style'
     HEADER_BACKBTN_DESCRLABEL_ENUM = (HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE,
      HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS,
      HEADER_BACKBTN_DESCRLABEL_SHOP,

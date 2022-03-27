@@ -23,6 +23,7 @@ _DYNAMIC_OBJECTS_CONFIG_FILE = 'scripts/dynamic_objects.xml'
 _AREA_VISUAL_SECTION = {BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA: 'stunAreaVisual',
  BATTLE_CHAT_COMMAND_NAMES.SHOOTING_POINT: 'shootAreaVisual'}
 _DIR_UP = Math.Vector3(0.0, 1.0, 0.0)
+STUN_AREA_STATIC_MARKER = 'stunAreaStaticMarker'
 _STUN_AREA_DEFAULTS = {'radius': 15.0,
  'areasNum': 3,
  'color': '0xff000000',

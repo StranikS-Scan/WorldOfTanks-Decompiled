@@ -41,7 +41,7 @@ class UISpamController(IUISpamController):
         AccountSettings.setUIFlag(self._VISITED_SETTING.format(aliasId), True)
 
     def _checkBattlesCount(self, value):
-        return self._itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount() <= value
+        return self._itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount() < value
 
     def _checkBlueprintsOrFragments(self, _):
         return not self._itemsCache.items.blueprints.hasBlueprintsOrFragments()

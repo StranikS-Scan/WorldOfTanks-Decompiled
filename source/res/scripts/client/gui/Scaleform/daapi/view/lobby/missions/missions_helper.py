@@ -629,7 +629,7 @@ class _DetailedMissionInfo(_MissionInfo):
             criteria = cond.getFilterCriteria(cond.getData())
         else:
             criteria = REQ_CRITERIA.DISCLOSABLE
-        isQuestForBattleRoyale = False
+        hideVehicleSelection = False
         battleCond = self.event.preBattleCond.getConditions()
         if battleCond:
             bonusTypes = battleCond.find('bonusTypes')
@@ -641,12 +641,14 @@ class _DetailedMissionInfo(_MissionInfo):
                     if constants.ARENA_BONUS_TYPE.EPIC_BATTLE not in arenaTypes:
                         criteria = criteria | ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
                     if constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD in arenaTypes or constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO in arenaTypes:
-                        isQuestForBattleRoyale = True
+                        hideVehicleSelection = True
+                    if constants.ARENA_BONUS_TYPE.RTS in arenaTypes or constants.ARENA_BONUS_TYPE.RTS_1x1 in arenaTypes or constants.ARENA_BONUS_TYPE.RTS_BOOTCAMP in arenaTypes:
+                        hideVehicleSelection = True
         xpMultCond = conds.find('hasReceivedMultipliedXP')
         if xpMultCond:
             extraConditions.append(xpMultCond)
         criteria = criteria | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
-        return (criteria, extraConditions, isQuestForBattleRoyale)
+        return (criteria, extraConditions, hideVehicleSelection)
 
     def _getUIDecoration(self):
         decoration = self.eventsCache.prefetcher.getMissionDecoration(self.event.getIconID(), DECORATION_SIZES.DETAILS)

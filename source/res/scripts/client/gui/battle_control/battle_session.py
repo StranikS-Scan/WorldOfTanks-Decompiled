@@ -185,6 +185,8 @@ class BattleSessionProvider(IBattleSessionProvider):
             vStats = self.__arenaDP.getVehicleStats()
             if self.__arenaVisitor.hasRespawns():
                 isDeserter = not vStats.stopRespawn
+            elif avatar_getter.isCommanderCtrlMode():
+                isDeserter = True
             else:
                 isDeserter = avatar_getter.isVehicleAlive() and not avatar_getter.isVehicleOverturned()
             return BattleExitResult(isDeserter, vInfo.player)
@@ -240,6 +242,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         self.__arenaVisitor = arena_visitor.createSkeleton()
         self.__battleCache.clear()
         self.__ctx.stop()
+        self.__isReplayPlaying = False
         return
 
     def switchToPostmortem(self, noRespawnPossible=True, respawnAvailable=False):
@@ -304,7 +307,7 @@ class BattleSessionProvider(IBattleSessionProvider):
                 ctrl.setVehicleNewHealth(vehicleID, newHealth, attackerID, attackReasonID)
         ctrl = self.__dynamicRepo.battleField
         if ctrl is not None:
-            ctrl.setVehicleHealth(vehicleID, newHealth)
+            ctrl.setVehicleHealth(vehicleID, newHealth, attackReasonID)
         return
 
     def repairPointAction(self, repairPointIndex, action, nextActionTime):

@@ -1237,6 +1237,28 @@
     <userString>	#vehicle_customization:projection_decals/special	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+      <exclude>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	700	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_364.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_364	</userString>
+      <tags>	styleOnly formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	CIS: Popular and New Vehicles	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
     <priceGroup>	projection_decals 150g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>

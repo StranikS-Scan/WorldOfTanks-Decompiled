@@ -16,6 +16,9 @@ class BattleResultsMeta(AbstractWindowView):
     def onResultsSharingBtnPress(self):
         self._printOverrideError('onResultsSharingBtnPress')
 
+    def onReplay(self, url):
+        self._printOverrideError('onReplay')
+
     def showUnlockWindow(self, itemId, unlockType):
         self._printOverrideError('showUnlockWindow')
 

@@ -446,13 +446,6 @@ class EventsCache(IEventsCache):
          'start': start,
          'finish': finish}
 
-    def getTradeInActions(self):
-
-        def containsTradeIn(a):
-            return any((step.get('name') == 'set_TradeInParams' for step in a.getData().get('steps', [])))
-
-        return self.getActions(containsTradeIn).values()
-
     def isBalancedSquadEnabled(self):
         return bool(self.__getUnitRestrictions().get('enabled', False))
 

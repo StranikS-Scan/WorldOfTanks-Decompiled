@@ -97,13 +97,13 @@ class NestedValuesMixin(DisplayValuesMixin):
     def _getDisplayParams(cls, curEq, eqsRange, param):
         param = _getAttrName(param)
         params = param.split('/')
-        values = [ _getFormattedNum(cls.__getEqParam(eq, params)) for eq in eqsRange ]
+        values = [ _getFormattedNum(cls._getEqParam(eq, params)) for eq in eqsRange ]
         if _allElementsEq(values):
             values = [values[0]]
         return values
 
     @classmethod
-    def __getEqParam(cls, eq, params):
+    def _getEqParam(cls, eq, params):
         data = {}
         if hasattr(eq, params[0]):
             data = getattr(eq, params[0])
@@ -114,6 +114,14 @@ class NestedValuesMixin(DisplayValuesMixin):
                 data = getattr(data, key)
 
         return data
+
+
+class NestedTupleFirstValuesMixin(NestedValuesMixin):
+
+    @classmethod
+    def _getEqParam(cls, eq, params):
+        data = super(NestedTupleFirstValuesMixin, cls)._getEqParam(eq, params)
+        return data[0]
 
 
 class NestedShellStunValuesMixin(NestedValuesMixin):
@@ -187,6 +195,13 @@ class PercentageLabelMixin(DisplayLabelMixin):
         else:
             value = [ _getFormattedNum(v * 100) for v in value ]
         return cls._formatParamStringInternal(value, COMMON.COMMON_PERCENT, returnArray=returnArray)
+
+
+class PerksControllerModPercentageMixin(DisplayLabelMixin):
+
+    @classmethod
+    def _formatParamString(cls, value, isMultiplier=True, returnArray=False):
+        return cls._formatParamStringInternal([ _getFormattedNum(v * 100) for v in value ], COMMON.COMMON_PERCENT, returnArray=returnArray)
 
 
 class MultiMeterLabelMixin(DisplayLabelMixin):
@@ -295,6 +310,10 @@ class NestedPercentageTextParam(NestedTextParam, NestedValuesMixin, PercentageLa
     pass
 
 
+class NestedPercentageTextTupleValueParam(NestedTextParam, NestedTupleFirstValuesMixin, PerksControllerModPercentageMixin):
+    pass
+
+
 class NestedShellStunSecondsTextParam(TextParam, NestedShellStunValuesMixin, SecondsLabelMixin):
     pass
 
@@ -317,7 +336,8 @@ g_battleAbilityParamsRenderers = {'FixedTextParam': makeRenderer(FixedTextParam.
  'NestedSecondsTextParam': makeRenderer(NestedSecondsTextParam.extendBlocks),
  'MulNestedPercentageTextParam': makeRenderer(NestedPercentageTextParam.extendBlocks),
  'AddNestedPercentageTextParam': makeRenderer(NestedPercentageTextParam.extendBlocks, isMultiplier=False),
- 'NestedShellStunSecondsTextParam': makeRenderer(NestedShellStunSecondsTextParam.extendBlocks)}
+ 'NestedShellStunSecondsTextParam': makeRenderer(NestedShellStunSecondsTextParam.extendBlocks),
+ 'MulNestedPercentageTextTupleValueParam': makeRenderer(NestedPercentageTextTupleValueParam.extendBlocks)}
 ConsumableTooltipEntry = namedtuple('ConsumableTooltipEntry', ('name', 'renderer'))
 
 class BattleAbilityTooltipManager(object):

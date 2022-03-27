@@ -20,17 +20,17 @@ from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
 
 class HitDirectionController(IViewComponentsController):
-    __slots__ = ('__uiHitComponents', '__isVisible', '__callbackIDs', '__damageIndicatorCrits', '__damageIndicatorAllies', '__damageIndicatorExtType', '__arenaDP', '__weakref__')
+    __slots__ = ('_uiHitComponents', '__isVisible', '__callbackIDs', '__damageIndicatorCrits', '__damageIndicatorAllies', '__damageIndicatorExtType', '_arenaDP', '__weakref__')
     settingsCore = dependency.descriptor(ISettingsCore)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, setup):
         super(HitDirectionController, self).__init__()
-        self.__uiHitComponents = {HitType.HIT_DAMAGE: HitDamageComponent(HitDamagePull()),
+        self._uiHitComponents = {HitType.HIT_DAMAGE: HitDamageComponent(HitDamagePull()),
          HitType.ARTY_HIT_PREDICTION: BaseHitComponent(ArtyHitPredictionPull())}
         self.__isVisible = False
-        self.__arenaDP = weakref.proxy(setup.arenaDP)
+        self._arenaDP = weakref.proxy(setup.arenaDP)
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.HIT_DIRECTION
@@ -51,26 +51,25 @@ class HitDirectionController(IViewComponentsController):
             ctrl.onVehicleControlling -= self.__onVehicleControlling
         g_eventBus.removeListener(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__clearHideCallbacks()
-        self.__arenaDP = None
+        self._arenaDP = None
         return
 
     def getHit(self, idx, hitType=HitType.HIT_DAMAGE):
-        return self.__uiHitComponents[hitType].pull.getHit(idx)
+        return self._uiHitComponents[hitType].pull.getHit(idx)
 
     def isVisible(self):
         return self.__isVisible
 
     def setVisible(self, flag):
         self.__isVisible = flag
-        for uiComponent in self.__uiHitComponents.itervalues():
-            uiComponent.setVisible(self.__isVisible)
+        self._updateComponentsVisibility()
 
     def setViewComponents(self, *components):
         for component in components:
             hitType = component.getHitType()
-            if hitType not in self.__uiHitComponents:
+            if hitType not in self._uiHitComponents:
                 _logger.error('Controller doesnt have the component with hit type(%s)', hitType)
-            self.__uiHitComponents[hitType].setUI(component, self.__isVisible)
+            self._uiHitComponents[hitType].setUI(component, self.__isVisible)
 
         handler = avatar_getter.getInputHandler()
         if handler is not None:
@@ -83,21 +82,21 @@ class HitDirectionController(IViewComponentsController):
         return
 
     def clearViewComponents(self):
-        for uiComponent in self.__uiHitComponents.itervalues():
+        for uiComponent in self._uiHitComponents.itervalues():
             uiComponent.clear()
 
     def addHit(self, hitDirYaw, attackerID, damage, isBlocked, critFlags, isHighExplosive, damagedID, attackReasonID):
-        atackerVehInfo = self.__arenaDP.getVehicleInfo(attackerID)
+        atackerVehInfo = self._arenaDP.getVehicleInfo(attackerID)
         atackerVehType = atackerVehInfo.vehicleType
-        isAlly = self.__arenaDP.isAllyTeam(atackerVehInfo.team)
-        playerVehType = self.__arenaDP.getVehicleInfo(damagedID).vehicleType
-        hitData = HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=atackerVehType.classTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive, attackReasonID=attackReasonID, friendlyFireMode=self.__isFriendlyFireMode())
-        return self.__uiHitComponents[HitType.HIT_DAMAGE].pull.addHit(hitData)
+        isAlly = self._arenaDP.isAllyTeam(atackerVehInfo.team)
+        playerVehType = self._arenaDP.getVehicleInfo(damagedID).vehicleType
+        hitData = HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=atackerVehType.classTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive, attackReasonID=attackReasonID, friendlyFireMode=self._isFriendlyFireMode())
+        return self._uiHitComponents[HitType.HIT_DAMAGE].pull.addHit(hitData)
 
     def addArtyHitPrediction(self, yaw):
         setting = self.settingsCore.options.getSetting(settings_constants.SOUND.ARTY_SHOT_ALERT_SOUND)
         hitData = SimpleHitData(yaw=yaw, soundName=setting.getEventName())
-        pull = self.__uiHitComponents[HitType.ARTY_HIT_PREDICTION].pull
+        pull = self._uiHitComponents[HitType.ARTY_HIT_PREDICTION].pull
         hit = None
         if pull.hitNeedPostponed(hitData):
             pull.postponedHit(hitData)
@@ -107,7 +106,7 @@ class HitDirectionController(IViewComponentsController):
 
     def removeArtyHitPrediction(self, yaw):
         hitData = SimpleHitData(yaw=yaw)
-        pull = self.__uiHitComponents[HitType.ARTY_HIT_PREDICTION].pull
+        pull = self._uiHitComponents[HitType.ARTY_HIT_PREDICTION].pull
         pull.removePostponedHit(hitData)
         hit = pull.findHit(hitData)
         if hit is not None:
@@ -116,30 +115,40 @@ class HitDirectionController(IViewComponentsController):
 
     def artyHitIsPostponed(self, yaw):
         hitData = SimpleHitData(yaw=yaw)
-        return self.__uiHitComponents[HitType.ARTY_HIT_PREDICTION].pull.findPostponedHit(hitData) is not None
+        return self._uiHitComponents[HitType.ARTY_HIT_PREDICTION].pull.findPostponedHit(hitData) is not None
+
+    def updateIndicator(self):
+        self._updateComponentsVisibility()
 
     def _hideAllHits(self):
-        for uiComponent in self.__uiHitComponents.itervalues():
+        for uiComponent in self._uiHitComponents.itervalues():
             uiComponent.pull.hideAllHits()
 
-    def __isFriendlyFireMode(self):
+    def _isFriendlyFireMode(self):
         isFriendlyFireMode = self.sessionProvider.arenaVisitor.bonus.isFriendlyFireMode()
         isCustomAllyDamageEffect = self.sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
         return isFriendlyFireMode and isCustomAllyDamageEffect
 
+    def _getViewComponent(self, hitType):
+        return self._uiHitComponents[hitType]
+
+    def _updateComponentsVisibility(self):
+        for uiComponent in self._uiHitComponents.itervalues():
+            uiComponent.setVisible(self.__isVisible)
+
     def __clearHideCallbacks(self):
-        for uiComponent in self.__uiHitComponents.itervalues():
+        for uiComponent in self._uiHitComponents.itervalues():
             uiComponent.pull.clearHideCallbacks()
 
     def __handleGUIVisibility(self, event):
         self.setVisible(event.ctx['visible'])
 
     def __onSettingsChanged(self, diff):
-        for uiComponent in self.__uiHitComponents.itervalues():
+        for uiComponent in self._uiHitComponents.itervalues():
             uiComponent.invalidateSettings(diff)
 
     def __onPostmortemKillerVision(self, killerVehicleID):
-        if killerVehicleID != self.__arenaDP.getPlayerVehicleID():
+        if killerVehicleID != self._arenaDP.getPlayerVehicleID():
             self._hideAllHits()
 
     def __onVehicleControlling(self, vehicle):

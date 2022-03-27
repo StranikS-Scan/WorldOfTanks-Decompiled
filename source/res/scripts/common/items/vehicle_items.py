@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/vehicle_items.py
 import functools
+import typing
 import Math
-from ModelHitTester import ModelHitTester
+import nations
 from constants import SHELL_TYPES
 from items import ITEM_TYPES, ITEM_TYPE_NAMES, makeIntCompactDescrByID
 from items.basic_item import BasicItem
@@ -14,6 +15,7 @@ from items.components import shell_components
 from items.components import sound_components
 from soft_exception import SoftException
 from wrapped_reflection_framework import ReflectionMetaclass
+from ModelHitTester import ModelHitStatus
 
 class VEHICLE_ITEM_STATUS(object):
     UNDEFINED = 0
@@ -97,10 +99,6 @@ class InstallableItem(VehicleItem):
         return
 
     @property
-    def hitTester(self):
-        return self.hitTesterManager.activeHitTester
-
-    @property
     def maxHealth(self):
         return self.healthParams.maxHealth
 
@@ -131,6 +129,9 @@ class InstallableItem(VehicleItem):
     @property
     def maxRepairCost(self):
         return self.healthParams.maxRepairCost
+
+    def getHitTester(self, modelStatus):
+        return self.hitTesterManager.getHitTester(modelStatus)
 
     @property
     def repairSpeedLimiter(self):
@@ -210,9 +211,8 @@ class Chassis(InstallableItem):
     def isTrackWithinTrack(self):
         return self.chassisType == CHASSIS_ITEM_TYPE.TRACK_WITHIN_TRACK
 
-    @property
-    def totalBBox(self):
-        return self.bboxManager.activeBBox
+    def getTotalBBox(self, modelHitStatus):
+        return self.bboxManager.getBBox(modelHitStatus)
 
 
 @add_shallow_copy()
@@ -281,7 +281,7 @@ class Turret(InstallableItem):
 @add_shallow_copy('__weakref__')
 class Gun(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', '__weakref__')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'edgeByVisualModel', '__weakref__')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -310,6 +310,7 @@ class Gun(InstallableItem):
         self.recoil = None
         self.animateEmblemSlots = True
         self.customizableVehicleAreas = None
+        self.edgeByVisualModel = True
         return
 
 
@@ -346,9 +347,8 @@ class Hull(BasicItem):
         self.burnoutAnimation = None
         return
 
-    @property
-    def hitTester(self):
-        return self.hitTesterManager.activeHitTester
+    def getHitTester(self, modelStatus):
+        return self.hitTesterManager.getHitTester(modelStatus)
 
     def copy(self):
         return Hull()
@@ -372,6 +372,10 @@ class Shell(BasicItem):
         self.icon = None
         self.iconName = None
         return
+
+    def __repr__(self):
+        nationId, shellId = self.id
+        return 'Shell(nation = {}, shellId = {}, shellName={})'.format(nations.NAMES[nationId], shellId, self.name)
 
     @property
     def kind(self):

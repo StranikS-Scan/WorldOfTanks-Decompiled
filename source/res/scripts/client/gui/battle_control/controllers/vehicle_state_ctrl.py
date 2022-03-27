@@ -352,9 +352,6 @@ class VehicleStateController(IBattleController):
             self.__updater = self.__updater.switch(self.__vehicleID)
         if self.__isRqToSwitch:
             nationID = vehicle.typeDescriptor.type.id[0]
-            notifications = avatar_getter.getSoundNotifications()
-            if notifications is not None:
-                notifications.clear()
             SoundGroups.g_instance.soundModes.setCurrentNation(nations.NAMES[nationID])
         self.onVehicleControlling(vehicle)
         if VEHICLE_VIEW_STATE.DUAL_GUN_STATE_UPDATED in self.__cachedStateValues.keys():

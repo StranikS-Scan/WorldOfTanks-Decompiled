@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/messenger_bar.py
 from account_helpers.settings_core.settings_constants import SESSION_STATS
 from adisp import process
-from constants import PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE, IS_DEVELOPMENT
 from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
 from gui import SystemMessages
@@ -107,7 +107,9 @@ class _CompareBasketListener(object):
 class MessengerBar(MessengerBarMeta, IGlobalListener):
     _referralCtrl = dependency.descriptor(IReferralProgramController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    _itemsCache = dependency.descriptor(IItemsCache)
     _uiSpamController = dependency.descriptor(IUISpamController)
+    _NEW_PLAYER_BATTLES = 2
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -213,7 +215,11 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
             result = yield ResetSessionStatsProcessor().request()
             if result and result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-        self.as_setSessionStatsButtonVisibleS(isSessionStatsEnabled)
+        btnIsVisible = isSessionStatsEnabled
+        if not IS_DEVELOPMENT:
+            battlesCount = self._itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
+            btnIsVisible &= battlesCount >= self._NEW_PLAYER_BATTLES
+        self.as_setSessionStatsButtonVisibleS(btnIsVisible)
         self.as_setSessionStatsButtonEnableS(isSessionStatsEnabled and isInSupportedMode, tooltip)
         self.__updateSessionStatsHint(self.__sessionStatsBtnOnlyOnceHintShow and isSessionStatsEnabled and isInSupportedMode and not self._uiSpamController.shouldBeHidden(SESSION_STATS_HINT))
         return

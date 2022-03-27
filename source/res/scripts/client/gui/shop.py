@@ -66,10 +66,6 @@ def _getParams(reason, price, itemId=None):
     return params
 
 
-def _getTradeOffParams(targetVehicleLevel):
-    return {'targetVehicleLevel': targetVehicleLevel}
-
-
 def _makeBuyItemUrl(categoryUrl, itemId=None):
     return '{}/items/$PARAMS(web2client_{})'.format(categoryUrl, itemId) if itemId else categoryUrl
 
@@ -132,12 +128,9 @@ def showBuyOptionalDeviceOverlay(itemId, source=None, origin=None, alias=VIEW_AL
         showBuyItemWebView(helpers.getBuyOptionalDevicesUrl(), itemId, source, origin, alias)
 
 
-def showTradeOffOverlay(targetLevel, parent=None):
-    _showBlurredWebOverlay(helpers.getTradeOffOverlayUrl(), _getTradeOffParams(targetLevel), parent, isClientCloseControl=True)
-
-
-def showPersonalTradeOffOverlay(parent=None):
-    _showBlurredWebOverlay(helpers.getPersonalTradeOffOverlayUrl(), parent=parent, isClientCloseControl=True)
+def showTradeOffOverlay(parent=None):
+    _showBlurredWebOverlay(helpers.getTradeOffOverlayUrl(), None, parent, isClientCloseControl=True)
+    return
 
 
 def showBuyGoldForVehicleWebOverlay(fullPrice, intCD, parent=None):

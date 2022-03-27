@@ -331,7 +331,7 @@ def readCamouflage(xmlCtx, section, sectionName, default=None):
     if section.has_key(aoTextureSizeKey):
         aoTextureSize = _xml.readTupleOfFloats(xmlCtx, section, aoTextureSizeKey, 2)
     if aoTextureSize is None and default is not None:
-        aoTextureSize = default[3]
+        aoTextureSize = default[2]
     return shared_components.Camouflage(tiling, mask, density, aoTextureSize)
 
 

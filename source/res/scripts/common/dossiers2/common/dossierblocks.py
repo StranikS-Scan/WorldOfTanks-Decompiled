@@ -91,18 +91,21 @@ class StaticDossierBlockDescr(object):
             struct.pack_into(self.__format, dossierCompDescrArray, offset, *self.__getValuesForPacking())
             self.__changed.clear()
             return (dossierCompDescrArray, self.__blockSize)
-        for record in self.__changed:
-            packing = self.__packing[record]
-            if packing['type'] == 'b':
+        changed = self.__changed
+        packing = self.__packing
+        data = self.__data
+        for record in changed:
+            packingRec = packing[record]
+            if packingRec['type'] == 'b':
                 continue
-            recordOffset = offset + packing['offset']
-            struct.pack_into('<' + packing['format'], dossierCompDescrArray, recordOffset, self.__data[record])
+            struct.pack_into('<' + packingRec['format'], dossierCompDescrArray, offset + packingRec['offset'], data[record])
 
-        self.__changed.clear()
+        changed.clear()
         return (dossierCompDescrArray, self.__blockSize)
 
     def __getValuesForPacking(self):
-        return [ self.__data[rec] for rec, _ in self.__recordsLayout ]
+        data = self.__data
+        return [ data[rec] for rec, _ in self.__recordsLayout ]
 
 
 class DictDossierBlockDescr(object):
@@ -217,51 +220,59 @@ class DictDossierBlockDescr(object):
         return self.__changed
 
     def updateDossierCompDescr(self, dossierCompDescrArray, offset, size):
-        length = len(self.__data)
+        data = self.__data
+        length = len(data)
         newSize = length * self.__itemSize
+        itemToList = self.__itemToList
+        itemFormat = self.__itemFormat
         if self.__isExpanded:
-            fmt = '<' + self.__itemFormat * length
+            fmt = '<' + itemFormat * length
             values = []
-            for key, value in self.__data.iteritems():
-                values += self.__itemToList(key, value)
+            for key, value in data.iteritems():
+                values += itemToList(key, value)
 
             if newSize == size:
                 struct.pack_into(fmt, dossierCompDescrArray, offset, *values)
                 return (dossierCompDescrArray, newSize)
             return (dossierCompDescrArray[:offset] + array('c', struct.pack(fmt, *values)) + dossierCompDescrArray[offset + size:], newSize)
         offsets = self.__offsets
-        for key in self.__changed:
-            recordOffset = offset + offsets[key]
-            struct.pack_into(('<' + self.__itemFormat), dossierCompDescrArray, recordOffset, *self.__itemToList(key, self.__data[key]))
+        changed = self.__changed
+        for key in changed:
+            struct.pack_into(('<' + itemFormat), dossierCompDescrArray, (offset + offsets[key]), *itemToList(key, data[key]))
 
-        self.__changed.clear()
-        if self.__added:
+        changed.clear()
+        added = self.__added
+        itemSize = self.__itemSize
+        if added:
             values = []
             recordOffset = size
-            for key in self.__added:
-                values += self.__itemToList(key, self.__data[key])
+            for key in added:
+                values += itemToList(key, data[key])
                 offsets[key] = recordOffset
-                recordOffset += self.__itemSize
+                recordOffset += itemSize
 
-            fmt = '<' + self.__itemFormat * len(self.__added)
+            fmt = '<' + itemFormat * len(added)
             dossierCompDescrArray = dossierCompDescrArray[:offset + size] + array('c', struct.pack(fmt, *values)) + dossierCompDescrArray[offset + size:]
-            self.__added.clear()
+            added.clear()
         return (dossierCompDescrArray, newSize)
 
     def __unpack(self, compDescr):
-        length = len(compDescr) / self.__itemSize
+        itemSize = self.__itemSize
+        length = len(compDescr) / itemSize
         if length == 0:
             return ({}, {})
         data, offsets = {}, {}
-        fmt = '<' + self.__itemFormat * length
+        itemFormat = self.__itemFormat
+        fmt = '<' + itemFormat * length
         values = struct.unpack(fmt, compDescr)
-        itemLength = len(self.__itemFormat)
+        itemLength = len(itemFormat)
         idx = 0
+        listToItem = self.__listToItem
         for i in xrange(length):
-            key, value = self.__listToItem(values, idx)
+            key, value = listToItem(values, idx)
             idx += itemLength
             data[key] = value
-            offsets[key] = i * self.__itemSize
+            offsets[key] = i * itemSize
 
         return (data, offsets)
 
@@ -344,32 +355,36 @@ class ListDossierBlockDescr(object):
         return self.__changed
 
     def updateDossierCompDescr(self, dossierCompDescrArray, offset, size):
-        length = size / self.__itemSize
-        newLength = len(self.__list)
-        newSize = newLength * self.__itemSize
+        itemSize = self.__itemSize
+        length = size / itemSize
+        selfList = self.__list
+        newLength = len(selfList)
+        newSize = newLength * itemSize
+        itemFormat = self.__itemFormat
+        itemToList = self.__itemToList
         if self.__isExpanded:
-            fmt = '<' + self.__itemFormat * newLength
+            fmt = '<' + itemFormat * newLength
             values = []
-            for item in self.__list:
-                values += self.__itemToList(item)
+            for item in selfList:
+                values += itemToList(item)
 
             if newSize == size:
                 struct.pack_into(fmt, dossierCompDescrArray, offset, *values)
                 return (dossierCompDescrArray, newSize)
             return (dossierCompDescrArray[:offset] + array('c', struct.pack(fmt, *values)) + dossierCompDescrArray[offset + size:], newSize)
-        for idx in self.__changed:
+        changed = self.__changed
+        for idx in changed:
             if idx < length:
-                itemOffset = offset + idx * self.__itemSize
-                struct.pack_into(('<' + self.__itemFormat), dossierCompDescrArray, itemOffset, *self.__itemToList(self.__list[idx]))
+                struct.pack_into(('<' + itemFormat), dossierCompDescrArray, (offset + idx * itemSize), *itemToList(selfList[idx]))
 
-        self.__changed.clear()
-        added = self.__list[length:]
+        changed.clear()
+        added = selfList[length:]
         if added:
             values = []
             for item in added:
-                values += self.__itemToList(item)
+                values += itemToList(item)
 
-            fmt = '<' + self.__itemFormat * len(added)
+            fmt = '<' + itemFormat * len(added)
             dossierCompDescrArray = dossierCompDescrArray[:offset + size] + array('c', struct.pack(fmt, *values)) + dossierCompDescrArray[offset + size:]
         return (dossierCompDescrArray, newSize)
 

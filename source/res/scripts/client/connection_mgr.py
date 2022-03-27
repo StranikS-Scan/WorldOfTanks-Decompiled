@@ -7,7 +7,7 @@ import BigWorld
 import constants
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
-from debug_utils import LOG_DEBUG, LOG_NOTE
+from debug_utils import LOG_DEBUG, LOG_NOTE, LOG_WARNING
 from shared_utils import nextTick
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL
 from helpers import getClientLanguage, uniprof
@@ -72,6 +72,7 @@ class ConnectionManager(IConnectionManager):
         self.__hostItem = g_preDefinedHosts._makeHostItem('', '', '')
         self.__retryConnectionPeriod = _MIN_RECONNECTION_TIMEOUT
         self.__retryConnectionCallbackID = None
+        self.__connectionInProgress = False
         g_playerEvents.onKickWhileLoginReceived += self.__processKick
         g_playerEvents.onLoginQueueNumberReceived += self.__processQueue
         self.__eManager = EventManager()
@@ -109,23 +110,35 @@ class ConnectionManager(IConnectionManager):
         self.__retryConnectionCallbackID = None
         if constants.IS_DEVELOPMENT:
             LOG_DEBUG('Calling BigWorld.connect with params: {0}, serverName: {1}, inactivityTimeout: {2}, publicKeyPath: {3}'.format(self.__connectionData.username, self.__connectionUrl, constants.CLIENT_INACTIVITY_TIMEOUT, self.__connectionData.publicKeyPath))
-        nextTick(lambda : BigWorld.connect(self.__connectionUrl, self.__connectionData, self.__serverResponseHandler))()
-        if g_preDefinedHosts.predefined(self.__connectionUrl) or g_preDefinedHosts.roaming(self.__connectionUrl):
-            self.__hostItem = g_preDefinedHosts.byUrl(self.__connectionUrl)
+        if self.__connectionInProgress:
+            LOG_WARNING('Try to call BigWorld.connect while connection in progress')
+            return
         else:
-            for server in BigWorld.serverDiscovery.servers:
-                if server.serverString == self.__connectionUrl:
-                    self.__hostItem = self.__hostItem._replace(name=server.ownerName, shortName=server.ownerName)
-                    break
+            nextTick(self.__tryConnect)()
+            if g_preDefinedHosts.predefined(self.__connectionUrl) or g_preDefinedHosts.roaming(self.__connectionUrl):
+                self.__hostItem = g_preDefinedHosts.byUrl(self.__connectionUrl)
             else:
-                self.__hostItem = self.__hostItem._replace(name=self.__connectionUrl, shortName=self.__connectionUrl)
+                for server in BigWorld.serverDiscovery.servers:
+                    if server.serverString == self.__connectionUrl:
+                        self.__hostItem = self.__hostItem._replace(name=server.ownerName, shortName=server.ownerName)
+                        break
+                else:
+                    self.__hostItem = self.__hostItem._replace(name=self.__connectionUrl, shortName=self.__connectionUrl)
 
-        return
+            return
+
+    def __tryConnect(self):
+        if self.__connectionInProgress:
+            LOG_WARNING('Try to call BigWorld.connect while connection in progress, but on nextTick')
+            return
+        self.__connectionInProgress = True
+        BigWorld.connect(self.__connectionUrl, self.__connectionData, self.__serverResponseHandler)
 
     @uniprof.regionDecorator(label='offline.connect', scope='exit')
     def __serverResponseHandler(self, stage, status, responseDataJSON):
         if constants.IS_DEVELOPMENT:
             LOG_DEBUG('Received server response with stage: {0}, status: {1}, responseData: {2}'.format(stage, status, responseDataJSON))
+        self.__connectionInProgress = False
         self.__connectionStatus = status
         try:
             responseData = json.loads(responseDataJSON)

@@ -5,7 +5,8 @@ from datetime import datetime
 from helpers import time_utils
 from account_helpers.AccountSettings import HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY
 from gui.shared.utils.plugins import IPlugin
-HintData = namedtuple('HintData', ['key',
+HintData = namedtuple('HintData', ['vKey',
+ 'key',
  'messageLeft',
  'messageRight',
  'offsetX',

@@ -103,23 +103,6 @@ class FrontLineWebApi(W2CSchema):
 
         return calendarData
 
-    @w2c(W2CSchema, name='get_seasons_achievements')
-    def getSeasonAchievements(self, _):
-        achievements = self.__itemsCache.items.getAccountDossier().getDossierDescr().expand('epicSeasons')
-        seasonsAchievements = []
-        season = self.__epicController.getCurrentSeason() or self.__epicController.getPreviousSeason()
-        if not season:
-            return seasonsAchievements
-        for seasonID, cycleID in achievements:
-            if season.getSeasonID() == seasonID and cycleID in season.getAllCycles():
-                key = (seasonID, cycleID)
-                seasonsAchievements.append(EpicSeasonAchievements(*(key + achievements[key]))._asdict())
-
-        if season.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
-            stats = self.__epicController.getStats()
-            seasonsAchievements.append(EpicSeasonAchievements(season_id=season.getSeasonID(), episode_id=season.getCycleID(), battle_count=stats.battleCount, average_xp=stats.averageXP, lvl=stats.playerLevelInfo[0], battle_bp_points=stats.seasonData[2].get('battlePassPoints', 0), season_bp_points=stats.seasonData[2].get('seasonBattlePassPoints', 0))._asdict())
-        return seasonsAchievements
-
     def __getAllLevelAwards(self):
         awardsData = dict()
         abilityPts = self.__epicController.getAbilityPointsForLevel()

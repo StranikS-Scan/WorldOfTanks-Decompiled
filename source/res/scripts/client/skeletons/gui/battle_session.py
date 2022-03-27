@@ -1,6 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/battle_session.py
-
+import typing
+if typing.TYPE_CHECKING:
+    from typing import Callable, Optional
+    from avatar_components.AvatarObserver import ObservedVehicleData
+    from gui.battle_control.arena_info.interfaces import IVehicleCountController, IArenaVehiclesController, ISpawnController, IRTSSpawnController, IRadarController, IProgressionController, IRTSVehicleChangeController
+    from gui.battle_control.controllers.commander.interfaces import IRTSCommanderController, IRTSBWController, IRTSSoundController
 
 class ISharedControllersLocator(object):
     __slots__ = ()
@@ -110,6 +115,14 @@ class IDynamicControllersLocator(object):
         raise NotImplementedError
 
     @property
+    def playerGameModeData(self):
+        raise NotImplementedError
+
+    @property
+    def teamHealthBar(self):
+        raise NotImplementedError
+
+    @property
     def progressTimer(self):
         raise NotImplementedError
 
@@ -171,6 +184,26 @@ class IDynamicControllersLocator(object):
 
     @property
     def gameNotifications(self):
+        raise NotImplementedError
+
+    @property
+    def teamSixthSense(self):
+        raise NotImplementedError
+
+    @property
+    def rtsCommander(self):
+        raise NotImplementedError
+
+    @property
+    def rtsBWCtrl(self):
+        raise NotImplementedError
+
+    @property
+    def rtsSound(self):
+        raise NotImplementedError
+
+    @property
+    def vehicleChange(self):
         raise NotImplementedError
 
 
@@ -247,6 +280,9 @@ class IClientArenaVisitor(object):
         raise NotImplementedError
 
     def getTeamSpawnPoints(self, team):
+        raise NotImplementedError
+
+    def getTeamBasePositions(self, team):
         raise NotImplementedError
 
     def getTeamSpawnPointsIterator(self, team):
@@ -430,7 +466,16 @@ class IArenaDataProvider(object):
     def isTeamKiller(self, vID):
         raise NotImplementedError
 
+    def isSupply(self, vID):
+        raise NotImplementedError
+
     def isObserver(self, vID):
+        raise NotImplementedError
+
+    def isCommander(self, vID):
+        raise NotImplementedError
+
+    def isPlayerCommander(self):
         raise NotImplementedError
 
     def isPlayerObserver(self):
@@ -511,7 +556,16 @@ class IBattleContext(object):
     def isTeamKiller(self, vID=None, avatarSessionID=None):
         raise NotImplementedError
 
+    def isSupply(self, vID):
+        raise NotImplementedError
+
     def isObserver(self, vID):
+        raise NotImplementedError
+
+    def isCommander(self, vID):
+        raise NotImplementedError
+
+    def isPlayerCommander(self):
         raise NotImplementedError
 
     def isPlayerObserver(self):

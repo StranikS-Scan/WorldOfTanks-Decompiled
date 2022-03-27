@@ -88,8 +88,8 @@
       <turret>	0.000000 0.660854 0.463634	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModelServer>	vehicles/german/G119_Pz58_Mutz/collision/Hull.model	</collisionModelServer>
-      <collisionModelClient>	vehicles/german/G119_Pz58_Mutz/collision_client/Hull.model	</collisionModelClient>
+      <collisionModelServer>	vehicles/german/G119_Panzer58/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G119_Panzer58/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <hangarShadowTexture>	vehicles/german/G119_Pz58_Mutz/Pz58_Mutz_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
@@ -248,8 +248,8 @@
       </effects>
       <hullPosition>	0.000000 0.95558 0.000000	</hullPosition>
       <hitTester>
-        <collisionModelServer>	vehicles/german/G119_Pz58_Mutz/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/german/G119_Pz58_Mutz/collision_client/Chassis.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/german/G119_Panzer58/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G119_Panzer58/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.24276 1.96289	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -915,8 +915,8 @@
             <exploded>	vehicles/german/G119_Pz58_Mutz/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G119_Pz58_Mutz/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G119_Pz58_Mutz/collision_client/Gun_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G119_Panzer58/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G119_Panzer58/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_main_mb	</effects>
           <reloadEffect>	reload85_107	</reloadEffect>
@@ -939,6 +939,7 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.925 0.37 0.000000 0.000000	</tiling>
             <density>	105.539 121.32	</density>
@@ -952,8 +953,8 @@
         <exploded>	vehicles/german/G119_Pz58_Mutz/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/german/G119_Pz58_Mutz/collision/Turret_01.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/german/G119_Pz58_Mutz/collision_client/Turret_01.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/german/G119_Panzer58/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G119_Panzer58/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.267142 1.13856	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>

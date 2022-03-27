@@ -18,7 +18,7 @@ from skeletons.gui.server_events import IEventsCache
 from helpers.time_utils import ONE_DAY, ONE_HOUR
 from gui.impl import backport
 from gui.shared.missions.packers.events import BattleQuestUIDataPacker
-_MARATHON_PREFIX = 'lunar_marathon'
+_MARATHON_PREFIX = 'winter_marathon'
 _POST_TIME_LEFT_LIMIT = ONE_HOUR * 12
 _eventsCache = dependency.descriptor(IEventsCache)
 

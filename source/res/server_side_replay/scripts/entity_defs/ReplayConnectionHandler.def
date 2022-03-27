@@ -1,0 +1,20 @@
+<ReplayConnectionHandler.def>
+  <Properties>
+    <account>
+      <Type>	MAILBOX	</Type>
+      <Flags>	BASE	</Flags>
+    </account>
+  </Properties>
+  <TempProperties></TempProperties>
+  <ClientMethods></ClientMethods>
+  <BaseMethods>
+    <stopReplay>
+      <Exposed></Exposed>
+    </stopReplay>
+    <kickSelf>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	UINT32	</Arg>
+    </kickSelf>
+  </BaseMethods>
+</ReplayConnectionHandler.def>

@@ -66,7 +66,7 @@ class TradeInPopup(TradeInPopupMeta):
         self.destroy()
 
     def onSelectVehicle(self, vehicleCD):
-        self.tradeIn.setActiveTradeOffVehicleCD(vehicleCD)
+        self.tradeIn.selectVehicleToSell(vehicleCD)
         self.onWindowClose()
 
     def __onResync(self, reason, diff):
@@ -75,9 +75,8 @@ class TradeInPopup(TradeInPopupMeta):
             self.__fillDP()
 
     def __fillDP(self):
-        tradeInVehicle = self.itemsCache.items.getItemByCD(self.__tradeInVehCD)
         self.__tradeInDP.setSelectedID(self.__tradeOffVehCD)
-        self.__tradeInDP.buildList(self.tradeIn.getTradeOffVehicles(tradeInVehicle.level))
+        self.__tradeInDP.buildList(self.tradeIn.getVehiclesToSell(True))
         self.__tradeInDP.refresh()
 
 

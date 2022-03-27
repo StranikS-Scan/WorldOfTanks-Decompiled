@@ -197,19 +197,6 @@ class VehicleTradeInValidator(SyncValidator):
         return makeError('vehicle_cannot_trade_off') if not self.vehicleToTradeOff.canTradeOff else makeSuccess()
 
 
-class VehiclePersonalTradeInValidator(SyncValidator):
-
-    def __init__(self, vehicleToBuy, vehicleToTradeOff, isEnabled=True):
-        super(VehiclePersonalTradeInValidator, self).__init__(isEnabled)
-        self.vehicleToBuy = vehicleToBuy
-        self.vehicleToTradeOff = vehicleToTradeOff
-
-    def _validate(self):
-        if not self.vehicleToBuy.canPersonalTradeInBuy:
-            return makeError('vehicle_cannot_trade_in')
-        return makeError('vehicle_cannot_trade_off') if not self.vehicleToTradeOff.canPersonalTradeInSale else makeSuccess()
-
-
 class VehicleLockValidator(SyncValidator):
 
     def __init__(self, vehicle, setAll=True, isEnabled=True):

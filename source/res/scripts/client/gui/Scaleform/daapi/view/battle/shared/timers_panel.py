@@ -57,7 +57,6 @@ _TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.REPAIRING_CD, _TIMER_STATES.WARNING_VIEW): 3}
 _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
  _TIMER_STATES.CAPTURE_BLOCK,
- _TIMER_STATES.SMOKE,
  _TIMER_STATES.INSPIRE,
  _TIMER_STATES.INSPIRE_CD,
  _TIMER_STATES.HEALING,
@@ -588,13 +587,14 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self._hideTimer(_TIMER_STATES.CAPTURE_BLOCK)
         return
 
-    def __updateSmokeTimer(self, smokesInfo):
-        if smokesInfo:
-            maxEndTime, eqID = max(((smokeInfo['endTime'], smokeInfo['equipmentID']) for smokeInfo in smokesInfo))
-            duration = vehicles.g_cache.equipments()[eqID].totalDuration
-            self._showTimer(_TIMER_STATES.SMOKE, duration, _TIMER_STATES.WARNING_VIEW, maxEndTime)
+    def __updateSmokeTimer(self, smokeInfo):
+        if smokeInfo is not None:
+            equipment = vehicles.g_cache.equipments()[smokeInfo['equipmentID']]
+            duration = equipment.expireDelay if smokeInfo['expiring'] else equipment.totalDuration
+            self._showTimer(_TIMER_STATES.SMOKE, duration, _TIMER_STATES.WARNING_VIEW, smokeInfo['endTime'])
         else:
             self._hideTimer(_TIMER_STATES.SMOKE)
+        return
 
     def __updateHealingTimer(self, isSourceVehicle, isInactivation, endTime, duration, senderKey):
         _logger.debug('[HEAL_POINT] %s __updateHealingTimer: isSourceVehicle: %s, isInactivation: %s, endTime: %s, duration: %s, senderKey: %s', BigWorld.player().id, isSourceVehicle, isInactivation, endTime, duration, senderKey)

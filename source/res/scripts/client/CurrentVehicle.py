@@ -302,6 +302,12 @@ class _CurrentVehicle(_CachedVehicle):
             return state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
         return False
 
+    def hasInvalidState(self, invalidStates):
+        if self.isPresent():
+            state, _ = self.item.getState()
+            return state in invalidStates
+        return False
+
     def isAutoLoadFull(self):
         return not self.isPresent() or self.item.isAutoLoadFull()
 

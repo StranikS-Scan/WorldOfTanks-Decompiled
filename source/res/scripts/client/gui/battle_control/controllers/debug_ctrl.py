@@ -46,7 +46,7 @@ class DebugController(IViewComponentsController):
 
     def _update(self):
         replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and not replayCtrl.isBattleSimulation and replayCtrl.fps > 0:
+        if replayCtrl.isPlaying and not replayCtrl.isBattleSimulation and replayCtrl.fps > 0 or replayCtrl.isServerSideReplay:
             fps = BigWorld.getFPS()[1]
             fpsReplay = int(replayCtrl.fps)
             ping = replayCtrl.ping

@@ -147,7 +147,7 @@ class BattleResultsService(IBattleResultsService):
                 SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
             if result.success:
                 self.__appliedAddXPBonus.add(arenaUniqueID)
-                yield self.__updateComposer(arenaUniqueID)
+                yield self.__updateComposer(arenaUniqueID, arenaInfo)
                 self.__onAddXPBonusChanged()
             return
 
@@ -189,7 +189,7 @@ class BattleResultsService(IBattleResultsService):
             return
         else:
             statisticsResult = getEmptyClientPB20UXStats()
-            vehTypeCompDescr, vData = first(reusableInfo.personal.getVehicleCDsIterator(result['personal']))
+            vehTypeCompDescr, vData = first(reusableInfo.personal.getVehicleCDsIterator(result))
             statisticsResult['vehTypeCompDescr'] = vehTypeCompDescr
             if reusableInfo.isPostBattlePremiumPlus:
                 statisticsResult['premiumType'] = PREMIUM_TYPE.PLUS
@@ -289,7 +289,7 @@ class BattleResultsService(IBattleResultsService):
 
     @async
     @process
-    def __updateComposer(self, arenaUniqueID, callback):
+    def __updateComposer(self, arenaUniqueID, xpBonusData, callback):
         results = yield BattleResultsGetter(arenaUniqueID).request()
         if results.success:
             result = results.auxData
@@ -297,7 +297,7 @@ class BattleResultsService(IBattleResultsService):
             if reusableInfo is None:
                 SystemMessages.pushI18nMessage(BATTLE_RESULTS.NODATA, type=SystemMessages.SM_TYPE.Warning)
                 callback(False)
-            self.__updateReusableInfo(reusableInfo)
+            self.__updateReusableInfo(reusableInfo, xpBonusData)
             arenaUniqueID = reusableInfo.arenaUniqueID
             composerObj = composer.createComposer(reusableInfo)
             composerObj.setResults(result, reusableInfo)
@@ -305,11 +305,14 @@ class BattleResultsService(IBattleResultsService):
         callback(True)
         return
 
-    def __updateReusableInfo(self, reusableInfo):
+    def __updateReusableInfo(self, reusableInfo, xpBonusData=None):
         arenaUniqueID = reusableInfo.arenaUniqueID
         reusableInfo.premiumState = self.__makePremiumState(arenaUniqueID, PREMIUM_TYPE.BASIC)
         reusableInfo.premiumPlusState = self.__makePremiumState(arenaUniqueID, PREMIUM_TYPE.PLUS)
-        reusableInfo.isAddXPBonusApplied = self.isAddXPBonusApplied(arenaUniqueID)
+        isXPBonusApplied = self.isAddXPBonusApplied(arenaUniqueID)
+        reusableInfo.isAddXPBonusApplied = isXPBonusApplied
+        if xpBonusData:
+            reusableInfo.updateXPEarnings(xpBonusData)
         reusableInfo.clientIndex = self.lobbyContext.getClientIDByArenaUniqueID(arenaUniqueID)
 
     def __onPremiumBought(self, event):

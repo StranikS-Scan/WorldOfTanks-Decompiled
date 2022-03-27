@@ -4,11 +4,12 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim
+from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR
 from adisp import process, async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_pass.battle_pass_helpers import updateBattlePassVersion
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
+from gui.rts_battles.rts_constants import RTS_CAROUSEL_FILTER_KEY
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCache
@@ -33,6 +34,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
     ROYALE_CAROUSEL_FILTER_1 = 'ROYALE_CAROUSEL_FILTER_1'
     ROYALE_CAROUSEL_FILTER_2 = 'ROYALE_CAROUSEL_FILTER_2'
+    RTS_CAROUSEL_FILTER_1 = 'RTS_CAROUSEL_FILTER_1'
+    RTS_CAROUSEL_FILTER_2 = 'RTS_CAROUSEL_FILTER_2'
     EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
     EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
     BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
@@ -61,6 +64,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     UNIT_FILTER = 'UNIT_FILTER'
     BATTLE_HUD = 'BATTLE_HUD'
     SPG_AIM = 'SPG_AIM'
+    CONTOUR = 'CONTOUR'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -142,7 +146,8 @@ class ServerSettingsManager(object):
                                        GAME.HANGAR_CAM_PERIOD: Offset(18, 1835008),
                                        GAME.SNIPER_ZOOM: Offset(27, 402653184)}),
      SETTINGS_SECTIONS.GAME_EXTENDED_2: Section(masks={GAME.SHOW_ARTY_HIT_ON_MAP: 0,
-                                         GAME.GAMEPLAY_ONLY_10_MODE: 1}, offsets={GAME.CUSTOMIZATION_DISPLAY_TYPE: Offset(2, 12)}),
+                                         GAME.GAMEPLAY_ONLY_10_MODE: 1,
+                                         GAME.SCROLL_SMOOTHING: 4}, offsets={GAME.CUSTOMIZATION_DISPLAY_TYPE: Offset(2, 12)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GAME.LENS_EFFECT: 1}, offsets={}),
      SETTINGS_SECTIONS.SOUND: Section(masks={}, offsets={SOUND.ALT_VOICES: Offset(0, 255)}),
@@ -165,8 +170,9 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.SPG_AIM: Section(masks={SPGAim.SHOTS_RESULT_INDICATOR: 0,
                                  SPGAim.SPG_SCALE_WIDGET: 1,
                                  SPGAim.SPG_STRATEGIC_CAM_MODE: 2,
-                                 SPGAim.AUTO_CHANGE_AIM_MODE: 3,
-                                 SPGAim.SCROLL_SMOOTHING_ENABLED: 6}, offsets={SPGAim.AIM_ENTRANCE_MODE: Offset(4, 48)}),
+                                 SPGAim.AUTO_CHANGE_AIM_MODE: 3}, offsets={SPGAim.AIM_ENTRANCE_MODE: Offset(4, 48)}),
+     SETTINGS_SECTIONS.CONTOUR: Section(masks={CONTOUR.ENHANCED_CONTOUR: 0}, offsets={CONTOUR.CONTOUR_PENETRABLE_ZONE: Offset(1, 6),
+                                 CONTOUR.CONTOUR_IMPENETRABLE_ZONE: Offset(3, 24)}),
      SETTINGS_SECTIONS.MARKERS: Section(masks={'markerBaseIcon': 0,
                                  'markerBaseLevel': 1,
                                  'markerBaseHpIndicator': 2,
@@ -339,7 +345,8 @@ class ServerSettingsManager(object):
                                             GuiSettingsBehavior.EPIC_RANDOM_CHECKBOX_CLICKED: 3,
                                             GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED: 25,
                                             GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: 26,
-                                            GuiSettingsBehavior.BIRTHDAY_CALENDAR_INTRO_SHOWED: 27}, offsets={}),
+                                            GuiSettingsBehavior.BIRTHDAY_CALENDAR_INTRO_SHOWED: 27,
+                                            GuiSettingsBehavior.IS_HIDE_RTS_BOOTCAMP_BANNER: 28}, offsets={}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
@@ -410,7 +417,9 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.WOTPLUS_HANGAR_HINT: 20,
                                            OnceOnlyHints.WOTPLUS_PROFILE_HINT: 21,
                                            OnceOnlyHints.HANGAR_HAVE_NEW_BADGE_HINT: 22,
-                                           OnceOnlyHints.HANGAR_HAVE_NEW_SUFFIX_BADGE_HINT: 23}, offsets={}),
+                                           OnceOnlyHints.HANGAR_HAVE_NEW_SUFFIX_BADGE_HINT: 23,
+                                           OnceOnlyHints.RTS_ROSTER_SETUP_HINT: 24,
+                                           OnceOnlyHints.RTS_BUILD_ROSTER_HINT: 25}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -487,6 +496,8 @@ class ServerSettingsManager(object):
                                        SESSION_STATS.SHOW_SPOTTED: 16,
                                        SESSION_STATS.ONLY_ONCE_HINT_SHOWN_FIELD: 17}, offsets={}),
      SETTINGS_SECTIONS.BATTLE_PASS_STORAGE: Section(masks={BATTLE_PASS.INTRO_SHOWN: 16,
+                                             BATTLE_PASS.EXTRA_CHAPTER_VIDEO_SHOWN: 18,
+                                             BATTLE_PASS.EXTRA_CHAPTER_INTRO_SHOWN: 19,
                                              BATTLE_PASS.INTRO_VIDEO_SHOWN: 20,
                                              BATTLE_PASS.DAILY_QUESTS_INTRO_SHOWN: 27}, offsets={BATTLE_PASS.BUY_ANIMATION_WAS_SHOWN: Offset(10, 15360),
                                              BATTLE_PASS.FLAGS_VERSION: Offset(21, 132120576)}),
@@ -589,7 +600,58 @@ class ServerSettingsManager(object):
                                                   'role_LT_universal': 23,
                                                   'role_LT_wheeled': 24,
                                                   'role_SPG': 25}, offsets={}),
-     SETTINGS_SECTIONS.UNIT_FILTER: Section(masks={}, offsets={GAME.UNIT_FILTER: Offset(0, 2047)})}
+     SETTINGS_SECTIONS.UNIT_FILTER: Section(masks={}, offsets={GAME.UNIT_FILTER: Offset(0, 2047)}),
+     SETTINGS_SECTIONS.RTS_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
+                                               'germany': 1,
+                                               'usa': 2,
+                                               'china': 3,
+                                               'france': 4,
+                                               'uk': 5,
+                                               'japan': 6,
+                                               'czech': 7,
+                                               'sweden': 8,
+                                               'poland': 9,
+                                               'italy': 10,
+                                               'lightTank': 15,
+                                               'mediumTank': 16,
+                                               'heavyTank': 17,
+                                               'SPG': 18,
+                                               'AT-SPG': 19,
+                                               'level_1': 20,
+                                               'level_2': 21,
+                                               'level_3': 22,
+                                               'level_4': 23,
+                                               'level_5': 24,
+                                               'level_6': 25,
+                                               'level_7': 26,
+                                               'level_8': 27,
+                                               'level_9': 28,
+                                               'level_10': 29}, offsets={}),
+     SETTINGS_SECTIONS.RTS_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
+                                               'elite': 1,
+                                               'rented': 2,
+                                               'igr': 3,
+                                               'gameMode': 4,
+                                               'favorite': 5,
+                                               'bonus': 6,
+                                               'event': 7,
+                                               'crystals': 8,
+                                               RTS_CAROUSEL_FILTER_KEY: 9,
+                                               'role_HT_assault': 11,
+                                               'role_HT_break': 12,
+                                               'role_HT_support': 13,
+                                               'role_HT_universal': 14,
+                                               'role_MT_universal': 15,
+                                               'role_MT_sniper': 16,
+                                               'role_MT_assault': 17,
+                                               'role_MT_support': 18,
+                                               'role_ATSPG_assault': 19,
+                                               'role_ATSPG_universal': 20,
+                                               'role_ATSPG_sniper': 21,
+                                               'role_ATSPG_support': 22,
+                                               'role_LT_universal': 23,
+                                               'role_LT_wheeled': 24,
+                                               'role_SPG': 25}, offsets={})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,

@@ -300,7 +300,7 @@ class ExchangeCtx(object):
 
     def getUserTags(self, avatarSessionID, igrType):
         contact = self.usersStorage.getUser(avatarSessionID, scope=UserEntityScope.BATTLE)
-        if contact is not None:
+        if contact is not None and avatarSessionID:
             userTags = contact.getTags()
         else:
             userTags = set()

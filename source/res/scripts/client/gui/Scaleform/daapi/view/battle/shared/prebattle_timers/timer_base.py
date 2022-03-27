@@ -85,7 +85,7 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
 
     def __updateTimer(self):
         self.__callbackID = None
-        if self.__timeLeft > 0:
+        if 0 < self.__timeLeft < 61:
             timeLeftWithShift = self.__timeLeft - 1
             self.as_setTimerS(timeLeftWithShift)
         return

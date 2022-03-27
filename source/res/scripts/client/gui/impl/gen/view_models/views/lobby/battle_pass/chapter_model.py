@@ -45,29 +45,29 @@ class ChapterModel(ViewModel):
     def setChapterState(self, value):
         self._setString(4, value.value)
 
-    def getIsRegular(self):
+    def getIsVehicleInHangar(self):
         return self._getBool(5)
 
-    def setIsRegular(self, value):
+    def setIsVehicleInHangar(self, value):
         self._setBool(5, value)
 
-    def getIsVehicleInHangar(self):
+    def getIsBought(self):
         return self._getBool(6)
 
-    def setIsVehicleInHangar(self, value):
+    def setIsBought(self, value):
         self._setBool(6, value)
 
-    def getIsBought(self):
-        return self._getBool(7)
-
-    def setIsBought(self, value):
-        self._setBool(7, value)
-
     def getLevelProgression(self):
-        return self._getNumber(8)
+        return self._getNumber(7)
 
     def setLevelProgression(self, value):
-        self._setNumber(8, value)
+        self._setNumber(7, value)
+
+    def getIsExtra(self):
+        return self._getBool(8)
+
+    def setIsExtra(self, value):
+        self._setBool(8, value)
 
     def _initialize(self):
         super(ChapterModel, self)._initialize()
@@ -76,7 +76,7 @@ class ChapterModel(ViewModel):
         self._addStringProperty('styleName', '')
         self._addNumberProperty('currentLevel', 0)
         self._addStringProperty('chapterState')
-        self._addBoolProperty('isRegular', False)
         self._addBoolProperty('isVehicleInHangar', False)
         self._addBoolProperty('isBought', False)
         self._addNumberProperty('levelProgression', 0)
+        self._addBoolProperty('isExtra', False)

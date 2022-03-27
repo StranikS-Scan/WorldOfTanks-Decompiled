@@ -584,7 +584,6 @@ def _migrateTo70(core, data, initialized):
     spgAim[SPGAim.SPG_STRATEGIC_CAM_MODE] = 0
     spgAim[SPGAim.AUTO_CHANGE_AIM_MODE] = True
     spgAim[SPGAim.AIM_ENTRANCE_MODE] = 0
-    spgAim[SPGAim.SCROLL_SMOOTHING_ENABLED] = True
 
 
 def _migrateTo71(core, data, initialized):
@@ -750,6 +749,16 @@ def _migrateTo85(core, data, initialized):
 def _migrateTo86(core, data, initialized):
     for position in range(2) + range(17, 18):
         data['clear']['battlePassStorage'] = data['clear'].get('battlePassStorage', 0) | 1 << position
+
+
+def _migrateTo87(core, data, initialized):
+    gameData = data['gameExtData2']
+    gameData[GAME.SCROLL_SMOOTHING] = True
+
+
+def _migrateTo88(core, data, initialized):
+    data['battlePassStorage'][BattlePassStorageKeys.EXTRA_CHAPTER_INTRO_SHOWN] = False
+    data['battlePassStorage'][BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN] = False
 
 
 _versions = ((1,
@@ -1090,6 +1099,14 @@ _versions = ((1,
   False),
  (86,
   _migrateTo86,
+  False,
+  False),
+ (87,
+  _migrateTo87,
+  False,
+  False),
+ (88,
+  _migrateTo88,
   False,
   False))
 

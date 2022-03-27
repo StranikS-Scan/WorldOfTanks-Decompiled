@@ -6,10 +6,12 @@ from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
 from helpers.i18n import makeString
 
 def getHotKeyList(command):
-    keys = []
-    key, satelliteKeys = CommandMapping.g_instance.getCommandKeys(command)
-    for satelliteKey in satelliteKeys:
-        keys.append(makeString(READABLE_KEY_NAMES.key(BigWorld.keyToString(satelliteKey))))
+    keys = [ makeString(READABLE_KEY_NAMES.key(vKey)) for vKey in getHotKeyVkList(command) ]
+    return keys
 
-    keys.append(makeString(READABLE_KEY_NAMES.key(BigWorld.keyToString(key))))
+
+def getHotKeyVkList(command):
+    key, satelliteKeys = CommandMapping.g_instance.getCommandKeys(command)
+    keys = [ BigWorld.keyToString(satelliteKey) for satelliteKey in satelliteKeys ]
+    keys.append(BigWorld.keyToString(key))
     return keys

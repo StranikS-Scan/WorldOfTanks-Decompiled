@@ -11,7 +11,7 @@
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	30	</forward>
-    <backward>	14	</backward>
+    <backward>	12	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.06	</moving>
@@ -45,7 +45,7 @@
   <hull>
     <armor>
       <armor_1>	160	</armor_1>
-      <armor_2>	160	</armor_2>
+      <armor_2>	148	</armor_2>
       <armor_3>	160	</armor_3>
       <armor_4>	120	</armor_4>
       <armor_5>	25.4	</armor_5>
@@ -70,7 +70,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	25611	</weight>
-    <maxHealth>	1360	</maxHealth>
+    <maxHealth>	1320	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -993,10 +993,10 @@
       <terrainResistance>	1.2 1.6 2.7	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	23	</rotationSpeed>
+      <rotationSpeed>	21	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.25	</vehicleMovement>
-        <vehicleRotation>	0.25	</vehicleRotation>
+        <vehicleMovement>	0.27	</vehicleMovement>
+        <vehicleRotation>	0.27	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -1673,14 +1673,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	14000	</weight>
-      <maxHealth>	340	</maxHealth>
-      <rotationSpeed>	23	</rotationSpeed>
+      <maxHealth>	330	</maxHealth>
+      <rotationSpeed>	21	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
+      <circularVisionRadius>	340	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -1762,7 +1762,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1856,6 +1856,7 @@
             </master>
           </drivenJoints>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <density>	106.645 121.338	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
@@ -2478,7 +2479,7 @@
     <detailed>
       <engines>
         <V_12BN>
-          <smplEnginePower>	750	</smplEnginePower>
+          <smplEnginePower>	715	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </V_12BN>
       </engines>

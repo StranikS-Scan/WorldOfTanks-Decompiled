@@ -821,6 +821,8 @@
           <armor>
             <armor_1>	20	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
             </armor_1>
+            <armor_4>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
@@ -863,6 +865,7 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
             <density>	116.737 117.855	</density>

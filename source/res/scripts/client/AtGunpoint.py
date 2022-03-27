@@ -12,6 +12,14 @@ class AtGunpoint(BigWorld.DynamicScriptComponent):
     def __init__(self):
         BigWorld.DynamicScriptComponent.__init__(self)
 
+    def _avatar(self):
+        avatar = BigWorld.player()
+        if avatar.isObserver():
+            attachedVehicle = avatar.getVehicleAttached()
+            if not attachedVehicle or attachedVehicle.id != self.entity.id:
+                return None
+        return avatar
+
     def onDestroy(self):
         if self.entity.isMyVehicle:
             if self.attackers is not None:
@@ -26,7 +34,8 @@ class AtGunpoint(BigWorld.DynamicScriptComponent):
                 newAttackers = self.attackers[path[-1][0]:path[-1][1]]
                 for hitYaw in newAttackers:
                     if not prev or all((not self.__isSameYaw(prevHitYaw, hitYaw) for prevHitYaw in prev)):
-                        self.__guiSessionProvider.shared.hitDirection.addArtyHitPrediction(hitYaw)
+                        if self._avatar() is not None:
+                            self.__guiSessionProvider.shared.hitDirection.addArtyHitPrediction(hitYaw)
 
             if prev is not None:
                 for prevHitYaw in prev:

@@ -81,5 +81,6 @@ class MissionsPackageBusinessHandler(PackageBusinessHandler):
                 subView.currentTab.setDefaultTab(event.ctx['subTab'])
             elif tabAlias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS:
                 subView.currentTab.updateState(**event.ctx)
+                subView.currentTab.markVisited()
         else:
             self.loadViewByCtxEvent(event)

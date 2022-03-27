@@ -23,10 +23,12 @@ class BattleOptDeviceTooltipData(BlocksTooltipData):
         return
 
     def _packBlocks(self, itemCD, itemStatus):
+        items = super(BattleOptDeviceTooltipData, self)._packBlocks()
         _, _, deviceID = vehicles.parseIntCompactDescr(itemCD)
         itemInBattle = self.guiSessionProvider.shared.optionalDevices.getOptDeviceInBattle(deviceID)
+        if not itemInBattle:
+            return items
         descriptor = itemInBattle.getDescriptor()
-        items = super(BattleOptDeviceTooltipData, self)._packBlocks()
         leftPadding = 20
         rightPadding = 20
         topPadding = 20

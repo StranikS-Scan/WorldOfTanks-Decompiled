@@ -18,7 +18,7 @@ from rent_common import parseRentID
 from gui import SystemMessages
 from gui.DialogsInterface import showI18nConfirmDialog
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shop import showBuyGoldForVehicleWebOverlay, showTradeOffOverlay, showPersonalTradeOffOverlay
+from gui.shop import showBuyGoldForVehicleWebOverlay, showTradeOffOverlay
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.STORE import STORE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -30,7 +30,7 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.impl.pub import ViewImpl
-from gui.impl.backport import BackportTooltipWindow, TooltipData, getIntegralFormat
+from gui.impl.backport import BackportTooltipWindow, getIntegralFormat, createTooltipData
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.views.buy_vehicle_view_model import BuyVehicleViewModel
 from gui.impl.gen.view_models.views.buy_vehicle_view.commander_slot_model import CommanderSlotModel
@@ -50,10 +50,10 @@ from gui.shared.money import Currency, Money
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.utils import decorators
 from gui.shared.utils.vehicle_collector_helper import getCollectibleVehiclesInInventory
-from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleTradeInProcessor, VehicleRestoreProcessor, VehiclePersonalTradeInProcessor, showVehicleReceivedResultMessages
+from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleTradeInProcessor, VehicleRestoreProcessor, showVehicleReceivedResultMessages
 from helpers import i18n, dependency, int2roman, func_utils
 from shared_utils import CONST_CONTAINER
-from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, IPersonalTradeInController, ISoundEventChecker
+from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
 from frameworks.wulf import WindowFlags, ViewStatus, ViewSettings
 _logger = logging.getLogger(__name__)
@@ -68,17 +68,13 @@ class VehicleBuyActionTypes(CONST_CONTAINER):
 _TooltipExtraData = namedtuple('_TooltipExtraData', 'key, itemType')
 _TANKMAN_KEYS = ('', 'creditsTankman', 'goldTankman')
 _ACADEMY_SLOT = 2
-_VP_SHOW_PREVIOUS_SCREEN_ON_SUCCESS_ALIASES = (VIEW_ALIAS.VEHICLE_PREVIEW,
- VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW,
- VIEW_ALIAS.PERSONAL_TRADE_IN_VEHICLE_PREVIEW,
- VIEW_ALIAS.LOBBY_STORE)
+_VP_SHOW_PREVIOUS_SCREEN_ON_SUCCESS_ALIASES = (VIEW_ALIAS.VEHICLE_PREVIEW, VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW, VIEW_ALIAS.LOBBY_STORE)
 _COLLECTIBLE_VEHICLE_TUTORIAL = 'collectibleVehicle'
 
 class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
     __itemsCache = dependency.descriptor(IItemsCache)
     __rentals = dependency.descriptor(IRentalsController)
     __tradeIn = dependency.descriptor(ITradeInController)
-    __personalTradeIn = dependency.descriptor(IPersonalTradeInController)
     __wallet = dependency.descriptor(IWalletController)
     __restore = dependency.descriptor(IRestoreController)
     __bootcamp = dependency.descriptor(IBootcampController)
@@ -116,8 +112,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         self.__selectedCardIdx = 0 if not self.__bootcamp.isInBootcamp() else _ACADEMY_SLOT
         self.__isWithoutCommander = False
         self.__vehicle = self.__itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.__nationID, self.__inNationID)
-        self.__tradeOffVehicle = self.__tradeIn.getActiveTradeOffVehicle()
-        self.__personalTradeInSaleVehicle = self.__personalTradeIn.getActiveTradeInSaleVehicle()
+        self.__tradeInVehicleToSell = self.__tradeIn.getSelectedVehicleToSell()
         if self.__vehicle.isRestoreAvailable():
             self.__selectedRentID = self.__RENT_NOT_SELECTED_IDX
             self.__selectedRentIdx = self.__RENT_NOT_SELECTED_IDX
@@ -125,11 +120,12 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             self.__selectedRentID = self.__RENT_UNLIM_IDX
             self.__selectedRentIdx = self.__RENT_UNLIM_IDX
         self.__isGoldAutoPurchaseEnabled = self.__wallet.isAvailable
-        self.__isRentVisible = self.__vehicle.hasRentPackages and not self.__isTradeIn() and not self.__isPersonalTradeIn()
+        self.__isRentVisible = self.__vehicle.hasRentPackages and not self.__isTradeIn()
         self.__popoverIsAvailable = True
         self.__tradeInInProgress = False
         self.__purchaseInProgress = False
         self.__usePreviousAlias = False
+        self.__tradeInProgress = False
         return
 
     @property
@@ -186,7 +182,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             equipmentBlock = vm.equipmentBlock
             equipmentBlock.setIsRentVisible(self.__isRentVisible)
             equipmentBlock.setTradeInIsEnabled(self.__isTradeIn())
-            equipmentBlock.setPersonalTradeInIsEnabled(self.__isPersonalTradeIn())
             emtySlotAvailable = self.__itemsCache.items.inventory.getFreeSlots(self.__stats.vehicleSlots) > 0
             equipmentBlock.setEmtySlotAvailable(emtySlotAvailable)
             equipmentBlock.setIsRestore(isRestore)
@@ -227,7 +222,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         equipmentBlock.ammo.onSelectedChange += self.__onSelectedChange
         self.__restore.onRestoreChangeNotify += self.__onRestoreChange
         self.__itemsCache.onSyncCompleted += self.__onItemCacheSyncCompleted
-        self.__personalTradeIn.onActiveSaleVehicleChanged += self.__onActiveTradeInSaleVehicleChanged
 
     def __removeListeners(self):
         self.removeListener(ShopEvent.CONFIRM_TRADE_IN, self.__onTradeInConfirmed, EVENT_BUS_SCOPE.LOBBY)
@@ -249,7 +243,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         equipmentBlock.ammo.onSelectedChange -= self.__onSelectedChange
         self.__restore.onRestoreChangeNotify -= self.__onRestoreChange
         self.__itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
-        self.__personalTradeIn.onActiveSaleVehicleChanged -= self.__onActiveTradeInSaleVehicleChanged
 
     def __onItemCacheSyncCompleted(self, *_):
         if self.__purchaseInProgress or self.viewModel is None or self.viewModel.proxy is None:
@@ -324,7 +317,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         self.__isRentVisible = not self.__isRentVisible
         self.__updateTradeOffVehicleIntCD()
         with self.viewModel.equipmentBlock.transaction() as equipmentBlockVm:
-            tradeInVisible = not self.__isRentVisible and self.__isTradeIn() and self.__tradeOffVehicle is None
+            tradeInVisible = not self.__isRentVisible and self.__isTradeIn() and self.__tradeInVehicleToSell is None
             equipmentBlockVm.vehicleTradeInBtn.setIsVisible(tradeInVisible)
             equipmentBlockVm.vehicleBtn.setVisible(tradeInVisible)
             equipmentBlockVm.vehicleRentBtn.setIsVisible(self.__isRentVisible)
@@ -339,27 +332,31 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         return
 
     def __onSelectTradeOffVehicle(self, _=None):
-        if self.__isPersonalTradeIn():
-            showPersonalTradeOffOverlay(parent=self.getParentWindow())
-        else:
-            showTradeOffOverlay(self.__vehicle.level, self.getParentWindow())
+        if self.__vehicle is not None:
+            self.__tradeIn.selectVehicleToBuy(self.__vehicle.intCD)
+        showTradeOffOverlay(self.getParentWindow())
+        return
 
     def __onWalletStatusChanged(self, *_):
         self.__isGoldAutoPurchaseEnabled &= self.__wallet.isAvailable
         self.__updateTotalPrice()
 
     def __onTradeOffVehicleSelected(self, _=None):
-        self.__tradeOffVehicle = self.__tradeIn.getActiveTradeOffVehicle()
-        if self.__tradeOffVehicle is not None:
+        oldVeh = self.__tradeInVehicleToSell
+        self.__tradeInVehicleToSell = self.__tradeIn.getSelectedVehicleToSell()
+        if self.__tradeInVehicleToSell is not None:
             self.__updateTradeInInfo()
             self.__updateSlotPrice()
             self.__updateTotalPrice()
+        elif oldVeh is not None and not self.__tradeInProgress:
+            self.__destroyWindow()
+            return
         self.__updateBuyBtnLabel()
         return
 
     def __onCancelTradeOffVehicle(self, _=None):
-        self.__tradeOffVehicle = None
-        self.__tradeIn.setActiveTradeOffVehicleCD(UNDEFINED_ITEM_CD)
+        self.__tradeInVehicleToSell = None
+        self.__tradeIn.selectVehicleToSell(UNDEFINED_ITEM_CD)
         self.__updateTradeInInfo()
         self.__updateTotalPrice()
         self.__updateSlotPrice()
@@ -377,12 +374,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         if vehicle and not vehicle.isRestoreAvailable():
             self.__onWindowClose()
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.VEHICLE_RESTORE_FINISHED, vehicleName=vehicle.userName)
-
-    def __onActiveTradeInSaleVehicleChanged(self, *_):
-        self.__updateTradeInInfo()
-        self.__updateTotalPrice()
-        self.__updateSlotPrice()
-        self.__updateBuyBtnLabel()
 
     def __onRentTermSelected(self, event):
         itemIdx = event.ctx
@@ -467,16 +458,17 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
     def __requestForMoneyObtain(self):
         try:
             self.__soundEventChecker.lockPlayingSounds()
+            self.__tradeInProgress = True
             yield self.__requestForMoneyObtainImpl()
         finally:
             self.__soundEventChecker.unlockPlayingSounds()
+            self.__tradeInProgress = False
 
     @adisp.async
     @adisp.process
     def __requestForMoneyObtainImpl(self, callback):
         equipmentBlock = self.viewModel.equipmentBlock
-        isTradeIn = self.__isTradeIn() and self.__tradeOffVehicle is not None and not self.__isRentVisible
-        isPersonalTradeIn = self.__isPersonalTradeIn() and self.__personalTradeInSaleVehicle is not None and not self.__isRentVisible
+        isTradeIn = self.__isTradeIn() and self.__tradeInVehicleToSell is not None and not self.__isRentVisible
         isWithSlot = equipmentBlock.slot.getIsSelected()
         isWithAmmo = equipmentBlock.ammo.getIsSelected()
         if self.__isWithoutCommander:
@@ -486,11 +478,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         result = None
         self.__purchaseInProgress = False
         if isTradeIn:
-            vehicle = self.__tradeOffVehicle
-            processor = VehicleTradeInProcessor(self.__vehicle, self.__tradeOffVehicle, isWithSlot, isWithAmmo, crewType)
-        elif isPersonalTradeIn:
-            vehicle = self.__personalTradeInSaleVehicle
-            processor = VehiclePersonalTradeInProcessor(self.__vehicle, self.__personalTradeInSaleVehicle, isWithSlot, isWithAmmo, crewType)
+            vehicle = self.__tradeInVehicleToSell
+            processor = VehicleTradeInProcessor(self.__vehicle, self.__tradeInVehicleToSell, isWithSlot, isWithAmmo, crewType)
         else:
             self.__purchaseInProgress = True
             processor, vehicle = (None, None)
@@ -520,7 +509,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
                 self.__purchaseInProgress = False
                 callback(result)
                 return
-        if not (isTradeIn or isPersonalTradeIn):
+        if not isTradeIn:
             emptySlotAvailable = self.__itemsCache.items.inventory.getFreeSlots(self.__stats.vehicleSlots) > 0
             if self.__isBuying():
                 if self.viewModel.getIsRestore():
@@ -664,28 +653,25 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
     def __updateTradeInInfo(self):
         self.__updateTradeOffVehicleIntCD()
         with self.viewModel.transaction() as vm:
-            vm.equipmentBlock.setTradeOffWidgetEnabled(bool(self.__tradeIn.getTradeOffVehicles()))
+            vehiclesAvailable = self.__vehicle.intCD in self.__tradeIn.getVehiclesToBuy(False)
+            vm.equipmentBlock.setTradeOffWidgetEnabled(vehiclesAvailable)
             vm.equipmentBlock.setBuyVehicleIntCD(self.__vehicle.intCD)
-            vm.equipmentBlock.setTradeInTooltip(TOOLTIPS_CONSTANTS.PERSONAL_TRADE_IN_INFO if self.__isPersonalTradeIn() else TOOLTIPS_CONSTANTS.TRADE_IN_INFO)
+            vm.equipmentBlock.setTradeInTooltip(TOOLTIPS_CONSTANTS.TRADE_IN_INFO)
             with vm.equipmentBlock.vehicleTradeInBtn.transaction() as vehicleTradeInBtnVm:
                 if self.__isTradeIn():
                     vehicleTradeInBtnVm.setIcon(R.images.gui.maps.icons.library.trade_in())
                     vehicleTradeInBtnVm.setLabel(R.strings.store.buyVehicleWindow.tradeInBtnLabel())
                 isTradeIn = not self.__isRentVisible and self.__isTradeIn()
-                vehicleTradeInBtnVm.setIsVisible(isTradeIn and self.__tradeOffVehicle is None)
+                vehicleTradeInBtnVm.setIsVisible(isTradeIn and self.__tradeInVehicleToSell is None)
             self.__updateTradeOffVehicleBtnData()
         return
 
     def __updateTradeOffVehicleIntCD(self):
         with self.viewModel.transaction() as vm:
-            self.__tradeOffVehicle = self.__tradeIn.getActiveTradeOffVehicle()
-            self.__personalTradeInSaleVehicle = self.__personalTradeIn.getActiveTradeInSaleVehicle()
-            if self.__isTradeIn() and self.__tradeOffVehicle is not None and not self.__isRentVisible:
-                vm.setTradeOffVehicleIntCD(self.__tradeOffVehicle.intCD)
-                vm.equipmentBlock.setTradeOffVehicleIntCD(self.__tradeOffVehicle.intCD)
-            elif self.__isPersonalTradeIn() and self.__personalTradeInSaleVehicle is not None and not self.__isRentVisible:
-                vm.setTradeOffVehicleIntCD(self.__personalTradeInSaleVehicle.intCD)
-                vm.equipmentBlock.setTradeOffVehicleIntCD(self.__personalTradeInSaleVehicle.intCD)
+            self.__tradeInVehicleToSell = self.__tradeIn.getSelectedVehicleToSell()
+            if self.__isTradeIn() and self.__tradeInVehicleToSell is not None and not self.__isRentVisible:
+                vm.setTradeOffVehicleIntCD(self.__tradeInVehicleToSell.intCD)
+                vm.equipmentBlock.setTradeOffVehicleIntCD(self.__tradeInVehicleToSell.intCD)
             else:
                 vm.setTradeOffVehicleIntCD(self.__TRADE_OFF_NOT_SELECTED)
                 vm.equipmentBlock.setTradeOffVehicleIntCD(self.__TRADE_OFF_NOT_SELECTED)
@@ -720,10 +706,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
     def __updateTradeOffVehicleBtnData(self):
         with self.viewModel.equipmentBlock.vehicleBtn.transaction() as vehicleBtnVm:
             tradeInSaleVehicle = None
-            if self.__isTradeIn() and self.__tradeOffVehicle is not None:
-                tradeInSaleVehicle = self.__tradeOffVehicle
-            elif self.__isPersonalTradeIn() and self.__personalTradeInSaleVehicle is not None:
-                tradeInSaleVehicle = self.__personalTradeInSaleVehicle
+            if self.__isTradeIn() and self.__tradeInVehicleToSell is not None:
+                tradeInSaleVehicle = self.__tradeInVehicleToSell
             vehicleBtnVm.setVisible(not self.__isRentVisible and tradeInSaleVehicle is not None)
             if tradeInSaleVehicle is not None:
                 vehicleBtnVm.setFlag(tradeInSaleVehicle.nationName)
@@ -762,7 +746,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
     def __updateTotalPrice(self):
         totalPrice = self.__getTotalItemPrice()
         with self.viewModel.equipmentBlock.transaction() as equipmentBlockVm:
-            if self.__isTradeIn() or self.__isPersonalTradeIn():
+            if self.__isTradeIn():
                 equipmentBlockVm.setConfirmGoldPrice(totalPrice.price.get(Currency.GOLD))
                 popoverIsAvailable = totalPrice.price.get(Currency.GOLD) <= self.__stats.money.get(Currency.GOLD)
                 if totalPrice.price.gold <= 0:
@@ -780,7 +764,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
                     model.setIsEnough(currencyValue <= self.__stats.money.get(currencyType))
                 isAction = totalPrice.getActionPrcAsMoney().get(currencyType) is not None and currencyValue < currencyDefValue
                 model.setShowOldValue(isAction)
-                model.setIsWithAction(isAction and (self.__tradeOffVehicle is None or not self.__isValidTradeOffSelected()) and self.__vehicle.intCD not in self.__personalTradeIn.getBuyVehicleCDs())
+                model.setIsWithAction(isAction and (self.__tradeInVehicleToSell is None or not self.__isValidTradeOffSelected()))
                 model.setIsBootcamp(self.__bootcamp.isInBootcamp())
                 if isAction:
                     updateActionInViewModel(currencyType, model, totalPrice)
@@ -796,17 +780,15 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             if not self.__isPurchaseCurrencyAvailable(currency):
                 isEnabled &= totalPriceMoney.get(currency) <= statsMoney.get(currency)
 
-        if self.__isTradeIn() and self.__tradeOffVehicle is not None:
-            isEnabled &= self.__isValidTradeOffSelected() and self.__tradeOffVehicle.isReadyToTradeOff
-        if self.__isPersonalTradeIn() and self.__personalTradeInSaleVehicle is not None:
-            isEnabled &= self.__isValidPersonalTradeInSelected() and self.__personalTradeInSaleVehicle.isReadyPersonalTradeInSale
+        if self.__isTradeIn() and self.__tradeInVehicleToSell is not None:
+            isEnabled &= self.__isValidTradeOffSelected() and self.__tradeInVehicleToSell.isReadyToTradeOff
         self.viewModel.equipmentBlock.setBuyBtnIsEnabled(isEnabled)
         return
 
     def __updateBuyBtnLabel(self):
         if self.__selectedRentIdx == self.__RENT_NOT_SELECTED_IDX:
             label = R.strings.store.buyVehicleWindow.restore()
-        elif not self.__isRentVisible and (self.__isTradeIn() and self.__tradeOffVehicle is not None or self.__isPersonalTradeIn() and self.__personalTradeInSaleVehicle is not None):
+        elif not self.__isRentVisible and self.__isTradeIn() and self.__tradeInVehicleToSell is not None:
             label = R.strings.store.buyVehicleWindow.exchange()
         elif self.__selectedRentID >= 0:
             label = R.strings.store.buyVehicleWindow.rentBtn()
@@ -827,17 +809,13 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
 
     def __getSlotIsAvailable(self, slotPrice):
         isSlotForRent = self.__selectedRentIdx >= 0 and self.__isRentVisible
-        isSlotForTradeIn = self.__isTradeIn() and self.__tradeOffVehicle is not None and not self.__isRentVisible
+        isSlotForTradeIn = self.__isTradeIn() and self.__tradeInVehicleToSell is not None and not self.__isRentVisible
         return not isSlotForRent and not isSlotForTradeIn and self.__isAvailablePrice(slotPrice)
 
     def __getTotalItemPrice(self):
         price = defPrice = ZERO_MONEY
-        if self.__isTradeIn() and self.__tradeOffVehicle is not None and not self.__isRentVisible:
+        if self.__isTradeIn() and self.__tradeInVehicleToSell is not None and not self.__isRentVisible:
             tradeInPrice = self.__tradeIn.getTradeInPrice(self.__vehicle)
-            price = tradeInPrice.price
-            defPrice = tradeInPrice.defPrice
-        elif self.__isPersonalTradeIn() and self.__personalTradeInSaleVehicle is not None and not self.__isRentVisible:
-            tradeInPrice = self.__personalTradeIn.getPersonalTradeInPrice(self.__vehicle)
             price = tradeInPrice.price
             defPrice = tradeInPrice.defPrice
         elif self.__selectedRentIdx >= 0 and self.__isRentVisible:
@@ -878,16 +856,11 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         if not tooltipId:
             return
         else:
-            if tooltipId in (TOOLTIPS_CONSTANTS.TRADE_IN_INFO, TOOLTIPS_CONSTANTS.TRADE_IN_INFO_NOT_AVAILABLE, TOOLTIPS_CONSTANTS.PERSONAL_TRADE_IN_INFO):
-                args = (self.__tradeIn.getAllowedVehicleLevels(self.__vehicle.level),)
-            elif tooltipId == TOOLTIPS_CONSTANTS.TRADE_IN_STATE_NOT_AVAILABLE:
-                if self.__previousAlias in (VIEW_ALIAS.PERSONAL_TRADE_IN_VEHICLE_PREVIEW, VIEW_ALIAS.LOBBY_STORE):
-                    veh = self.__personalTradeInSaleVehicle
-                else:
-                    veh = self.__tradeOffVehicle
+            if tooltipId == TOOLTIPS_CONSTANTS.TRADE_IN_STATE_NOT_AVAILABLE:
+                veh = self.__tradeInVehicleToSell
                 args = (veh,)
             elif tooltipId == TOOLTIPS_CONSTANTS.SELECTED_VEHICLE_TRADEOFF:
-                args = (self.__tradeOffVehicle.intCD,)
+                args = (self.__tradeInVehicleToSell.intCD,)
             elif tooltipId == TOOLTIPS_CONSTANTS.ACTION_PRICE:
                 args = (event.getArgument('tooltipType'),
                  event.getArgument('key'),
@@ -896,7 +869,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
                  event.getArgument('isBuying'))
             else:
                 args = None
-            return TooltipData(tooltip=tooltipId, isSpecial=True, specialAlias=tooltipId, specialArgs=args)
+            return createTooltipData(tooltip=tooltipId, isSpecial=True, specialAlias=tooltipId, specialArgs=args)
 
     def __addVMsInActionPriceList(self, listArray, itemPrice, fontNotEnoughIsEnabled=True, tooltipData=None):
         actionPriceModels = getItemPricesViewModel(self.__stats.money, itemPrice, isBootcamp=self.__bootcamp.isInBootcamp())[0]
@@ -924,22 +897,13 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         return currencyType == Currency.GOLD and self.__isGoldAutoPurchaseEnabled
 
     def __isTradeIn(self):
-        isBuyingAllowed = not self.__vehicle.isDisabledForBuy and not self.__vehicle.isHidden
-        return bool(self.__tradeIn.isEnabled() and self.__vehicle.canTradeIn and isBuyingAllowed)
-
-    def __isPersonalTradeIn(self):
-        return self.__vehicle.canPersonalTradeInBuy and not self.__vehicle.isDisabledForBuy
+        return bool(self.__tradeIn.isEnabled() and self.__vehicle.canTradeIn)
 
     def __isToggleRentAndTradeInState(self):
         return False if not self.__vehicle else self.__isTradeIn() and self.__vehicle.hasRentPackages
 
     def __isValidTradeOffSelected(self):
-        tradeOffVehicles = self.__tradeIn.getTradeOffVehicles(self.__vehicle.level)
-        return tradeOffVehicles is not None and self.__tradeOffVehicle.intCD in tradeOffVehicles
-
-    def __isValidPersonalTradeInSelected(self):
-        tradeInSaleVehicles = self.__personalTradeIn.getSaleVehicleCDs()
-        return tradeInSaleVehicles is not None and self.__personalTradeInSaleVehicle.intCD in tradeInSaleVehicles
+        return self.__tradeIn.validatePossibleVehicleToBuy(self.__vehicle)
 
     def __isRenting(self):
         return not self.__isBuying()

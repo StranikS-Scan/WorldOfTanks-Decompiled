@@ -99,6 +99,9 @@ class MarkerPlugin(IPlugin):
     def getMarkerSubtype(self, targetID):
         return INVALID_MARKER_SUBTYPE
 
+    def isMarkerActive(self, targetID):
+        return False
+
     def _createMarkerWithPosition(self, symbol, position, active=True):
         matrixProvider = Matrix()
         matrixProvider.translation = position
@@ -393,7 +396,7 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
                 self._setMarkerMatrix(marker.getMarkerID(), marker.getMatrixProvider())
                 self._setMarkerActive(marker.getMarkerID(), True)
         else:
-            if vInfo.isObserver():
+            if vInfo.isObserver() or vInfo.isCommander():
                 return
             self.__addMarkerToPool(vehicleID, vProxy)
         return
@@ -440,12 +443,15 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
     def __addAutoAimMarker(self, event):
         vehicle = event.ctx.get('vehicle')
         self._vehicleID = vehicle.id if vehicle is not None else None
-        if self._showExtendedInfo:
-            if self.__altMarker:
+        if avatar_getter.isPlayerCommander() and avatar_getter.isCommanderCtrlMode():
+            return
+        else:
+            if self._showExtendedInfo:
+                if self.__altMarker:
+                    self._addMarker(self._vehicleID)
+            elif self.__baseMarker:
                 self._addMarker(self._vehicleID)
-        elif self.__baseMarker:
-            self._addMarker(self._vehicleID)
-        return
+            return
 
     def __onVehicleStateUpdated(self, state, value):
         if state in (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):

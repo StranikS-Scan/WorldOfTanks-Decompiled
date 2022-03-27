@@ -46,17 +46,13 @@
       <armor_2>	50.8	</armor_2>
       <armor_3>	38.1	</armor_3>
       <armor_4>	38.1	</armor_4>
-      <armor_5>	38.1	</armor_5>
+      <armor_5>	19.1	</armor_5>
       <armor_6>	12.7	</armor_6>
-      <armor_7>	12.7	</armor_7>
-      <armor_8>	63.5	</armor_8>
-      <armor_9>	0	</armor_9>
-      <armor_10>	25.4	</armor_10>
-      <armor_11>	25.4	</armor_11>
-      <armor_14>	19.1	</armor_14>
-      <armor_15>	9.5	</armor_15>
-      <armor_16>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_16>
+      <armor_7>	25.4	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+      <armor_10>	9.5	</armor_10>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16029	</weight>
@@ -2822,12 +2818,11 @@
         <armor_2>	76.2	</armor_2>
         <armor_3>	50.8	</armor_3>
         <armor_4>	50.8	</armor_4>
-        <armor_5>	38.1	</armor_5>
+        <armor_5>	25.4	</armor_5>
         <armor_6>	25.4	</armor_6>
-        <armor_8>	25.4	</armor_8>
-        <armor_9>	0	</armor_9>
-        <armor_10>	50.8	</armor_10>
-        <armor_11>	25.4	</armor_11>
+        <armor_7>	38.1	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	25.4	</armor_9>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4800	</weight>
@@ -2863,8 +2858,10 @@
             </armor_1>
             <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
+            <armor_3>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
@@ -2923,6 +2920,7 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.88 0.55 0.000000 0.000000	</tiling>
             <density>	96.9317 111.77	</density>
@@ -2939,8 +2937,10 @@
             </armor_1>
             <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
+            <armor_3>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	15	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
@@ -3004,6 +3004,7 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.88 0.55 0.000000 0.000000	</tiling>
             <density>	124.66 153.626	</density>
@@ -3020,8 +3021,10 @@
             </armor_1>
             <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
+            <armor_3>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	40	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
@@ -3080,6 +3083,7 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
             <density>	103.444 104.132	</density>
@@ -3619,16 +3623,13 @@
       </unlocks>
       <armor>
         <armor_1>	63.5	</armor_1>
-        <armor_2>	63.5	</armor_2>
         <armor_3>	63.5	</armor_3>
         <armor_4>	63.5	</armor_4>
-        <armor_5>	38.1	</armor_5>
-        <armor_6>	25.4	</armor_6>
+        <armor_5>	25.4	</armor_5>
+        <armor_6>	19.1	</armor_6>
+        <armor_7>	38.1	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	63.5	</armor_9>
-        <armor_10>	25.4	</armor_10>
         <armor_11>	44.5	</armor_11>
-        <armor_12>	25.4	</armor_12>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
@@ -3655,12 +3656,16 @@
           <armor>
             <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
+            <armor_5>	63.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
             <gun>	20	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
@@ -3719,6 +3724,7 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
             <density>	96.9317 111.77	</density>
@@ -3733,12 +3739,16 @@
           <armor>
             <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
+            <armor_5>	63.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
             <gun>	15	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
@@ -3802,6 +3812,7 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
             <density>	124.66 153.626	</density>
@@ -3816,12 +3827,16 @@
           <armor>
             <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
+            <armor_5>	63.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
             <gun>	40	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
@@ -3880,6 +3895,7 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
             <density>	103.444 104.132	</density>
@@ -3890,12 +3906,16 @@
           <armor>
             <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
+            <armor_5>	63.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
             <gun>	15	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
@@ -3963,6 +3983,7 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.535 0.535 0.000000 0.000000	</tiling>
             <density>	100.871 130.92	</density>
@@ -3973,12 +3994,16 @@
           <armor>
             <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
+            <armor_5>	63.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
             <gun>	20	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
@@ -4041,6 +4066,7 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.535 0.535 0.000000 0.000000	</tiling>
             <density>	100.716 105.581	</density>

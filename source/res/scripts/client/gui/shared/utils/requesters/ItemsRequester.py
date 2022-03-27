@@ -4,9 +4,11 @@ import operator
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict, namedtuple
 import typing
+import BigWorld
 import constants
 import dossiers2
 import nations
+import async as future_async
 from account_shared import LayoutIterator
 from adisp import async, process
 from battle_pass_common import BATTLE_PASS_PDATA_KEY
@@ -16,6 +18,7 @@ from goodies.goodie_constants import GOODIE_STATE
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.requesters import vehicle_items_getter
+from gui.shared.utils.requesters.rts_statistics_requester import RtsStatisticsRequester
 from helpers import dependency
 from items import getTypeOfCompactDescr, makeIntCompactDescrByID, tankmen, vehicles
 from items.components.c11n_constants import CustomizationDisplayType, SeasonType
@@ -216,8 +219,8 @@ class VehsMultiNationSuitableCriteria(VehsSuitableCriteria):
 
 
 class REQ_CRITERIA(object):
-    EMPTY = RequestCriteria()
-    NONE = RequestCriteria(lambda i: False)
+    EMPTY = RequestCriteria(PredicateCondition(lambda i: True))
+    NONE = RequestCriteria(PredicateCondition(lambda i: False))
     CUSTOM = staticmethod(lambda predicate: RequestCriteria(PredicateCondition(predicate)))
     HIDDEN = RequestCriteria(PredicateCondition(operator.attrgetter('isHidden')))
     SECRET = RequestCriteria(PredicateCondition(operator.attrgetter('isSecret')))
@@ -283,15 +286,15 @@ class REQ_CRITERIA(object):
         CAN_TRADE_OFF = RequestCriteria(PredicateCondition(lambda item: item.canTradeOff))
         CAN_SELL = RequestCriteria(PredicateCondition(lambda item: item.canSell))
         CAN_NOT_BE_SOLD = RequestCriteria(PredicateCondition(lambda item: item.canNotBeSold))
-        CAN_PERSONAL_TRADE_IN_SALE = RequestCriteria(PredicateCondition(lambda item: item.canPersonalTradeInSale))
-        CAN_PERSONAL_TRADE_IN_BUY = RequestCriteria(PredicateCondition(lambda item: item.canPersonalTradeInBuy))
         IS_IN_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isInBattle))
         SECRET = RequestCriteria(PredicateCondition(lambda item: item.isSecret))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
         NAME_VEHICLE_WITH_SHORT = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableShortUserName or nameVehicle in item.searchableUserName)))
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
+        HAS_ANY_OF_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: bool(item.tags & tags))))
         FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
+        HAS_CUSTOM_STATE = staticmethod(lambda state: RequestCriteria(PredicateCondition(lambda item: item.getCustomState() == state)))
 
     class TANKMAN(object):
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
@@ -380,7 +383,7 @@ class ItemsRequester(IItemsRequester):
      'ranked',
      'dogTag'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, aiRostersRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -401,6 +404,8 @@ class ItemsRequester(IItemsRequester):
         self.__giftSystem = giftSystemRequester
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
+        self.__aiRosters = aiRostersRequester
+        self.__rtsStatisticsRequester = RtsStatisticsRequester()
         self.__fittingItemRequesters = {self.__inventory,
          self.__stats,
          self.__shop,
@@ -477,8 +482,16 @@ class ItemsRequester(IItemsRequester):
         return self.__battlePass
 
     @property
+    def rtsStatistics(self):
+        return self.__rtsStatisticsRequester
+
+    @property
     def giftSystem(self):
         return self.__giftSystem
+
+    @property
+    def aiRosters(self):
+        return self.__aiRosters
 
     @async
     @process
@@ -511,6 +524,9 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/ranked')
         yield self.__battleRoyale.request()
         Waiting.hide('download/ranked')
+        Waiting.show('download/aiRosters')
+        yield self.__aiRosters.request()
+        Waiting.hide('download/aiRosters')
         Waiting.show('download/badges')
         yield self.__badges.request()
         Waiting.hide('download/badges')
@@ -529,6 +545,9 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/festivity')
         yield self.__festivity.request()
         Waiting.hide('download/festivity')
+        Waiting.show('download/rtsStatistics')
+        yield self.__rtsStatisticsRequester.request()
+        Waiting.hide('download/rtsStatistics')
         Waiting.show('download/giftSystem')
         yield self.__giftSystem.request()
         Waiting.hide('download/giftSystem')
@@ -536,7 +555,7 @@ class ItemsRequester(IItemsRequester):
         callback(self)
 
     def isSynced(self):
-        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__giftSystem.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__battleRoyale.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
+        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__giftSystem.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__battleRoyale.isSynced() and self.__aiRosters.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
 
     @async
     @process
@@ -592,6 +611,7 @@ class ItemsRequester(IItemsRequester):
         self.__festivity.clear()
         self.__anonymizer.clear()
         self.__giftSystem.clear()
+        self.__aiRosters.clear()
 
     def onDisconnected(self):
         self.__tokens.onDisconnected()
@@ -815,6 +835,33 @@ class ItemsRequester(IItemsRequester):
                     result[intCD] = item
 
         return result
+
+    @future_async.async
+    def getItemsAsync(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None, onlyWithPrices=True, callback=None):
+        result = ItemsCollection()
+        if not isinstance(itemTypeID, tuple):
+            itemTypeID = (itemTypeID,)
+
+        def asyncGetItems():
+            for typeID in itemTypeID:
+                itemGetter = self.getItemByCD
+                protector = criteria.getIntCDProtector()
+                if protector is not None and protector.isUnlinked():
+                    callback(result)
+                for intCD in vehicle_items_getter.getItemsIterator(self.__shop.getItemsData(), nationID, typeID, onlyWithPrices):
+                    if BigWorld.player() is None:
+                        return
+                    if protector is not None and protector.isTriggered(intCD):
+                        continue
+                    item = itemGetter(intCD)
+                    if criteria(item):
+                        result[intCD] = item
+                    yield item
+
+            return
+
+        yield future_async.await(future_async.distributeLoopOverTicks(asyncGetItems(), minPerTick=10, maxPerTick=100, logID='getItemsAsync', tickLength=0.0))
+        callback(result)
 
     def getTankmen(self, criteria=REQ_CRITERIA.TANKMAN.ACTIVE):
         result = ItemsCollection()

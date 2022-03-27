@@ -83,8 +83,8 @@
       <turret>	0.000000 0.503066 0.022284	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModelServer>	vehicles/chinese/Ch01_Type59_Gold/collision/Hull.model	</collisionModelServer>
-      <collisionModelClient>	vehicles/chinese/Ch01_Type59_Gold/collision_client/Hull.model	</collisionModelClient>
+      <collisionModelServer>	vehicles/chinese/Ch01_Type59/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/chinese/Ch01_Type59/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <hangarShadowTexture>	vehicles/chinese/Ch01_Type59_Gold/Type59_HangarShadowMap.dds	</hangarShadowTexture>
     <customizationSlots>
@@ -245,8 +245,8 @@
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.966527 0.000000	</hullPosition>
       <hitTester>
-        <collisionModelServer>	vehicles/chinese/Ch01_Type59_Gold/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/chinese/Ch01_Type59_Gold/collision_client/Chassis.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/chinese/Ch01_Type59/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch01_Type59/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.31088 1.86928	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -972,8 +972,8 @@
             <exploded>	vehicles/chinese/Ch01_Type59_Gold/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/chinese/Ch01_Type59_Gold/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/chinese/Ch01_Type59_Gold/collision_client/Gun_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/chinese/Ch01_Type59/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch01_Type59/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_mainext	</effects>
           <reloadEffect>	reload85_107	</reloadEffect>
@@ -1009,8 +1009,8 @@
         <exploded>	vehicles/chinese/Ch01_Type59_Gold/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/chinese/Ch01_Type59_Gold/collision/Turret_01.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/chinese/Ch01_Type59_Gold/collision_client/Turret_01.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/chinese/Ch01_Type59/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch01_Type59/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.032964 0.301534 1.18003	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>

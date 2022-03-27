@@ -58,6 +58,8 @@ class IntSettingsRequester(object):
      'CAROUSEL_FILTER_1': 73,
      'CAROUSEL_FILTER_2': 74,
      'UNIT_FILTER': 77,
+     'RTS_CAROUSEL_FILTER_1': 78,
+     'RTS_CAROUSEL_FILTER_2': 79,
      'RANKED_CAROUSEL_FILTER_1': 80,
      'RANKED_CAROUSEL_FILTER_2': 81,
      'FEEDBACK_DAMAGE_INDICATOR': 82,
@@ -78,7 +80,8 @@ class IntSettingsRequester(object):
      'GAME_EXTENDED_2': constants.USER_SERVER_SETTINGS.GAME_EXTENDED_2,
      'SPG_AIM': constants.USER_SERVER_SETTINGS.SPG_AIM,
      MAPBOX_CAROUSEL_FILTER_1: 103,
-     MAPBOX_CAROUSEL_FILTER_2: 104}
+     MAPBOX_CAROUSEL_FILTER_2: 104,
+     'CONTOUR': constants.USER_SERVER_SETTINGS.CONTOUR}
 
     def __init__(self):
         self.__isSynced = False

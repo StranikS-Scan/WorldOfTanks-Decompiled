@@ -118,7 +118,7 @@ def updateFashions(appearance):
         if outfit and outfit.style and outfit.style.isProgression:
             changeStyleProgression(style=outfit.style, appearance=appearance, level=outfit.progressionLevel)
         if IS_EDITOR:
-            if outfit and outfit.style and outfit.style.modelsSet != appearance.currentModelsSet:
+            if outfit.style is not None and outfit.style.modelsSet != appearance.currentModelsSet:
                 setMaterialsVisibility(appearance, appearance.availableMaterials, False)
         appearance.c11nComponent = appearance.createComponent(Vehicular.C11nComponent, fashions, appearance.compoundModel, outfitData)
         return
@@ -201,7 +201,13 @@ def prepareBattleOutfit(outfitCD, vehicleDescriptor, vehicleId):
     outfitComponent = getOutfitComponent(outfitCD, vehicleDescriptor)
     outfit = Outfit(component=outfitComponent, vehicleCD=vehicleCD)
     player = BigWorld.player()
-    forceHistorical = player.playerVehicleID != vehicleId and player.customizationDisplayType < outfit.customizationDisplayType()
+    if player is not None and hasattr(player, 'customizationDisplayType'):
+        localPlayerWantsHistoricallyAccurate = player.customizationDisplayType < outfit.customizationDisplayType()
+        isLocalVehicle = player.playerVehicleID != vehicleId
+    else:
+        localPlayerWantsHistoricallyAccurate = False
+        isLocalVehicle = False
+    forceHistorical = isLocalVehicle and localPlayerWantsHistoricallyAccurate
     if outfit.style and (outfit.style.isProgression or IS_EDITOR):
         progressionOutfit = getStyleProgressionOutfit(outfit, toLevel=outfit.progressionLevel)
         if progressionOutfit is not None:

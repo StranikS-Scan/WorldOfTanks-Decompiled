@@ -94,7 +94,7 @@ class _VehiclesSelector(object):
 
     def highlightVehicles(self):
         self.__clearEdgedVehicles()
-        vehicles = [ v for v in BigWorld.player().vehicles if v.isStarted and v.isAlive() ]
+        vehicles = [ v for v in BigWorld.player().vehicles if v.isStarted and v.isAlive() and not v.isPlayerVehicle ]
         selected = self.__intersectChecker(vehicles)
         for v in selected:
             v.drawEdge(True)
@@ -216,7 +216,7 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
 
     def __init__(self, position, equipment, direction=_DEFAULT_STRIKE_DIRECTION):
         _DefaultStrikeSelector.__init__(self, position, equipment)
-        self.area = BigWorld.player().createEquipmentSelectedArea(position, direction, equipment)
+        self.area = BigWorld.player().createEquipmentSelectedArea(position, direction, equipment, doYCutOff=False)
         self.area.setOverTerrainOffset(10.0)
         self.direction = direction
         self.__sightUpdateActivity = None

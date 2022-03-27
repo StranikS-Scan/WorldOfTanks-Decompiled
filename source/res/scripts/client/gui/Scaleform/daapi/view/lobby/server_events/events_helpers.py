@@ -20,7 +20,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events import conditions, formatters, settings as quest_settings
 from gui.server_events.bonuses import VehiclesBonus
-from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, isDailyQuest, isLinkedSet
+from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, isDailyQuest, isLinkedSet, isRts
 from gui.server_events.personal_progress.formatters import PostBattleConditionsFormatter
 from gui.shared.formatters import icons, text_styles
 from helpers import dependency, i18n, int2roman, time_utils
@@ -111,7 +111,7 @@ class BattlePassProgress(object):
         return self.__battlePassController.getSingleAward(self.chapterID, self.level, self.__getRewardType()) if self.isLevelReached else []
 
     def __initExtendedData(self):
-        if not self.__battlePassController.isEnabled():
+        if not self.__battlePassController.isEnabled() or self.__chapterID == 0:
             return
         self.__pointsQst = self.__getQuestPoints()
         self.__prevLevel = self.__battlePassController.getLevelByPoints(self.__chapterID, self.__pointsTotal - self.__basePoints - self.__pointsQst)
@@ -167,12 +167,12 @@ class _EventInfo(EventInfoModel):
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
         index = 0
         progresses = []
-        isQuestDailyQuest = isDailyQuest(str(self.event.getID()))
+        questID = str(self.event.getID())
         if not isProgressReset and not isCompleted:
             for cond in self.event.bonusCond.getConditions().items:
                 if isinstance(cond, conditions._Cumulativable):
                     for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
-                        if not isQuestDailyQuest:
+                        if not isDailyQuest(questID) and not isRts(questID):
                             label = cond.getUserString()
                         else:
                             label = cond.getCustomDescription()

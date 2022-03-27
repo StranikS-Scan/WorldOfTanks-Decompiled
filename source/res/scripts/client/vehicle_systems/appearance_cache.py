@@ -133,7 +133,10 @@ class AppearanceCache(IAppearanceCache):
         else:
             data.typeDescr.keepPrereqs(data.prereqsNames)
             appearance = data.appearance
-            appearance.construct(BigWorld.player().playerVehicleID == vId, data.prereqsNames)
+            player = BigWorld.player()
+            isPlayer = player.playerVehicleID == vId
+            isControllableVehicle = player.isControllableVehicle(vId)
+            appearance.construct(isPlayer, isControllableVehicle, data.prereqsNames)
             self.__appearanceCache[vId] = appearance
             onFinishedCallback(appearance)
             return appearance

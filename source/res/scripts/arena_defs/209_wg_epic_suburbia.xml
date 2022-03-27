@@ -312,5 +312,451 @@
     </epic>
   </gameplayTypes>
   <roadMap></roadMap>
-  <mapActivities></mapActivities>
+  <mapActivities>
+    <scenario>
+      <startTime>	10.000000 12.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	0.000000	</interval>
+      <arenaPeriod>	2	</arenaPeriod>
+      <name>	pregame_attack_west	</name>
+      <trajectories>
+        <warplane>
+          <preset>	m209_IL2_plane_attack_W01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_attack_W02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_attack_W03	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	2.000000 2.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_attack_W04	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	2.000000 2.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_explosion_W01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	25.299999 25.299999	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_explosion_W03	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	28.100000 28.100000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_smoke_W01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	25.600000 25.500000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_AAD_W01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	9.000000 9.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_AAD_W02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	7.000000 7.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	4.000000 5.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	0.000000	</interval>
+      <arenaPeriod>	2	</arenaPeriod>
+      <name>	pregame_attack_center	</name>
+      <trajectories>
+        <warplane>
+          <preset>	m209_IL2_plane_attack_C01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_attack_C02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_attack_C03	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_attack_C04	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_explosion_C01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	23.200001 23.200001	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_explosion_C02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	26.900000 26.900000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_smoke_C01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	25.100000 25.100000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_smoke_C02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	27.000000 27.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_AAD_C01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	7.000000 7.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_AAD_C02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	6.500000 6.500000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	10.000000 12.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	0.000000	</interval>
+      <arenaPeriod>	2	</arenaPeriod>
+      <name>	pregame_attack_east	</name>
+      <trajectories>
+        <warplane>
+          <preset>	m209_IL2_plane_attack_E01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_attack_E02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_attack_E03	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	1.000000 1.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_attack_E04	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	1.000000 1.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_explosion_E01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	21.000000 21.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_explosion_E03	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	23.799999 23.799999	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_plane_smoke_E03	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	24.000000 24.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_AAD_E01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	7.500000 7.500000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_IL2_AAD_E02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	7.000000 7.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	360	</interval>
+      <arenaPeriod>	0	</arenaPeriod>
+      <name>	zone_WZ1_planes	</name>
+      <trajectories>
+        <warplane>
+          <preset>	m209_zone_destr_WZ1_planes_01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	1.000000 1.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_WZ1_planes_02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	1.000000 1.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_WZ1_planes_03	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_WZ1_planes_04	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	10.000000 40.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	300	</interval>
+      <arenaPeriod>	0	</arenaPeriod>
+      <name>	zone_WZ2_planes	</name>
+      <trajectories>
+        <warplane>
+          <preset>	m209_zone_destr_WZ2_planes_01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_WZ2_planes_02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_WZ2_planes_03	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_WZ2_planes_04	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	360	</interval>
+      <arenaPeriod>	0	</arenaPeriod>
+      <name>	zone_CZ1_planes	</name>
+      <trajectories>
+        <warplane>
+          <preset>	m209_zone_destr_CZ1_planes_01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_CZ1_planes_02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_CZ1_planes_03	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_CZ1_planes_04	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	1.000000 1.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	10.000000 40.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	300	</interval>
+      <arenaPeriod>	0	</arenaPeriod>
+      <name>	zone_CZ2_planes	</name>
+      <trajectories>
+        <warplane>
+          <preset>	m209_zone_destr_CZ2_planes_01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_CZ2_planes_02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_CZ2_planes_03	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	1.000000 1.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_CZ2_planes_04	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	1.000000 1.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	360	</interval>
+      <arenaPeriod>	0	</arenaPeriod>
+      <name>	zone_EZ1_planes	</name>
+      <trajectories>
+        <warplane>
+          <preset>	m209_zone_destr_EZ1_planes_01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	2.000000 2.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_EZ1_planes_02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	2.000000 2.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_EZ1_planes_03	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_EZ1_planes_04	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	10.000000 40.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	300	</interval>
+      <arenaPeriod>	0	</arenaPeriod>
+      <name>	zone_EZ2_planes	</name>
+      <trajectories>
+        <warplane>
+          <preset>	m209_zone_destr_EZ2_planes_01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_EZ2_planes_02	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_EZ2_planes_03	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	2.000000 2.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	m209_zone_destr_EZ2_planes_04	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	2.000000 2.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
 </209_wg_epic_suburbia.xml>

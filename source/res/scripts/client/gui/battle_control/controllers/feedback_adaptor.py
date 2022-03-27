@@ -19,19 +19,16 @@ _CELL_BLINKING_DURATION = 3.0
 class _DamagedDevicesExtraFetcher(object):
     __slots__ = ('__total', '__critical', '__destroyed', '__isInFire')
 
-    def __init__(self, total, critical, destroyed):
+    def __init__(self, total, critical, destroyed, isInFire):
         super(_DamagedDevicesExtraFetcher, self).__init__()
         self.__total = map(self.__convertExtra, total)
         self.__critical = critical
         self.__destroyed = destroyed
-        self.__isInFire = False
+        self.__isInFire = isInFire
 
     def getDamagedDevices(self):
         for idx in self.__critical:
             name = self.__total[idx]
-            if name == 'fire':
-                self.__isInFire = True
-                continue
             yield (name, 'damaged')
 
         for idx in self.__destroyed:
@@ -46,7 +43,7 @@ class _DamagedDevicesExtraFetcher(object):
 
 
 class BattleFeedbackAdaptor(IBattleController):
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onVehicleDetected', 'onActionAddedToMarkerReceived', 'onShotDone', 'onAddCommandReceived', 'setGoals', 'destroyGoal', 'onLocalKillGoalsUpdated', 'onEnemySPGShotReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache', '__eManager')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onVehicleDetected', 'onActionAddedToMarkerReceived', 'onShotDone', 'onAddCommandReceived', 'setGoals', 'destroyGoal', 'onLocalKillGoalsUpdated', 'onEnemySPGShotReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache', '__eManager', 'onVehicleReloading', 'onVehicleShoot')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -79,6 +76,8 @@ class BattleFeedbackAdaptor(IBattleController):
         self.setInFocusForPlayer = Event.Event(self.__eManager)
         self.onActionAddedToMarkerReceived = Event.Event(self.__eManager)
         self.onEnemySPGShotReceived = Event.Event(self.__eManager)
+        self.onVehicleReloading = Event.Event()
+        self.onVehicleShoot = Event.Event()
         self.setGoals = Event.Event(self.__eManager)
         self.destroyGoal = Event.Event(self.__eManager)
         self.onLocalKillGoalsUpdated = Event.Event(self.__eManager)
@@ -132,15 +131,15 @@ class BattleFeedbackAdaptor(IBattleController):
 
         return
 
-    def handleBattleEventsSummary(self, summary):
+    def handleBattleEventsSummary(self, vehicleID, summary):
         event = feedback_events.BattleSummaryFeedbackEvent.fromDict(summary)
-        self.onPlayerSummaryFeedbackReceived(event)
+        self.onPlayerSummaryFeedbackReceived(vehicleID, event)
         self.__eventsCache[event.getType()] = event
         event = feedback_events.PostmortemSummaryEvent.fromDict(summary)
         self.onPostmortemSummaryReceived(event)
         self.__eventsCache[event.getType()] = event
 
-    def handleBattleEvents(self, events, additionalData=None):
+    def handleBattleEvents(self, vehicleID, events, additionalData=None):
         feedbackEvents = []
         for data in events:
             feedbackEvent = feedback_events.PlayerFeedbackEvent.fromDict(data, additionalData)
@@ -159,7 +158,7 @@ class BattleFeedbackAdaptor(IBattleController):
             feedbackEvents.append(feedbackEvent)
 
         if feedbackEvents:
-            self.onPlayerFeedbackReceived(feedbackEvents)
+            self.onPlayerFeedbackReceived(vehicleID, feedbackEvents)
 
     def startVehicleVisual(self, vProxy, isImmediate=False):
         vehicleID = vProxy.id
@@ -197,7 +196,7 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onRoundFinished(winningTeam, reason)
 
     def setVehicleState(self, vehicleID, eventID, isImmediate=False):
-        if vehicleID != avatar_getter.getPlayerVehicleID():
+        if vehicleID != avatar_getter.getPlayerVehicleID() or avatar_getter.isPlayerCommander():
             self.onVehicleFeedbackReceived(eventID, vehicleID, isImmediate)
 
     def showActionMarker(self, vehicleID, vMarker='', mMarker='', numberOfReplies=0, isTargetForPlayer=False, isPermanent=True):
@@ -253,8 +252,9 @@ class BattleFeedbackAdaptor(IBattleController):
 
     def showVehicleDamagedDevices(self, vehicleID, criticalExtras, destroyedExtras):
         totalExtras = self.__arenaVisitor.vehicles.getVehicleExtras(vehicleID)
-        if totalExtras is not None:
-            fetcher = _DamagedDevicesExtraFetcher(totalExtras, criticalExtras, destroyedExtras)
+        vehicle = BigWorld.entities.get(vehicleID)
+        if totalExtras is not None and vehicle is not None:
+            fetcher = _DamagedDevicesExtraFetcher(totalExtras, criticalExtras, destroyedExtras, vehicle.isOnFire())
             self.onVehicleFeedbackReceived(_FET.SHOW_VEHICLE_DAMAGES_DEVICES, vehicleID, fetcher)
         return
 

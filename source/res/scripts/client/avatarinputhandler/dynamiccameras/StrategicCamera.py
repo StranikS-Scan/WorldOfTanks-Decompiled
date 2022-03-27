@@ -4,13 +4,13 @@ import math
 from collections import namedtuple
 import BigWorld
 import Math
+from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
 from Math import Vector2, Vector3
 import BattleReplay
 import Settings
 import constants
 import math_utils
 from AvatarInputHandler import cameras, aih_global_binding
-from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
 from AvatarInputHandler.AimingSystems.StrategicAimingSystemRemote import StrategicAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings, SPGScrollSmoother
 from AvatarInputHandler.DynamicCameras.camera_switcher import CameraSwitcher, SwitchTypes, CameraSwitcherCollection, SwitchToPlaces, TRANSITION_DIST_HYSTERESIS
@@ -325,15 +325,15 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
             self.__aimingSystem.setParallaxModeEnabled(diff[settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE] == 1)
         if settings_constants.SPGAim.AUTO_CHANGE_AIM_MODE in diff:
             self.__enableSwitchers()
-        if settings_constants.SPGAim.SCROLL_SMOOTHING_ENABLED in diff:
-            self.__scrollSmoother.setIsEnabled(self.settingsCore.getSetting(settings_constants.SPGAim.SCROLL_SMOOTHING_ENABLED))
+        if settings_constants.GAME.SCROLL_SMOOTHING in diff:
+            self.__scrollSmoother.setIsEnabled(self.settingsCore.getSetting(settings_constants.GAME.SCROLL_SMOOTHING))
 
     def _updateSettingsFromServer(self):
         if self.settingsCore.isReady:
             if self.__aimingSystem is not None:
                 self.__aimingSystem.setParallaxModeEnabled(self.settingsCore.getSetting(settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE) == 1)
             self.__enableSwitchers()
-            self.__scrollSmoother.setIsEnabled(self.settingsCore.getSetting(settings_constants.SPGAim.SCROLL_SMOOTHING_ENABLED))
+            self.__scrollSmoother.setIsEnabled(self.settingsCore.getSetting(settings_constants.GAME.SCROLL_SMOOTHING))
         return
 
     def __calcSmoothingPivotDelta(self, deltaTime):

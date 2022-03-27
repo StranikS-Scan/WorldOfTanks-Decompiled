@@ -123,6 +123,11 @@ class AvatarPositionControl(CallbackDelayer):
             self.__doUnbind(vehicleID)
         return
 
+    def initialBindToVehicle(self):
+        vehicleID = self.__avatar.playerVehicleID
+        BigWorld.player().consistentMatrices.notifyPreBind(BigWorld.player())
+        self.__avatar.base.initialBindToVehicle(vehicleID)
+
     def followCamera(self, bValue=True):
         self.__bFollowCamera = bValue
         if bValue:
@@ -135,8 +140,12 @@ class AvatarPositionControl(CallbackDelayer):
             self.stopCallback(self.__resetSwitching)
             _logger.warning('switchViewpoint happened during switching cooldown! isSwitching check missed!')
         self.__isSwitching = True
-        self.__avatar.cell.switchViewPointOrBindToVehicle(isViewpoint, vehOrPointId)
-        self.delayCallback(0.5, self.__resetSwitching)
+        if BattleReplay.isServerSideReplay():
+            self.__avatar.bindToVehicleForServerSideReplay(vehOrPointId)
+            self.__resetSwitching()
+        else:
+            self.__avatar.cell.switchViewPointOrBindToVehicle(isViewpoint, vehOrPointId)
+            self.delayCallback(0.5, self.__resetSwitching)
 
     def moveTo(self, pos):
         self.__avatar.cell.moveTo(pos)
@@ -159,12 +168,18 @@ class AvatarPositionControl(CallbackDelayer):
             return constants.SERVER_TICK_LENGTH
 
     def __doBind(self, vehicleID):
-        self.__avatar.cell.bindToVehicle(vehicleID)
+        if BattleReplay.isServerSideReplay():
+            self.__avatar.bindToVehicleForServerSideReplay(vehicleID)
+        else:
+            self.__avatar.cell.bindToVehicle(vehicleID)
 
     def __doUnbind(self, vehicleID=None):
         if vehicleID is None:
             vehicleID = 0
-        self.__avatar.cell.bindToVehicle(vehicleID)
+        if BattleReplay.isServerSideReplay():
+            self.__avatar.bindToVehicleForServerSideReplay(vehicleID)
+        else:
+            self.__avatar.cell.bindToVehicle(vehicleID)
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.setPlayerVehicleID(0)

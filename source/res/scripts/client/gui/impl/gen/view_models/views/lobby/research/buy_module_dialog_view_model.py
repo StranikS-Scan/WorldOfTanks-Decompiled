@@ -17,6 +17,7 @@ class MountDisabledReason(Enum):
 class ModuleType(Enum):
     FUELTANK = 'vehicleFuelTank'
     CHASSIS = 'vehicleChassis'
+    WHEELEDCHASSIS = 'vehicleWheeledChassis'
     ENGINE = 'vehicleEngine'
     RADIO = 'vehicleRadio'
     TURRET = 'vehicleTurret'

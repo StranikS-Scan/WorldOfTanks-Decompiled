@@ -18,6 +18,9 @@ from helpers.CallbackDelayer import CallbackDelayer
 from math_utils import almostZero
 from items.components.component_constants import MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS, MODERN_HE_DAMAGE_ABSORPTION_FACTOR
 from skeletons.account_helpers.settings_core import ISettingsCore
+from gui.shared import g_eventBus
+from gui.shared.events import GunMarkerEvent
+from gui.shared import EVENT_BUS_SCOPE
 _MARKER_TYPE = aih_constants.GUN_MARKER_TYPE
 _MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
 _SHOT_RESULT = aih_constants.SHOT_RESULT
@@ -208,15 +211,19 @@ class _CrosshairShotResults(object):
     @classmethod
     def getShotResult(cls, hitPoint, collision, direction, excludeTeam=0, piercingMultiplier=1):
         if collision is None:
+            cls.__sendDebugInfo([])
             return _SHOT_RESULT.UNDEFINED
         else:
             entity = collision.entity
             if not isinstance(entity, (VehicleEntity, DestructibleEntity)):
+                cls.__sendDebugInfo([])
                 return _SHOT_RESULT.UNDEFINED
             if entity.health <= 0 or entity.publicInfo['team'] == excludeTeam:
+                cls.__sendDebugInfo([])
                 return _SHOT_RESULT.UNDEFINED
             player = BigWorld.player()
             if player is None:
+                cls.__sendDebugInfo([])
                 return _SHOT_RESULT.UNDEFINED
             vDesc = player.getVehicleDescriptor()
             shell = vDesc.shot.shell
@@ -227,6 +234,7 @@ class _CrosshairShotResults(object):
             fullPiercingPower = cls._computePiercingPowerAtDist(ppDesc, dist, maxDist, piercingMultiplier)
             collisionsDetails = cls._getAllCollisionDetails(hitPoint, direction, entity)
             if collisionsDetails is None:
+                cls.__sendDebugInfo([])
                 return _SHOT_RESULT.UNDEFINED
             minPP, maxPP = cls._computePiercingPowerRandomization(shell)
             return cls.__shotResultModernHE(collisionsDetails, fullPiercingPower, shell, minPP, maxPP, entity) if shellKind == constants.SHELL_TYPES.HIGH_EXPLOSIVE and shell.type.mechanics == constants.SHELL_MECHANICS_TYPE.MODERN else cls.__shotResultDefault(collisionsDetails, fullPiercingPower, shell, minPP, maxPP, entity)
@@ -236,7 +244,11 @@ class _CrosshairShotResults(object):
         result = _SHOT_RESULT.NOT_PIERCED
         ignoredMaterials = set()
         piercingPower = fullPiercingPower
+        dispersion = round(piercingPower) * shell.piercingPowerRandomization
+        minPiercingPower = round(round(piercingPower) - dispersion)
+        maxPiercingPower = round(round(piercingPower) + dispersion)
         explosionDamageAbsorption = 0
+        debugPiercingsList = []
         for cDetails in collisionsDetails:
             if not cls.__isDestructibleComponent(entity, cDetails.compName):
                 return result
@@ -250,21 +262,32 @@ class _CrosshairShotResults(object):
                     piercingPercent = 100.0 + (penetrationArmor - piercingPower) / fullPiercingPower * 100.0
                 if matInfo.vehicleDamageFactor:
                     piercingPower -= penetrationArmor
+                    minPiercingPower = round(minPiercingPower - penetrationArmor)
+                    maxPiercingPower = round(maxPiercingPower - penetrationArmor)
                     if piercingPercent <= minPP and explosionDamageAbsorption == 0:
                         result = _SHOT_RESULT.GREAT_PIERCED
                     else:
                         result = _SHOT_RESULT.LITTLE_PIERCED
+                    cls.__collectDebugPiercingData(debugPiercingsList, penetrationArmor, hitAngleCos, minPiercingPower, maxPiercingPower, piercingPercent, matInfo, result)
+                    cls.__sendDebugInfo(debugPiercingsList, minPP, maxPP, fullPiercingPower)
                     return result
                 if shell.type.shieldPenetration:
-                    piercingPower -= penetrationArmor * MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS
+                    shieldPenetration = penetrationArmor * MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS
+                    piercingPower -= shieldPenetration
+                    minPiercingPower = round(minPiercingPower - shieldPenetration)
+                    maxPiercingPower = round(maxPiercingPower - shieldPenetration)
                     explosionDamageAbsorption += penetrationArmor * MODERN_HE_DAMAGE_ABSORPTION_FACTOR
                 if piercingPercent > maxPP or not shell.type.shieldPenetration or explosionDamageAbsorption >= shell.type.maxDamage:
+                    cls.__collectDebugPiercingData(debugPiercingsList, penetrationArmor, hitAngleCos, minPiercingPower, maxPiercingPower, piercingPercent, matInfo, _SHOT_RESULT.NOT_PIERCED)
+                    cls.__sendDebugInfo(debugPiercingsList, minPP, maxPP, fullPiercingPower)
                     return _SHOT_RESULT.NOT_PIERCED
                 if matInfo.extra and piercingPercent <= maxPP:
+                    cls.__collectDebugPiercingData(debugPiercingsList, penetrationArmor, hitAngleCos, minPiercingPower, maxPiercingPower, piercingPercent, matInfo, cls._CRIT_ONLY_SHOT_RESULT)
                     result = cls._CRIT_ONLY_SHOT_RESULT
                 if matInfo.collideOnceOnly:
                     ignoredMaterials.add((cDetails.compName, matInfo.kind))
 
+        cls.__sendDebugInfo(debugPiercingsList, minPP, maxPP, fullPiercingPower)
         return result
 
     @classmethod
@@ -273,14 +296,21 @@ class _CrosshairShotResults(object):
         isJet = False
         jetStartDist = None
         piercingPower = fullPiercingPower
+        dispersion = round(piercingPower) * shell.piercingPowerRandomization
+        minPiercingPower = round(round(piercingPower) - dispersion)
+        maxPiercingPower = round(round(piercingPower) + dispersion)
         ignoredMaterials = set()
+        debugPiercingsList = []
         for cDetails in collisionsDetails:
             if not cls.__isDestructibleComponent(entity, cDetails.compName):
                 break
             if isJet:
                 jetDist = cDetails.dist - jetStartDist
                 if jetDist > 0.0:
-                    piercingPower *= 1.0 - jetDist * cls._SHELL_EXTRA_DATA[shell.kind].jetLossPPByDist
+                    lossByDist = 1.0 - jetDist * cls._SHELL_EXTRA_DATA[shell.kind].jetLossPPByDist
+                    piercingPower *= lossByDist
+                    minPiercingPower = round(minPiercingPower * lossByDist)
+                    maxPiercingPower = round(maxPiercingPower * lossByDist)
             if cDetails.matInfo is None:
                 result = cls._CRIT_ONLY_SHOT_RESULT
             else:
@@ -288,22 +318,34 @@ class _CrosshairShotResults(object):
                 if (cDetails.compName, matInfo.kind) in ignoredMaterials:
                     continue
                 hitAngleCos = cDetails.hitAngleCos if matInfo.useHitAngle else 1.0
-                if not isJet and cls._shouldRicochet(shell.kind, hitAngleCos, matInfo, shell.caliber):
-                    break
                 piercingPercent = 1000.0
+                if not isJet and cls._shouldRicochet(shell.kind, hitAngleCos, matInfo, shell.caliber):
+                    cls.__collectDebugPiercingData(debugPiercingsList, None, hitAngleCos, minPiercingPower, maxPiercingPower, piercingPercent, matInfo, _SHOT_RESULT.NOT_PIERCED)
+                    break
+                penetrationArmor = 0
                 if piercingPower > 0.0:
                     penetrationArmor = cls._computePenetrationArmor(shell.kind, hitAngleCos, matInfo, shell.caliber)
                     piercingPercent = 100.0 + (penetrationArmor - piercingPower) / fullPiercingPower * 100.0
                     piercingPower -= penetrationArmor
+                    minPiercingPower = round(minPiercingPower - penetrationArmor)
+                    maxPiercingPower = round(maxPiercingPower - penetrationArmor)
                 if matInfo.vehicleDamageFactor:
                     if minPP < piercingPercent < maxPP:
                         result = _SHOT_RESULT.LITTLE_PIERCED
                     elif piercingPercent <= minPP:
                         result = _SHOT_RESULT.GREAT_PIERCED
+                    cls.__collectDebugPiercingData(debugPiercingsList, penetrationArmor, hitAngleCos, minPiercingPower, maxPiercingPower, piercingPercent, matInfo, result)
                     break
-                elif matInfo.extra:
-                    if piercingPercent <= maxPP:
-                        result = cls._CRIT_ONLY_SHOT_RESULT
+                else:
+                    debugResut = _SHOT_RESULT.NOT_PIERCED
+                    if minPP < piercingPercent < maxPP:
+                        debugResut = _SHOT_RESULT.LITTLE_PIERCED
+                    elif piercingPercent <= minPP:
+                        debugResut = _SHOT_RESULT.GREAT_PIERCED
+                    if matInfo.extra:
+                        if piercingPercent <= maxPP:
+                            result = cls._CRIT_ONLY_SHOT_RESULT
+                    cls.__collectDebugPiercingData(debugPiercingsList, penetrationArmor, hitAngleCos, minPiercingPower, maxPiercingPower, piercingPercent, matInfo, debugResut)
                 if matInfo.collideOnceOnly:
                     ignoredMaterials.add((cDetails.compName, matInfo.kind))
             if piercingPower <= 0.0:
@@ -314,11 +356,31 @@ class _CrosshairShotResults(object):
                 armor = mInfo.armor if mInfo is not None else 0.0
                 jetStartDist = cDetails.dist + armor * 0.001
 
+        cls.__sendDebugInfo(debugPiercingsList, minPP, maxPP, fullPiercingPower)
         return result
 
     @classmethod
     def __isDestructibleComponent(cls, entity, componentID):
         return entity.isDestructibleComponent(componentID) if isinstance(entity, DestructibleEntity) else True
+
+    @classmethod
+    def __collectDebugPiercingData(cls, piercingList, penetrationArmor, hitAngleCos, minPPower, maxPPower, piercingPercent, matInfo, result):
+        if constants.IS_DEVELOPMENT:
+            piercingList.append({'penetrationArmor': penetrationArmor,
+             'angle': math.degrees(math.acos(hitAngleCos)),
+             'minPPowerLeft': minPPower,
+             'maxPPowerLeft': maxPPower,
+             'piercingPercent': piercingPercent,
+             'matInfo': matInfo,
+             'result': result})
+
+    @classmethod
+    def __sendDebugInfo(cls, piercingData, minPP=None, maxPP=None, fullPP=None):
+        if constants.IS_DEVELOPMENT:
+            g_eventBus.handleEvent(GunMarkerEvent(GunMarkerEvent.UPDATE_PIERCING_DATA, ctx={'piercingData': piercingData,
+             'minPP': minPP,
+             'maxPP': maxPP,
+             'fullPP': fullPP}), scope=EVENT_BUS_SCOPE.BATTLE)
 
 
 def _setupGunMarkerSizeLimits(dataProvider, scale=None):
@@ -438,7 +500,7 @@ class _GunMarkersDPFactory(object):
     def _makeSPGProvider():
         dataProvider = GUI.WGSPGGunMarkerDataProvider(aih_constants.SPG_GUN_MARKER_ELEMENTS_COUNT, aih_constants.SPG_GUN_MARKER_ELEMENTS_RATE)
         dataProvider.positionMatrixProvider = Math.MatrixAnimation()
-        dataProvider.maxTime = 5.0
+        dataProvider.maxTime = 7.0
         dataProvider.serverTickLength = constants.SERVER_TICK_LENGTH
         dataProvider.sizeScaleRate = aih_constants.SPG_GUN_MARKER_SCALE_RATE
         dataProvider.sizeConstraint = (aih_constants.SPG_GUN_MARKER_MIN_SIZE, aih_constants.SPG_GUN_MARKER_MAX_SIZE)

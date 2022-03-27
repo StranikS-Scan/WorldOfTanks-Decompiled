@@ -13,6 +13,7 @@ from dog_tags_common.components_config import componentConfigAdapter as componen
 from helpers import getLanguageCode
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_control import IUISpamController
 if typing.TYPE_CHECKING:
     from typing import Dict, Iterable
     from account_helpers.dog_tags import DogTags
@@ -52,9 +53,11 @@ SECTION_BY_PURPOSE = {ComponentPurpose.TRIUMPH: EngravingSection.TRIUMPH,
  ComponentPurpose.DEDICATION: EngravingSection.DEDICATION,
  ComponentPurpose.BASE: BackgroundSection.TRIUMPH_MEDAL,
  ComponentPurpose.TRIUMPH_MEDAL: BackgroundSection.TRIUMPH_MEDAL}
+DOG_TAG_HINT = 'DogTagHangarHint'
 
 class DogTagComposerLobby(DogTagComposerClient):
     lobbyContext = dependency.descriptor(ILobbyContext)
+    uiSpamController = dependency.descriptor(IUISpamController)
 
     def __init__(self, dtHelper):
         self._dtHelper = dtHelper
@@ -77,7 +80,8 @@ class DogTagComposerLobby(DogTagComposerClient):
         model.setIsAvailable(self.serverSettings().isDogTagCustomizationScreenEnabled())
         model.setEngraving(engravingImage)
         model.setBackground(bgImage)
-        model.Counter.setValue(len(self._dtHelper.getUnseenComps()))
+        count = 0 if self.uiSpamController.shouldBeHidden(DOG_TAG_HINT) else len(self._dtHelper.getUnseenComps())
+        model.Counter.setValue(count)
         grades = engraving.componentDefinition.grades
         if engraving and grades and engraving.grade == len(grades) - 1:
             model.setIsMaxLevel(True)

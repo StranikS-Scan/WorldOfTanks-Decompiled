@@ -42,6 +42,8 @@ class AccountSyncData(object):
         if account is not None:
             self.__persistentCache.setAccount(account)
             self.__syncController = SyncController(account, self.__sendSyncRequest, self.__onSyncResponse, self.__onSyncComplete)
+        else:
+            self.__notifySubscribers(AccountCommands.RES_NON_PLAYER)
         return
 
     def waitForSync(self, callback):
@@ -122,10 +124,7 @@ class AccountSyncData(object):
         if not self.__account._update(not self.__isFirstSync, ext):
             return
         self.__isFirstSync = False
-        subscribers = self.__subscribers
-        self.__subscribers = []
-        for callback in subscribers:
-            callback(resultID)
+        self.__notifySubscribers(resultID)
 
     def __onSyncComplete(self, syncID, data):
         if syncID != self.__syncID:
@@ -162,6 +161,12 @@ class AccountSyncData(object):
             self.__persistentCache.data = accountDataExtractPersistent(self.__persistentCache.data)
             self.__persistentCache.save(accountDataPersistentHash(self.__persistentCache.data), self.__persistentCache.data)
             self.__persistentCache.isDirty = False
+
+    def __notifySubscribers(self, resultID):
+        subscribers = self.__subscribers
+        self.__subscribers = []
+        for callback in subscribers:
+            callback(resultID)
 
 
 class BaseSyncDataCache(object):

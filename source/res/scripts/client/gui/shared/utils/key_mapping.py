@@ -166,8 +166,22 @@ def canGetVirtualKey(key):
     return key < Keys.KEY_NUMLOCK
 
 
+def getVirtualKey(command):
+    vk, _ = __getVK(command)
+    return 'KEY_{}'.format(vk)
+
+
 def getReadableKey(command):
+    vk, fromOS = __getVK(command)
+    return makeString(vk) if fromOS else makeString(READABLE_KEY_NAMES.key(vk))
+
+
+def __getVK(command):
     key = getKey(command)
+    return getKeyAsString(key)
+
+
+def getKeyAsString(key):
     if canGetVirtualKey(key):
         vk = BigWorld.mapVirtualKey(key, MappingType.MAPVK_VSC_TO_VK)
         if vk != 0:
@@ -175,5 +189,5 @@ def getReadableKey(command):
                 key = SCALEFORM_TO_BW[vk]
             else:
                 key = BigWorld.mapVirtualKey(vk, MappingType.MAPVK_VK_TO_CHAR)
-                return makeString(unichr(key).upper())
-    return makeString(READABLE_KEY_NAMES.key(BigWorld.keyToString(key)))
+                return (unichr(key).upper(), True)
+    return (BigWorld.keyToString(key), False)

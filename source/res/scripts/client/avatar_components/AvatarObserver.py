@@ -4,6 +4,7 @@ from collections import defaultdict
 import logging
 import BigWorld
 import Math
+from PlayerEvents import g_playerEvents
 from aih_constants import CTRL_MODE_NAME, CTRL_MODES
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from AvatarInputHandler.subfilters_constants import AVATAR_SUBFILTERS, FILTER_INTERPOLATION_TYPE
@@ -66,12 +67,12 @@ class AvatarObserver(CallbackDelayer):
         self.__filterGetVector3 = getFilterMethod('getVector3')
         self.__filterResetVector3 = getFilterMethod('resetVector3')
         self.__filterSetInterpolationType = getFilterMethod('setInterpolationType')
-        if self.isObserver():
+        if self.isObserver() or self.isCommander():
             self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT, FILTER_INTERPOLATION_TYPE.LINEAR)
             self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT)
 
     def getObservedVehicleID(self):
-        return self.__observedVehicleID if self.isObserver() else self.playerVehicleID
+        return self.__observedVehicleID if self.isObserver() or self.isCommander() else self.playerVehicleID
 
     def onVehicleChanged(self):
         _logger.debug('Avatar vehicle has changed to %r', self.vehicle)
@@ -83,10 +84,13 @@ class AvatarObserver(CallbackDelayer):
                 typeofveh = 'observed' if self.__observedVehicleID == self.vehicle.id else 'players'
                 _logger.debug('Vehicle ID is %r and is %r', self.vehicle.id, typeofveh)
             isObserving = self.isObserver()
-            if isObserving and self.vehicle is not None:
+            isCommander = self.isCommander()
+            if (isObserving or isCommander) and self.vehicle is not None:
                 self.__observedVehicleID = self.vehicle.id
                 self.onObserverVehicleChanged()
-                self.guiSessionProvider.getArenaDP().switchCurrentTeam(self.vehicle.publicInfo['team'])
+                vehicleTeam = self.vehicle.publicInfo['team']
+                self.guiSessionProvider.getArenaDP().switchCurrentTeam(vehicleTeam)
+                g_playerEvents.onAvatarObserverVehicleChanged(self.vehicle.id)
                 self.inputHandler.setObservedVehicle(self.__observedVehicleID)
                 if self.gunRotator is not None:
                     self.gunRotator.start()
@@ -99,8 +103,9 @@ class AvatarObserver(CallbackDelayer):
                     for v in BigWorld.player().vehicles:
                         if v.appearance is not None:
                             v.appearance.highlighter.setVehicleOwnership()
-                            self.guiSessionProvider.stopVehicleVisual(v.id, False)
-                            self.guiSessionProvider.startVehicleVisual(v, True)
+                            if not isCommander or vehicleTeam == v.publicInfo['team']:
+                                self.guiSessionProvider.stopVehicleVisual(v.id, False)
+                                self.guiSessionProvider.startVehicleVisual(v, True)
 
             return
 
@@ -122,7 +127,7 @@ class AvatarObserver(CallbackDelayer):
 
     def getObservedVehicleMatrix(self):
         player = BigWorld.player()
-        if player.isObserver():
+        if player.isObserver() or player.isCommander():
             vehicle = player.getVehicleAttached()
             if vehicle is not None:
                 if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
@@ -132,7 +137,7 @@ class AvatarObserver(CallbackDelayer):
 
     def getObservedVehicleStabilisedMatrix(self):
         player = BigWorld.player()
-        if player.isObserver():
+        if player.isObserver() or player.isCommander():
             vehicle = player.getVehicleAttached()
             if vehicle is not None:
                 if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
@@ -142,7 +147,7 @@ class AvatarObserver(CallbackDelayer):
 
     def getObservedVehicleTurretMatrix(self):
         player = BigWorld.player()
-        if player.isObserver():
+        if player.isObserver() or player.isCommander():
             vehicle = player.getVehicleAttached()
             if vehicle is not None:
                 if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
@@ -162,7 +167,7 @@ class AvatarObserver(CallbackDelayer):
 
     def getVehicleDescriptor(self):
         descr = self.vehicleTypeDescriptor
-        if self.isObserver() and self.getVehicleAttached() is not None:
+        if self.isObserver() or self.isCommander() and self.getVehicleAttached() is not None:
             descr = self.getVehicleAttached().typeDescriptor
         return descr
 

@@ -5,7 +5,7 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import process
 from gui import SystemMessages
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeInVehiclesUrl, getPersonalTradeInVehiclesUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeInVehiclesUrl
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler, CM_BUY_COLOR
 from gui.Scaleform.locale.MENU import MENU
@@ -19,7 +19,8 @@ from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
 from gui.shared.utils import decorators
 from helpers import dependency
-from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController, IPersonalTradeInController
+from items import UNDEFINED_ITEM_CD
+from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from account_helpers import AccountSettings
@@ -43,7 +44,6 @@ class MODULE(object):
 
 class VEHICLE(object):
     EXCHANGE = 'exchange'
-    PERSONAL_EXCHANGE = 'personalTradeExchange'
     INFO = 'vehicleInfo'
     PREVIEW = 'preview'
     STATS = 'showVehicleStatistics'
@@ -162,12 +162,10 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
     _comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     _epicController = dependency.descriptor(IEpicBattleMetaGameController)
     _tradeInController = dependency.descriptor(ITradeInController)
-    _personalTradeInController = dependency.descriptor(IPersonalTradeInController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, cmProxy, ctx=None):
         super(VehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.EXCHANGE: 'showVehicleExchange',
-         VEHICLE.PERSONAL_EXCHANGE: 'showVehiclePersonalExchange',
          VEHICLE.INFO: 'showVehicleInfo',
          VEHICLE.SELL: 'sellVehicle',
          VEHICLE.RESEARCH: 'toResearch',
@@ -205,12 +203,11 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         shared_events.showVehPostProgressionView(vehicle.intCD)
 
     def showVehicleExchange(self):
-        self._tradeInController.setActiveTradeOffVehicleCD(self.vehCD)
-        showShop(getTradeInVehiclesUrl(), isClientCloseControl=True)
-
-    def showVehiclePersonalExchange(self):
-        self._personalTradeInController.setActiveTradeInSaleVehicleCD(self.vehCD)
-        showShop(getPersonalTradeInVehiclesUrl(), isClientCloseControl=True)
+        oldSellVeh = self._tradeInController.getSelectedVehicleToSell()
+        self._tradeInController.selectVehicleToSell(self.vehCD)
+        if not oldSellVeh or oldSellVeh.intCD != self.vehCD:
+            self._tradeInController.selectVehicleToBuy(UNDEFINED_ITEM_CD)
+        showShop(getTradeInVehiclesUrl())
 
     def checkFavoriteVehicle(self):
         self.__favoriteVehicle(True)
@@ -250,7 +247,6 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         vehicleWasInBattle = False
         accDossier = self.itemsCache.items.getAccountDossier(None)
-        buyVehicleCDs = self._personalTradeInController.getBuyVehicleCDs()
         if vehicle is None:
             return options
         else:
@@ -263,9 +259,6 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
             if vehicle is not None:
                 if vehicle.canTradeOff:
                     options.append(self._makeItem(VEHICLE.EXCHANGE, MENU.contextmenu(VEHICLE.EXCHANGE), {'enabled': vehicle.isReadyToTradeOff,
-                     'textColor': CM_BUY_COLOR}))
-                if vehicle.canPersonalTradeInSale and buyVehicleCDs:
-                    options.append(self._makeItem(VEHICLE.PERSONAL_EXCHANGE, MENU.contextmenu(VEHICLE.PERSONAL_EXCHANGE), {'enabled': vehicle.isReadyPersonalTradeInSale,
                      'textColor': CM_BUY_COLOR}))
                 options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO)), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle})])
                 if not vehicleWasInBattle:

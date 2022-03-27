@@ -371,7 +371,9 @@ class ArenaPeriodPlayer(ArenaPeriodController):
             return 0
         else:
             self._period = self.__replay.getArenaPeriod()
-            return None if self._period == _PERIOD.IDLE else self.__replay.getArenaLength()
+            if self._period == _PERIOD.IDLE:
+                return
+            return super(ArenaPeriodPlayer, self)._calculate() if BattleReplay.g_replayCtrl.isServerSideReplay else self.__replay.getArenaLength()
 
     def _setPlayingTimeOnArena(self):
         pass

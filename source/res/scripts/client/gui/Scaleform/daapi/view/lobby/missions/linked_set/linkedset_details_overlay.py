@@ -294,7 +294,10 @@ class LinkedSetDetailsOverlay(LinkedSetDetailsOverlayMeta):
              'headerExteriorText': MENU.HANGAR_AMMUNITIONPANEL_TUNINGBTN,
              'btnExteriorText': MENU.HANGAR_AMMUNITIONPANEL_TUNINGBTN,
              'btnServiceText': MENU.HANGAR_AMMUNITIONPANEL_MAITENANCEBTN,
-             'btnPurchaseText': VEHICLE_CUSTOMIZATION.COMMIT_BUY})
+             'btnPurchaseText': VEHICLE_CUSTOMIZATION.COMMIT_BUY,
+             'hangarText': MENU.HEADERBUTTONS_HANGAR,
+             'shopText': MENU.HEADERBUTTONS_SHOP,
+             'activated': STORAGE.PERSONALRESERVES_CARD_ACTIVATED})
             self._isSetupedFlashAnimTexts = True
 
 

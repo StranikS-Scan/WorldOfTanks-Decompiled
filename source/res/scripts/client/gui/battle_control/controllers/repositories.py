@@ -8,12 +8,16 @@ from gui.battle_control.controllers.appearance_cache_ctrls.battle_royale_appeara
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.event_appearance_cache_ctrl import EventAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.maps_training_appearance_cache_ctrl import MapsTrainingAppearanceCacheController
+from gui.battle_control.controllers.commander import rts_commander_ctrl, rts_sound_ctrl, rts_bw_ctrl
+from gui.battle_control.controllers.commander.spawn_ctrl.ctrl import RTSSpawnController
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
+from gui.battle_control.controllers import team_sixth_sense
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 from gui.battle_control.controllers import battle_hints_ctrl
 from gui.battle_control.controllers import radar_ctrl
 from gui.battle_control.controllers import spawn_ctrl
 from gui.battle_control.controllers import vehicles_count_ctrl
+from gui.battle_control.controllers import rts_vehicle_change_ctrl
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -257,6 +261,26 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     def battleNotifier(self):
         return self._repository.getController(BATTLE_CTRL_ID.BATTLE_NOTIFIER)
 
+    @property
+    def teamSixthSense(self):
+        return self._repository.getController(BATTLE_CTRL_ID.TEAM_SIXTH_SENSE)
+
+    @property
+    def rtsCommander(self):
+        return self._repository.getController(BATTLE_CTRL_ID.RTS_COMMANDER_CTRL)
+
+    @property
+    def rtsBWCtrl(self):
+        return self._repository.getController(BATTLE_CTRL_ID.RTS_BW_CTRL)
+
+    @property
+    def rtsSound(self):
+        return self._repository.getController(BATTLE_CTRL_ID.RTS_SOUND_CTRL)
+
+    @property
+    def vehicleChange(self):
+        return self._repository.getController(BATTLE_CTRL_ID.VEHICLE_CHANGE_CTRL)
+
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
     __slots__ = ()
@@ -393,8 +417,8 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
-        repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addArenaController(DefaultAppearanceCacheController(setup), setup)
+        repository.addArenaViewController(battle_field_ctrl.createBattleFieldCtrl(setup), setup)
         return repository
 
 
@@ -472,4 +496,41 @@ class MapsTrainingControllerRepository(_ControllersRepositoryByBonuses):
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addViewController(battle_hints_mt.createBattleHintsController(), setup)
         repository.addArenaController(MapsTrainingAppearanceCacheController(setup), setup)
+        return repository
+
+
+class RTSControllersRepository(ClassicControllersRepository):
+    __slots__ = ()
+
+    @classmethod
+    def create(cls, setup):
+        repository = super(RTSControllersRepository, cls).create(setup)
+        repository.addController(rts_commander_ctrl.RTSCommanderController())
+        repository.addController(rts_bw_ctrl.RTSBWController())
+        repository.addController(rts_sound_ctrl.RTSSoundController())
+        repository.addController(rts_vehicle_change_ctrl.createVehicleChangeCtrl(setup))
+        repository.addViewController(RTSSpawnController(), setup)
+        repository.addViewController(team_sixth_sense.TeamSixthSenseController(), setup)
+        repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
+        return repository
+
+
+class RTS1x1ControllersRepository(_ControllersRepository):
+    __slots__ = ()
+
+    @classmethod
+    def create(cls, setup):
+        repository = super(RTS1x1ControllersRepository, cls).create(setup)
+        repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
+        repository.addViewController(debug_ctrl.DebugController(), setup)
+        repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
+        repository.addArenaController(DefaultAppearanceCacheController(setup), setup)
+        repository.addArenaViewController(battle_field_ctrl.createBattleFieldCtrl(setup), setup)
+        repository.addController(rts_commander_ctrl.RTSCommanderController())
+        repository.addController(rts_bw_ctrl.RTSBWController())
+        repository.addController(rts_sound_ctrl.RTSSoundController())
+        repository.addController(rts_vehicle_change_ctrl.createVehicleChangeCtrl(setup))
+        repository.addViewController(RTSSpawnController(), setup)
+        repository.addViewController(team_sixth_sense.TeamSixthSenseController(), setup)
+        repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
         return repository

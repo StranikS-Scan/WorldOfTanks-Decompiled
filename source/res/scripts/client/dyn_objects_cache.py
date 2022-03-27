@@ -1,14 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/dyn_objects_cache.py
 import logging
+import typing
 from collections import namedtuple
 import BigWorld
 import resource_helper
 from constants import ARENA_GUI_TYPE
+from gui.battle_control.controllers.commander.common import BaseHighlightType
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.component_constants import ZERO_FLOAT
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from vehicle_systems.stricted_loading import makeCallbackWeak
+if typing.TYPE_CHECKING:
+    from typing import Dict, Optional
 _CONFIG_PATH = 'scripts/dynamic_objects.xml'
 _logger = logging.getLogger(__name__)
 _ScenariosEffect = namedtuple('_ScenariosEffect', ('path', 'rate', 'offset', 'scaleRatio'))
@@ -22,6 +26,7 @@ _BerserkerEffects = namedtuple('_BerserkerEffects', ('turretEffect', 'hullEffect
 MIN_OVER_TERRAIN_HEIGHT = 0
 MIN_UPDATE_INTERVAL = 0
 _TerrainCircleSettings = namedtuple('_TerrainCircleSettings', ('modelPath', 'color', 'enableAccurateCollision', 'maxUpdateInterval', 'overTerrainHeight', 'cutOffYDistance'))
+_CustomHavokModelSettings = namedtuple('_CustomHavokModelSettings', ('modelPath', 'havokModule'))
 
 def _createScenarioEffect(section, path):
     return _ScenariosEffect(section.readString(path, ''), section.readFloat('rate', ZERO_FLOAT), section.readVector3('offset', (ZERO_FLOAT, ZERO_FLOAT, ZERO_FLOAT)), section.readFloat('scaleRatio', ZERO_FLOAT))
@@ -74,6 +79,16 @@ def _createTerrainCircleSettings(section):
         subSection = section[sectionKey]
         if subSection is not None:
             result[sectionKey] = _TerrainCircleSettings(subSection.readString('visual'), int(subSection.readString('color'), 0), subSection.readBool('enableAccurateCollision'), max(MIN_UPDATE_INTERVAL, subSection.readFloat('maxUpdateInterval')), max(MIN_OVER_TERRAIN_HEIGHT, subSection.readFloat('overTerrainHeight')), subSection.readFloat('cutOffYDistance', default=-1.0))
+
+    return result
+
+
+def _createDestroyedHavokSettings(typeSection):
+    result = {}
+    for _, supplyHavokSetting in typeSection.items():
+        if supplyHavokSetting is not None:
+            settingTypeDef = supplyHavokSetting.readString('name')
+            result[settingTypeDef] = _CustomHavokModelSettings(supplyHavokSetting.readString('modelPath'), supplyHavokSetting.readString('havokModule'))
 
     return result
 
@@ -176,10 +191,10 @@ class DynObjectsBase(object):
         pass
 
 
-class _CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
+class CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
 
     def __init__(self):
-        super(_CommonForBattleRoyaleAndEpicBattleDynObjects, self).__init__()
+        super(CommonForBattleRoyaleAndEpicBattleDynObjects, self).__init__()
         self.__inspiringEffect = None
         self.__healPointEffect = None
         return
@@ -188,7 +203,7 @@ class _CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
         if not self._initialized:
             self.__inspiringEffect = _createTerrainCircleSettings(dataSection['InspireAreaVisual'])
             self.__healPointEffect = _createTerrainCircleSettings(dataSection[self._healPointKey])
-            super(_CommonForBattleRoyaleAndEpicBattleDynObjects, self).init(dataSection)
+            super(CommonForBattleRoyaleAndEpicBattleDynObjects, self).init(dataSection)
 
     def getInspiringEffect(self):
         return self.__inspiringEffect
@@ -207,7 +222,7 @@ class _CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
         pass
 
 
-class _EpicBattleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
+class _EpicBattleDynObjects(CommonForBattleRoyaleAndEpicBattleDynObjects):
 
     def __init__(self):
         super(_EpicBattleDynObjects, self).__init__()
@@ -223,10 +238,10 @@ class _EpicBattleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
         return self.__minesEffects
 
 
-class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
+class BattleRoyaleDynObjects(CommonForBattleRoyaleAndEpicBattleDynObjects):
 
     def __init__(self):
-        super(_BattleRoyaleDynObjects, self).__init__()
+        super(BattleRoyaleDynObjects, self).__init__()
         self.__vehicleUpgradeEffect = None
         self.__kamikazeActivatedEffect = None
         self.__trapPoint = None
@@ -256,7 +271,7 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
             self.__airDrop = _createAirDrop(dataSection['airDrop'], prerequisites)
             self.__loots = _createLoots(dataSection, dataSection['lootTypes'], prerequisites)
             BigWorld.loadResourceListBG(list(prerequisites), makeCallbackWeak(self.__onResourcesLoaded))
-            super(_BattleRoyaleDynObjects, self).init(dataSection)
+            super(BattleRoyaleDynObjects, self).init(dataSection)
 
     def getVehicleUpgradeEffect(self):
         return self.__vehicleUpgradeEffect
@@ -311,9 +326,56 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
         self.__resourcesCache = resourceRefs
 
 
-_CONF_STORAGES = {ARENA_GUI_TYPE.BATTLE_ROYALE: _BattleRoyaleDynObjects,
+class RTSCommander(DynObjectsBase):
+
+    def __init__(self):
+        super(RTSCommander, self).__init__()
+        self.__rtsBaseHightlight = {}
+        self.__destroyedSupplyHavokModels = {}
+
+    def init(self, dataSection):
+        section = dataSection['RTSBaseHightlight']
+        if section is None:
+            _logger.error('Failed to open base highlight config section!')
+            return {baseTypeName:'' for baseTypeName in BaseHighlightType.VARIANTS}
+        else:
+            result = {}
+            for baseTypeName in BaseHighlightType.VARIANTS:
+                ssmPath = section.readString(baseTypeName, '')
+                if not ssmPath:
+                    _logger.error('Invalid base highlight config!')
+                result[baseTypeName] = ssmPath
+
+            self.__rtsBaseHightlight = result
+            self.__destroyedSupplyHavokModels = _createDestroyedHavokSettings(dataSection['RTSDestroyedSupplyHavokModels'])
+            super(RTSCommander, self).init(dataSection)
+            return
+
+    def destroy(self):
+        self.__rtsBaseHightlight = None
+        super(RTSCommander, self).destroy()
+        return
+
+    def getBaseHighlightSsmPaths(self):
+        return self.__rtsBaseHightlight
+
+    def getDestroyedHavokModelSetting(self, supplyTypeDescr):
+        if supplyTypeDescr not in supplyTypeDescr:
+            _logger.error('Invalid supply type def %s, no valid setting found ', supplyTypeDescr)
+            return None
+        else:
+            return self.__destroyedSupplyHavokModels.get(supplyTypeDescr)
+
+
+_CONFIG_STORAGES = {ARENA_GUI_TYPE.BATTLE_ROYALE: BattleRoyaleDynObjects,
  ARENA_GUI_TYPE.EPIC_BATTLE: _EpicBattleDynObjects,
- ARENA_GUI_TYPE.EPIC_TRAINING: _EpicBattleDynObjects}
+ ARENA_GUI_TYPE.EPIC_TRAINING: _EpicBattleDynObjects,
+ ARENA_GUI_TYPE.RTS: RTSCommander,
+ ARENA_GUI_TYPE.RTS_BOOTCAMP: RTSCommander}
+
+def _getConfigStorage(arenaTypeID):
+    return _CONFIG_STORAGES.get(arenaTypeID)
+
 
 class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
 
@@ -326,8 +388,9 @@ class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
 
     def load(self, arenaType):
         if arenaType not in self.__configStorage:
-            if arenaType in _CONF_STORAGES:
-                confStorage = _CONF_STORAGES[arenaType]()
+            configClass = _getConfigStorage(arenaType)
+            if configClass:
+                confStorage = configClass()
                 self.__configStorage[arenaType] = confStorage
                 _, section = resource_helper.getRoot(_CONFIG_PATH)
                 confStorage.init(section)

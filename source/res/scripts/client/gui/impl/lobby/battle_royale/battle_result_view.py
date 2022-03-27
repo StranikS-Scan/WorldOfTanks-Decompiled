@@ -187,8 +187,10 @@ class BrBattleResultsViewInLobby(ViewImpl):
         else:
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_IN_PROGRESS)
         state = BattlePassProgress.BP_STATE_DISABLED
+        bpController = self.__battlePassController
+        isBought = all((bpController.isBought(chapterID=chapter) for chapter in bpController.getChapterIDs()))
         if self.__brController.isBattlePassAvailable(self.__arenaBonusType) and not self.__isObserverResult:
-            state = BattlePassProgress.BP_STATE_BOUGHT if self.__battlePassController.isBought() else BattlePassProgress.BP_STATE_NORMAL
+            state = BattlePassProgress.BP_STATE_BOUGHT if isBought else BattlePassProgress.BP_STATE_NORMAL
         battlePassModel.setBattlePassState(state)
 
     def __setLeaderboard(self, leaderboardModel):

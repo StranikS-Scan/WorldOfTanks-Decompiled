@@ -9,6 +9,7 @@ from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HEADER_BUTTONS_COU
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import lookupItem, showItemTooltip, getCDFromId, canInstallStyle, showAwardsTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as TC
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
+from gui.server_events.bonuses import getNonQuestBonuses
 from gui.shared import g_eventBus
 from gui.shared.events import HasCtxEvent
 from gui.shared.gui_items.dossier import dumpDossier
@@ -31,6 +32,8 @@ from gui.wgcg.utils.contexts import SPAAccountAttributeCtx, PlatformFetchProduct
 from web.web_client_api.ui.vehicle import _VehicleCustomizationPreviewSchema
 from items import makeIntCompactDescrByID
 from items.components.crew_books_constants import CrewBookCacheType
+if typing.TYPE_CHECKING:
+    from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
 _COUNTER_IDS_MAP = {'shop': VIEW_ALIAS.LOBBY_STORE}
 
 def _itemTypeValidator(itemType, _=None):
@@ -64,7 +67,7 @@ class _RunTriggerChainSchema(W2CSchema):
 
 class _ShowToolTipSchema(W2CSchema):
     tooltipType = Field(required=True, type=basestring)
-    itemId = Field(required=True, type=(int, basestring))
+    itemId = Field(type=(int, basestring))
     blockId = Field(type=basestring, validator=lambda value, _: value in ACHIEVEMENT_BLOCK.ALL)
 
 
@@ -115,6 +118,12 @@ class _SelectBattleTypeSchema(W2CSchema):
 
 class _UrlInfoSchema(W2CSchema):
     url = Field(required=True, type=basestring)
+
+
+class _ShowAdditionalRewardsTooltipSchema(W2CSchema):
+    rewards = Field(required=True, type=dict)
+    x = Field(required=True, type=int)
+    y = Field(required=True, type=int)
 
 
 class UtilWebApiMixin(object):
@@ -203,6 +212,18 @@ class UtilWebApiMixin(object):
     @w2c(W2CSchema, 'hide_tooltip')
     def hideToolTip(self, _):
         self.__getTooltipMgr().hide()
+
+    @w2c(W2CSchema, 'hide_window_tooltip')
+    def hideWulfToolTip(self, _):
+        self.__getTooltipMgr().onHideTooltip('')
+
+    @w2c(_ShowAdditionalRewardsTooltipSchema, 'show_additional_rewards_tooltip')
+    def showAdditionalRewardsTooltip(self, cmd):
+        bonuses = []
+        for key, value in cmd.rewards.iteritems():
+            bonuses.extend(getNonQuestBonuses(key, value))
+
+        self.__getTooltipMgr().onCreateWulfTooltip(TC.ADDITIONAL_REWARDS, [bonuses], cmd.x, cmd.y)
 
     @w2c(W2CSchema, 'server_timestamp')
     def getCurrentLocalServerTimestamp(self, _):

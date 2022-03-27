@@ -1,0 +1,16 @@
+<RTSComponent.def>
+  <CellMethods>
+    <setupArena>
+      <Arg>	PYTHON	</Arg>
+    </setupArena>
+  </CellMethods>
+  <BaseMethods>
+    <updatePrebattleDuration>
+      <Arg>	FLOAT32	</Arg>
+    </updatePrebattleDuration>
+    <destroyLeavers></destroyLeavers>
+  </BaseMethods>
+  <ofEntity>
+    <Arena></Arena>
+  </ofEntity>
+</RTSComponent.def>

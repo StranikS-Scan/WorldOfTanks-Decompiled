@@ -54,7 +54,7 @@ class StatsBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        info = reusable.getPersonalVehiclesInfo(result['personal'])
+        info = reusable.getPersonalVehiclesInfo(result)
         for statType, statFieldName in BATTLE_STATS_RESULT_FIELDS.iteritems():
             statVal = info.__getattribute__(statFieldName)
             self.addNextComponent(base.DirectStatsItem('', {'id': statType,
@@ -89,7 +89,7 @@ class TeamItem(base.StatsItem):
 class VehicleBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
-        vehicle = reusable.getPersonalVehiclesInfo(result['personal']).vehicle
+        vehicle = reusable.getPersonalVehiclesInfo(result).vehicle
         self.addNextComponent(base.DirectStatsItem('type', vehicle.type))
         self.addNextComponent(base.DirectStatsItem('name', vehicle.name))
 
@@ -100,7 +100,7 @@ class MTProgressMixin(object):
     def _getScenarioData(self, result, reusable):
         typeId = reusable.common.arenaType.getID()
         _, geometryID = parseTypeID(typeId)
-        vehType = reusable.getPersonalVehiclesInfo(result['personal']).vehicle.type
+        vehType = reusable.getPersonalVehiclesInfo(result).vehicle.type
         team = result['personal']['avatar']['team']
         config = self.mapsTrainingController.getConfig()
         rewardsConfig = config.get('rewards', {}).get(geometryID, {})

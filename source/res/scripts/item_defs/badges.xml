@@ -3013,5 +3013,89 @@
         </item>
       </value>
     </badge>
+    <badge>
+      <name>	rts_collection	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	117	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.111	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>	RTSBadge	  <name>	customLogicImpl	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	1vs1_leaderboard	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	118	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.112	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>	RTSBadge	  <name>	customLogicImpl	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	strategist_leaderboard	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	119	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.113	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>	RTSBadge	  <name>	customLogicImpl	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	tankman_leaderboard	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	120	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.114	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>	RTSBadge	  <name>	customLogicImpl	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
   </badges>
 </badges.xml>

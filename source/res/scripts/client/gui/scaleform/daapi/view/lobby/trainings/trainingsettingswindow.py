@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/TrainingSettingsWindow.py
 import ArenaType
-from account_helpers import gameplay_ctx
+from account_helpers.gameplay_ctx import ENABLED_ARENA_GAMEPLAY_NAMES, ENABLED_ARENA_EPIC_NAMES
 from constants import PREBATTLE_TYPE, IS_CHINA
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
@@ -17,20 +17,22 @@ from skeletons.gui.shared import IItemsCache
 
 class ArenasCache(object):
 
-    def __init__(self, ctx):
+    def __init__(self, allowedOnlyGpNames=None, excludedGpNames=None):
         self.__cache = []
-        self.__isEpic = ctx.get('isEpic', False)
+        self.__allowedOnlyGpNames = allowedOnlyGpNames or ENABLED_ARENA_GAMEPLAY_NAMES
+        self.__excludedGpNames = excludedGpNames if excludedGpNames else tuple()
         for arenaTypeID, arenaType in ArenaType.g_cache.iteritems():
-            if arenaType.explicitRequestOnly or not gameplay_ctx.isCreationEnabled(arenaType.gameplayName, self.__isEpic):
+            arenaGpName = arenaType.gameplayName
+            if arenaType.explicitRequestOnly or arenaGpName in self.__excludedGpNames or arenaGpName not in self.__allowedOnlyGpNames:
                 continue
             try:
                 nameSuffix = ''
-                if arenaType.gameplayName != 'ctf':
-                    arenaGameplayName = '#arenas:type/%s/%s/name' % (arenaType.gameplayName, arenaType.geometryName)
+                if arenaGpName != 'ctf':
+                    arenaGameplayName = '#arenas:type/%s/%s/name' % (arenaGpName, arenaType.geometryName)
                     if i18n.doesTextExist(arenaGameplayName):
                         nameSuffix = i18n.makeString(arenaGameplayName)
                     else:
-                        nameSuffix = i18n.makeString('#arenas:type/%s/name' % arenaType.gameplayName)
+                        nameSuffix = i18n.makeString('#arenas:type/%s/name' % arenaGpName)
                 self.__cache.append({'label': '%s - %s' % (arenaType.name, nameSuffix) if nameSuffix else arenaType.name,
                  'name': arenaType.name,
                  'arenaType': nameSuffix,
@@ -59,7 +61,10 @@ class TrainingSettingsWindow(TrainingWindowMeta):
         self.__isCreateRequest = ctx.get('isCreateRequest', False)
         self.__settings = ctx.get('settings', None)
         self.__isEpic = self.__settings.getEntityType() == PREBATTLE_TYPE.EPIC_TRAINING
-        self.__arenasCache = ArenasCache({'isEpic': self.__isEpic})
+        allowedGpNames = None
+        if self.__isEpic:
+            allowedGpNames = ENABLED_ARENA_EPIC_NAMES
+        self.__arenasCache = ArenasCache(allowedOnlyGpNames=allowedGpNames, excludedGpNames=('rts', 'rts_bootcamp'))
         return
 
     @prbEntityProperty

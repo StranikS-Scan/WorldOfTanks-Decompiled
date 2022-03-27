@@ -10,7 +10,7 @@ from gui.server_events.events_helpers import isDailyEpic
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
-from helpers import dependency, time_utils, int2roman
+from helpers import dependency, time_utils
 from skeletons.gui.game_control import IEpicBattleMetaGameController, IQuestsController
 _R_EPIC_BATTLE = R.strings.epic_battle.questsTooltip.epicBattle
 
@@ -89,7 +89,7 @@ class EpicBattleQuestsTooltipData(BlocksTooltipData):
                 valueStyle = text_styles.stats
                 timeStr = valueStyle(backport.text(R.strings.epic_battle.questsTooltip.epicBattle.lessThanDay()))
                 textStyle = text_styles.main
-                description = textStyle(backport.text(messageID(), cycle=int2roman(cycle.ordinalNumber), time=timeStr))
+                description = textStyle(backport.text(messageID(), time=timeStr))
                 return text_styles.concatStylesWithSpace(icon, description)
             if all((q.isCompleted() for q in quests)) and self.__epicController.isDailyQuestsRefreshAvailable():
                 data = time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()
@@ -105,7 +105,7 @@ class EpicBattleQuestsTooltipData(BlocksTooltipData):
             textStyle = text_styles.main
             valueStyle = text_styles.stats
             timeToStr = valueStyle(getTimeStr(getDate(cycle) - currentTime, R.strings.menu.Time.timeLeftShort))
-            description = textStyle(backport.text(messageID(), cycle=int2roman(cycle.ordinalNumber), time=timeToStr))
+            description = textStyle(backport.text(messageID(), time=timeToStr))
             return text_styles.concatStylesWithSpace(icon, description)
 
     def __getQuestForVehicle(self, vehicle, sortByPriority=False, questIDs=None):

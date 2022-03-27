@@ -639,18 +639,21 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self.delayedReload = debuffTime
 
     def __startReloadDelayed(self, shellIndex, state):
-        leftTimeDelayed = state.getActualValue() - self.delayedReload
-        baseTimeDelayed = state.getBaseValue() - self.delayedReload
-        if leftTimeDelayed > 0 and baseTimeDelayed > 0:
-            shellReload = shellIndex
-            if self.__delayedNextShellID is not None:
-                shellReload = self._cds.index(self.__delayedNextShellID)
-                self.__delayedNextShellID = None
-            self.as_setCoolDownTimeS(shellReload, leftTimeDelayed, baseTimeDelayed, 0)
+        if self.delayedReload is None:
+            return
         else:
-            _logger.error('Incorrect delayed reload timings: %f, %f', leftTimeDelayed, baseTimeDelayed)
-        self.delayedReload = None
-        return
+            leftTimeDelayed = state.getActualValue() - self.delayedReload
+            baseTimeDelayed = state.getBaseValue() - self.delayedReload
+            if leftTimeDelayed > 0 and baseTimeDelayed > 0:
+                shellReload = shellIndex
+                if self.__delayedNextShellID is not None:
+                    shellReload = self._cds.index(self.__delayedNextShellID)
+                    self.__delayedNextShellID = None
+                self.as_setCoolDownTimeS(shellReload, leftTimeDelayed, baseTimeDelayed, 0)
+            else:
+                _logger.error('Incorrect delayed reload timings: %f, %f', leftTimeDelayed, baseTimeDelayed)
+            self.delayedReload = None
+            return
 
     def __startReload(self, shellIndex, state):
         if self.__reloadTicker:

@@ -75,6 +75,14 @@ class HINT_TYPE:
     HINT_B3_CAPTURE_TOGETHER = 42
     HINT_SNIPER_LEVEL0 = 43
     HINT_CUSTOM = 44
+    HINT_RTS_MOVE_TANK = 45
+    HINT_RTS_ATTACK_TANK = 46
+    HINT_RTS_ATTACK_TANK_DOUBLE_CLICK = 47
+    HINT_RTS_CONTROL_TANK = 48
+    HINT_RTS_RELEASE_TANK = 49
+    HINT_RTS_MULTISELECT_TANKS = 50
+    HINT_RTS_SUPPLIES = 51
+    HINT_RTS_ROTATE_CAMERA = 52
     HINTS_B3_CAPTURE = (HINT_B3_DO_CAPTURE,
      HINT_B3_CAPTURE_IN_PROGRESS,
      HINT_B3_CAPTURE_RESET,
@@ -121,7 +129,15 @@ class HINT_TYPE:
      HINT_B3_CAPTURE_RESET,
      HINT_B3_FOLIAGE2,
      HINT_B3_FLANK,
-     HINT_B3_CAPTURE_TOGETHER)
+     HINT_B3_CAPTURE_TOGETHER,
+     HINT_RTS_MOVE_TANK,
+     HINT_RTS_ATTACK_TANK,
+     HINT_RTS_ATTACK_TANK_DOUBLE_CLICK,
+     HINT_RTS_CONTROL_TANK,
+     HINT_RTS_RELEASE_TANK,
+     HINT_RTS_MULTISELECT_TANKS,
+     HINT_RTS_SUPPLIES,
+     HINT_RTS_ROTATE_CAMERA)
     SECONDARY_HINTS = (HINT_WAIT_RELOAD,
      HINT_EXIT_GAME_AREA,
      HINT_AIM,
@@ -135,7 +151,7 @@ class HINT_TYPE:
      HINT_UNLOCK_TARGET)
 
 
-HINT_NAMES = ('hintMove', 'hintMoveTurret', 'hintShoot', 'hintAdvancedSniper', 'hintAim', 'hintSniper', 'hintWeakPoints', 'hintMessageAvoid', 'hintPlayerSpotted', 'hintSectorClear', 'hintStartNarrative', 'hintCaptureTheBase', 'hintResetProgress', 'hintRepairTrack', 'hintHealCrew', 'hintUseExtinguisher', 'hintAllyShoot', 'hintPlayerDetectEnemies', 'hintExitGameArea', 'hintEnemyCanHide', 'hintSneak', 'hintSniperOnDistance', 'hintRotateLobby', 'hintTargetLock', 'hintWaitReload', 'hintNoMove', 'hintNoMoveTurret', 'hintShootWhileMoving', 'hintMoveToMarker', 'hintSecondarySniper', 'hintUselessConsumable', 'hintLowHP', 'hintTargetUnLock', 'hintB3PlayerDetected', 'hintB3FallBack', 'hintB3Foliage', 'hintB3DoCapture', 'hintB3CaptureInProgress', 'hintB3EnemiesHidden', 'hintB3CaptureReset', 'hintB3Foliage2', 'hintB3Flank', 'hintB3CaptureTogether', 'hintSniperLevel0', 'hintCustom')
+HINT_NAMES = ('hintMove', 'hintMoveTurret', 'hintShoot', 'hintAdvancedSniper', 'hintAim', 'hintSniper', 'hintWeakPoints', 'hintMessageAvoid', 'hintPlayerSpotted', 'hintSectorClear', 'hintStartNarrative', 'hintCaptureTheBase', 'hintResetProgress', 'hintRepairTrack', 'hintHealCrew', 'hintUseExtinguisher', 'hintAllyShoot', 'hintPlayerDetectEnemies', 'hintExitGameArea', 'hintEnemyCanHide', 'hintSneak', 'hintSniperOnDistance', 'hintRotateLobby', 'hintTargetLock', 'hintWaitReload', 'hintNoMove', 'hintNoMoveTurret', 'hintShootWhileMoving', 'hintMoveToMarker', 'hintSecondarySniper', 'hintUselessConsumable', 'hintLowHP', 'hintTargetUnLock', 'hintB3PlayerDetected', 'hintB3FallBack', 'hintB3Foliage', 'hintB3DoCapture', 'hintB3CaptureInProgress', 'hintB3EnemiesHidden', 'hintB3CaptureReset', 'hintB3Foliage2', 'hintB3Flank', 'hintB3CaptureTogether', 'hintSniperLevel0', 'hintCustom', 'hintRTSMoveTank', 'hintRTSAttackTank', 'hintRTSAttackTankDoubleClick', 'hintRTSControlTank', 'hintRTSReleaseTank', 'hintRTSMultiselectTanks', 'hintRTSSupplies', 'hintRTSRotateCamera')
 
 class BOOTCAMP_BATTLE_RESULT_MESSAGE:
     DRAW = 0

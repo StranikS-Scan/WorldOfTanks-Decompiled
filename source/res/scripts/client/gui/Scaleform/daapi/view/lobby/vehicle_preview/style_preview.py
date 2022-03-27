@@ -3,21 +3,22 @@
 import logging
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import STYLE_PREVIEW_SOUND_SPACE
+from gui.Scaleform.daapi.view.meta.VehicleBasePreviewMeta import VehicleBasePreviewMeta
+from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import STYLE_PREVIEW_SOUND_SPACE
-from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
-from gui.Scaleform.daapi.view.meta.VehicleBasePreviewMeta import VehicleBasePreviewMeta
-from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE, g_eventBus
+from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.shared import EVENT_BUS_SCOPE, event_bus_handlers, event_dispatcher, events, g_eventBus
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.customization.c11n_items import getGroupFullNameResourceID
 from helpers import dependency
 from preview_selectable_logic import PreviewSelectableLogic
+from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.gui.game_control import IHeroTankController
-from gui.prb_control.events_dispatcher import g_eventDispatcher
 _SHOW_CLOSE_BTN = False
 _SHOW_BACK_BTN = True
 _logger = logging.getLogger(__name__)
@@ -32,12 +33,14 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
 
     def __init__(self, ctx=None):
         super(VehicleStylePreview, self).__init__(ctx)
+        self.__ctx = ctx
         self._style = ctx['style']
         self.__vehicleCD = ctx['itemCD']
-        self.__styleDescr = ctx.get('styleDescr') % {'insertion_open': '',
+        self.__styleDescr = (ctx.get('styleDescr') or self._style.getDescription()) % {'insertion_open': '',
          'insertion_close': ''}
         self.__backCallback = ctx.get('backCallback', event_dispatcher.showHangar)
         self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()))
+        self.__topPanelData = ctx.get('topPanelData') or {}
         self.__selectedVehicleEntityId = None
         g_currentPreviewVehicle.selectHeroTank(ctx.get('isHeroTank', False))
         return
@@ -48,7 +51,11 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     def onBackClick(self):
         self.__backCallback()
 
+    def setTopPanel(self):
+        self.as_setTopPanelS(self.__topPanelData.get('linkage', ''))
+
     def _populate(self):
+        self.setTopPanel()
         super(VehicleStylePreview, self)._populate()
         g_currentPreviewVehicle.selectVehicle(self.__vehicleCD, style=self._style)
         self.__selectedVehicleEntityId = g_currentPreviewVehicle.vehicleEntityID
@@ -79,6 +86,11 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
         super(VehicleStylePreview, self)._dispose()
         return
+
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        if alias == VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_PY_ALIAS:
+            viewPy.setData(**self.__topPanelData)
+            viewPy.setParentCtx(**self.__ctx)
 
     def _createSelectableLogic(self):
         return PreviewSelectableLogic()

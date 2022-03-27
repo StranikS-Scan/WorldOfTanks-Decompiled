@@ -1,60 +1,52 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/win_points.py
 import ResMgr
-from constants import FLAG_TYPES
-from items import vehicles
-from soft_exception import SoftException
+from constants import FLAG_TYPES_INDICES
 _CONFIG_FILE = 'scripts/item_defs/win_points.xml'
 
-class DamageSettings(object):
+class DamageSettingsEmpty(object):
+
+    def __init__(self):
+        self.pointsForKill = 0
+        self.pointsForDamage = (0, 0)
+
+
+class DamageSettings(DamageSettingsEmpty):
 
     def __init__(self, section):
+        super(DamageSettings, self).__init__()
         self.pointsForKill = section['winPointsForKill'].asInt
         self.pointsForDamage = (section['winPointsForDamage']['damageToDeal'].asInt, section['winPointsForDamage']['pointsToGrant'].asInt)
 
 
-class WinPointsTeamOrSoloSettings(object):
+class WinPointsGroupSettingsEmpty(object):
+
+    def __init__(self):
+        self.damageSettingsForVehicle = DamageSettingsEmpty()
+        self.damageSettingsForEquipment = DamageSettingsEmpty()
+
+
+class WinPointsGroupSettings(WinPointsGroupSettingsEmpty):
 
     def __init__(self, section):
-        self.vehicleDamageSettings = DamageSettings(section['vehicle'])
-        self.equipmentDamageSettings = DamageSettings(section['equipment'])
-        self.pointsForFlag = [0] * len(FLAG_TYPES.RANGE)
-        for name, subsection in section['winPointsForFlag'].items():
-            name = name.upper()
-            flagTypeId = getattr(FLAG_TYPES, name, None)
-            if flagTypeId is None:
-                raise SoftException('Unknown flag type name (%s)' % (name,))
-            self.pointsForFlag[flagTypeId] = subsection.asInt
+        super(WinPointsGroupSettings, self).__init__()
+        self.damageSettingsForVehicle = self.__getDamageSettingsFor(section['vehicle'])
+        self.damageSettingsForEquipment = self.__getDamageSettingsFor(section['equipment'])
 
-        self.pointsForOneResource = section['winPointsForOneResource'].asInt
-        return
+    def __getDamageSettingsFor(self, section):
+        return DamageSettings(section) if section else DamageSettingsEmpty()
 
-
-WinPointsTeamSettings = WinPointsTeamOrSoloSettings
-WinPointsSoloSettings = WinPointsTeamOrSoloSettings
 
 class WinPointsSettings(object):
 
     def __init__(self, section):
-        self.pointsCAP = section['winPointsCAP'].asInt
-        self.teamSettings = WinPointsTeamSettings(section['team'])
-        self.soloSettings = WinPointsSoloSettings(section['solo'])
+        self.pointsCAP = section.readInt('winPointsCAP', 0)
+        self.pointsForBaseCaptured = section.readInt('pointsForBaseCaptured', 0)
+        self.team = self.__getSettingsFor(section['team'])
+        self.avatar = self.__getSettingsFor(section['avatar'])
 
-    def pointsForKill(self, isSolo, forVehicle):
-        settings = self.soloSettings if isSolo else self.teamSettings
-        damageSettings = settings.vehicleDamageSettings if forVehicle else settings.equipmentDamageSettings
-        return damageSettings.pointsForKill
-
-    def pointsForDamage(self, isSolo, forVehicle):
-        settings = self.soloSettings if isSolo else self.teamSettings
-        damageSettings = settings.vehicleDamageSettings if forVehicle else settings.equipmentDamageSettings
-        return damageSettings.pointsForDamage
-
-    def __getattr__(self, item):
-        if item in ('pointsForFlag', 'pointsForOneResource'):
-            return lambda isSolo: getattr(self.soloSettings, item) if isSolo else getattr(self.teamSettings, item)
-        else:
-            return super(WinPointsSettings, self).__getattr__(item)
+    def __getSettingsFor(self, section):
+        return WinPointsGroupSettings(section) if section else WinPointsGroupSettingsEmpty()
 
 
 g_cache = None

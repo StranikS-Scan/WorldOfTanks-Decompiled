@@ -3,9 +3,9 @@
 import logging
 import random
 from math import ceil
+import BigWorld
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import DEATH_REASON_ALIVE, PREMIUM_TYPE, ARENA_BONUS_TYPE, ARENA_GUI_TYPE
-import BigWorld
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS_PREMIUM_STATES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -15,6 +15,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_results.components import base
 from gui.battle_results.components import shared
 from gui.battle_results.components import style
+from gui.battle_results.components.common import convertStrToNumber
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.premacc import premacc_helpers
@@ -27,9 +28,33 @@ from helpers import i18n, dependency, time_utils
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from RTSShared import RTSSupply
 _UNDEFINED_EFFICIENCY_VALUE = '-'
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
+
+def fillKillerInfoBlock(vehicleStateBlock, deathReason, killerID, reusable):
+    fillVehicleStateBlock(vehicleStateBlock, deathReason)
+    playerInfo = reusable.getPlayerInfoByVehicleID(killerID)
+    playerKillerBlock = KillerPlayerNameBlock()
+    playerKillerBlock.setPlayerInfo(playerInfo)
+    fillTeamKillerBlock(reusable, killerID, playerKillerBlock, vehicleStateBlock)
+    vehicleStateBlock.addComponent(vehicleStateBlock.getNextComponentIndex(), playerKillerBlock)
+
+
+def fillVehicleStateBlock(stateBlock, deathReason):
+    reason = style.makeI18nDeathReason(deathReason)
+    stateBlock.vehicleState = reason.i18nString
+    stateBlock.vehicleStatePrefix = reason.prefix
+    stateBlock.vehicleStateSuffix = reason.suffix
+
+
+def fillTeamKillerBlock(reusable, killerID, killerBlock, stateBlock):
+    vi = reusable.vehicles.getVehicleInfo(killerID)
+    if vi.isTeamKiller:
+        killerBlock.setTeamKillerInfo()
+        stateBlock.isKilledByTeamKiller = True
+
 
 class PremiumAccountFlag(base.StatsItem):
     __slots__ = ()
@@ -51,6 +76,7 @@ class DynamicPremiumState(base.StatsItem):
     __battleResults = dependency.descriptor(IBattleResultsService)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __UNPROFITABLE_ARENA_TYPES = (ARENA_BONUS_TYPE.TRAINING, ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING, ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING)
+    __DISABLED_PREMIUM_ARENA_TYPES = (ARENA_BONUS_TYPE.RTS, ARENA_BONUS_TYPE.RTS_1x1)
 
     def __init__(self, field, *path):
         super(DynamicPremiumState, self).__init__(field, *path)
@@ -74,7 +100,9 @@ class DynamicPremiumState(base.StatsItem):
         hasPremiumPlus = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
         hasBasicPremium = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.BASIC)
         negativeImpact = self.__xpDiff < 0 or self.__creditsDiff < 0
-        if self.__arenaBonusType in self.__UNPROFITABLE_ARENA_TYPES:
+        if self.__arenaBonusType in self.__DISABLED_PREMIUM_ARENA_TYPES:
+            self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_UNAVAILABLE
+        elif self.__arenaBonusType in self.__UNPROFITABLE_ARENA_TYPES:
             self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_EARNINGS
         elif (negativeImpact or hasBasicPremium) and not (hasPremiumPlus or self.__postBattlePremiumPlus):
             self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_ADVERTISING
@@ -274,12 +302,15 @@ class PersonalVehicleBlock(base.StatsBlock):
             self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_PREMATURELEAVE)
         elif deathReason > DEATH_REASON_ALIVE:
             if self.isVehicleStatusDefined and killerID:
-                fillKillerInfoBlock(self, deathReason, killerID, reusable)
+                self._setKillerInfo(deathReason, killerID, reusable)
         else:
             self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_ALIVE)
 
     def _getVehicleIcon(self, item):
         return getNationLessName(item.name)
+
+    def _setKillerInfo(self, deathReason, killerID, reusable):
+        fillKillerInfoBlock(self, deathReason, killerID, reusable)
 
 
 class EpicVehicleBlock(PersonalVehicleBlock):
@@ -359,6 +390,10 @@ class ArmorUsingDetailsBlock(_DetailsBlock):
         return
 
     def setRecord(self, result, _):
+        if result.vehicle.isSupply and (RTSSupply.isWatchTower(result.vehicle.tags) or RTSSupply.isBarricades(result.vehicle.tags)):
+            self.usedArmorCount = -1
+            self._isEmpty = True
+            return
         noDamage = result.noDamageDirectHitsReceived
         damageBlocked = result.damageBlockedByArmor
         self.usedArmorCount = noDamage
@@ -403,6 +438,10 @@ class StunDetailsBlock(_DetailsBlock):
         return
 
     def setRecord(self, result, _):
+        if result.vehicle.isSupply:
+            self.stunNum = -1
+            self._isEmpty = True
+            return
         count = result.stunNum
         assisted = result.damageAssistedStun
         duration = result.stunDuration
@@ -426,19 +465,26 @@ class CritsDetailsBlock(_DetailsBlock):
         return
 
     def setRecord(self, result, reusable):
+        if result.vehicle.isSupply:
+            self.critsCount = -1
+            self._isEmpty = True
+            return
         crits = result.critsInfo
         criticalDevices = []
         destroyedDevices = []
         destroyedTankmen = []
-        for device in crits[CRIT_MASK_SUB_TYPES.CRITICAL_DEVICES]:
+        cd = crits.get(CRIT_MASK_SUB_TYPES.CRITICAL_DEVICES, [])
+        for device in cd:
             self._isEmpty = False
             criticalDevices.append(style.makeCriticalModuleTooltipLabel(device))
 
-        for device in crits[CRIT_MASK_SUB_TYPES.DESTROYED_DEVICES]:
+        dd = crits.get(CRIT_MASK_SUB_TYPES.DESTROYED_DEVICES, [])
+        for device in dd:
             self._isEmpty = False
             destroyedDevices.append(style.makeDestroyedModuleTooltipLabel(device))
 
-        for tankman in crits[CRIT_MASK_SUB_TYPES.DESTROYED_TANKMENS]:
+        dt = crits.get(CRIT_MASK_SUB_TYPES.DESTROYED_TANKMENS, [])
+        for tankman in dt:
             self._isEmpty = False
             destroyedTankmen.append(style.makeTankmenTooltipLabel(tankman))
 
@@ -499,7 +545,7 @@ class AllyTeamBaseDetailBlock(TeamBaseDetailsBlock):
 
 
 class EnemyDetailsBlock(_DetailsBlock):
-    __slots__ = ('vehicleIcon', 'vehicleName', 'vehicleIntCD', 'vehicleID', 'deathReason', 'spotted', 'piercings', 'damageDealt', 'killCount', '_isEmpty')
+    __slots__ = ('vehicleIcon', 'vehicleName', 'vehicleIntCD', 'vehicleID', 'deathReason', 'spotted', 'piercings', 'damageDealt', 'killCount', 'damageBlockedByArmor', 'damageAssisted', 'damageAssistedStun', 'critsCount', '_isEmpty')
 
     def setRecord(self, result, reusable):
         if result.vehicle is not None:
@@ -511,6 +557,10 @@ class EnemyDetailsBlock(_DetailsBlock):
         self.piercings = result.piercings
         self.damageDealt = result.damageDealt
         self.killCount = result.targetKills
+        self.damageBlockedByArmor = result.damageBlockedByArmor
+        self.damageAssisted = result.damageAssisted
+        self.damageAssistedStun = result.damageAssistedStun
+        self.critsCount = result.critsCount
         blocks = (DamageDetailsBlock(),
          ArmorUsingDetailsBlock(),
          AssistDetailsBlock(),
@@ -561,48 +611,56 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
         return
 
     def setRecord(self, result, reusable):
-        info = reusable.getPersonalVehiclesInfo(result)
-        if info is None:
-            from debug_utils import LOG_ERROR
-            LOG_ERROR('ERROR: TotalEfficiencyDetailsHeader:setRecord: getPersonalVehiclesInfo returned NONE!')
-            return
-        else:
-            value = info.kills
-            self.kills = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
-            self.killsTooltip = self.__makeEfficiencyHeaderTooltip('summKill', value)
-            value = info.damageDealt
-            self.damageDealt = numbers.makeStringWithThousandSymbol(value, formatter=self.__formatter)
-            self.damageDealtTooltip = self.__makeEfficiencyHeaderTooltip('summDamage', value)
-            value = info.critsCount
-            self.criticalDamages = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
-            self.criticalDamagesTooltip = self.__makeEfficiencyHeaderTooltip('summCrits', value)
-            value = info.damageBlockedByArmor
-            self.damageBlockedByArmor = numbers.makeStringWithThousandSymbol(value, formatter=self.__formatter)
-            self.damageBlockedTooltip = self.__makeEfficiencyHeaderTooltip('summArmor', value)
-            value = info.damageAssisted
-            self.damageAssisted = numbers.makeStringWithThousandSymbol(value, formatter=self.__formatter)
-            self.damageAssistedTooltip = self.__makeEfficiencyHeaderTooltip('summAssist', value)
-            value = info.damageAssistedStun
-            self.damageAssistedStun = numbers.makeStringWithThousandSymbol(value, formatter=self.__formatter)
-            self.damageAssistedStunTooltip = self.__makeEfficiencyHeaderTooltip('summStun', value)
-            value = info.spotted
-            self.spotted = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
-            self.spottedTooltip = self.__makeEfficiencyHeaderTooltip('summSpotted', value)
-            self.hasEfficencyStats = info.kills + info.damageDealt + info.critsCount + info.damageBlockedByArmor + info.damageAssisted + info.damageAssistedStun + info.spotted > 0
-            return
+        for _, vehicles, _ in reusable.getPersonalDetailsIterator(result, onlySummary=True):
+            kills = sum((s.targetKills for s in vehicles))
+            self.kills = numbers.formatInt(kills, _UNDEFINED_EFFICIENCY_VALUE)
+            self.killsTooltip = self._makeEfficiencyHeaderTooltip('summKill', kills)
+            damageDealt = sum((s.damageDealt for s in vehicles))
+            self.damageDealt = numbers.makeStringWithThousandSymbol(damageDealt, formatter=self._formatter)
+            self.damageDealtTooltip = self._makeEfficiencyHeaderTooltip('summDamage', damageDealt)
+            spotted = sum((s.spotted for s in vehicles))
+            self.spotted = numbers.formatInt(spotted, _UNDEFINED_EFFICIENCY_VALUE)
+            self.spottedTooltip = self._makeEfficiencyHeaderTooltip('summSpotted', spotted)
+            critsCount = sum((s.critsCount for s in vehicles))
+            self.criticalDamages = numbers.formatInt(critsCount, _UNDEFINED_EFFICIENCY_VALUE)
+            self.criticalDamagesTooltip = self._makeEfficiencyHeaderTooltip('summCrits', critsCount)
+            damageBlockedByArmor = sum((s.damageBlockedByArmor for s in vehicles))
+            self.damageBlockedByArmor = numbers.makeStringWithThousandSymbol(damageBlockedByArmor, formatter=self._formatter)
+            self.damageBlockedTooltip = self._makeEfficiencyHeaderTooltip('summArmor', damageBlockedByArmor)
+            damageAssisted = sum((s.damageAssisted for s in vehicles))
+            self.damageAssisted = numbers.makeStringWithThousandSymbol(damageAssisted, formatter=self._formatter)
+            self.damageAssistedTooltip = self._makeEfficiencyHeaderTooltip('summAssist', damageAssisted)
+            damageAssistedStun = sum((s.damageAssistedStun for s in vehicles))
+            self.damageAssistedStun = numbers.makeStringWithThousandSymbol(damageAssistedStun, formatter=self._formatter)
+            self.damageAssistedStunTooltip = self._makeEfficiencyHeaderTooltip('summStun', damageAssistedStun)
+            self.hasEfficencyStats = kills + damageDealt + spotted + critsCount + damageBlockedByArmor + damageAssisted + damageAssistedStun > 0
 
     @classmethod
-    def __makeEfficiencyHeaderTooltip(cls, key, value):
+    def _makeEfficiencyHeaderTooltip(cls, key, value):
         if value > 0:
             header = TOOLTIPS.battleresults_efficiencyheader(key)
-            body = cls.__formatter(value)
+            body = cls._formatter(value)
             return makeTooltip(header, body)
         else:
             return None
 
     @classmethod
-    def __formatter(cls, value):
-        return '{:,}'.format(value).replace(',', ' ')
+    def _formatter(cls, value):
+        return convertStrToNumber(value)
+
+    def _createDetailedBlocks(self, reusable, enemies):
+        detailedBlocks = []
+        for info in enemies:
+            component = self._createEnemyBlock()
+            component.setRecord(info, reusable)
+            if not component.isEmpty():
+                detailedBlocks.append(component)
+
+        return detailedBlocks
+
+    @staticmethod
+    def _createEnemyBlock():
+        return EnemyDetailsBlock()
 
 
 class TotalEfficiencyDetailsBlock(base.StatsBlock):
@@ -610,31 +668,14 @@ class TotalEfficiencyDetailsBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         blocks = []
-        for bases, enemies in reusable.getPersonalDetailsIterator(result):
+        for bases, enemies, _ in reusable.getPersonalDetailsIterator(result):
             components = []
-            for info in bases:
-                if info.capturePoints > 0 or info.droppedCapturePoints > 0:
-                    components.append(style.GroupMiddleLabelBlock(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_BASES))
-                    component = EnemyTeamBaseDetailBlock()
-                    component.setRecord(info, reusable)
-                    components.append(component)
-                    component = AllyTeamBaseDetailBlock()
-                    component.setRecord(info, reusable)
-                    components.append(component)
-
+            self._createBasesBlock(bases, reusable, components)
             block = base.StatsBlock(base.ListMeta())
-            detailedBlocks = []
-            for info in enemies:
-                component = EnemyDetailsBlock()
-                component.setRecord(info, reusable)
-                if not component.isEmpty():
-                    detailedBlocks.append(component)
-
+            detailedBlocks = self._createDetailedBlocks(reusable, enemies)
             if detailedBlocks:
-                block.addComponent(block.getNextComponentIndex(), style.GroupMiddleLabelBlock(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_TECHNIQUE))
-                for db in detailedBlocks:
-                    block.addComponent(block.getNextComponentIndex(), db)
-
+                label = BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_TECHNIQUE
+                self._appendDetailedBlock(block, label, detailedBlocks, 'efficiencyHeader')
             for component in components:
                 block.addComponent(block.getNextComponentIndex(), component)
 
@@ -642,6 +683,35 @@ class TotalEfficiencyDetailsBlock(base.StatsBlock):
 
         for block in blocks[-1:] + blocks[:-1]:
             self.addComponent(self.getNextComponentIndex(), block)
+
+    def _createEnemyBlock(self):
+        return EnemyDetailsBlock()
+
+    def _createBasesBlock(self, bases, reusable, components):
+        for info in bases:
+            if info.capturePoints > 0 or info.droppedCapturePoints > 0:
+                components.append(style.GroupMiddleLabelBlock(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_BASES))
+                component = EnemyTeamBaseDetailBlock()
+                component.setRecord(info, reusable)
+                components.append(component)
+                component = AllyTeamBaseDetailBlock()
+                component.setRecord(info, reusable)
+                components.append(component)
+
+    def _createDetailedBlocks(self, reusable, enemies):
+        detailedBlocks = []
+        for info in enemies:
+            component = self._createEnemyBlock()
+            component.setRecord(info, reusable)
+            if not component.isEmpty():
+                detailedBlocks.append(component)
+
+        return detailedBlocks
+
+    def _appendDetailedBlock(self, block, blockLabel, detailedBlocks, efficiencyFieldName=None):
+        block.addComponent(block.getNextComponentIndex(), style.GroupMiddleLabelBlock(blockLabel, efficiencyFieldName))
+        for db in detailedBlocks:
+            block.addComponent(block.getNextComponentIndex(), db)
 
 
 class TotalPersonalAchievementsBlock(shared.BiDiStatsBlock):
@@ -678,16 +748,9 @@ class PersonalAccountDBID(base.StatsItem):
         return reusable.personal.avatar.accountDBID
 
 
-def fillKillerInfoBlock(vehicleStateBlock, deathReason, killerID, reusable):
-    reason = style.makeI18nDeathReason(deathReason)
-    vehicleStateBlock.vehicleState = reason.i18nString
-    vehicleStateBlock.vehicleStatePrefix = reason.prefix
-    vehicleStateBlock.vehicleStateSuffix = reason.suffix
-    pi = reusable.getPlayerInfoByVehicleID(killerID)
-    playerKillerBlock = KillerPlayerNameBlock()
-    playerKillerBlock.setPlayerInfo(pi)
-    vi = reusable.vehicles.getVehicleInfo(killerID)
-    if vi.isTeamKiller:
-        playerKillerBlock.setTeamKillerInfo()
-        vehicleStateBlock.isKilledByTeamKiller = True
-    vehicleStateBlock.addComponent(vehicleStateBlock.getNextComponentIndex(), playerKillerBlock)
+class ReplayURL(base.StatsItem):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def _convert(self, value, reusable):
+        hasFlag = self.__itemsCache.items.stats.isSsrPlayEnabled
+        return reusable.personal.getReplayURL() if hasFlag else ''

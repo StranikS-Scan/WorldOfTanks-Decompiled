@@ -441,7 +441,7 @@ class ImprovedConfiguration(StaticOptionalDevice):
 
 
 class Equipment(Artefact):
-    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor')
+    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'playerMessagesKey')
 
     def __init__(self):
         super(Equipment, self).__init__(items.ITEM_TYPES.equipment, 0, '', 0)
@@ -452,12 +452,14 @@ class Equipment(Artefact):
         self.reuseCount = component_constants.ZERO_INT
         self.cooldownSeconds = component_constants.ZERO_INT
         self.soundNotification = None
+        self.playerMessagesKey = None
         return
 
     def _readBasicConfig(self, xmlCtx, section):
         super(Equipment, self)._readBasicConfig(xmlCtx, section)
         self.equipmentType = items.EQUIPMENT_TYPES[section.readString('type', 'regular')]
         self.soundNotification = _xml.readStringOrNone(xmlCtx, section, 'soundNotification')
+        self.playerMessagesKey = _xml.readStringOrNone(xmlCtx, section, 'playerMessagesKey')
         scriptSection = section['script']
         self.stunResistanceEffect, self.stunResistanceDuration, self.repeatedStunDurationFactor = _readStun(xmlCtx, scriptSection)
         self.reuseCount, self.cooldownSeconds = _readReuseParams(xmlCtx, scriptSection)
@@ -950,7 +952,7 @@ class BomberConfigReader(PlaneConfigReader):
 
 
 class SmokeConfigReader(object):
-    _SMOKE_SLOTS = ('minDelay', 'deltaDelayRange', 'smokeModelName', 'startRadius', 'expandedRadius', 'startHeight', 'expandedHeight', 'heightUpFraction', 'expansionDuration', 'dispersionRadius', 'totalDuration', 'smokeOpacity', 'visionRadiusFactor', 'dotParams', 'areaLength', 'areaWidth', 'projectilesNumber', 'shellCompactDescr', 'areaVisual', 'areaMarker', 'noOwner', 'smokeEffectNameAlly', 'smokeEffectNameEnemy', 'shotSoundPreDelay', 'wwsoundShot', 'orthogonalDir', 'randomizeDuration', 'vignetteColor', 'vignetteIntensity')
+    _SMOKE_SLOTS = ('minDelay', 'deltaDelayRange', 'smokeModelName', 'startRadius', 'expandedRadius', 'startHeight', 'expandedHeight', 'heightUpFraction', 'postEffectTeams', 'expansionDuration', 'dispersionRadius', 'totalDuration', 'smokeOpacity', 'visionRadiusFactor', 'dotParams', 'areaLength', 'areaWidth', 'projectilesNumber', 'shellCompactDescr', 'areaVisual', 'areaMarker', 'noOwner', 'smokeEffectNameAlly', 'smokeEffectNameEnemy', 'shotSoundPreDelay', 'wwsoundShot', 'orthogonalDir', 'randomizeDuration', 'vignetteColor', 'vignetteIntensity')
 
     def initSmokeSlots(self):
         self.minDelay = component_constants.ZERO_FLOAT
@@ -965,8 +967,9 @@ class SmokeConfigReader(object):
         self.dispersionRadius = component_constants.ZERO_FLOAT
         self.totalDuration = component_constants.ZERO_FLOAT
         self.smokeOpacity = component_constants.ZERO_FLOAT
-        self.visionRadiusFactor = component_constants.ZERO_FLOAT
-        self.ingnoreVisionRaduisForTeammates = False
+        self.attrFactorMods = {}
+        self.expireDelay = component_constants.ZERO_FLOAT
+        self.postEffectTeams = []
         self.dotParams = None
         self.areaLength = component_constants.ZERO_FLOAT
         self.areaWidth = component_constants.ZERO_FLOAT
@@ -999,8 +1002,13 @@ class SmokeConfigReader(object):
         self.dispersionRadius = _xml.readPositiveFloat(xmlCtx, section, 'dispersionRadius')
         self.totalDuration = _xml.readPositiveFloat(xmlCtx, section, 'totalDuration')
         self.smokeOpacity = _xml.readPositiveFloat(xmlCtx, section, 'smokeOpacity')
-        self.visionRadiusFactor = _xml.readPositiveFloat(xmlCtx, section, 'visionRadiusFactor')
-        self.ingnoreVisionRaduisForTeammates = _xml.readBool(xmlCtx, section, 'ingnoreVisionRaduisForTeammates', False)
+        subXmlCtx, attrFactorModsSection = _xml.getSubSectionWithContext(xmlCtx, section, 'attrFactorMods', False)
+        if attrFactorModsSection is not None:
+            self._readAttrFactorMods(subXmlCtx, attrFactorModsSection)
+        subXmlCtx, postEffectsSection = _xml.getSubSectionWithContext(xmlCtx, section, 'postEffect', False)
+        if postEffectsSection is not None:
+            self._readPostEffectTeams(subXmlCtx, postEffectsSection)
+        self.expireDelay = _xml.readPositiveFloat(xmlCtx, section, 'expireDelay', component_constants.ZERO_FLOAT)
         self.areaLength = _xml.readPositiveFloat(xmlCtx, section, 'areaLength')
         self.areaWidth = _xml.readPositiveFloat(xmlCtx, section, 'areaWidth')
         self.projectilesNumber = _xml.readNonNegativeInt(xmlCtx, section, 'projectilesNumber')
@@ -1021,6 +1029,17 @@ class SmokeConfigReader(object):
         if IS_CLIENT:
             self.vignetteColor = _xml.readVector3(xmlCtx, section, 'vignetteColor')
             self.vignetteIntensity = _xml.readFloat(xmlCtx, section, 'vignetteIntensity')
+        return
+
+    def _readAttrFactorMods(self, xmlCtx, section):
+        for factor, subSection in section.items():
+            self.attrFactorMods[factor] = (_xml.readFloat(xmlCtx, subSection, 'value'), _xml.readBool(xmlCtx, subSection, 'ignoreAllies', True))
+
+    def _readPostEffectTeams(self, _, section):
+        if section.has_key('enemy'):
+            self.postEffectTeams.append(False)
+        if section.has_key('ally'):
+            self.postEffectTeams.append(True)
 
 
 class ReconConfigReader(PlaneConfigReader):

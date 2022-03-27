@@ -260,7 +260,7 @@ class RewardAnyState(State):
             currentLevel = self.__battlePass.getCurrentLevel()
             if self.__battlePass.isFinalLevel(chapterID, currentLevel):
                 machine.clearSelf()
-                showMissionsBattlePass(layoutID=R.views.lobby.battle_pass.ChapterChoiceView())
+                showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
             machine.clearManualFlow()
             return
 

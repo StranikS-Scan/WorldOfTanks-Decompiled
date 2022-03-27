@@ -12,7 +12,9 @@ from items.vehicles import VEHICLE_PHYSICS_TYPE, VehicleDescriptor, VehicleDescr
 from math import pi
 from constants import IS_CLIENT, IS_EDITOR, IS_CELLAPP, VEHICLE_PHYSICS_MODE, SERVER_TICK_LENGTH
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR, LOG_DEBUG_DEV
+from ModelHitTester import ModelHitStatus
 import copy
+from ModelHitTester import NoneHitTester
 from items.components import gun_components
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES
 from gun_rotation_shared import encodeRestrictedValueToUint, decodeRestrictedValueFromUint
@@ -482,7 +484,7 @@ def configurePhysics(physics, baseCfg, typeDescr, gravityFactor, updateSiegeMode
     return cfg
 
 
-def __computeModelShape(cfg, modelShapeCfg, typeDesc, boundingBoxes):
+def __computeModelShape(cfg, modelShapeCfg, typeDesc, boundingBoxes, modelHitStatus):
     bmin, bmax, _ = boundingBoxes['chassis']
     sizeX = bmax[0] - bmin[0]
     bminHull, bmaxHull, _ = boundingBoxes['hull']
@@ -497,7 +499,7 @@ def __computeModelShape(cfg, modelShapeCfg, typeDesc, boundingBoxes):
     modelShapeCfg['hullSize'] = Math.Vector3((sizeX, cfg['bodyHeight'], sizeZ))
     modelShapeCfg['hullBoxOffsetZ'] = offsZ
     if typeDesc.isWheeledVehicle:
-        wheelBbMin, wheelBbMax, _ = typeDesc.chassis.wheels.wheels[0].hitTester.bbox
+        wheelBbMin, wheelBbMax, _ = typeDesc.chassis.wheels.wheels[0].getHitTester(modelHitStatus).bbox
         wheelSize = wheelBbMax - wheelBbMin
         modelShapeCfg['wheelSize'] = wheelSize
     turretMin, turretMax, _ = boundingBoxes['turret']
@@ -528,9 +530,9 @@ def configureModelShapePhysics(cfg, typeDesc):
         isCrashedModelValid = False
 
     cfg['hasCrashedModel'] = isCrashedModelValid
-    __computeModelShape(cfg, cfg['shape']['modelShape'], typeDesc, normalBBoxes)
+    __computeModelShape(cfg, cfg['shape']['modelShape'], typeDesc, normalBBoxes, modelHitStatus=ModelHitStatus.NORMAL)
     if isCrashedModelValid:
-        __computeModelShape(cfg, cfg['shape']['crashedModelShape'], typeDesc, crashedBBoxes)
+        __computeModelShape(cfg, cfg['shape']['crashedModelShape'], typeDesc, crashedBBoxes, modelHitStatus=ModelHitStatus.CRASHED)
     return
 
 
@@ -702,11 +704,11 @@ def initVehiclePhysicsEditor(physics, typeDesc):
 
 def initVehiclePhysicsClient(physics, typeDesc):
     physDescr = typeDesc.physics
-    hullMin, hullMax, _ = typeDesc.hull.hitTester.bbox
+    hullMin, hullMax, _ = typeDesc.hitTesters.hull.bbox
     hullCenter = (hullMin + hullMax) * 0.5
     hullY = hullCenter.y + typeDesc.chassis.hullPosition.y
     hullHeight = hullMax.y - hullMin.y
-    bmin, bmax, _ = typeDesc.chassis.hitTester.bbox
+    bmin, bmax, _ = typeDesc.hitTesters.chassis.bbox
     chassisCenter = (bmin + bmax) * 0.5
     blen = bmax[2] - bmin[2]
     width = bmax[0] - bmin[0]
@@ -728,7 +730,7 @@ def initVehiclePhysicsClient(physics, typeDesc):
     hullPosY = typeDesc.chassis.hullPosition[1]
     hullMaxY = hullPosY + hullMax[1]
     turretPosY = typeDesc.hull.turretPositions[0][1]
-    turretMaxY = hullPosY + turretPosY + typeDesc.turret.hitTester.bbox[1][1]
+    turretMaxY = hullPosY + turretPosY + typeDesc.hitTesters.turret.bbox[1][1]
     commonBoxMaxY = max(chassisMaxY, hullMaxY, turretMaxY)
     gunPosY = hullPosY + turretPosY + typeDesc.turret.gunPosition[1]
     hullUpperBound = typeDesc.chassis.hullPosition.y + hullMax.y
@@ -798,7 +800,7 @@ def initVehiclePhysicsClient(physics, typeDesc):
 
 
 def computeBarrelLocalPoint(vehDescr, turretYaw, gunPitch):
-    maxGunZ = vehDescr.gun.hitTester.bbox[1][2]
+    maxGunZ = vehDescr.hitTesters.gun.bbox[1][2]
     m = Math.Matrix()
     m.setRotateX(gunPitch)
     pt = m.applyVector((0.0, 0.0, maxGunZ)) + vehDescr.activeGunShotPosition

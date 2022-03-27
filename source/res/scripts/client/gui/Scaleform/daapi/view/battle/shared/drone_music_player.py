@@ -2,12 +2,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/drone_music_player.py
 from functools import wraps, partial
 import time
+from typing import TYPE_CHECKING
 import BigWorld
 import WWISE
 import Event
 import SoundGroups
-from constants import ARENA_GUI_TYPE_LABEL, ARENA_PERIOD
+from constants import ARENA_GUI_TYPE_LABEL, ARENA_PERIOD, ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG, LOG_ERROR
+from gui.battle_control import avatar_getter
 from gui.battle_control.controllers import team_bases_ctrl
 from gui.battle_control.arena_info.interfaces import IArenaLoadController
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
@@ -18,6 +20,9 @@ from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import ISpecialSoundCtrl
+if TYPE_CHECKING:
+    import typing
+    from ArenaType import _DroneSettingHolder
 
 def _delegate(func):
 
@@ -332,10 +337,10 @@ class _EnemyBaseCaptureCondition(_BaseCaptureCondition):
 class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesListener, IViewComponentsCtrlListener, IArenaLoadController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
-    _SETTING_TO_CONDITION_MAPPING = {'vehiclesRemained': (lambda player: not player.sessionProvider.arenaVisitor.isArenaFogOfWarEnabled(), (_DeadAlliesCondition, _DeadEnemiesCondition), lambda name, key, data: data[name][key]),
-     'timeRemained': (lambda player: True, (_TimeRemainedCondition,), lambda name, key, data: data[name][key]),
-     'capturedPoints': (lambda player: True, (_AlliedBaseCaptureCondition, _EnemyBaseCaptureCondition), lambda name, key, data: (data[name][key], data['musicStopPredelay'][key])),
-     'hpPercentRemained': (lambda player: not player.sessionProvider.arenaVisitor.isArenaFogOfWarEnabled(), (_AlliesHPCondition, _EnemiesHPCondition), lambda name, key, data: data[name][key])}
+    _SETTING_TO_CONDITION_MAPPING = {'vehiclesRemained': (lambda player: not player.sessionProvider.arenaVisitor.isArenaFogOfWarEnabled(), (_DeadAlliesCondition, _DeadEnemiesCondition), lambda name, key, data: data[name].getValue(key)),
+     'timeRemained': (lambda player: True, (_TimeRemainedCondition,), lambda name, key, data: data[name].getValue(key)),
+     'capturedPoints': (lambda player: True, (_AlliedBaseCaptureCondition, _EnemyBaseCaptureCondition), lambda name, key, data: (data[name].getValue(key), data['musicStopPredelay'].getValue(key))),
+     'hpPercentRemained': (lambda player: not player.sessionProvider.arenaVisitor.isArenaFogOfWarEnabled(), (_AlliesHPCondition, _EnemiesHPCondition), lambda name, key, data: data[name].getValue(key))}
 
     def __init__(self):
         super(DroneMusicPlayer, self).__init__()
@@ -343,7 +348,8 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
         self.__isArenaLoadingCompleted = False
         arenaType = self.sessionProvider.arenaVisitor.getArenaType()
         self.__guiTypeName = ARENA_GUI_TYPE_LABEL.LABELS[self.sessionProvider.arenaVisitor.getArenaGuiType()]
-        self.__gameplayName = self.sessionProvider.arenaVisitor.type.getGamePlayName()
+        if self.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.RTS:
+            self.__guiTypeName = 'rts_commander' if avatar_getter.isPlayerCommander() else 'rts_tankman'
         self._musicSetup = self._initializeMusicData()
         self._conditions = []
         if self._musicSetup is not None:
@@ -430,8 +436,8 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
         for settingName, conditionsData in self._SETTING_TO_CONDITION_MAPPING.iteritems():
             setting = wwmusicDroneSetup.get(settingName)
             if setting:
-                key = (self.__guiTypeName, self.__gameplayName)
-                value = setting.get(key)
+                key = self.__guiTypeName
+                value = setting.getValue(key)
                 if value:
                     canBeCreated, condClasses, extractor = conditionsData
                     if canBeCreated(self):

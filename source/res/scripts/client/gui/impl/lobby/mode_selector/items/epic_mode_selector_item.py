@@ -9,7 +9,7 @@ from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
 from gui.shared.formatters import time_formatters
 from gui.shared.formatters.ranges import toRomanRangeString
-from helpers import dependency, time_utils, int2roman
+from helpers import dependency, time_utils
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_normal_card_model import BattlePassState
 if typing.TYPE_CHECKING:
@@ -27,15 +27,20 @@ class EpicModeSelectorItem(ModeSelectorLegacyItem):
         super(EpicModeSelectorItem, self)._onInitializing()
         self.__epicController.onPrimeTimeStatusUpdated += self.__onEpicUpdate
         self.__epicController.onUpdated += self.__onEpicUpdate
+        self.__epicController.onEventEnded += self.__onEventEnded
         self.__fillViewModel()
 
     def _onDisposing(self):
         self.__epicController.onPrimeTimeStatusUpdated -= self.__onEpicUpdate
         self.__epicController.onUpdated -= self.__onEpicUpdate
+        self.__epicController.onEventEnded -= self.__onEventEnded
         super(EpicModeSelectorItem, self)._onDisposing()
 
     def __onEpicUpdate(self, *_):
         self.__fillViewModel()
+
+    def __onEventEnded(self):
+        self.onCardChange()
 
     def __fillViewModel(self):
         with self.viewModel.transaction() as vm:
@@ -49,7 +54,6 @@ class EpicModeSelectorItem(ModeSelectorLegacyItem):
             if season is None:
                 return
             if season.hasActiveCycle(currentTime):
-                vm.setStatusActive(backport.text(R.strings.mode_selector.mode.epicBattle.seasonActive(), cycle=int2roman(currentSeason.getCycleInfo().getEpicCycleNumber())))
                 self._addReward(ModeSelectorRewardID.CREDITS)
                 self._addReward(ModeSelectorRewardID.EXPERIENCE)
                 timeLeftStr = ''
@@ -61,9 +65,9 @@ class EpicModeSelectorItem(ModeSelectorLegacyItem):
                 cycleInfo = season.getNextByTimeCycle(currentTime)
                 if cycleInfo is not None:
                     if cycleInfo.announceOnly:
-                        vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.epicBattle.cycleSoon(), cycle=int2roman(cycleInfo.getEpicCycleNumber())))
+                        vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.epicBattle.cycleSoon()))
                     else:
-                        vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.epicBattle.cycleNext(), cycle=int2roman(cycleInfo.getEpicCycleNumber()), date=backport.getShortDateFormat(cycleInfo.startDate)))
+                        vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.epicBattle.cycleNext(), date=backport.getShortDateFormat(cycleInfo.startDate)))
                     self.viewModel.setBattlePassState(BattlePassState.NONE)
                 else:
                     vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.epicBattle.seasonEnd()))

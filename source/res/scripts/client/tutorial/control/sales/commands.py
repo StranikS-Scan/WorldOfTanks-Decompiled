@@ -53,11 +53,7 @@ def showShopVehiclesRent():
 
 
 def showShopVehiclesTradeIn():
-    showShop(shop_helpers.getTradeInVehiclesUrl(), isClientCloseControl=True)
-
-
-def showShopVehiclesPersonalTradeIn():
-    showShop(shop_helpers.getPersonalTradeInVehiclesUrl(), isClientCloseControl=True)
+    showShop(shop_helpers.getTradeInVehiclesUrl())
 
 
 def configureShopForShells():

@@ -72,6 +72,18 @@ def getPlayerVehicleID(avatar=None):
     return getattr(avatar, 'playerVehicleID', 0)
 
 
+def isPlayerCommander(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    return avatar.isAICommander
+
+
+def isCommanderCtrlMode(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    return avatar.isCommanderCtrlMode()
+
+
 def isPlayerTeamKillSuspected():
     return bool(getattr(BigWorld.player(), 'tkillIsSuspected', 0))
 
@@ -199,11 +211,12 @@ def isPlayerOnArena(avatar=None):
 def getInputHandler(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
-        if avatar is None:
-            return
     try:
         result = avatar.inputHandler
     except AttributeError:
+        import Avatar
+        if not isinstance(avatar, Avatar.Avatar):
+            return
         _logger.exception('Attribute "inputHandler" not found')
         result = None
 
@@ -213,11 +226,12 @@ def getInputHandler(avatar=None):
 def getArena(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
-        if avatar is None:
-            return
     try:
         result = avatar.arena
     except AttributeError:
+        import Avatar
+        if not isinstance(avatar, Avatar.Avatar):
+            return
         _logger.exception('Attribute "arena" not found')
         result = None
 
@@ -410,6 +424,18 @@ def isObserver(avatar=None):
     except AttributeError:
         _logger.exception('Attribute "isObserved" is not found')
         result = False
+
+    return result
+
+
+def commanderVehicleID(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        result = avatar.commanderVehicleID()
+    except AttributeError:
+        _logger.exception('Attribute "isObserved" is not found')
+        result = None
 
     return result
 

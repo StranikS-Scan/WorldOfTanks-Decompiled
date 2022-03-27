@@ -14,7 +14,7 @@ from UnitBase import PREBATTLE_TYPE_TO_UNIT_ASSEMBLER, UNIT_ASSEMBLER_IMPL_TO_CO
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from battle_pass_common import BATTLE_PASS_CONFIG_NAME, BattlePassConfig
 from collector_vehicle import CollectorVehicleConsts
-from constants import BATTLE_NOTIFIER_CONFIG, ClansConfig, Configs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, IS_TUTORIAL_ENABLED, MAGNETIC_AUTO_AIM_CONFIG, MISC_GUI_SETTINGS, PremiumConfigs, RENEWABLE_SUBSCRIPTION_CONFIG
+from constants import BATTLE_NOTIFIER_CONFIG, ClansConfig, Configs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, IS_TUTORIAL_ENABLED, MAGNETIC_AUTO_AIM_CONFIG, MISC_GUI_SETTINGS, PremiumConfigs, RENEWABLE_SUBSCRIPTION_CONFIG, ARENA_BONUS_TYPE
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gifts.gifts_common import ClientReqStrategy, GiftEventID, GiftEventState
 from gui import GUI_SETTINGS, SystemMessages
@@ -26,8 +26,10 @@ from personal_missions import PM_BRANCH
 from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
 from ranked_common import SwitchState
 from renewable_subscription_common.settings_constants import GOLD_RESERVE_GAINS_SECTION
+from RTSShared import WARMUP_BATTLE_COST_FOR_COMMANDER, RTSBootcampMatchmakerState
 from shared_utils import makeTupleByDict, updateDict
 from telecom_rentals_common import TELECOM_RENTALS_CONFIG
+from trade_in_common.constants_types import CONFIG_NAME as TRADE_IN_CONFIG_NAME
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, List, Sequence
 _logger = logging.getLogger(__name__)
@@ -381,7 +383,8 @@ class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLe
  'metaLevel',
  'rewards',
  'defaultSlots',
- 'slots'])):
+ 'slots',
+ 'inBattleReservesByRank'])):
 
     def asDict(self):
         return self._asdict()
@@ -395,6 +398,7 @@ class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLe
 _EpicMetaGameConfig.__new__.__defaults__ = (0,
  (0, False),
  (0, 0, 0),
+ {},
  {},
  {},
  {})
@@ -846,6 +850,163 @@ class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events',))):
         data['events'] = {eID:makeTupleByDict(GiftEventConfig, eData) for eID, eData in data['events'].iteritems()}
 
 
+class RTSBattlesConfig(namedtuple('RTSBattlesConfig', ('isEnabled',
+ 'peripheryIDs',
+ 'primeTimes',
+ 'seasons',
+ 'cycleTimes',
+ 'leaderboard',
+ 'metaEconomics',
+ 'matchmaker',
+ 'statistics',
+ 'submodeBreakers',
+ 'restrictions',
+ 'warmup'))):
+    _DEFAULT_CURRENCY_FOR_COMMANDER = 100
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes=(), leaderboard={'isEnabled': False,
+         'rts_1x7': {'commander': {'win': 0,
+                                   'lose': 0,
+                                   'draw': 0},
+                     'tankist': {'win': (0, 0, 0, 0, 0, 0, 0),
+                                 'lose': (0, 0, 0, 0, 0, 0, 0),
+                                 'draw': (0, 0, 0, 0, 0, 0, 0)}},
+         'rts_1x1': {'commander': {'win': 0,
+                                   'lose': 0,
+                                   'draw': 0}}}, metaEconomics={'currency1x7Token': '',
+         'currency1x1Token': '',
+         'rts_1x7': {'currencyAmountToBattle': cls._DEFAULT_CURRENCY_FOR_COMMANDER,
+                     'battleEconomics': {'win': {'strategistPointsIncome': 0},
+                                         'defeat': {'strategistPointsIncome': 0}}},
+         'rts_1x1': {'currencyAmountToBattle': cls._DEFAULT_CURRENCY_FOR_COMMANDER,
+                     'battleEconomics': {'win': {'strategistPointsIncome': 0},
+                                         'defeat': {'strategistPointsIncome': 0}}}}, matchmaker={'rts_1x7': {'levels': frozenset(),
+                     'forbiddenTags': frozenset(),
+                     'forbiddenTypes': frozenset(),
+                     'allowedTags': frozenset(),
+                     'passToken': '',
+                     'invitationToken': ''},
+         'rts_bootcamp': {'state': 0}}, statistics={'isEnabled': False}, submodeBreakers={'rts_1x1': False,
+         'rts_1x7': False}, restrictions={'numBattlesWithTierX': 1}, warmup={'isEnabled': False,
+         'end': 0})
+        defaults.update(kwargs)
+        return super(RTSBattlesConfig, cls).__new__(cls, **defaults)
+
+    @classmethod
+    def _bonusTypeToName(cls, bonusType):
+        if bonusType == ARENA_BONUS_TYPE.RTS:
+            return 'rts_1x7'
+        if bonusType == ARENA_BONUS_TYPE.RTS_1x1:
+            return 'rts_1x1'
+        return 'rts_bootcamp' if bonusType == ARENA_BONUS_TYPE.RTS_BOOTCAMP else ''
+
+    def isSubmodeEnabled(self, bonusType):
+        name = self._bonusTypeToName(bonusType)
+        return self.submodeBreakers[name] if name in self.submodeBreakers else True
+
+    def currencyAmountToBattle(self, bonusType, ignoreWarmup=False):
+        return WARMUP_BATTLE_COST_FOR_COMMANDER if self.isWarmupEnabled() and not ignoreWarmup and bonusType == ARENA_BONUS_TYPE.RTS_1x1 else self.metaEconomics.get(self._bonusTypeToName(bonusType), {}).get('currencyAmountToBattle', self._DEFAULT_CURRENCY_FOR_COMMANDER)
+
+    def getCurrencyTokenName(self, bonusType):
+        if bonusType == ARENA_BONUS_TYPE.RTS:
+            return self.metaEconomics.get('currency1x7Token', '')
+        return self.metaEconomics.get('currency1x1Token', '') if bonusType == ARENA_BONUS_TYPE.RTS_1x1 else ''
+
+    def getInvitationTokenName(self, bonusType):
+        return self.matchmaker.get(self._bonusTypeToName(bonusType), {}).get('invitationToken', '')
+
+    def getPassTokenName(self, bonusType):
+        return self.matchmaker.get(self._bonusTypeToName(bonusType), {}).get('passToken', '')
+
+    def getVehicleRestrictions(self, bonusType):
+        return self.matchmaker.get(self._bonusTypeToName(bonusType), {})
+
+    def getRTSBootcampMatchmakerState(self):
+        rawState = self.matchmaker.get(self._bonusTypeToName(ARENA_BONUS_TYPE.RTS_BOOTCAMP), {}).get('state', RTSBootcampMatchmakerState.DISABLED.value)
+        return RTSBootcampMatchmakerState(rawState)
+
+    def isStatisticsEnabled(self):
+        return self.statistics.get('isEnabled', False)
+
+    def isLeaderboardEnabled(self):
+        return self.leaderboard.get('isEnabled', False)
+
+    def isWarmupEnabled(self):
+        return self.warmup.get('isEnabled', False)
+
+    def getWarmupPhaseEnd(self):
+        return self.warmup.get('end', False)
+
+    def getLeaderboard1x7(self):
+        return self.leaderboard.get('rts_1x7', {}).get('commander', {})
+
+    def getLeaderboardTanker(self):
+        return self.leaderboard.get('rts_1x7', {}).get('tankist', {})
+
+    def getLeaderboard1x1(self):
+        return self.leaderboard.get('rts_1x1', {}).get('commander', {})
+
+    def getMinNumberOfBattlesPlayedWithTierX(self):
+        return self.restrictions.get('numBattlesWithTierX', 0)
+
+    def getBattleEconomicsByBonusType(self, bonus):
+        return self.metaEconomics.get(self._bonusTypeToName(bonus)).get('battleEconomics')
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class RTSVehiclesCustomizationConfig(namedtuple('RTSBattlesConfig', ('tiers', 'tankClasses', 'vehicles'))):
+
+    def __new__(cls, **kwargs):
+        defaults = dict(tiers={}, tankClasses={}, vehicles={})
+        defaults.update(kwargs)
+        return super(RTSVehiclesCustomizationConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class _RtsProgressionConfig(namedtuple('_RtsProgressionConfig', ('isEnabled', 'progression', 'rtsCollectionToken'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, progression=[], rtsCollectionToken='')
+        defaults.update(kwargs)
+        return super(_RtsProgressionConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -880,6 +1041,9 @@ class ServerSettings(object):
         self.__vehiclePostProgressionConfig = VehiclePostProgressionConfig()
         self.__eventBattlesConfig = _EventBattlesConfig()
         self.__giftSystemConfig = GiftSystemConfig()
+        self.__rtsBattlesConfig = RTSBattlesConfig.defaults()
+        self.__rtsVehiclesCustomizationConfig = RTSVehiclesCustomizationConfig.defaults()
+        self.__rtsProgressionConfig = _RtsProgressionConfig.defaults()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -956,6 +1120,12 @@ class ServerSettings(object):
             self.__battlePassConfig = BattlePassConfig({})
         if _crystalRewardsConfig.CONFIG_NAME in self.__serverSettings:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
+        if Configs.RTS_CONFIG.value in self.__serverSettings:
+            self.__rtsBattlesConfig = makeTupleByDict(RTSBattlesConfig, self.__serverSettings[Configs.RTS_CONFIG.value])
+        if Configs.RTS_VEHICLES_CUSTOMIZATION_CONFIG.value in self.__serverSettings:
+            self.__rtsVehiclesCustomizationConfig = makeTupleByDict(RTSVehiclesCustomizationConfig, self.__serverSettings[Configs.RTS_VEHICLES_CUSTOMIZATION_CONFIG.value])
+        if Configs.RTS_PROGRESSION_CONFIG.value in self.__serverSettings:
+            self.__rtsProgressionConfig = makeTupleByDict(_RtsProgressionConfig, self.__serverSettings[Configs.RTS_PROGRESSION_CONFIG.value])
         self.__updateReactiveCommunicationConfig(self.__serverSettings)
         if BonusCapsConst.CONFIG_NAME in self.__serverSettings:
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = self.__serverSettings[BonusCapsConst.CONFIG_NAME]
@@ -1052,7 +1222,15 @@ class ServerSettings(object):
             self.__updateVehiclePostProgressionConfig(serverSettingsDiff)
         if Configs.GIFTS_CONFIG.value in serverSettingsDiff:
             self.__updateGiftSystemConfig(serverSettingsDiff)
+        if TRADE_IN_CONFIG_NAME in serverSettingsDiff:
+            self.__serverSettings[TRADE_IN_CONFIG_NAME] = serverSettingsDiff[TRADE_IN_CONFIG_NAME]
         self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
+        if Configs.RTS_CONFIG.value in serverSettingsDiff:
+            self.__updateRTSBattles(serverSettingsDiff)
+        if Configs.RTS_VEHICLES_CUSTOMIZATION_CONFIG.value in serverSettingsDiff:
+            self.__updateRTSVehiclesCustomizationConfig(serverSettingsDiff)
+        if Configs.RTS_PROGRESSION_CONFIG.value in serverSettingsDiff:
+            self.__updateRTSProgression(serverSettingsDiff)
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
@@ -1153,6 +1331,10 @@ class ServerSettings(object):
     @property
     def squadPremiumBonus(self):
         return self.__squadPremiumBonus
+
+    @property
+    def rtsProgressionConfig(self):
+        return self.__rtsProgressionConfig
 
     @property
     def vehiclePostProgression(self):
@@ -1468,8 +1650,20 @@ class ServerSettings(object):
     def getBlueprintsConvertSaleConfig(self):
         return self.__blueprintsConvertSaleConfig
 
+    def getRTSBattlesConfig(self):
+        return self.__rtsBattlesConfig
+
+    def getRTSVehiclesCustomizationConfig(self):
+        return self.__rtsVehiclesCustomizationConfig
+
+    def getAIRostersConfig(self):
+        return self.__serverSettings.get(Configs.AI_ROSTERS_CONFIG.value, {})
+
     def getActiveTestConfirmationConfig(self):
         return self.__getGlobalSetting(constants.ACTIVE_TEST_CONFIRMATION_CONFIG, {})
+
+    def getTradeInConfig(self):
+        return self.__getGlobalSetting(TRADE_IN_CONFIG_NAME, {})
 
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
@@ -1551,8 +1745,17 @@ class ServerSettings(object):
     def __updateEventBattles(self, targetSettings):
         self.__eventBattlesConfig = self.__eventBattlesConfig.replace(targetSettings['event_battles_config'])
 
+    def __updateRTSBattles(self, targetSettings):
+        self.__rtsBattlesConfig = self.__rtsBattlesConfig.replace(targetSettings[Configs.RTS_CONFIG.value])
+
     def __updateGiftSystemConfig(self, serverSettingsDiff):
         self.__giftSystemConfig = self.__giftSystemConfig.replace({'events': serverSettingsDiff[Configs.GIFTS_CONFIG.value]})
+
+    def __updateRTSVehiclesCustomizationConfig(self, targetSettings):
+        self.__rtsVehiclesCustomizationConfig = self.__rtsVehiclesCustomizationConfig.replace(targetSettings[Configs.RTS_VEHICLES_CUSTOMIZATION_CONFIG.value])
+
+    def __updateRTSProgression(self, targetSettings):
+        self.__rtsProgressionConfig = self.__rtsProgressionConfig.replace(targetSettings[Configs.RTS_PROGRESSION_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

@@ -91,7 +91,7 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
             serverName = ''
         currentSeason = self._getController().getCurrentSeason()
         if currentSeason and not timeLeft:
-            return backport.text(R.strings.epic_battle.primeTime.endOfCycle(), server=serverName)
+            return ''
         if not timeLeft and not isAvailable and not currentSeason:
             nextSeason = self._getController().getNextSeason()
             if nextSeason:
@@ -111,7 +111,7 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
         return backport.text(stringR, server=serverName, time=text_styles.neutral(timeLeftStr))
 
     def _getCycleFinishedOnThisServerText(self, cycleNumber, serverName):
-        return backport.text(R.strings.epic_battle.primeTime.status.cycleFinishedOnThisServer(), cycleNo=cycleNumber, server=serverName)
+        return backport.text(R.strings.epic_battle.primeTime.status.cycleFinishedOnThisServer(), server=serverName)
 
     def _onServerSettingsChange(self, diff):
         if diff.get(Configs.EPIC_CONFIG.value, {}).get('isEnabled') is False:

@@ -110,6 +110,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onVehicleUpdated += self.__arena_onVehicleUpdated
             arena.onVehicleKilled += self.__arena_onVehicleKilled
             arena.onVehicleRecovered += self.__arena_onVehicleRecovered
+            arena.onVehicleGodModeChanged += self.__arena_onGodModeChanged
             arena.onAvatarReady += self.__arena_onAvatarReady
             arena.onNewStatisticsReceived += self.__arena_onNewStatisticsReceived
             arena.onVehicleStatisticsUpdate += self.__arena_onVehicleStatisticsUpdate
@@ -117,6 +118,8 @@ class ArenaVehiclesListener(_Listener):
             arena.onInteractiveStats += self.__arena_onInteractiveStats
             arena.onGameModeSpecifcStats += self.__arena_onGameModeSpecifcStats
             arena.onFogOfWarEnabled += self.__arena_onFogOfWarEnabled
+            arena.onCommanderDataList += self.__arena_onCommanderDataList
+            arena.onCommanderDataVehicle += self.__arena_onCommanderDataVehicle
             arena.onChatCommandTargetUpdate += self.__arena_onChatCommandTargetUpdate
             arena.onChatCommandTriggered += self.__arena_onChatCommandTriggered
         return
@@ -130,6 +133,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onVehicleUpdated -= self.__arena_onVehicleUpdated
             arena.onVehicleKilled -= self.__arena_onVehicleKilled
             arena.onVehicleRecovered -= self.__arena_onVehicleRecovered
+            arena.onVehicleGodModeChanged -= self.__arena_onGodModeChanged
             arena.onAvatarReady -= self.__arena_onAvatarReady
             arena.onNewStatisticsReceived -= self.__arena_onNewStatisticsReceived
             arena.onVehicleStatisticsUpdate -= self.__arena_onVehicleStatisticsUpdate
@@ -137,6 +141,8 @@ class ArenaVehiclesListener(_Listener):
             arena.onInteractiveStats -= self.__arena_onInteractiveStats
             arena.onGameModeSpecifcStats -= self.__arena_onGameModeSpecifcStats
             arena.onFogOfWarEnabled -= self.__arena_onFogOfWarEnabled
+            arena.onCommanderDataList -= self.__arena_onCommanderDataList
+            arena.onCommanderDataVehicle -= self.__arena_onCommanderDataVehicle
             arena.onChatCommandTargetUpdate -= self.__arena_onChatCommandTargetUpdate
             arena.onChatCommandTriggered -= self.__arena_onChatCommandTriggered
         super(ArenaVehiclesListener, self).stop()
@@ -179,6 +185,14 @@ class ArenaVehiclesListener(_Listener):
 
     def __arena_onVehicleRecovered(self, vehID, *args):
         flags, vo = self._arenaDP.updateVehicleStatus(vehID, self._visitor.vehicles.getVehicleInfo(vehID))
+        if flags != INVALIDATE_OP.NONE:
+            self._invokeListenersMethod('invalidateVehicleStatus', flags, vo, self._arenaDP)
+
+    def __arena_onGodModeChanged(self, vehicleID):
+        updated = self._arenaDP.updateVehicleInfo(vehicleID, self._visitor.vehicles.getVehicleInfo(vehicleID))
+        if updated:
+            self._invokeListenersMethod('updateVehiclesInfo', updated, self._arenaDP)
+        flags, vo = self._arenaDP.updateVehicleStatus(vehicleID, self._visitor.vehicles.getVehicleInfo(vehicleID))
         if flags != INVALIDATE_OP.NONE:
             self._invokeListenersMethod('invalidateVehicleStatus', flags, vo, self._arenaDP)
 
@@ -238,6 +252,13 @@ class ArenaVehiclesListener(_Listener):
 
     def __arena_onFogOfWarEnabled(self, flag):
         self._invokeListenersMethod('invalidateFogOfWarEnabledFlag', flag)
+
+    def __arena_onCommanderDataList(self):
+        self._invokeListenersMethod('updateCommanderDataList')
+
+    def __arena_onCommanderDataVehicle(self, vehicleID):
+        vInfo = self._arenaDP.getVehicleInfo(vehicleID)
+        self._invokeListenersMethod('updateCommanderDataVehicle', vInfo)
 
     def __isRequiredDataExists(self):
         return self._arenaDP is not None and self._arenaDP.isRequiredDataExists()
@@ -309,16 +330,20 @@ class PersonalInvitationsListener(_Listener):
         super(PersonalInvitationsListener, self).start(setup)
         self.__filter.setArenaUniqueID(self._visitor.getArenaUniqueID())
         invitesManager = self.prbInvites
-        invitesManager.onReceivedInviteListModified += self.__im_onReceivedInviteModified
-        invitesManager.onSentInviteListModified += self.__im_onSentInviteListModified
-        invitesManager.onInvitesListInited += self.__im_onInvitesListInited
+        if invitesManager is not None:
+            invitesManager.onReceivedInviteListModified += self.__im_onReceivedInviteModified
+            invitesManager.onSentInviteListModified += self.__im_onSentInviteListModified
+            invitesManager.onInvitesListInited += self.__im_onInvitesListInited
+        return
 
     def stop(self):
         invitesManager = self.prbInvites
-        invitesManager.onReceivedInviteListModified -= self.__im_onReceivedInviteModified
-        invitesManager.onSentInviteListModified -= self.__im_onSentInviteListModified
-        invitesManager.onInvitesListInited -= self.__im_onInvitesListInited
+        if invitesManager is not None:
+            invitesManager.onReceivedInviteListModified -= self.__im_onReceivedInviteModified
+            invitesManager.onSentInviteListModified -= self.__im_onSentInviteListModified
+            invitesManager.onInvitesListInited -= self.__im_onInvitesListInited
         super(PersonalInvitationsListener, self).stop()
+        return
 
     def addController(self, controller):
         result = super(PersonalInvitationsListener, self).addController(controller)

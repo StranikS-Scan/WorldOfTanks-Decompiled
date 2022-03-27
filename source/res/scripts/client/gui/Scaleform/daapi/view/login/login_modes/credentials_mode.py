@@ -48,7 +48,8 @@ class CredentialsMode(BaseMode):
     def doLogin(self, userName, password, serverName, isSocialToken2Login):
         result = self.__validateCredentials(userName.lower().strip(), password.strip(), self.isToken2())
         if result.isValid:
-            Waiting.show('login')
+            if not Waiting.isOpened('login'):
+                Waiting.show('login')
             self._loginManager.initiateLogin(userName, password, serverName, isSocialToken2Login, isSocialToken2Login or self._rememberUser)
         else:
             self._view.as_setErrorMessageS(result.errorMessage, result.invalidFields)

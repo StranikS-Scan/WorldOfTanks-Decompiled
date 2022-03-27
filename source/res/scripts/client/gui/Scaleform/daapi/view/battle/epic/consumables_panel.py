@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/consumables_panel.py
-from epic_constants import IN_BATTLE_RESERVE_EVENTS
 from gui.Scaleform.daapi.view.battle.shared.consumables_panel import ConsumablesPanel
 from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from helpers.epic_game import searchRankForSlot
+from items.vehicles import getVehicleClassFromVehicleType
 
 class EpicBattleConsumablesPanel(ConsumablesPanel):
     _EMPTY_LOCKED_SLOT = -1
@@ -72,13 +73,15 @@ class EpicBattleConsumablesPanel(ConsumablesPanel):
             return
         else:
             arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
+            vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+            vehClass = getVehicleClassFromVehicleType(vehicle.typeDescriptor.type)
             if arena is None:
                 return
-            slotEventsConfig = arena.settings.get('epic_config', {}).get('epicMetaGame', {}).get('inBattleReservesByRank').get('events', {})
+            slotEventsConfig = arena.settings.get('epic_config', {}).get('epicMetaGame', {}).get('inBattleReservesByRank').get('slotActions', {}).get(vehClass, {})
             if not slotEventsConfig:
                 return
             unlockedSlotIdx = idx - self._ORDERS_START_IDX
-            rank = self.__searchRankForUnlock(unlockedSlotIdx, slotEventsConfig)
+            rank = searchRankForSlot(unlockedSlotIdx, slotEventsConfig)
             if rank is None:
                 return
             currentRank = playerDataComp.playerRank if playerDataComp.playerRank is not None else 0
@@ -88,15 +91,6 @@ class EpicBattleConsumablesPanel(ConsumablesPanel):
             tooltipId = TOOLTIPS_CONSTANTS.EPIC_RANK_UNLOCK_INFO if rank > 1 else ''
             self.as_updateLockedInformationS(idx, rank, tooltipId)
             return
-
-    @staticmethod
-    def __searchRankForUnlock(slotIdx, slotEventsConfig):
-        for rank, (_, updateEvent) in enumerate(slotEventsConfig):
-            for updateType, updateSet in updateEvent.iteritems():
-                if updateType == IN_BATTLE_RESERVE_EVENTS.SLOT_EVENT_ACTIONS.UNLOCKED and slotIdx in updateSet:
-                    return rank
-
-        return None
 
     def __addEquipmentLevelToSlot(self, idx, item):
         itemName = item.getDescriptor().name

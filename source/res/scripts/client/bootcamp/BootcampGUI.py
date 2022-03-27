@@ -3,13 +3,17 @@
 from gui.Scaleform.daapi.view.battle.shared.markers2d import MarkersManager, plugins
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings as _markers2d_settings
 from gui.Scaleform.daapi.view.battle.shared import indicators
-from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP
 from BootCampEvents import g_bootcampEvents
 from BootcampConstants import UI_STATE
 from helpers import i18n
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.entities.View import ViewKey
+from frameworks.wulf import WindowLayer
+from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
+import BigWorld
 _Event = events.ComponentEvent
 
 def getDirectionIndicator():
@@ -23,6 +27,9 @@ def getDirectionIndicator():
 
 
 class BootcampMarkersComponent(MarkersManager):
+
+    def setFocusVehicle(self, vehicleID):
+        pass
 
     def _setupPlugins(self, arenaVisitor):
         setup = super(BootcampMarkersComponent, self)._setupPlugins(arenaVisitor)
@@ -68,58 +75,69 @@ class BootcampStaticObjectsPlugin(plugins.MarkerPlugin):
             self._invokeMarker(self.__objects[objectID], 'setDistance', distance)
 
 
-class BootcampGUI(object):
+class BaseBootcampGUI(object):
+
+    def __init__(self):
+        g_bootcampEvents.onBCGUIComponentLifetime += self.onBCGUIComponentLifetime
+        self._minimap = None
+        self._markers2D = None
+        self._inited = False
+        return
+
+    @property
+    def inited(self):
+        return self._inited
+
+    def getMinimapPlugin(self):
+        return self._minimap
+
+    def getMarkers2DPlugin(self):
+        return self._markers2D
+
+    def fini(self):
+        self.clear()
+
+    def reload(self):
+        self._minimap = None
+        self._markers2D = None
+        self._inited = False
+        return
+
+    def clear(self):
+        self._minimap = None
+        self._markers2D = None
+        self._inited = False
+        g_bootcampEvents.onBCGUIComponentLifetime -= self.onBCGUIComponentLifetime
+        return
+
+    def onBCGUIComponentLifetime(self, alias, component):
+        if alias == BATTLE_VIEW_ALIASES.MARKERS_2D:
+            self._markers2D = component
+
+
+class BootcampGUI(BaseBootcampGUI):
 
     def __init__(self):
         super(BootcampGUI, self).__init__()
         addListener = g_eventBus.addListener
         addListener(_Event.COMPONENT_REGISTERED, self.__onComponentRegistered, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(_Event.COMPONENT_UNREGISTERED, self.__onComponentUnregistered, scope=EVENT_BUS_SCOPE.GLOBAL)
-        g_bootcampEvents.onBCGUIComponentLifetime += self.onBCGUIComponentLifetime
-        self.__minimap = None
-        self.__markers2D = None
-        self.__inited = False
-        return
-
-    @property
-    def inited(self):
-        return self.__inited
-
-    def getMinimapPlugin(self):
-        return self.__minimap
-
-    def getMarkers2DPlugin(self):
-        return self.__markers2D
-
-    def fini(self):
-        self.clear()
-
-    def reload(self):
-        self.__minimap = None
-        self.__markers2D = None
-        self.__inited = False
-        return
 
     def clear(self):
-        self.__minimap = None
-        self.__markers2D = None
-        self.__inited = False
-        g_bootcampEvents.onBCGUIComponentLifetime -= self.onBCGUIComponentLifetime
+        super(BootcampGUI, self).clear()
         removeListener = g_eventBus.removeListener
         removeListener(_Event.COMPONENT_REGISTERED, self.__onComponentRegistered, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(_Event.COMPONENT_UNREGISTERED, self.__onComponentUnregistered, scope=EVENT_BUS_SCOPE.GLOBAL)
-        return
 
     def onBCGUIComponentLifetime(self, alias, component):
-        if alias == BATTLE_VIEW_ALIASES.MARKERS_2D:
-            self.__markers2D = component
+        super(BootcampGUI, self).onBCGUIComponentLifetime(alias, component)
         self.checkInit()
 
     def checkInit(self):
-        newInit = self.__minimap is not None and self.__markers2D is not None
-        if newInit != self.__inited and not self.__inited:
+        newInit = self._minimap is not None and self._markers2D is not None
+        if newInit != self._inited and not self._inited:
             g_bootcampEvents.onUIStateChanged(UI_STATE.START)
-        self.__inited = newInit
+        self._inited = newInit
         return
 
     def __onComponentRegistered(self, event):
@@ -127,14 +145,39 @@ class BootcampGUI(object):
         if alias == BATTLE_VIEW_ALIASES.MINIMAP:
             plugin = event.componentPy.getPlugin('bootcamp')
             if plugin is not None:
-                self.__minimap = plugin
+                self._minimap = plugin
         self.checkInit()
         return
 
     def __onComponentUnregistered(self, event):
         alias = event.alias
-        if alias == BATTLE_VIEW_ALIASES.MINIMAP and self.__minimap is not None:
-            self.__minimap.stop()
-            self.__minimap = None
-            self.__inited = False
+        if alias == BATTLE_VIEW_ALIASES.MINIMAP and self._minimap is not None:
+            self._minimap.stop()
+            self._minimap = None
+            self._inited = False
         return
+
+
+class RTSBootcampGUI(BaseBootcampGUI):
+
+    def __init__(self):
+        super(RTSBootcampGUI, self).__init__()
+        avatar = BigWorld.player()
+        if avatar is None:
+            return
+        else:
+            app = avatar.appLoader.getApp()
+            battleContainer = app.containerManager.getContainer(WindowLayer.VIEW)
+            battleView = battleContainer.findView(ViewKey(VIEW_ALIAS.COMMANDER_BOOTCAMP_BATTLE_PAGE))
+            externList = battleView.getExternals()
+            markersList = [ x for x in externList if x.alias == BATTLE_VIEW_ALIASES.MARKERS_2D ]
+            markerComponent = markersList[0] if markersList else None
+            if markerComponent is None:
+                return
+            self._minimap = battleView.components['minimap'].getPlugin('bootcamp')
+            self._markers2D = markerComponent.getPlugin('bootcamp')
+            return
+
+    @property
+    def inited(self):
+        return True

@@ -6,7 +6,6 @@ from adisp import process
 from battle_pass_common import CurrencyBP
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui import DialogsInterface
-from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID, I18nConfirmDialogMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
 from gui.Scaleform.daapi.view.meta.VehiclePreviewBottomPanelStyleBuyingMeta import VehiclePreviewBottomPanelStyleBuyingMeta
@@ -78,17 +77,11 @@ class _StyleBuyingPanelView(ViewImpl):
     def setBuyParams(self, buyParams):
         self.__buyParams = buyParams
 
-    def _initialize(self, *args, **kwargs):
-        g_currentPreviewVehicle.onChangeStarted += self.__onVehicleChangeStarted
-        g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
-        g_clientUpdateManager.addMoneyCallback(self.__updateVMData)
-        self.viewModel.onBuy += self.__onBuy
+    def _getCallbacks(self):
+        return (('stats.{}'.format(c), self.__updateVMData) for c in Currency.ALL)
 
-    def _finalize(self):
-        self.viewModel.onBuy -= self.__onBuy
-        g_clientUpdateManager.removeObjectCallbacks(self)
-        g_currentPreviewVehicle.onChangeStarted -= self.__onVehicleChangeStarted
-        g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
+    def _getEvents(self):
+        return ((g_currentPreviewVehicle.onChangeStarted, self.__onVehicleChangeStarted), (g_currentPreviewVehicle.onChanged, self.__onVehicleChanged), (self.viewModel.onBuy, self.__onBuy))
 
     def _onLoaded(self, *args, **kwargs):
         self.__updateVMData()

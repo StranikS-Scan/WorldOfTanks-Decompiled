@@ -59,6 +59,7 @@ class SYSTEM_MESSAGES(object):
     ARENA_START_ERRORS_JOIN_EVENT_DISABLED = '#system_messages:arena_start_errors/join/EVENT_DISABLED'
     ARENA_START_ERRORS_JOIN_QUEUE_FULL = '#system_messages:arena_start_errors/join/QUEUE_FULL'
     ARENA_START_ERRORS_JOIN_QUEUE_FAILURE = '#system_messages:arena_start_errors/join/QUEUE_FAILURE'
+    ARENA_START_ERRORS_JOIN_INSUFFICIENT_FUNDS = '#system_messages:arena_start_errors/join/INSUFFICIENT_FUNDS'
     PREBATTLE_KICK_TYPE_SQUAD = '#system_messages:prebattle/kick/type/squad'
     PREBATTLE_KICK_TYPE_UNKNOWN = '#system_messages:prebattle/kick/type/unknown'
     PREBATTLE_KICK_REASON_ARENA_CREATION_FAILURE = '#system_messages:prebattle/kick/reason/ARENA_CREATION_FAILURE'
@@ -463,6 +464,8 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT = '#system_messages:vehicle_sell/success/with_demount_kit'
     VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT = '#system_messages:vehicle_sell/success_dismantling/with_demount_kit'
     VEHICLE_SELL_DEMOUNT_KIT_DISABLED = '#system_messages:vehicle_sell/demount_kit_disabled'
+    VEHICLE_TRADE_IN_OFFER_AVAILABLE = '#system_messages:vehicle_trade_in/offer_available'
+    VEHICLE_TRADE_IN_OFFER_UNAVAILABLE = '#system_messages:vehicle_trade_in/offer_unavailable'
     VEHICLE_TRADE_IN_SERVER_ERROR = '#system_messages:vehicle_trade_in/server_error'
     VEHICLE_TRADE_IN_SERVER_ERROR_CENTERDOWN = '#system_messages:vehicle_trade_in/server_error_centerDown'
     VEHICLE_TRADE_IN_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_trade_in/not_enough_credits'
@@ -1103,6 +1106,13 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATION_NOTSET_TITLE = '#system_messages:ranked/notification/notSet/title'
     RANKED_NOTIFICATION_AVAILABLE = '#system_messages:ranked/notification/available'
     RANKED_NOTIFICATION_AVAILABLE_TITLE = '#system_messages:ranked/notification/available/title'
+    RTS_NOTIFICATION_NOTAVAILABLE = '#system_messages:rts/notification/notAvailable'
+    RTS_NOTIFICATION_PRIMETIME = '#system_messages:rts/notification/primeTime'
+    RTS_NOTIFICATION_PRIMETIME_TITLE = '#system_messages:rts/notification/primeTime/title'
+    RTS_NOTIFICATION_NOTSET = '#system_messages:rts/notification/notSet'
+    RTS_NOTIFICATION_NOTSET_TITLE = '#system_messages:rts/notification/notSet/title'
+    RTS_NOTIFICATION_AVAILABLE = '#system_messages:rts/notification/available'
+    RTS_NOTIFICATION_AVAILABLE_TITLE = '#system_messages:rts/notification/available/title'
     ROYALE_NOTIFICATION_PRIMETIME = '#system_messages:royale/notification/primeTime'
     ROYALE_NOTIFICATION_PRIMETIME_TITLE = '#system_messages:royale/notification/primeTime/title'
     ROYALE_NOTIFICATION_CONGRATULATIONS = '#system_messages:royale/notification/congratulations'
@@ -1197,6 +1207,12 @@ class SYSTEM_MESSAGES(object):
     UPGRADETROPHYDEVICE_SWITCH_OFF_BODY = '#system_messages:upgradeTrophyDevice/switch_off/body'
     BATTLEPASS_BADGEREMOVED_TEXT = '#system_messages:battlePass/badgeRemoved/text'
     BATTLEPASS_REWARDCHOICE_ERROR = '#system_messages:battlePass/rewardChoice/error'
+    BATTLEPASS_EXTRASTARTED_HEADER = '#system_messages:battlePass/extraStarted/header'
+    BATTLEPASS_EXTRASTARTED_BODY = '#system_messages:battlePass/extraStarted/body'
+    BATTLEPASS_EXTRAFINISH_HEADER = '#system_messages:battlePass/extraFinish/header'
+    BATTLEPASS_EXTRAFINISH_BODY = '#system_messages:battlePass/extraFinish/body'
+    BATTLEPASS_EXTRAWILLENDSOON_HEADER = '#system_messages:battlePass/extraWillEndSoon/header'
+    BATTLEPASS_EXTRAWILLENDSOON_BODY = '#system_messages:battlePass/extraWillEndSoon/body'
     BATTLEPASS_GAMEMODEENABLED_HEADER = '#system_messages:battlePass/gameModeEnabled/header'
     BATTLEPASS_GAMEMODEENABLED_BODY_22 = '#system_messages:battlePass/gameModeEnabled/body/22'
     BATTLEPASS_GAMEMODEENABLED_BODY_27 = '#system_messages:battlePass/gameModeEnabled/body/27'
@@ -1280,6 +1296,7 @@ class SYSTEM_MESSAGES(object):
     TELECOMMERGERESULTS_BODY_CONJUNCTION = '#system_messages:telecomMergeResults/body/conjunction'
     TELECOMMERGERESULTS_BODY_PROGRESSDECALESCOMPENS = '#system_messages:telecomMergeResults/body/progressDecalesCompens'
     TELECOMMERGERESULTS_BODY_WISHMSG = '#system_messages:telecomMergeResults/body/wishMsg'
+    SSR_UNAVAILABLE = '#system_messages:ssr/unavailable'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1456,6 +1473,7 @@ class SYSTEM_MESSAGES(object):
      ARENA_START_ERRORS_JOIN_EVENT_DISABLED,
      ARENA_START_ERRORS_JOIN_QUEUE_FULL,
      ARENA_START_ERRORS_JOIN_QUEUE_FAILURE,
+     ARENA_START_ERRORS_JOIN_INSUFFICIENT_FUNDS,
      PREBATTLE_KICK_TYPE_SQUAD,
      PREBATTLE_KICK_TYPE_UNKNOWN,
      PREBATTLE_KICK_REASON_ARENA_CREATION_FAILURE,
@@ -1860,6 +1878,8 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT,
      VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT,
      VEHICLE_SELL_DEMOUNT_KIT_DISABLED,
+     VEHICLE_TRADE_IN_OFFER_AVAILABLE,
+     VEHICLE_TRADE_IN_OFFER_UNAVAILABLE,
      VEHICLE_TRADE_IN_SERVER_ERROR,
      VEHICLE_TRADE_IN_SERVER_ERROR_CENTERDOWN,
      VEHICLE_TRADE_IN_NOT_ENOUGH_CREDITS,
@@ -2500,6 +2520,13 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATION_NOTSET_TITLE,
      RANKED_NOTIFICATION_AVAILABLE,
      RANKED_NOTIFICATION_AVAILABLE_TITLE,
+     RTS_NOTIFICATION_NOTAVAILABLE,
+     RTS_NOTIFICATION_PRIMETIME,
+     RTS_NOTIFICATION_PRIMETIME_TITLE,
+     RTS_NOTIFICATION_NOTSET,
+     RTS_NOTIFICATION_NOTSET_TITLE,
+     RTS_NOTIFICATION_AVAILABLE,
+     RTS_NOTIFICATION_AVAILABLE_TITLE,
      ROYALE_NOTIFICATION_PRIMETIME,
      ROYALE_NOTIFICATION_PRIMETIME_TITLE,
      ROYALE_NOTIFICATION_CONGRATULATIONS,
@@ -2594,6 +2621,12 @@ class SYSTEM_MESSAGES(object):
      UPGRADETROPHYDEVICE_SWITCH_OFF_BODY,
      BATTLEPASS_BADGEREMOVED_TEXT,
      BATTLEPASS_REWARDCHOICE_ERROR,
+     BATTLEPASS_EXTRASTARTED_HEADER,
+     BATTLEPASS_EXTRASTARTED_BODY,
+     BATTLEPASS_EXTRAFINISH_HEADER,
+     BATTLEPASS_EXTRAFINISH_BODY,
+     BATTLEPASS_EXTRAWILLENDSOON_HEADER,
+     BATTLEPASS_EXTRAWILLENDSOON_BODY,
      BATTLEPASS_GAMEMODEENABLED_HEADER,
      BATTLEPASS_GAMEMODEENABLED_BODY_22,
      BATTLEPASS_GAMEMODEENABLED_BODY_27,
@@ -2676,7 +2709,8 @@ class SYSTEM_MESSAGES(object):
      TELECOMMERGERESULTS_BODY_CREDITS,
      TELECOMMERGERESULTS_BODY_CONJUNCTION,
      TELECOMMERGERESULTS_BODY_PROGRESSDECALESCOMPENS,
-     TELECOMMERGERESULTS_BODY_WISHMSG)
+     TELECOMMERGERESULTS_BODY_WISHMSG,
+     SSR_UNAVAILABLE)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

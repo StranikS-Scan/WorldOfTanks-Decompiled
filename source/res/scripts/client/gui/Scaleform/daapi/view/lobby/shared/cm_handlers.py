@@ -18,7 +18,6 @@ class CMLabel(object):
     BUY = 'buy'
     BUY_MORE = 'buyMore'
     EXCHANGE = 'exchange'
-    PERSONAL_EXCHANGE = 'personalTradeExchange'
     ADD_TO_COMPARE = 'addToCompare'
     SHOW_IN_HANGAR = 'showInHangar'
     PREVIEW = 'preview'

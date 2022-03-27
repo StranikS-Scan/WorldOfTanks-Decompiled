@@ -6,6 +6,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl.backport import createTooltipData
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_fields import TankSetupFields
+from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 _PanelSlotTooltip = namedtuple('_PanelSlotTooltip', 'tooltip, emptyTooltip')
@@ -177,7 +178,7 @@ class BattleAbilitiesToolitpBuilder(HangarModuleTooltipBuilder):
 
     @classmethod
     def getSpecialInfoSlotTooltip(cls, vehicle, slotID, intCD):
-        return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_SETUP_INFO, specialArgs=[vehicle])
+        return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_SETUP_INFO, specialArgs=[])
 
     @classmethod
     def getVehicle(cls, vehicle, currentSection=None):
@@ -214,7 +215,7 @@ def getSlotTooltipData(event, vehicle, currentSlotID, currentSection=None, toolt
             if slotType != currentSection:
                 return
             return tooltipBuilder.getTooltipData(copyVehicle, currentSlotID, int(intCD))
-        return tooltipBuilder.getSpecialInfoSlotTooltip(copyVehicle, currentSlotID, None) if tooltipId == TankSetupConstants.SPECIAL_SETUP_INFO_SLOT_TOOLTIP else tooltipBuilder.getPanelSlotTooltip(copyVehicle, int(slotID))
+        return tooltipBuilder.getSpecialInfoSlotTooltip(copyVehicle, currentSlotID, copyVehicle.intCD) if tooltipId == TankSetupConstants.SPECIAL_SETUP_INFO_SLOT_TOOLTIP else tooltipBuilder.getPanelSlotTooltip(copyVehicle, int(slotID))
 
 
 def getSlotSpecTooltipData(event, tooltipId):

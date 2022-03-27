@@ -65,6 +65,8 @@
       <armor_15>	11	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_15>
       <armor_16>	0	</armor_16>
+      <armor_17>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_17>
       <loader_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
         <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
       </loader_1>
@@ -3405,6 +3407,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.37 0.37 0.000000 0.000000	</tiling>
             <density>	100.847 110.414	</density>

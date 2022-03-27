@@ -583,7 +583,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             self.__ctx.vehicleAnchorsUpdater.onCameraLocated()
             return
 
-    def __onItemsBought(self, originalOutfits, purchaseItems, results):
+    def __onItemsBought(self, originalOutfits, purchaseItems, results, isAutoRentChanged=False):
         if results:
             if not self.__checkPurchaseSuccess(results):
                 _logger.error('Failed to purchase customization outfits.')
@@ -596,7 +596,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                 priority = NC_MESSAGE_PRIORITY.DEFAULT if currency != Currency.CREDITS else None
             else:
                 modifiedOutfits = self.__ctx.mode.getModifiedOutfits()
-                msgText = self.__getModifyMessage(originalOutfits, modifiedOutfits)
+                msgText = self.__getModifyMessage(originalOutfits, modifiedOutfits, isAutoRentChanged)
                 msgType = SM_TYPE.Information
                 priority = None
             if msgText is not None:
@@ -640,7 +640,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
              'money': money}
         return backport.text(msgKey, **msgCtx)
 
-    def __getModifyMessage(self, originalOutfits, modifiedOutfits):
+    def __getModifyMessage(self, originalOutfits, modifiedOutfits, isAutoRentChanged):
         forwardDiffs = False
         backwardDiffs = False
         for season in SeasonType.COMMON_SEASONS:
@@ -659,6 +659,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             msgText = backport.text(msgKey.change())
         elif hasRemovalsOnly:
             msgText = backport.text(msgKey.remove())
+        elif isAutoRentChanged:
+            msgText = None
         else:
             _logger.error('Failed to construct customization purchase system message. Missing outfits diff.')
             msgText = None

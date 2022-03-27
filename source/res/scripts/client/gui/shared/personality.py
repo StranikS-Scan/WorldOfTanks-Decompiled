@@ -3,14 +3,13 @@
 import logging
 import time
 import weakref
-from functools import partial
 import BigWorld
 import SoundGroups
-import nations
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
 from account_helpers.account_validator import ValidationCodes, InventoryVehiclesValidator, InventoryOutfitValidator, InventoryTankmenValidator
-from adisp import process, async
+from adisp import process
+import async as future_async
 from constants import HAS_DEV_RESOURCES
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, g_guiResetters, miniclient
@@ -33,7 +32,6 @@ from gui.wgnc import g_wgncProvider
 from helpers import isPlayerAccount, time_utils, dependency
 from helpers.blueprint_generator import g_blueprintGenerator
 from helpers.statistics import HANGAR_LOADING_STATE
-from items import vehicles
 from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
@@ -98,38 +96,17 @@ class ServicesLocator(object):
         cls.clear()
 
 
-class NationVehiclesCacher(object):
-
-    def __init__(self, nation):
-        self.__nation = nation
-        self.__name__ = '%sVehiclesCacher' % nations.NAMES[nation]
-
-    @async
-    def __call__(self, ctx, callback=None):
-        itemGetter = ServicesLocator.itemsCache.items.getItem
-        counter = 0
-        for vehTypeID in vehicles.g_list.getList(self.__nation):
-            if itemGetter(GUI_ITEM_TYPE.VEHICLE, self.__nation, vehTypeID) is None:
-                _logger.error('Vehicle with nation:%s and innationID:%s doesnt exist', self.__nation, vehTypeID)
-                callback(False)
-                return
-            counter += 1
-
-        _logger.info('Vehicles in nation: %s created %s', nations.NAMES[self.__nation], counter)
-        callback(True)
-        return
-
-
+@future_async.async
 def onAccountShowGUI(ctx):
     Waiting.show('enter')
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
     ServicesLocator.lobbyContext.onAccountShowGUI(ctx)
-    chain = [__runItemsCacheSync,
+    for func in [__runItemsCacheSync,
      __validateInventoryVehicles,
      __validateInventoryOutfit,
-     __validateInventoryTankmen]
-    chain.extend([ NationVehiclesCacher(nationID) for nationID in xrange(len(nations.NAMES)) ])
-    chain.extend([__runQuestSync,
+     __validateInventoryTankmen,
+     __cacheVehicles,
+     __runQuestSync,
      __runSettingsSync,
      __processEULA,
      __notifyOnSyncComplete,
@@ -137,8 +114,23 @@ def onAccountShowGUI(ctx):
      __initializeHangarSpace,
      __initializeHangar,
      __processWebCtrl,
-     __processElen])
-    __runChain(chain, ctx)
+     __processElen]:
+        try:
+            if BigWorld.player():
+                ts = time.time()
+                result = yield future_async.await_callback(func)(ctx)
+                te = time.time()
+                rt = te - ts
+                _logger.info('%s elapsed time: %s sec', func.__name__, rt)
+                if not result:
+                    break
+                yield future_async.resignTickIfRequired(0.0)
+            else:
+                _logger.warn('onAccountShowGUI(): %s has been called for an already deleted PlayerAccount object.', func.__name__)
+                break
+        except future_async.BrokenPromiseError:
+            _logger.debug('%s has been destroyed without user decision', func.__name__)
+            break
 
 
 def onAccountBecomeNonPlayer():
@@ -153,6 +145,14 @@ def onAccountBecomeNonPlayer():
     guiModsSendEvent('onAccountBecomeNonPlayer')
     UsersInfoHelper.clear()
     g_blueprintGenerator.fini()
+
+
+def onServerReplayEntering():
+    ServicesLocator.gameState.onServerReplayEntering()
+
+
+def onServerReplayExiting():
+    ServicesLocator.gameState.onServerReplayExiting()
 
 
 @process
@@ -232,7 +232,9 @@ def init(loadingScreenGUI=None):
     global onAccountBecomeNonPlayer
     global onAvatarBecomePlayer
     global onAccountBecomePlayer
+    global onServerReplayExiting
     global onKickedFromServer
+    global onServerReplayEntering
     global onShopResync
     miniclient.configure_state()
     ServicesLocator.connectionMgr.onKickedFromServer += onKickedFromServer
@@ -245,6 +247,8 @@ def init(loadingScreenGUI=None):
     g_playerEvents.onShopResync += onShopResync
     g_playerEvents.onCenterIsLongDisconnected += onCenterIsLongDisconnected
     g_playerEvents.onIGRTypeChanged += onIGRTypeChanged
+    g_playerEvents.onServerReplayEntering += onServerReplayEntering
+    g_playerEvents.onServerReplayExiting += onServerReplayExiting
     from gui.Scaleform.app_factory import createAppFactory
     ServicesLocator.appLoader.init(createAppFactory())
     g_paramsCache.init()
@@ -285,6 +289,8 @@ def fini():
     g_playerEvents.onShopResyncStarted -= onShopResyncStarted
     g_playerEvents.onShopResync -= onShopResync
     g_playerEvents.onCenterIsLongDisconnected -= onCenterIsLongDisconnected
+    g_playerEvents.onServerReplayEntering -= onServerReplayEntering
+    g_playerEvents.onServerReplayExiting -= onServerReplayExiting
     BigWorld.wg_setScreenshotNotifyCallback(None)
     if HAS_DEV_RESOURCES:
         try:
@@ -349,39 +355,15 @@ def onRecreateDevice():
 
 
 @process
-def __runChain(chain, ctx, currentIdx=0):
-    if currentIdx < len(chain):
-        ts = time.time()
-        result = yield chain[currentIdx](ctx)
-        te = time.time()
-        rt = te - ts
-        _logger.info('%s elapsed time: %s sec', chain[currentIdx].__name__, rt)
-        if result:
-            currentIdx += 1
-            BigWorld.callback(0.0, partial(__runChain, chain, ctx, currentIdx))
-        else:
-            del chain[:]
-    else:
-        del chain[:]
-
-
-@async
-@process
 def __runItemsCacheSync(_, callback=None):
-    playerRef = weakref.ref(BigWorld.player())
     yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI, notify=False)
     if not ServicesLocator.itemsCache.isSynced():
         ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/0')
         callback(False)
         return
-    if not playerRef():
-        _logger.warn('onAccountShowGUI(): the item cache update callback has been called for an already deleted PlayerAccount object.')
-        callback(False)
-        return
     callback(True)
 
 
-@async
 @process
 def __runQuestSync(_, callback=None):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
@@ -390,7 +372,6 @@ def __runQuestSync(_, callback=None):
     callback(True)
 
 
-@async
 @process
 def __runSettingsSync(_, callback=None):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
@@ -399,7 +380,6 @@ def __runSettingsSync(_, callback=None):
     callback(True)
 
 
-@async
 @process
 def __processEULA(_, callback=None):
     eula = EULADispatcher()
@@ -408,8 +388,9 @@ def __processEULA(_, callback=None):
     callback(True)
 
 
+@future_async.async
 def __processValidator(validator, callback):
-    code = validator.validate()
+    code = yield future_async.await_callback(validator.validate)()
     if code != ValidationCodes.OK:
         ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/{}'.format(code))
         callback(False)
@@ -417,22 +398,24 @@ def __processValidator(validator, callback):
     callback(True)
 
 
-@async
 def __validateInventoryVehicles(_, callback=None):
     __processValidator(InventoryVehiclesValidator(), callback)
 
 
-@async
 def __validateInventoryOutfit(_, callback=None):
     __processValidator(InventoryOutfitValidator(), callback)
 
 
-@async
 def __validateInventoryTankmen(_, callback=None):
     __processValidator(InventoryTankmenValidator(), callback)
 
 
-@async
+@future_async.async
+def __cacheVehicles(_, callback=None):
+    yield future_async.await_callback(ServicesLocator.itemsCache.items.getItemsAsync)(itemTypeID=GUI_ITEM_TYPE.VEHICLE)
+    callback(True)
+
+
 def __notifyOnSyncComplete(ctx, callback=None):
     playerRef = weakref.ref(BigWorld.player())
     g_playerEvents.onGuiCacheSyncCompleted(ctx)
@@ -445,26 +428,26 @@ def __notifyOnSyncComplete(ctx, callback=None):
     callback(True)
 
 
-@async
 def __requestDossier(_, callback=None):
     accDossier = ServicesLocator.itemsCache.items.getAccountDossier()
     ServicesLocator.rareAchievesCache.request(accDossier.getBlock('rareAchievements'))
     callback(True)
 
 
-@async
+@future_async.async
 def __initializeHangarSpace(_, callback=None):
     premium = ServicesLocator.itemsCache.items.stats.isPremium
     if ServicesLocator.hangarSpace.inited:
         ServicesLocator.hangarSpace.refreshSpace(premium)
     else:
         ServicesLocator.hangarSpace.init(premium)
+    yield future_async.resignTickIfRequired(0.0)
     g_currentVehicle.init()
+    yield future_async.resignTickIfRequired(0.0)
     g_currentPreviewVehicle.init()
     callback(True)
 
 
-@async
 def __initializeHangar(ctx=None, callback=None):
     ServicesLocator.soundCtrl.start()
     SoundGroups.g_instance.enableLobbySounds(True)
@@ -478,7 +461,6 @@ def __initializeHangar(ctx=None, callback=None):
     callback(True)
 
 
-@async
 @process
 def __processWebCtrl(_, callback=None):
     serverSettings = ServicesLocator.lobbyContext.getServerSettings()
@@ -488,7 +470,6 @@ def __processWebCtrl(_, callback=None):
     callback(True)
 
 
-@async
 @process
 def __processElen(_, callback=None):
     serverSettings = ServicesLocator.lobbyContext.getServerSettings()

@@ -34,7 +34,7 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
  BATTLE_EVENTS.ENEMY_RAM_ATTACK: (_BET.RAM,),
  BATTLE_EVENTS.ENEMY_BURNING: (_BET.BURN,),
  BATTLE_EVENTS.ENEMY_WORLD_COLLISION: (_BET.WORLD_COLLISION,),
- BATTLE_EVENTS.ENEMY_KILL: (_BET.DESTRUCTION,),
+ BATTLE_EVENTS.ENEMY_KILL: (_BET.DESTRUCTION, _BET.SUPPLY_DESTRUCTION),
  BATTLE_EVENTS.ENEMY_DETECTION: (_BET.DETECTION,),
  BATTLE_EVENTS.ENEMY_TRACK_DAMAGE: (_BET.ASSIST_TRACK,),
  BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE: (_BET.ASSIST_SPOT,),
@@ -170,7 +170,8 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.RECEIVED_DMG_BY_SPAWNED_BOT: _singleVehRibbonFormatter,
  _BET.DAMAGE_BY_MINEFIELD: _singleVehRibbonFormatter,
  _BET.RECEIVED_BY_MINEFIELD: _singleVehRibbonFormatter,
- _BET.RECEIVED_BY_SMOKE: _singleVehRibbonFormatter}
+ _BET.RECEIVED_BY_SMOKE: _singleVehRibbonFormatter,
+ _BET.SUPPLY_DESTRUCTION: _killRibbonFormatter}
 
 class BattleRibbonsPanel(RibbonsPanelMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -340,4 +341,5 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
          [_BET.RECEIVED_DMG_BY_SPAWNED_BOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedDmgBySpawnedBot())],
          [_BET.DAMAGE_BY_MINEFIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.damageByMinefield())],
          [_BET.RECEIVED_BY_MINEFIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByMinefield())],
-         [_BET.RECEIVED_BY_SMOKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBySmoke())]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])
+         [_BET.RECEIVED_BY_SMOKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBySmoke())],
+         [_BET.SUPPLY_DESTRUCTION, backport.text(R.strings.ingame_gui.efficiencyRibbons.kill())]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])

@@ -38,6 +38,7 @@ class EpicRespawnsController(RespawnsController):
         else:
             playerDataComp.onPlayerRespawnLaneUpdated += self.__onPlayerRespawnLaneUpdated
             playerDataComp.onPlayerGroupsChanged += self.__onPlayerGroupsChanged
+            playerDataComp.onPlayerPhysicalLaneUpdated += self.__onPlayerPhysicalLaneUpdated
             return
 
     def stopControl(self):
@@ -46,6 +47,7 @@ class EpicRespawnsController(RespawnsController):
         if playerDataComp is not None:
             playerDataComp.onPlayerRespawnLaneUpdated -= self.__onPlayerRespawnLaneUpdated
             playerDataComp.onPlayerGroupsChanged -= self.__onPlayerGroupsChanged
+            playerDataComp.onPlayerPhysicalLaneUpdated -= self.__onPlayerPhysicalLaneUpdated
         return
 
     def updateVehicleLimits(self, limits):
@@ -75,6 +77,9 @@ class EpicRespawnsController(RespawnsController):
         for viewCmp in self._viewComponents:
             viewCmp.setSelectedLane(laneID)
 
+        self.__onRespawnInfoUpdated()
+
+    def __onPlayerPhysicalLaneUpdated(self, laneID):
         self.__onRespawnInfoUpdated()
 
     def __onPlayerGroupsChanged(self, _):

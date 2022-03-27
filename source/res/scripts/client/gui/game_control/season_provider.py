@@ -298,6 +298,16 @@ class SeasonProvider(ISeasonProvider):
         currentTime = time_utils.getCurrentLocalServerTimestamp()
         return findFirst(lambda primeTime: primeTime.getNextPeriodStart(currentTime, currentCycleEndTime), primeTimes.values(), default=False)
 
+    def hasPrimeTimesPassedForCurrentCycle(self):
+        season = self.getCurrentSeason()
+        if season is not None:
+            if season.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
+                startDate = season.getStartDate()
+                primeTimes = self.getPrimeTimes()
+                currentTime = time_utils.getCurrentLocalServerTimestamp()
+                return findFirst(lambda primeTime: bool(primeTime.getPeriodsBetween(startDate, currentTime, includeEnd=False)), primeTimes.values(), default=False)
+        return False
+
     def _getHostList(self):
         hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)
         if self.__connectionMgr.isStandalone():

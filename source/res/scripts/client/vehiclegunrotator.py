@@ -8,9 +8,9 @@ import BattleReplay
 import BigWorld
 import Math
 import math_utils
-from AvatarInputHandler import AimingSystems
+from AvatarInputHandler.AimingSystems import getShotPosition, getVehicleGunMarkerPosition, getMultiGunCurrentShotPosition
 from constants import SERVER_TICK_LENGTH, AIMING_MODE, VEHICLE_SIEGE_STATE
-from gun_rotation_shared import calcPitchLimitsFromDesc, calcGunPitchCorrection, getLocalAimPoint
+from gun_rotation_shared import calcGunPitchCorrection, calcPitchLimitsFromDesc, getLocalAimPoint, isOutOfLimits
 from helpers import dependency
 from projectile_trajectory import getShotAngles
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -31,6 +31,7 @@ class VehicleGunRotator(object):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, avatar):
+        super(VehicleGunRotator, self).__init__()
         self._avatar = weakref.proxy(avatar)
         self.__isStarted = False
         self.__prevSentShotPoint = None
@@ -75,13 +76,7 @@ class VehicleGunRotator(object):
                 return
             else:
                 vehicle = player.getVehicleAttached()
-                if vehicle is None:
-                    return
-                if not vehicle.typeDescriptor.isDualgunVehicle:
-                    return
-                gunIdx = vehicle.activeGunIndex
-                multiGun = vehicle.typeDescriptor.turret.multiGun
-                return None if multiGun is None or gunIdx >= len(multiGun) or gunIdx < 0 else multiGun[gunIdx].shotPosition
+                return None if vehicle is None else getMultiGunCurrentShotPosition(vehicle)
 
         if self.__isStarted or not self.__speedsInitialized:
             return
@@ -185,7 +180,7 @@ class VehicleGunRotator(object):
                 self._avatar.inputHandler.updateGunMarker(markerPos, markerDir, (markerSize, idealMarkerSize), SERVER_TICK_LENGTH, collData)
                 self.__turretYaw, self.__gunPitch = getShotAngles(self._avatar.getVehicleDescriptor(), self._avatar.getOwnVehicleStabilisedMatrix(), (self.__turretYaw, self.__gunPitch), markerPos, adjust=True, overrideGunPosition=self.__gunPosition)
                 turretYawLimits = self.__getTurretYawLimits()
-                closestLimit = self.__isOutOfLimits(self.__turretYaw, turretYawLimits)
+                closestLimit = isOutOfLimits(self.__turretYaw, turretYawLimits)
                 if closestLimit is not None:
                     self.__turretYaw = closestLimit
                 self.__updateTurretMatrix(self.__turretYaw, SERVER_TICK_LENGTH)
@@ -207,12 +202,12 @@ class VehicleGunRotator(object):
         descr = self._avatar.getVehicleAttached().typeDescriptor
         shotTurretYaw, shotGunPitch = getShotAngles(descr, self._avatar.getOwnVehicleStabilisedMatrix(), (self.__turretYaw, self.__gunPitch), targetPoint, overrideGunPosition=self.__gunPosition, overrideShotIdx=overrideShotIdx)
         gunPitchLimits = calcPitchLimitsFromDesc(shotTurretYaw, self.__getGunPitchLimits(), descr.hull.turretPitches[0], descr.turret.gunJointPitch)
-        closestLimit = self.__isOutOfLimits(shotGunPitch, gunPitchLimits)
+        closestLimit = isOutOfLimits(shotGunPitch, gunPitchLimits)
         if closestLimit is not None:
             shotGunPitch = closestLimit
         turretYawLimits = self.__getTurretYawLimits()
         if not ignoreYawLimits:
-            closestLimit = self.__isOutOfLimits(shotTurretYaw, turretYawLimits)
+            closestLimit = isOutOfLimits(shotTurretYaw, turretYawLimits)
             if closestLimit is not None:
                 shotTurretYaw = closestLimit
         pos, vel = self.__getShotPosition(shotTurretYaw, shotGunPitch, shotIdx=overrideShotIdx)
@@ -451,7 +446,7 @@ class VehicleGunRotator(object):
             shortWayDiff, longWayDiff = self.__getRotationWays(curAngle, shotAngle)
             if speedLimit < 1e-05:
                 return curAngle
-            closestLimit = self.__isOutOfLimits(curAngle, angleLimits)
+            closestLimit = isOutOfLimits(curAngle, angleLimits)
             if closestLimit is not None:
                 return closestLimit
             shortWayDiffLimited = self.__applyTurretYawLimits(shortWayDiff, curAngle, angleLimits)
@@ -482,19 +477,6 @@ class VehicleGunRotator(object):
         else:
             shotDiff2 = -2.0 * pi + shotDiff1
         return (shotDiff1, shotDiff2) if abs(shotDiff1) <= pi else (shotDiff2, shotDiff1)
-
-    def __isOutOfLimits(self, angle, limits):
-        if limits is None:
-            return
-        elif abs(limits[1] - angle) < 1e-05 or abs(limits[0] - angle) < 1e-05:
-            return
-        dpi = 2 * pi
-        minDiff = fmod(limits[0] - angle + dpi, dpi)
-        maxDiff = fmod(limits[1] - angle + dpi, dpi)
-        if minDiff > maxDiff:
-            return
-        else:
-            return limits[0] if minDiff < dpi - maxDiff else limits[1]
 
     def __applyTurretYawLimits(self, diff, angle, limits):
         if limits is None:
@@ -548,32 +530,15 @@ class VehicleGunRotator(object):
         return curAngle + min(shotDiff, speedLimit) if shotDiff > 0.0 else curAngle + max(shotDiff, -speedLimit)
 
     def __getShotPosition(self, turretYaw, gunPitch, gunOffset=None, shotIdx=None):
-        descr = self._avatar.getVehicleDescriptor()
-        turretOffs = descr.hull.turretPositions[0] + descr.chassis.hullPosition
-        if gunOffset is None:
-            gunOffset = descr.activeGunShotPosition if self.__gunPosition is None else self.__gunPosition
-        shotSpeed = descr.getShot(shotIdx).speed
-        turretWorldMatrix = Math.Matrix()
-        turretWorldMatrix.setRotateY(turretYaw)
-        turretWorldMatrix.translation = turretOffs
-        turretWorldMatrix.postMultiply(Math.Matrix(self.getAvatarOwnVehicleStabilisedMatrix()))
-        position = turretWorldMatrix.applyPoint(gunOffset)
-        gunWorldMatrix = Math.Matrix()
-        gunWorldMatrix.setRotateX(gunPitch)
-        gunWorldMatrix.postMultiply(turretWorldMatrix)
-        vector = gunWorldMatrix.applyVector(Math.Vector3(0, 0, shotSpeed))
-        return (position, vector)
+        return getShotPosition(self.getAvatarOwnVehicleStabilisedMatrix(), self._avatar.getVehicleDescriptor(), turretYaw, gunPitch, gunOffset=gunOffset or self.__gunPosition, shotIdx=shotIdx)
 
     def getAttachedVehicleID(self):
         return self._avatar.playerVehicleID
 
     def __getGunMarkerPosition(self, shotPos, shotVec, dispersionAngles):
         shotDescr = self._avatar.getVehicleDescriptor().shot
-        gravity = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
         testVehicleID = self.getAttachedVehicleID()
-        collisionStrategy = AimingSystems.CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC
-        minBounds, maxBounds = BigWorld.player().arena.getSpaceBB()
-        endPos, direction, collData, usedMaxDistance = AimingSystems.getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
+        endPos, direction, collData, usedMaxDistance = getVehicleGunMarkerPosition(testVehicleID, shotPos, shotVec, self._avatar)
         distance = shotDescr.maxDistance if usedMaxDistance else (endPos - shotPos).length
         markerDiameter = 2.0 * distance * dispersionAngles[0]
         idealMarkerDiameter = 2.0 * distance * dispersionAngles[1]
@@ -600,12 +565,8 @@ class VehicleGunRotator(object):
 
     def __getTargetedEnemyForGun(self, gunShotPosition, excludeTeam):
         shotPos, shotVec = self.__getShotPosition(self.__turretYaw, self.__gunPitch, gunShotPosition)
-        shotDescr = self._avatar.getVehicleDescriptor().shot
-        gravity = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
         testVehicleID = self.getAttachedVehicleID()
-        collisionStrategy = AimingSystems.CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC
-        minBounds, maxBounds = BigWorld.player().arena.getSpaceBB()
-        _, _, collision, _ = AimingSystems.getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
+        _, _, collision, _ = getVehicleGunMarkerPosition(testVehicleID, shotPos, shotVec, self._avatar)
         if collision is not None:
             entity = collision.entity
             if entity is not None and entity.publicInfo and entity.publicInfo['team'] is not excludeTeam and entity.health > 0:

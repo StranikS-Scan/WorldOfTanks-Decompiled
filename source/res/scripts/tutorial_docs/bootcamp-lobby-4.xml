@@ -191,7 +191,11 @@
         </effects>
       </effects-group>
       <request-exclusive-hint>	MenuHangar	  <condition>
-          <not-on-scene>	Hangar	</not-on-scene>
+          <either>
+            <on-scene>	VehiclePreview	</on-scene>
+            <on-scene>	Research	</on-scene>
+            <on-scene>	Techtree	</on-scene>
+          </either>
         </condition>
       </request-exclusive-hint>
       <request-exclusive-hint>	FightButton	  <condition>

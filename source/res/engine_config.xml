@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -64,6 +64,29 @@
   </influx>
   <animation>
     <streamCacheSizeKB>	51200	</streamCacheSizeKB>
+    <parallel>	true	</parallel>
+    <optimize>	true	</optimize>
+    <lod>
+      <distance>	8	</distance>
+      <frames>	2	</frames>
+    </lod>
+    <lod>
+      <distance>	20	</distance>
+      <frames>	3	</frames>
+    </lod>
+    <lod>
+      <distance>	50	</distance>
+      <frames>	4	</frames>
+    </lod>
+    <lod>
+      <distance>	125	</distance>
+      <frames>	5	</frames>
+    </lod>
+    <lod>
+      <distance>	312	</distance>
+      <frames>	6	</frames>
+    </lod>
+    <dynamicShadows>	false	</dynamicShadows>
   </animation>
   <screenShot>
     <extension>	jpg	</extension>
@@ -175,7 +198,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
@@ -368,6 +391,9 @@
         </bank>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
+        <bank>
+          <name>	r4_hangar.bnk	</name>
+        </bank>
         <bank>
           <name>	fort_area.bnk	</name>
         </bank>

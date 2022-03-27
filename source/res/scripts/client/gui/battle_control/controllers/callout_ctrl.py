@@ -9,7 +9,6 @@ from account_helpers.settings_core.settings_constants import BattleCommStorageKe
 from chat_commands_consts import _PERSONAL_MESSAGE_MUTE_DURATION, BATTLE_CHAT_COMMAND_NAMES
 from frameworks.wulf import WindowLayer
 from gui import GUI_CTRL_MODE_FLAG
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control import avatar_getter
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
@@ -17,8 +16,7 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.event_dispatcher import _makeKeyCtx
 from gui.battle_control.view_components import IViewComponentsController
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
-from gui.shared.events import GameEvent, ViewEventType
-from gui.shared.events import LoadViewEvent
+from gui.shared.events import GameEvent
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from messenger.m_constants import MESSENGER_COMMAND_TYPE
@@ -83,7 +81,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         self.__commandReceivedData = None
         self.__lastPersonalMsgTimestamp = -_PERSONAL_MESSAGE_MUTE_DURATION
         self.__lastCalloutTimestamp = -_CALLOUT_MESSAGES_BLOCK_DURATION
-        self.__resetRadialMenuData()
+        self.resetRadialMenuData()
         return
 
     def setViewComponents(self, component):
@@ -94,6 +92,18 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         if self.__ui:
             self.__ui.onHidingFinished -= self.__onCalloutHidingFinished
         self.__ui = None
+        return
+
+    def isRadialMenuOpened(self):
+        return self.__radialMenuIsOpen
+
+    def resetRadialMenuData(self):
+        if self.__radialKeyDown is not None and avatar_getter.isVehicleAlive() and not self.__isUnusableMode():
+            self.__radialMenuIsOpen = False
+            self.__radialKeyDown = None
+            if self.hasDelayedCallback(self.__openRadialMenu):
+                self.stopCallback(self.__openRadialMenu)
+            self.__setAimingEnabled(isEnabled=True)
         return
 
     def handleCalloutAndRadialMenuKeyPress(self, key, isDown):
@@ -107,10 +117,10 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
                 return False
             if containerManager.isModalViewsIsExists() or self.__appLoader.getApp().hasGuiControlModeConsumers(*_CONSUMERS_LOCKS):
                 return False
-            isPlayerObserver = self.sessionProvider.getCtx().isPlayerObserver()
+            isUnusableMode = self.__isUnusableMode()
             if self.__radialKeyDown is None and isDown:
                 self.__radialKeyDown = key
-                if not self.hasDelayedCallback(self.__openRadialMenu) and avatar_getter.isVehicleAlive() and not isPlayerObserver:
+                if not self.hasDelayedCallback(self.__openRadialMenu) and avatar_getter.isVehicleAlive() and not isUnusableMode:
                     self.__setAimingEnabled(isEnabled=False)
                     if self.__commandReceivedData is None and cmdMap.isFired(CommandMapping.CMD_RADIAL_MENU_SHOW, key):
                         self.__openRadialMenu()
@@ -121,41 +131,29 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
                 if not self.__radialMenuIsOpen:
                     if cmdMap.isFired(CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND, key) and not avatar_getter.getForcedGuiControlModeFlags() & GUI_CTRL_MODE_FLAG.CURSOR_VISIBLE:
                         self.sessionProvider.handleContexChatCommand(key)
-                    elif cmdMap.isFired(CommandMapping.CMD_RADIAL_MENU_SHOW, key) and not isPlayerObserver:
+                    elif cmdMap.isFired(CommandMapping.CMD_RADIAL_MENU_SHOW, key) and not isUnusableMode:
                         gui_event_dispatcher.setRespondToCalloutCmd(self.__radialKeyDown, isDown)
-                    self.__resetRadialMenuData()
+                    self.resetRadialMenuData()
                     return True
                 if self.__radialKeyDown == key:
-                    if self.__radialMenuIsOpen and avatar_getter.isVehicleAlive() and not isPlayerObserver:
+                    if self.__radialMenuIsOpen and avatar_getter.isVehicleAlive() and not isUnusableMode:
                         gui_event_dispatcher.setRadialMenuCmd(key, False)
-                    self.__resetRadialMenuData()
+                    self.resetRadialMenuData()
                     return True
             return False
 
-    def isRadialMenuOpened(self):
-        return self.__radialMenuIsOpen
+    def __isUnusableMode(self):
+        return self.sessionProvider.getCtx().isPlayerObserver() or self.sessionProvider.getCtx().isPlayerCommander()
 
     def __activateListeners(self):
         g_messengerEvents.channels.onCommandReceived += self.__onCommandReceived
         g_eventBus.addListener(GameEvent.RESPOND_TO_CALLOUT, self.__handleCalloutButtonEvent, scope=EVENT_BUS_SCOPE.BATTLE)
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.BATTLE)
         BattleReplay.g_replayCtrl.onCommandReceived += self.__onCommandReceived
 
     def __deactivateListeners(self):
         g_messengerEvents.channels.onCommandReceived -= self.__onCommandReceived
         g_eventBus.removeListener(GameEvent.RESPOND_TO_CALLOUT, self.__handleCalloutButtonEvent, scope=EVENT_BUS_SCOPE.BATTLE)
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.BATTLE)
         BattleReplay.g_replayCtrl.onCommandReceived -= self.__onCommandReceived
-
-    def __resetRadialMenuData(self):
-        isPlayerObserver = self.sessionProvider.getCtx().isPlayerObserver()
-        if self.__radialKeyDown is not None and avatar_getter.isVehicleAlive() and not isPlayerObserver:
-            self.__radialMenuIsOpen = False
-            self.__radialKeyDown = None
-            if self.hasDelayedCallback(self.__openRadialMenu):
-                self.stopCallback(self.__openRadialMenu)
-            self.__setAimingEnabled(isEnabled=True)
-        return
 
     def __setAimingEnabled(self, isEnabled):
         if not isEnabled:
@@ -220,10 +218,6 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
             self.__isIBCEnabled = isEnabled
             return
 
-    def __handleLoadView(self, event):
-        if event.alias == VIEW_ALIAS.INGAME_DETAILS_HELP:
-            self.__resetRadialMenuData()
-
     def __executeHide(self, wasAnswered=False, commandReceived=None):
         if self.__isActive:
             self.__isActive = False
@@ -235,7 +229,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
 
     def __openRadialMenu(self):
         self.__radialMenuIsOpen = True
-        if avatar_getter.isVehicleAlive() and not self.sessionProvider.getCtx().isPlayerObserver():
+        if avatar_getter.isVehicleAlive() and not self.__isUnusableMode():
             self.__executeHide()
             gui_event_dispatcher.setRadialMenuCmd(self.__radialKeyDown, self.__radialMenuIsOpen)
 

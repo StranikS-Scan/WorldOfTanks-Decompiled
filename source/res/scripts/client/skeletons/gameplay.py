@@ -19,6 +19,8 @@ class GameplayStateID(object):
     AVATAR_ARENA_INFO = 'avatar.arena.info'
     AVATAR_ARENA_LOADED = 'avatar.arena.loaded'
     AVATAR_EXITING = 'avatar.exiting'
+    SERVER_REPLAY_ENTERING = 'replay.server.entering'
+    SERVER_REPLAY_EXITING = 'replay.server.exiting'
     BATTLE_REPLAY_LOADING = 'replay.loading'
     BATTLE_REPLAY_VERSION_DIFFERS = 'replay.version.differs'
     BATTLE_REPLAY_STARTING = 'replay.starting'
@@ -46,6 +48,8 @@ class PlayerEventID(object):
 
 
 class ReplayEventID(object):
+    SERVER_REPLAY_ENTERING = 'replay.server.entering'
+    SERVER_REPLAY_EXITING = 'replay.server.exiting'
     REPLAY_VERSION_CONFIRMATION = 'replay.version.confirmation'
     REPLAY_VERSION_CONFIRMED = 'replay.version.confirmed'
     REPLAY_REWIND = 'replay.rewind'

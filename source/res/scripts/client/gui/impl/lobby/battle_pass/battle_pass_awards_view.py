@@ -60,12 +60,13 @@ class BattlePassAwardsView(ViewImpl):
         tooltipId = event.getArgument('tooltipId')
         return None if tooltipId is None else self.__tooltipItems.get(tooltipId)
 
+    def _getEvents(self):
+        return ((self.__battlePassController.onBattlePassSettingsChange, self.__onSettingsChanged), (self.viewModel.onBuyClick, self.__onBuyClick))
+
     def _onLoading(self, bonuses, data, *args, **kwargs):
         super(BattlePassAwardsView, self)._onLoading(*args, **kwargs)
         chapterID = data.get('chapter', 0)
-        newLevel = data.get('newLevel')
-        if newLevel is None:
-            newLevel = 0
+        newLevel = data.get('newLevel', 0) or 0
         reason = data.get('reason', BattlePassRewardReason.DEFAULT)
         self.__closeCallback = data.get('callback')
         isFinalReward = self.__battlePassController.isFinalLevel(chapterID, newLevel) and reason not in (BattlePassRewardReason.PURCHASE_BATTLE_PASS, BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE, BattlePassRewardReason.SELECT_REWARD)
@@ -73,15 +74,15 @@ class BattlePassAwardsView(ViewImpl):
         rewardReason = MAP_REWARD_REASON.get(reason, RewardReason.DEFAULT)
         isBattlePassPurchased = self.__battlePassController.isBought(chapterID=chapterID) or isPurchase
         _, styleLevel = getStyleInfoForChapter(chapterID) if chapterID else (None, None)
-        self.viewModel.setIsFinalReward(isFinalReward)
-        self.viewModel.setReason(rewardReason)
-        self.viewModel.setIsBattlePassPurchased(isBattlePassPurchased)
-        self.viewModel.setCurrentLevel(newLevel)
-        self.viewModel.setChapterID(chapterID)
-        self.viewModel.setSeasonStopped(self.__battlePassController.isPaused())
-        self.viewModel.setIsBaseStyleLevel(styleLevel == 1)
+        with self.viewModel.transaction() as tx:
+            tx.setIsFinalReward(isFinalReward)
+            tx.setReason(rewardReason)
+            tx.setIsBattlePassPurchased(isBattlePassPurchased)
+            tx.setCurrentLevel(newLevel)
+            tx.setChapterID(chapterID)
+            tx.setSeasonStopped(self.__battlePassController.isPaused())
+            tx.setIsBaseStyleLevel(styleLevel == 1)
         self.__setAwards(bonuses, isFinalReward)
-        self.__addListeners()
         isRewardSelected = reason == BattlePassRewardReason.SELECT_REWARD
         self.viewModel.setIsNeedToShowOffer(not (isBattlePassPurchased or self.viewModel.additionalRewards.getItemsLength() or isRewardSelected))
         switchHangarOverlaySoundFilter(on=True)
@@ -95,20 +96,11 @@ class BattlePassAwardsView(ViewImpl):
 
     def _finalize(self):
         super(BattlePassAwardsView, self)._finalize()
-        self.__removeListeners()
         self.__tooltipItems = None
         switchHangarOverlaySoundFilter(on=False)
         if callable(self.__closeCallback):
             self.__closeCallback()
         g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.AWARD_VIEW_CLOSE), scope=EVENT_BUS_SCOPE.LOBBY)
-        return
-
-    def _onBuyClick(self):
-        if callable(self.__closeCallback):
-            self.__closeCallback()
-            self.__closeCallback = None
-        showBattlePassBuyWindow()
-        self.destroyWindow()
         return
 
     def __setAwards(self, bonuses, isFinalReward):
@@ -141,13 +133,19 @@ class BattlePassAwardsView(ViewImpl):
     def __getRewardWeight(bonus):
         return REWARD_SIZES.get(BattlePassAwardsManager.getBigIcon(bonus), 0)
 
-    def __addListeners(self):
-        model = self.viewModel
-        model.onBuyClick += self._onBuyClick
+    def __onSettingsChanged(self, *_):
+        chapterID = self.viewModel.getChapterID()
+        validState = not chapterID or self.__battlePassController.isEnabled() or self.__battlePassController.isPaused() and self.__battlePassController.isExtraChapter(chapterID)
+        if not validState:
+            self.destroyWindow()
 
-    def __removeListeners(self):
-        model = self.viewModel
-        model.onBuyClick -= self._onBuyClick
+    def __onBuyClick(self):
+        if callable(self.__closeCallback):
+            self.__closeCallback()
+            self.__closeCallback = None
+        showBattlePassBuyWindow()
+        self.destroyWindow()
+        return
 
 
 class BattlePassAwardWindow(LobbyNotificationWindow):

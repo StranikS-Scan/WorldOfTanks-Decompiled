@@ -43,8 +43,8 @@ _DAMAGE_INDICATOR_SWF_SIZE = (680, 680)
 _DAMAGE_INDICATOR_TOTAL_FRAMES = 160
 _BEGIN_ANIMATION_FRAMES = 11
 _DAMAGE_INDICATOR_FRAME_RATE = 24
-_BEGIN_ANIMATION_DURATION = _BEGIN_ANIMATION_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
-_DAMAGE_INDICATOR_ANIMATION_DURATION = _DAMAGE_INDICATOR_TOTAL_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
+BEGIN_ANIMATION_DURATION = _BEGIN_ANIMATION_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
+DAMAGE_INDICATOR_ANIMATION_DURATION = _DAMAGE_INDICATOR_TOTAL_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
 _DIRECT_INDICATOR_SWF = 'battleDirectionIndicatorApp.swf'
 _DIRECT_INDICATOR_COMPONENT = 'WGDirectionIndicatorFlash'
 _DIRECT_INDICATOR_MC_NAME = '_root.directionalIndicatorMc'
@@ -381,10 +381,10 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         return
 
     def getDuration(self):
-        return _DAMAGE_INDICATOR_ANIMATION_DURATION
+        return DAMAGE_INDICATOR_ANIMATION_DURATION
 
     def getBeginAnimationDuration(self):
-        return _BEGIN_ANIMATION_DURATION
+        return BEGIN_ANIMATION_DURATION
 
     def invalidateSettings(self, diff=None):
         getter = self.settingsCore.getSetting
@@ -400,7 +400,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         LOG_DEBUG_DEV('showHitDirection hit={}, vo={}'.format(hitData, vo))
         self.__updateMethod(**vo)
 
-    def hideHitDirection(self, idx):
+    def hideHitDirection(self, idx, hitData=None):
         self.as_hideS(idx)
 
     def __onCrosshairPositionChanged(self, posX, posY):
@@ -501,9 +501,9 @@ class SixthSenseIndicator(SixthSenseMeta):
             self.__callbackID = None
         return
 
-    def __onVehicleStateUpdated(self, state, value):
+    def __onVehicleStateUpdated(self, state, vehicleID=0):
         if state == VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY:
-            if value:
+            if vehicleID:
                 self.__cancelCallback()
                 self.__show()
             else:
@@ -821,12 +821,12 @@ def createDirectIndicator():
     return _DirectionIndicator(_DIRECT_INDICATOR_SWF)
 
 
-def createDamageIndicator():
-    return _DamageIndicator(HIT_INDICATOR_MAX_ON_SCREEN)
-
-
 def createPredictionIndicator():
     return _PredictionIndicator(PREDICTION_INDICATOR_MAX_ON_SCREEN)
+
+
+def createDamageIndicator():
+    return _DamageIndicator(HIT_INDICATOR_MAX_ON_SCREEN)
 
 
 class _ArtyDirectionIndicator(Flash, IDirectionIndicator):
@@ -962,7 +962,7 @@ class _PredictionIndicator(PredictionIndicatorMeta, IHitIndicator):
         self.as_setYawS(idx, hitData.getYaw())
         self.as_showS(itemIdx=idx)
 
-    def hideHitDirection(self, idx):
+    def hideHitDirection(self, idx, hitData=None):
         self.as_hideS(idx)
 
     def __onCrosshairPositionChanged(self, posX, posY):

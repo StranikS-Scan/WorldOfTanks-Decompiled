@@ -49,6 +49,9 @@ class FullStatsComponent(TabbedFullStatsMeta, IFullStatsComponent):
             self.as_resetActiveTabS()
         return
 
+    def setTableVisibility(self, isVisible):
+        self.as_setTableVisibilityS(isVisible)
+
     def onProgressTrackingClick(self, isSelected):
         self.__isProgressTrackingEnabled = isSelected
         if self.__isProgressTrackingEnabled:

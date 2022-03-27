@@ -77,13 +77,6 @@
       <undamaged>	vehicles/american/A92_M60/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A92_M60/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A92_M60/crash/lod0/Hull.model	</exploded>
-      <sets>
-        <A92_M60_3DSt_ZI_21>
-          <undamaged>	vehicles/american/A92_M60/_skins/A92_M60_3DSt_ZI_21/normal/lod0/Hull.model	</undamaged>
-          <destroyed>	vehicles/american/A92_M60/_skins/A92_M60_3DSt_ZI_21/crash/lod0/Hull.model	</destroyed>
-          <exploded>	vehicles/american/A92_M60/_skins/A92_M60_3DSt_ZI_21/crash/lod0/Hull.model	</exploded>
-        </A92_M60_3DSt_ZI_21>
-      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -107,8 +100,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.63291 0.359266 2.66828	</rayStart>
-        <rayEnd>	0.632908 0.176943 2.58607	</rayEnd>
+        <rayStart>	0.00654042 0.206062 3.00765	</rayStart>
+        <rayEnd>	0.0066007 0.023765 2.92538	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -582,58 +575,6 @@
         <clipAngle>	1.27152	</clipAngle>
         <anchorShift>	0.031857	</anchorShift>
       </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	15037	</slotId>
-        <tags>	direction_left_to_right formfactor_square	</tags>
-        <compatibleModels>	A92_M60_3DSt_ZI_21	</compatibleModels>
-        <position>	-1.48173 1.46079 3.02979	</position>
-        <rotation>	0.202458 -0.000001 3.14156	</rotation>
-        <scale>	0.59518 0.269959 0.595172	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.662443	</clipAngle>
-        <anchorShift>	0.154984	</anchorShift>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	15038	</slotId>
-        <tags>	formfactor_square direction_right_to_left	</tags>
-        <compatibleModels>	A92_M60_3DSt_ZI_21	</compatibleModels>
-        <position>	1.52017 1.49372 3.03655	</position>
-        <rotation>	0.202458 -0.000001 3.14156	</rotation>
-        <scale>	0.50468 0.22891 0.504673	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.662443	</clipAngle>
-        <anchorShift>	0.154984	</anchorShift>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	15039	</slotId>
-        <tags>	direction_right_to_left formfactor_square	</tags>
-        <compatibleModels>	A92_M60_3DSt_ZI_21	</compatibleModels>
-        <position>	0.814488 1.70698 1.98344	</position>
-        <rotation>	0.116357 -0.000002 3.14156	</rotation>
-        <scale>	0.514524 0.233375 0.514515	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	1.05437	</clipAngle>
-        <anchorShift>	0.022854	</anchorShift>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	15040	</slotId>
-        <tags>	formfactor_square	</tags>
-        <compatibleModels>	A92_M60_3DSt_ZI_21	</compatibleModels>
-        <position>	0.000013 2.02685 -2.4486	</position>
-        <rotation>	3.14159 -0.000008 -0.000009	</rotation>
-        <scale>	0.531518 0.303879 0.531515	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.241311	</clipAngle>
-        <anchorShift>	-0.033345	</anchorShift>
-      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -676,13 +617,6 @@
         <undamaged>	vehicles/american/A92_M60/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A92_M60/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A92_M60/crash/lod0/Chassis.model	</exploded>
-        <sets>
-          <A92_M60_3DSt_ZI_21>
-            <undamaged>	vehicles/american/A92_M60/_skins/A92_M60_3DSt_ZI_21/normal/lod0/Chassis.model	</undamaged>
-            <destroyed>	vehicles/american/A92_M60/_skins/A92_M60_3DSt_ZI_21/crash/lod0/Chassis.model	</destroyed>
-            <exploded>	vehicles/american/A92_M60/_skins/A92_M60_3DSt_ZI_21/crash/lod0/Chassis.model	</exploded>
-          </A92_M60_3DSt_ZI_21>
-        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1075,7 +1009,7 @@
             <segmentSyncPivotOffset>	-1.46178	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L4	</name>
-              <startAngle>	-45.2034	</startAngle>
+              <startAngle>	-45.0334	</startAngle>
               <teethCount>	11	</teethCount>
             </sync>
             <sync>
@@ -1428,7 +1362,7 @@
             <segmentSyncPivotOffset>	1.46178	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R4	</name>
-              <startAngle>	-45.4834	</startAngle>
+              <startAngle>	-45.0147	</startAngle>
               <teethCount>	11	</teethCount>
             </sync>
             <sync>
@@ -1722,13 +1656,6 @@
             <undamaged>	vehicles/american/A92_M60/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A92_M60/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A92_M60/crash/lod0/Gun_01.model	</exploded>
-            <sets>
-              <A92_M60_3DSt_ZI_21>
-                <undamaged>	vehicles/american/A92_M60/_skins/A92_M60_3DSt_ZI_21/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/american/A92_M60/_skins/A92_M60_3DSt_ZI_21/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/american/A92_M60/_skins/A92_M60_3DSt_ZI_21/crash/lod0/Gun_01.model	</exploded>
-              </A92_M60_3DSt_ZI_21>
-            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A92_M60/collision/Gun_01.model	</collisionModelServer>
@@ -1799,6 +1726,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.565 0.25 0.23 0.000000	</tiling>
             <density>	107.746 109.585	</density>
@@ -1810,13 +1738,6 @@
         <undamaged>	vehicles/american/A92_M60/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A92_M60/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A92_M60/crash/lod0/Turret_01.model	</exploded>
-        <sets>
-          <A92_M60_3DSt_ZI_21>
-            <undamaged>	vehicles/american/A92_M60/_skins/A92_M60_3DSt_ZI_21/normal/lod0/Turret_01.model	</undamaged>
-            <destroyed>	vehicles/american/A92_M60/_skins/A92_M60_3DSt_ZI_21/crash/lod0/Turret_01.model	</destroyed>
-            <exploded>	vehicles/american/A92_M60/_skins/A92_M60_3DSt_ZI_21/crash/lod0/Turret_01.model	</exploded>
-          </A92_M60_3DSt_ZI_21>
-        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A92_M60/collision/Turret_01.model	</collisionModelServer>
@@ -2297,45 +2218,6 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.522886	</clipAngle>
           <anchorShift>	0.851295	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35034	</slotId>
-          <tags>	formfactor_square	</tags>
-          <compatibleModels>	A92_M60_3DSt_ZI_21	</compatibleModels>
-          <position>	0.000029 2.65256 0.944924	</position>
-          <rotation>	0.327867 -0.000004 3.14156	</rotation>
-          <scale>	0.496086 0.258379 0.496091	</scale>
-          <doubleSided>	false	</doubleSided>
-          <showOn>	256	</showOn>
-          <clipAngle>	1.30936	</clipAngle>
-          <anchorShift>	0.102068	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35035	</slotId>
-          <tags>	direction_right_to_left formfactor_square	</tags>
-          <compatibleModels>	A92_M60_3DSt_ZI_21	</compatibleModels>
-          <position>	-0.680425 2.4009 0.877318	</position>
-          <rotation>	0.71875 -1.15319 -3.04911	</rotation>
-          <scale>	0.532928 0.422731 0.532928	</scale>
-          <doubleSided>	false	</doubleSided>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.663113	</clipAngle>
-          <anchorShift>	0.223121	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35036	</slotId>
-          <tags>	direction_left_to_right formfactor_square	</tags>
-          <compatibleModels>	A92_M60_3DSt_ZI_21	</compatibleModels>
-          <position>	0.878712 2.38475 0.743534	</position>
-          <rotation>	1.12653 1.25148 3.08953	</rotation>
-          <scale>	0.457585 0.362965 0.457581	</scale>
-          <doubleSided>	false	</doubleSided>
-          <showOn>	256	</showOn>
-          <clipAngle>	1.15736	</clipAngle>
-          <anchorShift>	0.21143	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

@@ -40,12 +40,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(BattlePassHowToEarnPointsView, self)._onLoading(*args, **kwargs)
-        self.__addListeners()
         self.__createGeneralModel()
-
-    def _finalize(self):
-        super(BattlePassHowToEarnPointsView, self)._finalize()
-        self.__removeListeners()
 
     def __createGeneralModel(self):
         with self.viewModel.transaction() as tx:
@@ -219,15 +214,8 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         viewModel.cards.addViewModel(gameModeCard)
         return
 
-    def __addListeners(self):
-        self.__battlePassController.onBattlePassSettingsChange += self.__onBattlePassSettingsChange
-        model = self.viewModel
-        model.onLinkClick += self.__onLinkClick
-
-    def __removeListeners(self):
-        self.__battlePassController.onBattlePassSettingsChange -= self.__onBattlePassSettingsChange
-        model = self.viewModel
-        model.onLinkClick -= self.__onLinkClick
+    def _getEvents(self):
+        return ((self.__battlePassController.onBattlePassSettingsChange, self.__onBattlePassSettingsChange), (self.__battlePassController.onSeasonStateChanged, self.__onSeasonStateChanged), (self.viewModel.onLinkClick, self.__onLinkClick))
 
     def __onLinkClick(self, args):
         viewModel = args.get('viewId')
@@ -239,6 +227,10 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         if self.__battlePassController.isVisible() and not self.__battlePassController.isPaused():
             self.__createGeneralModel()
         else:
+            showHangar()
+
+    def __onSeasonStateChanged(self):
+        if not self.__battlePassController.isActive():
             showHangar()
 
 

@@ -52,6 +52,9 @@ class INotificationWindowController(IGameController):
     def isEnabled(self):
         raise NotImplementedError
 
+    def isExecuting(self):
+        raise NotImplementedError
+
     def postponeActive(self):
         raise NotImplementedError
 

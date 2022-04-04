@@ -11,9 +11,10 @@ from gui.impl.gen import R
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.vehicle_bonus_model import VehicleBonusModel
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import CustomizationTooltipContext
-from gui.shared.missions.packers.bonus import BonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker, CrewBookBonusUIPacker, SimpleBonusUIPacker, BlueprintBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID
+from gui.shared.missions.packers.bonus import BonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker, CrewBookBonusUIPacker, SimpleBonusUIPacker, BlueprintBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, VehiclesBonusUIPacker
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.money import Currency
 from helpers import dependency
@@ -23,6 +24,7 @@ from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus, TmanTemplateTokensBonus, CustomizationsBonus, PlusPremiumDaysBonus, DossierBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, VehicleBlueprintBonus
     from account_helpers.offers.events_data import OfferEventData, OfferGift
+    from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
 
 def getBattlePassBonusPacker():
@@ -35,6 +37,7 @@ def getBattlePassBonusPacker():
      'crewBooks': ExtendedCrewBookBonusUIPacker(),
      'blueprints': BattlePassBlueprintsBonusPacker(),
      'slots': BattlePassSlotsBonusPacker(),
+     'vehicles': BattlePassVehiclesBonusUIPacker(),
      Currency.CREDITS: ExtendedCreditsBonusUIPacker(),
      BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME: BattlePassStyleProgressTokenBonusPacker(),
      BATTLE_PASS_SELECT_BONUS_NAME: SelectBonusPacker(),
@@ -416,6 +419,24 @@ class BattlePassSlotsBonusPacker(SimpleBonusUIPacker):
     @classmethod
     def _getBonusModel(cls):
         return RewardItemModel()
+
+
+class BattlePassVehiclesBonusUIPacker(VehiclesBonusUIPacker):
+
+    @classmethod
+    def _packVehicleBonusModel(cls, bonus, vehInfo, isRent, vehicle):
+        model = VehicleBonusModel()
+        cls.__fillVehicle(model, vehicle)
+        model.setBigIcon('vehicle_' + str(vehicle.intCD))
+        model.setName(bonus.getName())
+        return model
+
+    @classmethod
+    def __fillVehicle(cls, model, vehicle):
+        model.setIsElite(not vehicle.getEliteStatusProgress().toUnlock or vehicle.isElite)
+        model.setVehicleLvl(vehicle.level)
+        model.setVehicleName(vehicle.userName)
+        model.setVehicleType(vehicle.type)
 
 
 class BattlePassBlueprintsBonusPacker(BlueprintBonusUIPacker):

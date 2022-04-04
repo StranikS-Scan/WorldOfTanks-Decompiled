@@ -12,6 +12,7 @@ from RTSShared import RTSOrder, RTSManner
 from chat_commands_consts import INVALID_MARKER_ID
 from gui.Scaleform.daapi.view.battle.shared.markers2d.vehicle_plugins import getHitStateVO, getVehicleDamageType
 from gui.battle_control.controllers.commander.rts_commander_ctrl import getPrioritizedCondition
+from gui.battle_control.controllers.feedback_adaptor import EntityInFocusData
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from items.battle_royale import isSpawnedBot
@@ -21,7 +22,7 @@ from gui.Scaleform.daapi.view.battle.shared.markers2d.settings import MARKER_SYM
 from gui.Scaleform.daapi.view.battle.commander.markers2d.markers import SupplyMarker, OrderMarker
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, MARKER_HIT_STATE
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, MARKER_HIT_STATE, ENTITY_IN_FOCUS_TYPE
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.battle_constants import VehicleConditions
 if typing.TYPE_CHECKING:
@@ -762,6 +763,7 @@ class _SupplyMarkerPlugin(VehicleMarkerPlugin, IArenaVehiclesController):
         self._playerVehicleID = 0
         self._clazz = clazz
         self._spottedSupplies = []
+        self._selectedVehicleIDs = set()
 
     def init(self, *args):
         super(_SupplyMarkerPlugin, self).init()
@@ -789,15 +791,21 @@ class _SupplyMarkerPlugin(VehicleMarkerPlugin, IArenaVehiclesController):
     def start(self):
         super(_SupplyMarkerPlugin, self).start()
         rtsCommander = self.__sessionProvider.dynamic.rtsCommander
+        self._selectedVehicleIDs = set()
         if rtsCommander is not None:
+            rtsCommander.vehicles.onSelectionChanged += self._onSelectionChanged
             rtsCommander.vehicles.onVehicleReloading += self.__onVehicleReloading
+            rtsCommander.vehicles.onFocusVehicleChanged += self._onFocusVehicleChanged
         return
 
     def stop(self):
         super(_SupplyMarkerPlugin, self).stop()
         rtsCommander = self.__sessionProvider.dynamic.rtsCommander
+        self._selectedVehicleIDs = set()
         if rtsCommander is not None:
+            rtsCommander.vehicles.onSelectionChanged -= self._onSelectionChanged
             rtsCommander.vehicles.onVehicleReloading -= self.__onVehicleReloading
+            rtsCommander.vehicles.onFocusVehicleChanged -= self._onFocusVehicleChanged
         return
 
     def invalidateArenaInfo(self):
@@ -991,9 +999,38 @@ class _SupplyMarkerPlugin(VehicleMarkerPlugin, IArenaVehiclesController):
             self._invokeMarker(marker.getMarkerID(), 'setReloading', updateTime, timeLeft, baseTime)
             return
 
+    def _onFocusVehicleChanged(self, focusVehicleID, isInFocus):
+        self.updateFocusedSupply(focusVehicleID, isInFocus)
+
+    def updateFocusedSupply(self, focusVehicleID, isInFocus):
+        marker = self._markers.get(focusVehicleID)
+        if marker is None:
+            return
+        else:
+            vehicles = self.__sessionProvider.dynamic.rtsCommander.vehicles
+            vehicle = vehicles.get(focusVehicleID)
+            if vehicle is not None and vehicle.isAlive:
+                selectedVehicleIDsLength = len(self._selectedVehicleIDs)
+                isMarkingValid = selectedVehicleIDsLength > 0 and vehicle.isEnemy
+                focused = isInFocus if isMarkingValid else False
+                self._invokeMarker(marker.getMarkerID(), 'updateFocusedSelected', focused, vehicle.isSelected)
+            return
+
+    def _onSelectionChanged(self, selectedVehicleIDs):
+        selectedIDs = set(selectedVehicleIDs)
+        self._selectedVehicleIDs = selectedIDs
+
 
 class TankmanSupplyMarkerPlugin(_SupplyMarkerPlugin):
-    pass
+
+    def _updateDeathMarker(self, vehicleID, handle, value, marker):
+        self._setMarkerState(handle, 'dead')
+        super(TankmanSupplyMarkerPlugin, self)._updateDeathMarker(vehicleID, handle, value, marker)
+
+    def _onVehicleInFocus(self, vehicleID, entityInFocusData):
+        if entityInFocusData.entityTypeInFocus != ENTITY_IN_FOCUS_TYPE.VEHICLE or vehicleID not in self._markers:
+            return
+        super(TankmanSupplyMarkerPlugin, self)._onVehicleInFocus(vehicleID, entityInFocusData)
 
 
 class CommanderSupplyMarkerPlugin(_SupplyMarkerPlugin):

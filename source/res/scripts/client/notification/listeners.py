@@ -964,14 +964,14 @@ class BattlePassListener(_NotificationListener):
         self.__arenaBonusTypesHandlers = {ARENA_BONUS_TYPE.RANKED: self.__pushEnableChangeRanked,
          ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: self.__pushBattleRoyaleEnableChange,
          ARENA_BONUS_TYPE.EPIC_BATTLE: self.__pushEpicBattleModeChanged}
-        self.__battlePassController.onSeasonStateChange += self.__onSeasonStateChange
+        self.__battlePassController.onSeasonStateChanged += self.__onSeasonStateChange
         self.__battlePassController.onBattlePassSettingsChange += self.__onBattlePassSettingsChange
         self.__notificationCtrl.onEventNotificationsChanged += self.__onEventNotification
         self.__initArenaBonusTypeEnabledStates()
         return True
 
     def stop(self):
-        self.__battlePassController.onSeasonStateChange -= self.__onSeasonStateChange
+        self.__battlePassController.onSeasonStateChanged -= self.__onSeasonStateChange
         self.__battlePassController.onBattlePassSettingsChange -= self.__onBattlePassSettingsChange
         self.__notificationCtrl.onEventNotificationsChanged -= self.__onEventNotification
         self.__arenaBonusTypesHandlers = None

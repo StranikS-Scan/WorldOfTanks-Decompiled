@@ -4,7 +4,7 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class VehicleMarkersManagerMeta(BaseDAAPIComponent):
 
-    def setFocusVehicle(self, vehicleID):
+    def setFocusVehicle(self, vehicleID, isInFocused):
         self._printOverrideError('setFocusVehicle')
 
     def as_setMarkerDurationS(self, duration):

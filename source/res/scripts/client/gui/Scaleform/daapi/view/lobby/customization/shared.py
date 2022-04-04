@@ -332,7 +332,7 @@ def isC11nEnabled(lobbyContext=None, hangarSpace=None):
     if vehicleEntity is None:
         isVehicleCameraReadyForC11n = False
     else:
-        isVehicleCameraReadyForC11n = vehicleEntity.state == CameraMovementStates.ON_OBJECT
+        isVehicleCameraReadyForC11n = vehicleEntity.state in (CameraMovementStates.ON_OBJECT, CameraMovementStates.MOVING_TO_OBJECT)
     return lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and not state.isOnlyForEventBattles() and hangarSpace.spaceInited and hangarSpace.isModelLoaded and isVehicleCameraReadyForC11n
 
 

@@ -320,10 +320,16 @@ class RTSSoundController(IRTSSoundController, CallbackDelayer):
             return
         else:
             if self.__isHeadVehicleForVehicleSelection(command.entity.id):
+                if command.order == RTSOrder.DEFEND_THE_BASE:
+                    baseID, baseTeam = command.controlPoint
+                    baseIsCapturing = baseTeam in self.__sessionProvider.dynamic.rtsBWCtrl.capturingControlPoints
+                    if baseIsCapturing or self.__areEnemiesNearBase(baseID, baseTeam):
+                        self.__play2D(R4_SOUND.R4_ORDER_FIGHT_OFF_BASE_UI)
+                        return
                 self.__play2D(ORDER_TO_UI_EVENT[command.order])
             return
 
-    def __onOrderChanged(self, vID, order=None, manner=None, baseID=None, **kwargs):
+    def __onOrderChanged(self, vID, order=None, manner=None, baseTeam=None, **kwargs):
         isOrderChanged = kwargs['isOrderChanged']
         if order == RTSOrder.STOP:
             extra = kwargs['extra']
@@ -333,7 +339,7 @@ class RTSSoundController(IRTSSoundController, CallbackDelayer):
         if order in (RTSOrder.GO_TO_POSITION, RTSOrder.FORCE_GO_TO_POSITION):
             self.__playCommandGoToSound([vID], order, manner, isOrderChanged)
         elif order in (RTSOrder.DEFEND_THE_BASE, RTSOrder.CAPTURE_THE_BASE):
-            baseIsCapturing = baseID in self.__sessionProvider.dynamic.rtsBWCtrl.capturingControlPoints
+            baseIsCapturing = baseTeam in self.__sessionProvider.dynamic.rtsBWCtrl.capturingControlPoints
             self.__playCommandForBaseSound([vID], order, baseIsCapturing, isOrderChanged)
         else:
             self.__playOtherCommandSound([vID], order, isOrderChanged)

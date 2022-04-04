@@ -187,7 +187,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
             questCompletionChanged = self.eventsCache.questsProgress.getQuestCompletionChanged(quest.getID())
             if questCompletionChanged and markViewed:
                 self._scheduleMarkVisited(quest.getID())
-            indicateCompleteQuests.addBool(quest.isCompleted())
+            indicateCompleteQuests.addBool(questCompletionChanged)
 
         indicateCompleteQuests.invalidate()
 

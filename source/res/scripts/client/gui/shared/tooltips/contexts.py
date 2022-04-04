@@ -748,6 +748,9 @@ class VehCmpConfigurationContext(HangarContext):
         value.buyPrice = True
         return value
 
+    def buildItem(self, intCD, slotIdx=0, historicalBattleID=-1, vehicle=None):
+        return super(VehCmpConfigurationContext, self).buildItem(intCD, slotIdx, historicalBattleID, None)
+
 
 class VehCmpConfigurationSlotContext(VehCmpConfigurationContext):
 

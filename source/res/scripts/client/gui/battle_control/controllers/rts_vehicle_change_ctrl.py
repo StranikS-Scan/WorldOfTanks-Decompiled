@@ -18,6 +18,7 @@ from gui.battle_control.controllers.commander.rts_commander_ctrl import MappedKe
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.battle_session import IBattleSessionProvider
+from Math import Vector3, Matrix
 _logger = logging.getLogger(__name__)
 
 class _RTSVehicleChangeController(IRTSVehicleChangeController):
@@ -209,7 +210,7 @@ class _RTSVehicleChangeController(IRTSVehicleChangeController):
             cameraLocation = Math.Matrix(cam.aimingSystem.matrix).translation
             leavingVehicle = BigWorld.entity(self.__leavingVehicleID)
             targetPos = leavingVehicle.position if leavingVehicle else cameraLocation
-            self._changeControlMode(aih_constants.CTRL_MODE_NAME.COMMANDER, startingPos=cameraLocation, targetPos=targetPos, targetYaw=yaw)
+            self._changeControlMode(aih_constants.CTRL_MODE_NAME.COMMANDER, startingPos=cameraLocation, targetPos=targetPos, targetYaw=yaw if yaw != 0 else self.__getLookAtYPR(cameraLocation, targetPos))
         self.__avatar.stopVehicleControlAttempt()
 
     def __onStopVehicleControlSuccess(self):
@@ -232,6 +233,13 @@ class _RTSVehicleChangeController(IRTSVehicleChangeController):
         vehicleID = self.__avatar.playerVehicleID
         if not self.__isCommanderVehicle(vehicleID):
             self._changeControlMode(aih_constants.CTRL_MODE_NAME.ARCADE, preferredPos=self.__getVehicleGunMarkerPosition(vehicleID))
+
+    def __getLookAtYPR(self, lookAtPosition, currentPosition):
+        lookDir = lookAtPosition - currentPosition
+        camMat = Matrix()
+        camMat.lookAt(currentPosition, lookDir, Vector3(0, 1, 0))
+        camMat.invert()
+        return camMat.yaw
 
     def __getCameraYawPitch(self):
         cameraMatrix = Math.Matrix(self.__avatar.inputHandler.ctrl.camera.camera.matrix)

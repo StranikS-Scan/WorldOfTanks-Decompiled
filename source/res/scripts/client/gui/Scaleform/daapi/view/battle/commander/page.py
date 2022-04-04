@@ -57,13 +57,11 @@ class CommonRTSComponentsConfig(ComponentsConfig):
            BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL,
            BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL,
            BATTLE_VIEW_ALIASES.HINT_PANEL,
-           DynamicAliases.DRONE_MUSIC_PLAYER,
            BATTLE_VIEW_ALIASES.COMMANDER_SPAWN_MENU)),
          (BATTLE_CTRL_ID.CALLOUT, (BATTLE_VIEW_ALIASES.CALLOUT_PANEL,)),
          (BATTLE_CTRL_ID.MAPS, (BATTLE_VIEW_ALIASES.MINIMAP,)),
          (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,)),
-         (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.DRONE_MUSIC_PLAYER, BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR, BATTLE_VIEW_ALIASES.PLAYERS_PANEL)),
-         (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (DynamicAliases.DRONE_MUSIC_PLAYER,)),
+         (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR, BATTLE_VIEW_ALIASES.PLAYERS_PANEL)),
          (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,)),
          (BATTLE_CTRL_ID.PREBATTLE_SETUPS_CTRL, (BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, BATTLE_VIEW_ALIASES.DAMAGE_PANEL)),
          (BATTLE_CTRL_ID.AMMO, (BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)),
@@ -71,8 +69,6 @@ class CommonRTSComponentsConfig(ComponentsConfig):
          (BATTLE_CTRL_ID.TEAM_SIXTH_SENSE, (BATTLE_VIEW_ALIASES.SIXTH_SENSE, _DynamicAliases.SIXTH_SENSE_SOUND, _DynamicAliases.COMMANDER_VEHICLES_MGR_PROXY))), viewsConfig=((DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer), (_DynamicAliases.SIXTH_SENSE_SOUND, SixthSenseSound), (_DynamicAliases.COMMANDER_VEHICLES_MGR_PROXY, SixSenseCommanderVehiclesProxy)))
 
 
-_COMMANDER_COMPONENTS = CommonRTSComponentsConfig() + ComponentsConfig(viewsConfig=((DynamicAliases.DRONE_MUSIC_PLAYER, drone_music_player.CommanderDroneMusicPlayer),))
-_TANKMAN_COMPONENTS = CommonRTSComponentsConfig() + ComponentsConfig(viewsConfig=((DynamicAliases.DRONE_MUSIC_PLAYER, drone_music_player.DroneMusicPlayer),))
 BASE_COMMANDER_EXTENDED_CMPNTS = ComponentsConfig(config=((BATTLE_CTRL_ID.ARENA_PERIOD, (DynamicAliases.FINISH_SOUND_PLAYER,)), (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.FINISH_SOUND_PLAYER,))), viewsConfig=((DynamicAliases.FINISH_SOUND_PLAYER, finish_sound_player.FinishSoundPlayer), ('r4FinishSoundPlayer', finish_sound_player.R4FinishSoundPlayer)))
 
 class CommonCommanderBattlePage(CommanderBattlePageMeta, IRTSSpawnListener):
@@ -107,6 +103,7 @@ class CommonCommanderBattlePage(CommanderBattlePageMeta, IRTSSpawnListener):
             return
         self._setComponentsVisibility(visible=spawnMenuToggling | self._FORCED_VISIBLE_COMPONENTS, hidden=self._TOGGLE_COMPONENTS)
         spawnMenuToggling.clear()
+        self.as_spawnPointWindowClosedS()
         self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.COMMANDER_SPAWN_MENU)
 
     def onEntitySelected(self):
@@ -252,12 +249,15 @@ class CommonCommanderBattlePage(CommanderBattlePageMeta, IRTSSpawnListener):
 class CommanderBattlePage(CommonCommanderBattlePage):
 
     def __init__(self):
-        components = CommonRTSComponentsConfig() + ComponentsConfig(config=((BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, DynamicAliases.DRONE_MUSIC_PLAYER)),))
+        components = CommonRTSComponentsConfig()
         if not self.sessionProvider.isReplayPlaying:
             components += BASE_COMMANDER_EXTENDED_CMPNTS + ComponentsConfig(config=((BATTLE_CTRL_ID.TEAM_BASES, (DynamicAliases.FINISH_SOUND_PLAYER,)),))
         if BigWorld.player().isCommander():
             droneMPClass = drone_music_player.CommanderDroneMusicPlayer
         else:
             droneMPClass = drone_music_player.DroneMusicPlayer
-        components += ComponentsConfig(viewsConfig=((DynamicAliases.DRONE_MUSIC_PLAYER, droneMPClass),))
+        components += ComponentsConfig(config=((BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, DynamicAliases.DRONE_MUSIC_PLAYER)),
+         (BATTLE_CTRL_ID.ARENA_PERIOD, (DynamicAliases.DRONE_MUSIC_PLAYER,)),
+         (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.DRONE_MUSIC_PLAYER,)),
+         (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (DynamicAliases.DRONE_MUSIC_PLAYER,))), viewsConfig=((DynamicAliases.DRONE_MUSIC_PLAYER, droneMPClass),))
         super(CommanderBattlePage, self).__init__(components)

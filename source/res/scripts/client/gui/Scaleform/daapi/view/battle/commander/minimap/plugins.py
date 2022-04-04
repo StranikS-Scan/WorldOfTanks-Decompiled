@@ -1187,11 +1187,13 @@ class CommanderTeamsOrControlsPointsPlugin(RtsTeamsOrControlsPointsPlugin):
 
     def __onOrderChanged(self, entityID, order=None, target=None, extra=None, **kwargs):
         baseID = kwargs['baseID']
+        team = kwargs['baseTeam']
         isMannerChanged = kwargs['isMannerChanged']
         if order not in (RTSOrder.DEFEND_THE_BASE, RTSOrder.CAPTURE_THE_BASE) or not baseID or isMannerChanged:
             return
         else:
-            entryID = self._getMarkerIDByUID(baseID)
+            uid = getUniqueTeamOrControlPointID(team, 0)
+            entryID = self._getMarkerIDByUID(uid)
             if entryID in self.__pingEntries or entryID is None:
                 return
             self.__pingEntries.append(entryID)

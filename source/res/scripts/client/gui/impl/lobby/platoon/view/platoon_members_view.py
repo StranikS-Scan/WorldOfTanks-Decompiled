@@ -6,7 +6,7 @@ import BigWorld
 import VOIP
 from CurrentVehicle import g_currentVehicle
 from UnitBase import UNDEFINED_ESTIMATED_TIME
-from constants import PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE, PremiumConfigs
 from frameworks.wulf import WindowFlags, ViewSettings, WindowStatus
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS
 from gui.Scaleform.daapi.view.lobby.prb_windows.squad_action_button_state_vo import SquadActionButtonStateVO
@@ -228,6 +228,8 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
     def __onServerSettingsChange(self, diff):
         if 'unit_assembler_config' in diff:
             self._updateButtons()
+        if PremiumConfigs.PREM_SQUAD in diff:
+            self._setBonusInformation(self._getBonusState())
 
     def __onAvailableTiersForSearchChanged(self):
         self._updateButtons()

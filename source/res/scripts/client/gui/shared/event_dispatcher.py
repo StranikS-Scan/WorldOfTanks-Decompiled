@@ -363,8 +363,8 @@ def showVehicleStats(vehTypeCompDescr):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'itemCD': vehTypeCompDescr}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showHangar(ctx=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+def showHangar():
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBarracks(location=None, nationID=None, tankType=None, role=None):
@@ -652,7 +652,7 @@ def selectVehicleInHangar(itemCD, loadHangar=True):
         raise SoftException('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
     g_currentVehicle.selectVehicle(veh.invID)
     if loadHangar:
-        showHangar(ctx={'needToShowVehicle': True})
+        showHangar()
 
 
 def showPersonalCase(tankmanInvID, tabIndex, scope=EVENT_BUS_SCOPE.DEFAULT):

@@ -791,7 +791,6 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSSUBMODENOTAVAILABLE_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsSubmodeNotAvailable/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSSUBMODENOTELIGIBLE_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsSubmodeNotEligible/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOTAVAILABLE_HEADER = '#menu:headerButtons/fightBtn/tooltip/rtsNotAvailable/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOTAVAILABLE_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNotAvailable/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOBATTLES_HEADER = '#menu:headerButtons/fightBtn/tooltip/rtsNoBattles/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOBATTLES_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNoBattles/body'

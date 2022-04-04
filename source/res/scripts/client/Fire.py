@@ -21,6 +21,7 @@ class Fire(BigWorld.DynamicScriptComponent):
         super(Fire, self).__init__()
         self.__effectListPlayerRef = None
         vehicle = self.entity
+        self.__isPlayerVehicle = vehicle.isPlayerVehicle
         if not self.__tryShowFlameEffect():
             vehicle.onAppearanceReady += self.__tryShowFlameEffect
         return
@@ -127,3 +128,14 @@ class Fire(BigWorld.DynamicScriptComponent):
             self.__stopEffects()
         else:
             self.__playEffect()
+
+    def onCameraChanged(self, isPlayerVehicle):
+        if self.__isPlayerVehicle == isPlayerVehicle:
+            return
+        self.__isPlayerVehicle = isPlayerVehicle
+        vehicle = self.entity
+        appearance = vehicle.appearance
+        if appearance.isUnderwater:
+            return
+        self.__stopEffects()
+        self.__playEffect()

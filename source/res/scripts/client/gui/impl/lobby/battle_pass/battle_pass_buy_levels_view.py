@@ -62,7 +62,6 @@ class BattlePassBuyLevelView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(BattlePassBuyLevelView, self)._onLoading(*args, **kwargs)
-        self.__addListeners()
         with self.viewModel.transaction() as tx:
             tx.setIsWalletAvailable(self.__wallet.isAvailable)
             if self.__backCallback:
@@ -75,7 +74,6 @@ class BattlePassBuyLevelView(ViewImpl):
 
     def _finalize(self):
         super(BattlePassBuyLevelView, self)._finalize()
-        self.__removeListeners()
         self.__clearTooltips()
         self.__tooltipItems = None
         self.__package = None
@@ -102,34 +100,21 @@ class BattlePassBuyLevelView(ViewImpl):
     def __showRewards(self):
         self.viewModel.setState(self.viewModel.REWARDS_STATE)
 
-    def __addListeners(self):
-        model = self.viewModel
-        model.onBackClick += self.__onBackClick
-        model.showConfirmAny += self.__showConfirmAny
-        model.confirmAnyNumber.onChangeSelectedLevels += self.__onChangeSelectedLevels
-        model.confirmAnyNumber.onBuyClick += self.__onBuyBattlePassClick
-        model.confirmAnyNumber.onShowRewardsClick += self.__showRewards
-        self.__battlePassController.onLevelUp += self.__onLevelUp
-        self.__battlePassController.onBattlePassSettingsChange += self.__onSettingsChange
-        g_eventBus.addListener(events.BattlePassEvent.BUYING_THINGS, self.__onBuying, EVENT_BUS_SCOPE.LOBBY)
-        self.__wallet.onWalletStatusChanged += self.__onWalletChanged
-        self.__battlePassController.onExtraChapterExpired += self.__onExtraChapterExpired
-        self.__battlePassController.onBattlePassSettingsChange += self.__onBattlePassSettingsChange
+    def _getListeners(self):
+        return ((events.BattlePassEvent.BUYING_THINGS, self.__onBuying, EVENT_BUS_SCOPE.LOBBY),)
 
-    def __removeListeners(self):
-        model = self.viewModel
-        model.onBackClick -= self.__onBackClick
-        model.showConfirmAny -= self.__showConfirmAny
-        model.confirmAnyNumber.onChangeSelectedLevels -= self.__onChangeSelectedLevels
-        model.confirmAnyNumber.onBuyClick -= self.__onBuyBattlePassClick
-        model.confirmAnyNumber.onShowRewardsClick -= self.__showRewards
-        self.__battlePassController.onLevelUp -= self.__onLevelUp
-        self.__battlePassController.onBattlePassSettingsChange -= self.__onSettingsChange
-        g_eventBus.removeListener(events.BattlePassEvent.BUYING_THINGS, self.__onBuying, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
-        self.__wallet.onWalletStatusChanged -= self.__onWalletChanged
-        self.__battlePassController.onExtraChapterExpired -= self.__onExtraChapterExpired
-        self.__battlePassController.onBattlePassSettingsChange -= self.__onBattlePassSettingsChange
+    def _getEvents(self):
+        return ((self.viewModel.onBackClick, self.__onBackClick),
+         (self.viewModel.showConfirmAny, self.__showConfirmAny),
+         (self.viewModel.confirmAnyNumber.onChangeSelectedLevels, self.__onChangeSelectedLevels),
+         (self.viewModel.confirmAnyNumber.onBuyClick, self.__onBuyBattlePassClick),
+         (self.viewModel.confirmAnyNumber.onShowRewardsClick, self.__showRewards),
+         (self.__battlePassController.onLevelUp, self.__onLevelUp),
+         (self.__battlePassController.onBattlePassSettingsChange, self.__onSettingsChanged),
+         (self.__battlePassController.onSeasonStateChanged, self.__onSettingsChanged),
+         (self.__battlePassController.onExtraChapterExpired, self.__onExtraChapterExpired),
+         (self.__battlePassController.onBattlePassSettingsChange, self.__onBattlePassSettingsChange),
+         (self.__wallet.onWalletStatusChanged, self.__onWalletChanged))
 
     def __onBuying(self, _):
         self.__battlePassController.onLevelUp += self.__onLevelUp
@@ -143,7 +128,7 @@ class BattlePassBuyLevelView(ViewImpl):
     def __onLevelUp(self):
         self.__updateState()
 
-    def __onSettingsChange(self, *_):
+    def __onSettingsChanged(self, *_):
         if self.__battlePassController.isPaused():
             showMissionsBattlePass()
         elif self.__battlePassController.isVisible():

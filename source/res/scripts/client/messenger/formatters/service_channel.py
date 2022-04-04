@@ -1737,10 +1737,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     def __getTokensString(self, data):
         count = 0
         tokenStrings = []
-        rts1x7CurrencyTokensCount = 0
-        rts1x1CurrencyTokensCount = 0
-        rts1x7CurrencyToken = self.__rtsController.getSettings().getCurrencyTokenName(ARENA_BONUS_TYPE.RTS)
-        rts1x1CurrencyToken = self.__rtsController.getSettings().getCurrencyTokenName(ARENA_BONUS_TYPE.RTS_1x1)
         for tokenName, tokenData in data.iteritems():
             tankmanTokenResult = _processTankmanToken(tokenName)
             if tankmanTokenResult:
@@ -1751,10 +1747,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                     tokenStrings.append(offerTokenResult)
             if tokenName == constants.PERSONAL_MISSION_FREE_TOKEN_NAME:
                 count += tokenData.get('count', 0)
-            if tokenName == rts1x7CurrencyToken:
-                rts1x7CurrencyTokensCount += tokenData.get('count', 0)
-            if tokenName == rts1x1CurrencyToken:
-                rts1x1CurrencyTokensCount += tokenData.get('count', 0)
             quests = self.__eventsCache.getQuestsByTokenRequirement(tokenName)
             for quest in quests:
                 text = quest.getNotificationText().format(count=tokenData.get('count', 0))
@@ -1764,12 +1756,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         if count != 0:
             template = 'awardListAccruedInvoiceReceived' if count > 0 else 'awardListDebitedInvoiceReceived'
             tokenStrings.append(g_settings.htmlTemplates.format(template, {'count': count}))
-        if rts1x7CurrencyTokensCount > 0:
-            template = 'rts1x7CurrencyAccruedInvoiceReceived'
-            tokenStrings.append(g_settings.htmlTemplates.format(template, {'count': rts1x7CurrencyTokensCount}))
-        if rts1x1CurrencyTokensCount > 0:
-            template = 'rts1x1CurrencyAccruedInvoiceReceived'
-            tokenStrings.append(g_settings.htmlTemplates.format(template, {'count': rts1x1CurrencyTokensCount}))
         return tokenStrings
 
     def __getEntitlementsString(self, data):

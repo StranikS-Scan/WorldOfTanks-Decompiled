@@ -45,16 +45,21 @@ class IntroView(ViewImpl):
         return
 
     def _getEvents(self):
-        return ((self.viewModel.onClose, self.__onSubmit), (self.viewModel.onVideo, self.__showIntroVideo), (self.__battlePassController.onBattlePassSettingsChange, self.__updateBattlePassState))
+        return ((self.viewModel.onClose, self.__onSubmit),
+         (self.viewModel.onVideo, self.__showIntroVideo),
+         (self.__battlePassController.onBattlePassSettingsChange, self.__updateBattlePassState),
+         (self.__battlePassController.onSeasonStateChanged, self.__updateBattlePassState))
 
-    def __onSubmit(self):
+    @staticmethod
+    def __onSubmit():
         showMissionsBattlePass()
 
-    def __showIntroVideo(self):
+    @staticmethod
+    def __showIntroVideo():
         showBrowserOverlayView(getIntroVideoURL(), VIEW_ALIAS.BROWSER_OVERLAY)
 
     def __updateBattlePassState(self, *_):
         if self.__battlePassController.isPaused():
             showMissionsBattlePass()
-        elif not (self.__battlePassController.isEnabled() and self.__battlePassController.isActive()):
+        elif not self.__battlePassController.isActive():
             showHangar()

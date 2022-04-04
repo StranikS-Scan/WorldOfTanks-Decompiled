@@ -287,7 +287,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
     def _onVehicleFeedbackReceived(self, eventID, vehicleID, value):
         if eventID == _EVENT_ID.ENTITY_IN_FOCUS:
-            self.__onVehicleInFocus(vehicleID, value)
+            self._onVehicleInFocus(vehicleID, value)
         if vehicleID not in self._markers:
             return
         marker = self._markers[vehicleID]
@@ -296,12 +296,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             newState, stateText, iconAnimation = getHitStateVO(eventID, MARKER_HIT_STATE)
             self._updateMarkerState(handle, newState, value, stateText, iconAnimation)
         elif eventID == _EVENT_ID.VEHICLE_DEAD:
-            self._hide(handle, vehicleID)
-            self.__stopActionMarker(handle, vehicleID)
-            self._updateMarkerState(handle, 'dead', value)
-            self._setMarkerReplied(marker, False)
-            self._setMarkerSticky(handle, False)
-            self._setMarkerBoundEnabled(handle, False)
+            self._updateDeathMarker(vehicleID, handle, value, marker)
         elif eventID == _EVENT_ID.VEHICLE_SHOW_MARKER:
             vMarker, numberOfReplies, isTargetForPlayer, isPermanent = value
             self.__showActionMarker(handle, vMarker, vehicleID, numberOfReplies, isTargetForPlayer, isPermanent)
@@ -536,7 +531,15 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
     def _onVehicleMarkerRemoved(self, vehicleID):
         self._hideVehicleMarker(vehicleID)
 
-    def __onVehicleInFocus(self, vehicleID, entityInFocusData):
+    def _updateDeathMarker(self, vehicleID, handle, value, marker):
+        self._hide(handle, vehicleID)
+        self.__stopActionMarker(handle, vehicleID)
+        self._updateMarkerState(handle, 'dead', value)
+        self._setMarkerReplied(marker, False)
+        self._setMarkerSticky(handle, False)
+        self._setMarkerBoundEnabled(handle, False)
+
+    def _onVehicleInFocus(self, vehicleID, entityInFocusData):
         if entityInFocusData.entityTypeInFocus != ENTITY_IN_FOCUS_TYPE.VEHICLE:
             return
         markerID = -1

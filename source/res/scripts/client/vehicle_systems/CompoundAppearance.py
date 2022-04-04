@@ -682,6 +682,8 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
                 self.tracks.sniperMode(True)
             else:
                 self.tracks.sniperMode(False)
+        if self._vehicle and self._vehicle.isOnFire():
+            self._vehicle.fire.onCameraChanged(self.id == currentVehicleId)
         super(CompoundAppearance, self)._onCameraChanged(cameraName, currentVehicleId=currentVehicleId)
         return
 

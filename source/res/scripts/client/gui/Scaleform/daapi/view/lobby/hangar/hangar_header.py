@@ -272,7 +272,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._eventsCache.onSyncCompleted += self.update
         self._eventsCache.onProgressUpdated += self.update
         self._festivityController.onStateChanged += self.update
-        self.__battlePassController.onSeasonStateChange += self.update
+        self.__battlePassController.onSeasonStateChanged += self.update
         self.__rankedController.onGameModeStatusUpdated += self.update
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.update
         self.__mapboxCtrl.addProgressionListener(self.update)
@@ -293,7 +293,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._eventsCache.onSyncCompleted -= self.update
         self._eventsCache.onProgressUpdated -= self.update
         self._festivityController.onStateChanged -= self.update
-        self.__battlePassController.onSeasonStateChange -= self.update
+        self.__battlePassController.onSeasonStateChanged -= self.update
         self.__rankedController.onGameModeStatusUpdated -= self.update
         self._currentVehicle = None
         self.__screenWidth = None

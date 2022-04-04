@@ -279,9 +279,9 @@ class RTSBWController(CallbackDelayer, IRTSBWController):
 
     def __onTeamBasePointsUpdate(self, team, baseID, points, *_):
         if points == 0:
-            self.__capturingControlPoints.discard(baseID)
+            self.__capturingControlPoints.discard(team)
         else:
-            self.__capturingControlPoints.add(baseID)
+            self.__capturingControlPoints.add(team)
         invaders = []
         vehicles = [ v for v in BigWorld.player().vehicles if v.publicInfo['team'] != team and v.isAlive() and not self.__sessionProvider.getCtx().isObserver(v.id) and not v.isSupply() ]
         for baseInfo in self.__controlPoints:

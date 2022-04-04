@@ -29,8 +29,8 @@ class CommanderMarkersManager(MarkersManager):
             setup['supplies'] = plugins.TankmanSupplyMarkerPlugin
         return setup
 
-    def setFocusVehicle(self, vehicleID):
+    def setFocusVehicle(self, vehicleID, isInFocus):
         vehID = int(vehicleID)
         if avatar_getter.isCommanderCtrlMode():
             vehicles = self.__sessionProvider.dynamic.rtsCommander.vehicles
-            vehicles.setFocusVehicle(vehID, True, FocusPriority.MARKER)
+            vehicles.setFocusVehicle(vehID, isInFocus, FocusPriority.MARKER)

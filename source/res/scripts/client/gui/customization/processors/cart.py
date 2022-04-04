@@ -196,7 +196,7 @@ class SeparateItemsProcessor(ItemsProcessor):
              purchaseItem.intCD,
              purchaseItem.component.progressionLevel,
              purchaseItem.selected) if purchaseItem.item.isProgressive and purchaseItem.component is not None else (not purchaseItem.isEdited,
-             purchaseItem.isFromInventory,
+             not purchaseItem.isFromInventory,
              purchaseItem.intCD,
              -1,
              purchaseItem.selected)

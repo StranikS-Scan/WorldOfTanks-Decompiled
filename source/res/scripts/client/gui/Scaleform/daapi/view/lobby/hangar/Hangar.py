@@ -182,7 +182,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self._settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.__wotPlusInfo.onRenewableSubscriptionDataChanged += self.__onWotPlusDataChanged
-        self.battlePassController.onSeasonStateChange += self.__switchCarousels
+        self.battlePassController.onSeasonStateChanged += self.__switchCarousels
         self.startGlobalListening()
         self.__updateAll()
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
@@ -240,7 +240,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self.__wotPlusInfo.onRenewableSubscriptionDataChanged -= self.__onWotPlusDataChanged
-        self.battlePassController.onSeasonStateChange -= self.__switchCarousels
+        self.battlePassController.onSeasonStateChanged -= self.__switchCarousels
         self.__timer.clearCallbacks()
         self.__timer = None
         self.closeHelpLayout()

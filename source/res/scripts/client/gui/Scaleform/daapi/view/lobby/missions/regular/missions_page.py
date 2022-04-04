@@ -187,7 +187,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if enterEvent is not None:
             self.soundManager.playSound(enterEvent)
         g_currentVehicle.onChanged += self.__updateHeader
-        self.battlePassCtrl.onSeasonStateChange += self.__updateHeader
+        self.battlePassCtrl.onSeasonStateChanged += self.__updateHeader
         self.marathonsCtrl.onVehicleReceived += self.__onMarathonVehicleReceived
         Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
         if self.marathonsCtrl.isAnyActive():
@@ -218,7 +218,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
         self.marathonsCtrl.onVehicleReceived -= self.__onMarathonVehicleReceived
         g_currentVehicle.onChanged -= self.__updateHeader
-        self.battlePassCtrl.onSeasonStateChange -= self.__updateHeader
+        self.battlePassCtrl.onSeasonStateChanged -= self.__updateHeader
         self.removeListener(MissionsEvent.ON_GROUPS_DATA_CHANGED, self.__onPageUpdate, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(MissionsEvent.ON_FILTER_CHANGED, self.__onFilterChanged, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(MissionsEvent.ON_FILTER_CLOSED, self.__onFilterClosed, EVENT_BUS_SCOPE.LOBBY)

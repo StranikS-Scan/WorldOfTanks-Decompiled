@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/battle_session/legacy/entity.py
 from soft_exception import SoftException
 from constants import PREBATTLE_TYPE, QUEUE_TYPE, PREBATTLE_ROLE
-from gui import SystemMessages
+from gui import SystemMessages, GUI_SETTINGS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_MESSAGES
 from gui.prb_control import prb_getters
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -134,6 +134,10 @@ class BattleSessionEntity(LegacyEntity):
 
     def getTeamLimits(self):
         return prb_getters.getPrebattleSettings().getTeamLimits(self.getPlayerTeam())
+
+    def isObserverModeEnabled(self):
+        minCount = self.getTeamLimits(1)['minCount']
+        return GUI_SETTINGS.trainingObserverModeEnabled and minCount > 0
 
     def doAction(self, action=None):
         if self.getPlayerInfo().isReady():

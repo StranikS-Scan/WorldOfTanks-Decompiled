@@ -43,7 +43,10 @@ class ExtraIntroView(ViewImpl):
             fillVehicleInfo(tx.vehicleInfo, vehicle)
 
     def _getEvents(self):
-        return ((self.viewModel.onClose, self.__onSubmit), (self.__battlePassController.onExtraChapterExpired, self.__onExtraChapterExpired), (self.__battlePassController.onBattlePassSettingsChange, self.__onBattlePassSettingsChange))
+        return ((self.viewModel.onClose, self.__onSubmit),
+         (self.__battlePassController.onExtraChapterExpired, self.__onExtraChapterExpired),
+         (self.__battlePassController.onBattlePassSettingsChange, self.__onBattlePassSettingsChanged),
+         (self.__battlePassController.onSeasonStateChanged, self.__onBattlePassSettingsChanged))
 
     def __onSubmit(self):
         if self.__chapterID in self.__battlePassController.getChapterIDs():
@@ -55,14 +58,10 @@ class ExtraIntroView(ViewImpl):
     def __onExtraChapterExpired():
         showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
 
-    def __onBattlePassSettingsChange(self, *_):
-        if not self.__battlePassController.isChapterExists(self.__chapterID):
-            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+    def __onBattlePassSettingsChanged(self, *_):
+        if not self.__battlePassController.isActive():
+            showHangar()
         elif self.__battlePassController.isPaused():
             showMissionsBattlePass()
-        elif not (self.__battlePassController.isEnabled() and self.__battlePassController.isActive()):
-            showHangar()
-
-    def _finalize(self):
-        super(ExtraIntroView, self)._finalize()
-        self.__onSubmit()
+        elif not self.__battlePassController.isChapterExists(self.__chapterID):
+            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())

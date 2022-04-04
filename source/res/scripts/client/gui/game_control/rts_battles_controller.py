@@ -3,6 +3,7 @@
 import typing
 import logging
 import BigWorld
+from CurrentVehicle import g_currentVehicle
 from adisp import process
 import Event
 from account_helpers import AccountSettings
@@ -10,7 +11,6 @@ from account_helpers.AccountSettings import IS_RTS_COMMANDER, RTS_INTRO_PAGE_VIS
 from account_helpers.client_ai_rosters import getUnsuitableVehiclesCriteria
 from constants import Configs, ARENA_BONUS_TYPE
 from gui import GUI_SETTINGS
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.rts_battles.rts_helpers import markRTSBootcampComplete, isRTSBootcampComplete
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.listener import IGlobalListener
@@ -20,9 +20,8 @@ from gui.rts_battles.rts_constants import COMMANDER_INVITATION_MARGIN
 from gui.rts_battles.rts_models import RTSAlertData, RTSRoster
 from gui.rts_battles.sound_manager import RTSSoundManager
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from gui.shared.events import ViewEventType
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
-from gui.shared import event_dispatcher, EVENT_BUS_SCOPE, g_eventBus
+from gui.shared import event_dispatcher
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.Scaleform.genConsts.RTSBATTLES_ALIASES import RTSBATTLES_ALIASES
@@ -414,16 +413,14 @@ class RTSBattlesController(IRTSBattlesController, Notifiable, SeasonProvider, IG
             markRTSBootcampComplete(isComplete=True)
 
     def _addLobbyListeners(self):
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_currentVehicle.onChangeStarted += self._moveToTankPosition
 
     def _removeLobbyListeners(self):
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_currentVehicle.onChangeStarted -= self._moveToTankPosition
 
     @process
-    def __loadViewHandler(self, event):
+    def _moveToTankPosition(self):
         if not self.isPrbActive():
-            return
-        if event.alias != VIEW_ALIAS.LOBBY_HANGAR or not event.ctx.get('needToShowVehicle', False):
             return
         if self.isWarmup() and not self.isSubmodeEnabled(ARENA_BONUS_TYPE.RTS):
             yield self.prbDispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))

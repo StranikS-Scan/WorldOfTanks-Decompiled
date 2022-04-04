@@ -1508,7 +1508,7 @@ class IBattlePassController(IGameController):
     onLevelUp = None
     onBattlePassIsBought = None
     onSelectTokenUpdated = None
-    onSeasonStateChange = None
+    onSeasonStateChanged = None
     onBattlePassSettingsChange = None
     onFinalRewardStateChange = None
     onRewardSelectChange = None

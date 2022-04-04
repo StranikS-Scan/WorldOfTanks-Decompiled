@@ -300,7 +300,7 @@ class ProxyVehiclesManager(_ProxiesContainer, IProxyVehiclesManager, CallbacksSe
                 if marker is not None:
                     marker.setVisible(False)
                 wasEnqueued = self[vehicleID].enqueue(COMMAND_NAME.MOVE, marker=marker, position=position, heading=heading, controlPoint=controlPoint, isAggressive=isAggressive, isRetreat=self.__sessionProvider.dynamic.rtsCommander.isRetreatModeActive, executeNow=not append, companions=self.__getCompanions(vehicleID, vehicleIDs) or None, vehicleModel=self.__models.get(vehicleID, None), groupID=groupID)
-                if not wasEnqueued:
+                if marker and not wasEnqueued:
                     marker.fini()
 
             if not keepPosition:
@@ -564,7 +564,7 @@ class ProxyVehiclesManager(_ProxiesContainer, IProxyVehiclesManager, CallbacksSe
             if isInFocus:
                 self.__setFocus(vID, priority)
             _updateHighlights()
-            self.onFocusVehicleChanged(self.focusedID, isInFocus)
+            self.onFocusVehicleChanged(vID, isInFocus)
             if avatar_getter.isCommanderCtrlMode():
                 self.__sessionProvider.dynamic.rtsSound.focusedVehicleChanged(self.focusedID, isInFocus)
             return

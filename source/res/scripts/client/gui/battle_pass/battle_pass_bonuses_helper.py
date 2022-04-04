@@ -160,13 +160,26 @@ class _StyleProgressTokenValueGetter(_BaseValueGetter):
         return str(level)
 
 
+class _VehiclesValueGetter(_BaseValueGetter):
+
+    @classmethod
+    def getValue(cls, bonus, _):
+        value = bonus.getValue()
+        if isinstance(value, list):
+            value = first(value)
+        keys = value.keys()
+        value = str(first(keys))
+        return value
+
+
 _VALUE_GETTERS_MAP = {'default': _BaseValueGetter,
  'blueprints': _BlueprintValueGetter,
  'items': _IntCDValueGetter,
  'goodies': _IntCDValueGetter,
  'crewBooks': _IntCDValueGetter,
  'customizations': _CustomizationValueGetter,
- 'styleProgressToken': _StyleProgressTokenValueGetter}
+ 'styleProgressToken': _StyleProgressTokenValueGetter,
+ 'vehicles': _VehiclesValueGetter}
 
 class _BaseTextGetter(object):
 

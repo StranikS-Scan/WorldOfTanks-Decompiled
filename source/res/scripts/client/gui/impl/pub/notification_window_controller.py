@@ -21,7 +21,7 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class NotificationWindowController(INotificationWindowController, IGlobalListener):
-    __slots__ = ('__accountID', '__activeQueue', '__postponedQueue', '__currentWindow', '__callbackID', '__isWaitingShown', '__processAfterWaiting', '__isInBootcamp', '__isLobbyLoaded', '__locks')
+    __slots__ = ('__accountID', '__activeQueue', '__postponedQueue', '__currentWindow', '__callbackID', '__isWaitingShown', '__processAfterWaiting', '__isInBootcamp', '__isLobbyLoaded', '__locks', '__isExecuting')
     __gui = dependency.descriptor(IGuiLoader)
     __gameplay = dependency.descriptor(IGameplayLogic)
     __bootcamp = dependency.descriptor(IBootcampController)
@@ -38,6 +38,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__isLobbyLoaded = False
         self.__accountID = 0
         self.__isInBootcamp = False
+        self.__isExecuting = False
         self.onPostponedQueueUpdated = Event.Event()
         return
 
@@ -146,16 +147,21 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__notifyWithPostponedQueueCount()
 
     def isEnabled(self):
-        return False if not self.__isLobbyLoaded or self.__isInBootcamp or self.__locks or self.prbDispatcher is None else not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
+        return False if not self.__isLobbyLoaded or self.__isInBootcamp or self.prbDispatcher is None else not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
+
+    def isExecuting(self):
+        return self.__isExecuting
 
     def hasWindow(self, window):
         command = WindowNotificationCommand(window)
         return window == self.__currentWindow or command in self.__activeQueue or command in self.__postponedQueue
 
     def lock(self, key):
+        _logger.info('Notifications locked, key = %s', key)
         self.__locks.add(key)
 
     def unlock(self, key):
+        _logger.info('Notifications unlocked, key = %s', key)
         self.__locks.remove(key)
         self.__tryProcess()
 
@@ -163,10 +169,11 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         return key in self.__locks
 
     def __tryProcess(self):
-        if self.isEnabled():
-            self.__processNext()
-        elif self.__isLobbyLoaded:
-            self.postponeActive()
+        if not self.__locks:
+            if self.isEnabled():
+                self.__processNext()
+            elif self.__isLobbyLoaded:
+                self.postponeActive()
 
     def __onEnterBootcamp(self):
         self.__isInBootcamp = True
@@ -179,7 +186,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__notifyWithPostponedQueueCount()
 
     def __updateEnabled(self):
-        if not self.isEnabled():
+        if not self.isEnabled() and not self.__locks:
             self.postponeActive()
             self.__destroyCurrentWindow()
             self.__clearCallback()
@@ -200,7 +207,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
 
     def __processNext(self):
         self.__processAfterWaiting = True
-        if self.__callbackID is None:
+        if self.__callbackID is None and self.__activeQueue and not self.__isWaitingShown and not self.__locks:
             self.__callbackID = BigWorld.callback(0, self.__processNextCallback)
         return
 
@@ -210,11 +217,13 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
             return
         else:
             self.__processAfterWaiting = False
-            if self.isEnabled() and not self.__gui.windowsManager.findWindows(self.__overlappingWindowsPredicate):
+            if self.isEnabled() and not self.__locks and not self.__gui.windowsManager.findWindows(self.__overlappingWindowsPredicate):
                 command = self.__activeQueue.pop(0)
                 _logger.debug('Executing next command: %r', command)
                 self.__currentWindow = command.getWindow()
+                self.__isExecuting = True
                 command.execute()
+                self.__isExecuting = False
             return
 
     def __destroyCurrentWindow(self):

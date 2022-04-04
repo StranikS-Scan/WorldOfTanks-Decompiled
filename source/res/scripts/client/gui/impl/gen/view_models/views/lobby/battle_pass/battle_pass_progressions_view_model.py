@@ -24,7 +24,7 @@ class ButtonStates(Enum):
 class BattlePassProgressionsViewModel(CommonViewModel):
     __slots__ = ('onClose', 'onActionClick', 'onTakeClick', 'onTakeAllClick', 'onOpenShopClick', 'onAboutClick', 'onPointsInfoClick', 'onBpbitClick', 'onBpcoinClick', 'onTakeRewardsClick', 'onFinishedAnimation', 'onLevelsAnimationFinished', 'onChapterChoice', 'onViewLoaded')
 
-    def __init__(self, properties=39, commands=15):
+    def __init__(self, properties=40, commands=15):
         super(BattlePassProgressionsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -225,11 +225,17 @@ class BattlePassProgressionsViewModel(CommonViewModel):
     def setIsExtra(self, value):
         self._setBool(37, value)
 
+    def getHasExtra(self):
+        return self._getBool(38)
+
+    def setHasExtra(self, value):
+        self._setBool(38, value)
+
     def getExpireTime(self):
-        return self._getNumber(38)
+        return self._getNumber(39)
 
     def setExpireTime(self, value):
-        self._setNumber(38, value)
+        self._setNumber(39, value)
 
     def _initialize(self):
         super(BattlePassProgressionsViewModel, self)._initialize()
@@ -267,6 +273,7 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         self._addBoolProperty('isStyleTaken', False)
         self._addBoolProperty('isSeasonEndingSoon', False)
         self._addBoolProperty('isExtra', False)
+        self._addBoolProperty('hasExtra', False)
         self._addNumberProperty('expireTime', 0)
         self.onClose = self._addCommand('onClose')
         self.onActionClick = self._addCommand('onActionClick')

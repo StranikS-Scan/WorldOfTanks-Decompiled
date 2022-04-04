@@ -46,6 +46,8 @@ class CredentialsMode(BaseMode):
         self._loginManager.clearToken2Preference()
 
     def doLogin(self, userName, password, serverName, isSocialToken2Login):
+        if Waiting.isVisible():
+            return False
         result = self.__validateCredentials(userName.lower().strip(), password.strip(), self.isToken2())
         if result.isValid:
             if not Waiting.isOpened('login'):

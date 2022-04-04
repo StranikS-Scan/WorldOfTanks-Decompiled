@@ -80,8 +80,11 @@ class CommandsQueue(CallbackDelayer):
         return lastCommand.canReplaceQueuedCommand(commandTypeName) if lastCommand is not None else False
 
     def enqueue(self, commandTypeName, executeNow=False, **kwargs):
+        isAggressive = kwargs.get('isAggressive', False)
         if executeNow:
             self.clear()
+        elif isAggressive and self.__commands:
+            self.__remove(self.__commands[-1])
         if not self.canQueueCommand(commandTypeName, executeNow):
             return False
         if not executeNow and self.shouldReplaceLastQueued(commandTypeName):
@@ -133,6 +136,8 @@ class CommandsQueue(CallbackDelayer):
         return
 
     def __remove(self, command):
+        if not command:
+            return
         self.__commands.remove(command)
         command.fini()
         self.__vehicle.handleOnCommandDequeued(command)

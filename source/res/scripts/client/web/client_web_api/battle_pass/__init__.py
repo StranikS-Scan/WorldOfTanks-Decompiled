@@ -19,7 +19,7 @@ class BattlePassEventHandler(C2WHandler, EventsHandler):
 
     def _getEvents(self):
         return ((self.__battlePass.onBattlePassIsBought, self.__sendInfo),
-         (self.__battlePass.onSeasonStateChange, self.__sendInfo),
+         (self.__battlePass.onSeasonStateChanged, self.__sendInfo),
          (self.__battlePass.onBattlePassSettingsChange, self.__sendInfo),
          (self.__battlePass.onChapterChanged, self.__sendInfo))
 

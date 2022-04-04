@@ -61,7 +61,7 @@ class BattlePassAwardsView(ViewImpl):
         return None if tooltipId is None else self.__tooltipItems.get(tooltipId)
 
     def _getEvents(self):
-        return ((self.__battlePassController.onBattlePassSettingsChange, self.__onSettingsChanged), (self.viewModel.onBuyClick, self.__onBuyClick))
+        return ((self.viewModel.onBuyClick, self.__onBuyClick),)
 
     def _onLoading(self, bonuses, data, *args, **kwargs):
         super(BattlePassAwardsView, self)._onLoading(*args, **kwargs)
@@ -82,6 +82,7 @@ class BattlePassAwardsView(ViewImpl):
             tx.setChapterID(chapterID)
             tx.setSeasonStopped(self.__battlePassController.isPaused())
             tx.setIsBaseStyleLevel(styleLevel == 1)
+            tx.setIsExtra(self.__battlePassController.isExtraChapter(chapterID))
         self.__setAwards(bonuses, isFinalReward)
         isRewardSelected = reason == BattlePassRewardReason.SELECT_REWARD
         self.viewModel.setIsNeedToShowOffer(not (isBattlePassPurchased or self.viewModel.additionalRewards.getItemsLength() or isRewardSelected))
@@ -132,12 +133,6 @@ class BattlePassAwardsView(ViewImpl):
     @staticmethod
     def __getRewardWeight(bonus):
         return REWARD_SIZES.get(BattlePassAwardsManager.getBigIcon(bonus), 0)
-
-    def __onSettingsChanged(self, *_):
-        chapterID = self.viewModel.getChapterID()
-        validState = not chapterID or self.__battlePassController.isEnabled() or self.__battlePassController.isPaused() and self.__battlePassController.isExtraChapter(chapterID)
-        if not validState:
-            self.destroyWindow()
 
     def __onBuyClick(self):
         if callable(self.__closeCallback):

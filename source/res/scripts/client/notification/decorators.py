@@ -890,11 +890,11 @@ class BattlePassLockButtonDecorator(MessageDecorator):
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(BattlePassLockButtonDecorator, self).__init__(entityID, entity, settings, model)
         self.__battlePassController.onBattlePassSettingsChange += self.__update
-        self.__battlePassController.onSeasonStateChange += self.__update
+        self.__battlePassController.onSeasonStateChanged += self.__update
 
     def clear(self):
         self.__battlePassController.onBattlePassSettingsChange -= self.__update
-        self.__battlePassController.onSeasonStateChange -= self.__update
+        self.__battlePassController.onSeasonStateChanged -= self.__update
         super(BattlePassLockButtonDecorator, self).clear()
 
     def _make(self, formatted=None, settings=None):

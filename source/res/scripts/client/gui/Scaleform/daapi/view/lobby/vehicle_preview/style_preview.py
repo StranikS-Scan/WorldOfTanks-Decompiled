@@ -58,6 +58,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.setTopPanel()
         super(VehicleStylePreview, self)._populate()
         g_currentPreviewVehicle.selectVehicle(self.__vehicleCD, style=self._style)
+        g_eventBus.handleEvent(events.CameraMoveEvent(events.CameraMoveEvent.ON_HANGAR_VEHICLE), scope=EVENT_BUS_SCOPE.LOBBY)
         self.__selectedVehicleEntityId = g_currentPreviewVehicle.vehicleEntityID
         if not g_currentPreviewVehicle.isPresent() or self._style is None:
             event_dispatcher.showHangar()

@@ -680,6 +680,10 @@ class HangarCameraManagerEvent(HasCtxEvent):
     ON_DESTROY = 'hangarCameraManagerEvent/onDestroy'
 
 
+class CameraMoveEvent(HasCtxEvent):
+    ON_HANGAR_VEHICLE = 'CameraMoveEvent/ON_HANGAR_VEHICLE'
+
+
 class BattlePassEvent(HasCtxEvent):
     BUYING_THINGS = 'buyingThings'
     AWARD_VIEW_CLOSE = 'onAwardViewClose'

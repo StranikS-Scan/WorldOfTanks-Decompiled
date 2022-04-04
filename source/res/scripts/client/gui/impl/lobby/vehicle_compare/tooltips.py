@@ -41,6 +41,10 @@ class CmpBattleBoostersTooltipBuilder(BattleBoostersTooltipBuilder):
     def _getTooltipSpecialAlias(cls):
         return TOOLTIPS_CONSTANTS.BATTLE_BOOSTER_COMPARE
 
+    @classmethod
+    def _getInSlotTooltipAlias(cls):
+        return TOOLTIPS_CONSTANTS.BATTLE_BOOSTER_COMPARE
+
 
 class CmpShellTooltipBuilder(ShellTooltipBuilder):
     itemsCache = dependency.descriptor(IItemsCache)

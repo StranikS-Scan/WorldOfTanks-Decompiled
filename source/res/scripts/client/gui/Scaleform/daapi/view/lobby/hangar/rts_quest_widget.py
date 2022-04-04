@@ -19,6 +19,14 @@ class RtsQuestWidget(DailyQuestWidget):
         else:
             self._showOrHide()
 
+    def _populate(self):
+        super(RtsQuestWidget, self)._populate()
+        self.__battlesController.onControlModeChanged += self.__onGameModeChanged
+
+    def _dispose(self):
+        self.__battlesController.onControlModeChanged -= self.__onGameModeChanged
+        super(RtsQuestWidget, self)._dispose()
+
     def _makeInjectView(self):
         return RtsQuestsWidgetView()
 
@@ -33,11 +41,16 @@ class RtsQuestWidget(DailyQuestWidget):
         isCommander = self.__battlesController.isCommander()
         return self.__progressionCtrl.getQuests(isCommander, includeFuture=False)
 
+    def _executeShowOrHide(self):
+        haveQuestsToShow = self._hasIncompleteQuests() or self._hasQuestStatusChanged()
+        if self._shouldHide() or not haveQuestsToShow:
+            self._hide()
+            return
+        if haveQuestsToShow:
+            self._show()
+
     def __getQueueType(self):
         return self.prbEntity.getQueueType() if self.prbEntity else QUEUE_TYPE.UNKNOWN
 
-    def _executeShowOrHide(self):
-        if self._shouldHide():
-            self._hide()
-            return
-        self._show()
+    def __onGameModeChanged(self, *_):
+        self._showOrHide()

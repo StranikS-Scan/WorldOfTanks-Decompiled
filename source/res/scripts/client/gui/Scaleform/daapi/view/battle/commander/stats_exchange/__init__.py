@@ -8,11 +8,11 @@ from AvatarInputHandler import aih_global_binding
 from gui.Scaleform.daapi.view.battle.classic.stats_exchange import FragsCollectableStats
 from gui.Scaleform.daapi.view.battle.commander.stats_exchange import supply, broker
 from gui.Scaleform.daapi.view.meta.RTSBattleStatisticDataControllerMeta import RTSBattleStatisticDataControllerMeta
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.battle_control.controllers.commander.rts_commander_ctrl import getPrioritizedCondition
-from gui.battle_control.controllers.team_sixth_sense import ITeamSixthSenseView
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+import shared_utils
 if TYPE_CHECKING:
     from gui.battle_control.controllers.commander.interfaces import ICommand
 
@@ -226,6 +226,14 @@ class RTSStatisticsDataController(RTSBattleStatisticDataControllerMeta):
     def __onControlModeChanged(self, mode):
         self.updateCommanderDataList()
         self.as_setRTSCommanderModeS(mode in aih_constants.CTRL_MODE_NAME.COMMANDER_MODES)
+
+        def voSearchCondition(v):
+            return not (v.isObserver() or v.isSupply() or v.isCommander()) and arenaDP.isAllyTeam(v.team)
+
+        arenaDP = self._battleCtx.getArenaDP()
+        if mode in [aih_constants.CTRL_MODE_NAME.ARCADE, aih_constants.CTRL_MODE_NAME.COMMANDER] and arenaDP:
+            vo = shared_utils.findFirst(voSearchCondition, arenaDP.getVehiclesInfoIterator())
+            self.updateVehiclesInfo([(INVALIDATE_OP.SORTING, arenaDP.getVehicleInfo(vo.vehicleID))], arenaDP)
 
     def __onVehicleConditionUpdated(self, vehicleID, conditions):
         condition = getPrioritizedCondition(vehicleID, conditions)

@@ -6,24 +6,13 @@ import Math
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from HangarVehicle import HangarVehicle
 from constants import ARENA_BONUS_TYPE
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ViewEventType, ComponentEvent
+from gui.shared.events import CameraMoveEvent
 from helpers import dependency
 from skeletons.gui.game_control import IRTSBattlesController
 from skeletons.gui.shared.utils import IHangarSpace
 _logger = logging.getLogger(__name__)
-_TANKER_FORCED_ALIASES = [VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW,
- VIEW_ALIAS.VEHICLE_PREVIEW,
- VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW,
- VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW,
- VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW,
- VIEW_ALIAS.OFFER_GIFT_VEHICLE_PREVIEW,
- VIEW_ALIAS.STYLE_PROGRESSION_PREVIEW,
- VIEW_ALIAS.STYLE_PREVIEW,
- VIEW_ALIAS.STYLE_BUYING_PREVIEW]
 _MIN_CAM_DISTANCE = 4.0
 _MAX_CAM_DISTANCE = 5.0
 
@@ -63,12 +52,12 @@ class ClientSelectableRTSObject(ClientSelectableCameraObject):
         super(ClientSelectableRTSObject, self).onLeaveWorld()
 
     def _removeListeners(self):
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._eventHandler, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(ComponentEvent.COMPONENT_REGISTERED, self._eventHandler, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(CameraMoveEvent.ON_HANGAR_VEHICLE, self._eventHandler, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__hangarSpace.onVehicleChangeStarted -= self._onUpdate
 
     def _addListeners(self):
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._eventHandler, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(ComponentEvent.COMPONENT_REGISTERED, self._eventHandler, scope=EVENT_BUS_SCOPE.GLOBAL)
+        g_eventBus.addListener(CameraMoveEvent.ON_HANGAR_VEHICLE, self._eventHandler, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__hangarSpace.onVehicleChangeStarted += self._onUpdate
 
     def onMouseClick(self):
         self.__rtsController.enterRTSPrebattle()
@@ -80,12 +69,10 @@ class ClientSelectableRTSObject(ClientSelectableCameraObject):
             self._removeListeners()
         self._onUpdate()
 
-    def _eventHandler(self, event):
-        if event.alias in _TANKER_FORCED_ALIASES and self.__currentCamLocation != RTS_CAMERA_LOCATION.TANKER:
-            self.__currentCamLocation = RTS_CAMERA_LOCATION.TANKER
-            self.__setupTankerLocation()
-        if event.alias == HANGAR_ALIASES.RTS_SUBMODE_SELECTOR:
-            self._onUpdate()
+    def _eventHandler(self, event=None):
+        if self.__currentCamLocation != RTS_CAMERA_LOCATION.TANKER:
+            self.__currentCamLocation = cameraLocation = RTS_CAMERA_LOCATION.TANKER
+            self._CAM_TRANSITION_DICT[cameraLocation](self)
 
     def _onUpdate(self):
         if not self.__hangarSpace.spaceInited:

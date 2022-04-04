@@ -64,6 +64,13 @@
       <undamaged>	vehicles/french/F75_Char_de_25t/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/french/F75_Char_de_25t/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/french/F75_Char_de_25t/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <F75_Char_de_25t_3DSt_TIR>
+          <undamaged>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Hull.model	</exploded>
+        </F75_Char_de_25t_3DSt_TIR>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -966,6 +973,32 @@
         <hiddenForUser>	true	</hiddenForUser>
         <anchorShift>	1.177862	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15068	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+        <position>	0.52784 1.30801 1.99151	</position>
+        <rotation>	0.345838 0.000007 3.14157	</rotation>
+        <scale>	0.343072 0.197397 0.343077	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.807679	</clipAngle>
+        <anchorShift>	0.036618	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15069	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+        <position>	-1.21763 1.39435 0.437945	</position>
+        <rotation>	-0.000000 0.000011 3.13986	</rotation>
+        <scale>	0.438512 0.131468 0.438524	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.027851	</clipAngle>
+        <anchorShift>	0.041488	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	1.78 1.78 0.39 0.43	</tiling>
@@ -1005,6 +1038,13 @@
         <undamaged>	vehicles/french/F75_Char_de_25t/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F75_Char_de_25t/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/french/F75_Char_de_25t/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <F75_Char_de_25t_3DSt_TIR>
+            <undamaged>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Chassis.model	</exploded>
+          </F75_Char_de_25t_3DSt_TIR>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1664,6 +1704,13 @@
         <undamaged>	vehicles/french/F75_Char_de_25t/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F75_Char_de_25t/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/french/F75_Char_de_25t/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <F75_Char_de_25t_3DSt_TIR>
+            <undamaged>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Chassis.model	</exploded>
+          </F75_Char_de_25t_3DSt_TIR>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -2368,12 +2415,20 @@
             <undamaged>	vehicles/french/F75_Char_de_25t/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/french/F75_Char_de_25t/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/french/F75_Char_de_25t/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <F75_Char_de_25t_3DSt_TIR>
+                <undamaged>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Gun_02.model	</exploded>
+              </F75_Char_de_25t_3DSt_TIR>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F75_Char_de_25t/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F75_Char_de_25t/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+          <effects>	shot_main_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2834,6 +2889,105 @@
               <anchorShift>	0.118629	</anchorShift>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45035	</slotId>
+              <rayStart>	-0.000366154 0.0036708 2.54598	</rayStart>
+              <rayEnd>	-0.00323342 -0.00365305 2.54398	</rayEnd>
+              <rayUp>	0.079 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	-0.93537 1.89654 -1.91799	</position>
+              <rotation>	1.56897 1.56903 -0.000003	</rotation>
+              <scale>	0.262472 0.193731 0.244209	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.511428	</clipAngle>
+              <anchorShift>	0.108641	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45036	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	0.943089 1.97981 -1.45556	</position>
+              <rotation>	1.56891 -1.5689 -0.000032	</rotation>
+              <scale>	0.426492 0.158727 0.396816	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.511428	</clipAngle>
+              <anchorShift>	0.108630	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45037	</slotId>
+              <rayStart>	-0.000366154 0.0036708 2.54598	</rayStart>
+              <rayEnd>	-0.00323342 -0.00365305 2.54398	</rayEnd>
+              <rayUp>	0.079 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	-0.759502 2.00636 -0.531411	</position>
+              <rotation>	0.675059 0.000003 3.14156	</rotation>
+              <scale>	0.358769 0.137953 0.358774	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.358398	</clipAngle>
+              <anchorShift>	0.097795	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45038	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	-0.403673 1.98378 -2.43464	</position>
+              <rotation>	1.56859 -0.0070252 -0.00695559	</rotation>
+              <scale>	0.269551 0.107821 0.269551	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.511428	</clipAngle>
+              <anchorShift>	0.078620	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45039	</slotId>
+              <rayStart>	-0.000366154 0.0036708 2.54598	</rayStart>
+              <rayEnd>	-0.00323342 -0.00365305 2.54398	</rayEnd>
+              <rayUp>	0.079 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	0.0242051 2.1949 -0.903392	</position>
+              <rotation>	-0.000000 0.000018 3.14157	</rotation>
+              <scale>	0.38041 0.146275 0.380417	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.26247	</clipAngle>
+              <anchorShift>	0.057801	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45040	</slotId>
+              <tags>	formfactor_square	</tags>
+              <position>	0.759538 2.00634 -0.53141	</position>
+              <rotation>	0.675059 0.000003 3.14156	</rotation>
+              <scale>	0.358769 0.137953 0.358774	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.358398	</clipAngle>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <anchorShift>	0.097799	</anchorShift>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.000366154 0.0036708 2.54598	</rayStart>
@@ -2843,6 +2997,18 @@
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0.000366154 0.0036708 1.67298	</rayStart>
+              <rayEnd>	-0.0292422 0.0771506 1.67288	</rayEnd>
+              <rayUp>	0.087 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
             </slot>
           </customizationSlots>
           <edgeByVisualModel>	false	</edgeByVisualModel>
@@ -2891,12 +3057,20 @@
             <undamaged>	vehicles/french/F75_Char_de_25t/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F75_Char_de_25t/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/french/F75_Char_de_25t/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <F75_Char_de_25t_3DSt_TIR>
+                <undamaged>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Gun_01.model	</exploded>
+              </F75_Char_de_25t_3DSt_TIR>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F75_Char_de_25t/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F75_Char_de_25t/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+          <effects>	shot_main_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3355,6 +3529,72 @@
               <clipAngle>	1.23641	</clipAngle>
               <verticalMirror>	true	</verticalMirror>
               <anchorShift>	0.118629	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45035	</slotId>
+              <rayStart>	-0.000366154 0.0036708 2.54598	</rayStart>
+              <rayEnd>	-0.00323342 -0.00365305 2.54398	</rayEnd>
+              <rayUp>	0.079 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	-0.966866 1.89657 -1.77538	</position>
+              <rotation>	1.56904 1.569 0.000000	</rotation>
+              <scale>	0.270966 0.100845 0.252112	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.511428	</clipAngle>
+              <anchorShift>	0.078632	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45036	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	0.943094 1.98171 -1.45556	</position>
+              <rotation>	1.56894 -1.569 0.000000	</rotation>
+              <scale>	0.426493 0.158727 0.396817	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.511428	</clipAngle>
+              <anchorShift>	0.09863	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45037	</slotId>
+              <rayStart>	-0.000366154 0.0036708 2.54598	</rayStart>
+              <rayEnd>	-0.00323342 -0.00365305 2.54398	</rayEnd>
+              <rayUp>	0.079 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	-0.759502 2.00636 -0.531411	</position>
+              <rotation>	0.675059 0.000003 3.14156	</rotation>
+              <scale>	0.358769 0.137953 0.358774	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.358398	</clipAngle>
+              <anchorShift>	0.097795	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45038	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	-0.403673 1.98378 -2.43464	</position>
+              <rotation>	1.56859 -0.0070252 -0.00695559	</rotation>
+              <scale>	0.269551 0.107821 0.269551	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.511428	</clipAngle>
+              <anchorShift>	0.078620	</anchorShift>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
@@ -3414,12 +3654,20 @@
             <undamaged>	vehicles/french/F75_Char_de_25t/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/french/F75_Char_de_25t/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/french/F75_Char_de_25t/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <F75_Char_de_25t_3DSt_TIR>
+                <undamaged>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Gun_03.model	</exploded>
+              </F75_Char_de_25t_3DSt_TIR>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F75_Char_de_25t/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F75_Char_de_25t/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+          <effects>	shot_mainext_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3880,6 +4128,72 @@
               <anchorShift>	0.367960	</anchorShift>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45035	</slotId>
+              <rayStart>	-0.000366154 0.0036708 2.54598	</rayStart>
+              <rayEnd>	-0.00323342 -0.00365305 2.54398	</rayEnd>
+              <rayUp>	0.079 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	-0.967076 1.89837 -1.69391	</position>
+              <rotation>	1.56904 1.56904 0.000021	</rotation>
+              <scale>	0.270966 0.100845 0.252112	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.511428	</clipAngle>
+              <anchorShift>	0.078632	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45036	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	0.943097 1.98363 -1.45556	</position>
+              <rotation>	1.56887 -1.56906 -0.000046	</rotation>
+              <scale>	0.425629 0.158406 0.396014	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.511428	</clipAngle>
+              <anchorShift>	0.09863	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45037	</slotId>
+              <rayStart>	-0.000366154 0.0036708 2.54598	</rayStart>
+              <rayEnd>	-0.00323342 -0.00365305 2.54398	</rayEnd>
+              <rayUp>	0.079 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	-0.759502 2.00636 -0.531411	</position>
+              <rotation>	0.675059 0.000003 3.14156	</rotation>
+              <scale>	0.358769 0.137953 0.358774	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.358398	</clipAngle>
+              <anchorShift>	0.097795	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45038	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
+              <position>	-0.403673 1.98378 -2.43464	</position>
+              <rotation>	1.56859 -0.0070252 -0.00695559	</rotation>
+              <scale>	0.269551 0.107821 0.269551	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.511428	</clipAngle>
+              <anchorShift>	0.078620	</anchorShift>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	0.00163382 0.00467078 3.64033	</rayStart>
@@ -3889,6 +4203,18 @@
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.00163382 0.00467078 4.68995	</rayStart>
+              <rayEnd>	0.0584387 0.0138598 4.68965	</rayEnd>
+              <rayUp>	0.077312 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <compatibleModels>	F75_Char_de_25t_3DSt_TIR	</compatibleModels>
             </slot>
           </customizationSlots>
           <edgeByVisualModel>	false	</edgeByVisualModel>
@@ -3903,6 +4229,13 @@
         <undamaged>	vehicles/french/F75_Char_de_25t/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/french/F75_Char_de_25t/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/french/F75_Char_de_25t/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <F75_Char_de_25t_3DSt_TIR>
+            <undamaged>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F75_Char_de_25t/_skins/F75_Char_de_25t_3DSt_TIR/crash/lod0/Turret_01.model	</exploded>
+          </F75_Char_de_25t_3DSt_TIR>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/french/F75_Char_de_25t/collision/Turret_01.model	</collisionModelServer>

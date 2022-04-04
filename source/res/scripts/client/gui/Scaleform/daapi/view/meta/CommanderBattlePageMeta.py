@@ -3,4 +3,6 @@
 from gui.Scaleform.daapi.view.battle.classic.page import ClassicPage
 
 class CommanderBattlePageMeta(ClassicPage):
-    pass
+
+    def as_spawnPointWindowClosedS(self):
+        return self.flashObject.as_spawnPointWindowClosed() if self._isDAAPIInited() else None

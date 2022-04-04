@@ -18,6 +18,8 @@ class Sounds(CONST_CONTAINER):
     R4_REWARD_SCREEN_COLLECTION_CLOSE = 'r4_hangar_collection_close'
     R4_TUTORIAL_VICTORY = 'gui_hangar_simple_execution_screen'
     R4_TUTORIAL_DEFEAT = 'gui_hangar_neutral_screen'
+    STATE_PLACE = 'STATE_hangar_place'
+    STATE_PLACE_GARAGE = 'STATE_hangar_place_garage'
 
 
 RTS_PRIME_TIME_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.PRIME_TIMES_SPACE_NAME, entranceStates={}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=Sounds.R4_HANGAR_PRIME_TIMES_IN, exitEvent=Sounds.R4_HANGAR_PRIME_TIMES_OUT)
@@ -64,6 +66,7 @@ class RTSSoundManager(object):
 
     def onOpenPage(self):
         self.__r4HangarInfoPage.startEvent()
+        WWISE.WW_setState(Sounds.STATE_PLACE, Sounds.STATE_PLACE_GARAGE)
 
     def onOpenRosterSetup(self):
         self.__r4HangarRosterSetup.startEvent()

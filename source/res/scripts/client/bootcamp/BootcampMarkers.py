@@ -422,6 +422,7 @@ class BootcampMarkersManager(object):
         self.__markerSoundShow = None
         self.__switchedToSniperMode = False
         self.__switchedToHiddenMode = False
+        self.__avatar = BigWorld.player()
         if BattleReplay.g_replayCtrl.isPlaying:
             self.replayCallbacks = []
         return
@@ -553,8 +554,15 @@ class BootcampMarkersManager(object):
     def update(self):
         for marker in self.__markers.values():
             pos = marker.position
-            distance = int(round((pos - BigWorld.player().getOwnVehiclePosition()).length))
+            if not hasattr(self, '__avatar') or self.__avatar is None:
+                self.__avatar = BigWorld.player()
+            if self.__avatar.isCommanderCtrlMode():
+                distance = int(round((pos - self.__avatar.inputHandler.ctrl.camera.camera.position).length))
+            else:
+                distance = int(round((pos - self.__avatar.getOwnVehiclePosition()).length))
             marker.update(distance)
+
+        return
 
     def getActiveMarkers(self):
         return self.__markers

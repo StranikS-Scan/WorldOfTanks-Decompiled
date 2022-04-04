@@ -81,6 +81,11 @@
           <destroyed>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Hull.model	</exploded>
         </NYst>
+        <R45_IS_7_3DSt_HW_21>
+          <undamaged>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Hull.model	</exploded>
+        </R45_IS_7_3DSt_HW_21>
       </sets>
     </models>
     <swinging>
@@ -870,6 +875,52 @@
         <clipAngle>	1.34749	</clipAngle>
         <anchorShift>	-0.188154	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15061	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R45_IS_7_3DSt_HW_21	</compatibleModels>
+        <position>	-0.347436 1.33686 2.97806	</position>
+        <rotation>	0.388029 -0.0325631 -2.8637	</rotation>
+        <scale>	0.400844 0.396937 0.400236	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.27583	</clipAngle>
+        <anchorShift>	0.073373	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15062	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R45_IS_7_3DSt_HW_21	</compatibleModels>
+        <position>	-1.20441 1.57764 -2.97816	</position>
+        <rotation>	3.13985 0.000000 -0.000057	</rotation>
+        <scale>	0.44396 0.132057 0.443958	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.0788431	</clipAngle>
+        <anchorShift>	0.066172	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15063	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R45_IS_7_3DSt_HW_21	</compatibleModels>
+        <position>	1.46472 1.27764 2.20629	</position>
+        <rotation>	0.578647 0.704313 3.13165	</rotation>
+        <scale>	0.434291 0.179166 0.43363	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.27583	</clipAngle>
+        <anchorShift>	0.043893	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	sequence	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0.862 0.605 2.551	</position>
+        <rotation>	0.000000 0.000000 0.000000	</rotation>
+        <attachNode>	V	</attachNode>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -917,6 +968,11 @@
             <destroyed>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Chassis.model	</exploded>
           </NYst>
+          <R45_IS_7_3DSt_HW_21>
+            <undamaged>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Chassis.model	</exploded>
+          </R45_IS_7_3DSt_HW_21>
         </sets>
       </models>
       <splineDesc>
@@ -936,6 +992,10 @@
             <segmentModelLeft>	vehicles/russian/R45_IS-7/_skins/NYst/track/segment.model	</segmentModelLeft>
             <segmentModelRight>	vehicles/russian/R45_IS-7/_skins/NYst/track/segment.model	</segmentModelRight>
           </NYst>
+          <R45_IS_7_3DSt_HW_21>
+            <segmentModelLeft>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/track/segment.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/track/segment.model	</segmentModelRight>
+          </R45_IS_7_3DSt_HW_21>
         </modelSets>
       </splineDesc>
       <traces>
@@ -1334,7 +1394,6 @@
           </transform>
         </decal>
       </AODecals>
-      <trackThickness>	0.000000	</trackThickness>
       <physicalTracks>
         <left>
           <segmentsCount>	101	</segmentsCount>
@@ -1363,6 +1422,9 @@
             <NYst>
               <mainSegmentModel>	vehicles/russian/R45_IS-7/_skins/NYst/track/segment.model	</mainSegmentModel>
             </NYst>
+            <R45_IS_7_3DSt_HW_21>
+              <mainSegmentModel>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/track/segment.model	</mainSegmentModel>
+            </R45_IS_7_3DSt_HW_21>
           </modelSets>
           <collisionHull>
             <bottom></bottom>
@@ -1570,6 +1632,9 @@
             <NYst>
               <mainSegmentModel>	vehicles/russian/R45_IS-7/_skins/NYst/track/segment.model	</mainSegmentModel>
             </NYst>
+            <R45_IS_7_3DSt_HW_21>
+              <mainSegmentModel>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/track/segment.model	</mainSegmentModel>
+            </R45_IS_7_3DSt_HW_21>
           </modelSets>
           <collisionHull>
             <bottom></bottom>
@@ -1843,6 +1908,11 @@
                 <destroyed>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Gun_01.model	</exploded>
               </NYst>
+              <R45_IS_7_3DSt_HW_21>
+                <undamaged>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Gun_01.model	</exploded>
+              </R45_IS_7_3DSt_HW_21>
             </sets>
           </models>
           <hitTester>
@@ -1958,6 +2028,11 @@
             <destroyed>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Turret_01.model	</exploded>
           </NYst>
+          <R45_IS_7_3DSt_HW_21>
+            <undamaged>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Turret_01.model	</exploded>
+          </R45_IS_7_3DSt_HW_21>
         </sets>
       </models>
       <hitTester>
@@ -2687,6 +2762,78 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.819179	</clipAngle>
           <anchorShift>	-0.065613	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35054	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R45_IS_7_3DSt_HW_21	</compatibleModels>
+          <position>	-1.11778 2.06296 0.566312	</position>
+          <rotation>	0.784925 -1.56294 2.98639	</rotation>
+          <scale>	0.470954 0.266593 0.470954	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.20016	</clipAngle>
+          <anchorShift>	0.081732	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35055	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R45_IS_7_3DSt_HW_21	</compatibleModels>
+          <position>	1.175 1.93484 0.65801	</position>
+          <rotation>	0.838798 1.52162 -3.00626	</rotation>
+          <scale>	0.616744 0.349121 0.616744	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.20016	</clipAngle>
+          <anchorShift>	0.131732	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35056	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R45_IS_7_3DSt_HW_21	</compatibleModels>
+          <position>	0.000016 2.28502 1.36085	</position>
+          <rotation>	0.0937547 0.000005 3.14156	</rotation>
+          <scale>	0.50587 0.258116 0.505878	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.983247	</clipAngle>
+          <anchorShift>	0.163557	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35057	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R45_IS_7_3DSt_HW_21	</compatibleModels>
+          <position>	-0.150359 2.36255 -0.898806	</position>
+          <rotation>	3.01812 -0.00689483 -0.00173831	</rotation>
+          <scale>	0.708186 0.301812 0.708191	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.329955	</clipAngle>
+          <anchorShift>	0.028195	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35058	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R45_IS_7_3DSt_HW_21	</compatibleModels>
+          <position>	0.648054 3.3188 -0.478525	</position>
+          <rotation>	1.20998 0.136732 3.0224	</rotation>
+          <scale>	0.546913 0.193897 0.54692	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.16774	</clipAngle>
+          <anchorShift>	0.037361	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	sequence	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.858 0.436 0.487	</position>
+          <rotation>	0.000000 0.000000 0.000000	</rotation>
+          <attachNode>	HP_gunJoint	</attachNode>
         </slot>
       </customizationSlots>
       <customization>

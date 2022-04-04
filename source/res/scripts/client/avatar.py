@@ -3257,7 +3257,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def __updateTargetVehicleMarker(self):
         if self.isCommanderCtrlMode():
-            gui_event_dispatcher.hideAutoAimMarker()
+            self.autoAim()
         else:
             targetVehicleID = self.__targetVehicleIDs.get(self.currentVehicleID, None)
             vehicle = BigWorld.entity(targetVehicleID) if targetVehicleID else None

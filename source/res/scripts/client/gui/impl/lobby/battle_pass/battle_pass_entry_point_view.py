@@ -16,9 +16,10 @@ from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.formatters.invites import getPreQueueName
 from gui.server_events.events_dispatcher import showMissionsBattlePass
-from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
+from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency
+from helpers.events_handler import EventsHandler
 from helpers.time_utils import MS_IN_SECOND
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
@@ -76,7 +77,7 @@ class BattlePassEntryPointComponent(BattlePassEntryPointMeta):
         return self.__view
 
 
-class BaseBattlePassEntryPointView(IGlobalListener):
+class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
     __battlePassController = dependency.descriptor(IBattlePassController)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -151,28 +152,27 @@ class BaseBattlePassEntryPointView(IGlobalListener):
     def _saveLastState(self):
         _g_entryLastState.update(False, self.isBought, self.hasExtra, self.chapterID, self.level, self.progress, self.battlePassState, self.notChosenRewardCount)
 
-    def _onClick(self):
+    @staticmethod
+    def _onClick():
         showMissionsBattlePass()
 
+    def _getListeners(self):
+        return ((events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY),)
+
+    def _getEvents(self):
+        return ((self.__battlePassController.onPointsUpdated, self._updateData),
+         (self.__battlePassController.onBattlePassIsBought, self._updateData),
+         (self.__battlePassController.onSeasonStateChanged, self._updateData),
+         (self.__battlePassController.onExtraChapterExpired, self._updateData),
+         (self.__battlePassController.onBattlePassSettingsChange, self._updateData),
+         (self.__battlePassController.onChapterChanged, self._updateData),
+         (g_playerEvents.onClientUpdated, self.__onClientUpdated))
+
     def _addListeners(self):
-        self.__battlePassController.onPointsUpdated += self._updateData
-        self.__battlePassController.onBattlePassIsBought += self._updateData
-        self.__battlePassController.onSeasonStateChange += self._updateData
-        self.__battlePassController.onBattlePassSettingsChange += self._updateData
-        self.__battlePassController.onChapterChanged += self._updateData
-        g_playerEvents.onClientUpdated += self.__onClientUpdated
-        g_eventBus.addListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
         self.startGlobalListening()
 
     def _removeListeners(self):
         self.stopGlobalListening()
-        g_eventBus.removeListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
-        g_playerEvents.onClientUpdated -= self.__onClientUpdated
-        self.__battlePassController.onChapterChanged -= self._updateData
-        self.__battlePassController.onBattlePassSettingsChange -= self._updateData
-        self.__battlePassController.onSeasonStateChange -= self._updateData
-        self.__battlePassController.onBattlePassIsBought -= self._updateData
-        self.__battlePassController.onPointsUpdated -= self._updateData
 
     def _getTooltip(self):
         if self.isPaused:

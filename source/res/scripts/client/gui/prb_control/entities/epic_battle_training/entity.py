@@ -6,6 +6,7 @@ import account_helpers
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from CurrentVehicle import g_currentVehicle
+from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control import prb_getters
@@ -187,6 +188,10 @@ class EpicBattleTrainingEntity(LegacyEntity):
 
     def getTeamLimits(self):
         return prb_getters.getPrebattleSettings().getTeamLimits(self.getPlayerTeam())
+
+    def isObserverModeEnabled(self):
+        minCount = self.getSettings().getTeamLimits(1)['minCount']
+        return GUI_SETTINGS.trainingObserverModeEnabled and minCount > 0
 
     def doAction(self, action=None):
         self.__enterTrainingRoom()

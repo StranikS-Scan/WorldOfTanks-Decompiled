@@ -8,6 +8,7 @@ from gui.impl.gen import R
 from gui.impl import backport
 from gui.impl.gen.view_models.views.lobby.rts.quests_view_model import QuestsViewModel, State
 from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
+from gui.impl.lobby.rts.quests_helpers import filterCompletedProgressionQuests
 from gui.impl.lobby.rts.rts_i_tab_view import ITabView
 from gui.impl.lobby.rts.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.lobby.rts.tooltips.tooltip_helpers import createRTSCurrencyTooltipView
@@ -127,7 +128,7 @@ class QuestsView(ViewImpl, ITabView):
         return State.QUESTS_FINISHED if questsAvailableNextDay else State.EVENT_ENDED
 
     def _updateViewModel(self):
-        quests = self._progressionCtrl.getQuests()
+        quests = filterCompletedProgressionQuests(self._progressionCtrl.getQuests(), 4)
         self._bonusTooltipData.clear()
         self._conditionTooltipData.clear()
         with self.viewModel.transaction() as model:

@@ -75,7 +75,7 @@ def getPlayerVehicleID(avatar=None):
 def isPlayerCommander(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
-    return avatar.isAICommander
+    return avatar.isCommander()
 
 
 def isCommanderCtrlMode(avatar=None):

@@ -16,7 +16,6 @@ from gui.shared.money import Currency
 from helpers import dependency
 from messenger import g_settings
 from skeletons.gui.game_control import IBattlePassController
-from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 
 class _BattlePassActivateChapterValidator(SyncValidator):
@@ -84,6 +83,7 @@ class BattlePassActivateChapterProcessor(Processor):
 
 
 class BuyBattlePass(Processor):
+    __battlePassController = dependency.descriptor(IBattlePassController)
 
     def __init__(self, seasonID, chapterID):
         super(BuyBattlePass, self).__init__()
@@ -94,11 +94,10 @@ class BuyBattlePass(Processor):
         return makeI18nError(sysMsgKey='battlePass_buy/server_error')
 
     def _successHandler(self, code, ctx=None):
-        itemsCache = dependency.instance(IItemsCache)
         chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(self.__chapterID)())
         return makeSuccess(msgType=SM_TYPE.BattlePassBuy, userMsg='', auxData={'header': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP()),
          'description': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithoutRewards.text(), chapter=text_styles.credits(chapterName)),
-         'additionalText': self.__makeGoldString(itemsCache.items.shop.getBattlePassCost().get(Currency.GOLD, 0))})
+         'additionalText': self.__makeGoldString(self.__battlePassController.getBattlePassCost(self.__chapterID).get(Currency.GOLD, 0))})
 
     @staticmethod
     def __makeGoldString(gold):

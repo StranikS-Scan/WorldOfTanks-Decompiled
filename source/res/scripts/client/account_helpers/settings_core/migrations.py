@@ -761,6 +761,14 @@ def _migrateTo88(core, data, initialized):
     data['battlePassStorage'][BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN] = False
 
 
+def _migrateTo89(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    from account_helpers.settings_core.settings_constants import CONTOUR
+    data[SETTINGS_SECTIONS.CONTOUR][CONTOUR.ENHANCED_CONTOUR] = False
+    data[SETTINGS_SECTIONS.CONTOUR][CONTOUR.CONTOUR_PENETRABLE_ZONE] = 0
+    data[SETTINGS_SECTIONS.CONTOUR][CONTOUR.CONTOUR_IMPENETRABLE_ZONE] = 0
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1107,6 +1115,10 @@ _versions = ((1,
   False),
  (88,
   _migrateTo88,
+  False,
+  False),
+ (89,
+  _migrateTo89,
   False,
   False))
 

@@ -984,6 +984,7 @@ class ServerSettingsManager(object):
          'spgAim': {},
          GUI_START_BEHAVIOR: {},
          'battlePassStorage': {},
+         SETTINGS_SECTIONS.CONTOUR: {},
          'clear': {},
          'delete': []}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -1094,6 +1095,10 @@ class ServerSettingsManager(object):
         clearSpgAimData = clear.get(SETTINGS_SECTIONS.SPG_AIM, 0)
         if spgAimData or clearSpgAimData:
             settings[SETTINGS_SECTIONS.SPG_AIM] = self._buildSectionSettings(SETTINGS_SECTIONS.SPG_AIM, spgAimData) ^ clearSpgAimData
+        contourData = data.get(SETTINGS_SECTIONS.CONTOUR, {})
+        clearContourData = clear.get(SETTINGS_SECTIONS.CONTOUR, 0)
+        if contourData or clearContourData:
+            settings[SETTINGS_SECTIONS.CONTOUR] = self._buildSectionSettings(SETTINGS_SECTIONS.CONTOUR, contourData) ^ clearContourData
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

@@ -1567,6 +1567,9 @@ class IBattlePassController(IGameController):
     def isExtraChapter(self, chapterID):
         raise NotImplementedError
 
+    def getBattlePassCost(self, chapterID):
+        raise NotImplementedError
+
     def getChapterExpiration(self, chapterID):
         raise NotImplementedError
 

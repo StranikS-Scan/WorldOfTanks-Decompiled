@@ -25,7 +25,7 @@ class BattlePassPackage(object):
         self.__chapterID = chapterID
 
     def getPrice(self):
-        bpCost = self._itemsCache.items.shop.getBattlePassCost()
+        bpCost = self._battlePassController.getBattlePassCost(self.__chapterID)
         return self.__getPriceBP(bpCost)
 
     def getLevelsCount(self):

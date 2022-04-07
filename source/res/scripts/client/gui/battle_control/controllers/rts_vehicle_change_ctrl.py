@@ -47,7 +47,7 @@ class _RTSVehicleChangeController(IRTSVehicleChangeController):
 
     @property
     def isEnabled(self):
-        return self.__isEnabled and self.__avatar.isAICommander
+        return self.__isEnabled and self.__avatar.isCommander()
 
     def setEnabled(self, enabled):
         self.__isEnabled = enabled

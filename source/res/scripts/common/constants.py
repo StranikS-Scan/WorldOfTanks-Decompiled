@@ -2071,8 +2071,10 @@ class PREBATTLE_INVITE_STATUS:
 
 
 PREBATTLE_INVITE_STATUS_NAMES = dict([ (v, k) for k, v in PREBATTLE_INVITE_STATUS.__dict__.iteritems() if not k.startswith('_') ])
-FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk', 'event_deserter', 'event_afk', 'epic_deserter', 'rts_quick_destruction')
+FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk', 'event_deserter', 'event_afk', 'epic_deserter', 'rts_deserter', 'rts_afk')
 FAIRPLAY_VIOLATIONS_MASKS = dict([ (name, 1 << index) for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES) ])
+FAIRPLAY_VIOLATIONS_ALIASES = {'rts_deserter': 'deserter',
+ 'rts_afk': 'afk'}
 
 class INVALID_CLIENT_STATS:
     OK = 0

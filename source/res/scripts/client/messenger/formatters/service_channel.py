@@ -3838,7 +3838,7 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
         chapterID = ctx.get('chapter')
         header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP())
         description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithRewards.text())
-        price = self.__itemsCache.items.shop.getBattlePassCost().get(Currency.GOLD, 0)
+        price = self.__battlePassController.getBattlePassCost(chapterID).get(Currency.GOLD, 0)
         additionalText = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithRewards.additionalText(), chapter=text_styles.credits(backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())))
         additionalText += '<br/>' + self.__makeGoldString(price)
         priorityLevel = NotificationPriorityLevel.LOW

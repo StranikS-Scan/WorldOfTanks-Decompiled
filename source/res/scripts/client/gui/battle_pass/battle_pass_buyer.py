@@ -26,7 +26,7 @@ class BattlePassBuyer(object):
             _logger.error('Invalid chapterID: %s!', chapterID)
             return
         if not cls.__battlePassController.isBought(chapterID=chapterID):
-            spendMoneyGold += cls.__itemsCache.items.shop.getBattlePassCost().get(Currency.GOLD, 0)
+            spendMoneyGold += cls.__battlePassController.getBattlePassCost(chapterID).get(Currency.GOLD, 0)
         result = False
         if cls.__itemsCache.items.stats.actualGold < spendMoneyGold:
             showBuyGoldForBattlePass(spendMoneyGold)

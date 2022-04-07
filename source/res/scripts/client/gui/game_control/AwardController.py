@@ -21,7 +21,7 @@ from adisp import process
 from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
-from constants import DOSSIER_TYPE, EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE
+from constants import DOSSIER_TYPE, EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE, FAIRPLAY_VIOLATIONS_ALIASES
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import BADGES_BLOCK
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
@@ -398,8 +398,10 @@ class PunishWindowHandler(ServiceChannelHandler):
                 penaltyType = 'warning'
                 violation = fairplayViolations[0]
             violationName = getFairPlayViolationName(violation)
-            if violationName == 'rts_quick_destruction':
+            if violationName == 'rts_afk':
                 return
+            if violationName in FAIRPLAY_VIOLATIONS_ALIASES:
+                violationName = FAIRPLAY_VIOLATIONS_ALIASES[violationName]
             msgID = 'punishmentWindow/reason/%s' % violationName
             showDialog(I18PunishmentDialogMeta('punishmentWindow', None, {'penaltyType': penaltyType,
              'arenaName': i18n.makeString(arenaType.name),

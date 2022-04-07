@@ -4,7 +4,7 @@ import logging
 from helpers import dependency
 from constants import QUEUE_TYPE
 from daily_quest_widget import DailyQuestWidget
-from gui.impl.lobby.missions.rts_quests_widget_view import RtsQuestsWidgetView
+from gui.impl.lobby.rts.quests_widget_view import RtsQuestsWidgetView
 from skeletons.gui.game_control import IRTSProgressionController
 from skeletons.gui.game_control import IRTSBattlesController
 _logger = logging.getLogger(__name__)

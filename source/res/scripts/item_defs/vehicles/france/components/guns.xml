@@ -92,6 +92,7 @@
     <_120mm_D_1203_P>	110	</_120mm_D_1203_P>
     <_100mm_SA_47_58>	111	</_100mm_SA_47_58>
     <_120mm_D_1203_A_FL>	501	</_120mm_D_1203_A_FL>
+    <_120mm_SA_46_AC_FL>	502	</_120mm_SA_46_AC_FL>
     <Canon_de_105_court_mle_1934S_SH>	10000	</Canon_de_105_court_mle_1934S_SH>
     <Canon_de_75mm_Vo_920_m_s_dualgun_SH>	10001	</Canon_de_75mm_Vo_920_m_s_dualgun_SH>
     <_90mm_F3M_SH>	10002	</_90mm_F3M_SH>
@@ -4571,6 +4572,63 @@
         </_120mm_OE_mle_1930>
       </shots>
     </_120mm_SA_46_AC>
+    <_120mm_SA_46_AC_FL>
+      <userString>	#france_vehicles:_120mm_SA_46_AC	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	339000	</price>
+      <impulse>	0.64	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	9.14285714285714	</reloadTime>
+      <maxAmmo>	36	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	3580	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.285714285714286	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_Prf1943>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	257 237	</piercingPower>
+        </_120mm_Prf1943>
+        <_120mm_FrtPrf1945>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1334	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	325 297	</piercingPower>
+        </_120mm_FrtPrf1945>
+        <_120mm_OE_mle_1930>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_120mm_OE_mle_1930>
+      </shots>
+    </_120mm_SA_46_AC_FL>
     <_120mm_D_1203>
       <userString>	#france_vehicles:_120mm_D_1203	</userString>
       <tags></tags>

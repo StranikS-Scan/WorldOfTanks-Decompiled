@@ -39,7 +39,7 @@ from gui.shared.event_dispatcher import showTankPremiumAboutPage, showRTSMetaRoo
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController
+from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController, IRTSBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui import makeHtmlString
@@ -346,6 +346,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 class MissionsCategoriesView(_GroupedMissionsView):
     QUESTS_COUNT_LINKEDSET_BLOCK = 1
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    _rtsController = dependency.descriptor(IRTSBattlesController)
     __showDQInMissionsTab = False
 
     @classmethod
@@ -412,8 +413,12 @@ class MissionsCategoriesView(_GroupedMissionsView):
     def _getViewQuestFilter(self):
         return self.getViewQuestFilterIncludingDailyQuests() if self.__showDQInMissionsTab else self.getViewQuestFilter()
 
+    def _shouldAppendRTSBanner(self):
+        return self._rtsController.isEnabled() and self._rtsController.getCurrentCycleInfo()[1]
+
     def _appendBanner(self, quests):
-        quests.append({'blockId': QUESTS_ALIASES.MISSIONS_RTS_BANNER_VIEW_ALIAS})
+        if self._shouldAppendRTSBanner():
+            quests.append({'blockId': QUESTS_ALIASES.MISSIONS_RTS_BANNER_VIEW_ALIAS})
 
     def __onServerSettingsChange(self, diff):
         if PremiumConfigs.PREM_QUESTS not in diff:

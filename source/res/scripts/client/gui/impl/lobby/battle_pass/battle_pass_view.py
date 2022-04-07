@@ -85,7 +85,7 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         return layoutID not in _VIEWS or layoutID == _R_VIEWS.BattlePassProgressionsView() and chapterID and not self.__battlePassController.isChapterExists(chapterID)
 
     def __needReload(self, layoutID):
-        return self._injectView is None or self._injectView.layoutID != layoutID or self._injectView.layoutID == _R_VIEWS.BattlePassProgressionsView()
+        return self._injectView is None or self._injectView.layoutID != layoutID or self._injectView.layoutID in (_R_VIEWS.BattlePassProgressionsView(), _R_VIEWS.ChapterChoiceView())
 
     def __onViewLoaded(self):
         self.as_showViewS()

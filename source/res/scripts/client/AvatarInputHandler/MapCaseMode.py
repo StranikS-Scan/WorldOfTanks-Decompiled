@@ -5,7 +5,7 @@ import logging
 from ArtilleryEquipment import ArtilleryEquipment
 from AvatarInputHandler import gun_marker_ctrl
 from CombatSelectedArea import CombatSelectedArea
-from aih_constants import GUN_MARKER_TYPE, CTRL_MODE_NAME
+from aih_constants import GUN_MARKER_TYPE, CTRL_MODE_NAME, MAP_CASE_MODES
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
@@ -833,11 +833,7 @@ def activateMapCase(equipmentID, deactivateCallback, controlMode):
         inputHandler.ctrl.activateEquipment(equipmentID, preferredPos)
     else:
         currentMode = inputHandler.ctrlModeName
-        mapCaseModes = (CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD,
-         CTRL_MODE_NAME.MAP_CASE,
-         CTRL_MODE_NAME.MAP_CASE_ARCADE,
-         CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD)
-        if currentMode in mapCaseModes:
+        if currentMode in MAP_CASE_MODES:
             _logger.warning('MapCaseMode is active! Attempt to switch MapCaseModes simultaneously!')
             return
         controlMode.deactivateCallback = deactivateCallback

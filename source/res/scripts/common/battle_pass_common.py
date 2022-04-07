@@ -304,6 +304,9 @@ class BattlePassConfig(object):
     def getRegularChapterIds(self):
         return self._regularChapterIds
 
+    def getbattlePassCost(self, chapterID):
+        return self.chapters.get(chapterID, {}).get('battlePassCost', {'gold': 0})
+
     @staticmethod
     def iterRewardRanges(prevLvl, newLvl, rewardMask):
         return ((fromLvl, toLvl, mask) for fromLvl, toLvl, mask in ((prevLvl, newLvl, BattlePassConsts.FREE_MASK), (prevLvl, newLvl, BattlePassConsts.PAID_MASK)) if mask & rewardMask)

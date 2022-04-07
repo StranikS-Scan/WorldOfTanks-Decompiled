@@ -112,7 +112,7 @@ class VehicleGunRotator(object):
                 ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
             if self._avatar.inputHandler is None:
                 return
-            if self.__clientMode and self.__showServerMarker:
+            if self.isServerMarkerVisible():
                 self.__showServerMarker = False
                 self._avatar.inputHandler.showGunMarker2(False)
             if self.__transitionCallbackID is not None:
@@ -173,7 +173,7 @@ class VehicleGunRotator(object):
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
                 replayCtrl.setGunMarkerParams(markerSize, markerPos, markerDir)
-            if self.__clientMode and self.__showServerMarker:
+            if self.isServerMarkerVisible():
                 self._avatar.inputHandler.updateGunMarker2(markerPos, markerDir, (markerSize, idealMarkerSize), SERVER_TICK_LENGTH, collData)
             if not self.__clientMode or forceValueRefresh:
                 self.__lastShotPoint = markerPos
@@ -307,6 +307,9 @@ class VehicleGunRotator(object):
             if replayCtrl.isPlaying:
                 replayCtrl.resetUpdateGunOnTimeWarp()
             return
+
+    def isServerMarkerVisible(self):
+        return self.__clientMode and self.__showServerMarker
 
     def __getTimeDiff(self):
         timeDiff = BigWorld.time() - self.__time

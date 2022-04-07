@@ -101,6 +101,7 @@ _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera,
  DynamicCameras.StrategicCamera.StrategicCamera,
  DynamicCameras.ArtyCamera.ArtyCamera,
  DynamicCameras.DualGunCamera.DualGunCamera)
+_FREE_AND_CHAT_SHORTCUT_CMD = (CommandMapping.CMD_CM_FREE_CAMERA, CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND)
 
 class DynamicCameraSettings(object):
     settings = property(lambda self: self.__dynamic)
@@ -322,7 +323,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 return True
 
         if self.__isStarted and self.__isDetached:
-            if self.__curCtrl.alwaysReceiveKeyEvents(isDown=isDown) and not self.isObserverFPV or CommandMapping.g_instance.isFiredList((CommandMapping.CMD_CM_LOCK_TARGET, CommandMapping.CMD_CM_FREE_CAMERA), key):
+            alwaysReceive = self.__curCtrl.alwaysReceiveKeyEvents(isDown=isDown) and not self.isObserverFPV
+            cmdLockTarget = CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key)
+            cmdFreeAndChat = CommandMapping.g_instance.isFiredList(_FREE_AND_CHAT_SHORTCUT_CMD, key, True)
+            if alwaysReceive or cmdLockTarget or cmdFreeAndChat:
                 self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
             for command in self.__detachedCommands:
                 if command.handleKeyEvent(isDown, key, mods, event):
@@ -677,6 +681,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 BigWorld.setEdgeDrawerRenderMode(renderMode)
             else:
                 BigWorld.setEdgeDrawerRenderMode(0)
+            if eMode in aih_constants.MAP_CASE_MODES:
+                BigWorld.setEdgeDrawerRenderMode(1)
             return
 
     def onVehicleControlModeChanged(self, eMode):
@@ -912,7 +918,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
 
     def refreshGunMarkers(self):
         self.__curCtrl.setGunMarkerFlag(self.__isArenaStarted, _GUN_MARKER_FLAG.CONTROL_ENABLED)
-        self.showGunMarker2(gun_marker_ctrl.useServerGunMarker())
+        isServerMarkerVisible = BigWorld.player().gunRotator.isServerMarkerVisible()
+        self.showGunMarker2(gun_marker_ctrl.useServerGunMarker() and isServerMarkerVisible)
         self.showGunMarker(gun_marker_ctrl.useClientGunMarker())
 
     def __onRecreateDevice(self):

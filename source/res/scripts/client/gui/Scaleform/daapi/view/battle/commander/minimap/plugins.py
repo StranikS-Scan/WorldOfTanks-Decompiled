@@ -162,6 +162,8 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                     self.__addMaxViewRangeCircle()
                 if getter(settings_constants.GAME.MINIMAP_VIEW_RANGE):
                     self.__addViewRangeCircle()
+                if self._canShowMinSpottingRangeCircle():
+                    self.__addMinSpottingRangeCircle()
                 self._updateCirlcesState()
             return
 
@@ -193,6 +195,11 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                     self.__addMaxViewRangeCircle()
                 else:
                     self.__removeMaxViewRangeCircle()
+            if settings_constants.GAME.MINIMAP_MIN_SPOTTING_RANGE in diff:
+                if self._canShowMinSpottingRangeCircle():
+                    self.__addMinSpottingRangeCircle()
+                else:
+                    self.__removeMinSpottingRangeCircle()
             if settings_constants.GAME.MINIMAP_VIEW_RANGE in diff:
                 value = diff[settings_constants.GAME.MINIMAP_VIEW_RANGE]
                 if value:
@@ -203,6 +210,9 @@ class PersonalEntriesPlugin(common.SimplePlugin):
 
     def setDefaultViewRangeCircleSize(self, size):
         self.__defaultViewRangeCircleSize = size
+
+    def _canShowMinSpottingRangeCircle(self):
+        return self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_MIN_SPOTTING_RANGE)
 
     def __onKillerVisionEnter(self, killerVehicleID):
         self.__killerVehicleID = killerVehicleID
@@ -432,6 +442,10 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 self.__addMaxViewRangeCircle()
             else:
                 self.__removeMaxViewRangeCircle()
+            if self._canShowMinSpottingRangeCircle():
+                self.__addMinSpottingRangeCircle()
+            else:
+                self.__removeMinSpottingRangeCircle()
             if getter(settings_constants.GAME.MINIMAP_VIEW_RANGE):
                 self.__addViewRangeCircle()
             else:
@@ -501,6 +515,16 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         self.__circlesVisibilityState |= settings.CIRCLE_TYPE.VIEW_RANGE
         vehicleAttrs = self.sessionProvider.shared.feedback.getVehicleAttrs()
         self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_DYN_CIRCLE, settings.CIRCLE_STYLE.COLOR.VIEW_RANGE, settings.CIRCLE_STYLE.ALPHA, min(vehicleAttrs.get('circularVisionRadius', VISIBILITY.MIN_RADIUS), VISIBILITY.MAX_RADIUS))
+
+    def __addMinSpottingRangeCircle(self):
+        if self.__circlesVisibilityState & settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE:
+            return
+        self.__circlesVisibilityState |= settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE
+        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MIN_SPOTTING_CIRCLE, settings.CIRCLE_STYLE.COLOR.MIN_SPOTTING_RANGE, settings.CIRCLE_STYLE.ALPHA, VISIBILITY.MIN_RADIUS)
+
+    def __removeMinSpottingRangeCircle(self):
+        self.__circlesVisibilityState &= ~settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE
+        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_DEL_MIN_SPOTTING_CIRCLE)
 
     def __removeViewRangeCircle(self):
         self.__circlesVisibilityState &= ~settings.CIRCLE_TYPE.VIEW_RANGE

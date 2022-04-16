@@ -287,7 +287,7 @@ class _ReusableInfo(object):
                         intCD = vehicleID
                 else:
                     intCD = vehicleInfo.intCD
-                if vehicleInfo.accountDBID == playerDBID or vehicleInfo.team == playerTeam:
+                if result['common']['bonusType'] == ARENA_BONUS_TYPE.RTS and vehicleInfo.accountDBID == playerDBID or vehicleInfo.team == playerTeam:
                     continue
                 if vehicleInfo.accountDBID:
                     playerInfo = weakref.proxy(getPlayerInfo(vehicleInfo.accountDBID))

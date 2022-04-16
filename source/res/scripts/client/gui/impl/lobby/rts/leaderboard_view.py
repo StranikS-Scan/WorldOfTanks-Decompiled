@@ -181,6 +181,7 @@ class LeaderboardView(ViewImpl, ITabView):
         viewModel.setMinBattlesRequired(minBattleCount)
         viewModel.setCurrentPage(page)
         viewModel.setTotalPages(0)
+        viewModel.setMaxRank(eventData.getLeaderboardViewSize())
         self._updateRewards(viewModel)
         yield self._updateLeaderboard(viewModel, page=page)
         yield self._updatePlayerInfo(viewModel)

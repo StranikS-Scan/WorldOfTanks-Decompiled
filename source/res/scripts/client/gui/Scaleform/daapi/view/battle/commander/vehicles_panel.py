@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/commander/vehicles_panel.py
 import logging
-import typing
 import BigWorld
 import BattleReplay
 from RTSShared import RTSManner
@@ -15,8 +14,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 from gui.battle_control.battle_constants import VehicleConditions
 import Keys
-if typing.TYPE_CHECKING:
-    from typing import Callable, List
 _logger = logging.getLogger(__name__)
 
 class VehiclesPanel(VehiclesPanelMeta):
@@ -52,14 +49,26 @@ class VehiclesPanel(VehiclesPanelMeta):
                 if self.__lastSelected and self.__panelIDOrder and BigWorld.isKeyDown(Keys.KEY_LSHIFT) and self.__currentlySelected:
                     self.__vehProxyMgr.appendSelection(self.__getShiftSelectedIDs(vehicleID))
                     self.__lastSelected = vehicleID
+                elif hasAppendModifiers():
+                    if vehicle.isSelected:
+                        self.__vehProxyMgr.clearSelection([vehicle.id])
+                        for i, csVehicleID in enumerate(self.__currentlySelected):
+                            if csVehicleID == vehicleID:
+                                self.__currentlySelected.pop(i)
+                                break
+
+                        self.__lastSelected = min(self.__currentlySelected) if self.__currentlySelected else None
+                    else:
+                        self.__lastSelected = vehicleID
+                        self.__vehProxyMgr.appendSelection([vehicle.id])
                 else:
-                    self.__lastSelected = vehicleID if not vehicle.isSelected else min(self.__currentlySelected)
-                    selectionOp = self.__vehProxyMgr.clearSelection if vehicle.isSelected and hasAppendModifiers() else (self.__vehProxyMgr.appendSelection if hasAppendModifiers() else self.__vehProxyMgr.setSelection)
-                    selectionOp([vehicle.id])
+                    self.__lastSelected = vehicleID
+                    self.__vehProxyMgr.setSelection([vehicle.id])
                 self.__currentlySelected = self.__vehProxyMgr.keys(lambda v: v.isSelected)
                 self.__sessionProvider.dynamic.rtsSound.selectionChanged(self.__currentlySelected, selectionViaPanel=True)
             else:
                 _logger.warning('Vehicle is not available as commander vehicle')
+        return
 
     def onSwitchVehicle(self, vehicleID):
         if not BattleReplay.isPlaying():

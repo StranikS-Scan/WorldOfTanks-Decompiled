@@ -630,8 +630,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                     if isObserverMode:
                         player.positionControl.followCamera(False)
                         player.positionControl.bindToVehicle(True, self.__observerVehicle)
-                    elif eMode != 'commander':
-                        player.positionControl.bindToVehicle(True)
+                    else:
+                        vehicleID = player.commanderVehicleID() if eMode == 'commander' else None
+                        player.positionControl.bindToVehicle(True, vehicleID)
                 elif not prevCtrl.isManualBind() and not self.__curCtrl.isManualBind() and isObserverMode and not self.isObserverFPV:
                     if not (prevCtrlModeName == _CTRL_MODE.VIDEO and self.__observerIsSwitching):
                         player.positionControl.bindToVehicle(True)

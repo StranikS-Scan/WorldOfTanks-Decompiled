@@ -490,21 +490,17 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 else:
                     vehicleNames = {intCD:self._itemsCache.items.getItemByCD(intCD) for intCD in battleResults.get('playerVehicles', {}).keys()}
                 ctx['vehicleNames'] = ', '.join(map(operator.attrgetter('userName'), sorted(vehicleNames.values())))
-                detailedRewards = battleResults.get('detailedRewards', {})
                 xp = battleResults.get('xp')
-                xp += sum([ reward.get('xp', 0) for reward in detailedRewards.itervalues() ])
                 if xp:
                     ctx['xp'] = backport.getIntegralFormat(xp)
                 battleResKey = battleResults.get('isWinner', 0)
                 ctx['xpEx'] = self.__makeXpExString(xp, battleResKey, battleResults.get('xpPenalty', 0), battleResults)
                 ctx[Currency.GOLD] = self.__makeGoldString(battleResults.get(Currency.GOLD, 0))
                 accCredits = battleResults.get(Currency.CREDITS) - battleResults.get('creditsToDraw', 0)
-                accCredits += sum([ reward.get(Currency.CREDITS, 0) for reward in detailedRewards.itervalues() ])
                 if accCredits:
                     ctx[Currency.CREDITS] = self.__makeCurrencyString(Currency.CREDITS, accCredits)
                 ctx['piggyBank'] = self.__makePiggyBankString(battleResults.get('piggyBank'))
                 accCrystal = battleResults.get(Currency.CRYSTAL, 0)
-                accCrystal += sum([ reward.get(Currency.CRYSTAL, 0) for reward in detailedRewards.itervalues() ])
                 ctx['crystalStr'] = ''
                 if accCrystal:
                     ctx[Currency.CRYSTAL] = self.__makeCurrencyString(Currency.CRYSTAL, accCrystal)

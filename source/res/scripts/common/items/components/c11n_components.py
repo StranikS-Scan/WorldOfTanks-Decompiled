@@ -427,7 +427,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PAINT: PaintItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.DECAL: DecalItem, CustomizationType.FONT: Font, CustomizationType.STYLE: StyleItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.ATTACHMENT: AttachmentItem}
+    CUSTOMIZATION_TYPES = {CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PAINT: PaintItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.DECAL: DecalItem, CustomizationType.FONT: Font, CustomizationType.STYLE: StyleItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -940,7 +940,7 @@ def _validateDependencies(outfit, usedStyle, vehDescr, season):
         emblemRegions, inscriptionRegions = getAvailableDecalRegions(vehDescr)
         decalRegions = emblemRegions | inscriptionRegions
         modifiedOutfit = baseSeasonOutfit.applyDiff(outfit)
-        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}}
+        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}}
         for itemType, itemIDs in outfitToCheckDependencies.iteritems():
             camouflageItemTypeDependencies = usedStyle.dependencies.get(camouflageID, {}).get(itemType, {})
             alternateItems = usedStyle.alternateItems.get(itemType, ())

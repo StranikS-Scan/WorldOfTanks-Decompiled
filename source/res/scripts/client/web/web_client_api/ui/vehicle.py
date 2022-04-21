@@ -289,7 +289,7 @@ def _validatePrice(tData, errorStr=''):
     return
 
 
-def _validateBlocks(_, hiddenBlocks):
+def _validateBlocks(hiddenBlocks, *_):
     return all((block in OptionalBlocks.ALL for block in hiddenBlocks))
 
 

@@ -553,7 +553,7 @@ class BattlePassProgressionsView(ViewImpl):
             endTimestamp = 0
             endStringRes = _bpRes.commonProgression.body.ended
         else:
-            endTimestamp = self.__battlePassController.getChapterExpiration(self.__chapterID)
+            endTimestamp = self.__battlePassController.getSeasonFinishTime()
             endStringRes = _bpRes.progression.season.end.normal
         endTime = time_utils.getTimeStructInLocal(endTimestamp)
         return backport.text(endStringRes(), seasonNum=int2roman(self.__battlePassController.getSeasonNum()), endDay=endTime.tm_mday, endMonth=backport.text(R.strings.menu.dateTime.months.num(endTime.tm_mon)()), endTime=formatDate('%H:%M', endTimestamp))

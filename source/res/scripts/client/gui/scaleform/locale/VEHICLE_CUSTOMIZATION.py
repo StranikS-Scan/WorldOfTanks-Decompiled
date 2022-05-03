@@ -5973,6 +5973,7 @@ class VEHICLE_CUSTOMIZATION(object):
     PROJECTION_DECALS_SPECIAL_PROJECTION_DECAL_364 = '#vehicle_customization:projection_decals/special/projection_decal_364'
     PROJECTION_DECALS_ANIMALS_PROJECTION_DECAL_55 = '#vehicle_customization:projection_decals/animals/projection_decal_55'
     PROJECTION_DECALS_SPECIAL_PROJECTION_DECAL_365 = '#vehicle_customization:projection_decals/special/projection_decal_365'
+    PROJECTION_DECALS_ANIMALS_PROJECTION_DECAL_57 = '#vehicle_customization:projection_decals/animals/projection_decal_57'
     PROPERTYSHEET_KEYBOARD_HINT = '#vehicle_customization:propertySheet/keyboard/hint'
     PROPERTYSHEET_INSCRIPTIONCONTROLLER_INVALID_INSCRIPTION = '#vehicle_customization:propertySheet/inscriptionController/invalid_inscription'
     PROPERTYSHEET_INSCRIPTIONCONTROLLER_PROMPT = '#vehicle_customization:propertySheet/inscriptionController/prompt'
